@@ -44,9 +44,11 @@
     <uses-feature
         android:name="android.software.leanback"
         android:required="true" />
-    
+
+    <!-- android:usesCleartextTraffic - allow HTTP traffic -->
     <application
         android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.MainApplication"
+        android:usesCleartextTraffic="true"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:largeHeap="true"
