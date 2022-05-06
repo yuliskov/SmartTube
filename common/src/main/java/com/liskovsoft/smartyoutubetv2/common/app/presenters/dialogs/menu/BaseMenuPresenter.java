@@ -285,11 +285,6 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 getContext(),
                 "",
                 newValue -> {
-                    if (newValue == null || newValue.isEmpty()) {
-                        MessageHelpers.showMessage(getContext(), R.string.cant_save_playlist);
-                        return;
-                    }
-
                     MediaItemManager manager = YouTubeMediaItemManager.instance();
                     Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
                     RxUtils.execute(
@@ -304,7 +299,8 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                             }
                     );
                 },
-                getContext().getString(R.string.create_playlist)
+                getContext().getString(R.string.create_playlist),
+                true
         );
     }
 
@@ -354,7 +350,8 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                         }
                                 );
                             },
-                            getContext().getString(R.string.rename_playlist)
+                            getContext().getString(R.string.rename_playlist),
+                            true
                     );
                 }
         );

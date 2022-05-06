@@ -398,4 +398,5 @@
     <string name="cant_rename_empty_playlist">Can\'t rename empty playlist</string>
     <string name="cant_rename_foreign_playlist">Can\'t rename foreign playlist</string>
     <string name="cant_save_playlist">This playlist cannot be saved</string>
+    <string name="enter_value">Enter any non-empty value</string>
 </resources>
