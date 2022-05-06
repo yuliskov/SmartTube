@@ -362,7 +362,7 @@
     <string name="audio_sync_fix_desc">Un moyen alternatif de synchroniser l\'audio/vidéo. Il est considéré comme obsolète, mais, dans certains cas, il peut aider.</string>
     <string name="audio_sync_fix">Correction de la synchronisation audio</string>
     <string name="ambilight_ratio_fix_desc">Correction de l\'éclairage de biais absent. Correction d\'un rapport d\'aspect incorrect. Correction des captures d\'écran vides. Affecte les performances!</string>
-    <string name="ambilight_ratio_fix">Ambilight/Rapport d\'aspect/Correction des captures d'écran</string>
+    <string name="ambilight_ratio_fix">Ambilight/Rapport d\'aspect/Correction des captures d\'écran</string>
     <string name="force_legacy_codecs_desc">Amélioration significative des performances sur les appareils bas de gamme. La résolution maximale est de 720p.</string>
     <string name="force_legacy_codecs">Forcer les codecs existants (720p)</string>
     <string name="live_stream_fix_desc">Améliore considérablement les performances des flux en direct sur les appareils bas de gamme. La résolution maximale est de 1080p.</string>
