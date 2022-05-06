@@ -283,17 +283,26 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         closeDialog();
         SimpleEditDialog.show(
                 getContext(),
-                getContext().getString(R.string.playlist) + new Random().nextInt(100),
+                "",
                 newValue -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        MessageHelpers.showMessage(getContext(), R.string.cant_save_playlist);
+                        return;
+                    }
+
                     MediaItemManager manager = YouTubeMediaItemManager.instance();
                     Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
-                    RxUtils.execute(action, () -> {
-                        if (!video.hasVideo()) { // Playlists section
-                            BrowsePresenter.instance(getContext()).refresh();
-                        } else {
-                            MessageHelpers.showMessage(getContext(), newValue + ": " + getContext().getString(R.string.saved_to_playlists));
-                        }
-                    });
+                    RxUtils.execute(
+                            action,
+                            () -> MessageHelpers.showMessage(getContext(), newValue + ": " + getContext().getString(R.string.cant_save_playlist)),
+                            () -> {
+                                if (!video.hasVideo()) { // Playlists section
+                                    BrowsePresenter.instance(getContext()).refresh();
+                                } else {
+                                    MessageHelpers.showMessage(getContext(), newValue + ": " + getContext().getString(R.string.saved_to_playlists));
+                                }
+                            }
+                    );
                 },
                 getContext().getString(R.string.create_playlist)
         );
