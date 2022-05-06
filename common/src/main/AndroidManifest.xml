@@ -8,7 +8,11 @@
 
     <!-- Add requestLegacyExternalStorage to fix unavailable storage on Android 10 (doesn't work on Android 11) -->
     <!-- More info: https://stackoverflow.com/questions/63364476/requestlegacyexternalstorage-is-not-working-in-android-11-api-30 -->
-    <application android:requestLegacyExternalStorage="true">
+    <!-- android:usesCleartextTraffic - allow HTTP traffic -->
+    <application
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config">
         <receiver
             android:name="com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlReceiver"
             android:enabled="true"
