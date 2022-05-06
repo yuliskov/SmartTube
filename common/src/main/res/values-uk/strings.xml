@@ -218,8 +218,8 @@
     <string name="channels_auto_load">Автоматично завантажувати вміст розділу Канали</string>
     <string name="return_to_background_video">Повернутися до фонового відео</string>
     <string name="pin_unpin_from_sidebar">Прикріпити/Відкріпити від бічної панелі</string>
-    <string name="pin_unpin_playlist">Прикріпити/Відкріпити плейлист від бічної панелі</string>
-    <string name="pin_unpin_channel">Прикріпити/Відкріпити канал від бічної панелі</string>
+    <string name="pin_unpin_playlist">Прикріпити/Відкріпити цей плейлист від бічної панелі</string>
+    <string name="pin_unpin_channel">Прикріпити/Відкріпити цей канал від бічної панелі</string>
     <string name="pinned_to_sidebar">Прикріплено до бічної панелі</string>
     <string name="unpin_from_sidebar">Відкріпити від бічної панелі</string>
     <string name="unpinned_from_sidebar">Відкріплено від бічної панелі</string>
