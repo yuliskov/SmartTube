@@ -23,9 +23,9 @@ public class SimpleEditDialog {
         LayoutInflater inflater = LayoutInflater.from(context);
         View contentView = inflater.inflate(R.layout.simple_edit_dialog, null);
 
-        EditText editField = (EditText) contentView.findViewById(R.id.simple_edit_value);
-        editField.setText(defaultValue);
-        KeyHelpers.fixEnterKey(editField);
+        KeyHelpers.fixEnterKey(contentView.findViewById(R.id.simple_edit_value));
+
+        ((EditText) contentView.findViewById(R.id.simple_edit_value)).setText(defaultValue);
 
         // keep empty, will override below.
         // https://stackoverflow.com/a/15619098/5379584
