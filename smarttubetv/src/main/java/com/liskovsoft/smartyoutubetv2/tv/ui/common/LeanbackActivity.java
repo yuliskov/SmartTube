@@ -38,16 +38,10 @@ public abstract class LeanbackActivity extends MotherActivity {
         mModeSyncManager = ModeSyncManager.instance();
         mDoubleBackManager = new DoubleBackManager(this);
         mGeneralData = GeneralData.instance(this);
-    }
-
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-
-        // Start after PlaybackActivity fragment creation
         mGlobalKeyTranslator = this instanceof PlaybackActivity ?
-                new PlayerKeyTranslator(this, ((PlaybackActivity) this).getPlaybackView()) :
+                new PlayerKeyTranslator(this) :
                 new GlobalKeyTranslator(this);
+        mGlobalKeyTranslator.apply();
     }
 
     @Override
@@ -65,7 +59,7 @@ public abstract class LeanbackActivity extends MotherActivity {
             finishTheApp();
         }
 
-        return (mGlobalKeyTranslator != null && mGlobalKeyTranslator.translate(event)) || super.dispatchKeyEvent(event);
+        return mGlobalKeyTranslator.translate(event) || super.dispatchKeyEvent(event);
     }
 
     public UriBackgroundManager getBackgroundManager() {
@@ -84,6 +78,8 @@ public abstract class LeanbackActivity extends MotherActivity {
         super.onResume();
 
         // PIP fix: While entering/exiting PIP mode only Pause/Resume is called
+
+        mGlobalKeyTranslator.apply(); // adapt to state changes (like enter/exit from PIP mode)
 
         mModeSyncManager.restore(this);
 

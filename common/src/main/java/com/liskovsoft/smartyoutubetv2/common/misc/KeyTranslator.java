@@ -5,11 +5,13 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class KeyTranslator {
     private static final String TAG = KeyTranslator.class.getSimpleName();
-    private KeyEvent mHandledEvent;
+    private final Map<Integer, Integer> mKeyMapping = new HashMap<>();
+    private final Map<Integer, Runnable> mActionMapping = new HashMap<>();
 
     public final boolean translate(KeyEvent event) {
         Map<Integer, Integer> keyMapping = getKeyMapping();
@@ -36,8 +38,6 @@ public abstract class KeyTranslator {
 
         if (newKeyEvent != event) {
             handled = true;
-
-            checkAndFixUnpairedEvent(newKeyEvent);
 
             RxUtils.runAsync(() -> Utils.sendKey(newKeyEvent));
         }
@@ -68,33 +68,19 @@ public abstract class KeyTranslator {
         return newKey;
     }
 
-    private void checkAndFixUnpairedEvent(KeyEvent newKeyEvent) {
-        if (newKeyEvent == null) {
-            return;
-        }
+    protected abstract void initKeyMapping();
+    protected abstract void initActionMapping();
 
-        if (newKeyEvent.getAction() == KeyEvent.ACTION_UP &&
-                (mHandledEvent == null || mHandledEvent.getKeyCode() != newKeyEvent.getKeyCode())) {
-            KeyEvent keyDownEvent = new KeyEvent(
-                    newKeyEvent.getDownTime(),
-                    newKeyEvent.getEventTime(),
-                    KeyEvent.ACTION_DOWN,
-                    newKeyEvent.getKeyCode(),
-                    newKeyEvent.getRepeatCount(),
-                    newKeyEvent.getMetaState(),
-                    newKeyEvent.getDeviceId(),
-                    newKeyEvent.getScanCode(),
-                    newKeyEvent.getFlags(),
-                    newKeyEvent.getSource()
-            );
-
-            RxUtils.runAsync(() -> Utils.sendKey(keyDownEvent));
-        }
-
-        mHandledEvent = newKeyEvent;
+    protected Map<Integer, Integer> getKeyMapping() {
+        return mKeyMapping;
     }
 
-    protected abstract Map<Integer, Integer> getKeyMapping();
+    protected Map<Integer, Runnable> getActionMapping() {
+        return mActionMapping;
+    }
 
-    protected abstract Map<Integer, Runnable> getActionMapping();
+    public void apply() {
+        initKeyMapping();
+        initActionMapping();
+    }
 }

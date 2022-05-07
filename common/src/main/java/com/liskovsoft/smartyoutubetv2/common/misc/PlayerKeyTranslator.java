@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.KeyEvent;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -14,18 +15,17 @@ import java.util.Map;
 public class PlayerKeyTranslator extends GlobalKeyTranslator {
     private final GeneralData mGeneralData;
     private final Context mContext;
-    private final PlaybackView mPlaybackView;
 
-    public PlayerKeyTranslator(Context context, PlaybackView playbackView) {
+    public PlayerKeyTranslator(Context context) {
         super(context);
         mContext = context;
         mGeneralData = GeneralData.instance(context);
-        mPlaybackView = playbackView;
-        initKeyMapping();
-        initActionMapping();
     }
 
-    private void initKeyMapping() {
+    @Override
+    protected void initKeyMapping() {
+        super.initKeyMapping();
+
         Map<Integer, Integer> globalKeyMapping = getKeyMapping();
 
         // Reset global mapping to default
@@ -51,7 +51,10 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
         globalKeyMapping.put(KeyEvent.KEYCODE_DEL, KeyEvent.KEYCODE_0); // reset position of the video (if enabled number key handling in the settings)
     }
 
-    private void initActionMapping() {
+    @Override
+    protected void initActionMapping() {
+        super.initActionMapping();
+
         Map<Integer, Runnable> actionMapping = getActionMapping();
 
         addLikeAction(actionMapping);
@@ -64,18 +67,20 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
         }
 
         Runnable likeAction = () -> {
-            if (mPlaybackView.getEventListener() != null) {
-                mPlaybackView.getEventListener().onLikeClicked(true);
-                mPlaybackView.getController().setLikeButtonState(true);
-                mPlaybackView.getController().setDislikeButtonState(false);
+            PlaybackView playbackView = getPlaybackView();
+            if (playbackView != null && playbackView.getEventListener() != null) {
+                playbackView.getEventListener().onLikeClicked(true);
+                playbackView.getController().setLikeButtonState(true);
+                playbackView.getController().setDislikeButtonState(false);
                 MessageHelpers.showMessage(mContext, R.string.action_like);
             }
         };
         Runnable dislikeAction = () -> {
-            if (mPlaybackView.getEventListener() != null) {
-                mPlaybackView.getEventListener().onDislikeClicked(true);
-                mPlaybackView.getController().setLikeButtonState(false);
-                mPlaybackView.getController().setDislikeButtonState(true);
+            PlaybackView playbackView = getPlaybackView();
+            if (playbackView != null && playbackView.getEventListener() != null) {
+                playbackView.getEventListener().onDislikeClicked(true);
+                playbackView.getController().setLikeButtonState(false);
+                playbackView.getController().setDislikeButtonState(true);
                 MessageHelpers.showMessage(mContext, R.string.action_dislike);
             }
         };
@@ -120,8 +125,10 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
         float[] speedSteps =
                 new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f};
 
-        if (mPlaybackView.getController() != null) {
-            float currentSpeed = mPlaybackView.getController().getSpeed();
+        PlaybackView playbackView = getPlaybackView();
+
+        if (playbackView != null && playbackView.getController() != null) {
+            float currentSpeed = playbackView.getController().getSpeed();
             int currentIndex = Arrays.binarySearch(speedSteps, currentSpeed);
 
             if (currentIndex >= 0) {
@@ -130,9 +137,13 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
                 float speed = newIndex >= 0 && newIndex < speedSteps.length ? speedSteps[newIndex] : speedSteps[currentIndex];
 
                 PlayerData.instance(mContext).setSpeed(speed);
-                mPlaybackView.getController().setSpeed(speed);
+                playbackView.getController().setSpeed(speed);
                 MessageHelpers.showMessage(mContext, String.format("%sx", speed));
             }
         }
+    }
+
+    private PlaybackView getPlaybackView() {
+        return PlaybackPresenter.instance(mContext).getView();
     }
 }
