@@ -42,6 +42,7 @@ public class GeneralData {
     private boolean mIsBridgeCheckEnabled;
     private boolean mIsOkButtonLongPressDisabled;
     private String mLastPlaylistId;
+    private String mLastPlaylistTitle;
     private boolean mIsRemapPageUpToNextEnabled;
     private boolean mIsRemapPageUpToLikeEnabled;
     private boolean mIsRemapChannelUpToNextEnabled;
@@ -518,6 +519,15 @@ public class GeneralData {
         return mLastPlaylistId;
     }
 
+    public void setLastPlaylistTitle(String playlistTitle) {
+        mLastPlaylistTitle = playlistTitle;
+        persistState();
+    }
+
+    public String getLastPlaylistTitle() {
+        return mLastPlaylistTitle;
+    }
+
     private void initSections() {
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mDefaultSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -574,6 +584,7 @@ public class GeneralData {
         mIsHideShortsFromHistoryEnabled = Helpers.parseBoolean(split, 25, false);
         mIsScreensaverDisabled = Helpers.parseBoolean(split, 26, false);
         mIsVPNEnabled = Helpers.parseBoolean(split, 27, false);
+        mLastPlaylistTitle = Helpers.parseStr(split, 28);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -608,6 +619,6 @@ public class GeneralData {
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
-                mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled));
+                mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle));
     }
 }

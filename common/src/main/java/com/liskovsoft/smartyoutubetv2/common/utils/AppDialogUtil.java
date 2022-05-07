@@ -2,7 +2,12 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.content.Context;
 import android.os.Build;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
@@ -11,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCatego
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPreset;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.OnSelectSubtitleStyle;
@@ -18,6 +24,12 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.Sub
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.youtubeapi.service.YouTubeMediaItemManager;
+import com.liskovsoft.youtubeapi.service.YouTubeSignInManager;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -31,6 +43,7 @@ public class AppDialogUtil {
     private static final int VIDEO_PRESETS_ID = 136;
     private static final int AUDIO_DELAY_ID = 137;
     private static final int SUBTITLE_STYLES_ID = 45;
+    private static final String TAG = AppDialogUtil.class.getSimpleName();
 
     /**
      * Adds share link items to existing dialog.
@@ -360,5 +373,65 @@ public class AppDialogUtil {
                     playbackController.getSpeed() == speed));
         }
         settingsPresenter.appendRadioCategory(context.getString(R.string.video_speed), items);
+    }
+
+    public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback) {
+        if (!YouTubeSignInManager.instance().isSigned()) {
+            MessageHelpers.showMessage(context, R.string.msg_signed_users_only);
+            return;
+        }
+
+        MediaItemManager itemManager = YouTubeMediaItemManager.instance();
+
+        Disposable playlistsInfoAction = itemManager.getVideoPlaylistsInfoObserve(video.videoId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        videoPlaylistInfos -> {
+                            AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(context);
+                            dialogPresenter.clear();
+
+                            appendPlaylistDialogContent(context, video, itemManager, callback, dialogPresenter, videoPlaylistInfos);
+                            dialogPresenter.showDialog(context.getString(R.string.dialog_add_to_playlist));
+                        },
+                        error -> {
+                            // Fallback to something on error
+                            Log.e(TAG, "Get playlists error: %s", error.getMessage());
+                        }
+                );
+    }
+
+    private static void appendPlaylistDialogContent(
+            Context context, Video video, MediaItemManager itemManager, VideoMenuCallback callback, AppDialogPresenter dialogPresenter, List<VideoPlaylistInfo> videoPlaylistInfos) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
+            options.add(UiOptionItem.from(
+                    playlistInfo.getTitle(),
+                    (item) -> {
+                        addRemoveFromPlaylist(context, video, itemManager, callback, playlistInfo.getPlaylistId(), item.isSelected());
+                        GeneralData.instance(context).setLastPlaylistId(playlistInfo.getPlaylistId());
+                        GeneralData.instance(context).setLastPlaylistTitle(playlistInfo.getTitle());
+                    },
+                    playlistInfo.isSelected()));
+        }
+
+        dialogPresenter.appendCheckedCategory(context.getString(R.string.dialog_add_to_playlist), options);
+    }
+
+    private static void addRemoveFromPlaylist(Context context, Video video, MediaItemManager itemManager, VideoMenuCallback callback, String playlistId, boolean checked) {
+        Observable<Void> editObserve;
+
+        if (checked) {
+            editObserve = itemManager.addToPlaylistObserve(playlistId, video.videoId);
+        } else {
+            // Check that the current video belongs to the right section
+            if (callback != null && Helpers.equals(video.playlistId, playlistId)) {
+                callback.onItemAction(video, VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST);
+            }
+            editObserve = itemManager.removeFromPlaylistObserve(playlistId, video.videoId);
+        }
+
+        Disposable addRemoveAction = RxUtils.execute(editObserve); // ignore results (do the work in the background)
     }
 }

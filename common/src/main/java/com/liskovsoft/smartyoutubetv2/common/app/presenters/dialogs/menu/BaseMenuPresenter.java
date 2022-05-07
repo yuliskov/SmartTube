@@ -21,8 +21,6 @@ import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaItemManager;
 import io.reactivex.Observable;
 
-import java.util.Random;
-
 public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private final MediaServiceManager mServiceManager;
 
