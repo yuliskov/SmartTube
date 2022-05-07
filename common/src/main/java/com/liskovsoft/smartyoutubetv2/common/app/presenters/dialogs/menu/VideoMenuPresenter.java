@@ -157,11 +157,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mVideo = video;
         sVideoHolder = new WeakReference<>(video);
 
-        MediaServiceManager.instance().authCheck(this::obtainPlaylistsAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
-    }
-
-    private void obtainPlaylistsAndShowDialogSigned() {
-        prepareAndShowDialogSigned();
+        MediaServiceManager.instance().authCheck(this::prepareAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
     }
 
     private void prepareAndShowDialogSigned() {
