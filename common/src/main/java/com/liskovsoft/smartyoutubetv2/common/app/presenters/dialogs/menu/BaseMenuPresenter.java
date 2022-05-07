@@ -216,8 +216,8 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         mServiceManager.loadPlaylists(video, group -> {
             boolean isSaved = false;
 
-            for (MediaItem item : group.getMediaItems()) {
-                if (Helpers.equals(video.title, item.getTitle())) {
+            for (MediaItem playlist : group.getMediaItems()) {
+                if (Helpers.equalsAny(playlist.getTitle(), video.title, String.format("%s - %s", video.extractAuthor(), video.title))) {
                     isSaved = true;
                     break;
                 }
@@ -233,7 +233,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                             getCallback().onItemAction(getVideo(), VideoMenuCallback.ACTION_REMOVE);
                             closeDialog();
                         }
-                    }, video.title);
+                    }, String.format("%s: %s", video.title, getContext().getString(R.string.remove_playlist)));
                 }
             } else {
                 savePlaylist(video);
