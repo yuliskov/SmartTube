@@ -20,7 +20,6 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
 public class VideoStateManager extends PlayerEventListenerHelper {
-    private static final long MUSIC_VIDEO_MIN_LENGTH_MS = 2 * 60 * 1000;
     private static final long MUSIC_VIDEO_MAX_LENGTH_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 60_000;
     private static final String TAG = VideoStateManager.class.getSimpleName();
@@ -238,7 +237,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         State state = mStateService.getByVideoId(item.videoId);
 
         // Reset position of music videos
-        boolean isShort = state != null && (isMusic(state.lengthMs) && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled());
+        boolean isShort = state != null && (state.lengthMs < MUSIC_VIDEO_MAX_LENGTH_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled());
 
         if (isShort || item.isLive) {
             resetPosition(item);
@@ -381,7 +380,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         Video item = getVideo();
         boolean isLiveThreshold = getController().getLengthMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
         boolean isLive = item.isLive && isLiveThreshold;
-        boolean isMusic = isMusic(getController().getLengthMs());
+        boolean isMusic = item.belongsToMusic();
 
         if (isLive || isMusic) {
             getController().setSpeed(1.0f);
@@ -476,9 +475,5 @@ public class VideoStateManager extends PlayerEventListenerHelper {
      */
     private Video getVideo() {
         return mVideo;
-    }
-
-    private boolean isMusic(long lengthMs) {
-        return lengthMs > MUSIC_VIDEO_MIN_LENGTH_MS && lengthMs < MUSIC_VIDEO_MAX_LENGTH_MS;
     }
 }
