@@ -218,8 +218,8 @@
     <string name="channels_auto_load">Caricamento automatico contenuto sezione canali</string>
     <string name="return_to_background_video">Torna al video in esecuzione in background</string>
     <string name="pin_unpin_from_sidebar">Fissa o rimuovi dalla barra laterale</string>
-    <string name="pin_unpin_playlist">Fissa o rimuovi la playlist</string>
-    <string name="pin_unpin_channel">Fissa o rimuovi il canale</string>
+    <string name="pin_unpin_playlist">Fissa o rimuovi questa playlist dalla barra laterale</string>
+    <string name="pin_unpin_channel">Fissa o rimuovi questo canale dalla barra laterale</string>
     <string name="pinned_to_sidebar">Fissato alla barra laterale</string>
     <string name="unpin_from_sidebar">Rimuovi dalla barra laterale</string>
     <string name="unpinned_from_sidebar">Rimosso dalla barra laterale</string>
@@ -387,9 +387,9 @@
     <string name="pressing_home_back">premendo HOME o INDIETRO</string>
     <string name="player_number_key_seek">Ricerca con i tasti numerici</string>
     <string name="save_remove_playlist">Salva o rimuovi questa playlist dalla sezione Playlist</string>
+    <string name="remove_playlist">Rimuovi questa playlist dalla sezione Playlist</string>
     <string name="removed_from_playlists">Rimosso dalla sezione Playlist</string>
     <string name="saved_to_playlists">Salvato nella sezione Playlist</string>
-    <string name="remove_playlist">Rimuovi questa playlist dalla sezione Playlist</string>
     <string name="create_playlist">Crea playlist</string>
     <string name="add_video_to_new_playlist">Aggiungi questo video ad una nuova playlist</string>
     <string name="cant_delete_empty_playlist">Non posso cancellare una playlist vuota</string>
@@ -397,4 +397,6 @@
     <string name="rename_playlist">Rinomina playlist</string>
     <string name="cant_rename_empty_playlist">Non posso rinominare una playlist vuota</string>
     <string name="cant_rename_foreign_playlist">Non posso rinominare una playlist esterna</string>
+    <string name="cant_save_playlist">Questa playlist non può essere salvata</string>
+    <string name="enter_value">Immetti un valore non vuoto</string>
 </resources>
