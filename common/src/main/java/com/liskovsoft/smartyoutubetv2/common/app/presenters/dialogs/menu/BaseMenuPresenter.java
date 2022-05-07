@@ -217,7 +217,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             boolean isSaved = false;
 
             for (MediaItem playlist : group.getMediaItems()) {
-                if (Helpers.equalsAny(playlist.getTitle(), video.title, String.format("%s - %s", video.extractAuthor(), video.title))) {
+                if (playlist.getTitle().contains(video.title)) {
                     isSaved = true;
                     break;
                 }
