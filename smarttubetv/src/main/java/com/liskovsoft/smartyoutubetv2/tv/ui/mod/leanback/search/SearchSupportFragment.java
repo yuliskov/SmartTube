@@ -32,6 +32,7 @@ import androidx.leanback.widget.SpeechRecognitionCallback;
 import androidx.leanback.widget.VerticalGridView;
 import com.liskovsoft.sharedutils.BuildConfig;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -340,6 +341,7 @@ public class SearchSupportFragment extends Fragment {
                 }
             }
         });
+        KeyHelpers.fixEnterKey(mSearchTextEditor);
         // BUGFIX: focus lost with keyboard???
         //mSearchTextEditor.setOnKeyboardDismissListener(this::focusOnSearchField);
 
@@ -360,16 +362,6 @@ public class SearchSupportFragment extends Fragment {
             }
         });
         mSearchSettingsOrbView.setOnOrbClickedListener(v -> onSearchSettingsClicked());
-        
-        //mSearchTextEditor.setOnClickListener(v -> {
-        //    Log.d(TAG, "on search field clicked");
-        //
-        //    if (getContext() != null) {
-        //        // https://stackoverflow.com/questions/5105354/how-to-show-soft-keyboard-when-edittext-is-focused
-        //        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        //        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        //    }
-        //});
 
         mSpeechOrbView = mSearchBar.findViewById(R.id.lb_search_bar_speech_orb);
 

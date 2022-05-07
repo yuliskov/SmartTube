@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
+import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 
@@ -22,7 +23,9 @@ public class SimpleEditDialog {
         LayoutInflater inflater = LayoutInflater.from(context);
         View contentView = inflater.inflate(R.layout.simple_edit_dialog, null);
 
-        ((EditText) contentView.findViewById(R.id.simple_edit_value)).setText(defaultValue);
+        EditText editField = (EditText) contentView.findViewById(R.id.simple_edit_value);
+        editField.setText(defaultValue);
+        KeyHelpers.fixEnterKey(editField);
 
         // keep empty, will override below.
         // https://stackoverflow.com/a/15619098/5379584

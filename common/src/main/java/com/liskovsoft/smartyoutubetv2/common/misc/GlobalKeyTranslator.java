@@ -21,14 +21,15 @@ public class GlobalKeyTranslator extends KeyTranslator {
     protected void initKeyMapping() {
         Map<Integer, Integer> globalKeyMapping = getKeyMapping();
 
-        // Fix rare situations with some remotes. E.g. remote doesn't work on search page.
-        globalKeyMapping.put(KeyEvent.KEYCODE_NUMPAD_ENTER, KeyEvent.KEYCODE_DPAD_CENTER); // G20s: keyboard popup fix?
+        // Fix rare situations with some remotes. E.g. Shield.
         globalKeyMapping.put(KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_BACK);
         // Fix for the unknown usb remote controller: https://smartyoutubetv.github.io/#comment-3742343397
         globalKeyMapping.put(KeyEvent.KEYCODE_ESCAPE, KeyEvent.KEYCODE_BACK);
 
         // Could cause serious 'OK not working' bug (where Enter key is used as OK)
-        //globalKeyMapping.put(KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_DPAD_CENTER); // G20s: keyboard popup fix?
+        // See: KeyHelpers#fixEnterKey
+        //globalKeyMapping.put(KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_DPAD_CENTER); // G20s fix: show keyboard on textview click
+        //globalKeyMapping.put(KeyEvent.KEYCODE_NUMPAD_ENTER, KeyEvent.KEYCODE_DPAD_CENTER); // G20s fix: show keyboard on textview click
 
         // May help on buggy firmwares (where Enter key is used as OK)
         if (!PlaybackPresenter.instance(mContext).isInPipMode()) {
