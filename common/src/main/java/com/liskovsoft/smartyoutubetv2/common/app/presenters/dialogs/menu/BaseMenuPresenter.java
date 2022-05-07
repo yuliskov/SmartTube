@@ -226,14 +226,14 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             if (isSaved) {
                 if (video.playlistId == null) {
                     MessageHelpers.showMessage(getContext(), R.string.cant_delete_empty_playlist);
-                } else if (getVideo().belongsToPlaylists() && getCallback() != null) { // check that the parent is playlist
+                } else {
                     AppDialogUtil.showConfirmationDialog(getContext(), () -> {
                         removePlaylist(video);
-                        getCallback().onItemAction(getVideo(), VideoMenuCallback.ACTION_REMOVE);
-                        closeDialog();
+                        if (getCallback() != null) {
+                            getCallback().onItemAction(getVideo(), VideoMenuCallback.ACTION_REMOVE);
+                            closeDialog();
+                        }
                     }, video.title);
-                } else {
-                    removePlaylist(video);
                 }
             } else {
                 savePlaylist(video);
