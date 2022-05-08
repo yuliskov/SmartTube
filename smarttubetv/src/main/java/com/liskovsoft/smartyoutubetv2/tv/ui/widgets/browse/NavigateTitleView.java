@@ -152,7 +152,7 @@ public class NavigateTitleView extends TitleView {
 
             if (newVisibility == View.VISIBLE) {
                 Video video = PlaybackPresenter.instance(getContext()).getVideo();
-                mPipTitle.setText(video != null ? video.title : "");
+                mPipTitle.setText(video != null ? String.format("%s - %s", video.title, video.extractAuthor()) : "");
             }
         }
     }
