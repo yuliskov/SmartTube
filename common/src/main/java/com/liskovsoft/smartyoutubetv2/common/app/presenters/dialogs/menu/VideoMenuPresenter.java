@@ -305,7 +305,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo == null || !mVideo.hasPlaylist()) {
+        if (mVideo == null || !mVideo.hasPlaylist() || mVideo.belongsToSamePlaylistGroup()) {
             return;
         }
 

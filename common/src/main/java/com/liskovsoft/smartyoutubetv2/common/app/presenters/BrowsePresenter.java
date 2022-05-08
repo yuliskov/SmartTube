@@ -884,4 +884,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             getView().selectSection(sectionIndex, true);
         }
     }
+
+    public boolean inForeground() {
+        return ViewManager.instance(getContext()).getTopView() == BrowseView.class;
+    }
 }
