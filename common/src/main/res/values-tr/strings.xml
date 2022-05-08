@@ -398,4 +398,6 @@
     <string name="cant_rename_empty_playlist">Boş oynatma listesi yeniden adlandırılamıyor</string>
     <string name="cant_rename_foreign_playlist">Yabancı oynatma listesi yeniden adlandırılamıyor</string>
     <string name="cant_save_playlist">Bu oynatma listesi kaydedilemez</string>
+    <string name="enter_value">Boş olmayan bir değer girin</string>
+    <string name="dialog_add_remove_from">Ekle/Kaldır: %s</string>
 </resources>
