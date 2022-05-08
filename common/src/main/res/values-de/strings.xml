@@ -218,8 +218,8 @@
     <string name="channels_auto_load">Inhalt der Kanäle-Kategorie automatisch laden</string>
     <string name="return_to_background_video">Zurück zum Video im Hintergrund</string>
     <string name="pin_unpin_from_sidebar">Anheften/Ablösen von Seitenleiste</string>
-    <string name="pin_unpin_playlist">Diese Wiedergabeliste an Seitenleiste anheften/ablösen</string>
-    <string name="pin_unpin_channel">Diesen Kanal an Seitenleiste anheften/ablösen</string>
+    <string name="pin_unpin_playlist">Wiedergabeliste an Seitenleiste anheften/ablösen</string>
+    <string name="pin_unpin_channel">Kanal an Seitenleiste anheften/ablösen</string>
     <string name="pinned_to_sidebar">An Seitenleiste angeheftet</string>
     <string name="unpin_from_sidebar">Ablösen von Seitenleiste</string>
     <string name="unpinned_from_sidebar">Von Seitenleiste abgelöst</string>
@@ -391,7 +391,7 @@
     <string name="removed_from_playlists">Entfernt aus der Wiedergabelisten-Kategorie</string>
     <string name="saved_to_playlists">Gespeichert in der Wiedergabelisten-Kategorie</string>
     <string name="create_playlist">Wiedergabeliste erstellen</string>
-    <string name="add_video_to_new_playlist">Dieses Video zu einer neuen Wiedergabeliste hinzufügen</string>
+    <string name="add_video_to_new_playlist">Video zu einer neuen Wiedergabeliste hinzufügen</string>
     <string name="cant_delete_empty_playlist">Leere Wiedergabeliste kann nicht gelöscht werden</string>
     <string name="playlist">Wiedergabeliste</string>
     <string name="rename_playlist">Wiedergabeliste umbenennen</string>
