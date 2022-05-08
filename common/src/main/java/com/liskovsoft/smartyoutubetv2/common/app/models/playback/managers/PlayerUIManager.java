@@ -317,11 +317,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
         dialogPresenter.clear();
 
-        dialogPresenter.appendLongTextCategory(
-                getController().getVideo().title, UiOptionItem.from(description, null)
-        );
+        String title = getController().getVideo().title;
 
-        dialogPresenter.showDialog(getController().getVideo().title);
+        dialogPresenter.appendLongTextCategory(title, UiOptionItem.from(description, null));
+
+        dialogPresenter.showDialog(title);
     }
 
     @Override
