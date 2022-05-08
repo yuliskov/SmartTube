@@ -399,4 +399,5 @@
     <string name="cant_rename_foreign_playlist">Can\'t rename foreign playlist</string>
     <string name="cant_save_playlist">This playlist cannot be saved</string>
     <string name="enter_value">Enter any non-empty value</string>
+    <string name="dialog_add_remove_from">Add/Remove from %s</string>
 </resources>

@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -255,13 +256,30 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
-                        R.string.dialog_add_to, playlistTitle),
+                        R.string.dialog_add_remove_from, playlistTitle),
                         optionItem -> {
-                            addRemoveFromPlaylist(playlistId, true);
-                            MessageHelpers.showMessage(getContext(), getContext().getString(
-                                    R.string.added_to, playlistTitle
-                            ));
-                            mDialogPresenter.closeDialog();
+                            Disposable playlistsInfoAction = mItemManager.getVideoPlaylistsInfoObserve(mVideo.videoId)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(
+                                            videoPlaylistInfos -> {
+                                                for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
+                                                    if (playlistInfo.getPlaylistId().equals(playlistId)) {
+                                                        addRemoveFromPlaylist(playlistInfo.getPlaylistId(), !playlistInfo.isSelected());
+                                                        MessageHelpers.showMessage(getContext(), getContext().getString(
+                                                                playlistInfo.isSelected() ? R.string.removed_from : R.string.added_to, playlistInfo.getTitle()
+                                                        ));
+                                                        mDialogPresenter.closeDialog();
+
+                                                        break;
+                                                    }
+                                                }
+                                            },
+                                            error -> {
+                                                // Fallback to something on error
+                                                Log.e(TAG, "Add to recent playlist error: %s", error.getMessage());
+                                            }
+                                    );
                         }
                 )
         );
