@@ -391,10 +391,13 @@
     <string name="removed_from_playlists">Entfernt aus der Wiedergabelisten-Kategorie</string>
     <string name="saved_to_playlists">Gespeichert in der Wiedergabelisten-Kategorie</string>
     <string name="create_playlist">Wiedergabeliste erstellen</string>
-    <string name="add_video_to_new_playlist">Dieses Video zu einer neuen Wiedergabeliste hinzufügen</string>
+    <string name="add_video_to_new_playlist">Video zu einer neuen Wiedergabeliste hinzufügen</string>
     <string name="cant_delete_empty_playlist">Leere Wiedergabeliste kann nicht gelöscht werden</string>
     <string name="playlist">Wiedergabeliste</string>
     <string name="rename_playlist">Wiedergabeliste umbenennen</string>
     <string name="cant_rename_empty_playlist">Leere Wiedergabeliste kann nicht umbenannt werden</string>
     <string name="cant_rename_foreign_playlist">Fremde Wiedergabeliste kann nicht umbenannt werden</string>
+    <string name="cant_save_playlist">Diese Wiedergabeliste kann nicht gespeichert werden</string>
+    <string name="enter_value">Geben Sie einen beliebigen (nicht leeren) Wert ein</string>
+    <string name="dialog_add_remove_from">Hinzufügen/Entfernen aus %s</string>
 </resources>
