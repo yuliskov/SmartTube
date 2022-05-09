@@ -808,10 +808,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void setArtwork(String url) {
-        if (url == null || mPlayerGlue == null) {
-            return;
-        }
-
         mBackgroundManager.setBackground(url);
     }
 

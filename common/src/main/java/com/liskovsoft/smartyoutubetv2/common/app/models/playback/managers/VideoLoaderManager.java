@@ -278,6 +278,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             mPlaylist.setCurrent(item);
             mLastVideo = item;
             getController().setVideo(item);
+            getController().setArtwork(null);
             loadFormatInfo(item);
         }
     }
