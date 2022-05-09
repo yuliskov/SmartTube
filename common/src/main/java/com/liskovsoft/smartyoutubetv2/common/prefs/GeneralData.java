@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -320,39 +321,35 @@ public class GeneralData {
     }
 
     public void hideShortsFromSubscriptions(boolean enable) {
-        mIsHideShortsFromSubscriptionsEnabled = enable;
-        persistState();
+        GlobalPreferences.sInstance.hideShortsFromSubscriptions(enable);
     }
 
     public boolean isHideShortsFromSubscriptionsEnabled() {
-        return mIsHideShortsFromSubscriptionsEnabled;
+        return GlobalPreferences.sInstance.isHideShortsFromSubscriptionsEnabled();
     }
 
     public void hideShortsFromHome(boolean enable) {
-        mIsHideShortsFromHomeEnabled = enable;
-        persistState();
+        GlobalPreferences.sInstance.hideShortsFromHome(enable);
     }
 
     public boolean isHideShortsFromHomeEnabled() {
-        return mIsHideShortsFromHomeEnabled;
+        return GlobalPreferences.sInstance.isHideShortsFromHomeEnabled();
     }
 
     public void hideShortsFromHistory(boolean enable) {
-        mIsHideShortsFromHistoryEnabled = enable;
-        persistState();
+        GlobalPreferences.sInstance.hideShortsFromHistory(enable);
     }
 
     public boolean isHideShortsFromHistoryEnabled() {
-        return mIsHideShortsFromHistoryEnabled;
+        return GlobalPreferences.sInstance.isHideShortsFromHistoryEnabled();
     }
 
     public void hideUpcoming(boolean enable) {
-        mIsHideUpcomingEnabled = enable;
-        persistState();
+        GlobalPreferences.sInstance.hideUpcoming(enable);
     }
 
     public boolean isHideUpcomingEnabled() {
-        return mIsHideUpcomingEnabled;
+        return GlobalPreferences.sInstance.isHideUpcomingEnabled();
     }
 
     public void disableScreensaver(boolean enable) {

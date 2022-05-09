@@ -36,7 +36,6 @@ import androidx.core.content.ContextCompat;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -44,9 +43,6 @@ import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -56,9 +52,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
-import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,7 +65,6 @@ public class Utils {
     private static final String QR_CODE_URL_TEMPLATE = "https://api.qrserver.com/v1/create-qr-code/?data=%s";
     private static final int GLOBAL_VOLUME_TYPE = AudioManager.STREAM_MUSIC;
     private static final String GLOBAL_VOLUME_SERVICE = Context.AUDIO_SERVICE;
-    private static final int SHORTS_LEN_MS = 60 * 1_000;
 
     /**
      * Limit the maximum size of a Map by removing oldest entries when limit reached
@@ -497,18 +490,6 @@ public class Utils {
                 ChannelPresenter.instance(context).updateRows(group);
             }
         });
-    }
-
-    public static boolean isShort(MediaItem mediaItem) {
-        if (mediaItem == null || mediaItem.getTitle() == null) {
-            return false;
-        }
-
-        String title = mediaItem.getTitle().toLowerCase();
-
-        int lengthMs = mediaItem.getDurationMs();
-        boolean isShortLength = lengthMs > 0 && lengthMs < SHORTS_LEN_MS;
-        return isShortLength || title.contains("#short") || title.contains("#shorts") || title.contains("#tiktok");
     }
 
     public static void sendKey(int key) {

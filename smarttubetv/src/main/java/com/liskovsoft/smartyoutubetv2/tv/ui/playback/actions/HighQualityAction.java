@@ -16,6 +16,6 @@ public class HighQualityAction extends Action {
 
         setIcon(uncoloredDrawable);
         setLabel1(context.getString(
-                R.string.action_high_quality));
+                R.string.playback_settings));
     }
 }

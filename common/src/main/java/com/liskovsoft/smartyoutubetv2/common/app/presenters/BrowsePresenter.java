@@ -571,8 +571,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                     continue;
                                 }
                                 
-                                filterIfNeeded(mediaGroup);
-
                                 // Move to top isn't working properly (too slow)
                                 //VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, moveToTopIfNeeded(mediaGroup));
                                 VideoGroup videoGroup = VideoGroup.from(mediaGroup, section);
@@ -625,8 +623,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 return;
                             }
 
-                            filterIfNeeded(mediaGroup);
-
                             VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, position);
                             getView().updateSection(videoGroup);
 
@@ -678,8 +674,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueGroup -> {
-                            filterIfNeeded(continueGroup);
-
                             VideoGroup videoGroup = VideoGroup.from(continueGroup, group.getSection(), group.getPosition());
                             getView().updateSection(videoGroup);
 
@@ -787,30 +781,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         return -1;
-    }
-
-    private void filterIfNeeded(MediaGroup mediaGroup) {
-        if (mediaGroup == null || mediaGroup.getMediaItems() == null) {
-            return;
-        }
-
-        boolean isHideShortsEnabled = (mGeneralData.isHideShortsFromSubscriptionsEnabled() && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS) ||
-                (mGeneralData.isHideShortsFromHomeEnabled() && mediaGroup.getType() == MediaGroup.TYPE_HOME) ||
-                (mGeneralData.isHideShortsFromHistoryEnabled() && mediaGroup.getType() == MediaGroup.TYPE_HISTORY);
-        boolean isHideUpcomingEnabled = mGeneralData.isHideUpcomingEnabled() && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS;
-
-        if (isHideShortsEnabled || isHideUpcomingEnabled) {
-
-            // Remove Shorts and/or Upcoming
-            // NOTE: Predicate replacement function for devices with Android 6.0 and below.
-            Helpers.removeIf(mediaGroup.getMediaItems(), mediaItem -> {
-                if (mediaItem == null) {
-                    return false;
-                }
-
-                return (isHideShortsEnabled && Utils.isShort(mediaItem)) || (isHideUpcomingEnabled && mediaItem.isUpcoming());
-            });
-        }
     }
 
     private void filterIfNeeded(List<MediaGroup> mediaGroups) {

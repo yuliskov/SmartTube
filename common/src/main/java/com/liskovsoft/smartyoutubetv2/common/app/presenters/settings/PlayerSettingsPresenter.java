@@ -187,7 +187,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 {R.string.action_repeat_mode, PlayerTweaksData.PLAYER_BUTTON_REPEAT_MODE},
                 {R.string.action_next, PlayerTweaksData.PLAYER_BUTTON_NEXT},
                 {R.string.action_previous, PlayerTweaksData.PLAYER_BUTTON_PREVIOUS},
-                {R.string.action_high_quality, PlayerTweaksData.PLAYER_BUTTON_HIGH_QUALITY}
+                {R.string.playback_settings, PlayerTweaksData.PLAYER_BUTTON_HIGH_QUALITY}
         }) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {
