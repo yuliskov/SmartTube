@@ -278,7 +278,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             mPlaylist.setCurrent(item);
             mLastVideo = item;
             getController().setVideo(item);
-            getController().setArtwork(null);
             loadFormatInfo(item);
         }
     }
@@ -326,6 +325,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
         boolean isLive = formatInfo.isLive() || formatInfo.isLiveContent();
+        String artworkUrl = null;
 
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
@@ -352,13 +352,15 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
             scheduleReloadVideoTimer(30 * 1_000);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
-            getController().setArtwork(mLastVideo.bgImageUrl);
+            artworkUrl = mLastVideo.bgImageUrl;
         }
 
         Video video = getController().getVideo();
         if (video != null) {
             video.sync(formatInfo);
         }
+
+        getController().setArtwork(artworkUrl);
     }
 
     private void scheduleReloadVideoTimer(int reloadIntervalMs) {
