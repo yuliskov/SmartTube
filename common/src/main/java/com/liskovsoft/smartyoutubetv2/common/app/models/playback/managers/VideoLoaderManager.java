@@ -351,6 +351,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
             scheduleReloadVideoTimer(30 * 1_000);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
+            getController().setArtwork(mLastVideo.bgImageUrl);
         }
 
         Video video = getController().getVideo();

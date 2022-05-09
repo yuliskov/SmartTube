@@ -108,7 +108,7 @@ public class UriBackgroundManager {
         return mBackgroundManager;
     }
 
-    private void setBackground(String uri) {
+    public void setBackground(String uri) {
         int width = mMetrics.widthPixels;
         int height = mMetrics.heightPixels;
 
