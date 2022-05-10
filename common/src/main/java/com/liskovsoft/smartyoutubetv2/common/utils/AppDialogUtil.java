@@ -324,14 +324,14 @@ public class AppDialogUtil {
 
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(context.getString(R.string.cancel),
-                option -> settingsPresenter.goBack()));
-
         options.add(UiOptionItem.from(context.getString(R.string.btn_confirm),
                 option -> {
                     settingsPresenter.goBack();
                     onConfirm.run();
                 }));
+
+        options.add(UiOptionItem.from(context.getString(R.string.cancel),
+                option -> settingsPresenter.goBack()));
 
         settingsPresenter.appendStringsCategory(title, options);
 
