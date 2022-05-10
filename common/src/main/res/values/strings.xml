@@ -406,4 +406,10 @@
     <string name="alt_presets_behavior_desc">The app will try to maintain bandwidth correspond to selected preset instead of matching between resolution, fps and codec.</string>
     <string name="sleep_timer">Enable sleep timer (one hour)</string>
     <string name="sleep_timer_desc">Pause the playback if user didn\'t use the remote during one hour</string>
+    <string name="disable_vsync">Disable snap to vsync</string>
+    <string name="disable_vsync_desc">Improves playback performance a bit</string>
+    <string name="skip_codec_profile_check">Skip codec profile level check</string>
+    <string name="skip_codec_profile_check_desc">Don\'t check codec support when starting a video. Could be helpful on buggy firmwares.</string>
+    <string name="force_sw_codec">Force SW video decoder</string>
+    <string name="force_sw_codec_desc">Could play almost any video but performance is very poor.</string>
 </resources>

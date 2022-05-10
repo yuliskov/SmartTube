@@ -402,4 +402,10 @@
     <string name="alt_presets_behavior_desc">Додаток спробує підтримувати пропускну здатність близьку до пресету замість того, щоб вибрати точну відповідність між роздільною здатністю, частотою кадрів та кодеком.</string>
     <string name="sleep_timer">Таймер сну (одна година)</string>
     <string name="sleep_timer_desc">Ставити відтворення на паузу, якщо користувач не використовував пульт дистанційного керування протягом однієї години</string>
+    <string name="disable_vsync">Вимкнути вертикальну синхронізацію</string>
+    <string name="disable_vsync_desc">Трохи покращує продуктивність при відтворенні</string>
+    <string name="skip_codec_profile_check">Пропустити перевірку кодеків</string>
+    <string name="skip_codec_profile_check_desc">Не перевіряти підтримку кодеків під час запуску відео. Може бути корисним для глючних прошивок.</string>
+    <string name="force_sw_codec">Активувати програмний декодер</string>
+    <string name="force_sw_codec_desc">Може відтворювати будь-яке відео, але продуктивність дуже низька.</string>
 </resources>

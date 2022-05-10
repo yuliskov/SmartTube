@@ -261,15 +261,18 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
                 mPlayerData.isSonyTimerFixEnabled()));
 
-        options.add(UiOptionItem.from("Disable snap to vsync",
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_vsync),
+                getContext().getString(R.string.disable_vsync_desc),
                 option -> mPlayerTweaksData.disableSnapToVsync(option.isSelected()),
                 mPlayerTweaksData.isSnappingToVsyncDisabled()));
 
-        options.add(UiOptionItem.from("Skip codec profile level check",
+        options.add(UiOptionItem.from(getContext().getString(R.string.skip_codec_profile_check),
+                getContext().getString(R.string.skip_codec_profile_check_desc),
                 option -> mPlayerTweaksData.skipProfileLevelCheck(option.isSelected()),
                 mPlayerTweaksData.isProfileLevelCheckSkipped()));
 
-        options.add(UiOptionItem.from("Force SW video decoder",
+        options.add(UiOptionItem.from(getContext().getString(R.string.force_sw_codec),
+                getContext().getString(R.string.force_sw_codec_desc),
                 option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),
                 mPlayerTweaksData.isSWDecoderForced()));
 

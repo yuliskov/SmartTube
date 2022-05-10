@@ -402,4 +402,10 @@
     <string name="alt_presets_behavior_desc">Приложение попытается поддерживать пропускную способность близкую к пресету вместо того, чтобы выбрать точное соответсвие между разрешением, частотой кадров и кодеком.</string>
     <string name="sleep_timer">Таймер сна (один час)</string>
     <string name="sleep_timer_desc">Ставить проигрывание на паузу, если пользователь в течение часа не пользовался пультом.</string>
+    <string name="disable_vsync">Отключить вертикальную синхронизацию</string>
+    <string name="disable_vsync_desc">Немного улучшает производительность при воспроизведении</string>
+    <string name="skip_codec_profile_check">Пропустить проверку кодеков</string>
+    <string name="skip_codec_profile_check_desc">Не проверять поддержку кодеков при запуске видео. Может быть полезно для глючных прошивок.</string>
+    <string name="force_sw_codec">Активировать программный декодер</string>
+    <string name="force_sw_codec_desc">Может воспроизводить любое видео, но производительность очень низкая.</string>
 </resources>
