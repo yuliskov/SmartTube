@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.SearchOrbView;
 import androidx.leanback.widget.TitleView;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
@@ -17,7 +16,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler;
-import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
 
@@ -49,7 +47,6 @@ public class NavigateTitleView extends TitleView {
 
     @Override
     public View focusSearch(View focused, int direction) {
-
         View nextFoundFocusableViewInLayout = null;
 
         // Only concerned about focusing left and right at the moment
