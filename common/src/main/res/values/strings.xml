@@ -400,4 +400,10 @@
     <string name="cant_save_playlist">This playlist cannot be saved</string>
     <string name="enter_value">Enter any non-empty value</string>
     <string name="dialog_add_remove_from">Add/Remove from %s</string>
+    <string name="lb_playback_controls_skip_next">Skip Next</string>
+    <string name="lb_playback_controls_skip_previous">Skip Previous/Rewind to start position</string>
+    <string name="alt_presets_behavior">Alt presets behavior (limit bandwidth)</string>
+    <string name="alt_presets_behavior_desc">The app will try to maintain bandwidth correspond to selected preset instead of matching between resolution, fps and codec.</string>
+    <string name="sleep_timer">Enable sleep timer (one hour)</string>
+    <string name="sleep_timer_desc">Activate screensaver if user didn\'t use the remote during one hour</string>
 </resources>

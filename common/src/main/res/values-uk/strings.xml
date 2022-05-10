@@ -396,4 +396,10 @@
     <string name="cant_save_playlist">Цей плейлист зберегти неможливо</string>
     <string name="enter_value">Введіть будь-яке непусте значення</string>
     <string name="dialog_add_remove_from">Додати/Видалити з %s</string>
+    <string name="lb_playback_controls_skip_next">"Перейти до наступного відео"</string>
+    <string name="lb_playback_controls_skip_previous">"Перейти до попереднього відео/Перемотати на початок"</string>
+    <string name="alt_presets_behavior">Альтернативна поведінка відео пресетів (обмеження пропускної спроможності)</string>
+    <string name="alt_presets_behavior_desc">Додаток спробує підтримувати пропускну здатність близьку до пресету замість того, щоб вибрати точну відповідність між роздільною здатністю, частотою кадрів та кодеком.</string>
+    <string name="sleep_timer">Таймер сну (одна година)</string>
+    <string name="sleep_timer_desc">Активувати скринсейвер, якщо користувач не використовував пульт дистанційного керування протягом однієї години</string>
 </resources>

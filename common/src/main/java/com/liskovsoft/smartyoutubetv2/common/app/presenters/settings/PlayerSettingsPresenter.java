@@ -251,11 +251,13 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isTunneledPlaybackEnabled()));
 
-        options.add(UiOptionItem.from("Alt presets behavior (limit bandwidth)",
+        options.add(UiOptionItem.from(getContext().getString(R.string.alt_presets_behavior),
+                getContext().getString(R.string.alt_presets_behavior_desc),
                 option -> mPlayerTweaksData.enableNoFpsPresets(option.isSelected()),
                 mPlayerTweaksData.isNoFpsPresetsEnabled()));
 
-        options.add(UiOptionItem.from("Enable sleep timer (one hour)",
+        options.add(UiOptionItem.from(getContext().getString(R.string.sleep_timer),
+                getContext().getString(R.string.sleep_timer_desc),
                 option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
                 mPlayerData.isSonyTimerFixEnabled()));
 

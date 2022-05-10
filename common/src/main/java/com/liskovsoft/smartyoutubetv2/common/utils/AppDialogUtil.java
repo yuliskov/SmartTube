@@ -419,10 +419,10 @@ public class AppDialogUtil {
         dialogPresenter.appendCheckedCategory(context.getString(R.string.dialog_add_to_playlist), options);
     }
 
-    private static void addRemoveFromPlaylist(Context context, Video video, MediaItemManager itemManager, VideoMenuCallback callback, String playlistId, boolean checked) {
+    private static void addRemoveFromPlaylist(Context context, Video video, MediaItemManager itemManager, VideoMenuCallback callback, String playlistId, boolean add) {
         Observable<Void> editObserve;
 
-        if (checked) {
+        if (add) {
             editObserve = itemManager.addToPlaylistObserve(playlistId, video.videoId);
         } else {
             // Check that the current video belongs to the right section
