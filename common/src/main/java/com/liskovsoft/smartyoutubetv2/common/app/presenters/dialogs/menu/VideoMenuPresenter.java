@@ -266,7 +266,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                                                 for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
                                                     if (playlistInfo.getPlaylistId().equals(playlistId)) {
                                                         addRemoveFromPlaylist(playlistInfo.getPlaylistId(), playlistInfo.getTitle(), !playlistInfo.isSelected());
-                                                        mDialogPresenter.closeDialog();
                                                         break;
                                                     }
                                                 }
@@ -502,42 +501,44 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                         }));
     }
 
-    //private void addRemoveFromRecentPlaylist(VideoPlaylistInfo playlistInfo, boolean add) {
+    //private void addRemoveFromPlaylist(String playlistId, String playlistTitle, boolean add) {
+    //    Observable<Void> editObserve;
+    //
     //    if (add) {
-    //        Observable<Void> editObserve = mItemManager.addToPlaylistObserve(playlistInfo.getPlaylistId(), mVideo.videoId);
-    //        mAddToPlaylistAction = RxUtils.execute(editObserve);
-    //        mDialogPresenter.closeDialog();
-    //        MessageHelpers.showMessage(getContext(), getContext().getString(R.string.added_to, playlistInfo.getTitle()));
+    //        editObserve = mItemManager.addToPlaylistObserve(playlistId, mVideo.videoId);
     //    } else {
-    //        AppDialogUtil.showConfirmationDialog(getContext(), () -> {
-    //            // Check that the current video belongs to the right section
-    //            if (mCallback != null && Helpers.equals(mVideo.playlistId, playlistInfo.getPlaylistId())) {
-    //                mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST);
-    //            }
-    //            Observable<Void> editObserve = mItemManager.removeFromPlaylistObserve(playlistInfo.getPlaylistId(), mVideo.videoId);
-    //            mAddToPlaylistAction = RxUtils.execute(editObserve);
-    //            mDialogPresenter.closeDialog();
-    //            MessageHelpers.showMessage(getContext(), getContext().getString(R.string.removed_from, playlistInfo.getTitle()));
-    //        }, getContext().getString(R.string.dialog_remove_from, playlistInfo.getTitle()));
+    //        // Check that the current video belongs to the right section
+    //        if (mCallback != null && Helpers.equals(mVideo.playlistId, playlistId)) {
+    //            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST);
+    //        }
+    //        editObserve = mItemManager.removeFromPlaylistObserve(playlistId, mVideo.videoId);
     //    }
+    //
+    //    MessageHelpers.showMessage(getContext(),
+    //            getContext().getString(add ? R.string.added_to : R.string.removed_from, playlistTitle));
+    //    mAddToPlaylistAction = RxUtils.execute(editObserve);
     //}
 
     private void addRemoveFromPlaylist(String playlistId, String playlistTitle, boolean add) {
-        Observable<Void> editObserve;
-        
         if (add) {
-            editObserve = mItemManager.addToPlaylistObserve(playlistId, mVideo.videoId);
+            Observable<Void> editObserve = mItemManager.addToPlaylistObserve(playlistId, mVideo.videoId);
+            mAddToPlaylistAction = RxUtils.execute(editObserve);
+            mDialogPresenter.closeDialog();
+            MessageHelpers.showMessage(getContext(),
+                    getContext().getString(R.string.added_to, playlistTitle));
         } else {
-            // Check that the current video belongs to the right section
-            if (mCallback != null && Helpers.equals(mVideo.playlistId, playlistId)) {
-                mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST);
-            }
-            editObserve = mItemManager.removeFromPlaylistObserve(playlistId, mVideo.videoId);
+            AppDialogUtil.showConfirmationDialog(getContext(), () -> {
+                // Check that the current video belongs to the right section
+                if (mCallback != null && Helpers.equals(mVideo.playlistId, playlistId)) {
+                    mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST);
+                }
+                Observable<Void> editObserve = mItemManager.removeFromPlaylistObserve(playlistId, mVideo.videoId);
+                mAddToPlaylistAction = RxUtils.execute(editObserve);
+                mDialogPresenter.closeDialog();
+                MessageHelpers.showMessage(getContext(),
+                        getContext().getString(R.string.removed_from, playlistTitle));
+            }, getContext().getString(R.string.dialog_remove_from, playlistTitle));
         }
-
-        MessageHelpers.showMessage(getContext(),
-                getContext().getString(add ? R.string.added_to : R.string.removed_from, playlistTitle));
-        mAddToPlaylistAction = RxUtils.execute(editObserve);
     }
 
     private void toggleSubscribe() {

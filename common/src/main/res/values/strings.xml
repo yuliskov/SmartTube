@@ -405,5 +405,5 @@
     <string name="alt_presets_behavior">Alt presets behavior (limit bandwidth)</string>
     <string name="alt_presets_behavior_desc">The app will try to maintain bandwidth correspond to selected preset instead of matching between resolution, fps and codec.</string>
     <string name="sleep_timer">Enable sleep timer (one hour)</string>
-    <string name="sleep_timer_desc">Activate screensaver if user didn\'t use the remote during one hour</string>
+    <string name="sleep_timer_desc">Pause the playback if user didn\'t use the remote during one hour</string>
 </resources>
