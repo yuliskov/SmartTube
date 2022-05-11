@@ -14,32 +14,23 @@ public abstract class KeyTranslator {
     private final Map<Integer, Runnable> mActionMapping = new HashMap<>();
 
     public final boolean translate(KeyEvent event) {
-        Map<Integer, Integer> keyMapping = getKeyMapping();
-        Integer newKeyCode = null;
         boolean handled = false;
 
-        if (keyMapping != null) {
-            newKeyCode = keyMapping.get(event.getKeyCode());
-        }
-
-        Map<Integer, Runnable> actionMapping = getActionMapping();
-
-        if (actionMapping != null) {
-            Runnable action = actionMapping.get(event.getKeyCode());
-            if (action != null) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    action.run();
-                }
-                newKeyCode = KeyEvent.KEYCODE_UNKNOWN; // disable original mapping
+        Runnable action = mActionMapping.get(event.getKeyCode());
+        if (action != null) {
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                action.run();
             }
+            handled = true;
         }
 
-        KeyEvent newKeyEvent = translate(event, newKeyCode);
-
-        if (newKeyEvent != event) {
-            handled = true;
-
-            RxUtils.runAsync(() -> Utils.sendKey(newKeyEvent));
+        if (!handled) {
+            Integer newKeyCode = mKeyMapping.get(event.getKeyCode());
+            KeyEvent newKeyEvent = translate(event, newKeyCode);
+            if (newKeyEvent != event) {
+                RxUtils.runAsync(() -> Utils.sendKey(newKeyEvent));
+                handled = true;
+            }
         }
 
         return handled;
