@@ -364,7 +364,7 @@
     <string name="ambilight_ratio_fix_desc">Olmayan ön gerilim aydınlatmasını düzeltir. Yanlış en boy oranını düzeltir. Boş ekran görüntülerini düzeltir. Performansı etkiler!</string>
     <string name="ambilight_ratio_fix">Ambilight/En boy oranı/Ekran görüntüleri düzeltmesi</string>
     <string name="force_legacy_codecs_desc">Alt sınıf cihazlarda performansı önemli ölçüde artırır. Maksimum çözünürlük 720p\'dir.</string>
-    <string name="force_legacy_codecs">Eski çözücüleri zorla (720p)</string>
+    <string name="force_legacy_codecs">Eski kod çözücüleri zorla (720p)</string>
     <string name="live_stream_fix_desc">Alt sınıf cihazlarda canlı yayın performansını önemli ölçüde artırır. Maksimum çözünürlük 1080p\'dir.</string>
     <string name="live_stream_fix">Canlı yayın düzeltmesi. (1080p)</string>
     <string name="playback_notifications_fix_desc">Parça değişikliği bildirimlerini gizler. AOSP tabanlı aygıt yazılımlarında faydalı olabilir.</string>
@@ -400,4 +400,16 @@
     <string name="cant_save_playlist">Bu oynatma listesi kaydedilemez</string>
     <string name="enter_value">Boş olmayan bir değer girin</string>
     <string name="dialog_add_remove_from">Ekle/Kaldır: %s</string>
+    <string name="lb_playback_controls_skip_next">Sonrakine atla</string>
+    <string name="lb_playback_controls_skip_previous">Öncekine atla/Başlangıç konumuna geri sar</string>
+    <string name="alt_presets_behavior">Alt. ön ayar davranışı (bant genişliğini sınırla)</string>
+    <string name="alt_presets_behavior_desc">Uygulama çözünürlük, fps ve kod çözücü arasında eşleştirme yapmak yerine bant genişliğinin seçilen ön ayara karşılık gelmesini sağlamaya çalışacaktır.</string>
+    <string name="sleep_timer">Uyku zamanlayıcısını etkinleştir (bir saat)</string>
+    <string name="sleep_timer_desc">Kullanıcı bir saat boyunca uzaktan kumandayı kullanmadıysa oynatmayı duraklatır.</string>
+    <string name="disable_vsync">Dikey eşzamanlamaya uymayı devre dışı bırak</string>
+    <string name="disable_vsync_desc">Oynatma performansını biraz artırır.</string>
+    <string name="skip_codec_profile_check">Kod çözücü profil düzey kontrolünü atla</string>
+    <string name="skip_codec_profile_check_desc">Bir videoyu başlatırken kod çözücü desteğini kontrol etmez. Sorunlu aygıt yazılımlarında yardımcı olabilir.</string>
+    <string name="force_sw_codec">Yazılımsal video kod çözücüyü zorla</string>
+    <string name="force_sw_codec_desc">Hemen hemen her videoyu oynatabilir ama performansı çok kötüdür.</string>
 </resources>
