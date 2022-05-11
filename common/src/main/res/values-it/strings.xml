@@ -403,9 +403,9 @@
     <string name="lb_playback_controls_skip_next">Salta il prossimo</string>
     <string name="lb_playback_controls_skip_previous">Salta il precedente o ritorna alla posizione di partenza</string>
     <string name="alt_presets_behavior">Comportamento preimpostazioni alternative (limita la larghezza di banda))</string>
-    <string name="alt_presets_behavior_desc">L'app cercherà di mantenere la larghezza di banda corrispondente al preset selezionato invece di corrispondere tra risoluzione, fps e codec.</string>
+    <string name="alt_presets_behavior_desc">L\'app cercherà di mantenere la larghezza di banda corrispondente al preset selezionato invece di corrispondere tra risoluzione, fps e codec.</string>
     <string name="sleep_timer">Abilita il timer di spegnimento (un\'ora)</string>
-    <string name="sleep_timer_desc">Mettere in pausa la riproduzione se l\'utente non ha utilizzato il telecomando per un'ora</string>
+    <string name="sleep_timer_desc">Mettere in pausa la riproduzione se l\'utente non ha utilizzato il telecomando per un\'ora</string>
     <string name="disable_vsync">Disabilita lo snap a vsync</string>
     <string name="disable_vsync_desc">Migliora un po\' le prestazioni di riproduzione</string>
     <string name="skip_codec_profile_check">Salta il controllo del livello del profilo del codec</string>
