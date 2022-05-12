@@ -337,7 +337,7 @@ public class SearchSupportFragment extends Fragment {
                 mRowsSupportFragment.getVerticalGridView().clearFocus();
 
                 if (getContext() != null) {
-                    Helpers.showKeyboard(getContext());
+                    Helpers.showKeyboard(getContext(), v);
                 }
             }
         });
