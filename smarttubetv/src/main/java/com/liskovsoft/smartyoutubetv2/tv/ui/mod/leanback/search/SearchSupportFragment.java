@@ -332,13 +332,17 @@ public class SearchSupportFragment extends Fragment {
         mSearchTextEditor.setOnFocusChangeListener((v, focused) -> {
             Log.d(TAG, "on search field focused");
 
-            if (mIsKeyboardAutoShowEnabled && focused &&
-                    mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
-                mRowsSupportFragment.getVerticalGridView().clearFocus();
+            //if (mIsKeyboardAutoShowEnabled && focused &&
+            //        mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
+            //    mRowsSupportFragment.getVerticalGridView().clearFocus();
+            //
+            //    if (getContext() != null) {
+            //        Helpers.showKeyboard(getContext(), v);
+            //    }
+            //}
 
-                if (getContext() != null) {
-                    Helpers.showKeyboard(getContext(), v);
-                }
+            if (mIsKeyboardAutoShowEnabled && focused) {
+                Helpers.showKeyboard(v.getContext(), v);
             }
         });
         KeyHelpers.fixEnterKey(mSearchTextEditor);
