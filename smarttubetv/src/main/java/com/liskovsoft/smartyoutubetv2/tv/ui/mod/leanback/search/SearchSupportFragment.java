@@ -342,7 +342,7 @@ public class SearchSupportFragment extends Fragment {
             //}
 
             if (mIsKeyboardAutoShowEnabled && focused) {
-                Helpers.showKeyboard(v.getContext(), v);
+                Helpers.toggleKeyboard(v.getContext());
             }
         });
         KeyHelpers.fixEnterKey(mSearchTextEditor);
