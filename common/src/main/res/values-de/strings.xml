@@ -400,4 +400,16 @@
     <string name="cant_save_playlist">Diese Wiedergabeliste kann nicht gespeichert werden</string>
     <string name="enter_value">Geben Sie einen beliebigen (nicht leeren) Wert ein</string>
     <string name="dialog_add_remove_from">Hinzufügen/Entfernen aus %s</string>
+    <string name="lb_playback_controls_skip_next">Nächstes Video</string>
+    <string name="lb_playback_controls_skip_previous">Vorheriges Video</string>
+    <string name="alt_presets_behavior">Alternatives-Voreinstellungen-Verhalten (Bandbreite begrenzen)</string>
+    <string name="alt_presets_behavior_desc">Die App wird versuchen, die Bandbreite entsprechend der gewählten Voreinstellung beizubehalten, anstatt Auflösung, Bildrate und Codec aufeinander abzustimmen.</string>
+    <string name="sleep_timer">Sleep-Timer einschalten (eine Stunde)</string>
+    <string name="sleep_timer_desc">Pausiert die Wiedergabe, wenn die Fernbedienung eine Stunde lang nicht benutzt wurde.</string>
+    <string name="disable_vsync">Snap-to-VSync deaktivieren</string>
+    <string name="disable_vsync_desc">Verbessert die Wiedergabeperformance ein wenig.</string>
+    <string name="skip_codec_profile_check">Überprüfung des Codec-Profil-Level überspringen</string>
+    <string name="skip_codec_profile_check_desc">Überprüft nicht die Codec-Unterstützung beim Starten eines Videos. Könnte bei fehlerhaften Firmwares hilfreich sein.</string>
+    <string name="force_sw_codec">SW-Video-Decoder erzwingen</string>
+    <string name="force_sw_codec_desc">Könnte fast jedes Video abspielen, aber die Performance ist sehr schlecht.</string>
 </resources>
