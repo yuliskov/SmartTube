@@ -205,7 +205,7 @@
     <string name="player_remember_speed_all">Однакова швидкість на усіх відео</string>
     <string name="player_remember_speed_each">На кожному відео своя швидкість</string>
     <string name="msg_player_error_source">Не вдається завантажити відео</string>
-    <string name="msg_player_error_renderer">Обраний відеоформат не підтримуєтся</string>
+    <string name="msg_player_error_renderer">Обраний відеоформат не підтримуєтся\nІноді перезавантаження пристрою може допомогти.</string>
     <string name="msg_player_error_unexpected">Невідома помилка у відеодекодері</string>
     <string name="video_aspect">Співвідношення сторін</string>
     <string name="player_tweaks">Для розробників</string>
