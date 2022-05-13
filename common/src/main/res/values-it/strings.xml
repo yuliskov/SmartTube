@@ -205,7 +205,7 @@
     <string name="player_remember_speed_all">Stessa in tutti i video</string>
     <string name="player_remember_speed_each">Per ogni video</string>
     <string name="msg_player_error_source">Non riesco a caricare il video</string>
-    <string name="msg_player_error_renderer">Formato video non supportato</string>
+    <string name="msg_player_error_renderer">Formato video non supportato.\nA volte può essere utile riavviare il dispositivo.</string>
     <string name="msg_player_error_unexpected">Errore di decodifica sconosciuto</string>
     <string name="video_aspect">Proporzioni</string>
     <string name="player_tweaks">Opzioni sviluppatore</string>
