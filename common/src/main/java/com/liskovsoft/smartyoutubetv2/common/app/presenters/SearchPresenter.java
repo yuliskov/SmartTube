@@ -235,8 +235,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         showSettingsDialog();
     }
 
-    private void disposeActions() {
+    public void disposeActions() {
         RxUtils.disposeActions(mLoadAction, mScrollAction);
+        if (getView() != null) {
+            getView().showProgressBar(false);
+        }
     }
 
     private void showSettingsDialog() {

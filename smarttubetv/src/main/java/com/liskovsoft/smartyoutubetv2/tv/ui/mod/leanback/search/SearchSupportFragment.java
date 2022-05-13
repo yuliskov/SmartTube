@@ -33,6 +33,7 @@ import androidx.leanback.widget.VerticalGridView;
 import com.liskovsoft.sharedutils.BuildConfig;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -341,8 +342,13 @@ public class SearchSupportFragment extends Fragment {
             //    }
             //}
 
+            // User clicked on tag and tries to edit search query
+            if (focused) {
+                SearchPresenter.instance(v.getContext()).disposeActions();
+            }
+
             if (mIsKeyboardAutoShowEnabled && focused) {
-                Helpers.toggleKeyboard(v.getContext());
+                Helpers.showKeyboard(v.getContext());
             }
         });
         KeyHelpers.fixEnterKey(mSearchTextEditor);
