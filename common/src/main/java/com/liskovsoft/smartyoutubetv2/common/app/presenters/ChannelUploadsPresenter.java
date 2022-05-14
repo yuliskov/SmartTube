@@ -61,13 +61,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     public void onViewInitialized() {
         super.onViewInitialized();
 
-        if (mVideoItem != null) {
-            getView().clear();
-            updateGrid(mVideoItem);
-        } else if (mMediaGroup != null) {
-            getView().clear();
-            updateGrid(mMediaGroup);
-        }
+        refresh();
     }
 
     @Override
