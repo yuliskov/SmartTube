@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPreset;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.OnSelectSubtitleStyle;
@@ -437,24 +438,24 @@ public class AppDialogUtil {
         Disposable addRemoveAction = RxUtils.execute(editObserve); // ignore results (do the work in the background)
     }
 
-    public static void showPlaylistOrderDialog(Context context, Video video) {
+    public static void showPlaylistOrderDialog(Context context, Video video, Runnable onClose) {
         if (video == null) {
             return;
         }
 
         if (video.hasPlaylist()) {
-            showPlaylistOrderDialog(context, video.playlistId);
+            showPlaylistOrderDialog(context, video.playlistId, onClose);
         } else if (video.belongsToPlaylists()) {
             MediaServiceManager.instance().loadChannelUploads(video, group -> {
                 MediaItem first = group.getMediaItems().get(0);
                 String playlistId = first.getPlaylistId();
 
-                showPlaylistOrderDialog(context, playlistId);
+                showPlaylistOrderDialog(context, playlistId, onClose);
             });
         }
     }
 
-    public static void showPlaylistOrderDialog(Context context, String playlistId) {
+    public static void showPlaylistOrderDialog(Context context, String playlistId, Runnable onClose) {
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(context);
         dialogPresenter.clear();
 
@@ -473,9 +474,14 @@ public class AppDialogUtil {
                 if (optionItem.isSelected()) {
                     RxUtils.execute(
                             YouTubeMediaItemManager.instance().setPlaylistOrderObserve(playlistId, pair[1]),
-                            () -> MessageHelpers.showMessage(context, R.string.cant_do_this_for_foreign_playlist),
+                            () -> MessageHelpers.showMessage(context, R.string.owned_playlist_warning),
                             () -> {
                                 generalData.setPlaylistOrder(playlistId, pair[1]);
+                                ViewManager.instance(context).refreshCurrentView();
+                                if (onClose != null) {
+                                    dialogPresenter.closeDialog();
+                                    onClose.run();
+                                }
                                 MessageHelpers.showMessage(context, R.string.msg_done);
                             }
                     );

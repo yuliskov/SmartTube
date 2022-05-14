@@ -294,4 +294,18 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
             getView().clear();
         }
     }
+
+    public void refresh() {
+        if (getView() == null) {
+            return;
+        }
+
+        if (mVideoItem != null) {
+            getView().clear();
+            updateGrid(mVideoItem);
+        } else if (mMediaGroup != null) {
+            getView().clear();
+            updateGrid(mMediaGroup);
+        }
+    }
 }

@@ -516,7 +516,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
                         R.string.playlist_order),
-                        optionItem -> AppDialogUtil.showPlaylistOrderDialog(getContext(), mVideo)
+                        optionItem -> AppDialogUtil.showPlaylistOrderDialog(getContext(), mVideo, mDialogPresenter::closeDialog)
                 ));
     }
 

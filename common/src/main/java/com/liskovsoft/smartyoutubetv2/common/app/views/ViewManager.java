@@ -14,6 +14,7 @@ import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -404,5 +405,14 @@ public class ViewManager {
 
     public boolean isNewViewPending(Class<?> currentView) {
         return isNewViewPending() && mViewMapping.get(currentView) != mPendingActivityClass;
+    }
+
+    public void refreshCurrentView() {
+        Class<?> topView = getTopView();
+        if (topView == BrowseView.class) {
+            BrowsePresenter.instance(mContext).refresh();
+        } else if (topView == ChannelUploadsView.class) {
+            ChannelUploadsPresenter.instance(mContext).refresh();
+        }
     }
 }
