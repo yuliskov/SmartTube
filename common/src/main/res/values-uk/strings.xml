@@ -408,7 +408,7 @@
     <string name="skip_codec_profile_check_desc">Не перевіряти підтримку кодеків під час запуску відео. Може бути корисним для глючних прошивок.</string>
     <string name="force_sw_codec">Активувати програмний декодер</string>
     <string name="force_sw_codec_desc">Може відтворювати будь-яке відео, але продуктивність дуже низька.</string>
-    <string name="playlist_order">Порядок плейлиста</string>
+    <string name="playlist_order">Сортувати плейлист</string>
     <string name="playlist_order_added_date_newer_first">Дата додавання (спочатку новіші)</string>
     <string name="playlist_order_added_date_older_first">Дата додавання (спочатку старіші)</string>
     <string name="playlist_order_published_date_newer_first">Дата публікації (спочатку новіші)</string>

@@ -412,7 +412,7 @@
     <string name="skip_codec_profile_check_desc">Don\'t check codec support when starting a video. Could be helpful on buggy firmwares.</string>
     <string name="force_sw_codec">Force SW video decoder</string>
     <string name="force_sw_codec_desc">Could play almost any video but performance is very poor.</string>
-    <string name="playlist_order">Playlist order</string>
+    <string name="playlist_order">Sort playlist</string>
     <string name="playlist_order_added_date_newer_first">Added date (newer first)</string>
     <string name="playlist_order_added_date_older_first">Added date (older first)</string>
     <string name="playlist_order_published_date_newer_first">Published date (newer first)</string>

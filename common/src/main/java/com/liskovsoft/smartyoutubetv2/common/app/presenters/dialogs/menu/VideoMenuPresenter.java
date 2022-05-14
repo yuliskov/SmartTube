@@ -182,10 +182,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
         appendOpenPlaylistButton();
+        appendPlaylistOrderButton();
         appendSubscribeButton();
         appendTogglePinVideoToSidebarButton();
         appendSavePlaylistButton();
-        appendPlaylistOrderButton();
         appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
         appendShareButton();
