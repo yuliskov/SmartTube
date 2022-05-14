@@ -342,7 +342,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                 Observable<Void> action = manager.renamePlaylistObserve(firstItem.getPlaylistId(), newValue);
                                 RxUtils.execute(
                                         action,
-                                        () -> MessageHelpers.showMessage(getContext(), R.string.cant_rename_foreign_playlist),
+                                        () -> MessageHelpers.showMessage(getContext(), R.string.cant_do_this_for_foreign_playlist),
                                         () -> {
                                             video.title = newValue;
                                             BrowsePresenter.instance(getContext()).syncItem(video);

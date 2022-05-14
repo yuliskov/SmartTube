@@ -418,4 +418,5 @@
     <string name="playlist_order_published_date_newer_first">Published date (newer first)</string>
     <string name="playlist_order_published_date_older_first">Published date (older first)</string>
     <string name="playlist_order_popularity">Popularity</string>
+    <string name="cant_do_this_for_foreign_playlist">Can\'t do this for foreign playlist</string>
 </resources>

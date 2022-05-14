@@ -17,7 +17,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCatego
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPreset;
@@ -474,10 +473,10 @@ public class AppDialogUtil {
                 if (optionItem.isSelected()) {
                     RxUtils.execute(
                             YouTubeMediaItemManager.instance().setPlaylistOrderObserve(playlistId, pair[1]),
+                            () -> MessageHelpers.showMessage(context, R.string.cant_do_this_for_foreign_playlist),
                             () -> {
                                 generalData.setPlaylistOrder(playlistId, pair[1]);
                                 MessageHelpers.showMessage(context, R.string.msg_done);
-                                //BrowsePresenter.instance(context).refresh();
                             }
                     );
                 }

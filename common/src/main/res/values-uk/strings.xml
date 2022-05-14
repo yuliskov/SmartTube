@@ -414,4 +414,5 @@
     <string name="playlist_order_published_date_newer_first">Дата публікації (спочатку новіші)</string>
     <string name="playlist_order_published_date_older_first">Дата публікації (спочатку старіші)</string>
     <string name="playlist_order_popularity">За популярністю</string>
+    <string name="cant_do_this_for_foreign_playlist">Неможливо це зробити для чужого плейлиста</string>
 </resources>
