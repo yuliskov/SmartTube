@@ -408,4 +408,10 @@
     <string name="skip_codec_profile_check_desc">Не проверять поддержку кодеков при запуске видео. Может быть полезно для глючных прошивок.</string>
     <string name="force_sw_codec">Активировать программный декодер</string>
     <string name="force_sw_codec_desc">Может воспроизводить любое видео, но производительность очень низкая.</string>
+    <string name="playlist_order">Порядок плейлиста</string>
+    <string name="playlist_order_added_date_newer_first">Дата добавления (сначала более новые)</string>
+    <string name="playlist_order_added_date_older_first">Дата добавления (сначала более старые)</string>
+    <string name="playlist_order_published_date_newer_first">Дата публикации (сначала более новые)</string>
+    <string name="playlist_order_published_date_older_first">Дата публикации (сначала более старые)</string>
+    <string name="playlist_order_popularity">По популярности</string>
 </resources>

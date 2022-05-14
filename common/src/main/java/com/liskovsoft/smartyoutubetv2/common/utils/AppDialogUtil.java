@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 import android.content.Context;
 import android.os.Build;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -16,12 +17,14 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCatego
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPreset;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.OnSelectSubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaItemManager;
@@ -433,5 +436,56 @@ public class AppDialogUtil {
         }
 
         Disposable addRemoveAction = RxUtils.execute(editObserve); // ignore results (do the work in the background)
+    }
+
+    public static void showPlaylistOrderDialog(Context context, Video video) {
+        if (video == null) {
+            return;
+        }
+
+        if (video.hasPlaylist()) {
+            showPlaylistOrderDialog(context, video.playlistId);
+        } else if (video.belongsToPlaylists()) {
+            MediaServiceManager.instance().loadChannelUploads(video, group -> {
+                MediaItem first = group.getMediaItems().get(0);
+                String playlistId = first.getPlaylistId();
+
+                showPlaylistOrderDialog(context, playlistId);
+            });
+        }
+    }
+
+    public static void showPlaylistOrderDialog(Context context, String playlistId) {
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(context);
+        dialogPresenter.clear();
+
+        GeneralData generalData = GeneralData.instance(context);
+
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.playlist_order_added_date_newer_first, MediaItemManager.PLAYLIST_ORDER_ADDED_DATE_NEWER_FIRST},
+                {R.string.playlist_order_added_date_older_first, MediaItemManager.PLAYLIST_ORDER_ADDED_DATE_OLDER_FIRST},
+                {R.string.playlist_order_popularity, MediaItemManager.PLAYLIST_ORDER_POPULARITY},
+                {R.string.playlist_order_published_date_newer_first, MediaItemManager.PLAYLIST_ORDER_PUBLISHED_DATE_NEWER_FIRST},
+                {R.string.playlist_order_published_date_older_first, MediaItemManager.PLAYLIST_ORDER_PUBLISHED_DATE_OLDER_FIRST}
+        }) {
+            options.add(UiOptionItem.from(context.getString(pair[0]), optionItem -> {
+                if (optionItem.isSelected()) {
+                    RxUtils.execute(
+                            YouTubeMediaItemManager.instance().setPlaylistOrderObserve(playlistId, pair[1]),
+                            () -> {
+                                generalData.setPlaylistOrder(playlistId, pair[1]);
+                                MessageHelpers.showMessage(context, R.string.msg_done);
+                                //BrowsePresenter.instance(context).refresh();
+                            }
+                    );
+                }
+            }, generalData.getPlaylistOrder(playlistId) == pair[1]));
+        }
+
+        dialogPresenter.appendRadioCategory(context.getString(R.string.playlist_order), options);
+
+        dialogPresenter.showDialog(context.getString(R.string.playlist_order));
     }
 }

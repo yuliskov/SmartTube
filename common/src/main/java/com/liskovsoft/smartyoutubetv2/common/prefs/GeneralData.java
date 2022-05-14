@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
@@ -13,9 +14,11 @@ import com.liskovsoft.smartyoutubetv2.common.utils.HashList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class GeneralData {
     public static final int SCREEN_DIMMING_NEVER = 0;
@@ -56,6 +59,7 @@ public class GeneralData {
     private boolean mIsHideShortsFromHistoryEnabled;
     private boolean mIsScreensaverDisabled;
     private boolean mIsVPNEnabled;
+    private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
 
     private final List<Video> mPinnedItems = new HashList<Video>() {
         @Override
@@ -525,6 +529,16 @@ public class GeneralData {
         return mLastPlaylistTitle;
     }
 
+    public void setPlaylistOrder(String playlistId, int playlistOrder) {
+        mPlaylistOrder.put(playlistId, playlistOrder);
+        persistState();
+    }
+
+    public int getPlaylistOrder(String playlistId) {
+        Integer order = mPlaylistOrder.get(playlistId);
+        return order != null ? order : MediaItemManager.PLAYLIST_ORDER_ADDED_DATE_NEWER_FIRST;
+    }
+
     private void initSections() {
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mDefaultSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -582,6 +596,7 @@ public class GeneralData {
         mIsScreensaverDisabled = Helpers.parseBoolean(split, 26, false);
         mIsVPNEnabled = Helpers.parseBoolean(split, 27, false);
         mLastPlaylistTitle = Helpers.parseStr(split, 28);
+        String playlistOrder = Helpers.parseStr(split, 29);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -591,6 +606,16 @@ public class GeneralData {
             }
         } else {
             initPinnedItems();
+        }
+
+        if (playlistOrder != null && !playlistOrder.isEmpty()) {
+            mPlaylistOrder.clear();
+            String[] playlistOrderArr = Helpers.splitArray(playlistOrder);
+
+            for (String playlistOrderItem : playlistOrderArr) {
+                String[] keyValPair = playlistOrderItem.split("\\|");
+                mPlaylistOrder.put(keyValPair[0], Integer.parseInt(keyValPair[1]));
+            }
         }
 
         // Backward compatibility
@@ -609,6 +634,11 @@ public class GeneralData {
 
     private void persistState() {
         String pinnedItems = Helpers.mergeArray(mPinnedItems.toArray());
+        List<String> playlistOrderPairs = new ArrayList<>();
+        for (Entry<String, Integer> pair : mPlaylistOrder.entrySet()) {
+            playlistOrderPairs.add(String.format("%s|%s", pair.getKey(), pair.getValue()));
+        }
+        String playlistOrder = Helpers.mergeArray(playlistOrderPairs.toArray());
         // Zero index is skipped. Selected sections were there.
         mPrefs.setData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
                 mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems, mIsHideShortsFromSubscriptionsEnabled, mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
@@ -616,6 +646,6 @@ public class GeneralData {
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
-                mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle));
+                mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle, playlistOrder));
     }
 }

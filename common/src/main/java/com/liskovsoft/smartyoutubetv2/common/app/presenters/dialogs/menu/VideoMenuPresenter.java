@@ -58,6 +58,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsAddToPlaybackQueueButtonEnabled;
     private boolean mIsOpenDescriptionButtonEnabled;
     private boolean mIsPlayVideoButtonEnabled;
+    private boolean mIsPlaylistOrderButtonEnabled;
     private VideoMenuCallback mCallback;
 
     public interface VideoMenuCallback {
@@ -142,6 +143,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsCreatePlaylistButtonEnabled = true;
         mIsOpenDescriptionButtonEnabled = true;
         mIsPlayVideoButtonEnabled = true;
+        mIsPlaylistOrderButtonEnabled = true;
 
         showMenuInt(video);
     }
@@ -183,6 +185,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendSubscribeButton();
         appendTogglePinVideoToSidebarButton();
         appendSavePlaylistButton();
+        appendPlaylistOrderButton();
         appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
         appendShareButton();
@@ -501,23 +504,21 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                         }));
     }
 
-    //private void addRemoveFromPlaylist(String playlistId, String playlistTitle, boolean add) {
-    //    Observable<Void> editObserve;
-    //
-    //    if (add) {
-    //        editObserve = mItemManager.addToPlaylistObserve(playlistId, mVideo.videoId);
-    //    } else {
-    //        // Check that the current video belongs to the right section
-    //        if (mCallback != null && Helpers.equals(mVideo.playlistId, playlistId)) {
-    //            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST);
-    //        }
-    //        editObserve = mItemManager.removeFromPlaylistObserve(playlistId, mVideo.videoId);
-    //    }
-    //
-    //    MessageHelpers.showMessage(getContext(),
-    //            getContext().getString(add ? R.string.added_to : R.string.removed_from, playlistTitle));
-    //    mAddToPlaylistAction = RxUtils.execute(editObserve);
-    //}
+    private void appendPlaylistOrderButton() {
+        if (!mIsPlaylistOrderButtonEnabled) {
+            return;
+        }
+
+        if (mVideo == null || !mVideo.belongsToPlaylists()) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(
+                        R.string.playlist_order),
+                        optionItem -> AppDialogUtil.showPlaylistOrderDialog(getContext(), mVideo)
+                ));
+    }
 
     private void addRemoveFromPlaylist(String playlistId, String playlistTitle, boolean add) {
         if (add) {
