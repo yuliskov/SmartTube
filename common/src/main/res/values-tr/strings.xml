@@ -386,10 +386,10 @@
     <string name="pressing_home">ANA EKRAN\'a basarak</string>
     <string name="pressing_home_back">ANA EKRAN\'a ya da GERİ\'ye basarak</string>
     <string name="player_number_key_seek">Sayı tuşlarıyla arama</string>
-    <string name="save_remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümüne Kaydet/Kaldır</string>
-    <string name="remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümünden kaldır</string>
-    <string name="removed_from_playlists">Oynatma Listeleri bölümünden kaldırıldı</string>
-    <string name="saved_to_playlists">Oynatma Listeleri bölümüne kaydedildi</string>
+    <string name="save_remove_playlist">Bu oynatma listesini hesaba Ekle/Sil</string>
+    <string name="remove_playlist">Bu oynatma listesini hesaptan sil</string>
+    <string name="removed_from_playlists">Hesaptan silindi</string>
+    <string name="saved_to_playlists">Hesaba kaydedildi</string>
     <string name="create_playlist">Oynatma listesi oluştur</string>
     <string name="add_video_to_new_playlist">Bu videoyu yeni oynatma listesine ekle</string>
     <string name="cant_delete_empty_playlist">Boş oynatma listesi silinemiyor</string>
