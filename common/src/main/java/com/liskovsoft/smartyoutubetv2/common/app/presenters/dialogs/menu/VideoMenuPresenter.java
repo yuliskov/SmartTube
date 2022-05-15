@@ -30,6 +30,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class VideoMenuPresenter extends BaseMenuPresenter {
     private static final String TAG = VideoMenuPresenter.class.getSimpleName();
@@ -39,6 +40,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private Disposable mAddToPlaylistAction;
     private Disposable mNotInterestedAction;
     private Disposable mSubscribeAction;
+    private Disposable mPlaylistsInfoAction;
     private Video mVideo;
     public static WeakReference<Video> sVideoHolder = new WeakReference<>(null);
     private boolean mIsNotInterestedButtonEnabled;
@@ -60,6 +62,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsPlayVideoButtonEnabled;
     private boolean mIsPlaylistOrderButtonEnabled;
     private VideoMenuCallback mCallback;
+    private List<VideoPlaylistInfo> mVideoPlaylistInfos;
 
     public interface VideoMenuCallback {
         int ACTION_UNDEFINED = 0;
@@ -160,7 +163,26 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mVideo = video;
         sVideoHolder = new WeakReference<>(video);
 
-        MediaServiceManager.instance().authCheck(this::prepareAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
+        MediaServiceManager.instance().authCheck(this::bootstrapPrepareAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
+    }
+
+    private void bootstrapPrepareAndShowDialogSigned() {
+        mVideoPlaylistInfos = null;
+        RxUtils.disposeActions(mPlaylistsInfoAction);
+        if (isAddToRecentPlaylistButtonEnabled()) {
+            mPlaylistsInfoAction = mItemManager.getVideoPlaylistsInfoObserve(mVideo.videoId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            videoPlaylistInfos -> {
+                                mVideoPlaylistInfos = videoPlaylistInfos;
+                                prepareAndShowDialogSigned();
+                            },
+                            error -> Log.e(TAG, "Add to recent playlist error: %s", error.getMessage())
+                    );
+        } else {
+            prepareAndShowDialogSigned();
+        }
     }
 
     private void prepareAndShowDialogSigned() {
@@ -238,15 +260,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void appendAddToRecentPlaylistButton() {
-        if (!mIsAddToPlaylistButtonEnabled) {
-            return;
-        }
-
-        if (!mIsAddToRecentPlaylistButtonEnabled) {
-            return;
-        }
-
-        if (mVideo == null || !mVideo.hasVideo()) {
+        if (!isAddToRecentPlaylistButtonEnabled()) {
             return;
         }
 
@@ -257,31 +271,60 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
+        appendSimpleAddToRecentPlaylistButton(playlistId, playlistTitle);
+    }
+
+    private boolean isAddToRecentPlaylistButtonEnabled() {
+        return mIsAddToPlaylistButtonEnabled && mIsAddToRecentPlaylistButtonEnabled && mVideo != null && mVideo.hasVideo();
+    }
+
+    private void appendSimpleAddToRecentPlaylistButton(String playlistId, String playlistTitle) {
+        if (mVideoPlaylistInfos == null) {
+            return;
+        }
+
+        boolean isSelected = false;
+        for (VideoPlaylistInfo playlistInfo : mVideoPlaylistInfos) {
+            if (playlistInfo.getPlaylistId().equals(playlistId)) {
+                isSelected = playlistInfo.isSelected();
+                break;
+            }
+        }
+        boolean add = !isSelected;
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
-                        R.string.dialog_add_remove_from, playlistTitle),
-                        optionItem -> {
-                            Disposable playlistsInfoAction = mItemManager.getVideoPlaylistsInfoObserve(mVideo.videoId)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(
-                                            videoPlaylistInfos -> {
-                                                for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
-                                                    if (playlistInfo.getPlaylistId().equals(playlistId)) {
-                                                        addRemoveFromPlaylist(playlistInfo.getPlaylistId(), playlistInfo.getTitle(), !playlistInfo.isSelected());
-                                                        break;
-                                                    }
-                                                }
-                                            },
-                                            error -> {
-                                                // Fallback to something on error
-                                                Log.e(TAG, "Add to recent playlist error: %s", error.getMessage());
-                                            }
-                                    );
-                        }
+                        add ? R.string.dialog_add_to : R.string.dialog_remove_from, playlistTitle),
+                        optionItem -> addRemoveFromPlaylist(playlistId, playlistTitle, add)
                 )
         );
     }
+
+    //private void appendReactiveAddToRecentPlaylistButton(String playlistId, String playlistTitle) {
+    //    mDialogPresenter.appendSingleButton(
+    //            UiOptionItem.from(getContext().getString(
+    //                    R.string.dialog_add_remove_from, playlistTitle),
+    //                    optionItem -> {
+    //                        mPlaylistsInfoAction = mItemManager.getVideoPlaylistsInfoObserve(mVideo.videoId)
+    //                                .subscribeOn(Schedulers.io())
+    //                                .observeOn(AndroidSchedulers.mainThread())
+    //                                .subscribe(
+    //                                        videoPlaylistInfos -> {
+    //                                            for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
+    //                                                if (playlistInfo.getPlaylistId().equals(playlistId)) {
+    //                                                    addRemoveFromPlaylist(playlistInfo.getPlaylistId(), playlistInfo.getTitle(), !playlistInfo.isSelected());
+    //                                                    break;
+    //                                                }
+    //                                            }
+    //                                        },
+    //                                        error -> {
+    //                                            // Fallback to something on error
+    //                                            Log.e(TAG, "Add to recent playlist error: %s", error.getMessage());
+    //                                        }
+    //                                );
+    //                    }
+    //            )
+    //    );
+    //}
 
     private void appendOpenChannelButton() {
         if (!mIsOpenChannelButtonEnabled) {
