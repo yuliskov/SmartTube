@@ -42,7 +42,7 @@
     <string name="section_is_empty">Hata! Burada hiçbir şey yok.</string>
     <string name="dialog_add_to_playlist">Oynatma listesine Ekle/Kaldır</string>
     <string name="msg_signed_users_only">Sadece oturum açmış kullanıcılar</string>
-    <string name="msg_cant_load_content">İçerik yüklenemiyor.\n1) Cihazdaki tarih ve saati kontrol edin.\n2) Ağ bağlantısını kontrol edin.\n3) Hesabınızda oturum açmayı deneyin.</string>
+    <string name="msg_cant_load_content">İçerik yüklenemiyor.\n1) Cihazdaki tarih ve saati kontrol edin.\n2) Ağ bağlantısını kontrol edin.\n3) Hesabınızda oturum açmayı deneyin.\n4) Belki burada hiçbir şey yoktur.</string>
     <string name="title_video_presets">Video ön ayarları</string>
     <string name="settings_accounts">Hesaplar</string>
     <string name="settings_left_panel">Kategorileri düzenle</string>
@@ -205,7 +205,7 @@
     <string name="player_remember_speed_all">Tüm videolarda aynı</string>
     <string name="player_remember_speed_each">Her video için</string>
     <string name="msg_player_error_source">Video indirilemiyor</string>
-    <string name="msg_player_error_renderer">Seçilen video formatı desteklenmiyor</string>
+    <string name="msg_player_error_renderer">Seçilen video formatı desteklenmiyor.\nBelki bir aygıt yazılımı hatasıdır. Cihazı yeniden başlatıp deneyin.</string>
     <string name="msg_player_error_unexpected">Bilinmeyen video çözücü hatası</string>
     <string name="video_aspect">En boy oranı</string>
     <string name="player_tweaks">Geliştirici seçenekleri</string>
@@ -412,4 +412,12 @@
     <string name="skip_codec_profile_check_desc">Bir videoyu başlatırken kod çözücü desteğini kontrol etmez. Sorunlu aygıt yazılımlarında yardımcı olabilir.</string>
     <string name="force_sw_codec">Yazılımsal video kod çözücüyü zorla</string>
     <string name="force_sw_codec_desc">Hemen hemen her videoyu oynatabilir ama performansı çok kötüdür.</string>
+    <string name="playlist_order">Oynatma listesini sırala</string>
+    <string name="playlist_order_added_date_newer_first">Eklenme tarihi (önce daha yenisi)</string>
+    <string name="playlist_order_added_date_older_first">Eklenme tarihi (önce eski)</string>
+    <string name="playlist_order_published_date_newer_first">Yayımlanma tarihi (önce daha yenisi)</string>
+    <string name="playlist_order_published_date_older_first">Yayımlanma tarihi(önce eski)</string>
+    <string name="playlist_order_popularity">Popülerlik</string>
+    <string name="cant_do_this_for_foreign_playlist">Bunu yabancı oynatma listesi için yapamazsınız</string>
+    <string name="owned_playlist_warning">Hata. Bu işlem sedece sahip olunan oynatma listeleri için uygulanabilir</string>
 </resources>
