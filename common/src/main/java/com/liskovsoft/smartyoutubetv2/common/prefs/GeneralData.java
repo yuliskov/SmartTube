@@ -530,7 +530,11 @@ public class GeneralData {
     }
 
     public void setPlaylistOrder(String playlistId, int playlistOrder) {
-        mPlaylistOrder.put(playlistId, playlistOrder);
+        if (playlistOrder == -1) {
+            mPlaylistOrder.remove(playlistId);
+        } else {
+            mPlaylistOrder.put(playlistId, playlistOrder);
+        }
         persistState();
     }
 
