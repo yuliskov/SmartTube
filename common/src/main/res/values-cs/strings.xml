@@ -386,10 +386,10 @@
     <string name="pressing_home">stisknutím tlačítka DOMŮ</string>
     <string name="pressing_home_back">stisknutím tlačítka DOMŮ nebo ZPĚT</string>
     <string name="player_number_key_seek">Posuv pomocí čísel</string>
-    <string name="save_remove_playlist">Ulož/Odstraň tento playlist ze sekce Playlisty</string>
-    <string name="remove_playlist">Odstraň tento playlist ze sekce Playlisty</string>
-    <string name="removed_from_playlists">Odstraněno ze sekce Playlisty</string>
-    <string name="saved_to_playlists">Uloženo do sekce Playlisty</string>
+    <string name="save_remove_playlist">Přidat/Odebrat tento playlist z účtu</string>
+    <string name="remove_playlist">Odstranit tento playlist z účtu</string>
+    <string name="removed_from_playlists">Odstraněno z účtu</string>
+    <string name="saved_to_playlists">Uloženo do účtu</string>
     <string name="create_playlist">Vytvořit playlist</string>
     <string name="add_video_to_new_playlist">Přidat toto video do nového playlistu</string>
     <string name="cant_delete_empty_playlist">Nelze smazat prázdný playlist</string>
