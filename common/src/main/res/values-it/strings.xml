@@ -205,7 +205,7 @@
     <string name="player_remember_speed_all">Stessa in tutti i video</string>
     <string name="player_remember_speed_each">Per ogni video</string>
     <string name="msg_player_error_source">Non riesco a caricare il video</string>
-    <string name="msg_player_error_renderer">Formato video non supportato.\nA volte può essere utile riavviare il dispositivo.</string>
+    <string name="msg_player_error_renderer">Formato video non supportato.\nProbabilmente è un errore del firmware. Prova a riavviare il dispositivo.</string>
     <string name="msg_player_error_unexpected">Errore di decodifica sconosciuto</string>
     <string name="video_aspect">Proporzioni</string>
     <string name="player_tweaks">Opzioni sviluppatore</string>
@@ -412,4 +412,12 @@
     <string name="skip_codec_profile_check_desc">Non controlla il supporto del codec all\'avvio di un video. Potrebbe essere utile su un firmware difettoso.</string>
     <string name="force_sw_codec">Forza il decodificatore video SW</string>
     <string name="force_sw_codec_desc">Potrebbe riprodurre quasi tutti i video ma le prestazioni diventerebbero molto scarse.</string>
+    <string name="playlist_order">Ordina la playlist</string>
+    <string name="playlist_order_added_date_newer_first">Data di aggiunta (prima i più recenti)</string>
+    <string name="playlist_order_added_date_older_first">Data di aggiunta (prima i più vecchi)</string>
+    <string name="playlist_order_published_date_newer_first">Data di pubblicazione (prima i più recenti)</string>
+    <string name="playlist_order_published_date_older_first">Data di pubblicazione (prima i più vecchi)</string>
+    <string name="playlist_order_popularity">Popolarità</string>
+    <string name="cant_do_this_for_foreign_playlist">Non posso fare questo per le playlist esterne</string>
+    <string name="owned_playlist_warning">Errore. Questa azione può essere applicata solo alle playlist di tua proprietà.</string>
 </resources>
