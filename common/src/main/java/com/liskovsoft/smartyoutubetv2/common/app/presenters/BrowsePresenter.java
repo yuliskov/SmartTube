@@ -298,7 +298,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (isMultiGridChannelUploadsSection() && item.belongsToChannelUploads()) {
+        if (isMultiGridChannelUploadsSection() && item.belongsToChannelUploads() && !item.hasVideo()) {
             if (mMainUIData.isUploadsAutoLoadEnabled()) {
                 updateMultiGrid(item);
             } else {
@@ -316,7 +316,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         // Check that channels new look enabled and we're on the first column
-        if (isMultiGridChannelUploadsSection() && !item.hasVideo()) {
+        if (isMultiGridChannelUploadsSection() && item.belongsToChannelUploads() && !item.hasVideo()) {
             updateMultiGrid(item);
         } else {
             VideoActionPresenter.instance(getContext()).apply(item);
@@ -331,7 +331,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (item.belongsToChannelUploads()) { // We need to be sure we exactly on Channels section
+        if (item.belongsToChannelUploads() && !item.hasVideo()) { // We need to be sure we exactly on Channels section
             ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
                 if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE) { // works with any uploads section look
                     removeItem(item);
