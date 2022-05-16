@@ -10,6 +10,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -492,5 +493,33 @@ public class AppDialogUtil {
         dialogPresenter.appendRadioCategory(context.getString(R.string.playlist_order), options);
 
         dialogPresenter.showDialog(context.getString(R.string.playlist_order));
+    }
+
+    public interface OnVideoClick {
+        void onClick(Video item);
+    }
+
+    public static void showPlaybackQueueDialog(Context context, OnVideoClick onClick) {
+        String playbackQueueCategoryTitle = context.getString(R.string.playback_queue_category_title);
+
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(context);
+
+        settingsPresenter.clear();
+
+        List<OptionItem> options = new ArrayList<>();
+
+        Playlist playlist = Playlist.instance();
+
+        for (Video video : playlist.getAll()) {
+            options.add(0, UiOptionItem.from( // Add to start (recent videos on top)
+                    video.title,
+                    optionItem -> onClick.onClick(video),
+                    video == playlist.getCurrent())
+            );
+        }
+
+        settingsPresenter.appendRadioCategory(playbackQueueCategoryTitle, options);
+
+        settingsPresenter.showDialog(playbackQueueCategoryTitle);
     }
 }

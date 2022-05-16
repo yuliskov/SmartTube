@@ -234,6 +234,8 @@
     <string name="removed_from_playback_queue">Removed from playback queue</string>
     <string name="added_to_playback_queue">Added to playback queue</string>
     <string name="add_remove_from_playback_queue">Add/Remove from playback queue</string>
+    <string name="add_to_playback_queue">Add to playback queue</string>
+    <string name="remove_from_playback_queue">Remove from playback queue</string>
     <string name="proxy_enabled">Proxy enabled</string>
     <string name="proxy_disabled">Proxy disabled</string>
     <string name="uploads_row_name">Uploads</string>

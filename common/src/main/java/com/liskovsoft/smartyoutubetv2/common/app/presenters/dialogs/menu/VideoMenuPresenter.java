@@ -529,14 +529,13 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         Playlist playlist = Playlist.instance();
+        // Toggle between add/remove while dialog is opened
+        boolean containsVideo = playlist.contains(mVideo);
 
         mDialogPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(
-                        R.string.add_remove_from_playback_queue),
+                UiOptionItem.from(
+                        getContext().getString(containsVideo ? R.string.remove_from_playback_queue : R.string.add_to_playback_queue),
                         optionItem -> {
-                            // Toggle between add/remove while dialog is opened
-                            boolean containsVideo = playlist.contains(mVideo);
-
                             if (containsVideo) {
                                 playlist.remove(mVideo);
                             } else {
@@ -544,7 +543,15 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                             }
 
                             MessageHelpers.showMessage(getContext(), containsVideo ? R.string.removed_from_playback_queue : R.string.added_to_playback_queue);
+                            closeDialog();
                         }));
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.action_playback_queue),
+                        optionItem -> AppDialogUtil.showPlaybackQueueDialog(getContext(), video -> PlaybackPresenter.instance(getContext()).openVideo(video))
+                )
+        );
     }
 
     private void appendPlaylistOrderButton() {

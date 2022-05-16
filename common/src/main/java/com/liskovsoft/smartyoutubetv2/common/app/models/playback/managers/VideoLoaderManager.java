@@ -21,6 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -231,28 +232,10 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     @Override
     public void onPlaybackQueueClicked() {
-        String playbackQueueCategoryTitle = getActivity().getString(R.string.playback_queue_category_title);
-
-        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
-
-        settingsPresenter.clear();
-
-        List<OptionItem> options = new ArrayList<>();
-
-        for (Video video : mPlaylist.getAll()) {
-            options.add(0, UiOptionItem.from( // Add to start (recent videos on top)
-                    video.title,
-                    optionItem -> {
-                        mSkipAdd = true;
-                        openVideoInt(video);
-                    },
-                    video == mPlaylist.getCurrent())
-            );
-        }
-
-        settingsPresenter.appendRadioCategory(playbackQueueCategoryTitle, options);
-
-        settingsPresenter.showDialog(playbackQueueCategoryTitle);
+        AppDialogUtil.showPlaybackQueueDialog(getActivity(), video -> {
+            mSkipAdd = true;
+            openVideoInt(video);
+        });
     }
 
     @Override
