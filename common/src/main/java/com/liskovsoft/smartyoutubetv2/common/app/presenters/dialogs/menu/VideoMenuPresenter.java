@@ -542,8 +542,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                                 playlist.add(mVideo);
                             }
 
-                            MessageHelpers.showMessage(getContext(), containsVideo ? R.string.removed_from_playback_queue : R.string.added_to_playback_queue);
                             closeDialog();
+                            MessageHelpers.showMessage(getContext(), containsVideo ? R.string.removed_from_playback_queue : R.string.added_to_playback_queue);
                         }));
 
         mDialogPresenter.appendSingleButton(

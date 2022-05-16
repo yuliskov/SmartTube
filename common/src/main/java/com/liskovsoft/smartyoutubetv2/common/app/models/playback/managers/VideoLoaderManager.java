@@ -7,6 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -14,13 +15,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
-import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -28,7 +25,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +40,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     private long mPrevErrorTimeMs;
     private PlayerData mPlayerData;
     private long mSleepTimerStartMs;
-    private boolean mSkipAdd;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
     private final Map<Integer, Runnable> mErrorActions = new HashMap<>();
@@ -75,10 +70,14 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     @Override
     public void openVideo(Video item) {
-        if (!mSkipAdd) {
+        if (item == null) {
+            return;
+        }
+
+        if (!item.fromQueue) {
             mPlaylist.add(item);
         } else {
-            mSkipAdd = false;
+            item.fromQueue = false;
         }
 
         if (getController() != null && getController().isEngineInitialized()) { // player is initialized
@@ -148,7 +147,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         Video previous = mPlaylist.getPrevious();
 
         if (previous != null) {
-            mSkipAdd = true;
+            previous.fromQueue = true;
             openVideoInt(previous);
         }
     }
@@ -160,7 +159,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         if (next == null) {
             openVideoFromNext(getController().getVideo(), true);
         } else {
-            mSkipAdd = true;
+            next.fromQueue = true;
             openVideoInt(next);
         }
     }
@@ -232,10 +231,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     @Override
     public void onPlaybackQueueClicked() {
-        AppDialogUtil.showPlaybackQueueDialog(getActivity(), video -> {
-            mSkipAdd = true;
-            openVideoInt(video);
-        });
+        AppDialogUtil.showPlaybackQueueDialog(getActivity(), this::openVideoInt);
     }
 
     @Override

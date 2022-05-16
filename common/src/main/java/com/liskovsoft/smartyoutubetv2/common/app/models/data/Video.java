@@ -58,6 +58,7 @@ public final class Video implements Parcelable {
     public final long timestamp = System.currentTimeMillis();
     public int extra = -1;
     public int pendingPosMs;
+    public boolean fromQueue;
 
     public Video() {
        // NOP

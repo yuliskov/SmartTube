@@ -513,7 +513,10 @@ public class AppDialogUtil {
         for (Video video : playlist.getAll()) {
             options.add(0, UiOptionItem.from( // Add to start (recent videos on top)
                     video.title,
-                    optionItem -> onClick.onClick(video),
+                    optionItem -> {
+                        video.fromQueue = true;
+                        onClick.onClick(video);
+                    },
                     video == playlist.getCurrent())
             );
         }
