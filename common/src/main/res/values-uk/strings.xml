@@ -393,7 +393,7 @@
     <string name="rename_playlist">Перейменувати плейлист</string>
     <string name="cant_rename_empty_playlist">Неможливо перейменувати порожній плейлист</string>
     <string name="cant_rename_foreign_playlist">Неможливо перейменувати чужий плейлист</string>
-    <string name="cant_save_playlist">Цей плейлист зберегти неможливо</string>
+    <string name="cant_save_playlist">Цей плейлист додати неможливо</string>
     <string name="enter_value">Введіть будь-яке непусте значення</string>
     <string name="dialog_add_remove_from">Додати/Видалити з %s</string>
     <string name="lb_playback_controls_skip_next">"Перейти до наступного відео"</string>

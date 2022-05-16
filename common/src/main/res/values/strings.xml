@@ -389,7 +389,7 @@
     <string name="save_remove_playlist">Add/Delete this playlist from the account</string>
     <string name="remove_playlist">Delete this playlist from the account</string>
     <string name="removed_from_playlists">Deleted from the account</string>
-    <string name="saved_to_playlists">Saved to the account</string>
+    <string name="saved_to_playlists">Added to the account</string>
     <string name="create_playlist">Create playlist</string>
     <string name="add_video_to_new_playlist">Add this video to new playlist</string>
     <string name="cant_delete_empty_playlist">Can\'t delete empty playlist</string>
@@ -397,7 +397,7 @@
     <string name="rename_playlist">Rename playlist</string>
     <string name="cant_rename_empty_playlist">Can\'t rename empty playlist</string>
     <string name="cant_rename_foreign_playlist">Can\'t rename foreign playlist</string>
-    <string name="cant_save_playlist">This playlist cannot be saved</string>
+    <string name="cant_save_playlist">This playlist cannot be added</string>
     <string name="enter_value">Enter any non-empty value</string>
     <string name="dialog_add_remove_from">Add/Remove from %s</string>
     <string name="lb_playback_controls_skip_next">Skip Next</string>
