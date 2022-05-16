@@ -544,7 +544,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
                             closeDialog();
                             MessageHelpers.showMessage(getContext(), String.format("%s: %s",
-                                    mVideo.title,
+                                    mVideo.extractAuthor(),
                                     getContext().getString(containsVideo ? R.string.removed_from_playback_queue : R.string.added_to_playback_queue))
                             );
                         }));
