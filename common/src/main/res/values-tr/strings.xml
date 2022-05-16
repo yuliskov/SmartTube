@@ -234,6 +234,8 @@
     <string name="removed_from_playback_queue">Oynatma sırasından kaldırıldı</string>
     <string name="added_to_playback_queue">Oynatma sırasına eklendi</string>
     <string name="add_remove_from_playback_queue">Oynatma sırasına Ekle/Kaldır</string>
+    <string name="add_to_playback_queue">Oynatma sırasına ekle</string>
+    <string name="remove_from_playback_queue">Oynatma sırasından kaldır</string>
     <string name="proxy_enabled">Vekil Sunucu etkin</string>
     <string name="proxy_disabled">Vekil Sunucu devre dışı</string>
     <string name="uploads_row_name">Yüklemeler</string>
@@ -389,7 +391,7 @@
     <string name="save_remove_playlist">Bu oynatma listesini hesaba Ekle/Sil</string>
     <string name="remove_playlist">Bu oynatma listesini hesaptan sil</string>
     <string name="removed_from_playlists">Hesaptan silindi</string>
-    <string name="saved_to_playlists">Hesaba kaydedildi</string>
+    <string name="saved_to_playlists">Hesaba eklendi</string>
     <string name="create_playlist">Oynatma listesi oluştur</string>
     <string name="add_video_to_new_playlist">Bu videoyu yeni oynatma listesine ekle</string>
     <string name="cant_delete_empty_playlist">Boş oynatma listesi silinemiyor</string>
@@ -397,7 +399,7 @@
     <string name="rename_playlist">Oynatma listesini yeniden adlandır</string>
     <string name="cant_rename_empty_playlist">Boş oynatma listesi yeniden adlandırılamıyor</string>
     <string name="cant_rename_foreign_playlist">Yabancı oynatma listesi yeniden adlandırılamıyor</string>
-    <string name="cant_save_playlist">Bu oynatma listesi kaydedilemez</string>
+    <string name="cant_save_playlist">Bu oynatma listesi eklenemiyor</string>
     <string name="enter_value">Boş olmayan bir değer girin</string>
     <string name="dialog_add_remove_from">Ekle/Kaldır: %s</string>
     <string name="lb_playback_controls_skip_next">Sonrakine atla</string>
