@@ -143,6 +143,11 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         return true;
     }
 
+    @Override
+    public void onFinish() {
+        mPlaylist.clear();
+    }
+
     public void loadPrevious() {
         Video previous = mPlaylist.getPrevious();
 
