@@ -388,10 +388,10 @@
     <string name="pressing_home">by pressing HOME</string>
     <string name="pressing_home_back">by pressing HOME or BACK</string>
     <string name="player_number_key_seek">Seek with number keys</string>
-    <string name="save_remove_playlist">Add/Delete this playlist from the server</string>
-    <string name="remove_playlist">Delete this playlist from the server</string>
-    <string name="removed_from_playlists">Deleted from the server</string>
-    <string name="saved_to_playlists">Added to the server</string>
+    <string name="save_remove_playlist">Add/Delete this playlist from Playlists section</string>
+    <string name="remove_playlist">Delete this playlist from Playlists section</string>
+    <string name="removed_from_playlists">Deleted from Playlists section</string>
+    <string name="saved_to_playlists">Added to Playlists section</string>
     <string name="create_playlist">Create playlist</string>
     <string name="add_video_to_new_playlist">Add this video to new playlist</string>
     <string name="cant_delete_empty_playlist">Can\'t delete empty playlist</string>
