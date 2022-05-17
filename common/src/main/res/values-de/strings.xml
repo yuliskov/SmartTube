@@ -399,7 +399,7 @@
     <string name="rename_playlist">Wiedergabeliste umbenennen</string>
     <string name="cant_rename_empty_playlist">Leere Wiedergabeliste kann nicht umbenannt werden</string>
     <string name="cant_rename_foreign_playlist">Fremde Wiedergabeliste kann nicht umbenannt werden</string>
-    <string name="cant_save_playlist">Diese Wiedergabeliste kann nicht gespeichert werden</string>
+    <string name="cant_save_playlist">Diese Wiedergabeliste kann nicht hinzugefügt werden</string>
     <string name="enter_value">Geben Sie einen beliebigen (nicht leeren) Wert ein</string>
     <string name="dialog_add_remove_from">Hinzufügen/Entfernen aus %s</string>
     <string name="lb_playback_controls_skip_next">Nächstes Video</string>
