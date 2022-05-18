@@ -44,6 +44,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private SimpleExoPlayer mPlayer;
     private PlayerView mPlayerView;
     private float mCurrentSpeed = 1.0f;
+    private long mLastSeekMs;
 
     public ExoPlayerController(Context context) {
         mContext = context.getApplicationContext();
@@ -356,7 +357,17 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     @Override
     public void onSeekProcessed() {
+        if (throttleSeek()) {
+            return;
+        }
+
         mEventListener.onSeekEnd();
+    }
+
+    private boolean throttleSeek() {
+        long prevSeekMs = mLastSeekMs;
+        mLastSeekMs = System.currentTimeMillis();
+        return mLastSeekMs - prevSeekMs < 1_000;
     }
 
     @Override
