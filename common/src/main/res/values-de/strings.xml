@@ -205,7 +205,7 @@
     <string name="player_remember_speed_all">Gleiche Geschwindigkeit für alle Videos</string>
     <string name="player_remember_speed_each">Spezifische Geschwindigkeit pro Video</string>
     <string name="msg_player_error_source">Video kann nicht geladen werden</string>
-    <string name="msg_player_error_renderer">Das ausgewählte Videoformat wird nicht unterstützt\nManchmal kann ein Neustart des Geräts helfen.</string>
+    <string name="msg_player_error_renderer">Das ausgewählte Videoformat wird nicht unterstützt\nVielleicht ein Fehler in der Firmware. Versuchen Sie, das Gerät neu zu starten.</string>
     <string name="msg_player_error_unexpected">Unbekannter Video-Decoder-Fehler</string>
     <string name="video_aspect">Seitenverhältnis</string>
     <string name="player_tweaks">Entwickleroptionen</string>
@@ -234,6 +234,8 @@
     <string name="removed_from_playback_queue">Aus Warteschlange entfernt</string>
     <string name="added_to_playback_queue">Zur Warteschlange hinzugefügt</string>
     <string name="add_remove_from_playback_queue">Hinzufügen/Entfernen aus Warteschlange</string>
+    <string name="add_to_playback_queue">Hinzufügen zur Warteschlange</string>
+    <string name="remove_from_playback_queue">Entfernen aus Warteschlange</string>
     <string name="proxy_enabled">Proxy aktiviert</string>
     <string name="proxy_disabled">Proxy deaktiviert</string>
     <string name="uploads_row_name">Uploads</string>
@@ -386,10 +388,10 @@
     <string name="pressing_home">durch Drücken von HOME</string>
     <string name="pressing_home_back">durch Drücken von HOME oder BACK</string>
     <string name="player_number_key_seek">Spulen mit Zifferntasten</string>
-    <string name="save_remove_playlist">Speichern/Entfernen dieser Wiedergabeliste aus der Wiedergabelisten-Kategorie</string>
-    <string name="remove_playlist">Entferne diese Wiedergabeliste aus der Wiedergabelisten-Kategorie</string>
-    <string name="removed_from_playlists">Entfernt aus der Wiedergabelisten-Kategorie</string>
-    <string name="saved_to_playlists">Gespeichert in der Wiedergabelisten-Kategorie</string>
+    <string name="save_remove_playlist">Hinzufügen/Löschen dieser Wiedergabeliste aus der Wiedergabelisten-Kategorie</string>
+    <string name="remove_playlist">Lösche diese Wiedergabeliste aus der Wiedergabelisten-Kategorie</string>
+    <string name="removed_from_playlists">Gelöscht aus der Wiedergabelisten-Kategorie</string>
+    <string name="saved_to_playlists">Hinzugefügt zur Wiedergabelisten-Kategorie</string>
     <string name="create_playlist">Wiedergabeliste erstellen</string>
     <string name="add_video_to_new_playlist">Video zu einer neuen Wiedergabeliste hinzufügen</string>
     <string name="cant_delete_empty_playlist">Leere Wiedergabeliste kann nicht gelöscht werden</string>
@@ -397,7 +399,7 @@
     <string name="rename_playlist">Wiedergabeliste umbenennen</string>
     <string name="cant_rename_empty_playlist">Leere Wiedergabeliste kann nicht umbenannt werden</string>
     <string name="cant_rename_foreign_playlist">Fremde Wiedergabeliste kann nicht umbenannt werden</string>
-    <string name="cant_save_playlist">Diese Wiedergabeliste kann nicht gespeichert werden</string>
+    <string name="cant_save_playlist">Diese Wiedergabeliste kann nicht hinzugefügt werden</string>
     <string name="enter_value">Geben Sie einen beliebigen (nicht leeren) Wert ein</string>
     <string name="dialog_add_remove_from">Hinzufügen/Entfernen aus %s</string>
     <string name="lb_playback_controls_skip_next">Nächstes Video</string>
@@ -412,11 +414,12 @@
     <string name="skip_codec_profile_check_desc">Überprüft nicht die Codec-Unterstützung beim Starten eines Videos. Könnte bei fehlerhaften Firmwares hilfreich sein.</string>
     <string name="force_sw_codec">SW-Video-Decoder erzwingen</string>
     <string name="force_sw_codec_desc">Könnte fast jedes Video abspielen, aber die Performance ist sehr schlecht.</string>
-    <string name="playlist_order">Wiedergabelisten-Reihenfolge</string>
+    <string name="playlist_order">Wiedergabeliste sortieren</string>
     <string name="playlist_order_added_date_newer_first">Hinzugefügtes Datum (neue zuerst)</string>
     <string name="playlist_order_added_date_older_first">Hinzugefügtes Datum (ältere zuerst)</string>
     <string name="playlist_order_published_date_newer_first">Veröffentlichungsdatum (neue zuerst)</string>
     <string name="playlist_order_published_date_older_first">Veröffentlichungsdatum (ältere zuerst)</string>
     <string name="playlist_order_popularity">Beliebtheit</string>
     <string name="cant_do_this_for_foreign_playlist">Kann dies nicht für fremde Wiedergabelisten tun</string>
+    <string name="owned_playlist_warning">Fehler. Diese Aktion kann nur auf eigene Wiedergabelisten angewendet werden</string>
 </resources>
