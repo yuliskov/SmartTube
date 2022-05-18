@@ -234,6 +234,8 @@
     <string name="removed_from_playback_queue">Rimosso dalla coda di riproduzione</string>
     <string name="added_to_playback_queue">Aggiunto alla coda di riproduzione</string>
     <string name="add_remove_from_playback_queue">Aggiungi o rimuovi dalla coda</string>
+    <string name="add_to_playback_queue">Aggiungi alla coda di riproduzione</string>
+    <string name="remove_from_playback_queue">Rimuovi dalla coda di riproduzione</string>
     <string name="proxy_enabled">Proxy attivato</string>
     <string name="proxy_disabled">Proxy disattivato</string>
     <string name="uploads_row_name">Caricamenti</string>
@@ -386,10 +388,10 @@
     <string name="pressing_home">premendo HOME</string>
     <string name="pressing_home_back">premendo HOME o INDIETRO</string>
     <string name="player_number_key_seek">Ricerca con i tasti numerici</string>
-    <string name="save_remove_playlist">Salva o rimuovi questa playlist dalla sezione Playlist</string>
-    <string name="remove_playlist">Rimuovi questa playlist dalla sezione Playlist</string>
-    <string name="removed_from_playlists">Rimosso dalla sezione Playlist</string>
-    <string name="saved_to_playlists">Salvato nella sezione Playlist</string>
+    <string name="save_remove_playlist">Aggiungi o cancella questa playlist dall\'account</string>
+    <string name="remove_playlist">Cancella questa playlist dall\'account</string>
+    <string name="removed_from_playlists">Cancellata dall\'account</string>
+    <string name="saved_to_playlists">Aggiunta all\'account</string>
     <string name="create_playlist">Crea playlist</string>
     <string name="add_video_to_new_playlist">Aggiungi questo video ad una nuova playlist</string>
     <string name="cant_delete_empty_playlist">Non posso cancellare una playlist vuota</string>
@@ -397,7 +399,7 @@
     <string name="rename_playlist">Rinomina playlist</string>
     <string name="cant_rename_empty_playlist">Non posso rinominare una playlist vuota</string>
     <string name="cant_rename_foreign_playlist">Non posso rinominare una playlist esterna</string>
-    <string name="cant_save_playlist">Questa playlist non può essere salvata</string>
+    <string name="cant_save_playlist">Questa playlist non può essere aggiunta</string>
     <string name="enter_value">Immetti un valore non vuoto</string>
     <string name="dialog_add_remove_from">Aggiungi o rimuovi da %s</string>
     <string name="lb_playback_controls_skip_next">Salta il prossimo</string>
