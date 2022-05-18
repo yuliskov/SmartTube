@@ -389,9 +389,9 @@
     <string name="pressing_home_back">premendo HOME o INDIETRO</string>
     <string name="player_number_key_seek">Ricerca con i tasti numerici</string>
     <string name="save_remove_playlist">Aggiungi o cancella questa playlist dall\'account</string>
-    <string name="remove_playlist">Cancella questa playlist dall\'account</string>
-    <string name="removed_from_playlists">Cancellata dall\'account</string>
-    <string name="saved_to_playlists">Aggiunta all\'account</string>
+    <string name="remove_playlist">Cancella definitivamente questa playlist dalla sezione Playlist</string>
+    <string name="removed_from_playlists">Cancellata dalla sezione Playlist</string>
+    <string name="saved_to_playlists">Aggiunta alla sezione Playlist</string>
     <string name="create_playlist">Crea playlist</string>
     <string name="add_video_to_new_playlist">Aggiungi questo video ad una nuova playlist</string>
     <string name="cant_delete_empty_playlist">Non posso cancellare una playlist vuota</string>
@@ -422,4 +422,6 @@
     <string name="playlist_order_popularity">Popolarità</string>
     <string name="cant_do_this_for_foreign_playlist">Non posso fare questo per le playlist esterne</string>
     <string name="owned_playlist_warning">Errore. Questa azione può essere applicata solo alle playlist di tua proprietà.</string>
+    <string name="content_block_alt_server">Utilizza server alternativo</string>
+    <string name="content_block_alt_server_desc">Abilita questa opzione se SponsorBlock si rifiuta di funzionare per ragioni diverse.</string>
 </resources>
