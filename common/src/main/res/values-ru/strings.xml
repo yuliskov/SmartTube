@@ -418,4 +418,6 @@
     <string name="playlist_order_popularity">По популярности</string>
     <string name="cant_do_this_for_foreign_playlist">Невозможно это сделать для чужого плейлиста</string>
     <string name="owned_playlist_warning">Ошибка. Это действие применимо только для собственных плейлистов.</string>
+    <string name="content_block_alt_server">Использовать альтернативный сервер</string>
+    <string name="content_block_alt_server_desc">Включите эту опцию, если SponsorBlock отказывается работать по разным причинам.</string>
 </resources>

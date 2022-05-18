@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build.VERSION;
 import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager.SegmentAction;
 
@@ -181,6 +182,14 @@ public class ContentBlockData {
         persistData();
     }
 
+    public boolean isAltServerEnabled() {
+        return GlobalPreferences.instance(mAppPrefs.getContext()).isContentBlockAltServerEnabled();
+    }
+
+    public void enableAltServer(boolean enabled) {
+        GlobalPreferences.instance(mAppPrefs.getContext()).enableContentBlockAltServer(enabled);
+    }
+
     private void restoreState() {
         String data = mAppPrefs.getData(CONTENT_BLOCK_DATA);
 
@@ -228,7 +237,8 @@ public class ContentBlockData {
         String actions = Helpers.mergeArray(mActions.toArray());
 
         mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeObject(
-                mIsSponsorBlockEnabled, null, null, mIsSkipEachSegmentOnceEnabled, null, null, actions, colorCategories
+                mIsSponsorBlockEnabled, null, null, mIsSkipEachSegmentOnceEnabled,
+                null, null, actions, colorCategories
         ));
     }
 }
