@@ -234,6 +234,8 @@
     <string name="removed_from_playback_queue">Smazáno z fronty přehrávání</string>
     <string name="added_to_playback_queue">Přidáno do fronty přehrávání</string>
     <string name="add_remove_from_playback_queue">Přidat do/Smazat z fronty přehrávání</string>
+    <string name="add_to_playback_queue">Přidat do fronty přehrávání</string>
+    <string name="remove_from_playback_queue">Odebrat z fronty přehrávání</string>
     <string name="proxy_enabled">Povoleno proxy</string>
     <string name="proxy_disabled">Zakázáno proxy</string>
     <string name="uploads_row_name">Nahraná videa</string>
@@ -389,7 +391,7 @@
     <string name="save_remove_playlist">Přidat/Odebrat tento playlist z účtu</string>
     <string name="remove_playlist">Odstranit tento playlist z účtu</string>
     <string name="removed_from_playlists">Odstraněno z účtu</string>
-    <string name="saved_to_playlists">Uloženo do účtu</string>
+    <string name="saved_to_playlists">Přidáno do účtu</string>
     <string name="create_playlist">Vytvořit playlist</string>
     <string name="add_video_to_new_playlist">Přidat toto video do nového playlistu</string>
     <string name="cant_delete_empty_playlist">Nelze smazat prázdný playlist</string>
@@ -397,7 +399,7 @@
     <string name="rename_playlist">Přejmenovat playlist</string>
     <string name="cant_rename_empty_playlist">Nelze přejmenovat prázdný playlist</string>
     <string name="cant_rename_foreign_playlist">Nelze přejmenovat cizí playlist</string>
-    <string name="cant_save_playlist">Tento playlist nelze uložit</string>
+    <string name="cant_save_playlist">Tento playlist nelze přidat</string>
     <string name="enter_value">Zadejte libovolnou hodnotu</string>
     <string name="dialog_add_remove_from">Přidat do/Smazat z %s</string>
     <string name="lb_playback_controls_skip_next">Přeskočit Další</string>
