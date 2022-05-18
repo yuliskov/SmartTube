@@ -41,6 +41,10 @@ public class Playlist {
         mCurrentIndex = -1;
     }
 
+    public void clearPosition() {
+        mCurrentIndex = -1;
+    }
+
     /**
      * Used to sync list with remotely added items
      */

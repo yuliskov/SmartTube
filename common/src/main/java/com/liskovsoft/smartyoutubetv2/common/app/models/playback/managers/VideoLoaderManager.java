@@ -145,7 +145,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     @Override
     public void onFinish() {
-        mPlaylist.clear();
+        mPlaylist.clearPosition();
     }
 
     public void loadPrevious() {
