@@ -424,4 +424,5 @@
     <string name="owned_playlist_warning">Error. This action can be applied only for owned playlists</string>
     <string name="content_block_alt_server">Use alternative server</string>
     <string name="content_block_alt_server_desc">Enable this option if SponsorBlock refusing to work by different reasons.</string>
+    <string name="cancel">Cancel</string>
 </resources>
