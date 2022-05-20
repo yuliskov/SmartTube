@@ -279,13 +279,13 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onThumbsDownClicked(boolean thumbsDown) {
-        process(listener -> listener.onThumbsDownClicked(thumbsDown));
+    public void onDislikeClicked(boolean dislike) {
+        process(listener -> listener.onDislikeClicked(dislike));
     }
 
     @Override
-    public void onThumbsUpClicked(boolean thumbsUp) {
-        process(listener -> listener.onThumbsUpClicked(thumbsUp));
+    public void onLikeClicked(boolean like) {
+        process(listener -> listener.onLikeClicked(like));
     }
 
     @Override
@@ -329,8 +329,18 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
+    public void onSeekIntervalClicked() {
+        process(PlayerUiEventListener::onSeekIntervalClicked);
+    }
+
+    @Override
     public void onVideoInfoClicked() {
         process(PlayerUiEventListener::onVideoInfoClicked);
+    }
+
+    @Override
+    public void onShareLinkClicked() {
+        process(PlayerUiEventListener::onShareLinkClicked);
     }
 
     @Override

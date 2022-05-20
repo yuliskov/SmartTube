@@ -20,6 +20,9 @@
     <dimen name="settings_card_width">128dp</dimen>
     <dimen name="settings_card_height">100dp</dimen>
 
+    <dimen name="pip_title_max_width">500dp</dimen>
+    <dimen name="pip_title_size">24sp</dimen>
+
     <!-- Card view default size -->
     <!--
     <dimen name="lb_basic_card_title_text_size">14sp</dimen>
@@ -101,4 +104,17 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- Tooltip mod: extracted private values -->
+    <dimen name="tooltip_corner_radius_mod">20dp</dimen>
+    <dimen name="tooltip_horizontal_padding_mod">16dp</dimen>
+    <dimen name="tooltip_margin_mod">8dp</dimen>
+    <dimen name="tooltip_precise_anchor_extra_offset_mod">8dp</dimen>
+    <dimen name="tooltip_precise_anchor_threshold_mod">96dp</dimen>
+    <dimen name="tooltip_vertical_padding_mod">6.5dp</dimen>
+    <dimen name="tooltip_y_offset_non_touch_mod">0dp</dimen>
+    <dimen name="tooltip_y_offset_touch_mod">16dp</dimen>
+
+    <!-- Increase error view lines -->
+    <integer name="lb_error_message_max_lines">7</integer>
 </resources>

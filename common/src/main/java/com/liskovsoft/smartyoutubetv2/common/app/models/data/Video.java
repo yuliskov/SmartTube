@@ -44,9 +44,9 @@ public final class Video implements Parcelable {
     public String badge;
     public String previewUrl;
     public float percentWatched = -1;
-    public MediaItem mediaItem; // memory leak
-    public MediaItem nextMediaItem; // memory leak
-    public VideoGroup group; // used to get next page when scrolling
+    public MediaItem mediaItem;
+    public MediaItem nextMediaItem;
+    public VideoGroup group; // Memory leak. Used to get next page when scrolling.
     public boolean hasNewContent;
     public boolean isLive;
     public boolean isUpcoming;
@@ -58,6 +58,7 @@ public final class Video implements Parcelable {
     public final long timestamp = System.currentTimeMillis();
     public int extra = -1;
     public int pendingPosMs;
+    public boolean fromQueue;
 
     public Video() {
        // NOP
@@ -407,7 +408,7 @@ public final class Video implements Parcelable {
         return videoId == null && channelId != null && itemType == MediaItem.TYPE_PLAYLIST;
     }
 
-    public boolean belongsToPlaylist() {
+    public boolean belongsToPlaylists() {
         return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_USER_PLAYLISTS;
     }
 
@@ -471,6 +472,10 @@ public final class Video implements Parcelable {
         return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_HISTORY;
     }
 
+    public boolean belongsToMusic() {
+        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_MUSIC;
+    }
+
     public boolean belongsToSection() {
         return group != null && group.getSection() != null;
     }
@@ -495,6 +500,16 @@ public final class Video implements Parcelable {
         newTitle = metadata.getTitle();
         
         newSecondTitle = useAltSecondTitle ? metadata.getSecondTitleAlt() : metadata.getSecondTitle();
+
+        // Casting fix (no title, no desc)
+        if (title == null) {
+            title = newTitle;
+        }
+
+        // Casting fix (no title, no desc)
+        if (secondTitle == null) {
+            secondTitle = newSecondTitle;
+        }
 
         // No checks. This data wasn't existed before sync.
         if (metadata.getDescription() != null) {

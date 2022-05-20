@@ -154,9 +154,6 @@ public class ViewUtil {
     }
 
     public static RequestOptions glideOptions() {
-        //return new RequestOptions()
-        //        .skipMemoryCache(true);
-
         return new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.NONE) // ensure start animation from beginning
                 .skipMemoryCache(true); // ensure start animation from beginning
@@ -183,6 +180,7 @@ public class ViewUtil {
         if (title instanceof FrameLayout) {
             title.setBackgroundColor(transparent);
         }
+        // Can't set bg of individual items here because ones isn't added yet.
     }
 
     public static void makeMonochrome(ImageView iconView) {

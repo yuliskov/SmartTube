@@ -5,7 +5,6 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -20,7 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.proxy.WebProxyDialog;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,9 +51,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBootToSection(settingsPresenter);
         appendEnabledSections(settingsPresenter);
         appendContextMenuItemsCategory(settingsPresenter);
+        appendVariousButtonsCategory(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
-        appendBackgroundPlaybackActivationCategory(settingsPresenter);
+        //appendBackgroundPlaybackActivationCategory(settingsPresenter);
         appendScreenDimmingCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
         appendAppBackupCategory(settingsPresenter);
@@ -94,10 +94,14 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.subscribe_unsubscribe_from_channel, MainUIData.MENU_ITEM_SUBSCRIBE},
+                {R.string.save_remove_playlist, MainUIData.MENU_ITEM_SAVE_PLAYLIST},
+                {R.string.create_playlist, MainUIData.MENU_ITEM_CREATE_PLAYLIST},
+                {R.string.dialog_add_to_playlist, MainUIData.MENU_ITEM_ADD_TO_PLAYLIST},
+                {R.string.add_remove_from_recent_playlist, MainUIData.MENU_ITEM_RECENT_PLAYLIST},
                 {R.string.play_video, MainUIData.MENU_ITEM_PLAY_VIDEO},
                 {R.string.not_interested, MainUIData.MENU_ITEM_NOT_INTERESTED},
                 {R.string.remove_from_history, MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY},
-                {R.string.add_remove_from_recent_playlist, MainUIData.MENU_ITEM_RECENT_PLAYLIST},
                 {R.string.pin_unpin_from_sidebar, MainUIData.MENU_ITEM_PIN_TO_SIDEBAR},
                 {R.string.add_remove_from_playback_queue, MainUIData.MENU_ITEM_ADD_TO_QUEUE},
                 {R.string.share_link, MainUIData.MENU_ITEM_SHARE_LINK},
@@ -116,6 +120,24 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.context_menu), options);
+    }
+
+    private void appendVariousButtonsCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.settings_accounts, MainUIData.BUTTON_BROWSE_ACCOUNTS}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
+                if (optionItem.isSelected()) {
+                    mMainUIData.enableButton(pair[1]);
+                } else {
+                    mMainUIData.disableButton(pair[1]);
+                }
+                mRestartApp = true;
+            }, mMainUIData.isButtonEnabled(pair[1])));
+        }
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.various_buttons), options);
     }
 
     private void appendBootToSection(AppDialogPresenter settingsPresenter) {
@@ -166,23 +188,23 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendBackgroundPlaybackCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = HQDialogManager.createBackgroundPlaybackCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createBackgroundPlaybackCategory(getContext(), mPlayerData, mGeneralData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
-    private void appendBackgroundPlaybackActivationCategory(AppDialogPresenter settingsPresenter) {
-        List<OptionItem> options = new ArrayList<>();
-
-        options.add(UiOptionItem.from("HOME",
-                option -> mGeneralData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME),
-                mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME));
-
-        options.add(UiOptionItem.from("HOME/BACK",
-                option -> mGeneralData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK),
-                mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK));
-
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.background_playback_activation), options);
-    }
+    //private void appendBackgroundPlaybackActivationCategory(AppDialogPresenter settingsPresenter) {
+    //    List<OptionItem> options = new ArrayList<>();
+    //
+    //    options.add(UiOptionItem.from("HOME",
+    //            option -> mGeneralData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME),
+    //            mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME));
+    //
+    //    options.add(UiOptionItem.from("HOME/BACK",
+    //            option -> mGeneralData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK),
+    //            mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK));
+    //
+    //    settingsPresenter.appendRadioCategory(getContext().getString(R.string.background_playback_activation), options);
+    //}
 
     private void appendKeyRemappingCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
@@ -257,7 +279,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 String.format("%s:\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
                 option -> {
-                    Utils.showConfirmationDialog(getContext(), () -> {
+                    AppDialogUtil.showConfirmationDialog(getContext(), () -> {
                         mGeneralData.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
                         mGeneralData.enableSettingsSection(true); // prevent Settings lock
                         backupManager.checkPermAndBackup();
@@ -268,7 +290,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupManager.getBackupPath()),
                 option -> {
-                    Utils.showConfirmationDialog(getContext(), () -> {
+                    AppDialogUtil.showConfirmationDialog(getContext(), () -> {
                         backupManager.checkPermAndRestore();
                         MessageHelpers.showMessage(getContext(), R.string.msg_done);
                     }, getContext().getString(R.string.app_restore));

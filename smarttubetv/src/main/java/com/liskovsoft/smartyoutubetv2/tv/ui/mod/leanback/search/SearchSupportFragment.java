@@ -40,7 +40,9 @@ import androidx.leanback.widget.SpeechRecognitionCallback;
 import androidx.leanback.widget.VerticalGridView;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
+import com.liskovsoft.sharedutils.helpers.KeyHelpers;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -342,15 +344,25 @@ public class SearchSupportFragment extends Fragment {
         mSearchTextEditor.setOnFocusChangeListener((v, focused) -> {
             Log.d(TAG, "on search field focused");
 
-            if (mIsKeyboardAutoShowEnabled && focused &&
-                    mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
-                mRowsSupportFragment.getVerticalGridView().clearFocus();
+            //if (mIsKeyboardAutoShowEnabled && focused &&
+            //        mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
+            //    mRowsSupportFragment.getVerticalGridView().clearFocus();
+            //
+            //    if (getContext() != null) {
+            //        Helpers.showKeyboard(getContext(), v);
+            //    }
+            //}
 
-                if (getContext() != null) {
-                    Helpers.showKeyboard(getContext());
-                }
+            // User clicked on tag and tries to edit search query
+            if (focused) {
+                SearchPresenter.instance(v.getContext()).disposeActions();
+            }
+
+            if (mIsKeyboardAutoShowEnabled && focused) {
+                Helpers.showKeyboard(v.getContext());
             }
         });
+        KeyHelpers.fixEnterKey(mSearchTextEditor);
         // BUGFIX: focus lost with keyboard???
         //mSearchTextEditor.setOnKeyboardDismissListener(this::focusOnSearchField);
 
@@ -391,16 +403,6 @@ public class SearchSupportFragment extends Fragment {
             }
         });
         mSearchSettingsOrbView.setOnOrbClickedListener(v -> onSearchSettingsClicked());
-
-        //mSearchTextEditor.setOnClickListener(v -> {
-        //    Log.d(TAG, "on search field clicked");
-        //
-        //    if (getContext() != null) {
-        //        // https://stackoverflow.com/questions/5105354/how-to-show-soft-keyboard-when-edittext-is-focused
-        //        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        //        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        //    }
-        //});
 
         mSpeechOrbView = mSearchBar.findViewById(R.id.lb_search_bar_speech_orb);
         mSpeechOrbView.setOnFocusChangeListener((v, hasFocus) -> {

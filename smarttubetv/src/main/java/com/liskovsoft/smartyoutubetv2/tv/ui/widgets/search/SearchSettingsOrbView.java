@@ -7,6 +7,7 @@ import androidx.leanback.widget.SearchOrbView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
+ * Not used<br/>
  * A subclass of {@link SearchOrbView} that invokes dialog with search query params.
  */
 public class SearchSettingsOrbView extends SearchOrbView {

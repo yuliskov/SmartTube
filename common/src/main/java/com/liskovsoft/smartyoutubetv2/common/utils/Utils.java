@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -24,16 +25,17 @@ import android.os.IBinder;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -41,9 +43,6 @@ import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -53,9 +52,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
-import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -68,7 +65,6 @@ public class Utils {
     private static final String QR_CODE_URL_TEMPLATE = "https://api.qrserver.com/v1/create-qr-code/?data=%s";
     private static final int GLOBAL_VOLUME_TYPE = AudioManager.STREAM_MUSIC;
     private static final String GLOBAL_VOLUME_SERVICE = Context.AUDIO_SERVICE;
-    private static final int SHORTS_LEN_MS = 60 * 1_000;
 
     /**
      * Limit the maximum size of a Map by removing oldest entries when limit reached
@@ -350,6 +346,16 @@ public class Utils {
         return spannable;
     }
 
+    public static CharSequence icon(Context context, int resId, int lineHeight) {
+        SpannableString spannable = new SpannableString(" ");
+        Drawable drawable = ContextCompat.getDrawable(context, resId);
+        drawable.setBounds(0, 0, lineHeight, lineHeight);
+        ImageSpan imageSpan = new ImageSpan(drawable);
+        spannable.setSpan(imageSpan, 0, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return spannable;
+    }
+
     @SuppressWarnings("deprecation")
     public static boolean isServiceRunning(Context context, Class<? extends Service> serviceClass) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -451,6 +457,7 @@ public class Utils {
     }
 
     /**
+     * Selecting right presenter for the channel.<br/>
      * Channels could be of two types: regular (usr channel) and playlist channel (contains single row, try search: 'Mon mix')
      */
     public static void chooseChannelPresenter(Context context, Video item) {
@@ -485,38 +492,6 @@ public class Utils {
         });
     }
 
-    public static boolean isShort(MediaItem mediaItem) {
-        if (mediaItem == null || mediaItem.getTitle() == null) {
-            return false;
-        }
-
-        String title = mediaItem.getTitle().toLowerCase();
-
-        int lengthMs = ServiceHelper.timeTextToMillis(mediaItem.getBadgeText());
-        boolean isShortLength = lengthMs > 0 && lengthMs < SHORTS_LEN_MS;
-        return isShortLength || title.contains("#short") || title.contains("#shorts") || title.contains("#tiktok");
-    }
-
-    public static void showConfirmationDialog(Context context, Runnable onConfirm, String title) {
-        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(context);
-        settingsPresenter.clear();
-
-        List<OptionItem> options = new ArrayList<>();
-
-        options.add(UiOptionItem.from(context.getString(R.string.cancel_dialog),
-                option -> settingsPresenter.goBack()));
-
-        options.add(UiOptionItem.from(context.getString(R.string.btn_confirm),
-                option -> {
-                    settingsPresenter.goBack();
-                    onConfirm.run();
-                }));
-
-        settingsPresenter.appendStringsCategory(title, options);
-
-        settingsPresenter.showDialog(title);
-    }
-
     public static void sendKey(int key) {
         try {
             Instrumentation instrumentation = new Instrumentation();
@@ -535,5 +510,11 @@ public class Utils {
             // Injecting to another application requires INJECT_EVENTS permission
             e.printStackTrace();
         }
+    }
+
+    public static void showNotCompatibleMessage(Context context, int msgResId) {
+        MessageHelpers.showMessage(context, String.format("%s '%s'",
+                context.getString(R.string.not_compatible_with),
+                context.getString(msgResId)));
     }
 }

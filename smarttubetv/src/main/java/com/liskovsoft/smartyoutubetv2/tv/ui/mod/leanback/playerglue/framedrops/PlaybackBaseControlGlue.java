@@ -29,12 +29,13 @@ import androidx.leanback.media.PlaybackGlueHost;
 import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
-import androidx.leanback.widget.ControlButtonPresenterSelector;
 import androidx.leanback.widget.OnActionClickedListener;
 import androidx.leanback.widget.PlaybackControlsRow;
 import androidx.leanback.widget.PlaybackRowPresenter;
 import androidx.leanback.widget.PlaybackTransportRowPresenter;
 import androidx.leanback.widget.Presenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.ControlButtonPresenterSelector;
 
 import java.util.List;
 
@@ -331,14 +332,14 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
         mControlsRow.setBufferedPosition(-1);
         if (mControlsRow.getPrimaryActionsAdapter() == null) {
             ArrayObjectAdapter adapter = new ArrayObjectAdapter(
-                    new ControlButtonPresenterSelector());
+                    new ControlButtonPresenterSelector(PlayerData.instance(getContext()).isTooltipsEnabled()));
             onCreatePrimaryActions(adapter);
             mControlsRow.setPrimaryActionsAdapter(adapter);
         }
         // Add secondary actions
         if (mControlsRow.getSecondaryActionsAdapter() == null) {
             ArrayObjectAdapter secondaryActions = new ArrayObjectAdapter(
-                    new ControlButtonPresenterSelector());
+                    new ControlButtonPresenterSelector(PlayerData.instance(getContext()).isTooltipsEnabled()));
             onCreateSecondaryActions(secondaryActions);
             getControlsRow().setSecondaryActionsAdapter(secondaryActions);
         }

@@ -6,6 +6,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.view.View;
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.BackgroundManager;
 import com.bumptech.glide.Glide;
@@ -108,7 +110,18 @@ public class UriBackgroundManager {
         return mBackgroundManager;
     }
 
-    private void setBackground(String uri) {
+    public void setBackground(String uri) {
+        View videoView = mActivity.findViewById(R.id.video_surface);
+
+        if (videoView != null) {
+            videoView.setVisibility(uri == null ? View.VISIBLE : View.INVISIBLE);
+        }
+
+        if (uri == null) {
+            removeBackground();
+            return;
+        }
+
         int width = mMetrics.widthPixels;
         int height = mMetrics.heightPixels;
 
@@ -123,7 +136,7 @@ public class UriBackgroundManager {
                 .into(new SimpleTarget<Bitmap>(width, height) {
                     @Override
                     public void onResourceReady(
-                            Bitmap resource,
+                            @NonNull Bitmap resource,
                             Transition<? super Bitmap> transition) {
                         mBackgroundManager.setBitmap(resource);
                     }

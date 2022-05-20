@@ -72,7 +72,7 @@ public class StoryboardManager {
         }
 
         mFormatAction = storyboardObserve
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         storyboard -> {

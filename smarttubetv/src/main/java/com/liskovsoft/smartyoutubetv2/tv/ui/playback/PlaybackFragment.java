@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.media.MediaMetadataCompat;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.RowsSupportFragment;
@@ -27,6 +29,9 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.RowPresenter.ViewHolder;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.exoplayer2.ControlDispatcher;
 import com.google.android.exoplayer2.DefaultControlDispatcher;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -76,6 +81,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.EndingTimeView;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -683,12 +689,12 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         @Override
         public void onThumbsDown(boolean thumbsDown) {
-            mEventListener.onThumbsDownClicked(thumbsDown);
+            mEventListener.onDislikeClicked(thumbsDown);
         }
 
         @Override
         public void onThumbsUp(boolean thumbsUp) {
-            mEventListener.onThumbsUpClicked(thumbsUp);
+            mEventListener.onLikeClicked(thumbsUp);
         }
 
         @Override
@@ -717,8 +723,18 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
+        public void onSeekInterval() {
+            mEventListener.onSeekIntervalClicked();
+        }
+
+        @Override
         public void onVideoInfo() {
             mEventListener.onVideoInfoClicked();
+        }
+
+        @Override
+        public void onShareLink() {
+            mEventListener.onShareLinkClicked();
         }
 
         @Override
@@ -788,6 +804,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             mPlayerGlue.setTitle(video.getPlayerTitle() != null ? video.getPlayerTitle() : "...");
             mPlayerGlue.setSubtitle(video.getPlayerSecondTitle() != null ? appendLive(video.getPlayerSecondTitle(), video.isLive) : "...");
         }
+    }
+
+    @Override
+    public void setArtwork(String url) {
+        mBackgroundManager.setBackground(url);
     }
 
     private CharSequence appendLive(String title, boolean isLive) {

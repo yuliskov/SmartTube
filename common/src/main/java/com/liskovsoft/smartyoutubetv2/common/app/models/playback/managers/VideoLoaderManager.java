@@ -8,6 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.Analytics;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -15,21 +16,17 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +42,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     private long mPrevErrorTimeMs;
     private PlayerData mPlayerData;
     private long mSleepTimerStartMs;
-    private boolean mSkipAdd;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
     private final Map<Integer, Runnable> mErrorActions = new HashMap<>();
@@ -78,10 +74,14 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     @Override
     public void openVideo(Video item) {
-        if (!mSkipAdd) {
+        if (item == null) {
+            return;
+        }
+
+        if (!item.fromQueue) {
             mPlaylist.add(item);
         } else {
-            mSkipAdd = false;
+            item.fromQueue = false;
         }
 
         if (getController() != null && getController().isEngineInitialized()) { // player is initialized
@@ -162,11 +162,16 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         return true;
     }
 
+    @Override
+    public void onFinish() {
+        mPlaylist.clearPosition();
+    }
+
     public void loadPrevious() {
         Video previous = mPlaylist.getPrevious();
 
         if (previous != null) {
-            mSkipAdd = true;
+            previous.fromQueue = true;
             openVideoInt(previous);
         }
     }
@@ -178,7 +183,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         if (next == null) {
             openVideoFromNext(getController().getVideo(), true);
         } else {
-            mSkipAdd = true;
+            next.fromQueue = true;
             openVideoInt(next);
         }
     }
@@ -250,28 +255,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     @Override
     public void onPlaybackQueueClicked() {
-        String playbackQueueCategoryTitle = getActivity().getString(R.string.playback_queue_category_title);
-
-        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
-
-        settingsPresenter.clear();
-
-        List<OptionItem> options = new ArrayList<>();
-
-        for (Video video : mPlaylist.getAll()) {
-            options.add(0, UiOptionItem.from( // Add to start (recent videos on top)
-                    video.title,
-                    optionItem -> {
-                        mSkipAdd = true;
-                        openVideoInt(video);
-                    },
-                    video == mPlaylist.getCurrent())
-            );
-        }
-
-        settingsPresenter.appendRadioCategory(playbackQueueCategoryTitle, options);
-
-        settingsPresenter.showDialog(playbackQueueCategoryTitle);
+        AppDialogUtil.showPlaybackQueueDialog(getActivity(), this::openVideoInt);
     }
 
     @Override
@@ -333,7 +317,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processFormatInfo,
                            error -> {
@@ -350,6 +334,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
         boolean isLive = formatInfo.isLive() || formatInfo.isLiveContent();
+        String artworkUrl = null;
 
         if (formatInfo.isUnplayable() || formatInfo.isAgeRestricted()) {
             getController().showError(formatInfo.getPlayabilityStatus());
@@ -373,7 +358,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
-                    .subscribeOn(Schedulers.newThread())
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             dashManifest -> getController().openDash(dashManifest),
@@ -386,6 +371,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
             scheduleReloadVideoTimer(30 * 1_000);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
+            artworkUrl = mLastVideo.bgImageUrl;
             if (!mIsWasVideoStartError && mLastVideo != null) {
                 Analytics.sendVideoStartError(mLastVideo.videoId,
                         mLastVideo.title,
@@ -398,6 +384,8 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         if (video != null) {
             video.sync(formatInfo);
         }
+
+        getController().setArtwork(artworkUrl);
     }
 
     private void scheduleReloadVideoTimer(int reloadIntervalMs) {

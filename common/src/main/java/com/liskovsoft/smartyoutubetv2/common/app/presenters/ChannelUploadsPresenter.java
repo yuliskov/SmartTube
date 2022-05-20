@@ -61,13 +61,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     public void onViewInitialized() {
         super.onViewInitialized();
 
-        if (mVideoItem != null) {
-            getView().clear();
-            updateGrid(mVideoItem);
-        } else if (mMediaGroup != null) {
-            getView().clear();
-            updateGrid(mMediaGroup);
-        }
+        refresh();
     }
 
     @Override
@@ -99,7 +93,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     @Override
     public void onVideoItemLongClicked(Video item) {
         VideoMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
-            if (action == VideoMenuCallback.ACTION_PLAYLIST_REMOVE) {
+            if (action == VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST) {
                 removeItem(videoItem);
             } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE) {
                 MessageHelpers.showMessage(getContext(), R.string.unsubscribed_from_channel);
@@ -200,7 +194,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         }
 
         mScrollAction = continuation
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
@@ -220,7 +214,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         getView().showProgressBar(true);
 
         mUpdateAction = group
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::updateGrid,
@@ -258,7 +252,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         Observable<MediaGroup> group = mGroupManager.getGroupObserve(mediaItem);
 
         mUpdateAction = group
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         callback::onGroup,
@@ -292,6 +286,20 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     public void clear() {
         if (getView() != null) {
             getView().clear();
+        }
+    }
+
+    public void refresh() {
+        if (getView() == null) {
+            return;
+        }
+
+        if (mVideoItem != null) {
+            getView().clear();
+            updateGrid(mVideoItem);
+        } else if (mMediaGroup != null) {
+            getView().clear();
+            updateGrid(mMediaGroup);
         }
     }
 }

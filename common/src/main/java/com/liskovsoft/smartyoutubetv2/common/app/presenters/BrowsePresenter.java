@@ -52,6 +52,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private static final String TAG = BrowsePresenter.class.getSimpleName();
     private static final long HEADER_REFRESH_PERIOD_MS = 120 * 60 * 1_000;
     private static final int MIN_GROUP_SIZE = 13;
+    private static final int MIN_SCALED_GROUP_SIZE = 25;
     @SuppressLint("StaticFieldLeak")
     private static BrowsePresenter sInstance;
     private final MainUIData mMainUIData;
@@ -70,6 +71,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private Disposable mSignCheckAction;
     private BrowseSection mCurrentSection;
     private Video mCurrentVideo;
+    private VideoGroup mLastGroup;
+    private int mGroupTotalSize;
     private long mLastUpdateTimeMs;
     private int mBootSectionIndex;
     private int mSelectedSectionId = -1;
@@ -120,7 +123,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateSections();
         int selectedSectionIndex = findSectionIndex(mSelectedSectionId);
         mSelectedSectionId = -1;
-        getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex);
+        getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, true);
         showBootDialogs();
         Utils.updateRemoteControlService(getContext());
     }
@@ -294,7 +297,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (isMultiGridChannelUploadsSection() && item.belongsToChannelUploads()) {
+        if (isMultiGridChannelUploadsSection() && item.belongsToChannelUploads() && !item.hasVideo()) {
             if (mMainUIData.isUploadsAutoLoadEnabled()) {
                 updateMultiGrid(item);
             } else {
@@ -312,7 +315,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         // Check that channels new look enabled and we're on the first column
-        if (isMultiGridChannelUploadsSection() && item.belongsToChannelUploads()) {
+        if (isMultiGridChannelUploadsSection() && item.belongsToChannelUploads() && !item.hasVideo()) {
             updateMultiGrid(item);
         } else {
             VideoActionPresenter.instance(getContext()).apply(item);
@@ -327,7 +330,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (item.belongsToChannelUploads()) { // We need to be sure we exactly on Channels section
+        if (item.belongsToChannelUploads() && !item.hasVideo()) { // We need to be sure we exactly on Channels section
             ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
                 if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE) { // works with any uploads section look
                     removeItem(item);
@@ -336,7 +339,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         } else {
             VideoMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
                 if (action == VideoMenuCallback.ACTION_REMOVE ||
-                    action == VideoMenuCallback.ACTION_PLAYLIST_REMOVE) {
+                    action == VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST) {
                     removeItem(videoItem);
                 } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isMultiGridChannelUploadsSection()) {
                     removeItem(mCurrentVideo);
@@ -389,11 +392,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void moveSectionUp(BrowseSection section) {
         mGeneralData.moveSectionUp(section.getId());
         updateSections();
+
+        // Move current focus
+        getView().selectSection(mGeneralData.getSectionIndex(section.getId()), false);
     }
 
     public void moveSectionDown(BrowseSection section) {
         mGeneralData.moveSectionDown(section.getId());
         updateSections();
+
+        // No need to move focus because section should be already focused.
     }
 
     public boolean canMoveSectionUp(BrowseSection section) {
@@ -468,6 +476,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void refresh() {
         if (mCurrentSection != null) {
             updateSection(mCurrentSection.getId());
+            if (getView() != null) {
+                getView().focusOnContent();
+            }
         }
     }
 
@@ -547,7 +558,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         final AtomicInteger emissionIndex = new AtomicInteger(-1);
 
         mUpdateAction = groups
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroups -> {
@@ -559,15 +570,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                     continue;
                                 }
                                 
-                                filterIfNeeded(mediaGroup);
-
                                 // Move to top isn't working properly (too slow)
                                 //VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, moveToTopIfNeeded(mediaGroup));
                                 VideoGroup videoGroup = VideoGroup.from(mediaGroup, section);
 
                                 getView().updateSection(videoGroup);
 
-                                continueGroupIfNeeded(videoGroup);
+                                mLastGroup = videoGroup;
                             }
 
                             // Hide loading as long as first group received
@@ -577,9 +586,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         },
                         error -> {
                             Log.e(TAG, "updateRowsHeader error: %s", error.getMessage());
-                            getView().showProgressBar(false);
-                            getView().showError(new CategoryEmptyError(getContext()));
-                        });
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                                getView().showError(new CategoryEmptyError(getContext()));
+                            }
+                            mGroupTotalSize = 0;
+                        },
+                        this::continueGroupIfNeeded);
     }
 
     private void updateVideoGrid(BrowseSection section, Observable<MediaGroup> group, int position) {
@@ -599,7 +612,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         mUpdateAction = group
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroup -> {
@@ -609,8 +622,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 return;
                             }
 
-                            filterIfNeeded(mediaGroup);
-
                             VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, position);
                             getView().updateSection(videoGroup);
 
@@ -619,7 +630,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 getView().showProgressBar(false);
                             }
 
-                            continueGroupIfNeeded(videoGroup);
+                            mLastGroup = videoGroup;
                         },
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
@@ -627,7 +638,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 getView().showProgressBar(false);
                                 getView().showError(new CategoryEmptyError(getContext()));
                             }
-                        });
+                            mGroupTotalSize = 0;
+                        },
+                        this::continueGroupIfNeeded);
     }
 
     private void continueGroup(VideoGroup group) {
@@ -656,22 +669,26 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         mContinueAction = continuation
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueGroup -> {
-                            filterIfNeeded(continueGroup);
-
                             VideoGroup videoGroup = VideoGroup.from(continueGroup, group.getSection(), group.getPosition());
                             getView().updateSection(videoGroup);
+
+                            mLastGroup = videoGroup;
                         },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                             }
+                            mGroupTotalSize = 0;
                         },
-                        () -> getView().showProgressBar(false)
+                        () -> {
+                            getView().showProgressBar(false);
+                            continueGroupIfNeeded();
+                        }
                 );
     }
 
@@ -686,7 +703,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         getView().showProgressBar(true);
 
         mSignCheckAction = mSignInManager.isSignedObserve()
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         isSigned -> {
@@ -707,10 +724,20 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     /**
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
-    private void continueGroupIfNeeded(VideoGroup videoGroup) {
-        boolean groupTooSmall = videoGroup.getVideos() != null && videoGroup.getVideos().size() < MIN_GROUP_SIZE;
-        if (mMainUIData.getUIScale() < 0.8f || mMainUIData.getVideoGridScale() < 0.8f) {
-            continueGroup(videoGroup);
+    private void continueGroupIfNeeded() {
+        if (mLastGroup == null) {
+            return;
+        }
+
+        mGroupTotalSize += mLastGroup.getVideos() != null ? mLastGroup.getVideos().size() : 0;
+
+        boolean isScaledGridEnabled = mMainUIData.getUIScale() < 0.8f || mMainUIData.getVideoGridScale() < 0.8f;
+        boolean groupTooSmall = isScaledGridEnabled ? mGroupTotalSize < MIN_SCALED_GROUP_SIZE : mGroupTotalSize < MIN_GROUP_SIZE;
+
+        if (groupTooSmall) {
+            continueGroup(mLastGroup);
+        } else {
+            mGroupTotalSize = 0;
         }
     }
 
@@ -755,30 +782,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return -1;
     }
 
-    private void filterIfNeeded(MediaGroup mediaGroup) {
-        if (mediaGroup == null || mediaGroup.getMediaItems() == null) {
-            return;
-        }
-
-        boolean isHideShortsEnabled = (mGeneralData.isHideShortsFromSubscriptionsEnabled() && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS) ||
-                (mGeneralData.isHideShortsFromHomeEnabled() && mediaGroup.getType() == MediaGroup.TYPE_HOME) ||
-                (mGeneralData.isHideShortsFromHistoryEnabled() && mediaGroup.getType() == MediaGroup.TYPE_HISTORY);
-        boolean isHideUpcomingEnabled = mGeneralData.isHideUpcomingEnabled() && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS;
-
-        if (isHideShortsEnabled || isHideUpcomingEnabled) {
-
-            // Remove Shorts and/or Upcoming
-            // NOTE: Predicate replacement function for devices with Android 6.0 and below.
-            Helpers.removeIf(mediaGroup.getMediaItems(), mediaItem -> {
-                if (mediaItem == null) {
-                    return false;
-                }
-
-                return (isHideShortsEnabled && Utils.isShort(mediaItem)) || (isHideUpcomingEnabled && mediaItem.isUpcoming());
-            });
-        }
-    }
-
     private void filterIfNeeded(List<MediaGroup> mediaGroups) {
         if (mediaGroups == null) {
             return;
@@ -820,19 +823,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     /**
      * Is Channels new look enabled?
      */
-    private boolean isMultiGridChannelUploadsSection() {
+    public boolean isMultiGridChannelUploadsSection() {
         return mCurrentSection != null && mCurrentSection.getType() == BrowseSection.TYPE_MULTI_GRID && mCurrentSection.getId() == MediaGroup.TYPE_CHANNEL_UPLOADS;
     }
 
-    private boolean isSettingsSection() {
+    public boolean isSettingsSection() {
         return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SETTINGS;
     }
 
-    private boolean isPlaylistsSection() {
+    public boolean isPlaylistsSection() {
         return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_USER_PLAYLISTS;
     }
 
-    private boolean isSubscriptionsSection() {
+    public boolean isSubscriptionsSection() {
         return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SUBSCRIPTIONS;
     }
 
@@ -847,7 +850,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         int sectionIndex = findSectionIndex(sectionId);
 
         if (sectionIndex != -1) {
-            getView().selectSection(sectionIndex);
+            getView().selectSection(sectionIndex, true);
         }
+    }
+
+    public boolean inForeground() {
+        return ViewManager.instance(getContext()).getTopView() == BrowseView.class;
     }
 }

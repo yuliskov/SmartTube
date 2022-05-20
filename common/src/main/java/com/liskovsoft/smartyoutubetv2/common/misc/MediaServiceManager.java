@@ -32,6 +32,7 @@ public class MediaServiceManager {
     private Disposable mRowsAction;
     private Disposable mSubscribedChannelsAction;
     private Disposable mFormatInfoAction;
+    private Disposable mPlaylistGroupAction;
 
     public interface OnMetadata {
         void onMetadata(MediaItemMetadata metadata);
@@ -82,7 +83,7 @@ public class MediaServiceManager {
         }
 
         mMetadataAction = observable
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onMetadata::onMetadata,
@@ -102,7 +103,7 @@ public class MediaServiceManager {
         observable = mItemManager.getMetadataObserve(mediaItem);
 
         mMetadataAction = observable
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onMetadata::onMetadata,
@@ -128,7 +129,7 @@ public class MediaServiceManager {
         Observable<MediaGroup> observable = mGroupManager.getGroupObserve(item);
 
         mUploadsAction = observable
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onMediaGroup::onMediaGroup,
@@ -142,7 +143,7 @@ public class MediaServiceManager {
         Observable<MediaGroup> observable = mGroupManager.getSubscribedChannelsUpdateObserve();
 
         mSubscribedChannelsAction = observable
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onMediaGroup::onMediaGroup,
@@ -161,12 +162,19 @@ public class MediaServiceManager {
                 mGroupManager.getChannelObserve(item.mediaItem) : mGroupManager.getChannelObserve(item.channelId);
 
         mRowsAction = observable
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onMediaGroupList::onMediaGroupList,
                         error -> Log.e(TAG, "loadChannelRows error: %s", error.getMessage())
                 );
+    }
+
+    public void loadChannelPlaylist(Video item, OnMediaGroup group) {
+        loadChannelRows(
+                item,
+                mediaGroupList -> group.onMediaGroup(mediaGroupList.get(0))
+        );
     }
 
     public void loadFormatInfo(Video item, OnFormatInfo onFormatInfo) {
@@ -179,11 +187,29 @@ public class MediaServiceManager {
         Observable<MediaItemFormatInfo> observable = mItemManager.getFormatInfoObserve(item.videoId);
 
         mFormatInfoAction = observable
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onFormatInfo::onFormatInfo,
                         error -> Log.e(TAG, "loadFormatInfo error: %s", error.getMessage())
+                );
+    }
+
+    public void loadPlaylists(Video item, OnMediaGroup onPlaylistGroup) {
+        if (item == null) {
+            return;
+        }
+
+        RxUtils.disposeActions(mPlaylistGroupAction);
+
+        Observable<MediaGroup> observable = mGroupManager.getEmptyPlaylistsObserve();
+
+        mPlaylistGroupAction = observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        onPlaylistGroup::onMediaGroup,
+                        error -> Log.e(TAG, "loadPlaylists error: %s", error.getMessage())
                 );
     }
 
@@ -195,7 +221,7 @@ public class MediaServiceManager {
         RxUtils.disposeActions(mSignCheckAction);
 
         mSignCheckAction = mAuthManager.isSignedObserve()
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         isSigned -> {

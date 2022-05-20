@@ -4,10 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEventBridge;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 
 public class PlaybackPresenter extends BasePresenter<PlaybackView> {
@@ -78,7 +81,17 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     }
 
     public boolean isRunningInBackground() {
+        return getView() != null && getView().getController().isEngineInitialized() && !Utils.isPlayerInForeground(getContext());
+    }
+
+    public boolean isInPipMode() {
         return getView() != null && getView().getController().isInPIPMode();
+    }
+
+    private boolean isPreferBackground() {
+        int mode = PlayerData.instance(getContext()).getBackgroundMode();
+
+        return mode != PlaybackEngineController.BACKGROUND_MODE_DEFAULT;
     }
 
     public void forceFinish() {

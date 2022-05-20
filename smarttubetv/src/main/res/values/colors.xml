@@ -49,4 +49,20 @@
     <color name="primary_light">#B2DFDB</color>
     <color name="primary">#009688</color>
     <color name="white_87pc">#DDFFFFFF</color>
+
+    <!-- Tooltip mod: extracted private values -->
+    <color name="tooltip_background_dark_mod">#e6616161</color>
+    <color name="tooltip_background_light_mod">#e6FFFFFF</color>
+    <color name="foreground_material_dark_mod">@android:color/white</color>
+    <color name="foreground_material_light_mod">@android:color/black</color>
+
+    <!-- Default Orb buttons colors: search, accounts, search settings etc -->
+    <color name="orb_color">@color/grey</color>
+    <color name="orb_bright_color">@color/grey</color>
+    <color name="orb_icon_color">@color/white</color>
+
+    <!-- Search page mic button color -->
+    <color name="lb_speech_orb_not_recording">@color/orb_color</color>
+    <color name="lb_speech_orb_not_recording_pulsed">@color/orb_bright_color</color>
+    <color name="lb_speech_orb_not_recording_icon">@color/orb_icon_color</color>
 </resources>

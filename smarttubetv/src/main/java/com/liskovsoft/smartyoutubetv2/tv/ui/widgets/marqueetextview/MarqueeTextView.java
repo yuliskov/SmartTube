@@ -75,4 +75,12 @@ public class MarqueeTextView extends AppCompatTextView implements View.OnLayoutC
     public float getMarqueeSpeedFactor() {
         return mMarqueeSpeedFactor;
     }
+
+    /**
+     * Make marquee work even when the view isn't focused (e.g. browse pip title)
+     */
+    @Override
+    public boolean isFocused() {
+        return true;
+    }
 }

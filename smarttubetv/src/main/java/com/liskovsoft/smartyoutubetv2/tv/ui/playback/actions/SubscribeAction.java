@@ -31,8 +31,8 @@ public class SubscribeAction extends MultiAction {
 
         String[] labels = new String[drawables.length];
         // Note, labels denote the action taken when clicked
-        labels[INDEX_OFF] = context.getString(R.string.action_subscribe_off);
-        labels[INDEX_ON] = context.getString(R.string.action_subscribe_on);
+        labels[INDEX_OFF] = context.getString(R.string.unsubscribed_from_channel);
+        labels[INDEX_ON] = context.getString(R.string.subscribed_to_channel);
         setLabels(labels);
     }
 }

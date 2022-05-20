@@ -2,44 +2,51 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
 import android.view.KeyEvent;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class GlobalKeyTranslator extends KeyTranslator {
-    private final Map<Integer, Integer> mKeyMapping = new HashMap<>();
-    private final Map<Integer, Runnable> mActionMapping = new HashMap<>();
     private final GeneralData mGeneralData;
     private final Context mContext;
 
     public GlobalKeyTranslator(Context context) {
-        mGeneralData = GeneralData.instance(context);
         mContext = context;
-        initKeyMapping();
-        initActionMapping();
+        mGeneralData = GeneralData.instance(context);
     }
 
-    private void initKeyMapping() {
-        // Fix rare situations with some remotes. E.g. remote doesn't work on search page.
-        mKeyMapping.put(KeyEvent.KEYCODE_NUMPAD_ENTER, KeyEvent.KEYCODE_DPAD_CENTER); // G20s: keyboard popup fix?
-        mKeyMapping.put(KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_DPAD_CENTER); // G20s: keyboard popup fix?
-        mKeyMapping.put(KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_BACK);
+    @Override
+    protected void initKeyMapping() {
+        Map<Integer, Integer> globalKeyMapping = getKeyMapping();
+
+        // Fix rare situations with some remotes. E.g. Shield.
+        globalKeyMapping.put(KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_BACK);
         // Fix for the unknown usb remote controller: https://smartyoutubetv.github.io/#comment-3742343397
-        mKeyMapping.put(KeyEvent.KEYCODE_ESCAPE, KeyEvent.KEYCODE_BACK);
+        globalKeyMapping.put(KeyEvent.KEYCODE_ESCAPE, KeyEvent.KEYCODE_BACK);
 
-        // Navigation in categories
-        mKeyMapping.put(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_DPAD_CENTER);
+        // Could cause serious 'OK not working' bug (where Enter key is used as OK)
+        // See: KeyHelpers#fixEnterKey
+        //globalKeyMapping.put(KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_DPAD_CENTER); // G20s fix: show keyboard on textview click
+        //globalKeyMapping.put(KeyEvent.KEYCODE_NUMPAD_ENTER, KeyEvent.KEYCODE_DPAD_CENTER); // G20s fix: show keyboard on textview click
 
-        // Remapping below isn't confirmed to be useful
-        mKeyMapping.put(KeyEvent.KEYCODE_PAGE_UP, KeyEvent.KEYCODE_DPAD_UP);
-        mKeyMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, KeyEvent.KEYCODE_DPAD_DOWN);
-        mKeyMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_DPAD_LEFT);
-        mKeyMapping.put(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, KeyEvent.KEYCODE_DPAD_RIGHT);
+        // May help on buggy firmwares (where Enter key is used as OK)
+        if (!PlaybackPresenter.instance(mContext).isInPipMode()) {
+            globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_DPAD_CENTER);
+        } else {
+            globalKeyMapping.remove(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        }
+
+        // 4pda users have an issues with btn remapping
+        //globalKeyMapping.put(KeyEvent.KEYCODE_PAGE_UP, KeyEvent.KEYCODE_DPAD_UP);
+        //globalKeyMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, KeyEvent.KEYCODE_DPAD_DOWN);
+        //globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_DPAD_LEFT);
+        //globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, KeyEvent.KEYCODE_DPAD_RIGHT);
     }
 
-    private void initActionMapping() {
+    @Override
+    protected void initActionMapping() {
         addSearchAction();
     }
 
@@ -50,17 +57,9 @@ public class GlobalKeyTranslator extends KeyTranslator {
 
         Runnable searchAction = () -> SearchPresenter.instance(mContext).startSearch(null);
 
-        mActionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, searchAction);
-        mActionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, searchAction);
-    }
+        Map<Integer, Runnable> actionMapping = getActionMapping();
 
-    @Override
-    protected Map<Integer, Integer> getKeyMapping() {
-        return mKeyMapping;
-    }
-
-    @Override
-    protected Map<Integer, Runnable> getActionMapping() {
-        return mActionMapping;
+        actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, searchAction);
+        actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, searchAction);
     }
 }

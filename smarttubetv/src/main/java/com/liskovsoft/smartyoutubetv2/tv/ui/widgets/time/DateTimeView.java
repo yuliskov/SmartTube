@@ -36,10 +36,10 @@ public class DateTimeView extends AppCompatTextView implements TickleListener {
     }
 
     private void updateListener() {
-        mTickleManager.removeListener(this);
-
         if (getVisibility() == View.VISIBLE) {
             mTickleManager.addListener(this);
+        } else {
+            mTickleManager.removeListener(this);
         }
     }
 

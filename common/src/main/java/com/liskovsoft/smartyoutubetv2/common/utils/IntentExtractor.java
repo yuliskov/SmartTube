@@ -16,6 +16,7 @@ public class IntentExtractor {
     private static final String VIDEO_ID_KEY = "v";
     private static final String VIDEO_ID_LIST_KEY = "video_ids";
     private static final String CHANNEL_URL = "/channel/";
+    private static final String CHANNEL_URL_ALT = "/c/";
     private static final String USER_URL = "/user/";
     private static final String SUBSCRIPTIONS_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEsubscriptions"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String HISTORY_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEmy_youtube"; // last 'resume' param isn't parsed by intent and should be removed

@@ -77,7 +77,8 @@
                     android:textSize="@dimen/lb_search_bar_text_size"/>
     </RelativeLayout>
 
-    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.search.SearchSettingsOrbView
+    <!-- NOTE: You need to create different icon sizes to overcome icon oversize bug -->
+    <androidx.leanback.widget.SearchOrbView
         android:id="@+id/search_settings_orb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -86,13 +87,12 @@
         android:layout_toEndOf="@+id/lb_search_bar_items"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        app:searchOrbColor="#FFFFFF"
-        app:searchOrbBrightColor="#FFFFFF"
-        android:alpha="0.7"
-        app:searchOrbIconColor="#000000"
-    >
-    </com.liskovsoft.smartyoutubetv2.tv.ui.widgets.search.SearchSettingsOrbView>
+        app:searchOrbIcon="@drawable/search_bar_settings_orb"
+        app:searchOrbColor="@color/orb_color"
+        app:searchOrbBrightColor="@color/orb_bright_color"
+        app:searchOrbIconColor="@color/orb_icon_color" />
 
+    <!-- Start search button -->
     <androidx.leanback.widget.SearchOrbView
         android:id="@+id/lb_search_bar_search_orb"
         android:layout_width="wrap_content"
@@ -102,10 +102,7 @@
         android:layout_toEndOf="@+id/search_settings_orb"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        app:searchOrbColor="#FFFFFF"
-        app:searchOrbBrightColor="#FFFFFF"
-        app:searchOrbIconColor="#000000"
-        android:visibility="gone"
-    >
-    </androidx.leanback.widget.SearchOrbView>
+        app:searchOrbColor="@color/orb_color"
+        app:searchOrbBrightColor="@color/orb_bright_color"
+        app:searchOrbIconColor="@color/orb_icon_color" />
 </merge>

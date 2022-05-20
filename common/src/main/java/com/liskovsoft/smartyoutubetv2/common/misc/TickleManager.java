@@ -2,20 +2,25 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.os.Handler;
 import android.os.Looper;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
-import java.util.Collections;
-import java.util.Set;
-import java.util.WeakHashMap;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TickleManager {
     private static TickleManager mTickleManager;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final Runnable mUpdateHandler = this::updateTickle;
     // Usually listener is a view. So use weak refs to not hold it forever.
-    private final Set<TickleListener> mListeners = Collections.newSetFromMap(new WeakHashMap<>());
+    private final List<WeakReference<TickleListener>> mListeners = new ArrayList<>();
     private boolean mIsEnabled = true;
     private static final long DEFAULT_INTERVAL_MS = 10_000;
     private long mIntervalMs = DEFAULT_INTERVAL_MS;
+
+    public interface TickleListener {
+        void onTickle();
+    }
 
     private TickleManager() {
     }
@@ -29,14 +34,17 @@ public class TickleManager {
     }
 
     public void addListener(TickleListener listener) {
-        if (listener != null) {
-            mListeners.add(listener);
+        if (listener != null && !contains(listener)) {
+            cleanup();
+            mListeners.add(new WeakReference<>(listener));
             updateTickle();
         }
     }
 
     public void removeListener(TickleListener listener) {
-        mListeners.remove(listener);
+        if (listener != null) {
+            remove(listener);
+        }
     }
 
     public void setEnabled(boolean enabled) {
@@ -70,15 +78,25 @@ public class TickleManager {
         mHandler.removeCallbacks(mUpdateHandler);
 
         if (isEnabled() && !mListeners.isEmpty()) {
-            for (TickleListener listener : mListeners) {
-                listener.onTickle();
+            for (WeakReference<TickleListener> listener : mListeners) {
+                if (listener.get() != null) {
+                    listener.get().onTickle();
+                }
             }
 
             mHandler.postDelayed(mUpdateHandler, mIntervalMs);
         }
     }
 
-    public interface TickleListener {
-        void onTickle();
+    private boolean contains(TickleListener listener) {
+        return Helpers.containsIf(mListeners, item -> listener.equals(item.get()));
+    }
+
+    private void remove(TickleListener listener) {
+        Helpers.removeIf(mListeners, item -> listener.equals(item.get()));
+    }
+
+    private void cleanup() {
+        Helpers.removeIf(mListeners, item -> item.get() == null);
     }
 }

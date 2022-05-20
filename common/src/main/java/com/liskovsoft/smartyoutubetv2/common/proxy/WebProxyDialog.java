@@ -11,6 +11,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -149,6 +150,13 @@ public class WebProxyDialog {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.AppDialog);
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View contentView = inflater.inflate(R.layout.web_proxy_dialog, null);
+
+        KeyHelpers.fixEnterKey(
+                contentView.findViewById(R.id.proxy_host),
+                contentView.findViewById(R.id.proxy_port),
+                contentView.findViewById(R.id.proxy_username),
+                contentView.findViewById(R.id.proxy_password)
+        );
 
         if (mProxyManager.getProxyType() == Proxy.Type.DIRECT) {
             ((EditText) contentView.findViewById(R.id.proxy_host)).setText("");

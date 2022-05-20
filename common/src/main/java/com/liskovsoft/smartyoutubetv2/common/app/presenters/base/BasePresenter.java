@@ -136,11 +136,11 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         updateView(removedGroup, view);
     }
 
-    private void syncItem(Video item) {
+    public void syncItem(Video item) {
         syncItem(Collections.singletonList(item));
     }
 
-    private void syncItem(List<Video> items) {
+    public void syncItem(List<Video> items) {
         if (items.size() == 0) {
             return;
         }

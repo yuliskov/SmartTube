@@ -124,7 +124,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         getController().setSeekBarSegments(null);
 
         mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getEnabledCategories())
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         segments -> {
@@ -148,7 +148,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 Observable.interval(1, TimeUnit.SECONDS);
 
         mProgressAction = playbackProgressObservable
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::skipSegment,

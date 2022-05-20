@@ -4,8 +4,6 @@ import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -13,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +44,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendUIAutoHideCategory(settingsPresenter);
         appendSeekTypeCategory(settingsPresenter);
         appendSeekingPreviewCategory(settingsPresenter);
-        appendSeekIntervalCategory(settingsPresenter);
+        AppDialogUtil.appendSeekIntervalDialogItems(getContext(), settingsPresenter, mPlayerData, false);
         appendRememberSpeedCategory(settingsPresenter);
         appendEndingTimeCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
@@ -95,22 +94,22 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendVideoBufferCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = HQDialogManager.createVideoBufferCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createVideoBufferCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendVideoPresetsCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = HQDialogManager.createVideoPresetsCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createVideoPresetsCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendVideoZoomCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = PlayerUIManager.createVideoZoomCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createVideoZoomCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendAudioShiftCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = HQDialogManager.createAudioShiftCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createAudioShiftCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
@@ -143,18 +142,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_seek_preview), options);
     }
 
-    private void appendSeekIntervalCategory(AppDialogPresenter settingsPresenter) {
-        List<OptionItem> options = new ArrayList<>();
-
-        for (int intervalMs : new int[] {1_000, 2_000, 3_000, 5_000, 10_000, 15_000, 20_000, 30_000, 60_000}) {
-            options.add(UiOptionItem.from(getContext().getString(R.string.seek_interval_sec, Helpers.toString(intervalMs / 1_000f)),
-                    optionItem -> mPlayerData.setStartSeekIncrementMs(intervalMs),
-                    intervalMs == mPlayerData.getStartSeekIncrementMs()));
-        }
-
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.seek_interval), options);
-    }
-
     private void appendRememberSpeedCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
@@ -180,6 +167,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.seek_interval, PlayerTweaksData.PLAYER_BUTTON_SEEK_INTERVAL},
+                {R.string.share_link, PlayerTweaksData.PLAYER_BUTTON_SHARE},
                 {R.string.action_video_info, PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO},
                 {R.string.action_video_stats, PlayerTweaksData.PLAYER_BUTTON_VIDEO_STATS},
                 {R.string.action_playback_queue, PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE},
@@ -187,7 +176,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 {R.string.action_video_zoom, PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM},
                 {R.string.action_channel, PlayerTweaksData.PLAYER_BUTTON_OPEN_CHANNEL},
                 {R.string.action_search, PlayerTweaksData.PLAYER_BUTTON_SEARCH},
-                {R.string.action_pip, PlayerTweaksData.PLAYER_BUTTON_PIP},
+                {R.string.run_in_background, PlayerTweaksData.PLAYER_BUTTON_PIP},
                 {R.string.action_video_speed, PlayerTweaksData.PLAYER_BUTTON_VIDEO_SPEED},
                 {R.string.action_subtitles, PlayerTweaksData.PLAYER_BUTTON_SUBTITLES},
                 {R.string.action_subscribe, PlayerTweaksData.PLAYER_BUTTON_SUBSCRIBE},
@@ -198,7 +187,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 {R.string.action_repeat_mode, PlayerTweaksData.PLAYER_BUTTON_REPEAT_MODE},
                 {R.string.action_next, PlayerTweaksData.PLAYER_BUTTON_NEXT},
                 {R.string.action_previous, PlayerTweaksData.PLAYER_BUTTON_PREVIOUS},
-                {R.string.action_high_quality, PlayerTweaksData.PLAYER_BUTTON_HIGH_QUALITY}
+                {R.string.playback_settings, PlayerTweaksData.PLAYER_BUTTON_HIGH_QUALITY}
         }) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {
@@ -262,23 +251,28 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isTunneledPlaybackEnabled()));
 
-        options.add(UiOptionItem.from("Alt presets behavior (limit bandwidth)",
+        options.add(UiOptionItem.from(getContext().getString(R.string.alt_presets_behavior),
+                getContext().getString(R.string.alt_presets_behavior_desc),
                 option -> mPlayerTweaksData.enableNoFpsPresets(option.isSelected()),
                 mPlayerTweaksData.isNoFpsPresetsEnabled()));
 
-        options.add(UiOptionItem.from("Enable sleep timer (one hour)",
+        options.add(UiOptionItem.from(getContext().getString(R.string.sleep_timer),
+                getContext().getString(R.string.sleep_timer_desc),
                 option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
                 mPlayerData.isSonyTimerFixEnabled()));
 
-        options.add(UiOptionItem.from("Disable snap to vsync",
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_vsync),
+                getContext().getString(R.string.disable_vsync_desc),
                 option -> mPlayerTweaksData.disableSnapToVsync(option.isSelected()),
                 mPlayerTweaksData.isSnappingToVsyncDisabled()));
 
-        options.add(UiOptionItem.from("Skip codec profile level check",
+        options.add(UiOptionItem.from(getContext().getString(R.string.skip_codec_profile_check),
+                getContext().getString(R.string.skip_codec_profile_check_desc),
                 option -> mPlayerTweaksData.skipProfileLevelCheck(option.isSelected()),
                 mPlayerTweaksData.isProfileLevelCheckSkipped()));
 
-        options.add(UiOptionItem.from("Force SW video decoder",
+        options.add(UiOptionItem.from(getContext().getString(R.string.force_sw_codec),
+                getContext().getString(R.string.force_sw_codec_desc),
                 option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),
                 mPlayerTweaksData.isSWDecoderForced()));
 
@@ -384,6 +378,14 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         //        option -> mPlayerData.enableSeekMemory(option.isSelected()),
         //        mPlayerData.isSeekMemoryEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_number_key_seek),
+                option -> mPlayerData.enableNumberKeySeek(option.isSelected()),
+                mPlayerData.isNumberKeySeekEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_tooltips),
+                option -> mPlayerData.enableTooltips(option.isSelected()),
+                mPlayerData.isTooltipsEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_clock),
                 option -> mPlayerData.enableClock(option.isSelected()),
                 mPlayerData.isClockEnabled()));
@@ -399,6 +401,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_global_ending_time),
                 option -> mPlayerData.enableGlobalEndingTime(option.isSelected()),
                 mPlayerData.isGlobalEndingTimeEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_of_short_videos),
+                option -> mPlayerTweaksData.enableRememberPositionOfShortVideos(option.isSelected()),
+                mPlayerTweaksData.isRememberPositionOfShortVideosEnabled()));
 
         //OptionItem remainingTime = UiOptionItem.from(getContext().getString(R.string.player_show_remaining_time),
         //        option -> mPlayerData.enableRemainingTime(option.isSelected()), mPlayerData.isRemainingTimeEnabled());

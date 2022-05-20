@@ -31,11 +31,10 @@ public class PlaybackActivity extends LeanbackActivity {
     private static final float GAMEPAD_TRIGGER_INTENSITY_OFF = 0.45f;
     private boolean gamepadTriggerPressed = false;
     private PlaybackFragment mPlaybackFragment;
-    private long mBackPressedMs;
-    private long mFinishCalledMs;
     private ViewManager mViewManager;
-    private GeneralData mGeneralData;
     private PlayerTweaksData mPlayerTweaksData;
+    private GeneralData mGeneralData;
+    private boolean mBackPressed;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,8 +46,8 @@ public class PlaybackActivity extends LeanbackActivity {
             mPlaybackFragment = (PlaybackFragment) fragment;
         }
         mViewManager = ViewManager.instance(this);
-        mGeneralData = GeneralData.instance(this);
         mPlayerTweaksData = PlayerTweaksData.instance(this);
+        mGeneralData = GeneralData.instance(this);
     }
 
     @Override
@@ -159,8 +158,6 @@ public class PlaybackActivity extends LeanbackActivity {
     public void finish() {
         Log.d(TAG, "Finishing activity...");
 
-        mFinishCalledMs = System.currentTimeMillis();
-
         // NOTE: When exiting PIP mode onPause is called immediately after onResume
 
         // Also, avoid enter pip on stop!
@@ -168,11 +165,11 @@ public class PlaybackActivity extends LeanbackActivity {
 
         // NOTE: block back button for PIP.
         // User pressed PIP button in the player.
-        if (!isBackPressed() || mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK) {
-            enterPipMode();
+        if (!mBackPressed) {
+            enterPipMode(); // NOTE: without this call app will hangs when pressing on PIP button
         }
 
-        if (doNotFinish()) {
+        if (doNotDestroy() && !mBackPressed) {
             // Ensure to opening this activity when the user is returning to the app
             mViewManager.blockTop(this);
             mViewManager.startParentView(this);
@@ -193,10 +190,16 @@ public class PlaybackActivity extends LeanbackActivity {
         super.finishReally();
     }
 
-    private boolean doNotFinish() {
-        sIsInPipMode = isInPipMode();
-        return sIsInPipMode || (mPlaybackFragment.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND
-        && mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK);
+    @Override
+    public void onBackPressed() {
+        mBackPressed = mGeneralData.getBackgroundPlaybackShortcut() != GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK;
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onResume() {
+        mBackPressed = false;
+        super.onResume();
     }
 
     private boolean doNotDestroy() {
@@ -236,12 +239,6 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        mBackPressedMs = System.currentTimeMillis();
-        super.onBackPressed();
-    }
-
-    @Override
     public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode);
 
@@ -253,8 +250,8 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void onUserLeaveHint() {
-        // Check that user not open dialog instead of really leaving the activity
-        if (!AppDialogPresenter.instance(this).isDialogShown() && isHomePressed()) {
+        // Check that user not open dialog/search activity instead of really leaving the activity
+        if (!AppDialogPresenter.instance(this).isDialogShown() && !mBackPressed && !mViewManager.isNewViewPending()) {
             switch (mPlaybackFragment.getBackgroundMode()) {
                 case PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND:
                     enterBackgroundPlayMode();
@@ -281,25 +278,6 @@ public class PlaybackActivity extends LeanbackActivity {
         }
 
         return isInPictureInPictureMode();
-    }
-
-    private boolean isHomePressed() {
-        // Assume Home if no back and finish event happens
-        return !isBackPressed() && !isPipPressed() && !mViewManager.isNewViewPending();
-    }
-
-    private boolean isPipPressed() {
-        return isFinishCalled() && !isBackPressed();
-    }
-
-    private boolean isFinishCalled() {
-        return System.currentTimeMillis() - mFinishCalledMs < 1_000;
-    }
-
-    private boolean isBackPressed() {
-        long backPressedAgoMs = System.currentTimeMillis() - mBackPressedMs;
-        Log.d(TAG, "Back pressed ms ago: " + backPressedAgoMs);
-        return backPressedAgoMs < 1_000;
     }
 
     public PlaybackView getPlaybackView() {
