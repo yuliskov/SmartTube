@@ -28,6 +28,7 @@ public class UrlProvider extends ContentProvider {
     private final static int MAX_WIDTH_FOR_ULTRA_WIDE_ASPECT = 1920;
     private final static String MAX_VIDEO_HEIGHT_PARAM = "max_video_height";
     private final static String AVC_CODEC_PRIORITY_PARAM = "avc_codec_priority";
+    private final static String MP4A_CODEC_PRIORITY_PARAM = "mp4a_codec_priority";
 
     public UrlProvider() {
     }
@@ -78,6 +79,7 @@ public class UrlProvider extends ContentProvider {
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 final boolean isAvcCodecPriority = Boolean.parseBoolean(uri.getQueryParameter(AVC_CODEC_PRIORITY_PARAM));
+                final boolean isMp4aCodecPriority = Boolean.parseBoolean(uri.getQueryParameter(MP4A_CODEC_PRIORITY_PARAM));
                 final int finalMaxVideoHeight = maxVideoHeight;
                 formats = formats.stream()
                         .filter(adaptiveVideoFormat -> !adaptiveVideoFormat.getMimeType().contains("av01"))
@@ -101,6 +103,12 @@ public class UrlProvider extends ContentProvider {
                         .sorted((lhs, rhs) -> rhs.getBitrate() - lhs.getBitrate())
                         .sorted((lhs, rhs) -> {
                             final String priorityCodec = isAvcCodecPriority ? "avc" : "vp9";
+                            final int lhsValue = lhs.getMimeType().contains(priorityCodec) ? 1 : 0;
+                            final int rhsValue = rhs.getMimeType().contains(priorityCodec) ? 1 : 0;
+                            return rhsValue - lhsValue;
+                        })
+                        .sorted((lhs, rhs) -> {
+                            final String priorityCodec = isMp4aCodecPriority ? "mp4a" : "opus";
                             final int lhsValue = lhs.getMimeType().contains(priorityCodec) ? 1 : 0;
                             final int rhsValue = rhs.getMimeType().contains(priorityCodec) ? 1 : 0;
                             return rhsValue - lhsValue;
