@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.appcompat.widget.TooltipCompat;
 import androidx.leanback.R;
 import androidx.leanback.widget.Action;
 import androidx.leanback.widget.PlaybackControlsRow;
@@ -33,12 +32,15 @@ import androidx.leanback.widget.PresenterSelector;
  * Binds to items of type {@link Action}.
  */
 public class ControlButtonPresenterSelector extends PresenterSelector {
-
-    private final Presenter mPrimaryPresenter =
+    private final ControlButtonPresenter mPrimaryPresenter =
             new ControlButtonPresenter(R.layout.lb_control_button_primary);
-    private final Presenter mSecondaryPresenter =
+    private final ControlButtonPresenter mSecondaryPresenter =
             new ControlButtonPresenter(R.layout.lb_control_button_secondary);
     private final Presenter[] mPresenters = new Presenter[]{mPrimaryPresenter};
+
+    public ControlButtonPresenterSelector(boolean tooltipsEnabled) {
+        mPrimaryPresenter.tooltipsEnabled = mSecondaryPresenter.tooltipsEnabled = tooltipsEnabled;
+    }
 
     /**
      * Returns the presenter for primary controls.
@@ -82,6 +84,7 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
 
     static class ControlButtonPresenter extends Presenter {
         private int mLayoutResourceId;
+        private boolean tooltipsEnabled;
 
         ControlButtonPresenter(int layoutResourceId) {
             mLayoutResourceId = layoutResourceId;
@@ -98,7 +101,6 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
         public void onBindViewHolder(ViewHolder viewHolder, Object item) {
             Action action = (Action) item;
             ActionViewHolder vh = (ActionViewHolder) viewHolder;
-
             vh.mIcon.setImageDrawable(action.getIcon());
             if (vh.mLabel != null) {
                 if (action.getIcon() == null) {
@@ -113,12 +115,11 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
                 vh.mFocusableView.setContentDescription(contentDescription);
                 vh.mFocusableView.sendAccessibilityEvent(
                         AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
-            }
 
-            // MODIFIED: add button tooltips
-            // NOTE: don't work as expected: weird button highlight and no tooltip shown
-            if (action.getLabel1() != null) {
-                TooltipCompat.setTooltipText(vh.mFocusableView, action.getLabel1());
+                // MODIFIED: enable control tooltips
+                if (tooltipsEnabled) {
+                    TooltipCompatHandler.setTooltipText(vh.mFocusableView, action.getLabel1());
+                }
             }
         }
 

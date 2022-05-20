@@ -134,7 +134,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         getView().clearSearch();
 
         mLoadAction = mediaGroupManager.getSearchObserve(searchText, mSearchOptions)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroup -> {
@@ -157,7 +157,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         getView().clearSearch();
 
         mLoadAction = mediaGroupManager.getSearchAltObserve(searchText, mSearchOptions)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroups -> {
@@ -185,7 +185,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup)),
@@ -235,8 +235,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         showSettingsDialog();
     }
 
-    private void disposeActions() {
+    public void disposeActions() {
         RxUtils.disposeActions(mLoadAction, mScrollAction);
+        if (getView() != null) {
+            getView().showProgressBar(false);
+        }
     }
 
     private void showSettingsDialog() {

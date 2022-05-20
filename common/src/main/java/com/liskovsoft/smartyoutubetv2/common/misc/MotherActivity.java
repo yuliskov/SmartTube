@@ -30,6 +30,10 @@ public class MotherActivity extends FragmentActivity {
     private ScreensaverManager mScreensaverManager;
     private List<OnPermissions> mOnPermissions;
 
+    public interface OnPermissions {
+        void onPermissions(int requestCode, String[] permissions, int[] grantResults);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         // Fixing: Only fullscreen opaque activities can request orientation (api 26)
@@ -70,7 +74,11 @@ public class MotherActivity extends FragmentActivity {
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            mScreensaverManager.enable();
+            boolean isKeepScreenOff = mScreensaverManager.isScreenOff() && Helpers.equalsAny(event.getKeyCode(),
+                    new int[]{KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_VOLUME_DOWN});
+            if (!isKeepScreenOff) {
+                mScreensaverManager.enable();
+            }
         }
 
         return super.dispatchKeyEvent(event);
@@ -143,12 +151,33 @@ public class MotherActivity extends FragmentActivity {
     }
 
     private void initDpi() {
-        // To adapt to resolution change (e.g. on AFR) we can't do caching.
+        getResources().getDisplayMetrics().setTo(getDisplayMetrics());
+    }
 
+    //private DisplayMetrics getDisplayMetrics() {
+    //    DisplayMetrics displayMetrics = new DisplayMetrics();
+    //    getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+    //
+    //    // To adapt to resolution change (e.g. on AFR) check old width.
+    //    if (sCachedDisplayMetrics == null || sCachedDisplayMetrics.widthPixels != displayMetrics.widthPixels) {
+    //        float uiScale = MainUIData.instance(this).getUIScale();
+    //        float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
+    //        float density = DEFAULT_DENSITY / widthRatio * uiScale;
+    //        displayMetrics.density = density;
+    //        displayMetrics.scaledDensity = density;
+    //        sCachedDisplayMetrics = displayMetrics;
+    //    }
+    //
+    //    return sCachedDisplayMetrics;
+    //}
+
+    private DisplayMetrics getDisplayMetrics() {
+        // BUG: adapt to resolution change (e.g. on AFR)
+        // Don't disable caching or you will experience weird sizes on cards in video suggestions (e.g. after exit from PIP)!
         if (sCachedDisplayMetrics == null) {
-            float uiScale = MainUIData.instance(this).getUIScale();
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            float uiScale = MainUIData.instance(this).getUIScale();
             float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
             float density = DEFAULT_DENSITY / widthRatio * uiScale;
             displayMetrics.density = density;
@@ -156,7 +185,7 @@ public class MotherActivity extends FragmentActivity {
             sCachedDisplayMetrics = displayMetrics;
         }
 
-        getResources().getDisplayMetrics().setTo(sCachedDisplayMetrics);
+        return sCachedDisplayMetrics;
     }
 
     private void applyCustomConfig() {
@@ -190,7 +219,8 @@ public class MotherActivity extends FragmentActivity {
         mOnPermissions.add(onPermissions);
     }
 
-    public interface OnPermissions {
-        void onPermissions(int requestCode, String[] permissions, int[] grantResults);
+    public static void invalidate() {
+        sCachedDisplayMetrics = null;
+        sIsInPipMode = false;
     }
 }

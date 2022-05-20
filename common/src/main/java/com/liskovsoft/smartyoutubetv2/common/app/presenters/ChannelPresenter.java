@@ -140,7 +140,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             if (item.channelId != null) {
                 openChannel(item.channelId);
             } else if (item.videoId != null) {
-                MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
+                MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
                 mServiceManager.loadMetadata(item, metadata -> {
                     openChannel(metadata.getChannelId());
                     item.channelId = metadata.getChannelId();
@@ -204,7 +204,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         Observable<List<MediaGroup>> channelObserve = mMediaService.getMediaGroupManager().getChannelObserve(channelId);
 
         mUpdateAction = channelObserve
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::updateRows,
@@ -249,7 +249,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),

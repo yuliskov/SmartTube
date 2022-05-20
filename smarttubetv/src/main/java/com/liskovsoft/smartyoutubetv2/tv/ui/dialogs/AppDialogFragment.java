@@ -247,6 +247,8 @@ public class AppDialogFragment extends LeanbackSettingsFragment
                         getFragmentManager().addOnBackStackChangedListener(this::onBackPressed);
                     }
                 }
+
+                // NOTE: we should avoid open simple buttons because we don't know what is hidden behind them: new dialog on action
             }
         }
 

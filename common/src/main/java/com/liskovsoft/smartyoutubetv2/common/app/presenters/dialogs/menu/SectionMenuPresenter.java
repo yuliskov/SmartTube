@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
@@ -58,8 +59,23 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
     }
 
     @Override
+    protected VideoMenuCallback getCallback() {
+        return null;
+    }
+
+    @Override
     protected boolean isPinToSidebarEnabled() {
         return mIsUnpinFromSidebarEnabled;
+    }
+
+    @Override
+    protected boolean isSavePlaylistEnabled() {
+        return false;
+    }
+
+    @Override
+    protected boolean isCreatePlaylistEnabled() {
+        return true;
     }
 
     @Override
@@ -114,6 +130,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         appendAccountSelectionButton();
         appendMoveSectionButton();
         appendRenameSectionButton();
+        appendCreatePlaylistButton();
 
         if (!mDialogPresenter.isEmpty()) {
             String title = mSection != null ? mSection.getTitle() : null;
@@ -209,7 +226,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         if (BrowsePresenter.instance(getContext()).canMoveSectionUp(mSection)) {
             mDialogPresenter.appendSingleButton(
                     UiOptionItem.from(getContext().getString(R.string.move_section_up), optionItem -> {
-                        mDialogPresenter.closeDialog();
+                        //mDialogPresenter.closeDialog();
                         BrowsePresenter.instance(getContext()).moveSectionUp(mSection);
                     }));
         }
@@ -217,7 +234,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         if (BrowsePresenter.instance(getContext()).canMoveSectionDown(mSection)) {
             mDialogPresenter.appendSingleButton(
                     UiOptionItem.from(getContext().getString(R.string.move_section_down), optionItem -> {
-                        mDialogPresenter.closeDialog();
+                        //mDialogPresenter.closeDialog();
                         BrowsePresenter.instance(getContext()).moveSectionDown(mSection);
                     }));
         }

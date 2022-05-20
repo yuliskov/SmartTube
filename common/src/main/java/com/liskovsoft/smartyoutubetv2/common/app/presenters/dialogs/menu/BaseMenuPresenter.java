@@ -1,7 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -9,7 +13,13 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
+import com.liskovsoft.youtubeapi.service.YouTubeMediaItemManager;
+import io.reactivex.Observable;
 
 public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private final MediaServiceManager mServiceManager;
@@ -21,7 +31,10 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
     protected abstract Video getVideo();
     protected abstract AppDialogPresenter getDialogPresenter();
+    protected abstract VideoMenuCallback getCallback();
     protected abstract boolean isPinToSidebarEnabled();
+    protected abstract boolean isSavePlaylistEnabled();
+    protected abstract boolean isCreatePlaylistEnabled();
     protected abstract boolean isAccountSelectionEnabled();
 
     public void closeDialog() {
@@ -65,10 +78,10 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(original.isChannelPlaylist() || original.belongsToPlaylist() ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
+                        getContext().getString(original.isChannelPlaylist() || original.belongsToPlaylists() ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
                         optionItem -> {
                             if (original.hasVideo()) {
-                                MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
+                                MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
 
                                 mServiceManager.loadMetadata(
                                         original,
@@ -148,5 +161,199 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                         getContext().getString(R.string.dialog_account_list),
                         optionItem -> AccountSelectionPresenter.instance(getContext()).show(true)
                 ));
+    }
+
+    protected void appendSavePlaylistButton() {
+        if (!isSavePlaylistEnabled()) {
+            return;
+        }
+
+        Video original = getVideo();
+
+        if (original == null || (!original.hasPlaylist() && !original.isChannelPlaylist() && !original.belongsToPlaylists())) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(original.belongsToPlaylists()? R.string.remove_playlist : R.string.save_remove_playlist),
+                        optionItem -> {
+                            MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+                            if (original.hasPlaylist()) {
+                                syncToggleSavePlaylist(original, null);
+                            } else if (original.belongsToPlaylists()) {
+                                mServiceManager.loadChannelUploads(
+                                        original,
+                                        mediaGroup -> syncToggleSavePlaylist(original, mediaGroup)
+                                );
+                            } else {
+                                mServiceManager.loadChannelPlaylist(
+                                        original,
+                                        mediaGroup -> syncToggleSavePlaylist(original, mediaGroup)
+                                );
+                            }
+                        }
+                ));
+    }
+
+    private void syncToggleSavePlaylist(Video original, MediaGroup mediaGroup) {
+        Video video = Video.from(original);
+
+        // Need correct playlist title to further comparison (decide whether save or remove)
+        if (original.belongsToSamePlaylistGroup()) {
+            video.title = original.group.getTitle();
+        }
+
+        if (!original.hasPlaylist() && mediaGroup != null && mediaGroup.getMediaItems() != null) {
+            MediaItem first = mediaGroup.getMediaItems().get(0);
+            video.playlistId = first.getPlaylistId();
+        }
+
+        toggleSavePlaylist(video);
+    }
+
+    private void toggleSavePlaylist(Video video) {
+        mServiceManager.loadPlaylists(video, group -> {
+            boolean isSaved = false;
+
+            for (MediaItem playlist : group.getMediaItems()) {
+                if (playlist.getTitle().contains(video.title)) {
+                    isSaved = true;
+                    break;
+                }
+            }
+
+            if (isSaved) {
+                if (video.playlistId == null) {
+                    MessageHelpers.showMessage(getContext(), R.string.cant_delete_empty_playlist);
+                } else {
+                    AppDialogUtil.showConfirmationDialog(getContext(), () -> {
+                        removePlaylist(video);
+                        if (getCallback() != null) {
+                            getCallback().onItemAction(getVideo(), VideoMenuCallback.ACTION_REMOVE);
+                            closeDialog();
+                        }
+                    }, String.format("%s: %s", video.title, getContext().getString(R.string.remove_playlist)));
+                }
+            } else {
+                savePlaylist(video);
+            }
+        });
+    }
+
+    private void removePlaylist(Video video) {
+        MediaItemManager manager = YouTubeMediaItemManager.instance();
+        Observable<Void> action = manager.removePlaylistObserve(video.playlistId);
+        GeneralData.instance(getContext()).setPlaylistOrder(video.playlistId, -1);
+        RxUtils.execute(action,
+                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.cant_delete_empty_playlist)),
+                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.removed_from_playlists))
+        );
+    }
+
+    private void savePlaylist(Video video) {
+        MediaItemManager manager = YouTubeMediaItemManager.instance();
+        Observable<Void> action = manager.savePlaylistObserve(video.playlistId);
+        RxUtils.execute(action,
+                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.cant_save_playlist)),
+                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.saved_to_playlists))
+        );
+    }
+
+    protected void appendCreatePlaylistButton() {
+        if (!isCreatePlaylistEnabled()) {
+            return;
+        }
+
+        Video original = getVideo() != null ? getVideo() : new Video();
+
+        if (!original.belongsToPlaylists() && !original.hasVideo() &&
+                !(BrowsePresenter.instance(getContext()).inForeground() && BrowsePresenter.instance(getContext()).isPlaylistsSection())) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(original.hasVideo() ? R.string.add_video_to_new_playlist : R.string.create_playlist),
+                        optionItem -> showCreatePlaylistDialog(original)
+                        ));
+    }
+
+    private void showCreatePlaylistDialog(Video video) {
+        closeDialog();
+        SimpleEditDialog.show(
+                getContext(),
+                "",
+                newValue -> {
+                    MediaItemManager manager = YouTubeMediaItemManager.instance();
+                    Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
+                    RxUtils.execute(
+                            action,
+                            () -> MessageHelpers.showMessage(getContext(), newValue + ": " + getContext().getString(R.string.cant_save_playlist)),
+                            () -> {
+                                if (!video.hasVideo()) { // Playlists section
+                                    BrowsePresenter.instance(getContext()).refresh();
+                                } else {
+                                    MessageHelpers.showMessage(getContext(), newValue + ": " + getContext().getString(R.string.saved_to_playlists));
+                                }
+                            }
+                    );
+                },
+                getContext().getString(R.string.create_playlist),
+                true
+        );
+    }
+
+    protected void appendRenamePlaylistButton() {
+        if (!isCreatePlaylistEnabled()) {
+            return;
+        }
+
+        Video original = getVideo();
+
+        if (original == null || !original.belongsToPlaylists()) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.rename_playlist),
+                        optionItem -> showRenamePlaylistDialog(original)
+                ));
+    }
+
+    private void showRenamePlaylistDialog(Video video) {
+        MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+        mServiceManager.loadChannelUploads(
+                video,
+                mediaGroup -> {
+                    closeDialog();
+                    MediaItem firstItem = mediaGroup.getMediaItems().get(0);
+
+                    if (firstItem.getPlaylistId() == null) {
+                        MessageHelpers.showMessage(getContext(), R.string.cant_rename_empty_playlist);
+                        return;
+                    }
+
+                    SimpleEditDialog.show(
+                            getContext(),
+                            video.title,
+                            newValue -> {
+                                MediaItemManager manager = YouTubeMediaItemManager.instance();
+                                Observable<Void> action = manager.renamePlaylistObserve(firstItem.getPlaylistId(), newValue);
+                                RxUtils.execute(
+                                        action,
+                                        () -> MessageHelpers.showMessage(getContext(), R.string.owned_playlist_warning),
+                                        () -> {
+                                            video.title = newValue;
+                                            BrowsePresenter.instance(getContext()).syncItem(video);
+                                        }
+                                );
+                            },
+                            getContext().getString(R.string.rename_playlist),
+                            true
+                    );
+                }
+        );
     }
 }

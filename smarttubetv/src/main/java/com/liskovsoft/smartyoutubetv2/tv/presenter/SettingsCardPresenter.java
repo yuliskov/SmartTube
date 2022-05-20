@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.Presenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
@@ -48,6 +49,7 @@ public class SettingsCardPresenter extends Presenter {
 
             if (hasFocus) {
                 ViewUtil.enableMarquee(textView);
+                ViewUtil.setTextScrollSpeed(textView, MainUIData.instance(context).getCardTextScrollSpeed());
             } else {
                 ViewUtil.disableMarquee(textView);
             }

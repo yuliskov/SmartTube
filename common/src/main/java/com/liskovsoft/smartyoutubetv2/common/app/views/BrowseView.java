@@ -8,7 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 public interface BrowseView {
     void addSection(int index, BrowseSection category);
     void removeSection(BrowseSection category);
-    void selectSection(int index);
+    void selectSection(int index, boolean focusOnContent);
     void updateSection(VideoGroup group);
     void updateSection(SettingsGroup group);
     void clearSection(BrowseSection category);

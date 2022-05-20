@@ -28,6 +28,11 @@ public class MainUIData {
     public static final int MENU_ITEM_OPEN_DESCRIPTION = 0b1000000000;
     public static final int MENU_ITEM_RENAME_SECTION = 0b10000000000;
     public static final int MENU_ITEM_PLAY_VIDEO = 0b100000000000;
+    public static final int MENU_ITEM_SAVE_PLAYLIST = 0b1000000000000;
+    public static final int MENU_ITEM_ADD_TO_PLAYLIST = 0b10000000000000;
+    public static final int MENU_ITEM_SUBSCRIBE = 0b100000000000000;
+    public static final int MENU_ITEM_CREATE_PLAYLIST = 0b1000000000000000;
+    public static final int BUTTON_BROWSE_ACCOUNTS = 0b1;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
@@ -46,6 +51,7 @@ public class MainUIData {
     private boolean mIsUploadsAutoLoadEnabled;
     private float mCardTextScrollSpeed;
     private int mMenuItems;
+    private int mButtons;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -193,6 +199,20 @@ public class MainUIData {
         return (mMenuItems & menuItems) == menuItems;
     }
 
+    public void enableButton(int button) {
+        mButtons |= button;
+        persistState();
+    }
+
+    public void disableButton(int button) {
+        mButtons &= ~button;
+        persistState();
+    }
+
+    public boolean isButtonEnabled(int button) {
+        return (mButtons & button) == button;
+    }
+
     private void initColorSchemes() {
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_teal,
@@ -245,13 +265,14 @@ public class MainUIData {
         mCardTextScrollSpeed = Helpers.parseFloat(split, 11, 2);
         mMenuItems = Helpers.parseInt(split, 12,
                 Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_QUEUE | MENU_ITEM_SELECT_ACCOUNT | MENU_ITEM_PLAY_VIDEO)); // all except this items
+        mButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE); // all
     }
 
     private void persistState() {
         mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled,
                 mVideoGridScale, mUIScale, mColorSchemeIndex, mIsCardMultilineTitleEnabled,
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
-                mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems));
+                mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mButtons));
     }
 
     public static class ColorScheme {

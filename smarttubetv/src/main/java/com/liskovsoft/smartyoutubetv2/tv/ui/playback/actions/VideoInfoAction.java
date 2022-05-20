@@ -16,6 +16,6 @@ public class VideoInfoAction extends Action {
 
         setIcon(uncoloredDrawable);
         setLabel1(context.getString(
-                R.string.action_pip));
+                R.string.action_video_info));
     }
 }

@@ -18,8 +18,8 @@ public class Playlist {
         mPlaylist = new ArrayList<Video>() {
             @Override
             public boolean add(Video video) {
-                // Creating lightweight copy of origin
-                return super.add(video.copy());
+                // Memory leak fix. Creating lightweight copy of origin.
+                return super.add(video.group != null ? video.copy() : video);
             }
         };
         mCurrentIndex = -1;
@@ -38,6 +38,10 @@ public class Playlist {
      */
     public void clear() {
         mPlaylist.clear();
+        mCurrentIndex = -1;
+    }
+
+    public void clearPosition() {
         mCurrentIndex = -1;
     }
 

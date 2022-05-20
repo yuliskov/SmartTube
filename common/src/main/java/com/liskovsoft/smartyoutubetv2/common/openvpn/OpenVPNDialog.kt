@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import com.liskovsoft.sharedutils.helpers.FileHelpers
+import com.liskovsoft.sharedutils.helpers.KeyHelpers
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers
 import com.liskovsoft.sharedutils.mylogger.Log
 import com.liskovsoft.smartyoutubetv2.common.R
@@ -121,6 +122,8 @@ class OpenVPNDialog(private val context: Context): OpenVPNManager.OpenVPNCallbac
         val builder = AlertDialog.Builder(context, R.style.AppDialog)
         val inflater = LayoutInflater.from(context)
         val contentView = inflater.inflate(R.layout.openvpn_dialog, null)
+
+        KeyHelpers.fixEnterKey(contentView!!.findViewById(R.id.openvpn_config_address))
 
         (contentView!!.findViewById<View>(R.id.openvpn_config_address) as EditText?)!!.setText(openVPNManager.openVPNConfigUri)
 

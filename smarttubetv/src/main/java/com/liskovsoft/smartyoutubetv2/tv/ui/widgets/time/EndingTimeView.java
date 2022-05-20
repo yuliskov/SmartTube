@@ -1,9 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
@@ -14,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class EndingTimeView extends AppCompatTextView implements TickleListener {
     private TickleManager mTickleManager;
+    private boolean mIconIsSet;
 
     public EndingTimeView(Context context) {
         super(context);
@@ -35,11 +38,20 @@ public class EndingTimeView extends AppCompatTextView implements TickleListener 
         updateListener();
     }
 
-    private void updateListener() {
-        mTickleManager.removeListener(this);
+    private void setIcon() {
+        Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.icon_hourglass_bottom);
+        if (drawable != null) {
+            drawable.setBounds(3, 3, getLineHeight(), getLineHeight()); // add bounds to align vertically
+            setCompoundDrawables(drawable, null, null, null);
+            mIconIsSet = true;
+        }
+    }
 
+    private void updateListener() {
         if (getVisibility() == View.VISIBLE) {
             mTickleManager.addListener(this);
+        } else {
+            mTickleManager.removeListener(this);
         }
     }
 
@@ -56,9 +68,16 @@ public class EndingTimeView extends AppCompatTextView implements TickleListener 
             String endingTime = getEndingTime();
             if (endingTime != null) {
                 // https://stackoverflow.com/questions/5437674/what-unicode-characters-represent-time/9454080
-                //setText(endingTime);
+                //setText(TextUtils.concat( Utils.icon(getContext(), R.drawable.action_pip, getLineHeight()), " ", endingTime));
                 setText(String.format("⌛ %s", endingTime));
                 //setText(String.format("(%s)", endingTime));
+
+
+                // Use external icon
+                //setText(endingTime);
+                //if (!mIconIsSet) {
+                //    setIcon();
+                //}
             }
         }
     }

@@ -27,13 +27,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         mBackupDirs = new ArrayList<>();
         mBackupDirs.add(new File(FileHelpers.getBackupDir(mContext), "Backup"));
+        mBackupDirs.add(new File(FileHelpers.getExternalFilesDir(mContext), "Backup")); // isn't used at a moment
     }
-
-    //public void checkPermAndBackup() {
-    //    MediaServiceManager.instance().authCheck(
-    //            this::checkPermAndBackupInt, null
-    //    );
-    //}
 
     public void checkPermAndRestore() {
         if (FileHelpers.isExternalStorageReadable()) {
@@ -60,7 +55,12 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private void backupData() {
         Log.d(TAG, "App has been updated or installed. Doing data backup...");
 
-        File currentBackup = mBackupDirs.get(0); // backup to first dir from list
+        File currentBackup = getBackup();
+
+        if (currentBackup == null) {
+            Log.d(TAG, "Oops. Backup location not writable.");
+            return;
+        }
 
         // remove old backup
         if (currentBackup.isDirectory()) {
@@ -77,16 +77,9 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private void restoreData() {
         Log.d(TAG, "App just updated. Restoring data...");
 
-        File currentBackup = null;
+        File currentBackup = getBackup();
 
-        for (File backupDir : mBackupDirs) {
-            if (backupDir.isDirectory()) {
-                currentBackup = backupDir;
-                break;
-            }
-        }
-
-        if (currentBackup == null) {
+        if (FileHelpers.isEmpty(currentBackup)) {
             Log.d(TAG, "Oops. Backup not exists.");
             return;
         }
@@ -112,6 +105,17 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         PermissionHelpers.verifyStoragePermissions(mContext);
     }
 
+    private File getBackup() {
+        File currentBackup = null;
+
+        for (File backupDir : mBackupDirs) {
+            currentBackup = backupDir;
+            break;
+        }
+
+        return currentBackup;
+    }
+
     @Override
     public void onPermissions(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == PermissionHelpers.REQUEST_EXTERNAL_STORAGE) {
@@ -127,10 +131,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     }
 
     public String getBackupPath() {
-        if (mBackupDirs.size() > 0) {
-            return mBackupDirs.get(0).toString();
-        }
+        File currentBackup = getBackup();
 
-        return null;
+        return currentBackup != null ? currentBackup.toString() : null;
     }
 }

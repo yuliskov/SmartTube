@@ -3,13 +3,13 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,7 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
         //appendSubtitleLanguageCategory(settingsPresenter);
         appendSubtitleStyleCategory(settingsPresenter);
         appendSubtitleSizeCategory(settingsPresenter);
+        appendSubtitlePositionDialog(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.subtitle_category_title));
     }
@@ -67,7 +68,7 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
     //}
 
     private void appendSubtitleStyleCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = PlayerUIManager.createSubtitleStylesCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createSubtitleStylesCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
@@ -82,5 +83,18 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.subtitle_scale), options);
+    }
+
+    private void appendSubtitlePositionDialog(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int positionPercent : Helpers.range(0, 100, 5)) {
+            float position = positionPercent / 100f;
+            options.add(UiOptionItem.from(String.format("%s%%", positionPercent),
+                    optionItem -> mPlayerData.setSubtitlePosition(position),
+                    Helpers.floatEquals(position, mPlayerData.getSubtitlePosition())));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.subtitle_position), options);
     }
 }

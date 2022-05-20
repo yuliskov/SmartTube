@@ -57,11 +57,11 @@ public class RepeatAction extends MultiAction {
 
         String[] labels = new String[drawables.length];
         // Note, labels denote the action taken when clicked
-        labels[INDEX_NONE] = context.getString(R.string.lb_playback_controls_repeat_none);
-        labels[INDEX_ONE] = context.getString(R.string.lb_playback_controls_repeat_one);
-        labels[INDEX_ALL] = context.getString(R.string.lb_playback_controls_repeat_all);
-        labels[INDEX_PAUSE] = context.getString(R.string.playback_controls_repeat_pause);
-        labels[INDEX_LIST] = context.getString(R.string.playback_controls_repeat_list);
+        labels[INDEX_NONE] = context.getString(R.string.repeat_mode_none);
+        labels[INDEX_ONE] = context.getString(R.string.repeat_mode_one);
+        labels[INDEX_ALL] = context.getString(R.string.repeat_mode_all);
+        labels[INDEX_PAUSE] = context.getString(R.string.repeat_mode_pause);
+        labels[INDEX_LIST] = context.getString(R.string.repeat_mode_pause_alt);
         setLabels(labels);
     }
 }

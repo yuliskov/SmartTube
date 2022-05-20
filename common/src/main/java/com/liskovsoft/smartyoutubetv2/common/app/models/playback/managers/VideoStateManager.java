@@ -14,29 +14,34 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
 public class VideoStateManager extends PlayerEventListenerHelper {
+    private static final long MUSIC_VIDEO_MAX_LENGTH_MS = 6 * 60 * 1000;
+    private static final long LIVE_THRESHOLD_MS = 60_000;
     private static final String TAG = VideoStateManager.class.getSimpleName();
     private static final float RESTORE_POSITION_PERCENTS = 12;
     private boolean mIsPlayEnabled;
-    private Video mVideo;
+    private Video mVideo = new Video();
     private FormatItem mTempVideoFormat;
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
+    private PlayerTweaksData mPlayerTweaksData;
     private VideoStateService mStateService;
     private boolean mIsPlayBlocked;
 
     @Override
     public void onInitDone() { // called each time a video opened from the browser
         mPlayerData = PlayerData.instance(getActivity());
+        mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
         mStateService = VideoStateService.instance(getActivity());
 
         // onInitDone usually called after openVideo (if PlaybackView is destroyed)
         // So, we need to repeat some things again.
-        resetPositionOfNewVideo(mVideo);
+        resetPositionIfNeeded(getVideo());
     }
 
     /**
@@ -49,18 +54,18 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         if (getController() != null) {
             // Save state of the previous video.
             // In case video opened from phone and other stuff.
-            if (!item.equals(mVideo)) { // video might be opened twice (when remote connection enabled). Fix for that.
+            if (!item.equals(getVideo())) { // video might be opened twice (when remote connection enabled). Fix for that.
                 saveState();
             }
         }
 
         setPlayEnabled(true); // video just added
 
-        mVideo = item;
         mTempVideoFormat = null;
 
-        resetPositionOfNewVideo(item);
-        resetSpeedOfNewVideo();
+        // Don't do reset on videoLoaded state because this will influences minimized music videos.
+        resetPositionIfNeeded(item);
+        resetGlobalSpeedIfNeeded();
     }
 
     @Override
@@ -125,6 +130,9 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onVideoLoaded(Video item) {
+        // Actual video that match currently loaded one.
+        mVideo = item;
+
         // Restore formats again.
         // Maybe this could help with Shield format problem.
         // NOTE: produce multi thread exception:
@@ -132,9 +140,9 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         //restoreFormats();
 
         // In this state video length is not undefined.
-        restorePosition(item);
-        restorePendingPosition(item);
-        restoreSpeed(item);
+        restorePosition();
+        restorePendingPosition();
+        restoreSpeed();
         // Player thinks that subs not enabled if I enable it too early (e.g. on source change event).
         restoreSubtitleFormat();
 
@@ -183,7 +191,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     @Override
     public void onBuffering() {
         // Check LIVE threshold and set speed to normal
-        restoreSpeed(getController().getVideo());
+        restoreSpeed();
     }
 
     @Override
@@ -194,10 +202,12 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onControlsShown(boolean shown) {
-        if (shown) {
-            // Scenario: user clicked on channel button
-            saveState();
-        }
+        // NOTE: bug: current position saving to wrong video id. Explanation below.
+        // Bug in casting: current video doesn't match currently loaded one into engine.
+        //if (shown) {
+        //    // Scenario: user clicked on channel button
+        //    saveState();
+        //}
     }
 
     @Override
@@ -211,15 +221,15 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     }
 
     private void clearStateOfNextVideo() {
-        if (getController().getVideo() != null && getController().getVideo().nextMediaItem != null) {
-            resetPosition(getController().getVideo().nextMediaItem.getVideoId());
+        if (getVideo() != null && getVideo().nextMediaItem != null) {
+            resetPosition(getVideo().nextMediaItem.getVideoId());
         }
     }
 
     /**
      * Reset position of currently opened music and live videos.
      */
-    private void resetPositionOfNewVideo(Video item) {
+    private void resetPositionIfNeeded(Video item) {
         if (mStateService == null || item == null) {
             return;
         }
@@ -227,12 +237,14 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         State state = mStateService.getByVideoId(item.videoId);
 
         // Reset position of music videos
-        if (state != null && (state.lengthMs < VideoStateService.MUSIC_VIDEO_LENGTH_MS || item.isLive)) {
+        boolean isShort = state != null && (state.lengthMs < MUSIC_VIDEO_MAX_LENGTH_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled());
+
+        if (isShort || item.isLive) {
             resetPosition(item);
         }
     }
 
-    private void resetSpeedOfNewVideo() {
+    private void resetGlobalSpeedIfNeeded() {
         if (mPlayerData != null && !mPlayerData.isRememberSpeedEnabled()) {
             mPlayerData.setSpeed(1.0f);
         }
@@ -284,7 +296,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
             return;
         }
 
-        Video video = getController().getVideo();
+        Video video = getVideo();
 
         if (video != null) {
             savePosition(video);
@@ -303,7 +315,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         long positionMs = getController().getPositionMs();
         long remainsMs = lengthMs - positionMs;
         boolean isPositionActual = remainsMs > 1_000;
-        boolean isRealLiveStream = video.isLive && remainsMs < VideoStateService.LIVE_THRESHOLD_MS;
+        boolean isRealLiveStream = video.isLive && remainsMs < LIVE_THRESHOLD_MS;
         if ((isPositionActual && !isRealLiveStream) || !getPlayEnabled()) { // Is pause after each video enabled?
             mStateService.save(new State(video.videoId, positionMs, lengthMs, getController().getSpeed()));
             // Sync video. You could safely use it later to restore state.
@@ -321,7 +333,9 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         Playlist.instance().sync(video);
     }
 
-    private void restorePosition(Video item) {
+    private void restorePosition() {
+        Video item = getVideo();
+
         State state = mStateService.getByVideoId(item.videoId);
 
         // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
@@ -329,7 +343,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         boolean stateIsOutdated = state == null || state.timestamp < item.timestamp;
         if (containsWebPosition && stateIsOutdated) {
             // Web state is buggy on short videos (e.g. video clips)
-            boolean isLongVideo = getController().getLengthMs() > VideoStateService.MUSIC_VIDEO_LENGTH_MS;
+            boolean isLongVideo = getController().getLengthMs() > MUSIC_VIDEO_MAX_LENGTH_MS;
             if (isLongVideo) {
                 state = new State(item.videoId, convertToMs(item.percentWatched));
             }
@@ -353,17 +367,22 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     /**
      * Restore position from description time code
      */
-    private void restorePendingPosition(Video item) {
+    private void restorePendingPosition() {
+        Video item = getVideo();
+
         if (item.pendingPosMs > 0) {
             getController().setPositionMs(item.pendingPosMs);
             item.pendingPosMs = 0;
         }
     }
 
-    private void restoreSpeed(Video item) {
-        boolean isLiveThreshold = getController().getLengthMs() - getController().getPositionMs() < VideoStateService.LIVE_THRESHOLD_MS;
+    private void restoreSpeed() {
+        Video item = getVideo();
+        boolean isLiveThreshold = getController().getLengthMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
+        boolean isLive = item.isLive && isLiveThreshold;
+        boolean isMusic = item.belongsToMusic();
 
-        if (item.isLive && isLiveThreshold) {
+        if (isLive || isMusic) {
             getController().setSpeed(1.0f);
         } else {
             State state = mStateService.getByVideoId(item.videoId);
@@ -415,7 +434,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     }
 
     private void updateHistory() {
-        Video video = getController().getVideo();
+        Video video = getVideo();
 
         if (video == null) {
             return;
@@ -449,5 +468,12 @@ public class VideoStateManager extends PlayerEventListenerHelper {
                 screensaverManager.disableChecked();
             }
         }
+    }
+
+    /**
+     * Actual video that match currently loaded one.
+     */
+    private Video getVideo() {
+        return mVideo;
     }
 }

@@ -118,6 +118,8 @@ public class SubtitleManager implements TextOutput {
             } else {
                 applyStyle(subtitleStyle);
             }
+
+            mSubtitleView.setBottomPaddingFraction(mPlayerData.getSubtitlePosition());
         }
     }
 

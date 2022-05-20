@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 import android.content.Context;
 import android.text.TextUtils;
 import androidx.core.content.ContextCompat;
-import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager.SegmentAction;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -142,17 +141,13 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
                 optionItem -> mContentBlockData.enableSkipEachSegmentOnce(optionItem.isSelected()),
                 mContentBlockData.isSkipEachSegmentOnceEnabled()));
 
-        //options.add(UiOptionItem.from(getContext().getString(R.string.sponsor_color_markers),
-        //        optionItem -> mContentBlockData.enableColorMarkers(optionItem.isSelected()),
-        //        mContentBlockData.isColorMarkersEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.content_block_alt_server),
+                getContext().getString(R.string.content_block_alt_server_desc),
+                optionItem -> mContentBlockData.enableAltServer(optionItem.isSelected()),
+                mContentBlockData.isAltServerEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
-
-    //private CharSequence getColoredStringOld(int strResId, int colorResId) {
-    //    return mContentBlockData.isColorMarkersEnabled() ?
-    //            Utils.color(getContext().getString(strResId), ContextCompat.getColor(getContext(), colorResId)) : getContext().getString(strResId);
-    //}
 
     private CharSequence getColoredString(int strResId, int colorResId) {
         String origin = getContext().getString(strResId);
