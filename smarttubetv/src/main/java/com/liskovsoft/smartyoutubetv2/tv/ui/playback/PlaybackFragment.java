@@ -865,6 +865,12 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
     }
 
+    @Override
+    public void updateEndingTime() {
+        EndingTimeView endingTime = getActivity().findViewById(R.id.global_ending_time);
+        endingTime.update();
+    }
+
     // End Ui events
 
     // Begin Engine Events

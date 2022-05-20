@@ -64,6 +64,10 @@ public class EndingTimeView extends AppCompatTextView implements TickleListener 
 
     @Override
     public void onTickle() {
+        update();
+    }
+
+    public void update() {
         if (getVisibility() == View.VISIBLE) {
             String endingTime = getEndingTime();
             if (endingTime != null) {

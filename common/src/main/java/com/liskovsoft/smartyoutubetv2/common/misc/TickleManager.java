@@ -15,7 +15,7 @@ public class TickleManager {
     // Usually listener is a view. So use weak refs to not hold it forever.
     private final List<WeakReference<TickleListener>> mListeners = new ArrayList<>();
     private boolean mIsEnabled = true;
-    private static final long DEFAULT_INTERVAL_MS = 10_000;
+    private static final long DEFAULT_INTERVAL_MS = 60_000;
     private long mIntervalMs = DEFAULT_INTERVAL_MS;
 
     public interface TickleListener {

@@ -163,6 +163,8 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         if (mPlayerData.getSeekPreviewMode() != PlayerData.SEEK_PREVIEW_NONE) {
             getController().loadStoryboard();
         }
+
+        getController().updateEndingTime();
     }
 
     @Override

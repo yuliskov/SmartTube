@@ -29,4 +29,5 @@ public interface PlaybackUIController {
     void showError(String errorInfo);
     void showProgressBar(boolean show);
     void setSeekBarSegments(List<SeekBarSegment> segments);
+    void updateEndingTime();
 }
