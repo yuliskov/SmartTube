@@ -172,7 +172,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
     public void onPause() {
         showHideScreensaver(true);
         setPlayEnabled(false);
-        saveState();
+        //saveState();
     }
 
     @Override
@@ -208,7 +208,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
     @Override
     public void onSeekEnd() {
         // Scenario: user opens ui and does some seeking
-        saveState();
+        //saveState();
     }
 
     @Override
@@ -357,11 +357,16 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
             }
         }
 
+        // Try to not restore position of the live video (it's not precise)
+        if (stateIsOutdated && item.isLive) {
+            state = null;
+        }
+
         // Do I need to check that item isn't live? (state != null && !item.isLive)
         if (state != null) {
             long remainsMs = getController().getLengthMs() - state.positionMs;
             // Url list videos at this stage has undefined (-1) length. So, we need to ensure that remains is positive.
-            boolean isVideoEnded = remainsMs >= 0 && remainsMs < 1_000;
+            boolean isVideoEnded = remainsMs >= 0 && remainsMs < (item.isLive ? 30_000 : 1_000);
             if (!isVideoEnded || !getPlayEnabled()) {
                 getController().setPositionMs(state.positionMs);
             }
@@ -386,7 +391,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
 
         Observable<Void> historyObservable;
 
-        long positionSec = getController().getPositionMs() / 1_000;
+        long positionSec = video.isLive ? 0 : getController().getPositionMs() / 1_000;
 
         if (video.mediaItem != null) {
             historyObservable = mediaItemManager.updateHistoryPositionObserve(video.mediaItem, positionSec);
