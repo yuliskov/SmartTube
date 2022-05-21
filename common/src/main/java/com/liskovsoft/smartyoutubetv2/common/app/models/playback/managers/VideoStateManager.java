@@ -357,7 +357,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
             }
         }
 
-        // Try to not restore position of the live video (it's not precise)
+        // Web live position is broken. Ignore it.
         if (stateIsOutdated && item.isLive) {
             state = null;
         }
@@ -366,7 +366,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         if (state != null) {
             long remainsMs = getController().getLengthMs() - state.positionMs;
             // Url list videos at this stage has undefined (-1) length. So, we need to ensure that remains is positive.
-            boolean isVideoEnded = remainsMs >= 0 && remainsMs < (item.isLive ? 30_000 : 1_000);
+            boolean isVideoEnded = remainsMs >= 0 && remainsMs < (item.isLive ? 30_000 : 1_000); // live buffer fix
             if (!isVideoEnded || !getPlayEnabled()) {
                 getController().setPositionMs(state.positionMs);
             }
