@@ -168,6 +168,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
+    public void onSeekEnd() {
+        getController().updateEndingTime();
+    }
+
+    @Override
     public void onViewResumed() {
         // Activate debug infos when restoring after PIP.
         getController().showDebugInfo(mDebugViewEnabled);
