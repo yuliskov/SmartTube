@@ -13,13 +13,15 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
-public class VideoStateManager extends PlayerEventListenerHelper {
+public class VideoStateManager extends PlayerEventListenerHelper implements TickleListener {
     private static final long MUSIC_VIDEO_MAX_LENGTH_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 60_000;
     private static final String TAG = VideoStateManager.class.getSimpleName();
@@ -109,6 +111,8 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         if (!getPlayEnabled()) {
             getController().showOverlay(true);
         }
+
+        TickleManager.instance().addListener(this);
     }
 
     @Override
@@ -118,6 +122,13 @@ public class VideoStateManager extends PlayerEventListenerHelper {
             setPlayEnabled(getController().getPlay());
             saveState();
         }
+
+        TickleManager.instance().removeListener(this);
+    }
+
+    @Override
+    public void onTickle() {
+        updateHistory();
     }
 
     @Override
@@ -217,7 +228,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onViewPaused() {
-        persistVideoState();
+        persistState();
     }
 
     private void clearStateOfNextVideo() {
@@ -267,7 +278,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         }
     }
 
-    private void persistVideoState() {
+    private void persistState() {
         if (AppDialogPresenter.instance(getActivity()).isDialogShown()) {
             return;
         }
@@ -292,21 +303,18 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     }
 
     private void saveState() {
-        if (!getController().containsMedia()) {
+        savePosition();
+        updateHistory();
+        //persistState();
+    }
+
+    private void savePosition() {
+        Video video = getVideo();
+
+        if (video == null || !getController().containsMedia()) {
             return;
         }
 
-        Video video = getVideo();
-
-        if (video != null) {
-            savePosition(video);
-            updateHistory();
-            //persistVideoState();
-            //persistVolume();
-        }
-    }
-
-    private void savePosition(Video video) {
         // Exceptional cases:
         // 1) Track is ended
         // 2) Pause on end enabled
@@ -364,6 +372,31 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         }
     }
 
+    private void updateHistory() {
+        Video video = getVideo();
+
+        if (video == null || !getController().containsMedia()) {
+            return;
+        }
+
+        RxUtils.disposeActions(mHistoryAction);
+
+        MediaService service = YouTubeMediaService.instance();
+        MediaItemManager mediaItemManager = service.getMediaItemManager();
+
+        Observable<Void> historyObservable;
+
+        long positionSec = getController().getPositionMs() / 1_000;
+
+        if (video.mediaItem != null) {
+            historyObservable = mediaItemManager.updateHistoryPositionObserve(video.mediaItem, positionSec);
+        } else { // video launched form ATV channels
+            historyObservable = mediaItemManager.updateHistoryPositionObserve(video.videoId, positionSec);
+        }
+
+        mHistoryAction = RxUtils.execute(historyObservable);
+    }
+
     /**
      * Restore position from description time code
      */
@@ -419,10 +452,6 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         return mIsPlayEnabled;
     }
 
-    //private void persistVolume() {
-    //    mVolume = getController().getVolume();
-    //}
-
     private void restoreVolume() {
         getController().setVolume(mPlayerData.getPlayerVolume());
     }
@@ -431,31 +460,6 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         restoreVideoFormat();
         restoreAudioFormat();
         restoreSubtitleFormat();
-    }
-
-    private void updateHistory() {
-        Video video = getVideo();
-
-        if (video == null) {
-            return;
-        }
-
-        RxUtils.disposeActions(mHistoryAction);
-        
-        MediaService service = YouTubeMediaService.instance();
-        MediaItemManager mediaItemManager = service.getMediaItemManager();
-
-        Observable<Void> historyObservable;
-
-        long positionSec = getController().getPositionMs() / 1_000;
-
-        if (video.mediaItem != null) {
-            historyObservable = mediaItemManager.updateHistoryPositionObserve(video.mediaItem, positionSec);
-        } else { // video launched form ATV channels
-            historyObservable = mediaItemManager.updateHistoryPositionObserve(video.videoId, positionSec);
-        }
-
-        mHistoryAction = RxUtils.execute(historyObservable);
     }
 
     private void showHideScreensaver(boolean show) {
