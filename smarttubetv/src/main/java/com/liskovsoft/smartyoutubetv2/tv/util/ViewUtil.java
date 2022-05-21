@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.tv.util;
 import android.content.Context;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.text.BidiFormatter;
 import android.text.Layout;
@@ -38,7 +37,7 @@ public class ViewUtil {
     /**
      * Dim other rows in {@link RowPresenter}
      */
-    public static final boolean SELECT_EFFECT_ENABLED = false;
+    public static final boolean ROW_SELECT_EFFECT_ENABLED = false;
     /**
      * Scroll continue threshold
      */
@@ -70,7 +69,9 @@ public class ViewUtil {
 
         for (TextView textView : textViews) {
             textView.setEllipsize(TruncateAt.END);
-            textView.setHorizontallyScrolling(false);
+
+            // Line below cause broken grid layout on Android 4 and older
+            //textView.setHorizontallyScrolling(false);
 
             // Fix: text disappear on rtl languages
             if (VERSION.SDK_INT > 17 && BidiFormatter.getInstance().isRtlContext()) {
@@ -86,14 +87,6 @@ public class ViewUtil {
         if (textViews == null || textViews.length == 0) {
             return;
         }
-
-        //if (VERSION.SDK_INT > 17) {
-        //    if (BidiFormatter.getInstance().isRtlContext()) {
-        //        // TODO: fix marquee on rtl languages
-        //        // TODO: text disappear on rtl languages
-        //        return;
-        //    }
-        //}
 
         for (TextView textView : textViews) {
             if (ViewUtil.isTruncated(textView)) { // multiline scroll fix

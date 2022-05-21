@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
