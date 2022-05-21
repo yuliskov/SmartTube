@@ -71,7 +71,9 @@ public class ViewUtil {
             textView.setEllipsize(TruncateAt.END);
 
             // Line below cause broken grid layout on Android 4 and older
-            //textView.setHorizontallyScrolling(false);
+            if (VERSION.SDK_INT > 19) {
+                textView.setHorizontallyScrolling(false);
+            }
 
             // Fix: text disappear on rtl languages
             if (VERSION.SDK_INT > 17 && BidiFormatter.getInstance().isRtlContext()) {
