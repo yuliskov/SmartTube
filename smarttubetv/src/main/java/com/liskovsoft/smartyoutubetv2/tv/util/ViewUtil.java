@@ -63,17 +63,14 @@ public class ViewUtil {
     }
 
     public static void disableMarquee(TextView... textViews) {
-        if (textViews == null || textViews.length == 0) {
+        if (VERSION.SDK_INT <= 19 || textViews == null || textViews.length == 0) { // Android 4: Broken grid layout fix
             return;
         }
 
         for (TextView textView : textViews) {
             textView.setEllipsize(TruncateAt.END);
-
             // Line below cause broken grid layout on Android 4 and older
-            if (VERSION.SDK_INT > 19) {
-                textView.setHorizontallyScrolling(false);
-            }
+            textView.setHorizontallyScrolling(false);
 
             // Fix: text disappear on rtl languages
             if (VERSION.SDK_INT > 17 && BidiFormatter.getInstance().isRtlContext()) {
@@ -86,7 +83,7 @@ public class ViewUtil {
      * <a href="https://stackoverflow.com/questions/3332924/textview-marquee-not-working">More info</a>
      */
     public static void enableMarquee(TextView... textViews) {
-        if (textViews == null || textViews.length == 0) {
+        if (VERSION.SDK_INT <= 19 || textViews == null || textViews.length == 0) { // Android 4: Broken grid layout fix
             return;
         }
 
@@ -111,6 +108,10 @@ public class ViewUtil {
     }
 
     public static void setTextScrollSpeed(TextView textView, float speed) {
+        if (VERSION.SDK_INT <= 19) { // Android 4: Broken grid layout fix
+            return;
+        }
+
         if (textView instanceof MarqueeTextView) {
             ((MarqueeTextView) textView).setMarqueeSpeedFactor(speed);
         }
