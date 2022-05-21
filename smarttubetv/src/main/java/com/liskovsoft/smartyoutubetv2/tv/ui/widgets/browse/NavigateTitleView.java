@@ -113,6 +113,17 @@ public class NavigateTitleView extends TitleView {
             mAccountView = (SearchOrbView) findViewById(R.id.account_orb);
             mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).show());
             TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
+
+            //Drawable orbIcon = mAccountView.getOrbIcon();
+            //Glide.with(getContext())
+            //        .load(getContext().getDrawable(R.drawable.action_video_speed))
+            //        .apply(ViewUtil.glideOptions())
+            //        .into(new SimpleTarget<Drawable>(orbIcon.getIntrinsicWidth(), orbIcon.getIntrinsicHeight()) {
+            //            @Override
+            //            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+            //                  mAccountView.setOrbIcon(resource);
+            //            }
+            //        });
         }
 
         mExitPip = (SearchOrbView) findViewById(R.id.exit_pip);
