@@ -6,6 +6,7 @@ public class TrackInfoFormatter2 {
     private String mResolutionStr;
     private String mFpsStr;
     private String mCodecStr;
+    private String mBitrateStr;
     private String mHdrStr;
     private String mSpeedStr;
 
@@ -22,6 +23,9 @@ public class TrackInfoFormatter2 {
         String codec = TrackSelectorUtil.extractCodec(format);
         mCodecStr = codec != null ? codec.toUpperCase() : "";
 
+        String bitrate = TrackSelectorUtil.extractBitrate(format);
+        mBitrateStr = bitrate.toUpperCase();
+
         boolean isHdr = TrackSelectorUtil.isHdrCodec(format.codecs);
         mHdrStr = isHdr ? "HDR" : "";
     }
@@ -31,7 +35,7 @@ public class TrackInfoFormatter2 {
     }
 
     public String getQualityLabel() {
-        return combine(mResolutionStr, mFpsStr, mCodecStr, mHdrStr, mSpeedStr);
+        return combine(mResolutionStr, mFpsStr, mBitrateStr, mCodecStr, mHdrStr, mSpeedStr);
     }
 
     private static String combine(String... items) {
