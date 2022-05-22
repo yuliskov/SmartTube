@@ -204,12 +204,16 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                             String msg = "startListening error: " + error.getMessage();
                             Log.e(TAG, msg);
                             MessageHelpers.showLongMessage(getActivity(), msg);
+                            // some bad things happened?
+                            tryListening();
                         },
                         () -> {
                             // Some users seeing this.
                             // This msg couldn't appear in normal situation.
                             Log.d(TAG, "Remote session has been closed");
                             //MessageHelpers.showMessage(getActivity(), R.string.remote_session_closed);
+                            // some bad things happened?
+                            tryListening();
                         }
                 );
     }
