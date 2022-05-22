@@ -22,7 +22,7 @@
   <string name="playback_queue_category_title">File d\'attente pour la lecture</string>
   <string name="video_max_quality">Auto (qualité maximale)</string>
   <string name="audio_max_quality">Auto (qualité maximale)</string>
-  <string name="subtitles_disabled">Désactivé</string>
+  <string name="subtitles_disabled">Sous-titres désactivés</string>
   <string name="auto_frame_rate">Fréquence d\'images automatique</string>
   <string name="frame_rate_correction">Correction fps:\n%s</string>
   <string name="category_background_playback">Lecture en arriére-plan</string>
