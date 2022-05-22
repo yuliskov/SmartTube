@@ -181,7 +181,7 @@ public class Utils {
             return;
         }
 
-        if (RemoteControlData.instance(context).isRunInBackgroundEnabled()) {
+        if (RemoteControlData.instance(context).isDeviceLinkEnabled()) {
             // Service that prevents the app from destroying
             startService(context, RemoteControlService.class);
         } else {

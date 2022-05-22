@@ -54,7 +54,7 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
 
-        appendRunInBackgroundSwitch(settingsPresenter);
+        appendDeviceLinkSwitch(settingsPresenter);
         appendAddDeviceButton(settingsPresenter);
         appendRemoveAllDevicesButton(settingsPresenter);
         appendMiscCategory(settingsPresenter);
@@ -62,12 +62,12 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.showDialog(getContext().getString(R.string.settings_remote_control), this::unhold);
     }
 
-    private void appendRunInBackgroundSwitch(AppDialogPresenter settingsPresenter) {
+    private void appendDeviceLinkSwitch(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.settings_remote_control), optionItem -> {
             // Remote link depends on background service
-            mRemoteControlData.enableRunInBackground(optionItem.isSelected());
+            mRemoteControlData.enableDeviceLink(optionItem.isSelected());
             Utils.updateRemoteControlService(getContext());
-        }, mRemoteControlData.isRunInBackgroundEnabled()));
+        }, mRemoteControlData.isDeviceLinkEnabled()));
     }
 
     private void appendAddDeviceButton(AppDialogPresenter settingsPresenter) {
@@ -75,7 +75,7 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.dialog_add_device), option -> {
                     AddDevicePresenter.instance(getContext()).start();
 
-                    mRemoteControlData.enableRunInBackground(true);
+                    mRemoteControlData.enableDeviceLink(true);
                     Utils.updateRemoteControlService(getContext());
                 }));
     }
@@ -89,7 +89,7 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                     settingsPresenter.closeDialog();
 
-                    mRemoteControlData.enableRunInBackground(false);
+                    mRemoteControlData.enableDeviceLink(false);
                     Utils.updateRemoteControlService(getContext());
                 }
         );
