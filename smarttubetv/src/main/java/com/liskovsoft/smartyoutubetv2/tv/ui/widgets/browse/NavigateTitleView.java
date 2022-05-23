@@ -24,8 +24,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
@@ -40,7 +42,8 @@ public class NavigateTitleView extends TitleView {
     private SearchOrbView mAccountView;
     private SearchOrbView mExitPip;
     private TextView mPipTitle;
-    private int mGlobalVisibility = View.INVISIBLE;
+    private int mGlobalVisibility = View.GONE;
+    private DateTimeView mGlobalClock;
 
     public NavigateTitleView(Context context) {
         super(context);
@@ -104,7 +107,7 @@ public class NavigateTitleView extends TitleView {
         super.updateComponentsVisibility(flags);
 
         mGlobalVisibility = (flags & SEARCH_VIEW_VISIBLE) == SEARCH_VIEW_VISIBLE
-                ? View.VISIBLE : View.INVISIBLE;
+                ? View.VISIBLE : View.GONE;
 
         if (mAccountView != null) {
             mAccountView.setVisibility(mGlobalVisibility);
@@ -113,6 +116,10 @@ public class NavigateTitleView extends TitleView {
         if (mExitPip != null && (PlaybackPresenter.instance(getContext()).isRunningInBackground() || mGlobalVisibility != View.VISIBLE)) {
             mExitPip.setVisibility(mGlobalVisibility);
             mPipTitle.setVisibility(mGlobalVisibility);
+        }
+
+        if (mGlobalClock != null) {
+            mGlobalClock.setVisibility(mGlobalVisibility);
         }
     }
 
@@ -134,6 +141,11 @@ public class NavigateTitleView extends TitleView {
         //ViewUtil.enableMarquee(mPipTitle);
         //ViewUtil.setTextScrollSpeed(mPipTitle, MainUIData.instance(getContext()).getCardTextScrollSpeed());
         TooltipCompatHandler.setTooltipText(mExitPip, getContext().getString(R.string.return_to_background_video));
+
+        if (PlayerData.instance(getContext()).isGlobalClockEnabled()) {
+            mGlobalClock = (DateTimeView) findViewById(R.id.global_time);
+            mGlobalClock.showDate(true);
+        }
     }
 
     @Override
