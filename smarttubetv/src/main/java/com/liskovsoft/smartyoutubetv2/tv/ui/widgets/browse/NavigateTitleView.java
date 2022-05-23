@@ -1,21 +1,32 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.browse;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.SearchOrbView;
+import androidx.leanback.widget.SearchOrbView.Colors;
 import androidx.leanback.widget.TitleView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
 
@@ -111,19 +122,10 @@ public class NavigateTitleView extends TitleView {
 
         if (MainUIData.instance(getContext()).isButtonEnabled(MainUIData.BUTTON_BROWSE_ACCOUNTS)) {
             mAccountView = (SearchOrbView) findViewById(R.id.account_orb);
-            mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).show());
+            mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).show(this::updateAccountIcon));
             TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
 
-            //Drawable orbIcon = mAccountView.getOrbIcon();
-            //Glide.with(getContext())
-            //        .load(getContext().getDrawable(R.drawable.action_video_speed))
-            //        .apply(ViewUtil.glideOptions())
-            //        .into(new SimpleTarget<Drawable>(orbIcon.getIntrinsicWidth(), orbIcon.getIntrinsicHeight()) {
-            //            @Override
-            //            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-            //                  mAccountView.setOrbIcon(resource);
-            //            }
-            //        });
+            updateAccountIcon();
         }
 
         mExitPip = (SearchOrbView) findViewById(R.id.exit_pip);
@@ -163,5 +165,49 @@ public class NavigateTitleView extends TitleView {
                 mPipTitle.setText(video != null ? String.format("%s - %s", video.title, video.extractAuthor()) : "");
             }
         }
+    }
+
+    private void updateAccountIcon() {
+        if (mAccountView == null) {
+            return;
+        }
+
+        MediaServiceManager.instance().loadAccounts(accountList -> {
+            Account current = null;
+            for (Account account : accountList) {
+                if (account.isSelected()) {
+                    current = account;
+                    break;
+                }
+            }
+
+            if (current != null && current.getAvatarImageUrl() != null) {
+                loadAccountIcon(current.getAvatarImageUrl());
+            } else {
+                Colors orbColors = mAccountView.getOrbColors();
+                mAccountView.setOrbColors(new Colors(orbColors.color, orbColors.brightColor, ContextCompat.getColor(getContext(), R.color.orb_icon_color)));
+                mAccountView.setOrbIcon(getContext().getDrawable(R.drawable.browse_title_account));
+            }
+        });
+    }
+
+    private void loadAccountIcon(String url) {
+        if (mAccountView == null) {
+            return;
+        }
+
+        Drawable orbIcon = mAccountView.getOrbIcon();
+        Glide.with(getContext())
+                .load(url)
+                .apply(ViewUtil.glideOptions())
+                .fitCenter() // resize image
+                .into(new SimpleTarget<Drawable>(orbIcon.getIntrinsicWidth(), orbIcon.getIntrinsicHeight()) {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        Colors orbColors = mAccountView.getOrbColors();
+                        mAccountView.setOrbColors(new Colors(orbColors.color, orbColors.brightColor, Color.TRANSPARENT));
+                        mAccountView.setOrbIcon(resource);
+                    }
+                });
     }
 }

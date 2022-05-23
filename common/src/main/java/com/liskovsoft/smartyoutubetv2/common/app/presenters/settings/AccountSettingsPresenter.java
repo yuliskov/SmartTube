@@ -2,11 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
-import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -14,13 +11,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
-import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +22,12 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     private static final String TAG = AccountSettingsPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static AccountSettingsPresenter sInstance;
-    private final SignInManager mSignInManager;
-    private Disposable mAccountsAction;
+    private final MediaServiceManager mMediaServiceManager;
+    private Runnable mOnClose;
 
     public AccountSettingsPresenter(Context context) {
         super(context);
-        MediaService service = YouTubeMediaService.instance();
-        mSignInManager = service.getSignInManager();
+        mMediaServiceManager = MediaServiceManager.instance();
     }
 
     public static AccountSettingsPresenter instance(Context context) {
@@ -49,18 +41,16 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     }
 
     public void unhold() {
-        RxUtils.disposeActions(mAccountsAction);
         sInstance = null;
     }
 
     public void show() {
-        mAccountsAction = mSignInManager.getAccountsObserve()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        this::createAndShowDialog,
-                        error -> Log.e(TAG, "Get signed accounts error: %s", error.getMessage())
-                );
+        show(null);
+    }
+
+    public void show(Runnable onClose) {
+        mOnClose = onClose;
+        mMediaServiceManager.loadAccounts(this::createAndShowDialog);
     }
 
     private void createAndShowDialog(List<Account> accounts) {
@@ -82,6 +72,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.dialog_account_none), optionItem -> {
                     selectAccount(null);
                     settingsPresenter.closeDialog();
+                    onClose();
                 }, true
         ));
 
@@ -92,6 +83,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                     getFullName(account), option -> {
                         selectAccount(account);
                         settingsPresenter.closeDialog();
+                        onClose();
                     }, account.isSelected()
             ));
 
@@ -115,6 +107,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                                     removeAccount(account);
                                     settingsPresenter.closeDialog();
                                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                                    onClose();
                                 },
                                 getContext().getString(R.string.dialog_remove_account)
                         )
@@ -152,12 +145,18 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void selectAccount(Account account) {
-        mSignInManager.selectAccount(account);
+        mMediaServiceManager.getSingInManager().selectAccount(account);
         BrowsePresenter.instance(getContext()).refresh();
     }
 
     private void removeAccount(Account account) {
-        mSignInManager.removeAccount(account);
+        mMediaServiceManager.getSingInManager().removeAccount(account);
         BrowsePresenter.instance(getContext()).refresh();
+    }
+
+    private void onClose() {
+        if (mOnClose != null) {
+            mOnClose.run();
+        }
     }
 }

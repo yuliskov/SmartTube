@@ -5,6 +5,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
+import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
@@ -25,7 +26,7 @@ public class MediaServiceManager {
     private static MediaServiceManager sInstance;
     private final MediaItemManager mItemManager;
     private final MediaGroupManager mGroupManager;
-    private final SignInManager mAuthManager;
+    private final SignInManager mSingInManager;
     private Disposable mMetadataAction;
     private Disposable mUploadsAction;
     private Disposable mSignCheckAction;
@@ -33,6 +34,7 @@ public class MediaServiceManager {
     private Disposable mSubscribedChannelsAction;
     private Disposable mFormatInfoAction;
     private Disposable mPlaylistGroupAction;
+    private Disposable mAccountListAction;
 
     public interface OnMetadata {
         void onMetadata(MediaItemMetadata metadata);
@@ -50,11 +52,15 @@ public class MediaServiceManager {
         void onFormatInfo(MediaItemFormatInfo formatInfo);
     }
 
+    public interface OnAccountList {
+        void onAccountList(List<Account> accountList);
+    }
+
     public MediaServiceManager() {
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
         mGroupManager = service.getMediaGroupManager();
-        mAuthManager = service.getSignInManager();
+        mSingInManager = service.getSignInManager();
     }
 
     public static MediaServiceManager instance() {
@@ -63,6 +69,10 @@ public class MediaServiceManager {
         }
 
         return sInstance;
+    }
+
+    public SignInManager getSingInManager() {
+        return mSingInManager;
     }
 
     public void loadMetadata(Video item, OnMetadata onMetadata) {
@@ -213,6 +223,18 @@ public class MediaServiceManager {
                 );
     }
 
+    public void loadAccounts(OnAccountList onAccountList) {
+        RxUtils.disposeActions(mAccountListAction);
+
+        mAccountListAction = mSingInManager.getAccountsObserve()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        onAccountList::onAccountList,
+                        error -> Log.e(TAG, "Get signed accounts error: %s", error.getMessage())
+                );
+    }
+
     public void authCheck(Runnable onSuccess, Runnable onError) {
         if (onSuccess == null && onError == null) {
             return;
@@ -220,7 +242,7 @@ public class MediaServiceManager {
 
         RxUtils.disposeActions(mSignCheckAction);
 
-        mSignCheckAction = mAuthManager.isSignedObserve()
+        mSignCheckAction = mSingInManager.isSignedObserve()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
