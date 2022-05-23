@@ -412,4 +412,14 @@
   <string name="skip_codec_profile_check_desc">启动视频时不检查编解码器支持。可能对有缺陷的固件有所帮助。</string>
   <string name="force_sw_codec">强制软件视频解码器</string>
   <string name="force_sw_codec_desc">几乎可以播放任何视频，但性能非常差。</string>
+   <string name="playlist_order">播放列表</string>
+  <string name="playlist_order_added_date_newer_first">添加时间（从新到旧）</string>
+  <string name="playlist_order_added_date_older_first">添加时间（从旧到新）</string>
+  <string name="playlist_order_published_date_newer_first">发布时间（从新到旧）</string>
+  <string name="playlist_order_published_date_older_first">发布时间（从旧到新）</string>
+  <string name="playlist_order_popularity">受欢迎程度</string>
+  <string name="cant_do_this_for_foreign_playlist">不能对外部播放列表进行操作</string>
+  <string name="owned_playlist_warning">错误。此操作只能应用于您拥有的播放列表</string>
+  <string name="content_block_alt_server">使用替代服务器</string>
+  <string name="content_block_alt_server_desc">如果SponsorBlock因各种原因无法工作，请启用此选项。</string>
 </resources>
