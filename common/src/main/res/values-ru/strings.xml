@@ -420,4 +420,6 @@
     <string name="owned_playlist_warning">Ошибка. Это действие применимо только для собственных плейлистов.</string>
     <string name="content_block_alt_server">Использовать альтернативный сервер</string>
     <string name="content_block_alt_server_desc">Включите эту опцию, если SponsorBlock отказывается работать по разным причинам.</string>
+    <string name="unset_stream_reminder">Отключить напоминание о трансляции</string>
+    <string name="set_stream_reminder">Установить напоминание о трансляции</string>
 </resources>

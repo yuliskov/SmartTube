@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TickleManager {
-    private static TickleManager mTickleManager;
+    private static TickleManager sInstance;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final Runnable mUpdateHandler = this::updateTickle;
     // Usually listener is a view. So use weak refs to not hold it forever.
@@ -26,11 +26,11 @@ public class TickleManager {
     }
 
     public static TickleManager instance() {
-        if (mTickleManager == null) {
-            mTickleManager = new TickleManager();
+        if (sInstance == null) {
+            sInstance = new TickleManager();
         }
 
-        return mTickleManager;
+        return sInstance;
     }
 
     public void addListener(TickleListener listener) {

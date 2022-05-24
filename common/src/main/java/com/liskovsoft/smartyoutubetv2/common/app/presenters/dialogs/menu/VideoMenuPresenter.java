@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -61,6 +62,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsOpenDescriptionButtonEnabled;
     private boolean mIsPlayVideoButtonEnabled;
     private boolean mIsPlaylistOrderButtonEnabled;
+    private boolean mIsStreamReminderButtonEnabled;
     private VideoMenuCallback mCallback;
     private List<VideoPlaylistInfo> mVideoPlaylistInfos;
 
@@ -147,6 +149,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsOpenDescriptionButtonEnabled = true;
         mIsPlayVideoButtonEnabled = true;
         mIsPlaylistOrderButtonEnabled = true;
+        mIsStreamReminderButtonEnabled = true;
 
         showMenuInt(video);
     }
@@ -199,6 +202,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendAddToRecentPlaylistButton();
         appendAddToPlaylistButton();
         appendNotInterestedButton();
+        appendStreamReminderButton();
         appendCreatePlaylistButton();
         appendRenamePlaylistButton();
         appendPlaylistOrderButton();
@@ -570,6 +574,23 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 UiOptionItem.from(getContext().getString(
                         R.string.playlist_order),
                         optionItem -> AppDialogUtil.showPlaylistOrderDialog(getContext(), mVideo, mDialogPresenter::closeDialog)
+                ));
+    }
+
+    private void appendStreamReminderButton() {
+        if (!mIsStreamReminderButtonEnabled) {
+            return;
+        }
+
+        if (mVideo == null || !mVideo.isUpcoming) {
+            return;
+        }
+
+        StreamReminderService reminderService = StreamReminderService.instance();
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(reminderService.isReminderSet(mVideo) ? R.string.unset_stream_reminder : R.string.set_stream_reminder),
+                        optionItem -> reminderService.toggleReminder(mVideo)
                 ));
     }
 
