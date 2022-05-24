@@ -20,7 +20,7 @@
     <dimen name="settings_card_width">128dp</dimen>
     <dimen name="settings_card_height">100dp</dimen>
 
-    <dimen name="pip_title_max_width">500dp</dimen>
+    <dimen name="pip_title_max_width">450dp</dimen>
     <dimen name="pip_title_size">24sp</dimen>
 
     <!-- Card view default size -->
@@ -35,6 +35,9 @@
 
     <!-- Margin for items from the right side of search field. -->
     <dimen name="search_bar_right_items_margin">20dp</dimen>
+
+    <!-- Margin for items from the right side of search field. -->
+    <dimen name="search_bar_global_time_margin">120dp</dimen>
 
     <!-- Decrease Browse fragment content top padding. -->
     <!-- Old value: 167dp -->

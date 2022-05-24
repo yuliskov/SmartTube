@@ -32,6 +32,7 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.headers.ExtendedHeadersSupportFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.browse.NavigateTitleView;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -320,6 +321,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         startHeadersTransitionSafe(false);
         if (getMainFragment() != null && getMainFragment().getView() != null) {
             getMainFragment().getView().requestFocus();
+            updateTitleView();
         }
     }
 
@@ -440,5 +442,15 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public boolean isProgressBarShowing() {
         return mProgressBarManager.isShowing();
+    }
+
+    private void updateTitleView() {
+        if (getView() != null) {
+            NavigateTitleView titleView = getView().findViewById(R.id.browse_title_group);
+
+            if (titleView != null) {
+                titleView.update();
+            }
+        }
     }
 }

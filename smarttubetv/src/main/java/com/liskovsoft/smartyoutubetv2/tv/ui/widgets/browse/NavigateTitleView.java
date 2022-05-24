@@ -117,10 +117,6 @@ public class NavigateTitleView extends TitleView {
             mExitPip.setVisibility(mGlobalVisibility);
             mPipTitle.setVisibility(mGlobalVisibility);
         }
-
-        if (mGlobalClock != null) {
-            mGlobalClock.setVisibility(mGlobalVisibility);
-        }
     }
 
     @Override
@@ -129,7 +125,7 @@ public class NavigateTitleView extends TitleView {
 
         if (MainUIData.instance(getContext()).isButtonEnabled(MainUIData.BUTTON_BROWSE_ACCOUNTS)) {
             mAccountView = (SearchOrbView) findViewById(R.id.account_orb);
-            mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).show(this::updateAccountIcon));
+            mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).show());
             TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
 
             updateAccountIcon();
@@ -144,7 +140,8 @@ public class NavigateTitleView extends TitleView {
 
         if (PlayerData.instance(getContext()).isGlobalClockEnabled()) {
             mGlobalClock = (DateTimeView) findViewById(R.id.global_time);
-            mGlobalClock.showDate(true);
+            mGlobalClock.showDate(false);
+            mGlobalClock.setVisibility(View.VISIBLE);
         }
     }
 
@@ -164,6 +161,10 @@ public class NavigateTitleView extends TitleView {
         if (hasWindowFocus) { // pip window closed, dialog closed
             applyPipParameters();
         }
+    }
+
+    public void update() {
+        updateAccountIcon();
     }
 
     private void applyPipParameters() {

@@ -23,7 +23,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     @SuppressLint("StaticFieldLeak")
     private static AccountSettingsPresenter sInstance;
     private final MediaServiceManager mMediaServiceManager;
-    private Runnable mOnClose;
 
     public AccountSettingsPresenter(Context context) {
         super(context);
@@ -45,11 +44,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     }
 
     public void show() {
-        show(null);
-    }
-
-    public void show(Runnable onClose) {
-        mOnClose = onClose;
         mMediaServiceManager.loadAccounts(this::createAndShowDialog);
     }
 
@@ -72,7 +66,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.dialog_account_none), optionItem -> {
                     selectAccount(null);
                     settingsPresenter.closeDialog();
-                    onClose();
                 }, true
         ));
 
@@ -83,7 +76,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                     getFullName(account), option -> {
                         selectAccount(account);
                         settingsPresenter.closeDialog();
-                        onClose();
                     }, account.isSelected()
             ));
 
@@ -107,7 +99,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                                     removeAccount(account);
                                     settingsPresenter.closeDialog();
                                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
-                                    onClose();
                                 },
                                 getContext().getString(R.string.dialog_remove_account)
                         )
@@ -152,11 +143,5 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     private void removeAccount(Account account) {
         mMediaServiceManager.getSingInManager().removeAccount(account);
         BrowsePresenter.instance(getContext()).refresh();
-    }
-
-    private void onClose() {
-        if (mOnClose != null) {
-            mOnClose.run();
-        }
     }
 }
