@@ -592,8 +592,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 UiOptionItem.from(getContext().getString(reminderService.isReminderSet(mVideo) ? R.string.unset_stream_reminder : R.string.set_stream_reminder),
                         optionItem -> {
                             reminderService.toggleReminder(mVideo);
-                            MessageHelpers.showMessage(getContext(), R.string.msg_done);
                             closeDialog();
+                            MessageHelpers.showMessage(getContext(), R.string.msg_done);
                         }
                 ));
     }
