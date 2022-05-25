@@ -30,7 +30,7 @@
     <string name="option_background_playback_off">Disattivato</string>
     <string name="option_background_playback_pip">Immagine nell\'immagine (PiP)</string>
     <string name="option_background_playback_only_audio">Solo audio</string>
-    <string name="playback_settings">Opzioni riproduzione</string>
+    <string name="playback_settings">Impostazioni qualità di riproduzione</string>
     <string name="video_speed">Velocità video</string>
     <string name="resolution_switch">Cambia risoluzione</string>
     <string name="video_buffer">Buffer video</string>
@@ -113,8 +113,8 @@
     <string name="repeat_mode_pause">Ferma riproduzione dopo ogni video</string>
     <string name="repeat_mode_pause_alt">Riproduci solo i video della playlist continuamente</string>
     <string name="repeat_mode_none">Ferma dopo un video</string>
-    <string name="subscribed_to_channel">Iscritto al canale</string>
-    <string name="unsubscribed_from_channel">Disiscritto dal canale</string>
+    <string name="subscribed_to_channel">Canale sottoscritto</string>
+    <string name="unsubscribed_from_channel">Canale non sottoscritto</string>
     <string name="subtitle_yellow_transparent">Giallo su sfondo trasparente</string>
     <string name="subtitle_white_transparent">Bianco su sfondo trasparente</string>
     <string name="subtitle_white_black">Bianco su sfondo nero</string>
@@ -424,4 +424,7 @@
     <string name="owned_playlist_warning">Errore. Questa azione può essere applicata solo alle playlist di tua proprietà.</string>
     <string name="content_block_alt_server">Utilizza server alternativo</string>
     <string name="content_block_alt_server_desc">Abilita questa opzione se SponsorBlock si rifiuta di funzionare per ragioni diverse.</string>
+    <string name="unset_stream_reminder">Annulla l\'impostazione del promemoria dello streaming</string>
+    <string name="set_stream_reminder">Imposta il promemoria dello streaming</string>
+    <string name="playback_starts_shortly">La riproduzione inizierà automaticamente quando lo streaming sarà pronto</string>
 </resources>
