@@ -214,6 +214,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().setLikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE);
         getController().setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
         getController().setSubscribeButtonState(metadata.isSubscribed());
+        //getController().setUserIcon(metadata.getAuthorIconUrl());
     }
 
     @Override
