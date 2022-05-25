@@ -42,7 +42,7 @@
   <string name="section_is_empty">Oups! Il n\'y a rien ici.</string>
   <string name="dialog_add_to_playlist">Ajouter à la bibliothèque</string>
   <string name="msg_signed_users_only">Utilisateurs enregistrés uniquement</string>
-  <string name="msg_cant_load_content">Impossible de charger le contenu.\N1) Vérifiez la date et l'heure sur l'appareil.\N2) Vérifiez la connexion réseau.\N3) Essayez de vous connecter à votre compte.\N4) Peut-être qu'il n'y a rien ici.</string>
+  <string name="msg_cant_load_content">Impossible de charger le contenu.\N1) Vérifiez la date et l\'heure sur l\'appareil.\N2) Vérifiez la connexion réseau.\N3) Essayez de vous connecter à votre compte.\N4) Peut-être qu'il n'y a rien ici.</string>
   <string name="title_video_presets">Préréglages vidéo</string>
   <string name="settings_accounts">Comptes</string>
   <string name="settings_left_panel">Modifier catégories</string>
