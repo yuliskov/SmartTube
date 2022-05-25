@@ -18,7 +18,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventList
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
@@ -33,7 +32,6 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInManager;
 import io.reactivex.Observable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerUIManager extends PlayerEventListenerHelper implements MetadataListener {
@@ -214,7 +212,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().setLikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE);
         getController().setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
         getController().setSubscribeButtonState(metadata.isSubscribed());
-        //getController().setUserIcon(metadata.getAuthorIconUrl());
+        getController().setChannelIcon(metadata.getAuthorImageUrl());
     }
 
     @Override

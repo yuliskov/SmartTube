@@ -1,8 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback.other;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.KeyEvent;
 import android.view.View;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.leanback.media.PlaybackGlueHost;
 import androidx.leanback.media.PlaybackTransportControlGlue;
 import androidx.leanback.media.PlayerAdapter;
@@ -10,6 +14,10 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
+import androidx.leanback.widget.SearchOrbView.Colors;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -33,6 +41,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsUpAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoSpeedAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoStatsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoZoomAction;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -272,6 +281,20 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     public void setSubscribeActionState(boolean subscribed) {
         mSubscribeAction.setIndex(subscribed ? SubscribeAction.INDEX_ON : SubscribeAction.INDEX_OFF);
         invalidateUi(mSubscribeAction);
+    }
+
+    public void setChannelIcon(String iconUrl) {
+        Drawable originIcon = mChannelAction.getIcon();
+        Glide.with(getContext())
+                .load(iconUrl)
+                .apply(ViewUtil.glideOptions())
+                .fitCenter() // resize image
+                .into(new SimpleTarget<Drawable>(originIcon.getIntrinsicWidth(), originIcon.getIntrinsicHeight()) {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        mChannelAction.setIcon(resource);
+                    }
+                });
     }
 
     public void setThumbsUpActionState(boolean thumbsUp) {
