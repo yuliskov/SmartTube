@@ -293,6 +293,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                         mChannelAction.setIcon(resource);
+                        invalidateUi(mChannelAction);
                     }
                 });
     }
@@ -448,7 +449,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
      * Properly handle ui changes of multi-action buttons
      */
     private void invalidateUi(Action action) {
-        if (action instanceof PlaybackControlsRow.MultiAction) {
+        if (action != null) {
             // Notify adapter of action changes to handle primary actions, such as, play/pause.
             notifyActionChanged(
                     action,

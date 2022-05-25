@@ -30,7 +30,7 @@
     <string name="option_background_playback_off">Відключено</string>
     <string name="option_background_playback_pip">Картинка в картинці</string>
     <string name="option_background_playback_only_audio">Тільки аудіо</string>
-    <string name="playback_settings">Налаштування відтворення</string>
+    <string name="playback_settings">Налаштування якості відтворення</string>
     <string name="video_speed">Швидкість відео</string>
     <string name="resolution_switch">Перемикати роздільну здатність</string>
     <string name="video_buffer">Відеобуфер</string>
@@ -114,7 +114,7 @@
     <string name="repeat_mode_pause_alt">Відтворювати безперервно тільки відео з плейлиста</string>
     <string name="repeat_mode_none">Завершувати відтворення після одного відео</string>
     <string name="subscribed_to_channel">Підписка на канал оформлена</string>
-    <string name="unsubscribed_from_channel">Підписка на канал скасована</string>
+    <string name="unsubscribed_from_channel">Підписка на канал не оформлена</string>
     <string name="subtitle_yellow_transparent">Жовті на прозорому фоні</string>
     <string name="subtitle_white_transparent">Білі на прозорому фоні</string>
     <string name="subtitle_white_black">Білі на чорному фоні</string>
@@ -420,6 +420,7 @@
     <string name="owned_playlist_warning">Помилка. Ця дія застосовується лише для своїх плейлистів.</string>
     <string name="content_block_alt_server">Використовувати альтернативний сервер</string>
     <string name="content_block_alt_server_desc">Увімкніть цю опцію, якщо SponsorBlock відмовляється працювати з різних причин.</string>
-    <string name="unset_stream_reminder">Вимкнути нагадування про трансляцію</string>
+    <string name="unset_stream_reminder">Скасувати нагадування про трансляцію</string>
     <string name="set_stream_reminder">Встановити нагадування про трансляцію</string>
+    <string name="playback_starts_shortly">Відтворення почнеться автоматично, коли трансляція буде готова</string>
 </resources>

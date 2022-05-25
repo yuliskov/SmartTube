@@ -29,7 +29,7 @@
     <string name="option_background_playback_off">Отключено</string>
     <string name="option_background_playback_pip">Картинка в картинке</string>
     <string name="option_background_playback_only_audio">Только аудио</string>
-    <string name="playback_settings">Настройки воспроизведения</string>
+    <string name="playback_settings">Настройки качества воспроизведения</string>
     <string name="video_speed">Скорость видео</string>
     <string name="resolution_switch">Переключать разрешение</string>
     <string name="video_buffer">Видеобуфер</string>
@@ -114,7 +114,7 @@
     <string name="repeat_mode_pause_alt">Воспроизводить непрерывно только видео из плейлиста</string>
     <string name="repeat_mode_none">Завершать воспроизведение после одного видео</string>
     <string name="subscribed_to_channel">Подписка на канал оформлена</string>
-    <string name="unsubscribed_from_channel">Подписка на канал отменена</string>
+    <string name="unsubscribed_from_channel">Подписка на канал не оформлена</string>
     <string name="subtitle_yellow_transparent">Жёлтые на прозрачном фоне</string>
     <string name="subtitle_white_transparent">Белые на прозрачном фоне</string>
     <string name="subtitle_white_black">Белые на чёрном фоне</string>
@@ -422,4 +422,5 @@
     <string name="content_block_alt_server_desc">Включите эту опцию, если SponsorBlock отказывается работать по разным причинам.</string>
     <string name="unset_stream_reminder">Отключить напоминание о трансляции</string>
     <string name="set_stream_reminder">Установить напоминание о трансляции</string>
+    <string name="playback_starts_shortly">Воспроизведение начнется автоматически, когда трансляция будет готова</string>
 </resources>

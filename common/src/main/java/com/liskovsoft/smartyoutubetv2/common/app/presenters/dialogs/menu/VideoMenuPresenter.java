@@ -587,13 +587,14 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         StreamReminderService reminderService = StreamReminderService.instance(getContext());
+        boolean reminderSet = reminderService.isReminderSet(mVideo);
 
         mDialogPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(reminderService.isReminderSet(mVideo) ? R.string.unset_stream_reminder : R.string.set_stream_reminder),
+                UiOptionItem.from(getContext().getString(reminderSet ? R.string.unset_stream_reminder : R.string.set_stream_reminder),
                         optionItem -> {
                             reminderService.toggleReminder(mVideo);
                             closeDialog();
-                            MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                            MessageHelpers.showMessage(getContext(), reminderSet ? R.string.msg_done : R.string.playback_starts_shortly);
                         }
                 ));
     }

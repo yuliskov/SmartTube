@@ -30,7 +30,7 @@
     <string name="option_background_playback_off">Disabled</string>
     <string name="option_background_playback_pip">Picture in picture</string>
     <string name="option_background_playback_only_audio">Only audio</string>
-    <string name="playback_settings">Playback settings</string>
+    <string name="playback_settings">Playback quality settings</string>
     <string name="video_speed">Video speed</string>
     <string name="resolution_switch">Switch resolution</string>
     <string name="video_buffer">Video buffer</string>
@@ -113,8 +113,8 @@
     <string name="repeat_mode_pause">Stop playback after each video</string>
     <string name="repeat_mode_pause_alt">Play only playlist videos continuously</string>
     <string name="repeat_mode_none">Stop playback after one video</string>
-    <string name="subscribed_to_channel">Subscribed to channel</string>
-    <string name="unsubscribed_from_channel">Unsubscribed from channel</string>
+    <string name="subscribed_to_channel">Channel subscribed</string>
+    <string name="unsubscribed_from_channel">Channel not subscribed</string>
     <string name="subtitle_yellow_transparent">Yellow on transparent background</string>
     <string name="subtitle_white_transparent">White on transparent background</string>
     <string name="subtitle_white_black">White on black background</string>
@@ -426,4 +426,5 @@
     <string name="content_block_alt_server_desc">Enable this option if SponsorBlock refusing to work by different reasons.</string>
     <string name="unset_stream_reminder">Unset stream reminder</string>
     <string name="set_stream_reminder">Set stream reminder</string>
+    <string name="playback_starts_shortly">Playback will start automatically when the stream will be ready</string>
 </resources>

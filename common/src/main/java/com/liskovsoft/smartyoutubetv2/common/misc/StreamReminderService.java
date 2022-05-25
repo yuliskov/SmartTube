@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
@@ -26,7 +26,7 @@ public class StreamReminderService implements TickleListener {
     private final MediaItemManager mItemManager;
     private final List<Video> mItems;
     private final Context mContext;
-    private Disposable mMetadataAction;
+    private Disposable mReminderAction;
 
     private StreamReminderService(Context context) {
         MediaService service = YouTubeMediaService.instance();
@@ -76,11 +76,11 @@ public class StreamReminderService implements TickleListener {
             return;
         }
 
-        RxUtils.disposeActions(mMetadataAction);
+        RxUtils.disposeActions(mReminderAction);
 
-        List<Observable<MediaItemMetadata>> observables = toObservables();
+        List<Observable<MediaItemFormatInfo>> observables = toObservables();
 
-        mMetadataAction = Observable.mergeDelayError(observables)
+        mReminderAction = Observable.mergeDelayError(observables)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -89,9 +89,9 @@ public class StreamReminderService implements TickleListener {
                 );
     }
 
-    private void processMetadata(MediaItemMetadata metadata) {
-        String videoId = metadata.getVideoId();
-        if (!metadata.isUpcoming() && videoId != null) {
+    private void processMetadata(MediaItemFormatInfo formatInfo) {
+        String videoId = formatInfo.getVideoId();
+        if (formatInfo.isLive() && videoId != null) {
             Utils.movePlayerToForeground(mContext);
             PlaybackPresenter.instance(mContext).openVideo(videoId);
             Helpers.removeIf(mItems, item -> videoId.equals(item.videoId));
@@ -99,11 +99,14 @@ public class StreamReminderService implements TickleListener {
         }
     }
 
-    private List<Observable<MediaItemMetadata>> toObservables() {
-        List<Observable<MediaItemMetadata>> result = new ArrayList<>();
+    /**
+     * NOTE: don't use MediaItemMetadata because it has contains isLive and isUpcoming flags
+     */
+    private List<Observable<MediaItemFormatInfo>> toObservables() {
+        List<Observable<MediaItemFormatInfo>> result = new ArrayList<>();
 
         for (Video item : mItems) {
-            result.add(mItemManager.getMetadataObserve(item.videoId));
+            result.add(mItemManager.getFormatInfoObserve(item.videoId));
         }
 
         return result;
