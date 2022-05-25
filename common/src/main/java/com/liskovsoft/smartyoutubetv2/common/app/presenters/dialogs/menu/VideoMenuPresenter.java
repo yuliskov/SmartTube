@@ -198,11 +198,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendReturnToBackgroundVideoButton();
         appendPlayVideoButton();
         //appendNotInterestedButton();
+        appendStreamReminderButton();
         appendRemoveFromHistoryButton();
         appendAddToRecentPlaylistButton();
         appendAddToPlaylistButton();
         appendNotInterestedButton();
-        appendStreamReminderButton();
         appendCreatePlaylistButton();
         appendRenamePlaylistButton();
         appendPlaylistOrderButton();
@@ -586,7 +586,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        StreamReminderService reminderService = StreamReminderService.instance();
+        StreamReminderService reminderService = StreamReminderService.instance(getContext());
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(reminderService.isReminderSet(mVideo) ? R.string.unset_stream_reminder : R.string.set_stream_reminder),
