@@ -424,4 +424,6 @@
     <string name="owned_playlist_warning">Chyba. Tuto akci lze provést pouze pro vlastněné playlisty</string>
     <string name="content_block_alt_server">Použít alternativní server</string>
     <string name="content_block_alt_server_desc">Povolte toto nastavení, pokud z nějakého důvodu odmítá SponsorBlock fungovat.</string>
+    <string name="unset_stream_reminder">Zrušit připomenutí streamu</string>
+    <string name="set_stream_reminder">Nastavit připomenutí streamu</string>
 </resources>
