@@ -420,4 +420,8 @@
   <string name="playlist_order_popularity">Por popularidade</string>
   <string name="cant_do_this_for_foreign_playlist">Não posso fazer isso para playlist de terceiros!</string>
   <string name="owned_playlist_warning">Erro! Esta ação só pode ser aplicada para listas de reprodução próprias!</string>
+  <string name="content_block_alt_server_desc">Habilite esta opção se o Bloqueio de Patrocinador/Conteúdos Indesejáveis se recusar a trabalhar por diferentes razões.</string>
+  <string name="content_block_alt_server">Use servidor alternativo</string>
+  <string name="unset_stream_reminder">Lembrete de fluxo não definido</string>
+  <string name="set_stream_reminder">Definir lembrete de fluxo</string>
 </resources>
