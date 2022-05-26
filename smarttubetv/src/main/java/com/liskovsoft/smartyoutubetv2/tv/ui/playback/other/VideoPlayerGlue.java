@@ -283,6 +283,11 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         invalidateUi(mSubscribeAction);
     }
 
+    public void setPlaylistAddState(boolean selected) {
+        mPlaylistAddAction.setIndex(selected ? SubscribeAction.INDEX_ON : SubscribeAction.INDEX_OFF);
+        invalidateUi(mPlaylistAddAction);
+    }
+
     public void setChannelIcon(String iconUrl) {
         Drawable originIcon = mChannelAction.getIcon();
         Glide.with(getContext())

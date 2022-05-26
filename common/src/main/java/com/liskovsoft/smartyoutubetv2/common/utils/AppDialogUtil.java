@@ -391,13 +391,7 @@ public class AppDialogUtil {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        videoPlaylistInfos -> {
-                            AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(context);
-                            dialogPresenter.clear();
-
-                            appendPlaylistDialogContent(context, video, itemManager, callback, dialogPresenter, videoPlaylistInfos);
-                            dialogPresenter.showDialog(context.getString(R.string.dialog_add_to_playlist));
-                        },
+                        videoPlaylistInfos -> showAddToPlaylistDialog(context, video, callback, videoPlaylistInfos),
                         error -> {
                             // Fallback to something on error
                             Log.e(TAG, "Get playlists error: %s", error.getMessage());
@@ -405,15 +399,28 @@ public class AppDialogUtil {
                 );
     }
 
+    public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback, List<VideoPlaylistInfo> videoPlaylistInfos) {
+        if (videoPlaylistInfos == null) {
+            MessageHelpers.showMessage(context, R.string.msg_signed_users_only);
+            return;
+        }
+
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(context);
+        dialogPresenter.clear();
+
+        appendPlaylistDialogContent(context, video, callback, dialogPresenter, videoPlaylistInfos);
+        dialogPresenter.showDialog(context.getString(R.string.dialog_add_to_playlist));
+    }
+
     private static void appendPlaylistDialogContent(
-            Context context, Video video, MediaItemManager itemManager, VideoMenuCallback callback, AppDialogPresenter dialogPresenter, List<VideoPlaylistInfo> videoPlaylistInfos) {
+            Context context, Video video, VideoMenuCallback callback, AppDialogPresenter dialogPresenter, List<VideoPlaylistInfo> videoPlaylistInfos) {
         List<OptionItem> options = new ArrayList<>();
 
         for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
             options.add(UiOptionItem.from(
                     playlistInfo.getTitle(),
                     (item) -> {
-                        addRemoveFromPlaylist(context, video, itemManager, callback, playlistInfo.getPlaylistId(), item.isSelected());
+                        addRemoveFromPlaylist(context, video, callback, playlistInfo.getPlaylistId(), item.isSelected());
                         GeneralData.instance(context).setLastPlaylistId(playlistInfo.getPlaylistId());
                         GeneralData.instance(context).setLastPlaylistTitle(playlistInfo.getTitle());
                     },
@@ -423,8 +430,9 @@ public class AppDialogUtil {
         dialogPresenter.appendCheckedCategory(context.getString(R.string.dialog_add_to_playlist), options);
     }
 
-    private static void addRemoveFromPlaylist(Context context, Video video, MediaItemManager itemManager, VideoMenuCallback callback, String playlistId, boolean add) {
+    private static void addRemoveFromPlaylist(Context context, Video video, VideoMenuCallback callback, String playlistId, boolean add) {
         Observable<Void> editObserve;
+        MediaItemManager itemManager = YouTubeMediaItemManager.instance();
 
         if (add) {
             editObserve = itemManager.addToPlaylistObserve(playlistId, video.videoId);

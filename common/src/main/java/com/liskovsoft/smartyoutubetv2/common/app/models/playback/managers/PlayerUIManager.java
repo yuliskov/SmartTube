@@ -7,6 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -31,6 +32,9 @@ import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInManager;
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
 
@@ -40,9 +44,10 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private final Handler mHandler;
     private final MediaItemManager mMediaItemManager;
     private final VideoLoaderManager mVideoLoader;
+    private PlayerData mPlayerData;
+    private List<VideoPlaylistInfo> mVideoPlaylistInfos;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
-    private PlayerData mPlayerData;
     private boolean mIsMetadataLoaded;
     private final Runnable mSuggestionsResetHandler = () -> getController().resetSuggestedPosition();
     private final Runnable mUiAutoHideHandler = () -> {
@@ -132,7 +137,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onPlaylistAddClicked() {
-        AppDialogUtil.showAddToPlaylistDialog(getActivity(), getController().getVideo(), null);
+        if (mVideoPlaylistInfos == null) {
+            AppDialogUtil.showAddToPlaylistDialog(getActivity(), getController().getVideo(), null);
+        } else {
+            AppDialogUtil.showAddToPlaylistDialog(getActivity(), getController().getVideo(), null, mVideoPlaylistInfos);
+        }
     }
 
     @Override
@@ -213,6 +222,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
         getController().setSubscribeButtonState(metadata.isSubscribed());
         getController().setChannelIcon(metadata.getAuthorImageUrl());
+        setPlaylistAddStateCached(metadata);
     }
 
     @Override
@@ -511,5 +521,28 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     private interface MediaItemObservable {
         Observable<Void> call(MediaItem item);
+    }
+
+    private void setPlaylistAddStateCached(MediaItemMetadata metadata) {
+        mVideoPlaylistInfos = null;
+        Disposable playlistsInfoAction =
+                YouTubeMediaService.instance().getMediaItemManager().getVideoPlaylistsInfoObserve(metadata.getVideoId())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                videoPlaylistInfos -> {
+                                    mVideoPlaylistInfos = videoPlaylistInfos;
+                                    boolean isSelected = false;
+                                    for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
+                                        if (playlistInfo.isSelected()) {
+                                            isSelected = true;
+                                            break;
+                                        }
+                                    }
+
+                                    getController().setPlaylistAddState(isSelected);
+                                },
+                                error -> Log.e(TAG, "Add to recent playlist error: %s", error.getMessage())
+                        );
     }
 }
