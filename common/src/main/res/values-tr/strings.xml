@@ -30,7 +30,7 @@
     <string name="option_background_playback_off">Devre dışı</string>
     <string name="option_background_playback_pip">Resim içinde resim</string>
     <string name="option_background_playback_only_audio">Sadece ses</string>
-    <string name="playback_settings">Oynatma ayarları</string>
+    <string name="playback_settings">Oynatma kalitesi ayarları</string>
     <string name="video_speed">Video hızı</string>
     <string name="resolution_switch">Çözünürlüğü değiştir</string>
     <string name="video_buffer">Video arabelleği</string>
@@ -389,7 +389,7 @@
     <string name="pressing_home_back">ANA EKRAN\'a ya da GERİ\'ye basarak</string>
     <string name="player_number_key_seek">Sayı tuşlarıyla arama</string>
     <string name="save_remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümüne Ekle/Sil</string>
-    <string name="remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümünden sil</string>
+    <string name="remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümünden kalıcı olarak sil</string>
     <string name="removed_from_playlists">Oynatma Listeleri bölümünden silindi</string>
     <string name="saved_to_playlists">Oynatma Listeleri bölümüne eklendi</string>
     <string name="create_playlist">Oynatma listesi oluştur</string>
@@ -422,4 +422,9 @@
     <string name="playlist_order_popularity">Popülerlik</string>
     <string name="cant_do_this_for_foreign_playlist">Bunu yabancı oynatma listesi için yapamazsınız</string>
     <string name="owned_playlist_warning">Hata. Bu işlem sedece sahip olunan oynatma listeleri için uygulanabilir</string>
+    <string name="content_block_alt_server">Alternatif sunucu kullan</string>
+    <string name="content_block_alt_server_desc">SponsorBlock farklı nedenlerle çalışmayı reddediyorsa bu seçeneği etkinleştirebilirsiniz.</string>
+    <string name="unset_stream_reminder">Canlı yayın hatırlatıcısını iptal et</string>
+    <string name="set_stream_reminder">Canlı yayın hatırlatıcısını ayarla</string>
+    <string name="playback_starts_shortly">Canlı yayın hazır olduğunda oynatma otomatik olarak başlayacaktır.</string>
 </resources>
