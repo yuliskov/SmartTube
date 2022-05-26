@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.openvpn.OpenVPNManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -84,6 +85,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             configureProxy();
             configureOpenVPN();
             initVideoStateService();
+            initStreamReminderService();
             sRunOnce = true;
         }
     }
@@ -133,6 +135,12 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private void initVideoStateService() {
         if (getContext() != null) {
             VideoStateService.instance(getContext());
+        }
+    }
+
+    private void initStreamReminderService() {
+        if (getContext() != null) {
+            StreamReminderService.instance(getContext());
         }
     }
 

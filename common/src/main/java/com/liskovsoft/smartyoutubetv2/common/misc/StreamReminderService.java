@@ -4,12 +4,12 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -24,15 +24,15 @@ public class StreamReminderService implements TickleListener {
     private static final String TAG = StreamReminderService.class.getSimpleName();
     private static StreamReminderService sInstance;
     private final MediaItemManager mItemManager;
-    private final List<Video> mItems;
     private final Context mContext;
+    private final GeneralData mGeneralData;
     private Disposable mReminderAction;
 
     private StreamReminderService(Context context) {
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
-        mItems = new ArrayList<>();
         mContext = context.getApplicationContext();
+        mGeneralData = GeneralData.instance(context);
     }
 
     public static StreamReminderService instance(Context context) {
@@ -40,11 +40,13 @@ public class StreamReminderService implements TickleListener {
             sInstance = new StreamReminderService(context);
         }
 
+        sInstance.checkListener();
+
         return sInstance;
     }
 
     public boolean isReminderSet(Video video) {
-        return Helpers.containsIf(mItems, item -> video.videoId.equals(item.videoId));
+        return mGeneralData.containsPendingStream(video);
     }
 
     public void toggleReminder(Video video) {
@@ -52,18 +54,19 @@ public class StreamReminderService implements TickleListener {
             return;
         }
 
-        List<Video> removed = Helpers.removeIf(mItems, item -> video.videoId.equals(item.videoId));
-
-        if (removed == null) {
-            mItems.add(video);
+        if (mGeneralData.containsPendingStream(video)) {
+            mGeneralData.removePendingStream(video);
+        } else {
+            mGeneralData.addPendingStream(video);
         }
 
         checkListener();
     }
 
     private void checkListener() {
-        if (mItems.isEmpty()) {
+        if (mGeneralData.getPendingStreams().isEmpty()) {
             TickleManager.instance().removeListener(this);
+            sInstance = null;
         } else {
             TickleManager.instance().addListener(this);
         }
@@ -71,7 +74,7 @@ public class StreamReminderService implements TickleListener {
 
     @Override
     public void onTickle() {
-        if (mItems.isEmpty()) {
+        if (mGeneralData.getPendingStreams().isEmpty()) {
             checkListener();
             return;
         }
@@ -94,7 +97,9 @@ public class StreamReminderService implements TickleListener {
         if (formatInfo.isLive() && videoId != null) {
             Utils.movePlayerToForeground(mContext);
             PlaybackPresenter.instance(mContext).openVideo(videoId);
-            Helpers.removeIf(mItems, item -> videoId.equals(item.videoId));
+            Video video = new Video();
+            video.videoId = videoId;
+            mGeneralData.removePendingStream(video);
             checkListener();
         }
     }
@@ -105,7 +110,7 @@ public class StreamReminderService implements TickleListener {
     private List<Observable<MediaItemFormatInfo>> toObservables() {
         List<Observable<MediaItemFormatInfo>> result = new ArrayList<>();
 
-        for (Video item : mItems) {
+        for (Video item : mGeneralData.getPendingStreams()) {
             result.add(mItemManager.getFormatInfoObserve(item.videoId));
         }
 
