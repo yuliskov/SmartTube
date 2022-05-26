@@ -40,8 +40,6 @@ public class StreamReminderService implements TickleListener {
             sInstance = new StreamReminderService(context);
         }
 
-        sInstance.checkListener();
-
         return sInstance;
     }
 
@@ -60,10 +58,10 @@ public class StreamReminderService implements TickleListener {
             mGeneralData.addPendingStream(video);
         }
 
-        checkListener();
+        start();
     }
 
-    private void checkListener() {
+    public void start() {
         if (mGeneralData.getPendingStreams().isEmpty()) {
             TickleManager.instance().removeListener(this);
             sInstance = null;
@@ -75,7 +73,7 @@ public class StreamReminderService implements TickleListener {
     @Override
     public void onTickle() {
         if (mGeneralData.getPendingStreams().isEmpty()) {
-            checkListener();
+            start();
             return;
         }
 
@@ -100,7 +98,7 @@ public class StreamReminderService implements TickleListener {
             Video video = new Video();
             video.videoId = videoId;
             mGeneralData.removePendingStream(video);
-            checkListener();
+            start();
         }
     }
 
