@@ -391,7 +391,7 @@ public class AppDialogUtil {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        videoPlaylistInfos -> showAddToPlaylistDialog(context, video, callback, videoPlaylistInfos),
+                        videoPlaylistInfos -> showAddToPlaylistDialog(context, video, callback, videoPlaylistInfos, null),
                         error -> {
                             // Fallback to something on error
                             Log.e(TAG, "Get playlists error: %s", error.getMessage());
@@ -399,7 +399,7 @@ public class AppDialogUtil {
                 );
     }
 
-    public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback, List<VideoPlaylistInfo> videoPlaylistInfos) {
+    public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback, List<VideoPlaylistInfo> videoPlaylistInfos, Runnable onFinish) {
         if (videoPlaylistInfos == null) {
             MessageHelpers.showMessage(context, R.string.msg_signed_users_only);
             return;
@@ -409,7 +409,9 @@ public class AppDialogUtil {
         dialogPresenter.clear();
 
         appendPlaylistDialogContent(context, video, callback, dialogPresenter, videoPlaylistInfos);
-        dialogPresenter.showDialog(context.getString(R.string.dialog_add_to_playlist));
+        dialogPresenter.showDialog(context.getString(R.string.dialog_add_to_playlist), () -> {
+            if (onFinish != null) onFinish.run();
+        });
     }
 
     private static void appendPlaylistDialogContent(

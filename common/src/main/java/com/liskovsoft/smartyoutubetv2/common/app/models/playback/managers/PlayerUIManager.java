@@ -24,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -138,9 +139,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onPlaylistAddClicked() {
         if (mVideoPlaylistInfos == null) {
-            AppDialogUtil.showAddToPlaylistDialog(getActivity(), getController().getVideo(), null);
+            AppDialogUtil.showAddToPlaylistDialog(getActivity(), getController().getVideo(),
+                    null);
         } else {
-            AppDialogUtil.showAddToPlaylistDialog(getActivity(), getController().getVideo(), null, mVideoPlaylistInfos);
+            AppDialogUtil.showAddToPlaylistDialog(getActivity(), getController().getVideo(),
+                    null, mVideoPlaylistInfos, this::setPlaylistAddStateCached);
         }
     }
 
@@ -222,7 +225,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
         getController().setSubscribeButtonState(metadata.isSubscribed());
         getController().setChannelIcon(metadata.getAuthorImageUrl());
-        setPlaylistAddStateCached(metadata);
+        setPlaylistAddStateCached();
     }
 
     @Override
@@ -523,10 +526,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         Observable<Void> call(MediaItem item);
     }
 
-    private void setPlaylistAddStateCached(MediaItemMetadata metadata) {
+    private void setPlaylistAddStateCached() {
+        String videoId = getController().getVideo().videoId;
         mVideoPlaylistInfos = null;
         Disposable playlistsInfoAction =
-                YouTubeMediaService.instance().getMediaItemManager().getVideoPlaylistsInfoObserve(metadata.getVideoId())
+                YouTubeMediaService.instance().getMediaItemManager().getVideoPlaylistsInfoObserve(videoId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
