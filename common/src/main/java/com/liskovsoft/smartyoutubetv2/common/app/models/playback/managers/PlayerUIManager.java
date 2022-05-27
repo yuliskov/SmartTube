@@ -561,6 +561,10 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private void setSubtitleButtonState() {
         List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
 
+        if (subtitleFormats == null) {
+            return;
+        }
+
         boolean isSelected = false;
 
         for (FormatItem subtitle : subtitleFormats) {
