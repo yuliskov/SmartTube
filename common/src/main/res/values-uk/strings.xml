@@ -423,4 +423,5 @@
     <string name="unset_stream_reminder">Скасувати нагадування про трансляцію</string>
     <string name="set_stream_reminder">Встановити нагадування про трансляцію</string>
     <string name="playback_starts_shortly">Відтворення почнеться автоматично, коли трансляція буде готова</string>
+    <string name="starting_stream">Трансляція почалася…</string>
 </resources>

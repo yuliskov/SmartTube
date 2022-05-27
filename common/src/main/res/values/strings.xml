@@ -427,4 +427,5 @@
     <string name="unset_stream_reminder">Unset stream reminder</string>
     <string name="set_stream_reminder">Set stream reminder</string>
     <string name="playback_starts_shortly">Playback will start automatically when the stream will be ready</string>
+    <string name="starting_stream">Starting the stream…</string>
 </resources>

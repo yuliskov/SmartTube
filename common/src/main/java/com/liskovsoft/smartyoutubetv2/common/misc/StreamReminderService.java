@@ -4,8 +4,10 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -94,7 +96,6 @@ public class StreamReminderService implements TickleListener {
     private void processMetadata(MediaItemFormatInfo formatInfo) {
         String videoId = formatInfo.getVideoId();
         if (formatInfo.containsMedia() && videoId != null) {
-            Utils.movePlayerToForeground(mContext);
             Video video = new Video();
             video.videoId = videoId;
             video.isPending = true;
@@ -102,10 +103,12 @@ public class StreamReminderService implements TickleListener {
             Playlist playlist = Playlist.instance();
             Video current = playlist.getCurrent();
 
-            if (current != null && current.isPending) {
+            if (current != null && current.isPending && Utils.isPlayerInForeground(mContext)) {
                 playlist.add(video);
             } else {
+                Utils.movePlayerToForeground(mContext);
                 PlaybackPresenter.instance(mContext).openVideo(video);
+                MessageHelpers.showMessage(mContext, R.string.starting_stream);
             }
 
             mGeneralData.removePendingStream(video);
