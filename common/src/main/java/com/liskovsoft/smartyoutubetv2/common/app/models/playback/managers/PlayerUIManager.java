@@ -143,7 +143,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
                     null);
         } else {
             AppDialogUtil.showAddToPlaylistDialog(getActivity(), getController().getVideo(),
-                    null, mVideoPlaylistInfos, this::setPlaylistAddStateCached);
+                    null, mVideoPlaylistInfos, this::setPlaylistAddState);
         }
     }
 
@@ -536,17 +536,25 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
                         .subscribe(
                                 videoPlaylistInfos -> {
                                     mVideoPlaylistInfos = videoPlaylistInfos;
-                                    boolean isSelected = false;
-                                    for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
-                                        if (playlistInfo.isSelected()) {
-                                            isSelected = true;
-                                            break;
-                                        }
-                                    }
-
-                                    getController().setPlaylistAddState(isSelected);
+                                    setPlaylistAddState();
                                 },
                                 error -> Log.e(TAG, "Add to recent playlist error: %s", error.getMessage())
                         );
+    }
+
+    private void setPlaylistAddState() {
+        if (mVideoPlaylistInfos == null) {
+            return;
+        }
+
+        boolean isSelected = false;
+        for (VideoPlaylistInfo playlistInfo : mVideoPlaylistInfos) {
+            if (playlistInfo.isSelected()) {
+                isSelected = true;
+                break;
+            }
+        }
+
+        getController().setPlaylistAddState(isSelected);
     }
 }

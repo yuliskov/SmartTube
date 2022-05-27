@@ -30,6 +30,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaItemManager;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInManager;
+import com.liskovsoft.youtubeapi.service.data.YouTubeVideoPlaylistInfo;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -422,6 +423,9 @@ public class AppDialogUtil {
             options.add(UiOptionItem.from(
                     playlistInfo.getTitle(),
                     (item) -> {
+                        if (playlistInfo instanceof YouTubeVideoPlaylistInfo) {
+                            ((YouTubeVideoPlaylistInfo) playlistInfo).setSelected(item.isSelected());
+                        }
                         addRemoveFromPlaylist(context, video, callback, playlistInfo.getPlaylistId(), item.isSelected());
                         GeneralData.instance(context).setLastPlaylistId(playlistInfo.getPlaylistId());
                         GeneralData.instance(context).setLastPlaylistTitle(playlistInfo.getTitle());
