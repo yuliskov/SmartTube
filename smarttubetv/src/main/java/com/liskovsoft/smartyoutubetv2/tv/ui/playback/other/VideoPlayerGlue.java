@@ -298,6 +298,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                         mChannelAction.setIcon(resource);
+                        mChannelAction.setPadding(7);
                         invalidateUi(mChannelAction);
                     }
                 });
