@@ -283,9 +283,14 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         invalidateUi(mSubscribeAction);
     }
 
-    public void setPlaylistAddState(boolean selected) {
+    public void setPlaylistAddButtonState(boolean selected) {
         mPlaylistAddAction.setIndex(selected ? SubscribeAction.INDEX_ON : SubscribeAction.INDEX_OFF);
         invalidateUi(mPlaylistAddAction);
+    }
+
+    public void setSubtitleButtonState(boolean selected) {
+        mClosedCaptioningAction.setIndex(selected ? SubscribeAction.INDEX_ON : SubscribeAction.INDEX_OFF);
+        invalidateUi(mClosedCaptioningAction);
     }
 
     public void setChannelIcon(String iconUrl) {

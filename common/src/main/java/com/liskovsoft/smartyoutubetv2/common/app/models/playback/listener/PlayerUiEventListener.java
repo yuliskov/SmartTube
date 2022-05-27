@@ -20,7 +20,7 @@ public interface PlayerUiEventListener {
     void onDislikeClicked(boolean dislike);
     void onLikeClicked(boolean like);
     void onChannelClicked();
-    void onSubtitlesClicked();
+    void onSubtitleClicked();
     void onPlaylistAddClicked();
     void onDebugInfoClicked(boolean enabled);
     void onVideoSpeedClicked();

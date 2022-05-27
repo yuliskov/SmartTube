@@ -299,8 +299,8 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onSubtitlesClicked() {
-        process(PlayerUiEventListener::onSubtitlesClicked);
+    public void onSubtitleClicked() {
+        process(PlayerUiEventListener::onSubtitleClicked);
     }
 
     @Override

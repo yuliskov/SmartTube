@@ -698,7 +698,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         @Override
         public void onClosedCaptions() {
-            mEventListener.onSubtitlesClicked();
+            mEventListener.onSubtitleClicked();
         }
 
         @Override
@@ -1225,9 +1225,16 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setPlaylistAddState(boolean selected) {
+    public void setPlaylistAddButtonState(boolean selected) {
         if (mPlayerGlue != null) {
-            mPlayerGlue.setPlaylistAddState(selected);
+            mPlayerGlue.setPlaylistAddButtonState(selected);
+        }
+    }
+
+    @Override
+    public void setSubtitleButtonState(boolean selected) {
+        if (mPlayerGlue != null) {
+            mPlayerGlue.setSubtitleButtonState(selected);
         }
     }
 

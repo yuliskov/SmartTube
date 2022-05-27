@@ -195,7 +195,7 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onSubtitlesClicked() {
+    public void onSubtitleClicked() {
         // NOP
     }
 

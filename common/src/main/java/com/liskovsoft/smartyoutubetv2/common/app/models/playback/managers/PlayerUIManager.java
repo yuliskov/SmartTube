@@ -24,7 +24,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -118,7 +117,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
-    public void onSubtitlesClicked() {
+    public void onSubtitleClicked() {
         List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
 
         String subtitlesCategoryTitle = getActivity().getString(R.string.subtitle_category_title);
@@ -133,7 +132,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
                         option -> getController().setFormat(UiOptionItem.toFormat(option)),
                         getActivity().getString(R.string.subtitles_disabled)));
 
-        settingsPresenter.showDialog(subtitlesCategoryTitle);
+        settingsPresenter.showDialog(subtitlesCategoryTitle, this::setSubtitleButtonState);
     }
 
     @Override
@@ -143,7 +142,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
                     null);
         } else {
             AppDialogUtil.showAddToPlaylistDialog(getActivity(), getController().getVideo(),
-                    null, mVideoPlaylistInfos, this::setPlaylistAddState);
+                    null, mVideoPlaylistInfos, this::setPlaylistAddButtonState);
         }
     }
 
@@ -225,7 +224,8 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
         getController().setSubscribeButtonState(metadata.isSubscribed());
         getController().setChannelIcon(metadata.getAuthorImageUrl());
-        setPlaylistAddStateCached();
+        setPlaylistAddButtonStateCached();
+        setSubtitleButtonState();
     }
 
     @Override
@@ -526,7 +526,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         Observable<Void> call(MediaItem item);
     }
 
-    private void setPlaylistAddStateCached() {
+    private void setPlaylistAddButtonStateCached() {
         String videoId = getController().getVideo().videoId;
         mVideoPlaylistInfos = null;
         Disposable playlistsInfoAction =
@@ -536,13 +536,13 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
                         .subscribe(
                                 videoPlaylistInfos -> {
                                     mVideoPlaylistInfos = videoPlaylistInfos;
-                                    setPlaylistAddState();
+                                    setPlaylistAddButtonState();
                                 },
                                 error -> Log.e(TAG, "Add to recent playlist error: %s", error.getMessage())
                         );
     }
 
-    private void setPlaylistAddState() {
+    private void setPlaylistAddButtonState() {
         if (mVideoPlaylistInfos == null) {
             return;
         }
@@ -555,6 +555,21 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             }
         }
 
-        getController().setPlaylistAddState(isSelected);
+        getController().setPlaylistAddButtonState(isSelected);
+    }
+
+    private void setSubtitleButtonState() {
+        List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
+
+        boolean isSelected = false;
+
+        for (FormatItem subtitle : subtitleFormats) {
+            if (subtitle.isSelected() && !subtitle.isDefault()) {
+                isSelected = true;
+                break;
+            }
+        }
+
+        getController().setSubtitleButtonState(isSelected);
     }
 }
