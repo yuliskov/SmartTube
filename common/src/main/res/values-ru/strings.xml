@@ -424,4 +424,5 @@
     <string name="set_stream_reminder">Установить напоминание о трансляции</string>
     <string name="playback_starts_shortly">Воспроизведение начнется автоматически, когда трансляция будет готова</string>
     <string name="starting_stream">Трансляция началась…</string>
+    <string name="action_playlist_remove">Удалить из плейлиста</string>
 </resources>

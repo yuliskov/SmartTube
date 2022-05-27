@@ -32,7 +32,7 @@ public class ClosedCaptioningAction extends MultiAction {
         String[] labels = new String[drawables.length];
         // Note, labels denote the action taken when clicked
         labels[INDEX_OFF] = context.getString(R.string.lb_playback_controls_closed_captioning_enable);
-        labels[INDEX_ON] = context.getString(R.string.lb_playback_controls_closed_captioning_enable);
+        labels[INDEX_ON] = context.getString(R.string.lb_playback_controls_closed_captioning_disable);
         setLabels(labels);
     }
 }

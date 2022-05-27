@@ -29,7 +29,7 @@ public class PlaylistAddAction extends MultiAction {
         String[] labels = new String[drawables.length];
         // Note, labels denote the action taken when clicked
         labels[INDEX_OFF] = context.getString(R.string.action_playlist_add);
-        labels[INDEX_ON] = context.getString(R.string.action_playlist_add);
+        labels[INDEX_ON] = context.getString(R.string.action_playlist_remove);
         setLabels(labels);
     }
 }

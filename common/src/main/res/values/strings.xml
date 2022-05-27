@@ -428,4 +428,5 @@
     <string name="set_stream_reminder">Set stream reminder</string>
     <string name="playback_starts_shortly">Playback will start automatically when the stream will be ready</string>
     <string name="starting_stream">Starting the stream…</string>
+    <string name="action_playlist_remove">Remove from playlist</string>
 </resources>

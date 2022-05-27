@@ -97,6 +97,7 @@ public class StreamReminderService implements TickleListener {
         String videoId = formatInfo.getVideoId();
         if (formatInfo.containsMedia() && videoId != null) {
             Video video = new Video();
+            video.title = formatInfo.getTitle();
             video.videoId = videoId;
             video.isPending = true;
 
