@@ -30,7 +30,7 @@
     <string name="option_background_playback_off">Deaktiviert</string>
     <string name="option_background_playback_pip">Bild in Bild</string>
     <string name="option_background_playback_only_audio">Nur Audio</string>
-    <string name="playback_settings">Wiedergabe-Einstellungen</string>
+    <string name="playback_settings">Wiedergabequalität-Einstellungen</string>
     <string name="video_speed">Video-Geschwindigkeit</string>
     <string name="resolution_switch">Auflösung umschalten</string>
     <string name="video_buffer">Video-Puffer</string>
@@ -424,4 +424,8 @@
     <string name="owned_playlist_warning">Fehler. Diese Aktion kann nur auf eigene Wiedergabelisten angewendet werden</string>
     <string name="content_block_alt_server">Alternativen Server verwenden</string>
     <string name="content_block_alt_server_desc">Aktivieren Sie diese Option, wenn SponsorBlock aus verschiedenen Gründen nicht funktioniert.</string>
+    <string name="unset_stream_reminder">Stream-Erinnerung deaktivieren</string>
+    <string name="set_stream_reminder">Stream-Erinnerung aktivieren</string>
+    <string name="playback_starts_shortly">Die Wiedergabe wird automatisch gestartet, sobald der Stream bereit ist</string>
+    <string name="starting_stream">Starten des Streams…</string>
 </resources>
