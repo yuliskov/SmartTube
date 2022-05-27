@@ -59,6 +59,7 @@ public final class Video implements Parcelable {
     public int extra = -1;
     public int pendingPosMs;
     public boolean fromQueue;
+    public boolean isPending;
 
     public Video() {
        // NOP
