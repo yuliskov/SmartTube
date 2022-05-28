@@ -120,9 +120,13 @@ public class NavigateTitleView extends TitleView {
     }
 
     @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
 
+        init();
+    }
+
+    private void init() {
         if (MainUIData.instance(getContext()).isButtonEnabled(MainUIData.BUTTON_BROWSE_ACCOUNTS)) {
             mAccountView = (SearchOrbView) findViewById(R.id.account_orb);
             mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).show());
@@ -209,17 +213,11 @@ public class NavigateTitleView extends TitleView {
             return;
         }
 
-        View outerCircle = findViewById(R.id.search_orb);
-
-        if (outerCircle == null) {
-            return;
-        }
-
         Glide.with(getContext())
                 .load(url)
                 .apply(ViewUtil.glideOptions())
                 .circleCrop() // resize image
-                .into(new SimpleTarget<Drawable>(outerCircle.getWidth(), outerCircle.getHeight()) {
+                .into(new SimpleTarget<Drawable>(mAccountView.getWidth(), mAccountView.getHeight()) {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                         Colors orbColors = mAccountView.getOrbColors();
