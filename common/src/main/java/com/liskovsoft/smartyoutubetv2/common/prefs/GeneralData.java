@@ -57,6 +57,7 @@ public class GeneralData {
     private boolean mIsHideShortsFromHistoryEnabled;
     private boolean mIsScreensaverDisabled;
     private boolean mIsVPNEnabled;
+    private boolean mIsGlobalClockEnabled;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new ArrayList<>();
@@ -573,6 +574,15 @@ public class GeneralData {
         return Collections.unmodifiableList(mPendingStreams);
     }
 
+    public boolean isGlobalClockEnabled() {
+        return mIsGlobalClockEnabled;
+    }
+
+    public void enableGlobalClock(boolean enable) {
+        mIsGlobalClockEnabled = enable;
+        persistState();
+    }
+
     private void initSections() {
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mDefaultSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -632,6 +642,7 @@ public class GeneralData {
         mLastPlaylistTitle = Helpers.parseStr(split, 28);
         String playlistOrder = Helpers.parseStr(split, 29);
         String pendingStreams = Helpers.parseStr(split, 30);
+        mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, true);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -691,6 +702,6 @@ public class GeneralData {
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
-                playlistOrder, pendingStreams));
+                playlistOrder, pendingStreams, mIsGlobalClockEnabled));
     }
 }
