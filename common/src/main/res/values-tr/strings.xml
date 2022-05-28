@@ -62,7 +62,7 @@
     <string name="subtitle_white_semi_transparent">Beyaz (Yarı saydam arka plan)</string>
     <string name="subtitle_style">Altyazı stili</string>
     <string name="subtitle_language">Altyazı dili</string>
-    <string name="action_search">Aramaya başla</string>
+    <string name="action_search">Ara</string>
     <string name="settings_main_ui">Kullanıcı arayüzü</string>
     <string name="dialog_main_ui">Kullanıcı arayüzü</string>
     <string name="card_animated_previews">Hareketli ön izlemeler</string>
@@ -255,7 +255,7 @@
     <string name="refresh_section">Bölümü yenile</string>
     <string name="option_disabled">Devre dışı</string>
     <string name="live_now_row_name">Canlı</string>
-    <string name="run_in_background">Arka planda çalıştır</string>
+    <string name="run_in_background">Arka planda oynat</string>
     <string name="settings_remote_control">Uzaktan kontrol</string>
     <string name="background_service_started">Arka plan hizmeti başlatıldı</string>
     <string name="dialog_add_to">Ekle: %s</string>
@@ -426,6 +426,7 @@
     <string name="content_block_alt_server_desc">SponsorBlock farklı nedenlerle çalışmayı reddediyorsa bu seçeneği etkinleştirebilirsiniz.</string>
     <string name="unset_stream_reminder">Canlı yayın hatırlatıcısını iptal et</string>
     <string name="set_stream_reminder">Canlı yayın hatırlatıcısını ayarla</string>
-    <string name="playback_starts_shortly">Canlı yayın hazır olduğunda oynatma otomatik olarak başlayacaktır.</string>
+    <string name="playback_starts_shortly">Canlı yayın başladığında otomatik olarak oynatılacaktır.</string>
     <string name="starting_stream">Canlı yayın başlatılıyor…</string>
+    <string name="action_playlist_remove">Oynatma listesinden kaldır</string>
 </resources>
