@@ -30,7 +30,7 @@
     <string name="option_background_playback_off">Zakázáno</string>
     <string name="option_background_playback_pip">Video a zvuk</string>
     <string name="option_background_playback_only_audio">Pouze zvuk</string>
-    <string name="playback_settings">Nastavení přehrávání</string>
+    <string name="playback_settings">Nastavení kvality přehrávání</string>
     <string name="video_speed">Rychlost videa</string>
     <string name="resolution_switch">Přepnout rozlišení</string>
     <string name="video_buffer">Video vyrovnávací paměť</string>
@@ -424,6 +424,9 @@
     <string name="owned_playlist_warning">Chyba. Tuto akci lze provést pouze pro vlastněné playlisty</string>
     <string name="content_block_alt_server">Použít alternativní server</string>
     <string name="content_block_alt_server_desc">Povolte toto nastavení, pokud z nějakého důvodu odmítá SponsorBlock fungovat.</string>
-    <string name="unset_stream_reminder">Zrušit připomenutí streamu</string>
-    <string name="set_stream_reminder">Nastavit připomenutí streamu</string>
+    <string name="unset_stream_reminder">Zrušit připomenutí živého vysílání</string>
+    <string name="set_stream_reminder">Nastavit připomenutí živého vysílání</string>
+    <string name="playback_starts_shortly">Přehrávání se spustí automaticky, jakmile bude živé vysílání připraveno</string>
+    <string name="starting_stream">Živé vysílání začíná…</string>
+    <string name="action_playlist_remove">Odstranit z playlistu</string>
 </resources>
