@@ -62,7 +62,7 @@
     <string name="subtitle_white_semi_transparent">White on semitransparent background</string>
     <string name="subtitle_style">Subtitle style</string>
     <string name="subtitle_language">Subtitle language</string>
-    <string name="action_search">Start search</string>
+    <string name="action_search">Search</string>
     <string name="settings_main_ui">User interface</string>
     <string name="dialog_main_ui">User interface</string>
     <string name="card_animated_previews">Animated previews</string>
@@ -255,7 +255,7 @@
     <string name="refresh_section">Refresh section</string>
     <string name="option_disabled">Disabled</string>
     <string name="live_now_row_name">Live now</string>
-    <string name="run_in_background">Run in the background</string>
+    <string name="run_in_background">Background playback</string>
     <string name="settings_remote_control">Remote control</string>
     <string name="background_service_started">Background service started</string>
     <string name="dialog_add_to">Add to %s</string>

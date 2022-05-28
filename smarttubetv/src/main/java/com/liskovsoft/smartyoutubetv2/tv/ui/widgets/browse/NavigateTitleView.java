@@ -209,12 +209,17 @@ public class NavigateTitleView extends TitleView {
             return;
         }
 
-        Drawable orbIcon = mAccountView.getOrbIcon();
+        View outerCircle = findViewById(R.id.search_orb);
+
+        if (outerCircle == null) {
+            return;
+        }
+
         Glide.with(getContext())
                 .load(url)
                 .apply(ViewUtil.glideOptions())
-                .fitCenter() // resize image
-                .into(new SimpleTarget<Drawable>(orbIcon.getIntrinsicWidth(), orbIcon.getIntrinsicHeight()) {
+                .circleCrop() // resize image
+                .into(new SimpleTarget<Drawable>(outerCircle.getWidth(), outerCircle.getHeight()) {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                         Colors orbColors = mAccountView.getOrbColors();

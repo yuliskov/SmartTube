@@ -298,12 +298,12 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         Glide.with(getContext())
                 .load(iconUrl)
                 .apply(ViewUtil.glideOptions())
-                .fitCenter() // resize image
+                .circleCrop() // resize image
                 .into(new SimpleTarget<Drawable>(originIcon.getIntrinsicWidth(), originIcon.getIntrinsicHeight()) {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                         mChannelAction.setIcon(resource);
-                        mChannelAction.setPadding(7);
+                        mChannelAction.setPadding(3);
                         invalidateUi(mChannelAction);
                     }
                 });

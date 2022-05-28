@@ -62,10 +62,10 @@
     <string name="subtitle_white_semi_transparent">Білі на напівпрозорому фоні</string>
     <string name="subtitle_style">Стиль субтитрів</string>
     <string name="subtitle_language">Мова субтитрів</string>
-    <string name="action_search">Почати пошук</string>
+    <string name="action_search">Пошук</string>
     <string name="settings_main_ui">Інтерфейс</string>
     <string name="dialog_main_ui">Інтерфейс додатку</string>
-    <string name="card_animated_previews">Анімовані превью</string>
+    <string name="card_animated_previews">Анімований попередній перегляд</string>
     <string name="web_site">Вебсайт</string>
     <string name="donation">Підтримати проект</string>
     <string name="dialog_about">Про додаток</string>
@@ -118,7 +118,7 @@
     <string name="subtitle_yellow_transparent">Жовті на прозорому фоні</string>
     <string name="subtitle_white_transparent">Білі на прозорому фоні</string>
     <string name="subtitle_white_black">Білі на чорному фоні</string>
-    <string name="player_seek_preview">Прев\'ю при перемотуванні</string>
+    <string name="player_seek_preview">Попередній перегляд при перемотуванні</string>
     <string name="color_scheme_dark_grey_oled">Темно-сіра (OLED)</string>
     <string name="channels_section_sorting">Сортування розділу Канали</string>
     <string name="sorting_by_new_content">Новий контент</string>
@@ -255,7 +255,7 @@
     <string name="refresh_section">Оновити розділ</string>
     <string name="option_disabled">Відключено</string>
     <string name="live_now_row_name">У прямому ефірі зараз</string>
-    <string name="run_in_background">Працювати у фоновому режимі</string>
+    <string name="run_in_background">Фонове відтворення</string>
     <string name="settings_remote_control">Дистанційне керування</string>
     <string name="background_service_started">Фоновий сервіс запущений</string>
     <string name="dialog_add_to">Додати у %s</string>
@@ -374,7 +374,7 @@
     <string name="master_volume">Основна гучність</string>
     <string name="volume_limit">Обмеження гучності</string>
     <string name="play_video">Відтворити</string>
-    <string name="remember_position_of_short_videos">Запам\'ятовувати позицію коротких відео (меньш ніж 10 хв)</string>
+    <string name="remember_position_of_short_videos">Запам\'ятовувати позицію коротких відео (меньше 10 хв)</string>
     <string name="player_show_tooltips">Показати підказки для кнопок</string>
     <string name="action_like_unset">Подобається не встановлено</string>
     <string name="action_dislike_unset">Не подобається не встановлено</string>

@@ -62,10 +62,10 @@
     <string name="subtitle_white_semi_transparent">Белые на полупрозрачном фоне</string>
     <string name="subtitle_style">Стиль субтитров</string>
     <string name="subtitle_language">Язык субтитров</string>
-    <string name="action_search">Начать поиск</string>
+    <string name="action_search">Поиск</string>
     <string name="settings_main_ui">Интерфейс</string>
     <string name="dialog_main_ui">Интерфейс приложения</string>
-    <string name="card_animated_previews">Анимированные превью</string>
+    <string name="card_animated_previews">Анимированный предпросмотр</string>
     <string name="web_site">Веб-сайт</string>
     <string name="donation">Поддержать проект</string>
     <string name="dialog_about">О приложении</string>
@@ -118,7 +118,7 @@
     <string name="subtitle_yellow_transparent">Жёлтые на прозрачном фоне</string>
     <string name="subtitle_white_transparent">Белые на прозрачном фоне</string>
     <string name="subtitle_white_black">Белые на чёрном фоне</string>
-    <string name="player_seek_preview">Превью при перемотке</string>
+    <string name="player_seek_preview">Предпросмотр при перемотке</string>
     <string name="color_scheme_dark_grey_oled">Тёмно-серая (OLED)</string>
     <string name="channels_section_sorting">Сортировка раздела Каналы</string>
     <string name="sorting_by_new_content">Новый контент</string>
@@ -255,7 +255,7 @@
     <string name="refresh_section">Обновить раздел</string>
     <string name="option_disabled">Отключено</string>
     <string name="live_now_row_name">Сейчас в эфире</string>
-    <string name="run_in_background">Работать в фоновом режиме</string>
+    <string name="run_in_background">Фоновое воспроизведение</string>
     <string name="settings_remote_control">Дистанционное управление</string>
     <string name="background_service_started">Фоновый сервис запущен</string>
     <string name="dialog_add_to">Добавить в %s</string>
