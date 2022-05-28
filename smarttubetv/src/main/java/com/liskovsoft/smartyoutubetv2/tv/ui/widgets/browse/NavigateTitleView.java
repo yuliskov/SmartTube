@@ -23,8 +23,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSett
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
@@ -138,7 +138,7 @@ public class NavigateTitleView extends TitleView {
         //ViewUtil.setTextScrollSpeed(mPipTitle, MainUIData.instance(getContext()).getCardTextScrollSpeed());
         TooltipCompatHandler.setTooltipText(mExitPip, getContext().getString(R.string.return_to_background_video));
 
-        if (PlayerData.instance(getContext()).isGlobalClockEnabled()) {
+        if (GeneralData.instance(getContext()).isGlobalClockEnabled()) {
             mGlobalClock = (DateTimeView) findViewById(R.id.global_time);
             mGlobalClock.showDate(false);
             mGlobalClock.setVisibility(View.VISIBLE);

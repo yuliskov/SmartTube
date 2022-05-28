@@ -303,7 +303,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_global_clock),
-                option -> mGeneralData.enableGlobalClock(option.isSelected()),
+                option -> {
+                    mGeneralData.enableGlobalClock(option.isSelected());
+                    mRestartApp = true;
+                },
                 mGeneralData.isGlobalClockEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_history),
