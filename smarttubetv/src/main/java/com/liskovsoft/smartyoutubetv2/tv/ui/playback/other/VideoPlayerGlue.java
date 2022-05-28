@@ -203,14 +203,14 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_ADD_TO_PLAYLIST)) {
             adapter.add(mPlaylistAddAction);
         }
-        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE)) {
-            adapter.add(mPlaybackQueueAction);
-        }
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SUBSCRIBE)) {
             adapter.add(mSubscribeAction);
         }
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO)) {
             adapter.add(mVideoInfoAction);
+        }
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE)) {
+            adapter.add(mPlaybackQueueAction);
         }
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_STATS)) {
             adapter.add(mVideoStatsAction);
