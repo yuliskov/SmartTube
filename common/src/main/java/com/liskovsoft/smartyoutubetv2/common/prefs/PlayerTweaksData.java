@@ -230,7 +230,7 @@ public class PlayerTweaksData {
         mIsSnapToVsyncDisabled = Helpers.parseBoolean(split, 2, false);
         mIsProfileLevelCheckSkipped = Helpers.parseBoolean(split, 3, false);
         mIsSWDecoderForced = Helpers.parseBoolean(split, 4, false);
-        mIsTextureViewEnabled = Helpers.parseBoolean(split, 5, false);
+        mIsTextureViewEnabled = Helpers.parseBoolean(split, 5, VERSION.SDK_INT <= 19); // Android 4 playback crash fix
         // Need to be enabled (?) on older version of ExoPlayer (e.g. 2.10.6).
         // It's because there's no tweaks for modern devices.
         mIsSetOutputSurfaceWorkaroundEnabled = Helpers.parseBoolean(split, 7, true);
