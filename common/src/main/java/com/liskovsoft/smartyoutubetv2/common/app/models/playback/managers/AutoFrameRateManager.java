@@ -296,7 +296,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         afrResSwitchOption.setRequired(afrEnableOption);
         afrFpsCorrectionOption.setRequired(afrEnableOption);
         doubleRefreshRateOption.setRequired(afrEnableOption);
-        doubleRefreshRateOption.setRequired(skip24RateOption);
+        skip24RateOption.setRequired(afrEnableOption);
 
         options.add(afrEnableOption);
         options.add(afrResSwitchOption);
