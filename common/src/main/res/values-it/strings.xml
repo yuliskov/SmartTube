@@ -62,7 +62,7 @@
     <string name="subtitle_white_semi_transparent">Sfondo bianco o semitrasparente</string>
     <string name="subtitle_style">Stile sottotitoli</string>
     <string name="subtitle_language">Lingua sottotitoli</string>
-    <string name="action_search">Inizia ricerca</string>
+    <string name="action_search">Cerca</string>
     <string name="settings_main_ui">Interfaccia utente</string>
     <string name="dialog_main_ui">Interfaccia utente</string>
     <string name="card_animated_previews">Anteprime animate</string>
@@ -255,7 +255,7 @@
     <string name="refresh_section">Aggiorna sezione</string>
     <string name="option_disabled">Disabilitato</string>
     <string name="live_now_row_name">In diretta</string>
-    <string name="run_in_background">Avvia in background</string>
+    <string name="run_in_background">Riproduzione in background</string>
     <string name="settings_remote_control">Controllo remoto</string>
     <string name="background_service_started">Servizio di background avviato</string>
     <string name="dialog_add_to">Aggiungi a %s</string>
@@ -427,4 +427,6 @@
     <string name="unset_stream_reminder">Annulla l\'impostazione del promemoria dello streaming</string>
     <string name="set_stream_reminder">Imposta il promemoria dello streaming</string>
     <string name="playback_starts_shortly">La riproduzione inizierà automaticamente quando lo streaming sarà pronto</string>
+    <string name="starting_stream">Sto avviando lo stream…</string>
+    <string name="action_playlist_remove">Rimuovi dalla playlist</string>
 </resources>
