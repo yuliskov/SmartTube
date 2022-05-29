@@ -425,4 +425,16 @@
     <string name="playback_starts_shortly">Воспроизведение начнется автоматически, когда трансляция будет готова</string>
     <string name="starting_stream">Трансляция началась…</string>
     <string name="action_playlist_remove">Удалить из плейлиста</string>
+    <!-- BEGIN Moved strings -->
+    <string name="signin_view_title">Код загружается…</string>
+    <string name="signin_view_description">Чтобы войти в аккаунт, введите этот код на странице %s</string>
+    <string name="signin_view_action_text">Готово</string>
+    <string name="require_checked">Требуется \"%s\"</string>
+    <string name="msg_press_again_to_exit">Нажмите ещё раз для выхода</string>
+    <string name="player_remaining_time">Осталось: %s</string>
+    <string name="player_ending_time">Закончится в %s</string>
+    <string name="badge_new_content">НОВЫЙ КОНТЕНТ</string>
+    <string name="badge_live">В ЭФИРЕ</string>
+    <string name="add_device_view_description">Чтобы привязать устройство, введите этот код в приложении YouTube на телефоне в разделе Настройки/Смотреть на ТВ</string>
+    <!-- END Moved strings -->
 </resources>
