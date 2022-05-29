@@ -135,6 +135,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         mAutoFrameRateHelper.setDoubleRefreshRateEnabled(mPlayerData.isDoubleRefreshRateEnabled());
     }
 
+    public void onSkip24RateClick() {
+        mAutoFrameRateHelper.setSkip24RateEnabled(mPlayerData.isSkip24RateEnabled());
+    }
+
     private void applyAfrWrapper() {
         if (mPlayerData.isAfrEnabled()) {
             AppDialogPresenter.instance(getActivity()).showDialogMessage("Applying AFR...", this::applyAfr, 1_000);
@@ -227,7 +231,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         if (mAutoFrameRateHelper.isSupported()) {
             OptionCategory afrCategory = createAutoFrameRateCategory(
                     getActivity(), PlayerData.instance(getActivity()),
-                    () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick, this::onDoubleRefreshRateClick);
+                    () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick, this::onDoubleRefreshRateClick, this::onSkip24RateClick);
 
             OptionCategory afrPauseCategory = createAutoFrameRatePauseCategory(
                     getActivity(), PlayerData.instance(getActivity()));
@@ -255,15 +259,17 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     public static OptionCategory createAutoFrameRateCategory(Context context, PlayerData playerData) {
-        return createAutoFrameRateCategory(context, playerData, () -> {}, () -> {}, () -> {}, () -> {});
+        return createAutoFrameRateCategory(context, playerData, () -> {}, () -> {}, () -> {}, () -> {}, () -> {});
     }
 
     private static OptionCategory createAutoFrameRateCategory(Context context, PlayerData playerData,
-            Runnable onAfrCallback, Runnable onResolutionCallback, Runnable onFpsCorrectionCallback, Runnable onDoubleRefreshRateCallback) {
+            Runnable onAfrCallback, Runnable onResolutionCallback, Runnable onFpsCorrectionCallback,
+            Runnable onDoubleRefreshRateCallback, Runnable onSkip24RateCallback) {
         String title = context.getString(R.string.auto_frame_rate);
         String fpsCorrection = context.getString(R.string.frame_rate_correction, "24->23.97, 30->29.97, 60->59.94");
         String resolutionSwitch = context.getString(R.string.resolution_switch);
         String doubleRefreshRate = context.getString(R.string.double_refresh_rate);
+        String skip24Rate = context.getString(R.string.skip_24_rate);
         List<OptionItem> options = new ArrayList<>();
 
         OptionItem afrEnableOption = UiOptionItem.from(title, optionItem -> {
@@ -282,15 +288,21 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             playerData.setDoubleRefreshRateEnabled(optionItem.isSelected());
             onDoubleRefreshRateCallback.run();
         }, playerData.isDoubleRefreshRateEnabled());
+        OptionItem skip24RateOption = UiOptionItem.from(skip24Rate, optionItem -> {
+            playerData.enableSkip24Rate(optionItem.isSelected());
+            onSkip24RateCallback.run();
+        }, playerData.isSkip24RateEnabled());
 
         afrResSwitchOption.setRequired(afrEnableOption);
         afrFpsCorrectionOption.setRequired(afrEnableOption);
         doubleRefreshRateOption.setRequired(afrEnableOption);
+        doubleRefreshRateOption.setRequired(skip24RateOption);
 
         options.add(afrEnableOption);
         options.add(afrResSwitchOption);
         options.add(afrFpsCorrectionOption);
         options.add(doubleRefreshRateOption);
+        options.add(skip24RateOption);
 
         return OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_CHECKED, title, options);
     }

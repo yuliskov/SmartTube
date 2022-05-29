@@ -72,6 +72,7 @@ public class PlayerData {
     private boolean mIsTooltipsEnabled;
     private float mSubtitlePosition;
     private boolean mIsNumberKeySeekEnabled;
+    private boolean mIsSkip24RateEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -451,6 +452,15 @@ public class PlayerData {
         return mIsTimeCorrectionEnabled;
     }
 
+    public boolean isSkip24RateEnabled() {
+        return mIsSkip24RateEnabled;
+    }
+
+    public void enableSkip24Rate(boolean enable) {
+        mIsSkip24RateEnabled = enable;
+        persistData();
+    }
+
     public FormatItem getDefaultAudioFormat() {
         String language = LocaleUtility.getCurrentLanguage(mPrefs.getContext());
 
@@ -541,6 +551,7 @@ public class PlayerData {
         mIsTooltipsEnabled = Helpers.parseBoolean(split, 41, true);
         mSubtitlePosition = Helpers.parseFloat(split, 42, 0.1f);
         mIsNumberKeySeekEnabled = Helpers.parseBoolean(split, 43, true);
+        mIsSkip24RateEnabled = Helpers.parseBoolean(split, 44, false);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -557,6 +568,7 @@ public class PlayerData {
                 mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
-                mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled));
+                mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
+                mIsSkip24RateEnabled));
     }
 }

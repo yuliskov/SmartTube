@@ -196,6 +196,10 @@ public class AutoFrameRateHelper {
         mSyncHelper.setDoubleRefreshRateEnabled(enabled);
     }
 
+    public void setSkip24RateEnabled(boolean enabled) {
+        mSyncHelper.setSkip24RateEnabled(enabled);
+    }
+
     private void resetStats() {
         mSyncHelper.resetStats();
     }

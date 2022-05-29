@@ -30,6 +30,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
     // switch not only framerate but resolution too
     private boolean mIsResolutionSwitchEnabled;
     private boolean mIsDoubleRefreshRateEnabled = true;
+    private boolean mIsSkip24RateEnabled;
     private int mModeLength = -1;
     private AutoFrameRateListener mListener;
 
@@ -205,7 +206,8 @@ public class DisplaySyncHelper implements UhdHelperListener {
     }
 
     private HashMap<Integer, int[]> getRateMapping() {
-        return mIsDoubleRefreshRateEnabled ? getDoubleRateMapping() : getSingleRateMapping();
+        HashMap<Integer, int[]> rateMapping = mIsDoubleRefreshRateEnabled ? getDoubleRateMapping() : getSingleRateMapping();
+        return apply24RateSkip(rateMapping);
     }
 
     private HashMap<Integer, int[]> getSingleRateMapping() {
@@ -239,6 +241,17 @@ public class DisplaySyncHelper implements UhdHelperListener {
         relatedRates.put(5994, new int[]{5994, 6000, 2997, 3000});
         relatedRates.put(6000, new int[]{6000, 3000});
         return relatedRates;
+    }
+
+    private HashMap<Integer, int[]> apply24RateSkip(HashMap<Integer, int[]> rateMapping) {
+        if (mIsSkip24RateEnabled) {
+            rateMapping.remove(2397);
+            rateMapping.remove(2400);
+            rateMapping.remove(2497);
+            rateMapping.remove(2500);
+        }
+
+        return rateMapping;
     }
 
     /**
@@ -547,6 +560,10 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
     public void setDoubleRefreshRateEnabled(boolean enabled) {
         mIsDoubleRefreshRateEnabled = enabled;
+    }
+
+    public void setSkip24RateEnabled(boolean enabled) {
+        mIsSkip24RateEnabled = enabled;
     }
 
     public void setContext(Context context) {
