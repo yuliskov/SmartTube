@@ -311,7 +311,7 @@
     <string name="content_block_action_only_skip">Nur Überspringen</string>
     <string name="content_block_action_toast">Überspringen mit Benachrichtigung</string>
     <string name="content_block_action_dialog">Bestätigungsdialog anzeigen</string>
-    <string name="content_block_filler">Off-Topic (Füller)</string>
+    <string name="content_block_filler">Füller/Witze</string>
     <string name="keyboard_auto_show">Tastatur automatisch anzeigen</string>
     <string name="cancel_dialog">Abbrechen</string>
     <string name="msg_player_error_source2">Video-Quelle funktioniert nicht oder falsche Uhrzeit</string>
