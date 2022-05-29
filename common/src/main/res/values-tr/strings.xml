@@ -429,4 +429,20 @@
     <string name="playback_starts_shortly">Canlı yayın başladığında otomatik olarak oynatılacaktır.</string>
     <string name="starting_stream">Canlı yayın başlatılıyor…</string>
     <string name="action_playlist_remove">Oynatma listesinden kaldır</string>
+    <!-- BEGIN Moved strings -->
+    <string name="signin_view_title">Kullanıcı Kodu yükleniyor…</string>
+    <string name="signin_view_description">Oturum açmak için bu kodu sayfaya girin %s</string>
+    <string name="signin_view_action_text">Tamam</string>
+    <string name="require_checked">\"%s\" gerektirir</string>
+    <string name="msg_press_again_to_exit">Çıkmak için tekrar basın</string>
+    <string name="player_remaining_time">Kalan: %s</string>
+    <string name="player_ending_time">Bitiş saati: %s</string>
+    <string name="badge_new_content">YENİ İÇERİK</string>
+    <string name="badge_live">CANLI</string>
+    <string name="add_device_view_description">Cihazı bağlamak için bu kodu telefonunuzun YouTube uygulamasında Ayarlar / TV\'de İzle bölümüne girin</string>
+    <string name="playback_controls_repeat_pause">Tekrarla Duraklat</string>
+    <string name="playback_controls_repeat_list">Tekrarla Liste</string>
+    <string name="action_subscribe_off">Abone ol Kapalı</string>
+    <string name="action_subscribe_on">Abone ol Açık</string>
+    <!-- END Moved strings -->
 </resources>
