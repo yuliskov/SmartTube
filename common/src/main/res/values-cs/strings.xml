@@ -30,7 +30,7 @@
     <string name="option_background_playback_off">Zakázáno</string>
     <string name="option_background_playback_pip">Video a zvuk</string>
     <string name="option_background_playback_only_audio">Pouze zvuk</string>
-    <string name="playback_settings">Nastavení přehrávání</string>
+    <string name="playback_settings">Nastavení kvality přehrávání</string>
     <string name="video_speed">Rychlost videa</string>
     <string name="resolution_switch">Přepnout rozlišení</string>
     <string name="video_buffer">Video vyrovnávací paměť</string>
@@ -62,7 +62,7 @@
     <string name="subtitle_white_semi_transparent">Poloprůhledné pozadí</string>
     <string name="subtitle_style">Styl titulek</string>
     <string name="subtitle_language">Jazyk titulek</string>
-    <string name="action_search">Spustit hledání</string>
+    <string name="action_search">Hledat</string>
     <string name="settings_main_ui">Uživatelské rozhraní</string>
     <string name="dialog_main_ui">Uživatelské rozhraní</string>
     <string name="card_animated_previews">Animované náhledy</string>
@@ -255,7 +255,7 @@
     <string name="refresh_section">Aktualizovat sekci</string>
     <string name="option_disabled">Zakázáno</string>
     <string name="live_now_row_name">Nyní živě</string>
-    <string name="run_in_background">Běžet na pozadí</string>
+    <string name="run_in_background">Přehrávání na pozadí</string>
     <string name="settings_remote_control">Dálkové ovládání</string>
     <string name="background_service_started">Služba na pozadí spuštěna</string>
     <string name="dialog_add_to">Přidat do %s</string>
@@ -424,6 +424,25 @@
     <string name="owned_playlist_warning">Chyba. Tuto akci lze provést pouze pro vlastněné playlisty</string>
     <string name="content_block_alt_server">Použít alternativní server</string>
     <string name="content_block_alt_server_desc">Povolte toto nastavení, pokud z nějakého důvodu odmítá SponsorBlock fungovat.</string>
-    <string name="unset_stream_reminder">Zrušit připomenutí streamu</string>
-    <string name="set_stream_reminder">Nastavit připomenutí streamu</string>
+    <string name="unset_stream_reminder">Zrušit připomenutí živého vysílání</string>
+    <string name="set_stream_reminder">Nastavit připomenutí živého vysílání</string>
+    <string name="playback_starts_shortly">Přehrávání se spustí automaticky, jakmile bude živé vysílání připraveno</string>
+    <string name="starting_stream">Živé vysílání začíná…</string>
+    <string name="action_playlist_remove">Odstranit z playlistu</string>
+    <!--  ZAČÁTEK Přesunutých řetězců  -->
+    <string name="signin_view_title">Uživatelský kód se načítá…</string>
+    <string name="signin_view_description">Pro přihlášení zadejte tento kód na stránce %s</string>
+    <string name="signin_view_action_text">Hotovo</string>
+    <string name="require_checked">Vyžaduje \"%s\"</string>
+    <string name="msg_press_again_to_exit">Stiskněte znovu pro ukončení</string>
+    <string name="player_remaining_time">Zbývá: %s</string>
+    <string name="player_ending_time">Končí v %s</string>
+    <string name="badge_new_content">NOVÝ OBSAH</string>
+    <string name="badge_live">ŽIVĚ</string>
+    <string name="add_device_view_description">Ke spárování zařízení zadejte tento kód na vašem telefonu v YouTube aplikaci v sekci Nastavení/Sledovat v televizi</string>
+    <string name="playback_controls_repeat_pause">Opakovat Pozastavení</string>
+    <string name="playback_controls_repeat_list">Opakovat Seznam</string>
+    <string name="action_subscribe_off">Přestat odebírat</string>
+    <string name="action_subscribe_on">Odebírat</string>
+    <!-- KONEC Přesunutých řetězců -->
 </resources>
