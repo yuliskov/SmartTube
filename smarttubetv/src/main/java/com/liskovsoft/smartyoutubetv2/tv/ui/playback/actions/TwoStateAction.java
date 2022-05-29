@@ -7,36 +7,36 @@ import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.PlaybackControlsRow.MultiAction;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
-public class ThumbsAction extends MultiAction {
-    /**
-     * Action index for the solid thumb icon.
-     */
-    public static final int INDEX_ON = 0;
-
+public class TwoStateAction extends MultiAction {
     /**
      * Action index for the outline thumb icon.
      */
-    public static final int INDEX_OFF = 1;
+    public static final int INDEX_OFF = 0;
 
-    private ThumbsAction mBoundAction;
+    /**
+     * Action index for the solid thumb icon.
+     */
+    public static final int INDEX_ON = 1;
 
-    public ThumbsAction(Context context, int actionId, int solidIconResId) {
-        this(context, actionId, solidIconResId, ActionHelpers.getIconHighlightColor(context));
+    private TwoStateAction mBoundAction;
+
+    public TwoStateAction(Context context, int actionId, int offIconResId) {
+        this(context, actionId, offIconResId, ActionHelpers.getIconHighlightColor(context));
     }
 
     /**
      * Constructor
      * @param context Context used for loading resources.
      */
-    public ThumbsAction(Context context, int actionId, int solidIconResId, int highlightColor) {
+    public TwoStateAction(Context context, int actionId, int offIconResId, int highlightColor) {
         super(actionId);
-        Drawable[] drawables = new Drawable[2];
 
-        BitmapDrawable solidDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, solidIconResId);
-        drawables[INDEX_ON] = solidDrawable == null ? null
+        Drawable[] drawables = new Drawable[2];
+        BitmapDrawable offDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, offIconResId);
+        drawables[INDEX_OFF] = offDrawable;
+        drawables[INDEX_ON] = offDrawable == null ? null
                 : new BitmapDrawable(context.getResources(),
-                ActionHelpers.createBitmap(solidDrawable.getBitmap(), highlightColor));
-        drawables[INDEX_OFF] = solidDrawable;
+                ActionHelpers.createBitmap(offDrawable.getBitmap(), highlightColor));
         setDrawables(drawables);
 
         String[] labels = new String[drawables.length];
@@ -58,11 +58,11 @@ public class ThumbsAction extends MultiAction {
         }
     }
 
-    public ThumbsAction getBoundAction() {
+    public TwoStateAction getBoundAction() {
         return mBoundAction;
     }
 
-    public void setBoundAction(ThumbsAction boundAction) {
+    public void setBoundAction(TwoStateAction boundAction) {
         mBoundAction = boundAction;
     }
 }

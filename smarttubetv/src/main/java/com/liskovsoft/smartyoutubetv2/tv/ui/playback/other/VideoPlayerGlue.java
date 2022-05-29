@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback.other;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,11 +13,9 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
-import androidx.leanback.widget.SearchOrbView.Colors;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue;
@@ -35,7 +32,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.RepeatAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ScreenOffAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SearchAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SubscribeAction;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.TwoStateAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsDownAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsUpAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoSpeedAction;
@@ -279,18 +276,23 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     }
 
     public void setSubscribeActionState(boolean subscribed) {
-        mSubscribeAction.setIndex(subscribed ? SubscribeAction.INDEX_ON : SubscribeAction.INDEX_OFF);
+        mSubscribeAction.setIndex(subscribed ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
         invalidateUi(mSubscribeAction);
     }
 
     public void setPlaylistAddButtonState(boolean selected) {
-        mPlaylistAddAction.setIndex(selected ? SubscribeAction.INDEX_ON : SubscribeAction.INDEX_OFF);
+        mPlaylistAddAction.setIndex(selected ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
         invalidateUi(mPlaylistAddAction);
     }
 
     public void setSubtitleButtonState(boolean selected) {
-        mClosedCaptioningAction.setIndex(selected ? SubscribeAction.INDEX_ON : SubscribeAction.INDEX_OFF);
+        mClosedCaptioningAction.setIndex(selected ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
         invalidateUi(mClosedCaptioningAction);
+    }
+
+    public void setSpeedButtonState(boolean selected) {
+        mVideoSpeedAction.setIndex(selected ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
+        invalidateUi(mVideoSpeedAction);
     }
 
     public void setChannelIcon(String iconUrl) {
@@ -310,19 +312,19 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     }
 
     public void setThumbsUpActionState(boolean thumbsUp) {
-        mThumbsUpAction.setIndex(thumbsUp ? ThumbsAction.INDEX_ON : ThumbsAction.INDEX_OFF);
+        mThumbsUpAction.setIndex(thumbsUp ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
 
         invalidateUi(mThumbsUpAction);
     }
 
     public void setThumbsDownActionState(boolean thumbsDown) {
-        mThumbsDownAction.setIndex(thumbsDown ? ThumbsAction.INDEX_ON : ThumbsAction.INDEX_OFF);
+        mThumbsDownAction.setIndex(thumbsDown ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
 
         invalidateUi(mThumbsDownAction);
     }
 
     public void setDebugInfoActionState(boolean show) {
-        mVideoStatsAction.setIndex(show ? ThumbsAction.INDEX_ON : ThumbsAction.INDEX_OFF);
+        mVideoStatsAction.setIndex(show ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
         invalidateUi(mVideoStatsAction);
     }
 
@@ -377,15 +379,15 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
             handled = true;
         } else if (action == mSubscribeAction) {
             incrementActionIndex(action);
-            mActionListener.onSubscribe(getActionIndex(action) == SubscribeAction.INDEX_ON);
+            mActionListener.onSubscribe(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
         } else if (action == mThumbsDownAction) {
             incrementActionIndex(action);
-            mActionListener.onThumbsDown(getActionIndex(action) == ThumbsAction.INDEX_ON);
+            mActionListener.onThumbsDown(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
         } else if (action == mThumbsUpAction) {
             incrementActionIndex(action);
-            mActionListener.onThumbsUp(getActionIndex(action) == ThumbsAction.INDEX_ON);
+            mActionListener.onThumbsUp(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
         } else if (action == mChannelAction) {
             mActionListener.onChannel();
@@ -398,7 +400,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
             handled = true;
         } else if (action == mVideoStatsAction) {
             incrementActionIndex(action);
-            mActionListener.onDebugInfo(getActionIndex(action) == ThumbsAction.INDEX_ON);
+            mActionListener.onDebugInfo(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
         } else if (action == mVideoSpeedAction) {
             mActionListener.onVideoSpeed();
@@ -432,8 +434,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         if (handled) {
             invalidateUi(action);
 
-            if (action instanceof ThumbsAction) {
-                invalidateUi(((ThumbsAction) action).getBoundAction());
+            if (action instanceof TwoStateAction) {
+                invalidateUi(((TwoStateAction) action).getBoundAction());
             }
         }
 

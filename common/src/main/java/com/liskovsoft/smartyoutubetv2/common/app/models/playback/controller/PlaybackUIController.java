@@ -24,6 +24,7 @@ public interface PlaybackUIController {
     void setSubscribeButtonState(boolean subscribe);
     void setPlaylistAddButtonState(boolean selected);
     void setSubtitleButtonState(boolean selected);
+    void setSpeedButtonState(boolean selected);
     void setChannelIcon(String iconUrl);
     void setDebugButtonState(boolean show);
     void showDebugInfo(boolean show);

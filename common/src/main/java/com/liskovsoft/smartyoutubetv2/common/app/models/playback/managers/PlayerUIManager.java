@@ -226,6 +226,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().setChannelIcon(metadata.getAuthorImageUrl());
         setPlaylistAddButtonStateCached();
         setSubtitleButtonState();
+        setSpeedButtonState();
     }
 
     @Override
@@ -305,7 +306,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
         AppDialogUtil.appendSpeedDialogItems(getActivity(), settingsPresenter, mPlayerData, getController());
 
-        settingsPresenter.showDialog();
+        settingsPresenter.showDialog(this::setSpeedButtonState);
     }
 
     @Override
@@ -575,5 +576,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
 
         getController().setSubtitleButtonState(isSelected);
+    }
+
+    private void setSpeedButtonState() {
+        getController().setSpeedButtonState(getController().getSpeed() != 1.0f);
     }
 }

@@ -1239,6 +1239,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public void setSpeedButtonState(boolean selected) {
+        if (mPlayerGlue != null) {
+            mPlayerGlue.setSpeedButtonState(selected);
+        }
+    }
+
+    @Override
     public void setChannelIcon(String iconUrl) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setChannelIcon(iconUrl);
