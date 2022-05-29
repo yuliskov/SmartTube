@@ -62,7 +62,7 @@
     <string name="subtitle_white_semi_transparent">Weiß auf halbtransparentem Hintergrund</string>
     <string name="subtitle_style">Untertitel-Stil</string>
     <string name="subtitle_language">Untertitel-Sprache</string>
-    <string name="action_search">Suche starten</string>
+    <string name="action_search">Suche</string>
     <string name="settings_main_ui">Oberfläche</string>
     <string name="dialog_main_ui">Oberfläche</string>
     <string name="card_animated_previews">Animierte Vorschau</string>
@@ -141,7 +141,7 @@
     <string name="video_zoom_default">Standard</string>
     <string name="video_zoom_fit_width">Breite anpassen</string>
     <string name="video_zoom_fit_height">Höhe anpassen</string>
-    <string name="video_zoom_fit_both">Breite und Höhe anpassen</string>
+    <string name="video_zoom_fit_both">Breite oder Höhe anpassen</string>
     <string name="video_zoom_stretch">Strecken</string>
     <string name="color_scheme_teal">Blaugrün</string>
     <string name="color_scheme_teal_oled">Blaugrün (OLED)</string>
@@ -176,12 +176,12 @@
     <string name="settings_video">Video</string>
     <string name="content_block_confirm_skip">Überspringen bestätigen</string>
     <string name="content_block_categories">Segmente überspringen</string>
-    <string name="content_block_sponsor">Sponsor/Bezahlte Werbung</string>
-    <string name="content_block_intro">Intro/Unterbrechung</string>
-    <string name="content_block_outro">Outro/Abspann</string>
-    <string name="content_block_interaction">Interaktionserinnerung (Abo)</string>
-    <string name="content_block_self_promo">Eigenwerbung</string>
-    <string name="content_block_music_off_topic">Musikvideo: Intro/Outro</string>
+    <string name="content_block_sponsor">Gesponserte Videosegmente</string>
+    <string name="content_block_intro">Unterbrechung/Intro-Animation</string>
+    <string name="content_block_outro">Endkarten/Quellen/Anerkennungen</string>
+    <string name="content_block_interaction">Interaktions-Erinnerungen (Abonnieren, etc.)</string>
+    <string name="content_block_self_promo">Unbezahlt/Eigenwerbung</string>
+    <string name="content_block_music_off_topic">Musikvideoteile ohne Musik</string>
     <string name="confirm_segment_skip">Segment \"%s\" überspringen</string>
     <string name="cancel_segment_skip">Segment nicht überspringen</string>
     <string name="msg_skipping_segment">Segment \"%s\" überspringen…</string>
@@ -255,7 +255,7 @@
     <string name="refresh_section">Kategorie aktualisieren</string>
     <string name="option_disabled">Deaktiviert</string>
     <string name="live_now_row_name">Jetzt live</string>
-    <string name="run_in_background">Im Hintergrund ausführen</string>
+    <string name="run_in_background">Hintergrund-Wiedergabe</string>
     <string name="settings_remote_control">Fernsteuerung</string>
     <string name="background_service_started">Hintergrunddienst gestartet</string>
     <string name="dialog_add_to">Hinzufügen zu %s</string>
@@ -263,8 +263,8 @@
     <string name="added_to">Hinzugefügt zu %s</string>
     <string name="removed_from">Entfernt aus %s</string>
     <string name="video_preset_adaptive">Adaptiv</string>
-    <string name="content_block_preview_recap">Vorschau/Video-Zusammenfassung</string>
-    <string name="content_block_highlight">Video-Highlights</string>
+    <string name="content_block_preview_recap">Vorschau/Zusammenfassung</string>
+    <string name="content_block_highlight">Highlights</string>
     <string name="removed_from_history">Video wurde aus dem Verlauf entfernt</string>
     <string name="remove_from_history">Aus dem Verlauf entfernen</string>
     <string name="upload_date">Upload-Datum</string>
@@ -311,7 +311,7 @@
     <string name="content_block_action_only_skip">Nur Überspringen</string>
     <string name="content_block_action_toast">Überspringen mit Benachrichtigung</string>
     <string name="content_block_action_dialog">Bestätigungsdialog anzeigen</string>
-    <string name="content_block_filler">Off-Topic (Filler)</string>
+    <string name="content_block_filler">Füller/Witze</string>
     <string name="keyboard_auto_show">Tastatur automatisch anzeigen</string>
     <string name="cancel_dialog">Abbrechen</string>
     <string name="msg_player_error_source2">Video-Quelle funktioniert nicht oder falsche Uhrzeit</string>
@@ -428,4 +428,5 @@
     <string name="set_stream_reminder">Stream-Erinnerung aktivieren</string>
     <string name="playback_starts_shortly">Die Wiedergabe wird automatisch gestartet, sobald der Stream bereit ist</string>
     <string name="starting_stream">Starten des Streams…</string>
+    <string name="action_playlist_remove">Aus Wiedergabeliste entfernen</string>
 </resources>
