@@ -141,7 +141,7 @@
     <string name="video_zoom_default">Standard</string>
     <string name="video_zoom_fit_width">Breite anpassen</string>
     <string name="video_zoom_fit_height">Höhe anpassen</string>
-    <string name="video_zoom_fit_both">Breite und Höhe anpassen</string>
+    <string name="video_zoom_fit_both">Breite oder Höhe anpassen</string>
     <string name="video_zoom_stretch">Strecken</string>
     <string name="color_scheme_teal">Blaugrün</string>
     <string name="color_scheme_teal_oled">Blaugrün (OLED)</string>
