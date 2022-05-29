@@ -429,4 +429,19 @@
     <string name="playback_starts_shortly">Playback will start automatically when the stream will be ready</string>
     <string name="starting_stream">Starting the stream…</string>
     <string name="action_playlist_remove">Remove from playlist</string>
+    <!--  NEW ITEMS  -->
+    <string name="signin_view_title">User Code is loading…</string>
+    <string name="signin_view_description">To sign-in enter this code on page %s</string>
+    <string name="signin_view_action_text">Done</string>
+    <string name="require_checked">Requires \"%s\"</string>
+    <string name="msg_press_again_to_exit">Press again to exit</string>
+    <string name="player_remaining_time">Remaining: %s</string>
+    <string name="player_ending_time">Ends at %s</string>
+    <string name="badge_new_content">NEW CONTENT</string>
+    <string name="badge_live">LIVE</string>
+    <string name="add_device_view_description">To link the device enter this code on your phone\'s YouTube app in section Settings/Watch on TV</string>
+    <string name="playback_controls_repeat_pause">Repeat Pause</string>
+    <string name="playback_controls_repeat_list">Repeat List</string>
+    <string name="action_subscribe_off">Subscribe Off</string>
+    <string name="action_subscribe_on">Subscribe On</string>
 </resources>
