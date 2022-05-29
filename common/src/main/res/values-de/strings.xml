@@ -176,12 +176,12 @@
     <string name="settings_video">Video</string>
     <string name="content_block_confirm_skip">Überspringen bestätigen</string>
     <string name="content_block_categories">Segmente überspringen</string>
-    <string name="content_block_sponsor">Sponsor</string>
+    <string name="content_block_sponsor">Gesponserte Videosegmente</string>
     <string name="content_block_intro">Unterbrechung/Intro-Animation</string>
-    <string name="content_block_outro">Endkarten/Credits</string>
-    <string name="content_block_interaction">Interaktionserinnerung (Abonnieren)</string>
+    <string name="content_block_outro">Endkarten/Quellen/Anerkennungen</string>
+    <string name="content_block_interaction">Interaktions-Erinnerungen (Abonnieren, etc.)</string>
     <string name="content_block_self_promo">Unbezahlt/Eigenwerbung</string>
-    <string name="content_block_music_off_topic">Musik: Nicht-Musik-Sektion</string>
+    <string name="content_block_music_off_topic">Musikvideoteile ohne Musik</string>
     <string name="confirm_segment_skip">Segment \"%s\" überspringen</string>
     <string name="cancel_segment_skip">Segment nicht überspringen</string>
     <string name="msg_skipping_segment">Segment \"%s\" überspringen…</string>
@@ -264,7 +264,7 @@
     <string name="removed_from">Entfernt aus %s</string>
     <string name="video_preset_adaptive">Adaptiv</string>
     <string name="content_block_preview_recap">Vorschau/Zusammenfassung</string>
-    <string name="content_block_highlight">Video-Highlights</string>
+    <string name="content_block_highlight">Highlights</string>
     <string name="removed_from_history">Video wurde aus dem Verlauf entfernt</string>
     <string name="remove_from_history">Aus dem Verlauf entfernen</string>
     <string name="upload_date">Upload-Datum</string>
@@ -311,7 +311,7 @@
     <string name="content_block_action_only_skip">Nur Überspringen</string>
     <string name="content_block_action_toast">Überspringen mit Benachrichtigung</string>
     <string name="content_block_action_dialog">Bestätigungsdialog anzeigen</string>
-    <string name="content_block_filler">Off-Topic (Filler)</string>
+    <string name="content_block_filler">Off-Topic (Füller)</string>
     <string name="keyboard_auto_show">Tastatur automatisch anzeigen</string>
     <string name="cancel_dialog">Abbrechen</string>
     <string name="msg_player_error_source2">Video-Quelle funktioniert nicht oder falsche Uhrzeit</string>
