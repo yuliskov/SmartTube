@@ -42,7 +42,7 @@ public class NavigateTitleView extends TitleView {
     private SearchOrbView mAccountView;
     private SearchOrbView mExitPip;
     private TextView mPipTitle;
-    private int mGlobalVisibility = View.GONE;
+    private int mGlobalVisibility = View.INVISIBLE;
     private DateTimeView mGlobalClock;
 
     public NavigateTitleView(Context context) {
@@ -107,7 +107,7 @@ public class NavigateTitleView extends TitleView {
         super.updateComponentsVisibility(flags);
 
         mGlobalVisibility = (flags & SEARCH_VIEW_VISIBLE) == SEARCH_VIEW_VISIBLE
-                ? View.VISIBLE : View.GONE;
+                ? View.VISIBLE : View.INVISIBLE;
 
         if (mAccountView != null) {
             mAccountView.setVisibility(mGlobalVisibility);
@@ -131,8 +131,6 @@ public class NavigateTitleView extends TitleView {
             mAccountView = (SearchOrbView) findViewById(R.id.account_orb);
             mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).show());
             TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
-
-            updateAccountIcon();
         }
 
         mExitPip = (SearchOrbView) findViewById(R.id.exit_pip);
@@ -173,7 +171,7 @@ public class NavigateTitleView extends TitleView {
 
     private void applyPipParameters() {
         if (mExitPip != null) {
-            int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? mGlobalVisibility : View.GONE;
+            int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? mGlobalVisibility : View.INVISIBLE;
             mExitPip.setVisibility(newVisibility);
             mPipTitle.setVisibility(newVisibility);
 
@@ -209,7 +207,7 @@ public class NavigateTitleView extends TitleView {
     }
 
     private void loadAccountIcon(String url) {
-        // The view with GONE state has zero width and height
+        // The view with GONE visibility has zero width and height
         if (mAccountView == null || mAccountView.getWidth() == 0) {
             return;
         }
