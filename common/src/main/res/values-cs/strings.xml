@@ -445,4 +445,6 @@
     <string name="action_subscribe_off">Přestat odebírat</string>
     <string name="action_subscribe_on">Odebírat</string>
     <!-- KONEC Přesunutých řetězců -->
+    <string name="skip_24_rate">Přeskakovat formáty s 24fps (oprava pro režim Real Cinema?)</string>
+    <string name="player_disable_suggestions">Zakázat návrhy</string>
 </resources>
