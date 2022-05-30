@@ -44,6 +44,7 @@ public class NavigateTitleView extends TitleView {
     private TextView mPipTitle;
     private int mGlobalVisibility = View.INVISIBLE;
     private DateTimeView mGlobalClock;
+    private boolean mInitDone;
 
     public NavigateTitleView(Context context) {
         super(context);
@@ -106,6 +107,8 @@ public class NavigateTitleView extends TitleView {
     public void updateComponentsVisibility(int flags) {
         super.updateComponentsVisibility(flags);
 
+        init();
+
         mGlobalVisibility = (flags & SEARCH_VIEW_VISIBLE) == SEARCH_VIEW_VISIBLE
                 ? View.VISIBLE : View.INVISIBLE;
 
@@ -119,18 +122,17 @@ public class NavigateTitleView extends TitleView {
         }
     }
 
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-
-        init();
-    }
-
     private void init() {
+        if (mInitDone) {
+            return;
+        }
+
         if (MainUIData.instance(getContext()).isButtonEnabled(MainUIData.BUTTON_BROWSE_ACCOUNTS)) {
             mAccountView = (SearchOrbView) findViewById(R.id.account_orb);
             mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).show());
             TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
+
+            updateAccountIcon();
         }
 
         mExitPip = (SearchOrbView) findViewById(R.id.exit_pip);
@@ -145,6 +147,8 @@ public class NavigateTitleView extends TitleView {
             mGlobalClock.showDate(false);
             mGlobalClock.setVisibility(View.VISIBLE);
         }
+
+        mInitDone = true;
     }
 
     @Override
