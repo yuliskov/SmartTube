@@ -5,6 +5,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -203,6 +204,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         getController().clearSuggestions(); // clear previous videos
 
+        appendUserQueueIfNeeded(video);
+
         int groupIndex = -1;
 
         for (MediaGroup group : suggestions) {
@@ -235,5 +238,17 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
     private void disposeActions() {
         RxUtils.disposeActions(mMetadataAction, mScrollAction);
+    }
+
+    private void appendUserQueueIfNeeded(Video video) {
+        if (video.isRemote || !Playlist.instance().containsAfterCurrent()) {
+            return;
+        }
+
+        List<Video> queue = Playlist.instance().getAllAfterCurrent();
+
+        VideoGroup videoGroup = VideoGroup.from(queue);
+        videoGroup.setTitle(getActivity().getString(R.string.action_playback_queue));
+        getController().updateSuggestions(videoGroup);
     }
 }

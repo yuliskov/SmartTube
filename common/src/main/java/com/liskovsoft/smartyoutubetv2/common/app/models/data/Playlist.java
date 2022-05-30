@@ -215,6 +215,19 @@ public class Playlist {
         return Collections.unmodifiableList(mPlaylist.subList(mNewSessionIndex, size));
     }
 
+    public boolean containsAfterCurrent() {
+        return getNext() != null;
+    }
+
+    public List<Video> getAllAfterCurrent() {
+        int fromIndex = mCurrentIndex + 1;
+        if (fromIndex > 0 && fromIndex < mPlaylist.size()) {
+            return mPlaylist.subList(fromIndex, mPlaylist.size());
+        }
+
+        return null;
+    }
+
     public void removeAllAfterCurrent() {
         int fromIndex = mCurrentIndex + 1;
         if (fromIndex > 0 && fromIndex < mPlaylist.size()) {
