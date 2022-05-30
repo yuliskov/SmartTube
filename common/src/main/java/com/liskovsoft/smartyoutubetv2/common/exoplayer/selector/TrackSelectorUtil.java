@@ -151,25 +151,6 @@ public class TrackSelectorUtil {
                 "STATE_ENDED";
     }
 
-    //public static int getResolutionLabel(Format format) {
-    //    if (format == null) {
-    //        return 0;
-    //    }
-    //
-    //    int height = format.height;
-    //    int width = format.width;
-    //
-    //    if (width == Format.NO_VALUE || height == Format.NO_VALUE) {
-    //        return 0;
-    //    }
-    //
-    //    // Try to amplify resolution of aspect ratios that differ from 16:9
-    //    Integer heightAmp = mResolutionMap.get(width);
-    //
-    //    // Try to avoid square video proportions
-    //    return heightAmp != null && width > height && !VideoTrack.sizeEquals(width, height, 15) ? heightAmp : height;
-    //}
-
     public static String getResolutionLabel(Format format) {
         if (format == null) {
             return null;
