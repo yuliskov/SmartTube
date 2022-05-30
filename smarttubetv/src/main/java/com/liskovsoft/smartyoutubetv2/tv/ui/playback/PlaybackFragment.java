@@ -770,26 +770,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     // Begin Ui events
 
     @Override
-    public void resetSuggestedPosition() {
-        setPlayerRowIndex(0);
-    }
-
-    @Override
-    public void clearSuggestions() {
-        if (mRowsAdapter != null && mRowsAdapter.size() > 1) {
-            mRowsAdapter.removeItems(1, mRowsAdapter.size() - 1);
-        }
-
-        mMediaGroupAdapters.clear();
-    }
-
-    @Override
-    public boolean isSuggestionsEmpty() {
-        // Ignore first row. It's player controls row.
-        return mRowsAdapter == null || mRowsAdapter.size() <= 1;
-    }
-
-    @Override
     public void setVideo(Video video) {
         mExoPlayerController.setVideo(video);
 
@@ -1306,6 +1286,19 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public void removeSuggestions(VideoGroup group) {
+        if (group == null) {
+            return;
+        }
+
+        VideoGroupObjectAdapter adapter = mMediaGroupAdapters.get(group.getId());
+
+        if (adapter != null) {
+            adapter.remove(group);
+        }
+    }
+
+    @Override
     public int getSuggestionsIndex(VideoGroup group) {
         if (mRowsAdapter == null) {
             Log.e(TAG, "Related videos row not initialized yet.");
@@ -1350,6 +1343,26 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         return result;
+    }
+
+    @Override
+    public void resetSuggestedPosition() {
+        setPlayerRowIndex(0);
+    }
+
+    @Override
+    public void clearSuggestions() {
+        if (mRowsAdapter != null && mRowsAdapter.size() > 1) {
+            mRowsAdapter.removeItems(1, mRowsAdapter.size() - 1);
+        }
+
+        mMediaGroupAdapters.clear();
+    }
+
+    @Override
+    public boolean isSuggestionsEmpty() {
+        // Ignore first row. It's player controls row.
+        return mRowsAdapter == null || mRowsAdapter.size() <= 1;
     }
 
     /**

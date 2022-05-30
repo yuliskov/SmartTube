@@ -71,6 +71,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         int ACTION_UNSUBSCRIBE = 1;
         int ACTION_REMOVE = 2;
         int ACTION_REMOVE_FROM_PLAYLIST = 3;
+        int ACTION_REMOVE_FROM_QUEUE = 4;
+        int ACTION_ADD_TO_QUEUE = 5;
         void onItemAction(Video videoItem, int action);
     }
 
@@ -542,8 +544,15 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                         optionItem -> {
                             if (containsVideo) {
                                 playlist.remove(mVideo);
+                                if (mCallback != null) {
+                                    mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE);
+                                }
                             } else {
+                                mVideo.fromQueue = true;
                                 playlist.add(mVideo);
+                                if (mCallback != null) {
+                                    mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_ADD_TO_QUEUE);
+                                }
                             }
 
                             closeDialog();

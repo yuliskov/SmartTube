@@ -15,6 +15,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
@@ -24,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -231,7 +233,16 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onSuggestionItemLongClicked(Video item) {
-        VideoMenuPresenter.instance(getActivity()).showMenu(item);
+        VideoMenuPresenter.instance(getActivity()).showMenu(item, (videoItem, action) -> {
+            if (action == VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE) {
+                getController().removeSuggestions(VideoGroup.from(videoItem));
+            } else if (action == VideoMenuCallback.ACTION_ADD_TO_QUEUE) {
+                VideoGroup queue = getController().getSuggestionsByIndex(0);
+                VideoGroup group = VideoGroup.from(videoItem.copy());
+                group.setId(queue.getId());
+                getController().updateSuggestions(group);
+            }
+        });
     }
 
     @Override

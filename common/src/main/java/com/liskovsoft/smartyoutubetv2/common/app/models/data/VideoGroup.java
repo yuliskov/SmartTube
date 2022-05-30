@@ -122,6 +122,10 @@ public class VideoGroup {
         return mId;
     }
 
+    public void setId(int id) {
+        mId = id;
+    }
+
     public MediaGroup getMediaGroup() {
         return mMediaGroup;
     }
