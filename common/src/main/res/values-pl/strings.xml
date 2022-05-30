@@ -410,4 +410,36 @@
     <string name="skip_codec_profile_check_desc">Nie sprawdzaj obsługi kodeków podczas uruchamiania wideo. Może być pomocny w przypadku wadliwego oprogramowania układowego.</string>
     <string name="force_sw_codec">Wymuś dekoder wideo SW</string>
     <string name="force_sw_codec_desc">Może odtworzyć prawie każdy film, ale wydajność jest bardzo słaba.</string>
+	<string name="playlist_order">Sortowanie listy odtwarzania</string>
+    <string name="playlist_order_added_date_newer_first">Data dodania (najpierw nowsza)</string>
+    <string name="playlist_order_added_date_older_first">Data dodania (najpierw starsze)</string>
+    <string name="playlist_order_published_date_newer_first">Data publikacji (najpierw nowsze)</string>
+    <string name="playlist_order_published_date_older_first">Data publikacji (najpierw starsze)</string>
+    <string name="playlist_order_popularity">Popularność</string>
+    <string name="cant_do_this_for_foreign_playlist">Nie mogę tego zrobić dla zagranicznej listy odtwarzania</string>
+    <string name="owned_playlist_warning">Błąd. Tę czynność można zastosować tylko do posiadanych list odtwarzania</string>
+    <string name="content_block_alt_server">Użyj alternatywnego serwera</string>
+    <string name="content_block_alt_server_desc">Włącz tę opcję, jeśli SponsorBlock odmawia pracy z różnych powodów.</string>
+    <string name="unset_stream_reminder">Usuń przypomnienie o transmisji</string>
+    <string name="set_stream_reminder">Ustaw przypomnienie o transmisji</string>
+	<string name="playback_starts_shortly">Odtwarzanie rozpocznie się automatycznie, gdy strumień będzie gotowy</string>
+    <string name="starting_stream">Rozpoczynam transmisję…</string>
+	<string name="action_playlist_remove">Usuń z listy odtwarzania</string>
+    <!-- BEGIN Moved strings -->
+    <string name="signin_view_title">Wczytuję kod użytkownika…</string>
+    <string name="signin_view_description">Aby się zalogować, wprowadź ten kod na stronie %s</string>
+    <string name="signin_view_action_text">Gotowe</string>
+    <string name="require_checked">Wymaga \"%s\"</string>
+    <string name="msg_press_again_to_exit">Naciśnij ponownie, aby wyjść</string>
+    <string name="player_remaining_time">Pozostały: %s</string>
+    <string name="player_ending_time">Kończy się o %s</string>
+    <string name="badge_new_content">NOWA TREŚĆ</string>
+    <string name="badge_live">NA ŻYWO</string>
+    <string name="add_device_view_description">Aby połączyć urządzenie, wpisz ten kod w aplikacji YouTube na telefonie w sekcji Ustawienia/Oglądaj na TV</string>
+    <string name="playback_controls_repeat_pause">Powtarzaj pauzę</string>
+    <string name="playback_controls_repeat_list">Powtórz listę</string>
+    <string name="action_subscribe_off">Subskrybuj wył</string>
+    <string name="action_subscribe_on">Subskrybuj wł</string>
+    <!-- END Moved strings -->
+    <string name="skip_24_rate">Pomiń format 24kl./s (prawdziwa naprawa trybu kinowego?)</string>
 </resources>

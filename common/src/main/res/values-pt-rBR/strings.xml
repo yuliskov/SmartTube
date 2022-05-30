@@ -424,4 +424,7 @@
   <string name="content_block_alt_server">Use servidor alternativo</string>
   <string name="unset_stream_reminder">Lembrete de fluxo não definido</string>
   <string name="set_stream_reminder">Definir lembrete de fluxo</string>
+  <string name="playback_starts_shortly">A reprodução será iniciada automaticamente quando o fluxo estiver pronto!</string>
+  <string name="starting_stream">Começando o fluxo...</string>
+  <string name="action_playlist_remove">Remover da Lista de Reprodução</string>
 </resources>
