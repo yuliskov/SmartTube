@@ -209,12 +209,10 @@ public class NavigateTitleView extends TitleView {
     }
 
     private void loadAccountIcon(String url) {
-        if (mAccountView == null) {
+        // The view with GONE state has zero width and height
+        if (mAccountView == null || mAccountView.getWidth() == 0) {
             return;
         }
-
-        // The view with GONE state has zero width and height
-        mAccountView.setVisibility(View.VISIBLE);
 
         Glide.with(getContext())
                 .load(url)
