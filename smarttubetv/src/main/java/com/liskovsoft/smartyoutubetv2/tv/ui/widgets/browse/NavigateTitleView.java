@@ -213,7 +213,7 @@ public class NavigateTitleView extends TitleView {
             return;
         }
 
-        // View with GONE state hase zero width and height
+        // The view with GONE state has zero width and height
         mAccountView.setVisibility(View.VISIBLE);
 
         Glide.with(getContext())
