@@ -182,7 +182,8 @@ public class TrackSelectorUtil {
             return null;
         }
 
-        return getResolutionLabelByHeight(Math.min(height, width));
+        //return getResolutionLabelByHeight(Math.min(height, width));
+        return getResolutionLabelByHeight(height);
     }
 
     public static String getResolutionLabelByHeight(int height) {
