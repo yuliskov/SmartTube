@@ -47,6 +47,7 @@ public class PlayerTweaksData {
     private boolean mIsBufferingFixEnabled;
     private boolean mIsNoFpsPresetsEnabled;
     private boolean mIsRememberPositionOfShortVideosEnabled;
+    private boolean mIsSuggestionsDisabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -220,6 +221,15 @@ public class PlayerTweaksData {
         return mIsRememberPositionOfShortVideosEnabled;
     }
 
+    public boolean isSuggestionsDisabled() {
+        return mIsSuggestionsDisabled;
+    }
+
+    public void disableSuggestions(boolean disable) {
+        mIsSuggestionsDisabled = disable;
+        persistData();
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -244,6 +254,7 @@ public class PlayerTweaksData {
         mIsBufferingFixEnabled = Helpers.parseBoolean(split, 14, false);
         mIsNoFpsPresetsEnabled = Helpers.parseBoolean(split, 15, false);
         mIsRememberPositionOfShortVideosEnabled = Helpers.parseBoolean(split, 16, false);
+        mIsSuggestionsDisabled = Helpers.parseBoolean(split, 17, false);
     }
 
     private void persistData() {
@@ -252,7 +263,7 @@ public class PlayerTweaksData {
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
                 mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
-                mIsBufferingFixEnabled, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled
+                mIsBufferingFixEnabled, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled
         ));
     }
 }

@@ -438,4 +438,5 @@
     <string name="add_device_view_description">Щоб прив`язати пристрій, введіть цей код у додатку YouTube на телефоні у розділі Налаштування/Дивитися на ТВ</string>
     <!-- END Moved strings -->
     <string name="skip_24_rate">Пропускати 24fps формати (виправлення режиму real cinema?)</string>
+    <string name="player_disable_suggestions">Вимкнути рекомендації</string>
 </resources>

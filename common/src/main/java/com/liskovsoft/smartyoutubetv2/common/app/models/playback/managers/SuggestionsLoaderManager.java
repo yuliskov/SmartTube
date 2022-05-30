@@ -11,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -26,9 +27,15 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private final Set<MetadataListener> mListeners = new HashSet<>();
     private Disposable mMetadataAction;
     private Disposable mScrollAction;
+    private PlayerTweaksData mPlayerTweaksData;
 
     public interface MetadataListener {
         void onMetadata(MediaItemMetadata metadata);
+    }
+
+    @Override
+    public void onInitDone() {
+        mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
     }
 
     @Override
@@ -174,6 +181,11 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             String msg = "loadSuggestions: Can't obtain suggestions for video: " + video.title;
             Log.e(TAG, msg);
             //MessageHelpers.showMessage(getActivity(), msg);
+            return;
+        }
+
+        if (mPlayerTweaksData.isSuggestionsDisabled()) {
+            Log.d(TAG, "loadSuggestions: suggestions disabled by the user");
             return;
         }
 
