@@ -238,8 +238,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
                 getController().removeSuggestions(VideoGroup.from(videoItem));
             } else if (action == VideoMenuCallback.ACTION_ADD_TO_QUEUE) {
                 VideoGroup queue = getController().getSuggestionsByIndex(0);
-                VideoGroup group = VideoGroup.from(videoItem.copy());
+                Video newItem = videoItem.copy();
+                VideoGroup group = VideoGroup.from(newItem);
+                group.setTitle(queue.getTitle());
                 group.setId(queue.getId());
+                newItem.group = group;
                 getController().updateSuggestions(group);
             }
         });
