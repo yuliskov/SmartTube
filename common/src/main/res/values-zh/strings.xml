@@ -422,4 +422,24 @@
   <string name="owned_playlist_warning">错误。此操作只能应用于您拥有的播放列表</string>
   <string name="content_block_alt_server">使用替代服务器</string>
   <string name="content_block_alt_server_desc">如果SponsorBlock因各种原因无法工作，请启用此选项。</string>
+  <string name="set_stream_reminder">设置直播提醒</string>
+  <string name="unset_stream_reminder">取消直播提醒</string>
+  <string name="playback_starts_shortly">当直播视频准备好后将自动开始播放</string>
+  <string name="starting_stream">正在开始直播…</string>
+  <string name="action_playlist_remove">从播放列表移除</string>
+  <string name="signin_view_title">正在加载用户代码…</string>
+  <string name="signin_view_description">请在以下页面输入用户代码后登录 %s</string>
+  <string name="signin_view_action_text">完成</string>
+  <string name="require_checked">需要 \"%s</string>
+  <string name="msg_press_again_to_exit">再按一次后退出</string>
+  <string name="player_remaining_time">剩余: %s</string>
+  <string name="player_ending_time">结束于 %s</string>
+  <string name="badge_new_content">新内容</string>
+  <string name="badge_live">直播</string>
+  <string name="add_device_view_description">要关联设备，请在手机的YouTube应用“设置/在电视上观看”部分输入此代码</string>
+  <string name="playback_controls_repeat_pause">重复到此暂停</string>
+  <string name="playback_controls_repeat_list">重复列表</string>
+  <string name="action_subscribe_off">未订阅</string>
+  <string name="action_subscribe_on">已订阅</string>
+  <string name="skip_24_rate">跳过 24fps 格式 (真电影模式修复\？)</string>
 </resources>
