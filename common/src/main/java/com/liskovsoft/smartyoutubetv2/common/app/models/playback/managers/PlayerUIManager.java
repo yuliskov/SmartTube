@@ -365,6 +365,10 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onShareLinkClicked() {
+        if (getController().getVideo() == null) {
+            return;
+        }
+
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
         dialogPresenter.clear();
