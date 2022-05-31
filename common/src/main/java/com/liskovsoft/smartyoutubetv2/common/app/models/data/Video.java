@@ -35,7 +35,8 @@ public final class Video implements Parcelable {
     public String videoId;
     public String videoUrl;
     public String playlistId;
-    public int playlistIndex;
+    public String remotePlaylistId;
+    public int playlistIndex = -1;
     public String playlistParams;
     public String reloadPageKey;
     public String bgImageUrl;
@@ -159,26 +160,8 @@ public final class Video implements Parcelable {
     }
 
     public static Video from(String videoId) {
-        return from(videoId, null, -1);
-    }
-
-    public static Video from(String videoId, String playlistId, int playlistIndex) {
-        return from(videoId, playlistId, playlistIndex, null, null, null, -1, null, false);
-    }
-
-    public static Video from(String videoId, String playlistId, int playlistIndex, String channelId,
-                             String title, String info, float percentWatched, String cardImageUrl, boolean fromQueue) {
         Video video = new Video();
         video.videoId = videoId;
-        video.playlistId = playlistId;
-        video.playlistIndex = playlistIndex;
-        video.channelId = channelId;
-        video.title = title;
-        video.secondTitle = info;
-        video.percentWatched = percentWatched;
-        video.cardImageUrl = cardImageUrl;
-        video.fromQueue = fromQueue;
-
         return video;
     }
 
@@ -546,10 +529,21 @@ public final class Video implements Parcelable {
      * Creating lightweight copy of origin.
      */
     public Video copy() {
-        Video video = from(videoId, playlistId, playlistIndex, channelId, title, secondTitle, percentWatched, cardImageUrl, fromQueue);
+        Video video = new Video();
+        video.videoId = videoId;
+        video.playlistId = playlistId;
+        video.playlistIndex = playlistIndex;
+        video.channelId = channelId;
+        video.title = title;
+        video.secondTitle = secondTitle;
+        video.percentWatched = percentWatched;
+        video.cardImageUrl = cardImageUrl;
+        video.fromQueue = fromQueue;
+
         if (group != null) {
             video.group = group.copy(); // Needed for proper multi row fragments sync (row id == group id)
         }
+
         return video;
     }
 
@@ -564,6 +558,10 @@ public final class Video implements Parcelable {
     public String getPlayerSecondTitle() {
         // Don't sync future translation because of not precise info
         return newSecondTitle != null && !isUpcoming ? newSecondTitle : secondTitle != null ? secondTitle : null;
+    }
+
+    public String getPlaylistId() {
+        return isRemote && remotePlaylistId != null ? remotePlaylistId : playlistId;
     }
 
     private boolean checkMediaItems() {

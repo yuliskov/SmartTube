@@ -147,7 +147,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         // NOTE: Load suggestions from mediaItem isn't robust. Because playlistId may be initialized from RemoteControlManager.
         // Video might be loaded from Channels section (has playlistParams)
-        observable = mediaItemManager.getMetadataObserve(video.videoId, video.playlistId, video.playlistIndex, video.playlistParams);
+        observable = mediaItemManager.getMetadataObserve(video.videoId, video.getPlaylistId(), video.playlistIndex, video.playlistParams);
 
         clearSuggestionsIfNeeded(video);
 
@@ -165,7 +165,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             return;
         }
 
-        // Free a lot of memory
+        // Frees a lot of memory
         if (video.isRemote || !getController().isSuggestionsShown()) {
             getController().clearSuggestions();
         }

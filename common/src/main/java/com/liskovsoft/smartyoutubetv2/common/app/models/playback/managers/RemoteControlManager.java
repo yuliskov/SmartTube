@@ -240,7 +240,10 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                     getController().showOverlay(false);
                 }
                 Utils.movePlayerToForeground(getActivity());
-                Video newVideo = Video.from(command.getVideoId(), command.getPlaylistId(), command.getPlaylistIndex());
+                Video newVideo = Video.from(command.getVideoId());
+                newVideo.remotePlaylistId = command.getPlaylistId();
+                newVideo.playlistIndex = command.getPlaylistIndex();
+                newVideo.isRemote = true;
                 mNewVideoPositionMs = command.getCurrentTimeMs();
                 openNewVideo(newVideo);
                 break;
@@ -248,7 +251,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 if (getController() != null) {
                     Video video = getController().getVideo();
                     if (video != null) {
-                        video.playlistId = command.getPlaylistId();
+                        video.remotePlaylistId = command.getPlaylistId();
                         video.playlistParams = null;
                         video.isRemote = true;
                         mSuggestionsLoader.loadSuggestions(video);
