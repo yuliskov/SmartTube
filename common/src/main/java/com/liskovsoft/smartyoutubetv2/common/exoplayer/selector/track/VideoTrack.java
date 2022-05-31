@@ -100,7 +100,7 @@ public class VideoTrack extends MediaTrack {
         if (isPreset) {
             // Overcome non-standard aspect ratio by getting resolution label
             boolean respectPresetsFps = !sIsNoFpsPresetsEnabled ||
-                    sizeEquals(format.height, Integer.parseInt(TrackSelectorUtil.getResolutionLabelByHeight(track2.format.height)));
+                    sizeEquals(format.height, TrackSelectorUtil.getResolutionLabelByHeight(track2.format.height));
             //return compare(track2, COMPARE_TYPE_IN_BOUNDS_PRESET) : // EXPERIMENT: replaced multi fps with strict fps in presets
             return compare(track2, isMultiFpsFormat || respectPresetsFps ? COMPARE_TYPE_IN_BOUNDS_PRESET : COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS);
         } else {

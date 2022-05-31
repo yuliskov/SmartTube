@@ -164,34 +164,34 @@ public class TrackSelectorUtil {
         }
 
         //return getResolutionLabelByHeight(Math.min(height, width));
-        return getResolutionLabelByHeight(height);
+        return String.valueOf(getResolutionLabelByHeight(height));
     }
 
-    public static String getResolutionLabelByHeight(int height) {
-        String qualityLabel = null;
+    public static int getResolutionLabelByHeight(int height) {
+        int qualityLabel = height;
 
         // Non-regular examples
         // Мастерская Синдиката - Мы собрали суперкар КУВАЛДОЙ! - 2560x1182
         // [AMATORY] ALL STARS: LIVE IN MOSCOW 2021 - 2560x1088 
 
         if (height < 160) { // 256x144
-            qualityLabel = "144";
+            qualityLabel = 144;
         } else if (height < 260) { // 426x240
-            qualityLabel = "240";
+            qualityLabel = 240;
         } else if (height < 380) { // 640x360
-            qualityLabel = "360";
+            qualityLabel = 360;
         } else if (height < 500) { // 854x480
-            qualityLabel = "480";
+            qualityLabel = 480;
         } else if (height < 750) { // 1280x720
-            qualityLabel = "720";
+            qualityLabel = 720;
         } else if (height < 1085) { // 1920x1080
-            qualityLabel = "1080";
+            qualityLabel = 1080;
         } else if (height < 1500) { // 2560x1440
-            qualityLabel = "1440";
+            qualityLabel = 1440;
         } else if (height < 2200) { // 3840x2160
-            qualityLabel = "2160";
+            qualityLabel = 2160;
         } else if (height < 4400) { // 7680x4320
-            qualityLabel = "4320";
+            qualityLabel = 4320;
         }
 
         return qualityLabel;
