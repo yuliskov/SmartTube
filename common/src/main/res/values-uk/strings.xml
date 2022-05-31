@@ -234,7 +234,7 @@
     <string name="removed_from_playback_queue">Видалено з черги відтворення</string>
     <string name="added_to_playback_queue">Додано до черги відтворення</string>
     <string name="add_remove_from_playback_queue">Додати/Видалити з черги відтворення</string>
-    <string name="add_to_playback_queue">Додати у чергу відтворення</string>
+    <string name="add_to_playback_queue">Додати до черги відтворення</string>
     <string name="remove_from_playback_queue">Видалити з черги відтворення</string>
     <string name="proxy_enabled">Проксі активовано</string>
     <string name="proxy_disabled">Проксі деактивовано</string>
