@@ -582,7 +582,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             //    mEventListener.onScrollEnd((Video) adapter.get(adapter.size() - 1));
             //}
 
-            return index == -1 ? adapter.size() - 1 : index; // select last possible item on fail
+            //return index == -1 ? adapter.size() - 1 : index; // select last possible item on fail
         }
 
         return -1;
