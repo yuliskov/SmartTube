@@ -31,6 +31,7 @@ public class MainUIData {
     public static final int MENU_ITEM_ADD_TO_PLAYLIST = 0b10000000000000;
     public static final int MENU_ITEM_SUBSCRIBE = 0b100000000000000;
     public static final int MENU_ITEM_CREATE_PLAYLIST = 0b1000000000000000;
+    public static final int MENU_ITEM_STREAM_REMINDER = 0b10000000000000000;
     public static final int BUTTON_BROWSE_ACCOUNTS = 0b1;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;

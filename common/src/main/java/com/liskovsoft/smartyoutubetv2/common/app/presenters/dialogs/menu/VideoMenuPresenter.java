@@ -745,5 +745,9 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SUBSCRIBE)) {
             mIsSubscribeButtonEnabled = false;
         }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_STREAM_REMINDER)) {
+            mIsStreamReminderButtonEnabled = false;
+        }
     }
 }

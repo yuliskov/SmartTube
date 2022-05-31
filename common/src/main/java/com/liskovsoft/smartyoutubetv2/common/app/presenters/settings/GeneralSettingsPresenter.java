@@ -94,6 +94,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.set_stream_reminder, MainUIData.MENU_ITEM_STREAM_REMINDER},
                 {R.string.subscribe_unsubscribe_from_channel, MainUIData.MENU_ITEM_SUBSCRIBE},
                 {R.string.save_remove_playlist, MainUIData.MENU_ITEM_SAVE_PLAYLIST},
                 {R.string.create_playlist, MainUIData.MENU_ITEM_CREATE_PLAYLIST},
