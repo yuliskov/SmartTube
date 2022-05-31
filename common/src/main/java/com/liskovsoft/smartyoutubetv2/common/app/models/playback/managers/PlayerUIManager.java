@@ -234,12 +234,15 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onSuggestionItemLongClicked(Video item) {
         VideoMenuPresenter.instance(getActivity()).showMenu(item, (videoItem, action) -> {
-            if (action == VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE) {
-                getController().removeSuggestions(VideoGroup.from(videoItem));
-            } else if (action == VideoMenuCallback.ACTION_ADD_TO_QUEUE) {
-                String title = getActivity().getString(R.string.action_playback_queue);
-                int id = title.hashCode();
+            String title = getActivity().getString(R.string.action_playback_queue);
+            int id = title.hashCode();
 
+            if (action == VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE) {
+                VideoGroup group = VideoGroup.from(videoItem);
+                group.setTitle(title);
+                group.setId(id);
+                getController().removeSuggestions(group);
+            } else if (action == VideoMenuCallback.ACTION_ADD_TO_QUEUE) {
                 Video newItem = videoItem.copy();
                 VideoGroup group = VideoGroup.from(newItem, 0);
                 group.setTitle(title);
