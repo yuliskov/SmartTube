@@ -572,10 +572,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         // NOTE: skip first row. It's PlaybackControlsRow
         Object row = mRowsAdapter != null && mRowsAdapter.size() > 1 ? mRowsAdapter.get(1) : null;
+        int index = -1;
 
         if (row instanceof ListRow) {
             VideoGroupObjectAdapter adapter = (VideoGroupObjectAdapter) ((ListRow) row).getAdapter();
-            int index = adapter.indexOfAlt(getVideo());
+            index = adapter.indexOfAlt(getVideo());
 
             // Below doesn't work. onBindRowViewHolder won't called on update hidden list.
             //if (index == -1) {
@@ -585,7 +586,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             //return index == -1 ? adapter.size() - 1 : index; // select last possible item on fail
         }
 
-        return -1;
+        return index;
     }
 
     private void setupEventListeners() {

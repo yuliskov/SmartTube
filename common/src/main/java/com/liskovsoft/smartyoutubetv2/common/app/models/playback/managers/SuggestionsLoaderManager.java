@@ -212,14 +212,18 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             groupIndex++;
             if (group != null && !group.isEmpty()) {
                 VideoGroup videoGroup = VideoGroup.from(group);
-                getController().updateSuggestions(videoGroup);
 
                 // Merge remote queue with player's queue
                 if (groupIndex == 0 && video.isRemote) {
+                    videoGroup.setTitle(getActivity().getString(R.string.action_playback_queue));
+                    videoGroup.setId(videoGroup.getTitle().hashCode());
+
                     Playlist.instance().removeAllAfterCurrent();
                     Playlist.instance().addAll(videoGroup.getVideos());
                     Playlist.instance().setCurrent(video);
                 }
+
+                getController().updateSuggestions(videoGroup);
             }
         }
     }
