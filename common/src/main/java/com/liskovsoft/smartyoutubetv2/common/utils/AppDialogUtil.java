@@ -530,6 +530,7 @@ public class AppDialogUtil {
                     optionItem -> {
                         video.fromQueue = true;
                         onClick.onClick(video);
+                        settingsPresenter.closeDialog();
                     },
                     video == playlist.getCurrent())
             );
