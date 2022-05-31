@@ -240,13 +240,13 @@ public class PlayerTweaksData {
         mIsSnapToVsyncDisabled = Helpers.parseBoolean(split, 2, false);
         mIsProfileLevelCheckSkipped = Helpers.parseBoolean(split, 3, false);
         mIsSWDecoderForced = Helpers.parseBoolean(split, 4, false);
-        mIsTextureViewEnabled = Helpers.parseBoolean(split, 5, VERSION.SDK_INT <= 19); // Android 4 playback crash fix
+        mIsTextureViewEnabled = Helpers.parseBoolean(split, 5, false);
         // Need to be enabled (?) on older version of ExoPlayer (e.g. 2.10.6).
         // It's because there's no tweaks for modern devices.
         mIsSetOutputSurfaceWorkaroundEnabled = Helpers.parseBoolean(split, 7, true);
         mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 8, false);
         mIsKeepFinishedActivityEnabled = Helpers.parseBoolean(split, 9, false);
-        mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, VERSION.SDK_INT <= 19); // Android 4 playback crash fix
+        mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, false);
         mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTV(mPrefs.getContext()));
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
         // Example usage: Integer.MAX_VALUE & ~(PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO | PlayerTweaksData.PLAYER_BUTTON_SEEK_INTERVAL) // all buttons, except info button

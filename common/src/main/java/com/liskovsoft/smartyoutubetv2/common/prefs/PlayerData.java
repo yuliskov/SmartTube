@@ -470,7 +470,15 @@ public class PlayerData {
     public FormatItem getDefaultVideoFormat() {
         FormatItem formatItem = mDefaultVideoFormats.get(Build.MODEL);
 
-        return formatItem != null ? formatItem : Helpers.isVP9Supported() ? FormatItem.VIDEO_FHD_VP9_60 : FormatItem.VIDEO_HD_AVC_30;
+        if (formatItem == null) {
+            if (VERSION.SDK_INT <= 19) { // Android 4 playback crash fix (memory leak?)
+                formatItem = FormatItem.VIDEO_SD_AVC_30;
+            } else if (Helpers.isVP9Supported()) {
+                formatItem = FormatItem.VIDEO_FHD_VP9_60;
+            }
+        }
+
+        return formatItem != null ? formatItem : FormatItem.VIDEO_HD_AVC_30;
     }
 
     public int getStartSeekIncrementMs() {
@@ -532,7 +540,7 @@ public class PlayerData {
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, false);
         mPlaybackMode = Helpers.parseInt(split, 22, PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL);
         // didn't remember what was there
-        mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, VERSION.SDK_INT <= 19); // Android 4 playback crash fix
+        mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, false);
         mIsSonyTimerFixEnabled = Helpers.parseBoolean(split, 25, false);
         // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
