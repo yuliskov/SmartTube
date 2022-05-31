@@ -248,7 +248,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 openNewVideo(newVideo);
                 break;
             case Command.TYPE_UPDATE_PLAYLIST:
-                if (getController() != null) {
+                if (getController() != null && mConnected) {
                     Video video = getController().getVideo();
                     if (video != null) {
                         video.remotePlaylistId = command.getPlaylistId();
