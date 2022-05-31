@@ -164,4 +164,8 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
             }
         }
     }
+
+    public boolean isEmpty() {
+        return mVideoItems == null || mVideoItems.isEmpty();
+    }
 }

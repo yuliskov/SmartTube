@@ -89,6 +89,7 @@ import java.util.Map;
 public class PlaybackFragment extends SeekModePlaybackFragment implements PlaybackView, PlaybackController {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
     private static final int UPDATE_DELAY_MS = 16;
+    private static final int SUGGESTIONS_START_INDEX = 1;
     private VideoPlayerGlue mPlayerGlue;
     private SimpleExoPlayer mPlayer;
     private PlaybackPresenter mPlaybackPresenter;
@@ -544,7 +545,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
                 // Set position of item inside first row (playlist items)
                 if (mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
-                    int index = getSuggestedItemIndex();
+                    int index = getCurrentVideoIndex();
 
                     if (index > 0) {
                         ViewHolder vh = (ViewHolder) holder;
@@ -564,7 +565,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mCardPresenter = new VideoCardPresenter();
     }
 
-    private int getSuggestedItemIndex() {
+    private int getCurrentVideoIndex() {
         if (getVideo() == null || !getVideo().hasPlaylist() || !getVideo().hasVideo()) {
             return -1;
         }
@@ -1275,7 +1276,12 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             mMediaGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
 
             ListRow row = new ListRow(rowHeader, mediaGroupAdapter);
-            mRowsAdapter.add(row);
+
+            if (group.getPosition() == -1) {
+                mRowsAdapter.add(row);
+            } else {
+                mRowsAdapter.add(group.getPosition() + SUGGESTIONS_START_INDEX, row);
+            }
         } else {
             freeze(true);
 
@@ -1295,6 +1301,14 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         if (adapter != null) {
             adapter.remove(group);
+
+            if (adapter.isEmpty()) {
+                int position = getSuggestionsIndex(group);
+                if (position != -1) {
+                    mMediaGroupAdapters.remove(group.getId());
+                    mRowsAdapter.removeItems(position + SUGGESTIONS_START_INDEX, 1);
+                }
+            }
         }
     }
 
@@ -1322,7 +1336,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             }
         }
 
-        return index != -1 ? index - 1 : -1;
+        return index != -1 ? index - SUGGESTIONS_START_INDEX : -1;
     }
 
     @Override
@@ -1332,7 +1346,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         // NOTE: skip first row. It's PlaybackControlsRow
-        int realIndex = 1 + rowIndex;
+        int realIndex = rowIndex + SUGGESTIONS_START_INDEX;
         Object row = mRowsAdapter != null && mRowsAdapter.size() > realIndex ? mRowsAdapter.get(realIndex) : null;
 
         VideoGroup result = null;
@@ -1353,7 +1367,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void clearSuggestions() {
         if (mRowsAdapter != null && mRowsAdapter.size() > 1) {
-            mRowsAdapter.removeItems(1, mRowsAdapter.size() - 1);
+            mRowsAdapter.removeItems(SUGGESTIONS_START_INDEX, mRowsAdapter.size() - 1);
         }
 
         mMediaGroupAdapters.clear();
@@ -1362,7 +1376,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public boolean isSuggestionsEmpty() {
         // Ignore first row. It's player controls row.
-        return mRowsAdapter == null || mRowsAdapter.size() <= 1;
+        return mRowsAdapter == null || mRowsAdapter.size() <= SUGGESTIONS_START_INDEX;
     }
 
     /**
