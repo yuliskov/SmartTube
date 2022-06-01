@@ -1266,6 +1266,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
+        if (group == null || group.isEmpty()) {
+            Log.e(TAG, "Suggestions row is empty!");
+            return;
+        }
+
         HeaderItem rowHeader = new HeaderItem(group.getTitle());
         int mediaGroupId = group.getId(); // Create unique int from category.
 

@@ -197,4 +197,18 @@ public class VideoGroup {
 
         return groupPosition;
     }
+
+    public void removeAllBefore(Video video) {
+        if (mVideos == null) {
+            return;
+        }
+
+        int index = mVideos.indexOf(video);
+
+        if (index == -1) {
+            return;
+        }
+
+        mVideos = mVideos.subList(index + 1, mVideos.size());
+    }
 }

@@ -220,6 +220,10 @@ public class Playlist {
     }
 
     public List<Video> getAllAfterCurrent() {
+        if (mCurrentIndex == -1) {
+            return null;
+        }
+
         int fromIndex = mCurrentIndex + 1;
         if (fromIndex > 0 && fromIndex < mPlaylist.size()) {
             return mPlaylist.subList(fromIndex, mPlaylist.size());
@@ -229,9 +233,13 @@ public class Playlist {
     }
 
     public void removeAllAfterCurrent() {
+        if (mCurrentIndex == -1) {
+            return;
+        }
+
         int fromIndex = mCurrentIndex + 1;
         if (fromIndex > 0 && fromIndex < mPlaylist.size()) {
-            mPlaylist.subList(fromIndex, mPlaylist.size()).clear();
+            mPlaylist = mPlaylist.subList(0, fromIndex);
         }
     }
 
@@ -253,6 +261,10 @@ public class Playlist {
      * Do some cleanup to prevent possible OOM exception
      */
     private void stripPrevItem() {
+        if (mCurrentIndex == -1) {
+            return;
+        }
+
         int prevPosition = mCurrentIndex - 1;
 
         if (prevPosition < mPlaylist.size() && prevPosition >= 0) {
