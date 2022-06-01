@@ -30,6 +30,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.Too
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
+import static androidx.leanback.widget.TitleViewAdapter.BRANDING_VIEW_VISIBLE;
 import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
 
 /**
@@ -42,7 +43,8 @@ public class NavigateTitleView extends TitleView {
     private SearchOrbView mAccountView;
     private SearchOrbView mExitPip;
     private TextView mPipTitle;
-    private int mGlobalVisibility = View.INVISIBLE;
+    private int mSearchVisibility = View.INVISIBLE;
+    private int mBrandingVisibility = View.INVISIBLE;
     private DateTimeView mGlobalClock;
     private boolean mInitDone;
 
@@ -109,16 +111,23 @@ public class NavigateTitleView extends TitleView {
 
         init();
 
-        mGlobalVisibility = (flags & SEARCH_VIEW_VISIBLE) == SEARCH_VIEW_VISIBLE
+        mSearchVisibility = (flags & SEARCH_VIEW_VISIBLE) == SEARCH_VIEW_VISIBLE
+                ? View.VISIBLE : View.INVISIBLE;
+
+        mBrandingVisibility = (flags & BRANDING_VIEW_VISIBLE) == BRANDING_VIEW_VISIBLE
                 ? View.VISIBLE : View.INVISIBLE;
 
         if (mAccountView != null) {
-            mAccountView.setVisibility(mGlobalVisibility);
+            mAccountView.setVisibility(mSearchVisibility);
         }
 
-        if (mExitPip != null && (PlaybackPresenter.instance(getContext()).isRunningInBackground() || mGlobalVisibility != View.VISIBLE)) {
-            mExitPip.setVisibility(mGlobalVisibility);
-            mPipTitle.setVisibility(mGlobalVisibility);
+        if (mExitPip != null && (PlaybackPresenter.instance(getContext()).isRunningInBackground() || mSearchVisibility != View.VISIBLE)) {
+            mExitPip.setVisibility(mSearchVisibility);
+            mPipTitle.setVisibility(mSearchVisibility);
+        }
+
+        if (mGlobalClock != null) {
+            mGlobalClock.setVisibility(mBrandingVisibility);
         }
     }
 
@@ -175,7 +184,7 @@ public class NavigateTitleView extends TitleView {
 
     private void applyPipParameters() {
         if (mExitPip != null) {
-            int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? mGlobalVisibility : View.INVISIBLE;
+            int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? mSearchVisibility : View.INVISIBLE;
             mExitPip.setVisibility(newVisibility);
             mPipTitle.setVisibility(newVisibility);
 
