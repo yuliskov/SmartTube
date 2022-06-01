@@ -218,7 +218,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                     videoGroup.setTitle(getActivity().getString(R.string.action_playback_queue));
                     videoGroup.setId(videoGroup.getTitle().hashCode());
 
-                    Playlist.instance().removeAllAfterCurrent();
+                    //Playlist.instance().removeAllAfterCurrent();
                     Playlist.instance().addAll(videoGroup.getVideos());
                     Playlist.instance().setCurrent(video);
                 }
