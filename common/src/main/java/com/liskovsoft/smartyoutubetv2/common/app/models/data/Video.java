@@ -26,8 +26,8 @@ public final class Video implements Parcelable {
     public long id;
     public String title;
     public String secondTitle;
-    private String newTitle;
-    private String newSecondTitle;
+    private String metadataTitle;
+    private String metadataSecondTitle;
     public String description;
     public String category;
     public int itemType = -1;
@@ -484,18 +484,18 @@ public final class Video implements Parcelable {
             return;
         }
 
-        newTitle = metadata.getTitle();
+        metadataTitle = metadata.getTitle();
         
-        newSecondTitle = useAltSecondTitle ? metadata.getSecondTitleAlt() : metadata.getSecondTitle();
+        metadataSecondTitle = useAltSecondTitle ? metadata.getSecondTitleAlt() : metadata.getSecondTitle();
 
         // Casting fix (no title, no desc)
         if (title == null) {
-            title = newTitle;
+            title = metadataTitle;
         }
 
         // Casting fix (no title, no desc)
         if (secondTitle == null) {
-            secondTitle = newSecondTitle;
+            secondTitle = metadataSecondTitle;
         }
 
         // No checks. This data wasn't existed before sync.
@@ -552,12 +552,12 @@ public final class Video implements Parcelable {
     }
 
     public String getPlayerTitle() {
-        return newTitle != null ? newTitle : title != null ? title : null;
+        return metadataTitle != null ? metadataTitle : title != null ? title : null;
     }
 
     public String getPlayerSecondTitle() {
         // Don't sync future translation because of not precise info
-        return newSecondTitle != null && !isUpcoming ? newSecondTitle : secondTitle != null ? secondTitle : null;
+        return metadataSecondTitle != null && !isUpcoming ? metadataSecondTitle : secondTitle != null ? secondTitle : null;
     }
 
     public String getPlaylistId() {
