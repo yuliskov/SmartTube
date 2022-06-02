@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -186,23 +187,23 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         getController().setAfrRunning(true);
         int delayMs = 5_000;
 
-        if (mPlayerData.getAfrPauseSec() > 0) {
+        if (mPlayerData.getAfrPauseMs() > 0) {
             getController().setPlay(false);
-            delayMs = mPlayerData.getAfrPauseSec() * 1_000;
+            delayMs = mPlayerData.getAfrPauseMs();
         }
 
         Utils.postDelayed(mHandler, mPlaybackResumeHandler, delayMs);
     }
 
     private void savePlayback() {
-        if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
+        if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseMs() > 0) {
             mStateUpdater.blockPlay(true);
             mIsPlay = mStateUpdater.getPlayEnabled();
         }
     }
 
     private void restorePlayback() {
-        if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
+        if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseMs() > 0) {
             mStateUpdater.blockPlay(false);
             getController().setPlay(mIsPlay);
         }
@@ -313,14 +314,14 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
         List<OptionItem> options = new ArrayList<>();
 
-        for (int pauseSec : new int[] {0, 1, 2, 3, 4, 5, 6, 7}) {
-            String optionTitle = pauseSec == 0 ? context.getString(R.string.option_never) : context.getString(R.string.auto_frame_rate_sec, pauseSec);
+        for (int pauseMs : Helpers.range(0, 7_000, 500)) {
+            String optionTitle = pauseMs == 0 ? context.getString(R.string.option_never) : context.getString(R.string.auto_frame_rate_sec, pauseMs / 1_000f);
             options.add(UiOptionItem.from(optionTitle,
                     optionItem -> {
-                        playerData.setAfrPauseSec(pauseSec);
+                        playerData.setAfrPauseMs(pauseMs);
                         playerData.setAfrEnabled(true);
                     },
-                    pauseSec == playerData.getAfrPauseSec()));
+                    pauseMs == playerData.getAfrPauseMs()));
         }
 
         return OptionCategory.from(AUTO_FRAME_RATE_DELAY_ID, OptionCategory.TYPE_RADIO, title, options);

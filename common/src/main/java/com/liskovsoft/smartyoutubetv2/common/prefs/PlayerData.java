@@ -53,7 +53,7 @@ public class PlayerData {
     private boolean mIsAfrEnabled;
     private boolean mIsAfrFpsCorrectionEnabled;
     private boolean mIsAfrResSwitchEnabled;
-    private int mAfrPauseSec;
+    private int mAfrPauseMs;
     private int mAudioDelayMs;
     private boolean mIsRememberSpeedEnabled;
     private boolean mIsLegacyCodecsForced;
@@ -271,12 +271,12 @@ public class PlayerData {
         persistData();
     }
 
-    public int getAfrPauseSec() {
-        return mAfrPauseSec;
+    public int getAfrPauseMs() {
+        return mAfrPauseMs;
     }
 
-    public void setAfrPauseSec(int pauseSec) {
-        mAfrPauseSec = pauseSec;
+    public void setAfrPauseMs(int pauseSec) {
+        mAfrPauseMs = pauseSec;
         persistData();
     }
 
@@ -535,7 +535,7 @@ public class PlayerData {
         mIsAfrEnabled = Helpers.parseBoolean(split, 16, false);
         mIsAfrFpsCorrectionEnabled = Helpers.parseBoolean(split, 17, true);
         mIsAfrResSwitchEnabled = Helpers.parseBoolean(split, 18, false);
-        mAfrPauseSec = Helpers.parseInt(split, 19, 0);
+        // old afr delay sec was there
         mAudioDelayMs = Helpers.parseInt(split, 20, 0);
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, false);
         mPlaybackMode = Helpers.parseInt(split, 22, PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL);
@@ -560,6 +560,7 @@ public class PlayerData {
         mSubtitlePosition = Helpers.parseFloat(split, 42, 0.1f);
         mIsNumberKeySeekEnabled = Helpers.parseBoolean(split, 43, true);
         mIsSkip24RateEnabled = Helpers.parseBoolean(split, 44, false);
+        mAfrPauseMs = Helpers.parseInt(split, 45, 0);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -571,12 +572,12 @@ public class PlayerData {
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
-                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
+                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs,
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
                 mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
-                mIsSkip24RateEnabled));
+                mIsSkip24RateEnabled, mAfrPauseMs));
     }
 }

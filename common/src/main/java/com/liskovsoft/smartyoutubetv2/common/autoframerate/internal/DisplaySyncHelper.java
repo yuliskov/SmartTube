@@ -248,7 +248,6 @@ public class DisplaySyncHelper implements UhdHelperListener {
             rateMapping.remove(2397);
             rateMapping.remove(2400);
             rateMapping.remove(2497);
-            rateMapping.remove(2500);
         }
 
         return rateMapping;
