@@ -130,6 +130,16 @@ public class Playlist {
         return mPlaylist.contains(video);
     }
 
+    public boolean containsAfterCurrent(Video video) {
+        if (Video.isEmpty(video)) {
+            return false;
+        }
+
+        List<Video> afterCurrent = getAllAfterCurrent();
+
+        return afterCurrent.contains(video);
+    }
+
     ///**
     // * Trim playlist if one exceeds needed size or current element not last in the list
     // */
@@ -215,13 +225,13 @@ public class Playlist {
         return Collections.unmodifiableList(mPlaylist.subList(mNewSessionIndex, size));
     }
 
-    public boolean containsAfterCurrent() {
+    public boolean hasNext() {
         return getNext() != null;
     }
 
     public List<Video> getAllAfterCurrent() {
         if (mCurrentIndex == -1) {
-            return null;
+            return mPlaylist;
         }
 
         int fromIndex = mCurrentIndex + 1;

@@ -536,7 +536,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         Playlist playlist = Playlist.instance();
         // Toggle between add/remove while dialog is opened
-        boolean containsVideo = playlist.contains(mVideo);
+        boolean containsVideo = playlist.containsAfterCurrent(mVideo);
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(

@@ -247,7 +247,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void appendUserQueueIfNeeded(Video video) {
-        if (video.isRemote || !Playlist.instance().containsAfterCurrent()) {
+        if (video.isRemote || !Playlist.instance().hasNext()) {
             return;
         }
 
