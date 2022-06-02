@@ -137,7 +137,7 @@ public class Playlist {
 
         List<Video> afterCurrent = getAllAfterCurrent();
 
-        return afterCurrent.contains(video);
+        return afterCurrent != null && afterCurrent.contains(video);
     }
 
     ///**
