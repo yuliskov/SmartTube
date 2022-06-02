@@ -134,7 +134,11 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
             return;
         }
 
+        freeze(true);
+
         mGridAdapter.append(group);
+
+        freeze(false);
 
         restorePosition();
     }
@@ -149,6 +153,16 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
             } else {
                 mMainPresenter.onScrollEnd((Video) mGridAdapter.get(mGridAdapter.size() - 1));
             }
+        }
+    }
+
+    /**
+     * Disable scrolling on partially updated grid. This prevent cards from misbehaving.
+     */
+    private void freeze(boolean freeze) {
+        if (getBrowseGrid() != null) {
+            getBrowseGrid().setScrollEnabled(!freeze);
+            getBrowseGrid().setAnimateChildLayout(!freeze);
         }
     }
 
