@@ -355,7 +355,7 @@
     <string name="openvpn_test_aborted">Test byl přerušen, nejprve opravte nastavení OpenVPN.</string>
     <string name="openvpn_address_invalid">Adresa konfigurace OpenVPN není nastavena.</string>
     <string name="internet_censorship">Cenzura internetu</string>
-    <string name="rename_section">Přejmenovat sekci</string>
+    <string name="rename_section">Přejmenovat tuto sekci</string>
     <string name="simple_edit_value_hint">Nová hodnota</string>
     <string name="seek_interval">Interval přeskakování</string>
     <string name="seek_interval_sec">%s sekund</string>
@@ -396,7 +396,7 @@
     <string name="add_video_to_new_playlist">Přidat toto video do nového playlistu</string>
     <string name="cant_delete_empty_playlist">Nelze smazat prázdný playlist</string>
     <string name="playlist">Playlist</string>
-    <string name="rename_playlist">Přejmenovat playlist</string>
+    <string name="rename_playlist">Přejmenovat tento playlist</string>
     <string name="cant_rename_empty_playlist">Nelze přejmenovat prázdný playlist</string>
     <string name="cant_rename_foreign_playlist">Nelze přejmenovat cizí playlist</string>
     <string name="cant_save_playlist">Tento playlist nelze přidat</string>
@@ -414,7 +414,7 @@
     <string name="skip_codec_profile_check_desc">Přeskočí kontrolu podpory kodeku při spuštění videa. Může být užitečné pro zabugovaný firmware.</string>
     <string name="force_sw_codec">Vynutit softwarový dekodér videa</string>
     <string name="force_sw_codec_desc">Dokáže přehrát téměř jakékoli video, ale výkon je velmi chabý.</string>
-    <string name="playlist_order">Seřadit playlist</string>
+    <string name="playlist_order">Seřadit tento playlist</string>
     <string name="playlist_order_added_date_newer_first">Podle data přidání (nejprve novejší)</string>
     <string name="playlist_order_added_date_older_first">Podle data přidání (nejprve starší)</string>
     <string name="playlist_order_published_date_newer_first">Podle data vydání (nejprve novejší)</string>
