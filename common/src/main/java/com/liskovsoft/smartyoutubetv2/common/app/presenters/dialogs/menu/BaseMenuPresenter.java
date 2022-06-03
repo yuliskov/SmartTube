@@ -174,7 +174,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        // To maintain safety, allow removing user playlist only from Playlists section
+        // To prevent accidental deletion, allow removing user playlist only from Playlists section
         if (original.belongsToPlaylists() && (!BrowsePresenter.instance(getContext()).isPlaylistsSection() || !BrowsePresenter.instance(getContext()).inForeground())) {
             return;
         }
