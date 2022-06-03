@@ -98,7 +98,7 @@
     <string name="player_other">Різне</string>
     <string name="player_full_date">Точна дата в описі</string>
     <string name="open_channel">Перейти до каналу</string>
-    <string name="open_playlist">Відкрити плейлист</string>
+    <string name="open_playlist">Відкрити цей плейлист</string>
     <string name="not_interested">Більше не радити</string>
     <string name="you_wont_see_this_video">Це відео більше не з\`явиться серед рекомендацій</string>
     <string name="settings_search">Пошук</string>
