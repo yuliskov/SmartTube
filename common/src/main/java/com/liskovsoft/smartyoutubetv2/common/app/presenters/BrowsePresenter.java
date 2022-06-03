@@ -836,6 +836,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_USER_PLAYLISTS;
     }
 
+    public boolean isPlaylistsSectionActive() {
+        return isPlaylistsSection() && inForeground();
+    }
+
     public boolean isSubscriptionsSection() {
         return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SUBSCRIPTIONS;
     }

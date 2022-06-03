@@ -78,7 +78,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(original.isChannelPlaylist() || original.belongsToPlaylists() ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
+                        getContext().getString(original.isChannelPlaylist() || BrowsePresenter.instance(getContext()).isPlaylistsSectionActive() ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
                         optionItem -> {
                             if (original.hasVideo()) {
                                 MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
@@ -272,8 +272,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo() != null ? getVideo() : new Video();
 
-        if (!original.belongsToPlaylists() && !original.hasVideo() &&
-                !(BrowsePresenter.instance(getContext()).inForeground() && BrowsePresenter.instance(getContext()).isPlaylistsSection())) {
+        if (!original.belongsToPlaylists() && !original.hasVideo() && !BrowsePresenter.instance(getContext()).isPlaylistsSectionActive()) {
             return;
         }
 
@@ -316,7 +315,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo();
 
-        if (original == null || !BrowsePresenter.instance(getContext()).isPlaylistsSection() || !BrowsePresenter.instance(getContext()).inForeground()) {
+        if (original == null || !BrowsePresenter.instance(getContext()).isPlaylistsSectionActive()) {
             return;
         }
 

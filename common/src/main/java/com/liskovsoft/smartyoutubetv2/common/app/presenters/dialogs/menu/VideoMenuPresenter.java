@@ -576,7 +576,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo == null || !BrowsePresenter.instance(getContext()).isPlaylistsSection() || !BrowsePresenter.instance(getContext()).inForeground()) {
+        if (mVideo == null || !BrowsePresenter.instance(getContext()).isPlaylistsSectionActive()) {
             return;
         }
 
