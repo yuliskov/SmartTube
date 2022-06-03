@@ -175,7 +175,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         for (Video item : pinnedItems) {
             if (item != null) {
                 if (item.extra == -1) {
-                    BrowseSection section = new BrowseSection(item.hashCode(), item.title, BrowseSection.TYPE_GRID, item.cardImageUrl, true, item);
+                    BrowseSection section = new BrowseSection(item.hashCode(), item.title, BrowseSection.TYPE_GRID, item.cardImageUrl, false, item);
                     mSections.add(section);
                 } else {
                     BrowseSection section = mSectionsMapping.get(item.extra);
