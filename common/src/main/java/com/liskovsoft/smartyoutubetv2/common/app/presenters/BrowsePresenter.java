@@ -433,7 +433,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void pinItem(Video item) {
         mGeneralData.addPinnedItem(item);
 
-        BrowseSection section = new BrowseSection(item.hashCode(), item.title, BrowseSection.TYPE_GRID, item.cardImageUrl, true, item);
+        BrowseSection section = new BrowseSection(item.hashCode(), item.title, BrowseSection.TYPE_GRID, item.cardImageUrl, false, item);
         mSections.add(section);
         mGridMapping.put(item.hashCode(), createPinnedAction(item));
 
