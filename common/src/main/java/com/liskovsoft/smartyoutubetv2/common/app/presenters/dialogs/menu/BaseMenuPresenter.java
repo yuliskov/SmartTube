@@ -316,7 +316,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo();
 
-        if (original == null || !original.belongsToPlaylists()) {
+        if (original == null || !BrowsePresenter.instance(getContext()).isPlaylistsSection() || !BrowsePresenter.instance(getContext()).inForeground()) {
             return;
         }
 

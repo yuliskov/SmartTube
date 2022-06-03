@@ -351,7 +351,7 @@
     <string name="openvpn_test_aborted">Тест скасовано, спершу виправте налаштування OpenVPN.</string>
     <string name="openvpn_address_invalid">Адреса файла конфігурації не встановлена.</string>
     <string name="internet_censorship">Цензура в Інтернеті</string>
-    <string name="rename_section">Перейменувати розділ</string>
+    <string name="rename_section">Перейменувати цей розділ</string>
     <string name="simple_edit_value_hint">Нове значення</string>
     <string name="seek_interval">Інтервал перемотування</string>
     <string name="seek_interval_sec">%s сек</string>
@@ -392,7 +392,7 @@
     <string name="add_video_to_new_playlist">Додати це відео у новий плейлист</string>
     <string name="cant_delete_empty_playlist">Неможливо видалити порожній плейлист</string>
     <string name="playlist">Плейлист</string>
-    <string name="rename_playlist">Перейменувати плейлист</string>
+    <string name="rename_playlist">Перейменувати цей плейлист</string>
     <string name="cant_rename_empty_playlist">Неможливо перейменувати порожній плейлист</string>
     <string name="cant_rename_foreign_playlist">Неможливо перейменувати чужий плейлист</string>
     <string name="cant_save_playlist">Цей плейлист додати неможливо</string>
@@ -410,7 +410,7 @@
     <string name="skip_codec_profile_check_desc">Не перевіряти підтримку кодеків під час запуску відео. Може бути корисним для глючних прошивок.</string>
     <string name="force_sw_codec">Активувати програмний декодер</string>
     <string name="force_sw_codec_desc">Може відтворювати будь-яке відео, але продуктивність дуже низька.</string>
-    <string name="playlist_order">Сортувати плейлист</string>
+    <string name="playlist_order">Сортувати цей плейлист</string>
     <string name="playlist_order_added_date_newer_first">Дата додавання (спочатку новіші)</string>
     <string name="playlist_order_added_date_older_first">Дата додавання (спочатку старіші)</string>
     <string name="playlist_order_published_date_newer_first">Дата публікації (спочатку новіші)</string>
