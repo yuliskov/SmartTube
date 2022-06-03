@@ -174,6 +174,11 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
+        // To maintain safety, allow removing user playlist only from Playlists section
+        if (original.belongsToPlaylists() && (!BrowsePresenter.instance(getContext()).isPlaylistsSection() || !BrowsePresenter.instance(getContext()).inForeground())) {
+            return;
+        }
+
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
                         getContext().getString(original.belongsToPlaylists()? R.string.remove_playlist : R.string.save_remove_playlist),
