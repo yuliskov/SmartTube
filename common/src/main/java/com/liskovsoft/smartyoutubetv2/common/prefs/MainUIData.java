@@ -265,7 +265,7 @@ public class MainUIData {
         mCardTextScrollSpeed = Helpers.parseFloat(split, 11, 2);
         mMenuItems = Helpers.parseInt(split, 12,
                 Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT | MENU_ITEM_PLAY_VIDEO |
-                        MENU_ITEM_SUBSCRIBE | MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_PIN_TO_SIDEBAR)); // all except this items
+                        MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_PIN_TO_SIDEBAR)); // all except this items
         mButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE); // all
     }
 
