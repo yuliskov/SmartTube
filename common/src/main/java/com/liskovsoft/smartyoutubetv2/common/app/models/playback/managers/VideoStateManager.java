@@ -13,15 +13,13 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
-public class VideoStateManager extends PlayerEventListenerHelper implements TickleListener {
+public class VideoStateManager extends PlayerEventListenerHelper {
     private static final long MUSIC_VIDEO_MAX_LENGTH_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 60_000;
     private static final String TAG = VideoStateManager.class.getSimpleName();
@@ -34,7 +32,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
     private PlayerTweaksData mPlayerTweaksData;
     private VideoStateService mStateService;
     private boolean mIsPlayBlocked;
-    private int mTickleLeft;
 
     @Override
     public void onInitDone() { // called each time a video opened from the browser
@@ -112,8 +109,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         if (!getPlayEnabled()) {
             getController().showOverlay(true);
         }
-
-        TickleManager.instance().addListener(this);
     }
 
     @Override
@@ -122,18 +117,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         if (getController().containsMedia()) {
             setPlayEnabled(getController().getPlay());
             saveState();
-        }
-
-        TickleManager.instance().removeListener(this);
-        mTickleLeft = 0;
-    }
-
-    @Override
-    public void onTickle() {
-        // Every five minutes
-        if (++mTickleLeft > 5) {
-            updateHistory();
-            mTickleLeft = 0;
         }
     }
 
