@@ -179,7 +179,7 @@
     <string name="content_block_sponsor">Gesponserte Videosegmente</string>
     <string name="content_block_intro">Unterbrechung/Intro-Animation</string>
     <string name="content_block_outro">Endkarten/Credits</string>
-    <string name="content_block_interaction">Interaktions-Erinnerungen (Abonnieren, etc.)</string>
+    <string name="content_block_interaction">Interaktions-Erinnerungen (Abonnieren)</string>
     <string name="content_block_self_promo">Unbezahlt/Eigenwerbung</string>
     <string name="content_block_music_off_topic">Musikvideoteile ohne Musik</string>
     <string name="confirm_segment_skip">Segment \"%s\" überspringen</string>
