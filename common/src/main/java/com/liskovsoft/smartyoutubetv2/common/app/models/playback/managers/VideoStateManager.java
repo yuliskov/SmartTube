@@ -34,6 +34,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
     private PlayerTweaksData mPlayerTweaksData;
     private VideoStateService mStateService;
     private boolean mIsPlayBlocked;
+    private int mTickleLeft;
 
     @Override
     public void onInitDone() { // called each time a video opened from the browser
@@ -128,7 +129,11 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
 
     @Override
     public void onTickle() {
-        updateHistory();
+        // Every five minutes
+        if (++mTickleLeft > 5) {
+            updateHistory();
+            mTickleLeft = 0;
+        }
     }
 
     @Override
