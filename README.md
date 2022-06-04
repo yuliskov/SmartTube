@@ -88,8 +88,8 @@ You can select which categories you want to skip in the settings. Unlike the bro
 To cast videos from your phone (or other devices), you must link that device to your TV. Unlike the original YouTube app, SmartTubeNext does not automatically show up when you are in the same wifi network. How to link your smartphone and TV:
 
 1. open SmartTubeNext and go to settings
-2. go to "link devices" (2nd option)
-3. open your YouTube app on your phone, go to settings > watch on TV
+2. go to "Remote control" (2nd option)
+3. open your YouTube app on your phone, go to settings > General > watch on TV
 4. click on _connect using TV-code_ and enter the code from your TV
 
 [**Screenshot guide**](https://t.me/SmartTubeNext_en/8514)
