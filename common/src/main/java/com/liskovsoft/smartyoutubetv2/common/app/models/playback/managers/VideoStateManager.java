@@ -125,6 +125,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         }
 
         TickleManager.instance().removeListener(this);
+        mTickleLeft = 0;
     }
 
     @Override
