@@ -252,7 +252,7 @@ public class MainUIData {
         String[] split = Helpers.splitObjectLegacy(data);
 
         mIsCardAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
-        mVideoGridScale = Helpers.parseFloat(split, 1, 1.2f); // 3 cards in a row like in the original
+        mVideoGridScale = Helpers.parseFloat(split, 1, 1.0f); // 4 cards in a row
         mUIScale = Helpers.parseFloat(split, 2, 1.0f);
         mColorSchemeIndex = Helpers.parseInt(split, 3, 1);
         mIsCardMultilineTitleEnabled = Helpers.parseBoolean(split, 4, true);
@@ -264,7 +264,8 @@ public class MainUIData {
         mIsUploadsAutoLoadEnabled = Helpers.parseBoolean(split, 10, true);
         mCardTextScrollSpeed = Helpers.parseFloat(split, 11, 2);
         mMenuItems = Helpers.parseInt(split, 12,
-                Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_QUEUE | MENU_ITEM_SELECT_ACCOUNT | MENU_ITEM_PLAY_VIDEO)); // all except this items
+                Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT | MENU_ITEM_PLAY_VIDEO |
+                        MENU_ITEM_SUBSCRIBE | MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_PIN_TO_SIDEBAR)); // all except this items
         mButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE); // all
     }
 
