@@ -98,7 +98,7 @@
     <string name="player_other">Sonstige</string>
     <string name="player_full_date">Genaues Datum in der Beschreibung</string>
     <string name="open_channel">Kanal öffnen</string>
-    <string name="open_playlist">Wiedergabeliste öffnen</string>
+    <string name="open_playlist">Diese Wiedergabeliste öffnen</string>
     <string name="not_interested">Kein Interesse</string>
     <string name="you_wont_see_this_video">Video wurde aus den Empfehlungen entfernt</string>
     <string name="settings_search">Suche</string>
@@ -355,7 +355,7 @@
     <string name="openvpn_test_aborted">Der Test wurde abgebrochen, bitte korrigieren Sie zuerst die OpenVPN-Einstellungen.</string>
     <string name="openvpn_address_invalid">OpenVPN-Konfigurationsadresse nicht gesetzt.</string>
     <string name="internet_censorship">Internet-Zensur</string>
-    <string name="rename_section">Kategorie umbenennen</string>
+    <string name="rename_section">Diese Kategorie umbenennen</string>
     <string name="simple_edit_value_hint">Neuer Wert</string>
     <string name="seek_interval">Spulintervall</string>
     <string name="seek_interval_sec">%s sek.</string>
@@ -396,7 +396,7 @@
     <string name="add_video_to_new_playlist">Hinzufügen zu neuer Wiedergabeliste</string>
     <string name="cant_delete_empty_playlist">Leere Wiedergabeliste kann nicht gelöscht werden</string>
     <string name="playlist">Wiedergabeliste</string>
-    <string name="rename_playlist">Wiedergabeliste umbenennen</string>
+    <string name="rename_playlist">Diese Wiedergabeliste umbenennen</string>
     <string name="cant_rename_empty_playlist">Leere Wiedergabeliste kann nicht umbenannt werden</string>
     <string name="cant_rename_foreign_playlist">Fremde Wiedergabeliste kann nicht umbenannt werden</string>
     <string name="cant_save_playlist">Diese Wiedergabeliste kann nicht hinzugefügt werden</string>
@@ -414,7 +414,7 @@
     <string name="skip_codec_profile_check_desc">Überprüft nicht die Codec-Unterstützung beim Starten eines Videos. Könnte bei fehlerhaften Firmwares hilfreich sein.</string>
     <string name="force_sw_codec">SW-Video-Decoder erzwingen</string>
     <string name="force_sw_codec_desc">Könnte fast jedes Video abspielen, aber die Performance ist sehr schlecht.</string>
-    <string name="playlist_order">Wiedergabeliste sortieren</string>
+    <string name="playlist_order">Diese Wiedergabeliste sortieren</string>
     <string name="playlist_order_added_date_newer_first">Hinzugefügtes Datum (neue zuerst)</string>
     <string name="playlist_order_added_date_older_first">Hinzugefügtes Datum (ältere zuerst)</string>
     <string name="playlist_order_published_date_newer_first">Veröffentlichungsdatum (neue zuerst)</string>
