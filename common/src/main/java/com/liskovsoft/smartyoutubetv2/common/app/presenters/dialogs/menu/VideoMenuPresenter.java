@@ -223,6 +223,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         if (!mDialogPresenter.isEmpty()) {
             String title = mVideo != null ? mVideo.title : null;
+            // No need to add author because: 1) This could be a channel card. 2) This info isn't so important.
             mDialogPresenter.showDialog(title);
         }
     }

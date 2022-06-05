@@ -161,7 +161,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     public void onPause() {
         showHideScreensaver(true);
         setPlayEnabled(false);
-        //saveState();
+        saveState();
     }
 
     @Override
@@ -197,7 +197,8 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     @Override
     public void onSeekEnd() {
         // Scenario: user opens ui and does some seeking
-        //saveState();
+        // NOTE: dangerous: there's possibility of simultaneous seeks (e.g. when sponsor block is enabled)
+        saveState();
     }
 
     @Override
