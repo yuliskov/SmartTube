@@ -116,15 +116,8 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
      */
     @Override
     public void setPositionMs(long positionMs) {
-        long lengthMs = getLengthMs();
-
-        // Sponsor block fix. Round the position.
-        if (positionMs >= 0 && positionMs > lengthMs && positionMs - lengthMs < 1_000) {
-            positionMs = lengthMs;
-        }
-
         // Url list videos at load stage has undefined (-1) length. So, we need to remove length check.
-        if (mPlayer != null && positionMs >= 0 && positionMs <= lengthMs) {
+        if (mPlayer != null && positionMs >= 0 && positionMs <= getLengthMs()) {
             mPlayer.seekTo(positionMs);
         }
     }

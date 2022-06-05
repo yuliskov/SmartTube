@@ -180,7 +180,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 int type = mContentBlockData.getAction(segment.getCategory());
 
                 if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode()) {
-                    getController().setPositionMs(segment.getEndMs());
+                    setPositionMs(segment.getEndMs());
                 } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
                     messageSkip(segment.getEndMs(), localizedCategory);
                 } else if (type == ContentBlockData.ACTION_SHOW_DIALOG) {
@@ -213,7 +213,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     private void messageSkip(long skipPositionMs, String category) {
         MessageHelpers.showMessage(getActivity(),
                 String.format("%s: %s", ContentBlockData.SPONSOR_BLOCK_NAME, getActivity().getString(R.string.msg_skipping_segment, category)));
-        getController().setPositionMs(skipPositionMs);
+        setPositionMs(skipPositionMs);
     }
 
     private void confirmSkip(long skipPositionMs, String category) {
@@ -228,7 +228,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 getActivity().getString(R.string.confirm_segment_skip, category),
                 option -> {
                     settingsPresenter.closeDialog();
-                    getController().setPositionMs(skipPositionMs);
+                    setPositionMs(skipPositionMs);
                 }
         );
 
@@ -267,5 +267,19 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         return result;
+    }
+
+    /**
+     * Sponsor block fix. Position may exceed real media length.
+     */
+    private void setPositionMs(long positionMs) {
+        long lengthMs = getController().getLengthMs();
+
+        // Sponsor block fix. Position may exceed real media length.
+        if (lengthMs > 0 && positionMs > lengthMs) {
+            positionMs = lengthMs;
+        }
+
+        getController().setPositionMs(positionMs);
     }
 }
