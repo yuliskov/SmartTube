@@ -59,6 +59,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsPinToSidebarEnabled;
     private boolean mIsSavePlaylistButtonEnabled;
     private boolean mIsCreatePlaylistButtonEnabled;
+    private boolean mIsAddToNewPlaylistButtonEnabled;
     private boolean mIsOpenPlaylistButtonEnabled;
     private boolean mIsAddToPlaybackQueueButtonEnabled;
     private boolean mIsOpenDescriptionButtonEnabled;
@@ -121,6 +122,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     @Override
+    protected boolean isAddToNewPlaylistEnabled() {
+        return mIsAddToNewPlaylistButtonEnabled;
+    }
+
+    @Override
     protected boolean isAccountSelectionEnabled() {
         return mIsAccountSelectionEnabled;
     }
@@ -150,6 +156,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsPinToSidebarEnabled = true;
         mIsSavePlaylistButtonEnabled = true;
         mIsCreatePlaylistButtonEnabled = true;
+        mIsAddToNewPlaylistButtonEnabled = true;
         mIsOpenDescriptionButtonEnabled = true;
         mIsPlayVideoButtonEnabled = true;
         mIsPlaylistOrderButtonEnabled = true;
@@ -207,6 +214,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendAddToRecentPlaylistButton();
         appendAddToPlaylistButton();
         appendCreatePlaylistButton();
+        appendAddToNewPlaylistButton();
         appendNotInterestedButton();
         appendRenamePlaylistButton();
         appendPlaylistOrderButton();
@@ -744,6 +752,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_CREATE_PLAYLIST)) {
             mIsCreatePlaylistButtonEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_NEW_PLAYLIST)) {
+            mIsAddToNewPlaylistButtonEnabled = false;
         }
 
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SUBSCRIBE)) {

@@ -35,6 +35,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     protected abstract boolean isPinToSidebarEnabled();
     protected abstract boolean isSavePlaylistEnabled();
     protected abstract boolean isCreatePlaylistEnabled();
+    protected abstract boolean isAddToNewPlaylistEnabled();
     protected abstract boolean isAccountSelectionEnabled();
 
     public void closeDialog() {
@@ -272,15 +273,33 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo() != null ? getVideo() : new Video();
 
-        if (!original.belongsToPlaylists() && !original.hasVideo() && !BrowsePresenter.instance(getContext()).isPlaylistsSectionActive()) {
+        if (!BrowsePresenter.instance(getContext()).isPlaylistsSectionActive()) {
             return;
         }
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(original.hasVideo() ? R.string.add_video_to_new_playlist : R.string.create_playlist),
+                        getContext().getString(R.string.create_playlist),
                         optionItem -> showCreatePlaylistDialog(original)
                         ));
+    }
+
+    protected void appendAddToNewPlaylistButton() {
+        if (!isAddToNewPlaylistEnabled()) {
+            return;
+        }
+
+        Video original = getVideo() != null ? getVideo() : new Video();
+
+        if (!original.hasVideo()) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.add_video_to_new_playlist),
+                        optionItem -> showCreatePlaylistDialog(original)
+                ));
     }
 
     private void showCreatePlaylistDialog(Video video) {

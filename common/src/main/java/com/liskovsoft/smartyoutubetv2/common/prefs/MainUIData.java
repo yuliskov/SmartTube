@@ -32,6 +32,7 @@ public class MainUIData {
     public static final int MENU_ITEM_SUBSCRIBE = 0b100000000000000;
     public static final int MENU_ITEM_CREATE_PLAYLIST = 0b1000000000000000;
     public static final int MENU_ITEM_STREAM_REMINDER = 0b10000000000000000;
+    public static final int MENU_ITEM_ADD_TO_NEW_PLAYLIST = 0b100000000000000000;
     public static final int BUTTON_BROWSE_ACCOUNTS = 0b1;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
@@ -264,8 +265,8 @@ public class MainUIData {
         mIsUploadsAutoLoadEnabled = Helpers.parseBoolean(split, 10, true);
         mCardTextScrollSpeed = Helpers.parseFloat(split, 11, 2);
         mMenuItems = Helpers.parseInt(split, 12,
-                Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT | MENU_ITEM_PLAY_VIDEO |
-                        MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_PIN_TO_SIDEBAR)); // all except this items
+                Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_NEW_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT |
+                        MENU_ITEM_PLAY_VIDEO | MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_PIN_TO_SIDEBAR)); // all except this items
         mButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE); // all
     }
 
