@@ -13,13 +13,15 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
-public class VideoStateManager extends PlayerEventListenerHelper {
+public class VideoStateManager extends PlayerEventListenerHelper implements TickleListener {
     private static final long MUSIC_VIDEO_MAX_LENGTH_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 60_000;
     private static final String TAG = VideoStateManager.class.getSimpleName();
@@ -32,6 +34,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     private PlayerTweaksData mPlayerTweaksData;
     private VideoStateService mStateService;
     private boolean mIsPlayBlocked;
+    private int mTickleLeft;
 
     @Override
     public void onInitDone() { // called each time a video opened from the browser
@@ -101,6 +104,8 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineInitialized() {
+        TickleManager.instance().addListener(this);
+
         // Restore before video loaded.
         // This way we override auto track selection mechanism.
         //restoreFormats();
@@ -113,10 +118,22 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineReleased() {
+        mTickleLeft = 0;
+        TickleManager.instance().removeListener(this);
+
         // Save previous state
         if (getController().containsMedia()) {
             setPlayEnabled(getController().getPlay());
             saveState();
+        }
+    }
+
+    @Override
+    public void onTickle() {
+        // Sync history every five minutes
+        if (++mTickleLeft > 5) {
+            mTickleLeft = 0;
+            updateHistory();
         }
     }
 
@@ -161,7 +178,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     public void onPause() {
         showHideScreensaver(true);
         setPlayEnabled(false);
-        saveState();
+        //saveState();
     }
 
     @Override
@@ -198,7 +215,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     public void onSeekEnd() {
         // Scenario: user opens ui and does some seeking
         // NOTE: dangerous: there's possibility of simultaneous seeks (e.g. when sponsor block is enabled)
-        saveState();
+        //saveState();
     }
 
     @Override
