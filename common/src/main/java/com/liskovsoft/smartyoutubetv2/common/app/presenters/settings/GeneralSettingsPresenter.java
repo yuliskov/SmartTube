@@ -107,6 +107,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 {R.string.pin_unpin_from_sidebar, MainUIData.MENU_ITEM_PIN_TO_SIDEBAR},
                 {R.string.add_remove_from_playback_queue, MainUIData.MENU_ITEM_ADD_TO_QUEUE},
                 {R.string.share_link, MainUIData.MENU_ITEM_SHARE_LINK},
+                {R.string.share_embed_link, MainUIData.MENU_ITEM_SHARE_EMBED_LINK},
                 {R.string.dialog_account_list, MainUIData.MENU_ITEM_SELECT_ACCOUNT},
                 {R.string.move_section_up, MainUIData.MENU_ITEM_MOVE_SECTION_UP},
                 {R.string.move_section_down, MainUIData.MENU_ITEM_MOVE_SECTION_DOWN},

@@ -31,6 +31,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInManager;
 import io.reactivex.Observable;
@@ -365,17 +366,26 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onShareLinkClicked() {
-        if (getController().getVideo() == null) {
+        Video video = getController().getVideo();
+
+        if (video == null) {
             return;
         }
 
-        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+        //AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
-        dialogPresenter.clear();
+        //dialogPresenter.clear();
 
-        AppDialogUtil.appendShareDialogItems(getActivity(), dialogPresenter, getController().getVideo());
+        //AppDialogUtil.appendShareLinkDialogItem(getActivity(), dialogPresenter, getController().getVideo());
+        //AppDialogUtil.appendShareEmbedLinkDialogItem(getActivity(), dialogPresenter, getController().getVideo());
 
-        dialogPresenter.showDialog(getController().getVideo().title);
+        //dialogPresenter.showDialog(getController().getVideo().title);
+
+        if (video.videoId != null) {
+            Utils.displayShareVideoDialog(getActivity(), video.videoId);
+        } else if (video.channelId != null) {
+            Utils.displayShareChannelDialog(getActivity(), video.channelId);
+        }
     }
 
     @Override

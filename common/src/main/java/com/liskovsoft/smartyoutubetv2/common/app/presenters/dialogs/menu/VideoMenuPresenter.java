@@ -51,7 +51,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsOpenChannelButtonEnabled;
     private boolean mIsOpenChannelUploadsButtonEnabled;
     private boolean mIsSubscribeButtonEnabled;
-    private boolean mIsShareButtonEnabled;
+    private boolean mIsShareLinkButtonEnabled;
+    private boolean mIsShareEmbedLinkButtonEnabled;
     private boolean mIsAddToPlaylistButtonEnabled;
     private boolean mIsAddToRecentPlaylistButtonEnabled;
     private boolean mIsAccountSelectionEnabled;
@@ -150,7 +151,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsSubscribeButtonEnabled = true;
         mIsNotInterestedButtonEnabled = true;
         mIsRemoveFromHistoryButtonEnabled = true;
-        mIsShareButtonEnabled = true;
+        mIsShareLinkButtonEnabled = true;
+        mIsShareEmbedLinkButtonEnabled = true;
         mIsAccountSelectionEnabled = true;
         mIsReturnToBackgroundVideoEnabled = true;
         mIsPinToSidebarEnabled = true;
@@ -226,7 +228,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendSavePlaylistButton();
         appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
-        appendShareButton();
+        appendShareLinkButton();
+        appendShareEmbedLinkButton();
         appendAccountSelectionButton();
 
         if (!mDialogPresenter.isEmpty()) {
@@ -250,7 +253,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendTogglePinVideoToSidebarButton();
         appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
-        appendShareButton();
+        appendShareLinkButton();
+        appendShareEmbedLinkButton();
         appendAccountSelectionButton();
 
         if (mDialogPresenter.isEmpty()) {
@@ -444,12 +448,20 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 }));
     }
 
-    private void appendShareButton() {
-        if (!mIsShareButtonEnabled) {
+    private void appendShareLinkButton() {
+        if (!mIsShareLinkButtonEnabled) {
             return;
         }
 
-        AppDialogUtil.appendShareDialogItems(getContext(), mDialogPresenter, mVideo);
+        AppDialogUtil.appendShareLinkDialogItem(getContext(), mDialogPresenter, mVideo);
+    }
+
+    private void appendShareEmbedLinkButton() {
+        if (!mIsShareEmbedLinkButtonEnabled) {
+            return;
+        }
+
+        AppDialogUtil.appendShareEmbedLinkDialogItem(getContext(), mDialogPresenter, mVideo);
     }
 
     private void appendOpenDescriptionButton() {
@@ -719,7 +731,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_LINK)) {
-            mIsShareButtonEnabled = false;
+            mIsShareLinkButtonEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_EMBED_LINK)) {
+            mIsShareEmbedLinkButtonEnabled = false;
         }
 
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR)) {

@@ -53,7 +53,7 @@ public class AppDialogUtil {
     /**
      * Adds share link items to existing dialog.
      */
-    public static void appendShareDialogItems(Context context, AppDialogPresenter dialogPresenter, Video video) {
+    public static void appendShareLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video) {
         if (video == null) {
             return;
         }
@@ -70,6 +70,19 @@ public class AppDialogUtil {
                         Utils.displayShareChannelDialog(context, video.channelId);
                     }
                 }));
+    }
+
+    /**
+     * Adds share link items to existing dialog.
+     */
+    public static void appendShareEmbedLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video) {
+        if (video == null) {
+            return;
+        }
+
+        if (video.videoId == null && video.channelId == null) {
+            return;
+        }
 
         dialogPresenter.appendSingleButton(
                 UiOptionItem.from(context.getString(R.string.share_embed_link), optionItem -> {
