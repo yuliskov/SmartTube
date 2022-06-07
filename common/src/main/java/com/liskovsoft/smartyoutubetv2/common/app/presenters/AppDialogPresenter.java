@@ -26,6 +26,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     private String mTitle;
     private long mTimeoutMs;
     private boolean mIsTransparent;
+    private boolean mRestorePlayerUI;
 
     public static class OptionCategory {
         public static OptionCategory radioList(String title, List<OptionItem> items) {
@@ -104,6 +105,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         }
 
         mOnFinish.clear();
+        restorePlayerUI(true);
     }
 
     public void clear() {
@@ -117,7 +119,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     public void onViewInitialized() {
         getView().setTitle(mTitle);
         getView().addCategories(mCategories);
-        showPlayerUI(false);
+        restorePlayerUI(false);
     }
 
     /**
@@ -231,8 +233,11 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
             mHandler.postDelayed(mCloseDialog, mTimeoutMs);
         }
     }
-    
-    private void showPlayerUI(boolean show) {
+
+    /**
+     * Hide player's ui (if needed) before dialog and show after
+     */
+    private void restorePlayerUI(boolean restore) {
         PlaybackView view = PlaybackPresenter.instance(getContext()).getView();
 
         if (!Utils.isPlayerInForeground(getContext()) || view == null || view.getController() == null) {
@@ -241,6 +246,16 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
         PlaybackController controller = view.getController();
 
-        controller.showOverlay(show);
+        if (restore) {
+            if (mRestorePlayerUI) {
+                controller.showOverlay(true);
+                mRestorePlayerUI = false;
+            }
+        } else {
+            if (controller.isOverlayShown()) {
+                mRestorePlayerUI = true;
+                controller.showOverlay(false);
+            }
+        }
     }
 }
