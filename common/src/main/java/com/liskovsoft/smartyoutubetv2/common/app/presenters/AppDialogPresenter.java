@@ -87,15 +87,6 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     }
 
     /**
-     * Called after {@link #onFinish}
-     */
-    @Override
-    public void onViewDestroyed() {
-        super.onViewDestroyed();
-        clear();
-    }
-
-    /**
      * Called when user pressed back button.
      */
     @Override
@@ -123,6 +114,15 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     public void onViewInitialized() {
         getView().setTitle(mTitle);
         getView().addCategories(mCategories);
+    }
+
+    /**
+     * Called after {@link #onFinish}
+     */
+    @Override
+    public void onViewDestroyed() {
+        super.onViewDestroyed();
+        clear();
     }
 
     public void showDialog() {
