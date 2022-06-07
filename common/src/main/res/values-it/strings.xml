@@ -218,8 +218,8 @@
     <string name="channels_auto_load">Caricamento automatico contenuto sezione canali</string>
     <string name="return_to_background_video">Torna al video in esecuzione in background</string>
     <string name="pin_unpin_from_sidebar">Fissa o rimuovi dalla barra laterale</string>
-    <string name="pin_unpin_playlist">Fissa o rimuovi questa playlist dalla barra laterale</string>
-    <string name="pin_unpin_channel">Fissa o rimuovi questo canale dalla barra laterale</string>
+    <string name="pin_unpin_playlist">Fissa o rimuovi la playlist dalla barra laterale</string>
+    <string name="pin_unpin_channel">Fissa o rimuovi il canale dalla barra laterale</string>
     <string name="pinned_to_sidebar">Fissato alla barra laterale</string>
     <string name="unpin_from_sidebar">Rimuovi dalla barra laterale</string>
     <string name="unpinned_from_sidebar">Rimosso dalla barra laterale</string>
@@ -355,7 +355,7 @@
     <string name="openvpn_test_aborted">Test annullato, per favore correggi prima le impostazioni di OpenVPN.</string>
     <string name="openvpn_address_invalid">Indirizzo di configurazione OpenVPN non impostato.</string>
     <string name="internet_censorship">Censura su Internet</string>
-    <string name="rename_section">Rinomina sezione</string>
+    <string name="rename_section">Rinomina questa sezione</string>
     <string name="simple_edit_value_hint">Nuovo valore</string>
     <string name="seek_interval">Intervallo di ricerca</string>
     <string name="seek_interval_sec">%s sec</string>
@@ -388,12 +388,12 @@
     <string name="pressing_home">premendo HOME</string>
     <string name="pressing_home_back">premendo HOME o INDIETRO</string>
     <string name="player_number_key_seek">Ricerca con i tasti numerici</string>
-    <string name="save_remove_playlist">Aggiungi o cancella questa playlist dall\'account</string>
-    <string name="remove_playlist">Cancella definitivamente questa playlist dalla sezione Playlist</string>
+    <string name="save_remove_playlist">Aggiungi o cancella la playlist dall\'account</string>
+    <string name="remove_playlist">Cancella definitivamente la playlist dalla sezione Playlist</string>
     <string name="removed_from_playlists">Cancellata dalla sezione Playlist</string>
     <string name="saved_to_playlists">Aggiunta alla sezione Playlist</string>
     <string name="create_playlist">Crea playlist</string>
-    <string name="add_video_to_new_playlist">Aggiungi questo video ad una nuova playlist</string>
+    <string name="add_video_to_new_playlist">Aggiungi il video ad una nuova playlist</string>
     <string name="cant_delete_empty_playlist">Non posso cancellare una playlist vuota</string>
     <string name="playlist">Playlist</string>
     <string name="rename_playlist">Rinomina playlist</string>
@@ -446,4 +446,5 @@
     <string name="action_subscribe_on">Iscrizione attivata</string>
     <!-- END Moved strings -->
     <string name="skip_24_rate">Salta i formati a 24 fps (fix per la modalità cinema reale?)</string>
+    <string name="player_disable_suggestions">Disattiva i suggerimenti</string>
 </resources>
