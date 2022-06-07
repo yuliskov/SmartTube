@@ -4,10 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -114,6 +117,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     public void onViewInitialized() {
         getView().setTitle(mTitle);
         getView().addCategories(mCategories);
+        showPlayerUI(false);
     }
 
     /**
@@ -226,5 +230,17 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         if (mTimeoutMs > 0) {
             mHandler.postDelayed(mCloseDialog, mTimeoutMs);
         }
+    }
+    
+    private void showPlayerUI(boolean show) {
+        PlaybackView view = PlaybackPresenter.instance(getContext()).getView();
+
+        if (!Utils.isPlayerInForeground(getContext()) || view == null || view.getController() == null) {
+            return;
+        }
+
+        PlaybackController controller = view.getController();
+
+        controller.showOverlay(show);
     }
 }
