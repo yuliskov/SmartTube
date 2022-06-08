@@ -156,7 +156,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         metadata -> updateSuggestions(metadata, video),
-                        error -> Log.e(TAG, "loadSuggestions error: %s", error.getMessage())
+                        error -> {
+                            Log.e(TAG, "loadSuggestions error: %s", error.getMessage());
+                            error.printStackTrace();
+                        }
                 );
     }
 
@@ -210,6 +213,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         for (MediaGroup group : suggestions) {
             groupIndex++;
+
             if (group != null && !group.isEmpty()) {
                 VideoGroup videoGroup = VideoGroup.from(group);
 
