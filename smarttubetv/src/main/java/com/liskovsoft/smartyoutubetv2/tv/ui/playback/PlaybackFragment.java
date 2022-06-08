@@ -583,7 +583,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             //    mEventListener.onScrollEnd((Video) adapter.get(adapter.size() - 1));
             //}
 
-            //return index == -1 ? adapter.size() - 1 : index; // select last possible item on fail
+            // Select last possible item on fail
+            if (index == -1 && getVideo().hasNextPageKey()) {
+                index = adapter.size() - 1;
+            }
         }
 
         return index;
@@ -805,7 +808,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void loadStoryboard() {
         if (mPlayerGlue.getSeekProvider() instanceof StoryboardSeekDataProvider) {
-            ((StoryboardSeekDataProvider) mPlayerGlue.getSeekProvider()).setVideo(getVideo(), mExoPlayerController.getLengthMs());
+            ((StoryboardSeekDataProvider) mPlayerGlue.getSeekProvider()).init(getVideo(), mExoPlayerController.getLengthMs());
         }
     }
 

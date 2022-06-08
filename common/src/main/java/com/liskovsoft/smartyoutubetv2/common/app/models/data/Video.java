@@ -376,6 +376,10 @@ public final class Video implements Parcelable {
         return getReloadPageKey() != null;
     }
 
+    public boolean hasNextPageKey() {
+        return getNextPageKey() != null;
+    }
+
     public boolean hasUploads() {
         return mediaItem != null && mediaItem.hasUploads();
     }
@@ -409,6 +413,10 @@ public final class Video implements Parcelable {
     public String getReloadPageKey() {
         return reloadPageKey != null ? reloadPageKey :
                 (group != null && group.getMediaGroup() != null && group.getMediaGroup().getReloadPageKey() != null) ? group.getMediaGroup().getReloadPageKey() : null;
+    }
+
+    public String getNextPageKey() {
+        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getNextPageKey() != null ? group.getMediaGroup().getNextPageKey() : null;
     }
 
     public boolean belongsToUndefined() {
