@@ -4,13 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +23,6 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     private String mTitle;
     private long mTimeoutMs;
     private boolean mIsTransparent;
-    private boolean mRestorePlayerUI;
 
     public static class OptionCategory {
         public static OptionCategory radioList(String title, List<OptionItem> items) {
@@ -105,7 +101,6 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         }
 
         mOnFinish.clear();
-        restorePlayerUI(true);
     }
 
     public void clear() {
@@ -119,7 +114,6 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     public void onViewInitialized() {
         getView().setTitle(mTitle);
         getView().addCategories(mCategories);
-        restorePlayerUI(false);
     }
 
     /**
@@ -231,31 +225,6 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
         if (mTimeoutMs > 0) {
             mHandler.postDelayed(mCloseDialog, mTimeoutMs);
-        }
-    }
-
-    /**
-     * Hide player's ui (if needed) before dialog and show after
-     */
-    private void restorePlayerUI(boolean restore) {
-        PlaybackView view = PlaybackPresenter.instance(getContext()).getView();
-
-        if (!Utils.isPlayerInForeground(getContext()) || view == null || view.getController() == null) {
-            return;
-        }
-
-        PlaybackController controller = view.getController();
-
-        if (restore) {
-            if (mRestorePlayerUI) {
-                controller.showOverlay(true);
-                mRestorePlayerUI = false;
-            }
-        } else {
-            if (controller.isOverlayShown()) {
-                mRestorePlayerUI = true;
-                controller.showOverlay(false);
-            }
         }
     }
 }
