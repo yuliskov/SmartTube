@@ -172,6 +172,11 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         }
     }
 
+    @Override
+    public boolean isShown() {
+        return isVisible() && getUserVisibleHint();
+    }
+
     public void onFinish() {
         mSettingsPresenter.onFinish();
     }
