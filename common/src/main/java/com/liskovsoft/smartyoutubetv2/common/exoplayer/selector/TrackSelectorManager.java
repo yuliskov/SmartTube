@@ -520,28 +520,37 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         return mRenderers[rendererIndex] != null && mRenderers[rendererIndex].selectedTrack != null;
     }
 
+    /**
+     * Trying to filter languages preferred by the user
+     */
     private MediaTrack[][] filterByLanguage(MediaTrack[][] trackGroupList, MediaTrack originTrack) {
-        if (originTrack instanceof AudioTrack && trackGroupList.length > 1 && mLanguage != null) {
-            List<MediaTrack[]> resultTracks = null;
+        if (!(originTrack instanceof AudioTrack) || mLanguage == null || trackGroupList.length <= 1) {
+            return trackGroupList;
+        }
 
-            // Tracks are grouped by the language/formats
-            for (MediaTrack[] trackGroup : trackGroupList) {
-                if (trackGroup != null && trackGroup.length > 1) {
-                    MediaTrack mediaTrack = trackGroup[0];
+        if (originTrack.format != null && originTrack.format.language != null) {
+            return trackGroupList;
+        }
 
-                    if (mediaTrack.format != null && Helpers.equals(mediaTrack.format.language, mLanguage)) {
-                        if (resultTracks == null) {
-                            resultTracks = new ArrayList<>();
-                        }
+        List<MediaTrack[]> resultTracks = null;
 
-                        resultTracks.add(trackGroup);
+        // Tracks are grouped by the language/formats
+        for (MediaTrack[] trackGroup : trackGroupList) {
+            if (trackGroup != null && trackGroup.length > 1) {
+                MediaTrack mediaTrack = trackGroup[0];
+
+                if (mediaTrack.format != null && Helpers.equals(mediaTrack.format.language, mLanguage)) {
+                    if (resultTracks == null) {
+                        resultTracks = new ArrayList<>();
                     }
+
+                    resultTracks.add(trackGroup);
                 }
             }
+        }
 
-            if (resultTracks != null && !resultTracks.isEmpty()) {
-                return resultTracks.toArray(new MediaTrack[0][]);
-            }
+        if (resultTracks != null && !resultTracks.isEmpty()) {
+            return resultTracks.toArray(new MediaTrack[0][]);
         }
 
         return trackGroupList;
