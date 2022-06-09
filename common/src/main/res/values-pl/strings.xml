@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="header_home">Home</string>
+    <string name="header_home">Główna</string>
     <string name="title_search">Szukaj</string>
     <string name="header_subscriptions">Subskrypcje</string>
     <string name="header_history">Historia</string>
@@ -32,7 +32,7 @@
     <string name="option_background_playback_only_audio">Tylko dźwięk</string>
     <string name="playback_settings">Ustawienia odtwarzania</string>
     <string name="video_speed">Prędkość wideo</string>
-    <string name="resolution_switch">Przełącz rozdzielczość</string>
+    <string name="resolution_switch">Zmień rozdzielczość</string>
     <string name="video_buffer">Bufor wideo</string>
     <string name="video_buffer_size_low">Niski</string>
     <string name="video_buffer_size_med">Średni</string>
@@ -66,7 +66,7 @@
     <string name="settings_main_ui">Interfejs użytkownika</string>
     <string name="dialog_main_ui">Interfejs</string>
     <string name="card_animated_previews">Animowane podglądy</string>
-    <string name="web_site">Stronia internetowa</string>
+    <string name="web_site">Strona internetowa</string>
     <string name="donation">Dotacja</string>
     <string name="dialog_about">O...</string>
     <string name="dialog_player_ui">Odtwarzacz wideo</string>
@@ -74,7 +74,7 @@
     <string name="player_pause_on_ok">Przycisk OK wstrzymuje odtwarzanie</string>
     <string name="player_ok_button_behavior">Zachowanie przycisku OK</string>
     <string name="player_only_ui">Tylko interfejs</string>
-    <string name="player_ui_and_pause">UI and pause</string>
+    <string name="player_ui_and_pause">Interfejs i pauza</string>
     <string name="player_only_pause">Tylko pauza</string>
     <string name="check_for_updates">Sprawdź aktualizacje</string>
     <string name="update_not_found">Używasz najnowszej wersji</string>
@@ -103,7 +103,7 @@
     <string name="you_wont_see_this_video">Wideo zostało usunięte z polecanych</string>
     <string name="settings_search">Szukaj</string>
     <string name="dialog_search">Szukaj</string>
-    <string name="instant_voice_search">Szybkie wyszukiwanie głosowe</string>
+    <string name="instant_voice_search">Natychmiastowe wyszukiwanie głosowe</string>
     <string name="option_background_playback_behind">Odtwarzaj w tle</string>
     <string name="next_video_info_is_not_loaded_yet">Info o kolejnym wideo nie zostały jeszcze załadowane</string>
     <string name="card_multiline_title">Tytuły wielowierszowe</string>
@@ -177,7 +177,7 @@
     <string name="content_block_categories">Pomiń segmenty</string>
     <string name="content_block_sponsor">Sponsor</string>
     <string name="content_block_intro">Przerywnik/animacja wprowadzająca</string>
-    <string name="content_block_outro">Karty końcowe/kredyty</string>
+    <string name="content_block_outro">Karty/napisy końcowe</string>
     <string name="content_block_interaction">Przypomnienie o interakcji (subskrybuj)</string>
     <string name="content_block_self_promo">Bezpłatna/własna promocja</string>
     <string name="content_block_music_off_topic">Niemuzyczna sekcja klipu</string>
@@ -194,7 +194,7 @@
     <string name="player_low_video_quality">Niska jakość wideo</string>
     <string name="remote_session_closed">Sesja zdalna została zamknięta</string>
     <string name="msg_mode_switch_error">Nie można przełączyć trybu wyświetlania na \"%s\"</string>
-    <string name="msg_player_error">Wystąpił błąd gracza %s. Wznawiam odtwarzanie…</string>
+    <string name="msg_player_error">Wystąpił błąd odtwarzacza %s. Restartuje odtwarzanie…</string>
     <string name="video_preset_disabled">Bez ustawień wstępnych</string>
     <string name="video_preset_enabled">Format następnego wideo zostanie ustawiony zgodnie z ustawieniami wstępnymi</string>
     <string name="player_sleep_timer">Wyłącznik czasowy</string>
@@ -202,15 +202,15 @@
     <string name="player_remember_each_speed">Zapamiętaj każdą prędkość wideo</string>
     <string name="player_remember_speed_none">Brak</string>
     <string name="player_remember_speed_all">To samo we wszystkich wideo</string>
-    <string name="player_remember_speed_each">Na każde wideo</string>
-    <string name="msg_player_error_source">Nie można pobrać wideo!</string>
-    <string name="msg_player_error_renderer">Wybrany format wideo nie jest obsługiwany</string>
+    <string name="player_remember_speed_each">Dla każdego wideo</string>
+    <string name="msg_player_error_source">Nie można pobrać wideo</string>
+    <string name="msg_player_error_renderer">Wybrany format wideo nie jest obsługiwany[...]</string>
     <string name="msg_player_error_unexpected">Nieznany błąd dekodera wideo</string>
     <string name="video_aspect">Współczynnik proporcji</string>
     <string name="player_tweaks">Opcje programistyczne</string>
     <string name="header_uploads">Przesyłanie</string>
-    <string name="player_show_global_clock">Pokaż zawsze na ekranie zegar</string>
-    <string name="player_show_global_ending_time">Pokaż zawsze na ekranie czas zakończenia</string>
+    <string name="player_show_global_clock">Zawsze pokazuj zegar na ekranie</string>
+    <string name="player_show_global_ending_time">Zawsze pokazuj czas zakończenia na ekranie</string>
     <string name="uploads_old_look">Przywróć stary wygląd sekcji przesyłania</string>
     <string name="background_playback_activation">Odtwarzanie w tle (aktywacja)</string>
     <string name="channels_old_look">Przywróć stary wygląd sekcji Kanały</string>
@@ -227,7 +227,7 @@
     <string name="share_embed_link">Udostępnij link do osadzania</string>
     <string name="card_text_scroll_factor">Szybkość przewijania tekstu karty</string>
     <string name="preferred_update_source">Wybierz źródło aktualizacji</string>
-    <string name="hide_shorts">Ukryj krótkie wideo w Subskrypcjach</string>
+    <string name="hide_shorts">Ukryj \"shorts\" w Subskrypcjach</string>
     <string name="key_remapping">Zmiana mapowania kluczy</string>
     <string name="screen_dimming">Przyciemnianie ekranu</string>
     <string name="removed_from_playback_queue">Usunięto z kolejki odtwarzania</string>
@@ -239,15 +239,15 @@
     <string name="playlists_row_name">Utworzone listy odtwarzania</string>
     <string name="popular_uploads_row_name">Popularne wideo</string>
     <string name="breaking_news_row_name">Z ostatniej chwili</string>
-    <string name="covid_news_row_name">Covid-19 wiadomości</string>
+    <string name="covid_news_row_name">Wiadomości o Covid-19</string>
     <string name="enable_voice_search">Włącz wyszukiwanie głosowe</string>
     <string name="subscribe_unsubscribe_from_channel">Subskrybuj/Anuluj subskrypcję kanału</string>
-    <string name="app_backup_restore">Przywracania kopii zapasowej</string>
+    <string name="app_backup_restore">Stwórz/Przywróć</string>
     <string name="app_backup">Kopia zapasowa danych</string>
     <string name="app_restore">Przywróć dane z kopii zapasowej</string>
     <string name="skip_each_segment_once">Nie pomijaj ponownie segmentów</string>
-    <string name="disable_ok_long_press">Wyłącz przycisk OK i naciśnij długo</string>
-    <string name="player_time_correction">Wyświetlaj czas w odniesieniu do prędkości</string>
+    <string name="disable_ok_long_press">Wyłącz przytrzymanie przycisku OK</string>
+    <string name="player_time_correction">Wyświetlaj czas uwzględniając prędkość</string>
     <string name="sponsor_color_markers">Kolorowe znaczniki na pasku postępu</string>
     <string name="refresh_section">Odśwież sekcję</string>
     <string name="option_disabled">Wyłączone</string>
@@ -267,10 +267,10 @@
     <string name="upload_date">Data przesyłania</string>
     <string name="upload_date_any">Cały czas</string>
     <string name="upload_date_today">Dziś</string>
-    <string name="upload_date_this_week">W tym tygodniu</string>
+    <string name="upload_date_this_week">Ten tydzień</string>
     <string name="upload_date_this_month">Ten miesiąc</string>
-    <string name="upload_date_this_year">W tym roku</string>
-    <string name="double_refresh_rate">Podwójna częstotliwość odświeżania</string>
+    <string name="upload_date_this_year">Ten rok</string>
+    <string name="double_refresh_rate">Podwojenie częstotliwość odświeżania</string>
     <string name="upload_date_last_hour">Ostatnia godzina</string>
     <string name="focus_on_search_results">Autofokus na wynikach wyszukiwania</string>
     <string name="context_menu">Menu kontekstowe</string>
@@ -315,14 +315,14 @@
     <string name="hide_upcoming">Ukryj nadchodzące w Subskrypcjach</string>
     <string name="search_background_playback">Przełącz na tryb \'obraz w obrazie\', jeśli wyszukiwanie jest uruchamiane z odtwarzacza</string>
     <string name="trending_row_name">Trendy</string>
-    <string name="player_seek_type">Szukaj zachowania</string>
+    <string name="player_seek_type">Zachowanie wyszukiwania</string>
     <string name="player_seek_regular">Regularny</string>
     <string name="player_seek_confirmation_pause">Z potwierdzeniem (pauza podczas wyszukiwania)</string>
     <string name="player_seek_confirmation_play">Z potwierdzeniem (odtwarzaj podczas szukania)</string>
     <string name="hide_shorts_from_home">Ukryj krótkie wideo na Home</string>
     <string name="finish_on_disconnect">Zamknij aplikację po odłączeniu telefonu</string>
     <string name="update_error">Błąd aktualizacji</string>
-    <string name="hide_shorts_from_history">Ukryj krótkie wideo w historii</string>
+    <string name="hide_shorts_from_history">Ukryj \"shorts\" w historii</string>
     <string name="disable_screensaver">Wyłącz wygaszacz ekranu</string>
     <string name="description_not_found">Nie znaleziono opisu</string>
 	<string name="proxy_port_hint">Port proxy</string>
@@ -442,4 +442,8 @@
     <string name="action_subscribe_on">Subskrybuj wł</string>
     <!-- END Moved strings -->
     <string name="skip_24_rate">Pomiń format 24kl./s (prawdziwa naprawa trybu kinowego?)</string>
+    <string name="subtitle_white_transparent">Białe na przezroczystym tle</string>
+    <string name="add_to_playback_queue">Dodaj do kolejki odtwarzania</string>
+    <string name="remove_from_playback_queue">Usuń z kolejki odtwarzania</string>
+    <string name="player_disable_suggestions">Wyłącz rekomendacje</string>
 </resources>
