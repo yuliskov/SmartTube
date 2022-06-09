@@ -16,6 +16,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.AudioTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector.TrackSelectorCallback;
 
@@ -448,8 +449,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         // Get ready for group with multiple codecs: avc, av01
                         if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
                             result = mediaTrack;
-                            // Don't do break. Cause we don't know there 30/60 fps.
-                            //break;
+                            // Don't do break for VideoTrack because we don't know whether there 30/60 fps.
+                            if (!(originTrack instanceof VideoTrack)) {
+                                break;
+                            }
                         } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
                             result = mediaTrack;
                         }
@@ -536,7 +539,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         // Tracks are grouped by the language/formats
         for (MediaTrack[] trackGroup : trackGroupList) {
-            if (trackGroup != null && trackGroup.length > 1) {
+            if (trackGroup != null && trackGroup.length >= 1) {
                 MediaTrack mediaTrack = trackGroup[0];
 
                 if (mediaTrack.format != null && Helpers.equals(mediaTrack.format.language, mLanguage)) {

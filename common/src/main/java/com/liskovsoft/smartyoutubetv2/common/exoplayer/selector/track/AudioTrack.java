@@ -9,7 +9,14 @@ public class AudioTrack extends MediaTrack {
 
     @Override
     public int inBounds(MediaTrack track2) {
-        return compare(track2);
+        int result = compare(track2);
+
+        // Select at least something.
+        if (result == -1 && track2 != null && track2.format != null) {
+            result = 1;
+        }
+
+        return result;
     }
 
     @Override
