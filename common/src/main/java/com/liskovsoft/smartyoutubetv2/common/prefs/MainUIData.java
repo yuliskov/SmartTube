@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 
@@ -113,7 +114,8 @@ public class MainUIData {
     }
 
     public float getVideoGridScale() {
-        return mVideoGridScale;
+        // Fixing the bug with chaotic cards positioning on Android 4.4 devices.
+        return Build.VERSION.SDK_INT <= 19 ? 1.2f : mVideoGridScale;
     }
 
     public void setUIScale(float scale) {

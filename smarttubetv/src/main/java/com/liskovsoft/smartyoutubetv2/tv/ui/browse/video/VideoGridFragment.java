@@ -157,7 +157,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     }
 
     /**
-     * Disable scrolling on partially updated grid. This prevent cards from misbehaving.
+     * Disable scrolling on partially updated grid. This shouldn't fix card position bug on Android 4.4.
      */
     private void freeze(boolean freeze) {
         if (getBrowseGrid() != null) {
