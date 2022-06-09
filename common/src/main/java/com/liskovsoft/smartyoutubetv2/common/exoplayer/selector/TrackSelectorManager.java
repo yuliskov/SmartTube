@@ -14,12 +14,15 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.AudioTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector.TrackSelectorCallback;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -31,6 +34,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     //private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
     //private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
+    private final String mLanguage;
 
     private DefaultTrackSelector mTrackSelector;
     //private TrackSelection.Factory mTrackSelectionFactory;
@@ -38,6 +42,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
     private long mTracksInitTimeMs;
+
+    public TrackSelectorManager(String language) {
+        mLanguage = language;
+    }
 
     public void invalidate() {
         Arrays.fill(mRenderers, null);
@@ -414,11 +422,13 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         if (originTrack.format != null) { // not auto selection
             MediaTrack prevResult;
 
-            for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {
+            MediaTrack[][] mediaTracks = filterByLanguage(renderer.mediaTracks, originTrack);
+
+            for (int groupIndex = 0; groupIndex < mediaTracks.length; groupIndex++) {
                 prevResult = result;
 
                 // Very rare NPE fix
-                MediaTrack[] trackGroup = renderer.mediaTracks[groupIndex];
+                MediaTrack[] trackGroup = mediaTracks[groupIndex];
 
                 if (trackGroup == null) {
                     Log.e(TAG, "Track selection error. Media track group %s is empty.", groupIndex);
@@ -508,6 +518,33 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
     private boolean hasSelection(int rendererIndex) {
         return mRenderers[rendererIndex] != null && mRenderers[rendererIndex].selectedTrack != null;
+    }
+
+    private MediaTrack[][] filterByLanguage(MediaTrack[][] trackGroupList, MediaTrack originTrack) {
+        if (originTrack instanceof AudioTrack && trackGroupList.length > 1 && mLanguage != null) {
+            List<MediaTrack[]> resultTracks = null;
+
+            // Tracks are grouped by the language/formats
+            for (MediaTrack[] trackGroup : trackGroupList) {
+                if (trackGroup != null && trackGroup.length > 1) {
+                    MediaTrack mediaTrack = trackGroup[0];
+
+                    if (mediaTrack.format != null && Helpers.equals(mediaTrack.format.language, mLanguage)) {
+                        if (resultTracks == null) {
+                            resultTracks = new ArrayList<>();
+                        }
+
+                        resultTracks.add(trackGroup);
+                    }
+                }
+            }
+
+            if (resultTracks != null && !resultTracks.isEmpty()) {
+                return resultTracks.toArray(new MediaTrack[0][]);
+            }
+        }
+
+        return trackGroupList;
     }
 
     //private void setOverride(int rendererIndex, int group, int[] tracks, boolean enableRandomAdaptation) {
