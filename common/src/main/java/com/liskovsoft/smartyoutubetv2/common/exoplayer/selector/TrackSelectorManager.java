@@ -536,24 +536,37 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         }
 
         List<MediaTrack[]> resultTracks = null;
+        List<MediaTrack[]> resultTracksFallback = null;
 
         // Tracks are grouped by the language/formats
         for (MediaTrack[] trackGroup : trackGroupList) {
             if (trackGroup != null && trackGroup.length >= 1) {
                 MediaTrack mediaTrack = trackGroup[0];
 
-                if (mediaTrack.format != null && Helpers.equals(mediaTrack.format.language, mLanguage)) {
-                    if (resultTracks == null) {
-                        resultTracks = new ArrayList<>();
-                    }
+                if (mediaTrack.format != null) {
+                    if (Helpers.equals(mediaTrack.format.language, mLanguage)) {
+                        if (resultTracks == null) {
+                            resultTracks = new ArrayList<>();
+                        }
 
-                    resultTracks.add(trackGroup);
+                        resultTracks.add(trackGroup);
+                    } else if (Helpers.equals(mediaTrack.format.language, "en")) {
+                        if (resultTracksFallback == null) {
+                            resultTracksFallback = new ArrayList<>();
+                        }
+
+                        resultTracksFallback.add(trackGroup);
+                    }
                 }
             }
         }
 
         if (resultTracks != null && !resultTracks.isEmpty()) {
             return resultTracks.toArray(new MediaTrack[0][]);
+        }
+
+        if (resultTracksFallback != null && !resultTracksFallback.isEmpty()) {
+            return resultTracksFallback.toArray(new MediaTrack[0][]);
         }
 
         return trackGroupList;
