@@ -18,6 +18,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
@@ -309,6 +310,11 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
                         invalidateUi(mChannelAction);
                     }
                 });
+    }
+
+    public void setNextTitle(String title) {
+        mSkipNextAction.setLabel1(title != null ? title : getContext().getString(R.string.lb_playback_controls_skip_next));
+        invalidateUi(mSkipNextAction);
     }
 
     public void setThumbsUpActionState(boolean thumbsUp) {

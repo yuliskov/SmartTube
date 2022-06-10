@@ -122,6 +122,23 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isAbsoluteDateEnabled());
             getController().setVideo(video);
         }
+
+        getController().setNextTitle(getNextTitle());
+    }
+
+    private String getNextTitle() {
+        String title = null;
+
+        Video nextVideo = Playlist.instance().getNext();
+        Video video = getController().getVideo();
+
+        if (nextVideo != null) {
+            title = nextVideo.title;
+        } else if (video != null && video.nextMediaItem != null) {
+            title = video.nextMediaItem.getTitle();
+        }
+
+        return title;
     }
 
     public void loadSuggestions(Video video) {

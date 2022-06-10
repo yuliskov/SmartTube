@@ -27,6 +27,7 @@ public interface PlaybackUIController {
     void setSubtitleButtonState(boolean selected);
     void setSpeedButtonState(boolean selected);
     void setChannelIcon(String iconUrl);
+    void setNextTitle(String title);
     void setDebugButtonState(boolean show);
     void showDebugInfo(boolean show);
     void showSubtitles(boolean show);

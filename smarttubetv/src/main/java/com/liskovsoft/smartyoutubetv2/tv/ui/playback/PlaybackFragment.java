@@ -1238,6 +1238,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public void setNextTitle(String title) {
+        if (mPlayerGlue != null) {
+            mPlayerGlue.setNextTitle(title);
+        }
+    }
+
+    @Override
     public void setDebugButtonState(boolean show) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setDebugInfoActionState(show);
