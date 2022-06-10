@@ -51,7 +51,9 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
 
         appendUpdateSource(settingsPresenter);
 
-        appendSiteLink(settingsPresenter);
+        if (!Helpers.equalsAny(country, "RU", "UA")) {
+            appendSiteLink(settingsPresenter);
+        }
 
         //appendDumpDebugInfo(settingsPresenter);
 
