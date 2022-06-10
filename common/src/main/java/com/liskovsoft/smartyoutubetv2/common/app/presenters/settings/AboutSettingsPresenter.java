@@ -4,6 +4,7 @@ import android.content.Context;
 import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -38,6 +39,12 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
 
+        String country = LocaleUtility.getCurrentLocale(getContext()).getCountry();
+
+        if (!Helpers.equalsAny(country, "RU", "UA")) {
+            appendDonation(settingsPresenter);
+        }
+
         appendAutoUpdateSwitch(settingsPresenter);
 
         appendUpdateCheckButton(settingsPresenter);
@@ -45,8 +52,6 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         appendUpdateSource(settingsPresenter);
 
         appendSiteLink(settingsPresenter);
-
-        appendDonation(settingsPresenter);
 
         //appendDumpDebugInfo(settingsPresenter);
 
