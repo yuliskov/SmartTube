@@ -319,7 +319,7 @@
     <string name="player_seek_regular">Regularny</string>
     <string name="player_seek_confirmation_pause">Z potwierdzeniem (pauza podczas przewijania)</string>
     <string name="player_seek_confirmation_play">Z potwierdzeniem (odtwarzaj podczas przewijania)</string>
-    <string name="hide_shorts_from_home">Ukryj "shorts" na Home</string>
+    <string name="hide_shorts_from_home">Ukryj "shorts" na głównej</string>
     <string name="finish_on_disconnect">Zamknij aplikację po odłączeniu telefonu</string>
     <string name="update_error">Błąd aktualizacji</string>
     <string name="hide_shorts_from_history">Ukryj \"shorts\" w historii</string>
