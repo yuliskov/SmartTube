@@ -240,8 +240,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             if (group != null && !group.isEmpty()) {
                 VideoGroup videoGroup = VideoGroup.from(group);
 
-                // Merge remote queue with player's queue
-                if (groupIndex == 0 && video.isRemote && video.remotePlaylistId != null) {
+                // Merge remote queue with player's queue (when new queue added or user clicked on video)
+                if (groupIndex == 0 && video.isRemote && (video.remotePlaylistId != null || !Playlist.instance().hasNext())) {
                     videoGroup.removeAllBefore(video);
 
                     videoGroup.setTitle(getActivity().getString(R.string.action_playback_queue));
