@@ -261,7 +261,7 @@
     <string name="removed_from">Usunięto z %s</string>
     <string name="video_preset_adaptive">Adaptacyjny</string>
     <string name="content_block_preview_recap">Podgląd lub podsumowanie wideo</string>
-    <string name="content_block_highlight">Wskaż lub wyróżnij wideo</string>
+    <string name="content_block_highlight">Podsumowanie wideo</string>
     <string name="removed_from_history">Wideo zostało usunięte z historii</string>
     <string name="remove_from_history">Usunąć z historii</string>
     <string name="upload_date">Data przesyłania</string>
@@ -303,7 +303,7 @@
     <string name="action_previous">Poprzednie wideo</string>
     <string name="action_high_quality">Jakość wideo</string>
     <string name="content_block_no_skipping_mode">Tryb bez pomijania</string>
-    <string name="content_block_action_type">Wybrać działanie</string>
+    <string name="content_block_action_type">Wybierz działanie</string>
     <string name="content_block_action_none">Nic nie rób</string>
     <string name="content_block_action_only_skip">Tylko pomiń</string>
     <string name="content_block_action_toast">Pomiń z powiadomieniem</string>
