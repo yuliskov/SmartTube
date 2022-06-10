@@ -492,18 +492,26 @@ public final class Video implements Parcelable {
             return;
         }
 
-        metadataTitle = metadata.getTitle();
-        
-        metadataSecondTitle = useAltSecondTitle ? metadata.getSecondTitleAlt() : metadata.getSecondTitle();
+        // NOTE: Skip upcoming (no media) because default title more informative (e.g. has scheduled time).
+        // NOTE: Upcoming videos metadata wrongly reported as live
+        if (!isUpcoming) {
+            metadataTitle = metadata.getTitle();
 
-        // Casting fix (no title, no desc)
-        if (title == null) {
-            title = metadataTitle;
-        }
+            metadataSecondTitle = useAltSecondTitle ? metadata.getSecondTitleAlt() : metadata.getSecondTitle();
 
-        // Casting fix (no title, no desc)
-        if (secondTitle == null) {
-            secondTitle = metadataSecondTitle;
+            // Casting fix (no title, no desc)
+            if (title == null) {
+                title = metadataTitle;
+            }
+
+            // Casting fix (no title, no desc)
+            if (secondTitle == null) {
+                secondTitle = metadataSecondTitle;
+            }
+
+            // NOTE: Upcoming videos metadata wrongly reported as live (live == true, upcoming == false)
+            isLive = metadata.isLive();
+            isUpcoming = metadata.isUpcoming();
         }
 
         // No checks. This data wasn't existed before sync.
@@ -512,9 +520,6 @@ public final class Video implements Parcelable {
         }
         channelId = metadata.getChannelId();
         nextMediaItem = metadata.getNextVideo();
-        // NOTE: Upcoming videos metadata wrongly reported as live
-        isLive = metadata.isLive();
-        isUpcoming = metadata.isUpcoming();
         isSubscribed = metadata.isSubscribed();
         isSynced = true;
 
@@ -547,6 +552,9 @@ public final class Video implements Parcelable {
         video.percentWatched = percentWatched;
         video.cardImageUrl = cardImageUrl;
         video.fromQueue = fromQueue;
+        video.bgImageUrl = bgImageUrl;
+        video.isLive = isLive;
+        video.isUpcoming = isUpcoming;
 
         if (group != null) {
             video.group = group.copy(); // Needed for proper multi row fragments sync (row id == group id)

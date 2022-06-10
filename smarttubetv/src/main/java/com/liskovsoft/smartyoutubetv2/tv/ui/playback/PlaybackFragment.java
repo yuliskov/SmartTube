@@ -788,6 +788,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void setArtwork(String url) {
         mBackgroundManager.setBackground(url);
+        if (url != null && containsMedia()) {
+            restartEngine();
+        }
     }
 
     private CharSequence appendLive(String title, boolean isLive) {

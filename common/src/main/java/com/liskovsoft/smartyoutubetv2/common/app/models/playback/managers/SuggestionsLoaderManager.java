@@ -118,10 +118,16 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata, Video video) {
         // NOTE: Skip upcoming (no media) because default title more informative (e.g. has scheduled time).
         // NOTE: Upcoming videos metadata wrongly reported as live
-        if (getController().containsMedia() || video.getPlayerTitle() == null) {
-            video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isAbsoluteDateEnabled());
-            getController().setVideo(video);
+        //if (getController().containsMedia() || video.getPlayerTitle() == null) {
+        //    video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isAbsoluteDateEnabled());
+        //    getController().setVideo(video);
+        //}
+
+        if (getController().containsMedia()) {
+            video.isUpcoming = false; // live stream started
         }
+        video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isAbsoluteDateEnabled());
+        getController().setVideo(video);
 
         getController().setNextTitle(getNextTitle());
     }
