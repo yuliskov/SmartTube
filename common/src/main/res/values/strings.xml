@@ -373,7 +373,7 @@
     <string name="playback_notifications_fix">Disable playback notifications</string>
     <string name="amlogic_fix_desc">Frame drop fix on Amlogic-based devices.</string>
     <string name="amlogic_fix">Amlogic 1080p@60fps fix</string>
-    <string name="tunneled_video_playback_desc">Tunneled video playback promises benefits such as better audio/video synchronization (AV sync) and smoother playback. Required Android 5+</string>
+    <string name="tunneled_video_playback_desc">NOTE: pause may not work properly! Tunneled video playback promises benefits such as better audio/video synchronization (AV sync) and smoother playback. Required Android 5+</string>
     <string name="tunneled_video_playback">Tunneled video playback (Android 5+)</string>
     <string name="master_volume">Master volume</string>
     <string name="volume_limit">Volume limit</string>

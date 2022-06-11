@@ -369,7 +369,7 @@
     <string name="playback_notifications_fix">Отключить уведомления о воспроизведении</string>
     <string name="amlogic_fix_desc">Исправление потери кадров на устройствах на базе Amlogic.</string>
     <string name="amlogic_fix">Исправление 1080p@60fps на Amlogic</string>
-    <string name="tunneled_video_playback_desc">Туннельное воспроизведение обещает лучшую синхронизацию аудио/видео и более плавное воспроизведение. Требуется Андроид 5+</string>
+    <string name="tunneled_video_playback_desc">Внимание: могут быть проблемы с паузой! Туннельное воспроизведение обещает лучшую синхронизацию аудио/видео и более плавное воспроизведение. Требуется Андроид 5+</string>
     <string name="tunneled_video_playback">Туннельное воспроизведение (Android 5+)</string>
     <string name="master_volume">Основная громкость</string>
     <string name="volume_limit">Ограничение громкости</string>
