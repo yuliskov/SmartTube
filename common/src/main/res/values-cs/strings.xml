@@ -447,4 +447,6 @@
     <!-- KONEC Přesunutých řetězců -->
     <string name="skip_24_rate">Přeskakovat formáty s 24fps (oprava pro režim Real Cinema?)</string>
     <string name="player_disable_suggestions">Zakázat návrhy</string>
+    <string name="feedback">Zpětná vazba</string>
+    <string name="sources">Zdroje</string>
 </resources>
