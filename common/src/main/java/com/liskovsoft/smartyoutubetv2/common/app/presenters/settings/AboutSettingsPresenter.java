@@ -41,11 +41,6 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
 
         String country = LocaleUtility.getCurrentLocale(getContext()).getCountry();
 
-        if (!Helpers.equalsAny(country, "RU", "UA")) {
-            appendDonation(settingsPresenter);
-            appendFeedback(settingsPresenter);
-        }
-
         appendAutoUpdateSwitch(settingsPresenter);
 
         appendUpdateCheckButton(settingsPresenter);
@@ -53,7 +48,9 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         appendUpdateSource(settingsPresenter);
 
         if (!Helpers.equalsAny(country, "RU", "UA")) {
-            appendSiteLink(settingsPresenter);
+            appendDonation(settingsPresenter);
+            appendFeedback(settingsPresenter);
+            appendLinks(settingsPresenter);
         }
 
         //appendDumpDebugInfo(settingsPresenter);
@@ -75,10 +72,14 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleButton(updateCheckOption);
     }
 
-    private void appendSiteLink(AppDialogPresenter settingsPresenter) {
-        OptionItem webSiteOption = UiOptionItem.from(String.format("%s (GitHub)", getContext().getString(R.string.web_site)),
-                option -> Utils.openLink(getContext(), getContext().getString(R.string.web_site_url)));
+    private void appendLinks(AppDialogPresenter settingsPresenter) {
+        OptionItem sourcesOption = UiOptionItem.from(getContext().getString(R.string.sources),
+                option -> Utils.openLink(getContext(), Utils.toQrCodeLink(getContext().getString(R.string.sources_url))));
 
+        OptionItem webSiteOption = UiOptionItem.from(getContext().getString(R.string.web_site),
+                option -> Utils.openLink(getContext(), Utils.toQrCodeLink(getContext().getString(R.string.web_site_url))));
+
+        settingsPresenter.appendSingleButton(sourcesOption);
         settingsPresenter.appendSingleButton(webSiteOption);
     }
 

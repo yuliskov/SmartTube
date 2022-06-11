@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="web_site_url" translatable="false">https://github.com/yuliskov/SmartTubeNext</string>
+    <string name="web_site_url" translatable="false">https://smarttubenext.github.io</string>
+    <string name="sources_url" translatable="false">https://github.com/yuliskov/SmartTubeNext</string>
 </resources>
