@@ -73,12 +73,16 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendLinks(AppDialogPresenter settingsPresenter) {
+        OptionItem releasesOption = UiOptionItem.from(getContext().getString(R.string.releases),
+                option -> Utils.openLink(getContext(), Utils.toQrCodeLink(getContext().getString(R.string.releases_url))));
+
         OptionItem sourcesOption = UiOptionItem.from(getContext().getString(R.string.sources),
                 option -> Utils.openLink(getContext(), Utils.toQrCodeLink(getContext().getString(R.string.sources_url))));
 
         OptionItem webSiteOption = UiOptionItem.from(getContext().getString(R.string.web_site),
                 option -> Utils.openLink(getContext(), Utils.toQrCodeLink(getContext().getString(R.string.web_site_url))));
 
+        settingsPresenter.appendSingleButton(releasesOption);
         settingsPresenter.appendSingleButton(sourcesOption);
         settingsPresenter.appendSingleButton(webSiteOption);
     }

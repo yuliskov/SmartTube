@@ -441,4 +441,5 @@
     <string name="player_disable_suggestions">Отключить рекомендации</string>
     <string name="feedback">Обратная связь</string>
     <string name="sources">Исходники</string>
+    <string name="releases">Релизы</string>
 </resources>
