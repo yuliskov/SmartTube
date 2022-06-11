@@ -439,4 +439,5 @@
     <!-- END Moved strings -->
     <string name="skip_24_rate">Пропускать 24fps форматы (исправление для режима real cinema?)</string>
     <string name="player_disable_suggestions">Отключить рекомендации</string>
+    <string name="feedback">Обратная связь</string>
 </resources>

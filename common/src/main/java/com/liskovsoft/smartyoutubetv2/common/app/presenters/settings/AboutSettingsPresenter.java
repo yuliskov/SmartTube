@@ -43,6 +43,7 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
 
         if (!Helpers.equalsAny(country, "RU", "UA")) {
             appendDonation(settingsPresenter);
+            appendFeedback(settingsPresenter);
         }
 
         appendAutoUpdateSwitch(settingsPresenter);
@@ -118,5 +119,21 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.preferred_update_source), options);
+    }
+
+    private void appendFeedback(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> feedbackOptions = new ArrayList<>();
+
+        Map<String, String> feedback = Helpers.getMap(getContext(), R.array.feedback);
+
+        for (Entry<String, String> entry : feedback.entrySet()) {
+            feedbackOptions.add(UiOptionItem.from(
+                    entry.getKey(),
+                    option -> Utils.openLink(getContext(), Utils.toQrCodeLink(entry.getValue()))));
+        }
+
+        if (!feedbackOptions.isEmpty()) {
+            settingsPresenter.appendStringsCategory(getContext().getString(R.string.feedback), feedbackOptions);
+        }
     }
 }
