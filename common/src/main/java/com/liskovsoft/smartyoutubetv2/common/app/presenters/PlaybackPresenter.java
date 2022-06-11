@@ -81,7 +81,10 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     }
 
     public boolean isRunningInBackground() {
-        return getView() != null && getView().getController().isEngineInitialized() && !Utils.isPlayerInForeground(getContext());
+        return getView() != null &&
+                getView().getController().getBackgroundMode() != PlaybackEngineController.BACKGROUND_MODE_DEFAULT &&
+                getView().getController().isEngineInitialized() &&
+                !Utils.isPlayerInForeground(getContext());
     }
 
     public boolean isInPipMode() {
