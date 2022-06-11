@@ -240,7 +240,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             if (group != null && !group.isEmpty()) {
                 VideoGroup videoGroup = VideoGroup.from(group);
 
-                // Merge remote queue with player's queue (when new queue added or user clicked on video)
+                // Merge remote queue with player's queue (when phone cast just started or user clicked on playlist item)
                 if (groupIndex == 0 && video.isRemote && (video.remotePlaylistId != null || !Playlist.instance().hasNext())) {
                     videoGroup.removeAllBefore(video);
 
@@ -274,7 +274,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void appendUserQueueIfNeeded(Video video) {
-        if (video.isRemote || !Playlist.instance().hasNext()) {
+        // Exclude situations when phone cast just started or next item is null
+        if ((video.isRemote && video.remotePlaylistId != null) || !Playlist.instance().hasNext()) {
             return;
         }
 

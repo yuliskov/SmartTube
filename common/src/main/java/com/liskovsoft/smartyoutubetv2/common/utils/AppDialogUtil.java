@@ -539,7 +539,7 @@ public class AppDialogUtil {
 
         for (Video video : playlist.getAll()) {
             options.add(0, UiOptionItem.from( // Add to start (recent videos on top)
-                    String.format("%s - %s", video.title, video.extractAuthor()),
+                    String.format("%s - %s", video.getTitle(), video.extractAuthor()),
                     optionItem -> {
                         video.fromQueue = true;
                         onClick.onClick(video);

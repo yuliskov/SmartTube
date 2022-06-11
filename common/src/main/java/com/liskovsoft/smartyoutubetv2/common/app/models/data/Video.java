@@ -223,12 +223,16 @@ public final class Video implements Parcelable {
         return video == null || video.videoId == null;
     }
 
+    public String getTitle() {
+        return title != null ? title : metadataTitle;
+    }
+
     public String extractAuthor() {
         if (author != null) {
             return author;
         }
 
-        return extractAuthor(secondTitle);
+        return extractAuthor(secondTitle != null ? secondTitle : metadataSecondTitle);
     }
 
     private static String extractAuthor(String info) {
@@ -548,7 +552,9 @@ public final class Video implements Parcelable {
         video.playlistIndex = playlistIndex;
         video.channelId = channelId;
         video.title = title;
+        video.metadataTitle = metadataTitle;
         video.secondTitle = secondTitle;
+        video.metadataSecondTitle = metadataSecondTitle;
         video.percentWatched = percentWatched;
         video.cardImageUrl = cardImageUrl;
         video.fromQueue = fromQueue;
