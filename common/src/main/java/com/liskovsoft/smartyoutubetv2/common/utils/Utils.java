@@ -45,6 +45,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.WebBrowserPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -299,6 +300,10 @@ public class Utils {
     }
 
     public static void openLink(Context context, String url) {
+        WebBrowserPresenter.instance(context).loadUrl(url);
+    }
+
+    public static void openLinkExt(Context context, String url) {
         try {
             openLinkInTabs(context, url);
         } catch (Exception e) {
