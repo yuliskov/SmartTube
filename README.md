@@ -9,7 +9,7 @@ stability, voice search and casting support **might** be worse than in the offic
 
 **Do you have any question?** Ctrl+F or ⌘F this readme first!
 
-[**Installation**](#Installation) | [**Donation**](#Donation) | [**FAQ**](#FAQ) | [Support / Chat](#Support) | [Changelog](https://t.me/s/SmartTubeNextNewsEN) | [Source Code](https://github.com/yuliskov/SmartTubeNext)
+[**Installation**](#Installation) | [**Donation**](#Donation) | [**FAQ**](#FAQ) | [Support / Chat](#Support) | [Build](#Build) | [Changelog](https://t.me/s/SmartTubeNextNewsEN) | [Source Code](https://github.com/yuliskov/SmartTubeNext)
 
 
 ## Device support
@@ -160,6 +160,16 @@ The international group is in **English only**. But don't worry if your English 
 
 SmartTubeNext is developed single-handedly by Yurii; there is no larger team or company behind this. This is an open source, hobby project. Several others have helped with translations, some of which can be seen on [Github](https://github.com/yuliskov/SmartTubeNext/graphs/contributors), some have sent their translations directly to Yurii. There are also helpful people in the support chat.
 
+## Build
+
+To build, install and run a debug version, run this from the root of the project:
+
+```
+git clone https://github.com/yuliskov/SmartTubeNext.git
+cd SmartTubeNext
+git submodule update --init
+gradlew buildStorigDebug
+```
 
 ## Video codecs
 
