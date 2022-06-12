@@ -185,6 +185,11 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
+        if (mediaGroup == null) {
+            Log.e(TAG, "Oops. Can't continue. MediaGroup is null.");
+            return;
+        }
+
         Observable<MediaGroup> continuation;
 
         if (mediaGroup.getType() == MediaGroup.TYPE_SUGGESTIONS) {

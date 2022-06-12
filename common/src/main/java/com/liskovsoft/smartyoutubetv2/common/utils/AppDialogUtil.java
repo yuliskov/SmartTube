@@ -399,6 +399,10 @@ public class AppDialogUtil {
             return;
         }
 
+        if (video == null) {
+            return;
+        }
+
         MediaItemManager itemManager = YouTubeMediaItemManager.instance();
 
         Disposable playlistsInfoAction = itemManager.getVideoPlaylistsInfoObserve(video.videoId)

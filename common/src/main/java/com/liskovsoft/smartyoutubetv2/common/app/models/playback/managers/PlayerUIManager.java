@@ -577,7 +577,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     private void setPlaylistAddButtonState() {
-        if (mVideoPlaylistInfos == null) {
+        if (mVideoPlaylistInfos == null || getController() == null) {
             return;
         }
 

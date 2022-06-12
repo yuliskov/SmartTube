@@ -300,7 +300,12 @@ public class Utils {
     }
 
     public static void openLink(Context context, String url) {
-        WebBrowserPresenter.instance(context).loadUrl(url);
+        try {
+            WebBrowserPresenter.instance(context).loadUrl(url);
+        } catch (Exception e) {
+            // WebView not found. Use alt method.
+            openLinkExt(context, url);
+        }
     }
 
     public static void openLinkExt(Context context, String url) {

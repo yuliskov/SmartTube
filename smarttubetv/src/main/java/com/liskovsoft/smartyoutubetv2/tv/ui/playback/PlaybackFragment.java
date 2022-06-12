@@ -246,11 +246,15 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     public void skipToNext() {
-        mPlayerGlue.next();
+        if (mPlayerGlue != null) {
+            mPlayerGlue.next();
+        }
     }
 
     public void skipToPrevious() {
-        mPlayerGlue.previous();
+        if (mPlayerGlue != null) {
+            mPlayerGlue.previous();
+        }
     }
 
     public void rewind() {

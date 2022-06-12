@@ -395,7 +395,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateSections();
 
         // Move current focus
-        getView().selectSection(mGeneralData.getSectionIndex(section.getId()), false);
+        if (getView() != null) {
+            getView().selectSection(mGeneralData.getSectionIndex(section.getId()), false);
+        }
     }
 
     public void moveSectionDown(BrowseSection section) {

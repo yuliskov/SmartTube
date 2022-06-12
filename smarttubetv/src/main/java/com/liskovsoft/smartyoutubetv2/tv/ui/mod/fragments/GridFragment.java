@@ -67,7 +67,7 @@ public class GridFragment extends Fragment implements BrowseSupportFragment.Main
      * Returns R.id.browse_grid
      */
     public VerticalGridView getBrowseGrid() {
-        return mGridViewHolder.getGridView();
+        return mGridViewHolder != null ? mGridViewHolder.getGridView() : null;
     }
 
     /**
