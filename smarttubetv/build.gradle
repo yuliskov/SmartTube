@@ -98,10 +98,10 @@ android {
             //applicationId "org.smartteam.smarttube.tv"
             applicationId "com.teamsmart.videomanager.tv"
         }
-        // storig {
-        //     // matchingFallbacks = ['lite']
-        //     applicationId "com.teamsmart.videomanager.tv"
-        // }
+        storig {
+            // matchingFallbacks = ['lite']
+            applicationId "org.smartteam.smarttube.tv.orig"
+        }
         strtarmenia {
             // matchingFallbacks = ['lite']
             versionCode 11000 + defaultConfig.versionCode
