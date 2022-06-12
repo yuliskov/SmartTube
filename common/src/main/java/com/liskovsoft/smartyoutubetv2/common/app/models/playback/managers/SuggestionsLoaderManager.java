@@ -111,7 +111,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                         error -> {
                             getController().showProgressBar(false);
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
-                        }
+                        },
+                        () -> getController().showProgressBar(false)
                 );
     }
 
@@ -257,22 +258,6 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         }
     }
 
-    public void addMetadataListener(MetadataListener listener) {
-        mListeners.add(listener);
-    }
-
-    private void callListener(MediaItemMetadata mediaItemMetadata) {
-        if (mediaItemMetadata != null) {
-            for (MetadataListener listener : mListeners) {
-                listener.onMetadata(mediaItemMetadata);
-            }
-        }
-    }
-
-    private void disposeActions() {
-        RxUtils.disposeActions(mMetadataAction, mScrollAction);
-    }
-
     private void appendUserQueueIfNeeded(Video video) {
         // Exclude situations when phone cast just started or next item is null
         if ((video.isRemote && video.remotePlaylistId != null) || !Playlist.instance().hasNext()) {
@@ -288,5 +273,21 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             item.group = videoGroup;
         }
         getController().updateSuggestions(videoGroup);
+    }
+
+    public void addMetadataListener(MetadataListener listener) {
+        mListeners.add(listener);
+    }
+
+    private void callListener(MediaItemMetadata mediaItemMetadata) {
+        if (mediaItemMetadata != null) {
+            for (MetadataListener listener : mListeners) {
+                listener.onMetadata(mediaItemMetadata);
+            }
+        }
+    }
+
+    private void disposeActions() {
+        RxUtils.disposeActions(mMetadataAction, mScrollAction);
     }
 }
