@@ -587,9 +587,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             //    mEventListener.onScrollEnd((Video) adapter.get(adapter.size() - 1));
             //}
 
-            // Select last possible item on fail (queue doesn't contain current video)
-            if (index == -1 && getVideo().hasNextPageKey()) {
-                index = adapter.size() - 1;
+            // Select last possible item on fail (NOTE: skip queue because it doesn't contain current video)
+            if (index == -1 && !adapter.isEmpty()) {
+                int lastIndex = adapter.size() - 1;
+                Video lastVideo = (Video) adapter.get(lastIndex);
+                if (lastVideo.hasNextPageKey()) {
+                    index = lastIndex;
+                }
             }
         }
 
