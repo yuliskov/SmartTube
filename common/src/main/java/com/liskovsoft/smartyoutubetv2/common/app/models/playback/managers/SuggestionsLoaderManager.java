@@ -73,6 +73,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
     @Override
     public void onSuggestionItemClicked(Video item) {
+        markAsQueueIfNeeded(item);
+
         // Update UI to response to user clicks
         getController().resetSuggestedPosition();
     }
@@ -273,6 +275,14 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             item.group = videoGroup;
         }
         getController().updateSuggestions(videoGroup);
+    }
+
+    private void markAsQueueIfNeeded(Video item) {
+        List<Video> afterCurrent = Playlist.instance().getAllAfterCurrent();
+
+        if (afterCurrent != null && afterCurrent.contains(item)) {
+            item.fromQueue = true;
+        }
     }
 
     public void addMetadataListener(MetadataListener listener) {
