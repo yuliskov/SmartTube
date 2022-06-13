@@ -197,7 +197,7 @@
     <string name="msg_mode_switch_error">Görüntü modu değiştirilemiyor: \"%s\"</string>
     <string name="msg_player_error">Oynatıcı hatası oluştu %s. Oynatma yeniden başlatılıyor…</string>
     <string name="video_preset_disabled">Ön ayar olmadan</string>
-    <string name="video_preset_enabled">Bir sonraki videonun formatı ön ayara göre ayarlanacaktır.</string>
+    <string name="video_preset_enabled">Bir sonraki videonun biçimi ön ayara göre ayarlanacaktır.</string>
     <string name="player_sleep_timer">Uyku zamanlayıcısı</string>
     <string name="player_show_quality_info">Video kalite bilgisini göster</string>
     <string name="player_remember_each_speed">Her video hızını hatırla</string>
@@ -205,7 +205,7 @@
     <string name="player_remember_speed_all">Tüm videolarda aynı</string>
     <string name="player_remember_speed_each">Her video için</string>
     <string name="msg_player_error_source">Video indirilemiyor</string>
-    <string name="msg_player_error_renderer">Seçilen video formatı desteklenmiyor.\nBelki bir aygıt yazılımı hatasıdır. Cihazı yeniden başlatıp deneyin.</string>
+    <string name="msg_player_error_renderer">Seçilen video biçimi desteklenmiyor.\nBelki bir aygıt yazılımı hatasıdır. Cihazı yeniden başlatıp deneyin.</string>
     <string name="msg_player_error_unexpected">Bilinmeyen video çözücü hatası</string>
     <string name="video_aspect">En boy oranı</string>
     <string name="player_tweaks">Geliştirici seçenekleri</string>
@@ -445,4 +445,8 @@
     <string name="action_subscribe_off">Abone ol Kapalı</string>
     <string name="action_subscribe_on">Abone ol Açık</string>
     <!-- END Moved strings -->
+    <string name="skip_24_rate">24 fps biçimlerini atla (gerçek sinema modu düzeltmesi?)</string>
+    <string name="player_disable_suggestions">Önerileri devre dışı bırak</string>
+    <string name="feedback">Geri bildirim</string>
+    <string name="sources">Kaynaklar</string>
 </resources>
