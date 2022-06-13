@@ -93,6 +93,11 @@ public class HQDialogManager extends PlayerEventListenerHelper {
         if (!getController().containsMedia()) {
             getController().reloadPlayback();
         }
+
+        // Make changes in image quality easily distinguished by the user
+        if (formatItem.getType() == FormatItem.TYPE_VIDEO) {
+            getController().showOverlay(false);
+        }
     }
 
     private void addVideoBufferCategory() {
