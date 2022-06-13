@@ -373,7 +373,7 @@
     <string name="playback_notifications_fix">Wiedergabe-Benachrichtigungen deaktivieren</string>
     <string name="amlogic_fix_desc">Frame-Drop-Fix auf Amlogic-basierten Geräten.</string>
     <string name="amlogic_fix">Amlogic 1080p@60fps Fix</string>
-    <string name="tunneled_video_playback_desc">Die getunnelte Video-Wiedergabe verspricht Vorteile wie eine bessere Audio/Video-Synchronisation (AV-Sync) und eine flüssigere Wiedergabe. Erfordert Android 5+</string>
+    <string name="tunneled_video_playback_desc">HINWEIS: Pause funktioniert möglicherweise nicht richtig! Die getunnelte Video-Wiedergabe verspricht Vorteile wie eine bessere Audio/Video-Synchronisation (AV-Sync) und eine flüssigere Wiedergabe. Erfordert Android 5+</string>
     <string name="tunneled_video_playback">Getunnelte Video-Wiedergabe (Android 5+)</string>
     <string name="master_volume">Gesamtlautstärke</string>
     <string name="volume_limit">Lautstärkebegrenzung</string>
@@ -447,4 +447,7 @@
     <!-- END Moved strings -->
     <string name="skip_24_rate">24fps-Formate überspringen (Echter-Kinomodus-Fix?)</string>
     <string name="player_disable_suggestions">Vorschläge deaktivieren</string>
+    <string name="feedback">Feedback</string>
+    <string name="sources">Quellen</string>
+    <string name="releases">Versionen</string>
 </resources>
