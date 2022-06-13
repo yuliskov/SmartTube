@@ -23,6 +23,7 @@ public final class Video implements Parcelable {
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     private static final String[] sNotPlaylistParams = new String[] {"EAIYAQ%3D%3D"};
     private static final String SECTION_PREFIX = "FE";
+    private static final String BLACK_PLACEHOLDER_URL = "https://via.placeholder.com/1280x720/000000/000000";
     public long id;
     public String title;
     public String secondTitle;
@@ -421,6 +422,10 @@ public final class Video implements Parcelable {
 
     public String getNextPageKey() {
         return group != null && group.getMediaGroup() != null && group.getMediaGroup().getNextPageKey() != null ? group.getMediaGroup().getNextPageKey() : null;
+    }
+
+    public String getBackgroundUrl() {
+        return bgImageUrl != null ? bgImageUrl : BLACK_PLACEHOLDER_URL;
     }
 
     public boolean belongsToUndefined() {

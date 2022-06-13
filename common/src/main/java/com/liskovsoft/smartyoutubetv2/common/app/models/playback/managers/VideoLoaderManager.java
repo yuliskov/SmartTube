@@ -32,7 +32,6 @@ import java.util.Map;
 
 public class VideoLoaderManager extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoaderManager.class.getSimpleName();
-    private static final String BLACK_PLACEHOLDER_URL = "https://via.placeholder.com/1280x720/000000/000000";
     private final Playlist mPlaylist;
     private final Handler mHandler;
     private final SuggestionsLoaderManager mSuggestionsLoader;
@@ -314,6 +313,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
+            bgImageUrl = mLastVideo.getBackgroundUrl();
         } else if (formatInfo.containsDashUrl() && isLive && !PlayerTweaksData.instance(getActivity()).isLiveStreamFixEnabled()) {
             Log.d(TAG, "Found live video (current or past live stream) in dash format. Loading...");
             getController().openDashUrl(formatInfo.getDashManifestUrl());
@@ -337,7 +337,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
             scheduleReloadVideoTimer(30 * 1_000);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
-            bgImageUrl = mLastVideo.bgImageUrl != null ? mLastVideo.bgImageUrl : BLACK_PLACEHOLDER_URL;
+            bgImageUrl = mLastVideo.getBackgroundUrl();
         }
 
         Video video = getController().getVideo();
