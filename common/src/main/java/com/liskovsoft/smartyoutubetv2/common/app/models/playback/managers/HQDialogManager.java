@@ -94,7 +94,7 @@ public class HQDialogManager extends PlayerEventListenerHelper {
             getController().reloadPlayback();
         }
 
-        // Make changes in image quality easily distinguished by the user
+        // Make result easily be spotted by the user
         if (formatItem.getType() == FormatItem.TYPE_VIDEO) {
             getController().showOverlay(false);
         }
@@ -135,7 +135,18 @@ public class HQDialogManager extends PlayerEventListenerHelper {
 
     private void addPresetsCategory() {
         addCategoryInt(AppDialogUtil.createVideoPresetsCategory(
-                getActivity(), mPlayerData, () -> getController().setFormat(mPlayerData.getFormat(FormatItem.TYPE_VIDEO))));
+                getActivity(), mPlayerData, () -> {
+                    FormatItem format = mPlayerData.getFormat(FormatItem.TYPE_VIDEO);
+                    getController().setFormat(format);
+
+                    if (!getController().containsMedia()) {
+                        getController().reloadPlayback();
+                    }
+
+                    // Make result easily be spotted by the user
+                    getController().showOverlay(false);
+                }
+        ));
     }
 
     private void removeCategoryInt(int id) {
