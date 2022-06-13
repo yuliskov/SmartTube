@@ -373,7 +373,7 @@
     <string name="playback_notifications_fix">Zakázat oznámení přehrávání</string>
     <string name="amlogic_fix_desc">Oprava poklesu snímků na Amlogic zařízeních.</string>
     <string name="amlogic_fix">Amlogic 1080p@60fps oprava</string>
-    <string name="tunneled_video_playback_desc">Tunelované video přehrávání slibuje výhody jako např. lepší audio/video synchronizace (AV synchronizace) a plynulejší přehrávání. Vyžaduje Android 5+</string>
+    <string name="tunneled_video_playback_desc">POZNÁMKA: Pozastavení nemusí správně fungovat! Tunelované video přehrávání slibuje výhody jako např. lepší audio/video synchronizace (AV synchronizace) a plynulejší přehrávání. Vyžaduje Android 5+</string>
     <string name="tunneled_video_playback">Tunelované video přehrávání (Android 5+)</string>
     <string name="master_volume">Hlavní hlasitost</string>
     <string name="volume_limit">Omezení hlasitosti</string>
@@ -447,4 +447,7 @@
     <!-- KONEC Přesunutých řetězců -->
     <string name="skip_24_rate">Přeskakovat formáty s 24fps (oprava pro režim Real Cinema?)</string>
     <string name="player_disable_suggestions">Zakázat návrhy</string>
+    <string name="feedback">Zpětná vazba</string>
+    <string name="sources">Zdroje</string>
+    <string name="releases">Vydané verze</string>
 </resources>
