@@ -542,8 +542,10 @@ public class AppDialogUtil {
         Playlist playlist = Playlist.instance();
 
         for (Video video : playlist.getAll()) {
+            String title = video.getTitle();
+            String author = video.extractAuthor();
             options.add(0, UiOptionItem.from( // Add to start (recent videos on top)
-                    String.format("%s - %s", video.getTitle(), video.extractAuthor()),
+                    String.format("%s - %s", title != null ? title : "...", author != null ? author : "..."),
                     optionItem -> {
                         video.fromQueue = true;
                         onClick.onClick(video);
