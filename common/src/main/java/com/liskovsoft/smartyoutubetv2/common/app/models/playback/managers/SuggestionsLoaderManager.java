@@ -5,13 +5,14 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -109,6 +110,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                                 Playlist.instance().addAll(videoGroup.getVideos());
                                 Playlist.instance().setCurrent(video);
                             }
+
+                            continueGroupIfNeeded(videoGroup);
                         },
                         error -> {
                             getController().showProgressBar(false);
@@ -256,6 +259,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                 }
 
                 getController().updateSuggestions(videoGroup);
+
+                continueGroupIfNeeded(videoGroup);
             }
         }
     }
@@ -283,6 +288,16 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         if (afterCurrent != null && afterCurrent.contains(item)) {
             item.fromQueue = true;
         }
+    }
+
+    /**
+     * Most tiny ui has 8 cards in a row or 24 in grid.
+     */
+    private void continueGroupIfNeeded(VideoGroup group) {
+        MediaServiceManager.instance().continueGroupIfNeeded(getActivity(), group, () -> {
+            mScrollAction = null; // Allow simultaneous row continuation
+            continueGroup(group);
+        });
     }
 
     public void addMetadataListener(MetadataListener listener) {

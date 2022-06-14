@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.misc;
 
+import android.content.Context;
+import androidx.core.util.Pair;
 import com.liskovsoft.appupdatechecker2.other.SettingsManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
@@ -13,13 +15,17 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MediaServiceManager {
     private static final String TAG = SettingsManager.class.getSimpleName();
@@ -35,6 +41,11 @@ public class MediaServiceManager {
     private Disposable mFormatInfoAction;
     private Disposable mPlaylistGroupAction;
     private Disposable mAccountListAction;
+    private static final int MIN_GRID_GROUP_SIZE = 13;
+    private static final int MIN_ROW_GROUP_SIZE = 5;
+    private static final int MIN_SCALED_GRID_GROUP_SIZE = 35;
+    private static final int MIN_SCALED_ROW_GROUP_SIZE = 10;
+    private final Map<Integer, Pair<Integer, Long>> mContinuations = new HashMap<>();
 
     public interface OnMetadata {
         void onMetadata(MediaItemMetadata metadata);
@@ -264,5 +275,43 @@ public class MediaServiceManager {
 
     public void disposeActions() {
         RxUtils.disposeActions(mMetadataAction, mUploadsAction, mSignCheckAction);
+    }
+
+    /**
+     * Most tiny ui has 8 cards in a row or 24 in grid.
+     */
+    public void continueGroupIfNeeded(Context context, VideoGroup group, Runnable onNeedContinue) {
+        if (group == null) {
+            return;
+        }
+
+        Pair<Integer, Long> sizeTimestamp = mContinuations.get(group.getId());
+
+        long currentTimeMillis = System.currentTimeMillis();
+        if (sizeTimestamp != null && currentTimeMillis - sizeTimestamp.second > 3_000) { // seems that section is refreshed
+            sizeTimestamp = null;
+        }
+
+        int groupTotalSize = sizeTimestamp != null ? sizeTimestamp.first : 0;
+
+        groupTotalSize += group.getVideos() != null ? group.getVideos().size() : 0;
+
+        MainUIData mainUIData = MainUIData.instance(context);
+
+        boolean isScaledGridEnabled = mainUIData.getUIScale() < 0.8f || mainUIData.getVideoGridScale() < 0.8f;
+        boolean isGrid = groupTotalSize >= MIN_GRID_GROUP_SIZE;
+        int minScaledSize = isGrid ? MIN_SCALED_GRID_GROUP_SIZE : MIN_SCALED_ROW_GROUP_SIZE;
+        int minSize = isGrid ? MIN_GRID_GROUP_SIZE : MIN_ROW_GROUP_SIZE;
+        boolean groupTooSmall = isScaledGridEnabled ? groupTotalSize < minScaledSize : groupTotalSize < minSize;
+
+        if (groupTooSmall) {
+            if (onNeedContinue != null) {
+                onNeedContinue.run();
+            }
+        } else {
+            groupTotalSize = 0;
+        }
+
+        mContinuations.put(group.getId(), new Pair<>(groupTotalSize, currentTimeMillis));
     }
 }
