@@ -85,6 +85,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void openVideo(Video item) {
         enableUiAutoHideTimeout();
+
+        if (item != null && getController() != null && !item.equals(getController().getVideo())) {
+            mIsMetadataLoaded = false; // metadata isn't loaded yet at this point
+            resetButtonStates();
+        }
     }
 
     @Override
@@ -169,9 +174,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onVideoLoaded(Video item) {
-        mIsMetadataLoaded = false; // metadata isn't loaded yet at this point
-        resetButtonStates();
-
         if (mPlayerData.getSeekPreviewMode() != PlayerData.SEEK_PREVIEW_NONE) {
             getController().loadStoryboard();
         }
@@ -210,6 +212,10 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().setLikeButtonState(false);
         getController().setDislikeButtonState(false);
         getController().setSubscribeButtonState(false);
+        getController().setChannelIcon(null);
+        getController().setPlaylistAddButtonState(false);
+        getController().setSubtitleButtonState(false);
+        getController().setSpeedButtonState(false);
     }
 
     @Override

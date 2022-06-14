@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.leanback.media.PlaybackGlueHost;
 import androidx.leanback.media.PlaybackTransportControlGlue;
 import androidx.leanback.media.PlayerAdapter;
@@ -297,6 +298,12 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     }
 
     public void setChannelIcon(String iconUrl) {
+        if (iconUrl == null) {
+            mChannelAction.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.action_channel));
+            invalidateUi(mChannelAction);
+            return;
+        }
+
         Drawable originIcon = mChannelAction.getIcon();
         Glide.with(getContext())
                 .load(iconUrl)
