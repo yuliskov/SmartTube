@@ -292,26 +292,26 @@ public class MediaServiceManager {
             sizeTimestamp = null;
         }
 
-        int groupTotalSize = sizeTimestamp != null ? sizeTimestamp.first : 0;
-
-        groupTotalSize += group.getVideos() != null ? group.getVideos().size() : 0;
+        int prevSize = sizeTimestamp != null ? sizeTimestamp.first : 0;
+        int newSize = group.getVideos() != null ? group.getVideos().size() : 0;
+        int totalSize = prevSize + newSize;
 
         MainUIData mainUIData = MainUIData.instance(context);
 
-        boolean isScaledGridEnabled = mainUIData.getUIScale() < 0.8f || mainUIData.getVideoGridScale() < 0.8f;
-        boolean isGrid = groupTotalSize >= MIN_GRID_GROUP_SIZE;
+        boolean isScaledUIEnabled = mainUIData.getUIScale() < 0.8f || mainUIData.getVideoGridScale() < 0.8f;
+        boolean isGrid = newSize >= MIN_GRID_GROUP_SIZE;
         int minScaledSize = isGrid ? MIN_SCALED_GRID_GROUP_SIZE : MIN_SCALED_ROW_GROUP_SIZE;
         int minSize = isGrid ? MIN_GRID_GROUP_SIZE : MIN_ROW_GROUP_SIZE;
-        boolean groupTooSmall = isScaledGridEnabled ? groupTotalSize < minScaledSize : groupTotalSize < minSize;
+        boolean groupTooSmall = isScaledUIEnabled ? totalSize < minScaledSize : totalSize < minSize;
 
         if (groupTooSmall) {
             if (onNeedContinue != null) {
                 onNeedContinue.run();
             }
         } else {
-            groupTotalSize = 0;
+            totalSize = 0;
         }
 
-        mContinuations.put(group.getId(), new Pair<>(groupTotalSize, currentTimeMillis));
+        mContinuations.put(group.getId(), new Pair<>(totalSize, currentTimeMillis));
     }
 }
