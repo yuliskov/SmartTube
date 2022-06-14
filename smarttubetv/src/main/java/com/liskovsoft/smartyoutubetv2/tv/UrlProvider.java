@@ -12,17 +12,20 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.youtubeapi.service.data.YouTubeMediaItemFormatInfo;
 import com.liskovsoft.youtubeapi.videoinfo.V2.VideoInfoServiceUnsigned;
 import com.liskovsoft.youtubeapi.videoinfo.models.VideoInfo;
 import com.liskovsoft.youtubeapi.videoinfo.models.formats.AdaptiveVideoFormat;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class UrlProvider extends ContentProvider {
     private static final String TAG = "UrlProvider";
-    private final String [] COLUMNS = {"video_url", "audio_url"};
+    private final String [] COLUMNS = {"video_url", "audio_url", "dash_manifest"};
     private final static int MAX_VIDEO_HEIGHT = 2160;
     private final static double ASPECT_RATIO_16_9 = 16 / 9.0;
     private final static int MAX_WIDTH_FOR_ULTRA_WIDE_ASPECT = 1920;
@@ -66,6 +69,14 @@ public class UrlProvider extends ContentProvider {
         final String videoPageUrl = uri.getQueryParameter("url");
         final VideoInfo videoInfo = VideoInfoServiceUnsigned.instance()
                 .getVideoInfo(Uri.parse(videoPageUrl).getQueryParameter("v"), "");
+        String dashManifest = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            YouTubeMediaItemFormatInfo formatInfo = YouTubeMediaItemFormatInfo.from(videoInfo);
+            dashManifest = new BufferedReader(new InputStreamReader(formatInfo.createMpdStream()))
+                    .lines()
+                    .collect(Collectors.joining("\n"));
+        }
+
         @Nullable List<AdaptiveVideoFormat> formats = videoInfo.getAdaptiveFormats();
         String videoUrl = null;
         String audioUrl = null;
@@ -137,6 +148,7 @@ public class UrlProvider extends ContentProvider {
         final ArrayList<String> values = new ArrayList<>(COLUMNS.length);
         values.add(videoUrl);
         values.add(audioUrl);
+        values.add(dashManifest);
         cursor.addRow(values);
         Log.d(TAG, "query elapsed: " + (System.currentTimeMillis() - startTime) + "ms.");
         return cursor;
