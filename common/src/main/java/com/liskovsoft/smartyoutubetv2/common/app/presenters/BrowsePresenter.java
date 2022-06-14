@@ -671,7 +671,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         continueGroup -> {
                             VideoGroup videoGroup = VideoGroup.from(continueGroup, group.getSection(), group.getPosition());
                             getView().updateSection(videoGroup);
-                            
+
                             continueGroupIfNeeded(videoGroup);
                         },
                         error -> {

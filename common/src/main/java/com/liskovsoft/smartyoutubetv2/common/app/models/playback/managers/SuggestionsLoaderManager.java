@@ -28,7 +28,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsLoaderManager.class.getSimpleName();
     private final Set<MetadataListener> mListeners = new HashSet<>();
     private Disposable mMetadataAction;
-    private Disposable mScrollAction;
+    private Disposable mContinueAction;
     private PlayerTweaksData mPlayerTweaksData;
 
     public interface MetadataListener {
@@ -81,9 +81,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void continueGroup(VideoGroup group) {
-        boolean updateInProgress = mScrollAction != null && !mScrollAction.isDisposed();
-
-        if (updateInProgress) {
+        if (RxUtils.isAnyActionRunning(mContinueAction)) {
             return;
         }
 
@@ -95,7 +93,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         MediaItemManager mediaItemManager = YouTubeMediaService.instance().getMediaItemManager();
 
-        mScrollAction = mediaItemManager.continueGroupObserve(mediaGroup)
+        mContinueAction = mediaItemManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -295,7 +293,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
      */
     private void continueGroupIfNeeded(VideoGroup group) {
         MediaServiceManager.instance().continueGroupIfNeeded(getActivity(), group, () -> {
-            mScrollAction = null; // Allow simultaneous row continuation
+            mContinueAction = null; // Allow simultaneous row continuation
             continueGroup(group);
         });
     }
@@ -313,6 +311,6 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void disposeActions() {
-        RxUtils.disposeActions(mMetadataAction, mScrollAction);
+        RxUtils.disposeActions(mMetadataAction, mContinueAction);
     }
 }
