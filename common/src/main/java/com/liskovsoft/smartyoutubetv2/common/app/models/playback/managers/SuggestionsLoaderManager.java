@@ -186,7 +186,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                         error -> {
                             Log.e(TAG, "loadSuggestions error: %s", error.getMessage());
                             error.printStackTrace();
-                            // normally error could happen (cause unknown)
+                            // normally error could happen (something with title parsing)
                         }
                 );
     }
