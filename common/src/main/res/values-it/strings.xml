@@ -373,7 +373,7 @@
     <string name="playback_notifications_fix">Disabilita le notifiche di riproduzione</string>
     <string name="amlogic_fix_desc">Corregge i fotogrammi saltati su dispositivi basati su Amlogic.</string>
     <string name="amlogic_fix">Corregge Amlogic 1080p@60fps</string>
-    <string name="tunneled_video_playback_desc">La riproduzione video tunneled promette vantaggi come una migliore sincronizzazione audio/video (AV sync) e una riproduzione più fluida. Richiesto Android 5+</string>
+    <string name="tunneled_video_playback_desc">NOTA: la pausa potrebbe non funzionare correttamente! La riproduzione video tunneled promette vantaggi come una migliore sincronizzazione audio/video (AV sync) e una riproduzione più fluida. Richiesto Android 5+</string>
     <string name="tunneled_video_playback">Riproduzione video tunneled (Android 5+)</string>
     <string name="master_volume">Volume principale</string>
     <string name="volume_limit">Limite volume</string>
@@ -447,4 +447,7 @@
     <!-- END Moved strings -->
     <string name="skip_24_rate">Salta i formati a 24 fps (fix per la modalità cinema reale?)</string>
     <string name="player_disable_suggestions">Disattiva i suggerimenti</string>
+    <string name="feedback">Feedback</string>
+    <string name="sources">Sorgenti</string>
+    <string name="releases">Rilasci</string>
 </resources>
