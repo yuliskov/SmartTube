@@ -90,6 +90,11 @@ public class VideoGroup {
 
         for (MediaItem item : mediaGroup.getMediaItems()) {
             Video video = Video.from(item);
+
+            if (video.isEmpty()) {
+                continue;
+            }
+
             // Group position in multi-grid fragments
             video.groupPosition = videoGroup.mPosition;
             video.group = videoGroup;

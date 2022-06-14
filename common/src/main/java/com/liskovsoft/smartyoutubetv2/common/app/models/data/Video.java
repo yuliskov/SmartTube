@@ -228,6 +228,10 @@ public final class Video implements Parcelable {
         return title != null ? title : metadataTitle;
     }
 
+    public String getSecondTitle() {
+        return secondTitle != null ? secondTitle : metadataSecondTitle;
+    }
+
     public String extractAuthor() {
         if (author != null) {
             return author;
@@ -402,6 +406,10 @@ public final class Video implements Parcelable {
      */
     public boolean isChannelPlaylist() {
         return videoId == null && channelId != null && itemType == MediaItem.TYPE_PLAYLIST;
+    }
+
+    public boolean isEmpty() {
+        return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId);
     }
 
     public boolean belongsToPlaylists() {
