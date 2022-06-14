@@ -186,6 +186,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                         error -> {
                             Log.e(TAG, "loadSuggestions error: %s", error.getMessage());
                             error.printStackTrace();
+                            getController().clearSuggestions(); // clear previous videos
                         }
                 );
     }
