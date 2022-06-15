@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 public class UrlProvider extends ContentProvider {
     private static final String TAG = "UrlProvider";
-    private final String [] COLUMNS = {"video_url", "audio_url", "dash_manifest"};
+    private final String [] COLUMNS = {"video_url", "audio_url", "playlist_content"};
     private final static int MAX_VIDEO_HEIGHT = 2160;
     private final static double ASPECT_RATIO_16_9 = 16 / 9.0;
     private final static int MAX_WIDTH_FOR_ULTRA_WIDE_ASPECT = 1920;
@@ -69,10 +69,10 @@ public class UrlProvider extends ContentProvider {
         final String videoPageUrl = uri.getQueryParameter("url");
         final VideoInfo videoInfo = VideoInfoServiceUnsigned.instance()
                 .getVideoInfo(Uri.parse(videoPageUrl).getQueryParameter("v"), "");
-        String dashManifest = null;
+        String playlistContent = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             YouTubeMediaItemFormatInfo formatInfo = YouTubeMediaItemFormatInfo.from(videoInfo);
-            dashManifest = new BufferedReader(new InputStreamReader(formatInfo.createMpdStream()))
+            playlistContent = new BufferedReader(new InputStreamReader(formatInfo.createMpdStream()))
                     .lines()
                     .collect(Collectors.joining("\n"));
         }
@@ -145,11 +145,11 @@ public class UrlProvider extends ContentProvider {
         }
 
         final MatrixCursor cursor = new MatrixCursor(COLUMNS);
-        final ArrayList<String> values = new ArrayList<>(COLUMNS.length);
-        values.add(videoUrl);
-        values.add(audioUrl);
-        values.add(dashManifest);
-        cursor.addRow(values);
+        final ArrayList<String> row = new ArrayList<>(COLUMNS.length);
+        row.add(videoUrl);
+        row.add(audioUrl);
+        row.add(playlistContent);
+        cursor.addRow(row);
         Log.d(TAG, "query elapsed: " + (System.currentTimeMillis() - startTime) + "ms.");
         return cursor;
     }
