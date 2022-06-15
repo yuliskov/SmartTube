@@ -449,4 +449,5 @@
     <string name="player_disable_suggestions">Önerileri devre dışı bırak</string>
     <string name="feedback">Geri bildirim</string>
     <string name="sources">Kaynaklar</string>
+    <string name="releases">Sürümler</string>
 </resources>
