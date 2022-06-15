@@ -740,7 +740,7 @@ public class SearchSupportFragment extends Fragment {
      */
     protected void focusOnResults() {
         if (mRowsSupportFragment == null || mRowsSupportFragment.getVerticalGridView() == null
-                || mResultAdapter.size() == 0) {
+                || mResultAdapter == null || mResultAdapter.size() == 0) {
             return;
         }
 

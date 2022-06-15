@@ -112,10 +112,16 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                             continueGroupIfNeeded(videoGroup);
                         },
                         error -> {
-                            getController().showProgressBar(false);
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
+                            if (getController() != null) {
+                                getController().showProgressBar(false);
+                            }
                         },
-                        () -> getController().showProgressBar(false)
+                        () -> {
+                            if (getController() != null) {
+                                getController().showProgressBar(false);
+                            }
+                        }
                 );
     }
 
