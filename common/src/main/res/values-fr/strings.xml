@@ -424,4 +424,30 @@
   <string name="owned_playlist_warning">Erreur. Cette action ne peut être appliquée que pour les playlists vous appartenant</string>
   <string name="content_block_alt_server">Utiliser un serveur alternatif</string>
   <string name="content_block_alt_server_desc">Activez cette option si SponsorBlock refuse de fonctionner pour différentes raisons.</string>
+  <string name="unset_stream_reminder">Rappel des flux non réglés</string>
+  <string name="set_stream_reminder">Définir un rappel de diffusion</string>
+  <string name="playback_starts_shortly">La lecture démarre automatiquement lorsque le flux est prêt</string>
+  <string name="starting_stream">Démarrage du flux…</string>
+  <string name="action_playlist_remove">Supprimer de la playlist</string>
+  <!-- BEGIN Moved strings -->
+  <string name="signin_view_title">Le code utilisateur est en cours de chargement…</string>
+  <string name="signin_view_description">Pour vous connecter, entrez ce code sur la page %s</string>
+  <string name="signin_view_action_text">Terminé</string>
+  <string name="require_checked">Nécessite \"%s\"</string>
+  <string name="msg_press_again_to_exit">Appuyez à nouveau pour sortir</string>
+  <string name="player_remaining_time">Restant: %s</string>
+  <string name="player_ending_time">Se termine dans %s</string>
+  <string name="badge_new_content">NOUVEAU CONTENU</string>
+  <string name="badge_live">EN DIRECT</string>
+  <string name="add_device_view_description">Pour associer l'appareil, entrez ce code dans l'application YouTube de votre téléphone, dans la section Paramètres/Télévision</string>
+  <string name="playback_controls_repeat_pause">Répéter Pause</string>
+  <string name="playback_controls_repeat_list">Répéter la liste</string>
+  <string name="action_subscribe_off">Se désabonner</string>
+  <string name="action_subscribe_on">S'abonner</string>
+  <!-- END Moved strings -->
+  <string name="skip_24_rate">Sauter les formats en 24fps (correction réel du mode cinéma ?)</string>
+  <string name="player_disable_suggestions">Désactiver les suggestions</string>
+  <string name="feedback">Commentaires</string>
+  <string name="sources">Sources</string>
+  <string name="releases">Releases</string>
 </resources>
