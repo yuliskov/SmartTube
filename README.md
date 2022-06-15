@@ -9,7 +9,7 @@ stability, voice search and casting support **might** be worse than in the offic
 
 **Do you have any question?** Ctrl+F or ⌘F this readme first!
 
-[**Installation**](#Installation) | [**Donation**](#Donation) | [**FAQ**](#FAQ) | [Support / Chat](#Support) | [Build](#Build) | [Changelog](https://t.me/s/SmartTubeNextNewsEN) | [Source Code](https://github.com/yuliskov/SmartTubeNext)
+[**Installation**](#Installation) | [**Donation**](#Donation) | [**FAQ**](#FAQ) | [Support / Chat](#Support) | [Build](#Build) | [Translate the app](https://jtbrinkmann.de/tools/android-strings.xml-translator.html) | [Changelog](https://t.me/s/SmartTubeNextNewsEN) | [Source Code](https://github.com/yuliskov/SmartTubeNext)
 
 
 ## Device support
@@ -214,6 +214,11 @@ If HDR videos look looked dim or washed out, then check [this article](https://w
 
 
 ## FAQ
+
+### Q: There is no result for the search that I say (Android 11)
+
+A: They're some reports that the latest update for "Google app for Android TV" could cause this bug. Deleting the update should fix the problem.
+
 
 ### Q: AV01 does not play / Why is VP9 slow on my device?
 

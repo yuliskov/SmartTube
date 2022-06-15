@@ -439,11 +439,11 @@
   <string name="player_ending_time">Se termine dans %s</string>
   <string name="badge_new_content">NOUVEAU CONTENU</string>
   <string name="badge_live">EN DIRECT</string>
-  <string name="add_device_view_description">Pour associer l'appareil, entrez ce code dans l'application YouTube de votre téléphone, dans la section Paramètres/Télévision</string>
+  <string name="add_device_view_description">Pour associer l\'appareil, entrez ce code dans l\'application YouTube de votre téléphone, dans la section Paramètres/Télévision</string>
   <string name="playback_controls_repeat_pause">Répéter Pause</string>
   <string name="playback_controls_repeat_list">Répéter la liste</string>
   <string name="action_subscribe_off">Se désabonner</string>
-  <string name="action_subscribe_on">S'abonner</string>
+  <string name="action_subscribe_on">S\'abonner</string>
   <!-- END Moved strings -->
   <string name="skip_24_rate">Sauter les formats en 24fps (correction réel du mode cinéma ?)</string>
   <string name="player_disable_suggestions">Désactiver les suggestions</string>
