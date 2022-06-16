@@ -129,6 +129,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.settings_language_country, MainUIData.BUTTON_CHANGE_LANGUAGE},
                 {R.string.settings_accounts, MainUIData.BUTTON_BROWSE_ACCOUNTS}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {

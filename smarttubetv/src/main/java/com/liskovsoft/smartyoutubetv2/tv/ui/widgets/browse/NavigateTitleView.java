@@ -17,9 +17,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
@@ -41,6 +43,7 @@ import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
  */
 public class NavigateTitleView extends TitleView {
     private SearchOrbView mAccountView;
+    private SearchOrbView mLanguageView;
     private SearchOrbView mExitPip;
     private TextView mPipTitle;
     private int mSearchVisibility = View.INVISIBLE;
@@ -121,6 +124,10 @@ public class NavigateTitleView extends TitleView {
             mAccountView.setVisibility(mSearchVisibility);
         }
 
+        if (mLanguageView != null) {
+            mLanguageView.setVisibility(mSearchVisibility);
+        }
+
         if (mExitPip != null && (PlaybackPresenter.instance(getContext()).isRunningInBackground() || mSearchVisibility != View.VISIBLE)) {
             mExitPip.setVisibility(mSearchVisibility);
             mPipTitle.setVisibility(mSearchVisibility);
@@ -144,11 +151,19 @@ public class NavigateTitleView extends TitleView {
             updateAccountIcon();
         }
 
+        if (MainUIData.instance(getContext()).isButtonEnabled(MainUIData.BUTTON_CHANGE_LANGUAGE)) {
+            mLanguageView = (SearchOrbView) findViewById(R.id.language_orb);
+            mLanguageView.setOnOrbClickedListener(v -> LanguageSettingsPresenter.instance(getContext()).show());
+            TooltipCompatHandler.setTooltipText(mLanguageView, getContext().getString(R.string.settings_language_country));
+
+            updateLanguageIcon();
+        }
+
         mExitPip = (SearchOrbView) findViewById(R.id.exit_pip);
         mPipTitle = (TextView) findViewById(R.id.pip_title);
         mExitPip.setOnOrbClickedListener(v -> ViewManager.instance(getContext()).startView(PlaybackView.class));
-        //ViewUtil.enableMarquee(mPipTitle);
-        //ViewUtil.setTextScrollSpeed(mPipTitle, MainUIData.instance(getContext()).getCardTextScrollSpeed());
+        ViewUtil.enableMarquee(mPipTitle);
+        ViewUtil.setTextScrollSpeed(mPipTitle, MainUIData.instance(getContext()).getCardTextScrollSpeed());
         TooltipCompatHandler.setTooltipText(mExitPip, getContext().getString(R.string.return_to_background_video));
 
         if (GeneralData.instance(getContext()).isGlobalClockEnabled()) {
@@ -176,6 +191,13 @@ public class NavigateTitleView extends TitleView {
         if (hasWindowFocus) { // pip window closed, dialog closed
             applyPipParameters();
         }
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+
+        updateLanguageIcon();
     }
 
     public void update() {
@@ -210,7 +232,7 @@ public class NavigateTitleView extends TitleView {
             }
 
             if (current != null && current.getAvatarImageUrl() != null) {
-                loadAccountIcon(current.getAvatarImageUrl());
+                loadIcon(mAccountView, current.getAvatarImageUrl());
             } else {
                 Colors orbColors = mAccountView.getOrbColors();
                 mAccountView.setOrbColors(new Colors(orbColors.color, orbColors.brightColor, ContextCompat.getColor(getContext(), R.color.orb_icon_color)));
@@ -219,22 +241,27 @@ public class NavigateTitleView extends TitleView {
         });
     }
 
-    private void loadAccountIcon(String url) {
+    private void updateLanguageIcon() {
+        String country = LocaleUtility.getCurrentLocale(getContext()).getCountry();
+        loadIcon(mLanguageView, "https://countryflagsapi.com/png/" + country);
+    }
+
+    private static void loadIcon(SearchOrbView view, String url) {
         // The view with GONE visibility has zero width and height
-        if (mAccountView == null || mAccountView.getWidth() == 0) {
+        if (view == null || view.getWidth() == 0) {
             return;
         }
 
-        Glide.with(getContext())
+        Glide.with(view.getContext())
                 .load(url)
                 .apply(ViewUtil.glideOptions())
                 .circleCrop() // resize image
-                .into(new SimpleTarget<Drawable>(mAccountView.getWidth(), mAccountView.getHeight()) {
+                .into(new SimpleTarget<Drawable>(view.getWidth(), view.getHeight()) {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        Colors orbColors = mAccountView.getOrbColors();
-                        mAccountView.setOrbColors(new Colors(orbColors.color, orbColors.brightColor, Color.TRANSPARENT));
-                        mAccountView.setOrbIcon(resource);
+                        Colors orbColors = view.getOrbColors();
+                        view.setOrbColors(new Colors(orbColors.color, orbColors.brightColor, Color.TRANSPARENT));
+                        view.setOrbIcon(resource);
                     }
                 });
     }
