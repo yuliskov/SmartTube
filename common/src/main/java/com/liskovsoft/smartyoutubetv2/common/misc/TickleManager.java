@@ -37,7 +37,11 @@ public class TickleManager {
         if (listener != null && !contains(listener)) {
             cleanup();
             mListeners.add(new WeakReference<>(listener));
-            updateTickle();
+            if (mListeners.size() == 1) { // periodic callback not started yet
+                updateTickle();
+            } else if (isEnabled()) {
+                listener.onTickle(); // first run
+            }
         }
     }
 
