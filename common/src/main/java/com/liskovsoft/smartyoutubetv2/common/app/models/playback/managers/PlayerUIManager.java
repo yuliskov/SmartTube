@@ -174,10 +174,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onVideoLoaded(Video item) {
-        if (mPlayerData.getSeekPreviewMode() != PlayerData.SEEK_PREVIEW_NONE) {
-            getController().loadStoryboard();
-        }
-
         getController().updateEndingTime();
     }
 
@@ -229,6 +225,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
         mIsMetadataLoaded = true;
+        if (mPlayerData.getSeekPreviewMode() != PlayerData.SEEK_PREVIEW_NONE) {
+            getController().loadStoryboard();
+        }
         getController().setLikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE);
         getController().setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
         getController().setSubscribeButtonState(metadata.isSubscribed());

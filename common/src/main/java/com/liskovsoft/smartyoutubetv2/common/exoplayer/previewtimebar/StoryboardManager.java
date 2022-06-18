@@ -38,7 +38,7 @@ public class StoryboardManager {
     private Disposable mFormatAction;
     private long[] mSeekPositions;
     private int mCurrentImgNum = -1;
-    private Set<Integer> mCachedImageNums;
+    private final Set<Integer> mCachedImageNums = new ArraySet<>();
     private int mSeekDirection = DIRECTION_RIGHT;
 
     public interface Callback {
@@ -54,11 +54,12 @@ public class StoryboardManager {
     public void init(Video video, long lengthMs) {
         mLengthMs = lengthMs;
         mSeekPositions = null;
-        mCachedImageNums = new ArraySet<>();
+        mStoryboard = null;
+        mCachedImageNums.clear();
 
         RxUtils.disposeActions(mFormatAction);
 
-        if (video == null) {
+        if (video == null || video.isLive || video.isUpcoming) {
             return;
         }
 
