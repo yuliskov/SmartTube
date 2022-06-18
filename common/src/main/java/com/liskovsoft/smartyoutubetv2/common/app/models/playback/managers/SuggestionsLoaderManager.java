@@ -266,11 +266,11 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
      * Merge remote queue with player's queue (when phone cast just started or user clicked on playlist item)
      */
     private void mergeRemoteAndUserQueueIfNeeded(Video video, VideoGroup videoGroup) {
-        // NOTE: Commented out section below contains double queue bug!
+        // NOTE: Commented out section below has risk of adding random videos into the queue
         //if (video.isRemote && (video.remotePlaylistId != null || !Playlist.instance().hasNext())) {
         if (video.isRemote && video.remotePlaylistId != null) {
             videoGroup.removeAllBefore(video);
-            // Remove remote playlist id from the videos (no needed, since we should add the videos into the queue)
+            // Double queue bugfix. Remove remote playlist id from the videos.
             videoGroup.stripPlaylistInfo();
 
             videoGroup.setTitle(getActivity().getString(R.string.action_playback_queue));
