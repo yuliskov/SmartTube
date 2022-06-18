@@ -169,7 +169,7 @@ git clone https://github.com/yuliskov/SmartTubeNext.git
 cd SmartTubeNext
 git submodule update --init
 adb connect <device_ip_address>
-gradlew installStorigDebug
+gradlew clean installStorigDebug
 ```
 
 ## Video codecs
