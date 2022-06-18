@@ -216,7 +216,7 @@
   <string name="channels_old_look">Reverter para aparência antiga da seção de Canais</string>
   <string name="channels_auto_load">Carregar conteúdo da seção de Canais automaticamente</string>
   <string name="return_to_background_video">Voltar ao vídeo em execução em segundo plano</string>
-  <string name="pin_unpin_from_sidebar">Fixar/Desafixar canal da barra lateral</string>
+  <string name="pin_unpin_from_sidebar">Fixar/Desafixar canal na barra lateral</string>
   <string name="pinned_to_sidebar">Fixado na barra lateral!</string>
   <string name="unpin_from_sidebar">Desafixar da Barra Lateral</string>
   <string name="unpinned_from_sidebar">Desafixado da barra lateral!</string>
