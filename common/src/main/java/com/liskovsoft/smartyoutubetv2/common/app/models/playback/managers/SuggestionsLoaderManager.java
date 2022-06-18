@@ -251,22 +251,33 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             if (group != null && !group.isEmpty()) {
                 VideoGroup videoGroup = VideoGroup.from(group);
 
-                // Merge remote queue with player's queue (when phone cast just started or user clicked on playlist item)
-                if (groupIndex == 0 && video.isRemote && (video.remotePlaylistId != null || !Playlist.instance().hasNext())) {
-                    videoGroup.removeAllBefore(video);
-
-                    videoGroup.setTitle(getActivity().getString(R.string.action_playback_queue));
-                    videoGroup.setId(videoGroup.getTitle().hashCode());
-
-                    Playlist.instance().removeAllAfterCurrent();
-                    Playlist.instance().addAll(videoGroup.getVideos());
-                    Playlist.instance().setCurrent(video);
+                if (groupIndex == 0) {
+                    mergeRemoteAndUserQueueIfNeeded(video, videoGroup);
                 }
 
                 getController().updateSuggestions(videoGroup);
 
                 continueGroupIfNeeded(videoGroup);
             }
+        }
+    }
+
+    /**
+     * Merge remote queue with player's queue (when phone cast just started or user clicked on playlist item)
+     */
+    private void mergeRemoteAndUserQueueIfNeeded(Video video, VideoGroup videoGroup) {
+        //if (video.isRemote && (video.remotePlaylistId != null || !Playlist.instance().hasNext())) {
+        if (video.isRemote && video.remotePlaylistId != null) {
+            videoGroup.removeAllBefore(video);
+            // Remove remote playlist id from the videos (no needed, since we should add the videos into the queue)
+            videoGroup.stripPlaylistInfo();
+
+            videoGroup.setTitle(getActivity().getString(R.string.action_playback_queue));
+            videoGroup.setId(videoGroup.getTitle().hashCode());
+
+            Playlist.instance().removeAllAfterCurrent();
+            Playlist.instance().addAll(videoGroup.getVideos());
+            Playlist.instance().setCurrent(video);
         }
     }
 

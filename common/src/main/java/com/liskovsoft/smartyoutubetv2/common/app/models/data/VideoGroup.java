@@ -216,4 +216,18 @@ public class VideoGroup {
 
         mVideos = mVideos.subList(index + 1, mVideos.size());
     }
+
+    /**
+     * Remove playlist id from all videos
+     */
+    public void stripPlaylistInfo() {
+        if (mVideos == null) {
+            return;
+        }
+
+        for (Video video : mVideos) {
+            video.playlistId = null;
+            video.remotePlaylistId = null;
+        }
+    }
 }
