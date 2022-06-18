@@ -574,6 +574,7 @@ public final class Video implements Parcelable {
         video.bgImageUrl = bgImageUrl;
         video.isLive = isLive;
         video.isUpcoming = isUpcoming;
+        video.nextMediaItem = nextMediaItem;
 
         if (group != null) {
             video.group = group.copy(); // Needed for proper multi row fragments sync (row id == group id)
