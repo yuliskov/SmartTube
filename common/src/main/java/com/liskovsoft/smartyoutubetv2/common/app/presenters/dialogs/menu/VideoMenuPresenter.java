@@ -581,7 +581,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
                             closeDialog();
                             MessageHelpers.showMessage(getContext(), String.format("%s: %s",
-                                    mVideo.extractAuthor(),
+                                    mVideo.getAuthor(),
                                     getContext().getString(containsVideo ? R.string.removed_from_playback_queue : R.string.added_to_playback_queue))
                             );
                         }));
@@ -712,7 +712,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         MessageHelpers.showMessage(getContext(),
-                video.extractAuthor() + ": " + getContext().getString(!video.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel));
+                video.getAuthor() + ": " + getContext().getString(!video.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel));
     }
 
     private void updateEnabledMenuItems() {

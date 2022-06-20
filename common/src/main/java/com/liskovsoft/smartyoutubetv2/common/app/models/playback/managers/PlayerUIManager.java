@@ -352,7 +352,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
-        String description = getController().getVideo().description;
+        Video video = getController().getVideo();
+
+        String description = video.description;
 
         if (description == null || description.isEmpty()) {
             MessageHelpers.showMessage(getActivity(), R.string.description_not_found);
@@ -363,7 +365,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
         dialogPresenter.clear();
 
-        String title = getController().getVideo().title;
+        String title = String.format("%s - %s", video.getTitle(), video.getAuthor());
 
         dialogPresenter.appendLongTextCategory(title, UiOptionItem.from(description, null));
 

@@ -232,7 +232,7 @@ public final class Video implements Parcelable {
         return secondTitle != null ? secondTitle : metadataSecondTitle;
     }
 
-    public String extractAuthor() {
+    public String getAuthor() {
         if (author != null) {
             return author;
         }
@@ -240,15 +240,15 @@ public final class Video implements Parcelable {
         return extractAuthor(secondTitle != null ? secondTitle : metadataSecondTitle);
     }
 
-    private static String extractAuthor(String info) {
+    private static String extractAuthor(String secondTitle) {
         String result = null;
 
-        if (info != null) {
-            info = info.replace(TERTIARY_TEXT_DELIM + " LIVE", ""); // remove special marks
-            String[] split = info.split(TERTIARY_TEXT_DELIM);
+        if (secondTitle != null) {
+            secondTitle = secondTitle.replace(TERTIARY_TEXT_DELIM + " LIVE", ""); // remove special marks
+            String[] split = secondTitle.split(TERTIARY_TEXT_DELIM);
 
             if (split.length <= 1) {
-                result = info;
+                result = secondTitle;
             } else {
                 // First part may be a special label (4K, Stream, New etc)
                 // Two cases to detect label: 1) Description is long (4 items); 2) First item of info is too short (2 letters)
@@ -264,7 +264,7 @@ public final class Video implements Parcelable {
 
         if (group != null && group.getVideos() != null) {
             for (Video video : group.getVideos()) {
-                if (Helpers.equals(video.extractAuthor(), author)) {
+                if (Helpers.equals(video.getAuthor(), author)) {
                     result.add(video);
                 }
             }

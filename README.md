@@ -126,21 +126,13 @@ To enable global voice search, an additional app must be installed alongside Sma
 
 If you want to support my developments you are welcome to buy me a cup of coffee :)
 
-<!-- 
-> [BountySource (**PayPal**, **VISA**)](https://salt.bountysource.com/checkout/amount?team=smarttube)   
-> [QIWI (RU, Visa)](https://qiwi.com/n/GUESS025)  
-> [DonatePay (RU, **PayPal**, Visa)](https://new.donatepay.ru/@459197) 
--->
-> [**Patreon**](https://www.patreon.com/smarttube)  
+> [**Patreon (Visa, Mastercard, PayPal)**](https://www.patreon.com/smarttube)  
 > **PayPal**: firsthash at gmail.com  
 > **BTC**: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx  
 > **LTC**: ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw  
 > **ETH**: 0xe455E21a085ae195a097cd4F456051A9916A5064  
 > **ETC**: 0x209eCd33Fa61fA92167595eB3Aea92EE1905c815  
 > **XMR**: 48QsMjqfkeW54vkgKyRnjodtYxdmLk6HXfTWPSZoaFPEDpoHDwFUciGCe1QC9VAeGrgGw4PKNAksX9RW7myFqYJQDN5cHGT  
-> **BNB**: bnb1amjr7fauftxxyhe4f95280vklctj243k9u55fq  
-> **DOGE**: DBnqJwJs2GJBxrCDsi5bXwSmjnz8uGdUpB  
-> **eUSDT**: 0xe455e21a085ae195a097cd4f456051a9916a5064
 
 
 ## Support
@@ -161,8 +153,9 @@ The international group is in **English only**. But don't worry if your English 
 SmartTubeNext is developed single-handedly by Yurii; there is no larger team or company behind this. This is an open source, hobby project. Several others have helped with translations, some of which can be seen on [Github](https://github.com/yuliskov/SmartTubeNext/graphs/contributors), some have sent their translations directly to Yurii. There are also helpful people in the support chat.
 
 ## Build
-
-To build, install and run a debug version, run this from the root of the project:
+    
+NOTE: OpenJDK 14 or older (!) is required. Newer JDK could cause the app crash!  
+To build, install and run a debug version, run this commands:
 
 ```
 git clone https://github.com/yuliskov/SmartTubeNext.git
