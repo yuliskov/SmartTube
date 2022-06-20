@@ -122,6 +122,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
         // Reset colors
         getController().setSeekBarSegments(null);
+        // Reset previously found segment (fix no dialog popup)
+        mIsSameSegment = false;
 
         mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getEnabledCategories())
                 .subscribeOn(Schedulers.io())
