@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -45,13 +46,13 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendLanguageCategory(AppDialogPresenter settingsPresenter) {
-        Map<String, String> locales = getSupportedLocales();
+        Map<String, String> languages = getSupportedLanguages();
         String language = mLangUpdater.getPreferredLanguage();
         String languageTitle = "";
 
         List<OptionItem> options = new ArrayList<>();
 
-        for (Entry<String, String> entry : locales.entrySet()) {
+        for (Entry<String, String> entry : languages.entrySet()) {
             if (entry.getValue().equals(language)) {
                 languageTitle = String.format(" (%s)", entry.getKey());
             }
@@ -61,6 +62,7 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
                     option -> {
                         mLangUpdater.setPreferredLanguage(entry.getValue());
                         mRestartApp = true;
+                        settingsPresenter.closeDialog();
                     },
                     entry.getValue().equals(language)));
         }
@@ -86,6 +88,7 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
                     option -> {
                         mLangUpdater.setPreferredCountry(entry.getValue());
                         mRestartApp = true;
+                        settingsPresenter.closeDialog();
                     },
                     entry.getValue().equals(country)));
         }
@@ -98,15 +101,17 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
      * Gets map of Human readable locale names and their respective lang codes
      * @return locale name/code map
      */
-    private Map<String, String> getSupportedLocales() {
+    private Map<String, String> getSupportedLanguages() {
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
-        map.put(getContext().getResources().getString(R.string.default_lang), "");
+        String language = LocaleUtility.getCurrentLocale(getContext()).getDisplayLanguage();
+        map.put(getContext().getResources().getString(R.string.default_lang) + " - " + language, "");
         return Helpers.getMap(getContext().getResources().getStringArray(R.array.supported_languages), "|", map);
     }
 
     private Map<String, String> getSupportedCountries() {
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
-        map.put(getContext().getResources().getString(R.string.default_lang), "");
+        String country = LocaleUtility.getCurrentLocale(getContext()).getDisplayCountry();
+        map.put(getContext().getResources().getString(R.string.default_lang) + " - " + country, "");
         return Helpers.getMap(getContext().getResources().getStringArray(R.array.supported_countries), "|", map);
     }
 }
