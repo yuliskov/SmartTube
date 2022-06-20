@@ -127,7 +127,7 @@ To enable global voice search, an additional app must be installed alongside Sma
 If you want to support my developments you are welcome to buy me a cup of coffee :)
 
 > [**Patreon (Visa, Mastercard, PayPal)**](https://www.patreon.com/smarttube)  
-> **PayPal**: firsthash at gmail.com  
+> **PayPal**: firsthash@gmail.com  
 > **BTC**: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx  
 > **LTC**: ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw  
 > **ETH**: 0xe455E21a085ae195a097cd4F456051A9916A5064  
@@ -142,7 +142,7 @@ If you want to support my developments you are welcome to buy me a cup of coffee
 You can report in our Telegram group or via [issue tracker on Github](https://github.com/yuliskov/SmartTubeNext/issues) (account required).
 
 > **Telegram group (international)**: [@SmartTubeNext_en](http://t.me/SmartTubeNext_en)  
-> **Telegram group (Russian/UA/BY)**: [@SmartTubeNext](http://t.me/SmartTubeNext)  
+> **Telegram group (RU/UA)**: [@SmartTubeNext](http://t.me/SmartTubeNext)  
 > **Email**: first.hash at gmail dot com
 
 The international group is in **English only**. But don't worry if your English is not perfect, we have a friendly international community.
@@ -155,7 +155,7 @@ SmartTubeNext is developed single-handedly by Yurii; there is no larger team or 
 ## Build
     
 NOTE: OpenJDK 14 or older (!) is required. Newer JDK could cause the app crash!  
-To build, install and run a debug version, run this commands:
+To build and install a debug version, run this commands:
 
 ```
 git clone https://github.com/yuliskov/SmartTubeNext.git
