@@ -20,6 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -140,15 +141,19 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             if (item.channelId != null) {
                 openChannel(item.channelId);
             } else if (item.videoId != null) {
-                MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+                LoadingManager.showLoading(getContext(), true);
+                //MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
                 mServiceManager.loadMetadata(item, metadata -> {
+                    LoadingManager.showLoading(getContext(), false);
                     openChannel(metadata.getChannelId());
                     item.channelId = metadata.getChannelId();
                 });
             } else if (item.belongsToChannelUploads()) {
+                LoadingManager.showLoading(getContext(), true);
                 // Maybe this is subscribed items view
                 ChannelUploadsPresenter.instance(getContext())
                         .obtainVideoGroup(item, group -> {
+                            LoadingManager.showLoading(getContext(), false);
                             // Some uploads groups doesn't contain channel button.
                             // Use data from first item instead.
                             if (group.getChannelId() == null) {
