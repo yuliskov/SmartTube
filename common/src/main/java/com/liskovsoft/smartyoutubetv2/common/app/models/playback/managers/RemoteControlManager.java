@@ -440,7 +440,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
 
     private void movePlayerToForeground() {
         Utils.movePlayerToForeground(getActivity());
-        if (getController() == null || !Utils.checkActivity(getActivity())) { // player isn't started yet or closed
+        // Device wake fix when player isn't started yet or been closed
+        if (getController() == null || !Utils.checkActivity(getActivity())) {
             new Handler(Looper.myLooper()).postDelayed(() -> Utils.movePlayerToForeground(getActivity()), 5_000);
         }
     }
