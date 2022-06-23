@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.KeyEvent;
 import androidx.annotation.Nullable;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
@@ -439,7 +441,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private void movePlayerToForeground() {
         Utils.movePlayerToForeground(getActivity());
         if (getController() == null || !Utils.checkActivity(getActivity())) { // player isn't started yet or closed
-            RxUtils.runAsync(() -> Utils.movePlayerToForeground(getActivity()), 5_000);
+            new Handler(Looper.myLooper()).postDelayed(() -> Utils.movePlayerToForeground(getActivity()), 5_000);
         }
     }
 }
