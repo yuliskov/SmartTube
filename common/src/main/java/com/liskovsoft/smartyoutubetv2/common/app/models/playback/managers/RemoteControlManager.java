@@ -8,6 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.RemoteManager;
 import com.liskovsoft.mediaserviceinterfaces.data.Command;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -16,7 +17,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
-import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -239,7 +239,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 if (getController() != null) {
                     getController().showOverlay(false);
                 }
-                Utils.movePlayerToForeground(getActivity());
+                movePlayerToForeground();
                 Video newVideo = Video.from(command.getVideoId());
                 newVideo.remotePlaylistId = command.getPlaylistId();
                 newVideo.playlistIndex = command.getPlaylistIndex();
@@ -261,7 +261,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             case Command.TYPE_SEEK:
                 if (getController() != null) {
                     getController().showOverlay(false);
-                    Utils.movePlayerToForeground(getActivity());
+                    movePlayerToForeground();
                     getController().setPositionMs(command.getCurrentTimeMs());
                     postSeek(command.getCurrentTimeMs());
                 } else {
@@ -270,7 +270,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_PLAY:
                 if (getController() != null) {
-                    Utils.movePlayerToForeground(getActivity());
+                    movePlayerToForeground();
                     getController().setPlay(true);
                     //postStartPlaying(getController().getVideo(), true);
                     postPlay(true);
@@ -280,7 +280,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_PAUSE:
                 if (getController() != null) {
-                    Utils.movePlayerToForeground(getActivity());
+                    movePlayerToForeground();
                     getController().setPlay(false);
                     //postStartPlaying(getController().getVideo(), false);
                     postPlay(false);
@@ -290,7 +290,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_NEXT:
                 if (getBridge() != null) {
-                    Utils.movePlayerToForeground(getActivity());
+                    movePlayerToForeground();
                     mVideoLoader.loadNext();
                 } else {
                     openNewVideo(mVideo);
@@ -298,7 +298,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_PREVIOUS:
                 if (getBridge() != null && getController() != null) {
-                    Utils.movePlayerToForeground(getActivity());
+                    movePlayerToForeground();
                     // Switch immediately. Skip position reset logic.
                     mVideoLoader.loadPrevious();
                 } else {
@@ -433,6 +433,13 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             // Check that volume is set.
             // Because global value may not be supported (see FireTV Stick).
             MessageHelpers.showMessageThrottled(getActivity(), getActivity().getString(R.string.volume, Utils.getGlobalVolume(getActivity())));
+        }
+    }
+
+    private void movePlayerToForeground() {
+        Utils.movePlayerToForeground(getActivity());
+        if (getController() == null || !Utils.checkActivity(getActivity())) { // player isn't started yet or closed
+            RxUtils.runAsync(() -> Utils.movePlayerToForeground(getActivity()), 5_000);
         }
     }
 }
