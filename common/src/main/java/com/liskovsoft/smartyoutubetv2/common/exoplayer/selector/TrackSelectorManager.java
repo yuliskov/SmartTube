@@ -456,13 +456,18 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
                             result = mediaTrack;
                         }
-                    } else if (compare > 0 && mediaTrack.compare(result) >= 0) { // Select track with higher possible quality
-                        // Get ready for group with multiple codecs: avc, av01
-                        // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
-                        if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
-                            result = mediaTrack;
-                        } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
-                            result = mediaTrack;
+                    } else if (compare > 0) {
+                        // Select track with higher possible quality or by preferred codec
+                        boolean higherQuality = mediaTrack.compare(result) >= 0;
+                        boolean preferByCodec = MediaTrack.preferByCodec(mediaTrack, result);
+                        if (higherQuality || preferByCodec) {
+                            // Get ready for group with multiple codecs: avc, av01
+                            // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
+                            if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
+                                result = mediaTrack;
+                            } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
+                                result = mediaTrack;
+                            }
                         }
                     }
                 }
