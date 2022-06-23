@@ -26,6 +26,7 @@ public interface PlaybackUIController {
     void setPlaylistAddButtonState(boolean selected);
     void setSubtitleButtonState(boolean selected);
     void setSpeedButtonState(boolean selected);
+    void setContentBlockButtonState(boolean selected);
     void setChannelIcon(String iconUrl);
     void setNextTitle(String title);
     void setDebugButtonState(boolean show);

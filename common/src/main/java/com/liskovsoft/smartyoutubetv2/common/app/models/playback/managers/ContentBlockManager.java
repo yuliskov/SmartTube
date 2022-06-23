@@ -85,6 +85,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         MediaService mediaService = YouTubeMediaService.instance();
         mMediaItemManager = mediaService.getMediaItemManager();
         mContentBlockData = ContentBlockData.instance(getActivity());
+        //getController().setContentBlockButtonState(mContentBlockData.isSponsorBlockEnabled());
     }
 
     @Override
@@ -110,6 +111,12 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         disposeActions();
     }
 
+    @Override
+    public void onContentBlockClicked(boolean enabled) {
+        mContentBlockData.enableSponsorBlock(enabled);
+        onVideoLoaded(getController().getVideo());
+    }
+
     private boolean checkVideo(Video video) {
         return video != null && !video.isLive && !video.isUpcoming;
     }
@@ -119,11 +126,6 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             mSponsorSegments = null;
             return;
         }
-
-        // Reset colors
-        getController().setSeekBarSegments(null);
-        // Reset previously found segment (fix no dialog popup)
-        mIsSameSegment = false;
 
         mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getEnabledCategories())
                 .subscribeOn(Schedulers.io())
@@ -162,6 +164,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         RxUtils.disposeActions(mProgressAction, mSegmentsAction);
         mSponsorSegments = null;
         mVideo = null;
+
+        // Reset colors
+        getController().setSeekBarSegments(null);
+        // Reset previously found segment (fix no dialog popup)
+        mIsSameSegment = false;
     }
 
     private void skipSegment(long interval) {

@@ -225,6 +225,11 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
+    public void onContentBlockClicked(boolean enabled) {
+        // NOP
+    }
+
+    @Override
     public void onVideoInfoClicked() {
         // NOP
     }

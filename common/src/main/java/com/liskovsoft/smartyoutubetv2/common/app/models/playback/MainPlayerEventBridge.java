@@ -334,6 +334,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
+    public void onContentBlockClicked(boolean enabled) {
+        process(listener -> listener.onContentBlockClicked(enabled));
+    }
+
+    @Override
     public void onVideoInfoClicked() {
         process(PlayerUiEventListener::onVideoInfoClicked);
     }

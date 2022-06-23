@@ -735,6 +735,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
+        public void onContentBlock(boolean enabled) {
+            mEventListener.onContentBlockClicked(enabled);
+        }
+
+        @Override
         public void onVideoInfo() {
             mEventListener.onVideoInfoClicked();
         }
@@ -1227,7 +1232,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void setSubtitleButtonState(boolean selected) {
         if (mPlayerGlue != null) {
-            mPlayerGlue.setSubtitleButtonState(selected);
+            mPlayerGlue.setClosedCaptionsButtonState(selected);
         }
     }
 
@@ -1235,6 +1240,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void setSpeedButtonState(boolean selected) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setSpeedButtonState(selected);
+        }
+    }
+
+    @Override
+    public void setContentBlockButtonState(boolean selected) {
+        if (mPlayerGlue != null) {
+            mPlayerGlue.setContentBlockButtonState(selected);
         }
     }
 

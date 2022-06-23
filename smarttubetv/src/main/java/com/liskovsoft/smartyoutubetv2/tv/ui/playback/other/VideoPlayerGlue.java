@@ -23,6 +23,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ContentBlockAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SeekIntervalAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ShareAction;
@@ -86,6 +87,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     private final VideoInfoAction mVideoInfoAction;
     private final ShareAction mShareAction;
     private final SeekIntervalAction mSeekIntervalAction;
+    private final ContentBlockAction mContentBlockAction;
     private final OnActionClickedListener mActionListener;
     private String mQualityInfo;
     private QualityInfoListener mQualityInfoListener;
@@ -125,6 +127,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         mVideoInfoAction = new VideoInfoAction(context);
         mShareAction = new ShareAction(context);
         mSeekIntervalAction = new SeekIntervalAction(context);
+        mContentBlockAction = new ContentBlockAction(context);
     }
 
     @Override
@@ -211,6 +214,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE)) {
             adapter.add(mPlaybackQueueAction);
         }
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_CONTENT_BLOCK)) {
+            adapter.add(mContentBlockAction);
+        }
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_STATS)) {
             adapter.add(mVideoStatsAction);
         }
@@ -287,9 +293,14 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         invalidateUi(mPlaylistAddAction);
     }
 
-    public void setSubtitleButtonState(boolean selected) {
+    public void setClosedCaptionsButtonState(boolean selected) {
         mClosedCaptioningAction.setIndex(selected ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
         invalidateUi(mClosedCaptioningAction);
+    }
+
+    public void setContentBlockButtonState(boolean selected) {
+        mContentBlockAction.setIndex(selected ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
+        invalidateUi(mContentBlockAction);
     }
 
     public void setSpeedButtonState(boolean selected) {
@@ -442,6 +453,10 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         } else if (action == mSeekIntervalAction) {
             mActionListener.onSeekInterval();
             handled = true;
+        } else if (action == mContentBlockAction) {
+            incrementActionIndex(action);
+            mActionListener.onContentBlock(getActionIndex(action) == TwoStateAction.INDEX_ON);
+            handled = true;
         }
 
         if (handled) {
@@ -560,6 +575,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         void onVideoSpeed();
 
         void onSeekInterval();
+
+        void onContentBlock(boolean enabled);
 
         void onVideoInfo();
 
