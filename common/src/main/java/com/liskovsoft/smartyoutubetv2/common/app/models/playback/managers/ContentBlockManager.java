@@ -85,7 +85,6 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         MediaService mediaService = YouTubeMediaService.instance();
         mMediaItemManager = mediaService.getMediaItemManager();
         mContentBlockData = ContentBlockData.instance(getActivity());
-        //getController().setContentBlockButtonState(mContentBlockData.isSponsorBlockEnabled());
     }
 
     @Override
@@ -104,6 +103,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         if (!mContentBlockData.isSponsorBlockEnabled() || !checkVideo(getController().getVideo())) {
             disposeActions();
         }
+    }
+
+    @Override
+    public void onEngineInitialized() {
+        getController().setContentBlockButtonState(mContentBlockData.isSponsorBlockEnabled());
     }
 
     @Override
@@ -221,7 +225,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
     private void messageSkip(long skipPositionMs, String category) {
         MessageHelpers.showMessage(getActivity(),
-                String.format("%s: %s", ContentBlockData.SPONSOR_BLOCK_NAME, getActivity().getString(R.string.msg_skipping_segment, category)));
+                String.format("%s: %s", getActivity().getString(R.string.content_block_provider), getActivity().getString(R.string.msg_skipping_segment, category)));
         setPositionMs(skipPositionMs);
     }
 
@@ -251,7 +255,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         settingsPresenter.setCloseTimeoutMs(skipPositionMs - getController().getPositionMs());
 
         settingsPresenter.enableTransparent(true);
-        settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);
+        settingsPresenter.showDialog(getActivity().getString(R.string.content_block_provider));
     }
 
     private List<SeekBarSegment> toSeekBarSegments(List<SponsorSegment> segments) {

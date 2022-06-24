@@ -18,8 +18,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class ContentBlockData {
-    public static final String SPONSOR_BLOCK_NAME = "SponsorBlock";
-    public static final String SPONSOR_BLOCK_URL = "https://sponsor.ajay.app";
     public static final int ACTION_UNDEFINED = -1;
     public static final int ACTION_SKIP_ONLY = 0;
     public static final int ACTION_SKIP_WITH_TOAST = 1;

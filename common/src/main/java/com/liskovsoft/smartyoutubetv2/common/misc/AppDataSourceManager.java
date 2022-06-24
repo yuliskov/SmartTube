@@ -60,7 +60,7 @@ public class AppDataSourceManager {
         settingItems.add(new SettingsItem(
                 context.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(context).show(), R.drawable.settings_search));
         settingItems.add(new SettingsItem(
-                ContentBlockData.SPONSOR_BLOCK_NAME, () -> ContentBlockSettingsPresenter.instance(context).show(), R.drawable.settings_block));
+                context.getString(R.string.content_block_provider), () -> ContentBlockSettingsPresenter.instance(context).show(), R.drawable.settings_block));
         settingItems.add(new SettingsItem(
                 context.getString(R.string.settings_about), () -> AboutSettingsPresenter.instance(context).show(), R.drawable.settings_about));
 
