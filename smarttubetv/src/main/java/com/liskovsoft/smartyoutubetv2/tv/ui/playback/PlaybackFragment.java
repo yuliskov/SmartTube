@@ -1449,7 +1449,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     /**
      * Simply recreates exoplayer objects (silently) if prev track (current from this perspective) isn't empty<br/>
      * Fixes video artifacts when switching to the next video.<br/>
-     * Also could help with memory leaks?<br/>
+     * Also could help with memory leaks(??)<br/>
+     * Without this also you'll have problems with track quality switching(??).
      */
     private void resetPlayerState() {
         // Ensure that user isn't browsing suggestions
