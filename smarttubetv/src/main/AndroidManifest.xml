@@ -140,6 +140,8 @@
             android:supportsPictureInPicture="true"
             android:resizeableActivity="true"
             android:screenOrientation="landscape"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
             android:theme="@style/App.Theme.Leanback.Player"/>
 
         <activity

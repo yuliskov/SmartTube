@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.Instrumentation;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -270,10 +271,19 @@ public class Utils {
         if (context instanceof Activity) {
             Activity activity = (Activity) context;
             if (Build.VERSION.SDK_INT >= 27) {
+                activity.setShowWhenLocked(true);
                 activity.setTurnScreenOn(true);
+                KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+                if (keyguardManager != null) {
+                    keyguardManager.requestDismissKeyguard(activity, null);
+                }
             } else {
                 Window window = activity.getWindow();
-                window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+                window.addFlags(
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                );
             }
         }
     }
