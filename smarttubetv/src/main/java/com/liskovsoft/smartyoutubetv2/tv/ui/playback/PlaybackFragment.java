@@ -292,6 +292,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
+        //releasePlayer();
+        //initializePlayer();
+
         if (mPlayer != null) {
             mEventListener.onEngineReleased();
         }
@@ -1250,6 +1253,14 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
     }
 
+    private boolean isContentBlockEnabled() {
+        if (mPlayerGlue != null) {
+            return mPlayerGlue.isContentBlockButtonPressed();
+        }
+
+        return false;
+    }
+
     @Override
     public void setChannelIcon(String iconUrl) {
         if (mPlayerGlue != null) {
@@ -1445,16 +1456,19 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             // save state
             Video video = getVideo();
             int repeatButtonState = getRepeatButtonState();
+            boolean contentBlockEnabled = isContentBlockEnabled();
             boolean controlsShown = isOverlayShown();
             boolean debugShown = isDebugInfoShown();
 
-            // silently recreate player objects
+            // Silently recreate player objects.
+            // NOTE: Don't use events! Otherwise you'll get infinite loading video loop.
             destroyPlayerObjects();
             createPlayerObjects();
 
             // restore state
             setVideo(video);
             setRepeatButtonState(repeatButtonState);
+            setContentBlockButtonState(contentBlockEnabled);
             showOverlay(controlsShown);
             showDebugInfo(debugShown);
             setDebugButtonState(debugShown);

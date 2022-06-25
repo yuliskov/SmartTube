@@ -303,6 +303,10 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         invalidateUi(mContentBlockAction);
     }
 
+    public boolean isContentBlockButtonPressed() {
+        return mContentBlockAction.getIndex() == TwoStateAction.INDEX_ON;
+    }
+
     public void setSpeedButtonState(boolean selected) {
         mVideoSpeedAction.setIndex(selected ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
         invalidateUi(mVideoSpeedAction);
