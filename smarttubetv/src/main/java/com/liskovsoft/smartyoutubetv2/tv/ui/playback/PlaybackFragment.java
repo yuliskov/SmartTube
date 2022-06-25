@@ -1453,28 +1453,32 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      * Without this also you'll have problems with track quality switching(??).
      */
     private void resetPlayerState() {
-        // Ensure that user isn't browsing suggestions
-        if (containsMedia() && !isSuggestionsShown()) {
-            // save state
-            Video video = getVideo();
-            int repeatButtonState = getRepeatButtonState();
-            boolean contentBlockEnabled = isContentBlockEnabled();
-            boolean controlsShown = isOverlayShown();
-            boolean debugShown = isDebugInfoShown();
-
-            // Silently recreate player objects.
-            // NOTE: Don't use events! Otherwise you'll get infinite loading video loop.
-            destroyPlayerObjects();
-            createPlayerObjects();
-
-            // restore state
-            setVideo(video);
-            setRepeatButtonState(repeatButtonState);
-            setContentBlockButtonState(contentBlockEnabled);
-            showOverlay(controlsShown);
-            showDebugInfo(debugShown);
-            setDebugButtonState(debugShown);
+        if (containsMedia()) {
+            mPlayer.stop(true);
         }
+
+        //// Ensure that user isn't browsing suggestions
+        //if (containsMedia() && !isSuggestionsShown()) {
+        //    // save state
+        //    Video video = getVideo();
+        //    int repeatButtonState = getRepeatButtonState();
+        //    boolean contentBlockEnabled = isContentBlockEnabled();
+        //    boolean controlsShown = isOverlayShown();
+        //    boolean debugShown = isDebugInfoShown();
+        //
+        //    // Silently recreate player objects.
+        //    // NOTE: Don't use events! Otherwise you'll get infinite loading video loop.
+        //    destroyPlayerObjects();
+        //    createPlayerObjects();
+        //
+        //    // restore state
+        //    setVideo(video);
+        //    setRepeatButtonState(repeatButtonState);
+        //    setContentBlockButtonState(contentBlockEnabled);
+        //    showOverlay(controlsShown);
+        //    showDebugInfo(debugShown);
+        //    setDebugButtonState(debugShown);
+        //}
     }
 
     private void showHidePlayerOverlay(boolean show) {
