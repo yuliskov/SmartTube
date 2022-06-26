@@ -346,7 +346,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             video.sync(formatInfo);
         }
 
-        getController().setBackground(bgImageUrl);
+        getController().showBackground(bgImageUrl);
 
         if (bgImageUrl != null && getController().containsMedia()) {
             // Make background visible

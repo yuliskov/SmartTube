@@ -119,7 +119,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mBackgroundManager = getLeanbackActivity().getBackgroundManager();
         mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.player_background));
         mPlayerInitializer = new ExoPlayerInitializer(getContext());
-        mExoPlayerController = new ExoPlayerController(getContext(), this);
+        mExoPlayerController = new ExoPlayerController(getContext());
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.setView(this);
@@ -802,13 +802,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setBackground(String url) {
-        mBackgroundManager.setBackground(url);
+    public void showBackground(String url) {
+        mBackgroundManager.showBackground(url);
     }
 
     @Override
-    public void setBackgroundColor(int colorResId) {
-        mBackgroundManager.setColor(colorResId);
+    public void showBackgroundColor(int colorResId) {
+        mBackgroundManager.showBackgroundColor(colorResId);
     }
 
     private CharSequence appendLive(String title, boolean isLive) {
@@ -1459,7 +1459,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     @Override
     public void resetPlayerState() {
-        mExoPlayerController.resetPlayerState();
+        if (containsMedia()) { // don't reset for the upcoming streams
+            mExoPlayerController.resetPlayerState();
+            // Hide last frame of the previous video
+            showBackgroundColor(R.color.player_background);
+        }
+
+        //mPlaybackController.setBackground(null); // ensure that the background doesn't overlap the video
 
         //// Ensure that user isn't browsing suggestions
         //if (containsMedia() && !isSuggestionsShown()) {

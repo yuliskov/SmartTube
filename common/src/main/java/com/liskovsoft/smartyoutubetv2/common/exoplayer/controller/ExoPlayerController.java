@@ -18,7 +18,6 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
@@ -38,7 +37,6 @@ import java.util.List;
 public class ExoPlayerController implements Player.EventListener, PlayerController {
     private static final String TAG = ExoPlayerController.class.getSimpleName();
     private final Context mContext;
-    private final PlaybackController mPlaybackController;
     private final ExoMediaSourceFactory mMediaSourceFactory;
     private final TrackSelectorManager mTrackSelectorManager;
     private final TrackInfoFormatter2 mTrackFormatter;
@@ -49,8 +47,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private PlayerView mPlayerView;
     private float mCurrentSpeed = 1.0f;
 
-    public ExoPlayerController(Context context, PlaybackController playbackController) {
-        mPlaybackController = playbackController;
+    public ExoPlayerController(Context context) {
         mContext = context.getApplicationContext();
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
         mTrackSelectorManager = new TrackSelectorManager(LocaleUtility.getCurrentLocale(context).getLanguage());
@@ -300,7 +297,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         if (mOnSourceChanged) {
             mOnSourceChanged = false;
-            mPlaybackController.setBackground(null); // ensure that the background doesn't overlap the video
             mEventListener.onVideoLoaded(mVideo);
 
             // Produce thread sync problems
@@ -411,10 +407,8 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
      */
     @Override
     public void resetPlayerState() {
-        if (containsMedia()) {
+        if (mPlayer != null) {
             mPlayer.stop(true);
-            // Hide last frame of the previous video
-            mPlaybackController.setBackgroundColor(R.color.black);
         }
     }
 

@@ -10,7 +10,7 @@ public interface PlaybackController extends PlaybackEngineController, PlaybackUI
     void finish();
     void finishReally();
     void setAfrRunning(boolean isRunning);
-    void setBackground(String url);
-    void setBackgroundColor(int colorResId);
+    void showBackground(String url);
+    void showBackgroundColor(int colorResId);
     void resetPlayerState();
 }

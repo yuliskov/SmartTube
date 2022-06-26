@@ -65,7 +65,7 @@ public class UriBackgroundManager {
 
     public void onStart() {
         if (mBackgroundURI != null) {
-            setBackground(mBackgroundURI.toString());
+            showBackground(mBackgroundURI.toString());
         } else if (mBackgroundColor != -1) {
             setBackgroundColor(mBackgroundColor);
         } else {
@@ -99,7 +99,7 @@ public class UriBackgroundManager {
         @Override
         public void run() {
             if (mBackgroundURI != null) {
-                setBackground(mBackgroundURI.toString());
+                showBackground(mBackgroundURI.toString());
             }
         }
     }
@@ -108,7 +108,7 @@ public class UriBackgroundManager {
         return mBackgroundManager;
     }
 
-    public void setBackground(String uri) {
+    public void showBackground(String uri) {
         View videoView = mActivity.findViewById(R.id.video_surface);
 
         if (videoView != null) {
@@ -141,7 +141,7 @@ public class UriBackgroundManager {
                 });
     }
 
-    public void setColor(int colorResId) {
+    public void showBackgroundColor(int colorResId) {
         View videoView = mActivity.findViewById(R.id.video_surface);
 
         if (videoView != null) {
