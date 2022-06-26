@@ -257,6 +257,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableNoFpsPresets(option.isSelected()),
                 mPlayerTweaksData.isNoFpsPresetsEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.prefer_avc_codec),
+                option -> mPlayerTweaksData.preferAvcOverVp9(option.isSelected()),
+                mPlayerTweaksData.isAvcOverVp9Preferred()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.sleep_timer),
                 getContext().getString(R.string.sleep_timer_desc),
                 option -> mPlayerData.enableSonyTimerFix(option.isSelected()),

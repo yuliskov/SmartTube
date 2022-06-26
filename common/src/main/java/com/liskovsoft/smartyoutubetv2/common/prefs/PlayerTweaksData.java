@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build.VERSION;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class PlayerTweaksData {
@@ -49,6 +48,7 @@ public class PlayerTweaksData {
     private boolean mIsNoFpsPresetsEnabled;
     private boolean mIsRememberPositionOfShortVideosEnabled;
     private boolean mIsSuggestionsDisabled;
+    private boolean mIsAvcOverVp9Preferred;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -213,6 +213,15 @@ public class PlayerTweaksData {
         return mIsNoFpsPresetsEnabled;
     }
 
+    public void preferAvcOverVp9(boolean prefer) {
+        mIsAvcOverVp9Preferred = prefer;
+        persistData();
+    }
+
+    public boolean isAvcOverVp9Preferred() {
+        return mIsAvcOverVp9Preferred;
+    }
+
     public void enableRememberPositionOfShortVideos(boolean enable) {
         mIsRememberPositionOfShortVideosEnabled = enable;
         persistData();
@@ -255,6 +264,7 @@ public class PlayerTweaksData {
         mIsNoFpsPresetsEnabled = Helpers.parseBoolean(split, 15, false);
         mIsRememberPositionOfShortVideosEnabled = Helpers.parseBoolean(split, 16, false);
         mIsSuggestionsDisabled = Helpers.parseBoolean(split, 17, false);
+        mIsAvcOverVp9Preferred = Helpers.parseBoolean(split, 18, false);
     }
 
     private void persistData() {
@@ -263,7 +273,8 @@ public class PlayerTweaksData {
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
                 mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
-                mIsBufferingFixEnabled, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled
+                mIsBufferingFixEnabled, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
+                mIsAvcOverVp9Preferred
         ));
     }
 }
