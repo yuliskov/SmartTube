@@ -1461,6 +1461,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void resetPlayerState() {
         if (containsMedia()) {
             mPlayer.stop(true);
+            setBackgroundColor(R.color.black); // hide last frame of the previous video
         }
 
         //// Ensure that user isn't browsing suggestions

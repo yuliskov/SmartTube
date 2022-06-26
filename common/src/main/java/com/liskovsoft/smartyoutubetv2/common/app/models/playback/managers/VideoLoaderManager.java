@@ -263,7 +263,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             mLastVideo = item;
             getController().setVideo(item);
             getController().resetPlayerState();
-            getController().setBackgroundColor(R.color.black); // hide last frame of the previous video
             loadFormatInfo(item);
         }
     }
