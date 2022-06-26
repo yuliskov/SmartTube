@@ -82,6 +82,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
         if (getController() != null && getController().isEngineInitialized()) { // player is initialized
             if (!item.equals(mLastVideo)) {
+                getController().resetPlayerState();
                 loadVideo(item); // play immediately
             }
         } else {
@@ -262,7 +263,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             mPlaylist.setCurrent(item);
             mLastVideo = item;
             getController().setVideo(item);
-            getController().resetPlayerState();
             loadFormatInfo(item);
         }
     }

@@ -1459,11 +1459,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     @Override
     public void resetPlayerState() {
-        if (containsMedia()) { // don't reset for the upcoming streams
-            mExoPlayerController.resetPlayerState();
-            // Hide last frame of the previous video
-            showBackgroundColor(R.color.player_background);
-        }
+        mExoPlayerController.resetPlayerState();
+        // Hide last frame of the previous video
+        showBackgroundColor(R.color.player_background);
 
         //mPlaybackController.setBackground(null); // ensure that the background doesn't overlap the video
 
