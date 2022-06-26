@@ -119,7 +119,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mBackgroundManager = getLeanbackActivity().getBackgroundManager();
         mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.player_background));
         mPlayerInitializer = new ExoPlayerInitializer(getContext());
-        mExoPlayerController = new ExoPlayerController(getContext());
+        mExoPlayerController = new ExoPlayerController(getContext(), this);
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.setView(this);
@@ -877,28 +877,28 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void openDash(InputStream dashManifest) {
-        resetPlayerState();
+        //resetPlayerState();
 
         mExoPlayerController.openDash(dashManifest);
     }
 
     @Override
     public void openDashUrl(String dashManifestUrl) {
-        resetPlayerState();
+        //resetPlayerState();
 
         mExoPlayerController.openDashUrl(dashManifestUrl);
     }
 
     @Override
     public void openHlsUrl(String hlsPlaylistUrl) {
-        resetPlayerState();
+        //resetPlayerState();
 
         mExoPlayerController.openHlsUrl(hlsPlaylistUrl);
     }
 
     @Override
     public void openUrlList(List<String> urlList) {
-        resetPlayerState();
+        //resetPlayerState();
 
         mExoPlayerController.openUrlList(urlList);
     }
@@ -1459,10 +1459,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     @Override
     public void resetPlayerState() {
-        if (containsMedia()) {
-            mPlayer.stop(true);
-            setBackgroundColor(R.color.black); // hide last frame of the previous video
-        }
+        mExoPlayerController.resetPlayerState();
 
         //// Ensure that user isn't browsing suggestions
         //if (containsMedia() && !isSuggestionsShown()) {

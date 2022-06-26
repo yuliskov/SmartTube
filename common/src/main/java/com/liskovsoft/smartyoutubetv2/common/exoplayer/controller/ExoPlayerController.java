@@ -16,7 +16,9 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
@@ -36,6 +38,7 @@ import java.util.List;
 public class ExoPlayerController implements Player.EventListener, PlayerController {
     private static final String TAG = ExoPlayerController.class.getSimpleName();
     private final Context mContext;
+    private final PlaybackController mPlaybackController;
     private final ExoMediaSourceFactory mMediaSourceFactory;
     private final TrackSelectorManager mTrackSelectorManager;
     private final TrackInfoFormatter2 mTrackFormatter;
@@ -46,7 +49,8 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private PlayerView mPlayerView;
     private float mCurrentSpeed = 1.0f;
 
-    public ExoPlayerController(Context context) {
+    public ExoPlayerController(Context context, PlaybackController playbackController) {
+        mPlaybackController = playbackController;
         mContext = context.getApplicationContext();
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
         mTrackSelectorManager = new TrackSelectorManager(LocaleUtility.getCurrentLocale(context).getLanguage());
@@ -94,6 +98,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     private void openMediaSource(MediaSource mediaSource) {
+        resetPlayerState(); // fixes occasional video artifacts and problems with quality switching
         setQualityInfo("");
 
         mTrackSelectorManager.invalidate();
@@ -295,6 +300,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         if (mOnSourceChanged) {
             mOnSourceChanged = false;
+            mPlaybackController.setBackground(null); // ensure that the background doesn't overlap the video
             mEventListener.onVideoLoaded(mVideo);
 
             // Produce thread sync problems
@@ -395,6 +401,20 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             return mPlayer.getVolume();
         } else {
             return 1;
+        }
+    }
+
+    /**
+     * Fixes video artifacts when switching to the next video.<br/>
+     * Also could help with memory leaks(??)<br/>
+     * Without this also you'll have problems with track quality switching(??).
+     */
+    @Override
+    public void resetPlayerState() {
+        if (containsMedia()) {
+            mPlayer.stop(true);
+            // Hide last frame of the previous video
+            mPlaybackController.setBackgroundColor(R.color.black);
         }
     }
 
