@@ -407,7 +407,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
      */
     @Override
     public void resetPlayerState() {
-        if (mPlayer != null) {
+        if (containsMedia()) {
             mPlayer.stop(true);
         }
     }
