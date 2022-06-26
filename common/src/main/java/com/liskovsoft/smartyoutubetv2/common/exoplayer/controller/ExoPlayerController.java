@@ -16,7 +16,6 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
-import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
@@ -26,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter2;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -57,7 +57,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         // Shield 720p fix???
         initFormats();
-        VideoTrack.sIsNoFpsPresetsEnabled = PlayerTweaksData.instance(context).isNoFpsPresetsEnabled();
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
+        VideoTrack.sIsNoFpsPresetsEnabled = playerTweaksData.isNoFpsPresetsEnabled();
+        MediaTrack.preferAvcOverVp9(playerTweaksData.isAvcOverVp9Preferred());
     }
 
     private void initFormats() {
