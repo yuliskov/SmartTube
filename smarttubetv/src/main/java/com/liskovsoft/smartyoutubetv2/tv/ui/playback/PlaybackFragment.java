@@ -806,6 +806,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mBackgroundManager.setBackground(url);
     }
 
+    @Override
+    public void setBackgroundColor(int colorResId) {
+        mBackgroundManager.setColor(colorResId);
+    }
+
     private CharSequence appendLive(String title, boolean isLive) {
         CharSequence result = title;
 
@@ -1456,6 +1461,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void resetPlayerState() {
         if (containsMedia()) {
             mPlayer.stop(true);
+            setBackgroundColor(R.color.black);
         }
 
         //// Ensure that user isn't browsing suggestions
