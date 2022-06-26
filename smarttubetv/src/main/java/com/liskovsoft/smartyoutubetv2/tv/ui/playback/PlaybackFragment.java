@@ -1452,7 +1452,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      * Also could help with memory leaks(??)<br/>
      * Without this also you'll have problems with track quality switching(??).
      */
-    private void resetPlayerState() {
+    @Override
+    public void resetPlayerState() {
         if (containsMedia()) {
             mPlayer.stop(true);
         }
