@@ -442,5 +442,5 @@
     <string name="feedback">Зворотній зв`язок</string>
     <string name="sources">Вихідний код</string>
     <string name="releases">Релізи</string>
-    <string name="prefer_avc_codec"><![CDATA[Пріоритет вибору кодека: av1–>avc–>vp9]]></string>
+    <string name="prefer_avc_over_vp9">Вибір кодека: віддавати перевагу avc над vp9</string>
 </resources>
