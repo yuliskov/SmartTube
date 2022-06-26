@@ -280,7 +280,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             if (showLoadingMsg) {
                 MessageHelpers.showMessageThrottled(getActivity(), R.string.wait_data_loading);
             }
-            Utils.postDelayed(mHandler, mPendingNext, 1_000);
+            //Utils.postDelayed(mHandler, mPendingNext, 1_000);
         } else if (current.isRemote) {
             openFirstVideoFromRecommended(current);
         }
