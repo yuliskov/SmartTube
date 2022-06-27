@@ -248,7 +248,7 @@ public class NavigateTitleView extends TitleView {
     private void updateLanguageIcon() {
         Locale locale = LocaleUtility.getCurrentLocale(getContext());
         loadIcon(mLanguageView, "https://countryflagsapi.com/png/" + locale.getCountry());
-        TooltipCompatHandler.setTooltipText(mLanguageView, locale.getDisplayCountry());
+        TooltipCompatHandler.setTooltipText(mLanguageView, String.format("%s (%s)", locale.getDisplayCountry(), locale.getDisplayLanguage()));
     }
 
     private static void loadIcon(SearchOrbView view, String url) {
