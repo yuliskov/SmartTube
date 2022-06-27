@@ -6,8 +6,7 @@ package de.blinkt.openvpn.core;
 
 import android.text.TextUtils;
 
-import androidx.core.util.Pair;
-
+import android.util.Pair;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
