@@ -32,6 +32,8 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.Too
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
+import java.util.Locale;
+
 import static androidx.leanback.widget.TitleViewAdapter.BRANDING_VIEW_VISIBLE;
 import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
 
@@ -233,17 +235,20 @@ public class NavigateTitleView extends TitleView {
 
             if (current != null && current.getAvatarImageUrl() != null) {
                 loadIcon(mAccountView, current.getAvatarImageUrl());
+                TooltipCompatHandler.setTooltipText(mAccountView, current.getName() != null ? current.getName() : current.getEmail());
             } else {
                 Colors orbColors = mAccountView.getOrbColors();
                 mAccountView.setOrbColors(new Colors(orbColors.color, orbColors.brightColor, ContextCompat.getColor(getContext(), R.color.orb_icon_color)));
                 mAccountView.setOrbIcon(ContextCompat.getDrawable(getContext(), R.drawable.browse_title_account));
+                TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
             }
         });
     }
 
     private void updateLanguageIcon() {
-        String country = LocaleUtility.getCurrentLocale(getContext()).getCountry();
-        loadIcon(mLanguageView, "https://countryflagsapi.com/png/" + country);
+        Locale locale = LocaleUtility.getCurrentLocale(getContext());
+        loadIcon(mLanguageView, "https://countryflagsapi.com/png/" + locale.getCountry());
+        TooltipCompatHandler.setTooltipText(mLanguageView, locale.getDisplayCountry());
     }
 
     private static void loadIcon(SearchOrbView view, String url) {
