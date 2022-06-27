@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
 import android.text.TextUtils;
+import android.util.Pair;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.util.MimeTypes;
@@ -73,7 +74,7 @@ public class TrackSelectorUtil {
      * Try to amplify resolution of aspect ratios that differ from 16:9
      */
     private static String buildResolutionShortString(Format format) {
-        return getResolutionLabel(format) + "p";
+        return getResolutionLabel(format);
     }
 
     private static String buildAudioPropertyString(Format format) {
@@ -152,6 +153,72 @@ public class TrackSelectorUtil {
     }
 
     public static String getResolutionLabel(Format format) {
+        Pair<String, String> labels = getResolutionPrefixHeight(format);
+
+        if (labels == null) {
+            return null;
+        }
+
+        String prefix = labels.first != null ? "(" + labels.first + ") " : "";
+
+        return prefix + labels.second + "p";
+    }
+
+    public static String getShortResolutionLabel(Format format) {
+        Pair<String, String> labels = getResolutionPrefixHeight(format);
+
+        if (labels == null) {
+            return null;
+        }
+
+        return labels.first != null ? labels.first : labels.second;
+    }
+
+    public static int getOriginHeight(int height) {
+        int originHeight = height;
+
+        // Non-regular examples
+        // Мастерская Синдиката - Мы собрали суперкар КУВАЛДОЙ! - 2560x1182
+        // [AMATORY] ALL STARS: LIVE IN MOSCOW 2021 - 2560x1088 
+
+        if (height < 160) { // 256x144
+            originHeight = 144;
+        } else if (height < 260) { // 426x240
+            originHeight = 240;
+        } else if (height < 380) { // 640x360
+            originHeight = 360;
+        } else if (height < 500) { // 854x480
+            originHeight = 480;
+        } else if (height < 750) { // 1280x720
+            originHeight = 720;
+        } else if (height < 1085) { // 1920x1080
+            originHeight = 1080;
+        } else if (height < 1500) { // 2560x1440
+            originHeight = 1440;
+        } else if (height < 2200) { // 3840x2160
+            originHeight = 2160;
+        } else if (height < 4400) { // 7680x4320
+            originHeight = 4320;
+        }
+
+        return originHeight;
+    }
+
+    private static String getResolutionPrefix(int originHeight) {
+        String prefix = null;
+
+        if (originHeight == 1440) {
+            prefix = "2K";
+        } else if (originHeight == 2160) {
+            prefix = "4K";
+        } else if (originHeight == 4320) {
+            prefix = "8K";
+        }
+
+        return prefix;
+    }
+
+    private static Pair<String, String> getResolutionPrefixHeight(Format format) {
         if (format == null) {
             return null;
         }
@@ -163,37 +230,11 @@ public class TrackSelectorUtil {
             return null;
         }
 
-        //return getResolutionLabelByHeight(Math.min(height, width));
-        return String.valueOf(getResolutionLabelByHeight(height));
-    }
+        //int originHeight = getResolutionHeight(Math.min(height, width));
+        int originHeight = getOriginHeight(height);
 
-    public static int getResolutionLabelByHeight(int height) {
-        int qualityLabel = height;
+        String prefix = getResolutionPrefix(originHeight);
 
-        // Non-regular examples
-        // Мастерская Синдиката - Мы собрали суперкар КУВАЛДОЙ! - 2560x1182
-        // [AMATORY] ALL STARS: LIVE IN MOSCOW 2021 - 2560x1088 
-
-        if (height < 160) { // 256x144
-            qualityLabel = 144;
-        } else if (height < 260) { // 426x240
-            qualityLabel = 240;
-        } else if (height < 380) { // 640x360
-            qualityLabel = 360;
-        } else if (height < 500) { // 854x480
-            qualityLabel = 480;
-        } else if (height < 750) { // 1280x720
-            qualityLabel = 720;
-        } else if (height < 1085) { // 1920x1080
-            qualityLabel = 1080;
-        } else if (height < 1500) { // 2560x1440
-            qualityLabel = 1440;
-        } else if (height < 2200) { // 3840x2160
-            qualityLabel = 2160;
-        } else if (height < 4400) { // 7680x4320
-            qualityLabel = 4320;
-        }
-
-        return qualityLabel;
+        return new Pair<>(prefix, String.valueOf(originHeight));
     }
 }

@@ -15,7 +15,7 @@ public class TrackInfoFormatter2 {
             return;
         }
 
-        mResolutionStr = TrackSelectorUtil.getResolutionLabel(format);
+        mResolutionStr = TrackSelectorUtil.getShortResolutionLabel(format);
 
         int fpsNum = extractFps(format);
         mFpsStr = fpsNum == 0 ? "" : String.valueOf(fpsNum);
