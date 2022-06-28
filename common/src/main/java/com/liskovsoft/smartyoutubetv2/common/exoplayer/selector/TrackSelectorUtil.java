@@ -230,7 +230,10 @@ public class TrackSelectorUtil {
             return null;
         }
 
+        // Make resolution calculation of the vertical videos more closer to the official app.
         int originHeight = getOriginHeight(Math.min(height, width));
+
+        // Ignore vertical videos completely. Only height matters.
         //int originHeight = getOriginHeight(height);
 
         String prefix = getResolutionPrefix(originHeight);
