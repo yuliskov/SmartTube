@@ -153,7 +153,7 @@ public class TrackSelectorUtil {
     }
 
     public static String getResolutionLabel(Format format) {
-        Pair<String, String> labels = getResolutionPrefixHeight(format);
+        Pair<String, String> labels = getResolutionPrefixAndHeight(format);
 
         if (labels == null) {
             return null;
@@ -165,7 +165,7 @@ public class TrackSelectorUtil {
     }
 
     public static String getShortResolutionLabel(Format format) {
-        Pair<String, String> labels = getResolutionPrefixHeight(format);
+        Pair<String, String> labels = getResolutionPrefixAndHeight(format);
 
         if (labels == null) {
             return null;
@@ -218,7 +218,7 @@ public class TrackSelectorUtil {
         return prefix;
     }
 
-    private static Pair<String, String> getResolutionPrefixHeight(Format format) {
+    private static Pair<String, String> getResolutionPrefixAndHeight(Format format) {
         if (format == null) {
             return null;
         }
@@ -230,8 +230,8 @@ public class TrackSelectorUtil {
             return null;
         }
 
-        //int originHeight = getResolutionHeight(Math.min(height, width));
-        int originHeight = getOriginHeight(height);
+        int originHeight = getOriginHeight(Math.min(height, width));
+        //int originHeight = getOriginHeight(height);
 
         String prefix = getResolutionPrefix(originHeight);
 
