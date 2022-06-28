@@ -230,8 +230,8 @@ public class TrackSelectorUtil {
             return null;
         }
 
-        int originHeight = getOriginHeight(Math.min(height, width));
-        //int originHeight = getOriginHeight(height);
+        //int originHeight = getOriginHeight(Math.min(height, width));
+        int originHeight = getOriginHeight(height);
 
         String prefix = getResolutionPrefix(originHeight);
 
