@@ -271,7 +271,7 @@ public class MainUIData {
         mMenuItems = Helpers.parseInt(split, 12,
                 Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_NEW_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT |
                         MENU_ITEM_PLAY_VIDEO | MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_PIN_TO_SIDEBAR | MENU_ITEM_SHARE_EMBED_LINK)); // all except this items
-        mButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE); // all
+        mButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE & ~(BUTTON_CHANGE_LANGUAGE)); // all except this items
     }
 
     private void persistState() {

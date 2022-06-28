@@ -378,7 +378,7 @@
     <string name="player_show_tooltips">Показати підказки для кнопок</string>
     <string name="action_like_unset">Подобається не встановлено</string>
     <string name="action_dislike_unset">Не подобається не встановлено</string>
-    <string name="various_buttons">Різні кнопки</string>
+    <string name="various_buttons">Кнопки у верхній частині головного вікна</string>
     <string name="not_compatible_with">Обрана опція не зумісна з</string>
     <string name="subtitle_position">Зсув субтитрів внизу</string>
     <string name="pressing_home">натиснувши ДОДОМУ</string>
