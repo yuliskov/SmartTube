@@ -354,7 +354,7 @@
   <string name="openvpn_address_invalid">Endereço de configuração da OpenVPN não definido!</string>
   <string name="internet_censorship">Censura da Internet</string>
   <string name="rename_section">Renomear Seção</string>
-  <string name="simple_edit_value_hint">Novo valor</string>
+  <string name="simple_edit_value_hint">Novo nome</string>
   <string name="seek_interval">Intervalo de avanço/retrocesso</string>
   <string name="seek_interval_sec">%s seg</string>
   <string name="subtitle_system">Estilo do sistema\nundefined(configurações do Android &gt; acessibilidade)</string>
