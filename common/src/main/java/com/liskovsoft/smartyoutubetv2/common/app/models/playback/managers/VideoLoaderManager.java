@@ -280,8 +280,8 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             if (showLoadingMsg) {
                 MessageHelpers.showMessageThrottled(getActivity(), R.string.wait_data_loading);
             }
-            // Short videos ending fix (suggestions aren't loaded yet)
-            boolean isEnded = getController() != null && getController().getLengthMs() == getController().getPositionMs();
+            // Short videos next fix (suggestions aren't loaded yet)
+            boolean isEnded = getController() != null && Math.abs(getController().getLengthMs() - getController().getPositionMs()) < 100;
             if (isEnded) {
                 Utils.postDelayed(mHandler, mPendingNext, 1_000);
             }
