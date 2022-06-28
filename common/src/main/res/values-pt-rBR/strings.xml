@@ -40,7 +40,7 @@
   <string name="update_changelog">Registro de Alterações</string>
   <string name="install_update">Instalar Atualização</string>
   <string name="section_is_empty">Ops! Não há nada aqui!</string>
-  <string name="dialog_add_to_playlist">Adicionar/Remover da Lista de Reprodução</string>
+  <string name="dialog_add_to_playlist">Adicionar/Remover à uma lista de reprodução existente</string>
   <string name="msg_signed_users_only">Apenas Usuários Logados</string>
   <string name="msg_cant_load_content">O conteúdo não pode ser carregado.\n1) Verifique a conexão de rede.\n2) Tente fazer login em sua conta.</string>
   <string name="title_video_presets">Predefinições de Vídeo</string>
@@ -230,7 +230,7 @@
   <string name="screen_dimming">Desligar tela (Tela escura)</string>
   <string name="removed_from_playback_queue">Removido da lista de reprodução!</string>
   <string name="added_to_playback_queue">Adicionado à lista de reprodução!</string>
-  <string name="add_remove_from_playback_queue">Adicionar/Remover da lista de reprodução</string>
+  <string name="add_remove_from_playback_queue">Adicionar/Remover à uma lista de reprodução existente</string>
   <string name="proxy_enabled">Proxy ativado!</string>
   <string name="proxy_disabled">Proxy desativado!</string>
   <string name="uploads_row_name">Carregados</string>
@@ -296,8 +296,8 @@
   <string name="action_playback_queue">Fila de reprodução</string>
   <string name="action_video_speed">Velocidade de vídeo</string>
   <string name="action_subtitles">Legendas</string>
-  <string name="action_like">Gostei</string>
-  <string name="action_dislike">Não Gostei</string>
+  <string name="action_like">Gostei (desmarcar)</string>
+  <string name="action_dislike">Não Gostei (desmarcar)</string>
   <string name="action_repeat_mode">Modo de reprodução</string>
   <string name="action_next">Próximo vídeo</string>
   <string name="action_previous">Vídeo anterior</string>
@@ -378,8 +378,8 @@
   <string name="play_video">Reproduzir</string>
   <string name="remember_position_of_short_videos">Lembrar-se da posição em vídeos curtos (menos de 10 minutos)</string>
   <string name="player_show_tooltips">Mostrar rótulos de dicas de ferramentas/botões</string>
-  <string name="action_like_unset">Gostei (desmarcar)</string>
-  <string name="action_dislike_unset">Não Gostei (desmarcar)</string>
+  <string name="action_like_unset">Gostei (marcar)</string>
+  <string name="action_dislike_unset">Não Gostei (marcar)</string>
   <string name="various_buttons">Adicionar/Remover botões</string>
   <string name="not_compatible_with">A opção selecionada não é compatível!</string>
   <string name="subtitle_position">Fundo da legenda (transparência)</string>
@@ -391,7 +391,7 @@
   <string name="saved_to_playlists">Salva na seção listas de reprodução!</string>
   <string name="removed_from_playlists">Removida da seção listas de reprodução!</string>
   <string name="create_playlist">Criar nova lista de reprodução</string>
-  <string name="add_video_to_new_playlist">Adicione este vídeo à nova lista de reprodução</string>
+  <string name="add_video_to_new_playlist">Adicionar este vídeo à nova lista de reprodução</string>
   <string name="cant_delete_empty_playlist">Não é possível excluir a lista de reprodução vazia!</string>
   <string name="playlist">Lista de Reprodução</string>
   <string name="rename_playlist">Renomear lista de reprodução</string>
@@ -445,4 +445,8 @@
   <string name="msg_press_again_to_exit">Pressione novamente para sair!</string>
   <string name="player_remaining_time">Restante: %s</string>
   <string name="player_ending_time">Termina em %s</string>
+  <string name="add_to_playback_queue">Adicionar à fila de reprodução</string>
+  <string name="remove_from_playback_queue">Remover da fila de reprodução</string>
+  <string name="prefer_avc_over_vp9">Seleção de codec: prefira AVC ao VP9</string>
+  <string name="releases">Atualizações</string>
 </resources>
