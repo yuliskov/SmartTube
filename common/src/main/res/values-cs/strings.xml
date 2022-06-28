@@ -382,7 +382,7 @@
     <string name="player_show_tooltips">Zobrazit nápovědu tlačítek</string>
     <string name="action_like_unset">"Líbí se" není nastaveno</string>
     <string name="action_dislike_unset">"Nelíbí se" není nastaveno</string>
-    <string name="various_buttons">Různá tlačítka</string>
+    <string name="various_buttons">Tlačítka v horní částí hlavního okna</string>
     <string name="not_compatible_with">Vybraná možnost není kompatibilní s</string>
     <string name="subtitle_position">Spodní posun titulků</string>
     <string name="pressing_home">stisknutím tlačítka DOMŮ</string>
@@ -450,4 +450,5 @@
     <string name="feedback">Zpětná vazba</string>
     <string name="sources">Zdroje</string>
     <string name="releases">Vydané verze</string>
+    <string name="prefer_avc_over_vp9">Výběr kodeku: preferování AVC nad VP9</string>
 </resources>
