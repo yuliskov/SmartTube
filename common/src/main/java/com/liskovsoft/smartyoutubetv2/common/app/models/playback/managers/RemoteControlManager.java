@@ -333,6 +333,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 //}
                 break;
             case Command.TYPE_CONNECTED:
+                movePlayerToForeground();
                 // NOTE: there are possible false calls when mobile client unloaded from the memory.
                 //if (getActivity() != null && mRemoteControlData.isFinishOnDisconnectEnabled()) {
                 //    // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
