@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
@@ -195,13 +197,6 @@ public class NavigateTitleView extends TitleView {
         }
     }
 
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-
-        updateLanguageIcon();
-    }
-
     public void update() {
         updateAccountIcon();
     }
@@ -246,9 +241,16 @@ public class NavigateTitleView extends TitleView {
     }
 
     private void updateLanguageIcon() {
-        Locale locale = LocaleUtility.getCurrentLocale(getContext());
-        loadIcon(mLanguageView, "https://countryflagsapi.com/png/" + locale.getCountry());
-        TooltipCompatHandler.setTooltipText(mLanguageView, String.format("%s (%s)", locale.getDisplayCountry(), locale.getDisplayLanguage()));
+        if (mLanguageView == null) {
+            return;
+        }
+
+        // Use delay to fix icon initialization on app boot
+        new Handler(Looper.myLooper()).postDelayed(() -> {
+            Locale locale = LocaleUtility.getCurrentLocale(getContext());
+            loadIcon(mLanguageView, "https://countryflagsapi.com/png/" + locale.getCountry());
+            TooltipCompatHandler.setTooltipText(mLanguageView, String.format("%s (%s)", locale.getDisplayCountry(), locale.getDisplayLanguage()));
+        }, 100);
     }
 
     private static void loadIcon(SearchOrbView view, String url) {
