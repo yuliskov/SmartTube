@@ -181,7 +181,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
         switch (playbackMode) {
             case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
-                onNextClicked();
+                loadNext();
                 getController().showOverlay(true);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
@@ -195,7 +195,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                 if (!getController().isSuggestionsShown() && mPlaylist.getNext() == null) {
                     getController().finish();
                 } else {
-                    onNextClicked();
+                    loadNext();
                     getController().showOverlay(true);
                 }
                 break;
@@ -208,7 +208,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                     getController().setPositionMs(0);
                     Utils.showRepeatInfo(getActivity(), playbackMode);
                 } else {
-                    onNextClicked();
+                    loadNext();
                     getController().showOverlay(true);
                 }
                 break;
@@ -216,7 +216,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                 // stop player (if not playing playlist)
                 Video video = getController().getVideo();
                 if ((video != null && video.hasPlaylist()) || mPlaylist.getNext() != null) {
-                    onNextClicked();
+                    loadNext();
                     getController().showOverlay(true);
                 } else {
                     getController().showSuggestions(true);
@@ -280,7 +280,11 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             if (showLoadingMsg) {
                 MessageHelpers.showMessageThrottled(getActivity(), R.string.wait_data_loading);
             }
-            //Utils.postDelayed(mHandler, mPendingNext, 1_000);
+            // Short videos ending fix (suggestions aren't loaded yet)
+            boolean isEnded = getController() != null && getController().getLengthMs() == getController().getPositionMs();
+            if (isEnded) {
+                Utils.postDelayed(mHandler, mPendingNext, 1_000);
+            }
         } else if (current.isRemote) {
             openFirstVideoFromRecommended(current);
         }
