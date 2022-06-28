@@ -76,7 +76,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         boolean isFarFromStart = getController().getPositionMs() > 10_000;
 
         if (isFarFromStart) {
-            saveState(); // in case user want to go to previous video
+            saveState(); // in case the user wants to go to previous video
             getController().setPositionMs(0);
             return true;
         }
