@@ -40,6 +40,10 @@ public class WebBrowserFragment extends Fragment implements WebBrowserView {
         mWebView.setBackgroundColor(Color.TRANSPARENT);
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+
+        // No caching
+        webSettings.setAppCacheEnabled(false);
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
     }
 
     @Override
