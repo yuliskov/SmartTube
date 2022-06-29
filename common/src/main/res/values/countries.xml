@@ -5,14 +5,11 @@
         <item>Great Britain|GB</item>
         <item>Canada|CA</item>
         <item>Україна|UA</item>
+        <item>Россия|RU</item>
         <item>Беларусь|BY</item>
         <item>Қазақстан|KZ</item>
-        <item>Россия|RU</item>
+        <item>Armenia|HY</item>
         <item>Serbia|RS</item>
-        <item>New Zealand|NZ</item>
-        <item>Australia|AU</item>
-        <item>Switzerland|CH</item>
-        <item>Israel|IL</item>
         <item>Eesti|EE</item>
         <item>България|BG</item>
         <item>Deutschland|DE</item>
@@ -36,8 +33,11 @@
         <item>Slovakia|SK</item>
         <item>Slovenia|SL</item>
         <item>Sweden|SE</item>
+        <item>New Zealand|NZ</item>
+        <item>Australia|AU</item>
+        <item>Switzerland|CH</item>
+        <item>Israel|IL</item>
         <item>Bangladesh|BD</item>
-        <item>Armenia|HY</item>
         <item>Brasil|BR</item>
         <item>Portugalia|PT</item>
         <item>Argentina|AR</item>

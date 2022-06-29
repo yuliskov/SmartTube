@@ -3,11 +3,12 @@
     <string-array name="supported_languages">
         <item>English|en_US</item>
         <item>Українська|uk_UA</item>
+        <item>Русский|ru_RU</item>
+        <item>Armenian|hy</item>
+        <item>Serbian|sr</item>
         <item>Polski|pl</item>
         <item>Eesti keel|et_EE</item>
         <item>Deutsch|de_DE</item>
-        <item>Русский|ru_RU</item>
-        <item>Serbian|sr</item>
         <item>Български|bg</item>
         <item>Romanian|ro</item>
         <item>Swedish|se</item>
@@ -28,7 +29,6 @@
         <item>Español|es</item>
         <item>Español (Argentina)|es_AR</item>
         <item>Ελληνικά|el_GR</item>
-        <item>Armenian|hy</item>
         <item>Português|pt_PT</item>
         <item>Português (Brasileiro)|pt_BR</item>
         <item>Arabic|ar</item>
