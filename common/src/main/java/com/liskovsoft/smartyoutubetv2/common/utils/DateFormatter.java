@@ -42,7 +42,7 @@ public class DateFormatter {
 
         java.text.DateFormat natural =
                 java.text.DateFormat.getTimeInstance(
-                        java.text.DateFormat.LONG, new Locale(locale.getLanguage())); // Fix weird locale (e.g. ru_US)
+                        java.text.DateFormat.LONG, locale);
 
         if (natural instanceof SimpleDateFormat) {
             SimpleDateFormat sdf = (SimpleDateFormat) natural;

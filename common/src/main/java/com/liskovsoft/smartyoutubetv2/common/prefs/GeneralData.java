@@ -541,7 +541,7 @@ public class GeneralData {
 
     public int getPlaylistOrder(String playlistId) {
         Integer order = mPlaylistOrder.get(playlistId);
-        return order != null ? order : MediaItemManager.PLAYLIST_ORDER_ADDED_DATE_NEWER_FIRST;
+        return order != null ? order : -1; // default order unpredictable (depends on site prefs)
     }
 
     public void addPendingStream(Video video) {
