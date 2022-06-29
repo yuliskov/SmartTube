@@ -382,7 +382,7 @@
     <string name="player_show_tooltips">Schaltflächen-Tooltips anzeigen</string>
     <string name="action_like_unset">Mag ich</string>
     <string name="action_dislike_unset">Mag ich nicht</string>
-    <string name="various_buttons">Verschiedene Schaltflächen</string>
+    <string name="various_buttons">Schaltflächen am oberen Rand der Startseite</string>
     <string name="not_compatible_with">Ausgewählte Option ist nicht kompatibel mit</string>
     <string name="subtitle_position">Untertitel-Verschiebung von unten</string>
     <string name="pressing_home">durch Drücken von HOME</string>
@@ -450,4 +450,5 @@
     <string name="feedback">Feedback</string>
     <string name="sources">Quellen</string>
     <string name="releases">Versionen</string>
+    <string name="prefer_avc_over_vp9">Codec-Auswahl: avc statt vp9 bevorzugen</string>
 </resources>
