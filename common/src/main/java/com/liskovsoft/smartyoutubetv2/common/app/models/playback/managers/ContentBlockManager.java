@@ -37,7 +37,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     private List<SponsorSegment> mSponsorSegments;
     private Disposable mProgressAction;
     private Disposable mSegmentsAction;
-    private boolean mIsSameSegment;
+    private long mLastSkipPosMs;
 
     public static class SeekBarSegment {
         public int startProgress;
@@ -172,7 +172,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         // Reset colors
         getController().setSeekBarSegments(null);
         // Reset previously found segment (fix no dialog popup)
-        mIsSameSegment = false;
+        mLastSkipPosMs = 0;
     }
 
     private void skipSegment(long interval) {
@@ -180,24 +180,25 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
 
-        boolean isSegmentFound = false;
         SponsorSegment foundSegment = null;
+        long skipPosMs = 0;
 
         for (SponsorSegment segment : mSponsorSegments) {
             if (isPositionAtSegmentStart(getController().getPositionMs(), segment)) {
-                isSegmentFound = true;
                 foundSegment = segment;
                 Integer resId = mContentBlockData.getLocalizedRes(segment.getCategory());
                 String localizedCategory = resId != null ? getActivity().getString(resId) : segment.getCategory();
 
                 int type = mContentBlockData.getAction(segment.getCategory());
 
+                skipPosMs = segment.getEndMs();
+
                 if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode()) {
-                    setPositionMs(segment.getEndMs());
+                    setPositionMs(skipPosMs);
                 } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
-                    messageSkip(segment.getEndMs(), localizedCategory);
+                    messageSkip(skipPosMs, localizedCategory);
                 } else if (type == ContentBlockData.ACTION_SHOW_DIALOG) {
-                    confirmSkip(segment.getEndMs(), localizedCategory);
+                    confirmSkip(skipPosMs, localizedCategory);
                 }
 
                 break;
@@ -209,7 +210,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             mSponsorSegments.remove(foundSegment);
         }
 
-        mIsSameSegment = isSegmentFound;
+        mLastSkipPosMs = skipPosMs;
     }
 
     private boolean isPositionAtSegmentStart(long positionMs, SponsorSegment segment) {
@@ -230,7 +231,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private void confirmSkip(long skipPositionMs, String category) {
-        if (mIsSameSegment) {
+        if (mLastSkipPosMs == skipPositionMs) {
             return;
         }
 
