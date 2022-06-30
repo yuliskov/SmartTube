@@ -219,6 +219,10 @@ public class MotherActivity extends FragmentActivity {
         mOnPermissions.add(onPermissions);
     }
 
+    /**
+     * Use this method only upon exiting from the app.<br/>
+     * Big troubles with AFR resolution switch!
+     */
     public static void invalidate() {
         sCachedDisplayMetrics = null;
         sIsInPipMode = false;

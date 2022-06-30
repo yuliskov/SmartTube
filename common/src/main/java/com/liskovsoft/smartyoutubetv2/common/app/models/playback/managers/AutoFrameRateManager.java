@@ -249,18 +249,20 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
                 dialogPresenter.clear();
                 dialogPresenter.appendCheckedCategory(afrCategory.title, afrCategory.options);
-                dialogPresenter.showDialog(afrCategory.title, mApplyAfr);
+                dialogPresenter.showDialog(afrCategory.title);
             }));
             options.add(UiOptionItem.from(afrPauseCategory.title, optionItem -> {
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
                 dialogPresenter.clear();
                 dialogPresenter.appendRadioCategory(afrPauseCategory.title, afrPauseCategory.options);
-                dialogPresenter.showDialog(afrPauseCategory.title, mApplyAfr);
+                dialogPresenter.showDialog(afrPauseCategory.title);
             }));
 
             mUiManager.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING, getActivity().getString(R.string.auto_frame_rate), options));
+            mUiManager.addOnDialogHide(mApplyAfr); // Apply NEW Settings on dialog close
         } else {
             mUiManager.removeCategory(AUTO_FRAME_RATE_ID);
+            mUiManager.removeOnDialogHide(mApplyAfr);
         }
     }
 
