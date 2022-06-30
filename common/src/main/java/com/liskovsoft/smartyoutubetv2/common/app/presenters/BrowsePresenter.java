@@ -66,9 +66,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final MediaGroupManager mGroupManager;
     private final MediaItemManager mItemManager;
     private final SignInManager mSignInManager;
-    private Disposable mUpdateAction;
-    private Disposable mContinueAction;
-    private Disposable mSignCheckAction;
+    private final List<Disposable> mActions;
     private BrowseSection mCurrentSection;
     private Video mCurrentVideo;
     private long mLastUpdateTimeMs;
@@ -92,6 +90,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mGroupManager = mediaService.getMediaGroupManager();
         mItemManager = mediaService.getMediaItemManager();
         mSignInManager = mediaService.getSignInManager();
+        mActions = new ArrayList<>();
 
         initSections();
     }
@@ -359,6 +358,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
+        if (RxUtils.isAnyActionRunning(mActions)) {
+            Log.e(TAG, "Can't continue group. Another action is running.");
+            return;
+        }
+
         VideoGroup group = item.group;
 
         Log.d(TAG, "onScrollEnd. Group title: " + group.getTitle());
@@ -378,7 +382,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public boolean hasPendingActions() {
-        return RxUtils.isAnyActionRunning(mUpdateAction, mContinueAction, mSignCheckAction);
+        return RxUtils.isAnyActionRunning(mActions);
     }
 
     public boolean isItemPinned(Video item) {
@@ -547,8 +551,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private void updateVideoRows(BrowseSection section, Observable<List<MediaGroup>> groups) {
         Log.d(TAG, "updateRowsHeader: Start loading section: " + section.getTitle());
-
-        disposeActions();
+        
         getView().showProgressBar(true);
 
         VideoGroup firstGroup = VideoGroup.from(section);
@@ -557,7 +560,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         final AtomicInteger emissionIndex = new AtomicInteger(-1);
 
-        mUpdateAction = groups
+        Disposable updateAction = groups
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -591,12 +594,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 getView().showError(new CategoryEmptyError(getContext()));
                             }
                         });
+
+        mActions.add(updateAction);
     }
 
     private void updateVideoGrid(BrowseSection section, Observable<MediaGroup> group, int position) {
         Log.d(TAG, "updateGridHeader: Start loading section: " + section.getTitle());
-
-        disposeActions();
+        
         getView().showProgressBar(true);
 
         VideoGroup firstGroup = VideoGroup.from(section, position);
@@ -609,7 +613,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        mUpdateAction = group
+        Disposable updateAction = group
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -637,14 +641,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 getView().showError(new CategoryEmptyError(getContext()));
                             }
                         });
+
+        mActions.add(updateAction);
     }
 
     private void continueGroup(VideoGroup group) {
-        if (RxUtils.isAnyActionRunning(mContinueAction)) {
-            Log.e(TAG, "Can't continue group. Another action is running.");
-            return;
-        }
-
         if (getView() == null) {
             Log.e(TAG, "Can't continue group. The view is null.");
             return;
@@ -664,7 +665,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             continuation = mGroupManager.continueGroupObserve(mediaGroup);
         }
 
-        mContinueAction = continuation
+        Disposable continueAction = continuation
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -686,11 +687,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             }
                         }
                 );
+
+        mActions.add(continueAction);
     }
 
     private void authCheck(boolean check, Runnable callback) {
-        disposeActions();
-
         if (!check) {
             callback.run();
             return;
@@ -698,7 +699,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         getView().showProgressBar(true);
 
-        mSignCheckAction = mSignInManager.isSignedObserve()
+        Disposable signCheckAction = mSignInManager.isSignedObserve()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -715,20 +716,18 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         error -> Log.e(TAG, "authCheck error: %s", error.getMessage())
                 );
 
+        mActions.add(signCheckAction);
     }
 
     /**
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
     private void continueGroupIfNeeded(VideoGroup group) {
-        MediaServiceManager.instance().continueGroupIfNeeded(getContext(), group, () -> {
-            mContinueAction = null; // Allow simultaneous row continuation
-            continueGroup(group);
-        });
+        MediaServiceManager.instance().shouldContinueTheGroup(getContext(), group, () -> continueGroup(group));
     }
 
     private void disposeActions() {
-        RxUtils.disposeActions(mUpdateAction, mContinueAction, mSignCheckAction);
+        RxUtils.disposeActions(mActions);
     }
 
     private void updateMultiGrid(Video item) {

@@ -20,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,8 +28,7 @@ import java.util.Set;
 public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsLoaderManager.class.getSimpleName();
     private final Set<MetadataListener> mListeners = new HashSet<>();
-    private Disposable mMetadataAction;
-    private Disposable mContinueAction;
+    private List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
 
     public interface MetadataListener {
@@ -69,6 +69,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             return;
         }
 
+        if (RxUtils.isAnyActionRunning(mActions)) {
+            return;
+        }
+
         continueGroup(item.group);
     }
 
@@ -81,10 +85,6 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void continueGroup(VideoGroup group) {
-        if (RxUtils.isAnyActionRunning(mContinueAction)) {
-            return;
-        }
-
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         getController().showProgressBar(true);
@@ -93,7 +93,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         MediaItemManager mediaItemManager = YouTubeMediaService.instance().getMediaItemManager();
 
-        mContinueAction = mediaItemManager.continueGroupObserve(mediaGroup)
+        Disposable continueAction = mediaItemManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -123,6 +123,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                             }
                         }
                 );
+
+        mActions.add(continueAction);
     }
 
     private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata, Video video) {
@@ -184,7 +186,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         clearSuggestionsIfNeeded(video);
 
-        mMetadataAction = observable
+        Disposable metadataAction = observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -195,6 +197,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                             // normally error could happen (something with title parsing)
                         }
                 );
+
+        mActions.add(metadataAction);
     }
 
     private void clearSuggestionsIfNeeded(Video video) {
@@ -311,10 +315,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
     private void continueGroupIfNeeded(VideoGroup group) {
-        MediaServiceManager.instance().continueGroupIfNeeded(getActivity(), group, () -> {
-            mContinueAction = null; // Allow simultaneous row continuation
-            continueGroup(group);
-        });
+        MediaServiceManager.instance().shouldContinueTheGroup(getActivity(), group, () -> continueGroup(group));
     }
 
     public void addMetadataListener(MetadataListener listener) {
@@ -330,6 +331,6 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void disposeActions() {
-        RxUtils.disposeActions(mMetadataAction, mContinueAction);
+        RxUtils.disposeActions(mActions);
     }
 }

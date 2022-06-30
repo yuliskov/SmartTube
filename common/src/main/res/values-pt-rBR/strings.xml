@@ -218,7 +218,7 @@
   <string name="return_to_background_video">Voltar ao vídeo em execução em segundo plano</string>
   <string name="pin_unpin_from_sidebar">Fixar/Desafixar canal na barra lateral</string>
   <string name="pinned_to_sidebar">Fixado na barra lateral!</string>
-  <string name="unpin_from_sidebar">Desafixar da Barra Lateral</string>
+  <string name="unpin_from_sidebar">Desafixar da barra lateral</string>
   <string name="unpinned_from_sidebar">Desafixado da barra lateral!</string>
   <string name="dialog_select_country">País</string>
   <string name="settings_language_country">Idioma/País</string>
@@ -250,8 +250,8 @@
   <string name="refresh_section">Atualizar seção</string>
   <string name="option_disabled">Desativado</string>
   <string name="subtitle_white_transparent">Branco em fundo transparente</string>
-  <string name="pin_unpin_playlist">Fixar/Desfixar esta playlist na Barra Lateral</string>
-  <string name="pin_unpin_channel">Fixar/Desfixar este canal na Barra Lateral</string>
+  <string name="pin_unpin_playlist">Fixar/Desfixar esta playlist na barra lateral</string>
+  <string name="pin_unpin_channel">Fixar/Desfixar este canal na barra lateral</string>
   <string name="live_now_row_name">Ao vivo agora</string>
   <string name="run_in_background">Executar em segundo plano</string>
   <string name="settings_remote_control">Controle Remoto</string>
@@ -296,8 +296,8 @@
   <string name="action_playback_queue">Fila de reprodução</string>
   <string name="action_video_speed">Velocidade de vídeo</string>
   <string name="action_subtitles">Legendas</string>
-  <string name="action_like">Gostei (desmarcar)</string>
-  <string name="action_dislike">Não Gostei (desmarcar)</string>
+  <string name="action_like">Gostei</string>
+  <string name="action_dislike">Não Gostei</string>
   <string name="action_repeat_mode">Modo de reprodução</string>
   <string name="action_next">Próximo vídeo</string>
   <string name="action_previous">Vídeo anterior</string>

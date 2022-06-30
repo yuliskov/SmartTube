@@ -280,7 +280,7 @@ public class MediaServiceManager {
     /**
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
-    public void continueGroupIfNeeded(Context context, VideoGroup group, Runnable onNeedContinue) {
+    public void shouldContinueTheGroup(Context context, VideoGroup group, Runnable onNeedContinue) {
         if (group == null) {
             return;
         }
