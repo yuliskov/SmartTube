@@ -173,6 +173,14 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 mediaTrack.groupIndex = groupIndex;
                 mediaTrack.trackIndex = trackIndex;
 
+                if (mediaTrack.isVP9Codec() && !Helpers.isVP9Supported()) {
+                    continue;
+                }
+
+                if (mediaTrack.isAV1Codec() && !Helpers.isAV1Supported()) {
+                    continue;
+                }
+
                 // Selected track or not will be decided later in setSelection() routine
 
                 renderer.mediaTracks[groupIndex][trackIndex] = mediaTrack;

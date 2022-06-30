@@ -188,6 +188,14 @@ public class AppDialogUtil {
         boolean isPresetSelection = selectedFormat != null && selectedFormat.isPreset();
 
         for (VideoPreset preset : presets) {
+            if (preset.isVP9Preset() && !Helpers.isVP9Supported()) {
+                continue;
+            }
+
+            if (preset.isAV1Preset() && !Helpers.isAV1Supported()) {
+                continue;
+            }
+
             result.add(0, UiOptionItem.from(preset.name,
                     option -> setFormat(preset.format, playerData, onFormatSelected),
                     isPresetSelection && preset.format.equals(selectedFormat)));

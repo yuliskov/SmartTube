@@ -103,6 +103,14 @@ public abstract class MediaTrack {
         sVP9Weight = prefer ? AVC_WEIGHT : VP9_WEIGHT;
     }
 
+    public boolean isVP9Codec() {
+        return format != null && format.codecs != null && format.codecs.contains("vp9");
+    }
+
+    public boolean isAV1Codec() {
+        return format != null && format.codecs != null && format.codecs.contains("av01");
+    }
+
     //public static int compareCodecs(String codec1, String codec2) {
     //    if (codecEquals(codec1, codec2)) {
     //        return 0;

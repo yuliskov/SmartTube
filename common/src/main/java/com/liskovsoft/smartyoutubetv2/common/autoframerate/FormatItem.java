@@ -42,5 +42,13 @@ public interface FormatItem {
             // "2560,1440,30,vp9"
             this.format = ExoFormatItem.fromVideoSpec(presetSpec, true);
         }
+
+        public boolean isVP9Preset() {
+            return name != null && name.contains("vp9");
+        }
+
+        public boolean isAV1Preset() {
+            return name != null && name.contains("av01");
+        }
     }
 }
