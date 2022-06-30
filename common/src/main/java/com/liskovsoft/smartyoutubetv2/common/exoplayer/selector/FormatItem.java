@@ -1,7 +1,6 @@
-package com.liskovsoft.smartyoutubetv2.common.autoframerate;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
 import androidx.annotation.NonNull;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 
 public interface FormatItem {
     FormatItem VIDEO_AUTO = ExoFormatItem.fromVideoParams(-1, -1, -1);

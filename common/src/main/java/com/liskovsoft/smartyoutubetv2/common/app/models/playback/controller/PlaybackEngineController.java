@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller;
 
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 
 import java.io.InputStream;
 import java.util.List;

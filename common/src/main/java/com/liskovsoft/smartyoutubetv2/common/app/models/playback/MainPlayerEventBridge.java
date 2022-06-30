@@ -17,7 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.Remote
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoStateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoLoaderManager;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

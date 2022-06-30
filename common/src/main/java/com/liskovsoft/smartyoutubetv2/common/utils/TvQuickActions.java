@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 
 public class TvQuickActions {
     private final static String PACKAGE = "dev.vodik7.tvquickactions";

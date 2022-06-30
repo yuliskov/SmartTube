@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.autoframerate;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 
 public class ModeSyncManager {
     private static ModeSyncManager sInstance;

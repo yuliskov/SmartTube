@@ -14,8 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.PlayerSetti
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.RemoteControlSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SearchSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SubtitleSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPreset;
-import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
 
 import java.util.ArrayList;
 import java.util.List;
