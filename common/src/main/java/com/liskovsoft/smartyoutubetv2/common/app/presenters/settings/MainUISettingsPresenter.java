@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData.ColorScheme;
 
@@ -149,6 +150,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
             options.add(UiOptionItem.from(String.format("%sx", scale),
                     optionItem -> {
                         mMainUIData.setUIScale(scale);
+                        ViewManager.instance(getContext()).forceFinishTheApp();
                         mRestartApp = true;
                     },
                     Helpers.floatEquals(scale, mMainUIData.getUIScale())));
