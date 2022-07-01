@@ -72,6 +72,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private long mLastUpdateTimeMs;
     private int mBootSectionIndex;
     private int mSelectedSectionId = -1;
+    private VideoGroup mLastScrollGroup;
 
     private BrowsePresenter(Context context) {
         super(context);
@@ -358,12 +359,14 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (RxUtils.isAnyActionRunning(mActions)) {
-            Log.e(TAG, "Can't continue group. Another action is running.");
+        VideoGroup group = item.group;
+
+        if (mLastScrollGroup == group) {
+            Log.d(TAG, "Can't continue group. Another action is running.");
             return;
         }
 
-        VideoGroup group = item.group;
+        mLastScrollGroup = group;
 
         Log.d(TAG, "onScrollEnd. Group title: " + group.getTitle());
 
@@ -732,6 +735,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private void disposeActions() {
         RxUtils.disposeActions(mActions);
+        mLastScrollGroup = null;
+        mLastUpdateTimeMs = 0;
     }
 
     private void updateMultiGrid(Video item) {

@@ -30,6 +30,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private final Set<MetadataListener> mListeners = new HashSet<>();
     private List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
+    private VideoGroup mLastScrollGroup;
 
     public interface MetadataListener {
         void onMetadata(MediaItemMetadata metadata);
@@ -69,11 +70,16 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             return;
         }
 
-        if (RxUtils.isAnyActionRunning(mActions)) {
+        VideoGroup group = item.group;
+
+        if (mLastScrollGroup == group) {
+            Log.d(TAG, "Can't continue group. Another action is running.");
             return;
         }
 
-        continueGroup(item.group);
+        mLastScrollGroup = group;
+
+        continueGroup(group);
     }
 
     @Override
@@ -332,5 +338,6 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
     private void disposeActions() {
         RxUtils.disposeActions(mActions);
+        mLastScrollGroup = null;
     }
 }
