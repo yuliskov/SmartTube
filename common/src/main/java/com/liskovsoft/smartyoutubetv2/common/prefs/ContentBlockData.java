@@ -225,7 +225,11 @@ public class ContentBlockData {
         // Easy add new segments
         for (String segmentCategory : mAllCategories) {
             if (getAction(segmentCategory) == ACTION_UNDEFINED) {
-                mActions.add(SegmentAction.from(segmentCategory, ACTION_SKIP_WITH_TOAST));
+                if (SponsorSegment.CATEGORY_FILLER.equals(segmentCategory)) {
+                    mActions.add(SegmentAction.from(segmentCategory, ACTION_DO_NOTHING));
+                } else {
+                    mActions.add(SegmentAction.from(segmentCategory, ACTION_SKIP_WITH_TOAST));
+                }
             }
         }
     }
