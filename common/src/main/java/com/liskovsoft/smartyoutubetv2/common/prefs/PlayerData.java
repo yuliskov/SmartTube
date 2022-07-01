@@ -473,7 +473,9 @@ public class PlayerData {
         if (formatItem == null) {
             if (VERSION.SDK_INT <= 19) { // Android 4 playback crash fix (memory leak?)
                 formatItem = FormatItem.VIDEO_SD_AVC_30;
-            } else if (Helpers.isVP9Supported()) {
+            } else if (Helpers.isVP9ResolutionSupported(2160)) {
+                formatItem = FormatItem.VIDEO_4K_VP9_60;
+            } else if (Helpers.isVP9ResolutionSupported(1080)) {
                 formatItem = FormatItem.VIDEO_FHD_VP9_60;
             }
         }
