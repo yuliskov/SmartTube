@@ -188,11 +188,11 @@ public class AppDialogUtil {
         boolean isPresetSelection = selectedFormat != null && selectedFormat.isPreset();
 
         for (VideoPreset preset : presets) {
-            if (preset.isVP9Preset() && !Helpers.isVP9Supported()) {
+            if (preset.isVP9Preset() && !Helpers.isVP9ResolutionSupported(preset.getHeight())) {
                 continue;
             }
 
-            if (preset.isAV1Preset() && !Helpers.isAV1Supported()) {
+            if (preset.isAV1Preset() && !Helpers.isAV1ResolutionSupported(preset.getHeight())) {
                 continue;
             }
 

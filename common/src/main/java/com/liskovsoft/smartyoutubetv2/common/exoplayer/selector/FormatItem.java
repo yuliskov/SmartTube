@@ -49,5 +49,13 @@ public interface FormatItem {
         public boolean isAV1Preset() {
             return name != null && name.contains("av01");
         }
+
+        public int getWidth() {
+            return format != null ? format.getWidth() : -1;
+        }
+
+        public int getHeight() {
+            return format != null ? format.getHeight() : -1;
+        }
     }
 }

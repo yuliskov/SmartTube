@@ -173,11 +173,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 mediaTrack.groupIndex = groupIndex;
                 mediaTrack.trackIndex = trackIndex;
 
-                if (mediaTrack.isVP9Codec() && !Helpers.isVP9Supported()) {
+                if (mediaTrack.isVP9Codec() && !Helpers.isVP9ResolutionSupported(mediaTrack.getHeight())) {
                     continue;
                 }
 
-                if (mediaTrack.isAV1Codec() && !Helpers.isAV1Supported()) {
+                if (mediaTrack.isAV1Codec() && !Helpers.isAV1ResolutionSupported(mediaTrack.getHeight())) {
                     continue;
                 }
 

@@ -111,6 +111,14 @@ public abstract class MediaTrack {
         return format != null && format.codecs != null && format.codecs.contains("av01");
     }
 
+    public int getWidth() {
+        return format != null ? format.width : -1;
+    }
+
+    public int getHeight() {
+        return format != null ? format.height : -1;
+    }
+
     //public static int compareCodecs(String codec1, String codec2) {
     //    if (codecEquals(codec1, codec2)) {
     //        return 0;
