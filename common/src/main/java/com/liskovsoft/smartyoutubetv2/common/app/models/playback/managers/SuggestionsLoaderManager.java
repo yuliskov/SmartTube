@@ -160,12 +160,12 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     public void loadSuggestions(Video video) {
+        disposeActions();
+
         if (video == null) {
             Log.e(TAG, "loadSuggestions: video is null");
             return;
         }
-
-        disposeActions();
 
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
