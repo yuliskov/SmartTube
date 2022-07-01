@@ -225,6 +225,8 @@ public class ContentBlockData {
         // Easy add new segments
         for (String segmentCategory : mAllCategories) {
             if (getAction(segmentCategory) == ACTION_UNDEFINED) {
+                // Disable filler category by default
+                // This category is very extreme and is recommended to be disabled by default because of that.
                 if (SponsorSegment.CATEGORY_FILLER.equals(segmentCategory)) {
                     mActions.add(SegmentAction.from(segmentCategory, ACTION_DO_NOTHING));
                 } else {
