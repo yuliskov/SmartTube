@@ -551,6 +551,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private void updateVideoRows(BrowseSection section, Observable<List<MediaGroup>> groups) {
         Log.d(TAG, "updateRowsHeader: Start loading section: " + section.getTitle());
+
+        disposeActions();
         
         getView().showProgressBar(true);
 
@@ -600,6 +602,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private void updateVideoGrid(BrowseSection section, Observable<MediaGroup> group, int position) {
         Log.d(TAG, "updateGridHeader: Start loading section: " + section.getTitle());
+
+        disposeActions();
         
         getView().showProgressBar(true);
 
