@@ -378,8 +378,8 @@
   <string name="play_video">Reproduzir</string>
   <string name="remember_position_of_short_videos">Lembrar-se da posição em vídeos curtos (menos de 10 minutos)</string>
   <string name="player_show_tooltips">Mostrar rótulos de dicas de ferramentas/botões</string>
-  <string name="action_like_unset">Gostei (marcar)</string>
-  <string name="action_dislike_unset">Não Gostei (marcar)</string>
+  <string name="action_like_unset">Gostei</string>
+  <string name="action_dislike_unset">Não Gostei</string>
   <string name="various_buttons">Adicionar/Remover botões</string>
   <string name="not_compatible_with">A opção selecionada não é compatível!</string>
   <string name="subtitle_position">Fundo da legenda (transparência)</string>
