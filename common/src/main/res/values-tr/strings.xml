@@ -382,7 +382,7 @@
     <string name="player_show_tooltips">Düğme ipuçlarını göster</string>
     <string name="action_like_unset">Beğen</string>
     <string name="action_dislike_unset">Beğenme</string>
-    <string name="various_buttons">Çeşitli düğmeler</string>
+    <string name="various_buttons">Ana pencerenin üst kısmındaki düğmeler</string>
     <string name="not_compatible_with">Seçilen seçenek şunlarla uyumlu değil:</string>
     <string name="subtitle_position">Altyazı alttan kaydırma</string>
     <string name="pressing_home">ANA EKRAN\'a basarak</string>
@@ -450,4 +450,5 @@
     <string name="feedback">Geri bildirim</string>
     <string name="sources">Kaynaklar</string>
     <string name="releases">Sürümler</string>
+    <string name="prefer_avc_over_vp9">Kod çözücü seçimi: avc'yi vp9'a tercih et</string>
 </resources>
