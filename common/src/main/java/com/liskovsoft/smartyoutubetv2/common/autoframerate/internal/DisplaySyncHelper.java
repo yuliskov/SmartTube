@@ -103,7 +103,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
     }
 
     /**
-     * Filter out modes that less then required width.<br/>
+     * Filter out modes that has same width.<br/>
      * Reverse order is important because of later mapping by fps in other method.
      */
     private ArrayList<Mode> filterModesByWidth(Mode[] allModes, int videoWidth) {
@@ -123,7 +123,10 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
         for (Mode mode : allModes) {
             int width = mode.getPhysicalWidth();
-            if (width >= (videoWidth - 100)) {
+            //if (width >= (videoWidth - 100)) {
+            //    newModes.add(mode);
+            //}
+            if (Math.abs(width - videoWidth) < 100) {
                 newModes.add(mode);
             }
         }
