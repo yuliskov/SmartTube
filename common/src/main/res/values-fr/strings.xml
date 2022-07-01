@@ -450,5 +450,5 @@
   <string name="feedback">Commentaires</string>
   <string name="sources">Sources</string>
   <string name="releases">Versions</string>
-  <string name="prefer_avc_over_vp9">Sélection du codec: préférez l'avc au vp9</string>
+  <string name="prefer_avc_over_vp9">Sélection du codec: préférez l\'avc au vp9</string>
 </resources>
