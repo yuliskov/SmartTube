@@ -22,9 +22,11 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.Restore
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class TrackSelectorManager implements TrackSelectorCallback {
@@ -149,7 +151,9 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         Renderer renderer = mRenderers[rendererIndex];
         renderer.mediaTracks = new MediaTrack[renderer.trackGroups.length][];
-        renderer.sortedTracks = new TreeSet<>(new MediaTrackFormatComparator());
+        // Fix for java.util.ConcurrentModificationException inside of:
+        // com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem.from (ExoFormatItem.java:44)
+        renderer.sortedTracks = Collections.synchronizedSortedSet(new TreeSet<>(new MediaTrackFormatComparator()));
 
         if (rendererIndex == RENDERER_INDEX_SUBTITLE) {
             // AUTO OPTION: add disable subs option
@@ -638,7 +642,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         public boolean isDisabled;
         public TrackGroupArray trackGroups;
         public MediaTrack[][] mediaTracks;
-        public TreeSet<MediaTrack> sortedTracks;
+        public SortedSet<MediaTrack> sortedTracks;
         public MediaTrack selectedTrack;
     }
 
