@@ -620,6 +620,8 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     private void setSpeedButtonState(float speed) {
-        getController().setSpeedButtonState(speed != 1.0f);
+        if (getController() != null) {
+            getController().setSpeedButtonState(speed != 1.0f);
+        }
     }
 }

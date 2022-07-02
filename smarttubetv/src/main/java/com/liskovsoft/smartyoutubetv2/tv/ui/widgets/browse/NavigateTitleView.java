@@ -114,6 +114,13 @@ public class NavigateTitleView extends TitleView {
 
     @Override
     public void updateComponentsVisibility(int flags) {
+        // Fix for: Fatal Exception: java.lang.IllegalStateException
+        // Fragment has not been attached yet.
+        // Inside: super.updateComponentsVisibility(flags);
+        if (getWindowToken() == null) {
+            return;
+        }
+
         super.updateComponentsVisibility(flags);
 
         init();
