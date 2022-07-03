@@ -104,7 +104,8 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     }
 
     public void setPosition(String timeCode) {
-        if (getView() != null) {
+        // Check that the user isn't open context menu on suggestion item
+        if (Utils.isPlayerInForeground(getContext()) && !getView().getController().isSuggestionsShown()) {
             getView().getController().setPositionMs(ServiceHelper.timeTextToMillis(timeCode));
         } else {
             Video video = VideoMenuPresenter.sVideoHolder.get();
