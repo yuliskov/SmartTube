@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemStoryboard;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemStoryboard.Size;
@@ -31,7 +31,7 @@ public class StoryboardManager {
     private static final int MAX_PRELOADED_IMAGES = 3;
     private static final int DIRECTION_RIGHT = 0;
     private static final int DIRECTION_LEFT = 1;
-    private final MediaItemManager mMediaItemManager;
+    private final MediaItemService mMediaItemManager;
     private final Context mContext;
     private long mLengthMs;
     private MediaItemStoryboard mStoryboard;
@@ -48,7 +48,7 @@ public class StoryboardManager {
     public StoryboardManager(Context context) {
         mContext = context;
         MediaService mediaService = YouTubeMediaService.instance();
-        mMediaItemManager = mediaService.getMediaItemManager();
+        mMediaItemManager = mediaService.getMediaItemService();
     }
 
     public void init(Video video, long lengthMs) {

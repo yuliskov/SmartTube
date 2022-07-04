@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
@@ -33,7 +33,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
-import com.liskovsoft.youtubeapi.service.YouTubeSignInManager;
+import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -45,7 +45,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private static final String TAG = PlayerUIManager.class.getSimpleName();
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private final Handler mHandler;
-    private final MediaItemManager mMediaItemManager;
+    private final MediaItemService mMediaItemManager;
     private final VideoLoaderManager mVideoLoader;
     private PlayerData mPlayerData;
     private List<VideoPlaylistInfo> mVideoPlaylistInfos;
@@ -70,7 +70,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         mHandler = new Handler(Looper.getMainLooper());
 
         MediaService service = YouTubeMediaService.instance();
-        mMediaItemManager = service.getMediaItemManager();
+        mMediaItemManager = service.getMediaItemService();
     }
 
     @Override
@@ -267,7 +267,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
-        if (!YouTubeSignInManager.instance().isSigned()) {
+        if (!YouTubeSignInService.instance().isSigned()) {
             getController().setSubscribeButtonState(false);
             MessageHelpers.showMessage(getActivity(), R.string.msg_signed_users_only);
             return;
@@ -288,7 +288,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
-        if (!YouTubeSignInManager.instance().isSigned()) {
+        if (!YouTubeSignInService.instance().isSigned()) {
             getController().setDislikeButtonState(false);
             MessageHelpers.showMessage(getActivity(), R.string.msg_signed_users_only);
             return;
@@ -309,7 +309,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
-        if (!YouTubeSignInManager.instance().isSigned()) {
+        if (!YouTubeSignInService.instance().isSigned()) {
             getController().setLikeButtonState(false);
             MessageHelpers.showMessage(getActivity(), R.string.msg_signed_users_only);
             return;
@@ -572,7 +572,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         String videoId = getController().getVideo().videoId;
         mVideoPlaylistInfos = null;
         Disposable playlistsInfoAction =
-                YouTubeMediaService.instance().getMediaItemManager().getVideoPlaylistsInfoObserve(videoId)
+                YouTubeMediaService.instance().getMediaItemService().getVideoPlaylistsInfoObserve(videoId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(

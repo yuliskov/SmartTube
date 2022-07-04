@@ -3,10 +3,10 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 import android.content.Context;
 import android.util.Pair;
 import com.liskovsoft.appupdatechecker2.other.SettingsManager;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.SignInManager;
+import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
@@ -30,9 +30,9 @@ import java.util.Map;
 public class MediaServiceManager {
     private static final String TAG = SettingsManager.class.getSimpleName();
     private static MediaServiceManager sInstance;
-    private final MediaItemManager mItemManager;
-    private final MediaGroupManager mGroupManager;
-    private final SignInManager mSingInManager;
+    private final MediaItemService mItemManager;
+    private final MediaGroupService mGroupManager;
+    private final SignInService mSingInManager;
     private Disposable mMetadataAction;
     private Disposable mUploadsAction;
     private Disposable mSignCheckAction;
@@ -69,9 +69,9 @@ public class MediaServiceManager {
 
     public MediaServiceManager() {
         MediaService service = YouTubeMediaService.instance();
-        mItemManager = service.getMediaItemManager();
-        mGroupManager = service.getMediaGroupManager();
-        mSingInManager = service.getSignInManager();
+        mItemManager = service.getMediaItemService();
+        mGroupManager = service.getMediaGroupService();
+        mSingInManager = service.getSignInService();
     }
 
     public static MediaServiceManager instance() {
@@ -82,7 +82,7 @@ public class MediaServiceManager {
         return sInstance;
     }
 
-    public SignInManager getSingInManager() {
+    public SignInService getSingInManager() {
         return mSingInManager;
     }
 

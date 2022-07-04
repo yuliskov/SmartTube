@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
@@ -97,7 +97,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaItemManager mediaItemManager = YouTubeMediaService.instance().getMediaItemManager();
+        MediaItemService mediaItemManager = YouTubeMediaService.instance().getMediaItemService();
 
         Disposable continueAction = mediaItemManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.io())
@@ -174,7 +174,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         }
 
         MediaService service = YouTubeMediaService.instance();
-        MediaItemManager mediaItemManager = service.getMediaItemManager();
+        MediaItemService mediaItemManager = service.getMediaItemService();
 
         Observable<MediaItemMetadata> observable;
 

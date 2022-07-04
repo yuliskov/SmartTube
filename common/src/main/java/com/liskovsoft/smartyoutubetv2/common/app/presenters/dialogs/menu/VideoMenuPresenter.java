@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -37,7 +37,7 @@ import java.util.List;
 
 public class VideoMenuPresenter extends BaseMenuPresenter {
     private static final String TAG = VideoMenuPresenter.class.getSimpleName();
-    private final MediaItemManager mItemManager;
+    private final MediaItemService mItemManager;
     private final AppDialogPresenter mDialogPresenter;
     private final MediaServiceManager mServiceManager;
     private Disposable mAddToPlaylistAction;
@@ -83,7 +83,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private VideoMenuPresenter(Context context) {
         super(context);
         MediaService service = YouTubeMediaService.instance();
-        mItemManager = service.getMediaItemManager();
+        mItemManager = service.getMediaItemService();
         mServiceManager = MediaServiceManager.instance();
         mDialogPresenter = AppDialogPresenter.instance(context);
     }

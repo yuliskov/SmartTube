@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.RemoteManager;
+import com.liskovsoft.mediaserviceinterfaces.RemoteService;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -23,12 +23,12 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
     @SuppressLint("StaticFieldLeak")
     private static RemoteControlSettingsPresenter sInstance;
     private final RemoteControlData mRemoteControlData;
-    private final RemoteManager mRemoteManager;
+    private final RemoteService mRemoteManager;
 
     public RemoteControlSettingsPresenter(Context context) {
         super(context);
         MediaService mediaService = YouTubeMediaService.instance();
-        mRemoteManager = mediaService.getRemoteManager();
+        mRemoteManager = mediaService.getRemoteService();
         mRemoteControlData = RemoteControlData.instance(context);
     }
 

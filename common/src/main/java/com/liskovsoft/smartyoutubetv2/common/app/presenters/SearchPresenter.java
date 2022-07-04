@@ -2,13 +2,12 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.SearchOptions;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -129,7 +128,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         disposeActions();
         getView().showProgressBar(true);
 
-        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
 
         getView().clearSearch();
 
@@ -152,7 +151,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         disposeActions();
         getView().showProgressBar(true);
 
-        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
 
         getView().clearSearch();
 
@@ -182,7 +181,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
 
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.io())

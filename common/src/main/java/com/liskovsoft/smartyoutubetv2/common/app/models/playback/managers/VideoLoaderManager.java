@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.os.Handler;
 import android.os.Looper;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -301,7 +301,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         disposeActions();
 
         MediaService service = YouTubeMediaService.instance();
-        MediaItemManager mediaItemManager = service.getMediaItemManager();
+        MediaItemService mediaItemManager = service.getMediaItemService();
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

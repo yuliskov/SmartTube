@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
@@ -394,7 +394,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         RxUtils.disposeActions(mHistoryAction);
 
         MediaService service = YouTubeMediaService.instance();
-        MediaItemManager mediaItemManager = service.getMediaItemManager();
+        MediaItemService mediaItemManager = service.getMediaItemService();
 
         Observable<Void> historyObservable;
 

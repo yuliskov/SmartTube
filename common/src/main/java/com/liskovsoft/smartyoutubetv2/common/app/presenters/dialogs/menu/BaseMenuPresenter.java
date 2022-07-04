@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -18,7 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaItemManager;
+import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
 import io.reactivex.Observable;
 
 public abstract class BaseMenuPresenter extends BasePresenter<Void> {
@@ -248,7 +248,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     private void removePlaylist(Video video) {
-        MediaItemManager manager = YouTubeMediaItemManager.instance();
+        MediaItemService manager = YouTubeMediaItemService.instance();
         Observable<Void> action = manager.removePlaylistObserve(video.playlistId);
         GeneralData.instance(getContext()).setPlaylistOrder(video.playlistId, -1);
         RxUtils.execute(action,
@@ -258,7 +258,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     private void savePlaylist(Video video) {
-        MediaItemManager manager = YouTubeMediaItemManager.instance();
+        MediaItemService manager = YouTubeMediaItemService.instance();
         Observable<Void> action = manager.savePlaylistObserve(video.playlistId);
         RxUtils.execute(action,
                 () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.cant_save_playlist)),
@@ -308,7 +308,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 getContext(),
                 "",
                 newValue -> {
-                    MediaItemManager manager = YouTubeMediaItemManager.instance();
+                    MediaItemService manager = YouTubeMediaItemService.instance();
                     Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
                     RxUtils.execute(
                             action,
@@ -362,7 +362,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                             getContext(),
                             video.title,
                             newValue -> {
-                                MediaItemManager manager = YouTubeMediaItemManager.instance();
+                                MediaItemService manager = YouTubeMediaItemService.instance();
                                 Observable<Void> action = manager.renamePlaylistObserve(firstItem.getPlaylistId(), newValue);
                                 RxUtils.execute(
                                         action,

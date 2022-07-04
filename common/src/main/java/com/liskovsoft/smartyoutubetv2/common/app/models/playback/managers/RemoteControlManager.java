@@ -6,7 +6,7 @@ import android.os.Looper;
 import android.view.KeyEvent;
 import androidx.annotation.Nullable;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.RemoteManager;
+import com.liskovsoft.mediaserviceinterfaces.RemoteService;
 import com.liskovsoft.mediaserviceinterfaces.data.Command;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -27,7 +27,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class RemoteControlManager extends PlayerEventListenerHelper {
     private static final String TAG = RemoteControlManager.class.getSimpleName();
-    private final RemoteManager mRemoteManager;
+    private final RemoteService mRemoteManager;
     private final RemoteControlData mRemoteControlData;
     private final SuggestionsLoaderManager mSuggestionsLoader;
     private final VideoLoaderManager mVideoLoader;
@@ -46,7 +46,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         MediaService mediaService = YouTubeMediaService.instance();
         mSuggestionsLoader = suggestionsLoader;
         mVideoLoader = videoLoader;
-        mRemoteManager = mediaService.getRemoteManager();
+        mRemoteManager = mediaService.getRemoteService();
         mRemoteControlData = RemoteControlData.instance(context);
         mRemoteControlData.setOnChange(this::tryListening);
         tryListening();

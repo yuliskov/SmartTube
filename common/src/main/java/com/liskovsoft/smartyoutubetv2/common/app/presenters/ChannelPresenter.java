@@ -2,12 +2,11 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -206,7 +205,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         getView().showProgressBar(true);
 
-        Observable<List<MediaGroup>> channelObserve = mMediaService.getMediaGroupManager().getChannelObserve(channelId);
+        Observable<List<MediaGroup>> channelObserve = mMediaService.getMediaGroupService().getChannelObserve(channelId);
 
         mUpdateAction = channelObserve
                 .subscribeOn(Schedulers.io())
@@ -251,7 +250,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
 
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.io())

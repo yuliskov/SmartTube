@@ -2,10 +2,10 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.SignInManager;
+import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -63,9 +63,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final Map<Integer, Callable<List<SettingsItem>>> mSettingsGridMapping;
     private final Map<Integer, BrowseSection> mSectionsMapping;
     private final AppDataSourceManager mDataSourcePresenter;
-    private final MediaGroupManager mGroupManager;
-    private final MediaItemManager mItemManager;
-    private final SignInManager mSignInManager;
+    private final MediaGroupService mGroupManager;
+    private final MediaItemService mItemManager;
+    private final SignInService mSignInManager;
     private final List<Disposable> mActions;
     private BrowseSection mCurrentSection;
     private Video mCurrentVideo;
@@ -88,9 +88,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         ScreenHelper.updateScreenInfo(context);
 
         MediaService mediaService = YouTubeMediaService.instance();
-        mGroupManager = mediaService.getMediaGroupManager();
-        mItemManager = mediaService.getMediaItemManager();
-        mSignInManager = mediaService.getSignInManager();
+        mGroupManager = mediaService.getMediaGroupService();
+        mItemManager = mediaService.getMediaItemService();
+        mSignInManager = mediaService.getSignInService();
         mActions = new ArrayList<>();
 
         initSections();

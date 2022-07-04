@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -26,14 +26,14 @@ import java.util.List;
 public class StreamReminderService implements TickleListener {
     private static final String TAG = StreamReminderService.class.getSimpleName();
     private static StreamReminderService sInstance;
-    private final MediaItemManager mItemManager;
+    private final MediaItemService mItemManager;
     private final Context mContext;
     private final GeneralData mGeneralData;
     private Disposable mReminderAction;
 
     private StreamReminderService(Context context) {
         MediaService service = YouTubeMediaService.instance();
-        mItemManager = service.getMediaItemManager();
+        mItemManager = service.getMediaItemService();
         mContext = context.getApplicationContext();
         mGeneralData = GeneralData.instance(context);
     }

@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.graphics.Color;
 import androidx.core.content.ContextCompat;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 public class ContentBlockManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = ContentBlockManager.class.getSimpleName();
     private static final long SEGMENT_CHECK_LENGTH_MS = 3_000;
-    private MediaItemManager mMediaItemManager;
+    private MediaItemService mMediaItemManager;
     private ContentBlockData mContentBlockData;
     private Video mVideo;
     private List<SponsorSegment> mSponsorSegments;
@@ -83,7 +83,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     @Override
     public void onInitDone() {
         MediaService mediaService = YouTubeMediaService.instance();
-        mMediaItemManager = mediaService.getMediaItemManager();
+        mMediaItemManager = mediaService.getMediaItemService();
         mContentBlockData = ContentBlockData.instance(getActivity());
     }
 

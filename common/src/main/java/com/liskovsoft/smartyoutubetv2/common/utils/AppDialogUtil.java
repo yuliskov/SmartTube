@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.content.Context;
 import android.os.Build;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -28,8 +28,8 @@ import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaItemManager;
-import com.liskovsoft.youtubeapi.service.YouTubeSignInManager;
+import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
+import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import com.liskovsoft.youtubeapi.service.data.YouTubeVideoPlaylistInfo;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -402,7 +402,7 @@ public class AppDialogUtil {
     }
 
     public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback) {
-        if (!YouTubeSignInManager.instance().isSigned()) {
+        if (!YouTubeSignInService.instance().isSigned()) {
             MessageHelpers.showMessage(context, R.string.msg_signed_users_only);
             return;
         }
@@ -411,7 +411,7 @@ public class AppDialogUtil {
             return;
         }
 
-        MediaItemManager itemManager = YouTubeMediaItemManager.instance();
+        MediaItemService itemManager = YouTubeMediaItemService.instance();
 
         Disposable playlistsInfoAction = itemManager.getVideoPlaylistsInfoObserve(video.videoId)
                 .subscribeOn(Schedulers.io())
@@ -463,7 +463,7 @@ public class AppDialogUtil {
 
     private static void addRemoveFromPlaylist(Context context, Video video, VideoMenuCallback callback, String playlistId, boolean add) {
         Observable<Void> editObserve;
-        MediaItemManager itemManager = YouTubeMediaItemManager.instance();
+        MediaItemService itemManager = YouTubeMediaItemService.instance();
 
         if (add) {
             editObserve = itemManager.addToPlaylistObserve(playlistId, video.videoId);
@@ -504,16 +504,16 @@ public class AppDialogUtil {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
-                {R.string.playlist_order_added_date_newer_first, MediaItemManager.PLAYLIST_ORDER_ADDED_DATE_NEWER_FIRST},
-                {R.string.playlist_order_added_date_older_first, MediaItemManager.PLAYLIST_ORDER_ADDED_DATE_OLDER_FIRST},
-                {R.string.playlist_order_popularity, MediaItemManager.PLAYLIST_ORDER_POPULARITY},
-                {R.string.playlist_order_published_date_newer_first, MediaItemManager.PLAYLIST_ORDER_PUBLISHED_DATE_NEWER_FIRST},
-                {R.string.playlist_order_published_date_older_first, MediaItemManager.PLAYLIST_ORDER_PUBLISHED_DATE_OLDER_FIRST}
+                {R.string.playlist_order_added_date_newer_first, MediaItemService.PLAYLIST_ORDER_ADDED_DATE_NEWER_FIRST},
+                {R.string.playlist_order_added_date_older_first, MediaItemService.PLAYLIST_ORDER_ADDED_DATE_OLDER_FIRST},
+                {R.string.playlist_order_popularity, MediaItemService.PLAYLIST_ORDER_POPULARITY},
+                {R.string.playlist_order_published_date_newer_first, MediaItemService.PLAYLIST_ORDER_PUBLISHED_DATE_NEWER_FIRST},
+                {R.string.playlist_order_published_date_older_first, MediaItemService.PLAYLIST_ORDER_PUBLISHED_DATE_OLDER_FIRST}
         }) {
             options.add(UiOptionItem.from(context.getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {
                     RxUtils.execute(
-                            YouTubeMediaItemManager.instance().setPlaylistOrderObserve(playlistId, pair[1]),
+                            YouTubeMediaItemService.instance().setPlaylistOrderObserve(playlistId, pair[1]),
                             () -> MessageHelpers.showMessage(context, R.string.owned_playlist_warning),
                             () -> {
                                 generalData.setPlaylistOrder(playlistId, pair[1]);

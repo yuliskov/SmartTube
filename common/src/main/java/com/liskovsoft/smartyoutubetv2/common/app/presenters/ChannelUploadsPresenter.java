@@ -2,8 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
@@ -33,8 +33,8 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     private static final String TAG = ChannelUploadsPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static ChannelUploadsPresenter sInstance;
-    private final MediaGroupManager mGroupManager;
-    private final MediaItemManager mItemManager;
+    private final MediaGroupService mGroupManager;
+    private final MediaItemService mItemManager;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
     private Video mVideoItem;
@@ -43,8 +43,8 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     public ChannelUploadsPresenter(Context context) {
         super(context);
         MediaService mediaService = YouTubeMediaService.instance();
-        mGroupManager = mediaService.getMediaGroupManager();
-        mItemManager = mediaService.getMediaItemManager();
+        mGroupManager = mediaService.getMediaGroupService();
+        mItemManager = mediaService.getMediaItemService();
     }
 
     public static ChannelUploadsPresenter instance(Context context) {
