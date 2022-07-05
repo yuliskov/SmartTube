@@ -2,8 +2,8 @@
 <resources>
     <string-array name="supported_countries">
         <item>United States|US</item>
-        <item>Scotland|GB-SCT</item>
         <item>Great Britain|GB</item>
+        <item>Scotland|GB-SCT</item>
         <item>Canada|CA</item>
         <item>Україна|UA</item>
         <item>Россия|RU</item>

@@ -537,4 +537,8 @@ public class Utils {
                 context.getString(R.string.not_compatible_with),
                 context.getString(msgResId)));
     }
+
+    public static String getCountryFlagUrl(String countryCode) {
+        return "https://countryflagsapi.com/png/" + countryCode;
+    }
 }

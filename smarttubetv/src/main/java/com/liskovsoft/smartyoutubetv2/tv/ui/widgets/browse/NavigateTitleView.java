@@ -29,6 +29,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
@@ -255,7 +256,7 @@ public class NavigateTitleView extends TitleView {
         // Use delay to fix icon initialization on app boot
         new Handler(Looper.myLooper()).postDelayed(() -> {
             Locale locale = LocaleUtility.getCurrentLocale(getContext());
-            loadIcon(mLanguageView, "https://countryflagsapi.com/png/" + locale.getCountry());
+            loadIcon(mLanguageView, Utils.getCountryFlagUrl(locale.getCountry()));
             TooltipCompatHandler.setTooltipText(mLanguageView, String.format("%s (%s)", locale.getDisplayCountry(), locale.getDisplayLanguage()));
         }, 100);
     }
