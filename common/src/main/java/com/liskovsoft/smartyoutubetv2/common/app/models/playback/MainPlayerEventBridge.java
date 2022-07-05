@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.ViewEv
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.LiveChatManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.RemoteControlManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoStateManager;
@@ -47,6 +48,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         PlayerUIManager uiManager = new PlayerUIManager(videoLoader);
         VideoStateManager stateUpdater = new VideoStateManager();
         ContentBlockManager contentBlockManager = new ContentBlockManager();
+        LiveChatManager liveChatManager = new LiveChatManager();
 
         RemoteControlManager commandManager = new RemoteControlManager(context, suggestionsLoader, videoLoader);
         HQDialogManager hqDialogManager = new HQDialogManager(stateUpdater);
@@ -54,6 +56,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
 
         suggestionsLoader.addMetadataListener(uiManager);
         suggestionsLoader.addMetadataListener(contentBlockManager);
+        suggestionsLoader.addMetadataListener(liveChatManager);
 
         // NOTE: position matters!!!
         mEventListeners.add(autoFrameRateManager);
@@ -64,6 +67,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         mEventListeners.add(videoLoader);
         mEventListeners.add(commandManager);
         mEventListeners.add(contentBlockManager);
+        mEventListeners.add(liveChatManager);
     }
 
     public static MainPlayerEventBridge instance(Context context) {
