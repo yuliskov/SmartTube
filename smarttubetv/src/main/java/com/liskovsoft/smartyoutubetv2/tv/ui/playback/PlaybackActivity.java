@@ -251,6 +251,7 @@ public class PlaybackActivity extends LeanbackActivity {
     @Override
     public void onUserLeaveHint() {
         // Check that user not open dialog/search activity instead of really leaving the activity
+        // Activity may be overlapped by the dialog, back is pressed or new view started
         if (!AppDialogPresenter.instance(this).isDialogShown() && !mBackPressed && !mViewManager.isNewViewPending()) {
             switch (mPlaybackFragment.getBackgroundMode()) {
                 case PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND:
