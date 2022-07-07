@@ -15,6 +15,7 @@ public class UiOptionItem implements OptionItem {
     private Object mData;
     private OptionItem[] mRequiredItems;
     private OptionItem[] mRadioItems;
+    private ChatReceiver mChatReceiver;
 
     public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback) {
         return from(formats, callback, null);
@@ -77,6 +78,14 @@ public class UiOptionItem implements OptionItem {
         uiOptionItem.mIsSelected = isChecked;
         uiOptionItem.mCallback = callback;
         uiOptionItem.mData = data;
+
+        return uiOptionItem;
+    }
+
+    public static OptionItem from(CharSequence title, ChatReceiver chatReceiver) {
+        UiOptionItem uiOptionItem = new UiOptionItem();
+        uiOptionItem.mTitle = title;
+        uiOptionItem.mChatReceiver = chatReceiver;
 
         return uiOptionItem;
     }
@@ -149,5 +158,10 @@ public class UiOptionItem implements OptionItem {
     @Override
     public OptionItem[] getRadio() {
         return mRadioItems;
+    }
+
+    @Override
+    public ChatReceiver getChatReceiver() {
+        return mChatReceiver;
     }
 }

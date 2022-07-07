@@ -7,6 +7,7 @@ import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiverImpl;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -37,7 +38,8 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         dialogPresenter.clear();
         Video video = getController().getVideo();
         String title = String.format("%s - %s", video.getTitle(), video.getAuthor());
-        //dialogPresenter.appendChatCategory(title, UiOptionItem.from(description, null));
+        ChatReceiverImpl chatReceiver = new ChatReceiverImpl();
+        dialogPresenter.appendChatCategory(title, UiOptionItem.from(title, chatReceiver));
         dialogPresenter.showDialog(title);
 
         mChatAction = mChatService.openLiveChatObserve(chatKey)
@@ -46,7 +48,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
                 .subscribe(
                         chatItem -> {
                             Log.d(TAG, chatItem.getMessage());
-                            //optionItem.onChatItem(chatItem);
+                            chatReceiver.addChatItem(chatItem);
                         },
                         error -> {
                             Log.e(TAG, error.getMessage());
