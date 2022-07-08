@@ -44,6 +44,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.Play
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager.SeekBarSegment;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -74,6 +75,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigato
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.StoryboardSeekDataProvider;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.LiveChatView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.EndingTimeView;
 
@@ -195,7 +197,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         // NOTE: don't move this into another place! Multiple components rely on it.
         mEventListener.onViewResumed();
-        showHidePlayerOverlay(true); // PIP mode fix
+
+        showHideUI(true); // PIP mode fix
     }
 
     @Override
@@ -209,7 +212,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             maybeReleasePlayer();
         }
 
-        showHidePlayerOverlay(false); // PIP mode fix
+        showHideUI(false); // PIP mode fix
     }
 
     public void onDispatchKeyEvent(KeyEvent event) {
@@ -871,6 +874,12 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         endingTime.update();
     }
 
+    @Override
+    public void setChatReceiver(ChatReceiver chatReceiver) {
+        LiveChatView liveChat = getActivity().findViewById(R.id.live_chat);
+        liveChat.setChatReceiver(chatReceiver);
+    }
+
     // End Ui events
 
     // Begin Engine Events
@@ -1462,6 +1471,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mExoPlayerController.resetPlayerState();
         // Hide last frame of the previous video
         showBackgroundColor(R.color.player_background);
+        setChatReceiver(null);
 
         //mPlaybackController.setBackground(null); // ensure that the background doesn't overlap the video
 
@@ -1489,7 +1499,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         //}
     }
 
-    private void showHidePlayerOverlay(boolean show) {
+    /**
+     * PIP mode fix
+     */
+    private void showHideUI(boolean show) {
         Activity activity = getActivity();
 
         if (activity != null) {
@@ -1497,6 +1510,12 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
             if (overlay != null) {
                 overlay.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+
+            View liveChat = activity.findViewById(R.id.live_chat_wrapper);
+
+            if (liveChat != null) {
+                liveChat.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         }
     }

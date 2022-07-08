@@ -3,6 +3,7 @@
 <!-- More info: https://github.com/google/ExoPlayer/issues/6587 -->
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/playback_fragment_root"
         android:transitionGroup="false"
@@ -12,7 +13,7 @@
 
     <!-- Original place for VideoSurfaceView -->
 
-    <!-- Add subtitle view -->
+    <!-- Add subtitle view. Hides all views behind them. Should be placed at the top. -->
     <com.google.android.exoplayer2.ui.AspectRatioFrameLayout
         android:id="@+id/surface_root"
         android:layout_width="match_parent"
@@ -25,15 +26,20 @@
             android:layout_height="match_parent"/>
     </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
 
-    <!-- Add debug view -->
-    <FrameLayout android:id="@+id/debug_view_group"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:padding="4sp"
-                 android:layout_marginRight="100sp"
-                 android:visibility="gone"
-                 android:layout_gravity="top|right"
-                 android:background="#70000000"/>
+    <LinearLayout
+        android:id="@+id/live_chat_wrapper"
+        android:layout_width="450sp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right">
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.LiveChatView
+            android:id="@+id/live_chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:showIncomingTime="false"
+            app:isMessageFocusable="false"
+            android:visibility="gone"
+        />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/player_overlay_wrapper"
@@ -72,6 +78,15 @@
             android:textStyle="bold"
             style="?attr/playbackControlsTimeStyle"/>
     </LinearLayout>
+
+    <!-- Add debug view -->
+    <FrameLayout android:id="@+id/debug_view_group"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:padding="4sp"
+                 android:visibility="gone"
+                 android:layout_gravity="top|right"
+                 android:background="#70000000"/>
 
     <androidx.leanback.widget.NonOverlappingFrameLayout
         android:id="@+id/playback_fragment_background"

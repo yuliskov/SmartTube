@@ -104,6 +104,8 @@ class MessagesListStyle extends Style {
     private int dateHeaderTextSize;
     private int dateHeaderTextStyle;
 
+    private boolean isMessageFocusable;
+
     static MessagesListStyle parse(Context context, AttributeSet attrs) {
         MessagesListStyle style = new MessagesListStyle(context, attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MessagesList);
@@ -209,6 +211,8 @@ class MessagesListStyle extends Style {
         style.dateHeaderTextSize = typedArray.getDimensionPixelSize(R.styleable.MessagesList_dateHeaderTextSize,
                 style.getDimension(R.dimen.message_date_header_text_size));
         style.dateHeaderTextStyle = typedArray.getInt(R.styleable.MessagesList_dateHeaderTextStyle, Typeface.NORMAL);
+
+        style.isMessageFocusable = typedArray.getBoolean(R.styleable.MessagesList_isMessageFocusable, true);
 
         typedArray.recycle();
 
@@ -422,5 +426,9 @@ class MessagesListStyle extends Style {
         } else {
             return getDrawable(incomingImageOverlayDrawable);
         }
+    }
+
+    protected boolean isMessageFocusable() {
+        return isMessageFocusable;
     }
 }

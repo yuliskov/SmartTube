@@ -4,12 +4,10 @@ import com.liskovsoft.mediaserviceinterfaces.LiveChatService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiverImpl;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -34,14 +32,8 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
     private void openLiveChat(String chatKey) {
         disposeActions();
 
-        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
-        dialogPresenter.clear();
-        Video video = getController().getVideo();
-        String title = String.format("%s - %s", video.getTitle(), video.getAuthor());
-        ChatReceiverImpl chatReceiver = new ChatReceiverImpl();
-        dialogPresenter.appendChatCategory(title, UiOptionItem.from(title, chatReceiver));
-        dialogPresenter.enableTransparent(true);
-        dialogPresenter.showDialog(title, this::disposeActions);
+        ChatReceiver chatReceiver = new ChatReceiverImpl();
+        getController().setChatReceiver(chatReceiver);
 
         mChatAction = mChatService.openLiveChatObserve(chatKey)
                 .subscribeOn(Schedulers.io())
@@ -72,8 +64,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
     private void disposeActions() {
         if (RxUtils.isAnyActionRunning(mChatAction)) {
             RxUtils.disposeActions(mChatAction);
-            AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
-            dialogPresenter.closeDialog();
+            getController().setChatReceiver(null);
         }
     }
 }

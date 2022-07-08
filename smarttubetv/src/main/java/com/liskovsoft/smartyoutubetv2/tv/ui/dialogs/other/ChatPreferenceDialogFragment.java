@@ -10,16 +10,12 @@ import androidx.annotation.Nullable;
 import androidx.leanback.preference.LeanbackPreferenceDialogFragment;
 import androidx.preference.DialogPreference;
 import com.bumptech.glide.Glide;
-import com.liskovsoft.mediaserviceinterfaces.data.ChatItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.ChatItemMessage;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
-import com.stfalcon.chatkit.commons.models.IMessage;
-import com.stfalcon.chatkit.commons.models.IUser;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
-
-import java.util.Date;
 
 public class ChatPreferenceDialogFragment extends LeanbackPreferenceDialogFragment {
     private static final String SENDER_ID = ChatPreferenceDialogFragment.class.getSimpleName();
@@ -62,7 +58,7 @@ public class ChatPreferenceDialogFragment extends LeanbackPreferenceDialogFragme
         }
 
         MessagesList messagesList = (MessagesList) view.findViewById(R.id.messagesList);
-        MessagesListAdapter<Message> adapter = new MessagesListAdapter<>(SENDER_ID, (imageView, url, payload) ->
+        MessagesListAdapter<ChatItemMessage> adapter = new MessagesListAdapter<>(SENDER_ID, (imageView, url, payload) ->
                 Glide.with(view.getContext())
                     .load(url)
                     .apply(ViewUtil.glideOptions())
@@ -73,7 +69,7 @@ public class ChatPreferenceDialogFragment extends LeanbackPreferenceDialogFragme
         if (mChatReceiver != null) {
             mChatReceiver.setCallback(chatItem -> {
                 if (chatItem.getId() != null) {
-                    adapter.addToStart(Message.from(chatItem), true);
+                    adapter.addToStart(ChatItemMessage.from(chatItem), true);
                 }
             });
         }
@@ -87,72 +83,5 @@ public class ChatPreferenceDialogFragment extends LeanbackPreferenceDialogFragme
 
     public void enableTransparent(boolean enable) {
         mIsTransparent = enable;
-    }
-
-    private static class Message implements IMessage {
-        private String mId;
-        private String mText;
-        private Author mAuthor;
-        private Date mCreatedAt;
-
-        public static Message from(ChatItem chatItem) {
-            Message message = new Message();
-            message.mId = chatItem.getId();
-            message.mText = String.format("%s: %s", chatItem.getAuthorName(), chatItem.getMessage());
-            message.mAuthor = Author.from(chatItem);
-            message.mCreatedAt = new Date();
-
-            return message;
-        }
-
-        @Override
-        public String getId() {
-            return mId;
-        }
-
-        @Override
-        public String getText() {
-            return mText;
-        }
-
-        @Override
-        public Author getUser() {
-            return mAuthor;
-        }
-
-        @Override
-        public Date getCreatedAt() {
-            return mCreatedAt;
-        }
-    }
-
-    private static class Author implements IUser {
-        private String mId;
-        private String mName;
-        private String mAvatar;
-
-        public static Author from(ChatItem chatItem) {
-            Author author = new Author();
-            author.mAvatar = chatItem.getAuthorPhoto();
-            author.mName = chatItem.getAuthorName();
-            author.mId = chatItem.getAuthorName();
-
-            return author;
-        }
-
-        @Override
-        public String getId() {
-            return mId;
-        }
-
-        @Override
-        public String getName() {
-            return mName;
-        }
-
-        @Override
-        public String getAvatar() {
-            return mAvatar;
-        }
     }
 }

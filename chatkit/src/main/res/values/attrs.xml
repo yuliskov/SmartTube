@@ -153,6 +153,8 @@
             <flag name="italic" value="2" />
         </attr>
 
+        <attr name="isMessageFocusable" format="boolean|reference" />
+
     </declare-styleable>
 
     <attr name="DialogsListView" format="reference" />

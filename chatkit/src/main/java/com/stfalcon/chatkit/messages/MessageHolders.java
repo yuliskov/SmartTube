@@ -783,11 +783,11 @@ public class MessageHolders {
                 text.setTextColor(style.getIncomingTextColor());
                 text.setTextSize(TypedValue.COMPLEX_UNIT_PX, style.getIncomingTextSize());
                 text.setTypeface(text.getTypeface(), style.getIncomingTextStyle());
-                // MODIFIED: fix invisible links
-                LinkifyCompat.addLinks(text, style.getTextAutoLinkMask());
-                //text.setAutoLinkMask(style.getTextAutoLinkMask());
+                text.setAutoLinkMask(style.getTextAutoLinkMask());
                 text.setLinkTextColor(style.getIncomingTextLinkColor());
                 configureLinksBehavior(text);
+                // Should come after link configurator. Because it makes textView focusable.
+                text.setFocusable(style.isMessageFocusable());
             }
         }
 
@@ -847,6 +847,8 @@ public class MessageHolders {
                 text.setAutoLinkMask(style.getTextAutoLinkMask());
                 text.setLinkTextColor(style.getOutcomingTextLinkColor());
                 configureLinksBehavior(text);
+                // Should come after link configurator. Because it makes textView focusable.
+                text.setFocusable(style.isMessageFocusable());
             }
         }
 
