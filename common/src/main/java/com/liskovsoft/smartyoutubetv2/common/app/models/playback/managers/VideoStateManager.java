@@ -123,7 +123,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
 
         // Save previous state
         if (getController().containsMedia()) {
-            setPlayEnabled(getController().getPlay());
+            setPlayEnabled(getController().getPlayWhenReady());
             saveState();
         }
     }
@@ -380,7 +380,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         }
 
         if (!mIsPlayBlocked) {
-            getController().setPlay(getPlayEnabled());
+            getController().setPlayWhenReady(getPlayEnabled());
         }
     }
 

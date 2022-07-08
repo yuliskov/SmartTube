@@ -192,7 +192,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         int delayMs = 5_000;
 
         if (mPlayerData.getAfrPauseMs() > 0) {
-            getController().setPlay(false);
+            getController().setPlayWhenReady(false);
             delayMs = mPlayerData.getAfrPauseMs();
         }
 
@@ -209,7 +209,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private void restorePlayback() {
         if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseMs() > 0) {
             mStateUpdater.blockPlay(false);
-            getController().setPlay(mIsPlay);
+            getController().setPlayWhenReady(mIsPlay);
         }
     }
 

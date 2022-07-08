@@ -919,13 +919,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setPlay(boolean play) {
-        mExoPlayerController.setPlay(play);
+    public void setPlayWhenReady(boolean play) {
+        mExoPlayerController.setPlayWhenReady(play);
     }
 
     @Override
-    public boolean getPlay() {
-        return mExoPlayerController.getPlay();
+    public boolean getPlayWhenReady() {
+        return mExoPlayerController.getPlayWhenReady();
     }
 
     @Override

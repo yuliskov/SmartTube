@@ -526,7 +526,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
                     // NOP
                     break;
                 case PlayerData.ONLY_PAUSE:
-                    getController().setPlay(!getController().getPlay());
+                    getController().setPlayWhenReady(!getController().getPlayWhenReady());
                     return true; // don't show ui
             }
         }
@@ -556,7 +556,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     private boolean handlePlayPauseKey(int keyCode) {
         if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
-            getController().setPlay(!getController().getPlay());
+            getController().setPlayWhenReady(!getController().getPlayWhenReady());
             enableUiAutoHideTimeout(); // TODO: move out somehow
             return true;
         }

@@ -42,8 +42,8 @@ public interface PlaybackEngineController {
     long getPositionMs();
     void setPositionMs(long positionMs);
     long getLengthMs();
-    void setPlay(boolean play);
-    boolean getPlay();
+    void setPlayWhenReady(boolean play);
+    boolean getPlayWhenReady();
     boolean isPlaying();
     boolean isLoading();
     List<FormatItem> getVideoFormats();

@@ -180,6 +180,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
 
+        // Fix looping messages at the end of the video (playback mode: pause at the end of the video)
+        if (!getController().isPlaying()) {
+            return;
+        }
+
         SponsorSegment foundSegment = null;
         long skipPosMs = 0;
 

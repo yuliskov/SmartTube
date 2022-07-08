@@ -77,7 +77,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             mNewVideoPositionMs = 0;
         }
 
-        postStartPlaying(item, getController().getPlay());
+        postStartPlaying(item, getController().getPlayWhenReady());
         mVideo = item;
     }
 
@@ -273,7 +273,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             case Command.TYPE_PLAY:
                 if (getController() != null) {
                     movePlayerToForeground();
-                    getController().setPlay(true);
+                    getController().setPlayWhenReady(true);
                     //postStartPlaying(getController().getVideo(), true);
                     postPlay(true);
                 } else {
@@ -283,7 +283,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             case Command.TYPE_PAUSE:
                 if (getController() != null) {
                     movePlayerToForeground();
-                    getController().setPlay(false);
+                    getController().setPlayWhenReady(false);
                     //postStartPlaying(getController().getVideo(), false);
                     postPlay(false);
                 } else {

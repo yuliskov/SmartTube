@@ -186,7 +186,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
                 getController().setPositionMs(0);
-                getController().setPlay(true);
+                getController().setPlayWhenReady(true);
                 Utils.showRepeatInfo(getActivity(), playbackMode);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
@@ -204,7 +204,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                 // Except when playing from queue
                 if (mPlaylist.getNext() == null) {
                     getController().showSuggestions(true);
-                    getController().setPlay(false);
+                    getController().setPlayWhenReady(false);
                     getController().setPositionMs(0);
                     Utils.showRepeatInfo(getActivity(), playbackMode);
                 } else {
@@ -220,7 +220,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                     getController().showOverlay(true);
                 } else {
                     getController().showSuggestions(true);
-                    getController().setPlay(false);
+                    getController().setPlayWhenReady(false);
                     getController().setPositionMs(0);
                     Utils.showRepeatInfo(getActivity(), playbackMode);
                 }
