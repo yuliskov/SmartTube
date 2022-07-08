@@ -198,7 +198,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // NOTE: don't move this into another place! Multiple components rely on it.
         mEventListener.onViewResumed();
 
-        showHideUI(true); // PIP mode fix
+        showHideWidgets(true); // PIP mode fix
     }
 
     @Override
@@ -212,7 +212,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             maybeReleasePlayer();
         }
 
-        showHideUI(false); // PIP mode fix
+        showHideWidgets(false); // PIP mode fix
     }
 
     public void onDispatchKeyEvent(KeyEvent event) {
@@ -1502,7 +1502,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     /**
      * PIP mode fix
      */
-    private void showHideUI(boolean show) {
+    private void showHideWidgets(boolean show) {
         Activity activity = getActivity();
 
         if (activity != null) {
