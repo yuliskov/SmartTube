@@ -1,4 +1,4 @@
-include ':smarttubetv', ':common', ':openvpn'
+include ':smarttubetv', ':common', ':openvpn', ':chatkit'
 
 def rootDir = settingsDir
 

@@ -190,6 +190,7 @@ dependencies {
     implementation project(':sharedutils')
     implementation project(':mediaserviceinterfaces')
     implementation project(':youtubeapi')
+    implementation project(':chatkit')
 
     implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
     implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
@@ -204,5 +205,5 @@ dependencies {
 
     // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 
-    implementation 'com.github.stfalcon-studio:Chatkit:' + chatkitVersion
+    //implementation 'com.github.stfalcon-studio:Chatkit:' + chatkitVersion
 }

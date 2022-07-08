@@ -1,0 +1,228 @@
+<resources>
+
+    <attr name="MessageInput" format="reference" />
+
+    <declare-styleable name="MessageInput">
+        <attr name="inputButtonBackground" format="reference" />
+        <attr name="inputButtonDefaultBgColor" format="color|reference" />
+        <attr name="inputButtonDefaultBgPressedColor" format="color|reference" />
+        <attr name="inputButtonDefaultBgDisabledColor" format="color|reference" />
+
+        <attr name="inputButtonIcon" format="reference" />
+        <attr name="inputButtonDefaultIconColor" format="color|reference" />
+        <attr name="inputButtonDefaultIconPressedColor" format="color|reference" />
+        <attr name="inputButtonDefaultIconDisabledColor" format="color|reference" />
+
+        <attr name="inputButtonMargin" format="dimension|reference" />
+        <attr name="inputButtonWidth" format="dimension|reference" />
+        <attr name="inputButtonHeight" format="dimension|reference" />
+
+        <attr name="showAttachmentButton" format="boolean" />
+        <attr name="attachmentButtonBackground" format="reference" />
+        <attr name="attachmentButtonDefaultBgColor" format="color|reference" />
+        <attr name="attachmentButtonDefaultBgPressedColor" format="color|reference" />
+        <attr name="attachmentButtonDefaultBgDisabledColor" format="color|reference" />
+
+        <attr name="attachmentButtonIcon" format="reference" />
+        <attr name="attachmentButtonDefaultIconColor" format="color|reference" />
+        <attr name="attachmentButtonDefaultIconPressedColor" format="color|reference" />
+        <attr name="attachmentButtonDefaultIconDisabledColor" format="color|reference" />
+
+        <attr name="attachmentButtonMargin" format="dimension|reference" />
+        <attr name="attachmentButtonWidth" format="dimension|reference" />
+        <attr name="attachmentButtonHeight" format="dimension|reference" />
+
+        <attr name="inputMaxLines" format="integer" />
+        <attr name="inputHint" format="string" />
+
+        <attr name="inputText" format="string" />
+        <attr name="inputTextSize" format="dimension|reference" />
+        <attr name="inputTextColor" format="color|reference" />
+        <attr name="inputHintColor" format="color|reference" />
+
+        <attr name="inputBackground" format="reference" />
+        <attr name="inputCursorDrawable" format="reference" />
+
+        <attr name="delayTypingStatus" format="integer" />
+    </declare-styleable>
+
+    <attr name="MessagesList" format="reference" />
+
+    <declare-styleable name="MessagesList">
+
+        <attr name="textAutoLink">
+            <flag name="all" value="15" />
+            <flag name="email" value="2" />
+            <flag name="map" value="8" />
+            <flag name="none" value="0" />
+            <flag name="phone" value="4" />
+            <flag name="web" value="1" />
+        </attr>
+
+        <attr name="incomingTextLinkColor" format="color|reference" />
+        <attr name="outcomingTextLinkColor" format="color|reference" />
+
+        <attr name="incomingAvatarWidth" format="dimension|reference" />
+        <attr name="incomingAvatarHeight" format="dimension|reference" />
+
+        <attr name="incomingBubbleDrawable" format="reference" />
+        <attr name="incomingDefaultBubbleColor" format="color|reference" />
+        <attr name="incomingDefaultBubblePressedColor" format="color|reference" />
+        <attr name="incomingDefaultBubbleSelectedColor" format="color|reference" />
+
+        <attr name="incomingImageOverlayDrawable" format="reference" />
+        <attr name="incomingDefaultImageOverlayPressedColor" format="color|reference" />
+        <attr name="incomingDefaultImageOverlaySelectedColor" format="color|reference" />
+
+        <attr name="incomingBubblePaddingLeft" format="dimension|reference" />
+        <attr name="incomingBubblePaddingRight" format="dimension|reference" />
+        <attr name="incomingBubblePaddingTop" format="dimension|reference" />
+        <attr name="incomingBubblePaddingBottom" format="dimension|reference" />
+
+        <attr name="incomingTextColor" format="color|reference" />
+        <attr name="incomingTextSize" format="dimension|reference" />
+        <attr name="incomingTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+        <attr name="incomingTimeTextColor" format="color|reference" />
+        <attr name="incomingTimeTextSize" format="dimension|reference" />
+        <attr name="incomingTimeTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+        <attr name="incomingImageTimeTextColor" format="color|reference" />
+        <attr name="incomingImageTimeTextSize" format="dimension|reference" />
+        <attr name="incomingImageTimeTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+        <attr name="outcomingBubbleDrawable" format="reference" />
+        <attr name="outcomingDefaultBubbleColor" format="color|reference" />
+        <attr name="outcomingDefaultBubblePressedColor" format="color|reference" />
+        <attr name="outcomingDefaultBubbleSelectedColor" format="color|reference" />
+
+        <attr name="outcomingImageOverlayDrawable" format="reference" />
+        <attr name="outcomingDefaultImageOverlayPressedColor" format="color|reference" />
+        <attr name="outcomingDefaultImageOverlaySelectedColor" format="color|reference" />
+
+        <attr name="outcomingBubblePaddingLeft" format="dimension|reference" />
+        <attr name="outcomingBubblePaddingRight" format="dimension|reference" />
+        <attr name="outcomingBubblePaddingTop" format="dimension|reference" />
+        <attr name="outcomingBubblePaddingBottom" format="dimension|reference" />
+
+        <attr name="outcomingTextColor" format="color|reference" />
+        <attr name="outcomingTextSize" format="dimension|reference" />
+        <attr name="outcomingTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+        <attr name="outcomingTimeTextColor" format="color|reference" />
+        <attr name="outcomingTimeTextSize" format="dimension|reference" />
+        <attr name="outcomingTimeTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+        <attr name="outcomingImageTimeTextColor" format="color|reference" />
+        <attr name="outcomingImageTimeTextSize" format="dimension|reference" />
+        <attr name="outcomingImageTimeTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+        <attr name="dateHeaderPadding" format="dimension|reference" />
+        <attr name="dateHeaderFormat" format="string|reference" />
+        <attr name="dateHeaderTextColor" format="color|reference" />
+        <attr name="dateHeaderTextSize" format="dimension|reference" />
+        <attr name="dateHeaderTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+    </declare-styleable>
+
+    <attr name="DialogsListView" format="reference" />
+
+    <declare-styleable name="DialogsList">
+        <attr name="dialogTitleTextColor" format="color|reference" />
+        <attr name="dialogTitleTextSize" format="dimension|reference" />
+        <attr name="dialogTitleTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+        <attr name="dialogUnreadTitleTextColor" format="color|reference" />
+        <attr name="dialogUnreadTitleTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+        <attr name="dialogMessageTextColor" format="color|reference" />
+        <attr name="dialogMessageTextSize" format="dimension|reference" />
+        <attr name="dialogMessageTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+        <attr name="dialogUnreadMessageTextColor" format="color|reference" />
+        <attr name="dialogUnreadMessageTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+        <attr name="dialogDateColor" format="color|reference" />
+        <attr name="dialogDateSize" format="dimension|reference" />
+        <attr name="dialogDateStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+        <attr name="dialogUnreadDateColor" format="color|reference" />
+        <attr name="dialogUnreadDateStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+        <attr name="dialogUnreadBubbleEnabled" format="boolean" />
+        <attr name="dialogUnreadBubbleTextColor" format="color|reference" />
+        <attr name="dialogUnreadBubbleTextSize" format="dimension|reference" />
+        <attr name="dialogUnreadBubbleTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+        <attr name="dialogUnreadBubbleBackgroundColor" format="color|reference" />
+
+        <attr name="dialogAvatarWidth" format="dimension|reference" />
+        <attr name="dialogAvatarHeight" format="dimension|reference" />
+
+        <attr name="dialogMessageAvatarEnabled" format="boolean" />
+        <attr name="dialogMessageAvatarWidth" format="dimension|reference" />
+        <attr name="dialogMessageAvatarHeight" format="dimension|reference" />
+
+        <attr name="dialogDividerEnabled" format="boolean" />
+        <attr name="dialogDividerColor" format="color|reference" />
+        <attr name="dialogDividerLeftPadding" format="dimension|reference" />
+        <attr name="dialogDividerRightPadding" format="dimension|reference" />
+
+        <attr name="dialogItemBackground" format="color|reference" />
+        <attr name="dialogUnreadItemBackground" format="color|reference" />
+
+    </declare-styleable>
+
+</resources>
