@@ -98,7 +98,7 @@ public class ChatPreferenceDialogFragment extends LeanbackPreferenceDialogFragme
         public static Message from(ChatItem chatItem) {
             Message message = new Message();
             message.mId = chatItem.getId();
-            message.mText = String.format("%s\n\n%s", chatItem.getAuthorName(), chatItem.getMessage());
+            message.mText = String.format("%s: %s", chatItem.getAuthorName(), chatItem.getMessage());
             message.mAuthor = Author.from(chatItem);
             message.mCreatedAt = new Date();
 
