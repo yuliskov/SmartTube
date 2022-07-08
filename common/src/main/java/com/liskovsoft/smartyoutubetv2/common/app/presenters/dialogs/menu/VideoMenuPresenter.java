@@ -516,7 +516,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
     private void showLongTextDialog(String description) {
         mDialogPresenter.clear();
-        mDialogPresenter.appendLongTextCategory(mVideo.title, UiOptionItem.from(description, null));
+        mDialogPresenter.appendLongTextCategory(mVideo.title, UiOptionItem.from(description));
         mDialogPresenter.showDialog(mVideo.title);
     }
 

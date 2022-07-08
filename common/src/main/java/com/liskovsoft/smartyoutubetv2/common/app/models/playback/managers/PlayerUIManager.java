@@ -367,7 +367,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
         String title = String.format("%s - %s", video.getTitle(), video.getAuthor());
 
-        dialogPresenter.appendLongTextCategory(title, UiOptionItem.from(description, null));
+        dialogPresenter.appendLongTextCategory(title, UiOptionItem.from(description));
 
         dialogPresenter.showDialog(title);
     }

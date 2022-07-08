@@ -30,6 +30,8 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     static {
         // fix youtube bandwidth throttling
         System.setProperty("http.keepAlive", "false");
+        // fix ipv6 infinite video buffering???
+        System.setProperty("java.net.preferIPv6Addresses", "true");
     }
 
     @Override

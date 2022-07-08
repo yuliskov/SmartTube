@@ -54,6 +54,10 @@ public class UiOptionItem implements OptionItem {
         return uiOptionItem;
     }
 
+    public static OptionItem from(CharSequence title) {
+        return from(title, (OptionCallback) null);
+    }
+
     public static OptionItem from(CharSequence title, OptionCallback callback) {
         return from(title, callback, false);
     }

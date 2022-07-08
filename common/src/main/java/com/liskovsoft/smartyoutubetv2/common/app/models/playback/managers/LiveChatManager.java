@@ -27,7 +27,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
         if (metadata != null && metadata.getLiveChatKey() != null) {
-            //openLiveChat(metadata.getLiveChatKey());
+            openLiveChat(metadata.getLiveChatKey());
         }
     }
 
@@ -40,7 +40,8 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         String title = String.format("%s - %s", video.getTitle(), video.getAuthor());
         ChatReceiverImpl chatReceiver = new ChatReceiverImpl();
         dialogPresenter.appendChatCategory(title, UiOptionItem.from(title, chatReceiver));
-        dialogPresenter.showDialog(title);
+        dialogPresenter.enableTransparent(true);
+        dialogPresenter.showDialog(title, this::disposeActions);
 
         mChatAction = mChatService.openLiveChatObserve(chatKey)
                 .subscribeOn(Schedulers.io())
