@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.core.text.util.LinkifyCompat;
 import androidx.core.view.ViewCompat;
 
 import com.stfalcon.chatkit.R;
@@ -782,7 +783,9 @@ public class MessageHolders {
                 text.setTextColor(style.getIncomingTextColor());
                 text.setTextSize(TypedValue.COMPLEX_UNIT_PX, style.getIncomingTextSize());
                 text.setTypeface(text.getTypeface(), style.getIncomingTextStyle());
-                text.setAutoLinkMask(style.getTextAutoLinkMask());
+                // MODIFIED: fix invisible links
+                LinkifyCompat.addLinks(text, style.getTextAutoLinkMask());
+                //text.setAutoLinkMask(style.getTextAutoLinkMask());
                 text.setLinkTextColor(style.getIncomingTextLinkColor());
                 configureLinksBehavior(text);
             }
@@ -1072,6 +1075,7 @@ public class MessageHolders {
         @Override
         public void applyStyle(MessagesListStyle style) {
             if (time != null) {
+                time.setVisibility(style.showIncomingTime() ? View.VISIBLE : View.GONE);
                 time.setTextColor(style.getIncomingTimeTextColor());
                 time.setTextSize(TypedValue.COMPLEX_UNIT_PX, style.getIncomingTimeTextSize());
                 time.setTypeface(time.getTypeface(), style.getIncomingTimeTextStyle());
@@ -1119,6 +1123,7 @@ public class MessageHolders {
         @Override
         public void applyStyle(MessagesListStyle style) {
             if (time != null) {
+                time.setVisibility(style.showOutcomingTime() ? View.VISIBLE : View.GONE);
                 time.setTextColor(style.getOutcomingTimeTextColor());
                 time.setTextSize(TypedValue.COMPLEX_UNIT_PX, style.getOutcomingTimeTextSize());
                 time.setTypeface(time.getTypeface(), style.getOutcomingTimeTextStyle());

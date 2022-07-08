@@ -350,6 +350,12 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         }
     }
 
+    public void scrollToBottom() {
+        if (layoutManager != null) {
+            layoutManager.scrollToPosition(0);
+        }
+    }
+
     /**
      * Enables selection mode.
      *

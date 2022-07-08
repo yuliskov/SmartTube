@@ -62,6 +62,7 @@ class MessagesListStyle extends Style {
     private int incomingTextSize;
     private int incomingTextStyle;
 
+    private boolean showIncomingTime;
     private int incomingTimeTextColor;
     private int incomingTimeTextSize;
     private int incomingTimeTextStyle;
@@ -88,6 +89,7 @@ class MessagesListStyle extends Style {
     private int outcomingTextSize;
     private int outcomingTextStyle;
 
+    private boolean showOutcomingTime;
     private int outcomingTimeTextColor;
     private int outcomingTimeTextSize;
     private int outcomingTimeTextStyle;
@@ -145,6 +147,7 @@ class MessagesListStyle extends Style {
                 style.getDimension(R.dimen.message_text_size));
         style.incomingTextStyle = typedArray.getInt(R.styleable.MessagesList_incomingTextStyle, Typeface.NORMAL);
 
+        style.showIncomingTime = typedArray.getBoolean(R.styleable.MessagesList_showIncomingTime, true);
         style.incomingTimeTextColor = typedArray.getColor(R.styleable.MessagesList_incomingTimeTextColor,
                 style.getColor(R.color.warm_grey_four));
         style.incomingTimeTextSize = typedArray.getDimensionPixelSize(R.styleable.MessagesList_incomingTimeTextSize,
@@ -185,6 +188,7 @@ class MessagesListStyle extends Style {
                 style.getDimension(R.dimen.message_text_size));
         style.outcomingTextStyle = typedArray.getInt(R.styleable.MessagesList_outcomingTextStyle, Typeface.NORMAL);
 
+        style.showOutcomingTime = typedArray.getBoolean(R.styleable.MessagesList_showOutcomingTime, true);
         style.outcomingTimeTextColor = typedArray.getColor(R.styleable.MessagesList_outcomingTimeTextColor,
                 style.getColor(R.color.white60));
         style.outcomingTimeTextSize = typedArray.getDimensionPixelSize(R.styleable.MessagesList_outcomingTimeTextSize,
@@ -326,6 +330,10 @@ class MessagesListStyle extends Style {
         return outcomingTextStyle;
     }
 
+    protected boolean showOutcomingTime() {
+        return showOutcomingTime;
+    }
+
     protected int getOutcomingTimeTextColor() {
         return outcomingTimeTextColor;
     }
@@ -368,6 +376,10 @@ class MessagesListStyle extends Style {
 
     protected String getDateHeaderFormat() {
         return dateHeaderFormat;
+    }
+
+    protected boolean showIncomingTime() {
+        return showIncomingTime;
     }
 
     protected int getIncomingTimeTextSize() {

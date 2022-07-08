@@ -87,6 +87,7 @@
             <flag name="italic" value="2" />
         </attr>
 
+        <attr name="showIncomingTime" format="boolean|reference" />
         <attr name="incomingTimeTextColor" format="color|reference" />
         <attr name="incomingTimeTextSize" format="dimension|reference" />
         <attr name="incomingTimeTextStyle">
@@ -125,6 +126,7 @@
             <flag name="italic" value="2" />
         </attr>
 
+        <attr name="showOutcomingTime" format="boolean|reference" />
         <attr name="outcomingTimeTextColor" format="color|reference" />
         <attr name="outcomingTimeTextSize" format="dimension|reference" />
         <attr name="outcomingTimeTextStyle">
