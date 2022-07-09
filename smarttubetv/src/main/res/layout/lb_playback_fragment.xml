@@ -28,7 +28,7 @@
 
     <LinearLayout
         android:id="@+id/live_chat_wrapper"
-        android:layout_width="450sp"
+        android:layout_width="300sp"
         android:layout_height="match_parent"
         android:layout_gravity="right">
         <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.LiveChatView

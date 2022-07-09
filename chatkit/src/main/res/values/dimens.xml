@@ -31,6 +31,8 @@
     <dimen name="message_time_text_size">14sp</dimen>
     <dimen name="message_date_header_text_size">16sp</dimen>
     <dimen name="message_date_header_padding">16dp</dimen>
-    <dimen name="message_incoming_bubble_margin_right">40dp</dimen>
+    <!--<dimen name="message_incoming_bubble_margin_right">40dp</dimen>-->
+    <!-- Make messages to stick exactly to the right edge -->
+    <dimen name="message_incoming_bubble_margin_right">0dp</dimen>
     <dimen name="message_outcoming_bubble_margin_left">88dp</dimen>
 </resources>
