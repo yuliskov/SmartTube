@@ -343,6 +343,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
+    public void onChatClicked(boolean enabled) {
+        process(listener -> listener.onChatClicked(enabled));
+    }
+
+    @Override
     public void onVideoInfoClicked() {
         process(PlayerUiEventListener::onVideoInfoClicked);
     }

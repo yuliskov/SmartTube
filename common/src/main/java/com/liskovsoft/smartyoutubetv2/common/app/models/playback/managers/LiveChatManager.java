@@ -1,10 +1,13 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.os.Build;
 import com.liskovsoft.mediaserviceinterfaces.LiveChatService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiverImpl;
@@ -17,25 +20,42 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
     private static final String TAG = LiveChatManager.class.getSimpleName();
     private final LiveChatService mChatService;
     private Disposable mChatAction;
+    private String mLiveChatKey;
+    private boolean mChatEnabled;
 
     public LiveChatManager() {
         mChatService = YouTubeMediaService.instance().getLiveChatService();
     }
 
     @Override
+    public void openVideo(Video item) {
+        mChatEnabled = Build.VERSION.SDK_INT > 19;
+    }
+
+    @Override
     public void onMetadata(MediaItemMetadata metadata) {
-        if (metadata != null && metadata.getLiveChatKey() != null) {
-            openLiveChat(metadata.getLiveChatKey());
+        mLiveChatKey = metadata != null && metadata.getLiveChatKey() != null ? metadata.getLiveChatKey() : null;
+
+        if (mLiveChatKey != null) {
+            getController().setChatButtonState(mChatEnabled ? PlaybackUIController.BUTTON_STATE_ON : PlaybackUIController.BUTTON_STATE_OFF);
+        }
+
+        if (mChatEnabled) {
+            openLiveChat();
         }
     }
 
-    private void openLiveChat(String chatKey) {
+    private void openLiveChat() {
         disposeActions();
+
+        if (mLiveChatKey == null) {
+            return;
+        }
 
         ChatReceiver chatReceiver = new ChatReceiverImpl();
         getController().setChatReceiver(chatReceiver);
 
-        mChatAction = mChatService.openLiveChatObserve(chatKey)
+        mChatAction = mChatService.openLiveChatObserve(mLiveChatKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -49,6 +69,16 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
                         },
                         () -> Log.e(TAG, "Live chat session has been closed")
                 );
+    }
+
+    @Override
+    public void onChatClicked(boolean enabled) {
+        if (enabled) {
+            openLiveChat();
+        } else {
+            disposeActions();
+        }
+        mChatEnabled = enabled;
     }
 
     @Override

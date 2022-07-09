@@ -18,10 +18,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChatAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ContentBlockAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
@@ -88,9 +90,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     private final ShareAction mShareAction;
     private final SeekIntervalAction mSeekIntervalAction;
     private final ContentBlockAction mContentBlockAction;
+    private final ChatAction mChatAction;
     private final OnActionClickedListener mActionListener;
-    private String mQualityInfo;
-    private QualityInfoListener mQualityInfoListener;
     private int mPreviousAction = KeyEvent.ACTION_UP;
     private boolean mIsSingleKeyDown;
 
@@ -128,6 +129,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         mShareAction = new ShareAction(context);
         mSeekIntervalAction = new SeekIntervalAction(context);
         mContentBlockAction = new ContentBlockAction(context);
+        mChatAction = new ChatAction(context);
     }
 
     @Override
@@ -170,6 +172,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         }
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SHARE)) {
             adapter.add(mShareAction);
+        }
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_CHAT)) {
+            adapter.add(mChatAction);
         }
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SEARCH)) {
             adapter.add(mSearchAction);
@@ -301,6 +306,15 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     public void setContentBlockButtonState(boolean selected) {
         mContentBlockAction.setIndex(selected ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
         invalidateUi(mContentBlockAction);
+    }
+
+    public void setChatButtonState(int buttonState) {
+        if (buttonState == -1) {
+            mChatAction.setDisabled(true);
+        } else {
+            mChatAction.setIndex(buttonState);
+        }
+        invalidateUi(mChatAction);
     }
 
     public boolean isContentBlockButtonPressed() {
@@ -461,6 +475,10 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
             incrementActionIndex(action);
             mActionListener.onContentBlock(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
+        } else if (action == mChatAction) {
+            incrementActionIndex(action);
+            mActionListener.onChat(getActionIndex(action) == TwoStateAction.INDEX_ON);
+            handled = true;
         }
 
         if (handled) {
@@ -581,6 +599,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         void onSeekInterval();
 
         void onContentBlock(boolean enabled);
+
+        void onChat(boolean enabled);
 
         void onVideoInfo();
 

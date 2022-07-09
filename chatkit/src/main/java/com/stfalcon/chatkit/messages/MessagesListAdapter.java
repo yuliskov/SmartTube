@@ -57,6 +57,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
     private String senderId;
 
     private int selectedItemsCount;
+    private int maxItemsCount;
     private SelectionListener selectionListener;
 
     private OnLoadMoreListener loadMoreListener;
@@ -160,6 +161,8 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         if (layoutManager != null && scroll) {
             layoutManager.scrollToPosition(0);
         }
+
+        trimEnd();
     }
 
     /**
@@ -320,6 +323,10 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         if (result) {
             recountDateHeaders();
         }
+    }
+
+    public void setMaxItemsCount(int maxItemsCount) {
+        this.maxItemsCount = maxItemsCount;
     }
 
     /**
@@ -674,6 +681,22 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(copiedText, copiedText);
         clipboard.setPrimaryClip(clip);
+    }
+
+    private void trimEnd() {
+        if (maxItemsCount > 0) {
+            int messagesCount = getMessagesCount();
+            int leftoversCount = messagesCount - maxItemsCount;
+            if (leftoversCount > 0) {
+                int size = items.size();
+                int firstIndex = size - leftoversCount;
+                int lastIndex = size;
+
+                items.subList(firstIndex, lastIndex).clear();
+                notifyItemRangeRemoved(firstIndex, leftoversCount);
+                recountDateHeaders();
+            }
+        }
     }
 
     void setLayoutManager(RecyclerView.LayoutManager layoutManager) {

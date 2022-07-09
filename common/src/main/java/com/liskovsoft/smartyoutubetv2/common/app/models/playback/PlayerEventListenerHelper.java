@@ -229,6 +229,11 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
+    public void onChatClicked(boolean enabled) {
+        // NOP
+    }
+
+    @Override
     public void onVideoInfoClicked() {
         // NOP
     }

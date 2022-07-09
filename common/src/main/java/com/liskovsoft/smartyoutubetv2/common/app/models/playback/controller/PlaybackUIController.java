@@ -7,6 +7,14 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver
 import java.util.List;
 
 public interface PlaybackUIController {
+    int BUTTON_STATE_DISABLED = -1;
+    int BUTTON_STATE_OFF = 0;
+    int BUTTON_STATE_ON = 1;
+    int REPEAT_STATE_CLOSE = 0;
+    int REPEAT_STATE_REPEAT_ONE = 1;
+    int REPEAT_STATE_PLAY_ALL = 2;
+    int REPEAT_STATE_PAUSE = 3;
+    int REPEAT_STATE_LIST = 4;
     void updateSuggestions(VideoGroup group);
     void removeSuggestions(VideoGroup group);
     int getSuggestionsIndex(VideoGroup group);
@@ -28,6 +36,7 @@ public interface PlaybackUIController {
     void setSubtitleButtonState(boolean selected);
     void setSpeedButtonState(boolean selected);
     void setContentBlockButtonState(boolean selected);
+    void setChatButtonState(int buttonState);
     void setChannelIcon(String iconUrl);
     void setNextTitle(String title);
     void setDebugButtonState(boolean show);
