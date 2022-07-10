@@ -248,8 +248,10 @@ public class Playlist {
         }
 
         int fromIndex = mCurrentIndex + 1;
-        if (fromIndex > 0 && fromIndex < mPlaylist.size()) {
-            mPlaylist = mPlaylist.subList(0, fromIndex);
+        int size = mPlaylist.size();
+        if (fromIndex > 0 && fromIndex < size) {
+            //mPlaylist = mPlaylist.subList(0, fromIndex);
+            mPlaylist.subList(fromIndex, size).clear();
         }
     }
 
@@ -257,13 +259,16 @@ public class Playlist {
      * Trim playlist if one exceeds needed size or current element not last in the list
      */
     private void trimPlaylist() {
-        boolean playlistTooBig = mPlaylist.size() > PLAYLIST_MAX_SIZE;
+        int size = mPlaylist.size();
+        boolean playlistTooBig = size > PLAYLIST_MAX_SIZE;
 
         if (playlistTooBig) {
-            int fromIndex = mPlaylist.size() - PLAYLIST_MAX_SIZE;
-            int toIndex = mPlaylist.size();
-            mPlaylist = mPlaylist.subList(fromIndex, toIndex);
-            mCurrentIndex -= fromIndex;
+            //int fromIndex = mPlaylist.size() - PLAYLIST_MAX_SIZE;
+            //int toIndex = mPlaylist.size();
+            //mPlaylist = mPlaylist.subList(fromIndex, toIndex);
+            int toIndex = size - PLAYLIST_MAX_SIZE;
+            mPlaylist.subList(0, toIndex).clear();
+            mCurrentIndex -= toIndex;
         }
     }
 
