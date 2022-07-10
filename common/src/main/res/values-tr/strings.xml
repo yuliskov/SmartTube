@@ -451,4 +451,5 @@
     <string name="sources">Kaynaklar</string>
     <string name="releases">Sürümler</string>
     <string name="prefer_avc_over_vp9">Kod çözücü seçimi: avc\'yi vp9\'a tercih et</string>
+    <string name="open_chat">Sohbet</string>
 </resources>
