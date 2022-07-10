@@ -151,6 +151,10 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
      * @param scroll  {@code true} if need to scroll list to bottom when message added.
      */
     public void addToStart(MESSAGE message, boolean scroll) {
+        if (!checkMessage(message)) {
+            return;
+        }
+
         boolean isNewMessageToday = !isPreviousSameDate(0, message.getCreatedAt());
         if (isNewMessageToday) {
             items.add(0, new Wrapper<>(message.getCreatedAt()));
@@ -697,6 +701,10 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
                 recountDateHeaders();
             }
         }
+    }
+
+    private boolean checkMessage(MESSAGE message) {
+        return message != null && message.getId() != null && message.getUser() != null && message.getUser().getId() != null;
     }
 
     void setLayoutManager(RecyclerView.LayoutManager layoutManager) {

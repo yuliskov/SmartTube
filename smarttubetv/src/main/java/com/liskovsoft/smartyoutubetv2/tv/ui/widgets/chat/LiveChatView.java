@@ -62,10 +62,6 @@ public class LiveChatView extends com.stfalcon.chatkit.messages.MessagesList {
             setAdapter(mAdapter);
         }
 
-        mChatReceiver.setCallback(chatItem -> {
-            if (chatItem.getId() != null) {
-                mAdapter.addToStart(ChatItemMessage.from(chatItem), true);
-            }
-        });
+        mChatReceiver.setCallback(chatItem -> mAdapter.addToStart(ChatItemMessage.from(chatItem), true));
     }
 }

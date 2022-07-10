@@ -67,11 +67,7 @@ public class ChatPreferenceDialogFragment extends LeanbackPreferenceDialogFragme
         messagesList.setAdapter(adapter);
 
         if (mChatReceiver != null) {
-            mChatReceiver.setCallback(chatItem -> {
-                if (chatItem.getId() != null) {
-                    adapter.addToStart(ChatItemMessage.from(chatItem), true);
-                }
-            });
+            mChatReceiver.setCallback(chatItem -> adapter.addToStart(ChatItemMessage.from(chatItem), true));
         }
 
         if (mIsTransparent) {
