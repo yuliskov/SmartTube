@@ -73,6 +73,7 @@ public class PlayerData {
     private float mSubtitlePosition;
     private boolean mIsNumberKeySeekEnabled;
     private boolean mIsSkip24RateEnabled;
+    private boolean mIsLiveChatEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -461,6 +462,15 @@ public class PlayerData {
         persistData();
     }
 
+    public boolean isLiveChatEnabled() {
+        return mIsLiveChatEnabled;
+    }
+
+    public void enableLiveChat(boolean enable) {
+        mIsLiveChatEnabled = enable;
+        persistData();
+    }
+
     public FormatItem getDefaultAudioFormat() {
         String language = LocaleUtility.getCurrentLanguage(mPrefs.getContext());
 
@@ -563,6 +573,7 @@ public class PlayerData {
         mIsNumberKeySeekEnabled = Helpers.parseBoolean(split, 43, true);
         mIsSkip24RateEnabled = Helpers.parseBoolean(split, 44, false);
         mAfrPauseMs = Helpers.parseInt(split, 45, 0);
+        mIsLiveChatEnabled = Helpers.parseBoolean(split, 46, Build.VERSION.SDK_INT > 19);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -580,6 +591,6 @@ public class PlayerData {
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
-                mIsSkip24RateEnabled, mAfrPauseMs));
+                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled));
     }
 }

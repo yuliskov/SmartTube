@@ -451,5 +451,5 @@
     <string name="sources">Sources</string>
     <string name="releases">Releases</string>
     <string name="prefer_avc_over_vp9">Codec selection: prefer avc over vp9</string>
-    <string name="open_chat">Live Chat/Comments</string>
+    <string name="open_chat">Chat</string>
 </resources>

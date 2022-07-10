@@ -1,16 +1,15 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import android.os.Build;
 import com.liskovsoft.mediaserviceinterfaces.LiveChatService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiverImpl;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -18,18 +17,15 @@ import io.reactivex.schedulers.Schedulers;
 
 public class LiveChatManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = LiveChatManager.class.getSimpleName();
-    private final LiveChatService mChatService;
+    private LiveChatService mChatService;
+    private PlayerData mPlayerData;
     private Disposable mChatAction;
     private String mLiveChatKey;
-    private boolean mChatEnabled;
-
-    public LiveChatManager() {
-        mChatService = YouTubeMediaService.instance().getLiveChatService();
-    }
 
     @Override
-    public void openVideo(Video item) {
-        mChatEnabled = Build.VERSION.SDK_INT > 19;
+    public void onInitDone() {
+        mChatService = YouTubeMediaService.instance().getLiveChatService();
+        mPlayerData = PlayerData.instance(getActivity());
     }
 
     @Override
@@ -37,10 +33,10 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         mLiveChatKey = metadata != null && metadata.getLiveChatKey() != null ? metadata.getLiveChatKey() : null;
 
         if (mLiveChatKey != null) {
-            getController().setChatButtonState(mChatEnabled ? PlaybackUIController.BUTTON_STATE_ON : PlaybackUIController.BUTTON_STATE_OFF);
+            getController().setChatButtonState(mPlayerData.isLiveChatEnabled() ? PlaybackUIController.BUTTON_STATE_ON : PlaybackUIController.BUTTON_STATE_OFF);
         }
 
-        if (mChatEnabled) {
+        if (mPlayerData.isLiveChatEnabled()) {
             openLiveChat();
         }
     }
@@ -78,7 +74,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         } else {
             disposeActions();
         }
-        mChatEnabled = enabled;
+        mPlayerData.enableLiveChat(enabled);
     }
 
     @Override

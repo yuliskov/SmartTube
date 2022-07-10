@@ -443,5 +443,5 @@
     <string name="sources">Исходники</string>
     <string name="releases">Релизы</string>
     <string name="prefer_avc_over_vp9">Выбор кодека: отдавать предпочтение avc над vp9</string>
-    <string name="open_chat">Живой чат/Комментарии</string>
+    <string name="open_chat">Чат</string>
 </resources>
