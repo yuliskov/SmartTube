@@ -1,3 +1,4 @@
+<!-- MODIFIED: Android 9 message focused bug fix (RelativeLayout focusable="false") -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -5,7 +6,8 @@
     android:layout_marginBottom="8dp"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    android:layout_marginTop="8dp">
+    android:layout_marginTop="8dp"
+    android:focusable="false">
 
     <com.google.android.flexbox.FlexboxLayout
         android:id="@id/bubble"

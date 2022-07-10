@@ -785,9 +785,11 @@ public class MessageHolders {
                 text.setTypeface(text.getTypeface(), style.getIncomingTextStyle());
                 text.setAutoLinkMask(style.getTextAutoLinkMask());
                 text.setLinkTextColor(style.getIncomingTextLinkColor());
-                configureLinksBehavior(text);
-                // Should come after link configurator. Because it makes textView focusable.
-                text.setFocusable(style.isMessageFocusable());
+
+                // Link configurator makes textView focusable.
+                if (style.isMessageFocusable()) {
+                    configureLinksBehavior(text);
+                }
             }
         }
 
@@ -846,9 +848,11 @@ public class MessageHolders {
                 text.setTypeface(text.getTypeface(), style.getOutcomingTextStyle());
                 text.setAutoLinkMask(style.getTextAutoLinkMask());
                 text.setLinkTextColor(style.getOutcomingTextLinkColor());
-                configureLinksBehavior(text);
-                // Should come after link configurator. Because it makes textView focusable.
-                text.setFocusable(style.isMessageFocusable());
+
+                // Link configurator makes textView focusable.
+                if (style.isMessageFocusable()) {
+                    configureLinksBehavior(text);
+                }
             }
         }
 
