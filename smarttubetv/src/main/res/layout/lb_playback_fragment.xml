@@ -37,6 +37,8 @@
             android:layout_height="match_parent"
             app:showIncomingTime="false"
             app:isMessageFocusable="false"
+            app:incomingDefaultBubbleColor="@color/semi_transparent"
+            app:incomingTextColor="@color/white"
             android:visibility="gone"
         />
     </LinearLayout>
