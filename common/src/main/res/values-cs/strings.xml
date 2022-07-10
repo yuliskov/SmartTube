@@ -451,4 +451,5 @@
     <string name="sources">Zdroje</string>
     <string name="releases">Vydané verze</string>
     <string name="prefer_avc_over_vp9">Výběr kodeku: preferování AVC nad VP9</string>
+    <string name="open_chat">Chat</string>
 </resources>
