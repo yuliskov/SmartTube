@@ -15,6 +15,5 @@ public class ChatAction extends TwoStateAction {
         labels[INDEX_OFF] = context.getString(R.string.open_chat);
         labels[INDEX_ON] = context.getString(R.string.open_chat);
         setLabels(labels);
-        setDisabled(true);
     }
 }

@@ -13,8 +13,6 @@
  */
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,11 +23,9 @@ import android.widget.TextView;
 import androidx.leanback.R;
 import androidx.leanback.widget.Action;
 import androidx.leanback.widget.PlaybackControlsRow;
-import androidx.leanback.widget.PlaybackControlsRow.MultiAction;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PaddingAction;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.TwoStateAction;
 
 /**
  * Displays primary and secondary controls for a {@link PlaybackControlsRow}.
@@ -103,18 +99,11 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
         }
 
         // Used inside: com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.ViewHolder.bindControlToAction()
+        // Restore focus: com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBar.onRequestFocusInDescendants()
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, Object item) {
             Action action = (Action) item;
             ActionViewHolder vh = (ActionViewHolder) viewHolder;
-
-            if (action instanceof TwoStateAction && ((TwoStateAction) action).isDisabled()) {
-                // Fix: Invisible view takes extra space if added immediately to the group.
-                new Handler(Looper.myLooper()).postDelayed(() -> vh.view.setVisibility(View.GONE), 100);
-                return;
-            }
-
-            vh.view.setVisibility(View.VISIBLE);
 
             vh.mIcon.setImageDrawable(action.getIcon());
             if (action instanceof PaddingAction) {

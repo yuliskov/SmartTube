@@ -19,7 +19,6 @@ public class TwoStateAction extends MultiAction {
     public static final int INDEX_ON = 1;
 
     private TwoStateAction mBoundAction;
-    private boolean mIsDisabled;
 
     public TwoStateAction(Context context, int actionId, int offIconResId) {
         this(context, actionId, offIconResId, ActionHelpers.getIconHighlightColor(context));
@@ -54,8 +53,6 @@ public class TwoStateAction extends MultiAction {
     public void setIndex(int index) {
         super.setIndex(index);
 
-        mIsDisabled = false;
-
         if (index == INDEX_ON && mBoundAction != null) {
             mBoundAction.setIndex(INDEX_OFF);
         }
@@ -67,13 +64,5 @@ public class TwoStateAction extends MultiAction {
 
     public void setBoundAction(TwoStateAction boundAction) {
         mBoundAction = boundAction;
-    }
-
-    public void setDisabled(boolean disabled) {
-        mIsDisabled = disabled;
-    }
-
-    public boolean isDisabled() {
-        return mIsDisabled;
     }
 }

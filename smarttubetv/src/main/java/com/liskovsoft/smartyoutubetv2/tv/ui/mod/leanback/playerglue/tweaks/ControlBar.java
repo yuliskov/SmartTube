@@ -69,14 +69,7 @@ class ControlBar extends LinearLayout {
             int index = mLastFocusIndex >= 0 && mLastFocusIndex < getChildCount()
                     ? mLastFocusIndex : getDefaultFocusIndex();
 
-            View lastFocusedButton = getChildAt(index);
-
-            // Select default button if last one is hidden by ControlButtonPresenterSelector
-            if (lastFocusedButton.getVisibility() == View.GONE) {
-                lastFocusedButton = getChildAt(getDefaultFocusIndex());
-            }
-
-            if (lastFocusedButton.requestFocus(direction, previouslyFocusedRect)) {
+            if (getChildAt(index).requestFocus(direction, previouslyFocusedRect)) {
                 return true;
             }
         }

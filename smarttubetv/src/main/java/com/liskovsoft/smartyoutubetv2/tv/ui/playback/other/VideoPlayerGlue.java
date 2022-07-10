@@ -310,7 +310,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
 
     public void setChatButtonState(int buttonState) {
         if (buttonState == -1) {
-            mChatAction.setDisabled(true);
+            
         } else {
             mChatAction.setIndex(buttonState);
         }
