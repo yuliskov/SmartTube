@@ -451,4 +451,6 @@
     <string name="sources">Sorgenti</string>
     <string name="releases">Rilasci</string>
     <string name="prefer_avc_over_vp9">Selezione codec: preferisci avc a vp9</string>
+    <string name="open_chat">Chat</string>
+    <string name="place_chat_left">Posiziona la chat a sinistra</string>
 </resources>
