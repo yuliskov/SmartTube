@@ -50,6 +50,7 @@ public class PlayerTweaksData {
     private boolean mIsRememberPositionOfShortVideosEnabled;
     private boolean mIsSuggestionsDisabled;
     private boolean mIsAvcOverVp9Preferred;
+    private boolean mIsChatPlacedLeft;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -241,6 +242,15 @@ public class PlayerTweaksData {
         persistData();
     }
 
+    public boolean isChatPlacedLeft() {
+        return mIsChatPlacedLeft;
+    }
+
+    public void placeChatLeft(boolean left) {
+        mIsChatPlacedLeft = left;
+        persistData();
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -266,6 +276,7 @@ public class PlayerTweaksData {
         mIsRememberPositionOfShortVideosEnabled = Helpers.parseBoolean(split, 16, false);
         mIsSuggestionsDisabled = Helpers.parseBoolean(split, 17, false);
         mIsAvcOverVp9Preferred = Helpers.parseBoolean(split, 18, false);
+        mIsChatPlacedLeft = Helpers.parseBoolean(split, 19, false);
     }
 
     private void persistData() {
@@ -275,7 +286,7 @@ public class PlayerTweaksData {
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
                 mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
                 mIsBufferingFixEnabled, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
-                mIsAvcOverVp9Preferred
+                mIsAvcOverVp9Preferred, mIsChatPlacedLeft
         ));
     }
 }

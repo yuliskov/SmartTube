@@ -2,10 +2,14 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
@@ -49,6 +53,8 @@ public class LiveChatView extends com.stfalcon.chatkit.messages.MessagesList {
             return;
         }
 
+        alignChat();
+
         setVisibility(View.VISIBLE);
 
         if (mAdapter == null) {
@@ -63,5 +69,15 @@ public class LiveChatView extends com.stfalcon.chatkit.messages.MessagesList {
         }
 
         mChatReceiver.setCallback(chatItem -> mAdapter.addToStart(ChatItemMessage.from(chatItem), true));
+    }
+
+    private void alignChat() {
+        int gravity = Gravity.RIGHT;
+
+        if (PlayerTweaksData.instance(getContext()).isChatPlacedLeft()) {
+            gravity = Gravity.LEFT;
+        }
+
+        ((FrameLayout.LayoutParams)((ViewGroup) getParent()).getLayoutParams()).gravity = gravity;
     }
 }
