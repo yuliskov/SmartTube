@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.search.tags;
 
 import android.os.Bundle;
+import android.speech.SpeechRecognizer;
 import android.text.TextUtils;
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.HeaderItem;
@@ -241,7 +242,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
             selectAllText();
             loadSearchTags("");
 
-            if (enableRecognition) {
+            if (enableRecognition && SpeechRecognizer.isRecognitionAvailable(getContext())) {
                 startRecognition();
             } else {
                 focusOnSearchField();

@@ -224,8 +224,7 @@ public class SearchSupportFragment extends Fragment {
 
     int mStatus;
     boolean mAutoStartRecognition = false; // MOD: don't start search immediately
-
-    private boolean mIsPaused;
+    
     private boolean mPendingStartRecognitionWhenPaused;
     private SearchBar.SearchBarPermissionListener mPermissionListener =
             new SearchBar.SearchBarPermissionListener() {
@@ -446,7 +445,6 @@ public class SearchSupportFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mIsPaused = false;
         if (mSpeechRecognitionCallback == null && null == mSpeechRecognizer) {
             mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(
                     getContext());
@@ -466,7 +464,6 @@ public class SearchSupportFragment extends Fragment {
     @Override
     public void onPause() {
         releaseRecognizer();
-        mIsPaused = true;
         super.onPause();
     }
 
@@ -504,6 +501,8 @@ public class SearchSupportFragment extends Fragment {
     }
 
     /**
+     * NOTE: Activity should be resumed in order to recognize the voice<br/>
+     * Because SpeechRecognizer added to SearchBar after resume. See: {@link SearchSupportFragment#onResume()}<br/>
      * Starts speech recognition.  Typical use case is that
      * activity receives onNewIntent() call when user clicks a MIC button.
      * Note that SearchSupportFragment automatically starts speech recognition
@@ -511,10 +510,10 @@ public class SearchSupportFragment extends Fragment {
      * when fragment is created.
      */
     public void startRecognition() {
-        if (mIsPaused) {
-            mPendingStartRecognitionWhenPaused = true;
-        } else {
+        if (isResumed()) {
             mSearchBar.startRecognition();
+        } else {
+            mPendingStartRecognitionWhenPaused = true;
         }
     }
 

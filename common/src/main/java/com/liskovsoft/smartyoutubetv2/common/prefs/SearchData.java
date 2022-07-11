@@ -78,7 +78,7 @@ public class SearchData {
 
         String[] split = Helpers.splitObjectLegacy(data);
 
-        mIsInstantVoiceSearchEnabled = Helpers.parseBoolean(split, 0, false);
+        mIsInstantVoiceSearchEnabled = Helpers.parseBoolean(split, 0, true);
         mSearchOptions = Helpers.parseInt(split, 1, 0);
         mIsFocusOnResultsEnabled = Helpers.parseBoolean(split, 2, true);
         mIsKeyboardAutoShowEnabled = Helpers.parseBoolean(split, 3, false);
