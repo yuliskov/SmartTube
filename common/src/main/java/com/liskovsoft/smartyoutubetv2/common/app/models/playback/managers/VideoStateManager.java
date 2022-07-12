@@ -318,7 +318,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
     private void savePosition() {
         Video video = getVideo();
 
-        if (video == null || !getController().containsMedia()) {
+        if (video == null || getController() == null || !getController().containsMedia()) {
             return;
         }
 
