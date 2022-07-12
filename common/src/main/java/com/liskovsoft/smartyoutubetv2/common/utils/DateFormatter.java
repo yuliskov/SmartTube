@@ -39,10 +39,12 @@ public class DateFormatter {
 
     private static boolean is24HourLocale(Context context) {
         Locale locale = LocaleUtility.getCurrentLocale(context);
+        // Fix weird locale (e.g. ru_US)
+        Locale fixedLocale = new Locale(locale.getLanguage());
 
         java.text.DateFormat natural =
                 java.text.DateFormat.getTimeInstance(
-                        java.text.DateFormat.LONG, locale);
+                        java.text.DateFormat.LONG, fixedLocale);
 
         if (natural instanceof SimpleDateFormat) {
             SimpleDateFormat sdf = (SimpleDateFormat) natural;
