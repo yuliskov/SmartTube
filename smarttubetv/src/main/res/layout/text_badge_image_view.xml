@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:tools="http://schemas.android.com/tools"
        xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Changes to original image style: style="?attr/imageCardViewImageStyle" -->
+    <!-- Change 1: width and height set to match_parent to fix image black borders -->
+    <!-- Change 2: layout_viewType attr is moved out to parent container -->
     <ImageView
         android:id="@+id/main_image"
-        tools:ignore="ContentDescription"
-        style="?attr/imageCardViewImageStyle"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        tools:ignore="ContentDescription"/>
     <ImageView
         android:visibility="gone"
         android:id="@+id/preview_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         tools:ignore="ContentDescription"/>
