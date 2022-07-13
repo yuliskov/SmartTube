@@ -130,9 +130,11 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         setOnItemViewClickedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewClicked(item));
         setOnItemViewSelectedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewSelected(item));
 
-        if (SpeechRecognizer.isRecognitionAvailable(getContext())) {
-            PermissionHelpers.verifyMicPermissions(getContext());
-        }
+        // All needed permissions acquired inside SearchBar component.
+        // See: androidx.leanback.widget.SearchBar.startRecognition()
+        //if (SpeechRecognizer.isRecognitionAvailable(getContext())) {
+        //    PermissionHelpers.verifyMicPermissions(getContext());
+        //}
 
         // NOTE: External recognizer makes voice search behave unexpectedly. You should avoid using it till there be a solution.
 
