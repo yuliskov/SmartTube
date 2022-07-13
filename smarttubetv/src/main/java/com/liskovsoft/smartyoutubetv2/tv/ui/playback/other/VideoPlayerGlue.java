@@ -528,6 +528,18 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         }
     }
 
+    private void invalidateUi() {
+        ArrayObjectAdapter primaryAdapter = (ArrayObjectAdapter) getControlsRow().getPrimaryActionsAdapter();
+        if (primaryAdapter != null) {
+            primaryAdapter.notifyArrayItemRangeChanged(0, primaryAdapter.size());
+        }
+
+        ArrayObjectAdapter secondaryAdapter = (ArrayObjectAdapter) getControlsRow().getSecondaryActionsAdapter();
+        if (secondaryAdapter != null) {
+            secondaryAdapter.notifyArrayItemRangeChanged(0, secondaryAdapter.size());
+        }
+    }
+
     private void notifyActionChanged(
             Action action, ArrayObjectAdapter adapter) {
         if (adapter != null) {
@@ -599,6 +611,13 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     @Override
     public void onTopEdgeFocused() {
         mActionListener.onTopEdgeFocused();
+    }
+
+    /**
+     * Fix: Some controls are not visibility after exit from PIP (not all devices is affected).
+     */
+    public void refreshControls() {
+        invalidateUi();
     }
 
     /** Listens for when skip to next and previous actions have been dispatched. */

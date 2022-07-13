@@ -199,6 +199,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mEventListener.onViewResumed();
 
         showHideWidgets(true); // PIP mode fix
+
+        // Fix: Some controls are not visibility after exit from PIP (not all devices is affected)
+        if (mPlayerGlue != null) {
+            mPlayerGlue.refreshControls();
+        }
     }
 
     @Override
