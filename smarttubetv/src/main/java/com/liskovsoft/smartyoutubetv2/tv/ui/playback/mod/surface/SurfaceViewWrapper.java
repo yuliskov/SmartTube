@@ -15,6 +15,9 @@ public class SurfaceViewWrapper implements SurfaceWrapper {
     public SurfaceViewWrapper(Context context, ViewGroup root) {
         mVideoSurface = (SurfaceView) LayoutInflater.from(context).inflate(
                 androidx.leanback.R.layout.lb_video_surface, root, false);
+        // PIP flickering fix
+        // https://github.com/google/ExoPlayer/issues/8611
+        //mVideoSurface.getHolder().setFixedSize(1, 1);
         mVideoSurface.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
