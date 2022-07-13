@@ -94,6 +94,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.playlist_order, MainUIData.MENU_ITEM_PLAYLIST_ORDER},
+                {R.string.add_remove_from_playback_queue, MainUIData.MENU_ITEM_ADD_TO_QUEUE},
+                {R.string.action_playback_queue, MainUIData.MENU_ITEM_SHOW_QUEUE},
                 {R.string.set_stream_reminder, MainUIData.MENU_ITEM_STREAM_REMINDER},
                 {R.string.subscribe_unsubscribe_from_channel, MainUIData.MENU_ITEM_SUBSCRIBE},
                 {R.string.save_remove_playlist, MainUIData.MENU_ITEM_SAVE_PLAYLIST},
@@ -105,7 +108,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 {R.string.not_interested, MainUIData.MENU_ITEM_NOT_INTERESTED},
                 {R.string.remove_from_history, MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY},
                 {R.string.pin_unpin_from_sidebar, MainUIData.MENU_ITEM_PIN_TO_SIDEBAR},
-                {R.string.add_remove_from_playback_queue, MainUIData.MENU_ITEM_ADD_TO_QUEUE},
                 {R.string.share_link, MainUIData.MENU_ITEM_SHARE_LINK},
                 {R.string.share_embed_link, MainUIData.MENU_ITEM_SHARE_EMBED_LINK},
                 {R.string.dialog_account_list, MainUIData.MENU_ITEM_SELECT_ACCOUNT},

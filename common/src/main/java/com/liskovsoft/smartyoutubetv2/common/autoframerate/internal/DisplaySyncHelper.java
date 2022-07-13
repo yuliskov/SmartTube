@@ -210,8 +210,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
     private HashMap<Integer, int[]> getRateMapping() {
         HashMap<Integer, int[]> rateMapping = mIsDoubleRefreshRateEnabled ? getDoubleRateMapping() : getSingleRateMapping();
-        //return apply24RateSkip(rateMapping);
-        return rateMapping;
+        return apply24RateSkip(rateMapping);
     }
 
     private HashMap<Integer, int[]> getSingleRateMapping() {
@@ -409,7 +408,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
                 resultModes = filterSameResolutionModes(modes, currentMode);
             }
 
-            boolean skipFps = mIsSkip24RateEnabled && videoFramerate >= 23.97 && videoFramerate <= 24.97 && currentMode != null;
+            boolean skipFps = needResolutionSwitch && mIsSkip24RateEnabled && videoFramerate >= 23.97 && videoFramerate <= 24.97 && currentMode != null;
             Mode closerMode = findCloserMode(resultModes, skipFps ? currentMode.getRefreshRate() : videoFramerate);
 
             if (closerMode == null) {

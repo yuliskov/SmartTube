@@ -35,6 +35,8 @@ public class MainUIData {
     public static final int MENU_ITEM_STREAM_REMINDER = 0b10000000000000000;
     public static final int MENU_ITEM_ADD_TO_NEW_PLAYLIST = 0b100000000000000000;
     public static final int MENU_ITEM_SHARE_EMBED_LINK = 0b1000000000000000000;
+    public static final int MENU_ITEM_SHOW_QUEUE = 0b10000000000000000000;
+    public static final int MENU_ITEM_PLAYLIST_ORDER = 0b100000000000000000000;
     public static final int BUTTON_BROWSE_ACCOUNTS = 0b1;
     public static final int BUTTON_CHANGE_LANGUAGE = 0b10;
     @SuppressLint("StaticFieldLeak")

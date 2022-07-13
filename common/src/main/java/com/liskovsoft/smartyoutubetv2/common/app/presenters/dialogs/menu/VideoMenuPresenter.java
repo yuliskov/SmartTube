@@ -63,6 +63,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsAddToNewPlaylistButtonEnabled;
     private boolean mIsOpenPlaylistButtonEnabled;
     private boolean mIsAddToPlaybackQueueButtonEnabled;
+    private boolean mIsShowPlaybackQueueButtonEnabled;
     private boolean mIsOpenDescriptionButtonEnabled;
     private boolean mIsPlayVideoButtonEnabled;
     private boolean mIsPlaylistOrderButtonEnabled;
@@ -145,6 +146,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsAddToPlaylistButtonEnabled = true;
         mIsAddToRecentPlaylistButtonEnabled = true;
         mIsAddToPlaybackQueueButtonEnabled = true;
+        mIsShowPlaybackQueueButtonEnabled = true;
         mIsOpenChannelButtonEnabled = true;
         mIsOpenChannelUploadsButtonEnabled = true;
         mIsOpenPlaylistButtonEnabled = true;
@@ -228,6 +230,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendSavePlaylistButton();
         appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
+        appendShowPlaybackQueueButton();
         appendShareLinkButton();
         appendShareEmbedLinkButton();
         appendAccountSelectionButton();
@@ -253,6 +256,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendTogglePinVideoToSidebarButton();
         appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
+        appendShowPlaybackQueueButton();
         appendShareLinkButton();
         appendShareEmbedLinkButton();
         appendAccountSelectionButton();
@@ -585,6 +589,16 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                                     getContext().getString(containsVideo ? R.string.removed_from_playback_queue : R.string.added_to_playback_queue))
                             );
                         }));
+    }
+
+    private void appendShowPlaybackQueueButton() {
+        if (!mIsShowPlaybackQueueButtonEnabled) {
+            return;
+        }
+
+        if (mVideo == null || !mVideo.hasVideo()) {
+            return;
+        }
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(
@@ -780,6 +794,14 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_STREAM_REMINDER)) {
             mIsStreamReminderButtonEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHOW_QUEUE)) {
+            mIsShowPlaybackQueueButtonEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAYLIST_ORDER)) {
+            mIsPlaylistOrderButtonEnabled = false;
         }
     }
 }
