@@ -128,9 +128,9 @@
     <string name="playlists_style">Playlists section style</string>
     <string name="playlists_style_grid">Grid</string>
     <string name="playlists_style_rows">Rows</string>
-    <string name="player_show_clock">Show clock</string>
-    <string name="player_show_remaining_time">Show remaining time</string>
-    <string name="player_show_ending_time">Show ending time</string>
+    <string name="player_show_clock">Show clock in controls bar</string>
+    <string name="player_show_remaining_time">Show remaining time in controls bar</string>
+    <string name="player_show_ending_time">Show ending time in controls bar</string>
     <string name="open_channel_uploads">Open channel uploads</string>
     <string name="app_exit_shortcut">Exit from the app</string>
     <string name="app_exit_none">Don\'t exit</string>
@@ -199,7 +199,7 @@
     <string name="video_preset_disabled">Without preset</string>
     <string name="video_preset_enabled">Format of the next video will be set according to preset</string>
     <string name="player_sleep_timer">Sleep timer</string>
-    <string name="player_show_quality_info">Show video quality info</string>
+    <string name="player_show_quality_info">Show quality info in controls bar</string>
     <string name="player_remember_each_speed">Remember each video speed</string>
     <string name="player_remember_speed_none">None</string>
     <string name="player_remember_speed_all">Same on all videos</string>

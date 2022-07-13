@@ -249,10 +249,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     public void onPIPChanged(boolean isInPIP) {
-        // Fix: Some controls are not visibility after exit from PIP (not all devices is affected)
-        if (!isInPIP && mPlayerGlue != null) {
-            mPlayerGlue.refreshControls();
-        }
+        // NOP
     }
 
     public void skipToNext() {

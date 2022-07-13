@@ -128,9 +128,9 @@
     <string name="playlists_style">Стиль розділу Плейлисти</string>
     <string name="playlists_style_grid">Сітка</string>
     <string name="playlists_style_rows">Рядки</string>
-    <string name="player_show_clock">Відображати годинник</string>
-    <string name="player_show_remaining_time">Відображати час, що залишився</string>
-    <string name="player_show_ending_time">Відображати час закінчення</string>
+    <string name="player_show_clock">Відображати годинник у панелі керування</string>
+    <string name="player_show_remaining_time">Відображати час, що залишився у панелі керування</string>
+    <string name="player_show_ending_time">Відображати час закінчення у панелі керування</string>
     <string name="open_channel_uploads">Відкрити завантаження</string>
     <string name="app_exit_shortcut">Вихід з додатку</string>
     <string name="app_exit_none">Не виходити</string>
@@ -199,7 +199,7 @@
     <string name="video_preset_disabled">Без пресета</string>
     <string name="video_preset_enabled">Формат слідуючого відео буде встановлений у відповідності до пресету</string>
     <string name="player_sleep_timer">Таймер сну</string>
-    <string name="player_show_quality_info">Відображати інформацію про якість відео</string>
+    <string name="player_show_quality_info">Відображати інформацію про якість відео у панелі керування</string>
     <string name="player_remember_each_speed">Запам\'ятовувати швидкість кожного відео</string>
     <string name="player_remember_speed_none">Не запам\'ятовувати</string>
     <string name="player_remember_speed_all">Однакова швидкість на усіх відео</string>
