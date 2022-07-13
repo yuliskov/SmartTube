@@ -17,6 +17,7 @@ import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +82,12 @@ public class MotherActivity extends FragmentActivity {
             }
         }
 
-        return super.dispatchKeyEvent(event);
+        // Fix: IllegalStateException: Can not perform this action after onSaveInstanceState
+        if (Utils.checkActivity(this)) {
+            return super.dispatchKeyEvent(event);
+        } else {
+            return false;
+        }
     }
 
     @Override
