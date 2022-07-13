@@ -242,6 +242,8 @@ public class PlaybackActivity extends LeanbackActivity {
     public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode);
 
+        mPlaybackFragment.onPIPChanged(isInPictureInPictureMode);
+
         if (!isInPictureInPictureMode) {
             // Disable collapse app to Home launcher
             mViewManager.enableMoveToBack(false);
