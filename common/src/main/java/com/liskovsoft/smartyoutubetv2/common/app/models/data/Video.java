@@ -389,7 +389,7 @@ public final class Video implements Parcelable {
         return getNextPageKey() != null;
     }
 
-    public boolean hasUploads() {
+    public boolean hasNestedItems() {
         return mediaItem != null && mediaItem.hasUploads();
     }
 

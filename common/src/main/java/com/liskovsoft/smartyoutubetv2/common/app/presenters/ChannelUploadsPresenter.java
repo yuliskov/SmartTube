@@ -126,7 +126,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     public void openChannel(Video item) {
         // Working with uploads or playlists
-        if (item == null || (!item.hasUploads() && !item.hasPlaylist())) {
+        if (item == null || (!item.hasNestedItems() && !item.hasPlaylist())) {
             return;
         }
 
@@ -155,7 +155,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         disposeActions();
 
-        return item.hasUploads() ?
+        return item.hasNestedItems() ?
                mGroupManager.getGroupObserve(item.mediaItem) :
                item.hasReloadPageKey() ?
                mGroupManager.getGroupObserve(item.getReloadPageKey()) :
