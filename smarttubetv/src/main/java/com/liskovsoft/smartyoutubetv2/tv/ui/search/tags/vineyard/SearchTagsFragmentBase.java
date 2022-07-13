@@ -1,10 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.vineyard;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.SpeechRecognizer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +51,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         mResultsAdapter = new ArrayObjectAdapter(mResultsPresenter);
         mSearchTagsAdapter = new TagAdapter(getActivity(), "");
         setSearchResultProvider(this);
-        setupListeners();
+        setupListenersAndPermissions();
     }
 
     @Override
@@ -127,28 +126,34 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     }
 
     @SuppressWarnings("deprecation")
-    private void setupListeners() {
+    private void setupListenersAndPermissions() {
         setOnItemViewClickedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewClicked(item));
         setOnItemViewSelectedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewSelected(item));
+
+        if (SpeechRecognizer.isRecognitionAvailable(getContext())) {
+            PermissionHelpers.verifyMicPermissions(getContext());
+        }
+
+        // NOTE: External recognizer makes voice search behave unexpectedly. You should avoid using it till there be a solution.
 
         // Use system speech recognition dialog instead of internal one.
         // More robust. Works in all cases but could lead to problems with dpi.
         // NOTE: to revert to internal dialog just comment out code below.
-        if (!PermissionHelpers.hasPermission(getContext(), Manifest.permission.RECORD_AUDIO)) {
-            setSpeechRecognitionCallback(() -> {
-                if (isAdded()) {
-                    try {
-                        startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
-                    } catch (ActivityNotFoundException e) {
-                        Log.e(TAG, "Cannot find activity for speech recognizer", e);
-                    } catch (NullPointerException e) {
-                        Log.e(TAG, "Speech recognizer can't obtain applicationInfo", e);
-                    }
-                } else {
-                    Log.e(TAG, "Can't perform search. Fragment is detached.");
-                }
-            });
-        }
+        //if (!PermissionHelpers.hasPermission(getContext(), Manifest.permission.RECORD_AUDIO)) {
+        //    setSpeechRecognitionCallback(() -> {
+        //        if (isAdded()) {
+        //            try {
+        //                startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
+        //            } catch (ActivityNotFoundException e) {
+        //                Log.e(TAG, "Cannot find activity for speech recognizer", e);
+        //            } catch (NullPointerException e) {
+        //                Log.e(TAG, "Speech recognizer can't obtain applicationInfo", e);
+        //            }
+        //        } else {
+        //            Log.e(TAG, "Can't perform search. Fragment is detached.");
+        //        }
+        //    });
+        //}
     }
 
     protected void loadSearchTags(String searchQuery) {
