@@ -14,6 +14,7 @@ public class SearchData {
     private boolean mIsFocusOnResultsEnabled;
     private boolean mIsKeyboardAutoShowEnabled;
     private boolean mIsBackgroundPlaybackEnabled;
+    private boolean mIsAltSpeechRecognizerEnabled;
 
     private SearchData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
@@ -28,7 +29,7 @@ public class SearchData {
         return sInstance;
     }
 
-    public void setInstantVoiceSearchEnabled(boolean enabled) {
+    public void enableInstantVoiceSearch(boolean enabled) {
         mIsInstantVoiceSearchEnabled = enabled;
         persistData();
     }
@@ -37,7 +38,7 @@ public class SearchData {
         return mIsInstantVoiceSearchEnabled;
     }
 
-    public void setFocusOnResultsEnabled(boolean enabled) {
+    public void enableFocusOnResults(boolean enabled) {
         mIsFocusOnResultsEnabled = enabled;
         persistData();
     }
@@ -73,6 +74,15 @@ public class SearchData {
         return mIsBackgroundPlaybackEnabled;
     }
 
+    public void enableAltSpeechRecognizer(boolean enabled) {
+        mIsAltSpeechRecognizerEnabled = enabled;
+        persistData();
+    }
+
+    public boolean isAltSpeechRecognizerEnabled() {
+        return mIsAltSpeechRecognizerEnabled;
+    }
+
     private void restoreData() {
         String data = mAppPrefs.getData(SEARCH_DATA);
 
@@ -86,11 +96,12 @@ public class SearchData {
         mIsFocusOnResultsEnabled = Helpers.parseBoolean(split, 2, true);
         mIsKeyboardAutoShowEnabled = Helpers.parseBoolean(split, 3, false);
         mIsBackgroundPlaybackEnabled = Helpers.parseBoolean(split, 4, false);
+        mIsAltSpeechRecognizerEnabled = Helpers.parseBoolean(split, 5, false);
     }
 
     private void persistData() {
         mAppPrefs.setData(SEARCH_DATA,
                 Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
-                        mIsKeyboardAutoShowEnabled, mIsBackgroundPlaybackEnabled));
+                        mIsKeyboardAutoShowEnabled, mIsBackgroundPlaybackEnabled, mIsAltSpeechRecognizerEnabled));
     }
 }

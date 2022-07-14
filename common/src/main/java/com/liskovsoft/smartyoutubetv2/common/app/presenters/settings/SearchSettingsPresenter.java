@@ -35,12 +35,16 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.use_alt_speech_recognizer),
+                option -> mSearchData.enableAltSpeechRecognizer(option.isSelected()),
+                mSearchData.isAltSpeechRecognizerEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.instant_voice_search),
-                option -> mSearchData.setInstantVoiceSearchEnabled(option.isSelected()),
+                option -> mSearchData.enableInstantVoiceSearch(option.isSelected()),
                 mSearchData.isInstantVoiceSearchEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.focus_on_search_results),
-                option -> mSearchData.setFocusOnResultsEnabled(option.isSelected()),
+                option -> mSearchData.enableFocusOnResults(option.isSelected()),
                 mSearchData.isFocusOnResultsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.keyboard_auto_show),
