@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.vineyard;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
 import android.view.LayoutInflater;
@@ -141,7 +142,8 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         // NOTE: External recognizer makes voice search behave unexpectedly (broken by Google app updates).
         // You should avoid using it till there be a solution.
 
-        if (SearchData.instance(getContext()).isAltSpeechRecognizerEnabled()) {
+        // Internal recognizer needs API >= 23. See: androidx.leanback.widget.SearchBar.startRecognition()
+        if (Build.VERSION.SDK_INT < 23 || SearchData.instance(getContext()).isAltSpeechRecognizerEnabled()) {
             setSpeechRecognitionCallback(() -> {
                 if (isAdded()) {
                     try {
