@@ -125,7 +125,8 @@ public class TooltipCompatHandler implements View.OnLongClickListener, View.OnHo
         clearAnchorPos();
 
         mAnchor.setOnLongClickListener(this);
-        mAnchor.setOnHoverListener(this);
+        // Invisible controls bar can react on mouse pointer
+        //mAnchor.setOnHoverListener(this);
         mAnchor.setOnFocusChangeListener(this);
     }
 
