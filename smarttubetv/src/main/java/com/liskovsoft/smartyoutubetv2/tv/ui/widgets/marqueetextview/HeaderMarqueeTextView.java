@@ -4,6 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
+/**
+ * MarqueeTextView used in browse section headers
+ */
 public class HeaderMarqueeTextView extends MarqueeTextView {
     public HeaderMarqueeTextView(Context context) {
         super(context);
