@@ -128,9 +128,9 @@
     <string name="playlists_style">Wiedergabelisten-Stil</string>
     <string name="playlists_style_grid">Raster</string>
     <string name="playlists_style_rows">Reihe</string>
-    <string name="player_show_clock">Uhr anzeigen</string>
-    <string name="player_show_remaining_time">Verbleibende Zeit anzeigen</string>
-    <string name="player_show_ending_time">Endzeit anzeigen</string>
+    <string name="player_show_clock">Uhr in Steuerelementen anzeigen</string>
+    <string name="player_show_remaining_time">Verbleibende Zeit in Steuerelementen anzeigen</string>
+    <string name="player_show_ending_time">Endzeit in Steuerelementen anzeigen</string>
     <string name="open_channel_uploads">Kanal-Videos öffnen</string>
     <string name="app_exit_shortcut">App beenden</string>
     <string name="app_exit_none">Nicht beenden</string>
@@ -199,7 +199,7 @@
     <string name="video_preset_disabled">Keine Voreinstellung</string>
     <string name="video_preset_enabled">Format des nächsten Videos wird gemäß der Video-Voreinstellung festgelegt</string>
     <string name="player_sleep_timer">Sleep-Timer</string>
-    <string name="player_show_quality_info">Video-Qualität anzeigen</string>
+    <string name="player_show_quality_info">Video-Qualität in Steuerelementen anzeigen</string>
     <string name="player_remember_each_speed">Video-Geschwindigkeit merken (pro Video)</string>
     <string name="player_remember_speed_none">Nicht merken</string>
     <string name="player_remember_speed_all">Gleiche Geschwindigkeit für alle Videos</string>
@@ -451,4 +451,7 @@
     <string name="sources">Quellen</string>
     <string name="releases">Versionen</string>
     <string name="prefer_avc_over_vp9">Codec-Auswahl: avc statt vp9 bevorzugen</string>
+    <string name="open_chat">Chat</string>
+    <string name="place_chat_left">Chat auf linker Seite platzieren</string>
+    <string name="use_alt_speech_recognizer">Alternative Spracherkennung</string>
 </resources>
