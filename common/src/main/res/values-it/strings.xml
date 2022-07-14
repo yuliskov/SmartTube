@@ -128,9 +128,9 @@
     <string name="playlists_style">Stile playlist</string>
     <string name="playlists_style_grid">Griglia</string>
     <string name="playlists_style_rows">Righe</string>
-    <string name="player_show_clock">Mostra orologio</string>
-    <string name="player_show_remaining_time">Mostra tempo rimanente</string>
-    <string name="player_show_ending_time">Mostra ora di fine</string>
+    <string name="player_show_clock">Mostra orologio nella barra dei controlli</string>
+    <string name="player_show_remaining_time">Mostra tempo rimanente nella barra dei controlli</string>
+    <string name="player_show_ending_time">Mostra ora di fine nella barra dei controlli</string>
     <string name="open_channel_uploads">Apri video caricati</string>
     <string name="app_exit_shortcut">Esci dall\'app</string>
     <string name="app_exit_none">Non uscire</string>
@@ -199,7 +199,7 @@
     <string name="video_preset_disabled">Senza preset</string>
     <string name="video_preset_enabled">Il formato del video successivo sarà impostato in base al preset</string>
     <string name="player_sleep_timer">Timer spegnimento</string>
-    <string name="player_show_quality_info">Visualizza informazioni sulla qualità video</string>
+    <string name="player_show_quality_info">Visualizza informazioni sulla qualità video nella barra dei controlli</string>
     <string name="player_remember_each_speed">Ricorda la velocità di ogni video</string>
     <string name="player_remember_speed_none">Nessuna</string>
     <string name="player_remember_speed_all">Stessa in tutti i video</string>
