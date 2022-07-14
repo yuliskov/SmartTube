@@ -128,9 +128,9 @@
     <string name="playlists_style">Styl playlistů</string>
     <string name="playlists_style_grid">Mřížka</string>
     <string name="playlists_style_rows">Řady</string>
-    <string name="player_show_clock">Zobraz hodiny</string>
-    <string name="player_show_remaining_time">Ukaž zbývající čas</string>
-    <string name="player_show_ending_time">Ukaž čas ukončení</string>
+    <string name="player_show_clock">Zobraz hodiny na ovládacím panelu</string>
+    <string name="player_show_remaining_time">Ukaž zbývající čas na ovládacím panelu</string>
+    <string name="player_show_ending_time">Ukaž čas ukončení na ovládacím panelu</string>
     <string name="open_channel_uploads">Otevřít videa kanálu</string>
     <string name="app_exit_shortcut">Ukončit aplikaci</string>
     <string name="app_exit_none">Neukončovat</string>
@@ -199,7 +199,7 @@
     <string name="video_preset_disabled">Bez video předvolby</string>
     <string name="video_preset_enabled">Formát dalšího videa bude nastaven podle video předvolby</string>
     <string name="player_sleep_timer">Časovač vypnutí</string>
-    <string name="player_show_quality_info">Zobrazit info o kvalitě videa</string>
+    <string name="player_show_quality_info">Zobrazit informace o kvalitě na ovládacím panelu</string>
     <string name="player_remember_each_speed">Pamatovat si rychlost každého videa</string>
     <string name="player_remember_speed_none">Nepamatovat si žádné</string>
     <string name="player_remember_speed_all">Stejná rychlost pro všechna videa</string>
@@ -453,4 +453,5 @@
     <string name="prefer_avc_over_vp9">Výběr kodeku: preferování AVC nad VP9</string>
     <string name="open_chat">Chat</string>
     <string name="place_chat_left">Umístit chat na levou stranu</string>
+    <string name="use_alt_speech_recognizer">Alternativní rozpoznávač řeči</string>
 </resources>
