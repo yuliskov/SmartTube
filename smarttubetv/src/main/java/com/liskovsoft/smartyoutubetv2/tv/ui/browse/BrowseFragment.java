@@ -148,6 +148,17 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         setOnSearchClickedListener(view -> SearchPresenter.instance(getActivity()).startSearch(null));
     }
 
+    private void setupFragmentFactory() {
+        mSectionFragmentFactory = new BrowseSectionFragmentFactory(
+                (row) -> {
+                    focusOnContentIfNeeded();
+                    mBrowsePresenter.onSectionFocused(getSelectedHeaderId());
+                }
+        );
+
+        getMainFragmentRegistry().registerFragment(PageRow.class, mSectionFragmentFactory);
+    }
+
     private int indexOf(long headerId) {
         int index = 0;
         for (Integer id : mSections.keySet()) {
@@ -165,17 +176,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         // This Adapter is used to render the MainFragment sidebar labels.
         mSectionRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mSectionRowAdapter);
-    }
-
-    private void setupFragmentFactory() {
-        mSectionFragmentFactory = new BrowseSectionFragmentFactory(
-                (viewHolder, row) -> {
-                    focusOnContentIfNeeded();
-                    mBrowsePresenter.onSectionFocused(getSelectedHeaderId());
-                }
-        );
-
-        getMainFragmentRegistry().registerFragment(PageRow.class, mSectionFragmentFactory);
     }
 
     private void setupUi() {

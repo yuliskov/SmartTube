@@ -11,11 +11,18 @@
         android:layout_height="32dp"
         android:contentDescription="@string/header_icon" />
 
-    <TextView
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.HeaderMarqueeTextView
         android:id="@+id/header_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:layout_marginStart="10dp"
+
+        android:singleLine="true"
+        android:maxWidth="150sp"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:ellipsize="marquee"
+        android:scrollHorizontally="true"
+
         style="@style/TextAppearance.Leanback.Header"/>
 </androidx.leanback.widget.NonOverlappingLinearLayout>

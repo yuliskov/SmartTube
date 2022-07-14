@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
 import androidx.fragment.app.Fragment;
 import androidx.leanback.app.BrowseSupportFragment;
-import androidx.leanback.app.HeadersSupportFragment.OnHeaderViewSelectedListener;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.Row;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -19,17 +18,21 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoRowsFragment;
 
 public class BrowseSectionFragmentFactory extends BrowseSupportFragment.FragmentFactory<Fragment> {
     private static final String TAG = BrowseSectionFragmentFactory.class.getSimpleName();
-    private final OnHeaderViewSelectedListener mViewSelectedListener;
+    private final OnSectionSelectedListener mSectionSelectedListener;
     private Fragment mCurrentFragment;
     private int mFragmentType = BrowseSection.TYPE_GRID;
     private int mSelectedItemIndex = -1;
+
+    public interface OnSectionSelectedListener {
+        void onSectionSelected(Row row);
+    }
 
     public BrowseSectionFragmentFactory() {
         this(null);
     }
 
-    public BrowseSectionFragmentFactory(OnHeaderViewSelectedListener viewSelectedListener) {
-        mViewSelectedListener = viewSelectedListener;
+    public BrowseSectionFragmentFactory(OnSectionSelectedListener sectionSelectedListener) {
+        mSectionSelectedListener = sectionSelectedListener;
     }
 
     /**
@@ -69,8 +72,8 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
             mCurrentFragment = fragment;
 
             // give a chance to clear pending updates
-            if (mViewSelectedListener != null) {
-                mViewSelectedListener.onHeaderSelected(null, row);
+            if (mSectionSelectedListener != null) {
+                mSectionSelectedListener.onSectionSelected(row);
             }
             
             setCurrentFragmentItemIndex(mSelectedItemIndex);

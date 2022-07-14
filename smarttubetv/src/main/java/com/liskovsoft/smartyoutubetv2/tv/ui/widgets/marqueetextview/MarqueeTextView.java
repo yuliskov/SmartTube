@@ -9,7 +9,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class MarqueeTextView extends AppCompatTextView implements View.OnLayoutChangeListener {
     private float mDefaultMarqueeSpeed;
-    private float mMarqueeSpeedFactor;
+    private float mMarqueeSpeedFactor = 2.0f;
 
     public MarqueeTextView(Context context) {
         super(context);
@@ -79,8 +79,8 @@ public class MarqueeTextView extends AppCompatTextView implements View.OnLayoutC
     /**
      * Make marquee work even when the view isn't focused (e.g. browse pip title)
      */
-    @Override
-    public boolean isFocused() {
-        return true;
-    }
+    //@Override
+    //public boolean isFocused() {
+    //    return true;
+    //}
 }
