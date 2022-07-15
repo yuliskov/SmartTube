@@ -28,9 +28,9 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.webbrowser.WebBrowserActivity;
 
 public class MainApplication extends MultiDexApplication { // fix: Didn't find class "com.google.firebase.provider.FirebaseInitProvider"
     static {
-        // fix youtube bandwidth throttling???
+        // fix youtube bandwidth throttling (best - false)???
         System.setProperty("http.keepAlive", "true");
-        // fix ipv6 infinite video buffering???
+        // fix ipv6 infinite video buffering (best - true)???
         System.setProperty("java.net.preferIPv6Addresses", "true");
     }
 
