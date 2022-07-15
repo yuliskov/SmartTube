@@ -56,6 +56,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBackgroundPlaybackCategory(settingsPresenter);
         //appendBackgroundPlaybackActivationCategory(settingsPresenter);
         appendScreenDimmingCategory(settingsPresenter);
+        appendTimeModeCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
         appendAppBackupCategory(settingsPresenter);
         appendInternetCensorship(settingsPresenter);
@@ -271,6 +272,28 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.screen_dimming), options);
+    }
+
+    private void appendTimeModeCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.time_mode_24_hours),
+                option -> {
+                    mGeneralData.setTimeMode(GeneralData.TIME_MODE_24);
+                    mRestartApp = true;
+                },
+                mGeneralData.getTimeMode() == GeneralData.TIME_MODE_24));
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.time_mode_12_hours),
+                option -> {
+                    mGeneralData.setTimeMode(GeneralData.TIME_MODE_12);
+                    mRestartApp = true;
+                },
+                mGeneralData.getTimeMode() == GeneralData.TIME_MODE_12));
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.time_mode), options);
     }
 
     private void appendAppBackupCategory(AppDialogPresenter settingsPresenter) {

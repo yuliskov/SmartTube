@@ -36,6 +36,7 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.use_alt_speech_recognizer),
+                getContext().getString(R.string.use_alt_speech_recognizer_desc),
                 option -> mSearchData.enableAltSpeechRecognizer(option.isSelected()),
                 mSearchData.isAltSpeechRecognizerEnabled()));
 
