@@ -97,7 +97,11 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     @Override
     public void onModeError(Mode newMode) {
-        if (getActivity() != null) {
+        if (getActivity() == null) {
+            return;
+        }
+
+        if (newMode != null) {
             String msg = getActivity().getString(R.string.msg_mode_switch_error, UhdHelper.toResolution(newMode));
             Log.e(TAG, msg);
 
@@ -105,6 +109,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
             // This error could appear even on success.
             // MessageHelpers.showMessage(getActivity(), msg);
+        } else {
+            // Seems that the device doesn't support direct mode switching.
+            // Use tvQuickActions instead.
+            maybePausePlayback();
         }
     }
 
