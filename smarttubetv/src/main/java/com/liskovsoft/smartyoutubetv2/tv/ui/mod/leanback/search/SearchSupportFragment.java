@@ -225,7 +225,7 @@ public class SearchSupportFragment extends Fragment {
     int mStatus;
     boolean mAutoStartRecognition = false; // MOD: don't start search immediately
     
-    private boolean mPendingStartRecognitionWhenPaused;
+    private boolean mPendingStartRecognition;
     private SearchBar.SearchBarPermissionListener mPermissionListener =
             new SearchBar.SearchBarPermissionListener() {
         @Override
@@ -450,8 +450,8 @@ public class SearchSupportFragment extends Fragment {
                     getContext());
             mSearchBar.setSpeechRecognizer(mSpeechRecognizer);
         }
-        if (mPendingStartRecognitionWhenPaused) {
-            mPendingStartRecognitionWhenPaused = false;
+        if (mPendingStartRecognition) {
+            mPendingStartRecognition = false;
             // MOD: remove focus from other fields when doing voice search
             mSpeechOrbView.requestFocus();
             mSearchBar.startRecognition();
@@ -513,7 +513,7 @@ public class SearchSupportFragment extends Fragment {
         if (isResumed()) {
             mSearchBar.startRecognition();
         } else {
-            mPendingStartRecognitionWhenPaused = true;
+            mPendingStartRecognition = true;
         }
     }
 
