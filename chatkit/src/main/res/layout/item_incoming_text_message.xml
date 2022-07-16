@@ -1,12 +1,14 @@
-<!-- MODIFIED: Android 9 message focused bug fix (RelativeLayout focusable="false") -->
+<!-- MODIFIED -->
+<!-- Android 9 message focused bug fix: RelativeLayout focusable="false" -->
+<!-- Decrease space between messages: RelativeLayout android:layout_marginBottom=8dp>3dp android:layout_marginTop=8dp>3dp -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
+    android:layout_marginBottom="3dp"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="3dp"
     android:focusable="false">
 
     <com.stfalcon.chatkit.utils.ShapeImageView

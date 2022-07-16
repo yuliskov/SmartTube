@@ -39,6 +39,10 @@
             app:isMessageFocusable="false"
             app:incomingDefaultBubbleColor="@color/semi_transparent"
             app:incomingTextColor="@color/white"
+            app:incomingBubblePaddingLeft="10sp"
+            app:incomingBubblePaddingRight="10sp"
+            app:incomingBubblePaddingTop="3sp"
+            app:incomingBubblePaddingBottom="3sp"
             android:visibility="gone"
         />
     </LinearLayout>

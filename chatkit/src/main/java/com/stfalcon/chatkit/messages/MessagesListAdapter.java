@@ -705,7 +705,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
 
     private boolean checkMessage(MESSAGE message) {
         return message != null && message.getId() != null && message.getUser() != null && message.getUser().getId() != null
-                && message.getText() != null && !message.getText().isEmpty();
+                && message.getText() != null && !message.getText().trim().isEmpty();
     }
 
     void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
