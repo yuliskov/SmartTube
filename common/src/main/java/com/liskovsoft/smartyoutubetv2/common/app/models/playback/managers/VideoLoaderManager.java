@@ -207,10 +207,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                     getController().setPlayWhenReady(false);
                     getController().setPositionMs(0);
                     Utils.showRepeatInfo(getActivity(), playbackMode);
-
-                    if (getController().getBackgroundMode() != PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
-                        getController().finishReally();
-                    }
                 } else {
                     loadNext();
                     getController().showOverlay(true);
@@ -227,10 +223,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                     getController().setPlayWhenReady(false);
                     getController().setPositionMs(0);
                     Utils.showRepeatInfo(getActivity(), playbackMode);
-
-                    if (getController().getBackgroundMode() != PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
-                        getController().finishReally();
-                    }
                 }
                 break;
         }
