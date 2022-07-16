@@ -17,7 +17,6 @@ import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +29,8 @@ public class MotherActivity extends FragmentActivity {
     protected static boolean sIsInPipMode;
     private ScreensaverManager mScreensaverManager;
     private List<OnPermissions> mOnPermissions;
+    // Disabled by default to fix IllegalStateException: Can not perform this action after onSaveInstanceState
+    private boolean mSaveStateEnabled;
 
     public interface OnPermissions {
         void onPermissions(int requestCode, String[] permissions, int[] grantResults);
@@ -82,12 +83,7 @@ public class MotherActivity extends FragmentActivity {
             }
         }
 
-        // Fix: IllegalStateException: Can not perform this action after onSaveInstanceState
-        if (Utils.checkActivity(this)) {
-            return super.dispatchKeyEvent(event);
-        } else {
-            return false;
-        }
+        return super.dispatchKeyEvent(event);
     }
 
     @Override
@@ -214,6 +210,22 @@ public class MotherActivity extends FragmentActivity {
             }
             mOnPermissions.clear();
             mOnPermissions = null;
+        }
+    }
+
+    /**
+     * NOTE: When enabled, you could face IllegalStateException: Can not perform this action after onSaveInstanceState<br/>
+     * https://stackoverflow.com/questions/7575921/illegalstateexception-can-not-perform-this-action-after-onsaveinstancestate-wit?page=1&tab=scoredesc#tab-top
+     */
+    public void enableSaveState(boolean enable) {
+        mSaveStateEnabled = enable;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        // No call for super(). Bug on API Level > 11.
+        if (mSaveStateEnabled) {
+            super.onSaveInstanceState(outState);
         }
     }
 

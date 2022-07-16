@@ -194,9 +194,7 @@ public class PlaybackActivity extends LeanbackActivity {
     @Override
     public void onBackPressed() {
         mBackPressed = mGeneralData.getBackgroundPlaybackShortcut() != GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK;
-        if (Utils.checkActivity(this)) {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 
     @Override

@@ -39,8 +39,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private PlayerData mPlayerData;
     private boolean mIsPlay;
     private final Runnable mPlaybackResumeHandler = () -> {
-        getController().setAfrRunning(false);
-        restorePlayback();
+        if (getController() != null) {
+            getController().setAfrRunning(false);
+            restorePlayback();
+        }
     };
 
     public AutoFrameRateManager(HQDialogManager uiManager, VideoStateManager stateUpdater) {

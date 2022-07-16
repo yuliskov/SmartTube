@@ -12,6 +12,8 @@ public class BrowseActivity extends LeanbackActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main);
+        // State saving should be explicitly enabled for needed activities
+        enableSaveState(true);
     }
 
     @Override
