@@ -197,7 +197,7 @@ public class SearchSupportFragment extends Fragment {
         @Override
         public void run() {
             mAutoStartRecognition = false;
-            mSearchBar.startRecognition();
+            startRecognitionInt();
         }
     };
 
@@ -454,7 +454,7 @@ public class SearchSupportFragment extends Fragment {
             mPendingStartRecognition = false;
             // MOD: remove focus from other fields when doing voice search
             mSpeechOrbView.requestFocus();
-            mSearchBar.startRecognition();
+            startRecognitionInt();
         } else {
             // Ensure search bar state consistency when using external recognizer
             mSearchBar.stopRecognition();
@@ -511,9 +511,18 @@ public class SearchSupportFragment extends Fragment {
      */
     public void startRecognition() {
         if (isResumed()) {
-            mSearchBar.startRecognition();
+            startRecognitionInt();
         } else {
             mPendingStartRecognition = true;
+        }
+    }
+
+    private void startRecognitionInt() {
+        try {
+            mSearchBar.startRecognition();
+        } catch (SecurityException e) {
+            // Not allowed to bind to service Intent
+            e.printStackTrace();
         }
     }
 
