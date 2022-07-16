@@ -1101,6 +1101,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
     }
 
+    /**
+     * Force finish (PIP etc)
+     */
     @Override
     public void finishReally() {
         LeanbackActivity activity = getLeanbackActivity();
