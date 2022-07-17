@@ -431,7 +431,7 @@
     <string name="action_playlist_remove">Aus Wiedergabeliste entfernen</string>
     <!-- BEGIN Moved strings -->
     <string name="signin_view_title">Benutzercode wird geladen…</string>
-    <string name="signin_view_description">Um sich anzumelden, geben Sie diesen Code auf Seite %s ein</string>
+    <string name="signin_view_description">Um sich anzumelden, geben Sie diesen Code auf Seite %s ein.\nHINWEIS: Funktioniert nur mit Firefox- oder Chrome-Browsern.</string>
     <string name="signin_view_action_text">Erledigt</string>
     <string name="require_checked">Benötigt \"%s\"</string>
     <string name="msg_press_again_to_exit">Zum Beenden erneut drücken</string>
