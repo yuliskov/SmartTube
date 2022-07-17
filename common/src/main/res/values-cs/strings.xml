@@ -431,7 +431,7 @@
     <string name="action_playlist_remove">Odstranit z playlistu</string>
     <!--  ZAČÁTEK Přesunutých řetězců  -->
     <string name="signin_view_title">Uživatelský kód se načítá…</string>
-    <string name="signin_view_description">Pro přihlášení zadejte tento kód na stránce %s</string>
+    <string name="signin_view_description">Pro přihlášení zadejte tento kód na stránce %s\nPOZNÁMKA: Funguje pouze s Chrome nebo Firefox prohlížečem.</string>
     <string name="signin_view_action_text">Hotovo</string>
     <string name="require_checked">Vyžaduje \"%s\"</string>
     <string name="msg_press_again_to_exit">Stiskněte znovu pro ukončení</string>
@@ -454,4 +454,8 @@
     <string name="open_chat">Chat</string>
     <string name="place_chat_left">Umístit chat na levou stranu</string>
     <string name="use_alt_speech_recognizer">Alternativní rozpoznávač řeči</string>
+    <string name="time_mode">Časový režim</string>
+    <string name="time_mode_24_hours">24 hodin</string>
+    <string name="time_mode_12_hours">12 hodin (AM/PM)</string>
+    <string name="use_alt_speech_recognizer_desc">Dost zabugováno. Použijte pouze v případě, když máte problém s výchozím rozpoznávačem.</string>
 </resources>
