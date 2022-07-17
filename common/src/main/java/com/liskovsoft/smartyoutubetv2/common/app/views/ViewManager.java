@@ -322,6 +322,8 @@ public class ViewManager {
 
             ((MotherActivity) activity).finishReally();
 
+            PlaybackPresenter.instance(activity).forceFinish();
+
             // Fix: can't start finished app activity from history.
             // Do reset state because the app should continue to run in the background.
             // NOTE: Don't rely on MotherActivity.onDestroy() because activity can be killed silently.
