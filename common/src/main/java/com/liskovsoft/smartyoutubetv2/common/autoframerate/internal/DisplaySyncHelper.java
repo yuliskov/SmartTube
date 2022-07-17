@@ -416,7 +416,11 @@ public class DisplaySyncHelper implements UhdHelperListener {
             if (closerMode == null) {
                 String msg = "Could not find closer refresh rate for " + videoFramerate + "fps";
                 Log.i(TAG, msg);
-                mListener.onModeError(null);
+                if (modes.length == 1) { // notify tvQuickActions or other related software
+                    mListener.onModeError(null);
+                } else {
+                    mListener.onCancel();
+                }
                 return false;
             }
 

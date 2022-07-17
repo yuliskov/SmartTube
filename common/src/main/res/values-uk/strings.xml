@@ -427,7 +427,7 @@
     <string name="action_playlist_remove">Видалити з плейлиста</string>
     <!-- BEGIN Moved strings -->
     <string name="signin_view_title">Код завантажується…</string>
-    <string name="signin_view_description">Шоб увійти в обліковий запис, введіть цей код на сторінці %s\nОбов\’язкове використання браузерів Firefox або Chrome.</string>
+    <string name="signin_view_description">Шоб увійти в обліковий запис, введіть цей код на сторінці %s\nПРИМІТКА. Працює лише з браузерами Firefox або Chrome.</string>
     <string name="signin_view_action_text">Готово</string>
     <string name="require_checked">Потрібно \"%s\"</string>
     <string name="msg_press_again_to_exit">Натисніть ще раз для виходу</string>

@@ -431,7 +431,7 @@
     <string name="action_playlist_remove">Remove from playlist</string>
     <!-- BEGIN Moved strings -->
     <string name="signin_view_title">User Code is loading…</string>
-    <string name="signin_view_description">To sign-in enter this code on page %s\nIt\'s mandatory to use Firefox or Chrome browsers.</string>
+    <string name="signin_view_description">To sign-in enter this code on page %s\nNOTE: Works only with Firefox or Chrome browsers.</string>
     <string name="signin_view_action_text">Done</string>
     <string name="require_checked">Requires \"%s\"</string>
     <string name="msg_press_again_to_exit">Press again to exit</string>
