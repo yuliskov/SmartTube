@@ -453,4 +453,9 @@
     <string name="prefer_avc_over_vp9">Selezione codec: preferisci avc a vp9</string>
     <string name="open_chat">Chat</string>
     <string name="place_chat_left">Posiziona la chat a sinistra</string>
+    <string name="use_alt_speech_recognizer">Metodo alternativo per riconoscimento vocale</string>
+    <string name="time_mode">Formato ore</string>
+    <string name="time_mode_24_hours">24 ore</string>
+    <string name="time_mode_12_hours">12 ore (AM/PM)</string>
+    <string name="use_alt_speech_recognizer_desc">Non funziona bene. Usalo solo se hai problemi con il riconoscimento vocale predefinito.</string>
 </resources>
