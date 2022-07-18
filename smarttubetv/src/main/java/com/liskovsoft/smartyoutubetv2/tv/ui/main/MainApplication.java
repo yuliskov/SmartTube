@@ -33,7 +33,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         // false is better for streams (less buffering)
         System.setProperty("http.keepAlive", "false");
         // fix ipv6 infinite video buffering (best - true)???
-        System.setProperty("java.net.preferIPv6Addresses", "true");
+        //System.setProperty("java.net.preferIPv6Addresses", "true");
     }
 
     @Override
