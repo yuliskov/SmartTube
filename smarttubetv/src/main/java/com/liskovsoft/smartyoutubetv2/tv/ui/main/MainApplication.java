@@ -32,7 +32,8 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         // fix youtube bandwidth throttling (best - false)???
         // false is better for streams (less buffering)
         System.setProperty("http.keepAlive", "false");
-        // fix ipv6 infinite video buffering (best - true)???
+        // fix ipv6 infinite video buffering???
+        // Better to remove this fix at all. Users complain about infinite loading.
         //System.setProperty("java.net.preferIPv6Addresses", "true");
     }
 
