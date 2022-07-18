@@ -43,6 +43,8 @@
             app:incomingBubblePaddingRight="10sp"
             app:incomingBubblePaddingTop="3sp"
             app:incomingBubblePaddingBottom="3sp"
+            app:incomingAvatarHeight="25dp"
+            app:incomingAvatarWidth="25dp"
             android:visibility="gone"
         />
     </LinearLayout>

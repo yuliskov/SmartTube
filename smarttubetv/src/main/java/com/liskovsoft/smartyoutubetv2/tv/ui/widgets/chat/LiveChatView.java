@@ -64,7 +64,7 @@ public class LiveChatView extends com.stfalcon.chatkit.messages.MessagesList {
                             .apply(ViewUtil.glideOptions())
                             .circleCrop() // resize image
                             .into(imageView));
-            mAdapter.setMaxItemsCount(10);
+            mAdapter.setMaxItemsCount(15);
             setAdapter(mAdapter);
         }
 

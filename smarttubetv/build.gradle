@@ -206,4 +206,6 @@ dependencies {
     // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 
     //implementation 'com.github.stfalcon-studio:Chatkit:' + chatkitVersion
+
+    implementation 'net.gotev:speech:' + gotevSpeechVersion
 }

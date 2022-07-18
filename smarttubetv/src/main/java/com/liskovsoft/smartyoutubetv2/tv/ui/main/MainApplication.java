@@ -25,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.webbrowser.WebBrowserActivity;
+import net.gotev.speech.Speech;
 
 public class MainApplication extends MultiDexApplication { // fix: Didn't find class "com.google.firebase.provider.FirebaseInitProvider"
     static {
@@ -46,6 +47,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         //}
 
         setupViewManager();
+        Speech.init(this);
     }
 
     private void setupViewManager() {
