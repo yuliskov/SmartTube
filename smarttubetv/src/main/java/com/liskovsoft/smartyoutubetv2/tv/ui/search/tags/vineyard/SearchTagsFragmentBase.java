@@ -263,6 +263,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                     @Override
                     public void onStartOfSpeech() {
                         Log.i(TAG, "speech recognition is now active");
+                        showListening();
                     }
 
                     @Override
@@ -280,12 +281,16 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                         String result = str.toString().trim();
                         Log.i(TAG, "partial result: " + result);
                         setSearchQuery(result, true);
+
+                        showNotListening();
                     }
 
                     @Override
                     public void onSpeechResult(String result) {
                         Log.i(TAG, "result: " + result);
                         setSearchQuery(result, true);
+
+                        showNotListening();
                     }
                 });
             } catch (SpeechRecognitionNotAvailable exc) {

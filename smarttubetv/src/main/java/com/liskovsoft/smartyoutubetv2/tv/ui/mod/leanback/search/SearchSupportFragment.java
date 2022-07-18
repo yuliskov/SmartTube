@@ -34,6 +34,7 @@ import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
+import net.gotev.speech.Speech;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -373,6 +374,11 @@ public class SearchSupportFragment extends Fragment {
         mSearchSettingsOrbView.setOnOrbClickedListener(v -> onSearchSettingsClicked());
 
         mSpeechOrbView = mSearchBar.findViewById(R.id.lb_search_bar_speech_orb);
+        mSpeechOrbView.setOnFocusChangeListener((v, focused) -> {
+            if (!focused) {
+                Speech.getInstance().stopListening();
+            }
+        });
 
         // End MOD
 
@@ -766,6 +772,23 @@ public class SearchSupportFragment extends Fragment {
 
     protected void enableKeyboardAutoShow(boolean enable) {
         mIsKeyboardAutoShowEnabled = enable;
+    }
+
+    protected void showListening() {
+        if (mSpeechOrbView != null) {
+            mSpeechOrbView.showListening();
+        }
+    }
+
+    protected void showNotListening() {
+        if (mSpeechOrbView != null) {
+            mSpeechOrbView.showNotListening();
+        }
+
+        if (mSearchTextEditor != null) {
+            // Hide "Speak to search" when not listening
+            mSearchTextEditor.setHint("");
+        }
     }
 
     private void onSetSearchResultProvider() {
