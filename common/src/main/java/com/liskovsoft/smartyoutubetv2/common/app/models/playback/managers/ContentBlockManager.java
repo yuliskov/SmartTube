@@ -131,8 +131,10 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
 
+        // NOTE: SponsorBlock (when happened java.net.SocketTimeoutException) could block whole application with Schedulers.io()
+        // Because Schedulers.io() reuses blocked threads in RxJava 2: https://github.com/ReactiveX/RxJava/issues/6542
         mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getEnabledCategories())
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread()) // fix blocking
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         segments -> {
@@ -238,6 +240,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     private void confirmSkip(long skipPositionMs, String category) {
         if (mLastSkipPosMs == skipPositionMs) {
             return;
+        }
+
+        // Check that the user doesn't browse suggestions and hide player ui.
+        if (!getController().isSuggestionsShown()) {
+            getController().showOverlay(false);
         }
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());

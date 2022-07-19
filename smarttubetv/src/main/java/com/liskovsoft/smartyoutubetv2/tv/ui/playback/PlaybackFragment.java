@@ -1201,6 +1201,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
     }
 
+    /**
+     * The same as {@link #showOverlay(boolean)} but scrolls from suggestions to controls if needed.
+     */
     @Override
     public void showControls(boolean show) {
         if (isInPIPMode()) {
