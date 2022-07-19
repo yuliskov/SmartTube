@@ -242,11 +242,6 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
 
-        // Check that the user doesn't browse suggestions and hide player ui.
-        if (!getController().isSuggestionsShown()) {
-            getController().showOverlay(false);
-        }
-
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
         settingsPresenter.clear();
 
