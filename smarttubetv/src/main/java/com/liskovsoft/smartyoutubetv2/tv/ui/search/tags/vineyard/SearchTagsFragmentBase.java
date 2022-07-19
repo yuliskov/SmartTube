@@ -148,7 +148,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
         // Internal recognizer needs API >= 23. See: androidx.leanback.widget.SearchBar.startRecognition()
         if (Build.VERSION.SDK_INT < 23 || SearchData.instance(getContext()).isAltSpeechRecognizerEnabled()) {
-            setSpeechRecognitionCallback(mGotevCallback);
+            setSpeechRecognitionCallback(mDefaultCallback);
         }
     }
 
@@ -297,7 +297,11 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                 Log.e(TAG, "Speech recognition is not available on this device!");
                 // You can prompt the user if he wants to install Google App to have
                 // speech recognition, and then you can simply call:
-                SpeechUtil.redirectUserToGoogleAppOnPlayStore(getContext());
+                try {
+                    SpeechUtil.redirectUserToGoogleAppOnPlayStore(getContext());
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             Log.e(TAG, "Can't perform search. Fragment is detached.");

@@ -117,7 +117,6 @@
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity"
-            android:exported="true"
             android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape"/>
@@ -153,7 +152,6 @@
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity"
-            android:exported="true"
             android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape"/>
@@ -189,6 +187,73 @@
             android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape"/>
+
+        <!-- BEGIN Launchers -->
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.HomeLauncherActivity"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.NewsLauncherActivity"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.MusicLauncherActivity"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.GamesLauncherActivity"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.ChannelsLauncherActivity"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.SubscriptionsLauncherActivity"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.HistoryLauncherActivity"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.PlaylistsLauncherActivity"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.SearchLauncherActivity"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
+
+        <!-- END Launchers -->
 
         <!--
 
