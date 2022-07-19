@@ -847,6 +847,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         int sectionIndex = findSectionIndex(sectionId);
 
+        if (sectionIndex == -1) {
+            enableSection(sectionId, true);
+            sectionIndex = findSectionIndex(sectionId);
+            mGeneralData.enableSection(sectionId, false); // enable temporally (till restart)
+        }
+
         if (sectionIndex != -1) {
             getView().selectSection(sectionIndex, true);
         }
