@@ -376,7 +376,7 @@ public class SearchSupportFragment extends Fragment {
         mSpeechOrbView = mSearchBar.findViewById(R.id.lb_search_bar_speech_orb);
         mSpeechOrbView.setOnFocusChangeListener((v, focused) -> {
             if (!focused) {
-                Speech.getInstance().stopListening();
+                stopSpeechService();
             }
         });
 
@@ -888,6 +888,14 @@ public class SearchSupportFragment extends Fragment {
 
     private void setSearchQuery(String query) {
         mSearchBar.setSearchQuery(query);
+    }
+
+    private void stopSpeechService() {
+        try {
+            Speech.getInstance().stopListening();
+        } catch (IllegalArgumentException e) { // Speech service not registered
+            e.printStackTrace();
+        }
     }
 
     static class ExternalQuery {
