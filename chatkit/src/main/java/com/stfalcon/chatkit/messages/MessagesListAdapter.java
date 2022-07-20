@@ -31,6 +31,7 @@ import android.widget.TextView;
 import androidx.annotation.LayoutRes;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.stfalcon.chatkit.R;
 import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.commons.ViewHolder;
@@ -705,7 +706,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
 
     private boolean checkMessage(MESSAGE message) {
         return message != null && message.getId() != null && message.getUser() != null && message.getUser().getId() != null
-                && message.getText() != null && !message.getText().trim().isEmpty();
+                && message.getText() != null && !Helpers.trim(message.getText()).isEmpty();
     }
 
     void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
