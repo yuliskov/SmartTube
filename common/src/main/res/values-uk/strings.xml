@@ -452,6 +452,6 @@
     <string name="use_alt_speech_recognizer_desc">Серйозно забагований. Використовуйте його, лише якщо є проблеми із розпізнавачем за замовчуванням.</string>
     <string name="speech_recognizer">Розпізнавач мови</string>
     <string name="speech_recognizer_system">Системний (найкращій)</string>
-    <string name="speech_recognizer_external_1">Зовнішній 1 (серйозно забагований)</string>
+    <string name="speech_recognizer_external_1">Зовнішній 1 (серйозно забагований, для роботи потрібно заборонити доступ до мікрофону)</string>
     <string name="speech_recognizer_external_2">Зовнішній 2 (серйозно забагований)</string>
 </resources>
