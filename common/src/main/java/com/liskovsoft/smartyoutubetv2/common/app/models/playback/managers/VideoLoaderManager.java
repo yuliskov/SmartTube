@@ -55,6 +55,13 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             getController().restartEngine(); // properly save position of the current track
         }
     };
+    private final Runnable mStopLiveStream = () -> {
+        if (getController() != null &&
+                getController().getVideo() != null &&
+                getController().getVideo().isLive) {
+            applyPlaybackMode(PlaybackEngineController.PLAYBACK_MODE_PAUSE);
+        }
+    };
 
     public VideoLoaderManager(SuggestionsLoaderManager suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
@@ -118,16 +125,18 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     @Override
     public void onBuffering() {
-        // Fix long buffering
-        //Utils.postDelayed(mHandler, mPendingRestartEngine, BUFFERING_CHECK_MS);
+        // Fix long buffering (indicates end of the stream)
+        if (getController() != null &&
+                getController().getVideo() != null &&
+                getController().getVideo().isLive) {
+            Utils.postDelayed(mHandler, mStopLiveStream, 5 * 60 * 1_000);
+        }
     }
 
     @Override
     public void onPlay() {
-        //MessageHelpers.showMessage(getActivity(), "Start playing!");
-
         // Seems fine. Buffering is gone.
-        Utils.removeCallbacks(mHandler, mPendingRestartEngine);
+        Utils.removeCallbacks(mHandler, mPendingRestartEngine, mStopLiveStream);
     }
 
     @Override
@@ -172,62 +181,9 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     @Override
     public void onPlayEnd() {
-        // Fix simultaneous videos loading (e.g. when playback ends and user opens new video)
-        if (isActionsRunning()) {
-            return;
-        }
-
         int playbackMode = checkSleepTimer(mPlayerData.getPlaybackMode());
 
-        switch (playbackMode) {
-            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
-                loadNext();
-                getController().showOverlay(true);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
-                getController().setPositionMs(0);
-                getController().setPlayWhenReady(true);
-                Utils.showRepeatInfo(getActivity(), playbackMode);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
-                // Close player
-                // Except when playing from queue
-                if (!getController().isSuggestionsShown() && mPlaylist.getNext() == null) {
-                    getController().finishReally();
-                } else {
-                    loadNext();
-                    getController().showOverlay(true);
-                }
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
-                // Stop player after each video.
-                // Except when playing from queue
-                if (mPlaylist.getNext() == null) {
-                    getController().showSuggestions(true);
-                    getController().setPlayWhenReady(false);
-                    getController().setPositionMs(0);
-                    Utils.showRepeatInfo(getActivity(), playbackMode);
-                } else {
-                    loadNext();
-                    getController().showOverlay(true);
-                }
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_LIST:
-                // stop player (if not playing playlist)
-                Video video = getController().getVideo();
-                if ((video != null && video.hasPlaylist()) || mPlaylist.getNext() != null) {
-                    loadNext();
-                    getController().showOverlay(true);
-                } else {
-                    getController().showSuggestions(true);
-                    getController().setPlayWhenReady(false);
-                    getController().setPositionMs(0);
-                    Utils.showRepeatInfo(getActivity(), playbackMode);
-                }
-                break;
-        }
-
-        Log.e(TAG, "Undetected repeat mode " + playbackMode);
+        applyPlaybackMode(playbackMode);
     }
 
     @Override
@@ -398,7 +354,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     private void disposeActions() {
         RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
-        Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
+        Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext, mStopLiveStream);
     }
 
     private void initErrorActions() {
@@ -442,5 +398,62 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         }
 
         return urlList;
+    }
+
+    private void applyPlaybackMode(int playbackMode) {
+        // Fix simultaneous videos loading (e.g. when playback ends and user opens new video)
+        if (isActionsRunning()) {
+            return;
+        }
+
+        switch (playbackMode) {
+            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
+                loadNext();
+                getController().showOverlay(true);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
+                getController().setPositionMs(0);
+                getController().setPlayWhenReady(true);
+                Utils.showRepeatInfo(getActivity(), playbackMode);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
+                // Close player
+                // Except when playing from queue
+                if (!getController().isSuggestionsShown() && mPlaylist.getNext() == null) {
+                    getController().finishReally();
+                } else {
+                    loadNext();
+                    getController().showOverlay(true);
+                }
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
+                // Stop player after each video.
+                // Except when playing from queue
+                if (mPlaylist.getNext() == null) {
+                    getController().showSuggestions(true);
+                    getController().setPlayWhenReady(false);
+                    getController().setPositionMs(0);
+                    Utils.showRepeatInfo(getActivity(), playbackMode);
+                } else {
+                    loadNext();
+                    getController().showOverlay(true);
+                }
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_LIST:
+                // stop player (if not playing playlist)
+                Video video = getController().getVideo();
+                if ((video != null && video.hasPlaylist()) || mPlaylist.getNext() != null) {
+                    loadNext();
+                    getController().showOverlay(true);
+                } else {
+                    getController().showSuggestions(true);
+                    getController().setPlayWhenReady(false);
+                    getController().setPositionMs(0);
+                    Utils.showRepeatInfo(getActivity(), playbackMode);
+                }
+                break;
+        }
+
+        Log.e(TAG, "Undetected repeat mode " + playbackMode);
     }
 }
