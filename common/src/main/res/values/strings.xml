@@ -458,4 +458,8 @@
     <string name="time_mode_24_hours">24 hours</string>
     <string name="time_mode_12_hours">12 hours (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Seriously bugged. Use it only if you have troubles with the default recognizer.</string>
+    <string name="speech_recognizer">Speech recognizer</string>
+    <string name="speech_recognizer_system">System (preferred)</string>
+    <string name="speech_recognizer_external_1">External 1 (seriously bugged)</string>
+    <string name="speech_recognizer_external_2">External 2 (seriously bugged)</string>
 </resources>

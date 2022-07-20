@@ -5,6 +5,9 @@ import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class SearchData {
+    public static final int SPEECH_RECOGNIZER_SYSTEM = 0;
+    public static final int SPEECH_RECOGNIZER_EXTERNAL_1 = 1;
+    public static final int SPEECH_RECOGNIZER_EXTERNAL_2 = 2;
     private static final String SEARCH_DATA = "search_data";
     @SuppressLint("StaticFieldLeak")
     private static SearchData sInstance;
@@ -14,7 +17,7 @@ public class SearchData {
     private boolean mIsFocusOnResultsEnabled;
     private boolean mIsKeyboardAutoShowEnabled;
     private boolean mIsBackgroundPlaybackEnabled;
-    private boolean mIsAltSpeechRecognizerEnabled;
+    private int mSpeechRecognizerType;
 
     private SearchData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
@@ -74,13 +77,13 @@ public class SearchData {
         return mIsBackgroundPlaybackEnabled;
     }
 
-    public void enableAltSpeechRecognizer(boolean enabled) {
-        mIsAltSpeechRecognizerEnabled = enabled;
+    public void setSpeechRecognizerType(int type) {
+        mSpeechRecognizerType = type;
         persistData();
     }
 
-    public boolean isAltSpeechRecognizerEnabled() {
-        return mIsAltSpeechRecognizerEnabled;
+    public int getSpeechRecognizerType() {
+        return mSpeechRecognizerType;
     }
 
     private void restoreData() {
@@ -96,12 +99,13 @@ public class SearchData {
         mIsFocusOnResultsEnabled = Helpers.parseBoolean(split, 2, true);
         mIsKeyboardAutoShowEnabled = Helpers.parseBoolean(split, 3, false);
         mIsBackgroundPlaybackEnabled = Helpers.parseBoolean(split, 4, false);
-        mIsAltSpeechRecognizerEnabled = Helpers.parseBoolean(split, 5, false);
+        //mIsAltSpeechRecognizerEnabled
+        mSpeechRecognizerType = Helpers.parseInt(split, 6, SPEECH_RECOGNIZER_SYSTEM);
     }
 
     private void persistData() {
         mAppPrefs.setData(SEARCH_DATA,
                 Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
-                        mIsKeyboardAutoShowEnabled, mIsBackgroundPlaybackEnabled, mIsAltSpeechRecognizerEnabled));
+                        mIsKeyboardAutoShowEnabled, mIsBackgroundPlaybackEnabled, null, mSpeechRecognizerType));
     }
 }

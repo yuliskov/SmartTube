@@ -146,9 +146,19 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         // NOTE: External recognizer makes voice search behave unexpectedly (broken by Google app updates).
         // You should avoid using it till there be a solution.
 
-        // Internal recognizer needs API >= 23. See: androidx.leanback.widget.SearchBar.startRecognition()
-        if (Build.VERSION.SDK_INT < 23 || SearchData.instance(getContext()).isAltSpeechRecognizerEnabled()) {
-            setSpeechRecognitionCallback(mDefaultCallback);
+        switch (SearchData.instance(getContext()).getSpeechRecognizerType()) {
+            case SearchData.SPEECH_RECOGNIZER_SYSTEM:
+                // Internal recognizer needs API >= 23. See: androidx.leanback.widget.SearchBar.startRecognition()
+                if (Build.VERSION.SDK_INT < 23) {
+                    setSpeechRecognitionCallback(mDefaultCallback);
+                }
+                break;
+            case SearchData.SPEECH_RECOGNIZER_EXTERNAL_1:
+                setSpeechRecognitionCallback(mDefaultCallback);
+                break;
+            case SearchData.SPEECH_RECOGNIZER_EXTERNAL_2:
+                setSpeechRecognitionCallback(mGotevCallback);
+                break;
         }
     }
 

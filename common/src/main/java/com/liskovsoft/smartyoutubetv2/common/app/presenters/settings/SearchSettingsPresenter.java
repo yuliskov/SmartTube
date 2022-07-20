@@ -26,19 +26,30 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
-        
+
+        appendSpeechRecognizerCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_search));
     }
 
-    private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
+    private void appendSpeechRecognizerCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.use_alt_speech_recognizer),
-                getContext().getString(R.string.use_alt_speech_recognizer_desc),
-                option -> mSearchData.enableAltSpeechRecognizer(option.isSelected()),
-                mSearchData.isAltSpeechRecognizerEnabled()));
+        for (int[] pair : new int[][] {
+                {R.string.speech_recognizer_system, SearchData.SPEECH_RECOGNIZER_SYSTEM},
+                {R.string.speech_recognizer_external_1, SearchData.SPEECH_RECOGNIZER_EXTERNAL_1},
+                {R.string.speech_recognizer_external_2, SearchData.SPEECH_RECOGNIZER_EXTERNAL_2}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]),
+                    optionItem -> mSearchData.setSpeechRecognizerType(pair[1]),
+                    mSearchData.getSpeechRecognizerType() == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.speech_recognizer), options);
+    }
+
+    private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.instant_voice_search),
                 option -> mSearchData.enableInstantVoiceSearch(option.isSelected()),
@@ -56,6 +67,6 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
                 option -> mSearchData.enableBackgroundPlayback(option.isSelected()),
                 mSearchData.isBackgroundPlaybackEnabled()));
 
-        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.dialog_search), options);
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 }
