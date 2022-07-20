@@ -213,8 +213,8 @@ public class ViewManager {
         }
     }
 
-    private Class<?> getTopActivity() {
-        Class<?> result = null;
+    private Class<? extends Activity> getTopActivity() {
+        Class<? extends Activity> result = null;
 
         if (!mActivityStack.isEmpty()) {
             result = mActivityStack.peek();
@@ -241,6 +241,10 @@ public class ViewManager {
 
     public void blockTop(Activity activity) {
         mDefaultTop = activity == null ? null : activity.getClass();
+    }
+
+    public Class<? extends Activity> getBlockedTop() {
+        return mDefaultTop;
     }
 
     public void removeTop(Activity activity) {
@@ -349,7 +353,7 @@ public class ViewManager {
     }
 
     public Class<?> getTopView() {
-        Class<?> topActivity = getTopActivity();
+        Class<? extends Activity> topActivity = getTopActivity();
 
         if (topActivity == null) {
             return null;
