@@ -54,6 +54,7 @@ public class NavigateTitleView extends TitleView {
     private int mSearchVisibility = View.INVISIBLE;
     private int mBrandingVisibility = View.INVISIBLE;
     private DateTimeView mGlobalClock;
+    private DateTimeView mGlobalDate;
     private boolean mInitDone;
 
     public NavigateTitleView(Context context) {
@@ -148,6 +149,10 @@ public class NavigateTitleView extends TitleView {
         if (mGlobalClock != null) {
             mGlobalClock.setVisibility(mBrandingVisibility);
         }
+
+        if (mGlobalDate != null) {
+            mGlobalDate.setVisibility(mBrandingVisibility);
+        }
     }
 
     private void init() {
@@ -182,6 +187,11 @@ public class NavigateTitleView extends TitleView {
             mGlobalClock = (DateTimeView) findViewById(R.id.global_time);
             mGlobalClock.showDate(false);
             mGlobalClock.setVisibility(View.VISIBLE);
+
+            mGlobalDate = (DateTimeView) findViewById(R.id.global_date);
+            mGlobalDate.showTime(false);
+            mGlobalDate.showDate(true);
+            mGlobalDate.setVisibility(View.VISIBLE);
         }
 
         mInitDone = true;

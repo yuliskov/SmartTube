@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 public class DateTimeView extends AppCompatTextView implements TickleListener {
     private TickleManager mTickleManager;
     private boolean mIsDateEnabled = true;
+    private boolean mIsTimeEnabled = true;
 
     public DateTimeView(Context context) {
         super(context);
@@ -53,7 +54,16 @@ public class DateTimeView extends AppCompatTextView implements TickleListener {
     @Override
     public void onTickle() {
         if (getVisibility() == View.VISIBLE) {
-            String time = mIsDateEnabled ? DateFormatter.getCurrentDateTimeShort(getContext()) : DateFormatter.getCurrentTimeShort(getContext());
+            String time;
+
+            if (mIsDateEnabled && !mIsTimeEnabled) {
+                time = DateFormatter.getCurrentDateShort(getContext());
+            } else if (!mIsDateEnabled && mIsTimeEnabled) {
+                time = DateFormatter.getCurrentTimeShort(getContext());
+            } else {
+                time = DateFormatter.getCurrentDateTimeShort(getContext());
+            }
+
             // https://stackoverflow.com/questions/5437674/what-unicode-characters-represent-time/9454080
             //setText(String.format("⌚ %s", time));
             setText(time);
@@ -73,5 +83,9 @@ public class DateTimeView extends AppCompatTextView implements TickleListener {
      */
     public void showDate(boolean show) {
         mIsDateEnabled = show;
+    }
+
+    public void showTime(boolean show) {
+        mIsTimeEnabled = show;
     }
 }

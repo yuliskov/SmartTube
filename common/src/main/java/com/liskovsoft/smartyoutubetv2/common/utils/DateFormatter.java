@@ -17,6 +17,10 @@ public class DateFormatter {
         return getDateTimeShort(context, false, true, System.currentTimeMillis());
     }
 
+    public static String getCurrentDateShort(Context context) {
+        return getDateTimeShort(context, true, false, System.currentTimeMillis());
+    }
+
     public static String formatTimeShort(Context context, long currentTimeMs) {
         return getDateTimeShort(context, false, true, currentTimeMs);
     }

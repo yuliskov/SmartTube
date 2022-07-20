@@ -22,6 +22,7 @@
 
     <dimen name="pip_title_max_width">380dp</dimen>
     <dimen name="pip_title_size">24sp</dimen>
+    <dimen name="pip_title_date_size">12sp</dimen>
     <dimen name="browse_global_time_size">30sp</dimen>
 
     <!-- Card view default size -->
