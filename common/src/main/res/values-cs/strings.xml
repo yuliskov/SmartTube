@@ -458,4 +458,8 @@
     <string name="time_mode_24_hours">24 hodin</string>
     <string name="time_mode_12_hours">12 hodin (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Dost zabugováno. Použijte pouze v případě, když máte problém s výchozím rozpoznávačem.</string>
+    <string name="speech_recognizer">Rozpoznávač řeči</string>
+    <string name="speech_recognizer_system">Systémový (preferovaný)</string>
+    <string name="speech_recognizer_external_1">Externí 1 (vážně zabugováno)</string>
+    <string name="speech_recognizer_external_2">Externí 2 (vážně zabugováno)</string>
 </resources>
