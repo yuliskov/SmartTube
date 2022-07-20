@@ -198,6 +198,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     private void maybePausePlayback() {
+        if (getController() == null) {
+            return;
+        }
+
         getController().setAfrRunning(true);
         int delayMs = 5_000;
 

@@ -186,7 +186,12 @@ public class WebProxyDialog {
 
         mProxyConfigDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((view) -> {
             ((TextView) mProxyConfigDialog.findViewById(R.id.proxy_config_message)).setText("");
-            Proxy proxy = validateProxyConfigFields();
+            Proxy proxy = null;
+            try {
+                proxy = validateProxyConfigFields();
+            } catch (IllegalArgumentException e) { // port out of range
+                e.printStackTrace();
+            }
             if (proxy == null) {
                 appendStatusMessage(R.string.proxy_application_aborted);
             } else {
@@ -211,7 +216,12 @@ public class WebProxyDialog {
         });
 
         mProxyConfigDialog.setOnDismissListener(dialog -> {
-            Proxy proxy = validateProxyConfigFields();
+            Proxy proxy = null;
+            try {
+                proxy = validateProxyConfigFields();
+            } catch (IllegalArgumentException e) { // port out of range
+                e.printStackTrace();
+            }
             if (proxy != null) {
                 Log.d(TAG, "Saving proxy info: " + proxy);
                 mProxyManager.saveProxyInfoToPrefs(proxy, true);
