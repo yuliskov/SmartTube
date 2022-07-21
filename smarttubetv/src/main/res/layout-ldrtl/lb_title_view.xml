@@ -109,6 +109,7 @@
                   android:layout_height="wrap_content"
                   android:layout_marginEnd="@dimen/search_bar_global_time_margin"
                   android:layout_gravity="center_vertical|end"
+                  android:gravity="center_horizontal"
                   android:orientation="vertical">
         <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
             android:id="@+id/global_time"

@@ -12,13 +12,13 @@
     android:layout_marginTop="3dp"
     android:focusable="false">
 
-    <!-- Move author icon to the top android:layout_alignParentBottom="true"->android:layout_alignParentTop="true", add new android:layout_marginTop="3dp" -->
+    <!-- Move author icon to the top android:layout_alignParentBottom="true"->android:layout_alignParentTop="true", add new android:layout_marginTop="2dp" -->
     <com.stfalcon.chatkit.utils.ShapeImageView
         android:id="@id/messageUserAvatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp" />
 
