@@ -457,6 +457,8 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
      * Stop on long buffering (indicates end of the stream)
      */
     private void watchLiveStream() {
+        unwatchLiveStream();
+
         if (getController() != null &&
                 getController().getVideo() != null &&
                 getController().getVideo().isLive) {
