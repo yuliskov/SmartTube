@@ -298,13 +298,14 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> GlobalPreferences.instance(getContext()).enableChannelsService(!option.isSelected()),
                 !GlobalPreferences.instance(getContext()).isChannelsServiceEnabled()));
 
-        options.add(UiOptionItem.from("Prefer IPv4 DNS",
-                option -> GlobalPreferences.instance(getContext()).preferIPv4Dns(option.isSelected()),
-                GlobalPreferences.instance(getContext()).isIPv4DnsPreferred()));
-
-        options.add(UiOptionItem.from("Enable DNS over HTTPS",
-                option -> GlobalPreferences.instance(getContext()).enableDnsOverHttps(option.isSelected()),
-                GlobalPreferences.instance(getContext()).isDnsOverHttpsEnabled()));
+        // Disabled inside RetrofitHelper
+        //options.add(UiOptionItem.from("Prefer IPv4 DNS",
+        //        option -> GlobalPreferences.instance(getContext()).preferIPv4Dns(option.isSelected()),
+        //        GlobalPreferences.instance(getContext()).isIPv4DnsPreferred()));
+        //
+        //options.add(UiOptionItem.from("Enable DNS over HTTPS",
+        //        option -> GlobalPreferences.instance(getContext()).enableDnsOverHttps(option.isSelected()),
+        //        GlobalPreferences.instance(getContext()).isDnsOverHttpsEnabled()));
 
         // Need to be enabled on older version of ExoPlayer (e.g. 2.10.6).
         // It's because there's no tweaks for modern devices.
