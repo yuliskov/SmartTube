@@ -458,4 +458,8 @@
     <string name="time_mode_24_hours">24 ore</string>
     <string name="time_mode_12_hours">12 ore (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Non funziona bene. Usalo solo se hai problemi con il riconoscimento vocale predefinito.</string>
+    <string name="speech_recognizer">Riconoscimento vocale</string>
+    <string name="speech_recognizer_system">Sistema (preferito)</string>
+    <string name="speech_recognizer_external_1">Esterno 1 (gravemente difettato, per funzionare è necessario disabilitare l'accesso al microfono)</string>
+    <string name="speech_recognizer_external_2">Esterno 2 (seriamente difettato)</string>
 </resources>
