@@ -126,17 +126,13 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     @Override
     public void onBuffering() {
         // Fix long buffering (indicates end of the stream)
-        if (getController() != null &&
-                getController().getVideo() != null &&
-                getController().getVideo().isLive) {
-            Utils.postDelayed(mHandler, mStopLiveStream, 5 * 60 * 1_000);
-        }
+        watchLiveStream();
     }
 
     @Override
     public void onPlay() {
         // Seems fine. Buffering is gone.
-        Utils.removeCallbacks(mHandler, mPendingRestartEngine, mStopLiveStream);
+        unwatchLiveStream();
     }
 
     @Override
@@ -455,5 +451,23 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         }
 
         Log.e(TAG, "Undetected repeat mode " + playbackMode);
+    }
+
+    /**
+     * Stop on long buffering (indicates end of the stream)
+     */
+    private void watchLiveStream() {
+        if (getController() != null &&
+                getController().getVideo() != null &&
+                getController().getVideo().isLive) {
+            Utils.postDelayed(mHandler, mStopLiveStream, 2 * 60 * 1_000);
+        }
+    }
+
+    /**
+     * Cancel stream buffering check
+     */
+    private void unwatchLiveStream() {
+        Utils.removeCallbacks(mHandler, mPendingRestartEngine, mStopLiveStream);
     }
 }
