@@ -454,4 +454,5 @@
     <string name="speech_recognizer_system">Системний (найкращій)</string>
     <string name="speech_recognizer_external_1">Зовнішній 1 (серйозно забагований, для роботи потрібно заборонити доступ до мікрофону)</string>
     <string name="speech_recognizer_external_2">Зовнішній 2 (серйозно забагований)</string>
+    <string name="real_channel_icon">Показувати справжній значок на кнопці каналу</string>
 </resources>

@@ -30,6 +30,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMe
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -49,6 +50,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private final MediaItemService mMediaItemManager;
     private final VideoLoaderManager mVideoLoader;
     private PlayerData mPlayerData;
+    private PlayerTweaksData mPlayerTweaksData;
     private List<VideoPlaylistInfo> mVideoPlaylistInfos;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
@@ -77,6 +79,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onInitDone() {
         mPlayerData = PlayerData.instance(getActivity());
+        mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
 
         // Could be set once per activity creation (view layout stuff)
         getController().setVideoZoomMode(mPlayerData.getVideoZoomMode());
@@ -237,7 +240,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().setLikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE);
         getController().setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
         getController().setSubscribeButtonState(metadata.isSubscribed());
-        getController().setChannelIcon(metadata.getAuthorImageUrl());
+        if (mPlayerTweaksData.isRealChannelIconEnabled()) {
+            getController().setChannelIcon(metadata.getAuthorImageUrl());
+        }
         setPlaylistAddButtonStateCached();
         setSubtitleButtonState();
         setSpeedButtonState(getController().getSpeed()); // Use real speed (it more robust than the saved speed data)

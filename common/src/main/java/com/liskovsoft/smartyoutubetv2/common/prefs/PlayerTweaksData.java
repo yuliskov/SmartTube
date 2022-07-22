@@ -51,6 +51,7 @@ public class PlayerTweaksData {
     private boolean mIsSuggestionsDisabled;
     private boolean mIsAvcOverVp9Preferred;
     private boolean mIsChatPlacedLeft;
+    private boolean mIsRealChannelIconEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -251,6 +252,15 @@ public class PlayerTweaksData {
         persistData();
     }
 
+    public boolean isRealChannelIconEnabled() {
+        return mIsRealChannelIconEnabled;
+    }
+
+    public void enableRealChannelIcon(boolean enable) {
+        mIsRealChannelIconEnabled = enable;
+        persistData();
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -277,6 +287,7 @@ public class PlayerTweaksData {
         mIsSuggestionsDisabled = Helpers.parseBoolean(split, 17, false);
         mIsAvcOverVp9Preferred = Helpers.parseBoolean(split, 18, false);
         mIsChatPlacedLeft = Helpers.parseBoolean(split, 19, false);
+        mIsRealChannelIconEnabled = Helpers.parseBoolean(split, 20, true);
     }
 
     private void persistData() {
@@ -286,7 +297,7 @@ public class PlayerTweaksData {
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
                 mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
                 mIsBufferingFixEnabled, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
-                mIsAvcOverVp9Preferred, mIsChatPlacedLeft
+                mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled
         ));
     }
 }

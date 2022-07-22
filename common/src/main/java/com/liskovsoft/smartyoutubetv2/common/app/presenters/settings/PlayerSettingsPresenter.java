@@ -385,6 +385,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         //        option -> mPlayerData.enableSeekMemory(option.isSelected()),
         //        mPlayerData.isSeekMemoryEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.real_channel_icon),
+                option -> mPlayerTweaksData.enableRealChannelIcon(option.isSelected()),
+                mPlayerTweaksData.isRealChannelIconEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.place_chat_left),
                 option -> mPlayerTweaksData.placeChatLeft(option.isSelected()),
                 mPlayerTweaksData.isChatPlacedLeft()));
