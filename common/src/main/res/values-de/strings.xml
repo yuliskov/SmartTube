@@ -458,4 +458,8 @@
     <string name="time_mode_24_hours">24 Stunden</string>
     <string name="time_mode_12_hours">12 Stunden (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Funktioniert nicht gut. Verwenden Sie es nur, wenn Sie Probleme mit der Standard-Spracherkennung haben.</string>
+    <string name="speech_recognizer">Spracherkennung</string>
+    <string name="speech_recognizer_system">System (bevorzugt)</string>
+    <string name="speech_recognizer_external_1">Extern 1 (Funktioniert nicht gut, um es zu benutzen, müssen Sie den Zugriff auf das Mikrofon deaktivieren)</string>
+    <string name="speech_recognizer_external_2">Extern 2 (Funktioniert nicht gut)</string>
 </resources>
