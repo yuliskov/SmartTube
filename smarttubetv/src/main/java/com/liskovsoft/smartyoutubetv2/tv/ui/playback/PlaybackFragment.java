@@ -331,11 +331,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         // Background audio mode is complicated (null surface error) on Android 9 (api 28) and above. Try avoid it.
         // More info: DebugInfoMediaCodecVideoRenderer#handleMessage
-        if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
-            !ViewManager.instance(getContext()).isNewViewPending()) {
-            Log.d(TAG, "releasePlayer: Engine release is blocked by background playback. Exiting...");
-            return;
-        }
+        //if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
+        //    !ViewManager.instance(getContext()).isNewViewPending()) {
+        //    Log.d(TAG, "releasePlayer: Engine release is blocked by background playback. Exiting...");
+        //    return;
+        //}
 
         // Ensure to continue playback in audio mode
         if (ViewManager.instance(getContext()).getBlockedTop() == PlaybackActivity.class) {
