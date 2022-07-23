@@ -178,7 +178,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         if (mPlayer != null) {
             mPlayer.removeListener(this);
-            //mPlayer.stop(true);
+            mPlayer.stop(true);
             mPlayer.release();
             mPlayer = null;
         }
