@@ -415,10 +415,10 @@
   <string name="add_to_playback_queue">Thêm vào hàng chờ phát</string>
   <string name="remove_from_playback_queue">Xoá khỏi hàng chờ phát</string>
   <string name="playlist_order">Sắp xếp danh sách phát</string>
-  <string name="playlist_order_added_date_newer_first">Ngày thêm danh sách phátundefined(Mới nhất trước)</string>
-  <string name="playlist_order_added_date_older_first">Ngày thêm danh sách phátundefined(Cũ nhất trước)</string>
-  <string name="playlist_order_published_date_newer_first">Ngày đã xuất bản undefined(Mới nhất trước)</string>
-  <string name="playlist_order_published_date_older_first">Ngày đã xuất bản undefined(Cũ nhất trước)</string>
+  <string name="playlist_order_added_date_newer_first">Ngày thêm danh sách phát (Mới nhất trước)</string>
+  <string name="playlist_order_added_date_older_first">Ngày thêm danh sách phát (Cũ nhất trước)</string>
+  <string name="playlist_order_published_date_newer_first">Ngày đã xuất bản (Mới nhất trước)</string>
+  <string name="playlist_order_published_date_older_first">Ngày đã xuất bản (Cũ nhất trước)</string>
   <string name="playlist_order_popularity">Phổ biến</string>
   <string name="cant_do_this_for_foreign_playlist">Không thể làm điều này cho danh sách phát nước ngoài.</string>
   <string name="owned_playlist_warning">Lỗi. Tác vụ này chỉ có thể được áp dụng cho chủ sở hữu danh sách phát</string>
