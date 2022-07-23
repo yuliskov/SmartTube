@@ -413,26 +413,26 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                 Utils.showRepeatInfo(getActivity(), playbackMode);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
-                // Close player
+                // Close player if suggestions not shown
                 // Except when playing from queue
-                if (!getController().isSuggestionsShown() && mPlaylist.getNext() == null) {
-                    getController().finishReally();
-                } else {
+                if (mPlaylist.getNext() != null) {
                     loadNext();
                     getController().showOverlay(true);
+                } else if (!getController().isSuggestionsShown()) {
+                    getController().finishReally();
                 }
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
                 // Stop player after each video.
                 // Except when playing from queue
-                if (mPlaylist.getNext() == null) {
+                if (mPlaylist.getNext() != null) {
+                    loadNext();
+                    getController().showOverlay(true);
+                } else {
                     getController().showSuggestions(true);
                     getController().setPlayWhenReady(false);
                     getController().setPositionMs(0);
                     Utils.showRepeatInfo(getActivity(), playbackMode);
-                } else {
-                    loadNext();
-                    getController().showOverlay(true);
                 }
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_LIST:
