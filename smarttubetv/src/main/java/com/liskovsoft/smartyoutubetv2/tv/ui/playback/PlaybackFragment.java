@@ -338,7 +338,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         //}
 
         // Ensure to continue playback in audio mode
-        if (ViewManager.instance(getContext()).getBlockedTop() == PlaybackActivity.class) {
+        if (ViewManager.instance(getContext()).getBlockedTop() == PlaybackActivity.class && !isInPIPMode()) {
             Log.d(TAG, "releasePlayer: Playback activity is blocked. Exiting...");
             return;
         }
