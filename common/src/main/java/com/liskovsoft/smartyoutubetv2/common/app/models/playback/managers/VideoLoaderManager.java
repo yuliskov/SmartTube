@@ -59,7 +59,8 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         if (getController() != null &&
                 getController().getVideo() != null &&
                 getController().getVideo().isLive) {
-            applyPlaybackMode(PlaybackEngineController.PLAYBACK_MODE_PAUSE);
+            getController().showSuggestions(true);
+            getController().setPlayWhenReady(false);
         }
     };
 
