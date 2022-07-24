@@ -222,6 +222,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendNotInterestedButton();
         appendRenamePlaylistButton();
         appendPlaylistOrderButton();
+        appendAddToPlaybackQueueButton();
+        appendShowPlaybackQueueButton();
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
         appendOpenPlaylistButton();
@@ -229,8 +231,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendTogglePinVideoToSidebarButton();
         appendSavePlaylistButton();
         appendOpenDescriptionButton();
-        appendAddToPlaybackQueueButton();
-        appendShowPlaybackQueueButton();
         appendShareLinkButton();
         appendShareEmbedLinkButton();
         appendAccountSelectionButton();
@@ -251,12 +251,12 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         appendReturnToBackgroundVideoButton();
         appendPlayVideoButton();
+        appendAddToPlaybackQueueButton();
+        appendShowPlaybackQueueButton();
         appendOpenChannelButton();
         appendOpenPlaylistButton();
         appendTogglePinVideoToSidebarButton();
         appendOpenDescriptionButton();
-        appendAddToPlaybackQueueButton();
-        appendShowPlaybackQueueButton();
         appendShareLinkButton();
         appendShareEmbedLinkButton();
         appendAccountSelectionButton();
