@@ -188,7 +188,10 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup)),
-                        error -> Log.e(TAG, "continueGroup error: %s", error.getMessage()),
+                        error -> {
+                            Log.e(TAG, "continueGroup error: %s", error.getMessage());
+                            getView().showProgressBar(false);
+                        },
                         () -> getView().showProgressBar(false)
                 );
     }
