@@ -10,6 +10,7 @@ import android.speech.SpeechRecognizer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.CompletionInfo;
 import android.widget.FrameLayout;
@@ -374,9 +375,15 @@ public class SearchSupportFragment extends Fragment {
         mSearchSettingsOrbView.setOnOrbClickedListener(v -> onSearchSettingsClicked());
 
         mSpeechOrbView = mSearchBar.findViewById(R.id.lb_search_bar_speech_orb);
+        OnFocusChangeListener previousListener = mSpeechOrbView.getOnFocusChangeListener();
         mSpeechOrbView.setOnFocusChangeListener((v, focused) -> {
             if (!focused) {
                 stopSpeechService();
+            }
+
+            // Fix: Enable edit field dynamic style: white/grey, listening/non listening
+            if (previousListener != null) {
+                previousListener.onFocusChange(v, focused);
             }
         });
 
