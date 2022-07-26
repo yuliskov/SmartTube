@@ -337,8 +337,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         //    return;
         //}
 
-        // Ensure to continue playback in audio mode
-        if (ViewManager.instance(getContext()).getBlockedTop() == PlaybackActivity.class && !isInPIPMode()) {
+        // Ensure to continue playback in audio mode (activity should be blocked)
+        if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
+                ViewManager.instance(getContext()).getBlockedTop() == PlaybackActivity.class &&
+                !isInPIPMode()) {
             Log.d(TAG, "releasePlayer: Playback activity is blocked. Exiting...");
             return;
         }
