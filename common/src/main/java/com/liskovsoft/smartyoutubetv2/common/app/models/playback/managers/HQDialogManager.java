@@ -136,6 +136,10 @@ public class HQDialogManager extends PlayerEventListenerHelper {
     private void addPresetsCategory() {
         addCategoryInt(AppDialogUtil.createVideoPresetsCategory(
                 getActivity(), mPlayerData, () -> {
+                    if (getController() == null) {
+                        return;
+                    }
+
                     FormatItem format = mPlayerData.getFormat(FormatItem.TYPE_VIDEO);
                     getController().setFormat(format);
 
