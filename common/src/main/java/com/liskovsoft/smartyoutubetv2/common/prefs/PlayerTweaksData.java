@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class PlayerTweaksData {
@@ -277,7 +278,7 @@ public class PlayerTweaksData {
         mIsSetOutputSurfaceWorkaroundEnabled = Helpers.parseBoolean(split, 7, true);
         mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 8, false);
         mIsKeepFinishedActivityEnabled = Helpers.parseBoolean(split, 9, false);
-        mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, false);
+        mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, Build.VERSION.SDK_INT <= 19);
         mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTV(mPrefs.getContext()));
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
         mPlayerButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE & ~(PLAYER_BUTTON_SEEK_INTERVAL | PLAYER_BUTTON_CONTENT_BLOCK)); // all buttons, except these
