@@ -117,7 +117,7 @@ public abstract class LeanbackActivity extends MotherActivity {
 
     @Override
     public void finishReally() {
-        // Mandatory line. Enable regular view management (proper view stacking).
+        // Mandatory line. Fix un-proper view order (especially for playback view).
         mViewManager.startParentView(this);
         super.finishReally();
     }
