@@ -55,9 +55,9 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
     public void openVideo(Video item) {
         // Ensure that we aren't running on presenter init stage
         if (getController() != null) {
-            // Save state of the previous video.
-            // In case video opened from phone and other stuff.
             if (!item.equals(getVideo())) { // video might be opened twice (when remote connection enabled). Fix for that.
+                // Save state of the previous video.
+                // In case video opened from phone and other stuff.
                 saveState();
             }
         }
