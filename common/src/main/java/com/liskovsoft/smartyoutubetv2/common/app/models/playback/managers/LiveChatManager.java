@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import com.liskovsoft.mediaserviceinterfaces.LiveChatService;
+import com.liskovsoft.mediaserviceinterfaces.data.ChatItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
@@ -17,6 +18,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class LiveChatManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = LiveChatManager.class.getSimpleName();
+    private static final String[] BLACK_LIST = {". XYZ", ". ХYZ"};
     private LiveChatService mChatService;
     private PlayerData mPlayerData;
     private Disposable mChatAction;
@@ -57,7 +59,9 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
                 .subscribe(
                         chatItem -> {
                             Log.d(TAG, chatItem.getMessage());
-                            chatReceiver.addChatItem(chatItem);
+                            if (checkItem(chatItem)) {
+                                chatReceiver.addChatItem(chatItem);
+                            }
                         },
                         error -> {
                             Log.e(TAG, error.getMessage());
@@ -92,5 +96,21 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
             RxUtils.disposeActions(mChatAction);
             getController().setChatReceiver(null);
         }
+    }
+
+    private boolean checkItem(ChatItem chatItem) {
+        if (chatItem == null || chatItem.getAuthorName() == null) {
+            return false;
+        }
+
+        String authorName = chatItem.getAuthorName();
+
+        for (String spammer : BLACK_LIST) {
+            if (authorName.contains(spammer)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
