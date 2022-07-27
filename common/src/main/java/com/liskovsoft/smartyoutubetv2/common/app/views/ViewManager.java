@@ -104,7 +104,7 @@ public class ViewManager {
         }
     }
 
-    public boolean startParentView(Activity activity) {
+    public void startParentView(Activity activity) {
         if (activity.getIntent() != null) {
             removeTopActivity();
 
@@ -121,24 +121,23 @@ public class ViewManager {
 
                 if (mIsSinglePlayerMode) {
                     safeMoveTaskToBack(activity);
-                    return true;
                 }
+            } else {
+                try {
+                    Log.d(TAG, "Launching parent activity: " + parentActivity.getSimpleName());
+                    Intent intent = new Intent(activity, parentActivity);
 
-                return false;
-            }
-
-            try {
-                Log.d(TAG, "Launching parent activity: " + parentActivity.getSimpleName());
-                Intent intent = new Intent(activity, parentActivity);
-
-                safeStartActivity(activity, intent);
-            } catch (ActivityNotFoundException e) {
-                e.printStackTrace();
-                Log.e(TAG, "Parent activity not found.");
+                    safeStartActivity(activity, intent);
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Parent activity not found.");
+                }
             }
         }
+    }
 
-        return true;
+    public boolean hasParentView(Activity activity) {
+        return mActivityStack.size() > 1 || getDefaultParent(activity) != null;
     }
 
     public void startDefaultView() {

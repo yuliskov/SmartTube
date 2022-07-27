@@ -101,7 +101,7 @@ public abstract class LeanbackActivity extends MotherActivity {
     @Override
     public void finish() {
         // user pressed back key
-        if (!mViewManager.startParentView(this)) {
+        if (!mViewManager.hasParentView(this)) {
             switch (mGeneralData.getAppExitShortcut()) {
                 case GeneralData.EXIT_DOUBLE_BACK:
                     mDoubleBackManager.enableDoubleBackExit();
