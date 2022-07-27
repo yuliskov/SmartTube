@@ -18,6 +18,9 @@ import io.reactivex.schedulers.Schedulers;
 
 public class LiveChatManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = LiveChatManager.class.getSimpleName();
+    /**
+     * NOTE: Don't remove duplicates! They contain different chars.
+     */
     private static final String[] BLACK_LIST = {". XYZ", ". ХYZ", "Ricardo Merlino"};
     private LiveChatService mChatService;
     private PlayerData mPlayerData;
