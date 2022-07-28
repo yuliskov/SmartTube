@@ -462,4 +462,5 @@
     <string name="speech_recognizer_system">System (bevorzugt)</string>
     <string name="speech_recognizer_external_1">Extern 1 (Funktioniert nicht gut, um es zu benutzen, müssen Sie den Zugriff auf das Mikrofon deaktivieren)</string>
     <string name="speech_recognizer_external_2">Extern 2 (Funktioniert nicht gut)</string>
+    <string name="real_channel_icon">Echtes Symbol auf der Kanal-Taste anzeigen</string>
 </resources>
