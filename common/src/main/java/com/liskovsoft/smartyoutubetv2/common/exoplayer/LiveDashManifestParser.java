@@ -43,6 +43,8 @@ public class LiveDashManifestParser extends DashManifestParser {
         // Optimize ram usage on short streams (< 2 hours)
         if (getFirstSegmentNum(newManifest) == 0) { // Short stream. No need to do something special.
             mOldManifest = newManifest;
+            // Below line will be needed later (> 2 hours), when the stream no longer starts from 0 segment
+            mOldSegmentNum = getLastSegmentNum(newManifest);
             return;
         }
 
