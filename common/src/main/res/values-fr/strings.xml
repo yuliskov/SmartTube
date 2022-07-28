@@ -451,4 +451,16 @@
   <string name="sources">Sources</string>
   <string name="releases">Versions</string>
   <string name="prefer_avc_over_vp9">Sélection du codec: préférez l\'avc au vp9</string>
+  <string name="open_chat">Chat en direct</string>
+  <string name="place_chat_left">Placez le chat en direct à gauche</string>
+  <string name="use_alt_speech_recognizer">Alt reconnaissance vocale</string>
+  <string name="time_mode">Mode</string>
+  <string name="time_mode_24_hours">24 heures</string>
+  <string name="time_mode_12_hours">12 heures (AM/PM)</string>
+  <string name="use_alt_speech_recognizer_desc">Sérieusement buggé. Ne l'utilisez que si vous avez des problèmes avec le système de reconnaissance par défaut.</string>
+  <string name="speech_recognizer">Reconnaissance vocale</string>
+  <string name="speech_recognizer_system">Système (préféré)</string>
+  <string name="speech_recognizer_external_1">Externe 1 (sérieusement buggé, pour fonctionner vous devez désactiver l'accès au microphone)</string>
+  <string name="speech_recognizer_external_2">Externe 2 (sérieusement buggé)</string>
+  <string name="real_channel_icon">Afficher l'icône réelle sur le bouton du canal</string>
 </resources>
