@@ -46,7 +46,7 @@
   <string name="settings_left_panel">تحرير الفئات</string>
   <string name="settings_themes">السمات</string>
   <string name="settings_other">أُخرى</string>
-  <string name="settings_player">إعدادات المشغل</string>
+  <string name="settings_player">إعدادات المُشَغِّل</string>
   <string name="settings_language">اللغة</string>
   <string name="settings_linked_devices">الأجهزة المرتبطة</string>
   <string name="settings_about">حول التطبيق</string>
@@ -81,7 +81,7 @@
   <string name="player_ui_hide_behavior">إخفاء واجهة المستخدم أليًا</string>
   <string name="option_never">مطلقًا</string>
   <string name="side_panel_sections">رتِّب الأقسام</string>
-  <string name="boot_to_section">فتح التطبيق الى قسم</string>
+  <string name="boot_to_section">بدء التشغيل الى قسم</string>
   <string name="large_ui">واجهة مستخدم كبيرة</string>
   <string name="video_grid_scale">مقاس شبكة الفيديو</string>
   <string name="scale_ui">مقاس واجهة المستخدم</string>
@@ -93,7 +93,7 @@
   <string name="disable_update_check">تعطيل التحقق من التحديث</string>
   <string name="show_again">عرض مرة أخرى</string>
   <string name="check_updates_auto">اخبرني عن وجود تحديث جديد</string>
-  <string name="select_account_on_boot">حدد عند فتح التطبيق</string>
+  <string name="select_account_on_boot">حدد الحساب عند بدء التشغيل</string>
   <string name="player_other">خيارات متفرقة</string>
   <string name="player_full_date">التاريخ الدقيق في الوصف</string>
   <string name="open_channel">فتح القناة</string>
@@ -107,7 +107,7 @@
   <string name="next_video_info_is_not_loaded_yet">لم يتم تحميل معلومات الفيديو التالي بعد</string>
   <string name="card_multiline_title">عناوين متعددة الأسطر</string>
   <string name="cards_style">نمط البطاقات</string>
-  <string name="repeat_mode_all">تشغيل جميع مقاطع الفيديو واحدة تلو الأخرى</string>
+  <string name="repeat_mode_all">تشغيل جميع مقاطع الفيديو واحد تلو الأخَر</string>
   <string name="repeat_mode_one">تكرار الفيديو الحالي</string>
   <string name="repeat_mode_pause">إيقاف التشغيل بعد كل فيديو</string>
   <string name="repeat_mode_pause_alt">تشغيل مقاطع فيديو قائمة التشغيل فقط بشكل مستمر</string>
@@ -128,7 +128,7 @@
   <string name="playlists_style_rows">صفوف</string>
   <string name="player_show_clock">إظهار الساعة في مشغل الفيديو</string>
   <string name="player_show_remaining_time">إظهار الوقت المتبقي في مشغل الفيديو</string>
-  <string name="player_show_ending_time">إظهار وقت الانتهاء في مشغل الفيديو</string>
+  <string name="player_show_ending_time">إظهار وقت الإنتهاء في مشغل الفيديو</string>
   <string name="open_channel_uploads">فتح فيديوهات القناة</string>
   <string name="app_exit_shortcut">اخرج من التطبيق</string>
   <string name="app_exit_none">لا تخرج</string>
@@ -145,9 +145,9 @@
   <string name="color_scheme_teal_oled">أزرق مخضر (OLED)</string>
   <string name="player_seek_preview_none">معطَّل</string>
   <string name="player_seek_preview_single">إطار واحد</string>
-  <string name="player_seek_preview_carousel">شرائح</string>
-  <string name="player_seek_preview_carousel_slow">شرائح (بطيء، حسب الإطارات الرئيسية)</string>
-  <string name="player_seek_preview_carousel_fast">شرائح (سريع، ليس دقيق)</string>
+  <string name="player_seek_preview_carousel">إطارات متعددة</string>
+  <string name="player_seek_preview_carousel_slow">إطارات متعددة (بطيء، حسب الإطارات الرئيسية)</string>
+  <string name="player_seek_preview_carousel_fast">إطارات متعددة (سريع، ليس دقيق)</string>
   <string name="unsubscribe_from_channel">إلغاء الاشتراك من القناة</string>
   <string name="card_title_lines_num">عدد سطور عنوان البطاقة</string>
   <string name="card_auto_scrolled_title">تحريك العنوان الطويل أليًا</string>
@@ -159,7 +159,7 @@
   <string name="audio_shift">توافق الصوت</string>
   <string name="player_remember_speed">تذكر السرعة</string>
   <string name="mark_channel_as_watched">حدد بتم مشاهدته</string>
-  <string name="channel_marked_as_watched">تم تمييز القناة على أنها شوهدت</string>
+  <string name="channel_marked_as_watched">تم تمييز القناة على أنه تمت مشاهدتها</string>
   <string name="dialog_add_device">إضافة جهاز</string>
   <string name="dialog_remove_all_devices">إزالة كافة الأجهزة</string>
   <string name="device_link_enabled">تم تمكين الإرتباط</string>
@@ -191,7 +191,7 @@
   <string name="player_low_video_quality">جودة فيديو منخفضة</string>
   <string name="remote_session_closed">تم إغلاق الجلسة البعيدة</string>
   <string name="msg_mode_switch_error">لا يمكن تبديل وضع العرض إلى\"%s</string>
-  <string name="msg_player_error">حدث خطأ في المشغل%s.  جارٍ إعادة التشغيل ...</string>
+  <string name="msg_player_error">حدث خطأ في المُشَغِّل%s.  جارٍ إعادة التشغيل ...</string>
   <string name="video_preset_disabled">بدون ضبط مسبق</string>
   <string name="video_preset_enabled">سيتم ضبط تنسيق الفيديو التالي وفقًا للإعداد المسبق</string>
   <string name="player_sleep_timer">مؤقت النوم</string>
@@ -265,7 +265,7 @@
   <string name="upload_date_this_week">هذا الاسبوع</string>
   <string name="upload_date_this_month">هذا الشهر</string>
   <string name="upload_date_this_year">هذه السنة</string>
-  <string name="double_refresh_rate">معدل التحديث المزدوج</string>
+  <string name="double_refresh_rate">معدل الإطار المزدوج</string>
   <string name="upload_date_last_hour">الساعة الأخيرة</string>
   <string name="focus_on_search_results">التركيز التلقائي على نتائج البحث</string>
   <string name="context_menu">القائمة المنبثقة</string>
@@ -276,10 +276,10 @@
   <string name="audio_shift_sec">	%s ثانية</string>
   <string name="ui_hide_timeout_sec">	%s ثانية</string>
   <string name="screen_dimming_timeout_min">	%s دقيقة</string>
-  <string name="mark_all_channels_watched">حدد جميع القنوات على أنها شوهدت</string>
+  <string name="mark_all_channels_watched">حدد جميع القنوات على أنها تمت مشاهدتها</string>
   <string name="move_section_up">حَرِّك القسم لأعلى</string>
   <string name="move_section_down">حَرِّك القسم لأسفل</string>
-  <string name="player_buttons">إعداد أزرار المشغل</string>
+  <string name="player_buttons">إعداد أزرار المُشَغِّل</string>
   <string name="action_playlist_add">إضافة إلى قائمة التشغيل</string>
   <string name="action_video_stats">إحصائيات الفيديو</string>
   <string name="action_subscribe">إشتراك</string>
@@ -307,7 +307,7 @@
   <string name="cancel_dialog">إلغاء</string>
   <string name="msg_player_error_source2">مصدر الفيديو لا يعمل أو وقت غير صحيح</string>
   <string name="hide_upcoming">إخفاء القادم من الاشتراكات</string>
-  <string name="search_background_playback">فَعِّل نافذة ضمن النافذة عند البحث من المشغل</string>
+  <string name="search_background_playback">فَعِّل نافذة ضمن النافذة عند البحث من المُشَغِّل</string>
   <string name="trending_row_name">الشائع</string>
   <string name="player_seek_type">سلوك التسريع</string>
   <string name="player_seek_regular">عادي</string>
@@ -360,8 +360,8 @@
   <string name="subtitle_scale">مقياس الترجمة</string>
   <string name="audio_sync_fix_desc">طريقة بديلة لمزامنة الصوت / الفيديو.  يعتبر عفا عليه الزمن ، ولكن ، في بعض الحالات ، قد يساعد.</string>
   <string name="audio_sync_fix">إصلاح مزامنة الصوت</string>
-  <string name="ambilight_ratio_fix_desc">يعمل على إصلاح الإضاءة الخلفية المفقودة.  يصلح نسبة العرض إلى الارتفاع غير الصحيحة.  يصلح شاشة التوقف.  يؤثر على الأداء!</string>
-  <string name="ambilight_ratio_fix">Ambilight / نسبة العرض إلى الارتفاع / شاشة التوقف إصلاح</string>
+  <string name="ambilight_ratio_fix_desc">يعمل على إصلاح الإضاءة الخلفية المفقودة.  يصلح نسبة العرض إلى الارتفاع غير الصحيحة.  يصلح اللقطات الفارغة. يؤثر على الأداء!</string>
+  <string name="ambilight_ratio_fix">إصلاح Ambilight / نسبة العرض إلى الارتفاع / لقطات فارغة</string>
   <string name="force_legacy_codecs_desc">يحسن الأداء بشكل كبير على الأجهزة المنخفضة الجودة.  الدقة القصوى 720 بكسل.</string>
   <string name="force_legacy_codecs">فرض برامج الترميز القديمة (720 بكسل)</string>
   <string name="live_stream_fix_desc">يحسن أداء البث المباشر بشكل كبير على الأجهزة المنخفضة الجودة.  أقصى دقة 1080 بكسل.</string>
@@ -369,7 +369,7 @@
   <string name="playback_notifications_fix_desc">يخفي إخطارات تغيير المسار.  يمكن أن يكون مفيدًا في البرامج الثابتة المستندة إلى AOSP.</string>
   <string name="playback_notifications_fix">تعطيل إخطارات التشغيل</string>
   <string name="amlogic_fix_desc">إصلاح هبوط الإطارات على الأجهزة القائمة على Amlogic.</string>
-  <string name="amlogic_fix">Amlogic 1080p\@60fps fix إصلاح</string>
+  <string name="amlogic_fix">Amlogic 1080p\@60FPS fix إصلاح</string>
   <string name="tunneled_video_playback_desc">انتباه: المشاكل المحتملة مع التوقف!  اعادة تشغيل الفيديو عبر الأنفاق بفوائد مثل تزامن الصوت / الفيديو الأفضل (مزامنة AV) وتشغيل أكثر سلاسة.  مطلوب أندرويد 5+</string>
   <string name="tunneled_video_playback">تشغيل الفيديو عبر الأنفاق (Android 5+)</string>
   <string name="master_volume">الصوت الرئيسي</string>
@@ -397,12 +397,12 @@
   <string name="cant_rename_empty_playlist">لا يمكن إعادة تسمية قائمة التشغيل الفارغة</string>
   <string name="cant_rename_foreign_playlist">لا يمكن إعادة تسمية قائمة التشغيل الخاصة بشخص آخر</string>
   <string name="cant_save_playlist">لا يمكن إضافة قائمة التشغيل هذه</string>
-  <string name="enter_value">إدخال أي قيمة غير فارغة</string>
+  <string name="enter_value">إدخال أي قيمة (غير فارغة)</string>
   <string name="dialog_add_remove_from">إضافة / إزالة من%s</string>
   <string name="add_to_playback_queue">إضافة إلى قائمة انتظار التشغيل</string>
   <string name="remove_from_playback_queue">إزالة من قائمة انتظار التشغيل</string>
   <string name="lb_playback_controls_skip_next">\"الإنتقال إلى الفيديو التالي\"</string>
-  <string name="lb_playback_controls_skip_previous">\"الانتقال إلى الفيديو السابق / العودة إلى البداية\"</string>
+  <string name="lb_playback_controls_skip_previous">\"الانتقال إلى الفيديو السابق\"</string>
   <string name="alt_presets_behavior">السلوك البديل للإعدادات المسبقة للفيديو (حدود النطاق الترددي)</string>
   <string name="alt_presets_behavior_desc">سيحاول التطبيق الحفاظ على عرض النطاق الترددي الذي يتوافق مع الإعداد المسبق المحدد بدلاً من المطابقة بين الدقة ومعدل الإطارات والترميز.</string>
   <string name="sleep_timer">تفعيل مؤقت النوم (ساعة واحدة)</string>
@@ -454,11 +454,11 @@
   <string name="time_mode">وضع الوقت</string>
   <string name="time_mode_24_hours">24 ساعة</string>
   <string name="time_mode_12_hours">12 ساعة (ص / م)</string>
-  <string name="use_alt_speech_recognizer_desc"></string>
+  <string name="use_alt_speech_recognizer_desc">لا يعمل بشكل جيد. استخدمه فقط إذا كانت لديك مشاكل مع أداة التعرف الافتراضية</string>
   <string name="speech_recognizer">أداة التعرف على الكلام</string>
   <string name="speech_recognizer_system">النظام (مفضل)</string>
-  <string name="speech_recognizer_external_1"></string>
-  <string name="speech_recognizer_external_2"></string>
+  <string name="speech_recognizer_external_1">خارجي 1 (لا يعمل بشكل جيد ، من أجل العمل تحتاج إلى تعطيل الوصول إلى الميكروفون)</string>
+  <string name="speech_recognizer_external_2">خارجي 2 (لا يعمل بشكل جيد)</string>
   <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
-  <string name="real_channel_icon">إظهار رمز حقيقي على زر القناة</string>
+  <string name="real_channel_icon">إظهار شعار القناة في المُشَغِّل </string>
 </resources>
