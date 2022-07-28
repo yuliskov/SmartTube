@@ -176,15 +176,15 @@
     <string name="settings_video">Video</string>
     <string name="content_block_confirm_skip">Conferma salto</string>
     <string name="content_block_categories">Salta segmenti</string>
-    <string name="content_block_sponsor">Sponsor</string>
-    <string name="content_block_intro">Introduzione</string>
+    <string name="content_block_sponsor">Sponsorizzazione</string>
+    <string name="content_block_intro">Introduzione o intermezzo</string>
     <string name="content_block_outro">Titoli di coda e ringraziamenti</string>
     <string name="content_block_interaction">Promemoria di iscrizione al canale</string>
     <string name="content_block_self_promo">Autopromozione non retribuita</string>
     <string name="content_block_music_off_topic">Sezione non musicale della clip</string>
-    <string name="confirm_segment_skip">Salto il segmento \"%s\"?</string>
+    <string name="confirm_segment_skip">Salto il segmento\n\"%s\"?</string>
     <string name="cancel_segment_skip">Cancella salta il segmento</string>
-    <string name="msg_skipping_segment">Sto saltando il segmento \"%s\"…</string>
+    <string name="msg_skipping_segment">Sto saltando il segmento\n\"%s\"…</string>
     <string name="content_block_notification_type">Tipo di notifica</string>
     <string name="content_block_notify_none">Senza notifica</string>
     <string name="content_block_notify_toast">Notifica breve (toast)</string>
@@ -462,4 +462,5 @@
     <string name="speech_recognizer_system">Sistema (preferito)</string>
     <string name="speech_recognizer_external_1">Esterno 1 (gravemente difettato, per funzionare è necessario disabilitare l\'accesso al microfono)</string>
     <string name="speech_recognizer_external_2">Esterno 2 (seriamente difettato)</string>
+    <string name="real_channel_icon">Mostra l\'icona reale sul pulsante del canale</string>
 </resources>
