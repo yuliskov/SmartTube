@@ -28,6 +28,7 @@ public interface PlaybackEngineController {
     float ASPECT_RATIO_1_1 = 1f;
     float ASPECT_RATIO_4_3 = 1.33f;
     float ASPECT_RATIO_5_4 = 1.25f;
+    float ASPECT_RATIO_16_8_1 = 1.9753f;
     float ASPECT_RATIO_16_9 = 1.77f;
     float ASPECT_RATIO_16_10 = 1.6f;
     float ASPECT_RATIO_21_9 = 2.33f;

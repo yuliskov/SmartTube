@@ -323,6 +323,7 @@ public class AppDialogUtil {
         pairs.put("1:1", PlaybackEngineController.ASPECT_RATIO_1_1);
         pairs.put("4:3", PlaybackEngineController.ASPECT_RATIO_4_3);
         pairs.put("5:4", PlaybackEngineController.ASPECT_RATIO_5_4);
+        pairs.put("16:8.1 (1.9753:1)", PlaybackEngineController.ASPECT_RATIO_16_8_1);
         pairs.put("16:9", PlaybackEngineController.ASPECT_RATIO_16_9);
         pairs.put("16:10", PlaybackEngineController.ASPECT_RATIO_16_10);
         pairs.put("21:9 (2.33:1)", PlaybackEngineController.ASPECT_RATIO_21_9);
