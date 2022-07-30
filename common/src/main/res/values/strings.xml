@@ -463,4 +463,6 @@
     <string name="speech_recognizer_external_1">External 1 (seriously bugged, in order to work you need to disable access to the microphone)</string>
     <string name="speech_recognizer_external_2">External 2 (seriously bugged)</string>
     <string name="real_channel_icon">Show real icon on the channel button</string>
+    <string name="subtitle_yellow_semi_transparent">Yellow on semitransparent background</string>
+    <string name="subtitle_yellow_black">Yellow on black background</string>
 </resources>

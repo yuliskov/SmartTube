@@ -455,4 +455,6 @@
     <string name="speech_recognizer_external_1">Внешний 1 (серьезно забагован, для работы нужно отключить доступ к микрофону)</string>
     <string name="speech_recognizer_external_2">Внешний 2 (серьезно забагован)</string>
     <string name="real_channel_icon">Показать реальную иконку на кнопке канала</string>
+    <string name="subtitle_yellow_semi_transparent">Жёлтые на полупрозрачном фоне</string>
+    <string name="subtitle_yellow_black">Жёлтые на чёрном фоне</string>
 </resources>
