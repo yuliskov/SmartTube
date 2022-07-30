@@ -457,4 +457,5 @@
     <string name="real_channel_icon">Показувати справжній значок на кнопці каналу</string>
     <string name="subtitle_yellow_semi_transparent">Жовті на напівпрозорому фоні</string>
     <string name="subtitle_yellow_black">Жовті на чорному фоні</string>
+    <string name="player_pixel_ratio">Співвідношення сторін пікселя</string>
 </resources>

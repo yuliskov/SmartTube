@@ -465,4 +465,5 @@
     <string name="real_channel_icon">Show real icon on the channel button</string>
     <string name="subtitle_yellow_semi_transparent">Yellow on semitransparent background</string>
     <string name="subtitle_yellow_black">Yellow on black background</string>
+    <string name="player_pixel_ratio">Pixel ratio</string>
 </resources>
