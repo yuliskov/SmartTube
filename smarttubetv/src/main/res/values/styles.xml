@@ -174,4 +174,11 @@
         <item name="shelfBackground">@color/scheme_grey_shelf_background_dark</item>
     </style>
     <!--  End Color scheme: Teal (OLED)  -->
+
+    <!--  Color scheme: Dark Grey (monochrome)  -->
+    <style name="App.Theme.DarkGrey2.OLED.Browse" parent="App.Theme.DarkGrey.OLED.Browse">
+        <item name="android:windowBackground">@color/scheme_red_shelf_background_dark</item>
+        <item name="shelfBackground">@color/scheme_red_shelf_background_dark</item>
+    </style>
+    <!--  End Color scheme: Dark Grey (monochrome)  -->
 </resources>
