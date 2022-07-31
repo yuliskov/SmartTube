@@ -463,4 +463,8 @@
     <string name="speech_recognizer_external_1">Extern 1 (Funktioniert nicht gut, um es zu benutzen, müssen Sie den Zugriff auf das Mikrofon deaktivieren)</string>
     <string name="speech_recognizer_external_2">Extern 2 (Funktioniert nicht gut)</string>
     <string name="real_channel_icon">Echtes Symbol auf der Kanal-Taste anzeigen</string>
+    <string name="subtitle_yellow_semi_transparent">Gelb auf halbtransparentem Hintergrund</string>
+    <string name="subtitle_yellow_black">Gelb auf schwarzem Hintergrund</string>
+    <string name="player_pixel_ratio">Pixel-Verhältnis</string>
+    <string name="color_scheme_dark_grey_monochrome">Dunkelgrau (monochrom)</string>
 </resources>
