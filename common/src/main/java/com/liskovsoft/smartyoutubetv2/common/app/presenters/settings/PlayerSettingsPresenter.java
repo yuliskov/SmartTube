@@ -376,10 +376,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         ArrayList<Pair<String, Float>> pairs = new ArrayList<>();
-        pairs.add(new Pair<>("1:1 (16:9 monitor)", 1.0f));
-        pairs.add(new Pair<>("1.11111:1 (16:10 monitor)", 1.11111f));
-        pairs.add(new Pair<>("1.3333:1 (4:3 monitor)", 1.3333f));
-        pairs.add(new Pair<>("0.7619:1 (21:9 monitor)", 0.7619f));
+        pairs.add(new Pair<>("1:1 (16:9 display)", 1.0f));
+        pairs.add(new Pair<>("1.11111:1 (16:10 display)", 1.11111f));
+        pairs.add(new Pair<>("1.3333:1 (4:3 display)", 1.3333f));
+        pairs.add(new Pair<>("0.7619:1 (21:9 display)", 0.7619f));
 
         for (Pair<String, Float> pair : pairs) {
             options.add(UiOptionItem.from(pair.first,
