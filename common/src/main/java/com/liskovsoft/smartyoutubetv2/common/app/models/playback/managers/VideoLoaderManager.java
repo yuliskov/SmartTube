@@ -59,8 +59,10 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         if (getController() != null &&
                 getController().getVideo() != null &&
                 getController().getVideo().isLive) {
-            getController().showSuggestions(true);
+            // Do rewind ten sec to stop buffering
+            getController().setPositionMs(getController().getPositionMs() - 10_000);
             getController().setPlayWhenReady(false);
+            getController().showControls(true);
         }
     };
 
