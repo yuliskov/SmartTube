@@ -44,9 +44,6 @@ public class AddDeviceFragment extends GuidedStepSupportFragment implements AddD
     }
 
     private void setTitle(String userCode) {
-        // Maintain proper code direction on Arabic language (mobile client language should match???)
-        //getGuidanceStylist().getTitleView().setTextDirection(TextView.TEXT_DIRECTION_LTR);
-
         getGuidanceStylist().getTitleView().setText(userCode);
     }
 
