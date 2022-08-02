@@ -55,16 +55,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             getController().restartEngine(); // properly save position of the current track
         }
     };
-    private final Runnable mStopLiveStream = () -> {
-        if (getController() != null &&
-                getController().getVideo() != null &&
-                getController().getVideo().isLive) {
-            // Do rewind ten sec to stop buffering
-            getController().setPositionMs(getController().getPositionMs() - 10_000);
-            getController().setPlayWhenReady(false);
-            getController().showControls(true);
-        }
-    };
 
     public VideoLoaderManager(SuggestionsLoaderManager suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
@@ -124,18 +114,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     @Override
     public void onVideoLoaded(Video item) {
         mLastError = -1;
-    }
-
-    @Override
-    public void onBuffering() {
-        // Fix long buffering (indicates end of the stream)
-        watchLiveStream();
-    }
-
-    @Override
-    public void onPlay() {
-        // Seems fine. Buffering is gone.
-        unwatchLiveStream();
     }
 
     @Override
@@ -353,7 +331,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     private void disposeActions() {
         RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
-        Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext, mStopLiveStream);
+        Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
     }
 
     private void initErrorActions() {
@@ -454,25 +432,5 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         }
 
         Log.e(TAG, "Undetected repeat mode " + playbackMode);
-    }
-
-    /**
-     * Stop on long buffering (indicates end of the stream)
-     */
-    private void watchLiveStream() {
-        unwatchLiveStream();
-
-        if (getController() != null &&
-                getController().getVideo() != null &&
-                getController().getVideo().isLive) {
-            Utils.postDelayed(mHandler, mStopLiveStream, 2 * 60 * 1_000);
-        }
-    }
-
-    /**
-     * Cancel stream buffering check
-     */
-    private void unwatchLiveStream() {
-        Utils.removeCallbacks(mHandler, mPendingRestartEngine, mStopLiveStream);
     }
 }

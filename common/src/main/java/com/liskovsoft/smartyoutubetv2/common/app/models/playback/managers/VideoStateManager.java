@@ -170,15 +170,15 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
 
     @Override
     public void onPlay() {
-        showHideScreensaver(false);
         setPlayEnabled(true);
+        showHideScreensaver(false);
     }
 
     @Override
     public void onPause() {
-        showHideScreensaver(true);
         setPlayEnabled(false);
         //saveState();
+        showHideScreensaver(true);
     }
 
     @Override
@@ -209,6 +209,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
     public void onBuffering() {
         // Check LIVE threshold and set speed to normal
         restoreSpeed();
+        showHideScreensaver(true);
     }
 
     @Override
