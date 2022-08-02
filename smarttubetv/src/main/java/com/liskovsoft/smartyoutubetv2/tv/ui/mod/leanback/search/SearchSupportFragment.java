@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.CompletionInfo;
 import android.widget.FrameLayout;
 import androidx.fragment.app.Fragment;
@@ -778,6 +779,10 @@ public class SearchSupportFragment extends Fragment {
     }
 
     protected void enableKeyboardAutoShow(boolean enable) {
+        // Show/Hide kbd on activity first launch
+        if (getActivity() != null) {
+            getActivity().getWindow().setSoftInputMode(enable ? WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE : WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        }
         mIsKeyboardAutoShowEnabled = enable;
     }
 
