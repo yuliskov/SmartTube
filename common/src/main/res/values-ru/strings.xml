@@ -427,7 +427,7 @@
     <string name="action_playlist_remove">Удалить из плейлиста</string>
     <!-- BEGIN Moved strings -->
     <string name="signin_view_title">Код загружается…</string>
-    <string name="signin_view_description">Чтобы войти в аккаунт, введите этот код на странице %s\nПРИМЕЧАНИЕ. Работает только с браузерами Firefox или Chrome.</string>
+    <string name="signin_view_description">Чтобы войти в аккаунт, введите этот код на странице %s\nПРИМЕЧАНИЕ. Работает только с браузерами Firefox или Chrome.\nПРИМЕЧАНИЕ. На языках RTL код инвертирован.</string>
     <string name="signin_view_action_text">Готово</string>
     <string name="require_checked">Требуется \"%s\"</string>
     <string name="msg_press_again_to_exit">Нажмите ещё раз для выхода</string>
@@ -435,7 +435,7 @@
     <string name="player_ending_time">Закончится в %s</string>
     <string name="badge_new_content">НОВЫЙ КОНТЕНТ</string>
     <string name="badge_live">В ЭФИРЕ</string>
-    <string name="add_device_view_description">Чтобы привязать устройство, введите этот код в приложении YouTube на телефоне в разделе Настройки/Смотреть на ТВ\nПРИМЕЧАНИЕ. Работает только с клавиатурой Gboard.</string>
+    <string name="add_device_view_description">Чтобы привязать устройство, введите этот код в приложении YouTube на телефоне в разделе Настройки/Смотреть на ТВ\nПРИМЕЧАНИЕ. Работает только с клавиатурой Gboard.\nПРИМЕЧАНИЕ. На языках RTL код инвертирован.</string>
     <!-- END Moved strings -->
     <string name="skip_24_rate">Пропускать 24fps форматы (исправление для режима real cinema?)</string>
     <string name="player_disable_suggestions">Отключить рекомендации</string>
