@@ -209,6 +209,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
     public void onBuffering() {
         // Check LIVE threshold and set speed to normal
         restoreSpeed();
+        // Live stream starts to buffer after the end
         showHideScreensaver(true);
     }
 
