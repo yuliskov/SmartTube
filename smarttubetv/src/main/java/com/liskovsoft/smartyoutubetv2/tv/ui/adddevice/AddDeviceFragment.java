@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.adddevice;
 
 import android.os.Bundle;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.leanback.app.GuidedStepSupportFragment;
@@ -43,7 +44,10 @@ public class AddDeviceFragment extends GuidedStepSupportFragment implements AddD
     }
 
     private void setTitle(String userCode) {
-        getGuidanceStylist().getTitleView().setText(userCode);
+        TextView titleView = getGuidanceStylist().getTitleView();
+        // Maintain proper code direction on Arabic language
+        titleView.setTextDirection(TextView.TEXT_DIRECTION_LTR);
+        titleView.setText(userCode);
     }
 
     @Override
