@@ -104,7 +104,7 @@ public class ViewManager {
         }
     }
 
-    public boolean startParentView(Activity activity) {
+    public void startParentView(Activity activity) {
         if (activity.getIntent() != null) {
             removeTopActivity();
 
@@ -121,24 +121,23 @@ public class ViewManager {
 
                 if (mIsSinglePlayerMode) {
                     safeMoveTaskToBack(activity);
-                    return true;
                 }
+            } else {
+                try {
+                    Log.d(TAG, "Launching parent activity: " + parentActivity.getSimpleName());
+                    Intent intent = new Intent(activity, parentActivity);
 
-                return false;
-            }
-
-            try {
-                Log.d(TAG, "Launching parent activity: " + parentActivity.getSimpleName());
-                Intent intent = new Intent(activity, parentActivity);
-
-                safeStartActivity(activity, intent);
-            } catch (ActivityNotFoundException e) {
-                e.printStackTrace();
-                Log.e(TAG, "Parent activity not found.");
+                    safeStartActivity(activity, intent);
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Parent activity not found.");
+                }
             }
         }
+    }
 
-        return true;
+    public boolean hasParentView(Activity activity) {
+        return mActivityStack.size() > 1 || getDefaultParent(activity) != null;
     }
 
     public void startDefaultView() {
@@ -213,8 +212,8 @@ public class ViewManager {
         }
     }
 
-    private Class<?> getTopActivity() {
-        Class<?> result = null;
+    private Class<? extends Activity> getTopActivity() {
+        Class<? extends Activity> result = null;
 
         if (!mActivityStack.isEmpty()) {
             result = mActivityStack.peek();
@@ -241,6 +240,10 @@ public class ViewManager {
 
     public void blockTop(Activity activity) {
         mDefaultTop = activity == null ? null : activity.getClass();
+    }
+
+    public Class<? extends Activity> getBlockedTop() {
+        return mDefaultTop;
     }
 
     public void removeTop(Activity activity) {
@@ -322,6 +325,8 @@ public class ViewManager {
 
             ((MotherActivity) activity).finishReally();
 
+            PlaybackPresenter.instance(activity).forceFinish();
+
             // Fix: can't start finished app activity from history.
             // Do reset state because the app should continue to run in the background.
             // NOTE: Don't rely on MotherActivity.onDestroy() because activity can be killed silently.
@@ -347,7 +352,7 @@ public class ViewManager {
     }
 
     public Class<?> getTopView() {
-        Class<?> topActivity = getTopActivity();
+        Class<? extends Activity> topActivity = getTopActivity();
 
         if (topActivity == null) {
             return null;

@@ -23,11 +23,12 @@ public final class Video implements Parcelable {
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     private static final String[] sNotPlaylistParams = new String[] {"EAIYAQ%3D%3D"};
     private static final String SECTION_PREFIX = "FE";
+    private static final String BLACK_PLACEHOLDER_URL = "https://via.placeholder.com/1280x720/000000/000000";
     public long id;
     public String title;
     public String secondTitle;
-    private String newTitle;
-    private String newSecondTitle;
+    private String metadataTitle;
+    private String metadataSecondTitle;
     public String description;
     public String category;
     public int itemType = -1;
@@ -35,7 +36,8 @@ public final class Video implements Parcelable {
     public String videoId;
     public String videoUrl;
     public String playlistId;
-    public int playlistIndex;
+    public String remotePlaylistId;
+    public int playlistIndex = -1;
     public String playlistParams;
     public String reloadPageKey;
     public String bgImageUrl;
@@ -59,6 +61,7 @@ public final class Video implements Parcelable {
     public int extra = -1;
     public int pendingPosMs;
     public boolean fromQueue;
+    public boolean isPending;
 
     public Video() {
        // NOP
@@ -158,23 +161,8 @@ public final class Video implements Parcelable {
     }
 
     public static Video from(String videoId) {
-        return from(videoId, null, -1);
-    }
-
-    public static Video from(String videoId, String playlistId, int playlistIndex) {
-        return from(videoId, playlistId, playlistIndex, null, null, null, -1);
-    }
-
-    public static Video from(String videoId, String playlistId, int playlistIndex, String channelId, String title, String info, float percentWatched) {
         Video video = new Video();
         video.videoId = videoId;
-        video.playlistId = playlistId;
-        video.playlistIndex = playlistIndex;
-        video.channelId = channelId;
-        video.title = title;
-        video.secondTitle = info;
-        video.percentWatched = percentWatched;
-
         return video;
     }
 
@@ -236,23 +224,31 @@ public final class Video implements Parcelable {
         return video == null || video.videoId == null;
     }
 
-    public String extractAuthor() {
+    public String getTitle() {
+        return title != null ? title : metadataTitle;
+    }
+
+    public String getSecondTitle() {
+        return secondTitle != null ? secondTitle : metadataSecondTitle;
+    }
+
+    public String getAuthor() {
         if (author != null) {
             return author;
         }
 
-        return extractAuthor(secondTitle);
+        return extractAuthor(secondTitle != null ? secondTitle : metadataSecondTitle);
     }
 
-    private static String extractAuthor(String info) {
+    private static String extractAuthor(String secondTitle) {
         String result = null;
 
-        if (info != null) {
-            info = info.replace(TERTIARY_TEXT_DELIM + " LIVE", ""); // remove special marks
-            String[] split = info.split(TERTIARY_TEXT_DELIM);
+        if (secondTitle != null) {
+            secondTitle = secondTitle.replace(TERTIARY_TEXT_DELIM + " LIVE", ""); // remove special marks
+            String[] split = secondTitle.split(TERTIARY_TEXT_DELIM);
 
             if (split.length <= 1) {
-                result = info;
+                result = secondTitle;
             } else {
                 // First part may be a special label (4K, Stream, New etc)
                 // Two cases to detect label: 1) Description is long (4 items); 2) First item of info is too short (2 letters)
@@ -268,7 +264,7 @@ public final class Video implements Parcelable {
 
         if (group != null && group.getVideos() != null) {
             for (Video video : group.getVideos()) {
-                if (Helpers.equals(video.extractAuthor(), author)) {
+                if (Helpers.equals(video.getAuthor(), author)) {
                     result.add(video);
                 }
             }
@@ -389,7 +385,11 @@ public final class Video implements Parcelable {
         return getReloadPageKey() != null;
     }
 
-    public boolean hasUploads() {
+    public boolean hasNextPageKey() {
+        return getNextPageKey() != null;
+    }
+
+    public boolean hasNestedItems() {
         return mediaItem != null && mediaItem.hasUploads();
     }
 
@@ -408,6 +408,10 @@ public final class Video implements Parcelable {
         return videoId == null && channelId != null && itemType == MediaItem.TYPE_PLAYLIST;
     }
 
+    public boolean isEmpty() {
+        return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId);
+    }
+
     public boolean belongsToPlaylists() {
         return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_USER_PLAYLISTS;
     }
@@ -422,6 +426,14 @@ public final class Video implements Parcelable {
     public String getReloadPageKey() {
         return reloadPageKey != null ? reloadPageKey :
                 (group != null && group.getMediaGroup() != null && group.getMediaGroup().getReloadPageKey() != null) ? group.getMediaGroup().getReloadPageKey() : null;
+    }
+
+    public String getNextPageKey() {
+        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getNextPageKey() != null ? group.getMediaGroup().getNextPageKey() : null;
+    }
+
+    public String getBackgroundUrl() {
+        return bgImageUrl != null ? bgImageUrl : BLACK_PLACEHOLDER_URL;
     }
 
     public boolean belongsToUndefined() {
@@ -497,18 +509,26 @@ public final class Video implements Parcelable {
             return;
         }
 
-        newTitle = metadata.getTitle();
-        
-        newSecondTitle = useAltSecondTitle ? metadata.getSecondTitleAlt() : metadata.getSecondTitle();
+        // NOTE: Skip upcoming (no media) because default title more informative (e.g. has scheduled time).
+        // NOTE: Upcoming videos metadata wrongly reported as live
+        if (!isUpcoming) {
+            metadataTitle = metadata.getTitle();
 
-        // Casting fix (no title, no desc)
-        if (title == null) {
-            title = newTitle;
-        }
+            metadataSecondTitle = useAltSecondTitle ? metadata.getSecondTitleAlt() : metadata.getSecondTitle();
 
-        // Casting fix (no title, no desc)
-        if (secondTitle == null) {
-            secondTitle = newSecondTitle;
+            // Casting fix (no title, no desc)
+            if (title == null) {
+                title = metadataTitle;
+            }
+
+            // Casting fix (no title, no desc)
+            if (secondTitle == null) {
+                secondTitle = metadataSecondTitle;
+            }
+
+            // NOTE: Upcoming videos metadata wrongly reported as live (live == true, upcoming == false)
+            isLive = metadata.isLive();
+            isUpcoming = metadata.isUpcoming();
         }
 
         // No checks. This data wasn't existed before sync.
@@ -517,9 +537,6 @@ public final class Video implements Parcelable {
         }
         channelId = metadata.getChannelId();
         nextMediaItem = metadata.getNextVideo();
-        // NOTE: Upcoming videos metadata wrongly reported as live
-        isLive = metadata.isLive();
-        isUpcoming = metadata.isUpcoming();
         isSubscribed = metadata.isSubscribed();
         isSynced = true;
 
@@ -542,10 +559,27 @@ public final class Video implements Parcelable {
      * Creating lightweight copy of origin.
      */
     public Video copy() {
-        Video video = from(videoId, playlistId, playlistIndex, channelId, title, secondTitle, percentWatched);
+        Video video = new Video();
+        video.videoId = videoId;
+        video.playlistId = playlistId;
+        video.playlistIndex = playlistIndex;
+        video.channelId = channelId;
+        video.title = title;
+        video.metadataTitle = metadataTitle;
+        video.secondTitle = secondTitle;
+        video.metadataSecondTitle = metadataSecondTitle;
+        video.percentWatched = percentWatched;
+        video.cardImageUrl = cardImageUrl;
+        video.fromQueue = fromQueue;
+        video.bgImageUrl = bgImageUrl;
+        video.isLive = isLive;
+        video.isUpcoming = isUpcoming;
+        video.nextMediaItem = nextMediaItem;
+
         if (group != null) {
             video.group = group.copy(); // Needed for proper multi row fragments sync (row id == group id)
         }
+
         return video;
     }
 
@@ -554,12 +588,16 @@ public final class Video implements Parcelable {
     }
 
     public String getPlayerTitle() {
-        return newTitle != null ? newTitle : title != null ? title : null;
+        return metadataTitle != null ? metadataTitle : title != null ? title : null;
     }
 
     public String getPlayerSecondTitle() {
         // Don't sync future translation because of not precise info
-        return newSecondTitle != null && !isUpcoming ? newSecondTitle : secondTitle != null ? secondTitle : null;
+        return metadataSecondTitle != null && !isUpcoming ? metadataSecondTitle : secondTitle != null ? secondTitle : null;
+    }
+
+    public String getPlaylistId() {
+        return isRemote && remotePlaylistId != null ? remotePlaylistId : playlistId;
     }
 
     private boolean checkMediaItems() {

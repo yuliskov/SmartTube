@@ -10,4 +10,5 @@ public interface AppDialogView {
     void clear();
     void finish();
     void goBack();
+    boolean isShown();
 }

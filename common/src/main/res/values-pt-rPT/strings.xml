@@ -33,7 +33,7 @@
     <string name="video_speed">Velocidade do vídeo</string>
     <string name="resolution_switch">Mudar resolução</string>
     <string name="video_buffer">Buffer do vídeo</string>
-    <string name="video_buffer_size_low">Alto</string>
+    <string name="video_buffer_size_low">Baixo</string>
     <string name="video_buffer_size_med">Médio</string>
     <string name="video_buffer_size_high">Alto</string>
     <string name="update_changelog">Alterações</string>

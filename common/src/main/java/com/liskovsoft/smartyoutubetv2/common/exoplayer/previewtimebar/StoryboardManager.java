@@ -10,14 +10,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
-//import com.liskovsoft.appupdatechecker2.other.SettingsManager;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemStoryboard;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemStoryboard.Size;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -29,18 +28,18 @@ import java.util.Set;
 public class StoryboardManager {
     private static final String TAG = StoryboardManager.class.getSimpleName();
     private static final long FRAME_DURATION_MS = 10_000;
-    private final MediaItemManager mMediaItemManager;
+    private static final int MAX_PRELOADED_IMAGES = 3;
+    private static final int DIRECTION_RIGHT = 0;
+    private static final int DIRECTION_LEFT = 1;
+    private final MediaItemService mMediaItemManager;
     private final Context mContext;
     private long mLengthMs;
     private MediaItemStoryboard mStoryboard;
     private Disposable mFormatAction;
     private long[] mSeekPositions;
-    private static final int DIRECTION_RIGHT = 0;
-    private static final int DIRECTION_LEFT = 1;
     private int mCurrentImgNum = -1;
-    private Set<Integer> mCachedImageNums;
+    private final Set<Integer> mCachedImageNums = new ArraySet<>();
     private int mSeekDirection = DIRECTION_RIGHT;
-    private static final int MAX_PRELOADED_IMAGES = 3;
 
     public interface Callback {
         void onBitmapLoaded(Bitmap bitmap);
@@ -49,17 +48,18 @@ public class StoryboardManager {
     public StoryboardManager(Context context) {
         mContext = context;
         MediaService mediaService = YouTubeMediaService.instance();
-        mMediaItemManager = mediaService.getMediaItemManager();
+        mMediaItemManager = mediaService.getMediaItemService();
     }
 
-    public void setVideo(Video video, long lengthMs) {
+    public void init(Video video, long lengthMs) {
         mLengthMs = lengthMs;
         mSeekPositions = null;
-        mCachedImageNums = new ArraySet<>();
+        mStoryboard = null;
+        mCachedImageNums.clear();
 
         RxUtils.disposeActions(mFormatAction);
 
-        if (video == null) {
+        if (video == null || video.isLive || video.isUpcoming) {
             return;
         }
 

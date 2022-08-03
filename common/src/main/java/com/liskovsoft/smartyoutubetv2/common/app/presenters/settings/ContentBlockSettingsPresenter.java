@@ -17,11 +17,6 @@ import java.util.List;
 import java.util.Set;
 
 public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
-    private static final String CONTENT_BLOCK_TITLE = String.format(
-            "%s (%s)",
-            ContentBlockData.SPONSOR_BLOCK_NAME,
-            ContentBlockData.SPONSOR_BLOCK_URL
-    );
     private final ContentBlockData mContentBlockData;
 
     public ContentBlockSettingsPresenter(Context context) {
@@ -42,11 +37,16 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         appendColorMarkersSection(settingsPresenter);
         appendMiscSection(settingsPresenter);
 
-        settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);
+        settingsPresenter.showDialog(getContext().getString(R.string.content_block_provider));
     }
 
     private void appendSponsorBlockSwitch(AppDialogPresenter settingsPresenter) {
-        OptionItem sponsorBlockOption = UiOptionItem.from(CONTENT_BLOCK_TITLE,
+        String title = String.format(
+                "%s (%s)",
+                getContext().getString(R.string.content_block_provider),
+                getContext().getString(R.string.content_block_provider_url)
+        );
+        OptionItem sponsorBlockOption = UiOptionItem.from(title,
                 option -> mContentBlockData.enableSponsorBlock(option.isSelected()),
                 mContentBlockData.isSponsorBlockEnabled()
         );

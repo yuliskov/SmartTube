@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
@@ -242,6 +243,8 @@ public class PlaybackActivity extends LeanbackActivity {
     public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode);
 
+        mPlaybackFragment.onPIPChanged(isInPictureInPictureMode);
+
         if (!isInPictureInPictureMode) {
             // Disable collapse app to Home launcher
             mViewManager.enableMoveToBack(false);
@@ -251,24 +254,33 @@ public class PlaybackActivity extends LeanbackActivity {
     @Override
     public void onUserLeaveHint() {
         // Check that user not open dialog/search activity instead of really leaving the activity
-        if (!AppDialogPresenter.instance(this).isDialogShown() && !mBackPressed && !mViewManager.isNewViewPending()) {
-            switch (mPlaybackFragment.getBackgroundMode()) {
-                case PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND:
-                    enterBackgroundPlayMode();
-                    // Do we need to do something additional when running Play Behind?
-                    break;
-                case PlaybackEngineController.BACKGROUND_MODE_PIP:
-                    enterPipMode();
-                    if (doNotDestroy()) {
-                        // Ensure to opening this activity when the user is returning to the app
-                        mViewManager.blockTop(this);
-                        // Return to previous activity (create point from that app could be launched)
-                        mViewManager.startParentView(this);
-                        // Enable collapse app to Home launcher
-                        mViewManager.enableMoveToBack(true);
-                    }
-                    break;
-            }
+        // Activity may be overlapped by the dialog, back is pressed or new view started
+        if (AppDialogPresenter.instance(this).isDialogShown() || mBackPressed || mViewManager.isNewViewPending()) {
+            return;
+        }
+
+        switch (mPlaybackFragment.getBackgroundMode()) {
+            case PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND:
+                enterBackgroundPlayMode();
+                // Do we need to do something additional when running Play Behind?
+                break;
+            case PlaybackEngineController.BACKGROUND_MODE_PIP:
+                enterPipMode();
+                if (doNotDestroy()) {
+                    // Ensure to opening this activity when the user is returning to the app
+                    mViewManager.blockTop(this);
+                    // Return to previous activity (create point from that app could be launched)
+                    mViewManager.startParentView(this);
+                    // Enable collapse app to Home launcher
+                    mViewManager.enableMoveToBack(true);
+                }
+                break;
+            case PlaybackEngineController.BACKGROUND_MODE_SOUND:
+                if (doNotDestroy()) {
+                    // Ensure to continue a playback
+                    mViewManager.blockTop(this);
+                }
+                break;
         }
     }
 

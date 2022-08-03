@@ -7,6 +7,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper.AutoFrameRateListener;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 
 import java.util.HashMap;
 
@@ -194,6 +195,10 @@ public class AutoFrameRateHelper {
 
     public void setDoubleRefreshRateEnabled(boolean enabled) {
         mSyncHelper.setDoubleRefreshRateEnabled(enabled);
+    }
+
+    public void setSkip24RateEnabled(boolean enabled) {
+        mSyncHelper.setSkip24RateEnabled(enabled);
     }
 
     private void resetStats() {

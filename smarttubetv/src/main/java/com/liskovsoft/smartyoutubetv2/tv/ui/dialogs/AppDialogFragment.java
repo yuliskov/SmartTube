@@ -20,6 +20,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreference;
+import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.RadioListPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreferenceDialogFragment;
@@ -139,6 +141,14 @@ public class AppDialogFragment extends LeanbackSettingsFragment
             startPreferenceFragment(f);
 
             return true;
+        } else if (pref instanceof ChatPreference) {
+            ChatPreference chatPreference = (ChatPreference) pref;
+            ChatPreferenceDialogFragment f = ChatPreferenceDialogFragment.newInstance(chatPreference.getChatReceiver(), chatPreference.getKey());
+            f.enableTransparent(mIsTransparent);
+            f.setTargetFragment(caller, 0);
+            startPreferenceFragment(f);
+
+            return true;
         }
 
         // NOTE: Transparent CheckedList should be placed here (just in case you'll need it).
@@ -170,6 +180,11 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         if (mPreferenceFragment != null) {
             mPreferenceFragment.goBack();
         }
+    }
+
+    @Override
+    public boolean isShown() {
+        return isVisible() && getUserVisibleHint();
     }
 
     public void onFinish() {

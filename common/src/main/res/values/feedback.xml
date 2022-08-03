@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="feedback">
+        <item>Telegram|https://t.me/SmartTubeNext_en</item>
+        <item>Email|firsthash@gmail.com</item>
+    </string-array>
+</resources>

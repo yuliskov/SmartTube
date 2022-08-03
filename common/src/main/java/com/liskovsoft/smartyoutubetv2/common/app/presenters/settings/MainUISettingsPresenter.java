@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+import android.os.Build;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -39,7 +40,9 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 //        appendChannelSortingCategory(settingsPresenter);
 //        appendPlaylistsCategoryStyle(settingsPresenter);
         appendScaleUI(settingsPresenter);
-        appendVideoGridScale(settingsPresenter);
+        if (Build.VERSION.SDK_INT > 19) {
+            appendVideoGridScale(settingsPresenter);
+        }
 //        appendContextMenuItemsCategory(settingsPresenter);
 //        appendMiscCategory(settingsPresenter);
 
@@ -65,7 +68,9 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 
         options.add(animatedPreviewsOption);
         options.add(multilineTitle);
-        options.add(autoScrolledTitle);
+        if (Build.VERSION.SDK_INT > 19) {
+            options.add(autoScrolledTitle);
+        }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.cards_style), options);
     }

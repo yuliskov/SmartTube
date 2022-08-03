@@ -56,6 +56,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBackgroundPlaybackCategory(settingsPresenter);
         //appendBackgroundPlaybackActivationCategory(settingsPresenter);
         appendScreenDimmingCategory(settingsPresenter);
+        appendTimeModeCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
         appendAppBackupCategory(settingsPresenter);
         appendInternetCensorship(settingsPresenter);
@@ -94,17 +95,22 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.playlist_order, MainUIData.MENU_ITEM_PLAYLIST_ORDER},
+                {R.string.add_remove_from_playback_queue, MainUIData.MENU_ITEM_ADD_TO_QUEUE},
+                {R.string.action_playback_queue, MainUIData.MENU_ITEM_SHOW_QUEUE},
+                {R.string.set_stream_reminder, MainUIData.MENU_ITEM_STREAM_REMINDER},
                 {R.string.subscribe_unsubscribe_from_channel, MainUIData.MENU_ITEM_SUBSCRIBE},
                 {R.string.save_remove_playlist, MainUIData.MENU_ITEM_SAVE_PLAYLIST},
                 {R.string.create_playlist, MainUIData.MENU_ITEM_CREATE_PLAYLIST},
+                {R.string.add_video_to_new_playlist, MainUIData.MENU_ITEM_ADD_TO_NEW_PLAYLIST},
                 {R.string.dialog_add_to_playlist, MainUIData.MENU_ITEM_ADD_TO_PLAYLIST},
                 {R.string.add_remove_from_recent_playlist, MainUIData.MENU_ITEM_RECENT_PLAYLIST},
                 {R.string.play_video, MainUIData.MENU_ITEM_PLAY_VIDEO},
                 {R.string.not_interested, MainUIData.MENU_ITEM_NOT_INTERESTED},
                 {R.string.remove_from_history, MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY},
                 {R.string.pin_unpin_from_sidebar, MainUIData.MENU_ITEM_PIN_TO_SIDEBAR},
-                {R.string.add_remove_from_playback_queue, MainUIData.MENU_ITEM_ADD_TO_QUEUE},
                 {R.string.share_link, MainUIData.MENU_ITEM_SHARE_LINK},
+                {R.string.share_embed_link, MainUIData.MENU_ITEM_SHARE_EMBED_LINK},
                 {R.string.dialog_account_list, MainUIData.MENU_ITEM_SELECT_ACCOUNT},
                 {R.string.move_section_up, MainUIData.MENU_ITEM_MOVE_SECTION_UP},
                 {R.string.move_section_down, MainUIData.MENU_ITEM_MOVE_SECTION_DOWN},
@@ -126,6 +132,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.settings_language_country, MainUIData.BUTTON_CHANGE_LANGUAGE},
                 {R.string.settings_accounts, MainUIData.BUTTON_BROWSE_ACCOUNTS}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {
@@ -267,6 +274,28 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.screen_dimming), options);
     }
 
+    private void appendTimeModeCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.time_mode_24_hours),
+                option -> {
+                    mGeneralData.setTimeMode(GeneralData.TIME_MODE_24);
+                    mRestartApp = true;
+                },
+                mGeneralData.getTimeMode() == GeneralData.TIME_MODE_24));
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.time_mode_12_hours),
+                option -> {
+                    mGeneralData.setTimeMode(GeneralData.TIME_MODE_12);
+                    mRestartApp = true;
+                },
+                mGeneralData.getTimeMode() == GeneralData.TIME_MODE_12));
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.time_mode), options);
+    }
+
     private void appendAppBackupCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
@@ -302,9 +331,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_history),
-                option -> mGeneralData.hideShortsFromHistory(option.isSelected()),
-                mGeneralData.isHideShortsFromHistoryEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_global_clock),
+                option -> {
+                    mGeneralData.enableGlobalClock(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.isGlobalClockEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_home),
                 option -> mGeneralData.hideShortsFromHome(option.isSelected()),
@@ -313,6 +345,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts),
                 option -> mGeneralData.hideShortsFromSubscriptions(option.isSelected()),
                 mGeneralData.isHideShortsFromSubscriptionsEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_history),
+                option -> mGeneralData.hideShortsFromHistory(option.isSelected()),
+                mGeneralData.isHideShortsFromHistoryEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_upcoming),
                 option -> mGeneralData.hideUpcoming(option.isSelected()),

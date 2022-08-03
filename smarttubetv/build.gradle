@@ -59,8 +59,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 678
-        versionName "14.88"
+        versionCode 752
+        versionName "15.62"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -103,10 +103,10 @@ android {
             //applicationId "org.smartteam.smarttube.tv"
             applicationId "com.teamsmart.videomanager.tv"
         }
-        // storig {
-        //     // matchingFallbacks = ['lite']
-        //     applicationId "com.teamsmart.videomanager.tv"
-        // }
+        storig {
+            // matchingFallbacks = ['lite']
+            applicationId "org.smartteam.smarttube.tv.orig"
+        }
         strtarmenia {
             // matchingFallbacks = ['lite']
             versionCode 11000 + defaultConfig.versionCode
@@ -197,6 +197,7 @@ dependencies {
     implementation project(':sharedutils')
     implementation project(':mediaserviceinterfaces')
     implementation project(':youtubeapi')
+    implementation project(':chatkit')
 
     implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
     implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
@@ -212,4 +213,8 @@ dependencies {
     // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 
     implementation 'org.conscrypt:conscrypt-android:2.5.2'
+
+    //implementation 'com.github.stfalcon-studio:Chatkit:' + chatkitVersion
+
+    implementation 'net.gotev:speech:' + gotevSpeechVersion
 }

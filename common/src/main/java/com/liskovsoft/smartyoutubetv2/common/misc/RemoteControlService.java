@@ -47,6 +47,7 @@ public class RemoteControlService extends Service {
         Log.d(TAG, "onStartCommand: %s", Helpers.toString(intent));
 
         PlaybackPresenter.instance(getApplicationContext()); // init RemoteControlListener
+        StreamReminderService.instance(getApplicationContext()).start(); // init reminder service
 
         return START_STICKY;
     }

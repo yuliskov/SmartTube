@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller;
 
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 
 import java.io.InputStream;
 import java.util.List;
@@ -28,6 +28,7 @@ public interface PlaybackEngineController {
     float ASPECT_RATIO_1_1 = 1f;
     float ASPECT_RATIO_4_3 = 1.33f;
     float ASPECT_RATIO_5_4 = 1.25f;
+    float ASPECT_RATIO_16_8_1 = 1.9753f;
     float ASPECT_RATIO_16_9 = 1.77f;
     float ASPECT_RATIO_16_10 = 1.6f;
     float ASPECT_RATIO_21_9 = 2.33f;
@@ -42,8 +43,8 @@ public interface PlaybackEngineController {
     long getPositionMs();
     void setPositionMs(long positionMs);
     long getLengthMs();
-    void setPlay(boolean play);
-    boolean getPlay();
+    void setPlayWhenReady(boolean play);
+    boolean getPlayWhenReady();
     boolean isPlaying();
     boolean isLoading();
     List<FormatItem> getVideoFormats();

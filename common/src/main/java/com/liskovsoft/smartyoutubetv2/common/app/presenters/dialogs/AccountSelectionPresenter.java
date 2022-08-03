@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.SignInManager;
+import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -26,13 +26,13 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
     private static final String TAG = AccountSelectionPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static AccountSelectionPresenter sInstance;
-    private final SignInManager mSignInManager;
+    private final SignInService mSignInManager;
     private Disposable mAccountsAction;
 
     public AccountSelectionPresenter(Context context) {
         super(context);
         MediaService service = YouTubeMediaService.instance();
-        mSignInManager = service.getSignInManager();
+        mSignInManager = service.getSignInService();
     }
 
     public static AccountSelectionPresenter instance(Context context) {

@@ -11,13 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.BackgroundManager;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
@@ -67,7 +65,7 @@ public class UriBackgroundManager {
 
     public void onStart() {
         if (mBackgroundURI != null) {
-            setBackground(mBackgroundURI.toString());
+            showBackground(mBackgroundURI.toString());
         } else if (mBackgroundColor != -1) {
             setBackgroundColor(mBackgroundColor);
         } else {
@@ -101,7 +99,7 @@ public class UriBackgroundManager {
         @Override
         public void run() {
             if (mBackgroundURI != null) {
-                setBackground(mBackgroundURI.toString());
+                showBackground(mBackgroundURI.toString());
             }
         }
     }
@@ -110,7 +108,7 @@ public class UriBackgroundManager {
         return mBackgroundManager;
     }
 
-    public void setBackground(String uri) {
+    public void showBackground(String uri) {
         View videoView = mActivity.findViewById(R.id.video_surface);
 
         if (videoView != null) {
@@ -141,5 +139,20 @@ public class UriBackgroundManager {
                         mBackgroundManager.setBitmap(resource);
                     }
                 });
+    }
+
+    public void showBackgroundColor(int colorResId) {
+        View videoView = mActivity.findViewById(R.id.video_surface);
+
+        if (videoView != null) {
+            videoView.setVisibility(colorResId == -1 ? View.VISIBLE : View.INVISIBLE);
+        }
+
+        if (colorResId == -1) {
+            removeBackground();
+            return;
+        }
+
+        mBackgroundManager.setColor(ContextCompat.getColor(mActivity, colorResId));
     }
 }

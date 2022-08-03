@@ -130,6 +130,16 @@ public class Playlist {
         return mPlaylist.contains(video);
     }
 
+    public boolean containsAfterCurrent(Video video) {
+        if (Video.isEmpty(video)) {
+            return false;
+        }
+
+        List<Video> afterCurrent = getAllAfterCurrent();
+
+        return afterCurrent != null && afterCurrent.contains(video);
+    }
+
     ///**
     // * Trim playlist if one exceeds needed size or current element not last in the list
     // */
@@ -215,10 +225,33 @@ public class Playlist {
         return Collections.unmodifiableList(mPlaylist.subList(mNewSessionIndex, size));
     }
 
-    public void removeAllAfterCurrent() {
+    public boolean hasNext() {
+        return getNext() != null;
+    }
+
+    public List<Video> getAllAfterCurrent() {
+        if (mCurrentIndex == -1) {
+            return mPlaylist;
+        }
+
         int fromIndex = mCurrentIndex + 1;
         if (fromIndex > 0 && fromIndex < mPlaylist.size()) {
-            mPlaylist.subList(fromIndex, mPlaylist.size()).clear();
+            return mPlaylist.subList(fromIndex, mPlaylist.size());
+        }
+
+        return null;
+    }
+
+    public void removeAllAfterCurrent() {
+        if (mCurrentIndex == -1) {
+            return;
+        }
+
+        int fromIndex = mCurrentIndex + 1;
+        int size = mPlaylist.size();
+        if (fromIndex > 0 && fromIndex < size) {
+            //mPlaylist = mPlaylist.subList(0, fromIndex);
+            mPlaylist.subList(fromIndex, size).clear();
         }
     }
 
@@ -226,13 +259,16 @@ public class Playlist {
      * Trim playlist if one exceeds needed size or current element not last in the list
      */
     private void trimPlaylist() {
-        boolean playlistTooBig = mPlaylist.size() > PLAYLIST_MAX_SIZE;
+        int size = mPlaylist.size();
+        boolean playlistTooBig = size > PLAYLIST_MAX_SIZE;
 
         if (playlistTooBig) {
-            int fromIndex = mPlaylist.size() - PLAYLIST_MAX_SIZE;
-            int toIndex = mPlaylist.size();
-            mPlaylist = mPlaylist.subList(fromIndex, toIndex);
-            mCurrentIndex -= fromIndex;
+            //int fromIndex = mPlaylist.size() - PLAYLIST_MAX_SIZE;
+            //int toIndex = mPlaylist.size();
+            //mPlaylist = mPlaylist.subList(fromIndex, toIndex);
+            int toIndex = size - PLAYLIST_MAX_SIZE;
+            mPlaylist.subList(0, toIndex).clear();
+            mCurrentIndex -= toIndex;
         }
     }
 
@@ -240,6 +276,10 @@ public class Playlist {
      * Do some cleanup to prevent possible OOM exception
      */
     private void stripPrevItem() {
+        if (mCurrentIndex == -1) {
+            return;
+        }
+
         int prevPosition = mCurrentIndex - 1;
 
         if (prevPosition < mPlaylist.size() && prevPosition >= 0) {

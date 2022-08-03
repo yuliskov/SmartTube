@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.graphics.Color;
 import androidx.core.content.ContextCompat;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
@@ -31,13 +31,13 @@ import java.util.concurrent.TimeUnit;
 public class ContentBlockManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = ContentBlockManager.class.getSimpleName();
     private static final long SEGMENT_CHECK_LENGTH_MS = 3_000;
-    private MediaItemManager mMediaItemManager;
+    private MediaItemService mMediaItemManager;
     private ContentBlockData mContentBlockData;
     private Video mVideo;
     private List<SponsorSegment> mSponsorSegments;
     private Disposable mProgressAction;
     private Disposable mSegmentsAction;
-    private boolean mIsSameSegment;
+    private long mLastSkipPosMs;
 
     public static class SeekBarSegment {
         public int startProgress;
@@ -83,7 +83,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     @Override
     public void onInitDone() {
         MediaService mediaService = YouTubeMediaService.instance();
-        mMediaItemManager = mediaService.getMediaItemManager();
+        mMediaItemManager = mediaService.getMediaItemService();
         mContentBlockData = ContentBlockData.instance(getActivity());
     }
 
@@ -106,8 +106,19 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     @Override
+    public void onEngineInitialized() {
+        getController().setContentBlockButtonState(mContentBlockData.isSponsorBlockEnabled());
+    }
+
+    @Override
     public void onEngineReleased() {
         disposeActions();
+    }
+
+    @Override
+    public void onContentBlockClicked(boolean enabled) {
+        mContentBlockData.enableSponsorBlock(enabled);
+        onVideoLoaded(getController().getVideo());
     }
 
     private boolean checkVideo(Video video) {
@@ -120,11 +131,10 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
 
-        // Reset colors
-        getController().setSeekBarSegments(null);
-
+        // NOTE: SponsorBlock (when happened java.net.SocketTimeoutException) could block whole application with Schedulers.io()
+        // Because Schedulers.io() reuses blocked threads in RxJava 2: https://github.com/ReactiveX/RxJava/issues/6542
         mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getEnabledCategories())
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread()) // fix blocking
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         segments -> {
@@ -160,6 +170,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         RxUtils.disposeActions(mProgressAction, mSegmentsAction);
         mSponsorSegments = null;
         mVideo = null;
+
+        // Reset colors
+        getController().setSeekBarSegments(null);
+        // Reset previously found segment (fix no dialog popup)
+        mLastSkipPosMs = 0;
     }
 
     private void skipSegment(long interval) {
@@ -167,24 +182,30 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
 
-        boolean isSegmentFound = false;
+        // Fix looping messages at the end of the video (playback mode: pause at the end of the video)
+        if (!getController().isPlaying()) {
+            return;
+        }
+
         SponsorSegment foundSegment = null;
+        long skipPosMs = 0;
 
         for (SponsorSegment segment : mSponsorSegments) {
             if (isPositionAtSegmentStart(getController().getPositionMs(), segment)) {
-                isSegmentFound = true;
                 foundSegment = segment;
                 Integer resId = mContentBlockData.getLocalizedRes(segment.getCategory());
                 String localizedCategory = resId != null ? getActivity().getString(resId) : segment.getCategory();
 
                 int type = mContentBlockData.getAction(segment.getCategory());
 
+                skipPosMs = segment.getEndMs();
+
                 if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode()) {
-                    getController().setPositionMs(segment.getEndMs());
+                    setPositionMs(skipPosMs);
                 } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
-                    messageSkip(segment.getEndMs(), localizedCategory);
+                    messageSkip(skipPosMs, localizedCategory);
                 } else if (type == ContentBlockData.ACTION_SHOW_DIALOG) {
-                    confirmSkip(segment.getEndMs(), localizedCategory);
+                    confirmSkip(skipPosMs, localizedCategory);
                 }
 
                 break;
@@ -196,7 +217,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             mSponsorSegments.remove(foundSegment);
         }
 
-        mIsSameSegment = isSegmentFound;
+        mLastSkipPosMs = skipPosMs;
     }
 
     private boolean isPositionAtSegmentStart(long positionMs, SponsorSegment segment) {
@@ -212,12 +233,12 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
     private void messageSkip(long skipPositionMs, String category) {
         MessageHelpers.showMessage(getActivity(),
-                String.format("%s: %s", ContentBlockData.SPONSOR_BLOCK_NAME, getActivity().getString(R.string.msg_skipping_segment, category)));
-        getController().setPositionMs(skipPositionMs);
+                String.format("%s: %s", getActivity().getString(R.string.content_block_provider), getActivity().getString(R.string.msg_skipping_segment, category)));
+        setPositionMs(skipPositionMs);
     }
 
     private void confirmSkip(long skipPositionMs, String category) {
-        if (mIsSameSegment) {
+        if (mLastSkipPosMs == skipPositionMs) {
             return;
         }
 
@@ -228,7 +249,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 getActivity().getString(R.string.confirm_segment_skip, category),
                 option -> {
                     settingsPresenter.closeDialog();
-                    getController().setPositionMs(skipPositionMs);
+                    setPositionMs(skipPositionMs);
                 }
         );
 
@@ -242,7 +263,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         settingsPresenter.setCloseTimeoutMs(skipPositionMs - getController().getPositionMs());
 
         settingsPresenter.enableTransparent(true);
-        settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);
+        settingsPresenter.showDialog(getActivity().getString(R.string.content_block_provider));
     }
 
     private List<SeekBarSegment> toSeekBarSegments(List<SponsorSegment> segments) {
@@ -267,5 +288,19 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         return result;
+    }
+
+    /**
+     * Sponsor block fix. Position may exceed real media length.
+     */
+    private void setPositionMs(long positionMs) {
+        long lengthMs = getController().getLengthMs();
+
+        // Sponsor block fix. Position may exceed real media length.
+        if (lengthMs > 0 && positionMs > lengthMs) {
+            positionMs = lengthMs;
+        }
+
+        getController().setPositionMs(positionMs);
     }
 }

@@ -64,6 +64,10 @@ public class TrackErrorFixer {
         Set<MediaTrack> tracks = isAudio(mLastEx) ? mTrackSelectorManager.getAudioTracks() : mTrackSelectorManager.getVideoTracks();
         MediaTrack tmpTrack = null;
 
+        if (tracks == null) {
+            return false;
+        }
+
         for (MediaTrack track : tracks) {
             if (track.isSelected) {
                 addToBlacklist(track);

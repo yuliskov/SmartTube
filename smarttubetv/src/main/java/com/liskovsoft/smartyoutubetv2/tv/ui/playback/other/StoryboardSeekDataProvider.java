@@ -14,8 +14,8 @@ public class StoryboardSeekDataProvider extends PlaybackSeekDataProvider {
         mStoryboardManager = new StoryboardManager(context);
     }
 
-    public void setVideo(Video video, long lengthMs) {
-        mStoryboardManager.setVideo(video, lengthMs);
+    public void init(Video video, long lengthMs) {
+        mStoryboardManager.init(video, lengthMs);
     }
 
     @Override

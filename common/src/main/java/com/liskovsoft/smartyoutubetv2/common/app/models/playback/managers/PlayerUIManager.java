@@ -3,10 +3,11 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -14,37 +15,45 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
-import com.liskovsoft.youtubeapi.service.YouTubeSignInManager;
+import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerUIManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = PlayerUIManager.class.getSimpleName();
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private final Handler mHandler;
-    private final MediaItemManager mMediaItemManager;
+    private final MediaItemService mMediaItemManager;
     private final VideoLoaderManager mVideoLoader;
+    private PlayerData mPlayerData;
+    private PlayerTweaksData mPlayerTweaksData;
+    private List<VideoPlaylistInfo> mVideoPlaylistInfos;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
-    private PlayerData mPlayerData;
     private boolean mIsMetadataLoaded;
     private final Runnable mSuggestionsResetHandler = () -> getController().resetSuggestedPosition();
     private final Runnable mUiAutoHideHandler = () -> {
@@ -64,12 +73,13 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         mHandler = new Handler(Looper.getMainLooper());
 
         MediaService service = YouTubeMediaService.instance();
-        mMediaItemManager = service.getMediaItemManager();
+        mMediaItemManager = service.getMediaItemService();
     }
 
     @Override
     public void onInitDone() {
         mPlayerData = PlayerData.instance(getActivity());
+        mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
 
         // Could be set once per activity creation (view layout stuff)
         getController().setVideoZoomMode(mPlayerData.getVideoZoomMode());
@@ -79,6 +89,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void openVideo(Video item) {
         enableUiAutoHideTimeout();
+
+        if (item != null && getController() != null && !item.equals(getController().getVideo())) {
+            mIsMetadataLoaded = false; // metadata isn't loaded yet at this point
+            resetButtonStates();
+        }
     }
 
     @Override
@@ -114,7 +129,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
-    public void onSubtitlesClicked() {
+    public void onSubtitleClicked() {
         List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
 
         String subtitlesCategoryTitle = getActivity().getString(R.string.subtitle_category_title);
@@ -129,12 +144,18 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
                         option -> getController().setFormat(UiOptionItem.toFormat(option)),
                         getActivity().getString(R.string.subtitles_disabled)));
 
-        settingsPresenter.showDialog(subtitlesCategoryTitle);
+        settingsPresenter.showDialog(subtitlesCategoryTitle, this::setSubtitleButtonState);
     }
 
     @Override
     public void onPlaylistAddClicked() {
-        AppDialogUtil.showAddToPlaylistDialog(getActivity(), getController().getVideo(), null);
+        if (mVideoPlaylistInfos == null) {
+            AppDialogUtil.showAddToPlaylistDialog(getActivity(), getController().getVideo(),
+                    null);
+        } else {
+            AppDialogUtil.showAddToPlaylistDialog(getActivity(), getController().getVideo(),
+                    null, mVideoPlaylistInfos, this::setPlaylistAddButtonState);
+        }
     }
 
     @Override
@@ -157,16 +178,20 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onVideoLoaded(Video item) {
-        mIsMetadataLoaded = false; // metadata isn't loaded yet at this point
-        resetButtonStates();
+        getController().updateEndingTime();
+    }
 
-        if (mPlayerData.getSeekPreviewMode() != PlayerData.SEEK_PREVIEW_NONE) {
-            getController().loadStoryboard();
-        }
+    @Override
+    public void onSeekEnd() {
+        getController().updateEndingTime();
     }
 
     @Override
     public void onViewResumed() {
+        if (getController() == null) {
+            return;
+        }
+
         // Activate debug infos when restoring after PIP.
         getController().showDebugInfo(mDebugViewEnabled);
         getController().setDebugButtonState(mDebugViewEnabled);
@@ -191,6 +216,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().setLikeButtonState(false);
         getController().setDislikeButtonState(false);
         getController().setSubscribeButtonState(false);
+        getController().setChannelIcon(null);
+        getController().setPlaylistAddButtonState(false);
+        getController().setSubtitleButtonState(false);
+        getController().setSpeedButtonState(false);
+        getController().setChatButtonState(PlaybackUIController.BUTTON_STATE_DISABLED);
     }
 
     @Override
@@ -204,14 +234,40 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
         mIsMetadataLoaded = true;
+        if (mPlayerData.getSeekPreviewMode() != PlayerData.SEEK_PREVIEW_NONE) {
+            getController().loadStoryboard();
+        }
         getController().setLikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE);
         getController().setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
         getController().setSubscribeButtonState(metadata.isSubscribed());
+        if (mPlayerTweaksData.isRealChannelIconEnabled()) {
+            getController().setChannelIcon(metadata.getAuthorImageUrl());
+        }
+        setPlaylistAddButtonStateCached();
+        setSubtitleButtonState();
+        setSpeedButtonState(getController().getSpeed()); // Use real speed (it more robust than the saved speed data)
     }
 
     @Override
     public void onSuggestionItemLongClicked(Video item) {
-        VideoMenuPresenter.instance(getActivity()).showMenu(item);
+        VideoMenuPresenter.instance(getActivity()).showMenu(item, (videoItem, action) -> {
+            String title = getActivity().getString(R.string.action_playback_queue);
+            int id = title.hashCode();
+
+            if (action == VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE) {
+                VideoGroup group = VideoGroup.from(videoItem);
+                group.setTitle(title);
+                group.setId(id);
+                getController().removeSuggestions(group);
+            } else if (action == VideoMenuCallback.ACTION_ADD_TO_QUEUE) {
+                Video newItem = videoItem.copy();
+                VideoGroup group = VideoGroup.from(newItem, 0);
+                group.setTitle(title);
+                group.setId(id);
+                newItem.group = group;
+                getController().updateSuggestions(group);
+            }
+        });
     }
 
     @Override
@@ -222,7 +278,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
-        if (!YouTubeSignInManager.instance().isSigned()) {
+        if (!YouTubeSignInService.instance().isSigned()) {
             getController().setSubscribeButtonState(false);
             MessageHelpers.showMessage(getActivity(), R.string.msg_signed_users_only);
             return;
@@ -243,7 +299,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
-        if (!YouTubeSignInManager.instance().isSigned()) {
+        if (!YouTubeSignInService.instance().isSigned()) {
             getController().setDislikeButtonState(false);
             MessageHelpers.showMessage(getActivity(), R.string.msg_signed_users_only);
             return;
@@ -264,7 +320,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
-        if (!YouTubeSignInManager.instance().isSigned()) {
+        if (!YouTubeSignInService.instance().isSigned()) {
             getController().setLikeButtonState(false);
             MessageHelpers.showMessage(getActivity(), R.string.msg_signed_users_only);
             return;
@@ -286,7 +342,8 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
         AppDialogUtil.appendSpeedDialogItems(getActivity(), settingsPresenter, mPlayerData, getController());
 
-        settingsPresenter.showDialog();
+        // NOTE: Real speed isn't changed immediately, so use saved speed data
+        settingsPresenter.showDialog(() -> setSpeedButtonState(mPlayerData.getSpeed()));
     }
 
     @Override
@@ -306,7 +363,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
-        String description = getController().getVideo().description;
+        Video video = getController().getVideo();
+
+        String description = video.description;
 
         if (description == null || description.isEmpty()) {
             MessageHelpers.showMessage(getActivity(), R.string.description_not_found);
@@ -317,22 +376,35 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
         dialogPresenter.clear();
 
-        String title = getController().getVideo().title;
+        String title = String.format("%s - %s", video.getTitle(), video.getAuthor());
 
-        dialogPresenter.appendLongTextCategory(title, UiOptionItem.from(description, null));
+        dialogPresenter.appendLongTextCategory(title, UiOptionItem.from(description));
 
         dialogPresenter.showDialog(title);
     }
 
     @Override
     public void onShareLinkClicked() {
-        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+        Video video = getController().getVideo();
 
-        dialogPresenter.clear();
+        if (video == null) {
+            return;
+        }
 
-        AppDialogUtil.appendShareDialogItems(getActivity(), dialogPresenter, getController().getVideo());
+        //AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
-        dialogPresenter.showDialog(getController().getVideo().title);
+        //dialogPresenter.clear();
+
+        //AppDialogUtil.appendShareLinkDialogItem(getActivity(), dialogPresenter, getController().getVideo());
+        //AppDialogUtil.appendShareEmbedLinkDialogItem(getActivity(), dialogPresenter, getController().getVideo());
+
+        //dialogPresenter.showDialog(getController().getVideo().title);
+
+        if (video.videoId != null) {
+            Utils.displayShareVideoDialog(getActivity(), video.videoId);
+        } else if (video.channelId != null) {
+            Utils.displayShareChannelDialog(getActivity(), video.channelId);
+        }
     }
 
     @Override
@@ -465,7 +537,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
                     // NOP
                     break;
                 case PlayerData.ONLY_PAUSE:
-                    getController().setPlay(!getController().getPlay());
+                    getController().setPlayWhenReady(!getController().getPlayWhenReady());
                     return true; // don't show ui
             }
         }
@@ -495,7 +567,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     private boolean handlePlayPauseKey(int keyCode) {
         if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
-            getController().setPlay(!getController().getPlay());
+            getController().setPlayWhenReady(!getController().getPlayWhenReady());
             enableUiAutoHideTimeout(); // TODO: move out somehow
             return true;
         }
@@ -505,5 +577,62 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     private interface MediaItemObservable {
         Observable<Void> call(MediaItem item);
+    }
+
+    private void setPlaylistAddButtonStateCached() {
+        String videoId = getController().getVideo().videoId;
+        mVideoPlaylistInfos = null;
+        Disposable playlistsInfoAction =
+                YouTubeMediaService.instance().getMediaItemService().getVideoPlaylistsInfoObserve(videoId)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                videoPlaylistInfos -> {
+                                    mVideoPlaylistInfos = videoPlaylistInfos;
+                                    setPlaylistAddButtonState();
+                                },
+                                error -> Log.e(TAG, "Add to recent playlist error: %s", error.getMessage())
+                        );
+    }
+
+    private void setPlaylistAddButtonState() {
+        if (mVideoPlaylistInfos == null || getController() == null) {
+            return;
+        }
+
+        boolean isSelected = false;
+        for (VideoPlaylistInfo playlistInfo : mVideoPlaylistInfos) {
+            if (playlistInfo.isSelected()) {
+                isSelected = true;
+                break;
+            }
+        }
+
+        getController().setPlaylistAddButtonState(isSelected);
+    }
+
+    private void setSubtitleButtonState() {
+        List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
+
+        if (subtitleFormats == null) {
+            return;
+        }
+
+        boolean isSelected = false;
+
+        for (FormatItem subtitle : subtitleFormats) {
+            if (subtitle.isSelected() && !subtitle.isDefault()) {
+                isSelected = true;
+                break;
+            }
+        }
+
+        getController().setSubtitleButtonState(isSelected);
+    }
+
+    private void setSpeedButtonState(float speed) {
+        if (getController() != null) {
+            getController().setSpeedButtonState(speed != 1.0f);
+        }
     }
 }

@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.os.Handler;
 import android.os.Looper;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.Analytics;
@@ -59,6 +59,14 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     };
     private boolean mIsWasVideoStartError;
     private boolean mIsWasStarted;
+    private final Runnable mStopLiveStream = () -> {
+        if (getController() != null &&
+                getController().getVideo() != null &&
+                getController().getVideo().isLive) {
+            getController().showSuggestions(true);
+            getController().setPlayWhenReady(false);
+        }
+    };
 
     public VideoLoaderManager(SuggestionsLoaderManager suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
@@ -86,6 +94,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
         if (getController() != null && getController().isEngineInitialized()) { // player is initialized
             if (!item.equals(mLastVideo)) {
+                getController().resetPlayerState();
                 loadVideo(item); // play immediately
             }
         } else {
@@ -131,8 +140,8 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     @Override
     public void onBuffering() {
-        // Fix long buffering
-        //Utils.postDelayed(mHandler, mPendingRestartEngine, BUFFERING_CHECK_MS);
+        // Fix long buffering (indicates end of the stream)
+        watchLiveStream();
     }
 
     @Override
@@ -145,7 +154,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         }
 
         // Seems fine. Buffering is gone.
-        Utils.removeCallbacks(mHandler, mPendingRestartEngine);
+        unwatchLiveStream();
     }
 
     @Override
@@ -190,62 +199,9 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     @Override
     public void onPlayEnd() {
-        // Fix simultaneous videos loading (e.g. when playback ends and user opens new video)
-        if (isActionsRunning()) {
-            return;
-        }
-
         int playbackMode = checkSleepTimer(mPlayerData.getPlaybackMode());
 
-        switch (playbackMode) {
-            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
-                onNextClicked();
-                getController().showOverlay(true);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
-                getController().setPositionMs(0);
-                getController().setPlay(true);
-                Utils.showRepeatInfo(getActivity(), playbackMode);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
-                // Close player
-                // Except when playing from queue
-                if (!getController().isSuggestionsShown() && mPlaylist.getNext() == null) {
-                    getController().finish();
-                } else {
-                    onNextClicked();
-                    getController().showOverlay(true);
-                }
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
-                // Stop player after each video.
-                // Except when playing from queue
-                if (mPlaylist.getNext() == null) {
-                    getController().showSuggestions(true);
-                    getController().setPlay(false);
-                    getController().setPositionMs(0);
-                    Utils.showRepeatInfo(getActivity(), playbackMode);
-                } else {
-                    onNextClicked();
-                    getController().showOverlay(true);
-                }
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_LIST:
-                // stop player (if not playing playlist)
-                Video video = getController().getVideo();
-                if ((video != null && video.hasPlaylist()) || mPlaylist.getNext() != null) {
-                    onNextClicked();
-                    getController().showOverlay(true);
-                } else {
-                    getController().showSuggestions(true);
-                    getController().setPlay(false);
-                    getController().setPositionMs(0);
-                    Utils.showRepeatInfo(getActivity(), playbackMode);
-                }
-                break;
-        }
-
-        Log.e(TAG, "Undetected repeat mode " + playbackMode);
+        applyPlaybackMode(playbackMode);
     }
 
     @Override
@@ -298,7 +254,11 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             if (showLoadingMsg) {
                 MessageHelpers.showMessageThrottled(getActivity(), R.string.wait_data_loading);
             }
-            Utils.postDelayed(mHandler, mPendingNext, 1_000);
+            // Short videos next fix (suggestions aren't loaded yet)
+            boolean isEnded = getController() != null && Math.abs(getController().getLengthMs() - getController().getPositionMs()) < 100;
+            if (isEnded) {
+                Utils.postDelayed(mHandler, mPendingNext, 1_000);
+            }
         } else if (current.isRemote) {
             openFirstVideoFromRecommended(current);
         }
@@ -315,7 +275,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         disposeActions();
 
         MediaService service = YouTubeMediaService.instance();
-        MediaItemManager mediaItemManager = service.getMediaItemManager();
+        MediaItemService mediaItemManager = service.getMediaItemService();
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -334,10 +294,11 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
         boolean isLive = formatInfo.isLive() || formatInfo.isLiveContent();
-        String artworkUrl = null;
+        String bgImageUrl = null;
 
         if (formatInfo.isUnplayable() || formatInfo.isAgeRestricted()) {
             getController().showError(formatInfo.getPlayabilityStatus());
+            bgImageUrl = mLastVideo.getBackgroundUrl();
             if (!mIsWasVideoStartError && mLastVideo != null) {
                 Analytics.sendVideoStartError(mLastVideo.videoId,
                         mLastVideo.title,
@@ -371,6 +332,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
             scheduleReloadVideoTimer(30 * 1_000);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
+            bgImageUrl = mLastVideo.getBackgroundUrl();
             artworkUrl = mLastVideo.bgImageUrl;
             if (!mIsWasVideoStartError && mLastVideo != null) {
                 Analytics.sendVideoStartError(mLastVideo.videoId,
@@ -385,7 +347,12 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             video.sync(formatInfo);
         }
 
-        getController().setArtwork(artworkUrl);
+        getController().showBackground(bgImageUrl);
+
+        if (bgImageUrl != null && getController().containsMedia()) {
+            // Make background visible
+            getController().restartEngine();
+        }
     }
 
     private void scheduleReloadVideoTimer(int reloadIntervalMs) {
@@ -428,7 +395,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     private void disposeActions() {
         RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
-        Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
+        Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext, mStopLiveStream);
     }
 
     private void initErrorActions() {
@@ -472,5 +439,82 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         }
 
         return urlList;
+    }
+
+    private void applyPlaybackMode(int playbackMode) {
+        // Fix simultaneous videos loading (e.g. when playback ends and user opens new video)
+        if (isActionsRunning()) {
+            return;
+        }
+
+        switch (playbackMode) {
+            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
+                loadNext();
+                getController().showOverlay(true);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
+                getController().setPositionMs(0);
+                getController().setPlayWhenReady(true);
+                Utils.showRepeatInfo(getActivity(), playbackMode);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
+                // Close player if suggestions not shown
+                // Except when playing from queue
+                if (mPlaylist.getNext() != null) {
+                    loadNext();
+                    getController().showOverlay(true);
+                } else if (!getController().isSuggestionsShown()) {
+                    getController().finishReally();
+                }
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
+                // Stop player after each video.
+                // Except when playing from queue
+                if (mPlaylist.getNext() != null) {
+                    loadNext();
+                    getController().showOverlay(true);
+                } else {
+                    getController().showSuggestions(true);
+                    getController().setPlayWhenReady(false);
+                    getController().setPositionMs(0);
+                    Utils.showRepeatInfo(getActivity(), playbackMode);
+                }
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_LIST:
+                // stop player (if not playing playlist)
+                Video video = getController().getVideo();
+                if ((video != null && video.hasPlaylist()) || mPlaylist.getNext() != null) {
+                    loadNext();
+                    getController().showOverlay(true);
+                } else {
+                    getController().showSuggestions(true);
+                    getController().setPlayWhenReady(false);
+                    getController().setPositionMs(0);
+                    Utils.showRepeatInfo(getActivity(), playbackMode);
+                }
+                break;
+        }
+
+        Log.e(TAG, "Undetected repeat mode " + playbackMode);
+    }
+
+    /**
+     * Stop on long buffering (indicates end of the stream)
+     */
+    private void watchLiveStream() {
+        unwatchLiveStream();
+
+        if (getController() != null &&
+                getController().getVideo() != null &&
+                getController().getVideo().isLive) {
+            Utils.postDelayed(mHandler, mStopLiveStream, 2 * 60 * 1_000);
+        }
+    }
+
+    /**
+     * Cancel stream buffering check
+     */
+    private void unwatchLiveStream() {
+        Utils.removeCallbacks(mHandler, mPendingRestartEngine, mStopLiveStream);
     }
 }

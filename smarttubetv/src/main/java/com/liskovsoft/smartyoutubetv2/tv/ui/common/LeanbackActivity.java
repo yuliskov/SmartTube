@@ -101,7 +101,7 @@ public abstract class LeanbackActivity extends MotherActivity {
     @Override
     public void finish() {
         // user pressed back key
-        if (!mViewManager.startParentView(this)) {
+        if (!mViewManager.hasParentView(this)) {
             switch (mGeneralData.getAppExitShortcut()) {
                 case GeneralData.EXIT_DOUBLE_BACK:
                     mDoubleBackManager.enableDoubleBackExit();
@@ -113,6 +113,13 @@ public abstract class LeanbackActivity extends MotherActivity {
         } else {
             finishReally();
         }
+    }
+
+    @Override
+    public void finishReally() {
+        // Mandatory line. Fix un-proper view order (especially for playback view).
+        mViewManager.startParentView(this);
+        super.finishReally();
     }
 
     private void finishTheApp() {

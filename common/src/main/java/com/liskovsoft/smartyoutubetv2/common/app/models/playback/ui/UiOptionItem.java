@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui;
 
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import android.os.Build;
 
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
@@ -18,6 +19,7 @@ public class UiOptionItem implements OptionItem {
     private Object mData;
     private OptionItem[] mRequiredItems;
     private OptionItem[] mRadioItems;
+    private ChatReceiver mChatReceiver;
 
     private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
             Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
@@ -89,6 +91,10 @@ public class UiOptionItem implements OptionItem {
         return uiOptionItem;
     }
 
+    public static OptionItem from(CharSequence title) {
+        return from(title, (OptionCallback) null);
+    }
+
     public static OptionItem from(CharSequence title, OptionCallback callback) {
         return from(title, callback, false);
     }
@@ -113,6 +119,14 @@ public class UiOptionItem implements OptionItem {
         uiOptionItem.mIsSelected = isChecked;
         uiOptionItem.mCallback = callback;
         uiOptionItem.mData = data;
+
+        return uiOptionItem;
+    }
+
+    public static OptionItem from(CharSequence title, ChatReceiver chatReceiver) {
+        UiOptionItem uiOptionItem = new UiOptionItem();
+        uiOptionItem.mTitle = title;
+        uiOptionItem.mChatReceiver = chatReceiver;
 
         return uiOptionItem;
     }
@@ -185,5 +199,10 @@ public class UiOptionItem implements OptionItem {
     @Override
     public OptionItem[] getRadio() {
         return mRadioItems;
+    }
+
+    @Override
+    public ChatReceiver getChatReceiver() {
+        return mChatReceiver;
     }
 }

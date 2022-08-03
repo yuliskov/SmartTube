@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.content.Context;
 import android.os.Build;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -20,16 +20,17 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPreset;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.OnSelectSubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaItemManager;
-import com.liskovsoft.youtubeapi.service.YouTubeSignInManager;
+import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
+import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
+import com.liskovsoft.youtubeapi.service.data.YouTubeVideoPlaylistInfo;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -52,7 +53,7 @@ public class AppDialogUtil {
     /**
      * Adds share link items to existing dialog.
      */
-    public static void appendShareDialogItems(Context context, AppDialogPresenter dialogPresenter, Video video) {
+    public static void appendShareLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video) {
         if (video == null) {
             return;
         }
@@ -69,6 +70,19 @@ public class AppDialogUtil {
                         Utils.displayShareChannelDialog(context, video.channelId);
                     }
                 }));
+    }
+
+    /**
+     * Adds share link items to existing dialog.
+     */
+    public static void appendShareEmbedLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video) {
+        if (video == null) {
+            return;
+        }
+
+        if (video.videoId == null && video.channelId == null) {
+            return;
+        }
 
         dialogPresenter.appendSingleButton(
                 UiOptionItem.from(context.getString(R.string.share_embed_link), optionItem -> {
@@ -174,6 +188,14 @@ public class AppDialogUtil {
         boolean isPresetSelection = selectedFormat != null && selectedFormat.isPreset();
 
         for (VideoPreset preset : presets) {
+            if (preset.isVP9Preset() && !Helpers.isVP9ResolutionSupported(preset.getHeight())) {
+                continue;
+            }
+
+            if (preset.isAV1Preset() && !Helpers.isAV1ResolutionSupported(preset.getHeight())) {
+                continue;
+            }
+
             result.add(0, UiOptionItem.from(preset.name,
                     option -> setFormat(preset.format, playerData, onFormatSelected),
                     isPresetSelection && preset.format.equals(selectedFormat)));
@@ -301,6 +323,7 @@ public class AppDialogUtil {
         pairs.put("1:1", PlaybackEngineController.ASPECT_RATIO_1_1);
         pairs.put("4:3", PlaybackEngineController.ASPECT_RATIO_4_3);
         pairs.put("5:4", PlaybackEngineController.ASPECT_RATIO_5_4);
+        pairs.put("16:8.1 (1.9753:1)", PlaybackEngineController.ASPECT_RATIO_16_8_1);
         pairs.put("16:9", PlaybackEngineController.ASPECT_RATIO_16_9);
         pairs.put("16:10", PlaybackEngineController.ASPECT_RATIO_16_10);
         pairs.put("21:9 (2.33:1)", PlaybackEngineController.ASPECT_RATIO_21_9);
@@ -380,24 +403,22 @@ public class AppDialogUtil {
     }
 
     public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback) {
-        if (!YouTubeSignInManager.instance().isSigned()) {
+        if (!YouTubeSignInService.instance().isSigned()) {
             MessageHelpers.showMessage(context, R.string.msg_signed_users_only);
             return;
         }
 
-        MediaItemManager itemManager = YouTubeMediaItemManager.instance();
+        if (video == null) {
+            return;
+        }
+
+        MediaItemService itemManager = YouTubeMediaItemService.instance();
 
         Disposable playlistsInfoAction = itemManager.getVideoPlaylistsInfoObserve(video.videoId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        videoPlaylistInfos -> {
-                            AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(context);
-                            dialogPresenter.clear();
-
-                            appendPlaylistDialogContent(context, video, itemManager, callback, dialogPresenter, videoPlaylistInfos);
-                            dialogPresenter.showDialog(context.getString(R.string.dialog_add_to_playlist));
-                        },
+                        videoPlaylistInfos -> showAddToPlaylistDialog(context, video, callback, videoPlaylistInfos, null),
                         error -> {
                             // Fallback to something on error
                             Log.e(TAG, "Get playlists error: %s", error.getMessage());
@@ -405,15 +426,33 @@ public class AppDialogUtil {
                 );
     }
 
+    public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback, List<VideoPlaylistInfo> videoPlaylistInfos, Runnable onFinish) {
+        if (videoPlaylistInfos == null) {
+            MessageHelpers.showMessage(context, R.string.msg_signed_users_only);
+            return;
+        }
+
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(context);
+        dialogPresenter.clear();
+
+        appendPlaylistDialogContent(context, video, callback, dialogPresenter, videoPlaylistInfos);
+        dialogPresenter.showDialog(context.getString(R.string.dialog_add_to_playlist), () -> {
+            if (onFinish != null) onFinish.run();
+        });
+    }
+
     private static void appendPlaylistDialogContent(
-            Context context, Video video, MediaItemManager itemManager, VideoMenuCallback callback, AppDialogPresenter dialogPresenter, List<VideoPlaylistInfo> videoPlaylistInfos) {
+            Context context, Video video, VideoMenuCallback callback, AppDialogPresenter dialogPresenter, List<VideoPlaylistInfo> videoPlaylistInfos) {
         List<OptionItem> options = new ArrayList<>();
 
         for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
             options.add(UiOptionItem.from(
                     playlistInfo.getTitle(),
                     (item) -> {
-                        addRemoveFromPlaylist(context, video, itemManager, callback, playlistInfo.getPlaylistId(), item.isSelected());
+                        if (playlistInfo instanceof YouTubeVideoPlaylistInfo) {
+                            ((YouTubeVideoPlaylistInfo) playlistInfo).setSelected(item.isSelected());
+                        }
+                        addRemoveFromPlaylist(context, video, callback, playlistInfo.getPlaylistId(), item.isSelected());
                         GeneralData.instance(context).setLastPlaylistId(playlistInfo.getPlaylistId());
                         GeneralData.instance(context).setLastPlaylistTitle(playlistInfo.getTitle());
                     },
@@ -423,8 +462,9 @@ public class AppDialogUtil {
         dialogPresenter.appendCheckedCategory(context.getString(R.string.dialog_add_to_playlist), options);
     }
 
-    private static void addRemoveFromPlaylist(Context context, Video video, MediaItemManager itemManager, VideoMenuCallback callback, String playlistId, boolean add) {
+    private static void addRemoveFromPlaylist(Context context, Video video, VideoMenuCallback callback, String playlistId, boolean add) {
         Observable<Void> editObserve;
+        MediaItemService itemManager = YouTubeMediaItemService.instance();
 
         if (add) {
             editObserve = itemManager.addToPlaylistObserve(playlistId, video.videoId);
@@ -465,16 +505,16 @@ public class AppDialogUtil {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
-                {R.string.playlist_order_added_date_newer_first, MediaItemManager.PLAYLIST_ORDER_ADDED_DATE_NEWER_FIRST},
-                {R.string.playlist_order_added_date_older_first, MediaItemManager.PLAYLIST_ORDER_ADDED_DATE_OLDER_FIRST},
-                {R.string.playlist_order_popularity, MediaItemManager.PLAYLIST_ORDER_POPULARITY},
-                {R.string.playlist_order_published_date_newer_first, MediaItemManager.PLAYLIST_ORDER_PUBLISHED_DATE_NEWER_FIRST},
-                {R.string.playlist_order_published_date_older_first, MediaItemManager.PLAYLIST_ORDER_PUBLISHED_DATE_OLDER_FIRST}
+                {R.string.playlist_order_added_date_newer_first, MediaItemService.PLAYLIST_ORDER_ADDED_DATE_NEWER_FIRST},
+                {R.string.playlist_order_added_date_older_first, MediaItemService.PLAYLIST_ORDER_ADDED_DATE_OLDER_FIRST},
+                {R.string.playlist_order_popularity, MediaItemService.PLAYLIST_ORDER_POPULARITY},
+                {R.string.playlist_order_published_date_newer_first, MediaItemService.PLAYLIST_ORDER_PUBLISHED_DATE_NEWER_FIRST},
+                {R.string.playlist_order_published_date_older_first, MediaItemService.PLAYLIST_ORDER_PUBLISHED_DATE_OLDER_FIRST}
         }) {
             options.add(UiOptionItem.from(context.getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {
                     RxUtils.execute(
-                            YouTubeMediaItemManager.instance().setPlaylistOrderObserve(playlistId, pair[1]),
+                            YouTubeMediaItemService.instance().setPlaylistOrderObserve(playlistId, pair[1]),
                             () -> MessageHelpers.showMessage(context, R.string.owned_playlist_warning),
                             () -> {
                                 generalData.setPlaylistOrder(playlistId, pair[1]);
@@ -511,11 +551,14 @@ public class AppDialogUtil {
         Playlist playlist = Playlist.instance();
 
         for (Video video : playlist.getAll()) {
+            String title = video.getTitle();
+            String author = video.getAuthor();
             options.add(0, UiOptionItem.from( // Add to start (recent videos on top)
-                    video.title,
+                    String.format("%s - %s", title != null ? title : "...", author != null ? author : "..."),
                     optionItem -> {
                         video.fromQueue = true;
                         onClick.onClick(video);
+                        settingsPresenter.closeDialog();
                     },
                     video == playlist.getCurrent())
             );

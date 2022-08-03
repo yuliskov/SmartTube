@@ -8,6 +8,12 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorMan
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
 public abstract class MediaTrack {
+    private static final int VP9_WEIGHT = 31;
+    private static final int AVC_WEIGHT = 28;
+    private static final int AV1_WEIGHT = 14;
+    private static int sVP9Weight = VP9_WEIGHT;
+    private static int sAVCWeight = AVC_WEIGHT;
+    private static int sAV1Weight = AV1_WEIGHT;
     public Format format;
     public int groupIndex = -1;
     public int trackIndex = -1;
@@ -85,11 +91,32 @@ public abstract class MediaTrack {
             return 0;
         }
 
-        return codec.contains("vp9") ? 31 : codec.contains("avc") ? 28 : codec.contains("av01") ? 14 : 0;
+        return codec.contains("vp9") ? sVP9Weight : codec.contains("avc") ? sAVCWeight : codec.contains("av01") ? sAV1Weight : 0;
     }
 
     public static boolean preferByCodec(MediaTrack prevTrack, MediaTrack nextTrack) {
         return getCodecWeight(prevTrack) - getCodecWeight(nextTrack) > 0;
+    }
+
+    public static void preferAvcOverVp9(boolean prefer) {
+        sAVCWeight = prefer ? VP9_WEIGHT : AVC_WEIGHT;
+        sVP9Weight = prefer ? AVC_WEIGHT : VP9_WEIGHT;
+    }
+
+    public boolean isVP9Codec() {
+        return format != null && format.codecs != null && format.codecs.contains("vp9");
+    }
+
+    public boolean isAV1Codec() {
+        return format != null && format.codecs != null && format.codecs.contains("av01");
+    }
+
+    public int getWidth() {
+        return format != null ? format.width : -1;
+    }
+
+    public int getHeight() {
+        return format != null ? format.height : -1;
     }
 
     //public static int compareCodecs(String codec1, String codec2) {

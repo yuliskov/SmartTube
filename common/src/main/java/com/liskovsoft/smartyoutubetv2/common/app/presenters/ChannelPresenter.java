@@ -2,12 +2,11 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -20,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -140,15 +140,19 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             if (item.channelId != null) {
                 openChannel(item.channelId);
             } else if (item.videoId != null) {
-                MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+                LoadingManager.showLoading(getContext(), true);
+                //MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
                 mServiceManager.loadMetadata(item, metadata -> {
+                    LoadingManager.showLoading(getContext(), false);
                     openChannel(metadata.getChannelId());
                     item.channelId = metadata.getChannelId();
                 });
             } else if (item.belongsToChannelUploads()) {
+                LoadingManager.showLoading(getContext(), true);
                 // Maybe this is subscribed items view
                 ChannelUploadsPresenter.instance(getContext())
                         .obtainVideoGroup(item, group -> {
+                            LoadingManager.showLoading(getContext(), false);
                             // Some uploads groups doesn't contain channel button.
                             // Use data from first item instead.
                             if (group.getChannelId() == null) {
@@ -201,7 +205,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         getView().showProgressBar(true);
 
-        Observable<List<MediaGroup>> channelObserve = mMediaService.getMediaGroupManager().getChannelObserve(channelId);
+        Observable<List<MediaGroup>> channelObserve = mMediaService.getMediaGroupService().getChannelObserve(channelId);
 
         mUpdateAction = channelObserve
                 .subscribeOn(Schedulers.io())
@@ -246,7 +250,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
 
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.io())

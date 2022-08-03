@@ -25,6 +25,7 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.PlaybackControlsRow;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PaddingAction;
 
 /**
  * Displays primary and secondary controls for a {@link PlaybackControlsRow}.
@@ -97,11 +98,20 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
             return new ActionViewHolder(v);
         }
 
+        // Used inside: com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.ViewHolder.bindControlToAction()
+        // Restore focus: com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBar.onRequestFocusInDescendants()
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, Object item) {
             Action action = (Action) item;
             ActionViewHolder vh = (ActionViewHolder) viewHolder;
+
             vh.mIcon.setImageDrawable(action.getIcon());
+            if (action instanceof PaddingAction) {
+                int padding = ((PaddingAction) action).getPadding();
+                if (padding > 0) {
+                    vh.mIcon.setPadding(padding, padding, padding, padding);
+                }
+            }
             if (vh.mLabel != null) {
                 if (action.getIcon() == null) {
                     vh.mLabel.setText(action.getLabel1());

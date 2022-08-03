@@ -30,6 +30,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
     // switch not only framerate but resolution too
     private boolean mIsResolutionSwitchEnabled;
     private boolean mIsDoubleRefreshRateEnabled = true;
+    private boolean mIsSkip24RateEnabled;
     private int mModeLength = -1;
     private AutoFrameRateListener mListener;
 
@@ -102,7 +103,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
     }
 
     /**
-     * Filter out modes that less then required width.<br/>
+     * Filter out modes that has same width.<br/>
      * Reverse order is important because of later mapping by fps in other method.
      */
     private ArrayList<Mode> filterModesByWidth(Mode[] allModes, int videoWidth) {
@@ -122,7 +123,10 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
         for (Mode mode : allModes) {
             int width = mode.getPhysicalWidth();
-            if (width >= (videoWidth - 100)) {
+            //if (width >= (videoWidth - 100)) {
+            //    newModes.add(mode);
+            //}
+            if (Math.abs(width - videoWidth) < 100) {
                 newModes.add(mode);
             }
         }
@@ -205,7 +209,9 @@ public class DisplaySyncHelper implements UhdHelperListener {
     }
 
     private HashMap<Integer, int[]> getRateMapping() {
-        return mIsDoubleRefreshRateEnabled ? getDoubleRateMapping() : getSingleRateMapping();
+        HashMap<Integer, int[]> rateMapping = mIsDoubleRefreshRateEnabled ? getDoubleRateMapping() : getSingleRateMapping();
+        //return apply24RateSkip(rateMapping);
+        return rateMapping;
     }
 
     private HashMap<Integer, int[]> getSingleRateMapping() {
@@ -241,6 +247,16 @@ public class DisplaySyncHelper implements UhdHelperListener {
         return relatedRates;
     }
 
+    private HashMap<Integer, int[]> apply24RateSkip(HashMap<Integer, int[]> rateMapping) {
+        if (mIsSkip24RateEnabled) {
+            rateMapping.remove(2397);
+            rateMapping.remove(2400);
+            rateMapping.remove(2497);
+        }
+
+        return rateMapping;
+    }
+
     /**
      * Utility method to check if device is Amazon Fire TV device
      * @return {@code true} true if device is Amazon Fire TV device.
@@ -263,7 +279,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
             mModeLength = supportedModes == null ? 0 : supportedModes.length;
         }
 
-        return mModeLength > 1 && supportsDisplayModeChange();
+        return mModeLength >= 1 && supportsDisplayModeChange();
     }
 
     /**
@@ -393,12 +409,18 @@ public class DisplaySyncHelper implements UhdHelperListener {
                 resultModes = filterSameResolutionModes(modes, currentMode);
             }
 
-            Mode closerMode = findCloserMode(resultModes, videoFramerate);
+            // Rate boundaries slightly increased to perfect compare between two floats
+            boolean skipFps = mIsSkip24RateEnabled && videoFramerate >= 23.96 && videoFramerate <= 24.98 && currentMode != null;
+            Mode closerMode = findCloserMode(resultModes, skipFps ? currentMode.getRefreshRate() : videoFramerate);
 
             if (closerMode == null) {
                 String msg = "Could not find closer refresh rate for " + videoFramerate + "fps";
                 Log.i(TAG, msg);
-                mListener.onCancel();
+                if (modes.length == 1) { // notify tvQuickActions or other related software
+                    mListener.onModeError(null);
+                } else {
+                    mListener.onCancel();
+                }
                 return false;
             }
 
@@ -547,6 +569,10 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
     public void setDoubleRefreshRateEnabled(boolean enabled) {
         mIsDoubleRefreshRateEnabled = enabled;
+    }
+
+    public void setSkip24RateEnabled(boolean enabled) {
+        mIsSkip24RateEnabled = enabled;
     }
 
     public void setContext(Context context) {

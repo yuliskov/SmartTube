@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
 
 import java.util.HashSet;
@@ -59,6 +60,8 @@ public class AppDialogFragmentManager {
                 return createButtonPreference(category);
             case OptionCategory.TYPE_LONG_TEXT:
                 return createLongTextPreference(category);
+            case OptionCategory.TYPE_CHAT:
+                return createChatPreference(category);
         }
 
         throw  new IllegalStateException("Can't find matched preference for type: " + category.type);
@@ -78,6 +81,17 @@ public class AppDialogFragmentManager {
         pref.setDialogMessage(category.items.get(0).getTitle());
 
         initMultiSelectListPreference(category, pref);
+
+        return pref;
+    }
+
+    private Preference createChatPreference(OptionCategory category) {
+        ChatPreference pref = new ChatPreference(mStyledContext);
+
+        OptionItem optionItem = category.items.get(0);
+        pref.setChatReceiver(optionItem.getChatReceiver());
+
+        initDialogPreference(category, pref);
 
         return pref;
     }

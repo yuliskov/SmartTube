@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.Instrumentation;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -45,6 +46,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.WebBrowserPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -181,7 +183,7 @@ public class Utils {
             return;
         }
 
-        if (RemoteControlData.instance(context).isRunInBackgroundEnabled()) {
+        if (RemoteControlData.instance(context).isDeviceLinkEnabled()) {
             // Service that prevents the app from destroying
             startService(context, RemoteControlService.class);
         } else {
@@ -269,10 +271,19 @@ public class Utils {
         if (context instanceof Activity) {
             Activity activity = (Activity) context;
             if (Build.VERSION.SDK_INT >= 27) {
+                activity.setShowWhenLocked(true);
                 activity.setTurnScreenOn(true);
+                KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+                if (keyguardManager != null) {
+                    keyguardManager.requestDismissKeyguard(activity, null);
+                }
             } else {
                 Window window = activity.getWindow();
-                window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+                window.addFlags(
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                );
             }
         }
     }
@@ -299,6 +310,15 @@ public class Utils {
     }
 
     public static void openLink(Context context, String url) {
+        try {
+            WebBrowserPresenter.instance(context).loadUrl(url);
+        } catch (Exception e) {
+            // WebView not found. Use alt method.
+            openLinkExt(context, url);
+        }
+    }
+
+    public static void openLinkExt(Context context, String url) {
         try {
             openLinkInTabs(context, url);
         } catch (Exception e) {
@@ -516,5 +536,9 @@ public class Utils {
         MessageHelpers.showMessage(context, String.format("%s '%s'",
                 context.getString(R.string.not_compatible_with),
                 context.getString(msgResId)));
+    }
+
+    public static String getCountryFlagUrl(String countryCode) {
+        return "https://countryflagsapi.com/png/" + countryCode;
     }
 }

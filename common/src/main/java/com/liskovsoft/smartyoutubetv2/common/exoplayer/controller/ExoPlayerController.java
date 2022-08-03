@@ -13,17 +13,19 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter2;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -48,14 +50,16 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public ExoPlayerController(Context context) {
         mContext = context.getApplicationContext();
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
-        mTrackSelectorManager = new TrackSelectorManager();
+        mTrackSelectorManager = new TrackSelectorManager(LocaleUtility.getCurrentLocale(context).getLanguage());
         mTrackFormatter = new TrackInfoFormatter2();
 
         mMediaSourceFactory.setTrackErrorFixer(new TrackErrorFixer(mTrackSelectorManager));
 
         // Shield 720p fix???
         initFormats();
-        VideoTrack.sIsNoFpsPresetsEnabled = PlayerTweaksData.instance(context).isNoFpsPresetsEnabled();
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
+        VideoTrack.sIsNoFpsPresetsEnabled = playerTweaksData.isNoFpsPresetsEnabled();
+        MediaTrack.preferAvcOverVp9(playerTweaksData.isAvcOverVp9Preferred());
     }
 
     private void initFormats() {
@@ -93,6 +97,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     private void openMediaSource(MediaSource mediaSource) {
+        resetPlayerState(); // fixes occasional video artifacts and problems with quality switching
         setQualityInfo("");
 
         mTrackSelectorManager.invalidate();
@@ -117,7 +122,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public void setPositionMs(long positionMs) {
         // Url list videos at load stage has undefined (-1) length. So, we need to remove length check.
-        if (mPlayer != null && positionMs >= 0) {
+        if (mPlayer != null && positionMs >= 0 && positionMs <= getLengthMs()) {
             mPlayer.seekTo(positionMs);
         }
     }
@@ -133,14 +138,14 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
-    public void setPlay(boolean isPlaying) {
+    public void setPlayWhenReady(boolean play) {
         if (mPlayer != null) {
-            mPlayer.setPlayWhenReady(isPlaying);
+            mPlayer.setPlayWhenReady(play);
         }
     }
 
     @Override
-    public boolean getPlay() {
+    public boolean getPlayWhenReady() {
         if (mPlayer == null) {
             return false;
         }
@@ -173,7 +178,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         if (mPlayer != null) {
             mPlayer.removeListener(this);
-            //mPlayer.stop();
+            mPlayer.stop(true);
             mPlayer.release();
             mPlayer = null;
         }
@@ -262,11 +267,12 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
         Log.d(TAG, "onTracksChanged: start: groups length: " + trackGroups.length);
 
-        notifyOnVideoLoad();
-
         if (trackGroups.length == 0) {
             Log.i(TAG, "onTracksChanged: Hmm. Strange. Received empty groups, no selections. Why is this happens only on next/prev videos?");
+            return;
         }
+
+        notifyOnVideoLoad();
 
         for (TrackSelection selection : trackSelections.getAll()) {
             if (selection != null) {
@@ -393,6 +399,18 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             return mPlayer.getVolume();
         } else {
             return 1;
+        }
+    }
+
+    /**
+     * Fixes video artifacts when switching to the next video.<br/>
+     * Also could help with memory leaks(??)<br/>
+     * Without this also you'll have problems with track quality switching(??).
+     */
+    @Override
+    public void resetPlayerState() {
+        if (containsMedia()) {
+            mPlayer.stop(true);
         }
     }
 

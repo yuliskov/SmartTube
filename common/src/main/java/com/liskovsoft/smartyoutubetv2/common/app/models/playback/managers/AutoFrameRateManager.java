@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -12,7 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.AutoFrameRateHelper;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper.AutoFrameRateListener;
@@ -38,8 +39,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private PlayerData mPlayerData;
     private boolean mIsPlay;
     private final Runnable mPlaybackResumeHandler = () -> {
-        getController().setAfrRunning(false);
-        restorePlayback();
+        if (getController() != null) {
+            getController().setAfrRunning(false);
+            restorePlayback();
+        }
     };
 
     public AutoFrameRateManager(HQDialogManager uiManager, VideoStateManager stateUpdater) {
@@ -63,6 +66,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         mAutoFrameRateHelper.setFpsCorrectionEnabled(mPlayerData.isAfrFpsCorrectionEnabled());
         mAutoFrameRateHelper.setResolutionSwitchEnabled(mPlayerData.isAfrResSwitchEnabled(), false);
         mAutoFrameRateHelper.setDoubleRefreshRateEnabled(mPlayerData.isDoubleRefreshRateEnabled());
+        mAutoFrameRateHelper.setSkip24RateEnabled(mPlayerData.isSkip24RateEnabled());
 
 //        addUiOptions();
     }
@@ -78,6 +82,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     @Override
     public void onModeStart(Mode newMode) {
+        if (getActivity() == null) {
+            return;
+        }
+
         // Ugoos already displays this message on each mode switch
         String message = getActivity().getString(
                 R.string.auto_frame_rate_applying,
@@ -91,7 +99,11 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     @Override
     public void onModeError(Mode newMode) {
-        if (getActivity() != null) {
+        if (getActivity() == null) {
+            return;
+        }
+
+        if (newMode != null) {
             String msg = getActivity().getString(R.string.msg_mode_switch_error, UhdHelper.toResolution(newMode));
             Log.e(TAG, msg);
 
@@ -99,6 +111,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
             // This error could appear even on success.
             // MessageHelpers.showMessage(getActivity(), msg);
+        } else {
+            // Seems that the device doesn't support direct mode switching.
+            // Use tvQuickActions instead.
+            maybePausePlayback();
         }
     }
 
@@ -133,6 +149,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     private void onDoubleRefreshRateClick() {
         mAutoFrameRateHelper.setDoubleRefreshRateEnabled(mPlayerData.isDoubleRefreshRateEnabled());
+    }
+
+    public void onSkip24RateClick() {
+        mAutoFrameRateHelper.setSkip24RateEnabled(mPlayerData.isSkip24RateEnabled());
     }
 
     private void applyAfrWrapper() {
@@ -178,28 +198,32 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     private void maybePausePlayback() {
+        if (getController() == null) {
+            return;
+        }
+
         getController().setAfrRunning(true);
         int delayMs = 5_000;
 
-        if (mPlayerData.getAfrPauseSec() > 0) {
-            getController().setPlay(false);
-            delayMs = mPlayerData.getAfrPauseSec() * 1_000;
+        if (mPlayerData.getAfrPauseMs() > 0) {
+            getController().setPlayWhenReady(false);
+            delayMs = mPlayerData.getAfrPauseMs();
         }
 
         Utils.postDelayed(mHandler, mPlaybackResumeHandler, delayMs);
     }
 
     private void savePlayback() {
-        if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
+        if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseMs() > 0) {
             mStateUpdater.blockPlay(true);
             mIsPlay = mStateUpdater.getPlayEnabled();
         }
     }
 
     private void restorePlayback() {
-        if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
+        if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseMs() > 0) {
             mStateUpdater.blockPlay(false);
-            getController().setPlay(mIsPlay);
+            getController().setPlayWhenReady(mIsPlay);
         }
     }
 
@@ -227,7 +251,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         if (mAutoFrameRateHelper.isSupported()) {
             OptionCategory afrCategory = createAutoFrameRateCategory(
                     getActivity(), PlayerData.instance(getActivity()),
-                    () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick, this::onDoubleRefreshRateClick);
+                    () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick, this::onDoubleRefreshRateClick, this::onSkip24RateClick);
 
             OptionCategory afrPauseCategory = createAutoFrameRatePauseCategory(
                     getActivity(), PlayerData.instance(getActivity()));
@@ -239,31 +263,35 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
                 dialogPresenter.clear();
                 dialogPresenter.appendCheckedCategory(afrCategory.title, afrCategory.options);
-                dialogPresenter.showDialog(afrCategory.title, mApplyAfr);
+                dialogPresenter.showDialog(afrCategory.title);
             }));
             options.add(UiOptionItem.from(afrPauseCategory.title, optionItem -> {
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
                 dialogPresenter.clear();
                 dialogPresenter.appendRadioCategory(afrPauseCategory.title, afrPauseCategory.options);
-                dialogPresenter.showDialog(afrPauseCategory.title, mApplyAfr);
+                dialogPresenter.showDialog(afrPauseCategory.title);
             }));
 
             mUiManager.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING, getActivity().getString(R.string.auto_frame_rate), options));
+            mUiManager.addOnDialogHide(mApplyAfr); // Apply NEW Settings on dialog close
         } else {
             mUiManager.removeCategory(AUTO_FRAME_RATE_ID);
+            mUiManager.removeOnDialogHide(mApplyAfr);
         }
     }
 
     public static OptionCategory createAutoFrameRateCategory(Context context, PlayerData playerData) {
-        return createAutoFrameRateCategory(context, playerData, () -> {}, () -> {}, () -> {}, () -> {});
+        return createAutoFrameRateCategory(context, playerData, () -> {}, () -> {}, () -> {}, () -> {}, () -> {});
     }
 
     private static OptionCategory createAutoFrameRateCategory(Context context, PlayerData playerData,
-            Runnable onAfrCallback, Runnable onResolutionCallback, Runnable onFpsCorrectionCallback, Runnable onDoubleRefreshRateCallback) {
+            Runnable onAfrCallback, Runnable onResolutionCallback, Runnable onFpsCorrectionCallback,
+            Runnable onDoubleRefreshRateCallback, Runnable onSkip24RateCallback) {
         String title = context.getString(R.string.auto_frame_rate);
         String fpsCorrection = context.getString(R.string.frame_rate_correction, "24->23.97, 30->29.97, 60->59.94");
         String resolutionSwitch = context.getString(R.string.resolution_switch);
         String doubleRefreshRate = context.getString(R.string.double_refresh_rate);
+        String skip24Rate = context.getString(R.string.skip_24_rate);
         List<OptionItem> options = new ArrayList<>();
 
         OptionItem afrEnableOption = UiOptionItem.from(title, optionItem -> {
@@ -282,15 +310,21 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             playerData.setDoubleRefreshRateEnabled(optionItem.isSelected());
             onDoubleRefreshRateCallback.run();
         }, playerData.isDoubleRefreshRateEnabled());
+        OptionItem skip24RateOption = UiOptionItem.from(skip24Rate, optionItem -> {
+            playerData.enableSkip24Rate(optionItem.isSelected());
+            onSkip24RateCallback.run();
+        }, playerData.isSkip24RateEnabled());
 
         afrResSwitchOption.setRequired(afrEnableOption);
         afrFpsCorrectionOption.setRequired(afrEnableOption);
         doubleRefreshRateOption.setRequired(afrEnableOption);
+        skip24RateOption.setRequired(afrEnableOption);
 
         options.add(afrEnableOption);
         options.add(afrResSwitchOption);
         options.add(afrFpsCorrectionOption);
         options.add(doubleRefreshRateOption);
+        options.add(skip24RateOption);
 
         return OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_CHECKED, title, options);
     }
@@ -300,14 +334,14 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
         List<OptionItem> options = new ArrayList<>();
 
-        for (int pauseSec : new int[] {0, 1, 2, 3, 4, 5, 6, 7}) {
-            String optionTitle = pauseSec == 0 ? context.getString(R.string.option_never) : context.getString(R.string.auto_frame_rate_sec, pauseSec);
+        for (int pauseMs : Helpers.range(0, 7_000, 500)) {
+            String optionTitle = pauseMs == 0 ? context.getString(R.string.option_never) : context.getString(R.string.auto_frame_rate_sec, pauseMs / 1_000f);
             options.add(UiOptionItem.from(optionTitle,
                     optionItem -> {
-                        playerData.setAfrPauseSec(pauseSec);
+                        playerData.setAfrPauseMs(pauseMs);
                         playerData.setAfrEnabled(true);
                     },
-                    pauseSec == playerData.getAfrPauseSec()));
+                    pauseMs == playerData.getAfrPauseMs()));
         }
 
         return OptionCategory.from(AUTO_FRAME_RATE_DELAY_ID, OptionCategory.TYPE_RADIO, title, options);

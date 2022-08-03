@@ -2,13 +2,12 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.common.utils.HashList;
 
 import java.util.ArrayList;
@@ -28,13 +27,14 @@ public class GeneralData {
     public static final int EXIT_SINGLE_BACK = 2;
     public static final int BACKGROUND_PLAYBACK_SHORTCUT_HOME = 0;
     public static final int BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK = 1;
+    public static final int TIME_MODE_24 = 0;
+    public static final int TIME_MODE_12 = 1;
     @SuppressLint("StaticFieldLeak")
     private static GeneralData sInstance;
     private final Context mContext;
     private final AppPrefs mPrefs;
     private boolean mIsSettingsSectionEnabled;
     private int mBootSectionId;
-    private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private int mAppExitShortcut;
     private boolean mIsReturnToLauncherEnabled;
     private int mBackgroundShortcut;
@@ -42,6 +42,7 @@ public class GeneralData {
     private boolean mIsHideUpcomingEnabled;
     private boolean mIsRemapFastForwardToNextEnabled;
     private int mScreenDimmingTimeoutMin;
+    private int mTimeMode;
     private boolean mIsProxyEnabled;
     private boolean mIsBridgeCheckEnabled;
     private boolean mIsOkButtonLongPressDisabled;
@@ -59,7 +60,10 @@ public class GeneralData {
     private boolean mIsHideShortsFromHistoryEnabled;
     private boolean mIsScreensaverDisabled;
     private boolean mIsVPNEnabled;
+    private boolean mIsGlobalClockEnabled;
+    private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
+    private final List<Video> mPendingStreams = new ArrayList<>();
 
     private final List<Video> mPinnedItems = new HashList<Video>() {
         @Override
@@ -475,6 +479,15 @@ public class GeneralData {
         return mScreenDimmingTimeoutMin;
     }
 
+    public void setTimeMode(int mode) {
+        mTimeMode = mode;
+        persistState();
+    }
+
+    public int getTimeMode() {
+        return mTimeMode;
+    }
+
     public void enableProxy(boolean enable) {
         mIsProxyEnabled = enable;
         persistState();
@@ -540,7 +553,46 @@ public class GeneralData {
 
     public int getPlaylistOrder(String playlistId) {
         Integer order = mPlaylistOrder.get(playlistId);
-        return order != null ? order : MediaItemManager.PLAYLIST_ORDER_ADDED_DATE_NEWER_FIRST;
+        return order != null ? order : -1; // default order unpredictable (depends on site prefs)
+    }
+
+    public void addPendingStream(Video video) {
+        if (video == null || video.videoId == null || containsPendingStream(video)) {
+            return;
+        }
+
+        mPendingStreams.add(video);
+        persistState();
+    }
+
+    public void removePendingStream(Video video) {
+        if (video == null || video.videoId == null || !containsPendingStream(video)) {
+            return;
+        }
+
+        Helpers.removeIf(mPendingStreams, item -> video.videoId.equals(item.videoId));
+        persistState();
+    }
+
+    public boolean containsPendingStream(Video video) {
+        if (video == null || video.videoId == null) {
+            return false;
+        }
+
+        return Helpers.containsIf(mPendingStreams, item -> video.videoId.equals(item.videoId));
+    }
+
+    public List<Video> getPendingStreams() {
+        return Collections.unmodifiableList(mPendingStreams);
+    }
+
+    public boolean isGlobalClockEnabled() {
+        return mIsGlobalClockEnabled;
+    }
+
+    public void enableGlobalClock(boolean enable) {
+        mIsGlobalClockEnabled = enable;
+        persistState();
     }
 
     private void initSections() {
@@ -601,6 +653,9 @@ public class GeneralData {
         mIsVPNEnabled = Helpers.parseBoolean(split, 27, false);
         mLastPlaylistTitle = Helpers.parseStr(split, 28);
         String playlistOrder = Helpers.parseStr(split, 29);
+        String pendingStreams = Helpers.parseStr(split, 30);
+        mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, true);
+        mTimeMode = Helpers.parseInt(split, 32, DateFormatter.is24HourLocale(mContext) ? TIME_MODE_24 : TIME_MODE_12);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -622,6 +677,13 @@ public class GeneralData {
             }
         }
 
+        if (pendingStreams != null && !pendingStreams.isEmpty()) {
+            String[] pendingStreamsArr = Helpers.splitArray(pendingStreams);
+            for (String pendingStream : pendingStreamsArr) {
+                mPendingStreams.add(Video.fromString(pendingStream));
+            }
+        }
+
         // Backward compatibility
         if (!isSectionEnabled(MediaGroup.TYPE_SETTINGS)) {
             initPinnedItems();
@@ -638,6 +700,7 @@ public class GeneralData {
 
     private void persistState() {
         String pinnedItems = Helpers.mergeArray(mPinnedItems.toArray());
+        String pendingStreams = Helpers.mergeArray(mPendingStreams.toArray());
         List<String> playlistOrderPairs = new ArrayList<>();
         for (Entry<String, Integer> pair : mPlaylistOrder.entrySet()) {
             playlistOrderPairs.add(String.format("%s|%s", pair.getKey(), pair.getValue()));
@@ -645,11 +708,13 @@ public class GeneralData {
         String playlistOrder = Helpers.mergeArray(playlistOrderPairs.toArray());
         // Zero index is skipped. Selected sections were there.
         mPrefs.setData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
-                mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems, mIsHideShortsFromSubscriptionsEnabled, mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
+                mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems, mIsHideShortsFromSubscriptionsEnabled,
+                mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
                 mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
-                mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle, playlistOrder));
+                mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
+                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeMode));
     }
 }

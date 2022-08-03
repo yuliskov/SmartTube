@@ -15,7 +15,10 @@ public class IntentExtractor {
     private static final String[] SEARCH_KEYS = {"search_query", "query"};
     private static final String VIDEO_ID_KEY = "v";
     private static final String VIDEO_ID_LIST_KEY = "video_ids";
-    private static final String CHANNEL_URL = "/channel/";
+    /**
+     * https://youtube.com/channel/BLABLA/video
+     */
+    private static final String CHANNEL_KEY = "channel";
     private static final String CHANNEL_URL_ALT = "/c/";
     private static final String USER_URL = "/user/";
     private static final String SUBSCRIPTIONS_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEsubscriptions"; // last 'resume' param isn't parsed by intent and should be removed
@@ -93,9 +96,11 @@ public class IntentExtractor {
             return null;
         }
 
-        String[] split = extractUri(intent).toString().split(CHANNEL_URL);
+        // https://youtube.com/channel/BLABLA/video
+        // Don't Uri directly or you might get UnsupportedOperationException on some urls.
+        UrlQueryString parser = UrlQueryStringFactory.parse(extractUri(intent));
 
-        return split.length == 2 ? split[1] : null;
+        return parser.get(CHANNEL_KEY);
     }
 
     /**

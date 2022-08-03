@@ -9,7 +9,7 @@ stability, voice search and casting support **might** be worse than in the offic
 
 **Do you have any question?** Ctrl+F or ⌘F this readme first!
 
-[**Installation**](#Installation) | [**Donation**](#Donation) | [**FAQ**](#FAQ) | [Support / Chat](#Support) | [Changelog](https://t.me/s/SmartTubeNextNewsEN) | [Source Code](https://github.com/yuliskov/SmartTubeNext)
+[**Installation**](#Installation) | [**Donation**](#Donation) | [**FAQ**](#FAQ) | [Support / Chat](#Support) | [Build](#Build) | [Translate the app](https://jtbrinkmann.de/tools/android-strings.xml-translator.html) | [Changelog](https://t.me/s/SmartTubeNextNewsEN) | [Source Code](https://github.com/yuliskov/SmartTubeNext)
 
 
 ## Device support
@@ -88,8 +88,8 @@ You can select which categories you want to skip in the settings. Unlike the bro
 To cast videos from your phone (or other devices), you must link that device to your TV. Unlike the original YouTube app, SmartTubeNext does not automatically show up when you are in the same wifi network. How to link your smartphone and TV:
 
 1. open SmartTubeNext and go to settings
-2. go to "link devices" (2nd option)
-3. open your YouTube app on your phone, go to settings > watch on TV
+2. go to "Remote control" (2nd option)
+3. open your YouTube app on your phone, go to settings > General > watch on TV
 4. click on _connect using TV-code_ and enter the code from your TV
 
 [**Screenshot guide**](https://t.me/SmartTubeNext_en/8514)
@@ -126,21 +126,13 @@ To enable global voice search, an additional app must be installed alongside Sma
 
 If you want to support my developments you are welcome to buy me a cup of coffee :)
 
-<!-- 
-> [BountySource (**PayPal**, **VISA**)](https://salt.bountysource.com/checkout/amount?team=smarttube)   
-> [QIWI (RU, Visa)](https://qiwi.com/n/GUESS025)  
-> [DonatePay (RU, **PayPal**, Visa)](https://new.donatepay.ru/@459197) 
--->
-> [**Patreon**](https://www.patreon.com/smarttube)  
-> **PayPal**: firsthash at gmail.com  
+> [**Patreon (Visa, Mastercard, PayPal)**](https://www.patreon.com/smarttube)  
+> **PayPal**: firsthash@gmail.com  
 > **BTC**: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx  
 > **LTC**: ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw  
 > **ETH**: 0xe455E21a085ae195a097cd4F456051A9916A5064  
 > **ETC**: 0x209eCd33Fa61fA92167595eB3Aea92EE1905c815  
 > **XMR**: 48QsMjqfkeW54vkgKyRnjodtYxdmLk6HXfTWPSZoaFPEDpoHDwFUciGCe1QC9VAeGrgGw4PKNAksX9RW7myFqYJQDN5cHGT  
-> **BNB**: bnb1amjr7fauftxxyhe4f95280vklctj243k9u55fq  
-> **DOGE**: DBnqJwJs2GJBxrCDsi5bXwSmjnz8uGdUpB  
-> **eUSDT**: 0xe455e21a085ae195a097cd4f456051a9916a5064
 
 
 ## Support
@@ -150,7 +142,7 @@ If you want to support my developments you are welcome to buy me a cup of coffee
 You can report in our Telegram group or via [issue tracker on Github](https://github.com/yuliskov/SmartTubeNext/issues) (account required).
 
 > **Telegram group (international)**: [@SmartTubeNext_en](http://t.me/SmartTubeNext_en)  
-> **Telegram group (Russian/UA/BY)**: [@SmartTubeNext](http://t.me/SmartTubeNext)  
+> **Telegram group (RU/UA)**: [@SmartTubeNext](http://t.me/SmartTubeNext)  
 > **Email**: first.hash at gmail dot com
 
 The international group is in **English only**. But don't worry if your English is not perfect, we have a friendly international community.
@@ -160,6 +152,18 @@ The international group is in **English only**. But don't worry if your English 
 
 SmartTubeNext is developed single-handedly by Yurii; there is no larger team or company behind this. This is an open source, hobby project. Several others have helped with translations, some of which can be seen on [Github](https://github.com/yuliskov/SmartTubeNext/graphs/contributors), some have sent their translations directly to Yurii. There are also helpful people in the support chat.
 
+## Build
+    
+**NOTE: OpenJDK 14 or older (!) is required. Newer JDK could cause the app crash!**  
+To build and install a debug version, run this commands:
+
+```
+git clone https://github.com/yuliskov/SmartTubeNext.git
+cd SmartTubeNext
+git submodule update --init
+adb connect <device_ip_address>
+gradlew clean installStorigDebug
+```
 
 ## Video codecs
 
@@ -203,6 +207,11 @@ If HDR videos look looked dim or washed out, then check [this article](https://w
 
 
 ## FAQ
+
+### Q: There is no result for the search that I say (Android 11)
+
+A: They're some reports that the latest update for "Google app for Android TV" could cause this bug. Deleting the update should fix the problem.
+
 
 ### Q: AV01 does not play / Why is VP9 slow on my device?
 

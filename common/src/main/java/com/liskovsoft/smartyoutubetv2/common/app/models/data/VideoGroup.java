@@ -90,6 +90,11 @@ public class VideoGroup {
 
         for (MediaItem item : mediaGroup.getMediaItems()) {
             Video video = Video.from(item);
+
+            if (video.isEmpty()) {
+                continue;
+            }
+
             // Group position in multi-grid fragments
             video.groupPosition = videoGroup.mPosition;
             video.group = videoGroup;
@@ -120,6 +125,10 @@ public class VideoGroup {
 
     public int getId() {
         return mId;
+    }
+
+    public void setId(int id) {
+        mId = id;
     }
 
     public MediaGroup getMediaGroup() {
@@ -192,5 +201,33 @@ public class VideoGroup {
         }
 
         return groupPosition;
+    }
+
+    public void removeAllBefore(Video video) {
+        if (mVideos == null) {
+            return;
+        }
+
+        int index = mVideos.indexOf(video);
+
+        if (index == -1) {
+            return;
+        }
+
+        mVideos = mVideos.subList(index + 1, mVideos.size());
+    }
+
+    /**
+     * Remove playlist id from all videos
+     */
+    public void stripPlaylistInfo() {
+        if (mVideos == null) {
+            return;
+        }
+
+        for (Video video : mVideos) {
+            video.playlistId = null;
+            video.remotePlaylistId = null;
+        }
     }
 }

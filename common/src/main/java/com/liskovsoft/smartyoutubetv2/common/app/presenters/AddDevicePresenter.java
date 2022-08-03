@@ -57,7 +57,7 @@ public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
     }
 
     private void updateDeviceCode() {
-        mDeviceCodeAction = mMediaService.getRemoteManager().getPairingCodeObserve()
+        mDeviceCodeAction = mMediaService.getRemoteService().getPairingCodeObserve()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
