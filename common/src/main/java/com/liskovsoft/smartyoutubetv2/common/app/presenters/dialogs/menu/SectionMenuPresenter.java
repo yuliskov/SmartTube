@@ -79,6 +79,11 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
     }
 
     @Override
+    protected boolean isAddToNewPlaylistEnabled() {
+        return false;
+    }
+
+    @Override
     protected boolean isAccountSelectionEnabled() {
         return mIsAccountSelectionEnabled;
     }

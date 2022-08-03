@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.core.util.Pair;
+import android.util.Pair;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerLibraryInfo;
 import com.google.android.exoplayer2.Format;
@@ -49,8 +49,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private static final String TAG = DebugInfoManager.class.getSimpleName();
     private static final int REFRESH_INTERVAL_MS = 1000;
     private static final String NOT_AVAILABLE = "none";
-    private static final String DEFAULT = "default";
-    private float mTextSize = 15;
+    private final float mTextSize;
 
     private final SimpleExoPlayer mPlayer;
     private final ViewGroup mDebugViewGroup;

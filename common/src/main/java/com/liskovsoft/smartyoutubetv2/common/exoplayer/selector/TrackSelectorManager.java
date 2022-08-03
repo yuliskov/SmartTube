@@ -15,13 +15,19 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.AudioTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector.TrackSelectorCallback;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class TrackSelectorManager implements TrackSelectorCallback {
@@ -36,6 +42,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
     private final static float MAX_FRAME_RATE =
             Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1 ? 30f : 60f;
+    private final String mLanguage;
 
     private DefaultTrackSelector mTrackSelector;
     //private TrackSelection.Factory mTrackSelectionFactory;
@@ -43,6 +50,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
     private long mTracksInitTimeMs;
+
+    public TrackSelectorManager(String language) {
+        mLanguage = language;
+    }
 
     public void invalidate() {
         Arrays.fill(mRenderers, null);
@@ -145,6 +156,9 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         Renderer renderer = mRenderers[rendererIndex];
         renderer.mediaTracks = new MediaTrack[renderer.trackGroups.length][];
+        // Fix for java.util.ConcurrentModificationException inside of:
+        // com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem.from (ExoFormatItem.java:44)
+        // Won't help: renderer.sortedTracks = Collections.synchronizedSortedSet(new TreeSet<>(new MediaTrackFormatComparator()));
         renderer.sortedTracks = new TreeSet<>(new MediaTrackFormatComparator());
 
         if (rendererIndex == RENDERER_INDEX_SUBTITLE) {
@@ -168,6 +182,14 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 mediaTrack.format = format;
                 mediaTrack.groupIndex = groupIndex;
                 mediaTrack.trackIndex = trackIndex;
+
+                if (mediaTrack.isVP9Codec() && !Helpers.isVP9ResolutionSupported(mediaTrack.getHeight())) {
+                    continue;
+                }
+
+                if (mediaTrack.isAV1Codec() && !Helpers.isAV1ResolutionSupported(mediaTrack.getHeight())) {
+                    continue;
+                }
 
                 // Selected track or not will be decided later in setSelection() routine
 
@@ -419,11 +441,13 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         if (originTrack.format != null) { // not auto selection
             MediaTrack prevResult;
 
-            for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {
+            MediaTrack[][] mediaTracks = filterByLanguage(renderer.mediaTracks, originTrack);
+
+            for (int groupIndex = 0; groupIndex < mediaTracks.length; groupIndex++) {
                 prevResult = result;
 
                 // Very rare NPE fix
-                MediaTrack[] trackGroup = renderer.mediaTracks[groupIndex];
+                MediaTrack[] trackGroup = mediaTracks[groupIndex];
 
                 if (trackGroup == null) {
                     Log.e(TAG, "Track selection error. Media track group %s is empty.", groupIndex);
@@ -465,18 +489,25 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         // Get ready for group with multiple codecs: avc, av01
                         if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
                             result = mediaTrack;
-                            // Don't do break. Cause we don't know there 30/60 fps.
-                            //break;
+                            // Don't do break for VideoTrack because we don't know whether there 30/60 fps.
+                            if (!(originTrack instanceof VideoTrack)) {
+                                break;
+                            }
                         } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
                             result = mediaTrack;
                         }
-                    } else if (compare > 0 && mediaTrack.compare(result) >= 0) { // Select track with higher possible quality
-                        // Get ready for group with multiple codecs: avc, av01
-                        // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
-                        if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
-                            result = mediaTrack;
-                        } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
-                            result = mediaTrack;
+                    } else if (compare > 0) {
+                        // Select track with higher possible quality or by preferred codec
+                        boolean higherQuality = mediaTrack.compare(result) >= 0;
+                        //boolean preferByCodec = MediaTrack.preferByCodec(mediaTrack, result);
+                        if (higherQuality) { // || preferByCodec
+                            // Get ready for group with multiple codecs: avc, av01
+                            // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
+                            if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
+                                result = mediaTrack;
+                            } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
+                                result = mediaTrack;
+                            }
                         }
                     }
                 }
@@ -537,6 +568,55 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         return mRenderers[rendererIndex] != null && mRenderers[rendererIndex].selectedTrack != null;
     }
 
+    /**
+     * Trying to filter languages preferred by the user
+     */
+    private MediaTrack[][] filterByLanguage(MediaTrack[][] trackGroupList, MediaTrack originTrack) {
+        if (!(originTrack instanceof AudioTrack) || mLanguage == null || trackGroupList.length <= 1) {
+            return trackGroupList;
+        }
+
+        if (originTrack.format != null && originTrack.format.language != null) {
+            return trackGroupList;
+        }
+
+        List<MediaTrack[]> resultTracks = null;
+        List<MediaTrack[]> resultTracksFallback = null;
+
+        // Tracks are grouped by the language/formats
+        for (MediaTrack[] trackGroup : trackGroupList) {
+            if (trackGroup != null && trackGroup.length >= 1) {
+                MediaTrack mediaTrack = trackGroup[0];
+
+                if (mediaTrack.format != null) {
+                    if (Helpers.equals(mediaTrack.format.language, mLanguage)) {
+                        if (resultTracks == null) {
+                            resultTracks = new ArrayList<>();
+                        }
+
+                        resultTracks.add(trackGroup);
+                    } else if (Helpers.equals(mediaTrack.format.language, "en")) {
+                        if (resultTracksFallback == null) {
+                            resultTracksFallback = new ArrayList<>();
+                        }
+
+                        resultTracksFallback.add(trackGroup);
+                    }
+                }
+            }
+        }
+
+        if (resultTracks != null && !resultTracks.isEmpty()) {
+            return resultTracks.toArray(new MediaTrack[0][]);
+        }
+
+        if (resultTracksFallback != null && !resultTracksFallback.isEmpty()) {
+            return resultTracksFallback.toArray(new MediaTrack[0][]);
+        }
+
+        return trackGroupList;
+    }
+
     //private void setOverride(int rendererIndex, int group, int[] tracks, boolean enableRandomAdaptation) {
     //    TrackSelection.Factory factory = tracks.length == 1 ? FIXED_FACTORY : (enableRandomAdaptation ? RANDOM_FACTORY : mTrackSelectionFactory);
     //    mRenderers[rendererIndex].override = new SelectionOverride(group, tracks);
@@ -590,7 +670,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         public boolean isDisabled;
         public TrackGroupArray trackGroups;
         public MediaTrack[][] mediaTracks;
-        public TreeSet<MediaTrack> sortedTracks;
+        public SortedSet<MediaTrack> sortedTracks;
         public MediaTrack selectedTrack;
     }
 

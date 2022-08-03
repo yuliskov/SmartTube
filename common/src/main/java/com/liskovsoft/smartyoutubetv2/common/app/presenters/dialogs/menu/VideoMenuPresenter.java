@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -13,12 +13,15 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -34,7 +37,7 @@ import java.util.List;
 
 public class VideoMenuPresenter extends BaseMenuPresenter {
     private static final String TAG = VideoMenuPresenter.class.getSimpleName();
-    private final MediaItemManager mItemManager;
+    private final MediaItemService mItemManager;
     private final AppDialogPresenter mDialogPresenter;
     private final MediaServiceManager mServiceManager;
     private Disposable mAddToPlaylistAction;
@@ -48,7 +51,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsOpenChannelButtonEnabled;
     private boolean mIsOpenChannelUploadsButtonEnabled;
     private boolean mIsSubscribeButtonEnabled;
-    private boolean mIsShareButtonEnabled;
+    private boolean mIsShareLinkButtonEnabled;
+    private boolean mIsShareEmbedLinkButtonEnabled;
     private boolean mIsAddToPlaylistButtonEnabled;
     private boolean mIsAddToRecentPlaylistButtonEnabled;
     private boolean mIsAccountSelectionEnabled;
@@ -56,11 +60,14 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsPinToSidebarEnabled;
     private boolean mIsSavePlaylistButtonEnabled;
     private boolean mIsCreatePlaylistButtonEnabled;
+    private boolean mIsAddToNewPlaylistButtonEnabled;
     private boolean mIsOpenPlaylistButtonEnabled;
     private boolean mIsAddToPlaybackQueueButtonEnabled;
+    private boolean mIsShowPlaybackQueueButtonEnabled;
     private boolean mIsOpenDescriptionButtonEnabled;
     private boolean mIsPlayVideoButtonEnabled;
     private boolean mIsPlaylistOrderButtonEnabled;
+    private boolean mIsStreamReminderButtonEnabled;
     private VideoMenuCallback mCallback;
     private List<VideoPlaylistInfo> mVideoPlaylistInfos;
 
@@ -69,13 +76,15 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         int ACTION_UNSUBSCRIBE = 1;
         int ACTION_REMOVE = 2;
         int ACTION_REMOVE_FROM_PLAYLIST = 3;
+        int ACTION_REMOVE_FROM_QUEUE = 4;
+        int ACTION_ADD_TO_QUEUE = 5;
         void onItemAction(Video videoItem, int action);
     }
 
     private VideoMenuPresenter(Context context) {
         super(context);
         MediaService service = YouTubeMediaService.instance();
-        mItemManager = service.getMediaItemManager();
+        mItemManager = service.getMediaItemService();
         mServiceManager = MediaServiceManager.instance();
         mDialogPresenter = AppDialogPresenter.instance(context);
     }
@@ -115,6 +124,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     @Override
+    protected boolean isAddToNewPlaylistEnabled() {
+        return mIsAddToNewPlaylistButtonEnabled;
+    }
+
+    @Override
     protected boolean isAccountSelectionEnabled() {
         return mIsAccountSelectionEnabled;
     }
@@ -132,21 +146,25 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsAddToPlaylistButtonEnabled = true;
         mIsAddToRecentPlaylistButtonEnabled = true;
         mIsAddToPlaybackQueueButtonEnabled = true;
+        mIsShowPlaybackQueueButtonEnabled = true;
         mIsOpenChannelButtonEnabled = true;
         mIsOpenChannelUploadsButtonEnabled = true;
         mIsOpenPlaylistButtonEnabled = true;
         mIsSubscribeButtonEnabled = true;
         mIsNotInterestedButtonEnabled = true;
         mIsRemoveFromHistoryButtonEnabled = true;
-        mIsShareButtonEnabled = true;
+        mIsShareLinkButtonEnabled = true;
+        mIsShareEmbedLinkButtonEnabled = true;
         mIsAccountSelectionEnabled = true;
         mIsReturnToBackgroundVideoEnabled = true;
         mIsPinToSidebarEnabled = true;
         mIsSavePlaylistButtonEnabled = true;
         mIsCreatePlaylistButtonEnabled = true;
+        mIsAddToNewPlaylistButtonEnabled = true;
         mIsOpenDescriptionButtonEnabled = true;
         mIsPlayVideoButtonEnabled = true;
         mIsPlaylistOrderButtonEnabled = true;
+        mIsStreamReminderButtonEnabled = true;
 
         showMenuInt(video);
     }
@@ -195,13 +213,17 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendReturnToBackgroundVideoButton();
         appendPlayVideoButton();
         //appendNotInterestedButton();
+        appendStreamReminderButton();
         appendRemoveFromHistoryButton();
         appendAddToRecentPlaylistButton();
         appendAddToPlaylistButton();
-        appendNotInterestedButton();
         appendCreatePlaylistButton();
+        appendAddToNewPlaylistButton();
+        appendNotInterestedButton();
         appendRenamePlaylistButton();
         appendPlaylistOrderButton();
+        appendAddToPlaybackQueueButton();
+        appendShowPlaybackQueueButton();
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
         appendOpenPlaylistButton();
@@ -209,12 +231,13 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendTogglePinVideoToSidebarButton();
         appendSavePlaylistButton();
         appendOpenDescriptionButton();
-        appendAddToPlaybackQueueButton();
-        appendShareButton();
+        appendShareLinkButton();
+        appendShareEmbedLinkButton();
         appendAccountSelectionButton();
 
         if (!mDialogPresenter.isEmpty()) {
             String title = mVideo != null ? mVideo.title : null;
+            // No need to add author because: 1) This could be a channel card. 2) This info isn't so important.
             mDialogPresenter.showDialog(title);
         }
     }
@@ -228,12 +251,14 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         appendReturnToBackgroundVideoButton();
         appendPlayVideoButton();
+        appendAddToPlaybackQueueButton();
+        appendShowPlaybackQueueButton();
         appendOpenChannelButton();
         appendOpenPlaylistButton();
         appendTogglePinVideoToSidebarButton();
         appendOpenDescriptionButton();
-        appendAddToPlaybackQueueButton();
-        appendShareButton();
+        appendShareLinkButton();
+        appendShareEmbedLinkButton();
         appendAccountSelectionButton();
 
         if (mDialogPresenter.isEmpty()) {
@@ -346,7 +371,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo == null || !mVideo.hasPlaylist() || mVideo.belongsToSamePlaylistGroup()) {
+        // Check view to allow open playlist in grid
+        if (mVideo == null || !mVideo.hasPlaylist() || (mVideo.belongsToSamePlaylistGroup() && ViewManager.instance(getContext()).getTopView() == ChannelUploadsView.class)) {
             return;
         }
 
@@ -426,12 +452,20 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 }));
     }
 
-    private void appendShareButton() {
-        if (!mIsShareButtonEnabled) {
+    private void appendShareLinkButton() {
+        if (!mIsShareLinkButtonEnabled) {
             return;
         }
 
-        AppDialogUtil.appendShareDialogItems(getContext(), mDialogPresenter, mVideo);
+        AppDialogUtil.appendShareLinkDialogItem(getContext(), mDialogPresenter, mVideo);
+    }
+
+    private void appendShareEmbedLinkButton() {
+        if (!mIsShareEmbedLinkButtonEnabled) {
+            return;
+        }
+
+        AppDialogUtil.appendShareEmbedLinkDialogItem(getContext(), mDialogPresenter, mVideo);
     }
 
     private void appendOpenDescriptionButton() {
@@ -486,7 +520,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
     private void showLongTextDialog(String description) {
         mDialogPresenter.clear();
-        mDialogPresenter.appendLongTextCategory(mVideo.title, UiOptionItem.from(description, null));
+        mDialogPresenter.appendLongTextCategory(mVideo.title, UiOptionItem.from(description));
         mDialogPresenter.showDialog(mVideo.title);
     }
 
@@ -530,7 +564,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         Playlist playlist = Playlist.instance();
         // Toggle between add/remove while dialog is opened
-        boolean containsVideo = playlist.contains(mVideo);
+        boolean containsVideo = playlist.containsAfterCurrent(mVideo);
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(
@@ -538,16 +572,33 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                         optionItem -> {
                             if (containsVideo) {
                                 playlist.remove(mVideo);
+                                if (mCallback != null) {
+                                    mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE);
+                                }
                             } else {
+                                mVideo.fromQueue = true;
                                 playlist.add(mVideo);
+                                if (mCallback != null) {
+                                    mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_ADD_TO_QUEUE);
+                                }
                             }
 
                             closeDialog();
                             MessageHelpers.showMessage(getContext(), String.format("%s: %s",
-                                    mVideo.extractAuthor(),
+                                    mVideo.getAuthor(),
                                     getContext().getString(containsVideo ? R.string.removed_from_playback_queue : R.string.added_to_playback_queue))
                             );
                         }));
+    }
+
+    private void appendShowPlaybackQueueButton() {
+        if (!mIsShowPlaybackQueueButtonEnabled) {
+            return;
+        }
+
+        if (mVideo == null || !mVideo.hasVideo()) {
+            return;
+        }
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(
@@ -562,7 +613,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo == null || !mVideo.belongsToPlaylists()) {
+        if (mVideo == null || !BrowsePresenter.instance(getContext()).isPlaylistsSectionActive()) {
             return;
         }
 
@@ -570,6 +621,28 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 UiOptionItem.from(getContext().getString(
                         R.string.playlist_order),
                         optionItem -> AppDialogUtil.showPlaylistOrderDialog(getContext(), mVideo, mDialogPresenter::closeDialog)
+                ));
+    }
+
+    private void appendStreamReminderButton() {
+        if (!mIsStreamReminderButtonEnabled) {
+            return;
+        }
+
+        if (mVideo == null || !mVideo.isUpcoming) {
+            return;
+        }
+
+        StreamReminderService reminderService = StreamReminderService.instance(getContext());
+        boolean reminderSet = reminderService.isReminderSet(mVideo);
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(reminderSet ? R.string.unset_stream_reminder : R.string.set_stream_reminder),
+                        optionItem -> {
+                            reminderService.toggleReminder(mVideo);
+                            closeDialog();
+                            MessageHelpers.showMessage(getContext(), reminderSet ? R.string.msg_done : R.string.playback_starts_shortly);
+                        }
                 ));
     }
 
@@ -653,7 +726,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         MessageHelpers.showMessage(getContext(),
-                video.extractAuthor() + ": " + getContext().getString(!video.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel));
+                video.getAuthor() + ": " + getContext().getString(!video.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel));
     }
 
     private void updateEnabledMenuItems() {
@@ -672,7 +745,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_LINK)) {
-            mIsShareButtonEnabled = false;
+            mIsShareLinkButtonEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_EMBED_LINK)) {
+            mIsShareEmbedLinkButtonEnabled = false;
         }
 
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR)) {
@@ -707,8 +784,24 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             mIsCreatePlaylistButtonEnabled = false;
         }
 
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_NEW_PLAYLIST)) {
+            mIsAddToNewPlaylistButtonEnabled = false;
+        }
+
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SUBSCRIBE)) {
             mIsSubscribeButtonEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_STREAM_REMINDER)) {
+            mIsStreamReminderButtonEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHOW_QUEUE)) {
+            mIsShowPlaybackQueueButtonEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAYLIST_ORDER)) {
+            mIsPlaylistOrderButtonEnabled = false;
         }
     }
 }

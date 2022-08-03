@@ -26,21 +26,37 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
-        
+
+        appendSpeechRecognizerCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_search));
+    }
+
+    private void appendSpeechRecognizerCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.speech_recognizer_system, SearchData.SPEECH_RECOGNIZER_SYSTEM},
+                {R.string.speech_recognizer_external_1, SearchData.SPEECH_RECOGNIZER_EXTERNAL_1},
+                {R.string.speech_recognizer_external_2, SearchData.SPEECH_RECOGNIZER_EXTERNAL_2}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]),
+                    optionItem -> mSearchData.setSpeechRecognizerType(pair[1]),
+                    mSearchData.getSpeechRecognizerType() == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.speech_recognizer), options);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.instant_voice_search),
-                option -> mSearchData.setInstantVoiceSearchEnabled(option.isSelected()),
+                option -> mSearchData.enableInstantVoiceSearch(option.isSelected()),
                 mSearchData.isInstantVoiceSearchEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.focus_on_search_results),
-                option -> mSearchData.setFocusOnResultsEnabled(option.isSelected()),
+                option -> mSearchData.enableFocusOnResults(option.isSelected()),
                 mSearchData.isFocusOnResultsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.keyboard_auto_show),
@@ -51,6 +67,6 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
                 option -> mSearchData.enableBackgroundPlayback(option.isSelected()),
                 mSearchData.isBackgroundPlaybackEnabled()));
 
-        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.dialog_search), options);
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 }

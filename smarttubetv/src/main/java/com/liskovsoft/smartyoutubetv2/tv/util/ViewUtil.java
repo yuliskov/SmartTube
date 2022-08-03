@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.tv.util;
 import android.content.Context;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.text.BidiFormatter;
 import android.text.Layout;
@@ -38,7 +37,7 @@ public class ViewUtil {
     /**
      * Dim other rows in {@link RowPresenter}
      */
-    public static final boolean SELECT_EFFECT_ENABLED = false;
+    public static final boolean ROW_SELECT_EFFECT_ENABLED = false;
     /**
      * Scroll continue threshold
      */
@@ -64,18 +63,16 @@ public class ViewUtil {
     }
 
     public static void disableMarquee(TextView... textViews) {
-        if (textViews == null || textViews.length == 0) {
+        if (VERSION.SDK_INT <= 19 || textViews == null || textViews.length == 0) { // Android 4: Broken grid layout fix
             return;
         }
 
         for (TextView textView : textViews) {
             textView.setEllipsize(TruncateAt.END);
+            // Line below cause broken grid layout on Android 4 and older
             textView.setHorizontallyScrolling(false);
 
-            // Fix: text disappear on rtl languages
-            if (VERSION.SDK_INT > 17 && BidiFormatter.getInstance().isRtlContext()) {
-                textView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
-            }
+            applyMarqueeRtlParams(textView, false);
         }
     }
 
@@ -83,17 +80,9 @@ public class ViewUtil {
      * <a href="https://stackoverflow.com/questions/3332924/textview-marquee-not-working">More info</a>
      */
     public static void enableMarquee(TextView... textViews) {
-        if (textViews == null || textViews.length == 0) {
+        if (VERSION.SDK_INT <= 19 || textViews == null || textViews.length == 0) { // Android 4: Broken grid layout fix
             return;
         }
-
-        //if (VERSION.SDK_INT > 17) {
-        //    if (BidiFormatter.getInstance().isRtlContext()) {
-        //        // TODO: fix marquee on rtl languages
-        //        // TODO: text disappear on rtl languages
-        //        return;
-        //    }
-        //}
 
         for (TextView textView : textViews) {
             if (ViewUtil.isTruncated(textView)) { // multiline scroll fix
@@ -104,18 +93,37 @@ public class ViewUtil {
                 // App dialog title fix.
                 textView.setSelected(true);
 
-                // Fix: right scrolling on rtl languages
-                // Fix: text disappear on rtl languages
-                if (VERSION.SDK_INT > 17 && BidiFormatter.getInstance().isRtlContext()) {
-                    textView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
-                    textView.setTextDirection(TextView.TEXT_DIRECTION_RTL);
-                    textView.setGravity(Gravity.START);
-                }
+                applyMarqueeRtlParams(textView, true);
             }
         }
     }
 
+    public static void applyMarqueeRtlParams(TextView textView, boolean scroll) {
+        if (VERSION.SDK_INT <= 17) {
+            return;
+        }
+
+        if (!BidiFormatter.getInstance().isRtlContext()) {
+            return;
+        }
+
+        if (scroll) {
+            // Fix: right scrolling on rtl languages
+            // Fix: text disappear on rtl languages
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+            textView.setTextDirection(TextView.TEXT_DIRECTION_RTL);
+            textView.setGravity(Gravity.START);
+        } else {
+            // Fix: text disappear on rtl languages
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+        }
+    }
+
     public static void setTextScrollSpeed(TextView textView, float speed) {
+        if (VERSION.SDK_INT <= 19) { // Android 4: Broken grid layout fix
+            return;
+        }
+
         if (textView instanceof MarqueeTextView) {
             ((MarqueeTextView) textView).setMarqueeSpeedFactor(speed);
         }

@@ -13,6 +13,9 @@ import androidx.core.app.NotificationCompat;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
+/**
+ * This service isn't used at all! It can be safely removed in the future.
+ */
 public class BackgroundPlaybackService extends Service {
     private static final String TAG = BackgroundPlaybackService.class.getSimpleName();
 

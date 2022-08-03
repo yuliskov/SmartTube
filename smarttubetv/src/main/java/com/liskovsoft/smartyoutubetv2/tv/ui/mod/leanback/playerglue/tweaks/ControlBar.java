@@ -68,6 +68,7 @@ class ControlBar extends LinearLayout {
         if (getChildCount() > 0) {
             int index = mLastFocusIndex >= 0 && mLastFocusIndex < getChildCount()
                     ? mLastFocusIndex : getDefaultFocusIndex();
+
             if (getChildAt(index).requestFocus(direction, previouslyFocusedRect)) {
                 return true;
             }

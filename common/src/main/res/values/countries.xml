@@ -3,22 +3,14 @@
     <string-array name="supported_countries">
         <item>United States|US</item>
         <item>Great Britain|GB</item>
+        <item>Scotland|GB-SCT</item>
         <item>Canada|CA</item>
-        <item>Hong Kong|HK</item>
-        <item>Россия|RU</item>
         <item>Україна|UA</item>
+        <item>Россия|RU</item>
         <item>Беларусь|BY</item>
         <item>Қазақстан|KZ</item>
-        <item>Argentina|AR</item>
+        <item>Armenia|HY</item>
         <item>Serbia|RS</item>
-        <item>Australia|AU</item>
-        <item>Switzerland|CH</item>
-        <item>México|MX</item>
-        <item>Malaysia|MY</item>
-        <item>Japan|JP</item>
-        <item>India|IN</item>
-        <item>Kenya|KE</item>
-        <item>Israel|IL</item>
         <item>Eesti|EE</item>
         <item>България|BG</item>
         <item>Deutschland|DE</item>
@@ -31,22 +23,32 @@
         <item>Hungary|HU</item>
         <item>Nederland|NL</item>
         <item>België|BE</item>
-        <item>België (Nederland)|NL</item>
-        <item>België (France)|FR</item>
+        <item>België (Nederland)|nl_BE</item>
+        <item>België (France)|fr_BE</item>
         <item>Norsk|NB</item>
         <item>Czech|CS</item>
         <item>Italia|IT</item>
+        <item>Ελληνικά|GR</item>
         <item>Denmark|DK</item>
         <item>Lietuva|LT</item>
         <item>Moldova|MO</item>
         <item>Slovakia|SK</item>
         <item>Slovenia|SL</item>
         <item>Sweden|SE</item>
+        <item>New Zealand|NZ</item>
+        <item>Australia|AU</item>
+        <item>Switzerland|CH</item>
+        <item>Israel|IL</item>
         <item>Bangladesh|BD</item>
-        <item>Armenia|HY</item>
         <item>Brasil|BR</item>
         <item>Portugalia|PT</item>
-        <item>Ελληνικά|GR</item>
+        <item>Argentina|AR</item>
+        <item>México|MX</item>
+        <item>Hong Kong|HK</item>
+        <item>Malaysia|MY</item>
+        <item>Japan|JP</item>
+        <item>India|IN</item>
+        <item>Kenya|KE</item>
         <item>Türkiye|TR</item>
         <item>Egypt|EG</item>
         <item>Việt Nam|VN</item>

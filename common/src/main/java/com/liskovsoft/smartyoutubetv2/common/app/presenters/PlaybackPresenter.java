@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEventBridge;
@@ -81,7 +82,11 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     }
 
     public boolean isRunningInBackground() {
-        return getView() != null && getView().getController().isEngineInitialized() && !Utils.isPlayerInForeground(getContext());
+        return getView() != null &&
+                getView().getController().getBackgroundMode() != PlaybackEngineController.BACKGROUND_MODE_DEFAULT &&
+                getView().getController().isEngineInitialized() &&
+                !Utils.isPlayerInForeground(getContext()) &&
+                getContext() instanceof Activity && Utils.checkActivity((Activity) getContext()); // Check that activity is not in Finishing state
     }
 
     public boolean isInPipMode() {
@@ -101,7 +106,8 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     }
 
     public void setPosition(String timeCode) {
-        if (getView() != null) {
+        // Check that the user isn't open context menu on suggestion item
+        if (Utils.isPlayerInForeground(getContext()) && getView() != null && !getView().getController().isSuggestionsShown()) {
             getView().getController().setPositionMs(ServiceHelper.timeTextToMillis(timeCode));
         } else {
             Video video = VideoMenuPresenter.sVideoHolder.get();

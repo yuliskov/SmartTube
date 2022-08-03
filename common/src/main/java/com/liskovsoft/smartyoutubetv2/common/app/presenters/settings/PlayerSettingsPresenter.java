@@ -167,6 +167,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.open_chat, PlayerTweaksData.PLAYER_BUTTON_CHAT},
+                {R.string.content_block_provider, PlayerTweaksData.PLAYER_BUTTON_CONTENT_BLOCK},
                 {R.string.seek_interval, PlayerTweaksData.PLAYER_BUTTON_SEEK_INTERVAL},
                 {R.string.share_link, PlayerTweaksData.PLAYER_BUTTON_SHARE},
                 {R.string.action_video_info, PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO},
@@ -256,6 +258,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableNoFpsPresets(option.isSelected()),
                 mPlayerTweaksData.isNoFpsPresetsEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.prefer_avc_over_vp9),
+                option -> mPlayerTweaksData.preferAvcOverVp9(option.isSelected()),
+                mPlayerTweaksData.isAvcOverVp9Preferred()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.sleep_timer),
                 getContext().getString(R.string.sleep_timer_desc),
                 option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
@@ -292,13 +298,14 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> GlobalPreferences.instance(getContext()).enableChannelsService(!option.isSelected()),
                 !GlobalPreferences.instance(getContext()).isChannelsServiceEnabled()));
 
-        options.add(UiOptionItem.from("Prefer IPv4 DNS",
-                option -> GlobalPreferences.instance(getContext()).preferIPv4Dns(option.isSelected()),
-                GlobalPreferences.instance(getContext()).isIPv4DnsPreferred()));
-
-        options.add(UiOptionItem.from("Enable DNS over HTTPS",
-                option -> GlobalPreferences.instance(getContext()).enableDnsOverHttps(option.isSelected()),
-                GlobalPreferences.instance(getContext()).isDnsOverHttpsEnabled()));
+        // Disabled inside RetrofitHelper
+        //options.add(UiOptionItem.from("Prefer IPv4 DNS",
+        //        option -> GlobalPreferences.instance(getContext()).preferIPv4Dns(option.isSelected()),
+        //        GlobalPreferences.instance(getContext()).isIPv4DnsPreferred()));
+        //
+        //options.add(UiOptionItem.from("Enable DNS over HTTPS",
+        //        option -> GlobalPreferences.instance(getContext()).enableDnsOverHttps(option.isSelected()),
+        //        GlobalPreferences.instance(getContext()).isDnsOverHttpsEnabled()));
 
         // Need to be enabled on older version of ExoPlayer (e.g. 2.10.6).
         // It's because there's no tweaks for modern devices.
@@ -377,6 +384,18 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         //options.add(UiOptionItem.from(getContext().getString(R.string.player_pause_when_seek),
         //        option -> mPlayerData.enableSeekMemory(option.isSelected()),
         //        mPlayerData.isSeekMemoryEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.real_channel_icon),
+                option -> mPlayerTweaksData.enableRealChannelIcon(option.isSelected()),
+                mPlayerTweaksData.isRealChannelIconEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.place_chat_left),
+                option -> mPlayerTweaksData.placeChatLeft(option.isSelected()),
+                mPlayerTweaksData.isChatPlacedLeft()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_disable_suggestions),
+                option -> mPlayerTweaksData.disableSuggestions(option.isSelected()),
+                mPlayerTweaksData.isSuggestionsDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_number_key_seek),
                 option -> mPlayerData.enableNumberKeySeek(option.isSelected()),

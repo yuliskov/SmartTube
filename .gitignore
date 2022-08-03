@@ -61,6 +61,7 @@ tmp/
 *_bak*
 *_tmp
 *.bak*
+*.tmp
 *.7z
 .DS_Store
 /captures

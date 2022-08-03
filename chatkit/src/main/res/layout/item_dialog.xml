@@ -1,0 +1,112 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/dialogRootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@id/dialogContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground">
+
+        <com.stfalcon.chatkit.utils.ShapeImageView
+            android:id="@id/dialogAvatar"
+            android:layout_width="@dimen/dialog_avatar_width"
+            android:layout_height="@dimen/dialog_avatar_height"
+            android:layout_margin="16dp" />
+
+        <TextView
+            android:id="@id/dialogName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="19dp"
+            android:layout_toEndOf="@id/dialogAvatar"
+            android:layout_toLeftOf="@id/dialogDate"
+            android:layout_toRightOf="@id/dialogAvatar"
+            android:layout_toStartOf="@id/dialogDate"
+            android:ellipsize="end"
+            android:fontFamily="@string/font_fontFamily_medium"
+            android:includeFontPadding="false"
+            android:maxLines="1" />
+
+        <TextView
+            android:id="@id/dialogDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:ellipsize="end"
+            android:maxLines="1" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dialogName"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="7dp"
+            android:layout_toEndOf="@id/dialogAvatar"
+            android:layout_toRightOf="@id/dialogAvatar">
+
+            <com.stfalcon.chatkit.utils.ShapeImageView
+                android:id="@id/dialogLastMessageUserAvatar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp" />
+
+
+            <TextView
+                android:id="@id/dialogLastMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/dialogLastMessageUserAvatar"
+                android:layout_toRightOf="@id/dialogLastMessageUserAvatar"
+                android:ellipsize="end"
+                android:gravity="top"
+                android:maxLines="1" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@id/dialogUnreadBubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/dialogAvatar"
+            android:layout_alignRight="@id/dialogAvatar"
+            android:layout_alignTop="@id/dialogAvatar"
+            android:layout_marginEnd="-5dp"
+            android:layout_marginRight="-5dp"
+            android:layout_marginTop="-5dp"
+            android:background="@drawable/bubble_circle"
+            android:ellipsize="end"
+            android:fontFamily="@string/font_fontFamily_medium"
+            android:gravity="center"
+            android:lines="1" />
+
+        <FrameLayout
+            android:id="@id/dialogDividerContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="16dp"
+            android:paddingLeft="@dimen/dialog_divider_margin_left"
+            android:paddingStart="@dimen/dialog_divider_margin_left">
+
+            <View
+                android:id="@id/dialogDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/dialog_divider" />
+
+        </FrameLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

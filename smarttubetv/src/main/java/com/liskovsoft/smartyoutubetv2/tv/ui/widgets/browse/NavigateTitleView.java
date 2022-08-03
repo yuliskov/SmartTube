@@ -1,22 +1,43 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.browse;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.SearchOrbView;
+import androidx.leanback.widget.SearchOrbView.Colors;
 import androidx.leanback.widget.TitleView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.liskovsoft.mediaserviceinterfaces.data.Account;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
+import java.util.Locale;
+
+import static androidx.leanback.widget.TitleViewAdapter.BRANDING_VIEW_VISIBLE;
 import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
 
 /**
@@ -27,9 +48,14 @@ import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
  */
 public class NavigateTitleView extends TitleView {
     private SearchOrbView mAccountView;
+    private SearchOrbView mLanguageView;
     private SearchOrbView mExitPip;
     private TextView mPipTitle;
-    private int mGlobalVisibility = View.INVISIBLE;
+    private int mSearchVisibility = View.INVISIBLE;
+    private int mBrandingVisibility = View.INVISIBLE;
+    private DateTimeView mGlobalClock;
+    private DateTimeView mGlobalDate;
+    private boolean mInitDone;
 
     public NavigateTitleView(Context context) {
         super(context);
@@ -90,37 +116,85 @@ public class NavigateTitleView extends TitleView {
 
     @Override
     public void updateComponentsVisibility(int flags) {
+        // Fix for: Fatal Exception: java.lang.IllegalStateException
+        // Fragment has not been attached yet.
+        // Inside: super.updateComponentsVisibility(flags);
+        if (getWindowToken() == null) {
+            return;
+        }
+
         super.updateComponentsVisibility(flags);
 
-        mGlobalVisibility = (flags & SEARCH_VIEW_VISIBLE) == SEARCH_VIEW_VISIBLE
+        init();
+
+        mSearchVisibility = (flags & SEARCH_VIEW_VISIBLE) == SEARCH_VIEW_VISIBLE
+                ? View.VISIBLE : View.INVISIBLE;
+
+        mBrandingVisibility = (flags & BRANDING_VIEW_VISIBLE) == BRANDING_VIEW_VISIBLE
                 ? View.VISIBLE : View.INVISIBLE;
 
         if (mAccountView != null) {
-            mAccountView.setVisibility(mGlobalVisibility);
+            mAccountView.setVisibility(mSearchVisibility);
         }
 
-        if (mExitPip != null && (PlaybackPresenter.instance(getContext()).isRunningInBackground() || mGlobalVisibility != View.VISIBLE)) {
-            mExitPip.setVisibility(mGlobalVisibility);
-            mPipTitle.setVisibility(mGlobalVisibility);
+        if (mLanguageView != null) {
+            mLanguageView.setVisibility(mSearchVisibility);
+        }
+
+        if (mExitPip != null && (PlaybackPresenter.instance(getContext()).isRunningInBackground() || mSearchVisibility != View.VISIBLE)) {
+            mExitPip.setVisibility(mSearchVisibility);
+            mPipTitle.setVisibility(mSearchVisibility);
+        }
+
+        if (mGlobalClock != null) {
+            mGlobalClock.setVisibility(mBrandingVisibility);
+        }
+
+        if (mGlobalDate != null) {
+            mGlobalDate.setVisibility(mBrandingVisibility);
         }
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
+    private void init() {
+        if (mInitDone) {
+            return;
+        }
 
         if (MainUIData.instance(getContext()).isButtonEnabled(MainUIData.BUTTON_BROWSE_ACCOUNTS)) {
             mAccountView = (SearchOrbView) findViewById(R.id.account_orb);
             mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).show());
             TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
+
+            updateAccountIcon();
+        }
+
+        if (MainUIData.instance(getContext()).isButtonEnabled(MainUIData.BUTTON_CHANGE_LANGUAGE)) {
+            mLanguageView = (SearchOrbView) findViewById(R.id.language_orb);
+            mLanguageView.setOnOrbClickedListener(v -> LanguageSettingsPresenter.instance(getContext()).show());
+            TooltipCompatHandler.setTooltipText(mLanguageView, getContext().getString(R.string.settings_language_country));
+
+            updateLanguageIcon();
         }
 
         mExitPip = (SearchOrbView) findViewById(R.id.exit_pip);
         mPipTitle = (TextView) findViewById(R.id.pip_title);
         mExitPip.setOnOrbClickedListener(v -> ViewManager.instance(getContext()).startView(PlaybackView.class));
-        //ViewUtil.enableMarquee(mPipTitle);
-        //ViewUtil.setTextScrollSpeed(mPipTitle, MainUIData.instance(getContext()).getCardTextScrollSpeed());
+        ViewUtil.enableMarquee(mPipTitle);
+        ViewUtil.setTextScrollSpeed(mPipTitle, MainUIData.instance(getContext()).getCardTextScrollSpeed());
         TooltipCompatHandler.setTooltipText(mExitPip, getContext().getString(R.string.return_to_background_video));
+
+        if (GeneralData.instance(getContext()).isGlobalClockEnabled()) {
+            mGlobalClock = (DateTimeView) findViewById(R.id.global_time);
+            mGlobalClock.showDate(false);
+            mGlobalClock.setVisibility(View.VISIBLE);
+
+            mGlobalDate = (DateTimeView) findViewById(R.id.global_date);
+            mGlobalDate.showTime(false);
+            mGlobalDate.showDate(true);
+            mGlobalDate.setVisibility(View.VISIBLE);
+        }
+
+        mInitDone = true;
     }
 
     @Override
@@ -141,16 +215,79 @@ public class NavigateTitleView extends TitleView {
         }
     }
 
+    public void update() {
+        updateAccountIcon();
+    }
+
     private void applyPipParameters() {
         if (mExitPip != null) {
-            int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? mGlobalVisibility : View.GONE;
+            int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? mSearchVisibility : View.INVISIBLE;
             mExitPip.setVisibility(newVisibility);
             mPipTitle.setVisibility(newVisibility);
 
             if (newVisibility == View.VISIBLE) {
                 Video video = PlaybackPresenter.instance(getContext()).getVideo();
-                mPipTitle.setText(video != null ? String.format("%s - %s", video.title, video.extractAuthor()) : "");
+                mPipTitle.setText(video != null ? String.format("%s - %s", video.title, video.getAuthor()) : "");
             }
         }
+    }
+
+    private void updateAccountIcon() {
+        if (mAccountView == null) {
+            return;
+        }
+
+        MediaServiceManager.instance().loadAccounts(accountList -> {
+            Account current = null;
+            for (Account account : accountList) {
+                if (account.isSelected()) {
+                    current = account;
+                    break;
+                }
+            }
+
+            if (current != null && current.getAvatarImageUrl() != null) {
+                loadIcon(mAccountView, current.getAvatarImageUrl());
+                TooltipCompatHandler.setTooltipText(mAccountView, current.getName() != null ? current.getName() : current.getEmail());
+            } else {
+                Colors orbColors = mAccountView.getOrbColors();
+                mAccountView.setOrbColors(new Colors(orbColors.color, orbColors.brightColor, ContextCompat.getColor(getContext(), R.color.orb_icon_color)));
+                mAccountView.setOrbIcon(ContextCompat.getDrawable(getContext(), R.drawable.browse_title_account));
+                TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
+            }
+        });
+    }
+
+    private void updateLanguageIcon() {
+        if (mLanguageView == null) {
+            return;
+        }
+
+        // Use delay to fix icon initialization on app boot
+        new Handler(Looper.myLooper()).postDelayed(() -> {
+            Locale locale = LocaleUtility.getCurrentLocale(getContext());
+            loadIcon(mLanguageView, Utils.getCountryFlagUrl(locale.getCountry()));
+            TooltipCompatHandler.setTooltipText(mLanguageView, String.format("%s (%s)", locale.getDisplayCountry(), locale.getDisplayLanguage()));
+        }, 100);
+    }
+
+    private static void loadIcon(SearchOrbView view, String url) {
+        // The view with GONE visibility has zero width and height
+        if (view == null || view.getWidth() == 0) {
+            return;
+        }
+
+        Glide.with(view.getContext())
+                .load(url)
+                .apply(ViewUtil.glideOptions())
+                .circleCrop() // resize image
+                .into(new SimpleTarget<Drawable>(view.getWidth(), view.getHeight()) {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        Colors orbColors = view.getOrbColors();
+                        view.setOrbColors(new Colors(orbColors.color, orbColors.brightColor, Color.TRANSPARENT));
+                        view.setOrbIcon(resource);
+                    }
+                });
     }
 }

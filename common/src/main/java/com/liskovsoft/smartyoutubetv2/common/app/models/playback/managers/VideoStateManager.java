@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
@@ -10,20 +10,22 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventList
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
-public class VideoStateManager extends PlayerEventListenerHelper {
+public class VideoStateManager extends PlayerEventListenerHelper implements TickleListener {
     private static final long MUSIC_VIDEO_MAX_LENGTH_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 60_000;
     private static final String TAG = VideoStateManager.class.getSimpleName();
-    private static final float RESTORE_POSITION_PERCENTS = 12;
+    private static final float RESTORE_POSITION_PERCENTS = 10; // min value for immediately closed videos
     private boolean mIsPlayEnabled;
     private Video mVideo = new Video();
     private FormatItem mTempVideoFormat;
@@ -32,6 +34,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     private PlayerTweaksData mPlayerTweaksData;
     private VideoStateService mStateService;
     private boolean mIsPlayBlocked;
+    private int mTickleLeft;
 
     @Override
     public void onInitDone() { // called each time a video opened from the browser
@@ -52,9 +55,9 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     public void openVideo(Video item) {
         // Ensure that we aren't running on presenter init stage
         if (getController() != null) {
-            // Save state of the previous video.
-            // In case video opened from phone and other stuff.
             if (!item.equals(getVideo())) { // video might be opened twice (when remote connection enabled). Fix for that.
+                // Save state of the previous video.
+                // In case video opened from phone and other stuff.
                 saveState();
             }
         }
@@ -73,7 +76,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         boolean isFarFromStart = getController().getPositionMs() > 10_000;
 
         if (isFarFromStart) {
-            saveState(); // in case user want to go to previous video
+            saveState(); // in case the user wants to go to previous video
             getController().setPositionMs(0);
             return true;
         }
@@ -101,6 +104,8 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineInitialized() {
+        TickleManager.instance().addListener(this);
+
         // Restore before video loaded.
         // This way we override auto track selection mechanism.
         //restoreFormats();
@@ -113,10 +118,22 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineReleased() {
+        mTickleLeft = 0;
+        TickleManager.instance().removeListener(this);
+
         // Save previous state
         if (getController().containsMedia()) {
-            setPlayEnabled(getController().getPlay());
+            setPlayEnabled(getController().getPlayWhenReady());
             saveState();
+        }
+    }
+
+    @Override
+    public void onTickle() {
+        // Sync history every five minutes
+        if (++mTickleLeft > 5) {
+            mTickleLeft = 0;
+            updateHistory();
         }
     }
 
@@ -161,7 +178,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     public void onPause() {
         showHideScreensaver(true);
         setPlayEnabled(false);
-        saveState();
+        //saveState();
     }
 
     @Override
@@ -197,7 +214,8 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     @Override
     public void onSeekEnd() {
         // Scenario: user opens ui and does some seeking
-        saveState();
+        // NOTE: dangerous: there's possibility of simultaneous seeks (e.g. when sponsor block is enabled)
+        //saveState();
     }
 
     @Override
@@ -217,7 +235,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onViewPaused() {
-        persistVideoState();
+        persistState();
     }
 
     private void clearStateOfNextVideo() {
@@ -267,7 +285,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         }
     }
 
-    private void persistVideoState() {
+    private void persistState() {
         if (AppDialogPresenter.instance(getActivity()).isDialogShown()) {
             return;
         }
@@ -292,21 +310,18 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     }
 
     private void saveState() {
-        if (!getController().containsMedia()) {
+        savePosition();
+        updateHistory();
+        //persistState();
+    }
+
+    private void savePosition() {
+        Video video = getVideo();
+
+        if (video == null || getController() == null || !getController().containsMedia()) {
             return;
         }
 
-        Video video = getVideo();
-
-        if (video != null) {
-            savePosition(video);
-            updateHistory();
-            //persistVideoState();
-            //persistVolume();
-        }
-    }
-
-    private void savePosition(Video video) {
         // Exceptional cases:
         // 1) Track is ended
         // 2) Pause on end enabled
@@ -339,7 +354,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         State state = mStateService.getByVideoId(item.videoId);
 
         // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
-        boolean containsWebPosition = item.percentWatched >= RESTORE_POSITION_PERCENTS;
+        boolean containsWebPosition = item.percentWatched > RESTORE_POSITION_PERCENTS;
         boolean stateIsOutdated = state == null || state.timestamp < item.timestamp;
         if (containsWebPosition && stateIsOutdated) {
             // Web state is buggy on short videos (e.g. video clips)
@@ -349,19 +364,49 @@ public class VideoStateManager extends PlayerEventListenerHelper {
             }
         }
 
+        // Web live position is broken. Ignore it.
+        if (stateIsOutdated && item.isLive) {
+            state = null;
+        }
+
         // Do I need to check that item isn't live? (state != null && !item.isLive)
         if (state != null) {
             long remainsMs = getController().getLengthMs() - state.positionMs;
             // Url list videos at this stage has undefined (-1) length. So, we need to ensure that remains is positive.
-            boolean isVideoEnded = remainsMs >= 0 && remainsMs < 1_000;
+            boolean isVideoEnded = remainsMs >= 0 && remainsMs < (item.isLive ? 30_000 : 1_000); // live buffer fix
             if (!isVideoEnded || !getPlayEnabled()) {
                 getController().setPositionMs(state.positionMs);
             }
         }
 
         if (!mIsPlayBlocked) {
-            getController().setPlay(getPlayEnabled());
+            getController().setPlayWhenReady(getPlayEnabled());
         }
+    }
+
+    private void updateHistory() {
+        Video video = getVideo();
+
+        if (video == null || !getController().containsMedia()) {
+            return;
+        }
+
+        RxUtils.disposeActions(mHistoryAction);
+
+        MediaService service = YouTubeMediaService.instance();
+        MediaItemService mediaItemManager = service.getMediaItemService();
+
+        Observable<Void> historyObservable;
+
+        long positionSec = video.isLive ? 0 : getController().getPositionMs() / 1_000;
+
+        if (video.mediaItem != null) {
+            historyObservable = mediaItemManager.updateHistoryPositionObserve(video.mediaItem, positionSec);
+        } else { // video launched form ATV channels
+            historyObservable = mediaItemManager.updateHistoryPositionObserve(video.videoId, positionSec);
+        }
+
+        mHistoryAction = RxUtils.execute(historyObservable);
     }
 
     /**
@@ -419,10 +464,6 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         return mIsPlayEnabled;
     }
 
-    //private void persistVolume() {
-    //    mVolume = getController().getVolume();
-    //}
-
     private void restoreVolume() {
         getController().setVolume(mPlayerData.getPlayerVolume());
     }
@@ -431,31 +472,6 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         restoreVideoFormat();
         restoreAudioFormat();
         restoreSubtitleFormat();
-    }
-
-    private void updateHistory() {
-        Video video = getVideo();
-
-        if (video == null) {
-            return;
-        }
-
-        RxUtils.disposeActions(mHistoryAction);
-        
-        MediaService service = YouTubeMediaService.instance();
-        MediaItemManager mediaItemManager = service.getMediaItemManager();
-
-        Observable<Void> historyObservable;
-
-        long positionSec = getController().getPositionMs() / 1_000;
-
-        if (video.mediaItem != null) {
-            historyObservable = mediaItemManager.updateHistoryPositionObserve(video.mediaItem, positionSec);
-        } else { // video launched form ATV channels
-            historyObservable = mediaItemManager.updateHistoryPositionObserve(video.videoId, positionSec);
-        }
-
-        mHistoryAction = RxUtils.execute(historyObservable);
     }
 
     private void showHideScreensaver(boolean show) {

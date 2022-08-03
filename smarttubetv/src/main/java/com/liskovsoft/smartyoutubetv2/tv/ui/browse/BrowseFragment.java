@@ -32,6 +32,7 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.headers.ExtendedHeadersSupportFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.browse.NavigateTitleView;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -147,6 +148,17 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView,
         setOnSearchClickedListener(view -> SearchPresenter.instance(getActivity()).startSearch(null));
     }
 
+    private void setupFragmentFactory() {
+        mSectionFragmentFactory = new BrowseSectionFragmentFactory(
+                (row) -> {
+                    focusOnContentIfNeeded();
+                    mBrowsePresenter.onSectionFocused(getSelectedHeaderId());
+                }
+        );
+
+        getMainFragmentRegistry().registerFragment(PageRow.class, mSectionFragmentFactory);
+    }
+
     private int indexOf(long headerId) {
         int index = 0;
         for (Integer id : mSections.keySet()) {
@@ -164,17 +176,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView,
         // This Adapter is used to render the MainFragment sidebar labels.
         mSectionRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mSectionRowAdapter);
-    }
-
-    private void setupFragmentFactory() {
-        mSectionFragmentFactory = new BrowseSectionFragmentFactory(
-                (viewHolder, row) -> {
-                    focusOnContentIfNeeded();
-                    mBrowsePresenter.onSectionFocused(getSelectedHeaderId());
-                }
-        );
-
-        getMainFragmentRegistry().registerFragment(PageRow.class, mSectionFragmentFactory);
     }
 
     private void setupUi() {
@@ -320,6 +321,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView,
         startHeadersTransitionSafe(false);
         if (getMainFragment() != null && getMainFragment().getView() != null) {
             getMainFragment().getView().requestFocus();
+            updateTitleView();
         }
     }
 
@@ -445,5 +447,15 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView,
     @Override
     public void onSearchKeyUp() {
         SearchPresenter.instance(getActivity()).startSearch(null);
+    }
+
+    private void updateTitleView() {
+        if (getView() != null) {
+            NavigateTitleView titleView = getView().findViewById(R.id.browse_title_group);
+
+            if (titleView != null) {
+                titleView.update();
+            }
+        }
     }
 }

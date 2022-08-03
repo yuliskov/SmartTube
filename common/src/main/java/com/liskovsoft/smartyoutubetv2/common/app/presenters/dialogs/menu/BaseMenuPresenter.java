@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -18,7 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaItemManager;
+import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
 import io.reactivex.Observable;
 
 public abstract class BaseMenuPresenter extends BasePresenter<Void> {
@@ -35,6 +35,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     protected abstract boolean isPinToSidebarEnabled();
     protected abstract boolean isSavePlaylistEnabled();
     protected abstract boolean isCreatePlaylistEnabled();
+    protected abstract boolean isAddToNewPlaylistEnabled();
     protected abstract boolean isAccountSelectionEnabled();
 
     public void closeDialog() {
@@ -78,7 +79,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(original.isChannelPlaylist() || original.belongsToPlaylists() ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
+                        getContext().getString(original.isChannelPlaylist() || (original.hasNestedItems() && original.belongsToPlaylists()) ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
                         optionItem -> {
                             if (original.hasVideo()) {
                                 MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
@@ -123,8 +124,8 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         // Trying to properly format channel playlists, mixes etc
         boolean isChannelPlaylistItem = video.getGroupTitle() != null && video.belongsToSameAuthorGroup() && video.belongsToSamePlaylistGroup();
         boolean isUserPlaylistItem = video.getGroupTitle() != null && video.belongsToSamePlaylistGroup();
-        String title = isChannelPlaylistItem ? video.extractAuthor() : isUserPlaylistItem ? null : video.title;
-        String subtitle = isChannelPlaylistItem || isUserPlaylistItem ? video.getGroupTitle() : video.extractAuthor();
+        String title = isChannelPlaylistItem ? video.getAuthor() : isUserPlaylistItem ? null : video.title;
+        String subtitle = isChannelPlaylistItem || isUserPlaylistItem ? video.getGroupTitle() : video.getAuthor();
         section.title = title != null && subtitle != null ? String.format("%s - %s", title, subtitle) : String.format("%s", title != null ? title : subtitle);
         section.cardImageUrl = video.cardImageUrl;
 
@@ -143,8 +144,8 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         // Trying to properly format channel playlists, mixes etc
         boolean hasChannel = video.hasChannel() && !video.isChannel();
         boolean isUserPlaylistItem = video.getGroupTitle() != null && video.belongsToSamePlaylistGroup();
-        String title = hasChannel ? video.extractAuthor() : isUserPlaylistItem ? null : video.title;
-        String subtitle = isUserPlaylistItem ? video.getGroupTitle() : hasChannel || video.isChannel() ? null : video.extractAuthor();
+        String title = hasChannel ? video.getAuthor() : isUserPlaylistItem ? null : video.title;
+        String subtitle = isUserPlaylistItem ? video.getGroupTitle() : hasChannel || video.isChannel() ? null : video.getAuthor();
         section.title = title != null && subtitle != null ? String.format("%s - %s", title, subtitle) : String.format("%s", title != null ? title : subtitle);
         section.cardImageUrl = video.cardImageUrl;
 
@@ -171,6 +172,11 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         Video original = getVideo();
 
         if (original == null || (!original.hasPlaylist() && !original.isChannelPlaylist() && !original.belongsToPlaylists())) {
+            return;
+        }
+
+        // Allow removing user playlist only from Playlists section to prevent accidental deletion
+        if (BrowsePresenter.instance(getContext()).isPlaylistsSection() && !BrowsePresenter.instance(getContext()).inForeground()) {
             return;
         }
 
@@ -242,7 +248,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     private void removePlaylist(Video video) {
-        MediaItemManager manager = YouTubeMediaItemManager.instance();
+        MediaItemService manager = YouTubeMediaItemService.instance();
         Observable<Void> action = manager.removePlaylistObserve(video.playlistId);
         GeneralData.instance(getContext()).setPlaylistOrder(video.playlistId, -1);
         RxUtils.execute(action,
@@ -252,7 +258,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     private void savePlaylist(Video video) {
-        MediaItemManager manager = YouTubeMediaItemManager.instance();
+        MediaItemService manager = YouTubeMediaItemService.instance();
         Observable<Void> action = manager.savePlaylistObserve(video.playlistId);
         RxUtils.execute(action,
                 () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.cant_save_playlist)),
@@ -267,16 +273,33 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo() != null ? getVideo() : new Video();
 
-        if (!original.belongsToPlaylists() && !original.hasVideo() &&
-                !(BrowsePresenter.instance(getContext()).inForeground() && BrowsePresenter.instance(getContext()).isPlaylistsSection())) {
+        if (!BrowsePresenter.instance(getContext()).isPlaylistsSectionActive() || original.hasVideo()) {
             return;
         }
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(original.hasVideo() ? R.string.add_video_to_new_playlist : R.string.create_playlist),
+                        getContext().getString(R.string.create_playlist),
                         optionItem -> showCreatePlaylistDialog(original)
                         ));
+    }
+
+    protected void appendAddToNewPlaylistButton() {
+        if (!isAddToNewPlaylistEnabled()) {
+            return;
+        }
+
+        Video original = getVideo() != null ? getVideo() : new Video();
+
+        if (!original.hasVideo()) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.add_video_to_new_playlist),
+                        optionItem -> showCreatePlaylistDialog(original)
+                ));
     }
 
     private void showCreatePlaylistDialog(Video video) {
@@ -285,7 +308,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 getContext(),
                 "",
                 newValue -> {
-                    MediaItemManager manager = YouTubeMediaItemManager.instance();
+                    MediaItemService manager = YouTubeMediaItemService.instance();
                     Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
                     RxUtils.execute(
                             action,
@@ -311,7 +334,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo();
 
-        if (original == null || !original.belongsToPlaylists()) {
+        if (original == null || !BrowsePresenter.instance(getContext()).isPlaylistsSectionActive()) {
             return;
         }
 
@@ -339,7 +362,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                             getContext(),
                             video.title,
                             newValue -> {
-                                MediaItemManager manager = YouTubeMediaItemManager.instance();
+                                MediaItemService manager = YouTubeMediaItemService.instance();
                                 Observable<Void> action = manager.renamePlaylistObserve(firstItem.getPlaylistId(), newValue);
                                 RxUtils.execute(
                                         action,

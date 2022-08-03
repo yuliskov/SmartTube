@@ -211,7 +211,11 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             return;
         }
 
+        freeze1(true);
+
         mGridAdapter1.append(group);
+
+        freeze1(false);
 
         restorePosition1();
     }
@@ -238,7 +242,11 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             return;
         }
 
+        freeze2(true);
+
         mGridAdapter2.append(group);
+
+        freeze2(false);
 
         // TODO: Do we need to restore position on second group?
         //restorePosition2();
@@ -294,6 +302,26 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         }
 
         return mGridAdapter2.size() == 0;
+    }
+
+    /**
+     * Disable scrolling on partially updated grid. This prevent cards from misbehaving.
+     */
+    private void freeze1(boolean freeze) {
+        if (getBrowseGrid1() != null) {
+            getBrowseGrid1().setScrollEnabled(!freeze);
+            getBrowseGrid1().setAnimateChildLayout(!freeze);
+        }
+    }
+
+    /**
+     * Disable scrolling on partially updated grid. This prevent cards from misbehaving.
+     */
+    private void freeze2(boolean freeze) {
+        if (getBrowseGrid2() != null) {
+            getBrowseGrid2().setScrollEnabled(!freeze);
+            getBrowseGrid2().setAnimateChildLayout(!freeze);
+        }
     }
 
     private final class ItemViewLongPressedListener implements OnItemLongPressedListener {

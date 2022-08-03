@@ -18,8 +18,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class ContentBlockData {
-    public static final String SPONSOR_BLOCK_NAME = "SponsorBlock";
-    public static final String SPONSOR_BLOCK_URL = "https://sponsor.ajay.app";
     public static final int ACTION_UNDEFINED = -1;
     public static final int ACTION_SKIP_ONLY = 0;
     public static final int ACTION_SKIP_WITH_TOAST = 1;
@@ -227,7 +225,13 @@ public class ContentBlockData {
         // Easy add new segments
         for (String segmentCategory : mAllCategories) {
             if (getAction(segmentCategory) == ACTION_UNDEFINED) {
-                mActions.add(SegmentAction.from(segmentCategory, ACTION_SKIP_WITH_TOAST));
+                // Disable filler category by default
+                // This category is very extreme and is recommended to be disabled by default because of that.
+                if (SponsorSegment.CATEGORY_FILLER.equals(segmentCategory)) {
+                    mActions.add(SegmentAction.from(segmentCategory, ACTION_DO_NOTHING));
+                } else {
+                    mActions.add(SegmentAction.from(segmentCategory, ACTION_SKIP_WITH_TOAST));
+                }
             }
         }
     }

@@ -16,6 +16,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -38,11 +39,11 @@ import androidx.leanback.widget.SearchOrbView;
 import androidx.leanback.widget.SpeechOrbView;
 import androidx.leanback.widget.SpeechRecognitionCallback;
 import androidx.leanback.widget.VerticalGridView;
-
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
+import net.gotev.speech.Speech;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -204,7 +205,7 @@ public class SearchSupportFragment extends Fragment {
         @Override
         public void run() {
             mAutoStartRecognition = false;
-            mSearchBar.startRecognition();
+            startRecognitionInt();
         }
     };
 
@@ -232,9 +233,8 @@ public class SearchSupportFragment extends Fragment {
 
     int mStatus;
     boolean mAutoStartRecognition = false; // MOD: don't start search immediately
-
-    private boolean mIsPaused;
-    private boolean mPendingStartRecognitionWhenPaused;
+    
+    private boolean mPendingStartRecognition;
     private SearchBar.SearchBarPermissionListener mPermissionListener =
             new SearchBar.SearchBarPermissionListener() {
         @Override
@@ -489,17 +489,16 @@ public class SearchSupportFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mIsPaused = false;
         if (mSpeechRecognitionCallback == null && null == mSpeechRecognizer) {
             mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(
                     getContext());
             mSearchBar.setSpeechRecognizer(mSpeechRecognizer);
         }
-        if (mPendingStartRecognitionWhenPaused) {
-            mPendingStartRecognitionWhenPaused = false;
+        if (mPendingStartRecognition) {
+            mPendingStartRecognition = false;
             // MOD: remove focus from other fields when doing voice search
             mSpeechOrbView.requestFocus();
-            mSearchBar.startRecognition();
+            startRecognitionInt();
         } else {
             // Ensure search bar state consistency when using external recognizer
 //            mSearchBar.stopRecognition();
@@ -508,7 +507,7 @@ public class SearchSupportFragment extends Fragment {
 
     @Override
     public void onPause() {
-        mIsPaused = true;
+        releaseRecognizer();
         super.onPause();
     }
 
@@ -552,6 +551,8 @@ public class SearchSupportFragment extends Fragment {
     }
 
     /**
+     * NOTE: Activity should be resumed in order to recognize the voice<br/>
+     * Because SpeechRecognizer added to SearchBar after resume. See: {@link SearchSupportFragment#onResume()}<br/>
      * Starts speech recognition.  Typical use case is that
      * activity receives onNewIntent() call when user clicks a MIC button.
      * Note that SearchSupportFragment automatically starts speech recognition
@@ -559,10 +560,19 @@ public class SearchSupportFragment extends Fragment {
      * when fragment is created.
      */
     public void startRecognition() {
-        if (mIsPaused) {
-            mPendingStartRecognitionWhenPaused = false;
+        if (isResumed()) {
+            startRecognitionInt();
         } else {
+            mPendingStartRecognition = true;
+        }
+    }
+
+    private void startRecognitionInt() {
+        try {
             mSearchBar.startRecognition();
+        } catch (SecurityException e) {
+            // Not allowed to bind to service Intent
+            e.printStackTrace();
         }
     }
 
@@ -788,7 +798,7 @@ public class SearchSupportFragment extends Fragment {
      */
     protected void focusOnResults() {
         if (mRowsSupportFragment == null || mRowsSupportFragment.getVerticalGridView() == null
-                || mResultAdapter.size() == 0) {
+                || mResultAdapter == null || mResultAdapter.size() == 0) {
             return;
         }
 
@@ -806,6 +816,23 @@ public class SearchSupportFragment extends Fragment {
 
     protected void enableKeyboardAutoShow(boolean enable) {
         mIsKeyboardAutoShowEnabled = enable;
+    }
+
+    protected void showListening() {
+        if (mSpeechOrbView != null) {
+            mSpeechOrbView.showListening();
+        }
+    }
+
+    protected void showNotListening() {
+        if (mSpeechOrbView != null) {
+            mSpeechOrbView.showNotListening();
+        }
+
+        //if (mSearchTextEditor != null) {
+        //    // Hide "Speak to search" when not listening
+        //    mSearchTextEditor.setHint("");
+        //}
     }
 
     private void onSetSearchResultProvider() {

@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build.VERSION;
+import android.os.Build;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class PlayerTweaksData {
@@ -28,6 +28,8 @@ public class PlayerTweaksData {
     public static final int PLAYER_BUTTON_VIDEO_INFO = 0b1000000000000000000;
     public static final int PLAYER_BUTTON_SHARE = 0b10000000000000000000;
     public static final int PLAYER_BUTTON_SEEK_INTERVAL = 0b100000000000000000000;
+    public static final int PLAYER_BUTTON_CONTENT_BLOCK = 0b1000000000000000000000;
+    public static final int PLAYER_BUTTON_CHAT = 0b10000000000000000000000;
     @SuppressLint("StaticFieldLeak")
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;
@@ -47,6 +49,10 @@ public class PlayerTweaksData {
     private boolean mIsBufferingFixEnabled;
     private boolean mIsNoFpsPresetsEnabled;
     private boolean mIsRememberPositionOfShortVideosEnabled;
+    private boolean mIsSuggestionsDisabled;
+    private boolean mIsAvcOverVp9Preferred;
+    private boolean mIsChatPlacedLeft;
+    private boolean mIsRealChannelIconEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -211,6 +217,15 @@ public class PlayerTweaksData {
         return mIsNoFpsPresetsEnabled;
     }
 
+    public void preferAvcOverVp9(boolean prefer) {
+        mIsAvcOverVp9Preferred = prefer;
+        persistData();
+    }
+
+    public boolean isAvcOverVp9Preferred() {
+        return mIsAvcOverVp9Preferred;
+    }
+
     public void enableRememberPositionOfShortVideos(boolean enable) {
         mIsRememberPositionOfShortVideosEnabled = enable;
         persistData();
@@ -218,6 +233,33 @@ public class PlayerTweaksData {
 
     public boolean isRememberPositionOfShortVideosEnabled() {
         return mIsRememberPositionOfShortVideosEnabled;
+    }
+
+    public boolean isSuggestionsDisabled() {
+        return mIsSuggestionsDisabled;
+    }
+
+    public void disableSuggestions(boolean disable) {
+        mIsSuggestionsDisabled = disable;
+        persistData();
+    }
+
+    public boolean isChatPlacedLeft() {
+        return mIsChatPlacedLeft;
+    }
+
+    public void placeChatLeft(boolean left) {
+        mIsChatPlacedLeft = left;
+        persistData();
+    }
+
+    public boolean isRealChannelIconEnabled() {
+        return mIsRealChannelIconEnabled;
+    }
+
+    public void enableRealChannelIcon(boolean enable) {
+        mIsRealChannelIconEnabled = enable;
+        persistData();
     }
 
     private void restoreData() {
@@ -236,14 +278,17 @@ public class PlayerTweaksData {
         mIsSetOutputSurfaceWorkaroundEnabled = Helpers.parseBoolean(split, 7, true);
         mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 8, false);
         mIsKeepFinishedActivityEnabled = Helpers.parseBoolean(split, 9, false);
-        mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, VERSION.SDK_INT <= 19); // Android 4 playback crash fix
+        mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, Build.VERSION.SDK_INT <= 19);
         mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTV(mPrefs.getContext()));
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
-        // Example usage: Integer.MAX_VALUE & ~(PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO | PlayerTweaksData.PLAYER_BUTTON_SEEK_INTERVAL) // all buttons, except info button
-        mPlayerButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE & ~(PlayerTweaksData.PLAYER_BUTTON_SEEK_INTERVAL | PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE)); // all buttons, except these ones
+        mPlayerButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE & ~(PLAYER_BUTTON_SEEK_INTERVAL | PLAYER_BUTTON_CONTENT_BLOCK)); // all buttons, except these
         mIsBufferingFixEnabled = Helpers.parseBoolean(split, 14, false);
         mIsNoFpsPresetsEnabled = Helpers.parseBoolean(split, 15, false);
         mIsRememberPositionOfShortVideosEnabled = Helpers.parseBoolean(split, 16, false);
+        mIsSuggestionsDisabled = Helpers.parseBoolean(split, 17, false);
+        mIsAvcOverVp9Preferred = Helpers.parseBoolean(split, 18, false);
+        mIsChatPlacedLeft = Helpers.parseBoolean(split, 19, false);
+        mIsRealChannelIconEnabled = Helpers.parseBoolean(split, 20, true);
     }
 
     private void persistData() {
@@ -252,7 +297,8 @@ public class PlayerTweaksData {
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
                 mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
-                mIsBufferingFixEnabled, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled
+                mIsBufferingFixEnabled, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
+                mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled
         ));
     }
 }

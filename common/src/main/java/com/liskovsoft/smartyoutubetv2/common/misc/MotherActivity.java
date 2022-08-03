@@ -29,6 +29,8 @@ public class MotherActivity extends FragmentActivity {
     protected static boolean sIsInPipMode;
     private ScreensaverManager mScreensaverManager;
     private List<OnPermissions> mOnPermissions;
+    // Disabled by default to fix IllegalStateException: Can not perform this action after onSaveInstanceState
+    private boolean mSaveStateEnabled;
 
     public interface OnPermissions {
         void onPermissions(int requestCode, String[] permissions, int[] grantResults);
@@ -211,6 +213,22 @@ public class MotherActivity extends FragmentActivity {
         }
     }
 
+    /**
+     * NOTE: When enabled, you could face IllegalStateException: Can not perform this action after onSaveInstanceState<br/>
+     * https://stackoverflow.com/questions/7575921/illegalstateexception-can-not-perform-this-action-after-onsaveinstancestate-wit?page=1&tab=scoredesc#tab-top
+     */
+    public void enableSaveState(boolean enable) {
+        mSaveStateEnabled = enable;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        // No call for super(). Bug on API Level > 11.
+        if (mSaveStateEnabled) {
+            super.onSaveInstanceState(outState);
+        }
+    }
+
     public void addOnPermissions(OnPermissions onPermissions) {
         if (mOnPermissions == null) {
             mOnPermissions = new ArrayList<>();
@@ -219,6 +237,10 @@ public class MotherActivity extends FragmentActivity {
         mOnPermissions.add(onPermissions);
     }
 
+    /**
+     * Use this method only upon exiting from the app.<br/>
+     * Big troubles with AFR resolution switch!
+     */
     public static void invalidate() {
         sCachedDisplayMetrics = null;
         sIsInPipMode = false;

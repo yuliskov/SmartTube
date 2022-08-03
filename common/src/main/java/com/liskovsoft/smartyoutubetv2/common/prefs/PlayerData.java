@@ -9,7 +9,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 
@@ -53,7 +53,7 @@ public class PlayerData {
     private boolean mIsAfrEnabled;
     private boolean mIsAfrFpsCorrectionEnabled;
     private boolean mIsAfrResSwitchEnabled;
-    private int mAfrPauseSec;
+    private int mAfrPauseMs;
     private int mAudioDelayMs;
     private boolean mIsRememberSpeedEnabled;
     private boolean mIsLegacyCodecsForced;
@@ -72,6 +72,8 @@ public class PlayerData {
     private boolean mIsTooltipsEnabled;
     private float mSubtitlePosition;
     private boolean mIsNumberKeySeekEnabled;
+    private boolean mIsSkip24RateEnabled;
+    private boolean mIsLiveChatEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -270,12 +272,12 @@ public class PlayerData {
         persistData();
     }
 
-    public int getAfrPauseSec() {
-        return mAfrPauseSec;
+    public int getAfrPauseMs() {
+        return mAfrPauseMs;
     }
 
-    public void setAfrPauseSec(int pauseSec) {
-        mAfrPauseSec = pauseSec;
+    public void setAfrPauseMs(int pauseSec) {
+        mAfrPauseMs = pauseSec;
         persistData();
     }
 
@@ -451,6 +453,24 @@ public class PlayerData {
         return mIsTimeCorrectionEnabled;
     }
 
+    public boolean isSkip24RateEnabled() {
+        return mIsSkip24RateEnabled;
+    }
+
+    public void enableSkip24Rate(boolean enable) {
+        mIsSkip24RateEnabled = enable;
+        persistData();
+    }
+
+    public boolean isLiveChatEnabled() {
+        return mIsLiveChatEnabled;
+    }
+
+    public void enableLiveChat(boolean enable) {
+        mIsLiveChatEnabled = enable;
+        persistData();
+    }
+
     public FormatItem getDefaultAudioFormat() {
         String language = LocaleUtility.getCurrentLanguage(mPrefs.getContext());
 
@@ -460,7 +480,17 @@ public class PlayerData {
     public FormatItem getDefaultVideoFormat() {
         FormatItem formatItem = mDefaultVideoFormats.get(Build.MODEL);
 
-        return formatItem != null ? formatItem : Helpers.isVP9Supported() ? FormatItem.VIDEO_FHD_VP9_60 : FormatItem.VIDEO_HD_AVC_30;
+        if (formatItem == null) {
+            if (VERSION.SDK_INT <= 19) { // Android 4 playback crash fix (memory leak?)
+                formatItem = FormatItem.VIDEO_SD_AVC_30;
+            } else if (Helpers.isVP9ResolutionSupported(2160)) {
+                formatItem = FormatItem.VIDEO_4K_VP9_60;
+            } else if (Helpers.isVP9ResolutionSupported(1080)) {
+                formatItem = FormatItem.VIDEO_FHD_VP9_60;
+            }
+        }
+
+        return formatItem != null ? formatItem : FormatItem.VIDEO_HD_AVC_30;
     }
 
     public int getStartSeekIncrementMs() {
@@ -521,12 +551,12 @@ public class PlayerData {
         mIsAfrEnabled = Helpers.parseBoolean(split, 16, false);
         mIsAfrFpsCorrectionEnabled = Helpers.parseBoolean(split, 17, true);
         mIsAfrResSwitchEnabled = Helpers.parseBoolean(split, 18, false);
-        mAfrPauseSec = Helpers.parseInt(split, 19, 0);
+        // old afr delay sec was there
         mAudioDelayMs = Helpers.parseInt(split, 20, 0);
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, false);
         mPlaybackMode = Helpers.parseInt(split, 22, PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL);
         // didn't remember what was there
-        mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, VERSION.SDK_INT <= 19); // Android 4 playback crash fix
+        mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, Build.VERSION.SDK_INT <= 19);
         mIsSonyTimerFixEnabled = Helpers.parseBoolean(split, 25, false);
         // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
@@ -545,6 +575,9 @@ public class PlayerData {
         mIsTooltipsEnabled = Helpers.parseBoolean(split, 41, true);
         mSubtitlePosition = Helpers.parseFloat(split, 42, 0.1f);
         mIsNumberKeySeekEnabled = Helpers.parseBoolean(split, 43, true);
+        mIsSkip24RateEnabled = Helpers.parseBoolean(split, 44, false);
+        mAfrPauseMs = Helpers.parseInt(split, 45, 0);
+        mIsLiveChatEnabled = Helpers.parseBoolean(split, 46, Build.VERSION.SDK_INT > 19);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -556,11 +589,12 @@ public class PlayerData {
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
-                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
+                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs,
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
                 mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
-                mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled));
+                mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
+                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled));
     }
 }

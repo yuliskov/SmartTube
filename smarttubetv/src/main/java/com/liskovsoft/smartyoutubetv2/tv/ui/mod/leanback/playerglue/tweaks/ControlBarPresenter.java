@@ -128,7 +128,7 @@ class ControlBarPresenter extends Presenter {
 
             // TODO: modified
             // Decrease margin between player's buttons
-            return getChildMarginDefault(context) + getControlIconWidth(context) / 2;
+            return getChildMarginDefault(context) + getControlIconWidth(context) / 3;
         }
 
         void showControls(Presenter presenter) {

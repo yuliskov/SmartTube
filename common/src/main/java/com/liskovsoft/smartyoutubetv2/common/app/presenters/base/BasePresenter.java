@@ -68,11 +68,13 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     public Context getContext() {
         Activity activity = null;
 
-        // First, try to get localized contexts (regular and View contexts)
-        if (mActivity.get() != null) {
-            activity = mActivity.get();
-        } else if (mView.get() instanceof Fragment) {
+        // Trying to find localized context.
+        // First, try the view that belongs to this presenter.
+        // Second, try the activity that presenter called (could be destroyed).
+        if (mView.get() instanceof Fragment) {
             activity = ((Fragment) mView.get()).getActivity();
+        } else if (mActivity.get() != null) {
+            activity = mActivity.get();
         }
 
         // In case view was disposed like SplashView does

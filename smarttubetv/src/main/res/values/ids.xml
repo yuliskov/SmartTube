@@ -13,8 +13,10 @@
     <item name="action_info" type="id"/>
     <item name="action_share" type="id"/>
     <item name="action_screen_off" type="id"/>
+    <item name="action_chat" type="id"/>
     <item name="action_playback_queue" type="id"/>
     <item name="action_seek_interval" type="id"/>
+    <item name="action_content_block" type="id"/>
     <item name="channel_new_content" type="id"/>
     <item name="linkify_click_handler" type="id"/>
 </resources>

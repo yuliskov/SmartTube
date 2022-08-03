@@ -6,6 +6,6 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 public class CustomListRowPresenter extends ListRowPresenter {
     public CustomListRowPresenter() {
         super(ViewUtil.FOCUS_ZOOM_FACTOR, ViewUtil.USE_FOCUS_DIMMER);
-        setSelectEffectEnabled(ViewUtil.SELECT_EFFECT_ENABLED);
+        setSelectEffectEnabled(ViewUtil.ROW_SELECT_EFFECT_ENABLED);
     }
 }

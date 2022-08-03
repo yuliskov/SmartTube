@@ -9,7 +9,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 /**
  * An action for displaying a channel icon.
  */
-public class ChannelAction extends Action {
+public class ChannelAction extends PaddingAction {
     public ChannelAction(Context context) {
         super(R.id.action_channel);
         Drawable uncoloredDrawable = ContextCompat.getDrawable(context, R.drawable.action_channel);

@@ -51,15 +51,15 @@ public class GlobalKeyTranslator extends KeyTranslator {
     }
 
     private void addSearchAction() {
-        if (!mGeneralData.isRemapChannelUpToSearchEnabled()) {
-            return;
-        }
-
         Runnable searchAction = () -> SearchPresenter.instance(mContext).startSearch(null);
 
         Map<Integer, Runnable> actionMapping = getActionMapping();
 
-        actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, searchAction);
-        actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, searchAction);
+        actionMapping.put(KeyEvent.KEYCODE_AT, searchAction);
+
+        if (mGeneralData.isRemapChannelUpToSearchEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, searchAction);
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, searchAction);
+        }
     }
 }

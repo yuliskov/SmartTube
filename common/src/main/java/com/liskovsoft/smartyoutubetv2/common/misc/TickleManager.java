@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TickleManager {
-    private static TickleManager mTickleManager;
+    private static TickleManager sInstance;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final Runnable mUpdateHandler = this::updateTickle;
     // Usually listener is a view. So use weak refs to not hold it forever.
     private final List<WeakReference<TickleListener>> mListeners = new ArrayList<>();
     private boolean mIsEnabled = true;
-    private static final long DEFAULT_INTERVAL_MS = 10_000;
+    private static final long DEFAULT_INTERVAL_MS = 60_000;
     private long mIntervalMs = DEFAULT_INTERVAL_MS;
 
     public interface TickleListener {
@@ -26,18 +26,22 @@ public class TickleManager {
     }
 
     public static TickleManager instance() {
-        if (mTickleManager == null) {
-            mTickleManager = new TickleManager();
+        if (sInstance == null) {
+            sInstance = new TickleManager();
         }
 
-        return mTickleManager;
+        return sInstance;
     }
 
     public void addListener(TickleListener listener) {
         if (listener != null && !contains(listener)) {
             cleanup();
             mListeners.add(new WeakReference<>(listener));
-            updateTickle();
+            if (mListeners.size() == 1) { // periodic callback not started yet
+                updateTickle();
+            } else if (isEnabled()) {
+                listener.onTickle(); // first run
+            }
         }
     }
 

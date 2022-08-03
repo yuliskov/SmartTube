@@ -4,7 +4,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 
 import java.io.InputStream;
 import java.util.List;
@@ -21,8 +21,8 @@ public interface PlayerController {
     long getPositionMs();
     void setPositionMs(long positionMs);
     long getLengthMs();
-    void setPlay(boolean isPlaying);
-    boolean getPlay();
+    void setPlayWhenReady(boolean play);
+    boolean getPlayWhenReady();
     boolean isPlaying();
     boolean isLoading();
     void release();
@@ -42,4 +42,5 @@ public interface PlayerController {
     float getSpeed();
     void setVolume(float volume);
     float getVolume();
+    void resetPlayerState();
 }

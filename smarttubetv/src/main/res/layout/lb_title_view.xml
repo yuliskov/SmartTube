@@ -56,8 +56,22 @@
             android:transitionGroup="true"
             android:layout_marginStart="@dimen/search_bar_right_items_margin"
             android:nextFocusLeft="@id/title_orb"
-            android:nextFocusRight="@id/exit_pip"
+            android:nextFocusRight="@id/language_orb"
             app:searchOrbIcon="@drawable/browse_title_account"
+            app:searchOrbColor="@color/orb_color"
+            app:searchOrbBrightColor="@color/orb_bright_color"
+            app:searchOrbIconColor="@color/orb_icon_color"
+            android:visibility="gone" />
+
+        <androidx.leanback.widget.SearchOrbView
+            android:id="@+id/language_orb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:transitionGroup="true"
+            android:layout_marginStart="@dimen/search_bar_right_items_margin"
+            android:nextFocusLeft="@id/account_orb"
+            android:nextFocusRight="@id/exit_pip"
+            app:searchOrbIcon="@drawable/search_bar_settings_orb"
             app:searchOrbColor="@color/orb_color"
             app:searchOrbBrightColor="@color/orb_bright_color"
             app:searchOrbIconColor="@color/orb_icon_color"
@@ -69,15 +83,15 @@
             android:layout_height="wrap_content"
             android:transitionGroup="true"
             android:layout_marginStart="@dimen/search_bar_right_items_margin"
-            android:nextFocusLeft="@id/account_orb"
+            android:nextFocusLeft="@id/language_orb"
             app:searchOrbIcon="@drawable/browse_title_pip"
             app:searchOrbColor="@color/orb_color"
             app:searchOrbBrightColor="@color/orb_bright_color"
             app:searchOrbIconColor="@color/orb_icon_color"
             android:visibility="gone" />
 
-        <!-- Add ellipsize="marquee" to horizontal scrolling -->
-        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.MarqueeTextView
+        <!-- Add android:ellipsize="marquee" to horizontal scrolling -->
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.TitleMarqueeTextView
             android:id="@+id/pip_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,6 +99,42 @@
             android:layout_gravity="center_vertical"
             android:maxWidth="@dimen/pip_title_max_width"
             android:textSize="@dimen/pip_title_size"
+            style="?attr/browseTitleTextStyle"
+            android:ellipsize="marquee"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- Global clock -->
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginEnd="@dimen/search_bar_global_time_margin"
+                  android:layout_gravity="center_vertical|end"
+                  android:gravity="center_horizontal"
+                  android:orientation="vertical">
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
+            android:id="@+id/global_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/pip_title_size"
+            android:textColor="@color/white"
+            android:shadowColor="@color/black"
+            android:shadowDx="1.5"
+            android:shadowDy="1.3"
+            android:shadowRadius="1.6"
+            android:textStyle="bold"
+            style="?attr/browseTitleTextStyle"
+            android:visibility="gone" />
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
+            android:id="@+id/global_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/pip_title_date_size"
+            android:textColor="@color/white"
+            android:shadowColor="@color/black"
+            android:shadowDx="1.5"
+            android:shadowDy="1.3"
+            android:shadowRadius="1.6"
+            android:textStyle="bold"
             style="?attr/browseTitleTextStyle"
             android:visibility="gone" />
     </LinearLayout>

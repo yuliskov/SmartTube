@@ -1,0 +1,30 @@
+<resources>
+
+    <!-- MESSAGE LIST ITEM -->
+    <item name="bubble" type="id" />
+    <item name="messageText" type="id" />
+    <item name="messageUserAvatar" type="id" />
+    <item name="messageTime" type="id" />
+    <item name="image" type="id" />
+    <item name="imageOverlay" type="id" />
+
+    <!-- MESSAGE INPUT -->
+    <item name="attachmentButton" type="id" />
+    <item name="messageSendButton" type="id" />
+    <item name="attachmentButtonSpace" type="id" />
+    <item name="sendButtonSpace" type="id" />
+    <item name="messageInput" type="id" />
+
+    <!-- DIALOGS LIST ITEM -->
+    <item name="dialogRootLayout" type="id" />
+    <item name="dialogContainer" type="id" />
+    <item name="dialogName" type="id" />
+    <item name="dialogDate" type="id" />
+    <item name="dialogLastMessage" type="id" />
+    <item name="dialogUnreadBubble" type="id" />
+    <item name="dialogAvatar" type="id" />
+    <item name="dialogLastMessageUserAvatar" type="id" />
+    <item name="dialogDividerContainer" type="id" />
+    <item name="dialogDivider" type="id" />
+
+</resources>

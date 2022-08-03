@@ -145,8 +145,8 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     }
 
     public void removeAuthor(VideoGroup group) {
-        String author = group.getVideos().get(0).extractAuthor(); // assume same author
-        List<Video> result = Helpers.filter(mVideoItems, video -> Helpers.equals(author, video.extractAuthor()));
+        String author = group.getVideos().get(0).getAuthor(); // assume same author
+        List<Video> result = Helpers.filter(mVideoItems, video -> Helpers.equals(author, video.getAuthor()));
         if (result != null) {
             remove(VideoGroup.from(result));
         }
@@ -163,5 +163,9 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
                 }
             }
         }
+    }
+
+    public boolean isEmpty() {
+        return mVideoItems == null || mVideoItems.isEmpty();
     }
 }

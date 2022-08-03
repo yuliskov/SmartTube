@@ -99,11 +99,11 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
     }
 
     public VerticalGridView getBrowseGrid1() {
-        return mGridViewHolder1.getGridView();
+        return mGridViewHolder1 != null ? mGridViewHolder1.getGridView() : null;
     }
 
     public VerticalGridView getBrowseGrid2() {
-        return mGridViewHolder2.getGridView();
+        return mGridViewHolder2 != null ? mGridViewHolder2.getGridView() : null;
     }
 
     /**

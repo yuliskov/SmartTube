@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ public class ExoFormatItem implements FormatItem {
     private String mFormatId;
     private boolean mIsPreset;
 
-    synchronized public static List<FormatItem> from(Set<MediaTrack> mediaTracks) {
+    public static List<FormatItem> from(Set<MediaTrack> mediaTracks) {
         if (mediaTracks == null) {
             return null;
         }

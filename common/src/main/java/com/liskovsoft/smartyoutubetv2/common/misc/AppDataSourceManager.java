@@ -13,8 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.PlayerSetti
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.RemoteControlSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SearchSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SubtitleSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPreset;
-import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +67,8 @@ public class AppDataSourceManager {
 
     public VideoPreset[] getVideoPresets() {
         VideoPreset[] presets = {
+                new VideoPreset("144p     30fps    avc", "256,144,30,avc"),
+                new VideoPreset("144p     30fps    vp9", "256,144,30,vp9"),
                 new VideoPreset("360p     30fps    avc", "640,360,30,avc"),
                 new VideoPreset("360p     30fps    vp9", "640,360,30,vp9"),
                 new VideoPreset("360p     60fps    avc", "640,360,60,avc"),
@@ -94,30 +95,30 @@ public class AppDataSourceManager {
                 new VideoPreset("1080p    60fps    vp9", "1920,1080,60,vp9"),
                 new VideoPreset("1080p    30fps    vp9+hdr", "1920,1080,30,vp9.2"),
                 new VideoPreset("1080p    60fps    vp9+hdr", "1920,1080,60,vp9.2"),
-                new VideoPreset("1440p    30fps    av01", "2560,1440,30,av01"),
-                new VideoPreset("1440p    60fps    av01", "2560,1440,60,av01"),
-                new VideoPreset("1440p    30fps    av01+hdr", "2560,1440,30,av01.hdr"),
-                new VideoPreset("1440p    60fps    av01+hdr", "2560,1440,60,av01.hdr"),
-                new VideoPreset("1440p    30fps    vp9", "2560,1440,30,vp9"),
-                new VideoPreset("1440p    60fps    vp9", "2560,1440,60,vp9"),
-                new VideoPreset("1440p    30fps    vp9+hdr", "2560,1440,30,vp9.2"),
-                new VideoPreset("1440p    60fps    vp9+hdr", "2560,1440,60,vp9.2"),
-                new VideoPreset("2160p    30fps    av01", "3840,2160,30,av01"),
-                new VideoPreset("2160p    60fps    av01", "3840,2160,60,av01"),
-                new VideoPreset("2160p    30fps    av01+hdr", "3840,2160,30,av01.hdr"),
-                new VideoPreset("2160p    60fps    av01+hdr", "3840,2160,60,av01.hdr"),
-                new VideoPreset("2160p    30fps    vp9", "3840,2160,30,vp9"),
-                new VideoPreset("2160p    60fps    vp9", "3840,2160,60,vp9"),
-                new VideoPreset("2160p    30fps    vp9+hdr", "3840,2160,30,vp9.2"),
-                new VideoPreset("2160p    60fps    vp9+hdr", "3840,2160,60,vp9.2"),
-                new VideoPreset("4320p    30fps    av01", "7680,4320,30,av01"),
-                new VideoPreset("4320p    60fps    av01", "7680,4320,60,av01"),
-                new VideoPreset("4320p    30fps    av01+hdr", "7680,4320,30,av01.hdr"),
-                new VideoPreset("4320p    60fps    av01+hdr", "7680,4320,60,av01.hdr"),
-                new VideoPreset("4320p    30fps    vp9", "7680,4320,30,vp9"),
-                new VideoPreset("4320p    60fps    vp9", "7680,4320,60,vp9"),
-                new VideoPreset("4320p    30fps    vp9+hdr", "7680,4320,30,vp9.2"),
-                new VideoPreset("4320p    60fps    vp9+hdr", "7680,4320,60,vp9.2"),
+                new VideoPreset("(2K) 1440p    30fps    av01", "2560,1440,30,av01"),
+                new VideoPreset("(2K) 1440p    60fps    av01", "2560,1440,60,av01"),
+                new VideoPreset("(2K) 1440p    30fps    av01+hdr", "2560,1440,30,av01.hdr"),
+                new VideoPreset("(2K) 1440p    60fps    av01+hdr", "2560,1440,60,av01.hdr"),
+                new VideoPreset("(2K) 1440p    30fps    vp9", "2560,1440,30,vp9"),
+                new VideoPreset("(2K) 1440p    60fps    vp9", "2560,1440,60,vp9"),
+                new VideoPreset("(2K) 1440p    30fps    vp9+hdr", "2560,1440,30,vp9.2"),
+                new VideoPreset("(2K) 1440p    60fps    vp9+hdr", "2560,1440,60,vp9.2"),
+                new VideoPreset("(4K) 2160p    30fps    av01", "3840,2160,30,av01"),
+                new VideoPreset("(4K) 2160p    60fps    av01", "3840,2160,60,av01"),
+                new VideoPreset("(4K) 2160p    30fps    av01+hdr", "3840,2160,30,av01.hdr"),
+                new VideoPreset("(4K) 2160p    60fps    av01+hdr", "3840,2160,60,av01.hdr"),
+                new VideoPreset("(4K) 2160p    30fps    vp9", "3840,2160,30,vp9"),
+                new VideoPreset("(4K) 2160p    60fps    vp9", "3840,2160,60,vp9"),
+                new VideoPreset("(4K) 2160p    30fps    vp9+hdr", "3840,2160,30,vp9.2"),
+                new VideoPreset("(4K) 2160p    60fps    vp9+hdr", "3840,2160,60,vp9.2"),
+                new VideoPreset("(8K) 4320p    30fps    av01", "7680,4320,30,av01"),
+                new VideoPreset("(8K) 4320p    60fps    av01", "7680,4320,60,av01"),
+                new VideoPreset("(8K) 4320p    30fps    av01+hdr", "7680,4320,30,av01.hdr"),
+                new VideoPreset("(8K) 4320p    60fps    av01+hdr", "7680,4320,60,av01.hdr"),
+                new VideoPreset("(8K) 4320p    30fps    vp9", "7680,4320,30,vp9"),
+                new VideoPreset("(8K) 4320p    60fps    vp9", "7680,4320,60,vp9"),
+                new VideoPreset("(8K) 4320p    30fps    vp9+hdr", "7680,4320,30,vp9.2"),
+                new VideoPreset("(8K) 4320p    60fps    vp9+hdr", "7680,4320,60,vp9.2"),
                 //new VideoPreset("Adaptive", null)
         };
 

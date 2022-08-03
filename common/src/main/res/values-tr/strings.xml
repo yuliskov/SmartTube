@@ -30,7 +30,7 @@
     <string name="option_background_playback_off">Devre dışı</string>
     <string name="option_background_playback_pip">Resim içinde resim</string>
     <string name="option_background_playback_only_audio">Sadece ses</string>
-    <string name="playback_settings">Oynatma ayarları</string>
+    <string name="playback_settings">Oynatma kalitesi ayarları</string>
     <string name="video_speed">Video hızı</string>
     <string name="resolution_switch">Çözünürlüğü değiştir</string>
     <string name="video_buffer">Video arabelleği</string>
@@ -62,7 +62,7 @@
     <string name="subtitle_white_semi_transparent">Beyaz (Yarı saydam arka plan)</string>
     <string name="subtitle_style">Altyazı stili</string>
     <string name="subtitle_language">Altyazı dili</string>
-    <string name="action_search">Aramaya başla</string>
+    <string name="action_search">Ara</string>
     <string name="settings_main_ui">Kullanıcı arayüzü</string>
     <string name="dialog_main_ui">Kullanıcı arayüzü</string>
     <string name="card_animated_previews">Hareketli ön izlemeler</string>
@@ -197,7 +197,7 @@
     <string name="msg_mode_switch_error">Görüntü modu değiştirilemiyor: \"%s\"</string>
     <string name="msg_player_error">Oynatıcı hatası oluştu %s. Oynatma yeniden başlatılıyor…</string>
     <string name="video_preset_disabled">Ön ayar olmadan</string>
-    <string name="video_preset_enabled">Bir sonraki videonun formatı ön ayara göre ayarlanacaktır.</string>
+    <string name="video_preset_enabled">Bir sonraki videonun biçimi ön ayara göre ayarlanacaktır.</string>
     <string name="player_sleep_timer">Uyku zamanlayıcısı</string>
     <string name="player_show_quality_info">Video kalite bilgisini göster</string>
     <string name="player_remember_each_speed">Her video hızını hatırla</string>
@@ -205,7 +205,7 @@
     <string name="player_remember_speed_all">Tüm videolarda aynı</string>
     <string name="player_remember_speed_each">Her video için</string>
     <string name="msg_player_error_source">Video indirilemiyor</string>
-    <string name="msg_player_error_renderer">Seçilen video formatı desteklenmiyor.\nBelki bir aygıt yazılımı hatasıdır. Cihazı yeniden başlatıp deneyin.</string>
+    <string name="msg_player_error_renderer">Seçilen video biçimi desteklenmiyor.\nBelki bir aygıt yazılımı hatasıdır. Cihazı yeniden başlatıp deneyin.</string>
     <string name="msg_player_error_unexpected">Bilinmeyen video çözücü hatası</string>
     <string name="video_aspect">En boy oranı</string>
     <string name="player_tweaks">Geliştirici seçenekleri</string>
@@ -255,7 +255,7 @@
     <string name="refresh_section">Bölümü yenile</string>
     <string name="option_disabled">Devre dışı</string>
     <string name="live_now_row_name">Canlı</string>
-    <string name="run_in_background">Arka planda çalıştır</string>
+    <string name="run_in_background">Arka planda oynat</string>
     <string name="settings_remote_control">Uzaktan kontrol</string>
     <string name="background_service_started">Arka plan hizmeti başlatıldı</string>
     <string name="dialog_add_to">Ekle: %s</string>
@@ -382,14 +382,14 @@
     <string name="player_show_tooltips">Düğme ipuçlarını göster</string>
     <string name="action_like_unset">Beğen</string>
     <string name="action_dislike_unset">Beğenme</string>
-    <string name="various_buttons">Çeşitli düğmeler</string>
+    <string name="various_buttons">Ana pencerenin üst kısmındaki düğmeler</string>
     <string name="not_compatible_with">Seçilen seçenek şunlarla uyumlu değil:</string>
     <string name="subtitle_position">Altyazı alttan kaydırma</string>
     <string name="pressing_home">ANA EKRAN\'a basarak</string>
     <string name="pressing_home_back">ANA EKRAN\'a ya da GERİ\'ye basarak</string>
     <string name="player_number_key_seek">Sayı tuşlarıyla arama</string>
     <string name="save_remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümüne Ekle/Sil</string>
-    <string name="remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümünden sil</string>
+    <string name="remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümünden kalıcı olarak sil</string>
     <string name="removed_from_playlists">Oynatma Listeleri bölümünden silindi</string>
     <string name="saved_to_playlists">Oynatma Listeleri bölümüne eklendi</string>
     <string name="create_playlist">Oynatma listesi oluştur</string>
@@ -422,4 +422,40 @@
     <string name="playlist_order_popularity">Popülerlik</string>
     <string name="cant_do_this_for_foreign_playlist">Bunu yabancı oynatma listesi için yapamazsınız</string>
     <string name="owned_playlist_warning">Hata. Bu işlem sedece sahip olunan oynatma listeleri için uygulanabilir</string>
+    <string name="content_block_alt_server">Alternatif sunucu kullan</string>
+    <string name="content_block_alt_server_desc">SponsorBlock farklı nedenlerle çalışmayı reddediyorsa bu seçeneği etkinleştirebilirsiniz.</string>
+    <string name="unset_stream_reminder">Canlı yayın hatırlatıcısını iptal et</string>
+    <string name="set_stream_reminder">Canlı yayın hatırlatıcısını ayarla</string>
+    <string name="playback_starts_shortly">Canlı yayın başladığında otomatik olarak oynatılacaktır.</string>
+    <string name="starting_stream">Canlı yayın başlatılıyor…</string>
+    <string name="action_playlist_remove">Oynatma listesinden kaldır</string>
+    <!-- BEGIN Moved strings -->
+    <string name="signin_view_title">Kullanıcı Kodu yükleniyor…</string>
+    <string name="signin_view_description">Oturum açmak için bu kodu sayfaya girin %s</string>
+    <string name="signin_view_action_text">Tamam</string>
+    <string name="require_checked">\"%s\" gerektirir</string>
+    <string name="msg_press_again_to_exit">Çıkmak için tekrar basın</string>
+    <string name="player_remaining_time">Kalan: %s</string>
+    <string name="player_ending_time">Bitiş saati: %s</string>
+    <string name="badge_new_content">YENİ İÇERİK</string>
+    <string name="badge_live">CANLI</string>
+    <string name="add_device_view_description">Cihazı bağlamak için bu kodu telefonunuzun YouTube uygulamasında Ayarlar / TV\'de İzle bölümüne girin</string>
+    <string name="playback_controls_repeat_pause">Tekrarla Duraklat</string>
+    <string name="playback_controls_repeat_list">Tekrarla Liste</string>
+    <string name="action_subscribe_off">Abone ol Kapalı</string>
+    <string name="action_subscribe_on">Abone ol Açık</string>
+    <!-- END Moved strings -->
+    <string name="skip_24_rate">24 fps biçimlerini atla (gerçek sinema modu düzeltmesi?)</string>
+    <string name="player_disable_suggestions">Önerileri devre dışı bırak</string>
+    <string name="feedback">Geri bildirim</string>
+    <string name="sources">Kaynaklar</string>
+    <string name="releases">Sürümler</string>
+    <string name="prefer_avc_over_vp9">Kod çözücü seçimi: avc\'yi vp9\'a tercih et</string>
+    <string name="open_chat">Sohbet</string>
+    <string name="place_chat_left">Sohbeti sola yerleştir</string>
+    <string name="use_alt_speech_recognizer">Alternatif konuşma tanıyıcı</string>
+    <string name="time_mode">Saat modu</string>
+    <string name="time_mode_24_hours">24 saat</string>
+    <string name="time_mode_12_hours">12 saat (ÖÖ/ÖS)</string>
+    <string name="use_alt_speech_recognizer_desc">Ciddi hataları var. Yalnızca varsayılan tanıyıcıyla ilgili sorunlarınız varsa kullanın.</string>
 </resources>
