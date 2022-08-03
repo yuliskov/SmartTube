@@ -333,7 +333,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             scheduleReloadVideoTimer(30 * 1_000);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
-            artworkUrl = mLastVideo.bgImageUrl;
             if (!mIsWasVideoStartError && mLastVideo != null) {
                 Analytics.sendVideoStartError(mLastVideo.videoId,
                         mLastVideo.title,

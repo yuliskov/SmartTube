@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import android.os.Build;
 
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
 import java.util.ArrayList;

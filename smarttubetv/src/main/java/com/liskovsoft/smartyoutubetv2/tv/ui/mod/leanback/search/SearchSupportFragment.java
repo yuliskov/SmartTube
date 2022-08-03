@@ -941,14 +941,6 @@ public class SearchSupportFragment extends Fragment {
         }
     }
 
-    private void stopSpeechService() {
-        try {
-            Speech.getInstance().stopListening();
-        } catch (IllegalArgumentException e) { // Speech service not registered
-            e.printStackTrace();
-        }
-    }
-
     static class ExternalQuery {
         String mQuery;
         boolean mSubmit;
