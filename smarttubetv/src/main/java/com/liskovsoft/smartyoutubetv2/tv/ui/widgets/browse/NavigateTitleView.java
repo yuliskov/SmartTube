@@ -273,7 +273,7 @@ public class NavigateTitleView extends TitleView {
 
     private static void loadIcon(SearchOrbView view, String url) {
         // The view with GONE visibility has zero width and height
-        if (view == null || view.getWidth() == 0) {
+        if (view == null || view.getWidth() <= 0 || view.getHeight() <= 0) {
             return;
         }
 
