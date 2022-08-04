@@ -1,10 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.common.prefs;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.liskovsoft.smartyoutubetv2.common.utils.WeakHashSet;
 
 public class DataChangeBase {
-    private final Set<Runnable> mOnChangeList = new HashSet<>();
+    private final WeakHashSet<Runnable> mOnChangeList = new WeakHashSet<>();
 
     public void setOnChange(Runnable callback) {
         mOnChangeList.add(callback);
@@ -15,8 +14,6 @@ public class DataChangeBase {
     }
 
     protected void persistState() {
-        for (Runnable callback : mOnChangeList) {
-            callback.run();
-        }
+        mOnChangeList.forEach(Runnable::run);
     }
 }

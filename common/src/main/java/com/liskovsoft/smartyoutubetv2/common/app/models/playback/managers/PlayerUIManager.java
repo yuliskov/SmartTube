@@ -144,6 +144,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
                         option -> getController().setFormat(UiOptionItem.toFormat(option)),
                         getActivity().getString(R.string.subtitles_disabled)));
 
+        OptionCategory stylesCategory = AppDialogUtil.createSubtitleStylesCategory(getActivity(), mPlayerData);
+        settingsPresenter.appendRadioCategory(stylesCategory.title, stylesCategory.options);
+
         settingsPresenter.showDialog(subtitlesCategoryTitle, this::setSubtitleButtonState);
     }
 

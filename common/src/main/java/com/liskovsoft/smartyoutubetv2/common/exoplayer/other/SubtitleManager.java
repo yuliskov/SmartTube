@@ -51,15 +51,12 @@ public class SubtitleManager implements TextOutput {
         }
     }
 
-    public interface OnSelectSubtitleStyle {
-        void onSelectSubtitleStyle(SubtitleStyle style);
-    }
-
     public SubtitleManager(Activity activity, int subViewId) {
         mContext = activity;
         mSubtitleView = activity.findViewById(subViewId);
         mPrefs = AppPrefs.instance(activity);
         mPlayerData = PlayerData.instance(activity);
+        mPlayerData.setOnChange(this::configureSubtitleView);
         configureSubtitleView();
     }
 
@@ -70,23 +67,23 @@ public class SubtitleManager implements TextOutput {
         }
     }
 
-    public List<SubtitleStyle> getSubtitleStyles() {
-        return mSubtitleStyles;
-    }
-
-    public SubtitleStyle getSubtitleStyle() {
-        return mPlayerData.getSubtitleStyle();
-    }
-
-    public void setSubtitleStyle(SubtitleStyle subtitleStyle) {
-        mPlayerData.setSubtitleStyle(subtitleStyle);
-        configureSubtitleView();
-    }
-
     public void show(boolean show) {
         if (mSubtitleView != null) {
             mSubtitleView.setVisibility(show ? View.VISIBLE : View.GONE);
         }
+    }
+
+    private List<SubtitleStyle> getSubtitleStyles() {
+        return mSubtitleStyles;
+    }
+
+    private SubtitleStyle getSubtitleStyle() {
+        return mPlayerData.getSubtitleStyle();
+    }
+
+    private void setSubtitleStyle(SubtitleStyle subtitleStyle) {
+        mPlayerData.setSubtitleStyle(subtitleStyle);
+        configureSubtitleView();
     }
 
     private List<Cue> forceCenterAlignment(List<Cue> cues) {

@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PlayerData {
+public class PlayerData extends DataChangeBase {
     private static final String VIDEO_PLAYER_DATA = "video_player_data";
     public static final int ONLY_UI = 0;
     public static final int UI_AND_PAUSE = 1;
@@ -79,7 +79,7 @@ public class PlayerData {
         mPrefs = AppPrefs.instance(context);
         initSubtitleStyles();
         initDefaultFormats();
-        restoreData();
+        restoreState();
     }
 
     public static PlayerData instance(Context context) {
@@ -92,7 +92,7 @@ public class PlayerData {
 
     public void setOKButtonBehavior(int option) {
         mOKButtonBehavior = option;
-        persistData();
+        persistState();
     }
 
     public int getOKButtonBehavior() {
@@ -101,7 +101,7 @@ public class PlayerData {
 
     public void setUIHideTimoutSec(int timoutSec) {
         mUIHideTimeoutSec = timoutSec;
-        persistData();
+        persistState();
     }
 
     public int getUIHideTimoutSec() {
@@ -110,7 +110,7 @@ public class PlayerData {
 
     public void enableAbsoluteDate(boolean show) {
         mIsAbsoluteDateEnabled = show;
-        persistData();
+        persistState();
     }
 
     public boolean isAbsoluteDateEnabled() {
@@ -119,7 +119,7 @@ public class PlayerData {
 
     public void setSeekPreviewMode(int mode) {
         mSeekPreviewMode = mode;
-        persistData();
+        persistState();
     }
 
     public int getSeekPreviewMode() {
@@ -128,7 +128,7 @@ public class PlayerData {
 
     public void enableSeekConfirmPause(boolean enable) {
         mIsSeekConfirmPauseEnabled = enable;
-        persistData();
+        persistState();
     }
 
     public boolean isSeekConfirmPauseEnabled() {
@@ -137,7 +137,7 @@ public class PlayerData {
 
     public void enableSeekConfirmPlay(boolean enable) {
         mIsSeekConfirmPlayEnabled = enable;
-        persistData();
+        persistState();
     }
 
     public boolean isSeekConfirmPlayEnabled() {
@@ -150,7 +150,7 @@ public class PlayerData {
 
     public void enableClock(boolean enable) {
         mIsClockEnabled = enable;
-        persistData();
+        persistState();
     }
 
     public boolean isGlobalClockEnabled() {
@@ -159,7 +159,7 @@ public class PlayerData {
 
     public void enableGlobalClock(boolean enable) {
         mIsGlobalClockEnabled = enable;
-        persistData();
+        persistState();
     }
 
     public boolean isGlobalEndingTimeEnabled() {
@@ -168,7 +168,7 @@ public class PlayerData {
 
     public void enableGlobalEndingTime(boolean enable) {
         mIsGlobalEndingTimeEnabled = enable;
-        persistData();
+        persistState();
     }
 
     public boolean isRemainingTimeEnabled() {
@@ -177,7 +177,7 @@ public class PlayerData {
 
     public void enableRemainingTime(boolean enable) {
         mIsRemainingTimeEnabled = enable;
-        persistData();
+        persistState();
     }
 
     public boolean isEndingTimeEnabled() {
@@ -186,7 +186,7 @@ public class PlayerData {
 
     public void enableEndingTime(boolean enable) {
         mIsEndingTimeEnabled = enable;
-        persistData();
+        persistState();
     }
 
     public boolean isQualityInfoEnabled() {
@@ -195,12 +195,12 @@ public class PlayerData {
 
     public void enableQualityInfo(boolean enable) {
         mIsQualityInfoEnabled = enable;
-        persistData();
+        persistState();
     }
 
     public void setBackgroundMode(int type) {
         mBackgroundMode = type;
-        persistData();
+        persistState();
     }
 
     public int getBackgroundMode() {
@@ -209,7 +209,7 @@ public class PlayerData {
 
     public void setPlaybackMode(int type) {
         mPlaybackMode = type;
-        persistData();
+        persistState();
     }
 
     public int getPlaybackMode() {
@@ -223,7 +223,7 @@ public class PlayerData {
     public void enableRememberSpeed(boolean enable) {
         mIsRememberSpeedEnabled = enable;
         mIsRememberSpeedEachEnabled = false;
-        persistData();
+        persistState();
     }
 
     public boolean isRememberSpeedEachEnabled() {
@@ -233,7 +233,7 @@ public class PlayerData {
     public void enableRememberSpeedEach(boolean enable) {
         mIsRememberSpeedEachEnabled = enable;
         mIsRememberSpeedEnabled = false;
-        persistData();
+        persistState();
     }
 
     public boolean isLegacyCodecsForced() {
@@ -242,7 +242,7 @@ public class PlayerData {
 
     public void forceLegacyCodecs(boolean enable) {
         mIsLegacyCodecsForced = enable;
-        persistData();
+        persistState();
     }
 
     public boolean isAfrEnabled() {
@@ -251,7 +251,7 @@ public class PlayerData {
 
     public void setAfrEnabled(boolean enabled) {
         mIsAfrEnabled = enabled;
-        persistData();
+        persistState();
     }
 
     public boolean isAfrFpsCorrectionEnabled() {
@@ -260,7 +260,7 @@ public class PlayerData {
 
     public void setAfrFpsCorrectionEnabled(boolean enabled) {
         mIsAfrFpsCorrectionEnabled = enabled;
-        persistData();
+        persistState();
     }
 
     public boolean isAfrResSwitchEnabled() {
@@ -269,7 +269,7 @@ public class PlayerData {
 
     public void setAfrResSwitchEnabled(boolean enabled) {
         mIsAfrResSwitchEnabled = enabled;
-        persistData();
+        persistState();
     }
 
     public int getAfrPauseMs() {
@@ -278,7 +278,7 @@ public class PlayerData {
 
     public void setAfrPauseMs(int pauseSec) {
         mAfrPauseMs = pauseSec;
-        persistData();
+        persistState();
     }
 
     public boolean isDoubleRefreshRateEnabled() {
@@ -287,7 +287,7 @@ public class PlayerData {
 
     public void setDoubleRefreshRateEnabled(boolean enabled) {
         mIsDoubleRefreshRateEnabled = enabled;
-        persistData();
+        persistState();
     }
 
     public boolean isTooltipsEnabled() {
@@ -296,7 +296,7 @@ public class PlayerData {
 
     public void enableTooltips(boolean enable) {
         mIsTooltipsEnabled = enable;
-        persistData();
+        persistState();
     }
 
     public boolean isNumberKeySeekEnabled() {
@@ -305,7 +305,7 @@ public class PlayerData {
 
     public void enableNumberKeySeek(boolean enable) {
         mIsNumberKeySeekEnabled = enable;
-        persistData();
+        persistState();
     }
 
     public FormatItem getFormat(int type) {
@@ -343,12 +343,12 @@ public class PlayerData {
                 break;
         }
         
-        persistData();
+        persistState();
     }
 
     public void setVideoBufferType(int type) {
         mVideoBufferType = type;
-        persistData();
+        persistState();
     }
 
     public int getVideoBufferType() {
@@ -365,7 +365,7 @@ public class PlayerData {
 
     public void setSubtitleStyle(SubtitleStyle subtitleStyle) {
         mSubtitleStyleIndex = mSubtitleStyles.indexOf(subtitleStyle);
-        persistData();
+        persistState();
     }
 
     public float getSubtitleScale() {
@@ -374,7 +374,7 @@ public class PlayerData {
 
     public void setSubtitleScale(float scale) {
         mSubtitleScale = scale;
-        persistData();
+        persistState();
     }
 
     public float getSubtitlePosition() {
@@ -383,7 +383,7 @@ public class PlayerData {
 
     public void setSubtitlePosition(float position) {
         mSubtitlePosition = position;
-        persistData();
+        persistState();
     }
 
     public float getPlayerVolume() {
@@ -392,12 +392,12 @@ public class PlayerData {
 
     public void setPlayerVolume(float scale) {
         mPlayerVolume = scale;
-        persistData();
+        persistState();
     }
 
     public void setVideoZoomMode(int mode) {
         mVideoZoomMode = mode;
-        persistData();
+        persistState();
     }
 
     public int getVideoZoomMode() {
@@ -406,7 +406,7 @@ public class PlayerData {
 
     public void setVideoAspectRatio(float ratio) {
         mVideoAspectRatio = ratio;
-        persistData();
+        persistState();
     }
 
     public float getVideoAspectRatio() {
@@ -419,7 +419,7 @@ public class PlayerData {
         }
 
         mSpeed = speed;
-        persistData();
+        persistState();
     }
 
     public float getSpeed() {
@@ -432,12 +432,12 @@ public class PlayerData {
 
     public void setAudioDelayMs(int delayMs) {
         mAudioDelayMs = delayMs;
-        persistData();
+        persistState();
     }
 
     public void enableSonyTimerFix(boolean enable) {
         mIsSonyTimerFixEnabled = enable;
-        persistData();
+        persistState();
     }
 
     public boolean isSonyTimerFixEnabled() {
@@ -446,7 +446,7 @@ public class PlayerData {
 
     public void enableTimeCorrection(boolean enable) {
         mIsTimeCorrectionEnabled = enable;
-        persistData();
+        persistState();
     }
 
     public boolean isTimeCorrectionEnabled() {
@@ -459,7 +459,7 @@ public class PlayerData {
 
     public void enableSkip24Rate(boolean enable) {
         mIsSkip24RateEnabled = enable;
-        persistData();
+        persistState();
     }
 
     public boolean isLiveChatEnabled() {
@@ -468,7 +468,7 @@ public class PlayerData {
 
     public void enableLiveChat(boolean enable) {
         mIsLiveChatEnabled = enable;
-        persistData();
+        persistState();
     }
 
     public FormatItem getDefaultAudioFormat() {
@@ -499,7 +499,7 @@ public class PlayerData {
 
     public void setStartSeekIncrementMs(int startSeekIncrementMs) {
         mStartSeekIncrementMs = startSeekIncrementMs;
-        persistData();
+        persistState();
     }
 
     private void initSubtitleStyles() {
@@ -525,7 +525,7 @@ public class PlayerData {
         mDefaultVideoFormats.put("P1", FormatItem.VIDEO_FHD_AVC_60); // Chinese projector (see annoying emails)
     }
 
-    private void restoreData() {
+    private void restoreState() {
         String data = mPrefs.getData(VIDEO_PLAYER_DATA);
 
         String[] split = Helpers.splitObjectLegacy(data);
@@ -582,7 +582,8 @@ public class PlayerData {
         }
     }
 
-    private void persistData() {
+    @Override
+    protected void persistState() {
         mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsAbsoluteDateEnabled, mSeekPreviewMode, mIsSeekConfirmPauseEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
@@ -594,5 +595,7 @@ public class PlayerData {
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
                 mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled));
+
+        super.persistState();
     }
 }
