@@ -439,7 +439,7 @@
     <string name="player_ending_time">Ende: %s</string>
     <string name="badge_new_content">NEU</string>
     <string name="badge_live">LIVE</string>
-    <string name="add_device_view_description">Um ein Gerät zu verbinden, geben Sie diesen TV-Code in der YouTube-App auf Ihrem Smartphone/Tablet unter Einstellungen/Auf Fernseher ansehen/TV-Code ein</string>
+    <string name="add_device_view_description">Um ein Gerät zu verbinden, geben Sie diesen TV-Code in der YouTube-App auf Ihrem Smartphone/Tablet unter Einstellungen/Auf Fernseher ansehen/TV-Code ein.\nHINWEIS: Funktioniert nur mit Gboard-Tastatur.</string>
     <string name="playback_controls_repeat_pause">Pause wiederholen</string>
     <string name="playback_controls_repeat_list">Liste wiederholen</string>
     <string name="action_subscribe_off">Abonnieren aus</string>
