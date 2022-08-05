@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -596,9 +597,13 @@ public class GeneralData {
     }
 
     private void initSections() {
+        String country = LocaleUtility.getCurrentLocale(mContext).getCountry();
+
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mDefaultSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
-        mDefaultSections.put(R.string.header_news, MediaGroup.TYPE_NEWS);
+        if (!Helpers.equalsAny(country, "RU")) {
+            mDefaultSections.put(R.string.header_news, MediaGroup.TYPE_NEWS);
+        }
         mDefaultSections.put(R.string.header_music, MediaGroup.TYPE_MUSIC);
         mDefaultSections.put(R.string.header_channels, MediaGroup.TYPE_CHANNEL_UPLOADS);
         mDefaultSections.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);

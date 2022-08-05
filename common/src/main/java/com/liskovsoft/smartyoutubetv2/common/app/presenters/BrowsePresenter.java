@@ -135,6 +135,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         initSettingsSubCategories();
     }
 
+    /**
+     * NOTE: This only mapping. Enabled section list is here: GeneralData#initSections()
+     */
     private void initSectionMapping() {
         int uploadsType = mMainUIData.isUploadsOldLookEnabled() ? BrowseSection.TYPE_GRID : BrowseSection.TYPE_MULTI_GRID;
 
