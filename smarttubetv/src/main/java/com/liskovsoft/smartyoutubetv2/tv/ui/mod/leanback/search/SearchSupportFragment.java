@@ -781,7 +781,8 @@ public class SearchSupportFragment extends Fragment {
     protected void enableKeyboardAutoShow(boolean enable) {
         // Show/Hide kbd on activity first launch
         if (getActivity() != null) {
-            getActivity().getWindow().setSoftInputMode(enable ? WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE : WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+            // NOTE: You should set 'unspecified' instead of 'visible' to fix 'keyboard popup in the player' bug.
+            getActivity().getWindow().setSoftInputMode(enable ? WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED : WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
         mIsKeyboardAutoShowEnabled = enable;
     }
