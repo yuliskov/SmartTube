@@ -14,7 +14,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -48,6 +47,8 @@ public class AppDialogUtil {
     private static final int VIDEO_PRESETS_ID = 136;
     private static final int AUDIO_DELAY_ID = 137;
     private static final int SUBTITLE_STYLES_ID = 45;
+    private static final int SUBTITLE_SIZE_ID = 46;
+    private static final int SUBTITLE_POSITION_ID = 47;
     private static final String TAG = AppDialogUtil.class.getSimpleName();
 
     /**
@@ -275,11 +276,46 @@ public class AppDialogUtil {
         for (SubtitleStyle subtitleStyle : subtitleStyles) {
             styleOptions.add(UiOptionItem.from(
                     context.getString(subtitleStyle.nameResId),
-                    option -> playerData.setSubtitleStyle(subtitleStyle),
+                    option -> {
+                        playerData.setSubtitleStyle(subtitleStyle);
+                        Utils.showPlayerControls(context, false);
+                    },
                     subtitleStyle.equals(playerData.getSubtitleStyle())));
         }
 
         return styleOptions;
+    }
+
+    public static OptionCategory createSubtitleSizeCategory(Context context, PlayerData playerData) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int scalePercent : Helpers.range(10, 200, 10)) {
+            float scale = scalePercent / 100f;
+            options.add(UiOptionItem.from(String.format("%sx", scale),
+                    optionItem -> {
+                        playerData.setSubtitleScale(scale);
+                        Utils.showPlayerControls(context, false);
+                    },
+                    Helpers.floatEquals(scale, playerData.getSubtitleScale())));
+        }
+
+        return OptionCategory.from(SUBTITLE_SIZE_ID, OptionCategory.TYPE_RADIO, context.getString(R.string.subtitle_scale), options);
+    }
+
+    public static OptionCategory createSubtitlePositionCategory(Context context, PlayerData playerData) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int positionPercent : Helpers.range(0, 100, 5)) {
+            float position = positionPercent / 100f;
+            options.add(UiOptionItem.from(String.format("%s%%", positionPercent),
+                    optionItem -> {
+                        playerData.setSubtitlePosition(position);
+                        Utils.showPlayerControls(context, false);
+                    },
+                    Helpers.floatEquals(position, playerData.getSubtitlePosition())));
+        }
+
+        return OptionCategory.from(SUBTITLE_POSITION_ID, OptionCategory.TYPE_RADIO, context.getString(R.string.subtitle_position), options);
     }
 
     public static OptionCategory createVideoZoomCategory(Context context, PlayerData playerData) {

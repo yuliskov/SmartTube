@@ -46,6 +46,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.WebBrowserPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
@@ -540,5 +541,12 @@ public class Utils {
 
     public static String getCountryFlagUrl(String countryCode) {
         return "https://countryflagsapi.com/png/" + countryCode;
+    }
+
+    public static void showPlayerControls(Context context, boolean show) {
+        PlaybackView view = PlaybackPresenter.instance(context).getView();
+        if (view != null) {
+            view.getController().showOverlay(show);
+        }
     }
 }

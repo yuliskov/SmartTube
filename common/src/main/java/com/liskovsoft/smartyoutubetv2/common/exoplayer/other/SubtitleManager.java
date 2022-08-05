@@ -16,12 +16,13 @@ import com.google.android.exoplayer2.text.TextOutput;
 import com.google.android.exoplayer2.ui.SubtitleView;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubtitleManager implements TextOutput {
+public class SubtitleManager implements TextOutput, OnDataChange {
     private static final String TAG = SubtitleManager.class.getSimpleName();
     private final SubtitleView mSubtitleView;
     private final Context mContext;
@@ -56,7 +57,12 @@ public class SubtitleManager implements TextOutput {
         mSubtitleView = activity.findViewById(subViewId);
         mPrefs = AppPrefs.instance(activity);
         mPlayerData = PlayerData.instance(activity);
-        mPlayerData.setOnChange(this::configureSubtitleView);
+        mPlayerData.setOnChange(this);
+        configureSubtitleView();
+    }
+
+    @Override
+    public void onDataChange() {
         configureSubtitleView();
     }
 

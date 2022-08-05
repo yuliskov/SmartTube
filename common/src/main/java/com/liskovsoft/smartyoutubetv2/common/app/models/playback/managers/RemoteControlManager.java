@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventList
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -25,7 +26,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class RemoteControlManager extends PlayerEventListenerHelper {
+public class RemoteControlManager extends PlayerEventListenerHelper implements OnDataChange {
     private static final String TAG = RemoteControlManager.class.getSimpleName();
     private final RemoteService mRemoteManager;
     private final RemoteControlData mRemoteControlData;
@@ -48,7 +49,12 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         mVideoLoader = videoLoader;
         mRemoteManager = mediaService.getRemoteService();
         mRemoteControlData = RemoteControlData.instance(context);
-        mRemoteControlData.setOnChange(this::tryListening);
+        mRemoteControlData.setOnChange(this);
+        tryListening();
+    }
+
+    @Override
+    public void onDataChange() {
         tryListening();
     }
 

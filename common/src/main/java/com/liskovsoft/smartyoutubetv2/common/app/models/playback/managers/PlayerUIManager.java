@@ -147,6 +147,12 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         OptionCategory stylesCategory = AppDialogUtil.createSubtitleStylesCategory(getActivity(), mPlayerData);
         settingsPresenter.appendRadioCategory(stylesCategory.title, stylesCategory.options);
 
+        OptionCategory sizeCategory = AppDialogUtil.createSubtitleSizeCategory(getActivity(), mPlayerData);
+        settingsPresenter.appendRadioCategory(sizeCategory.title, sizeCategory.options);
+
+        OptionCategory positionCategory = AppDialogUtil.createSubtitlePositionCategory(getActivity(), mPlayerData);
+        settingsPresenter.appendRadioCategory(positionCategory.title, positionCategory.options);
+
         settingsPresenter.showDialog(subtitlesCategoryTitle, this::setSubtitleButtonState);
     }
 
