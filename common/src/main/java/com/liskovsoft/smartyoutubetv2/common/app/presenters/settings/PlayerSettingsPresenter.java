@@ -379,7 +379,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         pairs.add(new Pair<>("1:1 (16:9 display)", 1.0f));
         pairs.add(new Pair<>("1.11111:1 (16:10 display)", 1.11111f));
         pairs.add(new Pair<>("1.3333:1 (4:3 display)", 1.3333f));
-        pairs.add(new Pair<>("0.7619:1 (21:9 display)", 0.7619f));
+        // There is no display with exact 21:9 proportion???
+        //pairs.add(new Pair<>("0.7619:1 (21:9 display)", 0.7619f));
+        pairs.add(new Pair<>("0.75:1 (64:27 display)", 0.75f));
+        pairs.add(new Pair<>("0.7442:1 (43:18 display)", 0.7442f));
+        pairs.add(new Pair<>("0.7407:1 (12:5 display)", 0.7407f));
 
         for (Pair<String, Float> pair : pairs) {
             options.add(UiOptionItem.from(pair.first,
