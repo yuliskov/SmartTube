@@ -419,7 +419,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mPlayer = mPlayerInitializer.createPlayer(getContext(), renderersFactory, trackSelector);
         // Try to fix decoder error on Nvidia Shield 2019.
         // Init resources as early as possible.
-        mPlayer.setForegroundMode(true);
+        //mPlayer.setForegroundMode(true);
         mExoPlayerController.setPlayer(mPlayer);
     }
 
