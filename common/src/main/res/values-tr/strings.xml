@@ -431,7 +431,7 @@
     <string name="action_playlist_remove">Oynatma listesinden kaldır</string>
     <!-- BEGIN Moved strings -->
     <string name="signin_view_title">Kullanıcı Kodu yükleniyor…</string>
-    <string name="signin_view_description">Oturum açmak için bu kodu sayfaya girin %s</string>
+    <string name="signin_view_description">Oturum açmak için bu kodu sayfaya girin %s\nNOT: Yalnızca Firefox ya da Chrome tarayıcılarla çalışır.</string>
     <string name="signin_view_action_text">Tamam</string>
     <string name="require_checked">\"%s\" gerektirir</string>
     <string name="msg_press_again_to_exit">Çıkmak için tekrar basın</string>
@@ -439,7 +439,7 @@
     <string name="player_ending_time">Bitiş saati: %s</string>
     <string name="badge_new_content">YENİ İÇERİK</string>
     <string name="badge_live">CANLI</string>
-    <string name="add_device_view_description">Cihazı bağlamak için bu kodu telefonunuzun YouTube uygulamasında Ayarlar / TV\'de İzle bölümüne girin</string>
+    <string name="add_device_view_description">Cihazı bağlamak için bu kodu telefonunuzun YouTube uygulamasında Ayarlar / TV\'de İzle bölümüne girin. Yalnızca Gboard klavye ile çalışır.</string>
     <string name="playback_controls_repeat_pause">Tekrarla Duraklat</string>
     <string name="playback_controls_repeat_list">Tekrarla Liste</string>
     <string name="action_subscribe_off">Abone ol Kapalı</string>
@@ -458,4 +458,13 @@
     <string name="time_mode_24_hours">24 saat</string>
     <string name="time_mode_12_hours">12 saat (ÖÖ/ÖS)</string>
     <string name="use_alt_speech_recognizer_desc">Ciddi hataları var. Yalnızca varsayılan tanıyıcıyla ilgili sorunlarınız varsa kullanın.</string>
+    <string name="speech_recognizer">Konuşma tanıyıcı</string>
+    <string name="speech_recognizer_system">Sistem (tercih edilmiş)</string>
+    <string name="speech_recognizer_external_1">Harici 1 (Ciddi hataları var, çalışması için mikrofona erişimi devre dışı bırakmanız gerekir)</string>
+    <string name="speech_recognizer_external_2">Harici 2 (Ciddi hataları var)</string>
+    <string name="real_channel_icon">Kanal düğmesinde gerçek simgeyi göster</string>
+    <string name="subtitle_yellow_semi_transparent">Sarı (Yarı saydam arka plan)</string>
+    <string name="subtitle_yellow_black">Sarı (Siyah arka plan)</string>
+    <string name="player_pixel_ratio">Görüntü en boy oranı</string>
+    <string name="color_scheme_dark_grey_monochrome">Koyu Gri (tek renkli)</string>
 </resources>
