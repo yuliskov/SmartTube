@@ -431,7 +431,7 @@
     <string name="action_playlist_remove">Rimuovi dalla playlist</string>
     <!-- BEGIN Moved strings -->
     <string name="signin_view_title">Sto caricando il codice utente…</string>
-    <string name="signin_view_description">Per accedere inserisci questo codice nella pagina %s\nNOTA: funziona solo con i browser Firefox o Chrome.</string>
+    <string name="signin_view_description">Per accedere inserisci questo codice nella pagina %s\nNOTA. Funziona solo con i browser Firefox o Chrome.</string>
     <string name="signin_view_action_text">Fatto</string>
     <string name="require_checked">Richiede \"%s\"</string>
     <string name="msg_press_again_to_exit">Premi di nuovo per uscire</string>
@@ -439,7 +439,7 @@
     <string name="player_ending_time">Termina a %s</string>
     <string name="badge_new_content">NUOVO CONTENUTO</string>
     <string name="badge_live">DAL VIVO</string>
-    <string name="add_device_view_description">Per collegare il dispositivo, inserisci questo codice nell\'app YouTube del tuo telefono nella sezione Impostazioni/Guarda in TV</string>
+    <string name="add_device_view_description">Per collegare il dispositivo, inserisci questo codice nell\'app YouTube del tuo telefono nella sezione Impostazioni/Guarda in TV\nNOTA. Funziona solo con la tastiera Gboard.</string>
     <string name="playback_controls_repeat_pause">Ripeti pausa</string>
     <string name="playback_controls_repeat_list">Ripeti lista</string>
     <string name="action_subscribe_off">Iscrizione non attivata</string>
