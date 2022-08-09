@@ -153,7 +153,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     private void updatePlayerBackground() {
         if (isOverlayShown()) {
-            setBackgroundResource(isSuggestionsShown() ? R.drawable.player_background2 : R.drawable.player_background);
+            setBackgroundResource(isSuggestionsShown() ? R.drawable.player_background_suggestions : R.drawable.player_background_controls);
         }
     }
 
