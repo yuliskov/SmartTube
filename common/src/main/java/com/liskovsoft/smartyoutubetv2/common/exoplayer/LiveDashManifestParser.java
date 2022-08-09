@@ -12,6 +12,9 @@ import com.google.android.exoplayer2.source.dash.manifest.Representation.MultiSe
 import com.google.android.exoplayer2.source.dash.manifest.SegmentBase.SegmentList;
 import com.google.android.exoplayer2.source.dash.manifest.SegmentBase.SegmentTimelineElement;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.querystringparser.UrlQueryString;
+import com.liskovsoft.sharedutils.querystringparser.UrlQueryStringFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,6 +56,8 @@ public class LiveDashManifestParser extends DashManifestParser {
         long newSegmentNum = getLastSegmentNum(newManifest);
 
         if (mOldManifest == null) {
+            //recreateMissingSegments(newManifest);
+
             //newManifest.availabilityStartTimeMs = -1;
             Period newPeriod = newManifest.getPeriod(0);
             // TODO: modified
@@ -148,6 +153,82 @@ public class LiveDashManifestParser extends DashManifestParser {
             //oldSegmentTimeline.addAll(
             //        newSegmentList.segmentTimeline.subList(newSegmentList.segmentTimeline.size() - (int) segmentNumShift - 1, newSegmentList.segmentTimeline.size()));
         }
+    }
+
+    private static void recreateMissingSegments(DashManifest manifest) {
+        if (manifest == null) {
+            return;
+        }
+
+        Period oldPeriod = manifest.getPeriod(0);
+
+        for (int i = 0; i < oldPeriod.adaptationSets.size(); i++) {
+            for (int j = 0; j < oldPeriod.adaptationSets.get(i).representations.size(); j++) {
+                recreateRepresentation(
+                        oldPeriod.adaptationSets.get(i).representations.get(j)
+                );
+            }
+        }
+
+        long minUpdatePeriodMs = (long) Helpers.getField(manifest, "minUpdatePeriodMs");
+        long timeShiftBufferDepthMs = (long) Helpers.getField(manifest, "timeShiftBufferDepthMs");
+        long segmentCount = getFirstSegmentNum(manifest) > 4000 ? 4000 : getFirstSegmentNum(manifest);
+        Helpers.setField(manifest, "timeShiftBufferDepthMs", timeShiftBufferDepthMs + (minUpdatePeriodMs * segmentCount));
+    }
+
+    private static void recreateRepresentation(Representation oldRepresentation) {
+        MultiSegmentRepresentation oldMultiRepresentation = (MultiSegmentRepresentation) oldRepresentation;
+
+        SegmentList oldSegmentList = (SegmentList) Helpers.getField(oldMultiRepresentation, "segmentBase");
+
+        List<RangedUri> oldMediaSegments = (List<RangedUri>) Helpers.getField(oldSegmentList, "mediaSegments");
+
+        RangedUri firstSegment = oldMediaSegments.get(0);
+        RangedUri secondSegment = oldMediaSegments.get(1);
+        long start = firstSegment.start;
+        long length = firstSegment.length;
+        String firstSegmentUri = (String) Helpers.getField(firstSegment, "referenceUri");
+        String secondSegmentUri = (String) Helpers.getField(secondSegment, "referenceUri");
+
+        UrlQueryString firstSegmentQuery = UrlQueryStringFactory.parse("/" + firstSegmentUri);
+        UrlQueryString secondSegmentQuery = UrlQueryStringFactory.parse("/" + secondSegmentUri);
+        long firstSegmentNum = Helpers.parseLong(firstSegmentQuery.get("sq"));
+        long firstSegmentLimit = Helpers.parseLong(firstSegmentQuery.get("lmt"));
+        long secondSegmentLimit = Helpers.parseLong(secondSegmentQuery.get("lmt"));
+        long limitDiff = secondSegmentLimit - firstSegmentLimit;
+
+        if (firstSegmentNum <= 0) {
+            return;
+        }
+
+        long currentSegmentNum = firstSegmentNum - 1;
+        long currentSegmentLimit = firstSegmentLimit - limitDiff;
+        // Live news stream
+        long segmentCount = firstSegmentNum > 4000 ? 4000 : firstSegmentNum;
+        long startNumber = firstSegmentNum > 4000 ? firstSegmentNum - 4000 : 0;
+
+        while (currentSegmentNum >= startNumber) {
+            oldMediaSegments.add(0, new RangedUri(String.format("sq/%s/lmt/%s", currentSegmentNum, currentSegmentLimit), start, length));
+            currentSegmentNum--;
+            currentSegmentLimit -= limitDiff;
+        }
+
+        List<SegmentTimelineElement> oldSegmentTimeline = (List<SegmentTimelineElement>) Helpers.getField(oldSegmentList, "segmentTimeline");
+
+        // segmentTimeline is the same for all segments
+        if (oldMediaSegments.size() != oldSegmentTimeline.size()) {
+            SegmentTimelineElement lastTimeline = oldSegmentTimeline.get(oldSegmentTimeline.size() - 1);
+
+            long lastTimelineDuration = (Long) Helpers.getField(lastTimeline, "duration");
+
+            long lastTimelineStartTime = (Long) Helpers.getField(lastTimeline, "startTime");
+
+            for (int i = 1; i <= segmentCount; i++) {
+                oldSegmentTimeline.add(new SegmentTimelineElement(lastTimelineStartTime + (lastTimelineDuration * i), lastTimelineDuration));
+            }
+        }
+
+        Log.d(TAG, "Recreate representation: done");
     }
 
     private static long getFirstSegmentNum(DashManifest manifest) {
