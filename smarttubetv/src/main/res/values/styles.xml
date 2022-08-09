@@ -111,7 +111,7 @@
         <item name="appLogo">@mipmap/app_logo_semi_red</item>
     </style>
     <style name="ProgressBarHorizontal.Dark" parent="@android:style/Widget.ProgressBar.Horizontal">
-        <item name="android:progressDrawable">@drawable/progress_bar_drawable</item>
+        <item name="android:progressDrawable">@drawable/progress_bar_red</item>
     </style>
     <style name="App.Theme.DarkGrey.Preferences" parent="App.Theme.Leanback.Preferences">
         <item name="android:colorPrimary" tools:targetApi="21">@color/scheme_grey_background</item>
@@ -151,7 +151,7 @@
         <item name="shelfBackground">@color/scheme_red_shelf_background_dark</item>
     </style>
     <style name="ProgressBarHorizontal.Red" parent="@android:style/Widget.ProgressBar.Horizontal">
-        <item name="android:progressDrawable">@drawable/progress_bar_red</item>
+        <item name="android:progressDrawable">@drawable/progress_bar_semi_red</item>
     </style>
     <!--  End Color scheme: Red -->
 
