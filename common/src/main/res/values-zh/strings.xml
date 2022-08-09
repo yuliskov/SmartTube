@@ -251,7 +251,7 @@
   <string name="option_disabled">禁用</string>
   <string name="live_now_row_name">正在直播</string>
   <string name="run_in_background">在背景运行</string>
-  <string name="settings_remote_control">遥控器</string>
+  <string name="settings_remote_control">远程控制</string>
   <string name="background_service_started">背景服务已经启动</string>
   <string name="dialog_add_to">添加到 %s</string>
   <string name="dialog_remove_from">移除 %s</string>
@@ -441,5 +441,25 @@
   <string name="playback_controls_repeat_list">重复列表</string>
   <string name="action_subscribe_off">未订阅</string>
   <string name="action_subscribe_on">已订阅</string>
-  <string name="skip_24_rate">跳过 24fps 格式 (真电影模式修复\？)</string>
+  <string name="skip_24_rate">跳过 24fps 格式 (真实电影模式修复\？)</string>
+  <string name="player_disable_suggestions">禁用建议</string>
+  <string name="feedback">反馈</string>
+  <string name="sources">来源</string>
+  <string name="releases">发布</string>
+  <string name="prefer_avc_over_vp9">解码器选择：更倾向于avc而不是vp9</string>
+  <string name="open_chat">聊天</string>
+  <string name="place_chat_left">把聊天放在左边</string>
+  <string name="use_alt_speech_recognizer">替代语音识别器</string>
+  <string name="time_mode">时间模式</string>
+  <string name="time_mode_24_hours">24 小时</string>
+  <string name="time_mode_12_hours">12 小时(AM/PM)</string>
+  <string name="use_alt_speech_recognizer_desc">有严重的缺陷。只有在你对默认识别器有问题时才使用它。</string>
+  <string name="speech_recognizer_system">系统(首选)	</string>
+  <string name="speech_recognizer_external_1">例外情况 1 (严重失灵，为了正常使用，你需要禁止对麦克风的访问。)	</string>
+  <string name="speech_recognizer_external_2">例外情况 2 (严重困扰)	</string>
+  <string name="real_channel_icon">在频道按钮上显示真实图标</string>
+  <string name="subtitle_yellow_semi_transparent">黄色带半透明背景</string>
+  <string name="subtitle_yellow_black">黄色带黑色背景</string>
+  <string name="player_pixel_ratio">像素比率</string>
+  <string name="color_scheme_dark_grey_monochrome">深灰色（单色）</string>
 </resources>
