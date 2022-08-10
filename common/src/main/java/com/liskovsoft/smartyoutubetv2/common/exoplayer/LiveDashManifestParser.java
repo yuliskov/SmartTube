@@ -34,7 +34,11 @@ public class LiveDashManifestParser extends DashManifestParser {
     public DashManifest parse(Uri uri, InputStream inputStream) throws IOException {
         DashManifest manifest = super.parse(uri, inputStream);
 
+        //Log.d(TAG, "Parse start: " + System.currentTimeMillis());
+
         appendManifest(manifest);
+
+        //Log.d(TAG, "Parse end: " + System.currentTimeMillis());
 
         return mOldManifest;
     }
@@ -57,7 +61,7 @@ public class LiveDashManifestParser extends DashManifestParser {
         long newSegmentNum = getLastSegmentNum(newManifest);
 
         if (mOldManifest == null) {
-            //recreateMissingSegments(newManifest);
+            recreateMissingSegments(newManifest);
 
             //newManifest.availabilityStartTimeMs = -1;
             Period newPeriod = newManifest.getPeriod(0);
@@ -161,18 +165,27 @@ public class LiveDashManifestParser extends DashManifestParser {
             return;
         }
 
-        //if (getFirstSegmentNum(manifest) > MAX_SEGMENTS_COUNT) {
-        //    // Skip long live streams (performance fix)
-        //    return;
-        //}
-
         long minUpdatePeriodMs = (long) Helpers.getField(manifest, "minUpdatePeriodMs");
+        if (minUpdatePeriodMs <= 0) {
+            minUpdatePeriodMs = 5_000; // past live stream?
+        }
         long timeShiftBufferDepthMs = (long) Helpers.getField(manifest, "timeShiftBufferDepthMs");
+        long durationMs = (long) Helpers.getField(manifest, "durationMs"); // past live stream
         long firstSegmentNum = getFirstSegmentNum(manifest);
         long lastSegmentNum = getLastSegmentNum(manifest);
         long maxSegmentsCount = MAX_STREAM_LENGTH_MS / minUpdatePeriodMs;
         long segmentCount = Math.min(firstSegmentNum, maxSegmentsCount - (lastSegmentNum - firstSegmentNum - 1));
-        Helpers.setField(manifest, "timeShiftBufferDepthMs", timeShiftBufferDepthMs + (segmentCount * minUpdatePeriodMs));
+
+        if (firstSegmentNum > segmentCount) {
+            // Skip long live streams (performance fix)
+            return;
+        }
+
+        if (timeShiftBufferDepthMs > 0) { // active live stream
+            Helpers.setField(manifest, "timeShiftBufferDepthMs", timeShiftBufferDepthMs + (segmentCount * minUpdatePeriodMs));
+        } else { // past live stream
+            Helpers.setField(manifest, "durationMs", durationMs + (segmentCount * minUpdatePeriodMs));
+        }
 
         Period oldPeriod = manifest.getPeriod(0);
 
@@ -182,7 +195,7 @@ public class LiveDashManifestParser extends DashManifestParser {
                 recreateRepresentation(oldRepresentation, segmentCount);
 
                 long presentationTimeOffsetUs = oldRepresentation.presentationTimeOffsetUs;
-                Helpers.setField(oldRepresentation, "presentationTimeOffsetUs", presentationTimeOffsetUs - (segmentCount * minUpdatePeriodMs * 1000));
+                Helpers.setField(oldRepresentation, "presentationTimeOffsetUs", presentationTimeOffsetUs - (segmentCount * minUpdatePeriodMs * 1_000));
             }
         }
     }
