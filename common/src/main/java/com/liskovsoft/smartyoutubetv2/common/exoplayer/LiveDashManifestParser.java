@@ -26,6 +26,7 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class LiveDashManifestParser extends DashManifestParser {
     private static final String TAG = LiveDashManifestParser.class.getSimpleName();
+    private static final long MAX_STREAM_LENGTH_MS = 8 * 60 * 60 * 1_000; // 8 hours
     private DashManifest mOldManifest;
     private long mOldSegmentNum;
 
@@ -160,23 +161,33 @@ public class LiveDashManifestParser extends DashManifestParser {
             return;
         }
 
+        //if (getFirstSegmentNum(manifest) > MAX_SEGMENTS_COUNT) {
+        //    // Skip long live streams (performance fix)
+        //    return;
+        //}
+
+        long minUpdatePeriodMs = (long) Helpers.getField(manifest, "minUpdatePeriodMs");
+        long timeShiftBufferDepthMs = (long) Helpers.getField(manifest, "timeShiftBufferDepthMs");
+        long firstSegmentNum = getFirstSegmentNum(manifest);
+        long lastSegmentNum = getLastSegmentNum(manifest);
+        long maxSegmentsCount = MAX_STREAM_LENGTH_MS / minUpdatePeriodMs;
+        long segmentCount = Math.min(firstSegmentNum, maxSegmentsCount - (lastSegmentNum - firstSegmentNum - 1));
+        Helpers.setField(manifest, "timeShiftBufferDepthMs", timeShiftBufferDepthMs + (segmentCount * minUpdatePeriodMs));
+
         Period oldPeriod = manifest.getPeriod(0);
 
         for (int i = 0; i < oldPeriod.adaptationSets.size(); i++) {
             for (int j = 0; j < oldPeriod.adaptationSets.get(i).representations.size(); j++) {
-                recreateRepresentation(
-                        oldPeriod.adaptationSets.get(i).representations.get(j)
-                );
+                Representation oldRepresentation = oldPeriod.adaptationSets.get(i).representations.get(j);
+                recreateRepresentation(oldRepresentation, segmentCount);
+
+                long presentationTimeOffsetUs = oldRepresentation.presentationTimeOffsetUs;
+                Helpers.setField(oldRepresentation, "presentationTimeOffsetUs", presentationTimeOffsetUs - (segmentCount * minUpdatePeriodMs * 1000));
             }
         }
-
-        long minUpdatePeriodMs = (long) Helpers.getField(manifest, "minUpdatePeriodMs");
-        long timeShiftBufferDepthMs = (long) Helpers.getField(manifest, "timeShiftBufferDepthMs");
-        long segmentCount = getFirstSegmentNum(manifest) > 4000 ? 4000 : getFirstSegmentNum(manifest);
-        Helpers.setField(manifest, "timeShiftBufferDepthMs", timeShiftBufferDepthMs + (minUpdatePeriodMs * segmentCount));
     }
 
-    private static void recreateRepresentation(Representation oldRepresentation) {
+    private static void recreateRepresentation(Representation oldRepresentation, long segmentCount) {
         MultiSegmentRepresentation oldMultiRepresentation = (MultiSegmentRepresentation) oldRepresentation;
 
         SegmentList oldSegmentList = (SegmentList) Helpers.getField(oldMultiRepresentation, "segmentBase");
@@ -203,11 +214,8 @@ public class LiveDashManifestParser extends DashManifestParser {
 
         long currentSegmentNum = firstSegmentNum - 1;
         long currentSegmentLimit = firstSegmentLimit - limitDiff;
-        // Live news stream
-        long segmentCount = firstSegmentNum > 4000 ? 4000 : firstSegmentNum;
-        long startNumber = firstSegmentNum > 4000 ? firstSegmentNum - 4000 : 0;
 
-        while (currentSegmentNum >= startNumber) {
+        for (int i = 1; i <= segmentCount; i++) {
             oldMediaSegments.add(0, new RangedUri(String.format("sq/%s/lmt/%s", currentSegmentNum, currentSegmentLimit), start, length));
             currentSegmentNum--;
             currentSegmentLimit -= limitDiff;
@@ -218,9 +226,7 @@ public class LiveDashManifestParser extends DashManifestParser {
         // segmentTimeline is the same for all segments
         if (oldMediaSegments.size() != oldSegmentTimeline.size()) {
             SegmentTimelineElement lastTimeline = oldSegmentTimeline.get(oldSegmentTimeline.size() - 1);
-
             long lastTimelineDuration = (Long) Helpers.getField(lastTimeline, "duration");
-
             long lastTimelineStartTime = (Long) Helpers.getField(lastTimeline, "startTime");
 
             for (int i = 1; i <= segmentCount; i++) {
