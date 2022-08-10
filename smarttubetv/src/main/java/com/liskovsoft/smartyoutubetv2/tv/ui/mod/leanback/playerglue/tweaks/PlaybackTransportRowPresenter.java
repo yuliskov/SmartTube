@@ -370,7 +370,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 new PlaybackSeekDataProvider.ResultCallback() {
                     @Override
                     public void onThumbnailLoaded(Bitmap bitmap, int index) {
-                        int childIndex = index - (mThumbHeroIndex - mThumbsBar.getChildCount() / 2);
+                        int childIndex = mThumbsBar.getChildCount() == 1 ? // single frame carousel check
+                                0 : index - (mThumbHeroIndex - mThumbsBar.getChildCount() / 2);
                         if (childIndex < 0 || childIndex >= mThumbsBar.getChildCount()) {
                             return;
                         }
