@@ -190,6 +190,10 @@ public class LiveDashManifestParser extends DashManifestParser {
             segmentCount = Math.min(firstSegmentNum, maxSegmentsCount - (lastSegmentNum - firstSegmentNum - 1));
         }
 
+        if (segmentCount <= 0) {
+            return;
+        }
+
         if (timeShiftBufferDepthMs > 0) { // active live stream
             Helpers.setField(manifest, "timeShiftBufferDepthMs", timeShiftBufferDepthMs + (segmentCount * minUpdatePeriodMs));
         } else { // past live stream
