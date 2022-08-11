@@ -194,13 +194,14 @@ public class LiveDashManifestParser extends DashManifestParser {
             return;
         }
 
+        // TODO: remove fix below
+        if (minUpdatePeriodMs <= 2_000) {
+            return; // url won't work on small (2_000Ms) segments
+        }
+
         if (timeShiftBufferDepthMs > 0) { // active live stream
             Helpers.setField(manifest, "timeShiftBufferDepthMs", timeShiftBufferDepthMs + (segmentCount * minUpdatePeriodMs));
         } else { // past live stream
-            // TODO: remove fix below
-            if (minUpdatePeriodMs <= 2_000) {
-                return; // first segments won't work for some reasons
-            }
             Helpers.setField(manifest, "durationMs", durationMs + (segmentCount * minUpdatePeriodMs));
         }
 
