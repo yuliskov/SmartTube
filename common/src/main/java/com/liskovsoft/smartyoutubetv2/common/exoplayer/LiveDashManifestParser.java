@@ -32,7 +32,7 @@ import java.util.List;
 public class LiveDashManifestParser extends DashManifestParser {
     private static final String TAG = LiveDashManifestParser.class.getSimpleName();
     private static final long MAX_PAST_STREAM_LENGTH_MS = 8 * 60 * 60 * 1_000; // 8 hours
-    private static final long MAX_LIVE_STREAM_LENGTH_MS = 4 * 60 * 60 * 1_000; // 4 hours (higher values may cause problems, e.g. url not working)
+    private static final long MAX_LIVE_STREAM_LENGTH_MS = 1 * 60 * 60 * 1_000; // higher values may cause problems, e.g. url not working
     private DashManifest mOldManifest;
     private long mOldSegmentNum;
 
