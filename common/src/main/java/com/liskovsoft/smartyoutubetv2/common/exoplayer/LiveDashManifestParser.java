@@ -31,8 +31,10 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class LiveDashManifestParser extends DashManifestParser {
     private static final String TAG = LiveDashManifestParser.class.getSimpleName();
-    private static final long MAX_PAST_STREAM_LENGTH_MS = 8 * 60 * 60 * 1_000; // 8 hours
-    private static final long MAX_LIVE_STREAM_LENGTH_MS = 1 * 60 * 60 * 1_000; // higher values may cause problems, e.g. url not working
+    // Usually gaming streams. 8 hours max.
+    private static final long MAX_PAST_STREAM_LENGTH_MS = 8 * 60 * 60 * 1_000;
+    // Should be zero for non seekable streams (Record Drum'n'Bass). Higher values may produce 'url not working' error.
+    private static final long MAX_LIVE_STREAM_LENGTH_MS = 0 * 60 * 60 * 1_000;
     private DashManifest mOldManifest;
     private long mOldSegmentNum;
 
