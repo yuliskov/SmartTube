@@ -13,7 +13,7 @@ import java.util.Map;
 public class VideoStateService {
     @SuppressLint("StaticFieldLeak")
     private static VideoStateService sInstance;
-    private static final int MAX_PERSISTENT_STATE_SIZE = 50;
+    private static final int MAX_PERSISTENT_STATE_SIZE = 100;
     // Don't store state inside Video object.
     // As one video might correspond to multiple Video objects.
     private final Map<String, State> mStates = Utils.createLRUMap(MAX_PERSISTENT_STATE_SIZE);

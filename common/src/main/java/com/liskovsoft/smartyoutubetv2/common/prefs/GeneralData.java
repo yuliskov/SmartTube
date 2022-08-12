@@ -655,7 +655,7 @@ public class GeneralData {
         String playlistOrder = Helpers.parseStr(split, 29);
         String pendingStreams = Helpers.parseStr(split, 30);
         mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, true);
-        mTimeMode = Helpers.parseInt(split, 32, DateFormatter.is24HourLocale(mContext) ? TIME_MODE_24 : TIME_MODE_12);
+        mTimeMode = TIME_MODE_24;
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);

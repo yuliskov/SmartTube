@@ -435,7 +435,7 @@
     <string name="player_ending_time">Закінчиться в %s</string>
     <string name="badge_new_content">НОВИЙ КОНТЕНТ</string>
     <string name="badge_live">НАЖИВО</string>
-    <string name="add_device_view_description">Щоб прив`язати пристрій, введіть цей код у додатку YouTube на телефоні у розділі Налаштування/Дивитися на ТВ</string>
+    <string name="add_device_view_description">Щоб прив`язати пристрій, введіть цей код у додатку YouTube на телефоні у розділі Налаштування/Дивитися на ТВ\nПРИМІТКА. Працює лише з клавіатурою Gboard.</string>
     <!-- END Moved strings -->
     <string name="skip_24_rate">Пропускати 24fps формати (виправлення режиму real cinema?)</string>
     <string name="player_disable_suggestions">Вимкнути рекомендації</string>
@@ -455,4 +455,8 @@
     <string name="speech_recognizer_external_1">Зовнішній 1 (серйозно забагований, для роботи потрібно заборонити доступ до мікрофону)</string>
     <string name="speech_recognizer_external_2">Зовнішній 2 (серйозно забагований)</string>
     <string name="real_channel_icon">Показувати справжній значок на кнопці каналу</string>
+    <string name="subtitle_yellow_semi_transparent">Жовті на напівпрозорому фоні</string>
+    <string name="subtitle_yellow_black">Жовті на чорному фоні</string>
+    <string name="player_pixel_ratio">Співвідношення сторін пікселя</string>
+    <string name="color_scheme_dark_grey_monochrome">Темно-сіра (монохромна)</string>
 </resources>

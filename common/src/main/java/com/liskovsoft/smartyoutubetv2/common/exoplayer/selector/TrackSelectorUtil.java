@@ -11,6 +11,7 @@ import java.util.HashMap;
 
 public class TrackSelectorUtil {
     public static final String CODEC_SHORT_AV1 = "av01";
+    private static final String CODEC_SHORT_AV1_FIXED = "av1";
     private static final String CODEC_SHORT_AVC = "avc";
     public static final String CODEC_SHORT_VP9 = "vp9";
     private static final String CODEC_SHORT_VP9_HDR = "vp9.2";
@@ -134,11 +135,24 @@ public class TrackSelectorUtil {
 
         for (String codecName : codecNames) {
             if (codec.contains(codecName)) {
-                return codecName;
+                return fixShortCodecName(codecName);
             }
         }
 
         return codec;
+    }
+
+    private static String fixShortCodecName(String shortCodecName) {
+        if (shortCodecName == null) {
+            return null;
+        }
+
+        switch (shortCodecName) {
+            case CODEC_SHORT_AV1:
+                return CODEC_SHORT_AV1_FIXED;
+        }
+
+        return shortCodecName;
     }
 
     private static String buildChannels(Format format) {

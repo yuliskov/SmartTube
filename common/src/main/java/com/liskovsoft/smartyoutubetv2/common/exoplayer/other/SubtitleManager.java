@@ -16,12 +16,13 @@ import com.google.android.exoplayer2.text.TextOutput;
 import com.google.android.exoplayer2.ui.SubtitleView;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubtitleManager implements TextOutput {
+public class SubtitleManager implements TextOutput, OnDataChange {
     private static final String TAG = SubtitleManager.class.getSimpleName();
     private final SubtitleView mSubtitleView;
     private final Context mContext;
@@ -51,15 +52,17 @@ public class SubtitleManager implements TextOutput {
         }
     }
 
-    public interface OnSelectSubtitleStyle {
-        void onSelectSubtitleStyle(SubtitleStyle style);
-    }
-
     public SubtitleManager(Activity activity, int subViewId) {
         mContext = activity;
         mSubtitleView = activity.findViewById(subViewId);
         mPrefs = AppPrefs.instance(activity);
         mPlayerData = PlayerData.instance(activity);
+        mPlayerData.setOnChange(this);
+        configureSubtitleView();
+    }
+
+    @Override
+    public void onDataChange() {
         configureSubtitleView();
     }
 
@@ -70,23 +73,23 @@ public class SubtitleManager implements TextOutput {
         }
     }
 
-    public List<SubtitleStyle> getSubtitleStyles() {
-        return mSubtitleStyles;
-    }
-
-    public SubtitleStyle getSubtitleStyle() {
-        return mPlayerData.getSubtitleStyle();
-    }
-
-    public void setSubtitleStyle(SubtitleStyle subtitleStyle) {
-        mPlayerData.setSubtitleStyle(subtitleStyle);
-        configureSubtitleView();
-    }
-
     public void show(boolean show) {
         if (mSubtitleView != null) {
             mSubtitleView.setVisibility(show ? View.VISIBLE : View.GONE);
         }
+    }
+
+    private List<SubtitleStyle> getSubtitleStyles() {
+        return mSubtitleStyles;
+    }
+
+    private SubtitleStyle getSubtitleStyle() {
+        return mPlayerData.getSubtitleStyle();
+    }
+
+    private void setSubtitleStyle(SubtitleStyle subtitleStyle) {
+        mPlayerData.setSubtitleStyle(subtitleStyle);
+        configureSubtitleView();
     }
 
     private List<Cue> forceCenterAlignment(List<Cue> cues) {

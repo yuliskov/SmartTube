@@ -153,7 +153,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     private void updatePlayerBackground() {
         if (isOverlayShown()) {
-            setBackgroundResource(isSuggestionsShown() ? R.drawable.player_background2 : R.drawable.player_background);
+            setBackgroundResource(isSuggestionsShown() ? R.drawable.player_background_suggestions : R.drawable.player_background_controls);
         }
     }
 
@@ -404,6 +404,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         initializeGlobalClock();
 
         initializeGlobalEndingTime();
+
+        initializePixelRatio();
     }
 
     private void createPlayer() {
@@ -457,6 +459,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private void initializeGlobalEndingTime() {
         EndingTimeView endingTime = getActivity().findViewById(R.id.global_ending_time);
         endingTime.setVisibility(PlayerData.instance(getContext()).isGlobalEndingTimeEnabled() ? View.VISIBLE : View.GONE);
+    }
+
+    private void initializePixelRatio() {
+        setPixelRatio(PlayerTweaksData.instance(getContext()).getPixelRatio());
     }
 
     private void createMediaSession() {

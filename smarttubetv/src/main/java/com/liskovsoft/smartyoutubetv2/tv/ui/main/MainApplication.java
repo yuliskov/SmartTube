@@ -43,6 +43,9 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         // fix ipv6 infinite video buffering???
         // Better to remove this fix at all. Users complain about infinite loading.
         //System.setProperty("java.net.preferIPv6Addresses", "true");
+        // Another IPv6 fix (no effect)
+        // https://stackoverflow.com/questions/1920623/sometimes-httpurlconnection-getinputstream-executes-too-slowly
+        //System.setProperty("java.net.preferIPv4Stack" , "true");
     }
 
     @Override
