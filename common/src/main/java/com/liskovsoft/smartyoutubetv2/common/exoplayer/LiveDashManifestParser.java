@@ -31,8 +31,8 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class LiveDashManifestParser extends DashManifestParser {
     private static final String TAG = LiveDashManifestParser.class.getSimpleName();
-    // Usually gaming streams. 8 hours max.
-    private static final long MAX_PAST_STREAM_LENGTH_MS = 8 * 60 * 60 * 1_000;
+    // Usually gaming streams. 12 hours max.
+    private static final long MAX_PAST_STREAM_LENGTH_MS = 12 * 60 * 60 * 1_000;
     // Should be zero for non seekable streams (Record Drum'n'Bass). Higher values may produce 'url not working' error.
     private static final long MAX_LIVE_STREAM_LENGTH_MS = 0 * 60 * 60 * 1_000;
     private DashManifest mOldManifest;
@@ -182,15 +182,10 @@ public class LiveDashManifestParser extends DashManifestParser {
             // May has different length 5_000 (4hrs) or 2_000 (2hrs)
             minUpdatePeriodMs = durationMs / (lastSegmentNum - firstSegmentNum);
         }
-        long maxSegmentsCount = MAX_PAST_STREAM_LENGTH_MS / minUpdatePeriodMs;
-        long segmentCount = Math.min(firstSegmentNum, maxSegmentsCount - (lastSegmentNum - firstSegmentNum - 1));
 
-        if (firstSegmentNum > segmentCount) {
-            // Skip long live streams (performance fix)
-            //return;
-            maxSegmentsCount = MAX_LIVE_STREAM_LENGTH_MS / minUpdatePeriodMs;
-            segmentCount = Math.min(firstSegmentNum, maxSegmentsCount - (lastSegmentNum - firstSegmentNum - 1));
-        }
+        long maxSegmentsCount = (firstSegmentNum > 10_000 ? // Long live stream (e.g. news stream)
+                MAX_LIVE_STREAM_LENGTH_MS : MAX_PAST_STREAM_LENGTH_MS) / minUpdatePeriodMs;
+        long segmentCount = Math.min(firstSegmentNum, maxSegmentsCount - (lastSegmentNum - firstSegmentNum - 1));
 
         if (segmentCount <= 0) {
             return;
