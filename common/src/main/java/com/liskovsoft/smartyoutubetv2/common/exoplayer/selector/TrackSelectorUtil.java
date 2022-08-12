@@ -134,11 +134,24 @@ public class TrackSelectorUtil {
 
         for (String codecName : codecNames) {
             if (codec.contains(codecName)) {
-                return codecName;
+                return fixShortCodecName(codecName);
             }
         }
 
         return codec;
+    }
+
+    private static String fixShortCodecName(String shortCodecName) {
+        if (shortCodecName == null) {
+            return null;
+        }
+
+        switch (shortCodecName) {
+            case CODEC_SHORT_AV1:
+                return CODEC_SHORT_AV1_FIXED;
+        }
+
+        return shortCodecName;
     }
 
     private static String buildChannels(Format format) {

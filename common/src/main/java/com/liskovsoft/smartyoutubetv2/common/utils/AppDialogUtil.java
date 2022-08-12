@@ -20,10 +20,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.OnSelectSubtitleStyle;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -48,6 +47,8 @@ public class AppDialogUtil {
     private static final int VIDEO_PRESETS_ID = 136;
     private static final int AUDIO_DELAY_ID = 137;
     private static final int SUBTITLE_STYLES_ID = 45;
+    private static final int SUBTITLE_SIZE_ID = 46;
+    private static final int SUBTITLE_POSITION_ID = 47;
     private static final String TAG = AppDialogUtil.class.getSimpleName();
 
     /**
@@ -262,18 +263,14 @@ public class AppDialogUtil {
     }
 
     public static OptionCategory createSubtitleStylesCategory(Context context, PlayerData playerData) {
-        return createSubtitleStylesCategory(context, playerData, style -> {});
-    }
-
-    private static OptionCategory createSubtitleStylesCategory(Context context, PlayerData playerData, OnSelectSubtitleStyle onSelectSubtitleStyle) {
         List<SubtitleStyle> subtitleStyles = playerData.getSubtitleStyles();
 
         String subtitleStyleTitle = context.getString(R.string.subtitle_style);
 
-        return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, subtitleStyleTitle, fromSubtitleStyles(context, playerData, subtitleStyles, onSelectSubtitleStyle));
+        return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, subtitleStyleTitle, fromSubtitleStyles(context, playerData, subtitleStyles));
     }
 
-    private static List<OptionItem> fromSubtitleStyles(Context context, PlayerData playerData, List<SubtitleStyle> subtitleStyles, OnSelectSubtitleStyle onSelectSubtitleStyle) {
+    private static List<OptionItem> fromSubtitleStyles(Context context, PlayerData playerData, List<SubtitleStyle> subtitleStyles) {
         List<OptionItem> styleOptions = new ArrayList<>();
 
         for (SubtitleStyle subtitleStyle : subtitleStyles) {
@@ -281,12 +278,44 @@ public class AppDialogUtil {
                     context.getString(subtitleStyle.nameResId),
                     option -> {
                         playerData.setSubtitleStyle(subtitleStyle);
-                        onSelectSubtitleStyle.onSelectSubtitleStyle(subtitleStyle);
+                        Utils.showPlayerControls(context, false);
                     },
                     subtitleStyle.equals(playerData.getSubtitleStyle())));
         }
 
         return styleOptions;
+    }
+
+    public static OptionCategory createSubtitleSizeCategory(Context context, PlayerData playerData) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int scalePercent : Helpers.range(10, 200, 10)) {
+            float scale = scalePercent / 100f;
+            options.add(UiOptionItem.from(String.format("%sx", scale),
+                    optionItem -> {
+                        playerData.setSubtitleScale(scale);
+                        Utils.showPlayerControls(context, false);
+                    },
+                    Helpers.floatEquals(scale, playerData.getSubtitleScale())));
+        }
+
+        return OptionCategory.from(SUBTITLE_SIZE_ID, OptionCategory.TYPE_RADIO, context.getString(R.string.subtitle_scale), options);
+    }
+
+    public static OptionCategory createSubtitlePositionCategory(Context context, PlayerData playerData) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int positionPercent : Helpers.range(0, 100, 5)) {
+            float position = positionPercent / 100f;
+            options.add(UiOptionItem.from(String.format("%s%%", positionPercent),
+                    optionItem -> {
+                        playerData.setSubtitlePosition(position);
+                        Utils.showPlayerControls(context, false);
+                    },
+                    Helpers.floatEquals(position, playerData.getSubtitlePosition())));
+        }
+
+        return OptionCategory.from(SUBTITLE_POSITION_ID, OptionCategory.TYPE_RADIO, context.getString(R.string.subtitle_position), options);
     }
 
     public static OptionCategory createVideoZoomCategory(Context context, PlayerData playerData) {
@@ -323,7 +352,6 @@ public class AppDialogUtil {
         pairs.put("1:1", PlaybackEngineController.ASPECT_RATIO_1_1);
         pairs.put("4:3", PlaybackEngineController.ASPECT_RATIO_4_3);
         pairs.put("5:4", PlaybackEngineController.ASPECT_RATIO_5_4);
-        pairs.put("16:8.1 (1.9753:1)", PlaybackEngineController.ASPECT_RATIO_16_8_1);
         pairs.put("16:9", PlaybackEngineController.ASPECT_RATIO_16_9);
         pairs.put("16:10", PlaybackEngineController.ASPECT_RATIO_16_10);
         pairs.put("21:9 (2.33:1)", PlaybackEngineController.ASPECT_RATIO_21_9);

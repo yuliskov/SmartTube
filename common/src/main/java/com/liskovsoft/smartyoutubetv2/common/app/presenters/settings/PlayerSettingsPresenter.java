@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+import android.util.Pair;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -47,6 +48,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         AppDialogUtil.appendSeekIntervalDialogItems(getContext(), settingsPresenter, mPlayerData, false);
         appendRememberSpeedCategory(settingsPresenter);
         appendEndingTimeCategory(settingsPresenter);
+        appendPixelRatioCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
         appendTweaksCategory(settingsPresenter);
 
@@ -368,6 +370,28 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 mPlayerData.isEndingTimeEnabled()));
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_show_ending_time), options);
+    }
+
+    private void appendPixelRatioCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        ArrayList<Pair<String, Float>> pairs = new ArrayList<>();
+        pairs.add(new Pair<>("1:1 (16:9 display)", 1.0f));
+        pairs.add(new Pair<>("1.11111:1 (16:10 display)", 1.11111f));
+        pairs.add(new Pair<>("1.3333:1 (4:3 display)", 1.3333f));
+        // There is no display with exact 21:9 proportion???
+        //pairs.add(new Pair<>("0.7619:1 (21:9 display)", 0.7619f));
+        pairs.add(new Pair<>("0.75:1 (64:27 display)", 0.75f));
+        pairs.add(new Pair<>("0.7442:1 (43:18 display)", 0.7442f));
+        pairs.add(new Pair<>("0.7407:1 (12:5 display)", 0.7407f));
+
+        for (Pair<String, Float> pair : pairs) {
+            options.add(UiOptionItem.from(pair.first,
+                    optionItem -> mPlayerTweaksData.setPixelRatio(pair.second),
+                    Helpers.floatEquals(mPlayerTweaksData.getPixelRatio(), pair.second)));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_pixel_ratio), options);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {

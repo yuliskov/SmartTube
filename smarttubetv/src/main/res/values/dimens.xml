@@ -50,7 +50,7 @@
     <dimen name="lb_browse_rows_margin_start">265dp</dimen>
 
     <!-- Make search bar more compact so more buttons could be added after it. -->
-    <dimen name="lb_search_bar_items_width">500dp</dimen>
+    <dimen name="lb_search_bar_items_width">600dp</dimen>
 
     <!-- Increase player time text size -->
     <dimen name="lb_playback_controls_time_text_size">16sp</dimen>

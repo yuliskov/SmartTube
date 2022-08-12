@@ -21,6 +21,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     AspectRatioFrameLayout mVideoSurfaceRoot;
     private int mBackgroundResId;
     private float mAspectRatio;
+    private float mPixelRatio = 1.0f;
     private float mVideoAspectRatio;
 
     @Override
@@ -47,7 +48,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     @Override
     protected void onVideoSizeChanged(int width, int height) {
         mVideoAspectRatio = ((float) width) / height;
-        mVideoSurfaceRoot.setAspectRatio(mAspectRatio == 0 ? mVideoAspectRatio : mAspectRatio);
+        mVideoSurfaceRoot.setAspectRatio(calculateAspectRatio());
     }
 
     /**
@@ -79,7 +80,11 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
 
     public void setAspectRatio(float aspectRatio) {
         mAspectRatio = aspectRatio;
-        mVideoSurfaceRoot.setAspectRatio(mAspectRatio == 0 ? mVideoAspectRatio : mAspectRatio);
+        mVideoSurfaceRoot.setAspectRatio(calculateAspectRatio());
+    }
+
+    public void setPixelRatio(float pixelRatio) {
+        mPixelRatio = pixelRatio;
     }
 
     /**
@@ -97,5 +102,9 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
             backgroundView.setBackgroundResource(resId);
             mBackgroundResId = resId;
         }
+    }
+
+    private float calculateAspectRatio() {
+        return (mAspectRatio == 0 ? mVideoAspectRatio : mAspectRatio) * mPixelRatio;
     }
 }

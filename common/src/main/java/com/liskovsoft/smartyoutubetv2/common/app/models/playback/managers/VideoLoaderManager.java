@@ -139,25 +139,16 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onBuffering() {
-        // Fix long buffering (indicates end of the stream)
-        watchLiveStream();
-    }
-
-    @Override
     public void onPlay() {
         //MessageHelpers.showMessage(getActivity(), "Start playing!");
 
         if (!mIsWasStarted && mLastVideo != null) {
             Analytics.sendVideoStarted(mLastVideo.videoId, mLastVideo.title);
             mIsWasStarted = true;
-        }
 
-        // Seems fine. Buffering is gone.
-        unwatchLiveStream();
+        }
     }
 
-    @Override
     public boolean onPreviousClicked() {
         loadPrevious();
 
@@ -394,7 +385,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     private void disposeActions() {
         RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
-        Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext, mStopLiveStream);
+        Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
     }
 
     private void initErrorActions() {
@@ -495,25 +486,5 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         }
 
         Log.e(TAG, "Undetected repeat mode " + playbackMode);
-    }
-
-    /**
-     * Stop on long buffering (indicates end of the stream)
-     */
-    private void watchLiveStream() {
-        unwatchLiveStream();
-
-        if (getController() != null &&
-                getController().getVideo() != null &&
-                getController().getVideo().isLive) {
-            Utils.postDelayed(mHandler, mStopLiveStream, 2 * 60 * 1_000);
-        }
-    }
-
-    /**
-     * Cancel stream buffering check
-     */
-    private void unwatchLiveStream() {
-        Utils.removeCallbacks(mHandler, mPendingRestartEngine, mStopLiveStream);
     }
 }

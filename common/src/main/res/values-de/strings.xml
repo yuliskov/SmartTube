@@ -439,7 +439,7 @@
     <string name="player_ending_time">Ende: %s</string>
     <string name="badge_new_content">NEU</string>
     <string name="badge_live">LIVE</string>
-    <string name="add_device_view_description">Um ein Gerät zu verbinden, geben Sie diesen TV-Code in der YouTube-App auf Ihrem Smartphone/Tablet unter Einstellungen/Auf Fernseher ansehen/TV-Code ein</string>
+    <string name="add_device_view_description">Um ein Gerät zu verbinden, geben Sie diesen TV-Code in der YouTube-App auf Ihrem Smartphone/Tablet unter Einstellungen/Auf Fernseher ansehen/TV-Code ein.\nHINWEIS: Funktioniert nur mit Gboard-Tastatur.</string>
     <string name="playback_controls_repeat_pause">Pause wiederholen</string>
     <string name="playback_controls_repeat_list">Liste wiederholen</string>
     <string name="action_subscribe_off">Abonnieren aus</string>
@@ -463,4 +463,8 @@
     <string name="speech_recognizer_external_1">Extern 1 (Funktioniert nicht gut, um es zu benutzen, müssen Sie den Zugriff auf das Mikrofon deaktivieren)</string>
     <string name="speech_recognizer_external_2">Extern 2 (Funktioniert nicht gut)</string>
     <string name="real_channel_icon">Echtes Symbol auf der Kanal-Taste anzeigen</string>
+    <string name="subtitle_yellow_semi_transparent">Gelb auf halbtransparentem Hintergrund</string>
+    <string name="subtitle_yellow_black">Gelb auf schwarzem Hintergrund</string>
+    <string name="player_pixel_ratio">Pixel-Verhältnis</string>
+    <string name="color_scheme_dark_grey_monochrome">Dunkelgrau (monochrom)</string>
 </resources>
