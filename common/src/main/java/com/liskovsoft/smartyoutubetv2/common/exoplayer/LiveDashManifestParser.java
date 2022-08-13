@@ -33,7 +33,7 @@ public class LiveDashManifestParser extends DashManifestParser {
     private static final String TAG = LiveDashManifestParser.class.getSimpleName();
     // Usually gaming streams. 12 hours max.
     private static final long MAX_PAST_STREAM_LENGTH_MS = 12 * 60 * 60 * 1_000;
-    // Should be zero for non seekable streams (Record Drum'n'Bass). Higher values may produce 'url not working' error.
+    // Should be zero for non seekable streams (Record Radio). Higher values may produce 'url not working' error.
     private static final long MAX_LIVE_STREAM_LENGTH_MS = 0 * 60 * 60 * 1_000;
     private DashManifest mOldManifest;
     private long mOldSegmentNum;
@@ -216,9 +216,6 @@ public class LiveDashManifestParser extends DashManifestParser {
     }
 
     private static void recreateRepresentation(Representation oldRepresentation, long segmentCount, long minUpdatePeriodMs) {
-        long presentationTimeOffsetUs = oldRepresentation.presentationTimeOffsetUs;
-        Helpers.setField(oldRepresentation, "presentationTimeOffsetUs", presentationTimeOffsetUs - (segmentCount * minUpdatePeriodMs * 1_000));
-
         MultiSegmentRepresentation oldMultiRepresentation = (MultiSegmentRepresentation) oldRepresentation;
 
         SegmentList oldSegmentList = (SegmentList) Helpers.getField(oldMultiRepresentation, "segmentBase");
@@ -239,9 +236,13 @@ public class LiveDashManifestParser extends DashManifestParser {
         long secondSegmentLimit = Helpers.parseLong(secondSegmentQuery.get("lmt"));
         long limitDiff = secondSegmentLimit - firstSegmentLimit;
 
-        if (firstSegmentNum <= 0) {
+        // Skip variable segment limit (huge limit diff values)
+        if (firstSegmentNum <= 0 || limitDiff > 100) {
             return;
         }
+
+        long presentationTimeOffsetUs = oldRepresentation.presentationTimeOffsetUs;
+        Helpers.setField(oldRepresentation, "presentationTimeOffsetUs", presentationTimeOffsetUs - (segmentCount * minUpdatePeriodMs * 1_000));
 
         long currentSegmentNum = firstSegmentNum - 1;
         long currentSegmentLimit = firstSegmentLimit - limitDiff;
