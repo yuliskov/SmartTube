@@ -183,8 +183,9 @@ public class LiveDashManifestParser extends DashManifestParser {
             minUpdatePeriodMs = durationMs / (lastSegmentNum - firstSegmentNum) / 10 * 10; // Round ending digits
         }
 
-        long maxSegmentsCount = (timeShiftBufferDepthMs > 0 ? // active live stream
-                MAX_LIVE_STREAM_LENGTH_MS : MAX_PAST_STREAM_LENGTH_MS) / minUpdatePeriodMs;
+        boolean isPastLiveStream = firstSegmentNum <= 10_000;
+        long maxSegmentsCount = (isPastLiveStream ?
+                MAX_PAST_STREAM_LENGTH_MS : MAX_LIVE_STREAM_LENGTH_MS) / minUpdatePeriodMs;
         long segmentCount = Math.min(firstSegmentNum, maxSegmentsCount - (lastSegmentNum - firstSegmentNum - 1));
 
         if (segmentCount <= 0) {
@@ -196,8 +197,8 @@ public class LiveDashManifestParser extends DashManifestParser {
             return; // url won't work on small (2_000Ms) segments
         }
 
-        // Skip past streams that are truncated
-        if (durationMs > 0 && firstSegmentNum > segmentCount) {
+        // Skip past streams that are truncated (truncated streams have a problems)
+        if (isPastLiveStream && firstSegmentNum > segmentCount) {
             return;
         }
 
