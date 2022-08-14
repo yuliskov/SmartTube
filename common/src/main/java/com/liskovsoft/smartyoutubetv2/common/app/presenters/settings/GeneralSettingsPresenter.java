@@ -13,7 +13,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
-import com.liskovsoft.smartyoutubetv2.common.openvpn.OpenVPNDialog;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -380,6 +379,14 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendInternetCensorship(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        appendProxyManager(settingsPresenter, options);
+
+        //appendOpenVPNManager(settingsPresenter, options);
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.internet_censorship), options);
+    }
+
+    private void appendProxyManager(AppDialogPresenter settingsPresenter, List<OptionItem> options) {
         ProxyManager proxyManager = new ProxyManager(getContext());
 
         if (proxyManager.isProxySupported()) {
@@ -393,25 +400,25 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     },
                     mGeneralData.isProxyEnabled()));
         }
-
-        OpenVPNDialog openVPNDialog = new OpenVPNDialog(getContext());
-
-        if (getContext() instanceof MotherActivity) {
-            ((MotherActivity) getContext()).addOnPermissions(openVPNDialog);
-        }
-
-        if (openVPNDialog.isOpenVPNSupported()) {
-            options.add(UiOptionItem.from(getContext().getString(R.string.enable_openvpn),
-                    option -> {
-                        mGeneralData.enableVPN(option.isSelected());
-                        openVPNDialog.enable(option.isSelected());
-                        if (option.isSelected()) {
-                            settingsPresenter.closeDialog();
-                        }
-                    },
-                    mGeneralData.isVPNEnabled()));
-        }
-
-        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.internet_censorship), options);
     }
+
+    //private void appendOpenVPNManager(AppDialogPresenter settingsPresenter, List<OptionItem> options) {
+    //    OpenVPNDialog openVPNDialog = new OpenVPNDialog(getContext());
+    //
+    //    if (getContext() instanceof MotherActivity) {
+    //        ((MotherActivity) getContext()).addOnPermissions(openVPNDialog);
+    //    }
+    //
+    //    if (openVPNDialog.isOpenVPNSupported()) {
+    //        options.add(UiOptionItem.from(getContext().getString(R.string.enable_openvpn),
+    //                option -> {
+    //                    mGeneralData.enableVPN(option.isSelected());
+    //                    openVPNDialog.enable(option.isSelected());
+    //                    if (option.isSelected()) {
+    //                        settingsPresenter.closeDialog();
+    //                    }
+    //                },
+    //                mGeneralData.isVPNEnabled()));
+    //    }
+    //}
 }

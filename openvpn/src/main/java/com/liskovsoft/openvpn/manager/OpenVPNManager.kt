@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.openvpn
+package com.liskovsoft.openvpn.manager
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,8 +9,8 @@ import android.os.Build
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import com.liskovsoft.openvpn.OnVPNStatusChangeListener
-import com.liskovsoft.openvpn.VPNService
+import com.liskovsoft.openvpn.service.OnVPNStatusChangeListener
+import com.liskovsoft.openvpn.service.VPNService
 import com.liskovsoft.sharedutils.helpers.FileHelpers
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs
 import java.io.File

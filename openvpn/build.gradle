@@ -26,6 +26,20 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+
+    // gradle 4.6 migration: disable dimensions mechanism
+    // more: https://proandroiddev.com/advanced-android-flavors-part-4-a-new-version-fc2ad80c01bb
+    flavorDimensions "default"
+
+    productFlavors {
+        stbeta {}
+        ststable {}
+        storig {}
+        strtarmenia {}
+        stbolshoetv {}
+        stredboxtv {}
+        stsibsetru {}
+    }
 }
 
 dependencies {
@@ -34,4 +48,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:' + kotlinCoreVersion
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + kotlinCoreVersion
+    implementation 'androidx.appcompat:appcompat:' + appCompatXLibraryVersion
+    implementation project(':sharedutils')
+    implementation project(':common')
 }

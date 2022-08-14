@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.openvpn.ConstsKt;
 
 public class AppPrefs extends SharedPreferencesBase {
     private static final String TAG = AppPrefs.class.getSimpleName();
@@ -18,6 +17,8 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String WEB_PROXY_ENABLED = "web_proxy_enabled";
     private static final String OPENVPN_CONFIG_URI = "openvpn_config_uri";
     private static final String OPENVPN_ENABLED = "openvpn_enabled";
+    private static final String ANTIZAPRET_PROFILE = "https://antizapret.prostovpn.org/antizapret-tcp.ovpn";
+    private static final String ZABORONA_PROFILE = "https://zaborona.help/openvpn-client-config/zaborona-help_maxroutes.ovpn";
     private String mBootResolution;
 
     private AppPrefs(Context context) {
@@ -89,7 +90,7 @@ public class AppPrefs extends SharedPreferencesBase {
     }
 
     public String getOpenVPNConfigUri() {
-        return getString(OPENVPN_CONFIG_URI, ConstsKt.AntiZapretProfile);
+        return getString(OPENVPN_CONFIG_URI, ANTIZAPRET_PROFILE);
     }
 
     public void setOpenVPNConfigUri(String uri) {
