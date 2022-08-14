@@ -31,8 +31,8 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class LiveDashManifestParser extends DashManifestParser {
     private static final String TAG = LiveDashManifestParser.class.getSimpleName();
-    // Usually gaming streams. 12 hours max.
-    private static final long MAX_PAST_STREAM_LENGTH_MS = 12 * 60 * 60 * 1_000;
+    // Usually gaming streams. 10 hours max.
+    private static final long MAX_PAST_STREAM_LENGTH_MS = 10 * 60 * 60 * 1_000;
     // Should be zero for non seekable streams (Record Radio). Higher values may produce 'url not working' error.
     private static final long MAX_LIVE_STREAM_LENGTH_MS = 0 * 60 * 60 * 1_000;
     private DashManifest mOldManifest;
@@ -180,7 +180,7 @@ public class LiveDashManifestParser extends DashManifestParser {
         long lastSegmentNum = getLastSegmentNum(manifest);
         if (minUpdatePeriodMs <= 0) { // past live stream
             // May has different length 5_000 (4hrs) or 2_000 (2hrs)
-            minUpdatePeriodMs = durationMs / (lastSegmentNum - firstSegmentNum);
+            minUpdatePeriodMs = durationMs / (lastSegmentNum - firstSegmentNum) / 10 * 10; // Round ending digits
         }
 
         long maxSegmentsCount = (timeShiftBufferDepthMs > 0 ? // active live stream
@@ -194,6 +194,11 @@ public class LiveDashManifestParser extends DashManifestParser {
         // TODO: remove fix below
         if (minUpdatePeriodMs <= 2_000) {
             return; // url won't work on small (2_000Ms) segments
+        }
+
+        // Skip past streams that are truncated
+        if (durationMs > 0 && firstSegmentNum > segmentCount) {
+            return;
         }
 
         if (timeShiftBufferDepthMs > 0) { // active live stream
