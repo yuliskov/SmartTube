@@ -174,7 +174,7 @@ public class LiveDashManifestParser extends DashManifestParser {
         }
 
         long minUpdatePeriodMs = (long) Helpers.getField(manifest, "minUpdatePeriodMs");
-        long timeShiftBufferDepthMs = (long) Helpers.getField(manifest, "timeShiftBufferDepthMs");
+        long timeShiftBufferDepthMs = (long) Helpers.getField(manifest, "timeShiftBufferDepthMs"); // active live stream
         long durationMs = (long) Helpers.getField(manifest, "durationMs"); // past live stream
         long firstSegmentNum = getFirstSegmentNum(manifest);
         long lastSegmentNum = getLastSegmentNum(manifest);
@@ -183,7 +183,7 @@ public class LiveDashManifestParser extends DashManifestParser {
             minUpdatePeriodMs = durationMs / (lastSegmentNum - firstSegmentNum);
         }
 
-        long maxSegmentsCount = (firstSegmentNum > 10_000 ? // Long live stream (e.g. news stream)
+        long maxSegmentsCount = (timeShiftBufferDepthMs > 0 ? // active live stream
                 MAX_LIVE_STREAM_LENGTH_MS : MAX_PAST_STREAM_LENGTH_MS) / minUpdatePeriodMs;
         long segmentCount = Math.min(firstSegmentNum, maxSegmentsCount - (lastSegmentNum - firstSegmentNum - 1));
 
