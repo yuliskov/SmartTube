@@ -33,8 +33,9 @@ public class LiveDashManifestParser extends DashManifestParser {
     private static final String TAG = LiveDashManifestParser.class.getSimpleName();
     // Usually gaming streams. 10 hours max.
     private static final long MAX_PAST_STREAM_LENGTH_MS = 10 * 60 * 60 * 1_000;
-    // Should be zero for non seekable streams (Record Radio). Higher values may produce 'url not working' error.
-    private static final long MAX_LIVE_STREAM_LENGTH_MS = 0 * 60 * 60 * 1_000;
+    // Should be close to zero but not zero (small buffer size fix on Radio Record).
+    // Higher values may produce 'url not working' error.
+    private static final long MAX_LIVE_STREAM_LENGTH_MS = 30 * 60 * 1_000;
     private DashManifest mOldManifest;
     private long mOldSegmentNum;
 
@@ -183,7 +184,8 @@ public class LiveDashManifestParser extends DashManifestParser {
             minUpdatePeriodMs = durationMs / (lastSegmentNum - firstSegmentNum) / 10 * 10; // Round ending digits
         }
 
-        boolean isPastLiveStream = firstSegmentNum <= 10_000;
+        //boolean isPastLiveStream = firstSegmentNum <= 10_000;
+        boolean isPastLiveStream = durationMs > 0;
         long maxSegmentsCount = (isPastLiveStream ?
                 MAX_PAST_STREAM_LENGTH_MS : MAX_LIVE_STREAM_LENGTH_MS) / minUpdatePeriodMs;
         long segmentCount = Math.min(firstSegmentNum, maxSegmentsCount - (lastSegmentNum - firstSegmentNum - 1));
