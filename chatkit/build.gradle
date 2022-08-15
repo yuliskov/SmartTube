@@ -49,6 +49,6 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:' + appCompatXLibraryVersion
     implementation 'com.google.android.material:material:1.6.1'
-    implementation "com.google.android:flexbox:1.0.0"
+    implementation "com.google.android:flexbox:2.0.1"
     implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXLibraryVersion
 }
