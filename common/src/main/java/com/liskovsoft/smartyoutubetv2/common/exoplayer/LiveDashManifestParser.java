@@ -35,7 +35,7 @@ public class LiveDashManifestParser extends DashManifestParser {
     private static final long MAX_PAST_STREAM_LENGTH_MS = 10 * 60 * 60 * 1_000;
     // Should be close to zero but not zero (buffer size fix on Radio Record).
     // Higher values may produce 'url not working' error.
-    private static final long MAX_LIVE_STREAM_LENGTH_MS = 5 * 60 * 1_000;
+    private static final long MAX_LIVE_STREAM_LENGTH_MS = 1 * 60 * 1_000;
     private DashManifest mOldManifest;
     private long mOldSegmentNum;
 

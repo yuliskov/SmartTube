@@ -21,7 +21,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
     /**
      * NOTE: Don't remove duplicates! They contain different chars.
      */
-    private static final String[] BLACK_LIST = {". XYZ", ". ХYZ", "⠄XYZ", "⠄ХYZ", "Ricardo Merlino"};
+    private static final String[] BLACK_LIST = {". XYZ", ". ХYZ", "⠄XYZ", "⠄ХYZ", "Ricardo Merlino", "⠄соm", ".com", ".соm", ". com"};
     private LiveChatService mChatService;
     private PlayerData mPlayerData;
     private Disposable mChatAction;
