@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
@@ -24,6 +26,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     private WeakReference<Context> mApplicationContext = new WeakReference<>(null);
     private Runnable mOnDone;
     private static boolean sRunOnce;
+    private long mUpdateCheckMs;
 
     public BasePresenter(Context context) {
         setContext(context);
@@ -84,7 +87,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void onViewInitialized() {
-        // NOP
+        showBootDialogs();
     }
 
     @Override
@@ -100,6 +103,8 @@ public abstract class BasePresenter<T> implements Presenter<T> {
             // NOTE: don't place cleanup in the onViewResumed!!! This could cause errors when view is resumed.
             syncItem(Playlist.instance().getChangedItems());
         }
+
+        showBootDialogs();
     }
 
     @Override
@@ -183,5 +188,17 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     protected static void enableSync() {
         sSync = true;
         Playlist.instance().onNewSession();
+    }
+
+    private void showBootDialogs() {
+        long currentTimeMs = System.currentTimeMillis();
+
+        if (this instanceof BrowsePresenter && currentTimeMs - mUpdateCheckMs > 60 * 60 * 1_000) {
+            BootDialogPresenter updatePresenter = BootDialogPresenter.instance(getContext());
+            updatePresenter.start();
+            updatePresenter.unhold();
+            Utils.updateRemoteControlService(getContext());
+            mUpdateCheckMs = currentTimeMs;
+        }
     }
 }
