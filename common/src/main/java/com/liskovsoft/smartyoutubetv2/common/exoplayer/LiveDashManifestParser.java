@@ -195,7 +195,7 @@ public class LiveDashManifestParser extends DashManifestParser {
             return;
         }
 
-        // TODO: remove fix below
+        // 2_000 Ms streams has variable limit values in url (that is unpredictable)
         if (minUpdatePeriodMs <= 2_000) {
             return; // url won't work on small (2_000Ms) segments
         }
