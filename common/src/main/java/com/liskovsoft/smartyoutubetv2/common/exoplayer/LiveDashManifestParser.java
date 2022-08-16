@@ -33,9 +33,9 @@ public class LiveDashManifestParser extends DashManifestParser {
     private static final String TAG = LiveDashManifestParser.class.getSimpleName();
     // Usually gaming streams. 10 hours max.
     private static final long MAX_PAST_STREAM_LENGTH_MS = 10 * 60 * 60 * 1_000;
-    // Should be close to zero but not zero (buffer size fix on Radio Record).
+    // Should be close to zero but not zero to increase buffer size to 30 sec (Radio Record).
     // Higher values may produce 'url not working' error.
-    private static final long MAX_LIVE_STREAM_LENGTH_MS = 1 * 60 * 1_000;
+    private static final long MAX_LIVE_STREAM_LENGTH_MS = 30 * 1_000;
     private DashManifest mOldManifest;
     private long mOldSegmentNum;
 
