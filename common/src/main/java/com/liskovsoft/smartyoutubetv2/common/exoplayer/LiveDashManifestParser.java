@@ -31,11 +31,12 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class LiveDashManifestParser extends DashManifestParser {
     private static final String TAG = LiveDashManifestParser.class.getSimpleName();
-    // Usually gaming streams. 10 hours max.
-    private static final long MAX_PAST_STREAM_LENGTH_MS = 10 * 60 * 60 * 1_000;
     // Should be close to zero but not zero to increase buffer size to 30 sec (Radio Record).
     // Higher values may produce 'url not working' error.
     private static final long MAX_LIVE_STREAM_LENGTH_MS = 30 * 1_000;
+    // Usually gaming streams. 10 hrs max.
+    private static final long MAX_PAST_STREAM_LENGTH_MS = 10 * 60 * 60 * 1_000;
+    private static final long MAX_NEW_STREAM_LENGTH_MS = 8 * 60 * 60 * 1_000;
     private DashManifest mOldManifest;
     private long mOldSegmentNum;
 
@@ -184,10 +185,10 @@ public class LiveDashManifestParser extends DashManifestParser {
             minUpdatePeriodMs = durationMs / (lastSegmentNum - firstSegmentNum) / 10 * 10; // Round ending digits
         }
 
-        //boolean isPastLiveStream = firstSegmentNum <= 10_000;
-        boolean isPastLiveStream = durationMs > 0;
-        long maxSegmentsCount = (isPastLiveStream ?
-                MAX_PAST_STREAM_LENGTH_MS : MAX_LIVE_STREAM_LENGTH_MS) / minUpdatePeriodMs;
+        boolean isNewStream = firstSegmentNum < 10_000;
+        boolean isPastStream = durationMs > 0;
+        long maxSegmentsCount = (isPastStream ? MAX_PAST_STREAM_LENGTH_MS :
+                                    isNewStream ? MAX_NEW_STREAM_LENGTH_MS : MAX_LIVE_STREAM_LENGTH_MS) / minUpdatePeriodMs;
         long segmentCount = Math.min(firstSegmentNum, maxSegmentsCount - (lastSegmentNum - firstSegmentNum - 1));
 
         if (segmentCount <= 0) {
@@ -200,7 +201,7 @@ public class LiveDashManifestParser extends DashManifestParser {
         }
 
         // Skip past streams that are truncated (truncated streams have a problems)
-        if (isPastLiveStream && firstSegmentNum > segmentCount) {
+        if (isNewStream && firstSegmentNum > segmentCount) {
             return;
         }
 
