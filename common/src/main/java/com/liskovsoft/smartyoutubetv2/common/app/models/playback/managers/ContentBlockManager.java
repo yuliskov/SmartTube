@@ -187,11 +187,13 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
 
+        long positionMs = getController().getPositionMs();
+
         SponsorSegment foundSegment = null;
         long skipPosMs = 0;
 
         for (SponsorSegment segment : mSponsorSegments) {
-            if (isPositionAtSegmentStart(getController().getPositionMs(), segment)) {
+            if (isPositionInsideSegment(positionMs, segment)) {
                 foundSegment = segment;
                 Integer resId = mContentBlockData.getLocalizedRes(segment.getCategory());
                 String localizedCategory = resId != null ? getActivity().getString(resId) : segment.getCategory();
@@ -201,7 +203,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 skipPosMs = segment.getEndMs();
 
                 if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode()) {
-                    setPositionMs(skipPosMs);
+                    simpleSkip(skipPosMs);
                 } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
                     messageSkip(skipPosMs, localizedCategory);
                 } else if (type == ContentBlockData.ACTION_SHOW_DIALOG) {
@@ -220,25 +222,35 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         mLastSkipPosMs = skipPosMs;
     }
 
-    private boolean isPositionAtSegmentStart(long positionMs, SponsorSegment segment) {
+    private boolean isPositionInsideSegment(long positionMs, SponsorSegment segment) {
+
+
         // Note. Getting into account playback speed. Also check that the zone is long enough.
         //float checkEndMs = segment.getStartMs() + SEGMENT_CHECK_LENGTH_MS * getController().getSpeed();
         //return positionMs >= segment.getStartMs() && positionMs <= checkEndMs && checkEndMs <= segment.getEndMs();
         return positionMs >= segment.getStartMs() && positionMs <= segment.getEndMs();
     }
 
-    private boolean isPositionInsideSegment(long positionMs, SponsorSegment segment) {
-        return positionMs >= segment.getStartMs() && positionMs < segment.getEndMs();
+    private void simpleSkip(long skipPosMs) {
+        if (mLastSkipPosMs == skipPosMs) {
+            return;
+        }
+
+        setPositionMs(skipPosMs);
     }
 
-    private void messageSkip(long skipPositionMs, String category) {
+    private void messageSkip(long skipPosMs, String category) {
+        if (mLastSkipPosMs == skipPosMs) {
+            return;
+        }
+
         MessageHelpers.showMessage(getActivity(),
                 String.format("%s: %s", getActivity().getString(R.string.content_block_provider), getActivity().getString(R.string.msg_skipping_segment, category)));
-        setPositionMs(skipPositionMs);
+        setPositionMs(skipPosMs);
     }
 
-    private void confirmSkip(long skipPositionMs, String category) {
-        if (mLastSkipPosMs == skipPositionMs) {
+    private void confirmSkip(long skipPosMs, String category) {
+        if (mLastSkipPosMs == skipPosMs) {
             return;
         }
 
@@ -249,7 +261,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 getActivity().getString(R.string.confirm_segment_skip, category),
                 option -> {
                     settingsPresenter.closeDialog();
-                    setPositionMs(skipPositionMs);
+                    setPositionMs(skipPosMs);
                 }
         );
 
@@ -260,7 +272,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
         settingsPresenter.appendSingleButton(acceptOption);
         settingsPresenter.appendSingleButton(cancelOption);
-        settingsPresenter.setCloseTimeoutMs(skipPositionMs - getController().getPositionMs());
+        settingsPresenter.setCloseTimeoutMs(skipPosMs - getController().getPositionMs());
 
         settingsPresenter.enableTransparent(true);
         settingsPresenter.showDialog(getActivity().getString(R.string.content_block_provider));
