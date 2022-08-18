@@ -201,7 +201,7 @@ public class LiveDashManifestParser extends DashManifestParser {
         }
 
         // Skip past streams that are truncated (truncated streams have a problems)
-        if (isNewStream && firstSegmentNum > segmentCount) {
+        if ((isNewStream || isPastStream) && firstSegmentNum > segmentCount) {
             return;
         }
 

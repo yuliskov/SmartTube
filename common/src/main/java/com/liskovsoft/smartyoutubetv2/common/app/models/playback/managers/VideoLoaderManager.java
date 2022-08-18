@@ -246,19 +246,18 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
-        boolean isLive = formatInfo.isLive() || formatInfo.isLiveContent();
         String bgImageUrl = null;
 
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
             bgImageUrl = mLastVideo.getBackgroundUrl();
-        } else if (formatInfo.containsDashUrl() && isLive && !PlayerTweaksData.instance(getActivity()).isLiveStreamFixEnabled()) {
+        } else if (formatInfo.containsDashUrl() && !forceLegacyFormat(formatInfo)) {
             Log.d(TAG, "Found live video (current or past live stream) in dash format. Loading...");
             getController().openDashUrl(formatInfo.getDashManifestUrl());
-        } else if (formatInfo.containsHlsUrl() && isLive) {
+        } else if (formatInfo.containsHlsUrl()) {
             Log.d(TAG, "Found live video (current or past live stream) in hls format. Loading...");
             getController().openHlsUrl(formatInfo.getHlsManifestUrl());
-        } else if (formatInfo.containsDashVideoInfo() && !mPlayerData.isLegacyCodecsForced()) {
+        } else if (formatInfo.containsDashVideoInfo() && !forceLegacyFormat(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
@@ -432,5 +431,19 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         }
 
         Log.e(TAG, "Undetected repeat mode " + playbackMode);
+    }
+
+    private boolean forceLegacyFormat(MediaItemFormatInfo formatInfo) {
+        boolean isLive = formatInfo.isLive() || formatInfo.isLiveContent();
+
+        if (isLive && PlayerTweaksData.instance(getActivity()).isLiveStreamFixEnabled() && formatInfo.containsHlsUrl()) {
+            return true;
+        }
+
+        if (!isLive && mPlayerData.isLegacyCodecsForced()) {
+            return true;
+        }
+
+        return false;
     }
 }
