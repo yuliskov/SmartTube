@@ -42,7 +42,7 @@
     <string name="section_is_empty">Jejda! Tady nic není.</string>
     <string name="dialog_add_to_playlist">Přidat do playlistu</string>
     <string name="msg_signed_users_only">Pouze přihlášení uživatelé</string>
-    <string name="msg_cant_load_content">Jejda. Nelze načíst obsah.\n1) Zkontrolujte čas a datum zařízení.\n2) Zkontrolujte připojení k síti.\n3) Zkuste se přihlásit do svého účtu.\n4) Možná tu nic není.</string>   
+    <string name="msg_cant_load_content">Jejda. Nelze načíst obsah.\n1) Zkontrolujte čas a datum zařízení.\n2) Zkontrolujte připojení k síti.\n3) Zkontrolujte nastavení proxy.\n4) Zkuste se přihlásit do svého účtu.\n5) Možná tu nic není.</string>   
     <string name="title_video_presets">Video předvolby</string>
     <string name="settings_accounts">Účty</string>
     <string name="settings_left_panel">Upravit kategorie</string>
@@ -467,4 +467,5 @@
     <string name="subtitle_yellow_black">Žlutá na černém pozadí</string>
     <string name="player_pixel_ratio">Poměr pixelů</string>
     <string name="color_scheme_dark_grey_monochrome">Tmavě šedá (černobílá)</string>
+    <string name="disable_mic_permission">Zakažte aplikaci přístup k mikrofonu, aby tento rozpoznávač fungoval správně.</string>
 </resources>
