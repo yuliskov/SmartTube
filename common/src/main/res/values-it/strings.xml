@@ -467,5 +467,5 @@
     <string name="subtitle_yellow_black">Giallo su sfondo nero</string>
     <string name="player_pixel_ratio">Rapporto pixel</string>
     <string name="color_scheme_dark_grey_monochrome">Grigio scuro (monocromatico)</string>
-    <string name="disable_mic_permission">Per favore, disabilita l'accesso al microfono all'app affinché il riconoscimento funzioni correttamente.</string>
+    <string name="disable_mic_permission">Per favore, disabilita l\'accesso al microfono all\'app affinché il riconoscimento funzioni correttamente.</string>
 </resources>
