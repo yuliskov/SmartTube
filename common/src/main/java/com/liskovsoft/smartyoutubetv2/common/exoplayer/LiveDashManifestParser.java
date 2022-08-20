@@ -35,7 +35,7 @@ public class LiveDashManifestParser extends DashManifestParser {
     // Higher values may produce 'url not working' error.
     private static final long MAX_LIVE_STREAM_LENGTH_MS = 30 * 1_000;
     // Usually gaming streams. 10 hrs max.
-    private static final long MAX_PAST_STREAM_LENGTH_MS = 10 * 60 * 60 * 1_000;
+    private static final long MAX_PAST_STREAM_LENGTH_MS = 12 * 60 * 60 * 1_000;
     private static final long MAX_NEW_STREAM_LENGTH_MS = 8 * 60 * 60 * 1_000;
     private DashManifest mOldManifest;
     private long mOldSegmentNum;
@@ -182,7 +182,7 @@ public class LiveDashManifestParser extends DashManifestParser {
         long currentSegmentCount = getSegmentCount(manifest);
         if (minUpdatePeriodMs <= 0) { // past live stream
             // May has different length 5_000 (4hrs) or 2_000 (2hrs)
-            minUpdatePeriodMs = durationMs / currentSegmentCount / 10 * 10; // Round ending digits
+            minUpdatePeriodMs = durationMs / (currentSegmentCount - 1) / 10 * 10; // Round ending digits
         }
 
         boolean isNewStream = firstSegmentNum < 10_000 && currentSegmentCount > 3;
