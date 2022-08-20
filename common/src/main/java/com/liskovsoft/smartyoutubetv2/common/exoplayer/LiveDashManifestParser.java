@@ -36,7 +36,7 @@ public class LiveDashManifestParser extends DashManifestParser {
     private static final long MAX_LIVE_STREAM_LENGTH_MS = 30 * 1_000;
     // Usually gaming streams. 10 hrs max.
     private static final long MAX_PAST_STREAM_LENGTH_MS = 12 * 60 * 60 * 1_000;
-    private static final long MAX_NEW_STREAM_LENGTH_MS = 30 * 1_000;
+    private static final long MAX_NEW_STREAM_LENGTH_MS = 8 * 60 * 60 * 1_000;
     private DashManifest mOldManifest;
     private long mOldSegmentNum;
 
@@ -179,10 +179,15 @@ public class LiveDashManifestParser extends DashManifestParser {
         long timeShiftBufferDepthMs = (long) Helpers.getField(manifest, "timeShiftBufferDepthMs"); // active live stream
         long durationMs = (long) Helpers.getField(manifest, "durationMs"); // past live stream
         long firstSegmentNum = getFirstSegmentNum(manifest);
+        long firstSegmentDurationMs = getFirstSegmentDurationMs(manifest);
         long currentSegmentCount = getSegmentCount(manifest);
         if (minUpdatePeriodMs <= 0) { // past live stream
             // May has different length 5_000 (4hrs) or 2_000 (2hrs)
             minUpdatePeriodMs = durationMs / (currentSegmentCount - 1) / 10 * 10; // Round ending digits
+        }
+
+        if (minUpdatePeriodMs != firstSegmentDurationMs) { // variable segment timeline (unpredictable)
+            return;
         }
 
         boolean isNewStream = firstSegmentNum < 10_000 && currentSegmentCount > 3;
@@ -301,6 +306,11 @@ public class LiveDashManifestParser extends DashManifestParser {
 
     private static long getSegmentCount(DashManifest manifest) {
         return manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex().getSegmentCount(C.TIME_UNSET);
+    }
+
+    private static long getFirstSegmentDurationMs(DashManifest manifest) {
+        DashSegmentIndex dashSegmentIndex = manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex();
+        return dashSegmentIndex.getDurationUs(getFirstSegmentNum(manifest), C.TIME_UNSET) / 1_000;
     }
 
     private static class MultiSegmentRepresentationWrapper extends MultiSegmentRepresentation {
