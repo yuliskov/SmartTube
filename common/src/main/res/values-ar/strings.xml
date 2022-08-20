@@ -461,4 +461,9 @@
   <string name="speech_recognizer_external_2">خارجي 2 (لا يعمل بشكل جيد)</string>
   <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
   <string name="real_channel_icon">إظهار شعار القناة في المُشَغِّل </string>
+  <string name="subtitle_yellow_semi_transparent">اصفر على خلفية شبه شفافة</string>
+  <string name="subtitle_yellow_black">اصفر على خلفية سوداء</string>
+  <string name="player_pixel_ratio">معدل البكسلات</string>
+  <string name="color_scheme_dark_grey_monochrome">رمادي مظلم(معكوس)</string>
+  <string name="disable_mic_permission">الرجاء,تعطيل الوصول الى المايكروفون لهاذا التطبيق لكي يعمل هذا الباحث بنجاح</string>
 </resources>
