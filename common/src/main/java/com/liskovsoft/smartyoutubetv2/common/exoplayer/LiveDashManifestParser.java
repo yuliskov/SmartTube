@@ -36,7 +36,7 @@ public class LiveDashManifestParser extends DashManifestParser {
     private static final long MAX_LIVE_STREAM_LENGTH_MS = 30 * 1_000;
     // Usually gaming streams. 10 hrs max.
     private static final long MAX_PAST_STREAM_LENGTH_MS = 12 * 60 * 60 * 1_000;
-    private static final long MAX_NEW_STREAM_LENGTH_MS = 8 * 60 * 60 * 1_000;
+    private static final long MAX_NEW_STREAM_LENGTH_MS = 30 * 1_000;
     private DashManifest mOldManifest;
     private long mOldSegmentNum;
 
