@@ -176,11 +176,11 @@
     <string name="content_block_confirm_skip">Potwierdź przy pominięciu</string>
     <string name="content_block_categories">Pomiń segmenty</string>
     <string name="content_block_sponsor">Sponsor</string>
-    <string name="content_block_intro">Przerywnik/animacja wprowadzająca</string>
-    <string name="content_block_outro">Napisy/karty końcowe</string>
+    <string name="content_block_intro">Przerwa/Animowane intro</string>
+    <string name="content_block_outro">Ekran końcowy/Napisy</string>
     <string name="content_block_interaction">Przypomnienie o interakcji (subskrybuj)</string>
-    <string name="content_block_self_promo">Bezpłatna/własna promocja</string>
-    <string name="content_block_music_off_topic">Niemuzyczna sekcja klipu</string>
+    <string name="content_block_self_promo">Nieopłacona/Własna promocja</string>
+    <string name="content_block_music_off_topic">Muzyka: Sekcja niemuzyczna</string>
     <string name="confirm_segment_skip">Pomiń segment \"%s\"?</string>
     <string name="cancel_segment_skip">Anuluj pomijanie segmentu</string>
     <string name="msg_skipping_segment">Pomijanie segmentu\"%s\"…</string>
@@ -260,7 +260,7 @@
     <string name="added_to">Dodano do %s</string>
     <string name="removed_from">Usunięto z %s</string>
     <string name="video_preset_adaptive">Adaptacyjny</string>
-    <string name="content_block_preview_recap">Podgląd lub podsumowanie wideo</string>
+    <string name="content_block_preview_recap">Zapowiedź/Podsumowanie</string>
     <string name="content_block_highlight">Wyróżnione</string>
     <string name="removed_from_history">Wideo zostało usunięte z historii</string>
     <string name="remove_from_history">Usunąć z historii</string>
@@ -308,7 +308,7 @@
     <string name="content_block_action_only_skip">Tylko pomiń</string>
     <string name="content_block_action_toast">Pomiń z powiadomieniem</string>
     <string name="content_block_action_dialog">Pokaż okno dialogowe potwierdzenia</string>
-    <string name="content_block_filler">Nie na temat (wypełniacz)</string>
+    <string name="content_block_filler">Wypełniacz nietematyczny/żart</string>
     <string name="keyboard_auto_show">Pokaż klawiaturę automatycznie</string>
     <string name="cancel_dialog">Anuluj</string>
     <string name="msg_player_error_source2">Źródło wideo nie działa lub jest w nieodpowiednim czasie</string>
