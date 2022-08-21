@@ -75,10 +75,6 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         mSearchText = null;
         mSearchOptions = 0;
-
-        if (mSearchData.isBackgroundPlaybackEnabled() && PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
-            ViewManager.instance(getContext()).startView(SplashView.class);
-        }
     }
 
     @Override

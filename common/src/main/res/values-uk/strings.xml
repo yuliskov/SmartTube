@@ -312,7 +312,7 @@
     <string name="cancel_dialog">Скасувати</string>
     <string name="msg_player_error_source2">Джерело відео не працює або невірний час</string>
     <string name="hide_upcoming">Приховувати анонси з Підписок</string>
-    <string name="search_background_playback">Переходити у режим Картинка в картинці, якщо пошук запущено з плеєру</string>
+    <string name="search_background_playback">Переходити у режим Картинка в картинці при пошуку/відкритті каналу</string>
     <string name="trending_row_name">Популярне</string>
     <string name="player_seek_type">Поведінка перемотування</string>
     <string name="player_seek_regular">Звичайна</string>

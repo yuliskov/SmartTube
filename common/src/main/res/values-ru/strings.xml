@@ -312,7 +312,7 @@
     <string name="cancel_dialog">Отменить</string>
     <string name="msg_player_error_source2">Источник видео не работает или неправильное время</string>
     <string name="hide_upcoming">Скрывать анонсы из Подписок</string>
-    <string name="search_background_playback">Переходить в режим Картинка в картинке, если поиск запущен из плеера</string>
+    <string name="search_background_playback">Переходить в режим Картинка в картинке при поиске/открытии канала</string>
     <string name="trending_row_name">В тренде</string>
     <string name="player_seek_type">Поведение перемотки</string>
     <string name="player_seek_regular">Обычное</string>
