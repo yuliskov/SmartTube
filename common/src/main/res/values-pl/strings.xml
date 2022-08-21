@@ -116,6 +116,7 @@
     <string name="subscribed_to_channel">Subskrybujesz kanał</string>
     <string name="unsubscribed_from_channel">Odsubskrybuj kanał</string>
     <string name="subtitle_yellow_transparent">Żółte na przezroczystym tle</string>
+    <string name="subtitle_white_transparent">Białe na przezroczystym tle</string>
     <string name="subtitle_white_black">Białe na czarnym tle</string>
     <string name="player_seek_preview">Podgląd podczas przewijania</string>
     <string name="color_scheme_dark_grey_oled">Ciemnoszary (OLED)</string>
@@ -233,6 +234,8 @@
     <string name="removed_from_playback_queue">Usunięto z kolejki odtwarzania</string>
     <string name="added_to_playback_queue">Dodano do kolejki odtwarzania</string>
     <string name="add_remove_from_playback_queue">Dodaj/usuń z kolejki odtwarzania</string>
+    <string name="add_to_playback_queue">Dodaj do kolejki odtwrzania</string>
+    <string name="remove_from_playback_queue">Usuń z kolejki odttwarzania</string>
     <string name="proxy_enabled">Proxy włączone</string>
     <string name="proxy_disabled">Proxy wyłączone</string>
     <string name="uploads_row_name">Przesyłanie</string>
@@ -386,6 +389,7 @@
     <string name="pressing_home_back">naciskając HOME lub WSTECZ</string>
 	<string name="player_number_key_seek">Przewijaj za pomocą klawiszy numerycznych</string>
 	<string name="save_remove_playlist">Zapisz/usuń tę listę odtwarzania z sekcji Listy odtwarzania</string>
+    <string name="remove_playlist">Usuń listę odtwarzania z sekcji List odtwarzania permanentnie</string>
     <string name="removed_from_playlists">Usunięto z sekcji Listy odtwarzania</string>
     <string name="saved_to_playlists">Zapisano w sekcji Listy odtwarzania</string>
     <string name="create_playlist">Stwórz listę odtwarzania</string>
@@ -459,4 +463,9 @@
     <string name="speech_recognizer_external_1">Zewnętrzne 1 (niestabilny, by działał musisz wyłączyć dostęp do mikrofonu)</string>
     <string name="speech_recognizer_external_2">Zewnętrzne 2 (niestabilny)</string>
 	<string name="real_channel_icon">Pokaż prawdziwą ikonę na przycisku kanału</string>
+    <string name="subtitle_yellow_semi_transparent">Żółte na półprzezroczystym tle</string>
+    <string name="subtitle_yellow_black">Żółte na czarnym tle</string>
+    <string name="player_pixel_ratio">Współczynnik pikseli</string>
+    <string name="color_scheme_dark_grey_monochrome">Ciemny szary (monochromatyczny)</string>
+    <string name="disable_mic_permission">Wyłącz dostęp do mikrofonu tej aplikacji aby rozpoznawanie mowy działało poprawnie</string>
 </resources>
