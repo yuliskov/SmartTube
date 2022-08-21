@@ -125,6 +125,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onChannelClicked() {
+        if (SearchData.instance(getActivity()).isBackgroundPlaybackEnabled()) {
+            onPipClicked();
+        }
         ChannelPresenter.instance(getActivity()).openChannel(getController().getVideo());
     }
 

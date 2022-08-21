@@ -71,7 +71,7 @@ public class LiveDashManifestParser extends DashManifestParser {
         long newSegmentNum = getLastSegmentNum(newManifest);
 
         if (mOldManifest == null) {
-            recreateMissingSegments(newManifest);
+            //recreateMissingSegments(newManifest);
 
             //newManifest.availabilityStartTimeMs = -1;
             Period newPeriod = newManifest.getPeriod(0);
