@@ -316,7 +316,7 @@
     <string name="cancel_dialog">Annulla</string>
     <string name="msg_player_error_source2">La sorgente video non funziona</string>
     <string name="hide_upcoming">Nascondi i video seguenti dalle Iscrizioni</string>
-    <string name="search_background_playback">Entra in PiP quando cerchi dal lettore</string>
+    <string name="search_background_playback">Entra in PiP quando cerchi o apri il canale</string>
     <string name="trending_row_name">Tendenze</string>
     <string name="player_seek_type">Tipo di ricerca</string>
     <string name="player_seek_regular">Regolare</string>
