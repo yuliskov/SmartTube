@@ -316,7 +316,7 @@
     <string name="cancel_dialog">İptal et</string>
     <string name="msg_player_error_source2">Video kaynağı çalışmıyor ya da hatalı saat</string>
     <string name="hide_upcoming">Abonelikler\'de yaklaşan yayınları gizle</string>
-    <string name="search_background_playback">Oynatıcıdan arama yaparken resim içinde resim moduna geç</string>
+    <string name="search_background_playback">Arama yaparken/Kanalı açarken resim içinde resim moduna geç</string>
     <string name="trending_row_name">Trendler</string>
     <string name="player_seek_type">Arama davranışı</string>
     <string name="player_seek_regular">Normal</string>
