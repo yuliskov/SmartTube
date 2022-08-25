@@ -16,6 +16,7 @@ import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
@@ -72,33 +73,33 @@ public class ExoPlayerInitializer {
     private DefaultLoadControl createLoadControl() {
         DefaultLoadControl.Builder baseBuilder = new DefaultLoadControl.Builder();
 
-        //baseBuilder.setAllocator(new DefaultAllocator(true, C.DEFAULT_BUFFER_SEGMENT_SIZE))
-        //        .setBufferDurationsMs(2_500,
-        //                5_000,
-        //                1_000,
-        //                2_000)
-        //        .setTargetBufferBytes(C.LENGTH_UNSET)
-        //        .setPrioritizeTimeOverSizeThresholds(true);
+        // Default values
+        //DefaultLoadControl.DEFAULT_MIN_BUFFER_MS // 15_000
+        //DefaultLoadControl.DEFAULT_MAX_BUFFER_MS // 50_000
+        //DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS // 2_500
+        //DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS // 5_000
 
-        if (PlayerController.BUFFER_HIGH == mPlayerData.getVideoBufferType()) {
-            int minBufferMs = 30000; // 30 seconds
-            int maxBufferMs = 36000000; // technical infinity, recommended here a very high number, the max will be based on setTargetBufferBytes() value
-            int bufferForPlaybackMs = 500; // half a seconds can be lower as lowe as 250
-            int bufferForPlaybackAfterRebufferMs = 3000; // 3 seconds
-            baseBuilder
-                    .setAllocator(new DefaultAllocator(true, C.DEFAULT_BUFFER_SEGMENT_SIZE))
-                    .setBufferDurationsMs(minBufferMs, maxBufferMs, bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs)
-                    .setTargetBufferBytes(mDeviceRam);
-        } else if (PlayerController.BUFFER_LOW == mPlayerData.getVideoBufferType()) {
-            baseBuilder
-                    .setBufferDurationsMs(
-                            DefaultLoadControl.DEFAULT_MIN_BUFFER_MS / 3,
-                            DefaultLoadControl.DEFAULT_MAX_BUFFER_MS / 3,
-                            DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS / 3,
-                            DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS / 3);
+        // Medium buffer is default one
+        int minBufferMs = 20_000;
+        int maxBufferMs = 20_000;
+        int bufferForPlaybackMs = 500;
+        int bufferForPlaybackAfterRebufferMs = 1_000;
+
+        switch (mPlayerData.getVideoBufferType()) {
+            case PlaybackEngineController.BUFFER_HIGH:
+                minBufferMs = 30_000; // 30 seconds
+                maxBufferMs = 36_000_000; // technical infinity, recommended here a very high number, the max will be based on setTargetBufferBytes() value
+                baseBuilder
+                        .setTargetBufferBytes(mDeviceRam);
+                break;
+            case PlaybackEngineController.BUFFER_LOW:
+                minBufferMs = 10_000;
+                maxBufferMs = 10_000;
+                break;
         }
 
-        // Normal buffer is a default one
+        baseBuilder
+                .setBufferDurationsMs(minBufferMs, maxBufferMs, bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs);
 
         return baseBuilder.createDefaultLoadControl();
     }

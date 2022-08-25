@@ -17,7 +17,7 @@ public interface PlaybackEngineController {
     int BACKGROUND_MODE_PIP = 2;
     int BACKGROUND_MODE_PLAY_BEHIND = 3;
     int BUFFER_LOW = 0;
-    int BUFFER_MED = 1;
+    int BUFFER_MEDIUM = 1;
     int BUFFER_HIGH = 2;
     int ZOOM_MODE_DEFAULT = AspectRatioFrameLayout.RESIZE_MODE_FIT;
     int ZOOM_MODE_FIT_WIDTH = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH;

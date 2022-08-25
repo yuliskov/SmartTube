@@ -542,7 +542,7 @@ public class PlayerData extends DataChangeBase {
         mVideoFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 9)), getDefaultVideoFormat());
         mAudioFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 10)), getDefaultAudioFormat());
         mSubtitleFormat = ExoFormatItem.from(Helpers.parseStr(split, 11));
-        mVideoBufferType = Helpers.parseInt(split, 12, PlaybackEngineController.BUFFER_LOW);
+        mVideoBufferType = Helpers.parseInt(split, 12, PlaybackEngineController.BUFFER_MEDIUM);
         mSubtitleStyleIndex = Helpers.parseInt(split, 13, 1);
         mVideoZoomMode = Helpers.parseInt(split, 14, PlaybackEngineController.ZOOM_MODE_DEFAULT);
         mSpeed = Helpers.parseFloat(split, 15, 1.0f);
