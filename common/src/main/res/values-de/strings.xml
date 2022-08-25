@@ -316,7 +316,7 @@
     <string name="cancel_dialog">Abbrechen</string>
     <string name="msg_player_error_source2">Video-Quelle funktioniert nicht oder falsche Uhrzeit</string>
     <string name="hide_upcoming">Anstehende Videos in Abos ausblenden</string>
-    <string name="search_background_playback">Bild-in-Bild öffnen bei Suche über den Player</string>
+    <string name="search_background_playback">Bild-in-Bild öffnen bei Suche/Kanal öffnen</string>
     <string name="trending_row_name">Trends</string>
     <string name="player_seek_type">Verhalten beim Spulen</string>
     <string name="player_seek_regular">Normal</string>
