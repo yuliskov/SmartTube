@@ -138,7 +138,7 @@ android {
         variant.outputs.each { output ->
             def project = "STubeNext"
             def flavor = variant.productFlavors[-1].name
-            def buildType = variant.variantData.variantConfiguration.buildType.name.take(1)
+            def buildType = variant.buildType.name.take(1)
             def version = variant.versionName
 
             def newApkName = sprintf("%s_%s_v%s_%s.apk", [project, flavor, version, buildType])

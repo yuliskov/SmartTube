@@ -1,6 +1,13 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 apply from: gradle.ext.sharedModulesConstants
 
+// NOT working
+// Running 'gradle wrapper' will generate gradlew
+wrapper {
+    gradleVersion = gradleVersion
+    distributionType = Wrapper.DistributionType.BIN
+}
+
 buildscript {
     apply from: gradle.ext.sharedModulesConstants
 
@@ -10,7 +17,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.4'
+        classpath 'com.android.tools.build:gradle:' + androidGradleVersion
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:' + kotlinVersion
 
         // NOTE: Do not place your application dependencies here; they belong
