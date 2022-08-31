@@ -617,7 +617,8 @@ public final class Video implements Parcelable {
             List<MediaGroup> suggestions = metadata.getSuggestions();
 
             if (suggestions != null && suggestions.size() > 1) {
-                nextVideo = suggestions.get(1).getMediaItems().get(0);
+                List<MediaItem> mediaItems = suggestions.get(1).getMediaItems();
+                nextVideo = Helpers.findFirst(mediaItems, item -> item.getVideoId() != null);
             }
         }
 
