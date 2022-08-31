@@ -218,15 +218,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             if (isEnded) {
                 Utils.postDelayed(mHandler, mPendingNext, 1_000);
             }
-        } else if (current.isRemote) {
-            openFirstVideoFromRecommended(current);
-        }
-    }
-
-    private void openFirstVideoFromRecommended(Video video) {
-        VideoGroup suggestions = getController().getSuggestionsByIndex(video.isRemote ? 1 : 0);
-        if (suggestions != null && suggestions.getVideos() != null && suggestions.getVideos().size() > 0) {
-            openVideoInt(suggestions.getVideos().get(0));
         }
     }
 

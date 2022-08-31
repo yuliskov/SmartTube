@@ -536,7 +536,7 @@ public final class Video implements Parcelable {
             description = metadata.getDescription();
         }
         channelId = metadata.getChannelId();
-        nextMediaItem = metadata.getNextVideo();
+        nextMediaItem = findNextVideo(metadata);
         isSubscribed = metadata.isSubscribed();
         isSynced = true;
 
@@ -603,6 +603,26 @@ public final class Video implements Parcelable {
     private boolean checkMediaItems() {
         return group != null && group.getMediaGroup() != null
                 && group.getMediaGroup().getMediaItems() != null && group.getMediaGroup().getMediaItems().size() >= 2;
+    }
+
+    private MediaItem findNextVideo(MediaItemMetadata metadata) {
+        if (metadata == null) {
+            return null;
+        }
+
+        MediaItem nextVideo = metadata.getNextVideo();
+
+        // BUGFIX: player closed after last video from the remote queue
+        if (nextVideo == null && isRemote) {
+            List<MediaGroup> suggestions = metadata.getSuggestions();
+
+            if (suggestions != null && suggestions.size() > 1) {
+                List<MediaItem> mediaItems = suggestions.get(1).getMediaItems();
+                nextVideo = Helpers.findFirst(mediaItems, item -> item.getVideoId() != null);
+            }
+        }
+
+        return nextVideo;
     }
 
     // Builder for Video object.

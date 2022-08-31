@@ -122,6 +122,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
     public void onFinish() {
         // User action detected. Stop remote session.
         mConnected = false;
+        mVideo = null;
     }
 
     private void postStartPlaying(@Nullable Video item, boolean isPlaying) {
