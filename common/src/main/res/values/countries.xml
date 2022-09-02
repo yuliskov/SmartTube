@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="supported_countries">
-        <item>Saudi Arabia|SA</item>
         <item>United States|US</item>
         <item>Great Britain|GB</item>
         <item>Scotland|GB-SCT</item>
@@ -40,6 +39,7 @@
         <item>Australia|AU</item>
         <item>Switzerland|CH</item>
         <item>Israel|IL</item>
+        <item>Saudi Arabia|SA</item>
         <item>Bangladesh|BD</item>
         <item>Brasil|BR</item>
         <item>Portugalia|PT</item>
