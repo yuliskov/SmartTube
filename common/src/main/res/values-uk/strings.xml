@@ -306,7 +306,7 @@
     <string name="content_block_action_none">Нічого не робити</string>
     <string name="content_block_action_only_skip">Тільки пропуск</string>
     <string name="content_block_action_toast">Пропуск з повідомленням</string>
-    <string name="content_block_action_dialog">Ділог підтвердження</string>
+    <string name="content_block_action_dialog">Діалог підтвердження</string>
     <string name="content_block_filler">Відхід від теми (офтопік)</string>
     <string name="keyboard_auto_show">Показувати клавіатуру автоматично</string>
     <string name="cancel_dialog">Скасувати</string>
