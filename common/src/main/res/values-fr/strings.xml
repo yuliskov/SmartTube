@@ -467,5 +467,5 @@
   <string name="subtitle_yellow_black">Jaune sur fond noir</string>
   <string name="player_pixel_ratio">Ratio de pixels</string>
   <string name="color_scheme_dark_grey_monochrome">Gris foncé (monochrome)</string>
-  <string name="disable_mic_permission">Veuillez désactiver l'accès au microphone pour l'application afin que cet outil de reconnaissance fonctionne correctement.</string>
+  <string name="disable_mic_permission">Veuillez désactiver l\'accès au microphone pour l\'application afin que cet outil de reconnaissance fonctionne correctement.</string>
 </resources>
