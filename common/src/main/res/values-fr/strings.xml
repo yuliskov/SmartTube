@@ -463,4 +463,9 @@
   <string name="speech_recognizer_external_1">Externe 1 (sérieusement buggé, pour fonctionner vous devez désactiver l\'accès au microphone)</string>
   <string name="speech_recognizer_external_2">Externe 2 (sérieusement buggé)</string>
   <string name="real_channel_icon">Afficher l\'icône réelle sur le bouton du canal</string>
+  <string name="subtitle_yellow_semi_transparent">Jaune sur fond semi-transparent</string>
+  <string name="subtitle_yellow_black">Jaune sur fond noir</string>
+  <string name="player_pixel_ratio">Ratio de pixels</string>
+  <string name="color_scheme_dark_grey_monochrome">Gris foncé (monochrome)</string>
+  <string name="disable_mic_permission">Veuillez désactiver l'accès au microphone pour l'application afin que cet outil de reconnaissance fonctionne correctement.</string>
 </resources>
