@@ -316,7 +316,7 @@
     <string name="cancel_dialog">Zrušit</string>
     <string name="msg_player_error_source2">Zdroj videa nefunguje nebo je nesprávný čas</string>
     <string name="hide_upcoming">Skryj nadcházející videa v Odběrech</string>
-    <string name="search_background_playback">Zapni Obraz v obraze, pokud vyhledávám z přehrávače</string>
+    <string name="search_background_playback">Zapni Obraz v obraze při vyhledávání/otevření kanálu</string>
     <string name="trending_row_name">Trendy</string>
     <string name="player_seek_type">Typ přetáčení</string>
     <string name="player_seek_regular">Normální</string>
