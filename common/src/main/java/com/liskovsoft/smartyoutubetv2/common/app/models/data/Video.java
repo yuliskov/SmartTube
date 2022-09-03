@@ -120,7 +120,7 @@ public final class Video implements Parcelable {
         video.previewUrl = item.getVideoPreviewUrl();
         video.playlistId = item.getPlaylistId();
         video.playlistIndex = item.getPlaylistIndex();
-        video.playlistParams = item.getPlaylistParams();
+        video.playlistParams = item.getParams();
         video.reloadPageKey = item.getReloadPageKey();
         video.isLive = item.isLive();
         video.isUpcoming = item.isUpcoming();
@@ -466,8 +466,8 @@ public final class Video implements Parcelable {
         MediaItem first = mediaItems.get(0);
         MediaItem second = mediaItems.get(1);
 
-        String playlist1 = first.getPlaylistId() != null ? first.getPlaylistId() : first.getPlaylistParams();
-        String playlist2 = second.getPlaylistId() != null ? second.getPlaylistId() : second.getPlaylistParams();
+        String playlist1 = first.getPlaylistId() != null ? first.getPlaylistId() : first.getParams();
+        String playlist2 = second.getPlaylistId() != null ? second.getPlaylistId() : second.getParams();
 
         return playlist1 != null && playlist2 != null && Helpers.equals(playlist1, playlist2);
     }
