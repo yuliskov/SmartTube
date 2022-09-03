@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -394,6 +395,13 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
                     } else {
                         mActionDown = RxUtils.runAsync(() -> Utils.sendKey(resultKey));
                     }
+                }
+                break;
+            case Command.TYPE_VOICE:
+                if (command.isVoiceStarted()) {
+                    SearchPresenter.instance(getActivity()).startVoice();
+                } else {
+                    SearchPresenter.instance(getActivity()).forceFinish();
                 }
                 break;
         }

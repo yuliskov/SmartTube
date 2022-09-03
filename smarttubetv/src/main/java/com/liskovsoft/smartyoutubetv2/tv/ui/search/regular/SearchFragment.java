@@ -300,4 +300,13 @@ public class SearchFragment extends SearchSupportFragment
             startRecognition();
         }
     }
+
+    @Override
+    public void finishReally() {
+        LeanbackActivity activity = (LeanbackActivity) getActivity();
+
+        if (activity != null) {
+            activity.finishReally();
+        }
+    }
 }
