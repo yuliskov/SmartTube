@@ -114,6 +114,8 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     @Override
     public void onVideoLoaded(Video item) {
         mLastError = -1;
+        getController().setRepeatButtonState(
+                item.finishOnEnded ? PlaybackEngineController.PLAYBACK_MODE_CLOSE : mPlayerData.getPlaybackMode());
     }
 
     @Override
@@ -159,6 +161,11 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     @Override
     public void onPlayEnd() {
         int playbackMode = checkSleepTimer(mPlayerData.getPlaybackMode());
+
+        Video video = getController().getVideo();
+        if (video != null && video.finishOnEnded) {
+            playbackMode = PlaybackEngineController.PLAYBACK_MODE_CLOSE;
+        }
 
         applyPlaybackMode(playbackMode);
     }

@@ -190,4 +190,8 @@ public class IntentExtractor {
                 intent.getStringExtra(Intent.EXTRA_TEXT) != null ?
                         Uri.parse(intent.getStringExtra(Intent.EXTRA_TEXT)) : null;
     }
+
+    public static boolean hasFinishOnEndedFlag(Intent intent) {
+        return intent != null && intent.getBooleanExtra("finish_on_ended", false);
+    }
 }
