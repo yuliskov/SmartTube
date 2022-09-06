@@ -86,8 +86,8 @@ public class MediaServiceManager {
         return mSingInManager;
     }
 
-    public void loadMetadata(Video item, OnMetadata onMetadata) {
-        if (item == null) {
+    public void loadMetadata(Video video, OnMetadata onMetadata) {
+        if (video == null) {
             return;
         }
 
@@ -95,12 +95,14 @@ public class MediaServiceManager {
 
         Observable<MediaItemMetadata> observable;
 
-        if (item.mediaItem != null) {
+        // NOTE: Load suggestions from mediaItem isn't robust. Because playlistId may be initialized from RemoteControlManager.
+        // Video might be loaded from Channels section (has playlistParams)
+        if (video.mediaItem != null) {
             // Use additional data like playlist id
-            observable = mItemManager.getMetadataObserve(item.mediaItem);
+            observable = mItemManager.getMetadataObserve(video.mediaItem);
         } else {
             // Simply load
-            observable = mItemManager.getMetadataObserve(item.videoId);
+            observable = mItemManager.getMetadataObserve(video.videoId, video.getPlaylistId(), video.playlistIndex, video.playlistParams);
         }
 
         mMetadataAction = observable
@@ -112,6 +114,9 @@ public class MediaServiceManager {
                 );
     }
 
+    /**
+     * NOTE: Load suggestions from MediaItem isn't robust. Because playlistId may be initialized from RemoteControlManager.
+     */
     public void loadMetadata(MediaItem mediaItem, OnMetadata onMetadata) {
         if (mediaItem == null) {
             return;

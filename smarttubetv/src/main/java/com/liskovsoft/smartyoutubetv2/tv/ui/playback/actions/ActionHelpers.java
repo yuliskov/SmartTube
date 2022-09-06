@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import androidx.core.content.ContextCompat;
@@ -20,6 +21,12 @@ public class ActionHelpers {
             return outValue.data;
         }
         return ContextCompat.getColor(context, R.color.lb_playback_icon_highlight_no_theme);
+    }
+
+    public static BitmapDrawable createDrawable(Context context, BitmapDrawable bitmapDrawable, int bitmapColor) {
+        return bitmapDrawable == null ? null
+                : new BitmapDrawable(context.getResources(),
+                createBitmap(bitmapDrawable.getBitmap(), bitmapColor));
     }
 
     public static Bitmap createBitmap(Bitmap bitmap, int color) {

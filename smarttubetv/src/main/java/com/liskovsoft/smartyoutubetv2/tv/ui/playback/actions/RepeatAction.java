@@ -5,17 +5,19 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.PlaybackControlsRow.MultiAction;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
  * An action for displaying two repeat states: none and all.
  */
 public class RepeatAction extends MultiAction {
-    public static final int INDEX_NONE = 0;
-    public static final int INDEX_ONE = 1;
-    public static final int INDEX_ALL = 2;
-    public static final int INDEX_PAUSE = 3;
-    public static final int INDEX_LIST = 4;
+    public static final int INDEX_NONE = PlaybackUIController.REPEAT_MODE_CLOSE;
+    public static final int INDEX_ONE = PlaybackUIController.REPEAT_MODE_ONE;
+    public static final int INDEX_ALL = PlaybackUIController.REPEAT_MODE_ALL;
+    public static final int INDEX_PAUSE = PlaybackUIController.REPEAT_MODE_PAUSE;
+    public static final int INDEX_LIST = PlaybackUIController.REPEAT_MODE_LIST;
+    public static final int INDEX_SHUFFLE = PlaybackUIController.REPEAT_MODE_SHUFFLE;
 
     /**
      * Constructor
@@ -32,27 +34,19 @@ public class RepeatAction extends MultiAction {
      */
     public RepeatAction(Context context, int selectionColor) {
         super(R.id.lb_control_repeat);
-        Drawable[] drawables = new Drawable[5];
+        Drawable[] drawables = new Drawable[6];
         BitmapDrawable repeatNoneDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_none);
         BitmapDrawable repeatOneDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_one);
         BitmapDrawable repeatAllDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_all);
         BitmapDrawable repeatPauseDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_pause);
         BitmapDrawable repeatListDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_list);
-        drawables[INDEX_NONE] = repeatNoneDrawable == null ? null
-                : new BitmapDrawable(context.getResources(),
-                ActionHelpers.createBitmap(repeatNoneDrawable.getBitmap(), selectionColor));
-        drawables[INDEX_ONE] = repeatOneDrawable == null ? null
-                : new BitmapDrawable(context.getResources(),
-                ActionHelpers.createBitmap(repeatOneDrawable.getBitmap(), selectionColor));
-        drawables[INDEX_ALL] = repeatAllDrawable == null ? null
-                : new BitmapDrawable(context.getResources(),
-                ActionHelpers.createBitmap(repeatAllDrawable.getBitmap(), selectionColor));
-        drawables[INDEX_PAUSE] = repeatPauseDrawable == null ? null
-                : new BitmapDrawable(context.getResources(),
-                ActionHelpers.createBitmap(repeatPauseDrawable.getBitmap(), selectionColor));
-        drawables[INDEX_LIST] = repeatListDrawable == null ? null
-                : new BitmapDrawable(context.getResources(),
-                ActionHelpers.createBitmap(repeatListDrawable.getBitmap(), selectionColor));
+        BitmapDrawable repeatShuffleDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_shuffle);
+        drawables[INDEX_NONE] = ActionHelpers.createDrawable(context, repeatNoneDrawable, selectionColor);
+        drawables[INDEX_ONE] = ActionHelpers.createDrawable(context, repeatOneDrawable, selectionColor);
+        drawables[INDEX_ALL] = ActionHelpers.createDrawable(context, repeatAllDrawable, selectionColor);
+        drawables[INDEX_PAUSE] = ActionHelpers.createDrawable(context, repeatPauseDrawable, selectionColor);
+        drawables[INDEX_LIST] = ActionHelpers.createDrawable(context, repeatListDrawable, selectionColor);
+        drawables[INDEX_SHUFFLE] = ActionHelpers.createDrawable(context, repeatShuffleDrawable, selectionColor);
         setDrawables(drawables);
 
         String[] labels = new String[drawables.length];
@@ -62,6 +56,7 @@ public class RepeatAction extends MultiAction {
         labels[INDEX_ALL] = context.getString(R.string.repeat_mode_all);
         labels[INDEX_PAUSE] = context.getString(R.string.repeat_mode_pause);
         labels[INDEX_LIST] = context.getString(R.string.repeat_mode_pause_alt);
+        labels[INDEX_SHUFFLE] = context.getString(R.string.repeat_mode_shuffle);
         setLabels(labels);
     }
 }

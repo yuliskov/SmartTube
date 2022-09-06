@@ -2,11 +2,13 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
@@ -21,7 +23,7 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
-public class VideoStateManager extends PlayerEventListenerHelper implements TickleListener {
+public class VideoStateManager extends PlayerEventListenerHelper implements TickleListener, MetadataListener {
     private static final long MUSIC_VIDEO_MAX_LENGTH_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 60_000;
     private static final String TAG = VideoStateManager.class.getSimpleName();
@@ -138,6 +140,11 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
     }
 
     @Override
+    public void onMetadata(MediaItemMetadata metadata) {
+        updateHistory();
+    }
+
+    @Override
     public void onEngineError(int type) {
         // Oops. Error happens while playing (network lost etc).
         if (getController().getPositionMs() > 1_000) {
@@ -162,8 +169,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         restoreSpeed();
         // Player thinks that subs not enabled if I enable it too early (e.g. on source change event).
         restoreSubtitleFormat();
-
-        updateHistory();
 
         restoreVolume();
     }

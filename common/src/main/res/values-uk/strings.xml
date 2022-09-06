@@ -460,4 +460,5 @@
     <string name="player_pixel_ratio">Співвідношення сторін пікселя</string>
     <string name="color_scheme_dark_grey_monochrome">Темно-сіра (монохромна)</string>
     <string name="disable_mic_permission">Будь ласка, вимкніть доступ до мікрофона для програми, щоб цей розпізнавач працював належним чином.</string>
+    <string name="repeat_mode_shuffle">Перемішати будь-який плейлист</string>
 </resources>

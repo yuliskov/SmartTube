@@ -55,6 +55,8 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         AutoFrameRateManager autoFrameRateManager = new AutoFrameRateManager(hqDialogManager, stateUpdater);
 
         suggestionsLoader.addMetadataListener(uiManager);
+        suggestionsLoader.addMetadataListener(videoLoader);
+        suggestionsLoader.addMetadataListener(stateUpdater);
         suggestionsLoader.addMetadataListener(contentBlockManager);
         suggestionsLoader.addMetadataListener(liveChatManager);
 

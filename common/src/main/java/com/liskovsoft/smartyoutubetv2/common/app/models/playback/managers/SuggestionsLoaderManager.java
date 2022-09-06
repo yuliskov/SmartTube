@@ -206,8 +206,6 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private void updateSuggestions(MediaItemMetadata mediaItemMetadata, Video video) {
         syncCurrentVideo(mediaItemMetadata, video);
 
-        callListener(mediaItemMetadata);
-
         List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
         if (suggestions == null) {
@@ -249,6 +247,9 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                 continueGroupIfNeeded(videoGroup);
             }
         }
+
+        // After video suggestions
+        callListener(mediaItemMetadata);
     }
 
     /**

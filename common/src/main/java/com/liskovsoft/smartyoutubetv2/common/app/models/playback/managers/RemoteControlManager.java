@@ -14,7 +14,7 @@ import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -100,13 +100,13 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
 
     @Override
     public void onPlayEnd() {
-        switch (PlayerData.instance(getActivity()).getPlaybackMode()) {
-            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
-            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
-            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
+        switch (PlayerData.instance(getActivity()).getRepeatMode()) {
+            case PlaybackUIController.REPEAT_MODE_CLOSE:
+            case PlaybackUIController.REPEAT_MODE_PAUSE:
+            case PlaybackUIController.REPEAT_MODE_ALL:
                 postPlay(false);
                 break;
-            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
+            case PlaybackUIController.REPEAT_MODE_ONE:
                 postStartPlaying(getController().getVideo(), true);
                 break;
         }
