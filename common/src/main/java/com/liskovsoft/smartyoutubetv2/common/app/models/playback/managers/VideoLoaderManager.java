@@ -469,7 +469,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
             Video video = new Video();
             video.playlistId = mLastVideo.playlistId;
             VideoGroup topRow = getController().getSuggestionsByIndex(0);
-            video.playlistIndex = Helpers.getRandomNumber(0,
+            video.playlistIndex = Helpers.getRandomIndex(
                     mLastVideo.playlistInfo.getSize() != -1 ? mLastVideo.playlistInfo.getSize() : topRow != null ? topRow.getVideos().size() : -1);
 
             MediaServiceManager.instance().loadMetadata(video, randomMetadata -> {
