@@ -214,14 +214,16 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode()) {
                     skip = true;
                     skipPosMs = positionMs;
-                    if (!skipAdjacent)
-                        break;
+                    if (skipAdjacent) {
+                        continue;
+                    }
                 } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
                     skip = true;
                     categories.Add(localizedCategory);
                     skipPosMs = positionMs;
-                    if (!skipAdjacent)
-                        break;
+                    if (skipAdjacent) {
+                        continue;
+                    }
                 } else if (type == ContentBlockData.ACTION_SHOW_DIALOG) {
                     // if we have not yet found a segment without ACTION_SHOW_DIALOG, we confirmSkip and break;
                     // otherwise we just break, so that we perform the accumulated skip(s) immediately: when
@@ -233,12 +235,12 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                     //         skip = false;
                     //     }
                     //     confirmSkip(positionMs, localizedCategory);
-                    //     break;
                     // }
-                    if (!skip)
+                    if (!skip) {
                         confirmSkip(positionMs, localizedCategory);
-                    break;
+                    }
                 } 
+                break;
             }
         }
         
