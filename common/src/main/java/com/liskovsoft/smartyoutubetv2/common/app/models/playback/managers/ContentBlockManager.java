@@ -138,6 +138,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         segments -> {
+                            // Ensure the segments are sorted by ascending start position. This is necessary for the loop in skipSegment.
+                            segments.sort((SponsorSegment a, SponsorSegment b) -> Long.compare(a.getStartMs(), b.getStartMs()));
                             mVideo = item;
                             mSponsorSegments = segments;
                             if (mContentBlockData.isColorMarkersEnabled()) {
@@ -188,43 +190,69 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         long positionMs = getController().getPositionMs();
-
-        SponsorSegment foundSegment = null;
         long skipPosMs = 0;
+        boolean skip = false;
+        List<String> categories = new List<String>();
+        final boolean skipAdjacent = true;
 
+        // The segments are ordered by ascending starting position.
         for (SponsorSegment segment : mSponsorSegments) {
             if (isPositionInsideSegment(positionMs, segment)) {
-                foundSegment = segment;
                 Integer resId = mContentBlockData.getLocalizedRes(segment.getCategory());
                 String localizedCategory = resId != null ? getActivity().getString(resId) : segment.getCategory();
 
                 int type = mContentBlockData.getAction(segment.getCategory());
 
-                skipPosMs = segment.getEndMs();
-
-                if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode()) {
-                    simpleSkip(skipPosMs);
-                } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
-                    messageSkip(skipPosMs, localizedCategory);
-                } else if (type == ContentBlockData.ACTION_SHOW_DIALOG) {
-                    confirmSkip(skipPosMs, localizedCategory);
+                positionMs = segment.getEndMs();
+                
+                // Skip each segment only once
+                if (mContentBlockData.isSkipEachSegmentOnceEnabled()) {
+                    mSponsorSegments.remove(segment);
                 }
 
-                break;
+                if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode()) {
+                    skip = true;
+                    skipPosMs = positionMs;
+                    if (!skipAdjacent)
+                        break;
+                } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
+                    skip = true;
+                    categories.Add(localizedCategory);
+                    skipPosMs = positionMs;
+                    if (!skipAdjacent)
+                        break;
+                } else if (type == ContentBlockData.ACTION_SHOW_DIALOG) {
+                    // if we have not yet found a segment without ACTION_SHOW_DIALOG, we confirmSkip and break;
+                    // otherwise we just break, so that we perform the accumulated skip(s) immediately: when
+                    // skipSegment is called again we will notice that we have to show a dialog.
+                    // TODO: we could do
+                    // if (categories.isEmpty()) {
+                    //     if (skip) {
+                    //         simpleSkip(skipPosMs);
+                    //         skip = false;
+                    //     }
+                    //     confirmSkip(positionMs, localizedCategory);
+                    //     break;
+                    // }
+                    if (!skip)
+                        confirmSkip(positionMs, localizedCategory);
+                    break;
+                } 
             }
         }
-
-        // Skip each segment only once
-        if (foundSegment != null && mContentBlockData.isSkipEachSegmentOnceEnabled()) {
-            mSponsorSegments.remove(foundSegment);
+        
+        if skip {
+            if categories.isEmpty() {
+                simpleSkip(skipPosMs);
+            } else {
+                messageSkip(skipPosMs, categories);
+            }
         }
 
         mLastSkipPosMs = skipPosMs;
     }
 
     private boolean isPositionInsideSegment(long positionMs, SponsorSegment segment) {
-
-
         // Note. Getting into account playback speed. Also check that the zone is long enough.
         //float checkEndMs = segment.getStartMs() + SEGMENT_CHECK_LENGTH_MS * getController().getSpeed();
         //return positionMs >= segment.getStartMs() && positionMs <= checkEndMs && checkEndMs <= segment.getEndMs();
@@ -239,13 +267,19 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         setPositionMs(skipPosMs);
     }
 
-    private void messageSkip(long skipPosMs, String category) {
+    private void messageSkip(long skipPosMs, List<String> categories) {
         if (mLastSkipPosMs == skipPosMs) {
             return;
         }
+        
+        String details = null;
+        for (String category : categories) {
+            String s = getActivity().getString(R.string.msg_skipping_segment, category);
+            details = (details == null ? s : String.format("%s, %s", details, s));
+        }
 
         MessageHelpers.showMessage(getActivity(),
-                String.format("%s: %s", getActivity().getString(R.string.content_block_provider), getActivity().getString(R.string.msg_skipping_segment, category)));
+                String.format("%s: %s", getActivity().getString(R.string.content_block_provider), details));
         setPositionMs(skipPosMs);
     }
 
