@@ -274,7 +274,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
         
         String details = categories.map((String category) -> getActivity().getString(R.string.msg_skipping_segment, category))
-                                   .collect(Collectors.joining(","));
+                                   .collect(Collectors.joining(", "));
 
         MessageHelpers.showMessage(getActivity(),
                 String.format("%s: %s", getActivity().getString(R.string.content_block_provider), details));
