@@ -110,7 +110,7 @@
     <string name="cards_style">Styl karet</string>
     <string name="repeat_mode_all">Přehraj videa nepřetržitě</string>
     <string name="repeat_mode_one">Opakovat aktuální video</string>
-    <string name="repeat_mode_pause">Zastavit přehrávání po každém videu</string>
+    <string name="repeat_mode_pause">Pozastavit přehrávání po každém videu</string>
     <string name="repeat_mode_pause_alt">Hraj videa nepřetržitě pouze pro playlist</string>    
     <string name="repeat_mode_none">Ukončit přehrávání po jednom videu</string>
     <string name="subscribed_to_channel">Přihlášen k odběru kanálu</string>
@@ -468,4 +468,5 @@
     <string name="player_pixel_ratio">Poměr pixelů</string>
     <string name="color_scheme_dark_grey_monochrome">Tmavě šedá (černobílá)</string>
     <string name="disable_mic_permission">Zakažte aplikaci přístup k mikrofonu, aby tento rozpoznávač fungoval správně.</string>
+    <string name="repeat_mode_shuffle">Promíchat jakýkoliv playlist</string>
 </resources>
