@@ -108,7 +108,7 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
 
         String[] updateUrls = getContext().getResources().getStringArray(R.array.update_urls);
 
-        if (updateUrls.length == 1) {
+        if (updateUrls.length <= 1) {
             return;
         }
 
