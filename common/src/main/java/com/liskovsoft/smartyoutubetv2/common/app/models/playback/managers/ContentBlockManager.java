@@ -27,6 +27,7 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class ContentBlockManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = ContentBlockManager.class.getSimpleName();
@@ -272,11 +273,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
         
-        String details = null;
-        for (String category : categories) {
-            String s = getActivity().getString(R.string.msg_skipping_segment, category);
-            details = (details == null ? s : String.format("%s, %s", details, s));
-        }
+        String details = categories.map((String category) -> getActivity().getString(R.string.msg_skipping_segment, category))
+                                   .collect(Collectors.joining(","));
 
         MessageHelpers.showMessage(getActivity(),
                 String.format("%s: %s", getActivity().getString(R.string.content_block_provider), details));
