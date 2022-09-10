@@ -232,7 +232,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 }
 
                 PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
-                playbackPresenter.openVideo(videoId);
+                playbackPresenter.openVideo(videoId, IntentExtractor.hasFinishOnEndedFlag(intent));
 
                 return true;
             }
@@ -245,7 +245,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
             if (backupData != null) {
                 PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
-                playbackPresenter.openVideo(backupData);
+                playbackPresenter.openVideo(backupData, false);
                 return true;
             }
 

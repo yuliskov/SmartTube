@@ -120,8 +120,12 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     }
 
     @Override
-    public void onVideoLoaded(Video item) {
+    public void onVideoLoaded(Video video) {
         mLastError = -1;
+
+        if (video.finishOnEnded) {
+            getController().setRepeatButtonState(PlaybackUIController.REPEAT_MODE_CLOSE);
+        }
     }
 
     @Override
@@ -167,6 +171,11 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     @Override
     public void onPlayEnd() {
         int repeatMode = checkSleepTimer(mPlayerData.getRepeatMode());
+
+        Video video = getController().getVideo();
+        if (video != null && video.finishOnEnded) {
+            repeatMode = PlaybackUIController.REPEAT_MODE_CLOSE;
+        }
 
         applyRepeatMode(repeatMode);
     }
