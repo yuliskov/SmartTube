@@ -454,7 +454,7 @@
     <string name="open_chat">Chat</string>
     <string name="place_chat_left">Posiziona la chat a sinistra</string>
     <string name="use_alt_speech_recognizer">Metodo alternativo per riconoscimento vocale</string>
-    <string name="time_mode">Formato ore</string>
+    <string name="time_mode">Formato orario</string>
     <string name="time_mode_24_hours">24 ore</string>
     <string name="time_mode_12_hours">12 ore (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Non funziona bene. Usalo solo se hai problemi con il riconoscimento vocale predefinito.</string>
@@ -468,4 +468,5 @@
     <string name="player_pixel_ratio">Rapporto pixel</string>
     <string name="color_scheme_dark_grey_monochrome">Grigio scuro (monocromatico)</string>
     <string name="disable_mic_permission">Per favore, disabilita l\'accesso al microfono all\'app affinché il riconoscimento funzioni correttamente.</string>
+    <string name="repeat_mode_shuffle">Mescola qualsiasi playlist</string>
 </resources>
