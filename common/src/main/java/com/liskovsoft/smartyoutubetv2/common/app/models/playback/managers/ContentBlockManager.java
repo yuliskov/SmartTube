@@ -189,37 +189,14 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
         long positionMs = getController().getPositionMs();
 
-        SponsorSegment foundSegment = null;
-        long skipPosMs = 0;
+        List<SponsorSegment> foundSegment = findMatchedSegments(positionMs);
 
-        for (SponsorSegment segment : mSponsorSegments) {
-            if (isPositionInsideSegment(positionMs, segment)) {
-                foundSegment = segment;
-                Integer resId = mContentBlockData.getLocalizedRes(segment.getCategory());
-                String localizedCategory = resId != null ? getActivity().getString(resId) : segment.getCategory();
-
-                int type = mContentBlockData.getAction(segment.getCategory());
-
-                skipPosMs = segment.getEndMs();
-
-                if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode()) {
-                    simpleSkip(skipPosMs);
-                } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
-                    messageSkip(skipPosMs, localizedCategory);
-                } else if (type == ContentBlockData.ACTION_SHOW_DIALOG) {
-                    confirmSkip(skipPosMs, localizedCategory);
-                }
-
-                break;
-            }
-        }
+        applyActions(foundSegment);
 
         // Skip each segment only once
         if (foundSegment != null && mContentBlockData.isSkipEachSegmentOnceEnabled()) {
-            mSponsorSegments.remove(foundSegment);
+            mSponsorSegments.removeAll(foundSegment);
         }
-
-        mLastSkipPosMs = skipPosMs;
     }
 
     private boolean isPositionInsideSegment(long positionMs, SponsorSegment segment) {
@@ -314,5 +291,60 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         getController().setPositionMs(positionMs);
+    }
+
+    private List<SponsorSegment> findMatchedSegments(long positionMs) {
+        if (mSponsorSegments == null) {
+            return null;
+        }
+
+        List<SponsorSegment> foundSegment = null;
+
+        for (SponsorSegment segment : mSponsorSegments) {
+            int action = mContentBlockData.getAction(segment.getCategory());
+            boolean isSkipAction = action == ContentBlockData.ACTION_SKIP_ONLY ||
+                    action == ContentBlockData.ACTION_SKIP_WITH_TOAST;
+            if (foundSegment == null) {
+                if (isPositionInsideSegment(positionMs, segment)) {
+                    foundSegment = new ArrayList<>();
+                    foundSegment.add(segment);
+
+                    // Action grouping aren't supported for dialogs
+                    if (!isSkipAction) {
+                        break;
+                    }
+                }
+            } else {
+                SponsorSegment lastSegment = foundSegment.get(foundSegment.size() - 1);
+                if (isSkipAction && isPositionInsideSegment(lastSegment.getEndMs(), segment)) {
+                    foundSegment.add(segment);
+                }
+            }
+        }
+
+        return foundSegment;
+    }
+
+    private void applyActions(List<SponsorSegment> foundSegment) {
+        if (foundSegment != null) {
+            SponsorSegment lastSegment = foundSegment.get(foundSegment.size() - 1);
+
+            Integer resId = mContentBlockData.getLocalizedRes(lastSegment.getCategory());
+            String localizedCategory = resId != null ? getActivity().getString(resId) : lastSegment.getCategory();
+
+            int type = mContentBlockData.getAction(lastSegment.getCategory());
+
+            long skipPosMs = lastSegment.getEndMs();
+
+            if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode()) {
+                simpleSkip(skipPosMs);
+            } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
+                messageSkip(skipPosMs, localizedCategory);
+            } else if (type == ContentBlockData.ACTION_SHOW_DIALOG) {
+                confirmSkip(skipPosMs, localizedCategory);
+            }
+        }
+
+        mLastSkipPosMs = foundSegment != null ? foundSegment.get(foundSegment.size() - 1).getEndMs() : 0;
     }
 }
