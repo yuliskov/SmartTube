@@ -5,6 +5,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
+import androidx.leanback.widget.PlaybackControlsRow;
 import androidx.leanback.widget.PlaybackRowPresenter;
 import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -19,6 +20,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     private QualityInfoListener mQualityInfoListener;
     private ControlsVisibilityListener mVisibilityListener;
     private PlayPauseListener mPlayPauseListener;
+    private long mPublishedTimeMs = 0;
 
     /**
      * Constructor for the glue.
@@ -111,6 +113,11 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     }
 
     @Override
+    public void setLiveTimestamp(String timestamp) {
+        // TODO: convert timestamp to publishedTimeMs
+    }
+
+    @Override
     public void play() {
         super.play();
 
@@ -125,6 +132,39 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
 
         if (mPlayPauseListener != null) {
             mPlayPauseListener.onPlay(false);
+        }
+    }
+
+    @Override
+    protected void onUpdateControlsVisibility() {
+        super.onUpdateControlsVisibility();
+
+        if (isControlsVisible()) {
+            updateLiveEndingTime();
+        }
+    }
+
+    @Override
+    protected void onUpdateProgress() {
+        super.onUpdateProgress();
+
+        if (isControlsVisible()) {
+            updateLiveEndingTime();
+        }
+    }
+
+    private void updateLiveEndingTime() {
+        if (mPublishedTimeMs <= 0) {
+            return;
+        }
+
+        PlaybackControlsRow controlsRow = getControlsRow();
+        PlayerAdapter playerAdapter = getPlayerAdapter();
+
+        if (controlsRow != null && playerAdapter != null) {
+            long liveDurationMs = System.currentTimeMillis() - mPublishedTimeMs;
+            controlsRow.setDuration(
+                    playerAdapter.isPrepared() ? liveDurationMs : -1);
         }
     }
 
