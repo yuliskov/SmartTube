@@ -11,6 +11,6 @@ public class DateFormatterTest {
     @Test
     public void testToUnixTimeMs() {
         long timeMs = DateFormatter.toUnixTimeMs("2022-09-11T23:39:38+00:00");
-        assertTrue("time not null", timeMs > 0);
+        assertEquals("time equals", 1662939578000L, timeMs);
     }
 }
