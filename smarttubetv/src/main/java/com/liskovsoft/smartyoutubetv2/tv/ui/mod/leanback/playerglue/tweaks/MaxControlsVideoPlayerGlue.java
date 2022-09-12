@@ -20,7 +20,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     private QualityInfoListener mQualityInfoListener;
     private ControlsVisibilityListener mVisibilityListener;
     private PlayPauseListener mPlayPauseListener;
-    private long mPublishedTimeMs = 0;
+    private long mLiveTimestampMs = 0;
 
     /**
      * Constructor for the glue.
@@ -113,8 +113,8 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     }
 
     @Override
-    public void setLiveTimestamp(String timestamp) {
-        // TODO: convert timestamp to publishedTimeMs
+    public void setLiveTimestamp(long timestampMs) {
+        mLiveTimestampMs = timestampMs;
     }
 
     @Override
@@ -154,7 +154,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     }
 
     private void updateLiveEndingTime() {
-        if (mPublishedTimeMs <= 0) {
+        if (mLiveTimestampMs <= 0) {
             return;
         }
 
@@ -162,7 +162,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         PlayerAdapter playerAdapter = getPlayerAdapter();
 
         if (controlsRow != null && playerAdapter != null) {
-            long liveDurationMs = System.currentTimeMillis() - mPublishedTimeMs;
+            long liveDurationMs = System.currentTimeMillis() - mLiveTimestampMs;
             controlsRow.setDuration(
                     playerAdapter.isPrepared() ? liveDurationMs : -1);
         }

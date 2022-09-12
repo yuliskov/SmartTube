@@ -4,9 +4,11 @@ import android.content.Context;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class DateFormatter {
     public static String getCurrentDateTimeShort(Context context) {
@@ -68,5 +70,21 @@ public class DateFormatter {
         } else {
             return true;
         }
+    }
+
+    /**
+     * Input example: "2022-09-11T23:39:38+00:00"<br/>
+     * https://stackoverflow.com/questions/2597083/illegal-pattern-character-t-when-parsing-a-date-string-to-java-util-date
+     */
+    public static long toUnixTimeMs(String timestamp) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date = null;
+        try {
+            date = format.parse(timestamp);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date != null ? date.getTime() : 0;
     }
 }

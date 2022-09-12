@@ -11,6 +11,7 @@ android {
 
     compileSdkVersion project.properties.compileSdkVersion
     buildToolsVersion project.properties.buildToolsVersion
+    testOptions.unitTests.includeAndroidResources = true
 
     defaultConfig {
         minSdkVersion project.properties.minSdkVersion
@@ -49,6 +50,7 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:' + appCompatXLibraryVersion
     testImplementation 'junit:junit:' + junitVersion
+    testImplementation 'org.robolectric:robolectric:' + robolectricVersion
     androidTestImplementation 'androidx.test.ext:junit:' + testXSupportLibraryVersion
 
     //implementation project(':openvpn')
