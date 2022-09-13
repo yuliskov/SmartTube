@@ -25,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -253,13 +254,22 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
         String bgImageUrl = null;
 
+        Video video = getController().getVideo();
+
+        if (video == null) {
+            Log.e(TAG, "Can't process format when video is null");
+            return;
+        }
+
+        video.sync(formatInfo);
+
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
             bgImageUrl = mLastVideo.getBackgroundUrl();
-        } else if (formatInfo.isLive() && formatInfo.containsDashUrl() && !forceLegacyFormat(formatInfo)) {
+        } else if (formatInfo.isLive() && formatInfo.containsDashUrl() && !video.isPublishedRecently() && !forceLegacyFormat(formatInfo)) {
             Log.d(TAG, "Found live video (current or past live stream) in dash format. Loading...");
             getController().openDashUrl(formatInfo.getDashManifestUrl());
-        } else if (formatInfo.isLive() && formatInfo.containsHlsUrl()) {
+        } else if (formatInfo.isLive() && formatInfo.containsHlsUrl() && forceLegacyFormat(formatInfo)) {
             Log.d(TAG, "Found live video (current or past live stream) in hls format. Loading...");
             getController().openHlsUrl(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsDashVideoInfo() && !forceLegacyFormat(formatInfo)) {
@@ -280,11 +290,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
             scheduleReloadVideoTimer(30 * 1_000);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
-        }
-
-        Video video = getController().getVideo();
-        if (video != null) {
-            video.sync(formatInfo);
         }
 
         getController().showBackground(bgImageUrl);

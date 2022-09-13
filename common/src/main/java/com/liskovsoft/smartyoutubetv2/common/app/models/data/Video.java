@@ -11,6 +11,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.ArrayList;
@@ -66,6 +67,7 @@ public final class Video implements Parcelable {
     public boolean fromQueue;
     public boolean isPending;
     public boolean finishOnEnded;
+    public long publishedTimeMs;
 
     public Video() {
        // NOP
@@ -558,6 +560,13 @@ public final class Video implements Parcelable {
         if (description == null) {
             description = formatInfo.getDescription();
         }
+
+        publishedTimeMs = DateFormatter.toUnixTimeMs(formatInfo.getStartTimestamp());
+
+        // TESTING
+        //if (publishedTimeMs == 0) {
+        //    publishedTimeMs = 1663048310000L;
+        //}
     }
 
     /**
@@ -628,6 +637,10 @@ public final class Video implements Parcelable {
         }
 
         return nextVideo;
+    }
+
+    public boolean isPublishedRecently() {
+        return System.currentTimeMillis() - publishedTimeMs < 24 * 60 * 60 * 1_000;
     }
 
     // Builder for Video object.

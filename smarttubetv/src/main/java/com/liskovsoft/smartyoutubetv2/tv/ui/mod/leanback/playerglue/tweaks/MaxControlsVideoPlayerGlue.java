@@ -9,6 +9,7 @@ import androidx.leanback.widget.PlaybackControlsRow;
 import androidx.leanback.widget.PlaybackRowPresenter;
 import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.framedrops.PlaybackBaseControlGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.framedrops.PlaybackTransportControlGlue;
@@ -20,7 +21,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     private QualityInfoListener mQualityInfoListener;
     private ControlsVisibilityListener mVisibilityListener;
     private PlayPauseListener mPlayPauseListener;
-    private long mLiveTimestampMs = 0;
+    private Video mVideo;
 
     /**
      * Constructor for the glue.
@@ -113,8 +114,8 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     }
 
     @Override
-    public void setLiveTimestamp(long timestampMs) {
-        mLiveTimestampMs = timestampMs;
+    public void setVideo(Video video) {
+        mVideo = video;
     }
 
     @Override
@@ -154,18 +155,31 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     }
 
     private void updateLiveEndingTime() {
-        if (mLiveTimestampMs <= 0) {
+        if (mVideo == null) {
+            return;
+        }
+
+        long liveTimestampMs = mVideo.publishedTimeMs;
+
+        if (liveTimestampMs <= 0) {
             return;
         }
 
         PlaybackControlsRow controlsRow = getControlsRow();
         PlayerAdapter playerAdapter = getPlayerAdapter();
 
-        if (controlsRow != null && playerAdapter != null) {
-            long liveDurationMs = System.currentTimeMillis() - mLiveTimestampMs;
-            controlsRow.setDuration(
-                    playerAdapter.isPrepared() ? liveDurationMs : -1);
+        if (controlsRow == null || playerAdapter == null) {
+            return;
         }
+
+        // Detect unusual video length.
+        if (playerAdapter.getDuration() < 24 * 60 * 60 * 1_000) {
+            return;
+        }
+
+        long liveDurationMs = System.currentTimeMillis() - liveTimestampMs;
+        controlsRow.setDuration(
+                playerAdapter.isPrepared() ? liveDurationMs : -1);
     }
 
     private void updateQualityInfo() {

@@ -824,6 +824,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             // Preserve player formatting
             mPlayerGlue.setTitle(video.getPlayerTitle() != null ? video.getPlayerTitle() : "...");
             mPlayerGlue.setSubtitle(video.getPlayerSecondTitle() != null ? appendLive(video.getPlayerSecondTitle(), video.isLive) : "...");
+            mPlayerGlue.setVideo(video);
         }
     }
 
