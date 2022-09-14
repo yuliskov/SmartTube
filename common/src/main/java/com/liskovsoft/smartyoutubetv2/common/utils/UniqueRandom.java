@@ -7,13 +7,17 @@ import java.util.List;
 
 public class UniqueRandom {
     private static final int RANDOM_FAIL_REPEAT_TIMES = 10;
-    private final List<Integer> mUsedIndexes = new ArrayList<>();
-    private int mListSize;
+    private List<Integer> mUsedIndexes;
+    private int mTotalSize;
 
     public int getRandomIndex(int size) {
-        if (mListSize != size || mUsedIndexes.size() == size) {
+        if (mUsedIndexes == null) {
+            mUsedIndexes = new ArrayList<>();
+        }
+
+        if (mTotalSize != size || mUsedIndexes.size() == size) {
             mUsedIndexes.clear();
-            mListSize = size;
+            mTotalSize = size;
         }
 
         int randomIndex = 0;

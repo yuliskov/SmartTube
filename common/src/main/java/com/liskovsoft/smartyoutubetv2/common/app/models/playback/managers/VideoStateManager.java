@@ -378,7 +378,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
 
         // Set actual position for live videos with uncommon length
         if (state == null && item.isLive && getController().getDurationMs() > Video.MAX_DURATION_MS) {
-            state = new State(item.videoId, item.getLiveDurationMs());
+            state = new State(item.videoId, item.getLiveDurationMs() * 999 / 1000); // align by segment size
         }
 
         // Do I need to check that item isn't live? (state != null && !item.isLive)

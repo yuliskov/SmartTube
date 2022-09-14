@@ -25,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.UniqueRandom;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -41,6 +42,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     private final Playlist mPlaylist;
     private final Handler mHandler;
     private final SuggestionsLoaderManager mSuggestionsLoader;
+    private final UniqueRandom mRandom;
     private Video mLastVideo;
     private int mLastError = -1;
     private long mPrevErrorTimeMs;
@@ -67,6 +69,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         mSuggestionsLoader = suggestionsLoader;
         mPlaylist = Playlist.instance();
         mHandler = new Handler(Looper.getMainLooper());
+        mRandom = new UniqueRandom();
     }
 
     @Override
@@ -479,7 +482,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
             Video video = new Video();
             video.playlistId = mLastVideo.playlistId;
             VideoGroup topRow = getController().getSuggestionsByIndex(0);
-            video.playlistIndex = Helpers.getRandomIndex(
+            video.playlistIndex = mRandom.getRandomIndex(
                     mLastVideo.playlistInfo.getSize() != -1 ? mLastVideo.playlistInfo.getSize() : topRow != null ? topRow.getVideos().size() : -1);
 
             MediaServiceManager.instance().loadMetadata(video, randomMetadata -> {

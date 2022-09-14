@@ -328,7 +328,7 @@ public class PlayerData extends DataChangeBase {
     }
 
     public void setFormat(FormatItem format) {
-        if (format == null) {
+        if (format == null || Helpers.equalsAny(format, mVideoFormat, mAudioFormat, mSubtitleFormat)) {
             return;
         }
 
