@@ -643,7 +643,7 @@ public final class Video implements Parcelable {
     }
 
     public boolean isPublishedRecently() {
-        return System.currentTimeMillis() - publishedTimeMs < 24 * 60 * 60 * 1_000;
+        return System.currentTimeMillis() - publishedTimeMs < MAX_DURATION_MS;
     }
 
     public long getLiveDurationMs() {
