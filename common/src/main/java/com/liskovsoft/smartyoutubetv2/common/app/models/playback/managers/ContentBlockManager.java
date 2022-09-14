@@ -268,8 +268,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             }
 
             SeekBarSegment seekBarSegment = new SeekBarSegment();
-            double startRatio = (double) sponsorSegment.getStartMs() / getController().getLengthMs(); // Range: [0, 1]
-            double endRatio = (double) sponsorSegment.getEndMs() / getController().getLengthMs(); // Range: [0, 1]
+            double startRatio = (double) sponsorSegment.getStartMs() / getController().getDurationMs(); // Range: [0, 1]
+            double endRatio = (double) sponsorSegment.getEndMs() / getController().getDurationMs(); // Range: [0, 1]
             seekBarSegment.startProgress = (int) (startRatio * Integer.MAX_VALUE); // Could safely cast to int
             seekBarSegment.endProgress = (int) (endRatio * Integer.MAX_VALUE); // Could safely cast to int
             seekBarSegment.color = ContextCompat.getColor(getActivity(), mContentBlockData.getColorRes(sponsorSegment.getCategory()));
@@ -283,7 +283,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
      * Sponsor block fix. Position may exceed real media length.
      */
     private void setPositionMs(long positionMs) {
-        long lengthMs = getController().getLengthMs();
+        long lengthMs = getController().getDurationMs();
 
         // Sponsor block fix. Position may exceed real media length.
         if (lengthMs > 0 && positionMs > lengthMs) {

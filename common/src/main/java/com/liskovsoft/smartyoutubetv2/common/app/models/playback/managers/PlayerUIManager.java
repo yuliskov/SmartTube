@@ -567,9 +567,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     private boolean handleNumKeys(int keyCode) {
         if (mPlayerData.isNumberKeySeekEnabled() && keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9) {
-            if (getController() != null && getController().getLengthMs() > 0) {
+            if (getController() != null && getController().getDurationMs() > 0) {
                 float seekPercent = (keyCode - KeyEvent.KEYCODE_0) / 10f;
-                getController().setPositionMs((long)(getController().getLengthMs() * seekPercent));
+                getController().setPositionMs((long)(getController().getDurationMs() * seekPercent));
             }
         }
 

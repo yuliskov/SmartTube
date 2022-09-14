@@ -22,6 +22,7 @@ import java.util.List;
  */
 public final class Video implements Parcelable {
     public static final String TERTIARY_TEXT_DELIM = "•";
+    public static final long MAX_DURATION_MS = 24 * 60 * 60 * 1_000;
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     private static final String[] sNotPlaylistParams = new String[] {"EAIYAQ%3D%3D"};
     private static final String SECTION_PREFIX = "FE";
@@ -561,12 +562,14 @@ public final class Video implements Parcelable {
             description = formatInfo.getDescription();
         }
 
-        publishedTimeMs = DateFormatter.toUnixTimeMs(formatInfo.getStartTimestamp());
+        String lengthSeconds = formatInfo.getLengthSeconds();
+        // Published time used on live videos only
+        if (lengthSeconds == null || lengthSeconds.isEmpty() || lengthSeconds.equals("0")) {
+            publishedTimeMs = DateFormatter.toUnixTimeMs(formatInfo.getStartTimestamp());
 
-        // TESTING
-        //if (publishedTimeMs == 0) {
-        //    publishedTimeMs = 1663048310000L;
-        //}
+            // TESTING
+            //publishedTimeMs = System.currentTimeMillis() - 2 * 60 * 60 * 1_000;
+        }
     }
 
     /**
@@ -641,6 +644,15 @@ public final class Video implements Parcelable {
 
     public boolean isPublishedRecently() {
         return System.currentTimeMillis() - publishedTimeMs < 24 * 60 * 60 * 1_000;
+    }
+
+    public long getLiveDurationMs() {
+        if (publishedTimeMs == 0) {
+            return 0;
+        }
+
+        long liveDurationMs = System.currentTimeMillis() - publishedTimeMs;
+        return liveDurationMs > 0 && liveDurationMs < MAX_DURATION_MS ? liveDurationMs : 0;
     }
 
     // Builder for Video object.

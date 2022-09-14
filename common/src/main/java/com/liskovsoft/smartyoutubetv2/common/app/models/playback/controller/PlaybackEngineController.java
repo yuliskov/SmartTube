@@ -36,7 +36,7 @@ public interface PlaybackEngineController {
     void openUrlList(List<String> urlList);
     long getPositionMs();
     void setPositionMs(long positionMs);
-    long getLengthMs();
+    long getDurationMs();
     void setPlayWhenReady(boolean play);
     boolean getPlayWhenReady();
     boolean isPlaying();

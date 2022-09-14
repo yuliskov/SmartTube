@@ -159,9 +159,9 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
             return;
         }
 
-        long liveTimestampMs = mVideo.publishedTimeMs;
+        long liveDurationMs = mVideo.getLiveDurationMs();
 
-        if (liveTimestampMs <= 0) {
+        if (liveDurationMs == 0) {
             return;
         }
 
@@ -172,14 +172,11 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
             return;
         }
 
-        // Detect unusual video length.
-        if (playerAdapter.getDuration() < 24 * 60 * 60 * 1_000) {
-            return;
+        // Apply duration on videos with uncommon length.
+        if (playerAdapter.getDuration() > Video.MAX_DURATION_MS) {
+            controlsRow.setDuration(
+                    playerAdapter.isPrepared() ? liveDurationMs : -1);
         }
-
-        long liveDurationMs = System.currentTimeMillis() - liveTimestampMs;
-        controlsRow.setDuration(
-                playerAdapter.isPrepared() ? liveDurationMs : -1);
     }
 
     private void updateQualityInfo() {

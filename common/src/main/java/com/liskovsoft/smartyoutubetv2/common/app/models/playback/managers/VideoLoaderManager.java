@@ -25,7 +25,6 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
-import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -229,7 +228,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                 MessageHelpers.showMessageThrottled(getActivity(), R.string.wait_data_loading);
             }
             // Short videos next fix (suggestions aren't loaded yet)
-            boolean isEnded = getController() != null && Math.abs(getController().getLengthMs() - getController().getPositionMs()) < 100;
+            boolean isEnded = getController() != null && Math.abs(getController().getDurationMs() - getController().getPositionMs()) < 100;
             if (isEnded) {
                 Utils.postDelayed(mHandler, mPendingNext, 1_000);
             }

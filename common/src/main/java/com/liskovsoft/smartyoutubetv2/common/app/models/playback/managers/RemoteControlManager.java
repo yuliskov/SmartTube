@@ -138,7 +138,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
         if (item != null && getController() != null) {
             videoId = item.videoId;
             positionMs = getController().getPositionMs();
-            durationMs = getController().getLengthMs();
+            durationMs = getController().getDurationMs();
         }
 
         postStartPlaying(videoId, positionMs, durationMs, isPlaying);
@@ -169,11 +169,11 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
     }
 
     private void postPlay(boolean isPlaying) {
-        postState(getController().getPositionMs(), getController().getLengthMs(), isPlaying);
+        postState(getController().getPositionMs(), getController().getDurationMs(), isPlaying);
     }
 
     private void postSeek(long positionMs) {
-        postState(positionMs, getController().getLengthMs(), getController().isPlaying());
+        postState(positionMs, getController().getDurationMs(), getController().isPlaying());
     }
 
     private void postIdle() {
