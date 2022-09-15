@@ -6,7 +6,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
@@ -482,7 +481,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
             Video video = new Video();
             video.playlistId = mLastVideo.playlistId;
             VideoGroup topRow = getController().getSuggestionsByIndex(0);
-            video.playlistIndex = mRandom.getRandomIndex(
+            video.playlistIndex = mRandom.getPlaylistIndex(mLastVideo.getPlaylistId(),
                     mLastVideo.playlistInfo.getSize() != -1 ? mLastVideo.playlistInfo.getSize() : topRow != null ? topRow.getVideos().size() : -1);
 
             MediaServiceManager.instance().loadMetadata(video, randomMetadata -> {

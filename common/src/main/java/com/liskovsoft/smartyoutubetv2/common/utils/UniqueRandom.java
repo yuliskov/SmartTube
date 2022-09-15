@@ -8,22 +8,28 @@ import java.util.List;
 public class UniqueRandom {
     private static final int RANDOM_FAIL_REPEAT_TIMES = 10;
     private List<Integer> mUsedIndexes;
-    private int mTotalSize;
+    private int mPlaylistSize;
+    private String mPlaylistId;
 
-    public int getRandomIndex(int size) {
+    public int getPlaylistIndex(int playlistSize) {
+        return getPlaylistIndex(null, playlistSize);
+    }
+
+    public int getPlaylistIndex(String playlistId, int playlistSize) {
         if (mUsedIndexes == null) {
             mUsedIndexes = new ArrayList<>();
         }
 
-        if (mTotalSize != size || mUsedIndexes.size() == size) {
+        if (!Helpers.equals(mPlaylistId, playlistId) || mPlaylistSize != playlistSize || mUsedIndexes.size() == playlistSize) {
             mUsedIndexes.clear();
-            mTotalSize = size;
+            mPlaylistSize = playlistSize;
+            mPlaylistId = playlistId;
         }
 
         int randomIndex = 0;
 
         for (int i = 0; i < RANDOM_FAIL_REPEAT_TIMES; i++) {
-            randomIndex = Helpers.getRandomIndex(size);
+            randomIndex = Helpers.getRandomIndex(playlistSize);
             if (!mUsedIndexes.contains(randomIndex)) {
                 mUsedIndexes.add(randomIndex);
                 break;

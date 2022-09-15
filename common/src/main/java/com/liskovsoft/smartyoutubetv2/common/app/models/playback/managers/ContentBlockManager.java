@@ -30,7 +30,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ContentBlockManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = ContentBlockManager.class.getSimpleName();
-    private static final long SEGMENT_CHECK_LENGTH_MS = 3_000;
     private MediaItemService mMediaItemManager;
     private ContentBlockData mContentBlockData;
     private Video mVideo;
@@ -316,7 +315,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 }
             } else {
                 SponsorSegment lastSegment = foundSegment.get(foundSegment.size() - 1);
-                if (isSkipAction && isPositionInsideSegment(lastSegment.getEndMs(), segment)) {
+                if (isSkipAction && isPositionInsideSegment(lastSegment.getEndMs() + 3_000, segment)) {
                     foundSegment.add(segment);
                 }
             }
