@@ -154,8 +154,8 @@ SmartTubeNext is developed single-handedly by Yurii; there is no larger team or 
 
 ## Build
     
-**NOTE: OpenJDK 14 or older (!) is required. Newer JDK could cause the app crash!**  
-To build and install a debug version, run this commands:
+**NOTE: OpenJDK 14 or older (!) is required. Newer JDK could cause app crash!**  
+To build and install debug version, run these commands:
 
 ```
 git clone https://github.com/yuliskov/SmartTubeNext.git
