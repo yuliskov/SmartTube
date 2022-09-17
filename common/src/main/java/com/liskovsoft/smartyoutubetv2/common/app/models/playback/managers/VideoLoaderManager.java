@@ -267,7 +267,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
             bgImageUrl = mLastVideo.getBackgroundUrl();
-        } else if (formatInfo.isLive() && formatInfo.containsDashUrl() && !video.isPublishedRecently() && !forceLegacyFormat(formatInfo)) {
+        } else if (formatInfo.isLive() && formatInfo.containsDashUrl() && !forceLegacyFormat(formatInfo)) {
             Log.d(TAG, "Found live video (current or past live stream) in dash format. Loading...");
             getController().openDashUrl(formatInfo.getDashManifestUrl());
         } else if (formatInfo.isLive() && formatInfo.containsHlsUrl() && forceLegacyFormat(formatInfo)) {

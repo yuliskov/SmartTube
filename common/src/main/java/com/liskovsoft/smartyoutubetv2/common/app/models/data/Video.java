@@ -67,7 +67,8 @@ public final class Video implements Parcelable {
     public boolean fromQueue;
     public boolean isPending;
     public boolean finishOnEnded;
-    public long publishedTimeMs;
+    public long startTimeMs;
+    public boolean isLongStream;
 
     public Video() {
        // NOP
@@ -564,7 +565,8 @@ public final class Video implements Parcelable {
         String lengthSeconds = formatInfo.getLengthSeconds();
         // Published time used on live videos only
         if (lengthSeconds == null || lengthSeconds.isEmpty() || lengthSeconds.equals("0")) {
-            publishedTimeMs = formatInfo.getStartTimeMs();
+            startTimeMs = formatInfo.getStartTimeMs();
+            isLongStream = formatInfo.getStartSegmentNum() > 0;
 
             // TESTING
             //publishedTimeMs = System.currentTimeMillis() - 2 * 60 * 60 * 1_000;
@@ -641,16 +643,12 @@ public final class Video implements Parcelable {
         return nextVideo;
     }
 
-    public boolean isPublishedRecently() {
-        return System.currentTimeMillis() - publishedTimeMs < MAX_DURATION_MS;
-    }
-
     public long getLiveDurationMs() {
-        if (publishedTimeMs == 0) {
+        if (startTimeMs == 0) {
             return 0;
         }
 
-        long liveDurationMs = System.currentTimeMillis() - publishedTimeMs - 60_000; // add 60 sec buffer
+        long liveDurationMs = System.currentTimeMillis() - startTimeMs - 60_000; // add 60 sec buffer
         return liveDurationMs > 0 && liveDurationMs < MAX_DURATION_MS ? liveDurationMs : 0;
     }
 
