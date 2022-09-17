@@ -11,7 +11,6 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.ArrayList;
@@ -565,7 +564,7 @@ public final class Video implements Parcelable {
         String lengthSeconds = formatInfo.getLengthSeconds();
         // Published time used on live videos only
         if (lengthSeconds == null || lengthSeconds.isEmpty() || lengthSeconds.equals("0")) {
-            publishedTimeMs = DateFormatter.toUnixTimeMs(formatInfo.getStartTimestamp());
+            publishedTimeMs = formatInfo.getStartTimeMs();
 
             // TESTING
             //publishedTimeMs = System.currentTimeMillis() - 2 * 60 * 60 * 1_000;
