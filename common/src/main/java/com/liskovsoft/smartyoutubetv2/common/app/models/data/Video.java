@@ -649,8 +649,14 @@ public final class Video implements Parcelable {
             return 0;
         }
 
-        long liveDurationMs = System.currentTimeMillis() - startTimeMs - 60_000; // add 60 sec buffer
-        return liveDurationMs > 0 && liveDurationMs < MAX_DURATION_MS ? liveDurationMs : 0;
+        long liveDurationMs = System.currentTimeMillis() - startTimeMs;
+        return liveDurationMs > 0 ? liveDurationMs : 0;
+    }
+
+    public long getLiveBufferDurationMs() {
+        // Add 60 sec buffer and align by segment size
+        long bufferDurationMs = (getLiveDurationMs() - 60_000) * 9999 / 10000;
+        return bufferDurationMs > 0 ? bufferDurationMs : 0;
     }
 
     // Builder for Video object.

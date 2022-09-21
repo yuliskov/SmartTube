@@ -260,12 +260,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
             bgImageUrl = mLastVideo.getBackgroundUrl();
-        } else if (formatInfo.isLive() && formatInfo.containsDashUrl() && !forceLegacyFormat(formatInfo)) {
-            Log.d(TAG, "Found live video (current or past live stream) in dash format. Loading...");
-            getController().openDashUrl(formatInfo.getDashManifestUrl());
-        } else if (formatInfo.isLive() && formatInfo.containsHlsUrl() && forceLegacyFormat(formatInfo)) {
-            Log.d(TAG, "Found live video (current or past live stream) in hls format. Loading...");
-            getController().openHlsUrl(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsDashVideoInfo() && !forceLegacyFormat(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
@@ -276,6 +270,12 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                             dashManifest -> getController().openDash(dashManifest),
                             error -> Log.e(TAG, "createMpdStream error: %s", error.getMessage())
                     );
+        } else if (formatInfo.isLive() && formatInfo.containsDashUrl() && !forceLegacyFormat(formatInfo)) {
+            Log.d(TAG, "Found live video (current or past live stream) in dash format. Loading...");
+            getController().openDashUrl(formatInfo.getDashManifestUrl());
+        } else if (formatInfo.isLive() && formatInfo.containsHlsUrl() && forceLegacyFormat(formatInfo)) {
+            Log.d(TAG, "Found live video (current or past live stream) in hls format. Loading...");
+            getController().openHlsUrl(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsUrlListInfo()) {
             Log.d(TAG, "Found url list video. This is always LQ. Loading...");
             getController().openUrlList(applyFix(formatInfo.createUrlList()));
