@@ -10,6 +10,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
+import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
@@ -68,7 +69,7 @@ public final class Video implements Parcelable {
     public boolean isPending;
     public boolean finishOnEnded;
     public long startTimeMs;
-    public boolean isLongStream;
+    private int startSegmentNum;
 
     public Video() {
        // NOP
@@ -565,8 +566,8 @@ public final class Video implements Parcelable {
         String lengthSeconds = formatInfo.getLengthSeconds();
         // Published time used on live videos only
         if (lengthSeconds == null || lengthSeconds.isEmpty() || lengthSeconds.equals("0")) {
-            startTimeMs = formatInfo.getStartTimeMs();
-            isLongStream = formatInfo.getStartSegmentNum() > 0;
+            startTimeMs = formatInfo.getStartTimeMs() > 0 ? formatInfo.getStartTimeMs() : DateHelper.toUnixTimeMs(formatInfo.getStartTimestamp());
+            startSegmentNum = formatInfo.getStartSegmentNum();
 
             // TESTING
             //publishedTimeMs = System.currentTimeMillis() - 2 * 60 * 60 * 1_000;

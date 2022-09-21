@@ -255,14 +255,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
         String bgImageUrl = null;
 
-        Video video = getController().getVideo();
-
-        if (video == null) {
-            Log.e(TAG, "Can't process format when video is null");
-            return;
-        }
-
-        video.sync(formatInfo);
+        mLastVideo.sync(formatInfo);
 
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
