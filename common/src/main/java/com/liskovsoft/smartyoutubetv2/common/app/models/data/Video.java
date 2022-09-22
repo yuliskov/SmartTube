@@ -563,14 +563,10 @@ public final class Video implements Parcelable {
             description = formatInfo.getDescription();
         }
 
-        String lengthSeconds = formatInfo.getLengthSeconds();
         // Published time used on live videos only
-        if (lengthSeconds == null || lengthSeconds.isEmpty() || lengthSeconds.equals("0")) {
+        if (formatInfo.isLive()) {
             startTimeMs = formatInfo.getStartTimeMs() > 0 ? formatInfo.getStartTimeMs() : DateHelper.toUnixTimeMs(formatInfo.getStartTimestamp());
             startSegmentNum = formatInfo.getStartSegmentNum();
-
-            // TESTING
-            //publishedTimeMs = System.currentTimeMillis() - 2 * 60 * 60 * 1_000;
         }
     }
 
@@ -654,8 +650,8 @@ public final class Video implements Parcelable {
     }
 
     public long getLiveBufferDurationMs() {
-        // Add 60 sec buffer and align by segment size
-        long bufferDurationMs = (getLiveDurationMs() - 60_000) * 9999 / 10000;
+        // Add buffer and take into account segment offset
+        long bufferDurationMs = getLiveDurationMs() - (startSegmentNum > 0 ? 120_000 : 60_000);
         return bufferDurationMs > 0 ? bufferDurationMs : 0;
     }
 
