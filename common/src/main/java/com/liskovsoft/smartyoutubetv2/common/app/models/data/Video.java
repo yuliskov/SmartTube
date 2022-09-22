@@ -645,7 +645,8 @@ public final class Video implements Parcelable {
             return 0;
         }
 
-        long liveDurationMs = System.currentTimeMillis() - startTimeMs;
+        // Stream real length may exceeds calculated length
+        long liveDurationMs = System.currentTimeMillis() - startTimeMs - 60_000;
         return liveDurationMs > 0 ? liveDurationMs : 0;
     }
 
