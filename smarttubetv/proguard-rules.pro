@@ -25,6 +25,8 @@
 #-keepattributes InnerClasses
 
 -keep public class com.liskovsoft.youtubeapi.** { *; }
+-keep class org.mozilla.** { *; }
+
 #-keep class okhttp3.**{*;}
 #-keep interface okhttp3.** { *; }
 
