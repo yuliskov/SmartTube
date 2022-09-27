@@ -104,9 +104,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         }
         mIsWasVideoStartError = false;
         mIsWasStarted = false;
-        if (item != null) {
-            Analytics.sendVideoStarting(item.videoId, item.title);
-        }
+        Analytics.sendVideoStarting(item.videoId, item.title);
     }
 
     @Override
@@ -148,7 +146,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         if (!mIsWasStarted && mLastVideo != null) {
             Analytics.sendVideoStarted(mLastVideo.videoId, mLastVideo.title);
             mIsWasStarted = true;
-
         }
     }
 
@@ -287,9 +284,19 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
         mLastVideo.sync(formatInfo);
 
-        if (formatInfo.isUnplayable()) {
+        if (formatInfo.isUnplayable() || formatInfo.isAgeRestricted()) {
             getController().showError(formatInfo.getPlayabilityStatus());
             bgImageUrl = mLastVideo.getBackgroundUrl();
+            if (!mIsWasVideoStartError) {
+                Analytics.sendVideoStartError(mLastVideo.videoId,
+                        mLastVideo.title,
+                        formatInfo.getPlayabilityStatus());
+                mIsWasVideoStartError = true;
+            }
+            if (formatInfo.isAgeRestricted()) {
+                SignInPresenter.instance(getActivity()).start();
+                getController().finish();
+            }
         } else if (formatInfo.containsDashVideoInfo() && !forceLegacyFormat(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
@@ -314,7 +321,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
             scheduleReloadVideoTimer(30 * 1_000);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
-            if (!mIsWasVideoStartError && mLastVideo != null) {
+            if (!mIsWasVideoStartError) {
                 Analytics.sendVideoStartError(mLastVideo.videoId,
                         mLastVideo.title,
                         formatInfo.getPlayabilityStatus());
