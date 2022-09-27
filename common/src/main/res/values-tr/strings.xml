@@ -42,7 +42,7 @@
     <string name="section_is_empty">Hata! Burada hiçbir şey yok.</string>
     <string name="dialog_add_to_playlist">Oynatma listesine Ekle/Kaldır</string>
     <string name="msg_signed_users_only">Sadece oturum açmış kullanıcılar</string>
-    <string name="msg_cant_load_content">İçerik yüklenemiyor.\n1) Cihazdaki tarih ve saati kontrol edin.\n2) Ağ bağlantısını kontrol edin.\n3) Hesabınızda oturum açmayı deneyin.\n4) Belki burada hiçbir şey yoktur.</string>
+    <string name="msg_cant_load_content">İçerik yüklenemiyor.\n1) Cihazdaki tarih ve saati kontrol edin.\n2) Ağ bağlantısını kontrol edin.\n3) Vekil Sunucu ayarlarınızı kontrol edin.\n4) Hesabınızda oturum açmayı deneyin.\n5) Belki burada hiçbir şey yoktur.</string>
     <string name="title_video_presets">Video ön ayarları</string>
     <string name="settings_accounts">Hesaplar</string>
     <string name="settings_left_panel">Kategorileri düzenle</string>
@@ -110,7 +110,7 @@
     <string name="cards_style">Kart stili</string>
     <string name="repeat_mode_all">Videoları sürekli oynat</string>
     <string name="repeat_mode_one">Videoyu tekrarla</string>
-    <string name="repeat_mode_pause">Her videodan sonra oynatmayı durdur</string>
+    <string name="repeat_mode_pause">Her videodan sonra oynatmayı duraklat</string>
     <string name="repeat_mode_pause_alt">Sadece oynatma listesi videolarını sürekli oynat</string>
     <string name="repeat_mode_none">Videodan sonra oynatmayı durdur</string>
     <string name="subscribed_to_channel">Kanala abone olundu</string>
@@ -316,7 +316,7 @@
     <string name="cancel_dialog">İptal et</string>
     <string name="msg_player_error_source2">Video kaynağı çalışmıyor ya da hatalı saat</string>
     <string name="hide_upcoming">Abonelikler\'de yaklaşan yayınları gizle</string>
-    <string name="search_background_playback">Oynatıcıdan arama yaparken resim içinde resim moduna geç</string>
+    <string name="search_background_playback">Arama yaparken/Kanalı açarken resim içinde resim moduna geç</string>
     <string name="trending_row_name">Trendler</string>
     <string name="player_seek_type">Arama davranışı</string>
     <string name="player_seek_regular">Normal</string>
@@ -467,4 +467,6 @@
     <string name="subtitle_yellow_black">Sarı (Siyah arka plan)</string>
     <string name="player_pixel_ratio">Görüntü en boy oranı</string>
     <string name="color_scheme_dark_grey_monochrome">Koyu Gri (tek renkli)</string>
+    <string name="disable_mic_permission">Bu tanıyıcının düzgün çalışması için lütfen uygulamanın mikrofon erişimini devre dışı bırakın.</string>
+    <string name="repeat_mode_shuffle">Herhangi bir oynatma listesini karıştır</string>
 </resources>

@@ -2,11 +2,13 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
@@ -21,8 +23,8 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
-public class VideoStateManager extends PlayerEventListenerHelper implements TickleListener {
-    private static final long MUSIC_VIDEO_MAX_LENGTH_MS = 6 * 60 * 1000;
+public class VideoStateManager extends PlayerEventListenerHelper implements TickleListener, MetadataListener {
+    private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 60_000;
     private static final String TAG = VideoStateManager.class.getSimpleName();
     private static final float RESTORE_POSITION_PERCENTS = 10; // min value for immediately closed videos
@@ -138,6 +140,11 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
     }
 
     @Override
+    public void onMetadata(MediaItemMetadata metadata) {
+        updateHistory();
+    }
+
+    @Override
     public void onEngineError(int type) {
         // Oops. Error happens while playing (network lost etc).
         if (getController().getPositionMs() > 1_000) {
@@ -162,8 +169,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         restoreSpeed();
         // Player thinks that subs not enabled if I enable it too early (e.g. on source change event).
         restoreSubtitleFormat();
-
-        updateHistory();
 
         restoreVolume();
     }
@@ -257,7 +262,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         State state = mStateService.getByVideoId(item.videoId);
 
         // Reset position of music videos
-        boolean isShort = state != null && (state.lengthMs < MUSIC_VIDEO_MAX_LENGTH_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled());
+        boolean isShort = state != null && (state.lengthMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled());
 
         if (isShort || item.isLive) {
             resetPosition(item);
@@ -328,7 +333,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         // 1) Track is ended
         // 2) Pause on end enabled
         // 3) Watching live stream in real time
-        long lengthMs = getController().getLengthMs();
+        long lengthMs = getController().getDurationMs();
         long positionMs = getController().getPositionMs();
         long remainsMs = lengthMs - positionMs;
         boolean isPositionActual = remainsMs > 1_000;
@@ -360,7 +365,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         boolean stateIsOutdated = state == null || state.timestamp < item.timestamp;
         if (containsWebPosition && stateIsOutdated) {
             // Web state is buggy on short videos (e.g. video clips)
-            boolean isLongVideo = getController().getLengthMs() > MUSIC_VIDEO_MAX_LENGTH_MS;
+            boolean isLongVideo = getController().getDurationMs() > MUSIC_VIDEO_MAX_DURATION_MS;
             if (isLongVideo) {
                 state = new State(item.videoId, convertToMs(item.percentWatched));
             }
@@ -371,9 +376,14 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
             state = null;
         }
 
+        // Set actual position for live videos with uncommon length
+        if (state == null && item.isLive && getController().getDurationMs() > Video.MAX_DURATION_MS) {
+            state = new State(item.videoId, item.getLiveBufferDurationMs());
+        }
+
         // Do I need to check that item isn't live? (state != null && !item.isLive)
         if (state != null) {
-            long remainsMs = getController().getLengthMs() - state.positionMs;
+            long remainsMs = getController().getDurationMs() - state.positionMs;
             // Url list videos at this stage has undefined (-1) length. So, we need to ensure that remains is positive.
             boolean isVideoEnded = remainsMs >= 0 && remainsMs < (item.isLive ? 30_000 : 1_000); // live buffer fix
             if (!isVideoEnded || !getPlayEnabled()) {
@@ -425,7 +435,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
 
     private void restoreSpeed() {
         Video item = getVideo();
-        boolean isLiveThreshold = getController().getLengthMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
+        boolean isLiveThreshold = getController().getDurationMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
         boolean isLive = item.isLive && isLiveThreshold;
         boolean isMusic = item.belongsToMusic();
 
@@ -442,7 +452,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
             return -1;
         }
 
-        long newPositionMs = (long) (getController().getLengthMs() / 100 * percentWatched);
+        long newPositionMs = (long) (getController().getDurationMs() / 100 * percentWatched);
 
         boolean samePositions = Math.abs(newPositionMs - getController().getPositionMs()) < 10_000;
 

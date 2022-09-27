@@ -16,12 +16,14 @@ import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.RowPresenter.ViewHolder;
 import androidx.leanback.widget.SpeechRecognitionCallback;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.SearchTagsProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
@@ -147,6 +149,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
         switch (SearchData.instance(getContext()).getSpeechRecognizerType()) {
             case SearchData.SPEECH_RECOGNIZER_SYSTEM:
+                // Do nothing unless we have old api.
                 // Internal recognizer needs API >= 23. See: androidx.leanback.widget.SearchBar.startRecognition()
                 if (Build.VERSION.SDK_INT < 23) {
                     setSpeechRecognitionCallback(mDefaultCallback);
@@ -250,6 +253,10 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     @SuppressWarnings("deprecation")
     private final SpeechRecognitionCallback mDefaultCallback = () -> {
         if (isAdded()) {
+            if (PermissionHelpers.hasMicPermissions(getContext())) {
+                MessageHelpers.showMessage(getContext(), R.string.disable_mic_permission);
+            }
+
             try {
                 startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
             } catch (ActivityNotFoundException e) {

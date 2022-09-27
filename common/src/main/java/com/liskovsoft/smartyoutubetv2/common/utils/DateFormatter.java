@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.content.Context;
-import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
 import java.text.SimpleDateFormat;
@@ -40,33 +39,5 @@ public class DateFormatter {
         String currentTime = serverFormat.format(new Date(currentTimeMs));
 
         return String.format("%1$s", currentTime);
-    }
-
-    public static boolean is24HourLocale(Context context) {
-        Locale currentLocale = LocaleUtility.getCurrentLocale(context);
-
-        // Fix weird locale like en_RO
-        for (Locale locale : Locale.getAvailableLocales()) {
-            if (locale.getCountry().equals(currentLocale.getCountry())) {
-                currentLocale = locale;
-                break;
-            }
-        }
-
-        java.text.DateFormat natural =
-                java.text.DateFormat.getTimeInstance(
-                        java.text.DateFormat.LONG, currentLocale);
-
-        if (natural instanceof SimpleDateFormat) {
-            SimpleDateFormat sdf = (SimpleDateFormat) natural;
-            String pattern = sdf.toPattern();
-            if (pattern.indexOf('H') >= 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return true;
-        }
     }
 }

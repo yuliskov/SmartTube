@@ -42,7 +42,7 @@
     <string name="section_is_empty">Oops! There is nothing in here.</string>
     <string name="dialog_add_to_playlist">Add/Remove from playlist</string>
     <string name="msg_signed_users_only">Signed users only</string>
-    <string name="msg_cant_load_content">Can\'t load content.\n1) Check date and time on the device.\n2) Check network connection.\n3) Try to sign in to your account.\n4) Maybe there is nothing in here.</string>
+    <string name="msg_cant_load_content">Can\'t load content.\n1) Check date and time on the device.\n2) Check network connection.\n3) Check your proxy settings.\n4) Try to sign in to your account.\n5) Maybe there is nothing in here.</string>
     <string name="title_video_presets">Video presets</string>
     <string name="settings_accounts">Accounts</string>
     <string name="settings_left_panel">Edit categories</string>
@@ -110,7 +110,7 @@
     <string name="cards_style">Cards style</string>
     <string name="repeat_mode_all">Play videos continuously</string>
     <string name="repeat_mode_one">Repeat current video</string>
-    <string name="repeat_mode_pause">Stop playback after each video</string>
+    <string name="repeat_mode_pause">Pause playback after each video</string>
     <string name="repeat_mode_pause_alt">Play only playlist videos continuously</string>
     <string name="repeat_mode_none">Stop playback after one video</string>
     <string name="subscribed_to_channel">Channel subscribed</string>
@@ -316,7 +316,7 @@
     <string name="cancel_dialog">Cancel</string>
     <string name="msg_player_error_source2">Video source isn\'t working or incorrect time</string>
     <string name="hide_upcoming">Hide upcoming from Subscriptions</string>
-    <string name="search_background_playback">Enter PIP when searching from player</string>
+    <string name="search_background_playback">Enter PIP on search/open channel</string>
     <string name="trending_row_name">Trending</string>
     <string name="player_seek_type">Seek behavior</string>
     <string name="player_seek_regular">Regular</string>
@@ -467,5 +467,7 @@
     <string name="subtitle_yellow_black">Yellow on black background</string>
     <string name="player_pixel_ratio">Pixel ratio</string>
     <string name="color_scheme_dark_grey_monochrome">Dark Grey (monochrome)</string>
+    <string name="disable_mic_permission">Please, disable microphone access for the app in order this recognizer to work properly.</string>
+    <string name="repeat_mode_shuffle">Shuffle any playlist</string>
     <string name="cancel">Cancel</string>
 </resources>

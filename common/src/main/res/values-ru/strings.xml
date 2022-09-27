@@ -41,7 +41,7 @@
     <string name="section_is_empty">Ой! Здесь ничего нет.</string>
     <string name="dialog_add_to_playlist">Добавить/Удалить из плейлиста</string>
     <string name="msg_signed_users_only">Необходимо войти в вккаунт</string>
-    <string name="msg_cant_load_content">Не получилось загрузить содержимое.\n1) Проверьте дату и время на устройстве.\n2) Проверьте сетевое подключение.\n3) Попробуйте войти в аккаунт.\n4) Возможно, здесь ничего нет.</string>
+    <string name="msg_cant_load_content">Не получилось загрузить содержимое.\n1) Проверьте дату и время на устройстве.\n2) Проверьте сетевое подключение.\n3) Проверьте настройки прокси.\n4) Попробуйте войти в аккаунт.\n5) Возможно, здесь ничего нет.</string>
     <string name="title_video_presets">Профили видео</string>
     <string name="settings_accounts">Аккаунты</string>
     <string name="settings_left_panel">Настроить категории</string>
@@ -110,7 +110,7 @@
     <string name="cards_style">Стиль карточек</string>
     <string name="repeat_mode_all">Воспроизводить видео непрерывно</string>
     <string name="repeat_mode_one">Повторять текущее видео</string>
-    <string name="repeat_mode_pause">Останавливать воспроизведение после каждого видео</string>
+    <string name="repeat_mode_pause">Ставить воспроизведение на паузу после каждого видео</string>
     <string name="repeat_mode_pause_alt">Воспроизводить непрерывно только видео из плейлиста</string>
     <string name="repeat_mode_none">Завершать воспроизведение после одного видео</string>
     <string name="subscribed_to_channel">Подписка на канал оформлена</string>
@@ -312,7 +312,7 @@
     <string name="cancel_dialog">Отменить</string>
     <string name="msg_player_error_source2">Источник видео не работает или неправильное время</string>
     <string name="hide_upcoming">Скрывать анонсы из Подписок</string>
-    <string name="search_background_playback">Переходить в режим Картинка в картинке, если поиск запущен из плеера</string>
+    <string name="search_background_playback">Переходить в режим Картинка в картинке при поиске/открытии канала</string>
     <string name="trending_row_name">В тренде</string>
     <string name="player_seek_type">Поведение перемотки</string>
     <string name="player_seek_regular">Обычное</string>
@@ -459,5 +459,7 @@
     <string name="subtitle_yellow_black">Жёлтые на чёрном фоне</string>
     <string name="player_pixel_ratio">Соотношение сторон пикселя</string>
     <string name="color_scheme_dark_grey_monochrome">Тёмно-серая (монохромная)</string>
+    <string name="disable_mic_permission">Пожалуйста, отключите доступ к микрофону для приложения, чтобы этот распознаватель работал правильно.</string>
+    <string name="repeat_mode_shuffle">Перемешать любой плейлист</string>
     <string name="cancel">Отмена</string>
 </resources>

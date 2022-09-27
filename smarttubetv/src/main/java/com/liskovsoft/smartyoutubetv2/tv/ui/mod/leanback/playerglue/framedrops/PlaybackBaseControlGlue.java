@@ -435,19 +435,17 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
 
     // MOD: fix frame drops: don't update progress too often
 
-    private void syncControlsStateIfNeeded() {
-        if (!mIsControlsVisible) {
+    protected void onUpdateControlsVisibility() {
+        if (mIsControlsVisible) {
             updateProgress();
             updateBufferedProgress();
         }
     }
 
     public void setControlsVisibility(boolean show) {
-        if (show) {
-            syncControlsStateIfNeeded();
-        }
-
         mIsControlsVisible = show;
+
+        onUpdateControlsVisibility();
     }
 
     public boolean isControlsVisible() {

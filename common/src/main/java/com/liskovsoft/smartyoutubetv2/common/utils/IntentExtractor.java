@@ -170,6 +170,10 @@ public class IntentExtractor {
         return intent != null && extractUri(intent) != null && extractUri(intent).toString().contains("launch=voice");
     }
 
+    public static boolean hasFinishOnEndedFlag(Intent intent) {
+        return intent != null && intent.getBooleanExtra("finish_on_ended", false);
+    }
+
     /**
      * Example: https://www.youtube.com/tv?voice={"youtubeAssistantRequest":{"query":"Russian YouTube","queryIntent":"CgxTZWFyY2hJbnRlbnQSFAoFcXVlcnkSCxoJCgdSdXNzaWFuEiYKCGRvY190eXBlEhoaGAoWWU9VVFVCRV9ET0NfVFlQRV9WSURFTw==","youtubeAssistantParams":{"personalDataParams":{"showPersonalData":false}},"enablePrefetchLogging":true},"updateYoutubeSettings":{"enableSafetyMode":false,"enablePersonalResults":false},"hasEntityBar":false}&command_id=CWGIYL6nN8Gi3AP_5Y6wAQ&launch=voice&vq=Russian%20YouTube
      */

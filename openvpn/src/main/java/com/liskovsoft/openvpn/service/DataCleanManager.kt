@@ -1,4 +1,4 @@
-package com.liskovsoft.openvpn
+package com.liskovsoft.openvpn.service
 
 import android.content.Context
 import android.os.Environment

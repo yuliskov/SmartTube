@@ -99,8 +99,8 @@ public class EndingTimeView extends AppCompatTextView implements TickleListener 
 
         long remainingTimeMs = 0;
 
-        if (playbackView != null) {
-            remainingTimeMs = playbackView.getController().getLengthMs() - playbackView.getController().getPositionMs();
+        if (playbackView != null && playbackView.getController().getVideo() != null && !playbackView.getController().getVideo().isLive) {
+            remainingTimeMs = playbackView.getController().getDurationMs() - playbackView.getController().getPositionMs();
             remainingTimeMs = applySpeedCorrection(remainingTimeMs);
         }
 

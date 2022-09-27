@@ -5,9 +5,11 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
+import androidx.leanback.widget.PlaybackControlsRow;
 import androidx.leanback.widget.PlaybackRowPresenter;
 import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.framedrops.PlaybackBaseControlGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.framedrops.PlaybackTransportControlGlue;
@@ -19,6 +21,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     private QualityInfoListener mQualityInfoListener;
     private ControlsVisibilityListener mVisibilityListener;
     private PlayPauseListener mPlayPauseListener;
+    private Video mVideo;
 
     /**
      * Constructor for the glue.
@@ -111,6 +114,11 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     }
 
     @Override
+    public void setVideo(Video video) {
+        mVideo = video;
+    }
+
+    @Override
     public void play() {
         super.play();
 
@@ -125,6 +133,49 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
 
         if (mPlayPauseListener != null) {
             mPlayPauseListener.onPlay(false);
+        }
+    }
+
+    @Override
+    protected void onUpdateControlsVisibility() {
+        super.onUpdateControlsVisibility();
+
+        if (isControlsVisible()) {
+            updateLiveEndingTime();
+        }
+    }
+
+    @Override
+    protected void onUpdateProgress() {
+        super.onUpdateProgress();
+
+        if (isControlsVisible()) {
+            updateLiveEndingTime();
+        }
+    }
+
+    private void updateLiveEndingTime() {
+        if (mVideo == null) {
+            return;
+        }
+
+        long liveDurationMs = mVideo.getLiveDurationMs();
+
+        if (liveDurationMs == 0) {
+            return;
+        }
+
+        PlaybackControlsRow controlsRow = getControlsRow();
+        PlayerAdapter playerAdapter = getPlayerAdapter();
+
+        if (controlsRow == null || playerAdapter == null) {
+            return;
+        }
+
+        // Apply duration on videos with uncommon length.
+        if (playerAdapter.getDuration() > Video.MAX_DURATION_MS) {
+            controlsRow.setDuration(
+                    playerAdapter.isPrepared() ? liveDurationMs : -1);
         }
     }
 

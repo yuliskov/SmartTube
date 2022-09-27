@@ -112,6 +112,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public void onViewInitialized() {
+        super.onViewInitialized();
+
         if (getView() == null) {
             return;
         }
@@ -122,8 +124,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         int selectedSectionIndex = findSectionIndex(mSelectedSectionId);
         mSelectedSectionId = -1;
         getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, true);
-        showBootDialogs();
-        Utils.updateRemoteControlService(getContext());
     }
 
     private void initSections() {
@@ -141,7 +141,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         mSectionsMapping.put(MediaGroup.TYPE_HOME, new BrowseSection(MediaGroup.TYPE_HOME, getContext().getString(R.string.header_home), BrowseSection.TYPE_ROW, R.drawable.icon_home));
         mSectionsMapping.put(MediaGroup.TYPE_GAMING, new BrowseSection(MediaGroup.TYPE_GAMING, getContext().getString(R.string.header_gaming), BrowseSection.TYPE_ROW, R.drawable.icon_gaming));
-        if (!Helpers.equalsAny(country, "RU")) {
+        if (!Helpers.equalsAny(country, "RU", "BY")) {
             mSectionsMapping.put(MediaGroup.TYPE_NEWS, new BrowseSection(MediaGroup.TYPE_NEWS, getContext().getString(R.string.header_news), BrowseSection.TYPE_ROW, R.drawable.icon_news));
         }
         mSectionsMapping.put(MediaGroup.TYPE_MUSIC, new BrowseSection(MediaGroup.TYPE_MUSIC, getContext().getString(R.string.header_music), BrowseSection.TYPE_ROW, R.drawable.icon_music));
@@ -475,12 +475,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         if (timeAfterPauseMs > HEADER_REFRESH_PERIOD_MS) { // update header every n minutes
             refresh();
         }
-    }
-
-    private void showBootDialogs() {
-//        BootDialogPresenter updatePresenter = BootDialogPresenter.instance(getContext());
-//        updatePresenter.start();
-//        updatePresenter.unhold();
     }
 
     public void refresh() {

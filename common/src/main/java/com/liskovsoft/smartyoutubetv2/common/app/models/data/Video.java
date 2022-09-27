@@ -9,6 +9,8 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
+import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
@@ -20,6 +22,7 @@ import java.util.List;
  */
 public final class Video implements Parcelable {
     public static final String TERTIARY_TEXT_DELIM = "•";
+    public static final long MAX_DURATION_MS = 24 * 60 * 60 * 1_000;
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     private static final String[] sNotPlaylistParams = new String[] {"EAIYAQ%3D%3D"};
     private static final String SECTION_PREFIX = "FE";
@@ -48,6 +51,8 @@ public final class Video implements Parcelable {
     public float percentWatched = -1;
     public MediaItem mediaItem;
     public MediaItem nextMediaItem;
+    public MediaItem nextMediaItemBackup;
+    public VideoPlaylistInfo playlistInfo;
     public VideoGroup group; // Memory leak. Used to get next page when scrolling.
     public boolean hasNewContent;
     public boolean isLive;
@@ -62,6 +67,9 @@ public final class Video implements Parcelable {
     public int pendingPosMs;
     public boolean fromQueue;
     public boolean isPending;
+    public boolean finishOnEnded;
+    public long startTimeMs;
+    private int startSegmentNum;
 
     public Video() {
        // NOP
@@ -120,7 +128,7 @@ public final class Video implements Parcelable {
         video.previewUrl = item.getVideoPreviewUrl();
         video.playlistId = item.getPlaylistId();
         video.playlistIndex = item.getPlaylistIndex();
-        video.playlistParams = item.getPlaylistParams();
+        video.playlistParams = item.getParams();
         video.reloadPageKey = item.getReloadPageKey();
         video.isLive = item.isLive();
         video.isUpcoming = item.isUpcoming();
@@ -466,8 +474,8 @@ public final class Video implements Parcelable {
         MediaItem first = mediaItems.get(0);
         MediaItem second = mediaItems.get(1);
 
-        String playlist1 = first.getPlaylistId() != null ? first.getPlaylistId() : first.getPlaylistParams();
-        String playlist2 = second.getPlaylistId() != null ? second.getPlaylistId() : second.getPlaylistParams();
+        String playlist1 = first.getPlaylistId() != null ? first.getPlaylistId() : first.getParams();
+        String playlist2 = second.getPlaylistId() != null ? second.getPlaylistId() : second.getParams();
 
         return playlist1 != null && playlist2 != null && Helpers.equals(playlist1, playlist2);
     }
@@ -536,7 +544,8 @@ public final class Video implements Parcelable {
             description = metadata.getDescription();
         }
         channelId = metadata.getChannelId();
-        nextMediaItem = metadata.getNextVideo();
+        nextMediaItem = findNextVideo(metadata);
+        playlistInfo = metadata.getPlaylistInfo();
         isSubscribed = metadata.isSubscribed();
         isSynced = true;
 
@@ -552,6 +561,12 @@ public final class Video implements Parcelable {
 
         if (description == null) {
             description = formatInfo.getDescription();
+        }
+
+        // Published time used on live videos only
+        if (formatInfo.isLive()) {
+            startTimeMs = formatInfo.getStartTimeMs() > 0 ? formatInfo.getStartTimeMs() : DateHelper.toUnixTimeMs(formatInfo.getStartTimestamp());
+            startSegmentNum = formatInfo.getStartSegmentNum();
         }
     }
 
@@ -603,6 +618,42 @@ public final class Video implements Parcelable {
     private boolean checkMediaItems() {
         return group != null && group.getMediaGroup() != null
                 && group.getMediaGroup().getMediaItems() != null && group.getMediaGroup().getMediaItems().size() >= 2;
+    }
+
+    private MediaItem findNextVideo(MediaItemMetadata metadata) {
+        if (metadata == null) {
+            return null;
+        }
+
+        MediaItem nextVideo = metadata.getNextVideo();
+
+        // BUGFIX: player closed after last video from the remote queue
+        if (nextVideo == null && isRemote) {
+            List<MediaGroup> suggestions = metadata.getSuggestions();
+
+            if (suggestions != null && suggestions.size() > 1) {
+                List<MediaItem> mediaItems = suggestions.get(1).getMediaItems();
+                nextVideo = Helpers.findFirst(mediaItems, item -> item.getVideoId() != null);
+            }
+        }
+
+        return nextVideo;
+    }
+
+    public long getLiveDurationMs() {
+        if (startTimeMs == 0) {
+            return 0;
+        }
+
+        // Stream real length may exceeds calculated length
+        long liveDurationMs = System.currentTimeMillis() - startTimeMs - 60_000;
+        return liveDurationMs > 0 ? liveDurationMs : 0;
+    }
+
+    public long getLiveBufferDurationMs() {
+        // Add buffer and take into account segment offset
+        long bufferDurationMs = getLiveDurationMs() - (startSegmentNum > 0 ? 120_000 : 60_000);
+        return bufferDurationMs > 0 ? bufferDurationMs : 0;
     }
 
     // Builder for Video object.

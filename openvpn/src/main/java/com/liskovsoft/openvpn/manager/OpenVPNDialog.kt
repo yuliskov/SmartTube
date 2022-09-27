@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.openvpn
+package com.liskovsoft.openvpn.manager
 
 import android.content.Context
 import android.content.DialogInterface
@@ -9,11 +9,11 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import com.liskovsoft.openvpn.R
 import com.liskovsoft.sharedutils.helpers.FileHelpers
 import com.liskovsoft.sharedutils.helpers.KeyHelpers
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers
 import com.liskovsoft.sharedutils.mylogger.Log
-import com.liskovsoft.smartyoutubetv2.common.R
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity
 
 class OpenVPNDialog(private val context: Context): OpenVPNManager.OpenVPNCallback, MotherActivity.OnPermissions {

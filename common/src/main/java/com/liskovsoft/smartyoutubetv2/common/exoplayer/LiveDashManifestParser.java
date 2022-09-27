@@ -31,8 +31,12 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class LiveDashManifestParser extends DashManifestParser {
     private static final String TAG = LiveDashManifestParser.class.getSimpleName();
-    private static final long MAX_PAST_STREAM_LENGTH_MS = 8 * 60 * 60 * 1_000; // 8 hours
-    private static final long MAX_LIVE_STREAM_LENGTH_MS = 1 * 60 * 60 * 1_000; // higher values may cause problems, e.g. url not working
+    // Should be close to zero but not zero to increase buffer size to 30 sec (Radio Record).
+    // Higher values may produce 'url not working' error.
+    private static final long MAX_LIVE_STREAM_LENGTH_MS = 30 * 1_000;
+    // Usually gaming streams. 10 hrs max.
+    private static final long MAX_PAST_STREAM_LENGTH_MS = 12 * 60 * 60 * 1_000;
+    private static final long MAX_NEW_STREAM_LENGTH_MS = 30 * 1_000;
     private DashManifest mOldManifest;
     private long mOldSegmentNum;
 
@@ -67,7 +71,7 @@ public class LiveDashManifestParser extends DashManifestParser {
         long newSegmentNum = getLastSegmentNum(newManifest);
 
         if (mOldManifest == null) {
-            recreateMissingSegments(newManifest);
+            //recreateMissingSegments(newManifest);
 
             //newManifest.availabilityStartTimeMs = -1;
             Period newPeriod = newManifest.getPeriod(0);
@@ -172,56 +176,60 @@ public class LiveDashManifestParser extends DashManifestParser {
         }
 
         long minUpdatePeriodMs = (long) Helpers.getField(manifest, "minUpdatePeriodMs");
-        long timeShiftBufferDepthMs = (long) Helpers.getField(manifest, "timeShiftBufferDepthMs");
+        long timeShiftBufferDepthMs = (long) Helpers.getField(manifest, "timeShiftBufferDepthMs"); // active live stream
         long durationMs = (long) Helpers.getField(manifest, "durationMs"); // past live stream
         long firstSegmentNum = getFirstSegmentNum(manifest);
-        long lastSegmentNum = getLastSegmentNum(manifest);
+        long firstSegmentDurationMs = getFirstSegmentDurationMs(manifest);
+        long currentSegmentCount = getSegmentCount(manifest);
         if (minUpdatePeriodMs <= 0) { // past live stream
             // May has different length 5_000 (4hrs) or 2_000 (2hrs)
-            minUpdatePeriodMs = durationMs / (lastSegmentNum - firstSegmentNum);
-        }
-        long maxSegmentsCount = MAX_PAST_STREAM_LENGTH_MS / minUpdatePeriodMs;
-        long segmentCount = Math.min(firstSegmentNum, maxSegmentsCount - (lastSegmentNum - firstSegmentNum - 1));
-
-        if (firstSegmentNum > segmentCount) {
-            // Skip long live streams (performance fix)
-            //return;
-            maxSegmentsCount = MAX_LIVE_STREAM_LENGTH_MS / minUpdatePeriodMs;
-            segmentCount = Math.min(firstSegmentNum, maxSegmentsCount - (lastSegmentNum - firstSegmentNum - 1));
+            minUpdatePeriodMs = durationMs / (currentSegmentCount - 1) / 10 * 10; // Round ending digits
         }
 
-        if (segmentCount <= 0) {
+        if (minUpdatePeriodMs != firstSegmentDurationMs) { // variable segment timeline (unpredictable)
             return;
         }
 
-        // TODO: remove fix below
+        boolean isNewStream = firstSegmentNum < 10_000 && currentSegmentCount > 3;
+        boolean isPastStream = durationMs > 0 && currentSegmentCount > 3;
+        long maxSegmentsCount = (isPastStream ? MAX_PAST_STREAM_LENGTH_MS :
+                                    isNewStream ? MAX_NEW_STREAM_LENGTH_MS : MAX_LIVE_STREAM_LENGTH_MS) / minUpdatePeriodMs;
+        long recreateSegmentCount = Math.min(firstSegmentNum, maxSegmentsCount - currentSegmentCount);
+
+        if (recreateSegmentCount <= 0) {
+            return;
+        }
+
+        // 2_000 Ms streams has variable limit values in url (that is unpredictable)
         if (minUpdatePeriodMs <= 2_000) {
             return; // url won't work on small (2_000Ms) segments
         }
 
+        // Skip past streams that are truncated (truncated streams have a problems)
+        if ((isNewStream || isPastStream) && firstSegmentNum > recreateSegmentCount) {
+            return;
+        }
+
         if (timeShiftBufferDepthMs > 0) { // active live stream
-            Helpers.setField(manifest, "timeShiftBufferDepthMs", timeShiftBufferDepthMs + (segmentCount * minUpdatePeriodMs));
+            Helpers.setField(manifest, "timeShiftBufferDepthMs", timeShiftBufferDepthMs + (recreateSegmentCount * minUpdatePeriodMs));
         } else { // past live stream
-            Helpers.setField(manifest, "durationMs", durationMs + (segmentCount * minUpdatePeriodMs));
+            Helpers.setField(manifest, "durationMs", durationMs + (recreateSegmentCount * minUpdatePeriodMs));
         }
 
         Period oldPeriod = manifest.getPeriod(0);
 
         for (int i = 0; i < oldPeriod.adaptationSets.size(); i++) {
             AdaptationSet adaptationSet = oldPeriod.adaptationSets.get(i);
-            lazyRecreateRepresentations(adaptationSet, segmentCount, minUpdatePeriodMs);
+            lazyRecreateRepresentations(adaptationSet, recreateSegmentCount, minUpdatePeriodMs);
             //List<Representation> representations = adaptationSet.representations;
             //for (int j = 0; j < representations.size(); j++) {
             //    Representation oldRepresentation = representations.get(j);
-            //    recreateRepresentation(oldRepresentation, segmentCount, minUpdatePeriodMs);
+            //    recreateRepresentation(oldRepresentation, recreateSegmentCount, minUpdatePeriodMs);
             //}
         }
     }
 
     private static void recreateRepresentation(Representation oldRepresentation, long segmentCount, long minUpdatePeriodMs) {
-        long presentationTimeOffsetUs = oldRepresentation.presentationTimeOffsetUs;
-        Helpers.setField(oldRepresentation, "presentationTimeOffsetUs", presentationTimeOffsetUs - (segmentCount * minUpdatePeriodMs * 1_000));
-
         MultiSegmentRepresentation oldMultiRepresentation = (MultiSegmentRepresentation) oldRepresentation;
 
         SegmentList oldSegmentList = (SegmentList) Helpers.getField(oldMultiRepresentation, "segmentBase");
@@ -242,9 +250,13 @@ public class LiveDashManifestParser extends DashManifestParser {
         long secondSegmentLimit = Helpers.parseLong(secondSegmentQuery.get("lmt"));
         long limitDiff = secondSegmentLimit - firstSegmentLimit;
 
-        if (firstSegmentNum <= 0) {
+        // Skip variable segment limit (huge limit diff values)
+        if (firstSegmentNum <= 0 || limitDiff > 100) {
             return;
         }
+
+        long presentationTimeOffsetUs = oldRepresentation.presentationTimeOffsetUs;
+        Helpers.setField(oldRepresentation, "presentationTimeOffsetUs", presentationTimeOffsetUs - (segmentCount * minUpdatePeriodMs * 1_000));
 
         long currentSegmentNum = firstSegmentNum - 1;
         long currentSegmentLimit = firstSegmentLimit - limitDiff;
@@ -294,6 +306,11 @@ public class LiveDashManifestParser extends DashManifestParser {
 
     private static long getSegmentCount(DashManifest manifest) {
         return manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex().getSegmentCount(C.TIME_UNSET);
+    }
+
+    private static long getFirstSegmentDurationMs(DashManifest manifest) {
+        DashSegmentIndex dashSegmentIndex = manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex();
+        return dashSegmentIndex.getDurationUs(getFirstSegmentNum(manifest), C.TIME_UNSET) / 1_000;
     }
 
     private static class MultiSegmentRepresentationWrapper extends MultiSegmentRepresentation {

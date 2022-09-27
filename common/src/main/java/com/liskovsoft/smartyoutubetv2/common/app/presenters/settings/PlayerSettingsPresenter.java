@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
 import java.util.ArrayList;
@@ -20,11 +21,13 @@ import java.util.List;
 public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private final PlayerData mPlayerData;
     private final PlayerTweaksData mPlayerTweaksData;
+    private final SearchData mSearchData;
 
     private PlayerSettingsPresenter(Context context) {
         super(context);
         mPlayerData = PlayerData.instance(context);
         mPlayerTweaksData = PlayerTweaksData.instance(context);
+        mSearchData = SearchData.instance(context);
     }
 
     public static PlayerSettingsPresenter instance(Context context) {
@@ -408,6 +411,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         //options.add(UiOptionItem.from(getContext().getString(R.string.player_pause_when_seek),
         //        option -> mPlayerData.enableSeekMemory(option.isSelected()),
         //        mPlayerData.isSeekMemoryEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.search_background_playback),
+                option -> mSearchData.enableTempBackgroundMode(option.isSelected()),
+                mSearchData.isTempBackgroundModeEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.real_channel_icon),
                 option -> mPlayerTweaksData.enableRealChannelIcon(option.isSelected()),

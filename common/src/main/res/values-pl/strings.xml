@@ -63,8 +63,8 @@
     <string name="subtitle_style">Styl napisów</string>
     <string name="subtitle_language">Język napisów</string>
     <string name="action_search">Zacznij szukać</string>
-    <string name="settings_main_ui">Interfejs użytkownika</string>
-    <string name="dialog_main_ui">Interfejs</string>
+    <string name="settings_main_ui">Interfejs</string>
+    <string name="dialog_main_ui">Interfejs użytkownika</string>
     <string name="card_animated_previews">Animowany podgląd</string>
     <string name="web_site">Stronia internetowa</string>
     <string name="donation">Dotacja</string>
@@ -75,7 +75,7 @@
     <string name="player_ok_button_behavior">Zachowanie przycisku OK</string>
     <string name="player_only_ui">Tylko interfejs</string>
     <string name="player_ui_and_pause">Interfejs i wstrzymaj</string>
-    <string name="player_only_pause">Tylko pauza</string>
+    <string name="player_only_pause">Tylko wstrzymaj</string>
     <string name="check_for_updates">Sprawdź aktualizacje</string>
     <string name="update_not_found">Używasz najnowszej wersji</string>
     <string name="update_in_progress">Zaczekaj…</string>
@@ -315,7 +315,7 @@
     <string name="hide_upcoming">Ukryj nadchodzące w Subskrypcjach</string>
     <string name="search_background_playback">Przełącz na tryb \'obraz w obrazie\', jeśli wyszukiwanie jest uruchamiane z odtwarzacza</string>
     <string name="trending_row_name">Trendy</string>
-    <string name="player_seek_type">Szukaj zachowania</string>
+    <string name="player_seek_type">Zachowanie szukania</string>
     <string name="player_seek_regular">Regularny</string>
     <string name="player_seek_confirmation_pause">Z potwierdzeniem (pauza podczas wyszukiwania)</string>
     <string name="player_seek_confirmation_play">Z potwierdzeniem (odtwarzaj podczas szukania)</string>
@@ -459,4 +459,10 @@
     <string name="speech_recognizer_external_1">Zewnętrzny 1 (poważnie podsłuchiwany, aby działać trzeba wyłączyć dostęp do mikrofonu)</string>
     <string name="speech_recognizer_external_2">Zewnętrzny 2 (poważny błąd)</string>
 	<string name="real_channel_icon">Pokaż prawdziwą ikonę na przycisku kanału</string>
+	<string name="subtitle_yellow_semi_transparent">Żółty na półprzezroczystym tle</string>
+    <string name="subtitle_yellow_black">Żółty na czarnym tle</string>
+    <string name="player_pixel_ratio">Proporcja pikseli</string>
+    <string name="color_scheme_dark_grey_monochrome">Ciemnoszary (monochromatyczny)</string>
+	<string name="disable_mic_permission">Wyłącz dostęp do mikrofonu dla aplikacji, aby ten aparat rozpoznawania działał poprawnie.</string>
+	<string name="repeat_mode_shuffle">Pomieszaj dowolną listę odtwarzania</string>
 </resources>

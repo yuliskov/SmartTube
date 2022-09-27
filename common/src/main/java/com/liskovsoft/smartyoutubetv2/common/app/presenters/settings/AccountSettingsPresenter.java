@@ -60,6 +60,10 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendSelectAccountSection(List<Account> accounts, AppDialogPresenter settingsPresenter) {
+        if (accounts == null || accounts.isEmpty()) {
+            return;
+        }
+
         List<OptionItem> optionItems = new ArrayList<>();
 
         optionItems.add(UiOptionItem.from(
@@ -88,6 +92,10 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendRemoveAccountSection(List<Account> accounts, AppDialogPresenter settingsPresenter) {
+        if (accounts == null || accounts.isEmpty()) {
+            return;
+        }
+
         List<OptionItem> optionItems = new ArrayList<>();
 
         for (Account account : accounts) {

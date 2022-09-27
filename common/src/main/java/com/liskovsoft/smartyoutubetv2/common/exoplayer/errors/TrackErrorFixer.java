@@ -39,7 +39,7 @@ public class TrackErrorFixer {
 
         InvalidResponseCodeException ex = (InvalidResponseCodeException) e;
 
-        if (ex.responseCode != 404) {
+        if (ex.responseCode != 404 && ex.responseCode != 503) {
             return false;
         }
 
