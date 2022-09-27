@@ -39,6 +39,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private Disposable mScrollAction;
     private Disposable mLoadAction;
     private String mSearchText;
+    private boolean mIsVoice;
     private int mSearchOptions;
 
     private SearchPresenter(Context context) {
@@ -60,7 +61,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     @Override
     public void onViewInitialized() {
-        startSearchInt(mSearchText);
+        startSearchInt();
     }
 
     @Override
@@ -75,10 +76,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         mSearchText = null;
         mSearchOptions = 0;
-
-        if (mSearchData.isBackgroundPlaybackEnabled() && PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
-            ViewManager.instance(getContext()).startView(SplashView.class);
-        }
+        mIsVoice = false;
     }
 
     @Override
@@ -210,22 +208,31 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         continueGroup(group);
     }
 
-    public void startSearch(String searchText) {
-        mSearchText = searchText;
-
-        mViewManager.startView(SearchView.class);
-        startSearchInt(searchText);
+    public void startVoice() {
+        startSearch(null, true);
     }
 
-    private void startSearchInt(String searchText) {
+    public void startSearch(String searchText) {
+        startSearch(searchText, false);
+    }
+
+    public void startSearch(String searchText, boolean isVoice) {
+        mSearchText = searchText;
+        mIsVoice = isVoice;
+
+        mViewManager.startView(SearchView.class);
+        startSearchInt();
+    }
+
+    private void startSearchInt() {
         if (getView() == null) {
             return;
         }
 
-        if (mSearchData.isInstantVoiceSearchEnabled() && searchText == null) {
+        if ((mIsVoice || mSearchData.isInstantVoiceSearchEnabled()) && mSearchText == null) {
             getView().startVoiceRecognition();
         } else {
-            getView().startSearch(searchText);
+            getView().startSearch(mSearchText);
         }
     }
 
@@ -277,5 +284,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.upload_date), options);
+    }
+
+    public void forceFinish() {
+        if (getView() != null) {
+            getView().finishReally();
+        }
     }
 }

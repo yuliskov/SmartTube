@@ -125,6 +125,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onChannelClicked() {
+        startTempBackgroundMode();
         ChannelPresenter.instance(getActivity()).openChannel(getController().getVideo());
     }
 
@@ -200,6 +201,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         if (getController() == null) {
             return;
         }
+
+        // Reset temp mode.
+        SearchData.instance(getActivity()).startTempBackgroundMode(false);
 
         // Activate debug infos when restoring after PIP.
         getController().showDebugInfo(mDebugViewEnabled);
@@ -418,9 +422,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onSearchClicked() {
-        if (SearchData.instance(getActivity()).isBackgroundPlaybackEnabled()) {
-            onPipClicked();
-        }
+        startTempBackgroundMode();
         SearchPresenter.instance(getActivity()).startSearch(null);
     }
 
@@ -565,9 +567,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     private boolean handleNumKeys(int keyCode) {
         if (mPlayerData.isNumberKeySeekEnabled() && keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9) {
-            if (getController() != null && getController().getLengthMs() > 0) {
+            if (getController() != null && getController().getDurationMs() > 0) {
                 float seekPercent = (keyCode - KeyEvent.KEYCODE_0) / 10f;
-                getController().setPositionMs((long)(getController().getLengthMs() * seekPercent));
+                getController().setPositionMs((long)(getController().getDurationMs() * seekPercent));
             }
         }
 
@@ -642,6 +644,14 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private void setSpeedButtonState(float speed) {
         if (getController() != null) {
             getController().setSpeedButtonState(speed != 1.0f);
+        }
+    }
+
+    private void startTempBackgroundMode() {
+        SearchData searchData = SearchData.instance(getActivity());
+        if (searchData.isTempBackgroundModeEnabled()) {
+            searchData.startTempBackgroundMode(true);
+            onPipClicked();
         }
     }
 }

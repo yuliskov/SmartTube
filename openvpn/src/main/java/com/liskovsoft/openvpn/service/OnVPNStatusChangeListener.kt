@@ -1,4 +1,4 @@
-package com.liskovsoft.openvpn
+package com.liskovsoft.openvpn.service
 
 interface OnVPNStatusChangeListener {
     fun onProfileLoaded(profileLoaded: Boolean)

@@ -9,4 +9,5 @@ public interface SearchView {
     void startSearch(String searchText);
     String getSearchText();
     void startVoiceRecognition();
+    void finishReally();
 }

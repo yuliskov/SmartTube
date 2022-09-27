@@ -30,7 +30,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ContentBlockManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = ContentBlockManager.class.getSimpleName();
-    private static final long SEGMENT_CHECK_LENGTH_MS = 3_000;
     private MediaItemService mMediaItemManager;
     private ContentBlockData mContentBlockData;
     private Video mVideo;
@@ -187,58 +186,47 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
 
-        SponsorSegment foundSegment = null;
-        long skipPosMs = 0;
+        long positionMs = getController().getPositionMs();
 
-        for (SponsorSegment segment : mSponsorSegments) {
-            if (isPositionAtSegmentStart(getController().getPositionMs(), segment)) {
-                foundSegment = segment;
-                Integer resId = mContentBlockData.getLocalizedRes(segment.getCategory());
-                String localizedCategory = resId != null ? getActivity().getString(resId) : segment.getCategory();
+        List<SponsorSegment> foundSegment = findMatchedSegments(positionMs);
 
-                int type = mContentBlockData.getAction(segment.getCategory());
-
-                skipPosMs = segment.getEndMs();
-
-                if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode()) {
-                    setPositionMs(skipPosMs);
-                } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
-                    messageSkip(skipPosMs, localizedCategory);
-                } else if (type == ContentBlockData.ACTION_SHOW_DIALOG) {
-                    confirmSkip(skipPosMs, localizedCategory);
-                }
-
-                break;
-            }
-        }
+        applyActions(foundSegment);
 
         // Skip each segment only once
         if (foundSegment != null && mContentBlockData.isSkipEachSegmentOnceEnabled()) {
-            mSponsorSegments.remove(foundSegment);
+            mSponsorSegments.removeAll(foundSegment);
         }
-
-        mLastSkipPosMs = skipPosMs;
     }
 
-    private boolean isPositionAtSegmentStart(long positionMs, SponsorSegment segment) {
+    private boolean isPositionInsideSegment(long positionMs, SponsorSegment segment) {
+
+
         // Note. Getting into account playback speed. Also check that the zone is long enough.
         //float checkEndMs = segment.getStartMs() + SEGMENT_CHECK_LENGTH_MS * getController().getSpeed();
         //return positionMs >= segment.getStartMs() && positionMs <= checkEndMs && checkEndMs <= segment.getEndMs();
         return positionMs >= segment.getStartMs() && positionMs <= segment.getEndMs();
     }
 
-    private boolean isPositionInsideSegment(long positionMs, SponsorSegment segment) {
-        return positionMs >= segment.getStartMs() && positionMs < segment.getEndMs();
+    private void simpleSkip(long skipPosMs) {
+        if (mLastSkipPosMs == skipPosMs) {
+            return;
+        }
+
+        setPositionMs(skipPosMs);
     }
 
-    private void messageSkip(long skipPositionMs, String category) {
+    private void messageSkip(long skipPosMs, String category) {
+        if (mLastSkipPosMs == skipPosMs) {
+            return;
+        }
+
         MessageHelpers.showMessage(getActivity(),
                 String.format("%s: %s", getActivity().getString(R.string.content_block_provider), getActivity().getString(R.string.msg_skipping_segment, category)));
-        setPositionMs(skipPositionMs);
+        setPositionMs(skipPosMs);
     }
 
-    private void confirmSkip(long skipPositionMs, String category) {
-        if (mLastSkipPosMs == skipPositionMs) {
+    private void confirmSkip(long skipPosMs, String category) {
+        if (mLastSkipPosMs == skipPosMs) {
             return;
         }
 
@@ -249,7 +237,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 getActivity().getString(R.string.confirm_segment_skip, category),
                 option -> {
                     settingsPresenter.closeDialog();
-                    setPositionMs(skipPositionMs);
+                    setPositionMs(skipPosMs);
                 }
         );
 
@@ -260,7 +248,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
         settingsPresenter.appendSingleButton(acceptOption);
         settingsPresenter.appendSingleButton(cancelOption);
-        settingsPresenter.setCloseTimeoutMs(skipPositionMs - getController().getPositionMs());
+        settingsPresenter.setCloseTimeoutMs(skipPosMs - getController().getPositionMs());
 
         settingsPresenter.enableTransparent(true);
         settingsPresenter.showDialog(getActivity().getString(R.string.content_block_provider));
@@ -279,8 +267,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             }
 
             SeekBarSegment seekBarSegment = new SeekBarSegment();
-            double startRatio = (double) sponsorSegment.getStartMs() / getController().getLengthMs(); // Range: [0, 1]
-            double endRatio = (double) sponsorSegment.getEndMs() / getController().getLengthMs(); // Range: [0, 1]
+            double startRatio = (double) sponsorSegment.getStartMs() / getController().getDurationMs(); // Range: [0, 1]
+            double endRatio = (double) sponsorSegment.getEndMs() / getController().getDurationMs(); // Range: [0, 1]
             seekBarSegment.startProgress = (int) (startRatio * Integer.MAX_VALUE); // Could safely cast to int
             seekBarSegment.endProgress = (int) (endRatio * Integer.MAX_VALUE); // Could safely cast to int
             seekBarSegment.color = ContextCompat.getColor(getActivity(), mContentBlockData.getColorRes(sponsorSegment.getCategory()));
@@ -294,7 +282,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
      * Sponsor block fix. Position may exceed real media length.
      */
     private void setPositionMs(long positionMs) {
-        long lengthMs = getController().getLengthMs();
+        long lengthMs = getController().getDurationMs();
 
         // Sponsor block fix. Position may exceed real media length.
         if (lengthMs > 0 && positionMs > lengthMs) {
@@ -302,5 +290,60 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         getController().setPositionMs(positionMs);
+    }
+
+    private List<SponsorSegment> findMatchedSegments(long positionMs) {
+        if (mSponsorSegments == null) {
+            return null;
+        }
+
+        List<SponsorSegment> foundSegment = null;
+
+        for (SponsorSegment segment : mSponsorSegments) {
+            int action = mContentBlockData.getAction(segment.getCategory());
+            boolean isSkipAction = action == ContentBlockData.ACTION_SKIP_ONLY ||
+                    action == ContentBlockData.ACTION_SKIP_WITH_TOAST;
+            if (foundSegment == null) {
+                if (isPositionInsideSegment(positionMs, segment)) {
+                    foundSegment = new ArrayList<>();
+                    foundSegment.add(segment);
+
+                    // Action grouping aren't supported for dialogs
+                    if (!isSkipAction) {
+                        break;
+                    }
+                }
+            } else {
+                SponsorSegment lastSegment = foundSegment.get(foundSegment.size() - 1);
+                if (isSkipAction && isPositionInsideSegment(lastSegment.getEndMs() + 3_000, segment)) {
+                    foundSegment.add(segment);
+                }
+            }
+        }
+
+        return foundSegment;
+    }
+
+    private void applyActions(List<SponsorSegment> foundSegment) {
+        if (foundSegment != null) {
+            SponsorSegment lastSegment = foundSegment.get(foundSegment.size() - 1);
+
+            Integer resId = mContentBlockData.getLocalizedRes(lastSegment.getCategory());
+            String localizedCategory = resId != null ? getActivity().getString(resId) : lastSegment.getCategory();
+
+            int type = mContentBlockData.getAction(lastSegment.getCategory());
+
+            long skipPosMs = lastSegment.getEndMs();
+
+            if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode()) {
+                simpleSkip(skipPosMs);
+            } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
+                messageSkip(skipPosMs, localizedCategory);
+            } else if (type == ContentBlockData.ACTION_SHOW_DIALOG) {
+                confirmSkip(skipPosMs, localizedCategory);
+            }
+        }
+
+        mLastSkipPosMs = foundSegment != null ? foundSegment.get(foundSegment.size() - 1).getEndMs() : 0;
     }
 }

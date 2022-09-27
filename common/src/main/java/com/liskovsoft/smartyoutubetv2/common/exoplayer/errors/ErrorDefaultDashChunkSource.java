@@ -14,7 +14,7 @@ import com.google.android.exoplayer2.upstream.TransferListener;
 
 import java.util.List;
 
-public class MyDefaultDashChunkSource extends DefaultDashChunkSource {
+public class ErrorDefaultDashChunkSource extends DefaultDashChunkSource {
     private final TrackErrorFixer mTrackErrorFixer;
 
     public static final class Factory implements DashChunkSource.Factory {
@@ -50,7 +50,7 @@ public class MyDefaultDashChunkSource extends DefaultDashChunkSource {
             if (transferListener != null) {
                 dataSource.addTransferListener(transferListener);
             }
-            return new MyDefaultDashChunkSource(
+            return new ErrorDefaultDashChunkSource(
                     manifestLoaderErrorThrower,
                     manifest,
                     periodIndex,
@@ -68,11 +68,11 @@ public class MyDefaultDashChunkSource extends DefaultDashChunkSource {
 
     }
 
-    public MyDefaultDashChunkSource(LoaderErrorThrower manifestLoaderErrorThrower, DashManifest manifest, int periodIndex,
-                                    int[] adaptationSetIndices, TrackSelection trackSelection, int trackType,
-                                    DataSource dataSource, long elapsedRealtimeOffsetMs, int maxSegmentsPerLoad,
-                                    boolean enableEventMessageTrack, List<Format> closedCaptionFormats,
-                                    @Nullable PlayerTrackEmsgHandler playerTrackEmsgHandler, @Nullable TrackErrorFixer trackErrorFixer) {
+    public ErrorDefaultDashChunkSource(LoaderErrorThrower manifestLoaderErrorThrower, DashManifest manifest, int periodIndex,
+                                       int[] adaptationSetIndices, TrackSelection trackSelection, int trackType,
+                                       DataSource dataSource, long elapsedRealtimeOffsetMs, int maxSegmentsPerLoad,
+                                       boolean enableEventMessageTrack, List<Format> closedCaptionFormats,
+                                       @Nullable PlayerTrackEmsgHandler playerTrackEmsgHandler, @Nullable TrackErrorFixer trackErrorFixer) {
         super(manifestLoaderErrorThrower, manifest, periodIndex, adaptationSetIndices, trackSelection,
                 trackType, dataSource, elapsedRealtimeOffsetMs, maxSegmentsPerLoad,
                 enableEventMessageTrack, closedCaptionFormats, playerTrackEmsgHandler);

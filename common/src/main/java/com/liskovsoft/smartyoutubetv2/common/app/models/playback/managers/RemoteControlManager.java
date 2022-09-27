@@ -14,8 +14,9 @@ import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -99,13 +100,13 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
 
     @Override
     public void onPlayEnd() {
-        switch (PlayerData.instance(getActivity()).getPlaybackMode()) {
-            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
-            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
-            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
+        switch (PlayerData.instance(getActivity()).getRepeatMode()) {
+            case PlaybackUIController.REPEAT_MODE_CLOSE:
+            case PlaybackUIController.REPEAT_MODE_PAUSE:
+            case PlaybackUIController.REPEAT_MODE_ALL:
                 postPlay(false);
                 break;
-            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
+            case PlaybackUIController.REPEAT_MODE_ONE:
                 postStartPlaying(getController().getVideo(), true);
                 break;
         }
@@ -122,6 +123,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
     public void onFinish() {
         // User action detected. Stop remote session.
         mConnected = false;
+        mVideo = null;
     }
 
     private void postStartPlaying(@Nullable Video item, boolean isPlaying) {
@@ -136,7 +138,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
         if (item != null && getController() != null) {
             videoId = item.videoId;
             positionMs = getController().getPositionMs();
-            durationMs = getController().getLengthMs();
+            durationMs = getController().getDurationMs();
         }
 
         postStartPlaying(videoId, positionMs, durationMs, isPlaying);
@@ -167,11 +169,11 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
     }
 
     private void postPlay(boolean isPlaying) {
-        postState(getController().getPositionMs(), getController().getLengthMs(), isPlaying);
+        postState(getController().getPositionMs(), getController().getDurationMs(), isPlaying);
     }
 
     private void postSeek(long positionMs) {
-        postState(positionMs, getController().getLengthMs(), getController().isPlaying());
+        postState(positionMs, getController().getDurationMs(), getController().isPlaying());
     }
 
     private void postIdle() {
@@ -393,6 +395,13 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
                     } else {
                         mActionDown = RxUtils.runAsync(() -> Utils.sendKey(resultKey));
                     }
+                }
+                break;
+            case Command.TYPE_VOICE:
+                if (command.isVoiceStarted()) {
+                    SearchPresenter.instance(getActivity()).startVoice();
+                } else {
+                    SearchPresenter.instance(getActivity()).forceFinish();
                 }
                 break;
         }

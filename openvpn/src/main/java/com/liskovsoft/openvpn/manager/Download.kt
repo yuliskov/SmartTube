@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.openvpn
+package com.liskovsoft.openvpn.manager
 
 import android.net.Uri
 import com.liskovsoft.sharedutils.helpers.FileHelpers

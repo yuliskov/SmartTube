@@ -16,7 +16,8 @@ public class SearchData {
     private int mSearchOptions;
     private boolean mIsFocusOnResultsEnabled;
     private boolean mIsKeyboardAutoShowEnabled;
-    private boolean mIsBackgroundPlaybackEnabled;
+    private boolean mIsTempBackgroundModeEnabled;
+    private boolean mIsTempBackgroundModeStarted;
     private int mSpeechRecognizerType;
 
     private SearchData(Context context) {
@@ -68,13 +69,21 @@ public class SearchData {
         return mIsKeyboardAutoShowEnabled;
     }
 
-    public void enableBackgroundPlayback(boolean enabled) {
-        mIsBackgroundPlaybackEnabled = enabled;
+    public void enableTempBackgroundMode(boolean enabled) {
+        mIsTempBackgroundModeEnabled = enabled;
         persistData();
     }
 
-    public boolean isBackgroundPlaybackEnabled() {
-        return mIsBackgroundPlaybackEnabled;
+    public boolean isTempBackgroundModeEnabled() {
+        return mIsTempBackgroundModeEnabled;
+    }
+
+    public void startTempBackgroundMode(boolean start) {
+        mIsTempBackgroundModeStarted = start;
+    }
+
+    public boolean isTempBackgroundModeStarted() {
+        return mIsTempBackgroundModeStarted;
     }
 
     public void setSpeechRecognizerType(int type) {
@@ -98,7 +107,7 @@ public class SearchData {
         mSearchOptions = Helpers.parseInt(split, 1, 0);
         mIsFocusOnResultsEnabled = Helpers.parseBoolean(split, 2, true);
         mIsKeyboardAutoShowEnabled = true;
-        mIsBackgroundPlaybackEnabled = Helpers.parseBoolean(split, 4, false);
+        mIsTempBackgroundModeEnabled = Helpers.parseBoolean(split, 4, false);
         //mIsAltSpeechRecognizerEnabled
         mSpeechRecognizerType = Helpers.parseInt(split, 6, SPEECH_RECOGNIZER_SYSTEM);
     }
@@ -106,6 +115,6 @@ public class SearchData {
     private void persistData() {
         mAppPrefs.setData(SEARCH_DATA,
                 Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
-                        mIsKeyboardAutoShowEnabled, mIsBackgroundPlaybackEnabled, null, mSpeechRecognizerType));
+                        mIsKeyboardAutoShowEnabled, mIsTempBackgroundModeEnabled, null, mSpeechRecognizerType));
     }
 }

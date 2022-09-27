@@ -14,7 +14,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelec
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
-import com.liskovsoft.smartyoutubetv2.common.openvpn.OpenVPNManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
@@ -82,7 +81,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 //            runRemoteControlTasks();
             //setupKeepAlive();
             configureProxy();
-            configureOpenVPN();
+            //configureOpenVPN();
             initVideoStateService();
             initStreamReminderService();
             sRunOnce = true;
@@ -125,11 +124,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
     }
 
-    private void configureOpenVPN() {
-        if (getContext() != null && GeneralData.instance(getContext()).isVPNEnabled()) {
-            OpenVPNManager.instance(getContext(), null).configureOpenVPN();
-        }
-    }
+    //private void configureOpenVPN() {
+    //    if (getContext() != null && GeneralData.instance(getContext()).isVPNEnabled()) {
+    //        OpenVPNManager.instance(getContext(), null).configureOpenVPN();
+    //    }
+    //}
 
     private void initVideoStateService() {
         if (getContext() != null) {
@@ -233,7 +232,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 }
 
                 PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
-                playbackPresenter.openVideo(videoId);
+                playbackPresenter.openVideo(videoId, IntentExtractor.hasFinishOnEndedFlag(intent));
 
                 return true;
             }
@@ -246,7 +245,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
             if (backupData != null) {
                 PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
-                playbackPresenter.openVideo(backupData);
+                playbackPresenter.openVideo(backupData, false);
                 return true;
             }
 

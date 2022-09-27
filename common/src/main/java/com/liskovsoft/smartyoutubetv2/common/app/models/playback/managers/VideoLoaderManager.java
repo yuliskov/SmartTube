@@ -6,21 +6,27 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.Analytics;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.SampleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.UniqueRandom;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -32,11 +38,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VideoLoaderManager extends PlayerEventListenerHelper {
+public class VideoLoaderManager extends PlayerEventListenerHelper implements MetadataListener, OnDataChange {
     private static final String TAG = VideoLoaderManager.class.getSimpleName();
     private final Playlist mPlaylist;
     private final Handler mHandler;
     private final SuggestionsLoaderManager mSuggestionsLoader;
+    private final UniqueRandom mRandom;
     private Video mLastVideo;
     private int mLastError = -1;
     private long mPrevErrorTimeMs;
@@ -57,26 +64,21 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             getController().restartEngine(); // properly save position of the current track
         }
     };
+    private final Runnable mLoadRandomNext = this::loadRandomNext;
     private boolean mIsWasVideoStartError;
     private boolean mIsWasStarted;
-    private final Runnable mStopLiveStream = () -> {
-        if (getController() != null &&
-                getController().getVideo() != null &&
-                getController().getVideo().isLive) {
-            getController().showSuggestions(true);
-            getController().setPlayWhenReady(false);
-        }
-    };
 
     public VideoLoaderManager(SuggestionsLoaderManager suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
         mPlaylist = Playlist.instance();
         mHandler = new Handler(Looper.getMainLooper());
+        mRandom = new UniqueRandom();
     }
 
     @Override
     public void onInitDone() {
         mPlayerData = PlayerData.instance(getActivity());
+        mPlayerData.setOnChange(this);
         initErrorActions();
     }
 
@@ -102,15 +104,13 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         }
         mIsWasVideoStartError = false;
         mIsWasStarted = false;
-        if (item != null) {
-            Analytics.sendVideoStarting(item.videoId, item.title);
-        }
+        Analytics.sendVideoStarting(item.videoId, item.title);
     }
 
     @Override
     public void onEngineInitialized() {
         loadVideo(mLastVideo);
-        getController().setRepeatButtonState(mPlayerData.getPlaybackMode());
+        getController().setRepeatButtonState(mPlayerData.getRepeatMode());
         mSleepTimerStartMs = System.currentTimeMillis();
     }
 
@@ -134,8 +134,9 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onVideoLoaded(Video item) {
+    public void onVideoLoaded(Video video) {
         mLastError = -1;
+        getController().setRepeatButtonState(video.finishOnEnded ? PlaybackUIController.REPEAT_MODE_CLOSE : mPlayerData.getRepeatMode());
     }
 
     @Override
@@ -145,7 +146,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         if (!mIsWasStarted && mLastVideo != null) {
             Analytics.sendVideoStarted(mLastVideo.videoId, mLastVideo.title);
             mIsWasStarted = true;
-
         }
     }
 
@@ -190,9 +190,14 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
 
     @Override
     public void onPlayEnd() {
-        int playbackMode = checkSleepTimer(mPlayerData.getPlaybackMode());
+        int repeatMode = checkSleepTimer(mPlayerData.getRepeatMode());
 
-        applyPlaybackMode(playbackMode);
+        Video video = getController().getVideo();
+        if (video != null && video.finishOnEnded) {
+            repeatMode = PlaybackUIController.REPEAT_MODE_CLOSE;
+        }
+
+        applyRepeatMode(repeatMode);
     }
 
     @Override
@@ -216,7 +221,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         if (mPlayerData.isSonyTimerFixEnabled()) {
             if (System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
                 MessageHelpers.showLongMessage(getActivity(), R.string.player_sleep_timer);
-                playbackMode = PlaybackEngineController.PLAYBACK_MODE_PAUSE;
+                playbackMode = PlaybackUIController.REPEAT_MODE_PAUSE;
             }
         }
 
@@ -246,19 +251,10 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                 MessageHelpers.showMessageThrottled(getActivity(), R.string.wait_data_loading);
             }
             // Short videos next fix (suggestions aren't loaded yet)
-            boolean isEnded = getController() != null && Math.abs(getController().getLengthMs() - getController().getPositionMs()) < 100;
+            boolean isEnded = getController() != null && Math.abs(getController().getDurationMs() - getController().getPositionMs()) < 100;
             if (isEnded) {
                 Utils.postDelayed(mHandler, mPendingNext, 1_000);
             }
-        } else if (current.isRemote) {
-            openFirstVideoFromRecommended(current);
-        }
-    }
-
-    private void openFirstVideoFromRecommended(Video video) {
-        VideoGroup suggestions = getController().getSuggestionsByIndex(video.isRemote ? 1 : 0);
-        if (suggestions != null && suggestions.getVideos() != null && suggestions.getVideos().size() > 0) {
-            openVideoInt(suggestions.getVideos().get(0));
         }
     }
 
@@ -284,13 +280,14 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
-        boolean isLive = formatInfo.isLive() || formatInfo.isLiveContent();
         String bgImageUrl = null;
+
+        mLastVideo.sync(formatInfo);
 
         if (formatInfo.isUnplayable() || formatInfo.isAgeRestricted()) {
             getController().showError(formatInfo.getPlayabilityStatus());
             bgImageUrl = mLastVideo.getBackgroundUrl();
-            if (!mIsWasVideoStartError && mLastVideo != null) {
+            if (!mIsWasVideoStartError) {
                 Analytics.sendVideoStartError(mLastVideo.videoId,
                         mLastVideo.title,
                         formatInfo.getPlayabilityStatus());
@@ -300,13 +297,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                 SignInPresenter.instance(getActivity()).start();
                 getController().finish();
             }
-        } else if (formatInfo.containsDashUrl() && isLive && !PlayerTweaksData.instance(getActivity()).isLiveStreamFixEnabled()) {
-            Log.d(TAG, "Found live video (current or past live stream) in dash format. Loading...");
-            getController().openDashUrl(formatInfo.getDashManifestUrl());
-        } else if (formatInfo.containsHlsUrl() && isLive) {
-            Log.d(TAG, "Found live video (current or past live stream) in hls format. Loading...");
-            getController().openHlsUrl(formatInfo.getHlsManifestUrl());
-        } else if (formatInfo.containsDashVideoInfo() && !mPlayerData.isLegacyCodecsForced()) {
+        } else if (formatInfo.containsDashVideoInfo() && !forceLegacyFormat(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
@@ -316,6 +307,12 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                             dashManifest -> getController().openDash(dashManifest),
                             error -> Log.e(TAG, "createMpdStream error: %s", error.getMessage())
                     );
+        } else if (formatInfo.isLive() && formatInfo.containsDashUrl() && !forceLegacyFormat(formatInfo)) {
+            Log.d(TAG, "Found live video (current or past live stream) in dash format. Loading...");
+            getController().openDashUrl(formatInfo.getDashManifestUrl());
+        } else if (formatInfo.isLive() && formatInfo.containsHlsUrl() && forceLegacyFormat(formatInfo)) {
+            Log.d(TAG, "Found live video (current or past live stream) in hls format. Loading...");
+            getController().openHlsUrl(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsUrlListInfo()) {
             Log.d(TAG, "Found url list video. This is always LQ. Loading...");
             getController().openUrlList(applyFix(formatInfo.createUrlList()));
@@ -324,17 +321,12 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             scheduleReloadVideoTimer(30 * 1_000);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
-            if (!mIsWasVideoStartError && mLastVideo != null) {
+            if (!mIsWasVideoStartError) {
                 Analytics.sendVideoStartError(mLastVideo.videoId,
                         mLastVideo.title,
                         formatInfo.getPlayabilityStatus());
                 mIsWasVideoStartError = true;
             }
-        }
-
-        Video video = getController().getVideo();
-        if (video != null) {
-            video.sync(formatInfo);
         }
 
         getController().showBackground(bgImageUrl);
@@ -384,6 +376,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void disposeActions() {
+        MediaServiceManager.instance().disposeActions();
         RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
         Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
     }
@@ -431,23 +424,24 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         return urlList;
     }
 
-    private void applyPlaybackMode(int playbackMode) {
+    private void applyRepeatMode(int repeatMode) {
         // Fix simultaneous videos loading (e.g. when playback ends and user opens new video)
         if (isActionsRunning()) {
             return;
         }
 
-        switch (playbackMode) {
-            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
+        switch (repeatMode) {
+            case PlaybackUIController.REPEAT_MODE_ALL:
+            case PlaybackUIController.REPEAT_MODE_SHUFFLE:
                 loadNext();
                 getController().showOverlay(true);
                 break;
-            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
+            case PlaybackUIController.REPEAT_MODE_ONE:
                 getController().setPositionMs(0);
                 getController().setPlayWhenReady(true);
-                Utils.showRepeatInfo(getActivity(), playbackMode);
+                Utils.showRepeatInfo(getActivity(), repeatMode);
                 break;
-            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
+            case PlaybackUIController.REPEAT_MODE_CLOSE:
                 // Close player if suggestions not shown
                 // Except when playing from queue
                 if (mPlaylist.getNext() != null) {
@@ -457,7 +451,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                     getController().finishReally();
                 }
                 break;
-            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
+            case PlaybackUIController.REPEAT_MODE_PAUSE:
                 // Stop player after each video.
                 // Except when playing from queue
                 if (mPlaylist.getNext() != null) {
@@ -467,10 +461,10 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                     getController().showSuggestions(true);
                     getController().setPlayWhenReady(false);
                     getController().setPositionMs(0);
-                    Utils.showRepeatInfo(getActivity(), playbackMode);
+                    Utils.showRepeatInfo(getActivity(), repeatMode);
                 }
                 break;
-            case PlaybackEngineController.PLAYBACK_MODE_LIST:
+            case PlaybackUIController.REPEAT_MODE_LIST:
                 // stop player (if not playing playlist)
                 Video video = getController().getVideo();
                 if ((video != null && video.hasPlaylist()) || mPlaylist.getNext() != null) {
@@ -480,11 +474,67 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                     getController().showSuggestions(true);
                     getController().setPlayWhenReady(false);
                     getController().setPositionMs(0);
-                    Utils.showRepeatInfo(getActivity(), playbackMode);
+                    Utils.showRepeatInfo(getActivity(), repeatMode);
                 }
                 break;
         }
 
-        Log.e(TAG, "Undetected repeat mode " + playbackMode);
+        Log.e(TAG, "Undetected repeat mode " + repeatMode);
+    }
+
+    private boolean forceLegacyFormat(MediaItemFormatInfo formatInfo) {
+        boolean isLive = formatInfo.isLive() || formatInfo.isLiveContent();
+
+        if (isLive && PlayerTweaksData.instance(getActivity()).isLiveStreamFixEnabled() && formatInfo.containsHlsUrl()) {
+            return true;
+        }
+
+        if (!isLive && mPlayerData.isLegacyCodecsForced()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onMetadata(MediaItemMetadata metadata) {
+        loadRandomNext();
+    }
+
+    @Override
+    public void onDataChange() {
+        Utils.postDelayed(mHandler, mLoadRandomNext, 3_000);
+    }
+
+    private void loadRandomNext() {
+        MediaServiceManager.instance().disposeActions();
+
+        if (getController() == null || mPlayerData == null || mLastVideo == null || mLastVideo.playlistInfo == null) {
+            return;
+        }
+
+        if (mPlayerData.getRepeatMode() == PlaybackUIController.REPEAT_MODE_SHUFFLE) {
+            Video video = new Video();
+            video.playlistId = mLastVideo.playlistId;
+            VideoGroup topRow = getController().getSuggestionsByIndex(0);
+            video.playlistIndex = mRandom.getPlaylistIndex(mLastVideo.getPlaylistId(),
+                    mLastVideo.playlistInfo.getSize() != -1 ? mLastVideo.playlistInfo.getSize() : topRow != null ? topRow.getVideos().size() : -1);
+
+            MediaServiceManager.instance().loadMetadata(video, randomMetadata -> {
+                if (randomMetadata.getNextVideo() == null) {
+                    return;
+                }
+
+                if (mLastVideo.nextMediaItemBackup == null) {
+                    mLastVideo.nextMediaItemBackup = mLastVideo.nextMediaItem;
+                }
+
+                mLastVideo.nextMediaItem = SampleMediaItem.from(randomMetadata);
+                getController().setNextTitle(mLastVideo.nextMediaItem.getTitle());
+            });
+        } else if (mLastVideo.nextMediaItemBackup != null) {
+            mLastVideo.nextMediaItem = mLastVideo.nextMediaItemBackup;
+            getController().setNextTitle(mLastVideo.nextMediaItem.getTitle());
+        }
     }
 }

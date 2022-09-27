@@ -42,7 +42,7 @@
     <string name="section_is_empty">Oops! Qui non c\'è niente.</string>
     <string name="dialog_add_to_playlist">Aggiungi o rimuovi dalla playlist</string>
     <string name="msg_signed_users_only">Solo utenti che hanno effettuato l\'accesso</string>
-    <string name="msg_cant_load_content">Non posso caricare il contenuto.\n1)Controlla data e ora sul dispositivo.\n2) Controlla la connessione di rete.\n3) Prova ad accedere al tuo account.\n4) Forse non c\'è niente qui dentro.</string>
+    <string name="msg_cant_load_content">Non posso caricare il contenuto.\n1) Controlla data e ora sul dispositivo.\n2) Controlla la connessione di rete.\n3) Controlla le impostazioni del proxy.\n4) Prova ad accedere al tuo account.\n5) Forse non c\'è niente qui dentro.</string>
     <string name="title_video_presets">Preset video</string>
     <string name="settings_accounts">Profili</string>
     <string name="settings_left_panel">Modifica categorie</string>
@@ -110,9 +110,9 @@
     <string name="cards_style">Stile riquadri</string>
     <string name="repeat_mode_all">Riproduci i video continuamente</string>
     <string name="repeat_mode_one">Ripeti video corrente</string>
-    <string name="repeat_mode_pause">Ferma riproduzione dopo ogni video</string>
+    <string name="repeat_mode_pause">Metti in pausa la riproduzione dopo ogni video</string>
     <string name="repeat_mode_pause_alt">Riproduci solo i video della playlist continuamente</string>
-    <string name="repeat_mode_none">Ferma dopo un video</string>
+    <string name="repeat_mode_none">Interrompi la riproduzione dopo un video</string>
     <string name="subscribed_to_channel">Canale sottoscritto</string>
     <string name="unsubscribed_from_channel">Canale non sottoscritto</string>
     <string name="subtitle_yellow_transparent">Giallo su sfondo trasparente</string>
@@ -316,7 +316,7 @@
     <string name="cancel_dialog">Annulla</string>
     <string name="msg_player_error_source2">La sorgente video non funziona</string>
     <string name="hide_upcoming">Nascondi i video seguenti dalle Iscrizioni</string>
-    <string name="search_background_playback">Entra in PiP quando cerchi dal lettore</string>
+    <string name="search_background_playback">Entra in PiP quando cerchi o apri il canale</string>
     <string name="trending_row_name">Tendenze</string>
     <string name="player_seek_type">Tipo di ricerca</string>
     <string name="player_seek_regular">Regolare</string>
@@ -454,7 +454,7 @@
     <string name="open_chat">Chat</string>
     <string name="place_chat_left">Posiziona la chat a sinistra</string>
     <string name="use_alt_speech_recognizer">Metodo alternativo per riconoscimento vocale</string>
-    <string name="time_mode">Formato ore</string>
+    <string name="time_mode">Formato orario</string>
     <string name="time_mode_24_hours">24 ore</string>
     <string name="time_mode_12_hours">12 ore (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Non funziona bene. Usalo solo se hai problemi con il riconoscimento vocale predefinito.</string>
@@ -467,4 +467,6 @@
     <string name="subtitle_yellow_black">Giallo su sfondo nero</string>
     <string name="player_pixel_ratio">Rapporto pixel</string>
     <string name="color_scheme_dark_grey_monochrome">Grigio scuro (monocromatico)</string>
+    <string name="disable_mic_permission">Per favore, disabilita l\'accesso al microfono sull\'app affinché il riconoscimento vocale funzioni correttamente.</string>
+    <string name="repeat_mode_shuffle">Mescola qualsiasi playlist</string>
 </resources>

@@ -59,14 +59,22 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 770
-        versionName "15.80"
+        versionCode 793
+        versionName "16.03"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
         // More info: http://myhexaville.com/2017/03/10/android-multidex/
         // Additionally, you should extend your application from MultiDexApplication
         multiDexEnabled = true
+
+        // https://stackoverflow.com/questions/37382057/android-apk-how-to-exclude-a-so-file-from-a-3rd-party-dependency-using-gradle
+        // armeabi-v7a backward compatible with arm64-v8a, x86 -> x86_64 etc
+        ndk {
+            abiFilters "armeabi-v7a"
+            //abiFilters "armeabi-v7a", "x86"
+            //abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
     }
     signingConfigs {
         release {
@@ -79,8 +87,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            shrinkResources true
-            minifyEnabled true
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
@@ -165,7 +172,7 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:' + glideVersion
     annotationProcessor 'com.github.bumptech.glide:compiler:' + glideVersion
-    implementation 'com.zlc.glide:webpdecoder:2.0.' + glideVersion
+    implementation 'com.zlc.glide:webpdecoder:' + webpDecoderVersion
 
     //////// BEGIN EXOPLAYER /////////
 

@@ -134,13 +134,6 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata, Video video) {
-        // NOTE: Skip upcoming (no media) because default title more informative (e.g. has scheduled time).
-        // NOTE: Upcoming videos metadata wrongly reported as live
-        //if (getController().containsMedia() || video.getPlayerTitle() == null) {
-        //    video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isAbsoluteDateEnabled());
-        //    getController().setVideo(video);
-        //}
-
         if (getController().containsMedia()) {
             video.isUpcoming = false; // live stream started
         }
@@ -178,14 +171,6 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         Observable<MediaItemMetadata> observable;
 
-        // NOTE: Load suggestions from mediaItem isn't robust. Because playlistId may be initialized from RemoteControlManager
-        //if (video.mediaItem != null && !video.isRemote) {
-        //    observable = mediaItemManager.getMetadataObserve(video.mediaItem);
-        //} else {
-        //    // Video might be loaded from channels
-        //    observable = mediaItemManager.getMetadataObserve(video.videoId, video.playlistId, video.playlistIndex);
-        //}
-
         // NOTE: Load suggestions from mediaItem isn't robust. Because playlistId may be initialized from RemoteControlManager.
         // Video might be loaded from Channels section (has playlistParams)
         observable = mediaItemManager.getMetadataObserve(video.videoId, video.getPlaylistId(), video.playlistIndex, video.playlistParams);
@@ -200,7 +185,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                         error -> {
                             Log.e(TAG, "loadSuggestions error: %s", error.getMessage());
                             error.printStackTrace();
-                            // normally error could happen (something with title parsing)
+                            // Errors are usual here (something with title parsing)
                         }
                 );
 
@@ -221,14 +206,11 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private void updateSuggestions(MediaItemMetadata mediaItemMetadata, Video video) {
         syncCurrentVideo(mediaItemMetadata, video);
 
-        callListener(mediaItemMetadata);
-
         List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
         if (suggestions == null) {
             String msg = "loadSuggestions: Can't obtain suggestions for video: " + video.title;
             Log.e(TAG, msg);
-            //MessageHelpers.showMessage(getActivity(), msg);
             return;
         }
 
@@ -238,11 +220,6 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         }
 
         if (!video.isRemote) {
-            //if (video.hasPlaylistIndex() && !getController().isSuggestionsEmpty()) {
-            //    Log.d(TAG, "Skip reloading suggestions when watching playlist.");
-            //    return;
-            //}
-
             if (getController().isSuggestionsShown()) {
                 Log.d(TAG, "Suggestions is opened. Seems that user want to stay here.");
                 return;
@@ -270,6 +247,9 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                 continueGroupIfNeeded(videoGroup);
             }
         }
+
+        // After video suggestions
+        callListener(mediaItemMetadata);
     }
 
     /**

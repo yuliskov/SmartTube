@@ -218,6 +218,32 @@ public class TrackSelectorUtil {
         return originHeight;
     }
 
+    public static int getHeightByWidth(int width) {
+        int originHeight = -1;
+
+        if (width < 280) { // 256x144
+            originHeight = 144;
+        } else if (width < 440) { // 426x240
+            originHeight = 240;
+        } else if (width < 650) { // 640x360
+            originHeight = 360;
+        } else if (width < 870) { // 854x480
+            originHeight = 480;
+        } else if (width < 1300) { // 1280x720
+            originHeight = 720;
+        } else if (width < 2000) { // 1920x1080
+            originHeight = 1080;
+        } else if (width < 2600) { // 2560x1440
+            originHeight = 1440;
+        } else if (width < 3900) { // 3840x2160
+            originHeight = 2160;
+        } else if (width < 7700) { // 7680x4320
+            originHeight = 4320;
+        }
+
+        return originHeight;
+    }
+
     private static String getResolutionPrefix(int originHeight) {
         String prefix = null;
 
@@ -245,7 +271,8 @@ public class TrackSelectorUtil {
         }
 
         // Make resolution calculation of the vertical videos more closer to the official app.
-        int originHeight = getOriginHeight(Math.min(height, width));
+        boolean isUltraWide = (float) width/height >= 2.1; // maybe 2.3???
+        int originHeight = isUltraWide ? getHeightByWidth(width) : getOriginHeight(Math.min(height, width));
 
         // Ignore vertical videos completely. Only height matters.
         //int originHeight = getOriginHeight(height);

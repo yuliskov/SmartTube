@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MediaSourceEventListener;
@@ -33,7 +32,7 @@ import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.MyDefaultDashChunkSource;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.ErrorDefaultDashChunkSource;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.MyDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -161,7 +160,7 @@ public class ExoMediaSourceFactory {
             case C.TYPE_DASH:
                 DashMediaSource dashSource =
                         new DashMediaSource.Factory(
-                                new MyDefaultDashChunkSource.Factory(mMediaDataSourceFactory, mTrackErrorFixer),
+                                new ErrorDefaultDashChunkSource.Factory(mMediaDataSourceFactory, mTrackErrorFixer),
                                 buildDataSourceFactory(USE_BANDWIDTH_METER)
                         )
                                 .setManifestParser(new LiveDashManifestParser()) // Don't make static! Need state reset for each live source.
@@ -194,7 +193,7 @@ public class ExoMediaSourceFactory {
     private MediaSource buildMPDMediaSource(Uri uri, InputStream mpdContent) {
         // Are you using FrameworkSampleSource or ExtractorSampleSource when you build your player?
         DashMediaSource dashSource = new DashMediaSource.Factory(
-                new DefaultDashChunkSource.Factory(mMediaDataSourceFactory),
+                new ErrorDefaultDashChunkSource.Factory(mMediaDataSourceFactory, mTrackErrorFixer),
                 null
         )
                 .createMediaSource(getManifest(uri, mpdContent));

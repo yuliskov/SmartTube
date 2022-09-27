@@ -42,7 +42,7 @@
     <string name="section_is_empty">Hier ist nichts drin</string>
     <string name="dialog_add_to_playlist">Hinzufügen/Entfernen aus Wiedergabeliste</string>
     <string name="msg_signed_users_only">Nur angemeldete Nutzer</string>
-    <string name="msg_cant_load_content">Inhalt kann nicht geladen werden.\n1) Überprüfen Sie Datum und Uhrzeit auf dem Gerät.\n2) Überprüfen Sie die Internetverbindung.\n3) Versuchen Sie, sich mit Ihrem Konto anzumelden.\n4) Vielleicht ist hier nichts drin.</string>
+    <string name="msg_cant_load_content">Inhalt kann nicht geladen werden.\n1) Überprüfen Sie Datum und Uhrzeit auf dem Gerät.\n2) Überprüfen Sie die Internetverbindung.\n3) Überprüfen Sie Ihre Proxy-Einstellungen.\n4) Versuchen Sie, sich mit Ihrem Konto anzumelden.\n5) Vielleicht ist hier nichts drin.</string>
     <string name="title_video_presets">Video-Voreinstellungen</string>
     <string name="settings_accounts">Konten</string>
     <string name="settings_left_panel">Kategorien bearbeiten</string>
@@ -110,7 +110,7 @@
     <string name="cards_style">Karten-Stil</string>
     <string name="repeat_mode_all">Videos fortlaufend abspielen</string>
     <string name="repeat_mode_one">Aktuelles Video wiederholen</string>
-    <string name="repeat_mode_pause">Wiedergabe nach jedem Video stoppen</string>
+    <string name="repeat_mode_pause">Wiedergabe nach jedem Video pausieren</string>
     <string name="repeat_mode_pause_alt">Nur Videos der Wiedergabeliste fortlaufend abspielen</string>
     <string name="repeat_mode_none">Wiedergabe nach einem Video stoppen</string>
     <string name="subscribed_to_channel">Kanal abonniert</string>
@@ -316,7 +316,7 @@
     <string name="cancel_dialog">Abbrechen</string>
     <string name="msg_player_error_source2">Video-Quelle funktioniert nicht oder falsche Uhrzeit</string>
     <string name="hide_upcoming">Anstehende Videos in Abos ausblenden</string>
-    <string name="search_background_playback">Bild-in-Bild öffnen bei Suche über den Player</string>
+    <string name="search_background_playback">Bild-in-Bild öffnen bei Suche/Kanal öffnen</string>
     <string name="trending_row_name">Trends</string>
     <string name="player_seek_type">Verhalten beim Spulen</string>
     <string name="player_seek_regular">Normal</string>
@@ -467,4 +467,6 @@
     <string name="subtitle_yellow_black">Gelb auf schwarzem Hintergrund</string>
     <string name="player_pixel_ratio">Pixel-Verhältnis</string>
     <string name="color_scheme_dark_grey_monochrome">Dunkelgrau (monochrom)</string>
+    <string name="disable_mic_permission">Bitte deaktivieren Sie den Mikrofonzugriff für die App, damit diese Spracherkennung richtig funktioniert.</string>
+    <string name="repeat_mode_shuffle">Zufällige Wiedergabe einer Wiedergabeliste</string>
 </resources>

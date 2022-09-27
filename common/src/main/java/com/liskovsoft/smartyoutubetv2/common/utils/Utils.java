@@ -44,6 +44,7 @@ import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -459,19 +460,19 @@ public class Utils {
 
     public static void showRepeatInfo(Context context, int modeIndex) {
         switch (modeIndex) {
-            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
+            case PlaybackUIController.REPEAT_MODE_ALL:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_all);
                 break;
-            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
+            case PlaybackUIController.REPEAT_MODE_ONE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_one);
                 break;
-            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
+            case PlaybackUIController.REPEAT_MODE_PAUSE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_pause);
                 break;
-            case PlaybackEngineController.PLAYBACK_MODE_LIST:
+            case PlaybackUIController.REPEAT_MODE_LIST:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_pause_alt);
                 break;
-            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
+            case PlaybackUIController.REPEAT_MODE_CLOSE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_none);
                 break;
         }
