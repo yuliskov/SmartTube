@@ -8,7 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
+//import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
@@ -200,12 +200,12 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     private void showBootDialogs() {
         long currentTimeMs = System.currentTimeMillis();
 
-        if (this instanceof BrowsePresenter && currentTimeMs - mUpdateCheckMs > 60 * 60 * 1_000) {
-            BootDialogPresenter updatePresenter = BootDialogPresenter.instance(getContext());
-            updatePresenter.start();
-            updatePresenter.unhold();
-            Utils.updateRemoteControlService(getContext());
-            mUpdateCheckMs = currentTimeMs;
-        }
+//        if (this instanceof BrowsePresenter && currentTimeMs - mUpdateCheckMs > 60 * 60 * 1_000) {
+//            BootDialogPresenter updatePresenter = BootDialogPresenter.instance(getContext());
+//            updatePresenter.start();
+//            updatePresenter.unhold();
+//            Utils.updateRemoteControlService(getContext());
+//            mUpdateCheckMs = currentTimeMs;
+//        }
     }
 }

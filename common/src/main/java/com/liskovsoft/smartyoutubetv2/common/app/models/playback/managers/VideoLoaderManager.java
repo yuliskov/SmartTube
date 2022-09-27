@@ -65,6 +65,8 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         }
     };
     private final Runnable mLoadRandomNext = this::loadRandomNext;
+    private boolean mIsWasVideoStartError;
+    private boolean mIsWasStarted;
 
     public VideoLoaderManager(SuggestionsLoaderManager suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
