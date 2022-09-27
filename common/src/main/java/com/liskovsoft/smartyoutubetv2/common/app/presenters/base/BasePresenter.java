@@ -198,14 +198,6 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     }
 
     private void showBootDialogs() {
-        long currentTimeMs = System.currentTimeMillis();
 
-//        if (this instanceof BrowsePresenter && currentTimeMs - mUpdateCheckMs > 60 * 60 * 1_000) {
-//            BootDialogPresenter updatePresenter = BootDialogPresenter.instance(getContext());
-//            updatePresenter.start();
-//            updatePresenter.unhold();
-//            Utils.updateRemoteControlService(getContext());
-//            mUpdateCheckMs = currentTimeMs;
-//        }
     }
 }
