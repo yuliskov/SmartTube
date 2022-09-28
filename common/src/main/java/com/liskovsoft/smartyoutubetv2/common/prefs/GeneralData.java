@@ -649,7 +649,7 @@ public class GeneralData {
         mIsRemapChannelUpToSearchEnabled = Helpers.parseBoolean(split, 23, false);
         mIsHideShortsFromHomeEnabled = Helpers.parseBoolean(split, 24, false);
         mIsHideShortsFromHistoryEnabled = Helpers.parseBoolean(split, 25, false);
-        mIsScreensaverDisabled = true;
+        mIsScreensaverDisabled = false;
         mIsVPNEnabled = Helpers.parseBoolean(split, 27, false);
         mLastPlaylistTitle = Helpers.parseStr(split, 28);
         String playlistOrder = Helpers.parseStr(split, 29);
