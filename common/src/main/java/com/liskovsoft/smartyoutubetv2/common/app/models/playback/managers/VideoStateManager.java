@@ -25,7 +25,7 @@ import io.reactivex.disposables.Disposable;
 
 public class VideoStateManager extends PlayerEventListenerHelper implements TickleListener, MetadataListener {
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
-    private static final long LIVE_THRESHOLD_MS = 60_000;
+    private static final long LIVE_THRESHOLD_MS = 90_000;
     private static final String TAG = VideoStateManager.class.getSimpleName();
     private static final float RESTORE_POSITION_PERCENTS = 10; // min value for immediately closed videos
     private boolean mIsPlayEnabled;
@@ -213,7 +213,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
     @Override
     public void onBuffering() {
         // Check LIVE threshold and set speed to normal
-        restoreSpeed();
+        //restoreSpeed();
         // Live stream starts to buffer after the end
         showHideScreensaver(true);
     }
