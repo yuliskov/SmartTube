@@ -89,7 +89,7 @@ public class VideoStateService {
     public static class State {
         public final String videoId;
         public final long positionMs;
-        public final long lengthMs;
+        public final long durationMs;
         public final float speed;
         public final long timestamp = System.currentTimeMillis();
 
@@ -97,14 +97,14 @@ public class VideoStateService {
             this(videoId, positionMs, -1);
         }
 
-        public State(String videoId, long positionMs, long lengthMs) {
-            this(videoId, positionMs, lengthMs, 1.0f);
+        public State(String videoId, long positionMs, long durationMs) {
+            this(videoId, positionMs, durationMs, 1.0f);
         }
 
-        public State(String videoId, long positionMs, long lengthMs, float speed) {
+        public State(String videoId, long positionMs, long durationMs, float speed) {
             this.videoId = videoId;
             this.positionMs = positionMs;
-            this.lengthMs = lengthMs;
+            this.durationMs = durationMs;
             this.speed = speed;
         }
 
@@ -130,7 +130,7 @@ public class VideoStateService {
         @NonNull
         @Override
         public String toString() {
-            return String.format("%s,%s,%s,%s", videoId, positionMs, lengthMs, speed);
+            return String.format("%s,%s,%s,%s", videoId, positionMs, durationMs, speed);
         }
     }
 }

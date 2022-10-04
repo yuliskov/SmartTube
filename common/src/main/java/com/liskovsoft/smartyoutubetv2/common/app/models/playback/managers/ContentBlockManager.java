@@ -282,11 +282,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
      * Sponsor block fix. Position may exceed real media length.
      */
     private void setPositionMs(long positionMs) {
-        long lengthMs = getController().getDurationMs();
+        long durationMs = getController().getDurationMs();
 
         // Sponsor block fix. Position may exceed real media length.
-        if (lengthMs > 0 && positionMs > lengthMs) {
-            positionMs = lengthMs;
+        if (durationMs > 0 && positionMs > durationMs) {
+            positionMs = durationMs;
         }
 
         getController().setPositionMs(positionMs);

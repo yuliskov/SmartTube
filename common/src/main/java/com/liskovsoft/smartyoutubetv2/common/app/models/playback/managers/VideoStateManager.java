@@ -262,7 +262,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         State state = mStateService.getByVideoId(item.videoId);
 
         // Reset position of music videos
-        boolean isShort = state != null && (state.lengthMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled());
+        boolean isShort = state != null && (state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled());
 
         if (isShort || item.isLive) {
             resetPosition(item);
@@ -285,7 +285,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
 
         if (state != null) {
             if (mPlayerData.isRememberSpeedEachEnabled()) {
-                mStateService.save(new State(videoId, 0, state.lengthMs, state.speed));
+                mStateService.save(new State(videoId, 0, state.durationMs, state.speed));
             } else {
                 mStateService.removeByVideoId(videoId);
             }
@@ -333,18 +333,18 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         // 1) Track is ended
         // 2) Pause on end enabled
         // 3) Watching live stream in real time
-        long lengthMs = getController().getDurationMs();
+        long durationMs = getController().getDurationMs();
         long positionMs = getController().getPositionMs();
-        long remainsMs = lengthMs - positionMs;
+        long remainsMs = durationMs - positionMs;
         boolean isPositionActual = remainsMs > 1_000;
         boolean isRealLiveStream = video.isLive && remainsMs < LIVE_THRESHOLD_MS;
         if ((isPositionActual && !isRealLiveStream) || !getPlayEnabled()) { // Is pause after each video enabled?
-            mStateService.save(new State(video.videoId, positionMs, lengthMs, getController().getSpeed()));
+            mStateService.save(new State(video.videoId, positionMs, durationMs, getController().getSpeed()));
             // Sync video. You could safely use it later to restore state.
-            video.percentWatched = positionMs / (lengthMs / 100f);
+            video.percentWatched = positionMs / (durationMs / 100f);
         } else {
             // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
-            mStateService.save(new State(video.videoId, lengthMs, lengthMs, 1.0f));
+            mStateService.save(new State(video.videoId, durationMs, durationMs, 1.0f));
             video.percentWatched = 100;
 
             // NOTE: Storage optimization!!!
@@ -377,7 +377,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         }
 
         // Set actual position for live videos with uncommon length
-        if (state == null && item.isLive) {
+        if ((state == null || state.positionMs == state.durationMs) && item.isLive) {
             // Add buffer. Should I take into account segment offset???
             state = new State(item.videoId, getController().getDurationMs() - 60_000);
         }
