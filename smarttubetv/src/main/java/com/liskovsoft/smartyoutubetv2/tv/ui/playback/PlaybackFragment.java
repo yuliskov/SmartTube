@@ -421,7 +421,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // Try to fix decoder error on Nvidia Shield 2019.
         // Init resources as early as possible.
         //mPlayer.setForegroundMode(true);
-        mPlayer.setSeekParameters(SeekParameters.CLOSEST_SYNC); // live stream (dash) seeking fix
+        // NOTE: Avoid using this. SponsorBlock may hang because of constant rewinds.
+        //mPlayer.setSeekParameters(SeekParameters.CLOSEST_SYNC); // live stream (dash) seeking fix
         mExoPlayerController.setPlayer(mPlayer);
     }
 
