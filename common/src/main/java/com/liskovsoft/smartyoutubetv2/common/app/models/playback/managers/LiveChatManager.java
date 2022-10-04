@@ -109,7 +109,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         String authorName = chatItem.getAuthorName();
 
         for (String spammer : BLACK_LIST) {
-            if (authorName.contains(spammer)) {
+            if (authorName.toLowerCase().contains(spammer.toLowerCase())) {
                 return false;
             }
         }

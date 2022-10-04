@@ -31,6 +31,7 @@ import com.google.android.exoplayer2.ControlDispatcher;
 import com.google.android.exoplayer2.DefaultControlDispatcher;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
@@ -420,6 +421,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // Try to fix decoder error on Nvidia Shield 2019.
         // Init resources as early as possible.
         //mPlayer.setForegroundMode(true);
+        mPlayer.setSeekParameters(SeekParameters.CLOSEST_SYNC); // live stream (dash) seeking fix
         mExoPlayerController.setPlayer(mPlayer);
     }
 

@@ -645,14 +645,14 @@ public final class Video implements Parcelable {
             return 0;
         }
 
-        // Stream real length may exceeds calculated length
-        long liveDurationMs = System.currentTimeMillis() - startTimeMs - 60_000;
+        // Is stream real length may exceeds calculated length???
+        long liveDurationMs = System.currentTimeMillis() - startTimeMs;
         return liveDurationMs > 0 ? liveDurationMs : 0;
     }
 
     public long getLiveBufferDurationMs() {
-        // Add buffer and take into account segment offset
-        long bufferDurationMs = getLiveDurationMs() - (startSegmentNum > 0 ? 120_000 : 60_000);
+        // Add buffer. Should I take into account segment offset???
+        long bufferDurationMs = getLiveDurationMs() - 60_000;
         return bufferDurationMs > 0 ? bufferDurationMs : 0;
     }
 

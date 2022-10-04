@@ -89,7 +89,7 @@ public class TrackSelectorUtil {
 
     private static String buildBitrateString(Format format) {
         double bitrateMB = Helpers.round(format.bitrate / 1_000_000f, 2);
-        return format.bitrate == Format.NO_VALUE || bitrateMB == 0 ? "" : String.format("%sMbit", Helpers.formatFloat(bitrateMB));
+        return format.bitrate == Format.NO_VALUE || bitrateMB == 0 ? "" : String.format("%sMbps", Helpers.formatFloat(bitrateMB));
     }
 
     private static String joinWithSeparator(String first, String second) {

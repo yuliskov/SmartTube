@@ -409,7 +409,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         }
 
         float mbit = ((float) bitrate) / 1_000_000;
-        return String.format(Locale.ENGLISH, "%.2fMbit", mbit);
+        return String.format(Locale.ENGLISH, "%.2fMbps", mbit);
     }
 
     private String getFormatId(Format video) {
