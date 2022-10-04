@@ -858,7 +858,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void loadStoryboard() {
         if (mPlayerGlue.getSeekProvider() instanceof StoryboardSeekDataProvider) {
-            ((StoryboardSeekDataProvider) mPlayerGlue.getSeekProvider()).init(getVideo(), mExoPlayerController.getLengthMs());
+            ((StoryboardSeekDataProvider) mPlayerGlue.getSeekProvider()).init(getVideo(), mExoPlayerController.getDurationMs());
         }
     }
 
@@ -950,7 +950,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public long getDurationMs() {
-        return mExoPlayerController.getLengthMs();
+        long durationMs = mExoPlayerController.getDurationMs();
+
+        if (durationMs > Video.MAX_DURATION_MS) {
+            durationMs = getVideo().getLiveDurationMs();
+        }
+
+        return durationMs;
     }
 
     @Override

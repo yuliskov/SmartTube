@@ -650,12 +650,6 @@ public final class Video implements Parcelable {
         return liveDurationMs > 0 ? liveDurationMs : 0;
     }
 
-    public long getLiveBufferDurationMs() {
-        // Add buffer. Should I take into account segment offset???
-        long bufferDurationMs = getLiveDurationMs() - 60_000;
-        return bufferDurationMs > 0 ? bufferDurationMs : 0;
-    }
-
     // Builder for Video object.
     public static class VideoBuilder {
         private long id;

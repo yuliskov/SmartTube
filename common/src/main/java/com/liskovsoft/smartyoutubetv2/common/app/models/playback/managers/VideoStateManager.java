@@ -377,8 +377,9 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         }
 
         // Set actual position for live videos with uncommon length
-        if (state == null && item.isLive && getController().getDurationMs() > Video.MAX_DURATION_MS) {
-            state = new State(item.videoId, item.getLiveBufferDurationMs());
+        if (state == null && item.isLive) {
+            // Add buffer. Should I take into account segment offset???
+            state = new State(item.videoId, getController().getDurationMs() - 60_000);
         }
 
         // Do I need to check that item isn't live? (state != null && !item.isLive)
