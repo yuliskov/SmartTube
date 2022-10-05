@@ -454,9 +454,9 @@
     <string name="open_chat">Obrolan</string>
     <string name="place_chat_left">Tempatkan obrolan ke kiri</string>
     <string name="use_alt_speech_recognizer">Pengenal ucapan alternatif</string>
-    <string name="time_mode">Mode waktu</string>
-    <string name="time_mode_24_hours">24 jam</string>
-    <string name="time_mode_12_hours">12 jam (AM/PM)</string>
+    <string name="time_format">Mode waktu</string>
+    <string name="time_format_24">24 jam</string>
+    <string name="time_format_12">12 jam (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Serius rusak. Gunakan hanya jika Anda memiliki masalah dengan pengenal default.</string>
     <string name="speech_recognizer">Pengenal ucapan</string>
     <string name="speech_recognizer_system">Sistem (lebih utama)</string>

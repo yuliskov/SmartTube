@@ -446,9 +446,9 @@
     <string name="open_chat">Чат</string>
     <string name="place_chat_left">Разместить чат слева</string>
     <string name="use_alt_speech_recognizer">Альтернативный распознаватель речи</string>
-    <string name="time_mode">Режим времени</string>
-    <string name="time_mode_24_hours">24 часа</string>
-    <string name="time_mode_12_hours">12 часов (AM/PM)</string>
+    <string name="time_format">Формат времени</string>
+    <string name="time_format_24">24 часа</string>
+    <string name="time_format_12">12 часов (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Серьезно забагован. Используйте его, только если есть проблемы с распознавателем по умолчанию.</string>
     <string name="speech_recognizer">Распознаватель речи</string>
     <string name="speech_recognizer_system">Системный (наилучший)</string>

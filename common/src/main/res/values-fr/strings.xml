@@ -454,9 +454,9 @@
   <string name="open_chat">Chat en direct</string>
   <string name="place_chat_left">Placez le chat en direct à gauche</string>
   <string name="use_alt_speech_recognizer">Alt reconnaissance vocale</string>
-  <string name="time_mode">Mode</string>
-  <string name="time_mode_24_hours">24 heures</string>
-  <string name="time_mode_12_hours">12 heures (AM/PM)</string>
+  <string name="time_format">Mode</string>
+  <string name="time_format_24">24 heures</string>
+  <string name="time_format_12">12 heures (AM/PM)</string>
   <string name="use_alt_speech_recognizer_desc">Sérieusement buggé. Ne l\'utilisez que si vous avez des problèmes avec le système de reconnaissance par défaut.</string>
   <string name="speech_recognizer">Reconnaissance vocale</string>
   <string name="speech_recognizer_system">Système (préféré)</string>

@@ -27,8 +27,8 @@ public class GeneralData {
     public static final int EXIT_SINGLE_BACK = 2;
     public static final int BACKGROUND_PLAYBACK_SHORTCUT_HOME = 0;
     public static final int BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK = 1;
-    public static final int TIME_MODE_24 = 0;
-    public static final int TIME_MODE_12 = 1;
+    public static final int TIME_FORMAT_24 = 0;
+    public static final int TIME_FORMAT_12 = 1;
     @SuppressLint("StaticFieldLeak")
     private static GeneralData sInstance;
     private final Context mContext;
@@ -42,7 +42,7 @@ public class GeneralData {
     private boolean mIsHideUpcomingEnabled;
     private boolean mIsRemapFastForwardToNextEnabled;
     private int mScreenDimmingTimeoutMin;
-    private int mTimeMode;
+    private int mTimeFormat;
     private boolean mIsProxyEnabled;
     private boolean mIsBridgeCheckEnabled;
     private boolean mIsOkButtonLongPressDisabled;
@@ -479,13 +479,13 @@ public class GeneralData {
         return mScreenDimmingTimeoutMin;
     }
 
-    public void setTimeMode(int mode) {
-        mTimeMode = mode;
+    public void setTimeFormat(int format) {
+        mTimeFormat = format;
         persistState();
     }
 
-    public int getTimeMode() {
-        return mTimeMode;
+    public int getTimeFormat() {
+        return mTimeFormat;
     }
 
     public void enableProxy(boolean enable) {
@@ -655,7 +655,7 @@ public class GeneralData {
         String playlistOrder = Helpers.parseStr(split, 29);
         String pendingStreams = Helpers.parseStr(split, 30);
         mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, true);
-        mTimeMode = Helpers.parseInt(split, 32, LocaleUtility.is24HourLocale(mContext) ? TIME_MODE_24 : TIME_MODE_12);
+        mTimeFormat = Helpers.parseInt(split, 32, LocaleUtility.is24HourLocale(mContext) ? TIME_FORMAT_24 : TIME_FORMAT_12);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -715,6 +715,6 @@ public class GeneralData {
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
-                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeMode));
+                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat));
     }
 }

@@ -417,9 +417,9 @@
   <string name="speech_recognizer_system">Συστήματος(προτείνεται)</string>
   <string name="speech_recognizer">Αναγνώριση ομιλίας </string>
   <string name="use_alt_speech_recognizer_desc">Σοβαρά σφάλματα. Να χρησιμοποιηθεί μόνο αν υπάρχουν προβλήματα με την προεπιλεγμένη αναγνώριση </string>
-  <string name="time_mode_12_hours">12ωρο (ΠΜ/ΜΜ)</string>
-  <string name="time_mode_24_hours">24ωρο</string>
-  <string name="time_mode">Τύπος ώρας </string>
+  <string name="time_format_12">12ωρο (ΠΜ/ΜΜ)</string>
+  <string name="time_format_24">24ωρο</string>
+  <string name="time_format">Τύπος ώρας </string>
   <string name="use_alt_speech_recognizer">Εναλλακτική αναγνώριση ομιλίας </string>
   <string name="place_chat_left">Τοποθέτηση συζήτησης αριστερά </string>
   <string name="open_chat">Συζήτηση </string>

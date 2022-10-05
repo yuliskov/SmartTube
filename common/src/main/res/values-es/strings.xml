@@ -454,9 +454,9 @@
     <string name="open_chat">Chat</string>
     <string name="place_chat_left">Colocar chat en la izquierda</string>
     <string name="use_alt_speech_recognizer">Reconocimiento de voz alternativo</string>
-    <string name="time_mode">Modo tiempo</string>
-    <string name="time_mode_24_hours">24 horas</string>
-    <string name="time_mode_12_hours">12 horas (AM/PM)</string>
+    <string name="time_format">Modo tiempo</string>
+    <string name="time_format_24">24 horas</string>
+    <string name="time_format_12">12 horas (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Tiene muchos fallos. Úsalo sólo si tienes problemas con el reconocedor por defecto.</string>
     <string name="speech_recognizer">Reconocimiento de voz</string>
     <string name="speech_recognizer_system">Sistema (preferido)</string>
