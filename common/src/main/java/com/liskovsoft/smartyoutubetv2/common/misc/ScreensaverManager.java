@@ -66,6 +66,7 @@ public class ScreensaverManager {
         int delayMs = mGeneralData.getScreenDimmingTimeoutMin() == GeneralData.SCREEN_DIMMING_NEVER ?
                 10_000 :
                 mGeneralData.getScreenDimmingTimeoutMin() * 60 * 1_000;
+        Utils.removeCallbacks(mHandler, mUndimScreen);
         Utils.postDelayed(mHandler, mDimScreen, delayMs);
     }
 
@@ -171,7 +172,7 @@ public class ScreensaverManager {
         }
 
         PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
-        return playbackView != null && (playbackView.getController().isPlaying() || playbackView.getController().isLoading());
+        return playbackView != null && playbackView.getController().isPlaying();
     }
 
     private boolean isSigning() {
