@@ -558,6 +558,8 @@ public final class Video implements Parcelable {
         if (formatInfo == null) {
             return;
         }
+        
+        isLive = formatInfo.isLive();
 
         if (description == null) {
             description = formatInfo.getDescription();
