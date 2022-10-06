@@ -374,7 +374,7 @@
     <string name="master_volume">Основная громкость</string>
     <string name="volume_limit">Ограничение громкости</string>
     <string name="play_video">Воспроизвести</string>
-    <string name="remember_position_of_short_videos">Запоминать позицию коротких видео (менее 10 мин)</string>
+    <string name="remember_position_of_short_videos">Запоминать позицию коротких видео (менее 5 мин)</string>
     <string name="player_show_tooltips">Показать подсказки для кнопок</string>
     <string name="action_like_unset">Нравится не установлено</string>
     <string name="action_dislike_unset">Не нравится не установлено</string>

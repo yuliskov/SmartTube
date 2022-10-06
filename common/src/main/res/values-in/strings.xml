@@ -378,7 +378,7 @@
     <string name="master_volume">Volume utama</string>
     <string name="volume_limit">Batas volume</string>
     <string name="play_video">Putar</string>
-    <string name="remember_position_of_short_videos">Ingat posisi video pendek (kurang dari 10 menit)</string>
+    <string name="remember_position_of_short_videos">Ingat posisi video pendek (kurang dari 5 menit)</string>
     <string name="player_show_tooltips">Tampilkan tooltips tombol</string>
     <string name="action_like_unset">Like tidak disetel</string>
     <string name="action_dislike_unset">Dislike tidak disetel</string>
