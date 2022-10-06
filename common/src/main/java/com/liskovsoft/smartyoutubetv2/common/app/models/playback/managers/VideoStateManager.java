@@ -137,6 +137,12 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
             mTickleLeft = 0;
             updateHistory();
         }
+
+        // Restore normal speed on LIVE end
+        restoreSpeed();
+        //if (isLiveThreshold()) {
+        //    getController().setSpeed(1.0f);
+        //}
     }
 
     @Override
@@ -212,10 +218,14 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
 
     @Override
     public void onBuffering() {
-        // Check LIVE threshold and set speed to normal
-        //restoreSpeed();
         // Live stream starts to buffer after the end
         showHideScreensaver(true);
+
+        // Restore normal speed on LIVE end
+        restoreSpeed();
+        //if (isLiveThreshold()) {
+        //    getController().setSpeed(1.0f);
+        //}
     }
 
     @Override
@@ -436,11 +446,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
 
     private void restoreSpeed() {
         Video item = getVideo();
-        boolean isLiveThreshold = getController().getDurationMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
-        boolean isLive = item.isLive && isLiveThreshold;
-        boolean isMusic = item.belongsToMusic();
 
-        if (isLive || isMusic) {
+        if (isLiveThreshold() || isMusicVideo()) {
             getController().setSpeed(1.0f);
         } else {
             State state = mStateService.getByVideoId(item.videoId);
@@ -504,5 +511,16 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
      */
     private Video getVideo() {
         return mVideo;
+    }
+
+    private boolean isLiveThreshold() {
+        Video item = getVideo();
+        boolean isLiveThreshold = getController().getDurationMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
+        return item.isLive && isLiveThreshold;
+    }
+
+    private boolean isMusicVideo() {
+        Video item = getVideo();
+        return item.belongsToMusic();
     }
 }

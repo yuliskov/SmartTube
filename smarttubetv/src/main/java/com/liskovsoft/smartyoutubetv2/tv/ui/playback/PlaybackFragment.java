@@ -1043,6 +1043,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void setSpeed(float speed) {
         mExoPlayerController.setSpeed(speed);
+        // NOTE: Real speed isn't changed immediately, so use supplied speed data
+        setSpeedButtonState(speed != 1.0f);
     }
 
     @Override

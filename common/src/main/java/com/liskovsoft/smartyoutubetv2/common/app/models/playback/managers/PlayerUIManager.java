@@ -258,7 +258,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
         setPlaylistAddButtonStateCached();
         setSubtitleButtonState();
-        setSpeedButtonState(getController().getSpeed()); // Use real speed (it more robust than the saved speed data)
     }
 
     @Override
@@ -355,8 +354,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
         AppDialogUtil.appendSpeedDialogItems(getActivity(), settingsPresenter, mPlayerData, getController());
 
-        // NOTE: Real speed isn't changed immediately, so use saved speed data
-        settingsPresenter.showDialog(() -> setSpeedButtonState(mPlayerData.getSpeed()));
+        settingsPresenter.showDialog();
     }
 
     @Override
@@ -639,12 +637,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
 
         getController().setSubtitleButtonState(isSelected);
-    }
-
-    private void setSpeedButtonState(float speed) {
-        if (getController() != null) {
-            getController().setSpeedButtonState(speed != 1.0f);
-        }
     }
 
     private void startTempBackgroundMode() {
