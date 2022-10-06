@@ -138,7 +138,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
             updateHistory();
         }
 
-        // Restore normal speed on LIVE end
+        // Restore speed on LIVE end
         restoreSpeed();
         //if (isLiveThreshold()) {
         //    getController().setSpeed(1.0f);
@@ -221,7 +221,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         // Live stream starts to buffer after the end
         showHideScreensaver(true);
 
-        // Restore normal speed on LIVE end
+        // Restore speed on LIVE end or after seek
         restoreSpeed();
         //if (isLiveThreshold()) {
         //    getController().setSpeed(1.0f);
