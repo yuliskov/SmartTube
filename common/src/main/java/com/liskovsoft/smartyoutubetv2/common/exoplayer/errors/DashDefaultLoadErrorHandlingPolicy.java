@@ -10,6 +10,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class DashDefaultLoadErrorHandlingPolicy extends DefaultLoadErrorHandlingPolicy {
+    /**
+     * Copied from the parent class!
+     */
     @Override
     public long getBlacklistDurationMsFor(int dataType, long loadDurationMs, IOException exception, int errorCount) {
         if (exception instanceof InvalidResponseCodeException) {
@@ -22,6 +25,9 @@ public class DashDefaultLoadErrorHandlingPolicy extends DefaultLoadErrorHandling
         return C.TIME_UNSET;
     }
 
+    /**
+     * Copied from the parent class!
+     */
     @Override
     public long getRetryDelayMsFor(int dataType, long loadDurationMs, IOException exception, int errorCount) {
         return exception instanceof ParserException
