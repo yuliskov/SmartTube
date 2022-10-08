@@ -1,10 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.errors;
 
-import android.os.Handler;
+import com.google.android.exoplayer2.source.chunk.Chunk;
+import com.google.android.exoplayer2.source.chunk.ContainerMediaChunk;
 import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException;
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,17 +16,14 @@ import java.util.Set;
 public class TrackErrorFixer {
     private static final int BLACKLIST_CHECK_MS = 1_000;
     private static final int BLACKLIST_CLEAR_MS = 10_000;
-    private static final int SELECT_FIRST_TRACK_MS = 30_000;
+    private static final String TAG = TrackErrorFixer.class.getSimpleName();
     private final TrackSelectorManager mTrackSelectorManager;
-    private final Handler mHandler;
     private long mSelectionTimeMs;
     private final Map<MediaTrack, Long> mBlacklistedTracks = new HashMap<>();
     private InvalidResponseCodeException mLastEx;
-    private final Runnable mSelectFirstTrack = this::selectFirstTrack;
 
     public TrackErrorFixer(TrackSelectorManager trackSelectorManager) {
         mTrackSelectorManager = trackSelectorManager;
-        mHandler = new Handler();
     }
 
     /**
@@ -130,5 +129,20 @@ public class TrackErrorFixer {
 
     private void addToBlacklist(MediaTrack track) {
         mBlacklistedTracks.put(track, System.currentTimeMillis());
+    }
+
+    public void fixEmptyChunk(Chunk chunk) {
+        // Fix when just started new type live stream ahead of the position
+        if (chunk instanceof ContainerMediaChunk) {
+            long nextLoadPosition = (Long) Helpers.getField(chunk, "nextLoadPosition");
+            if (nextLoadPosition == 0) {
+                Log.e(TAG, "Stream position behind the timeline. Waiting for new data...");
+                try {
+                    Thread.sleep(10_000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

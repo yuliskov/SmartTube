@@ -9,7 +9,7 @@ import com.google.android.exoplayer2.upstream.Loader.UnexpectedLoaderException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class MyDefaultLoadErrorHandlingPolicy extends DefaultLoadErrorHandlingPolicy {
+public class DashDefaultLoadErrorHandlingPolicy extends DefaultLoadErrorHandlingPolicy {
     @Override
     public long getBlacklistDurationMsFor(int dataType, long loadDurationMs, IOException exception, int errorCount) {
         if (exception instanceof InvalidResponseCodeException) {
