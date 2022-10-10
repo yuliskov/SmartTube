@@ -378,7 +378,7 @@
     <string name="master_volume">Volume principale</string>
     <string name="volume_limit">Limite volume</string>
     <string name="play_video">Riproduci</string>
-    <string name="remember_position_of_short_videos">Ricorda la posizione dei video brevi (meno di 10 minuti)</string>
+    <string name="remember_position_of_short_videos">Ricorda la posizione dei video brevi (meno di 5 minuti)</string>
     <string name="player_show_tooltips">Mostra le descrizioni dei tasti</string>
     <string name="action_like_unset">Mi piace non è selezionato</string>
     <string name="action_dislike_unset">Non mi piace non è selezionato</string>
