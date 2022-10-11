@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
@@ -92,8 +93,9 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
         if (getController() != null && getController().isEngineInitialized()) { // player is initialized
             if (!item.equals(mLastVideo)) {
-                getController().resetPlayerState();
-                loadVideo(item); // play immediately
+                loadVideo(item); // force play immediately
+            } else {
+                loadSuggestions(item);
             }
         } else {
             mLastVideo = item; // save for later
@@ -207,12 +209,28 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         return playbackMode;
     }
 
+    /**
+     * Force load and play!
+     */
     private void loadVideo(Video item) {
         if (item != null) {
             mPlaylist.setCurrent(item);
             mLastVideo = item;
             getController().setVideo(item);
+            getController().resetPlayerState();
             loadFormatInfo(item);
+        }
+    }
+
+    /**
+     * Force load suggestions.
+     */
+    private void loadSuggestions(Video item) {
+        if (item != null) {
+            mPlaylist.setCurrent(item);
+            mLastVideo = item;
+            getController().setVideo(item);
+            mSuggestionsLoader.loadSuggestions(item);
         }
     }
 

@@ -1521,31 +1521,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // Hide last frame of the previous video
         showBackgroundColor(R.color.player_background);
         setChatReceiver(null);
-
-        //mPlaybackController.setBackground(null); // ensure that the background doesn't overlap the video
-
-        //// Ensure that user isn't browsing suggestions
-        //if (containsMedia() && !isSuggestionsShown()) {
-        //    // save state
-        //    Video video = getVideo();
-        //    int repeatButtonState = getRepeatButtonState();
-        //    boolean contentBlockEnabled = isContentBlockEnabled();
-        //    boolean controlsShown = isOverlayShown();
-        //    boolean debugShown = isDebugInfoShown();
-        //
-        //    // Silently recreate player objects.
-        //    // NOTE: Don't use events! Otherwise you'll get infinite loading video loop.
-        //    destroyPlayerObjects();
-        //    createPlayerObjects();
-        //
-        //    // restore state
-        //    setVideo(video);
-        //    setRepeatButtonState(repeatButtonState);
-        //    setContentBlockButtonState(contentBlockEnabled);
-        //    showOverlay(controlsShown);
-        //    showDebugInfo(debugShown);
-        //    setDebugButtonState(debugShown);
-        //}
     }
 
     /**
