@@ -378,7 +378,7 @@
     <string name="master_volume">Hlavní hlasitost</string>
     <string name="volume_limit">Omezení hlasitosti</string>
     <string name="play_video">Přehrát</string>
-    <string name="remember_position_of_short_videos">Pamatovat si pozici krátkých videí (méně než 10 minut)</string>
+    <string name="remember_position_of_short_videos">Pamatovat si pozici krátkých videí (méně než 5 minut)</string>
     <string name="player_show_tooltips">Zobrazit nápovědu tlačítek</string>
     <string name="action_like_unset">"Líbí se" není nastaveno</string>
     <string name="action_dislike_unset">"Nelíbí se" není nastaveno</string>
