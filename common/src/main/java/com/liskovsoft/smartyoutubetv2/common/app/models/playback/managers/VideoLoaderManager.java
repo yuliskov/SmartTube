@@ -6,7 +6,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
@@ -47,6 +46,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     private int mLastError = -1;
     private long mPrevErrorTimeMs;
     private PlayerData mPlayerData;
+    private PlayerTweaksData mPlayerTweaksData;
     private long mSleepTimerStartMs;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
@@ -76,6 +76,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     public void onInitDone() {
         mPlayerData = PlayerData.instance(getActivity());
         mPlayerData.setOnChange(this);
+        mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
         initErrorActions();
     }
 
@@ -259,6 +260,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         disposeActions();
 
         MediaService service = YouTubeMediaService.instance();
+        service.enableOldStreams(mPlayerTweaksData.isLiveStreamFixEnabled());
         MediaItemService mediaItemManager = service.getMediaItemService();
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribeOn(Schedulers.io())
@@ -361,9 +363,8 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         // Might happen when the app wasn't used quite a long time.
         mErrorActions.put(PlayerEventListener.ERROR_TYPE_SOURCE, () -> {
             // This buffering setting could also cause such errors.
-            PlayerTweaksData tweaksData = PlayerTweaksData.instance(getActivity());
-            if (tweaksData.isBufferingFixEnabled()) {
-                tweaksData.enableBufferingFix(false);
+            if (mPlayerTweaksData.isBufferingFixEnabled()) {
+                mPlayerTweaksData.enableBufferingFix(false);
             }
 
             MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_source2);
@@ -460,7 +461,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     private boolean forceLegacyFormat(MediaItemFormatInfo formatInfo) {
         boolean isLive = formatInfo.isLive() || formatInfo.isLiveContent();
 
-        if (isLive && PlayerTweaksData.instance(getActivity()).isLiveStreamFixEnabled() && formatInfo.containsHlsUrl()) {
+        if (isLive && mPlayerTweaksData.isLiveStreamFixEnabled() && formatInfo.containsHlsUrl()) {
             return true;
         }
 

@@ -5,16 +5,24 @@ import com.liskovsoft.mediaserviceinterfaces.data.ChatItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiverImpl;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LiveChatManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = LiveChatManager.class.getSimpleName();
@@ -24,6 +32,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
     private static final String[] BLACK_LIST = {". XYZ", ". ХYZ", "⠄XYZ", "⠄ХYZ", "Ricardo Merlino", "⠄СОM", ".COM", ".СОM", ". COM"};
     private LiveChatService mChatService;
     private PlayerData mPlayerData;
+    private PlayerTweaksData mPlayerTweaksData;
     private Disposable mChatAction;
     private String mLiveChatKey;
 
@@ -31,6 +40,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
     public void onInitDone() {
         mChatService = YouTubeMediaService.instance().getLiveChatService();
         mPlayerData = PlayerData.instance(getActivity());
+        mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
     }
 
     @Override
@@ -75,13 +85,41 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
-    public void onChatClicked(boolean enabled) {
-        if (enabled) {
-            openLiveChat();
-        } else {
-            disposeActions();
-        }
-        mPlayerData.enableLiveChat(enabled);
+    public void onChatClicked() {
+        String chatCategoryTitle = getActivity().getString(R.string.open_chat);
+
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
+
+        settingsPresenter.clear();
+
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getActivity().getString(R.string.option_disabled),
+                optionItem -> {
+                    enableLiveChat(false);
+                    settingsPresenter.closeDialog();
+                },
+                !mPlayerData.isLiveChatEnabled()));
+
+        options.add(UiOptionItem.from(getActivity().getString(R.string.chat_left),
+                optionItem -> {
+                    mPlayerTweaksData.placeChatLeft(true);
+                    enableLiveChat(true);
+                    settingsPresenter.closeDialog();
+                },
+                mPlayerData.isLiveChatEnabled() && mPlayerTweaksData.isChatPlacedLeft()));
+
+        options.add(UiOptionItem.from(getActivity().getString(R.string.chat_right),
+                optionItem -> {
+                    mPlayerTweaksData.placeChatLeft(false);
+                    enableLiveChat(true);
+                    settingsPresenter.closeDialog();
+                },
+                mPlayerData.isLiveChatEnabled() && !mPlayerTweaksData.isChatPlacedLeft()));
+
+        settingsPresenter.appendRadioCategory(chatCategoryTitle, options);
+
+        settingsPresenter.showDialog(chatCategoryTitle);
     }
 
     @Override
@@ -115,5 +153,18 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         }
 
         return true;
+    }
+
+    private void enableLiveChat(boolean enabled) {
+        if (enabled) {
+            openLiveChat();
+        } else {
+            disposeActions();
+        }
+        mPlayerData.enableLiveChat(enabled);
+
+        if (mLiveChatKey != null) {
+            getController().setChatButtonState(enabled ? PlaybackUIController.BUTTON_STATE_ON : PlaybackUIController.BUTTON_STATE_OFF);
+        }
     }
 }

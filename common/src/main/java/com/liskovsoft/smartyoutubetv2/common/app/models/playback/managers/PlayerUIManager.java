@@ -134,13 +134,12 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
 
         String subtitlesCategoryTitle = getActivity().getString(R.string.subtitle_category_title);
-        String subtitleFormatsTitle = getActivity().getString(R.string.subtitle_language);
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
 
         settingsPresenter.clear();
 
-        settingsPresenter.appendRadioCategory(subtitleFormatsTitle,
+        settingsPresenter.appendRadioCategory(subtitlesCategoryTitle,
                 UiOptionItem.from(subtitleFormats,
                         option -> getController().setFormat(UiOptionItem.toFormat(option)),
                         getActivity().getString(R.string.subtitles_disabled)));

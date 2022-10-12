@@ -479,8 +479,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
             mActionListener.onContentBlock(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
         } else if (action == mChatAction) {
-            incrementActionIndex(action);
-            mActionListener.onChat(getActionIndex(action) == TwoStateAction.INDEX_ON);
+            mActionListener.onChat();
             handled = true;
         }
 
@@ -637,7 +636,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
 
         void onContentBlock(boolean enabled);
 
-        void onChat(boolean enabled);
+        void onChat();
 
         void onVideoInfo();
 

@@ -768,8 +768,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onChat(boolean enabled) {
-            mEventListener.onChatClicked(enabled);
+        public void onChat() {
+            mEventListener.onChatClicked();
         }
 
         @Override

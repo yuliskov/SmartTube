@@ -461,4 +461,6 @@
     <string name="color_scheme_dark_grey_monochrome">Тёмно-серая (монохромная)</string>
     <string name="disable_mic_permission">Пожалуйста, отключите доступ к микрофону для приложения, чтобы этот распознаватель работал правильно.</string>
     <string name="repeat_mode_shuffle">Перемешать любой плейлист</string>
+    <string name="chat_left">Слева</string>
+    <string name="chat_right">Справа</string>
 </resources>
