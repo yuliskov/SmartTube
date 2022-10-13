@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="header_home">Startside</string>
     <string name="title_search">Søk</string>
@@ -119,4 +120,21 @@
     <string name="sorting_by_new_content">Nytt innhold</string>
     <string name="sorting_alphabetically">Alfabetisk</string>
     <string name="sorting_last_viewed">Sist sett</string>
+    <string name="settings_general">Generelt</string>
+    <string name="context_menu">Kontektsmeny</string>
+    <string name="various_buttons">Knapper på toppen av hovedvinduet</string>
+    <string name="app_exit_shortcut">Avslutte appen</string>
+    <string name="screen_dimming">Skjermdimming</string>
+    <string name="time_format">Tidsformat</string>
+    <string name="key_remapping">Remapping av knapper</string>
+    <string name="app_backup_restore">Sikkerhetskopiering</string>
+    <string name="internet_censorship">Internettsensur</string>
+    <string name="app_exit_none">Ikke avslutt</string>
+    <string name="app_double_back_exit">Dobbelt tilbakeklikk</string>
+    <string name="app_single_back_exit">Enkelt tilbakeklikk</string>
+    <string name="time_format_24">24-timers</string>
+    <string name="time_format_12">12-timers (AM/PM)</string>
+    <string name="enable_web_proxy">Bruk proxy</string>
+    <string name="app_backup">Ta sikkerhetskopi</string>
+    <string name="app_restore">Gjenopprett sikkerhetskopi</string>
 </resources>
