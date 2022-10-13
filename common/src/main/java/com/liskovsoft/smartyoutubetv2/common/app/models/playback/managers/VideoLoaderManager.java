@@ -200,11 +200,9 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     }
 
     private int checkSleepTimer(int playbackMode) {
-        if (mPlayerData.isSonyTimerFixEnabled()) {
-            if (System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
-                MessageHelpers.showLongMessage(getActivity(), R.string.player_sleep_timer);
-                playbackMode = PlaybackUIController.REPEAT_MODE_PAUSE;
-            }
+        if (mPlayerData.isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
+            playbackMode = PlaybackUIController.REPEAT_MODE_PAUSE;
+            getController().showError(getActivity().getString(R.string.sleep_timer));
         }
 
         return playbackMode;

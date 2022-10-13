@@ -267,11 +267,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.preferAvcOverVp9(option.isSelected()),
                 mPlayerTweaksData.isAvcOverVp9Preferred()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.sleep_timer),
-                getContext().getString(R.string.sleep_timer_desc),
-                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
-                mPlayerData.isSonyTimerFixEnabled()));
-
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_vsync),
                 getContext().getString(R.string.disable_vsync_desc),
                 option -> mPlayerTweaksData.disableSnapToVsync(option.isSelected()),
@@ -400,17 +395,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        //options.add(UiOptionItem.from(getContext().getString(R.string.player_full_date),
-        //        option -> mPlayerData.enableAbsoluteDate(option.isSelected()),
-        //        mPlayerData.isAbsoluteDateEnabled()));
-
-        //options.add(UiOptionItem.from(getContext().getString(R.string.player_time_correction),
-        //        option -> mPlayerData.enableTimeCorrection(option.isSelected()),
-        //        mPlayerData.isTimeCorrectionEnabled()));
-
-        //options.add(UiOptionItem.from(getContext().getString(R.string.player_pause_when_seek),
-        //        option -> mPlayerData.enableSeekMemory(option.isSelected()),
-        //        mPlayerData.isSeekMemoryEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.sleep_timer),
+                //getContext().getString(R.string.sleep_timer_desc),
+                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
+                mPlayerData.isSonyTimerFixEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.search_background_playback),
                 option -> mSearchData.enableTempBackgroundMode(option.isSelected()),
