@@ -436,7 +436,7 @@
   <string name="require_checked">Nécessite \"%s\"</string>
   <string name="msg_press_again_to_exit">Appuyez à nouveau pour sortir</string>
   <string name="player_remaining_time">Restant: %s</string>
-  <string name="player_ending_time">Se termine dans %s</string>
+  <string name="player_ending_time">Se termine à %s</string>
   <string name="badge_new_content">NOUVEAU CONTENU</string>
   <string name="badge_live">EN DIRECT</string>
   <string name="add_device_view_description">Pour associer l\'appareil, entrez ce code dans l\'application YouTube de votre téléphone, dans la section Paramètres/Télévision</string>
