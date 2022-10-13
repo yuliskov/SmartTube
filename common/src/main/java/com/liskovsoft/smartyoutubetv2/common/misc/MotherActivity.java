@@ -216,18 +216,18 @@ public class MotherActivity extends FragmentActivity {
      * https://stackoverflow.com/questions/7469082/getting-exception-illegalstateexception-can-not-perform-this-action-after-onsa<br/>
      * https://stackoverflow.com/questions/7575921/illegalstateexception-can-not-perform-this-action-after-onsaveinstancestate-wit?page=1&tab=scoredesc#tab-top
      */
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        // No call for super(). Bug on API Level > 11.
-        //if (Utils.checkActivity(this)) {
-        //    super.onSaveInstanceState(outState);
-        //}
-
-        // Workaround is to override onSaveInstanceState and add something to the bundle prior to calling the super
-        // https://stackoverflow.com/questions/7469082/getting-exception-illegalstateexception-can-not-perform-this-action-after-onsa
-        outState.putString("WORKAROUND_FOR_BUG_19917_KEY", "WORKAROUND_FOR_BUG_19917_VALUE");
-        super.onSaveInstanceState(outState);
-    }
+    //@Override
+    //protected void onSaveInstanceState(@NonNull Bundle outState) {
+    //    // No call for super(). Bug on API Level > 11.
+    //    //if (Utils.checkActivity(this)) {
+    //    //    super.onSaveInstanceState(outState);
+    //    //}
+    //
+    //    // Workaround is to override onSaveInstanceState and add something to the bundle prior to calling the super
+    //    // https://stackoverflow.com/questions/7469082/getting-exception-illegalstateexception-can-not-perform-this-action-after-onsa
+    //    outState.putString("WORKAROUND_FOR_BUG_19917_KEY", "WORKAROUND_FOR_BUG_19917_VALUE");
+    //    super.onSaveInstanceState(outState);
+    //}
 
     public void addOnPermissions(OnPermissions onPermissions) {
         if (mOnPermissions == null) {
