@@ -114,7 +114,7 @@
     <string name="repeat_mode_pause_alt">Pausar después de cada vídeo fuera de lista de reproducción</string>
     <string name="repeat_mode_none">Parar después de un vídeo</string>
     <string name="subscribed_to_channel">Suscrito al canal</string>
-    <string name="unsubscribed_from_channel">Desuscribirse del canal</string>
+    <string name="unsubscribed_from_channel">No estás Suscrito al canal</string>
     <string name="subtitle_yellow_transparent">Amarillo sobre fondo transparente</string>
     <string name="subtitle_white_black">Blanco sobre fondo negro</string>
     <string name="player_seek_preview">Previsualizar mientras busca</string>
