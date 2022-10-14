@@ -59,6 +59,9 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
     private void appendCardsStyle(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        OptionItem realThumbnailsOption = UiOptionItem.from(getContext().getString(R.string.card_real_thumbnails),
+                option -> mMainUIData.enableCardRealThumbnails(option.isSelected()), mMainUIData.isCardRealThumbnailsEnabled());
+
         OptionItem animatedPreviewsOption = UiOptionItem.from(getContext().getString(R.string.card_animated_previews),
                 option -> mMainUIData.enableCardAnimatedPreviews(option.isSelected()), mMainUIData.isCardAnimatedPreviewsEnabled());
 
@@ -68,6 +71,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         OptionItem autoScrolledTitle = UiOptionItem.from(getContext().getString(R.string.card_auto_scrolled_title),
                 option -> mMainUIData.enableCardTextAutoScroll(option.isSelected()), mMainUIData.isCardTextAutoScrollEnabled());
 
+        options.add(realThumbnailsOption);
         options.add(animatedPreviewsOption);
         options.add(multilineTitle);
         if (Build.VERSION.SDK_INT > 19) {

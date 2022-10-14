@@ -463,4 +463,5 @@
     <string name="repeat_mode_shuffle">Перемешать любой плейлист</string>
     <string name="chat_left">Слева</string>
     <string name="chat_right">Справа</string>
+    <string name="card_real_thumbnails">Заменить миниатюры кадром из видео</string>
 </resources>

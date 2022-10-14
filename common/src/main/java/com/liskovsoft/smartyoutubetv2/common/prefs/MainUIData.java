@@ -58,6 +58,7 @@ public class MainUIData {
     private float mCardTextScrollSpeed;
     private int mMenuItems;
     private int mButtons;
+    private boolean mIsCardRealThumbnailsEnabled;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -108,6 +109,15 @@ public class MainUIData {
 
     public int getCardTitleLinesNum() {
         return mCardTitleLinesNum;
+    }
+
+    public void enableCardRealThumbnails(boolean enable) {
+        mIsCardRealThumbnailsEnabled = enable;
+        persistState();
+    }
+
+    public boolean isCardRealThumbnailsEnabled() {
+        return mIsCardRealThumbnailsEnabled;
     }
 
     public void setVideoGridScale(float scale) {
@@ -280,13 +290,14 @@ public class MainUIData {
                 Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_NEW_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT |
                         MENU_ITEM_PLAY_VIDEO | MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_PIN_TO_SIDEBAR | MENU_ITEM_SHARE_EMBED_LINK)); // all except this items
         mButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE & ~(BUTTON_CHANGE_LANGUAGE)); // all except this items
+        mIsCardRealThumbnailsEnabled = Helpers.parseBoolean(split, 14, false);
     }
 
     private void persistState() {
         mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled,
                 mVideoGridScale, mUIScale, mColorSchemeIndex, mIsCardMultilineTitleEnabled,
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
-                mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mButtons));
+                mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mButtons, mIsCardRealThumbnailsEnabled));
     }
 
     public static class ColorScheme {

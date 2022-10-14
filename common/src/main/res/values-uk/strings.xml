@@ -463,4 +463,5 @@
     <string name="repeat_mode_shuffle">Перемішати будь-який плейлист</string>
     <string name="chat_left">Ліворуч</string>
     <string name="chat_right">Праворуч</string>
+    <string name="card_real_thumbnails">Замінити мініатюри кадром із відео</string>
 </resources>

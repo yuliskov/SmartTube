@@ -471,4 +471,5 @@
     <string name="repeat_mode_shuffle">Shuffle any playlist</string>
     <string name="chat_left">Left</string>
     <string name="chat_right">Right</string>
+    <string name="card_real_thumbnails">Replace thumbnails with a frame from the video</string>
 </resources>
