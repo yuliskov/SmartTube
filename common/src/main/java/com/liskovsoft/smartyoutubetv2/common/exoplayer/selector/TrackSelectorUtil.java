@@ -58,7 +58,7 @@ public class TrackSelectorUtil {
         return trackName.length() == 0 ? "unknown" : trackName;
     }
 
-    private static String buildHDRString(Format format) {
+    public static String buildHDRString(Format format) {
         if (format == null) {
             return "";
         }
@@ -155,8 +155,20 @@ public class TrackSelectorUtil {
         return shortCodecName;
     }
 
-    private static String buildChannels(Format format) {
+    public static String buildChannels(Format format) {
+        if (format == null) {
+            return "";
+        }
+
         return format.bitrate > 300000 ? "5.1" : "";
+    }
+
+    public static boolean isVideo(Format format) {
+        return MimeTypes.isVideo(format.sampleMimeType);
+    }
+
+    public static boolean isAudio(Format format) {
+        return MimeTypes.isAudio(format.sampleMimeType);
     }
 
     public static String stateToString(int playbackState) {

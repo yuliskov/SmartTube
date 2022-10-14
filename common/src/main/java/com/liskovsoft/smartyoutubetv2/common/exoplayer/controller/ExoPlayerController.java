@@ -284,12 +284,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
                 mEventListener.onTrackChanged(ExoFormatItem.from(format));
 
-                if (ExoFormatItem.isVideo(format)) {
-                    mTrackFormatter.setFormat(format);
-                    setQualityInfo(mTrackFormatter.getQualityLabel());
-                }
+                mTrackFormatter.setFormat(format);
             }
         }
+        
+        setQualityInfo(mTrackFormatter.getQualityLabel());
     }
 
     private void notifyOnVideoLoad() {
