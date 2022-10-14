@@ -34,6 +34,7 @@
     <string name="video_speed">Video speed</string>
     <string name="resolution_switch">Switch resolution</string>
     <string name="video_buffer">Video buffer</string>
+    <string name="video_buffer_size_none">None</string>
     <string name="video_buffer_size_low">Low</string>
     <string name="video_buffer_size_med">Medium</string>
     <string name="video_buffer_size_high">High</string>
