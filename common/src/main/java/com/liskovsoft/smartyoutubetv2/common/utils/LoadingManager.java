@@ -3,8 +3,10 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -27,6 +29,11 @@ public class LoadingManager {
             ChannelView channelView = ChannelPresenter.instance(context).getView();
             if (channelView != null) {
                 channelView.showProgressBar(show);
+            }
+        } else if (topView == ChannelUploadsView.class) {
+            ChannelUploadsView uploadsView = ChannelUploadsPresenter.instance(context).getView();
+            if (uploadsView != null) {
+                uploadsView.showProgressBar(show);
             }
         }
     }
