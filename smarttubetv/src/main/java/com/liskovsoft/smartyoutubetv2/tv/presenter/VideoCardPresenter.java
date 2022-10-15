@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Pair;
@@ -37,6 +38,7 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
     private int mSelectedTextColor = -1;
     private Drawable mDefaultCardImage;
     private boolean mIsAnimatedPreviewsEnabled;
+    private boolean mIsRealThumbnailsEnabled;
     private boolean mIsCardMultilineTitleEnabled;
     private boolean mIsCardTextAutoScrollEnabled;
     private float mCardTextScrollSpeed;
@@ -58,6 +60,7 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
         mDefaultCardImage = new ColorDrawable(ContextCompat.getColor(context, R.color.lb_grey));
 
         mIsAnimatedPreviewsEnabled = isCardAnimatedPreviewsEnabled(context);
+        mIsRealThumbnailsEnabled = isCardRealThumbnailsEnabled(context);
         mIsCardMultilineTitleEnabled = isCardMultilineTitleEnabled(context);
         mIsCardTextAutoScrollEnabled = isCardTextAutoScrollEnabled(context);
         mCardTextScrollSpeed = getCardTextScrollSpeed(context);
@@ -131,9 +134,10 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
         cardView.setMainImageDimensions(mWidth, mHeight);
 
         Glide.with(context)
-                .load(video.cardImageUrl)
+                .asBitmap() // disable animation (webp, gif)
+                .load(mIsRealThumbnailsEnabled && video.previewUrl != null ? video.previewUrl : video.cardImageUrl)
                 .apply(ViewUtil.glideOptions().error(mDefaultCardImage))
-                .listener(mErrorListener)
+                .listener(mErrorListener2)
                 .into(cardView.getMainImageView());
     }
 
@@ -167,6 +171,10 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
         return MainUIData.instance(context).isCardAnimatedPreviewsEnabled();
     }
 
+    protected boolean isCardRealThumbnailsEnabled(Context context) {
+        return MainUIData.instance(context).isCardRealThumbnailsEnabled();
+    }
+
     protected boolean isCardMultilineTitleEnabled(Context context) {
         return MainUIData.instance(context).isCardMultilineTitleEnabled();
     }
@@ -196,6 +204,19 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
 
         @Override
         public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+            return false;
+        }
+    };
+
+    private final RequestListener<Bitmap> mErrorListener2 = new RequestListener<Bitmap>() {
+        @Override
+        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+            Log.e(TAG, "Glide load failed: " + e);
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
             return false;
         }
     };
