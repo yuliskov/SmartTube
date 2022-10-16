@@ -100,13 +100,23 @@ public class Utils {
 
     @TargetApi(17)
     public static void displayShareVideoDialog(Context context, String videoId) {
-        Uri videoUrl = convertToFullVideoUrl(videoId);
+        displayShareVideoDialog(context, videoId, 0);
+    }
+
+    @TargetApi(17)
+    public static void displayShareVideoDialog(Context context, String videoId, int posSec) {
+        Uri videoUrl = convertToFullVideoUrl(videoId, posSec);
         showMultiChooser(context, videoUrl);
     }
 
     @TargetApi(17)
     public static void displayShareEmbedVideoDialog(Context context, String videoId) {
-        Uri videoUrl = convertToEmbedVideoUrl(videoId);
+        displayShareEmbedVideoDialog(context, videoId, 0);
+    }
+
+    @TargetApi(17)
+    public static void displayShareEmbedVideoDialog(Context context, String videoId, int posSec) {
+        Uri videoUrl = convertToEmbedVideoUrl(videoId, posSec);
         showMultiChooser(context, videoUrl);
     }
 
@@ -129,13 +139,20 @@ public class Utils {
         context.startActivity(chooserIntent);
     }
 
-    private static Uri convertToFullVideoUrl(String videoId) {
-        String url = String.format("https://www.youtube.com/watch?v=%s", videoId);
+    /**
+     * https://youtu.be/nragduYePsQ?t=193<br/>
+     * https://www.youtube.com/watch?v=nragduYePsQ&t=193
+     */
+    private static Uri convertToFullVideoUrl(String videoId, int posSec) {
+        String url = String.format("https://youtu.be/%s?t=%s", videoId, posSec);
         return Uri.parse(url);
     }
 
-    private static Uri convertToEmbedVideoUrl(String videoId) {
-        String url = String.format("https://www.youtube.com/embed/%s", videoId);
+    /**
+     * https://www.youtube.com/embed/nragduYePsQ?start=193
+     */
+    private static Uri convertToEmbedVideoUrl(String videoId, int posSec) {
+        String url = String.format("https://www.youtube.com/embed/%s?start=%s", videoId, posSec);
         return Uri.parse(url);
     }
 

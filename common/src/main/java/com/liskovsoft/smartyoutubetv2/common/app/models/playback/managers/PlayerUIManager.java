@@ -411,7 +411,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         //dialogPresenter.showDialog(getController().getVideo().title);
 
         if (video.videoId != null) {
-            Utils.displayShareVideoDialog(getActivity(), video.videoId);
+            Utils.displayShareVideoDialog(getActivity(), video.videoId, (int)(getController().getPositionMs() / 1_000));
         } else if (video.channelId != null) {
             Utils.displayShareChannelDialog(getActivity(), video.channelId);
         }
