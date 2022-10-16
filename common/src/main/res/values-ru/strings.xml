@@ -465,4 +465,9 @@
     <string name="chat_left">Слева</string>
     <string name="chat_right">Справа</string>
     <string name="card_real_thumbnails">Заменить миниатюры кадром из видео</string>
+    <string name="card_content">Откуда брать миниатюры карточек</string>
+    <string name="thumb_quality_default">По умолчанию</string>
+    <string name="thumb_quality_start">Начало видео</string>
+    <string name="thumb_quality_middle">Середина видео</string>
+    <string name="thumb_quality_end">Конец видео</string>
 </resources>

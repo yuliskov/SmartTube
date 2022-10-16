@@ -473,4 +473,9 @@
     <string name="chat_left">Left</string>
     <string name="chat_right">Right</string>
     <string name="card_real_thumbnails">Replace thumbnails with a frame from the video</string>
+    <string name="card_content">Where to grab card thumbnails</string>
+    <string name="thumb_quality_default">Default</string>
+    <string name="thumb_quality_start">Start of the video</string>
+    <string name="thumb_quality_middle">Middle of the video</string>
+    <string name="thumb_quality_end">End of the video</string>
 </resources>

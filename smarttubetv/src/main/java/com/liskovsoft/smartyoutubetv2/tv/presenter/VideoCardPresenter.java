@@ -20,6 +20,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.ExtendedCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
@@ -38,10 +39,10 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
     private int mSelectedTextColor = -1;
     private Drawable mDefaultCardImage;
     private boolean mIsAnimatedPreviewsEnabled;
-    private boolean mIsRealThumbnailsEnabled;
     private boolean mIsCardMultilineTitleEnabled;
     private boolean mIsCardTextAutoScrollEnabled;
     private float mCardTextScrollSpeed;
+    private int mThumbQuality;
     private int mWidth;
     private int mHeight;
 
@@ -60,10 +61,10 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
         mDefaultCardImage = new ColorDrawable(ContextCompat.getColor(context, R.color.lb_grey));
 
         mIsAnimatedPreviewsEnabled = isCardAnimatedPreviewsEnabled(context);
-        mIsRealThumbnailsEnabled = isCardRealThumbnailsEnabled(context);
         mIsCardMultilineTitleEnabled = isCardMultilineTitleEnabled(context);
         mIsCardTextAutoScrollEnabled = isCardTextAutoScrollEnabled(context);
         mCardTextScrollSpeed = getCardTextScrollSpeed(context);
+        mThumbQuality = getThumbQuality(context);
 
         updateDimensions(context);
 
@@ -134,10 +135,18 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
         cardView.setMainImageDimensions(mWidth, mHeight);
 
         Glide.with(context)
-                .asBitmap() // disable animation (webp, gif)
-                .load(mIsRealThumbnailsEnabled && video.previewUrl != null ? video.previewUrl : video.cardImageUrl)
-                .apply(ViewUtil.glideOptions().error(mDefaultCardImage))
-                .listener(mErrorListener2)
+                //.asBitmap() // disable animation (webp, gif)
+                .load(ClickbaitRemover.updateThumbnail(video.cardImageUrl, mThumbQuality))
+                .apply(ViewUtil.glideOptions())
+                .listener(mErrorListener)
+                .error(
+                    // Updated thumbnail url not found
+                    Glide.with(context)
+                        .load(video.cardImageUrl)
+                        .apply(ViewUtil.glideOptions())
+                        .listener(mErrorListener)
+                        .error(mDefaultCardImage)
+                )
                 .into(cardView.getMainImageView());
     }
 
@@ -171,16 +180,16 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
         return MainUIData.instance(context).isCardAnimatedPreviewsEnabled();
     }
 
-    protected boolean isCardRealThumbnailsEnabled(Context context) {
-        return MainUIData.instance(context).isCardRealThumbnailsEnabled();
-    }
-
     protected boolean isCardMultilineTitleEnabled(Context context) {
         return MainUIData.instance(context).isCardMultilineTitleEnabled();
     }
 
     protected float getCardTextScrollSpeed(Context context) {
         return MainUIData.instance(context).getCardTextScrollSpeed();
+    }
+
+    protected int getThumbQuality(Context context) {
+        return MainUIData.instance(context).getThumbQuality();
     }
 
     protected boolean isContentEnabled() {

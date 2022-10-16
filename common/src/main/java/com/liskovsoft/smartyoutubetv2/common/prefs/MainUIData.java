@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +59,7 @@ public class MainUIData {
     private float mCardTextScrollSpeed;
     private int mMenuItems;
     private int mButtons;
-    private boolean mIsCardRealThumbnailsEnabled;
+    private int mThumbQuality;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -111,13 +112,13 @@ public class MainUIData {
         return mCardTitleLinesNum;
     }
 
-    public void enableCardRealThumbnails(boolean enable) {
-        mIsCardRealThumbnailsEnabled = enable;
+    public void setThumbQuality(int quality) {
+        mThumbQuality = quality;
         persistState();
     }
 
-    public boolean isCardRealThumbnailsEnabled() {
-        return mIsCardRealThumbnailsEnabled;
+    public int getThumbQuality() {
+        return mThumbQuality;
     }
 
     public void setVideoGridScale(float scale) {
@@ -290,14 +291,16 @@ public class MainUIData {
                 Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_NEW_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT |
                         MENU_ITEM_PLAY_VIDEO | MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_PIN_TO_SIDEBAR | MENU_ITEM_SHARE_EMBED_LINK)); // all except this items
         mButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE & ~(BUTTON_CHANGE_LANGUAGE)); // all except this items
-        mIsCardRealThumbnailsEnabled = Helpers.parseBoolean(split, 14, false);
+        // 14
+        mThumbQuality = Helpers.parseInt(split, 15, ClickbaitRemover.THUMB_QUALITY_DEFAULT);
     }
 
     private void persistState() {
         mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled,
                 mVideoGridScale, mUIScale, mColorSchemeIndex, mIsCardMultilineTitleEnabled,
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
-                mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mButtons, mIsCardRealThumbnailsEnabled));
+                mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mButtons,
+                null, mThumbQuality));
     }
 
     public static class ColorScheme {

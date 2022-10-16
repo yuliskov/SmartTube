@@ -465,4 +465,9 @@
     <string name="chat_left">Ліворуч</string>
     <string name="chat_right">Праворуч</string>
     <string name="card_real_thumbnails">Замінити мініатюри кадром із відео</string>
+    <string name="card_content">Звідки брати мініатюри карток</string>
+    <string name="thumb_quality_default">За замовчуванням</string>
+    <string name="thumb_quality_start">Початок відео</string>
+    <string name="thumb_quality_middle">Середина відео</string>
+    <string name="thumb_quality_end">Кінець відео</string>
 </resources>
