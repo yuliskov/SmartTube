@@ -10,7 +10,7 @@ public class ClickbaitRemover {
     public static final int THUMB_QUALITY_MIDDLE = 2;
     public static final int THUMB_QUALITY_END = 3;
 
-    private static final Pattern THUMB_QUALITY_PATTERN = Pattern.compile("(hq1|hq2|hq3|hqdefault|mqdefault|hq720)\\.jpg");
+    private static final Pattern THUMB_QUALITY_PATTERN = Pattern.compile("/(hq1|hq2|hq3|hqdefault|mqdefault|hq720)\\.");
 
     public static String updateThumbnail(String thumbUrl, int thumbQuality) {
         if (thumbUrl == null || thumbQuality == THUMB_QUALITY_DEFAULT) {
@@ -31,6 +31,6 @@ public class ClickbaitRemover {
                 break;
         }
 
-        return Helpers.replace(thumbUrl, THUMB_QUALITY_PATTERN, quality + ".jpg");
+        return Helpers.replace(thumbUrl, THUMB_QUALITY_PATTERN, "/" + quality + ".");
     }
 }
