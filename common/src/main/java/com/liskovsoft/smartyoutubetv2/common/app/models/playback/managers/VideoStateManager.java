@@ -27,7 +27,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 90_000;
     private static final String TAG = VideoStateManager.class.getSimpleName();
-    private static final float RESTORE_POSITION_PERCENTS = 10; // min value for immediately closed videos
     private boolean mIsPlayEnabled;
     private Video mVideo = new Video();
     private FormatItem mTempVideoFormat;
@@ -370,14 +369,12 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
 
         State state = mStateService.getByVideoId(item.videoId);
 
-        // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
-        boolean containsWebPosition = item.percentWatched > RESTORE_POSITION_PERCENTS;
         boolean stateIsOutdated = state == null || state.timestamp < item.timestamp;
-        if (containsWebPosition && stateIsOutdated) {
+        if (item.getPositionMs() > 0 && stateIsOutdated) {
             // Web state is buggy on short videos (e.g. video clips)
             boolean isLongVideo = getController().getDurationMs() > MUSIC_VIDEO_MAX_DURATION_MS;
             if (isLongVideo) {
-                state = new State(item.videoId, convertToMs(item.percentWatched));
+                state = new State(item.videoId, item.getPositionMs());
             }
         }
 
@@ -398,7 +395,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
             // Url list videos at this stage has undefined (-1) length. So, we need to ensure that remains is positive.
             boolean isVideoEnded = remainsMs >= 0 && remainsMs < (item.isLive ? 30_000 : 1_000); // live buffer fix
             if (!isVideoEnded || !getPlayEnabled()) {
-                getController().setPositionMs(state.positionMs);
+                setPositionMs(state.positionMs);
             }
         }
 
@@ -455,22 +452,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         }
     }
 
-    private long convertToMs(float percentWatched) {
-        if (percentWatched >= 100) {
-            return -1;
-        }
-
-        long newPositionMs = (long) (getController().getDurationMs() / 100 * percentWatched);
-
-        boolean samePositions = Math.abs(newPositionMs - getController().getPositionMs()) < 10_000;
-
-        if (samePositions) {
-            newPositionMs = -1;
-        }
-
-        return newPositionMs;
-    }
-
     public void blockPlay(boolean block) {
         mIsPlayBlocked = block;
     }
@@ -522,5 +503,12 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
     private boolean isMusicVideo() {
         Video item = getVideo();
         return item.belongsToMusic();
+    }
+
+    private void setPositionMs(long positionMs) {
+        boolean samePositions = Math.abs(positionMs - getController().getPositionMs()) < 10_000;
+        if (!samePositions) {
+            getController().setPositionMs(positionMs);
+        }
     }
 }

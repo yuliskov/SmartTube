@@ -66,7 +66,7 @@ public class AppDialogUtil {
         dialogPresenter.appendSingleButton(
                 UiOptionItem.from(context.getString(R.string.share_link), optionItem -> {
                     if (video.videoId != null) {
-                        Utils.displayShareVideoDialog(context, video.videoId);
+                        Utils.displayShareVideoDialog(context, video.videoId, (int)(video.getPositionMs() / 1_000));
                     } else if (video.channelId != null) {
                         Utils.displayShareChannelDialog(context, video.channelId);
                     }
