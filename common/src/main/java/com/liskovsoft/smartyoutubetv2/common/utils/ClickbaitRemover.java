@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 
 import java.util.regex.Pattern;
 
@@ -32,5 +33,17 @@ public class ClickbaitRemover {
         }
 
         return Helpers.replace(thumbUrl, THUMB_QUALITY_PATTERN, "/" + quality + ".");
+    }
+
+    public static String updateThumbnail(Video video, int thumbQuality) {
+        if (video == null) {
+            return null;
+        }
+
+        if (video.isLive || video.isUpcoming) {
+            return video.cardImageUrl;
+        }
+
+        return updateThumbnail(video.cardImageUrl, thumbQuality);
     }
 }

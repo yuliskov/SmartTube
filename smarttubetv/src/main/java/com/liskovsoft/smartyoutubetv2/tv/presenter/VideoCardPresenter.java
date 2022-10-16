@@ -136,13 +136,15 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
 
         Glide.with(context)
                 //.asBitmap() // disable animation (webp, gif)
-                .load(ClickbaitRemover.updateThumbnail(video.cardImageUrl, mThumbQuality))
+                .load(ClickbaitRemover.updateThumbnail(video, mThumbQuality))
+                //.placeholder(mDefaultCardImage)
                 .apply(ViewUtil.glideOptions())
                 .listener(mErrorListener)
                 .error(
                     // Updated thumbnail url not found
                     Glide.with(context)
                         .load(video.cardImageUrl)
+                        //.placeholder(mDefaultCardImage)
                         .apply(ViewUtil.glideOptions())
                         .listener(mErrorListener)
                         .error(mDefaultCardImage)
