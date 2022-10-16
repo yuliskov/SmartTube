@@ -7,4 +7,5 @@ public interface PlaybackView {
     void setEventListener(PlayerEventListener stateBridge);
     PlayerEventListener getEventListener();
     PlaybackController getController();
+    void showProgressBar(boolean show);
 }
