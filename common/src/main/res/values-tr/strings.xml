@@ -34,6 +34,7 @@
     <string name="video_speed">Video hızı</string>
     <string name="resolution_switch">Çözünürlüğü değiştir</string>
     <string name="video_buffer">Video arabelleği</string>
+    <string name="video_buffer_size_none">Hiçbiri</string>
     <string name="video_buffer_size_low">Düşük</string>
     <string name="video_buffer_size_med">Orta</string>
     <string name="video_buffer_size_high">Yüksek</string>
@@ -378,7 +379,7 @@
     <string name="master_volume">Ana ses</string>
     <string name="volume_limit">Ses sınırı</string>
     <string name="play_video">Oynat</string>
-    <string name="remember_position_of_short_videos">Kısa videoların konumunu hatırla (10 dakikadan az)</string>
+    <string name="remember_position_of_short_videos">Kısa videoların konumunu hatırla (5 dakikadan az)</string>
     <string name="player_show_tooltips">Düğme ipuçlarını göster</string>
     <string name="action_like_unset">Beğen</string>
     <string name="action_dislike_unset">Beğenme</string>
@@ -406,7 +407,7 @@
     <string name="lb_playback_controls_skip_previous">Öncekine atla/Başlangıç konumuna geri sar</string>
     <string name="alt_presets_behavior">Alt. ön ayar davranışı (bant genişliğini sınırla)</string>
     <string name="alt_presets_behavior_desc">Uygulama çözünürlük, fps ve kod çözücü arasında eşleştirme yapmak yerine bant genişliğinin seçilen ön ayara karşılık gelmesini sağlamaya çalışacaktır.</string>
-    <string name="sleep_timer">Uyku zamanlayıcısını etkinleştir (bir saat)</string>
+    <string name="sleep_timer">Uyku zamanlayıcısı (bir saat)</string>
     <string name="sleep_timer_desc">Kullanıcı bir saat boyunca uzaktan kumandayı kullanmadıysa oynatmayı duraklatır.</string>
     <string name="disable_vsync">Dikey eşzamanlamaya uymayı devre dışı bırak</string>
     <string name="disable_vsync_desc">Oynatma performansını biraz artırır.</string>
@@ -469,4 +470,12 @@
     <string name="color_scheme_dark_grey_monochrome">Koyu Gri (tek renkli)</string>
     <string name="disable_mic_permission">Bu tanıyıcının düzgün çalışması için lütfen uygulamanın mikrofon erişimini devre dışı bırakın.</string>
     <string name="repeat_mode_shuffle">Herhangi bir oynatma listesini karıştır</string>
+    <string name="chat_left">Sol</string>
+    <string name="chat_right">Sağ</string>
+    <string name="card_real_thumbnails">Küçük resimleri videodan bir kareyle değiştir</string>
+    <string name="card_content">Küçük resimler nereden alınsın</string>
+    <string name="thumb_quality_default">Varsayılan</string>
+    <string name="thumb_quality_start">Videonun başlangıcından</string>
+    <string name="thumb_quality_middle">Videonun ortasından</string>
+    <string name="thumb_quality_end">Videonun sonundan</string>
 </resources>
