@@ -33,10 +33,11 @@
     <string name="playback_settings">Nastavení kvality přehrávání</string>
     <string name="video_speed">Rychlost videa</string>
     <string name="resolution_switch">Přepnout rozlišení</string>
-    <string name="video_buffer">Video vyrovnávací paměť</string>
-    <string name="video_buffer_size_low">Nízký</string>
+    <string name="video_buffer">Vyrovnávací paměť videa</string>
+    <string name="video_buffer_size_none">Žádná</string>
+    <string name="video_buffer_size_low">Nízká</string>
     <string name="video_buffer_size_med">Střední</string>
-    <string name="video_buffer_size_high">Vysoký</string>
+    <string name="video_buffer_size_high">Vysoká</string>
     <string name="update_changelog">Seznam změn</string>
     <string name="install_update">Instalovat aktualizace</string>
     <string name="section_is_empty">Jejda! Tady nic není.</string>
@@ -406,7 +407,7 @@
     <string name="lb_playback_controls_skip_previous">Přeskočit Předchozí/Přetočit do výchozí pozice</string>
     <string name="alt_presets_behavior">Náhradní chování předvoleb (omezit šířku pásma)</string>
     <string name="alt_presets_behavior_desc">Aplikace se pokusí zachovat šířku pásma odpovídající vybrané předvolbě namísto shody mezi rozlišením, fps a kodekem.</string>    
-    <string name="sleep_timer">Povolit časovač spánku (1 hodina)</string>
+    <string name="sleep_timer">Časovač spánku (1 hodina)</string>
     <string name="sleep_timer_desc">Pozastav přehrávání pokud uživatel nepoužil ovladač během hodiny</string>
     <string name="disable_vsync">Zakázat vertikální synchronizaci</string>
     <string name="disable_vsync_desc">Částečně zlepšuje výkon přehrávání</string>
@@ -469,4 +470,12 @@
     <string name="color_scheme_dark_grey_monochrome">Tmavě šedá (černobílá)</string>
     <string name="disable_mic_permission">Zakažte aplikaci přístup k mikrofonu, aby tento rozpoznávač fungoval správně.</string>
     <string name="repeat_mode_shuffle">Promíchat jakýkoliv playlist</string>
+    <string name="chat_left">Vlevo</string>
+    <string name="chat_right">Vpravo</string>
+    <string name="card_real_thumbnails">Nahradit náhledy snímkem z videa</string>
+    <string name="card_content">Odkud vzít náhled videa</string>
+    <string name="thumb_quality_default">Výchozí</string>
+    <string name="thumb_quality_start">Na začátku videa</string>
+    <string name="thumb_quality_middle">Uprostřed videa</string>
+    <string name="thumb_quality_end">Na konci videa</string>
 </resources>
