@@ -172,7 +172,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
     @Override
     public void onPlayEnd() {
-        int repeatMode = checkSleepTimer(mPlayerData.getRepeatMode());
+        int repeatMode = mPlayerData.getRepeatMode();
 
         Video video = getController().getVideo();
         if (video != null && video.finishOnEnded) {
@@ -196,16 +196,24 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     public boolean onKeyDown(int keyCode) {
         mSleepTimerStartMs = System.currentTimeMillis();
 
+        // Remove error msg if needed
+        if (mPlayerData.isSonyTimerFixEnabled()) {
+            getController().setVideo(mLastVideo);
+        }
+
         return false;
     }
 
-    private int checkSleepTimer(int playbackMode) {
-        if (mPlayerData.isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
-            playbackMode = PlaybackUIController.REPEAT_MODE_PAUSE;
+    @Override
+    public void onTickle() {
+        checkSleepTimer();
+    }
+
+    private void checkSleepTimer() {
+        if (mPlayerData.isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 1 * 60 * 1_000) {
+            getController().setPlayWhenReady(false);
             getController().showError(getActivity().getString(R.string.sleep_timer));
         }
-
-        return playbackMode;
     }
 
     /**

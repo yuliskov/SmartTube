@@ -15,15 +15,13 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
-public class VideoStateManager extends PlayerEventListenerHelper implements TickleListener, MetadataListener {
+public class VideoStateManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 90_000;
     private static final String TAG = VideoStateManager.class.getSimpleName();
@@ -105,8 +103,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
 
     @Override
     public void onEngineInitialized() {
-        TickleManager.instance().addListener(this);
-
         // Restore before video loaded.
         // This way we override auto track selection mechanism.
         //restoreFormats();
@@ -120,7 +116,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
     @Override
     public void onEngineReleased() {
         mTickleLeft = 0;
-        TickleManager.instance().removeListener(this);
 
         // Save previous state
         if (getController().containsMedia()) {

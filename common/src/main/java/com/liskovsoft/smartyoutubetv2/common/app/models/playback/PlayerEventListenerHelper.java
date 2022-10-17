@@ -267,4 +267,9 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     public void onPlaybackQueueClicked() {
         // NOP
     }
+
+    @Override
+    public void onTickle() {
+        // NOP
+    }
 }
