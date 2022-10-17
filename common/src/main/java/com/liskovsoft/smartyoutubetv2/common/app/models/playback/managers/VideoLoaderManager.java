@@ -210,7 +210,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     }
 
     private void checkSleepTimer() {
-        if (mPlayerData.isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 1 * 60 * 1_000) {
+        if (mPlayerData.isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
             getController().setPlayWhenReady(false);
             getController().showError(getActivity().getString(R.string.sleep_timer));
         }
