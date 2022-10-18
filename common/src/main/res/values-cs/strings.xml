@@ -407,7 +407,7 @@
     <string name="lb_playback_controls_skip_previous">Přeskočit Předchozí/Přetočit do výchozí pozice</string>
     <string name="alt_presets_behavior">Náhradní chování předvoleb (omezit šířku pásma)</string>
     <string name="alt_presets_behavior_desc">Aplikace se pokusí zachovat šířku pásma odpovídající vybrané předvolbě namísto shody mezi rozlišením, fps a kodekem.</string>    
-    <string name="sleep_timer">Časovač spánku (1 hodina)</string>
+    <string name="sleep_timer">Časovač spánku (1 hodina od posledního použití ovladače)</string>
     <string name="sleep_timer_desc">Pozastav přehrávání pokud uživatel nepoužil ovladač během hodiny</string>
     <string name="disable_vsync">Zakázat vertikální synchronizaci</string>
     <string name="disable_vsync_desc">Částečně zlepšuje výkon přehrávání</string>
