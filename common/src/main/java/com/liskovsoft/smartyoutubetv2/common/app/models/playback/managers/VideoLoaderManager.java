@@ -77,6 +77,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         mPlayerData = PlayerData.instance(getActivity());
         mPlayerData.setOnChange(this);
         mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
+        mSleepTimerStartMs = System.currentTimeMillis();
         initErrorActions();
     }
 
