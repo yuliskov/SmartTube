@@ -15,10 +15,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDial
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.LiveChatManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.RemoteControlManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoStateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoLoaderManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoStateManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -182,11 +183,15 @@ public class MainPlayerEventBridge implements PlayerEventListener {
 
     @Override
     public void onEngineInitialized() {
+        TickleManager.instance().addListener(this);
+
         process(PlayerEventListener::onEngineInitialized);
     }
 
     @Override
     public void onEngineReleased() {
+        TickleManager.instance().removeListener(this);
+
         process(PlayerEventListener::onEngineReleased);
     }
 
@@ -243,6 +248,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     @Override
     public void onVideoLoaded(Video item) {
         process(listener -> listener.onVideoLoaded(item));
+    }
+
+    @Override
+    public void onTickle() {
+        process(PlayerEventListener::onTickle);
     }
 
     // End engine events

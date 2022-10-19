@@ -403,7 +403,7 @@
     <string name="lb_playback_controls_skip_previous">"Перейти к предыдущему видео/Перемотать в начало"</string>
     <string name="alt_presets_behavior">Альтернативное поведение видео пресетов (ограничение пропускной способности)</string>
     <string name="alt_presets_behavior_desc">Приложение попытается поддерживать пропускную способность близкую к пресету вместо того, чтобы выбрать точное соответсвие между разрешением, частотой кадров и кодеком.</string>
-    <string name="sleep_timer">Таймер сна (один час)</string>
+    <string name="sleep_timer">Таймер сна (если пульт не использовался один час)</string>
     <string name="sleep_timer_desc">Ставить проигрывание на паузу, если пользователь в течение часа не пользовался пультом.</string>
     <string name="disable_vsync">Отключить вертикальную синхронизацию</string>
     <string name="disable_vsync_desc">Немного улучшает производительность при воспроизведении</string>

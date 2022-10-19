@@ -99,7 +99,7 @@ public class ExoPlayerInitializer {
             case PlaybackEngineController.BUFFER_NONE:
                 minBufferMs = 1_000;
                 maxBufferMs = 1_000;
-                bufferForPlaybackMs = 0;
+                bufferForPlaybackMs = 1_000;
                 bufferForPlaybackAfterRebufferMs = 0;
                 break;
         }
