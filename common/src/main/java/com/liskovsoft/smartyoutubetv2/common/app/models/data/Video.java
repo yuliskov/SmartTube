@@ -418,7 +418,7 @@ public final class Video implements Parcelable {
     }
 
     public boolean isPlaylistInChannel() {
-        return belongsToChannel() && hasPlaylist() && mediaItem != null && mediaItem.getDurationMs() <= 0;
+        return belongsToChannel() && hasPlaylist() && !belongsToSamePlaylistGroup();
     }
 
     public boolean isEmpty() {
