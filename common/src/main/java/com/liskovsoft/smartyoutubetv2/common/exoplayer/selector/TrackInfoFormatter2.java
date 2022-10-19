@@ -9,8 +9,17 @@ public class TrackInfoFormatter2 {
     private String mBitrateStr;
     private String mHdrStr;
     private String mSpeedStr;
+    private String mChannelsStr;
 
     public void setFormat(Format format) {
+        if (TrackSelectorUtil.isVideo(format)) {
+            setVideoFormat(format);
+        } else if (TrackSelectorUtil.isAudio(format)) {
+            setAudioFormat(format);
+        }
+    }
+
+    public void setVideoFormat(Format format) {
         if (format == null) {
             return;
         }
@@ -26,8 +35,15 @@ public class TrackInfoFormatter2 {
         String bitrate = TrackSelectorUtil.extractBitrate(format);
         mBitrateStr = bitrate.toUpperCase();
 
-        boolean isHdr = TrackSelectorUtil.isHdrCodec(format.codecs);
-        mHdrStr = isHdr ? "HDR" : "";
+        mHdrStr = TrackSelectorUtil.buildHDRString(format);
+    }
+
+    public void setAudioFormat(Format format) {
+        if (format == null) {
+            return;
+        }
+
+        mChannelsStr = TrackSelectorUtil.buildChannels(format);
     }
 
     public void setSpeed(float speed) {
@@ -35,7 +51,7 @@ public class TrackInfoFormatter2 {
     }
 
     public String getQualityLabel() {
-        return combine(mResolutionStr, mFpsStr, mCodecStr, mHdrStr, mSpeedStr);
+        return combine(mResolutionStr, mFpsStr, mCodecStr, mHdrStr, mChannelsStr, mSpeedStr);
     }
 
     private static String combine(String... items) {

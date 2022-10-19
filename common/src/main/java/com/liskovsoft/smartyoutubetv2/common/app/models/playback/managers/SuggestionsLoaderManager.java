@@ -206,6 +206,13 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private void updateSuggestions(MediaItemMetadata mediaItemMetadata, Video video) {
         syncCurrentVideo(mediaItemMetadata, video);
 
+        appendSuggestions(video, mediaItemMetadata);
+
+        // After video suggestions
+        callListener(mediaItemMetadata);
+    }
+
+    private void appendSuggestions(Video video, MediaItemMetadata mediaItemMetadata) {
         List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
         if (suggestions == null) {
@@ -219,11 +226,9 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             return;
         }
 
-        if (!video.isRemote) {
-            if (getController().isSuggestionsShown()) {
-                Log.d(TAG, "Suggestions is opened. Seems that user want to stay here.");
-                return;
-            }
+        if (!video.isRemote && getController().isSuggestionsShown()) {
+            Log.d(TAG, "Suggestions is opened. Seems that user want to stay here.");
+            return;
         }
 
         getController().clearSuggestions(); // clear previous videos
@@ -247,9 +252,6 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                 continueGroupIfNeeded(videoGroup);
             }
         }
-
-        // After video suggestions
-        callListener(mediaItemMetadata);
     }
 
     /**

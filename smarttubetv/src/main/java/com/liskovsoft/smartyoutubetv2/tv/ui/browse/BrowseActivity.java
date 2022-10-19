@@ -19,8 +19,6 @@ public class BrowseActivity extends LeanbackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main);
         Analytics.sendActivityStarted(BrowseActivity.class.getSimpleName());
-        // State saving should be explicitly enabled for needed activities
-        enableSaveState(true);
     }
 
     @Override

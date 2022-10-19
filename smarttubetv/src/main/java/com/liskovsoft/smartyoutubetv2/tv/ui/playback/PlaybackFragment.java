@@ -31,6 +31,7 @@ import com.google.android.exoplayer2.ControlDispatcher;
 import com.google.android.exoplayer2.DefaultControlDispatcher;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
@@ -420,6 +421,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // Try to fix decoder error on Nvidia Shield 2019.
         // Init resources as early as possible.
         //mPlayer.setForegroundMode(true);
+        // NOTE: Avoid using seekParameters. ContentBlock hangs because of constant skipping to the segment start.
+        // ContentBlock hangs on the last segment: https://www.youtube.com/watch?v=pYymRbfjKv8
+        //mPlayer.setSeekParameters(SeekParameters.CLOSEST_SYNC); // live stream (dash) seeking fix
         mExoPlayerController.setPlayer(mPlayer);
     }
 
@@ -764,8 +768,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onChat(boolean enabled) {
-            mEventListener.onChatClicked(enabled);
+        public void onChat() {
+            mEventListener.onChatClicked();
         }
 
         @Override
@@ -856,7 +860,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void loadStoryboard() {
         if (mPlayerGlue.getSeekProvider() instanceof StoryboardSeekDataProvider) {
-            ((StoryboardSeekDataProvider) mPlayerGlue.getSeekProvider()).init(getVideo(), mExoPlayerController.getLengthMs());
+            ((StoryboardSeekDataProvider) mPlayerGlue.getSeekProvider()).init(getVideo(), mExoPlayerController.getDurationMs());
         }
     }
 
@@ -948,7 +952,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public long getDurationMs() {
-        return mExoPlayerController.getLengthMs();
+        long durationMs = mExoPlayerController.getDurationMs();
+
+        if (durationMs > Video.MAX_DURATION_MS) {
+            durationMs = getVideo().getLiveDurationMs();
+        }
+
+        return durationMs;
     }
 
     @Override
@@ -1033,6 +1043,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void setSpeed(float speed) {
         mExoPlayerController.setSpeed(speed);
+        // NOTE: Real speed isn't changed immediately, so use supplied speed data
+        setSpeedButtonState(speed != 1.0f);
     }
 
     @Override
@@ -1509,31 +1521,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // Hide last frame of the previous video
         showBackgroundColor(R.color.player_background);
         setChatReceiver(null);
-
-        //mPlaybackController.setBackground(null); // ensure that the background doesn't overlap the video
-
-        //// Ensure that user isn't browsing suggestions
-        //if (containsMedia() && !isSuggestionsShown()) {
-        //    // save state
-        //    Video video = getVideo();
-        //    int repeatButtonState = getRepeatButtonState();
-        //    boolean contentBlockEnabled = isContentBlockEnabled();
-        //    boolean controlsShown = isOverlayShown();
-        //    boolean debugShown = isDebugInfoShown();
-        //
-        //    // Silently recreate player objects.
-        //    // NOTE: Don't use events! Otherwise you'll get infinite loading video loop.
-        //    destroyPlayerObjects();
-        //    createPlayerObjects();
-        //
-        //    // restore state
-        //    setVideo(video);
-        //    setRepeatButtonState(repeatButtonState);
-        //    setContentBlockButtonState(contentBlockEnabled);
-        //    showOverlay(controlsShown);
-        //    showDebugInfo(debugShown);
-        //    setDebugButtonState(debugShown);
-        //}
     }
 
     /**

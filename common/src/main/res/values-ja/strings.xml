@@ -427,9 +427,9 @@
   <string name="open_chat">チャット</string>
   <string name="place_chat_left">チャットを右に表示</string>
   <string name="use_alt_speech_recognizer">代替の音声認識方法</string>
-  <string name="time_mode">時刻表記</string>
-  <string name="time_mode_24_hours">24時間表示</string>
-  <string name="time_mode_12_hours">12時間表示 (午前/午後)</string>
+  <string name="time_format">時刻表記</string>
+  <string name="time_format_24">24時間表示</string>
+  <string name="time_format_12">12時間表示 (午前/午後)</string>
   <string name="speech_recognizer">音声認識</string>
   <string name="use_alt_speech_recognizer_desc">重大なバグがあります。デフォルトの認識方法で問題がある場合にのみ使用してください。</string>
   <string name="speech_recognizer_system">システム (推奨)</string>

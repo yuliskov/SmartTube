@@ -199,11 +199,9 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private boolean isPositionInsideSegment(long positionMs, SponsorSegment segment) {
-
-
-        // Note. Getting into account playback speed. Also check that the zone is long enough.
-        //float checkEndMs = segment.getStartMs() + SEGMENT_CHECK_LENGTH_MS * getController().getSpeed();
-        //return positionMs >= segment.getStartMs() && positionMs <= checkEndMs && checkEndMs <= segment.getEndMs();
+        // NOTE: in case of using Player.setSeekParameters (inaccurate seeking) increase sponsor segment window
+        // int seekShift = 1_000;
+        // return positionMs >= (segment.getStartMs() - seekShift) && positionMs <= (segment.getEndMs() + seekShift);
         return positionMs >= segment.getStartMs() && positionMs <= segment.getEndMs();
     }
 
@@ -282,11 +280,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
      * Sponsor block fix. Position may exceed real media length.
      */
     private void setPositionMs(long positionMs) {
-        long lengthMs = getController().getDurationMs();
+        long durationMs = getController().getDurationMs();
 
         // Sponsor block fix. Position may exceed real media length.
-        if (lengthMs > 0 && positionMs > lengthMs) {
-            positionMs = lengthMs;
+        if (durationMs > 0 && positionMs > durationMs) {
+            positionMs = durationMs;
         }
 
         getController().setPositionMs(positionMs);

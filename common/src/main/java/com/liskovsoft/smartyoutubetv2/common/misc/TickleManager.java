@@ -2,17 +2,17 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.os.Handler;
 import android.os.Looper;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.utils.WeakHashSet;
 
 public class TickleManager {
+    private static final String TAG = TickleManager.class.getSimpleName();
     private static TickleManager sInstance;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final Runnable mUpdateHandler = this::updateTickle;
     // Usually listener is a view. So use weak refs to not hold it forever.
     private final WeakHashSet<TickleListener> mListeners = new WeakHashSet<>();
     private boolean mIsEnabled = true;
-    private static final long DEFAULT_INTERVAL_MS = 60_000;
-    private long mIntervalMs = DEFAULT_INTERVAL_MS;
 
     public interface TickleListener {
         void onTickle();
@@ -52,14 +52,6 @@ public class TickleManager {
         return mIsEnabled;
     }
 
-    public void setIntervalMs(long intervalMs) {
-        mIntervalMs = intervalMs;
-    }
-
-    public long getIntervalMs() {
-        return mIntervalMs;
-    }
-
     public void clear() {
         mListeners.clear();
         updateTickle();
@@ -75,7 +67,12 @@ public class TickleManager {
 
         if (isEnabled() && !mListeners.isEmpty()) {
             mListeners.forEach(TickleListener::onTickle);
-            mHandler.postDelayed(mUpdateHandler, mIntervalMs);
+
+            // Align tickle by clock minutes
+            long timeMillis = System.currentTimeMillis();
+            long delayMs = 60_000 - timeMillis % 60_000;
+            Log.d(TAG, "Updating tickle in %s ms...", delayMs);
+            mHandler.postDelayed(mUpdateHandler, delayMs);
         }
     }
 }

@@ -34,6 +34,7 @@
     <string name="video_speed">Video speed</string>
     <string name="resolution_switch">Switch resolution</string>
     <string name="video_buffer">Video buffer</string>
+    <string name="video_buffer_size_none">None</string>
     <string name="video_buffer_size_low">Low</string>
     <string name="video_buffer_size_med">Medium</string>
     <string name="video_buffer_size_high">High</string>
@@ -378,7 +379,7 @@
     <string name="master_volume">Master volume</string>
     <string name="volume_limit">Volume limit</string>
     <string name="play_video">Play</string>
-    <string name="remember_position_of_short_videos">Remember position of short videos (less than 10 min)</string>
+    <string name="remember_position_of_short_videos">Remember position of short videos (less than 5 min)</string>
     <string name="player_show_tooltips">Show button tooltips</string>
     <string name="action_like_unset">Like is unset</string>
     <string name="action_dislike_unset">Dislike is unset</string>
@@ -406,7 +407,7 @@
     <string name="lb_playback_controls_skip_previous">Skip Previous/Rewind to start position</string>
     <string name="alt_presets_behavior">Alt presets behavior (limit bandwidth)</string>
     <string name="alt_presets_behavior_desc">The app will try to maintain bandwidth correspond to selected preset instead of matching between resolution, fps and codec.</string>
-    <string name="sleep_timer">Enable sleep timer (one hour)</string>
+    <string name="sleep_timer">Sleep timer (one hour)</string>
     <string name="sleep_timer_desc">Pause the playback if user didn\'t use the remote during one hour</string>
     <string name="disable_vsync">Disable snap to vsync</string>
     <string name="disable_vsync_desc">Improves playback performance a bit</string>
@@ -454,9 +455,9 @@
     <string name="open_chat">Chat</string>
     <string name="place_chat_left">Place chat to the left</string>
     <string name="use_alt_speech_recognizer">Alt speech recognizer</string>
-    <string name="time_mode">Time mode</string>
-    <string name="time_mode_24_hours">24 hours</string>
-    <string name="time_mode_12_hours">12 hours (AM/PM)</string>
+    <string name="time_format">Time format</string>
+    <string name="time_format_24">24 hours</string>
+    <string name="time_format_12">12 hours (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Seriously bugged. Use it only if you have troubles with the default recognizer.</string>
     <string name="speech_recognizer">Speech recognizer</string>
     <string name="speech_recognizer_system">System (preferred)</string>
@@ -469,5 +470,13 @@
     <string name="color_scheme_dark_grey_monochrome">Dark Grey (monochrome)</string>
     <string name="disable_mic_permission">Please, disable microphone access for the app in order this recognizer to work properly.</string>
     <string name="repeat_mode_shuffle">Shuffle any playlist</string>
+    <string name="chat_left">Left</string>
+    <string name="chat_right">Right</string>
+    <string name="card_real_thumbnails">Replace thumbnails with a frame from the video</string>
+    <string name="card_content">Where to grab card thumbnails</string>
+    <string name="thumb_quality_default">Default</string>
+    <string name="thumb_quality_start">Start of the video</string>
+    <string name="thumb_quality_middle">Middle of the video</string>
+    <string name="thumb_quality_end">End of the video</string>
     <string name="cancel">Cancel</string>
 </resources>

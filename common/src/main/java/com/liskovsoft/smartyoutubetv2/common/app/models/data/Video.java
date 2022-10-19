@@ -27,6 +27,7 @@ public final class Video implements Parcelable {
     private static final String[] sNotPlaylistParams = new String[] {"EAIYAQ%3D%3D"};
     private static final String SECTION_PREFIX = "FE";
     private static final String BLACK_PLACEHOLDER_URL = "https://via.placeholder.com/1280x720/000000/000000";
+    private static final float RESTORE_POSITION_PERCENTS = 10; // min value for immediately closed videos
     public long id;
     public String title;
     public String secondTitle;
@@ -558,6 +559,8 @@ public final class Video implements Parcelable {
         if (formatInfo == null) {
             return;
         }
+        
+        isLive = formatInfo.isLive();
 
         if (description == null) {
             description = formatInfo.getDescription();
@@ -645,15 +648,19 @@ public final class Video implements Parcelable {
             return 0;
         }
 
-        // Stream real length may exceeds calculated length
-        long liveDurationMs = System.currentTimeMillis() - startTimeMs - 60_000;
+        // Is stream real length may exceeds calculated length???
+        long liveDurationMs = System.currentTimeMillis() - startTimeMs;
         return liveDurationMs > 0 ? liveDurationMs : 0;
     }
 
-    public long getLiveBufferDurationMs() {
-        // Add buffer and take into account segment offset
-        long bufferDurationMs = getLiveDurationMs() - (startSegmentNum > 0 ? 120_000 : 60_000);
-        return bufferDurationMs > 0 ? bufferDurationMs : 0;
+    public long getPositionMs() {
+        // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
+        if (mediaItem == null || percentWatched <= RESTORE_POSITION_PERCENTS || percentWatched >= 100) {
+            return 0;
+        }
+
+        long posMs = (long) (mediaItem.getDurationMs() / 100 * percentWatched);
+        return posMs > 0 && posMs < mediaItem.getDurationMs() ? posMs : 0;
     }
 
     // Builder for Video object.

@@ -28,7 +28,7 @@ public class DateFormatter {
         String datePattern = "EEE d MMM";
 
         // details: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
-        String timePattern = GeneralData.instance(context).getTimeMode() == GeneralData.TIME_MODE_24 ? "H:mm" : "h:mm a";
+        String timePattern = GeneralData.instance(context).getTimeFormat() == GeneralData.TIME_FORMAT_24 ? "H:mm" : "h:mm a";
 
         SimpleDateFormat serverFormat = new SimpleDateFormat(
                 String.format("%s%s",

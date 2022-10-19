@@ -451,9 +451,9 @@
   <string name="open_chat">دردشة</string>
   <string name="place_chat_left">ضع الدردشة على اليسار</string>
   <string name="use_alt_speech_recognizer">أداة التعرف على الكلام البديلة</string>
-  <string name="time_mode">وضع الوقت</string>
-  <string name="time_mode_24_hours">24 ساعة</string>
-  <string name="time_mode_12_hours">12 ساعة (ص/م)</string>
+  <string name="time_format">وضع الوقت</string>
+  <string name="time_format_24">24 ساعة</string>
+  <string name="time_format_12">12 ساعة (ص/م)</string>
   <string name="use_alt_speech_recognizer_desc">لا يعمل بشكل جيد. استخدمه فقط إذا كانت لديك مشاكل مع أداة التعرف الافتراضية</string>
   <string name="speech_recognizer">أداة التعرف على الكلام</string>
   <string name="speech_recognizer_system">النظام (مفضل)</string>

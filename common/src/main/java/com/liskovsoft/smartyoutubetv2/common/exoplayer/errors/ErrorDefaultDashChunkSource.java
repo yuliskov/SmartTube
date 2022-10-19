@@ -87,4 +87,11 @@ public class ErrorDefaultDashChunkSource extends DefaultDashChunkSource {
 
         return mTrackErrorFixer.fixError(e) || super.onChunkLoadError(chunk, cancelable, e, blacklistDurationMs);
     }
+
+    @Override
+    public void onChunkLoadCompleted(Chunk chunk) {
+        mTrackErrorFixer.fixEmptyChunk(chunk);
+
+        super.onChunkLoadCompleted(chunk);
+    }
 }

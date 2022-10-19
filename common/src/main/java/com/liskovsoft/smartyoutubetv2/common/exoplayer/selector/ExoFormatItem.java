@@ -95,10 +95,6 @@ public class ExoFormatItem implements FormatItem {
         return formatItem;
     }
 
-    public static boolean isVideo(Format format) {
-        return MimeTypes.isVideo(format.sampleMimeType);
-    }
-
     private static int getType(Format format) {
         String sampleMimeType = format.sampleMimeType;
 

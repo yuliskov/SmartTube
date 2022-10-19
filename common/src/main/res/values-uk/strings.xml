@@ -34,6 +34,7 @@
     <string name="video_speed">Швидкість відео</string>
     <string name="resolution_switch">Перемикати роздільну здатність</string>
     <string name="video_buffer">Відеобуфер</string>
+    <string name="video_buffer_size_none">Немає</string>
     <string name="video_buffer_size_low">Низький</string>
     <string name="video_buffer_size_med">Середній</string>
     <string name="video_buffer_size_high">Високий</string>
@@ -374,7 +375,7 @@
     <string name="master_volume">Основна гучність</string>
     <string name="volume_limit">Обмеження гучності</string>
     <string name="play_video">Відтворити</string>
-    <string name="remember_position_of_short_videos">Запам\'ятовувати позицію коротких відео (меньше 10 хв)</string>
+    <string name="remember_position_of_short_videos">Запам\'ятовувати позицію коротких відео (меньше 5 хв)</string>
     <string name="player_show_tooltips">Показати підказки для кнопок</string>
     <string name="action_like_unset">Подобається не встановлено</string>
     <string name="action_dislike_unset">Не подобається не встановлено</string>
@@ -446,9 +447,9 @@
     <string name="open_chat">Чат</string>
     <string name="place_chat_left">Розмістити чат ліворуч</string>
     <string name="use_alt_speech_recognizer">Альтернативний розпізнавач мови</string>
-    <string name="time_mode">Режим часу</string>
-    <string name="time_mode_24_hours">24 години</string>
-    <string name="time_mode_12_hours">12 годин (AM/PM)</string>
+    <string name="time_format">Формат часу</string>
+    <string name="time_format_24">24 години</string>
+    <string name="time_format_12">12 годин (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Серйозно забагований. Використовуйте його, лише якщо є проблеми із розпізнавачем за замовчуванням.</string>
     <string name="speech_recognizer">Розпізнавач мови</string>
     <string name="speech_recognizer_system">Системний (найкращій)</string>
@@ -461,4 +462,12 @@
     <string name="color_scheme_dark_grey_monochrome">Темно-сіра (монохромна)</string>
     <string name="disable_mic_permission">Будь ласка, вимкніть доступ до мікрофона для програми, щоб цей розпізнавач працював належним чином.</string>
     <string name="repeat_mode_shuffle">Перемішати будь-який плейлист</string>
+    <string name="chat_left">Ліворуч</string>
+    <string name="chat_right">Праворуч</string>
+    <string name="card_real_thumbnails">Замінити мініатюри кадром із відео</string>
+    <string name="card_content">Звідки брати мініатюри карток</string>
+    <string name="thumb_quality_default">За замовчуванням</string>
+    <string name="thumb_quality_start">Початок відео</string>
+    <string name="thumb_quality_middle">Середина відео</string>
+    <string name="thumb_quality_end">Кінець відео</string>
 </resources>

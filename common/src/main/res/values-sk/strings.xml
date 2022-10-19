@@ -454,9 +454,9 @@
     <string name="open_chat">Chat</string>
     <string name="place_chat_left">Zobraziť chat na ľavej strane</string>
     <string name="use_alt_speech_recognizer">Alternatívne rozpoznávanie jazyka</string>
-    <string name="time_mode">Režim času</string>
-    <string name="time_mode_24_hours">24 hodín</string>
-    <string name="time_mode_12_hours">12 hodín (AM/PM)</string>
+    <string name="time_format">Režim času</string>
+    <string name="time_format_24">24 hodín</string>
+    <string name="time_format_12">12 hodín (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Dosť zabugované. Použite ho iba v prípade, že máte problémy s predvoleným rozpoznávačom.</string>
     <string name="speech_recognizer">Rozpoznávanie hlasu</string>
     <string name="speech_recognizer_system">Systém (odporúčané)</string>

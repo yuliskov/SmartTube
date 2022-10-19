@@ -134,13 +134,12 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
 
         String subtitlesCategoryTitle = getActivity().getString(R.string.subtitle_category_title);
-        String subtitleFormatsTitle = getActivity().getString(R.string.subtitle_language);
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
 
         settingsPresenter.clear();
 
-        settingsPresenter.appendRadioCategory(subtitleFormatsTitle,
+        settingsPresenter.appendRadioCategory(subtitlesCategoryTitle,
                 UiOptionItem.from(subtitleFormats,
                         option -> getController().setFormat(UiOptionItem.toFormat(option)),
                         getActivity().getString(R.string.subtitles_disabled)));
@@ -258,7 +257,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
         setPlaylistAddButtonStateCached();
         setSubtitleButtonState();
-        setSpeedButtonState(getController().getSpeed()); // Use real speed (it more robust than the saved speed data)
     }
 
     @Override
@@ -355,8 +353,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
         AppDialogUtil.appendSpeedDialogItems(getActivity(), settingsPresenter, mPlayerData, getController());
 
-        // NOTE: Real speed isn't changed immediately, so use saved speed data
-        settingsPresenter.showDialog(() -> setSpeedButtonState(mPlayerData.getSpeed()));
+        settingsPresenter.showDialog();
     }
 
     @Override
@@ -414,7 +411,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         //dialogPresenter.showDialog(getController().getVideo().title);
 
         if (video.videoId != null) {
-            Utils.displayShareVideoDialog(getActivity(), video.videoId);
+            Utils.displayShareVideoDialog(getActivity(), video.videoId, (int)(getController().getPositionMs() / 1_000));
         } else if (video.channelId != null) {
             Utils.displayShareChannelDialog(getActivity(), video.channelId);
         }
@@ -639,12 +636,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
 
         getController().setSubtitleButtonState(isSelected);
-    }
-
-    private void setSpeedButtonState(float speed) {
-        if (getController() != null) {
-            getController().setSpeedButtonState(speed != 1.0f);
-        }
     }
 
     private void startTempBackgroundMode() {

@@ -122,13 +122,13 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public void setPositionMs(long positionMs) {
         // Url list videos at load stage has undefined (-1) length. So, we need to remove length check.
-        if (mPlayer != null && positionMs >= 0 && positionMs <= getLengthMs()) {
+        if (mPlayer != null && positionMs >= 0 && positionMs <= getDurationMs()) {
             mPlayer.seekTo(positionMs);
         }
     }
 
     @Override
-    public long getLengthMs() {
+    public long getDurationMs() {
         if (mPlayer == null) {
             return -1;
         }
@@ -284,12 +284,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
                 mEventListener.onTrackChanged(ExoFormatItem.from(format));
 
-                if (ExoFormatItem.isVideo(format)) {
-                    mTrackFormatter.setFormat(format);
-                    setQualityInfo(mTrackFormatter.getQualityLabel());
-                }
+                mTrackFormatter.setFormat(format);
             }
         }
+        
+        setQualityInfo(mTrackFormatter.getQualityLabel());
     }
 
     private void notifyOnVideoLoad() {

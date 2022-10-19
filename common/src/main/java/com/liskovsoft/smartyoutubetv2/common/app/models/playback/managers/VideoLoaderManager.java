@@ -48,6 +48,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     private int mLastError = -1;
     private long mPrevErrorTimeMs;
     private PlayerData mPlayerData;
+    private PlayerTweaksData mPlayerTweaksData;
     private long mSleepTimerStartMs;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
@@ -79,6 +80,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     public void onInitDone() {
         mPlayerData = PlayerData.instance(getActivity());
         mPlayerData.setOnChange(this);
+        mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
         initErrorActions();
     }
 
@@ -96,8 +98,9 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
         if (getController() != null && getController().isEngineInitialized()) { // player is initialized
             if (!item.equals(mLastVideo)) {
-                getController().resetPlayerState();
-                loadVideo(item); // play immediately
+                loadVideo(item); // force play immediately
+            } else {
+                loadSuggestions(item);
             }
         } else {
             mLastVideo = item; // save for later
@@ -218,22 +221,36 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     }
 
     private int checkSleepTimer(int playbackMode) {
-        if (mPlayerData.isSonyTimerFixEnabled()) {
-            if (System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
-                MessageHelpers.showLongMessage(getActivity(), R.string.player_sleep_timer);
-                playbackMode = PlaybackUIController.REPEAT_MODE_PAUSE;
-            }
+        if (mPlayerData.isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
+            playbackMode = PlaybackUIController.REPEAT_MODE_PAUSE;
+            getController().showError(getActivity().getString(R.string.sleep_timer));
         }
 
         return playbackMode;
     }
 
+    /**
+     * Force load and play!
+     */
     private void loadVideo(Video item) {
         if (item != null) {
             mPlaylist.setCurrent(item);
             mLastVideo = item;
             getController().setVideo(item);
+            getController().resetPlayerState();
             loadFormatInfo(item);
+        }
+    }
+
+    /**
+     * Force load suggestions.
+     */
+    private void loadSuggestions(Video item) {
+        if (item != null) {
+            mPlaylist.setCurrent(item);
+            mLastVideo = item;
+            getController().setVideo(item);
+            mSuggestionsLoader.loadSuggestions(item);
         }
     }
 
@@ -262,6 +279,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         disposeActions();
 
         MediaService service = YouTubeMediaService.instance();
+        service.enableOldStreams(mPlayerTweaksData.isLiveStreamFixEnabled());
         MediaItemService mediaItemManager = service.getMediaItemService();
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribeOn(Schedulers.io())
@@ -386,9 +404,8 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         // Might happen when the app wasn't used quite a long time.
         mErrorActions.put(PlayerEventListener.ERROR_TYPE_SOURCE, () -> {
             // This buffering setting could also cause such errors.
-            PlayerTweaksData tweaksData = PlayerTweaksData.instance(getActivity());
-            if (tweaksData.isBufferingFixEnabled()) {
-                tweaksData.enableBufferingFix(false);
+            if (mPlayerTweaksData.isBufferingFixEnabled()) {
+                mPlayerTweaksData.enableBufferingFix(false);
             }
 
             MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_source2);
@@ -485,7 +502,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     private boolean forceLegacyFormat(MediaItemFormatInfo formatInfo) {
         boolean isLive = formatInfo.isLive() || formatInfo.isLiveContent();
 
-        if (isLive && PlayerTweaksData.instance(getActivity()).isLiveStreamFixEnabled() && formatInfo.containsHlsUrl()) {
+        if (isLive && mPlayerTweaksData.isLiveStreamFixEnabled() && formatInfo.containsHlsUrl()) {
             return true;
         }
 

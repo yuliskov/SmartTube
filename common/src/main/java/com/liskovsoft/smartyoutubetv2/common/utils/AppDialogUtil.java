@@ -66,7 +66,7 @@ public class AppDialogUtil {
         dialogPresenter.appendSingleButton(
                 UiOptionItem.from(context.getString(R.string.share_link), optionItem -> {
                     if (video.videoId != null) {
-                        Utils.displayShareVideoDialog(context, video.videoId);
+                        Utils.displayShareVideoDialog(context, video.videoId, (int)(video.getPositionMs() / 1_000));
                     } else if (video.channelId != null) {
                         Utils.displayShareChannelDialog(context, video.channelId);
                     }
@@ -225,6 +225,7 @@ public class AppDialogUtil {
     public static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData, Runnable onBufferSelected) {
         String videoBufferTitle = context.getString(R.string.video_buffer);
         List<OptionItem> optionItems = new ArrayList<>();
+        optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_none, PlaybackEngineController.BUFFER_NONE, onBufferSelected));
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_low, PlaybackEngineController.BUFFER_LOW, onBufferSelected));
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_med, PlaybackEngineController.BUFFER_MEDIUM, onBufferSelected));
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_high, PlaybackEngineController.BUFFER_HIGH, onBufferSelected));

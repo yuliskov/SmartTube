@@ -436,7 +436,7 @@
   <string name="require_checked">Nécessite \"%s\"</string>
   <string name="msg_press_again_to_exit">Appuyez à nouveau pour sortir</string>
   <string name="player_remaining_time">Restant: %s</string>
-  <string name="player_ending_time">Se termine dans %s</string>
+  <string name="player_ending_time">Se termine à %s</string>
   <string name="badge_new_content">NOUVEAU CONTENU</string>
   <string name="badge_live">EN DIRECT</string>
   <string name="add_device_view_description">Pour associer l\'appareil, entrez ce code dans l\'application YouTube de votre téléphone, dans la section Paramètres/Télévision</string>
@@ -454,9 +454,9 @@
   <string name="open_chat">Chat en direct</string>
   <string name="place_chat_left">Placez le chat en direct à gauche</string>
   <string name="use_alt_speech_recognizer">Alt reconnaissance vocale</string>
-  <string name="time_mode">Mode</string>
-  <string name="time_mode_24_hours">24 heures</string>
-  <string name="time_mode_12_hours">12 heures (AM/PM)</string>
+  <string name="time_format">Mode</string>
+  <string name="time_format_24">24 heures</string>
+  <string name="time_format_12">12 heures (AM/PM)</string>
   <string name="use_alt_speech_recognizer_desc">Sérieusement buggé. Ne l\'utilisez que si vous avez des problèmes avec le système de reconnaissance par défaut.</string>
   <string name="speech_recognizer">Reconnaissance vocale</string>
   <string name="speech_recognizer_system">Système (préféré)</string>
@@ -468,4 +468,5 @@
   <string name="player_pixel_ratio">Ratio de pixels</string>
   <string name="color_scheme_dark_grey_monochrome">Gris foncé (monochrome)</string>
   <string name="disable_mic_permission">Veuillez désactiver l\'accès au microphone pour l\'application afin que cet outil de reconnaissance fonctionne correctement.</string>
+  <string name="repeat_mode_shuffle">Lecture aléatoire de n\'importe quelle playlist</string>
 </resources>

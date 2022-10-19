@@ -454,9 +454,9 @@
     <string name="open_chat">Sohbet</string>
     <string name="place_chat_left">Sohbeti sola yerleştir</string>
     <string name="use_alt_speech_recognizer">Alternatif konuşma tanıyıcı</string>
-    <string name="time_mode">Saat modu</string>
-    <string name="time_mode_24_hours">24 saat</string>
-    <string name="time_mode_12_hours">12 saat (ÖÖ/ÖS)</string>
+    <string name="time_format">Saat modu</string>
+    <string name="time_format_24">24 saat</string>
+    <string name="time_format_12">12 saat (ÖÖ/ÖS)</string>
     <string name="use_alt_speech_recognizer_desc">Ciddi hataları var. Yalnızca varsayılan tanıyıcıyla ilgili sorunlarınız varsa kullanın.</string>
     <string name="speech_recognizer">Konuşma tanıyıcı</string>
     <string name="speech_recognizer_system">Sistem (tercih edilmiş)</string>

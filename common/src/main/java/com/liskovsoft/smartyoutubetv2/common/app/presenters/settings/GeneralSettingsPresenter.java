@@ -55,7 +55,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBackgroundPlaybackCategory(settingsPresenter);
         //appendBackgroundPlaybackActivationCategory(settingsPresenter);
         appendScreenDimmingCategory(settingsPresenter);
-        appendTimeModeCategory(settingsPresenter);
+        appendTimeFormatCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
         appendAppBackupCategory(settingsPresenter);
         appendInternetCensorship(settingsPresenter);
@@ -273,26 +273,26 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.screen_dimming), options);
     }
 
-    private void appendTimeModeCategory(AppDialogPresenter settingsPresenter) {
+    private void appendTimeFormatCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(
-                getContext().getString(R.string.time_mode_24_hours),
+                getContext().getString(R.string.time_format_24),
                 option -> {
-                    mGeneralData.setTimeMode(GeneralData.TIME_MODE_24);
+                    mGeneralData.setTimeFormat(GeneralData.TIME_FORMAT_24);
                     mRestartApp = true;
                 },
-                mGeneralData.getTimeMode() == GeneralData.TIME_MODE_24));
+                mGeneralData.getTimeFormat() == GeneralData.TIME_FORMAT_24));
 
         options.add(UiOptionItem.from(
-                getContext().getString(R.string.time_mode_12_hours),
+                getContext().getString(R.string.time_format_12),
                 option -> {
-                    mGeneralData.setTimeMode(GeneralData.TIME_MODE_12);
+                    mGeneralData.setTimeFormat(GeneralData.TIME_FORMAT_12);
                     mRestartApp = true;
                 },
-                mGeneralData.getTimeMode() == GeneralData.TIME_MODE_12));
+                mGeneralData.getTimeFormat() == GeneralData.TIME_FORMAT_12));
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.time_mode), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.time_format), options);
     }
 
     private void appendAppBackupCategory(AppDialogPresenter settingsPresenter) {

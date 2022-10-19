@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Pair;
@@ -19,6 +20,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.ExtendedCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
@@ -40,6 +42,7 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
     private boolean mIsCardMultilineTitleEnabled;
     private boolean mIsCardTextAutoScrollEnabled;
     private float mCardTextScrollSpeed;
+    private int mThumbQuality;
     private int mWidth;
     private int mHeight;
 
@@ -61,6 +64,7 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
         mIsCardMultilineTitleEnabled = isCardMultilineTitleEnabled(context);
         mIsCardTextAutoScrollEnabled = isCardTextAutoScrollEnabled(context);
         mCardTextScrollSpeed = getCardTextScrollSpeed(context);
+        mThumbQuality = getThumbQuality(context);
 
         updateDimensions(context);
 
@@ -131,9 +135,20 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
         cardView.setMainImageDimensions(mWidth, mHeight);
 
         Glide.with(context)
-                .load(video.cardImageUrl)
-                .apply(ViewUtil.glideOptions().error(mDefaultCardImage))
+                //.asBitmap() // disable animation (webp, gif)
+                .load(ClickbaitRemover.updateThumbnail(video, mThumbQuality))
+                //.placeholder(mDefaultCardImage)
+                .apply(ViewUtil.glideOptions())
                 .listener(mErrorListener)
+                .error(
+                    // Updated thumbnail url not found
+                    Glide.with(context)
+                        .load(video.cardImageUrl)
+                        //.placeholder(mDefaultCardImage)
+                        .apply(ViewUtil.glideOptions())
+                        .listener(mErrorListener)
+                        .error(mDefaultCardImage)
+                )
                 .into(cardView.getMainImageView());
     }
 
@@ -175,6 +190,10 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
         return MainUIData.instance(context).getCardTextScrollSpeed();
     }
 
+    protected int getThumbQuality(Context context) {
+        return MainUIData.instance(context).getThumbQuality();
+    }
+
     protected boolean isContentEnabled() {
         return true;
     }
@@ -196,6 +215,19 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
 
         @Override
         public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+            return false;
+        }
+    };
+
+    private final RequestListener<Bitmap> mErrorListener2 = new RequestListener<Bitmap>() {
+        @Override
+        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+            Log.e(TAG, "Glide load failed: " + e);
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
             return false;
         }
     };

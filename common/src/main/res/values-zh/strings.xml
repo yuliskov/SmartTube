@@ -450,9 +450,9 @@
   <string name="open_chat">聊天</string>
   <string name="place_chat_left">把聊天放在左边</string>
   <string name="use_alt_speech_recognizer">替代语音识别器</string>
-  <string name="time_mode">时间模式</string>
-  <string name="time_mode_24_hours">24 小时</string>
-  <string name="time_mode_12_hours">12 小时(AM/PM)</string>
+  <string name="time_format">时间模式</string>
+  <string name="time_format_24">24 小时</string>
+  <string name="time_format_12">12 小时(AM/PM)</string>
   <string name="use_alt_speech_recognizer_desc">有严重的缺陷。只有在你对默认识别器有问题时才使用它。</string>
   <string name="speech_recognizer_system">系统(首选)	</string>
   <string name="speech_recognizer_external_1">例外情况 1 (严重失灵，为了正常使用，你需要禁止对麦克风的访问。)	</string>

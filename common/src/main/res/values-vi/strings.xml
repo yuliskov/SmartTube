@@ -452,9 +452,9 @@
   <string name="prefer_avc_over_vp9">Lựa chọn Codec: ưu tiên sử dụng avc hơn vp9</string>
   <string name="place_chat_left">Đặt trò chuyện ở bên trái</string>
   <string name="use_alt_speech_recognizer">Trình nhận dạng giọng nói thay thế</string>
-  <string name="time_mode">Chế độ thời gian</string>
-  <string name="time_mode_24_hours">24 giờ</string>
-  <string name="time_mode_12_hours">12 giờ (AM/PM)</string>
+  <string name="time_format">Chế độ thời gian</string>
+  <string name="time_format_24">24 giờ</string>
+  <string name="time_format_12">12 giờ (AM/PM)</string>
   <string name="use_alt_speech_recognizer_desc">Có thể bị nghe trộm. Chỉ sử dụng nó nếu bạn gặp sự cố với trình nhận dạng mặc định.</string>
   <string name="speech_recognizer">Trình nhận dạng giọng nói</string>
   <string name="speech_recognizer_system">Theo hệ thống (Ưu tiên)</string>

@@ -33,6 +33,7 @@
     <string name="video_speed">Скорость видео</string>
     <string name="resolution_switch">Переключать разрешение</string>
     <string name="video_buffer">Видеобуфер</string>
+    <string name="video_buffer_size_none">Нет</string>
     <string name="video_buffer_size_low">Низкий</string>
     <string name="video_buffer_size_med">Средний</string>
     <string name="video_buffer_size_high">Высокий</string>
@@ -374,7 +375,7 @@
     <string name="master_volume">Основная громкость</string>
     <string name="volume_limit">Ограничение громкости</string>
     <string name="play_video">Воспроизвести</string>
-    <string name="remember_position_of_short_videos">Запоминать позицию коротких видео (менее 10 мин)</string>
+    <string name="remember_position_of_short_videos">Запоминать позицию коротких видео (менее 5 мин)</string>
     <string name="player_show_tooltips">Показать подсказки для кнопок</string>
     <string name="action_like_unset">Нравится не установлено</string>
     <string name="action_dislike_unset">Не нравится не установлено</string>
@@ -446,9 +447,9 @@
     <string name="open_chat">Чат</string>
     <string name="place_chat_left">Разместить чат слева</string>
     <string name="use_alt_speech_recognizer">Альтернативный распознаватель речи</string>
-    <string name="time_mode">Режим времени</string>
-    <string name="time_mode_24_hours">24 часа</string>
-    <string name="time_mode_12_hours">12 часов (AM/PM)</string>
+    <string name="time_format">Формат времени</string>
+    <string name="time_format_24">24 часа</string>
+    <string name="time_format_12">12 часов (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Серьезно забагован. Используйте его, только если есть проблемы с распознавателем по умолчанию.</string>
     <string name="speech_recognizer">Распознаватель речи</string>
     <string name="speech_recognizer_system">Системный (наилучший)</string>
@@ -461,5 +462,13 @@
     <string name="color_scheme_dark_grey_monochrome">Тёмно-серая (монохромная)</string>
     <string name="disable_mic_permission">Пожалуйста, отключите доступ к микрофону для приложения, чтобы этот распознаватель работал правильно.</string>
     <string name="repeat_mode_shuffle">Перемешать любой плейлист</string>
+    <string name="chat_left">Слева</string>
+    <string name="chat_right">Справа</string>
+    <string name="card_real_thumbnails">Заменить миниатюры кадром из видео</string>
+    <string name="card_content">Откуда брать миниатюры карточек</string>
+    <string name="thumb_quality_default">По умолчанию</string>
+    <string name="thumb_quality_start">Начало видео</string>
+    <string name="thumb_quality_middle">Середина видео</string>
+    <string name="thumb_quality_end">Конец видео</string>
     <string name="cancel">Отмена</string>
 </resources>

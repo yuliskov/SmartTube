@@ -378,7 +378,7 @@
     <string name="master_volume">Hlavní hlasitost</string>
     <string name="volume_limit">Omezení hlasitosti</string>
     <string name="play_video">Přehrát</string>
-    <string name="remember_position_of_short_videos">Pamatovat si pozici krátkých videí (méně než 10 minut)</string>
+    <string name="remember_position_of_short_videos">Pamatovat si pozici krátkých videí (méně než 5 minut)</string>
     <string name="player_show_tooltips">Zobrazit nápovědu tlačítek</string>
     <string name="action_like_unset">"Líbí se" není nastaveno</string>
     <string name="action_dislike_unset">"Nelíbí se" není nastaveno</string>
@@ -454,9 +454,9 @@
     <string name="open_chat">Chat</string>
     <string name="place_chat_left">Umístit chat na levou stranu</string>
     <string name="use_alt_speech_recognizer">Alternativní rozpoznávač řeči</string>
-    <string name="time_mode">Časový režim</string>
-    <string name="time_mode_24_hours">24 hodin</string>
-    <string name="time_mode_12_hours">12 hodin (AM/PM)</string>
+    <string name="time_format">Časový režim</string>
+    <string name="time_format_24">24 hodin</string>
+    <string name="time_format_12">12 hodin (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Dost zabugováno. Použijte pouze v případě, když máte problém s výchozím rozpoznávačem.</string>
     <string name="speech_recognizer">Rozpoznávač řeči</string>
     <string name="speech_recognizer_system">Systémový (preferovaný)</string>

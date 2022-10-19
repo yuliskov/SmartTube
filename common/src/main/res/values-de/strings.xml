@@ -378,7 +378,7 @@
     <string name="master_volume">Gesamtlautstärke</string>
     <string name="volume_limit">Lautstärkebegrenzung</string>
     <string name="play_video">Abspielen</string>
-    <string name="remember_position_of_short_videos">Position von kurzen Videos merken (weniger als 10 Min.)</string>
+    <string name="remember_position_of_short_videos">Position von kurzen Videos merken (weniger als 5 Min.)</string>
     <string name="player_show_tooltips">Schaltflächen-Tooltips anzeigen</string>
     <string name="action_like_unset">Mag ich</string>
     <string name="action_dislike_unset">Mag ich nicht</string>
@@ -454,9 +454,9 @@
     <string name="open_chat">Chat</string>
     <string name="place_chat_left">Chat auf linker Seite platzieren</string>
     <string name="use_alt_speech_recognizer">Alternative Spracherkennung</string>
-    <string name="time_mode">Stunden-Format</string>
-    <string name="time_mode_24_hours">24 Stunden</string>
-    <string name="time_mode_12_hours">12 Stunden (AM/PM)</string>
+    <string name="time_format">Stunden-Format</string>
+    <string name="time_format_24">24 Stunden</string>
+    <string name="time_format_12">12 Stunden (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Funktioniert nicht gut. Verwenden Sie es nur, wenn Sie Probleme mit der Standard-Spracherkennung haben.</string>
     <string name="speech_recognizer">Spracherkennung</string>
     <string name="speech_recognizer_system">System (bevorzugt)</string>

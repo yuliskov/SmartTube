@@ -25,9 +25,8 @@ import io.reactivex.disposables.Disposable;
 
 public class VideoStateManager extends PlayerEventListenerHelper implements TickleListener, MetadataListener {
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
-    private static final long LIVE_THRESHOLD_MS = 60_000;
+    private static final long LIVE_THRESHOLD_MS = 90_000;
     private static final String TAG = VideoStateManager.class.getSimpleName();
-    private static final float RESTORE_POSITION_PERCENTS = 10; // min value for immediately closed videos
     private boolean mIsPlayEnabled;
     private Video mVideo = new Video();
     private FormatItem mTempVideoFormat;
@@ -137,6 +136,12 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
             mTickleLeft = 0;
             updateHistory();
         }
+
+        // Restore speed on LIVE end
+        restoreSpeed();
+        //if (isLiveThreshold()) {
+        //    getController().setSpeed(1.0f);
+        //}
     }
 
     @Override
@@ -212,10 +217,14 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
 
     @Override
     public void onBuffering() {
-        // Check LIVE threshold and set speed to normal
-        restoreSpeed();
         // Live stream starts to buffer after the end
         showHideScreensaver(true);
+
+        // Restore speed on LIVE end or after seek
+        restoreSpeed();
+        //if (isLiveThreshold()) {
+        //    getController().setSpeed(1.0f);
+        //}
     }
 
     @Override
@@ -262,7 +271,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         State state = mStateService.getByVideoId(item.videoId);
 
         // Reset position of music videos
-        boolean isShort = state != null && (state.lengthMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled());
+        boolean isShort = state != null && (state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled());
 
         if (isShort || item.isLive) {
             resetPosition(item);
@@ -285,7 +294,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
 
         if (state != null) {
             if (mPlayerData.isRememberSpeedEachEnabled()) {
-                mStateService.save(new State(videoId, 0, state.lengthMs, state.speed));
+                mStateService.save(new State(videoId, 0, state.durationMs, state.speed));
             } else {
                 mStateService.removeByVideoId(videoId);
             }
@@ -333,18 +342,18 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         // 1) Track is ended
         // 2) Pause on end enabled
         // 3) Watching live stream in real time
-        long lengthMs = getController().getDurationMs();
+        long durationMs = getController().getDurationMs();
         long positionMs = getController().getPositionMs();
-        long remainsMs = lengthMs - positionMs;
+        long remainsMs = durationMs - positionMs;
         boolean isPositionActual = remainsMs > 1_000;
         boolean isRealLiveStream = video.isLive && remainsMs < LIVE_THRESHOLD_MS;
         if ((isPositionActual && !isRealLiveStream) || !getPlayEnabled()) { // Is pause after each video enabled?
-            mStateService.save(new State(video.videoId, positionMs, lengthMs, getController().getSpeed()));
+            mStateService.save(new State(video.videoId, positionMs, durationMs, getController().getSpeed()));
             // Sync video. You could safely use it later to restore state.
-            video.percentWatched = positionMs / (lengthMs / 100f);
+            video.percentWatched = positionMs / (durationMs / 100f);
         } else {
             // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
-            mStateService.save(new State(video.videoId, lengthMs, lengthMs, 1.0f));
+            mStateService.save(new State(video.videoId, durationMs, durationMs, 1.0f));
             video.percentWatched = 100;
 
             // NOTE: Storage optimization!!!
@@ -360,14 +369,12 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
 
         State state = mStateService.getByVideoId(item.videoId);
 
-        // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
-        boolean containsWebPosition = item.percentWatched > RESTORE_POSITION_PERCENTS;
         boolean stateIsOutdated = state == null || state.timestamp < item.timestamp;
-        if (containsWebPosition && stateIsOutdated) {
+        if (item.getPositionMs() > 0 && stateIsOutdated) {
             // Web state is buggy on short videos (e.g. video clips)
             boolean isLongVideo = getController().getDurationMs() > MUSIC_VIDEO_MAX_DURATION_MS;
             if (isLongVideo) {
-                state = new State(item.videoId, convertToMs(item.percentWatched));
+                state = new State(item.videoId, item.getPositionMs());
             }
         }
 
@@ -377,8 +384,9 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
         }
 
         // Set actual position for live videos with uncommon length
-        if (state == null && item.isLive && getController().getDurationMs() > Video.MAX_DURATION_MS) {
-            state = new State(item.videoId, item.getLiveBufferDurationMs());
+        if ((state == null || state.positionMs == state.durationMs) && item.isLive) {
+            // Add buffer. Should I take into account segment offset???
+            state = new State(item.videoId, getController().getDurationMs() - 60_000);
         }
 
         // Do I need to check that item isn't live? (state != null && !item.isLive)
@@ -387,7 +395,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
             // Url list videos at this stage has undefined (-1) length. So, we need to ensure that remains is positive.
             boolean isVideoEnded = remainsMs >= 0 && remainsMs < (item.isLive ? 30_000 : 1_000); // live buffer fix
             if (!isVideoEnded || !getPlayEnabled()) {
-                getController().setPositionMs(state.positionMs);
+                setPositionMs(state.positionMs);
             }
         }
 
@@ -435,32 +443,13 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
 
     private void restoreSpeed() {
         Video item = getVideo();
-        boolean isLiveThreshold = getController().getDurationMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
-        boolean isLive = item.isLive && isLiveThreshold;
-        boolean isMusic = item.belongsToMusic();
 
-        if (isLive || isMusic) {
+        if (isLiveThreshold() || isMusicVideo()) {
             getController().setSpeed(1.0f);
         } else {
             State state = mStateService.getByVideoId(item.videoId);
             getController().setSpeed(state != null && mPlayerData.isRememberSpeedEachEnabled() ? state.speed : mPlayerData.getSpeed());
         }
-    }
-
-    private long convertToMs(float percentWatched) {
-        if (percentWatched >= 100) {
-            return -1;
-        }
-
-        long newPositionMs = (long) (getController().getDurationMs() / 100 * percentWatched);
-
-        boolean samePositions = Math.abs(newPositionMs - getController().getPositionMs()) < 10_000;
-
-        if (samePositions) {
-            newPositionMs = -1;
-        }
-
-        return newPositionMs;
     }
 
     public void blockPlay(boolean block) {
@@ -503,5 +492,23 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Tick
      */
     private Video getVideo() {
         return mVideo;
+    }
+
+    private boolean isLiveThreshold() {
+        Video item = getVideo();
+        boolean isLiveThreshold = getController().getDurationMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
+        return item.isLive && isLiveThreshold;
+    }
+
+    private boolean isMusicVideo() {
+        Video item = getVideo();
+        return item.belongsToMusic();
+    }
+
+    private void setPositionMs(long positionMs) {
+        boolean samePositions = Math.abs(positionMs - getController().getPositionMs()) < 10_000;
+        if (!samePositions) {
+            getController().setPositionMs(positionMs);
+        }
     }
 }

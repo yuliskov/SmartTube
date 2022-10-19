@@ -229,7 +229,7 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onChatClicked(boolean enabled) {
+    public void onChatClicked() {
         // NOP
     }
 

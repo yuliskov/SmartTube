@@ -279,8 +279,8 @@
   <string name="play_video">Predvajaj</string>
   <string name="rename_playlist">Preimenuj seznam predvajanja</string>
   <string name="playlist">Seznam predvajanja</string>
-  <string name="time_mode_24_hours">24 ur</string>
-  <string name="time_mode_12_hours">12 ur</string>
+  <string name="time_format_24">24 ur</string>
+  <string name="time_format_12">12 ur</string>
   <string name="signin_view_action_text"></string>
   <string name="action_playlist_remove">Odstrani iz seznama predvajanja</string>
   <string name="playlist_order_added_date_newer_first">Datum dodajanja (najnovejši)</string>
