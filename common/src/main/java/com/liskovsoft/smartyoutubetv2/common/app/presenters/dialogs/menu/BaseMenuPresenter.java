@@ -79,7 +79,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(original.isChannelPlaylist() || (original.hasNestedItems() && original.belongsToPlaylists()) ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
+                        getContext().getString(original.isPlaylistAsChannel() || (original.hasNestedItems() && original.belongsToPlaylists()) ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
                         optionItem -> {
                             if (original.hasVideo()) {
                                 MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
@@ -171,7 +171,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo();
 
-        if (original == null || (!original.hasPlaylist() && !original.isChannelPlaylist() && !original.belongsToPlaylists())) {
+        if (original == null || (!original.hasPlaylist() && !original.isPlaylistAsChannel() && !original.belongsToPlaylists())) {
             return;
         }
 

@@ -23,7 +23,7 @@ public class VideoActionPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (item.hasNestedItems()) {
+        if (item.hasNestedItems() || item.isPlaylistInChannel()) {
             // Below doesn't work right now. Api doesn't contains channel id.
             //ChannelPresenter.instance(getContext()).openChannel(item);
 

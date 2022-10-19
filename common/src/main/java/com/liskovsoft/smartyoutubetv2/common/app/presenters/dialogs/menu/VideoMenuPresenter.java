@@ -273,7 +273,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo == null || !mVideo.hasVideo() || mVideo.isChannelPlaylist()) {
+        if (mVideo == null || !mVideo.hasVideo() || mVideo.isPlaylistAsChannel()) {
             return;
         }
 
@@ -363,7 +363,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         // Prepare to special type of channels that work as playlist
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
-                        mVideo.isChannelPlaylist() ? R.string.open_playlist : R.string.open_channel), optionItem -> Utils.chooseChannelPresenter(getContext(), mVideo)));
+                        mVideo.isPlaylistAsChannel() ? R.string.open_playlist : R.string.open_channel), optionItem -> Utils.chooseChannelPresenter(getContext(), mVideo)));
     }
 
     private void appendOpenPlaylistButton() {
@@ -377,7 +377,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         // Prepare to special type of channels that work as playlist
-        if (mVideo.isChannelPlaylist() && ChannelPresenter.canOpenChannel(mVideo)) {
+        if (mVideo.isPlaylistAsChannel() && ChannelPresenter.canOpenChannel(mVideo)) {
             return;
         }
 
@@ -529,7 +529,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo == null || mVideo.isChannelPlaylist() || (!mVideo.canSubscribe() && !mVideo.hasVideo())) {
+        if (mVideo == null || mVideo.isPlaylistAsChannel() || (!mVideo.canSubscribe() && !mVideo.hasVideo())) {
             return;
         }
 
