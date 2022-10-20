@@ -7,7 +7,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
@@ -114,7 +116,8 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     @Override
     public void onFinish() {
         if (SearchData.instance(getContext()).isTempBackgroundModeStarted() &&
-            PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
+            PlaybackPresenter.instance(getContext()).isRunningInBackground() &&
+            (this instanceof SearchPresenter || this instanceof ChannelPresenter)) {
             ViewManager.instance(getContext()).startView(SplashView.class);
         }
     }
