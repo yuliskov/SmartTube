@@ -164,7 +164,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 ));
     }
 
-    protected void appendSavePlaylistButton() {
+    protected void appendSaveRemovePlaylistButton() {
         if (!isSavePlaylistEnabled()) {
             return;
         }
@@ -186,23 +186,23 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                         optionItem -> {
                             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
                             if (original.hasPlaylist()) {
-                                syncToggleSavePlaylist(original, null);
+                                syncToggleSaveRemovePlaylist(original, null);
                             } else if (original.belongsToPlaylists()) {
                                 mServiceManager.loadChannelUploads(
                                         original,
-                                        mediaGroup -> syncToggleSavePlaylist(original, mediaGroup)
+                                        mediaGroup -> syncToggleSaveRemovePlaylist(original, mediaGroup)
                                 );
                             } else {
                                 mServiceManager.loadChannelPlaylist(
                                         original,
-                                        mediaGroup -> syncToggleSavePlaylist(original, mediaGroup)
+                                        mediaGroup -> syncToggleSaveRemovePlaylist(original, mediaGroup)
                                 );
                             }
                         }
                 ));
     }
 
-    private void syncToggleSavePlaylist(Video original, MediaGroup mediaGroup) {
+    private void syncToggleSaveRemovePlaylist(Video original, MediaGroup mediaGroup) {
         Video video = Video.from(original);
 
         // Need correct playlist title to further comparison (decide whether save or remove)
@@ -215,10 +215,10 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             video.playlistId = first.getPlaylistId();
         }
 
-        toggleSavePlaylist(video);
+        toggleSaveRemovePlaylist(video);
     }
 
-    private void toggleSavePlaylist(Video video) {
+    private void toggleSaveRemovePlaylist(Video video) {
         mServiceManager.loadPlaylists(video, group -> {
             boolean isSaved = false;
 

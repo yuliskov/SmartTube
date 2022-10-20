@@ -97,7 +97,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
             if (!item.equals(mLastVideo)) {
                 loadVideo(item); // force play immediately
             } else {
-                loadSuggestions(item);
+                loadSuggestions(item); // update suggestions only
             }
         } else {
             mLastVideo = item; // save for later

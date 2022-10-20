@@ -17,8 +17,8 @@ public class SearchData {
     private boolean mIsFocusOnResultsEnabled;
     private boolean mIsKeyboardAutoShowEnabled;
     private boolean mIsTempBackgroundModeEnabled;
-    private boolean mIsTempBackgroundModeStarted;
     private int mSpeechRecognizerType;
+    private Class<?> mTempBackgroundModeClass;
 
     private SearchData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
@@ -78,12 +78,12 @@ public class SearchData {
         return mIsTempBackgroundModeEnabled;
     }
 
-    public void startTempBackgroundMode(boolean start) {
-        mIsTempBackgroundModeStarted = start;
+    public void setTempBackgroundModeClass(Class<?> clazz) {
+        mTempBackgroundModeClass = clazz;
     }
 
-    public boolean isTempBackgroundModeStarted() {
-        return mIsTempBackgroundModeStarted;
+    public Class<?> getTempBackgroundModeClass() {
+        return mTempBackgroundModeClass;
     }
 
     public void setSpeechRecognizerType(int type) {

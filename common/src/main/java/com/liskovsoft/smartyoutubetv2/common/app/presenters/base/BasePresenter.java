@@ -115,9 +115,8 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void onFinish() {
-        if (SearchData.instance(getContext()).isTempBackgroundModeStarted() &&
-            PlaybackPresenter.instance(getContext()).isRunningInBackground() &&
-            (this instanceof SearchPresenter || this instanceof ChannelPresenter)) {
+        if (SearchData.instance(getContext()).getTempBackgroundModeClass() == this.getClass() &&
+            PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
             ViewManager.instance(getContext()).startView(SplashView.class);
         }
     }

@@ -229,7 +229,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendOpenPlaylistButton();
         appendSubscribeButton();
         appendTogglePinVideoToSidebarButton();
-        appendSavePlaylistButton();
+        appendSaveRemovePlaylistButton();
         appendOpenDescriptionButton();
         appendShareLinkButton();
         appendShareEmbedLinkButton();

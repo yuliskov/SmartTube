@@ -465,6 +465,14 @@
   <string name="subtitle_yellow_black">صفراء على خلفية سوداء</string>
   <string name="player_pixel_ratio">معدل البكسلات</string>
   <string name="color_scheme_dark_grey_monochrome">رمادي مظلم(معكوس)</string>
-  <string name="disable_mic_permission">الرجاء,تعطيل الوصول الى المايكروفون لهاذا التطبيق لكي يعمل هذا الباحث بنجاح</string>
+  <string name="disable_mic_permission">من فضلك ، قم بتعطيل الوصول إلى الميكروفون للتطبيق حتى تعمل أداة التعرف هذه بشكل صحيح.</string>
   <string name="repeat_mode_shuffle">تبديل أي قائمة تشغيل عشوائيًا</string>
+  <string name="chat_left">اليسار</string>
+  <string name="chat_right">اليمين</string>
+  <string name="card_real_thumbnails">استبدال الصور المصغرة بإطار من الفيديو</string>
+  <string name="card_content">مكان انتزاع الصور المصغرة للبطاقة</string>
+  <string name="thumb_quality_default">إفتراضي</string>
+  <string name="thumb_quality_start">بداية الفيديو</string>
+  <string name="thumb_quality_middle">منتصف الفيديو</string>
+  <string name="thumb_quality_end">نهاية الفيديو</string>
 </resources>

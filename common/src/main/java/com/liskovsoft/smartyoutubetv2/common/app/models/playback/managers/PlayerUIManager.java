@@ -125,7 +125,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onChannelClicked() {
-        startTempBackgroundMode();
+        startTempBackgroundMode(ChannelPresenter.class);
         ChannelPresenter.instance(getActivity()).openChannel(getController().getVideo());
     }
 
@@ -202,7 +202,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
 
         // Reset temp mode.
-        SearchData.instance(getActivity()).startTempBackgroundMode(false);
+        SearchData.instance(getActivity()).setTempBackgroundModeClass(null);
 
         // Activate debug infos when restoring after PIP.
         getController().showDebugInfo(mDebugViewEnabled);
@@ -419,7 +419,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onSearchClicked() {
-        startTempBackgroundMode();
+        startTempBackgroundMode(SearchPresenter.class);
         SearchPresenter.instance(getActivity()).startSearch(null);
     }
 
@@ -638,10 +638,10 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().setSubtitleButtonState(isSelected);
     }
 
-    private void startTempBackgroundMode() {
+    private void startTempBackgroundMode(Class<?> clazz) {
         SearchData searchData = SearchData.instance(getActivity());
         if (searchData.isTempBackgroundModeEnabled()) {
-            searchData.startTempBackgroundMode(true);
+            searchData.setTempBackgroundModeClass(clazz);
             onPipClicked();
         }
     }
