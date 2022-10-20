@@ -7,7 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
-import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
+import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -51,7 +51,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private final VideoLoaderManager mVideoLoader;
     private PlayerData mPlayerData;
     private PlayerTweaksData mPlayerTweaksData;
-    private List<VideoPlaylistInfo> mVideoPlaylistInfos;
+    private List<PlaylistInfo> mPlaylistInfos;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
     private boolean mIsMetadataLoaded;
@@ -158,12 +158,12 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onPlaylistAddClicked() {
-        if (mVideoPlaylistInfos == null) {
+        if (mPlaylistInfos == null) {
             AppDialogUtil.showAddToPlaylistDialog(getActivity(), getController().getVideo(),
                     null);
         } else {
             AppDialogUtil.showAddToPlaylistDialog(getActivity(), getController().getVideo(),
-                    null, mVideoPlaylistInfos, this::setPlaylistAddButtonState);
+                    null, mPlaylistInfos, this::setPlaylistAddButtonState);
         }
     }
 
@@ -589,14 +589,14 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     private void setPlaylistAddButtonStateCached() {
         String videoId = getController().getVideo().videoId;
-        mVideoPlaylistInfos = null;
+        mPlaylistInfos = null;
         Disposable playlistsInfoAction =
-                YouTubeMediaService.instance().getMediaItemService().getVideoPlaylistsInfoObserve(videoId)
+                YouTubeMediaService.instance().getMediaItemService().getPlaylistsInfoObserve(videoId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 videoPlaylistInfos -> {
-                                    mVideoPlaylistInfos = videoPlaylistInfos;
+                                    mPlaylistInfos = videoPlaylistInfos;
                                     setPlaylistAddButtonState();
                                 },
                                 error -> Log.e(TAG, "Add to recent playlist error: %s", error.getMessage())
@@ -604,12 +604,12 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     private void setPlaylistAddButtonState() {
-        if (mVideoPlaylistInfos == null || getController() == null) {
+        if (mPlaylistInfos == null || getController() == null) {
             return;
         }
 
         boolean isSelected = false;
-        for (VideoPlaylistInfo playlistInfo : mVideoPlaylistInfos) {
+        for (PlaylistInfo playlistInfo : mPlaylistInfos) {
             if (playlistInfo.isSelected()) {
                 isSelected = true;
                 break;

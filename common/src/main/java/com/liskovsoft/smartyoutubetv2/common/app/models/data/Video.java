@@ -9,7 +9,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
-import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
+import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -53,7 +53,7 @@ public final class Video implements Parcelable {
     public MediaItem mediaItem;
     public MediaItem nextMediaItem;
     public MediaItem nextMediaItemBackup;
-    public VideoPlaylistInfo playlistInfo;
+    public PlaylistInfo playlistInfo;
     public VideoGroup group; // Memory leak. Used to get next page when scrolling.
     public boolean hasNewContent;
     public boolean isLive;
@@ -425,7 +425,7 @@ public final class Video implements Parcelable {
         return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId);
     }
 
-    public boolean belongsToPlaylists() {
+    public boolean belongsToUserPlaylists() {
         return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_USER_PLAYLISTS;
     }
 

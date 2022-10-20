@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
+import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -69,7 +69,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsPlaylistOrderButtonEnabled;
     private boolean mIsStreamReminderButtonEnabled;
     private VideoMenuCallback mCallback;
-    private List<VideoPlaylistInfo> mVideoPlaylistInfos;
+    private List<PlaylistInfo> mPlaylistInfos;
 
     public interface VideoMenuCallback {
         int ACTION_UNDEFINED = 0;
@@ -185,15 +185,15 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void bootstrapPrepareAndShowDialogSigned() {
-        mVideoPlaylistInfos = null;
+        mPlaylistInfos = null;
         RxUtils.disposeActions(mPlaylistsInfoAction);
         if (isAddToRecentPlaylistButtonEnabled()) {
-            mPlaylistsInfoAction = mItemManager.getVideoPlaylistsInfoObserve(mVideo.videoId)
+            mPlaylistsInfoAction = mItemManager.getPlaylistsInfoObserve(mVideo.videoId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             videoPlaylistInfos -> {
-                                mVideoPlaylistInfos = videoPlaylistInfos;
+                                mPlaylistInfos = videoPlaylistInfos;
                                 prepareAndShowDialogSigned();
                             },
                             error -> Log.e(TAG, "Add to recent playlist error: %s", error.getMessage())
@@ -304,12 +304,12 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void appendSimpleAddToRecentPlaylistButton(String playlistId, String playlistTitle) {
-        if (mVideoPlaylistInfos == null) {
+        if (mPlaylistInfos == null) {
             return;
         }
 
         boolean isSelected = false;
-        for (VideoPlaylistInfo playlistInfo : mVideoPlaylistInfos) {
+        for (PlaylistInfo playlistInfo : mPlaylistInfos) {
             if (playlistInfo.getPlaylistId().equals(playlistId)) {
                 isSelected = playlistInfo.isSelected();
                 break;

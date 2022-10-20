@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
-import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
+import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -29,7 +29,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
-import com.liskovsoft.youtubeapi.service.data.YouTubeVideoPlaylistInfo;
+import com.liskovsoft.youtubeapi.service.data.YouTubePlaylistInfo;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -443,7 +443,7 @@ public class AppDialogUtil {
 
         MediaItemService itemManager = YouTubeMediaItemService.instance();
 
-        Disposable playlistsInfoAction = itemManager.getVideoPlaylistsInfoObserve(video.videoId)
+        Disposable playlistsInfoAction = itemManager.getPlaylistsInfoObserve(video.videoId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -455,8 +455,8 @@ public class AppDialogUtil {
                 );
     }
 
-    public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback, List<VideoPlaylistInfo> videoPlaylistInfos, Runnable onFinish) {
-        if (videoPlaylistInfos == null) {
+    public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback, List<PlaylistInfo> playlistInfos, Runnable onFinish) {
+        if (playlistInfos == null) {
             MessageHelpers.showMessage(context, R.string.msg_signed_users_only);
             return;
         }
@@ -464,22 +464,22 @@ public class AppDialogUtil {
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(context);
         dialogPresenter.clear();
 
-        appendPlaylistDialogContent(context, video, callback, dialogPresenter, videoPlaylistInfos);
+        appendPlaylistDialogContent(context, video, callback, dialogPresenter, playlistInfos);
         dialogPresenter.showDialog(context.getString(R.string.dialog_add_to_playlist), () -> {
             if (onFinish != null) onFinish.run();
         });
     }
 
     private static void appendPlaylistDialogContent(
-            Context context, Video video, VideoMenuCallback callback, AppDialogPresenter dialogPresenter, List<VideoPlaylistInfo> videoPlaylistInfos) {
+            Context context, Video video, VideoMenuCallback callback, AppDialogPresenter dialogPresenter, List<PlaylistInfo> playlistInfos) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
+        for (PlaylistInfo playlistInfo : playlistInfos) {
             options.add(UiOptionItem.from(
                     playlistInfo.getTitle(),
                     (item) -> {
-                        if (playlistInfo instanceof YouTubeVideoPlaylistInfo) {
-                            ((YouTubeVideoPlaylistInfo) playlistInfo).setSelected(item.isSelected());
+                        if (playlistInfo instanceof YouTubePlaylistInfo) {
+                            ((YouTubePlaylistInfo) playlistInfo).setSelected(item.isSelected());
                         }
                         addRemoveFromPlaylist(context, video, callback, playlistInfo.getPlaylistId(), item.isSelected());
                         GeneralData.instance(context).setLastPlaylistId(playlistInfo.getPlaylistId());
@@ -515,7 +515,7 @@ public class AppDialogUtil {
 
         if (video.hasPlaylist()) {
             showPlaylistOrderDialog(context, video.playlistId, onClose);
-        } else if (video.belongsToPlaylists()) {
+        } else if (video.belongsToUserPlaylists()) {
             MediaServiceManager.instance().loadChannelUploads(video, group -> {
                 MediaItem first = group.getMediaItems().get(0);
                 String playlistId = first.getPlaylistId();

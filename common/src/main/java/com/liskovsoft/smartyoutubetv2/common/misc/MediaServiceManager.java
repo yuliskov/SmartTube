@@ -12,6 +12,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.sharedutils.rx.RxUtils;
@@ -41,6 +42,7 @@ public class MediaServiceManager {
     private Disposable mFormatInfoAction;
     private Disposable mPlaylistGroupAction;
     private Disposable mAccountListAction;
+    private Disposable mPlaylistInfosAction;
     private static final int MIN_GRID_GROUP_SIZE = 13;
     private static final int MIN_ROW_GROUP_SIZE = 5;
     private static final int MIN_SCALED_GRID_GROUP_SIZE = 35;
@@ -65,6 +67,10 @@ public class MediaServiceManager {
 
     public interface OnAccountList {
         void onAccountList(List<Account> accountList);
+    }
+
+    public interface OnPlaylistInfos {
+        void onPlaylistInfos(List<PlaylistInfo> playlistInfos);
     }
 
     public MediaServiceManager() {
@@ -159,7 +165,10 @@ public class MediaServiceManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onMediaGroup::onMediaGroup,
-                        error -> Log.e(TAG, "loadChannelUploads error: %s", error.getMessage())
+                        error -> {
+                            onMediaGroup.onMediaGroup(null);
+                            Log.e(TAG, "loadChannelUploads error: %s", error.getMessage());
+                        }
                 );
     }
 
@@ -236,6 +245,20 @@ public class MediaServiceManager {
                 .subscribe(
                         onPlaylistGroup::onMediaGroup,
                         error -> Log.e(TAG, "loadPlaylists error: %s", error.getMessage())
+                );
+    }
+
+    public void getPlaylistInfos(OnPlaylistInfos onPlaylistInfos) {
+        RxUtils.disposeActions(mPlaylistInfosAction);
+
+        Observable<List<PlaylistInfo>> observable = mItemManager.getPlaylistsInfoObserve(null);
+
+        mPlaylistInfosAction = observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        onPlaylistInfos::onPlaylistInfos,
+                        error -> Log.e(TAG, "getPlaylistInfos error: %s", error.getMessage())
                 );
     }
 

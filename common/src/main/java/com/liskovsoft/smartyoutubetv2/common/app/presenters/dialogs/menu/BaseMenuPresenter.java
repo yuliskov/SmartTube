@@ -4,6 +4,8 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -79,7 +81,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(original.isPlaylistAsChannel() || (original.hasNestedItems() && original.belongsToPlaylists()) ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
+                        getContext().getString(original.isPlaylistAsChannel() || (original.hasNestedItems() && original.belongsToUserPlaylists()) ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
                         optionItem -> {
                             if (original.hasVideo()) {
                                 MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
@@ -171,7 +173,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo();
 
-        if (original == null || (!original.hasPlaylist() && !original.isPlaylistAsChannel() && !original.belongsToPlaylists())) {
+        if (original == null || (!original.hasPlaylist() && !original.isPlaylistAsChannel() && !original.belongsToUserPlaylists())) {
             return;
         }
 
@@ -182,27 +184,39 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(original.belongsToPlaylists()? R.string.remove_playlist : R.string.save_remove_playlist),
+                        getContext().getString(original.belongsToUserPlaylists()? R.string.remove_playlist : R.string.save_remove_playlist),
                         optionItem -> {
                             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
                             if (original.hasPlaylist()) {
                                 syncToggleSaveRemovePlaylist(original, null);
-                            } else if (original.belongsToPlaylists()) {
+                            } else if (original.belongsToUserPlaylists()) {
+                                // NOTE: Can't get empty playlist id. Empty playlist doesn't contain videos.
                                 mServiceManager.loadChannelUploads(
                                         original,
-                                        mediaGroup -> syncToggleSaveRemovePlaylist(original, mediaGroup)
+                                        mediaGroup -> syncToggleSaveRemovePlaylist(original, getFirstPlaylistId(mediaGroup))
                                 );
+
+                                // NOTE: Don't use this as multiple playlists may share the same name.
+                                // Empty playlist fix
+                                //mServiceManager.getPlaylistInfos(playlistInfos -> {
+                                //    PlaylistInfo first = Helpers.findFirst(playlistInfos, value -> Helpers.equals(value.getTitle(),
+                                //            original.getTitle()));
+                                //
+                                //    if (first != null) {
+                                //        syncToggleSaveRemovePlaylist(original, first.getPlaylistId());
+                                //    }
+                                //});
                             } else {
                                 mServiceManager.loadChannelPlaylist(
                                         original,
-                                        mediaGroup -> syncToggleSaveRemovePlaylist(original, mediaGroup)
+                                        mediaGroup -> syncToggleSaveRemovePlaylist(original, getFirstPlaylistId(mediaGroup))
                                 );
                             }
                         }
                 ));
     }
 
-    private void syncToggleSaveRemovePlaylist(Video original, MediaGroup mediaGroup) {
+    private void syncToggleSaveRemovePlaylist(Video original, String playlistId) {
         Video video = Video.from(original);
 
         // Need correct playlist title to further comparison (decide whether save or remove)
@@ -210,9 +224,8 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             video.title = original.group.getTitle();
         }
 
-        if (!original.hasPlaylist() && mediaGroup != null && mediaGroup.getMediaItems() != null) {
-            MediaItem first = mediaGroup.getMediaItems().get(0);
-            video.playlistId = first.getPlaylistId();
+        if (!original.hasPlaylist() && playlistId != null) {
+            video.playlistId = playlistId;
         }
 
         toggleSaveRemovePlaylist(video);
@@ -264,6 +277,15 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.cant_save_playlist)),
                 () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.saved_to_playlists))
         );
+    }
+
+    private String getFirstPlaylistId(MediaGroup mediaGroup) {
+        if (mediaGroup != null && mediaGroup.getMediaItems() != null) {
+            MediaItem first = mediaGroup.getMediaItems().get(0);
+            return first.getPlaylistId();
+        }
+
+        return null;
     }
 
     protected void appendCreatePlaylistButton() {
