@@ -463,7 +463,7 @@
     <string name="speech_recognizer_system">Systémový (preferovaný)</string>
     <string name="speech_recognizer_external_1">Externí 1 (vážně zabugováno - aby fungovalo, musíte zakázat přístup k mikrofonu)</string>
     <string name="speech_recognizer_external_2">Externí 2 (vážně zabugováno)</string>
-    <string name="real_channel_icon">Zobraz opravdovou ikonu na tlačítku kanálu</string>
+    <string name="real_channel_icon">Zobraz ikonu na tlačítku kanálu</string>
     <string name="subtitle_yellow_semi_transparent">Žlutá na poloprůhledném pozadí</string>
     <string name="subtitle_yellow_black">Žlutá na černém pozadí</string>
     <string name="player_pixel_ratio">Poměr pixelů</string>
