@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.data.YouTubeMediaItemFormatInfo;
-import com.liskovsoft.youtubeapi.videoinfo.V2.VideoInfoServiceUnsigned;
+import com.liskovsoft.youtubeapi.videoinfo.V2.VideoInfoService;
 import com.liskovsoft.youtubeapi.videoinfo.models.VideoInfo;
 import com.liskovsoft.youtubeapi.videoinfo.models.formats.AdaptiveVideoFormat;
 
@@ -67,8 +67,8 @@ public class UrlProvider extends ContentProvider {
                         String[] selectionArgs, String sortOrder) {
         final long startTime = System.currentTimeMillis();
         final String videoPageUrl = uri.getQueryParameter("url");
-        final VideoInfo videoInfo = VideoInfoServiceUnsigned.instance()
-                .getVideoInfo(Uri.parse(videoPageUrl).getQueryParameter("v"), "");
+        final VideoInfo videoInfo = VideoInfoService.instance()
+                .getVideoInfo(Uri.parse(videoPageUrl).getQueryParameter("v"), "", "");
         String playlistContent = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             YouTubeMediaItemFormatInfo formatInfo = YouTubeMediaItemFormatInfo.from(videoInfo);
