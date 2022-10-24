@@ -23,6 +23,8 @@ import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
 import io.reactivex.Observable;
 
+import java.util.List;
+
 public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private final MediaServiceManager mServiceManager;
 
@@ -193,19 +195,29 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                 // NOTE: Can't get empty playlist id. Empty playlist doesn't contain videos.
                                 mServiceManager.loadChannelUploads(
                                         original,
-                                        mediaGroup -> syncToggleSaveRemovePlaylist(original, getFirstPlaylistId(mediaGroup))
-                                );
+                                        mediaGroup -> {
+                                            String playlistId = getFirstPlaylistId(mediaGroup);
 
-                                // NOTE: Don't use this as multiple playlists may share the same name.
-                                // Empty playlist fix
-                                //mServiceManager.getPlaylistInfos(playlistInfos -> {
-                                //    PlaylistInfo first = Helpers.findFirst(playlistInfos, value -> Helpers.equals(value.getTitle(),
-                                //            original.getTitle()));
-                                //
-                                //    if (first != null) {
-                                //        syncToggleSaveRemovePlaylist(original, first.getPlaylistId());
-                                //    }
-                                //});
+                                            if (playlistId != null) {
+                                                syncToggleSaveRemovePlaylist(original, playlistId);
+                                            } else {
+                                                // Empty playlist fix. Get 'add to playlist' infos
+                                                mServiceManager.getPlaylistInfos(playlistInfos -> {
+                                                    List<PlaylistInfo> infos = Helpers.filter(playlistInfos, value -> Helpers.equals(
+                                                            value.getTitle(), original.getTitle()));
+
+                                                    String playlistId2 = null;
+
+                                                    // Multiple playlists may share same name
+                                                    if (infos != null && infos.size() == 1) {
+                                                        playlistId2 = infos.get(0).getPlaylistId();
+                                                    }
+
+                                                    syncToggleSaveRemovePlaylist(original, playlistId2);
+                                                });
+                                            }
+                                        }
+                                );
                             } else {
                                 mServiceManager.loadChannelPlaylist(
                                         original,
