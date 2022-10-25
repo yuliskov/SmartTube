@@ -23,7 +23,7 @@
   <string name="video_max_quality">Auto (maks. jakość)</string>
   <string name="audio_max_quality">Auto (maks. jakość)</string>
   <string name="subtitles_disabled">Napisy wyłączone</string>
-  <string name="auto_frame_rate">Auto liczba klatek/s</string>
+  <string name="auto_frame_rate">Auto Frame Rate</string>
   <string name="frame_rate_correction">Napraw fps:\n%s</string>
   <string name="category_background_playback">Odtwarzanie w tle</string>
   <string name="not_implemented">Nie zaimplementowano</string>
@@ -51,7 +51,7 @@
   <string name="settings_player">Odtwarzacz wideo</string>
   <string name="settings_language">Język</string>
   <string name="settings_linked_devices">Połączone urządzenia</string>
-  <string name="settings_about">O...</string>
+  <string name="settings_about">Informacje</string>
   <string name="dialog_account_list">Wybierz konto</string>
   <string name="dialog_account_none">Brak</string>
   <string name="dialog_remove_account">Wyloguj się</string>
@@ -81,8 +81,8 @@
   <string name="update_in_progress">Zaczekaj…</string>
   <string name="player_ui_hide_behavior">Auto ukrywanie interfejsu</string>
   <string name="option_never">Nigdy</string>
-  <string name="side_panel_sections">Sekcje ustawień</string>
-  <string name="boot_to_section">Uruchom do sekcji</string>
+  <string name="side_panel_sections">Widoczne sekcje</string>
+  <string name="boot_to_section">Sekcja startowa</string>
   <string name="large_ui">Duży interfejs</string>
   <string name="video_grid_scale">Skala siatki wideo</string>
   <string name="scale_ui">Skala interfejsu</string>
@@ -284,7 +284,7 @@
   <string name="mark_all_channels_watched">Oznacz wszystkie kanały jako obejrzane</string>
   <string name="move_section_up">Przesuń sekcję w górę</string>
   <string name="move_section_down">Przesuń sekcję w dół</string>
-  <string name="player_buttons">Przyciski konfiguracji odtwarzacza</string>
+  <string name="player_buttons">Przyciski odtwarzacza</string>
   <string name="action_playlist_add">Dodaj do listy odtwarzania</string>
   <string name="action_video_stats">Statystyki wideo</string>
   <string name="action_subscribe">Subskrybuj</string>
