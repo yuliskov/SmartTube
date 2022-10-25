@@ -27,7 +27,6 @@
     <string name="category_background_playback">Bakgrunnsavspilling</string>
     <string name="not_implemented">Ikke implementert</string>
     <string name="option_background_playback_off">Deaktivert</string>
-    <string name="option_background_playback_all">Video og lyd</string>
     <string name="option_background_playback_only_audio">Bare lyd</string>
     <string name="playback_settings">Avspillingsinnstillinger</string>
     <string name="video_speed">Videohastighet</string>
@@ -155,6 +154,5 @@
     <string name="move_section_up">Flytt seksjon opp</string>
     <string name="move_section_down">Flytt seksjon ned</string>
     <string name="rename_section">Gi nytt navn til seksjon</string>
-    <string name="settings_general">Generelt</string>
     <string name="action_video_info">Videobeskrivelse</string>
 </resources>

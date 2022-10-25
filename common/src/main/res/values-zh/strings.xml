@@ -465,7 +465,7 @@
   <string name="speech_recognizer">语音识别器</string>
   <string name="video_buffer_size_none">无</string>
   <string name="disable_mic_permission">为了让这个识别器可以正常工作，请关闭应用程序的麦克风访问。</string>
-  <string name="repeat_mode_shuffle">乱序播放任何播放列表/string>
+  <string name="repeat_mode_shuffle">乱序播放任何播放列表</string>
   <string name="chat_left">左边</string>
   <string name="chat_right">右边</string>
   <string name="card_real_thumbnails">替换缩略图为视频中的一个画面</string>
@@ -473,5 +473,5 @@
   <string name="thumb_quality_default">默认</string>
   <string name="thumb_quality_start">视频的起始画面</string>
   <string name="thumb_quality_middle">视频的中间画面</string>
-  <string name="thumb_quality_end">视频的结束画面</string></resources>
-  </resources>
+  <string name="thumb_quality_end">视频的结束画面</string>
+</resources>
