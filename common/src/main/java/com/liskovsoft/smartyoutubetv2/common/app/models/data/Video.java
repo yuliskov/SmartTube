@@ -58,6 +58,7 @@ public final class Video implements Parcelable {
     public boolean hasNewContent;
     public boolean isLive;
     public boolean isUpcoming;
+    private boolean isMovie;
     public boolean isSubscribed;
     public boolean isRemote;
     public int groupPosition = -1; // group position in multi-grid fragments
@@ -133,6 +134,7 @@ public final class Video implements Parcelable {
         video.reloadPageKey = item.getReloadPageKey();
         video.isLive = item.isLive();
         video.isUpcoming = item.isUpcoming();
+        video.isMovie = item.isMovie();
         video.clickTrackingParams = item.getClickTrackingParams();
         video.mediaItem = item;
 
@@ -422,7 +424,8 @@ public final class Video implements Parcelable {
     }
 
     public boolean isEmpty() {
-        return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId);
+        // NOTE: Movies labeled as "Free with Ads" not supported yet
+        return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId) || isMovie;
     }
 
     public boolean belongsToUserPlaylists() {
