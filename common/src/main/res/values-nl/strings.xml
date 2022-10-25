@@ -93,7 +93,7 @@
   <string name="color_scheme_dark_grey">Donker</string>
   <string name="disable_update_check">Niet automatisch updaten</string>
   <string name="show_again">Altijd weergeven</string>
-  <string name="check_updates_auto">Automatisch updates</string>
+  <string name="check_updates_auto">Melding over nieuwe update</string>
   <string name="select_account_on_boot">Accountkeuze weergeven na opstarten</string>
   <string name="player_other">Overige instellingen</string>
   <string name="player_full_date">Publicatiedatum weergeven</string>
@@ -114,7 +114,7 @@
   <string name="repeat_mode_pause_alt">Pauzeren na elke video (n.v.t. op afspeellijsten)</string>
   <string name="repeat_mode_none">Stoppen na elke video</string>
   <string name="subscribed_to_channel">Je bent nu geabonneerd</string>
-  <string name="unsubscribed_from_channel">Je bent niet meer geabonneerd</string>
+  <string name="unsubscribed_from_channel">Je bent niet geabonneerd</string>
   <string name="subtitle_yellow_transparent">Geel</string>
   <string name="subtitle_white_black">Zwarte achtergrond</string>
   <string name="player_seek_preview">Voorvertoning weergeven tijdens snelzoeken</string>
@@ -169,7 +169,7 @@
   <string name="settings_ui_scale">Formaat</string>
   <string name="msg_restart_app">Start de app opnieuw op om de instellingen toe te passen</string>
   <string name="settings_block">Inhoudsblokkade</string>
-  <string name="msg_applying">Bezig met toepassen van %…s</string>
+  <string name="msg_applying">Bezig met toepassen van %s</string>
   <string name="msg_done">Voltooid</string>
   <string name="settings_general">Algemeen</string>
   <string name="settings_video">Video</string>
@@ -285,7 +285,7 @@
   <string name="move_section_up">Sectie omhoog verplaatsen</string>
   <string name="move_section_down">Sectie omlaag verplaatsen</string>
   <string name="player_buttons">Setup player buttons</string>
-  <string name="action_playlist_add">Spelerknoppen instellen</string>
+  <string name="action_playlist_add">Toevoegen aan afspeellijst</string>
   <string name="action_video_stats">Video statistieken</string>
   <string name="action_subscribe">Abonneren</string>
   <string name="action_channel">Kanaal openen</string>
@@ -467,4 +467,6 @@
   <string name="card_content">Waar miniaturen van gebruiken</string>
   <string name="player_remaining_time">Resterend %s</string>
   <string name="player_ending_time">Eindigt om %s</string>
+  <string name="video_buffer_size_none">Niet</string>
+  <string name="subtitle_white_transparent">Wit op transparante achtergrond</string>
 </resources>
