@@ -406,7 +406,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
             return;
         }
 
-        RxUtils.disposeActions(mHistoryAction);
+        // Is this really safe? Could I lost history because of this?
+        //RxUtils.disposeActions(mHistoryAction);
 
         MediaService service = YouTubeMediaService.instance();
         MediaItemService mediaItemManager = service.getMediaItemService();
