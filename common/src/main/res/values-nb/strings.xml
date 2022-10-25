@@ -137,4 +137,24 @@
     <string name="enable_web_proxy">Bruk proxy</string>
     <string name="app_backup">Ta sikkerhetskopi</string>
     <string name="app_restore">Gjenopprett sikkerhetskopi</string>
+    <string name="playlist_order">Sorter spilleliste</string>
+    <string name="add_remove_from_playback_queue">Legg til/Fjern fra spille-kø</string>
+    <string name="action_playback_queue">Spille-kø</string>
+    <string name="unset_stream_reminder">Fjern stream-påminnelse</string>
+    <string name="set_stream_reminder">Sett stream-påminnelse</string>
+    <string name="subscribe_unsubscribe_from_channel">Abonner / Avslutt abonnement</string>
+    <string name="save_remove_playlist">Legg til/Fjern spilleliste fra spilleliste-seksjonen</string>
+    <string name="create_playlist">Opprett spilleliste</string>
+    <string name="add_video_to_new_playlist">Legg til ny spilleliste</string>
+    <string name="add_remove_from_recent_playlist">Legg til/Fjern fra nylig brukt spilleliste</string>
+    <string name="play_video">Spill video</string>
+    <string name="remove_from_history">Fjern fra spille-logg</string>
+    <string name="pin_unpin_from_sidebar">Legg til/Fjern fra sidepanel</string>
+    <string name="share_link">Del lenke</string>
+    <string name="share_embed_link">Del innbygginslenke</string>
+    <string name="move_section_up">Flytt seksjon opp</string>
+    <string name="move_section_down">Flytt seksjon ned</string>
+    <string name="rename_section">Gi nytt navn til seksjon</string>
+    <string name="settings_general">Generelt</string>
+    <string name="action_video_info">Videobeskrivelse</string>
 </resources>
