@@ -34,6 +34,7 @@
     <string name="video_speed">Video-Geschwindigkeit</string>
     <string name="resolution_switch">Auflösung umschalten</string>
     <string name="video_buffer">Video-Puffer</string>
+    <string name="video_buffer_size_none">Keiner</string>
     <string name="video_buffer_size_low">Niedrig</string>
     <string name="video_buffer_size_med">Mittel</string>
     <string name="video_buffer_size_high">Hoch</string>
@@ -406,7 +407,7 @@
     <string name="lb_playback_controls_skip_previous">Vorheriges Video</string>
     <string name="alt_presets_behavior">Alternatives-Voreinstellungen-Verhalten (Bandbreite begrenzen)</string>
     <string name="alt_presets_behavior_desc">Die App wird versuchen, die Bandbreite entsprechend der gewählten Voreinstellung beizubehalten, anstatt Auflösung, Bildrate und Codec aufeinander abzustimmen.</string>
-    <string name="sleep_timer">Sleep-Timer einschalten (eine Stunde)</string>
+    <string name="sleep_timer">Sleep-Timer (wenn Fernbedienung eine Stunde nicht benutzt)</string>
     <string name="sleep_timer_desc">Pausiert die Wiedergabe, wenn die Fernbedienung eine Stunde lang nicht benutzt wurde.</string>
     <string name="disable_vsync">Snap-to-VSync deaktivieren</string>
     <string name="disable_vsync_desc">Verbessert die Wiedergabeperformance ein wenig.</string>
@@ -469,4 +470,12 @@
     <string name="color_scheme_dark_grey_monochrome">Dunkelgrau (monochrom)</string>
     <string name="disable_mic_permission">Bitte deaktivieren Sie den Mikrofonzugriff für die App, damit diese Spracherkennung richtig funktioniert.</string>
     <string name="repeat_mode_shuffle">Zufällige Wiedergabe einer Wiedergabeliste</string>
+    <string name="chat_left">Links</string>
+    <string name="chat_right">Rechts</string>
+    <string name="card_real_thumbnails">Vorschaubilder durch ein Bild aus dem Video ersetzen</string>
+    <string name="card_content">Quelle der Karten-Vorschaubilder</string>
+    <string name="thumb_quality_default">Standard</string>
+    <string name="thumb_quality_start">Start des Videos</string>
+    <string name="thumb_quality_middle">Mitte des Videos</string>
+    <string name="thumb_quality_end">Ende des Videos</string>
 </resources>
