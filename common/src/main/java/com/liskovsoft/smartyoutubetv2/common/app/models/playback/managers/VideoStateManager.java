@@ -55,6 +55,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         // Ensure that we aren't running on presenter init stage
         if (getController() != null) {
             if (!item.equals(getVideo())) { // video might be opened twice (when remote connection enabled). Fix for that.
+                // Reset auto-save history timer
+                mTickleLeft = 0;
                 // Save state of the previous video.
                 // In case video opened from phone and other stuff.
                 saveState();
@@ -115,8 +117,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public void onEngineReleased() {
-        mTickleLeft = 0;
-
         // Save previous state
         if (getController().containsMedia()) {
             setPlayEnabled(getController().getPlayWhenReady());
