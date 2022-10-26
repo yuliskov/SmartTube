@@ -105,6 +105,9 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public void onEngineInitialized() {
+        // Reset auto-save history timer
+        mTickleLeft = 0;
+
         // Restore before video loaded.
         // This way we override auto track selection mechanism.
         //restoreFormats();

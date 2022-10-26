@@ -443,7 +443,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                 } else {
                     getController().showSuggestions(true);
                     getController().setPlayWhenReady(false);
-                    getController().setPositionMs(0);
+                    //getController().setPositionMs(0);
                     Utils.showRepeatInfo(getActivity(), repeatMode);
                 }
                 break;
