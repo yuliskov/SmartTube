@@ -75,6 +75,7 @@ public class PlayerData extends DataChangeBase {
     private boolean mIsNumberKeySeekEnabled;
     private boolean mIsSkip24RateEnabled;
     private boolean mIsLiveChatEnabled;
+    private FormatItem mLastSubtitleFormat;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -341,10 +342,17 @@ public class PlayerData extends DataChangeBase {
                 break;
             case FormatItem.TYPE_SUBTITLE:
                 mSubtitleFormat = format;
+                if (!format.isDefault()) {
+                    mLastSubtitleFormat = format;
+                }
                 break;
         }
         
         persistState();
+    }
+
+    public FormatItem getLastSubtitleFormat() {
+        return mLastSubtitleFormat;
     }
 
     public void setVideoBufferType(int type) {
@@ -577,6 +585,7 @@ public class PlayerData extends DataChangeBase {
         mIsSkip24RateEnabled = Helpers.parseBoolean(split, 44, false);
         mAfrPauseMs = Helpers.parseInt(split, 45, 0);
         mIsLiveChatEnabled = Helpers.parseBoolean(split, 46, Build.VERSION.SDK_INT > 19);
+        mLastSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 47)), FormatItem.SUBTITLE_DEFAULT);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -595,7 +604,7 @@ public class PlayerData extends DataChangeBase {
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
-                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled));
+                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, Helpers.toString(mLastSubtitleFormat)));
 
         super.persistState();
     }

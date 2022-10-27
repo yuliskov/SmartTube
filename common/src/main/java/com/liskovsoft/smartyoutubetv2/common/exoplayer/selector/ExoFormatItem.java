@@ -327,6 +327,7 @@ public class ExoFormatItem implements FormatItem {
         formatItem.mTrack = mediaTrack;
         formatItem.mType = TYPE_SUBTITLE;
         formatItem.mLanguage = langCode;
+        formatItem.mIsDefault = langCode == null;
 
         mediaTrack.format = Format.createTextSampleFormat(null, null, -1, langCode);
 

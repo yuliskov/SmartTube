@@ -158,9 +158,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onSubtitleLongPressed(boolean enabled) {
-        //Log.d(TAG, "on sub long press %s", enabled);
+        getController().setFormat(enabled ? FormatItem.SUBTITLE_DEFAULT : mPlayerData.getLastSubtitleFormat());
 
-        getController().setSubtitleButtonState(!enabled);
+        getController().setSubtitleButtonState((mPlayerData.getLastSubtitleFormat() != FormatItem.SUBTITLE_DEFAULT) && !enabled);
     }
 
     @Override
