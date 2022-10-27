@@ -44,7 +44,7 @@
     <string name="dialog_add_to_playlist">Aggiungi o rimuovi dalla playlist</string>
     <string name="msg_signed_users_only">Solo utenti che hanno effettuato l\'accesso</string>
     <string name="msg_cant_load_content">Non posso caricare il contenuto.\n1) Controlla data e ora sul dispositivo.\n2) Controlla la connessione di rete.\n3) Controlla le impostazioni del proxy.\n4) Prova ad accedere al tuo account.\n5) Forse non c\'è niente qui dentro.</string>
-    <string name="title_video_presets">Preset video</string>
+    <string name="title_video_presets">Preimpostazioni video</string>
     <string name="settings_accounts">Profili</string>
     <string name="settings_left_panel">Modifica categorie</string>
     <string name="settings_themes">Temi</string>
@@ -197,8 +197,8 @@
     <string name="remote_session_closed">La sessione remota è stata chiusa</string>
     <string name="msg_mode_switch_error">Non posso cambiare a modalità \"%s\"</string>
     <string name="msg_player_error">Errore riproduttore video %s. Riavvio riproduzione…</string>
-    <string name="video_preset_disabled">Senza preset</string>
-    <string name="video_preset_enabled">Il formato del video successivo sarà impostato in base al preset</string>
+    <string name="video_preset_disabled">Senza preimpostazioni</string>
+    <string name="video_preset_enabled">Il formato del video successivo sarà impostato in base alla preimpostazione</string>
     <string name="player_sleep_timer">Timer spegnimento</string>
     <string name="player_show_quality_info">Visualizza informazioni sulla qualità video nella barra dei controlli</string>
     <string name="player_remember_each_speed">Ricorda la velocità di ogni video</string>
@@ -403,10 +403,10 @@
     <string name="cant_save_playlist">Questa playlist non può essere aggiunta</string>
     <string name="enter_value">Immetti un valore non vuoto</string>
     <string name="dialog_add_remove_from">Aggiungi o rimuovi da %s</string>
-    <string name="lb_playback_controls_skip_next">Salta il prossimo</string>
-    <string name="lb_playback_controls_skip_previous">Salta il precedente o ritorna alla posizione di partenza</string>
+    <string name="lb_playback_controls_skip_next">Salta al prossimo</string>
+    <string name="lb_playback_controls_skip_previous">Salta al precedente o ritorna alla posizione di partenza</string>
     <string name="alt_presets_behavior">Comportamento preimpostazioni alternative (limita la larghezza di banda))</string>
-    <string name="alt_presets_behavior_desc">L\'app cercherà di mantenere la larghezza di banda corrispondente al preset selezionato invece di corrispondere tra risoluzione, fps e codec.</string>
+    <string name="alt_presets_behavior_desc">L\'app cercherà di mantenere la larghezza di banda corrispondente alla preimpostazione selezionata invece di corrispondere tra risoluzione, fps e codec.</string>
     <string name="sleep_timer">Timer di spegnimento (un\'ora se non controllato da remoto)</string>
     <string name="sleep_timer_desc">Mettere in pausa la riproduzione se l\'utente non ha utilizzato il telecomando per un\'ora</string>
     <string name="disable_vsync">Disabilita lo snap a vsync</string>
