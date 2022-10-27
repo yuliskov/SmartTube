@@ -21,6 +21,7 @@ public interface PlayerUiEventListener {
     void onLikeClicked(boolean like);
     void onChannelClicked();
     void onSubtitleClicked();
+    void onSubtitleLongPressed(boolean enabled);
     void onPlaylistAddClicked();
     void onDebugInfoClicked(boolean enabled);
     void onVideoSpeedClicked();

@@ -199,6 +199,11 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
+    public void onSubtitleLongPressed(boolean enabled) {
+        // NOP
+    }
+
+    @Override
     public void onTrackChanged(FormatItem track) {
         // NOP
     }

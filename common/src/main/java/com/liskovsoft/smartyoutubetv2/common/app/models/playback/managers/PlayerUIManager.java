@@ -157,6 +157,13 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
+    public void onSubtitleLongPressed(boolean enabled) {
+        //Log.d(TAG, "on sub long press %s", enabled);
+
+        getController().setSubtitleButtonState(!enabled);
+    }
+
+    @Override
     public void onPlaylistAddClicked() {
         if (mPlaylistInfos == null) {
             AppDialogUtil.showAddToPlaylistDialog(getActivity(), getController().getVideo(),

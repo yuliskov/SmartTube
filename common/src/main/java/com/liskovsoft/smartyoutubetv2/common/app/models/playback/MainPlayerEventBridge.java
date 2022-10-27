@@ -320,6 +320,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
+    public void onSubtitleLongPressed(boolean enabled) {
+        process(listener -> listener.onSubtitleLongPressed(enabled));
+    }
+
+    @Override
     public void onControlsShown(boolean shown) {
         process(listener -> listener.onControlsShown(shown));
     }

@@ -43,11 +43,13 @@ import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.ControlButtonPresenterSelector;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlClickedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlLongClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlSelectedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.PlayPauseListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.QualityInfoListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.seekpreview.ThumbsBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.ControlsVisibilityListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.widget.OnActionLongClickedListener;
 
 import java.util.Arrays;
 
@@ -831,6 +833,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
     ControlBarPresenter mPlaybackControlsPresenter;
     ControlBarPresenter mSecondaryControlsPresenter;
     OnActionClickedListener mOnActionClickedListener;
+    OnActionLongClickedListener mOnActionLongClickedListener;
 
     private final OnControlSelectedListener mOnControlSelectedListener =
             new OnControlSelectedListener() {
@@ -862,6 +865,19 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
     };
 
+    private final OnControlLongClickedListener mOnControlLongClickedListener =
+            new OnControlLongClickedListener() {
+        @Override
+        public boolean onControlLongClicked(Presenter.ViewHolder itemViewHolder, Object item,
+                                     ControlBarPresenter.BoundData data) {
+            if (mOnActionLongClickedListener != null && item instanceof Action) {
+                return mOnActionLongClickedListener.onActionLongClicked((Action) item);
+            }
+
+            return false;
+        }
+    };
+
     public PlaybackTransportRowPresenter() {
         setHeaderPresenter(null);
         setSelectEffectEnabled(false);
@@ -877,6 +893,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         mSecondaryControlsPresenter.setOnControlSelectedListener(mOnControlSelectedListener);
         mPlaybackControlsPresenter.setOnControlClickedListener(mOnControlClickedListener);
         mSecondaryControlsPresenter.setOnControlClickedListener(mOnControlClickedListener);
+        mPlaybackControlsPresenter.setOnControlLongClickedListener(mOnControlLongClickedListener);
+        mSecondaryControlsPresenter.setOnControlLongClickedListener(mOnControlLongClickedListener);
     }
 
     /**
@@ -891,6 +909,13 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
      */
     public void setOnActionClickedListener(OnActionClickedListener listener) {
         mOnActionClickedListener = listener;
+    }
+
+    /**
+     * MODIFIED: Sets the listener for {@link Action} long click events.
+     */
+    public void setOnActionLongClickedListener(OnActionLongClickedListener listener) {
+        mOnActionLongClickedListener = listener;
     }
 
     /**

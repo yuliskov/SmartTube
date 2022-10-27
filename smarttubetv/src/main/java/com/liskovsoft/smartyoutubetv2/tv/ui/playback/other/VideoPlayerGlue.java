@@ -14,6 +14,7 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
+import androidx.leanback.widget.PlaybackRowPresenter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -21,6 +22,8 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.widget.OnActionLongClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChatAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
@@ -63,7 +66,7 @@ import java.util.concurrent.TimeUnit;
  * Note that the superclass, {@link PlaybackTransportControlGlue}, manages the playback controls
  * row.
  */
-public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
+public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> implements OnActionLongClickedListener {
     private static final long TEN_SECONDS = TimeUnit.SECONDS.toMillis(10);
     private static final String TAG = VideoPlayerGlue.class.getSimpleName();
     private final ThumbsUpAction mThumbsUpAction;
@@ -226,11 +229,25 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     }
 
     @Override
+    protected PlaybackRowPresenter onCreateRowPresenter() {
+        PlaybackRowPresenter rowPresenter = super.onCreateRowPresenter();
+
+        ((PlaybackTransportRowPresenter) rowPresenter).setOnActionLongClickedListener(this);
+
+        return rowPresenter;
+    }
+
+    @Override
     public void onActionClicked(Action action) {
         if (!dispatchAction(action)) {
             // Super class handles play/pause and delegates to abstract methods next()/previous().
             super.onActionClicked(action);
         }
+    }
+
+    @Override
+    public boolean onActionLongClicked(Action action) {
+        return dispatchLongClickAction(action);
     }
 
     @Override
@@ -494,6 +511,21 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         return handled;
     }
 
+    private boolean dispatchLongClickAction(Action action) {
+        if (action == null) {
+            return false;
+        }
+
+        boolean handled = false;
+
+        if (action == mClosedCaptioningAction) {
+            mActionListener.onClosedCaptionsLongPress(mClosedCaptioningAction.getIndex() == TwoStateAction.INDEX_ON);
+            handled = true;
+        }
+
+        return handled;
+    }
+
     private int getActionIndex(Action action) {
         if (action instanceof PlaybackControlsRow.MultiAction) {
             PlaybackControlsRow.MultiAction multiAction = (PlaybackControlsRow.MultiAction) action;
@@ -625,6 +657,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         void onChannel();
 
         void onClosedCaptions();
+
+        void onClosedCaptionsLongPress(boolean enabled);
 
         void onPlaylistAdd();
 

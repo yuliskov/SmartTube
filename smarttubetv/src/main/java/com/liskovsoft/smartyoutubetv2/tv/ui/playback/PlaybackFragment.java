@@ -743,6 +743,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
+        public void onClosedCaptionsLongPress(boolean enabled) {
+            mEventListener.onSubtitleLongPressed(enabled);
+        }
+
+        @Override
         public void onPlaylistAdd() {
             mEventListener.onPlaylistAddClicked();
         }
