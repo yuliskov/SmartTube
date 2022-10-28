@@ -341,10 +341,8 @@ public class PlayerData extends DataChangeBase {
                 mAudioFormat = format;
                 break;
             case FormatItem.TYPE_SUBTITLE:
+                setLastSubtitleFormat(format);
                 mSubtitleFormat = format;
-                if (!format.isDefault()) {
-                    mLastSubtitleFormat = format;
-                }
                 break;
         }
         
@@ -353,6 +351,14 @@ public class PlayerData extends DataChangeBase {
 
     public FormatItem getLastSubtitleFormat() {
         return mLastSubtitleFormat;
+    }
+
+    private void setLastSubtitleFormat(FormatItem format) {
+        if (format != null && !format.isDefault()) {
+            mLastSubtitleFormat = format;
+        } else if (mSubtitleFormat != null && !mSubtitleFormat.isDefault()) {
+            mLastSubtitleFormat = mSubtitleFormat;
+        }
     }
 
     public void setVideoBufferType(int type) {
