@@ -315,13 +315,13 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onSubtitleClicked() {
-        process(PlayerUiEventListener::onSubtitleClicked);
+    public void onSubtitleClicked(boolean enabled) {
+        process(listener -> listener.onSubtitleClicked(enabled));
     }
 
     @Override
-    public void onSubtitleLongPressed(boolean enabled) {
-        process(listener -> listener.onSubtitleLongPressed(enabled));
+    public void onSubtitleLongClicked(boolean enabled) {
+        process(listener -> listener.onSubtitleLongClicked(enabled));
     }
 
     @Override
@@ -360,8 +360,13 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onChatClicked() {
-        process(PlayerUiEventListener::onChatClicked);
+    public void onChatClicked(boolean enabled) {
+        process(listener -> listener.onChatClicked(enabled));
+    }
+
+    @Override
+    public void onChatLongClicked(boolean enabled) {
+        process(listener -> listener.onChatLongClicked(enabled));
     }
 
     @Override

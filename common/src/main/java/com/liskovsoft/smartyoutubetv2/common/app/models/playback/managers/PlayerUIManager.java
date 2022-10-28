@@ -130,7 +130,23 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
-    public void onSubtitleClicked() {
+    public void onSubtitleClicked(boolean enabled) {
+        if (getController().getSubtitleFormats().size() == 1 || !getController().getSubtitleFormats().contains(mPlayerData.getLastSubtitleFormat())) {
+            // Only default (no subs) selection
+            getController().setSubtitleButtonState(false);
+            return;
+        }
+
+        if (FormatItem.SUBTITLE_DEFAULT.equals(mPlayerData.getLastSubtitleFormat())) { // first run
+            onSubtitleLongClicked(enabled);
+        } else {
+            getController().setFormat(enabled ? FormatItem.SUBTITLE_DEFAULT : mPlayerData.getLastSubtitleFormat());
+            getController().setSubtitleButtonState(!FormatItem.SUBTITLE_DEFAULT.equals(mPlayerData.getLastSubtitleFormat()) && !enabled);
+        }
+    }
+
+    @Override
+    public void onSubtitleLongClicked(boolean enabled) {
         List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
 
         String subtitlesCategoryTitle = getActivity().getString(R.string.subtitle_category_title);
@@ -154,18 +170,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         settingsPresenter.appendRadioCategory(positionCategory.title, positionCategory.options);
 
         settingsPresenter.showDialog(subtitlesCategoryTitle, this::setSubtitleButtonState);
-    }
-
-    @Override
-    public void onSubtitleLongPressed(boolean enabled) {
-        if (getController().getSubtitleFormats().size() == 1 || !getController().getSubtitleFormats().contains(mPlayerData.getLastSubtitleFormat())) {
-            // Only default (no subs) selection
-            return;
-        }
-
-        getController().setFormat(enabled ? FormatItem.SUBTITLE_DEFAULT : mPlayerData.getLastSubtitleFormat());
-
-        getController().setSubtitleButtonState(!FormatItem.SUBTITLE_DEFAULT.equals(mPlayerData.getLastSubtitleFormat()) && !enabled);
     }
 
     @Override

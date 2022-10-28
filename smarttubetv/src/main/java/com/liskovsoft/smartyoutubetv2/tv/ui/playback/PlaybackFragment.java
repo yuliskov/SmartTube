@@ -31,7 +31,6 @@ import com.google.android.exoplayer2.ControlDispatcher;
 import com.google.android.exoplayer2.DefaultControlDispatcher;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
@@ -738,13 +737,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onClosedCaptions() {
-            mEventListener.onSubtitleClicked();
+        public void onClosedCaptions(boolean enabled) {
+            mEventListener.onSubtitleClicked(enabled);
         }
 
         @Override
         public void onClosedCaptionsLongPress(boolean enabled) {
-            mEventListener.onSubtitleLongPressed(enabled);
+            mEventListener.onSubtitleLongClicked(enabled);
         }
 
         @Override
@@ -773,8 +772,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onChat() {
-            mEventListener.onChatClicked();
+        public void onChat(boolean enabled) {
+            mEventListener.onChatClicked(enabled);
+        }
+
+        @Override
+        public void onChatLongPress(boolean enabled) {
+            mEventListener.onChatLongClicked(enabled);
         }
 
         @Override

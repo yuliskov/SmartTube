@@ -20,14 +20,15 @@ public interface PlayerUiEventListener {
     void onDislikeClicked(boolean dislike);
     void onLikeClicked(boolean like);
     void onChannelClicked();
-    void onSubtitleClicked();
-    void onSubtitleLongPressed(boolean enabled);
+    void onSubtitleClicked(boolean enabled);
+    void onSubtitleLongClicked(boolean enabled);
     void onPlaylistAddClicked();
     void onDebugInfoClicked(boolean enabled);
     void onVideoSpeedClicked();
     void onSeekIntervalClicked();
     void onContentBlockClicked(boolean enabled);
-    void onChatClicked();
+    void onChatClicked(boolean enabled);
+    void onChatLongClicked(boolean enabled);
     void onVideoInfoClicked();
     void onShareLinkClicked();
     void onSearchClicked();
