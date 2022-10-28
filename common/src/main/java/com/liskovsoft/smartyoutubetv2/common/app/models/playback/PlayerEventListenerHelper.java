@@ -219,7 +219,12 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onVideoSpeedClicked() {
+    public void onVideoSpeedClicked(boolean enabled) {
+        // NOP
+    }
+
+    @Override
+    public void onVideoSpeedLongClicked(boolean enabled) {
         // NOP
     }
 

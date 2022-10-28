@@ -424,7 +424,6 @@ public class AppDialogUtil {
                     optionItem -> {
                         playerData.setSpeed(speed);
                         playbackController.setSpeed(speed);
-                        //settingsPresenter.closeDialog();
                     },
                     playbackController.getSpeed() == speed));
         }

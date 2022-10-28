@@ -131,15 +131,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onSubtitleClicked(boolean enabled) {
-        if (getController().getSubtitleFormats().size() == 1 || !getController().getSubtitleFormats().contains(mPlayerData.getLastSubtitleFormat())) {
-            // Only default (no subs) selection
-            getController().setSubtitleButtonState(false);
-            return;
-        }
-
         if (FormatItem.SUBTITLE_DEFAULT.equals(mPlayerData.getLastSubtitleFormat())) { // first run
             onSubtitleLongClicked(enabled);
-        } else {
+        } else if (getController().getSubtitleFormats().size() > 1 && getController().getSubtitleFormats().contains(mPlayerData.getLastSubtitleFormat())) {
             getController().setFormat(enabled ? FormatItem.SUBTITLE_DEFAULT : mPlayerData.getLastSubtitleFormat());
             getController().setSubtitleButtonState(!FormatItem.SUBTITLE_DEFAULT.equals(mPlayerData.getLastSubtitleFormat()) && !enabled);
         }
@@ -361,7 +355,17 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
-    public void onVideoSpeedClicked() {
+    public void onVideoSpeedClicked(boolean enabled) {
+        if (Helpers.floatEquals(mPlayerData.getLastSpeed(), 1.0f)) {
+            onVideoSpeedLongClicked(enabled);
+        } else {
+            mPlayerData.setSpeed(enabled ? 1.0f : mPlayerData.getLastSpeed());
+            getController().setSpeed(enabled ? 1.0f : mPlayerData.getLastSpeed());
+        }
+    }
+
+    @Override
+    public void onVideoSpeedLongClicked(boolean enabled) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
         settingsPresenter.clear();
 

@@ -757,8 +757,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onVideoSpeed() {
-            mEventListener.onVideoSpeedClicked();
+        public void onVideoSpeed(boolean enabled) {
+            mEventListener.onVideoSpeedClicked(enabled);
+        }
+
+        @Override
+        public void onVideoSpeedLongPress(boolean enabled) {
+            mEventListener.onVideoSpeedLongClicked(enabled);
         }
 
         @Override

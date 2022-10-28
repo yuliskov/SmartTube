@@ -345,8 +345,13 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onVideoSpeedClicked() {
-        process(PlayerUiEventListener::onVideoSpeedClicked);
+    public void onVideoSpeedClicked(boolean enabled) {
+        process(listener -> listener.onVideoSpeedClicked(enabled));
+    }
+
+    @Override
+    public void onVideoSpeedLongClicked(boolean enabled) {
+        process(listener -> listener.onVideoSpeedLongClicked(enabled));
     }
 
     @Override

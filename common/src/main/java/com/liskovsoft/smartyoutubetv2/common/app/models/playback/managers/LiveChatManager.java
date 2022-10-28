@@ -86,12 +86,9 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onChatClicked(boolean enabled) {
-        if (mLiveChatKey == null) {
-            getController().setChatButtonState(PlaybackUIController.BUTTON_STATE_OFF);
-            return;
+        if (mLiveChatKey != null) {
+            enableLiveChat(!enabled);
         }
-
-        enableLiveChat(!enabled);
     }
 
     @Override

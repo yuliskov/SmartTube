@@ -455,7 +455,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
             mActionListener.onChannel();
             handled = true;
         } else if (action == mClosedCaptioningAction) {
-            mActionListener.onClosedCaptions(mClosedCaptioningAction.getIndex() == TwoStateAction.INDEX_ON);
+            mActionListener.onClosedCaptions(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
         } else if (action == mPlaylistAddAction) {
             mActionListener.onPlaylistAdd();
@@ -465,7 +465,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
             mActionListener.onDebugInfo(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
         } else if (action == mVideoSpeedAction) {
-            mActionListener.onVideoSpeed();
+            mActionListener.onVideoSpeed(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
         } else if (action == mSearchAction) {
             mActionListener.onSearch();
@@ -496,7 +496,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
             mActionListener.onContentBlock(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
         } else if (action == mChatAction) {
-            mActionListener.onChat(mChatAction.getIndex() == TwoStateAction.INDEX_ON);
+            mActionListener.onChat(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
         }
 
@@ -519,10 +519,13 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         boolean handled = false;
 
         if (action == mClosedCaptioningAction) {
-            mActionListener.onClosedCaptionsLongPress(mClosedCaptioningAction.getIndex() == TwoStateAction.INDEX_ON);
+            mActionListener.onClosedCaptionsLongPress(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
         } else if (action == mChatAction) {
-            mActionListener.onChatLongPress(mChatAction.getIndex() == TwoStateAction.INDEX_ON);
+            mActionListener.onChatLongPress(getActionIndex(action) == TwoStateAction.INDEX_ON);
+            handled = true;
+        } else if (action == mVideoSpeedAction) {
+            mActionListener.onVideoSpeedLongPress(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
         }
 
@@ -667,7 +670,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
 
         void onDebugInfo(boolean enabled);
 
-        void onVideoSpeed();
+        void onVideoSpeed(boolean enabled);
+
+        void onVideoSpeedLongPress(boolean enabled);
 
         void onSeekInterval();
 
