@@ -130,6 +130,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
 
+        if (item.equals(mVideo)) {
+            startSponsorWatcher();
+            return;
+        }
+
         // NOTE: SponsorBlock (when happened java.net.SocketTimeoutException) could block whole application with Schedulers.io()
         // Because Schedulers.io() reuses blocked threads in RxJava 2: https://github.com/ReactiveX/RxJava/issues/6542
         mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getEnabledCategories())
@@ -139,15 +144,23 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                         segments -> {
                             mVideo = item;
                             mSponsorSegments = segments;
-                            if (mContentBlockData.isColorMarkersEnabled()) {
-                                getController().setSeekBarSegments(toSeekBarSegments(segments));
-                            }
-                            if (mContentBlockData.isActionsEnabled()) {
-                                startPlaybackWatcher();
-                            }
+                            startSponsorWatcher();
                         },
                         error -> Log.d(TAG, "It's ok. Nothing to block in this video. Error msg: %s", error.getMessage())
                 );
+    }
+
+    private void startSponsorWatcher() {
+        if (mSponsorSegments == null) {
+            return;
+        }
+
+        if (mContentBlockData.isColorMarkersEnabled()) {
+            getController().setSeekBarSegments(toSeekBarSegments(mSponsorSegments));
+        }
+        if (mContentBlockData.isActionsEnabled()) {
+            startPlaybackWatcher();
+        }
     }
 
     private void startPlaybackWatcher() {
@@ -167,8 +180,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
     private void disposeActions() {
         RxUtils.disposeActions(mProgressAction, mSegmentsAction);
-        mSponsorSegments = null;
-        mVideo = null;
+        //mSponsorSegments = null;
+        //mVideo = null;
 
         // Reset colors
         getController().setSeekBarSegments(null);
