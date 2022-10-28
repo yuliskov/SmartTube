@@ -158,7 +158,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onSubtitleLongPressed(boolean enabled) {
-        if (getController().getSubtitleFormats().size() == 1) {
+        if (getController().getSubtitleFormats().size() == 1 || !getController().getSubtitleFormats().contains(mPlayerData.getLastSubtitleFormat())) {
             // Only default (no subs) selection
             return;
         }

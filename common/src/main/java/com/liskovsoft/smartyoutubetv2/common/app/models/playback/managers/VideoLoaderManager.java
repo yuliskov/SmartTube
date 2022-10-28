@@ -275,6 +275,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                 .subscribe(this::processFormatInfo,
                            error -> {
                                Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
+                               Log.e(TAG, "Probably no internet connection");
                                scheduleReloadVideoTimer(1_000);
                            });
     }
@@ -286,7 +287,9 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
+            mSuggestionsLoader.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
+            loadNext();
         } else if (formatInfo.containsDashVideoInfo() && !forceLegacyFormat(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
