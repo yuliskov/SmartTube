@@ -385,6 +385,11 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 video,
                 mediaGroup -> {
                     closeDialog();
+
+                    if (mediaGroup == null) { // crash fix
+                        return;
+                    }
+
                     MediaItem firstItem = mediaGroup.getMediaItems().get(0);
 
                     if (firstItem.getPlaylistId() == null) {

@@ -906,7 +906,7 @@ public class SearchSupportFragment extends Fragment {
     private void stopSpeechService() {
         try {
             Speech.getInstance().stopListening();
-        } catch (IllegalArgumentException e) { // Speech service not registered
+        } catch (IllegalArgumentException | NoSuchMethodError e) { // Speech service not registered/Android 4 (no such method)
             e.printStackTrace();
         }
     }

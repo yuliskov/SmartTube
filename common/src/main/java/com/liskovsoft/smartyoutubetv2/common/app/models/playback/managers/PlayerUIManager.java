@@ -133,7 +133,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     public void onSubtitleClicked(boolean enabled) {
         if (FormatItem.SUBTITLE_DEFAULT.equals(mPlayerData.getLastSubtitleFormat())) { // first run
             onSubtitleLongClicked(enabled);
-        } else if (getController().getSubtitleFormats().size() > 1 && getController().getSubtitleFormats().contains(mPlayerData.getLastSubtitleFormat())) {
+        } else if (getController().getSubtitleFormats() != null &&
+                   getController().getSubtitleFormats().size() > 1 &&
+                   getController().getSubtitleFormats().contains(mPlayerData.getLastSubtitleFormat())) {
             getController().setFormat(enabled ? FormatItem.SUBTITLE_DEFAULT : mPlayerData.getLastSubtitleFormat());
             getController().setSubtitleButtonState(!FormatItem.SUBTITLE_DEFAULT.equals(mPlayerData.getLastSubtitleFormat()) && !enabled);
         }
