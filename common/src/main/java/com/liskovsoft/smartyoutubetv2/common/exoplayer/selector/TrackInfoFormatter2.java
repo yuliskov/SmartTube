@@ -51,7 +51,7 @@ public class TrackInfoFormatter2 {
     }
 
     public String getQualityLabel() {
-        return combine(mResolutionStr, mFpsStr, mCodecStr, mHdrStr, mChannelsStr, mSpeedStr);
+        return combine(mResolutionStr, mFpsStr, mCodecStr, mBitrateStr, mHdrStr, mChannelsStr, mSpeedStr);
     }
 
     private static String combine(String... items) {

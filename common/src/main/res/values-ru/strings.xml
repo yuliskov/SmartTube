@@ -470,4 +470,5 @@
     <string name="thumb_quality_start">Начало видео</string>
     <string name="thumb_quality_middle">Середина видео</string>
     <string name="thumb_quality_end">Конец видео</string>
+    <string name="content_block_status">Проверить состояние SponsorBlock</string>
 </resources>
