@@ -32,8 +32,8 @@ public class TrackInfoFormatter2 {
         String codec = TrackSelectorUtil.extractCodec(format);
         mCodecStr = codec != null ? codec.toUpperCase() : "";
 
-        String bitrate = TrackSelectorUtil.extractBitrate(format);
-        mBitrateStr = bitrate.toUpperCase();
+        String bitrate = TrackSelectorUtil.extractBitrate(format, 0);
+        mBitrateStr = bitrate.isEmpty() ? "" : bitrate.toUpperCase() + "Mb";
 
         mHdrStr = TrackSelectorUtil.buildHDRString(format);
     }

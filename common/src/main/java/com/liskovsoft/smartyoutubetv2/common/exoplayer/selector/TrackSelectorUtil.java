@@ -119,8 +119,8 @@ public class TrackSelectorUtil {
         return codecNameShort(format.codecs);
     }
 
-    public static String extractBitrate(Format format) {
-        double bitrateMB = Helpers.round(format.bitrate / 1_000_000f, 2);
+    public static String extractBitrate(Format format, int places) {
+        double bitrateMB = Helpers.round(format.bitrate / 1_000_000f, places);
         return format.bitrate == Format.NO_VALUE || bitrateMB == 0 ? "" : Helpers.formatFloat(bitrateMB);
     }
 
