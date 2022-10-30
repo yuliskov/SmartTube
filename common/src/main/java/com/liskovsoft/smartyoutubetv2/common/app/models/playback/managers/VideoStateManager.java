@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
@@ -17,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -250,6 +252,30 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     @Override
     public void onViewPaused() {
         persistState();
+    }
+
+    @Override
+    public void onVideoSpeedClicked(boolean enabled) {
+        if (Helpers.floatEquals(mPlayerData.getLastSpeed(), 1.0f)) {
+            onVideoSpeedLongClicked(enabled);
+        } else {
+            State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
+            float lastSpeed = state != null && mPlayerData.isRememberSpeedEachEnabled() ? state.speed : mPlayerData.getLastSpeed();
+            mPlayerData.setSpeed(enabled ? 1.0f : lastSpeed);
+            getController().setSpeed(enabled ? 1.0f : lastSpeed);
+        }
+    }
+
+    @Override
+    public void onVideoSpeedLongClicked(boolean enabled) {
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
+        settingsPresenter.clear();
+
+        // suppose live stream if buffering near the end
+        // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
+        AppDialogUtil.appendSpeedDialogItems(getActivity(), settingsPresenter, mPlayerData, getController());
+
+        settingsPresenter.showDialog();
     }
 
     private void clearStateOfNextVideo() {

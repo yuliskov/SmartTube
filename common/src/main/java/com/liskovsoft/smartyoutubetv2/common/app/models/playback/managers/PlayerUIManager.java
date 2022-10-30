@@ -357,28 +357,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
-    public void onVideoSpeedClicked(boolean enabled) {
-        if (Helpers.floatEquals(mPlayerData.getLastSpeed(), 1.0f)) {
-            onVideoSpeedLongClicked(enabled);
-        } else {
-            mPlayerData.setSpeed(enabled ? 1.0f : mPlayerData.getLastSpeed());
-            getController().setSpeed(enabled ? 1.0f : mPlayerData.getLastSpeed());
-        }
-    }
-
-    @Override
-    public void onVideoSpeedLongClicked(boolean enabled) {
-        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
-        settingsPresenter.clear();
-
-        // suppose live stream if buffering near the end
-        // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
-        AppDialogUtil.appendSpeedDialogItems(getActivity(), settingsPresenter, mPlayerData, getController());
-
-        settingsPresenter.showDialog();
-    }
-
-    @Override
     public void onSeekIntervalClicked() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
         settingsPresenter.clear();
