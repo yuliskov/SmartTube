@@ -60,8 +60,8 @@
   <string name="dialog_select_language">Taal</string>
   <string name="subtitle_default">Standaard</string>
   <string name="subtitle_white_semi_transparent">Doorzichtige achtergrond</string>
-  <string name="subtitle_style">Ondertitelstijl</string>
-  <string name="subtitle_language">Ondertiteltaal</string>
+  <string name="subtitle_style">Ondertitel stijl</string>
+  <string name="subtitle_language">Ondertitel taal</string>
   <string name="action_search">Zoeken</string>
   <string name="settings_main_ui">Weergave</string>
   <string name="dialog_main_ui">Weergave</string>
@@ -207,7 +207,7 @@
   <string name="msg_player_error_renderer">De geselecteerde videokwaliteit wordt niet ondersteund</string>
   <string name="msg_player_error_unexpected">Onbekende video-decodeerfout</string>
   <string name="video_aspect">Beeldverhouding</string>
-  <string name="player_tweaks">Ontwikkelaarsopties</string>
+  <string name="player_tweaks">Gavanceerde video informatie tonen</string>
   <string name="header_uploads">Kanalen/Uploads</string>
   <string name="player_show_global_clock">Klok op videobeeld weergeven</string>
   <string name="player_show_global_ending_time">Eindtijd altijd op het scherm weergeven</string>
@@ -315,14 +315,14 @@
   <string name="hide_upcoming">Aankomende verbergen voor abonnementen</string>
   <string name="search_background_playback">Voer PIP in bij het zoeken vanaf speler</string>
   <string name="trending_row_name">Trending</string>
-  <string name="player_seek_type">Zoek type</string>
+  <string name="player_seek_type">Zoek gedrag</string>
   <string name="player_seek_regular">Normaal</string>
   <string name="player_seek_memory_pause">Onthoud positie en pauze</string>
   <string name="player_seek_memory_play">Onthoud positie en blijf spelen</string>
-  <string name="hide_shorts_from_home">Shorts verbergen op home</string>
+  <string name="hide_shorts_from_home">Shorts verbergen op startpagina</string>
   <string name="finish_on_disconnect">Voltooi de app nadat de telefoon/tablet is losgekoppeld</string>
   <string name="update_error">Update fout</string>
-  <string name="hide_shorts_from_history">Shorts verbergen op geschiedenis</string>
+  <string name="hide_shorts_from_history">Shorts verbergen bij geschiedenis</string>
   <string name="disable_screensaver">Schermbeveiliging uitschakelen</string>
   <string name="description_not_found">Beschrijving niet gevonden</string>
   <string name="proxy_port_hint">Proxy poort</string>
@@ -359,7 +359,7 @@
   <string name="subtitle_system">Systeem style (Android settings &gt; Toegankelijkheid)</string>
   <string name="subtitle_scale">Ondertitel schaal</string>
   <string name="audio_sync_fix_desc">Een alternatieve manier om audio/video te synchroniseren. Het wordt als achterhaald beschouwd, maar kan in sommige gevallen helpen.</string>
-  <string name="audio_sync_fix">Audiosynchronisatie opgelost</string>
+  <string name="audio_sync_fix">Audiosynchronisatie oplossing</string>
   <string name="ambilight_ratio_fix_desc">Corrigeert afwezige biasverlichting. Corrigeert onjuiste beeldverhouding. Lost lege schermafbeeldingen op. Beïnvloedt de prestaties!</string>
   <string name="ambilight_ratio_fix">Ambilight/beeldverhouding/screenshots opgelost</string>
   <string name="force_legacy_codecs_desc">Verbetert de prestaties op low-end apparaten aanzienlijk. Maximale resolutie is 720p.</string>
@@ -383,7 +383,7 @@
   <string name="action_dislike_unset">Vind ik niet leuk is uitgeschakeld</string>
   <string name="various_buttons">Knoppen bovenaan het hoofdvenster</string>
   <string name="not_compatible_with">Geselecteerde optie is niet compatibel met</string>
-  <string name="subtitle_position">Ondertitel onderste shift</string>
+  <string name="subtitle_position">Ondertitel positie</string>
   <string name="pressing_home">door op HOME te drukken</string>
   <string name="pressing_home_back">door op HOME of BACK te drukken</string>
   <string name="player_number_key_seek">Zoeken met cijfertoetsen</string>
@@ -427,13 +427,13 @@
   <string name="starting_stream">De stream starten…</string>
   <string name="action_playlist_remove">Verwijderen uit afspeellijst</string>
   <string name="signin_view_title">Gebruikerscode wordt geladen...</string>
-  <string name="signin_view_description">Voer deze code in op pagina %s\n om in te loggen. Opmerking:undefinedWerkt alleen met Firefox- of Chrome-browsers.</string>
+  <string name="signin_view_description">Voer deze code in op pagina %s\n om in te loggen. Opmerking: Werkt alleen met Firefox- of Chrome-browsers.</string>
   <string name="signin_view_action_text">Gedaan</string>
   <string name="require_checked">Vereist \"%s</string>
   <string name="msg_press_again_to_exit">Druk nogmaals om af te sluiten</string>
   <string name="badge_new_content">NIEUWE INHOUD</string>
   <string name="badge_live">LIVE</string>
-  <string name="add_device_view_description">Om het apparaat te koppelen, voert u deze code in op de YouTube-app van uw telefoon in het gedeelte Instellingen/Op tv bekijken. Opmerking: Werkt alleen met Gboard-toetsenbord.</string>
+  <string name="add_device_view_description">Om het apparaat te koppelen, voert u deze code in op de YouTube-app van uw apparaat in het gedeelte Instellingen/Op tv bekijken. Opmerking: Werkt alleen met Gboard-toetsenbord.</string>
   <string name="playback_controls_repeat_pause">Herhaal Pauze</string>
   <string name="playback_controls_repeat_list">Herhaal lijst</string>
   <string name="action_subscribe_off">Abonneren uit</string>
@@ -469,4 +469,7 @@
   <string name="player_ending_time">Eindigt om %s</string>
   <string name="video_buffer_size_none">Niet</string>
   <string name="subtitle_white_transparent">Wit op transparante achtergrond</string>
+  <string name="content_block_status">Controleer SponsorBlock status</string>
+  <string name="player_seek_confirmation_pause">Met bevestiging (pauze tijdens zoeken)</string>
+  <string name="player_seek_confirmation_play">Met bevestiging (spelen tijdens het zoeken)</string>
 </resources>
