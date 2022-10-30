@@ -14,7 +14,8 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        jcenter()
+        // 403 error
+        //jcenter() 
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:' + androidGradleVersion
@@ -29,7 +30,8 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        jcenter()
+        // 403 error
+        //jcenter()
         maven { url 'https://jitpack.io' }
         flatDir { dirs 'libs' } // include duktape-my to all subprojects
     }

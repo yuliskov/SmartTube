@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">पिछला ट्रैक</string>
+  <string name="exo_controls_next_description">अगला ट्रैक</string>
+  <string name="exo_controls_pause_description">रोकें</string>
+  <string name="exo_controls_play_description">चलाएं</string>
+  <string name="exo_controls_stop_description">बंद करें</string>
+  <string name="exo_controls_rewind_description">पीछे ले जाएं</string>
+  <string name="exo_controls_fastforward_description">तेज़ी से आगे बढ़ाएं</string>
+  <string name="exo_controls_repeat_off_description">किसी को न दोहराएं</string>
+  <string name="exo_controls_repeat_one_description">एक को दोहराएं</string>
+  <string name="exo_controls_repeat_all_description">सभी को दोहराएं</string>
+  <string name="exo_controls_shuffle_on_description">शफ़ल करना चालू है</string>
+  <string name="exo_controls_shuffle_off_description">शफ़ल करना बंद है</string>
+  <string name="exo_controls_fullscreen_description">फ़ुलस्क्रीन मोड</string>
+  <string name="exo_controls_vr_description">VR मोड</string>
+  <string name="exo_download_description">डाउनलोड करें</string>
+  <string name="exo_download_notification_channel_name">डाउनलोड की गई मीडिया फ़ाइलें</string>
+  <string name="exo_download_downloading">डाउनलोड हो रहा है</string>
+  <string name="exo_download_completed">डाउनलोड पूरा हुआ</string>
+  <string name="exo_download_failed">डाउनलोड नहीं हो सका</string>
+  <string name="exo_download_removing">डाउनलोड की गई फ़ाइलें हटाई जा रही हैं</string>
+  <string name="exo_track_selection_title_video">वीडियो</string>
+  <string name="exo_track_selection_title_audio">ऑडियो</string>
+  <string name="exo_track_selection_title_text">लेख</string>
+  <string name="exo_track_selection_none">कोई नहीं</string>
+  <string name="exo_track_selection_auto">अपने आप</string>
+  <string name="exo_track_unknown">अज्ञात</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">मोनो साउंड</string>
+  <string name="exo_track_stereo">स्टीरियो साउंड</string>
+  <string name="exo_track_surround">सराउंड साउंड</string>
+  <string name="exo_track_surround_5_point_1">5.1 सराउंड साउंड</string>
+  <string name="exo_track_surround_7_point_1">7.1 सराउंड साउंड</string>
+  <string name="exo_track_role_alternate">विकल्प</string>
+  <string name="exo_track_role_supplementary">सप्लिमेंट्री</string>
+  <string name="exo_track_role_commentary">कमेंट्री</string>
+  <string name="exo_track_role_closed_captions">सबटाइटल</string>
+  <string name="exo_track_bitrate">%1$.2f एमबीपीएस</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

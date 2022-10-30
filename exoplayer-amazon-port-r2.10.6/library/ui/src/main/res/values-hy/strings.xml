@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">Նախորդը</string>
+  <string name="exo_controls_next_description">Հաջորդը</string>
+  <string name="exo_controls_pause_description">Դադարեցնել</string>
+  <string name="exo_controls_play_description">Նվագարկել</string>
+  <string name="exo_controls_stop_description">Կանգնեցնել</string>
+  <string name="exo_controls_rewind_description">Հետ</string>
+  <string name="exo_controls_fastforward_description">Առաջ</string>
+  <string name="exo_controls_repeat_off_description">Չկրկնել</string>
+  <string name="exo_controls_repeat_one_description">Կրկնել մեկը</string>
+  <string name="exo_controls_repeat_all_description">Կրկնել բոլորը</string>
+  <string name="exo_controls_shuffle_on_description">Խառնումը միացված է</string>
+  <string name="exo_controls_shuffle_off_description">Խառնումն անջատված է</string>
+  <string name="exo_controls_fullscreen_description">Լիաէկրան ռեժիմ</string>
+  <string name="exo_controls_vr_description">VR ռեժիմ</string>
+  <string name="exo_download_description">Ներբեռնել</string>
+  <string name="exo_download_notification_channel_name">Ներբեռնումներ</string>
+  <string name="exo_download_downloading">Ներբեռնում</string>
+  <string name="exo_download_completed">Ներբեռնումն ավարտվեց</string>
+  <string name="exo_download_failed">Չհաջողվեց ներբեռնել</string>
+  <string name="exo_download_removing">Ներբեռնումները հեռացվում են</string>
+  <string name="exo_track_selection_title_video">Տեսանյութ</string>
+  <string name="exo_track_selection_title_audio">Աուդիո</string>
+  <string name="exo_track_selection_title_text">Տեքստ</string>
+  <string name="exo_track_selection_none">Ոչ մեկը</string>
+  <string name="exo_track_selection_auto">Ավտոմատ</string>
+  <string name="exo_track_unknown">Անհայտ</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">Մոնո</string>
+  <string name="exo_track_stereo">Ստերեո</string>
+  <string name="exo_track_surround">Ծավալային ձայն</string>
+  <string name="exo_track_surround_5_point_1">5․1 ծավալային ձայն</string>
+  <string name="exo_track_surround_7_point_1">7․1 ծավալային ձայն</string>
+  <string name="exo_track_role_alternate">Այլընտրանքային</string>
+  <string name="exo_track_role_supplementary">Լրացուցիչ</string>
+  <string name="exo_track_role_commentary">Մեկնաբանություններ</string>
+  <string name="exo_track_role_closed_captions">Ենթագրեր</string>
+  <string name="exo_track_bitrate">%1$.2f Մբիթ/վ</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

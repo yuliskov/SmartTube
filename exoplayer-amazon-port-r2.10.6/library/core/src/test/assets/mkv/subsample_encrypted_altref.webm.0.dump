@@ -1,0 +1,36 @@
+seekMap:
+  isSeekable = false
+  duration = 1000
+  getPosition(0) = [[timeUs=0, position=0]]
+numberOfTracks = 1
+track 1:
+  format:
+    bitrate = -1
+    id = 1
+    containerMimeType = null
+    sampleMimeType = video/x-vnd.on2.vp9
+    maxInputSize = -1
+    width = 360
+    height = 240
+    frameRate = -1.0
+    rotationDegrees = 0
+    pixelWidthHeightRatio = 1.0
+    channelCount = -1
+    sampleRate = -1
+    pcmEncoding = -1
+    encoderDelay = 0
+    encoderPadding = 0
+    subsampleOffsetUs = 9223372036854775807
+    selectionFlags = 0
+    language = null
+    drmInitData = 1305012705
+    initializationData:
+  total output bytes = 39
+  sample count = 1
+  sample 0:
+    time = 0
+    flags = 1073741824
+    data = length 39, hash B7FE77F4
+    crypto mode = 1
+    encryption key = length 16, hash 4CE944CF
+tracksEnded = true

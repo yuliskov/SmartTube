@@ -1,0 +1,46 @@
+<tt xmlns:ttm="http://www.w3.org/2006/10/ttaf1#metadata"
+    xmlns:ttp="http://www.w3.org/2006/10/ttaf1#parameter"
+    xmlns:tts="http://www.w3.org/2006/10/ttaf1#style"
+    xmlns="http://www.w3.org/ns/ttml"
+    xmlns="http://www.w3.org/2006/10/ttaf1">
+  <head>
+    <styling>
+      <style id="s0"
+        tts:backgroundColor="blue"
+        tts:color="black"
+        tts:fontWeight="bold" />
+      <style id="s1"
+        tts:backgroundColor="black"
+        tts:color="red"
+        tts:fontFamily="sansSerif"
+        tts:fontStyle="italic"
+        tts:textDecoration="lineThrough" />
+      <style id="s2"
+        tts:backgroundColor="red" />
+      <style id="s3"
+        tts:backgroundColor="green"
+        tts:textDecoration="lineThrough" />
+    </styling>
+  </head>
+  <body>
+    <div>
+      <p style="s0 s1" begin="10s" end="18s" tts:color="yellow">text 1</p>
+    </div>
+    <div>
+      <p style="s0 s1" begin="20s" end="28s">text 2</p>
+    </div>
+    <div tts:color="yellow" tts:textDecoration="underline" tts:fontStyle="italic" tts:fontFamily="sansSerifInline">
+      <p style="s2                           s3" begin="30s" end="38s">text 2.5</p>
+    </div>
+    <div>
+      <!-- empty style attribute -->
+      <p style=" " begin="40s" end="48s">text 3</p>
+    </div>
+    <div>
+      <p style="not_existing" begin="50s" end="58s">text 4</p>
+    </div>
+    <div>
+      <p style="not_existing s2" begin="60s" end="68s">text 5</p>
+    </div>
+  </body>
+</tt>

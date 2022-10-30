@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">Ne ponavljaj nijednu</string>
+  <string name="exo_media_action_repeat_one_description">Ponovi jednu</string>
+  <string name="exo_media_action_repeat_all_description">Ponovi sve</string>
+</resources>

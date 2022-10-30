@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">Előző szám</string>
+  <string name="exo_controls_next_description">Következő szám</string>
+  <string name="exo_controls_pause_description">Szüneteltetés</string>
+  <string name="exo_controls_play_description">Lejátszás</string>
+  <string name="exo_controls_stop_description">Leállítás</string>
+  <string name="exo_controls_rewind_description">Visszatekerés</string>
+  <string name="exo_controls_fastforward_description">Előretekerés</string>
+  <string name="exo_controls_repeat_off_description">Nincs ismétlés</string>
+  <string name="exo_controls_repeat_one_description">Egy szám ismétlése</string>
+  <string name="exo_controls_repeat_all_description">Összes szám ismétlése</string>
+  <string name="exo_controls_shuffle_on_description">Keverés bekapcsolva</string>
+  <string name="exo_controls_shuffle_off_description">Keverés kikapcsolva</string>
+  <string name="exo_controls_fullscreen_description">Teljes képernyős mód</string>
+  <string name="exo_controls_vr_description">VR-mód</string>
+  <string name="exo_download_description">Letöltés</string>
+  <string name="exo_download_notification_channel_name">Letöltések</string>
+  <string name="exo_download_downloading">Letöltés folyamatban</string>
+  <string name="exo_download_completed">A letöltés befejeződött</string>
+  <string name="exo_download_failed">Nem sikerült a letöltés</string>
+  <string name="exo_download_removing">Letöltések törlése folyamatban</string>
+  <string name="exo_track_selection_title_video">Videó</string>
+  <string name="exo_track_selection_title_audio">Hang</string>
+  <string name="exo_track_selection_title_text">Szöveg</string>
+  <string name="exo_track_selection_none">Nincs</string>
+  <string name="exo_track_selection_auto">Automatikus</string>
+  <string name="exo_track_unknown">Ismeretlen</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">Monó</string>
+  <string name="exo_track_stereo">Sztereó</string>
+  <string name="exo_track_surround">Térhatású hangzás</string>
+  <string name="exo_track_surround_5_point_1">5.1-es térhatású hangzás</string>
+  <string name="exo_track_surround_7_point_1">7.1-es térhatású hangzás</string>
+  <string name="exo_track_role_alternate">Alternatív</string>
+  <string name="exo_track_role_supplementary">Kiegészítő</string>
+  <string name="exo_track_role_commentary">Kommentár</string>
+  <string name="exo_track_role_closed_captions">Felirat</string>
+  <string name="exo_track_bitrate">%1$.2f Mbps</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

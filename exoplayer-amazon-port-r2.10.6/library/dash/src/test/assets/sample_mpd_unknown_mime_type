@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MPD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    availabilityStartTime="2014-06-19T23:07:42"
+    minBufferTime="PT1.500S"
+    minimumUpdatePeriod="PT5.000S"
+    profiles="urn:mpeg:dash:profile:isoff-main:2011"
+    timeShiftBufferDepth="PT129600.000S"
+    type="dynamic"
+    xmlns="urn:mpeg:DASH:schema:MPD:2011"
+    xsi:schemaLocation="urn:mpeg:DASH:schema:MPD:2011 DASH-MPD.xsd"
+    yt:earliestMediaSequence="1266404" >
+    <Period start="PT6462826.784S" >
+        <SegmentList
+            presentationTimeOffset="34740095"
+            startNumber="1292317"
+            timescale="1000" >
+            <SegmentTimeline>
+                <S d="4804" />
+                <S d="5338" />
+                <S d="4938" />
+            </SegmentTimeline>
+        </SegmentList>
+        <AdaptationSet
+            mimeType="audio/mp4"
+            subsegmentAlignment="true" >
+            <Role
+                schemeIdUri="urn:mpeg:DASH:role:2011"
+                value="main" />
+            <Representation
+                id="141"
+                audioSamplingRate="48000"
+                bandwidth="272000"
+                codecs="mp4a.40.2"
+                startWithSAP="1" >
+                <AudioChannelConfiguration
+                    schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011"
+                    value="2" />
+                <BaseURL>
+http://www.test.com/141
+                </BaseURL>
+                <SegmentList>
+                    <Initialization
+                        range="0-591"
+                        sourceURL="sq/0/clen/79480/lmt/1403219262956762/dur/4.805" />
+                    <SegmentURL media="sq/1292317/clen/77447/lmt/1409671169987621/dur/4.805" />
+                    <SegmentURL media="sq/1292318/clen/86958/lmt/1409671174832549/dur/5.339" />
+                    <SegmentURL media="sq/1292319/clen/85018/lmt/1409671179719956/dur/4.938" />
+                </SegmentList>
+            </Representation>
+        </AdaptationSet>
+        <AdaptationSet
+            mimeType="video/mp4"
+            subsegmentAlignment="true" >
+            <Role
+                schemeIdUri="urn:mpeg:DASH:role:2011"
+                value="main" />
+            <Representation
+                id="135"
+                bandwidth="1116000"
+                codecs="avc1.42c01f"
+                height="480"
+                startWithSAP="1"
+                width="854" >
+                <BaseURL>
+http://www.test.com/135
+                </BaseURL>
+                <SegmentList>
+                    <Initialization
+                        range="0-671"
+                        sourceURL="sq/0/clen/1221137/lmt/1403219262956762/dur/4.805" />
+                    <SegmentURL media="sq/1292317/clen/1279915/lmt/1409671169987621/dur/4.805" />
+                    <SegmentURL media="sq/1292318/clen/1310650/lmt/1409671174832549/dur/5.339" />
+                    <SegmentURL media="sq/1292319/clen/1486558/lmt/1409671179719956/dur/4.938" />
+                </SegmentList>
+            </Representation>
+        </AdaptationSet>
+        <AdaptationSet
+            lang="en"
+            mimeType="text/vtt" >
+            <Role
+                schemeIdUri="urn:mpeg:DASH:role:2011"
+                value="caption" />
+            <Representation
+                id="en"
+                bandwidth="0"
+                codecs="" >
+                <BaseURL>
+http://www.test.com/vtt
+                </BaseURL>
+                <SegmentList>
+                    <SegmentURL media="sq/1292317" />
+                    <SegmentURL media="sq/1292318" />
+                    <SegmentURL media="sq/1292319" />
+                </SegmentList>
+            </Representation>
+        </AdaptationSet>
+        <AdaptationSet
+                    mimeType="application/octet-stream" >
+                    <Role
+                        schemeIdUri="urn:mpeg:DASH:role:2011"
+                        value="caption" />
+                    <Representation
+                        id="608"
+                        bandwidth="0"
+                        codecs="" >
+                        <BaseURL>
+        http://www.test.com/608
+                        </BaseURL>
+                        <SegmentList>
+                            <SegmentURL media="sq/1292317" />
+                            <SegmentURL media="sq/1292318" />
+                            <SegmentURL media="sq/1292319" />
+                        </SegmentList>
+                    </Representation>
+                </AdaptationSet>
+    </Period>
+</MPD>

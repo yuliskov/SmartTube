@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">ಯಾವುದನ್ನೂ ಪುನರಾವರ್ತಿಸಬೇಡಿ</string>
+  <string name="exo_media_action_repeat_one_description">ಒಂದನ್ನು ಪುನರಾವರ್ತಿಸಿ</string>
+  <string name="exo_media_action_repeat_all_description">ಎಲ್ಲವನ್ನು ಪುನರಾವರ್ತಿಸಿ</string>
+</resources>

@@ -166,23 +166,23 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:' + glideVersion
     annotationProcessor 'com.github.bumptech.glide:compiler:' + glideVersion
-    implementation 'com.zlc.glide:webpdecoder:' + webpDecoderVersion
+    implementation 'com.github.zjupure:webpdecoder:' + webpDecoderVersion
 
     //////// BEGIN EXOPLAYER /////////
 
-    implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
-    implementation 'com.amazon.android:extension-leanback:' + amazonExoplayerVersion
-    implementation 'com.amazon.android:extension-mediasession:' + amazonExoplayerVersion
+    implementation project(':exoplayer-library')
+    implementation project(':exoplayer-extension-leanback')
+    implementation project(':exoplayer-extension-mediasession')
+
+    // implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
+    // implementation 'com.amazon.android:extension-leanback:' + amazonExoplayerVersion
+    // implementation 'com.amazon.android:extension-mediasession:' + amazonExoplayerVersion
 
     // implementation 'com.google.android.exoplayer:exoplayer:' + exoplayerVersion
     // implementation 'com.google.android.exoplayer:extension-leanback:' + exoplayerVersion
     // implementation 'com.google.android.exoplayer:extension-mediasession:' + exoplayerVersion
 
     // implementation 'com.github.amzn:exoplayer-amazon-port:' + amazonExoplayerJitpackVersion
-
-    // implementation project(':exoplayer-library')
-    // implementation project(':exoplayer-extension-leanback')
-    // implementation project(':exoplayer-extension-mediasession')
 
     //////// END EXOPLAYER //////////
 

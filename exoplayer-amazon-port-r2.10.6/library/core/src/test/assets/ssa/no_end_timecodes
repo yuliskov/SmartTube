@@ -1,0 +1,12 @@
+[Script Info]
+Title: SomeTitle
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Open Sans Semibold,36,&H00FFFFFF,&H000000FF,&H00020713,&H00000000,-1,0,0,0,100,100,0,0,1,1.7,0,2,0,0,28,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, Text
+Dialogue: 0,0:00:00.00,          ,Default,Olly,This is the first subtitle.
+Dialogue: 0,0:00:02.34,          ,Default,Olly,This is the second subtitle \nwith a newline \Nand another.
+Dialogue: 0,0:00:04.56,          ,Default,Olly,This is the third subtitle, with a comma.

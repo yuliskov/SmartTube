@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">कुनै पनि नदोहोर्‍याउनुहोस्</string>
+  <string name="exo_media_action_repeat_one_description">एउटा दोहोर्‍याउनुहोस्</string>
+  <string name="exo_media_action_repeat_all_description">सबै दोहोर्‍याउनुहोस्</string>
+</resources>

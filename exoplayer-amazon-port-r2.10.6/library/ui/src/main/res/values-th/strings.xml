@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">แทร็กก่อนหน้า</string>
+  <string name="exo_controls_next_description">แทร็กถัดไป</string>
+  <string name="exo_controls_pause_description">หยุด</string>
+  <string name="exo_controls_play_description">เล่น</string>
+  <string name="exo_controls_stop_description">หยุด</string>
+  <string name="exo_controls_rewind_description">กรอกลับ</string>
+  <string name="exo_controls_fastforward_description">กรอไปข้างหน้า</string>
+  <string name="exo_controls_repeat_off_description">ไม่เล่นซ้ำ</string>
+  <string name="exo_controls_repeat_one_description">เล่นซ้ำเพลงเดียว</string>
+  <string name="exo_controls_repeat_all_description">เล่นซ้ำทั้งหมด</string>
+  <string name="exo_controls_shuffle_on_description">เปิดการสุ่มเพลงอยู่</string>
+  <string name="exo_controls_shuffle_off_description">ปิดการสุ่มเพลงอยู่</string>
+  <string name="exo_controls_fullscreen_description">โหมดเต็มหน้าจอ</string>
+  <string name="exo_controls_vr_description">โหมด VR</string>
+  <string name="exo_download_description">ดาวน์โหลด</string>
+  <string name="exo_download_notification_channel_name">ดาวน์โหลด</string>
+  <string name="exo_download_downloading">กำลังดาวน์โหลด</string>
+  <string name="exo_download_completed">การดาวน์โหลดเสร็จสมบูรณ์</string>
+  <string name="exo_download_failed">การดาวน์โหลดล้มเหลว</string>
+  <string name="exo_download_removing">กำลังนำรายการที่ดาวน์โหลดออก</string>
+  <string name="exo_track_selection_title_video">วิดีโอ</string>
+  <string name="exo_track_selection_title_audio">เสียง</string>
+  <string name="exo_track_selection_title_text">ข้อความ</string>
+  <string name="exo_track_selection_none">ไม่มี</string>
+  <string name="exo_track_selection_auto">ยานยนต์</string>
+  <string name="exo_track_unknown">ไม่ทราบ</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">โมโน</string>
+  <string name="exo_track_stereo">สเตอริโอ</string>
+  <string name="exo_track_surround">เสียงเซอร์ราวด์</string>
+  <string name="exo_track_surround_5_point_1">ระบบเสียง 5.1 เซอร์ราวด์</string>
+  <string name="exo_track_surround_7_point_1">7.1 เสียงเซอร์ราวด์</string>
+  <string name="exo_track_role_alternate">อื่นๆ</string>
+  <string name="exo_track_role_supplementary">แทร็กเสริม</string>
+  <string name="exo_track_role_commentary">ความคิดเห็น</string>
+  <string name="exo_track_role_closed_captions">คำบรรยาย</string>
+  <string name="exo_track_bitrate">%1$.2f Mbps</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

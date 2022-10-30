@@ -1,0 +1,49 @@
+// Copyright (C) 2017 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+apply from: '../constants.gradle'
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion project.ext.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
+    }
+
+    lintOptions {
+        // Truth depends on JUnit, which depends on java.lang.management, which
+        // is not part of Android. Remove this when JUnit 4.13 or later is used.
+        // See: https://github.com/junit-team/junit4/pull/1187.
+        disable 'InvalidPackage'
+    }
+
+    testOptions.unitTests.includeAndroidResources = true
+}
+
+dependencies {
+    api 'org.mockito:mockito-core:' + mockitoVersion
+    api 'androidx.test.ext:junit:' + androidXTestVersion
+    api 'androidx.test.ext:truth:' + androidXTestVersion
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation project(modulePrefix + 'library-core')
+    implementation 'com.google.auto.value:auto-value-annotations:' + autoValueVersion
+    annotationProcessor 'com.google.auto.value:auto-value:' + autoValueVersion
+    testImplementation project(modulePrefix + 'testutils-robolectric')
+}

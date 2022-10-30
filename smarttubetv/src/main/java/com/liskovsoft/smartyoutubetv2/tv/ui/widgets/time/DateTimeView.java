@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import androidx.appcompat.widget.AppCompatTextView;
+import android.widget.TextView;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
 import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
@@ -11,7 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 /**
  * Note, same view is used inside player and in as global time view
  */
-public class DateTimeView extends AppCompatTextView implements TickleListener {
+public class DateTimeView extends TextView implements TickleListener {
     private TickleManager mTickleManager;
     private boolean mIsDateEnabled = true;
     private boolean mIsTimeEnabled = true;

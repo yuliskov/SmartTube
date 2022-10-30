@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
-import androidx.appcompat.widget.AppCompatTextView;
+import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -14,7 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
-public class EndingTimeView extends AppCompatTextView implements TickleListener {
+public class EndingTimeView extends TextView implements TickleListener {
     private TickleManager mTickleManager;
     private boolean mIconIsSet;
 

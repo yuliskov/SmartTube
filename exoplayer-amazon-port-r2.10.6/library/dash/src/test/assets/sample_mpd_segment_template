@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MPD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:mpeg:DASH:schema:MPD:2011" xmlns:yt="http://youtube.com/yt/2012/10/10" xsi:schemaLocation="urn:mpeg:DASH:schema:MPD:2011 DASH-MPD.xsd" minBufferTime="PT1.500S" profiles="urn:mpeg:dash:profile:isoff-main:2011" type="dynamic" availabilityStartTime="2016-10-14T17:00:17" timeShiftBufferDepth="PT7200.000S" minimumUpdatePeriod="PT2.000S" yt:earliestMediaSequence="0" yt:mpdRequestTime="2016-10-14T18:29:17.082" yt:mpdResponseTime="2016-10-14T18:29:17.194">
+ <Period start="PT0.000S" yt:segmentIngestTime="2016-10-14T17:00:14.257">
+  <SegmentTemplate startNumber="0" timescale="1000" media="sq/$Number$">
+   <SegmentTimeline>
+    <S d="2002" t="6009" r="2"/>
+    <S d="1985"/>
+    <S d="2000"/>
+   </SegmentTimeline>
+  </SegmentTemplate>
+  <AdaptationSet id="0" mimeType="audio/mp4" subsegmentAlignment="true">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="main"/>
+   <Representation id="140" codecs="mp4a.40.2" audioSamplingRate="48000" startWithSAP="1" bandwidth="144000">
+    <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+    <BaseURL>http://redirector.googlevideo.com/videoplayback/id/BktsoMO3OMs.0/itag/140/source/yt_live_broadcast/ratebypass/yes/cmbypass/yes/mime/audio%2Fmp4/live/1/gir/yes/noclen/1/signature/B5137EA0CC278C07DD056D204E863CC81EDEB39E.1AD5D242EBC94922EDA7165353A89A5E08A4103A/key/dg_test0/mpd_version/5/ip/0.0.0.0/ipbits/0/expire/1476490914/sparams/ip,ipbits,expire,id,itag,source,ratebypass,cmbypass,mime,live,gir,noclen/</BaseURL>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet id="1" mimeType="video/mp4" subsegmentAlignment="true">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="main"/>
+   <Representation id="133" codecs="avc1.4d4015" width="426" height="240" startWithSAP="1" maxPlayoutRate="1" bandwidth="258000" frameRate="30">
+    <BaseURL>http://redirector.googlevideo.com/videoplayback/id/BktsoMO3OMs.0/itag/133/source/yt_live_broadcast/ratebypass/yes/cmbypass/yes/mime/video%2Fmp4/live/1/gir/yes/noclen/1/signature/90154AE9C5C9D9D519CBF2E43AB0A1778375992D.40E2E855ADFB38FA7E95E168FEEEA6796B080BD7/key/dg_test0/mpd_version/5/ip/0.0.0.0/ipbits/0/expire/1476490914/sparams/ip,ipbits,expire,id,itag,source,ratebypass,cmbypass,mime,live,gir,noclen/</BaseURL>
+   </Representation>
+   <Representation id="134" codecs="avc1.4d401e" width="640" height="360" startWithSAP="1" maxPlayoutRate="1" bandwidth="646000" frameRate="30">
+    <BaseURL>http://redirector.googlevideo.com/videoplayback/id/BktsoMO3OMs.0/itag/134/source/yt_live_broadcast/ratebypass/yes/cmbypass/yes/mime/video%2Fmp4/live/1/gir/yes/noclen/1/signature/5C094AEFDCEB1A4D2F3C05F8BD095C336EF0E1C3.7AE6B9951B0237AAE6F031927AACAC4974BAFFAA/key/dg_test0/mpd_version/5/ip/0.0.0.0/ipbits/0/expire/1476490914/sparams/ip,ipbits,expire,id,itag,source,ratebypass,cmbypass,mime,live,gir,noclen/</BaseURL>
+   </Representation>
+   <Representation id="135" codecs="avc1.4d401f" width="854" height="480" startWithSAP="1" maxPlayoutRate="1" bandwidth="1171000" frameRate="30">
+    <BaseURL>http://redirector.googlevideo.com/videoplayback/id/BktsoMO3OMs.0/itag/135/source/yt_live_broadcast/ratebypass/yes/cmbypass/yes/mime/video%2Fmp4/live/1/gir/yes/noclen/1/signature/1F7660CA4E5B4AE4D60E18795680E34CDD2EF3C9.800B0A1D5F490DE142CCF4C88C64FD21D42129/key/dg_test0/mpd_version/5/ip/0.0.0.0/ipbits/0/expire/1476490914/sparams/ip,ipbits,expire,id,itag,source,ratebypass,cmbypass,mime,live,gir,noclen/</BaseURL>
+   </Representation>
+   <Representation id="160" codecs="avc1.42c00b" width="256" height="144" startWithSAP="1" maxPlayoutRate="1" bandwidth="124000" frameRate="30">
+    <BaseURL>http://redirector.googlevideo.com/videoplayback/id/BktsoMO3OMs.0/itag/160/source/yt_live_broadcast/ratebypass/yes/cmbypass/yes/mime/video%2Fmp4/live/1/gir/yes/noclen/1/signature/94EB61673784DF0C4237A1A866F2E171C8A64ADB.AEC00AA06C2278FEA8702FB62693B70D8977F46C/key/dg_test0/mpd_version/5/ip/0.0.0.0/ipbits/0/expire/1476490914/sparams/ip,ipbits,expire,id,itag,source,ratebypass,cmbypass,mime,live,gir,noclen/</BaseURL>
+   </Representation>
+   <Representation id="136" codecs="avc1.4d401f" width="1280" height="720" startWithSAP="1" maxPlayoutRate="1" bandwidth="2326000" frameRate="30">
+    <BaseURL>http://redirector.googlevideo.com/videoplayback/id/BktsoMO3OMs.0/itag/136/source/yt_live_broadcast/ratebypass/yes/cmbypass/yes/mime/video%2Fmp4/live/1/gir/yes/noclen/1/signature/6D8C34FC30A1F1A4F700B61180D1C4CCF6274844.29EBCB4A837DE626C52C66CF650519E61C2FF0BF/key/dg_test0/mpd_version/5/ip/0.0.0.0/ipbits/0/expire/1476490914/sparams/ip,ipbits,expire,id,itag,source,ratebypass,cmbypass,mime,live,gir,noclen/</BaseURL>
+   </Representation>
+  </AdaptationSet>
+ </Period>
+</MPD>

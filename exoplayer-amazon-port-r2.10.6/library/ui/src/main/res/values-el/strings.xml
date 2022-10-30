@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">Προηγούμενο κομμάτι</string>
+  <string name="exo_controls_next_description">Επόμενο κομμάτι</string>
+  <string name="exo_controls_pause_description">Παύση</string>
+  <string name="exo_controls_play_description">Αναπαραγωγή</string>
+  <string name="exo_controls_stop_description">Διακοπή</string>
+  <string name="exo_controls_rewind_description">Επαναφορά</string>
+  <string name="exo_controls_fastforward_description">Γρήγορη προώθηση</string>
+  <string name="exo_controls_repeat_off_description">Καμία επανάληψη</string>
+  <string name="exo_controls_repeat_one_description">Επανάληψη ενός κομματιού</string>
+  <string name="exo_controls_repeat_all_description">Επανάληψη όλων</string>
+  <string name="exo_controls_shuffle_on_description">Τυχαία αναπαραγωγή: Ενεργή</string>
+  <string name="exo_controls_shuffle_off_description">Τυχαία αναπαραγωγή: Ανενεργή</string>
+  <string name="exo_controls_fullscreen_description">Λειτουργία πλήρους οθόνης</string>
+  <string name="exo_controls_vr_description">Λειτουργία VR mode</string>
+  <string name="exo_download_description">Λήψη</string>
+  <string name="exo_download_notification_channel_name">Λήψεις</string>
+  <string name="exo_download_downloading">Λήψη</string>
+  <string name="exo_download_completed">Η λήψη ολοκληρώθηκε</string>
+  <string name="exo_download_failed">Η λήψη απέτυχε</string>
+  <string name="exo_download_removing">Κατάργηση λήψεων</string>
+  <string name="exo_track_selection_title_video">Βίντεο</string>
+  <string name="exo_track_selection_title_audio">Ήχος</string>
+  <string name="exo_track_selection_title_text">Κείμενο</string>
+  <string name="exo_track_selection_none">Κανένα</string>
+  <string name="exo_track_selection_auto">Αυτόματο</string>
+  <string name="exo_track_unknown">Άγνωστο</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">Μονοφωνικό</string>
+  <string name="exo_track_stereo">Στερεοφωνικό</string>
+  <string name="exo_track_surround">Περιφερειακός ήχος</string>
+  <string name="exo_track_surround_5_point_1">Περιφερειακός ήχος 5.1</string>
+  <string name="exo_track_surround_7_point_1">Περιφερειακός ήχος 7.1</string>
+  <string name="exo_track_role_alternate">Εναλλακτικό</string>
+  <string name="exo_track_role_supplementary">Συμπληρωματικό</string>
+  <string name="exo_track_role_commentary">Σχολιασμός</string>
+  <string name="exo_track_role_closed_captions">Υπότιτλοι</string>
+  <string name="exo_track_bitrate">%1$.2f Mbps</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

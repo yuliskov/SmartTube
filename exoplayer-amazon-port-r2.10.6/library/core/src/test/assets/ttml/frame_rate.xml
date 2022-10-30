@@ -1,0 +1,18 @@
+<tt xmlns="http://www.w3.org/ns/ttml"
+    xmlns:ttp="http://www.w3.org/ns/ttml#parameter"
+    ttp:frameRate="50"
+    ttp:frameRateMultiplier="1000 1001"
+    ttp:tickRate="100">
+    <head>
+        <styling>
+        </styling>
+    </head>
+    <body>
+        <div>
+            <p begin="100t" end="101t">text 1</p>
+        </div>
+        <div>
+            <p begin="50000f" end="100000f">text 2</p>
+        </div>
+    </body>
+</tt>

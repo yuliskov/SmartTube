@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">پچھلا ٹریک</string>
+  <string name="exo_controls_next_description">اگلا ٹریک</string>
+  <string name="exo_controls_pause_description">موقوف کریں</string>
+  <string name="exo_controls_play_description">چلائیں</string>
+  <string name="exo_controls_stop_description">روکیں</string>
+  <string name="exo_controls_rewind_description">ریوائینڈ کریں</string>
+  <string name="exo_controls_fastforward_description">تیزی سے فارورڈ کریں</string>
+  <string name="exo_controls_repeat_off_description">کسی کو نہ دہرائیں</string>
+  <string name="exo_controls_repeat_one_description">ایک کو دہرائیں</string>
+  <string name="exo_controls_repeat_all_description">سبھی کو دہرائیں</string>
+  <string name="exo_controls_shuffle_on_description">شفل آن</string>
+  <string name="exo_controls_shuffle_off_description">شفل آف</string>
+  <string name="exo_controls_fullscreen_description">پوری اسکرین والی وضع</string>
+  <string name="exo_controls_vr_description">VR موڈ</string>
+  <string name="exo_download_description">ڈاؤن لوڈ کریں</string>
+  <string name="exo_download_notification_channel_name">ڈاؤن لوڈز</string>
+  <string name="exo_download_downloading">ڈاؤن لوڈ ہو رہا ہے</string>
+  <string name="exo_download_completed">ڈاؤن لوڈ مکمل ہو گیا</string>
+  <string name="exo_download_failed">ڈاؤن لوڈ ناکام ہو گیا</string>
+  <string name="exo_download_removing">ڈاؤن لوڈز کو ہٹایا جا رہا ہے</string>
+  <string name="exo_track_selection_title_video">ویڈیو</string>
+  <string name="exo_track_selection_title_audio">آڈیو</string>
+  <string name="exo_track_selection_title_text">متن</string>
+  <string name="exo_track_selection_none">کوئی نہیں</string>
+  <string name="exo_track_selection_auto">خودکار</string>
+  <string name="exo_track_unknown">نامعلوم</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">مونو</string>
+  <string name="exo_track_stereo">اسٹیریو</string>
+  <string name="exo_track_surround">محیط آواز</string>
+  <string name="exo_track_surround_5_point_1">5.1 محیط آواز</string>
+  <string name="exo_track_surround_7_point_1">7.1 محیط آواز</string>
+  <string name="exo_track_role_alternate">متبادل</string>
+  <string name="exo_track_role_supplementary">اضافی</string>
+  <string name="exo_track_role_commentary">تبصرہ</string>
+  <string name="exo_track_role_closed_captions">سب ٹائٹلز</string>
+  <string name="exo_track_bitrate">%1$.2f Mbps</string>
+  <string name="exo_item_list">%1$s، %2$s</string>
+</resources>

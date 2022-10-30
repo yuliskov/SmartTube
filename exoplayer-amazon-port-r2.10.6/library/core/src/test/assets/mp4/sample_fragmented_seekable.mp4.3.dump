@@ -1,0 +1,181 @@
+seekMap:
+  isSeekable = true
+  duration = 1067733
+  getPosition(0) = [[timeUs=66733, position=1325]]
+numberOfTracks = 2
+track 0:
+  format:
+    bitrate = -1
+    id = 1
+    containerMimeType = null
+    sampleMimeType = video/avc
+    maxInputSize = -1
+    width = 1080
+    height = 720
+    frameRate = -1.0
+    rotationDegrees = 0
+    pixelWidthHeightRatio = 1.0
+    channelCount = -1
+    sampleRate = -1
+    pcmEncoding = -1
+    encoderDelay = 0
+    encoderPadding = 0
+    subsampleOffsetUs = 9223372036854775807
+    selectionFlags = 0
+    language = null
+    drmInitData = -
+    initializationData:
+      data = length 29, hash 4746B5D9
+      data = length 10, hash 7A0D0F2B
+  total output bytes = 85933
+  sample count = 30
+  sample 0:
+    time = 66000
+    flags = 1
+    data = length 38070, hash B58E1AEE
+  sample 1:
+    time = 199000
+    flags = 0
+    data = length 8340, hash 8AC449FF
+  sample 2:
+    time = 132000
+    flags = 0
+    data = length 1295, hash C0DA5090
+  sample 3:
+    time = 100000
+    flags = 0
+    data = length 469, hash D6E0A200
+  sample 4:
+    time = 166000
+    flags = 0
+    data = length 564, hash E5F56C5B
+  sample 5:
+    time = 332000
+    flags = 0
+    data = length 6075, hash 8756E49E
+  sample 6:
+    time = 266000
+    flags = 0
+    data = length 847, hash DCC2B618
+  sample 7:
+    time = 233000
+    flags = 0
+    data = length 455, hash B9CCE047
+  sample 8:
+    time = 299000
+    flags = 0
+    data = length 467, hash 69806D94
+  sample 9:
+    time = 466000
+    flags = 0
+    data = length 4549, hash 3944F501
+  sample 10:
+    time = 399000
+    flags = 0
+    data = length 1087, hash 491BF106
+  sample 11:
+    time = 367000
+    flags = 0
+    data = length 380, hash 5FED016A
+  sample 12:
+    time = 433000
+    flags = 0
+    data = length 455, hash 8A0610
+  sample 13:
+    time = 599000
+    flags = 0
+    data = length 5190, hash B9031D8
+  sample 14:
+    time = 533000
+    flags = 0
+    data = length 1071, hash 684E7DC8
+  sample 15:
+    time = 500000
+    flags = 0
+    data = length 653, hash 8494F326
+  sample 16:
+    time = 566000
+    flags = 0
+    data = length 485, hash 2CCC85F4
+  sample 17:
+    time = 733000
+    flags = 0
+    data = length 4884, hash D16B6A96
+  sample 18:
+    time = 666000
+    flags = 0
+    data = length 997, hash 164FF210
+  sample 19:
+    time = 633000
+    flags = 0
+    data = length 640, hash F664125B
+  sample 20:
+    time = 700000
+    flags = 0
+    data = length 491, hash B5930C7C
+  sample 21:
+    time = 866000
+    flags = 0
+    data = length 2989, hash 92CF4FCF
+  sample 22:
+    time = 800000
+    flags = 0
+    data = length 838, hash 294A3451
+  sample 23:
+    time = 767000
+    flags = 0
+    data = length 544, hash FCCE2DE6
+  sample 24:
+    time = 833000
+    flags = 0
+    data = length 329, hash A654FFA1
+  sample 25:
+    time = 1000000
+    flags = 0
+    data = length 1517, hash 5F7EBF8B
+  sample 26:
+    time = 933000
+    flags = 0
+    data = length 803, hash 7A5C4C1D
+  sample 27:
+    time = 900000
+    flags = 0
+    data = length 415, hash B31BBC3B
+  sample 28:
+    time = 967000
+    flags = 0
+    data = length 415, hash 850DFEA3
+  sample 29:
+    time = 1033000
+    flags = 0
+    data = length 619, hash AB5E56CA
+track 1:
+  format:
+    bitrate = -1
+    id = 2
+    containerMimeType = null
+    sampleMimeType = audio/mp4a-latm
+    maxInputSize = -1
+    width = -1
+    height = -1
+    frameRate = -1.0
+    rotationDegrees = 0
+    pixelWidthHeightRatio = 1.0
+    channelCount = 1
+    sampleRate = 44100
+    pcmEncoding = -1
+    encoderDelay = 0
+    encoderPadding = 0
+    subsampleOffsetUs = 9223372036854775807
+    selectionFlags = 0
+    language = und
+    drmInitData = -
+    initializationData:
+      data = length 5, hash 2B7623A
+  total output bytes = 10
+  sample count = 1
+  sample 0:
+    time = 1044000
+    flags = 1
+    data = length 10, hash A453EEBE
+tracksEnded = true

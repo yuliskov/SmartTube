@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">前のトラック</string>
+  <string name="exo_controls_next_description">次のトラック</string>
+  <string name="exo_controls_pause_description">一時停止</string>
+  <string name="exo_controls_play_description">再生</string>
+  <string name="exo_controls_stop_description">停止</string>
+  <string name="exo_controls_rewind_description">巻き戻し</string>
+  <string name="exo_controls_fastforward_description">早送り</string>
+  <string name="exo_controls_repeat_off_description">リピートなし</string>
+  <string name="exo_controls_repeat_one_description">1 曲をリピート</string>
+  <string name="exo_controls_repeat_all_description">全曲をリピート</string>
+  <string name="exo_controls_shuffle_on_description">シャッフル ON</string>
+  <string name="exo_controls_shuffle_off_description">シャッフル OFF</string>
+  <string name="exo_controls_fullscreen_description">全画面モード</string>
+  <string name="exo_controls_vr_description">VR モード</string>
+  <string name="exo_download_description">ダウンロード</string>
+  <string name="exo_download_notification_channel_name">ダウンロード</string>
+  <string name="exo_download_downloading">ダウンロードしています</string>
+  <string name="exo_download_completed">ダウンロードが完了しました</string>
+  <string name="exo_download_failed">ダウンロードに失敗しました</string>
+  <string name="exo_download_removing">ダウンロードを削除しています</string>
+  <string name="exo_track_selection_title_video">動画</string>
+  <string name="exo_track_selection_title_audio">音声</string>
+  <string name="exo_track_selection_title_text">文字</string>
+  <string name="exo_track_selection_none">なし</string>
+  <string name="exo_track_selection_auto">自動</string>
+  <string name="exo_track_unknown">不明</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">モノラル</string>
+  <string name="exo_track_stereo">ステレオ</string>
+  <string name="exo_track_surround">サラウンド サウンド</string>
+  <string name="exo_track_surround_5_point_1">5.1 サラウンド サウンド</string>
+  <string name="exo_track_surround_7_point_1">7.1 サラウンド サウンド</string>
+  <string name="exo_track_role_alternate">代替</string>
+  <string name="exo_track_role_supplementary">補足</string>
+  <string name="exo_track_role_commentary">解説</string>
+  <string name="exo_track_role_closed_captions">字幕</string>
+  <string name="exo_track_bitrate">%1$.2f Mbps</string>
+  <string name="exo_item_list">%1$s、%2$s</string>
+</resources>

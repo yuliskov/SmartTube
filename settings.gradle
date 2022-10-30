@@ -13,6 +13,11 @@ gradle.ext.mediaServiceCoreRoot = new File(rootDir, '../MediaServiceCore').exist
 apply from: new File(gradle.ext.mediaServiceCoreRoot, 'core_settings.gradle')
 
 // git submodule
+gradle.ext.exoplayerRoot = new File(rootDir, './exoplayer-amazon-port-r2.10.6')
+gradle.ext.exoplayerModulePrefix = 'exoplayer-'
+apply from: new File(gradle.ext.exoplayerRoot, 'core_settings.gradle')
+
+// git submodule
 // gradle.ext.exoplayerRoot = new File(rootDir, '../AmznExoPlayer2.10.6').exists() ? new File(rootDir, '../AmznExoPlayer2.10.6') : new File(rootDir, './AmznExoPlayer2.10.6')
 // gradle.ext.exoplayerModulePrefix = 'exoplayer-'
 // apply from: new File(gradle.ext.exoplayerRoot, 'core_settings.gradle')

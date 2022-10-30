@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">반복 안함</string>
+  <string name="exo_media_action_repeat_one_description">현재 미디어 반복</string>
+  <string name="exo_media_action_repeat_all_description">모두 반복</string>
+</resources>
