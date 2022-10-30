@@ -657,8 +657,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
-        
-        getView().showProgressBar(true);
+
+        // Small amount of items == small load time. Loading bar are useless?
+        //getView().showProgressBar(true);
 
         MediaGroup mediaGroup = group.getMediaGroup();
 

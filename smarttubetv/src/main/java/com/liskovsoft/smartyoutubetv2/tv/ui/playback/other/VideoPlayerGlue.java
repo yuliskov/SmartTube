@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue;
@@ -95,6 +96,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     private final ChatAction mChatAction;
     private final OnActionClickedListener mActionListener;
     private final PlayerTweaksData mPlayerTweaksData;
+    private final GeneralData mGeneralData;
     private int mPreviousAction = KeyEvent.ACTION_UP;
     private boolean mIsSingleKeyDown;
 
@@ -105,6 +107,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         super(context, playerAdapter);
 
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
+        mGeneralData = GeneralData.instance(getContext());
 
         mActionListener = actionListener;
 
@@ -421,6 +424,11 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     private boolean dispatchAction(Action action) {
         if (action == null) {
             return false;
+        }
+
+        // Replace short click action with long if long click is disabled in the settings
+        if (mGeneralData.isOkButtonLongPressDisabled() && dispatchLongClickAction(action)) {
+            return true;
         }
 
         boolean handled = false;
