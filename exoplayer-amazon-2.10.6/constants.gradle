@@ -18,7 +18,8 @@ project.ext {
     minSdkVersion = 16
     targetSdkVersion = 28
     compileSdkVersion = 28
-    dexmakerVersion = '2.21.0'
+    // dexmakerVersion = '2.21.0' // absent in mavenCentral
+    dexmakerVersion = '2.28.3'
     mockitoVersion = '2.25.0'
     robolectricVersion = '4.2'
     autoValueVersion = '1.6'
