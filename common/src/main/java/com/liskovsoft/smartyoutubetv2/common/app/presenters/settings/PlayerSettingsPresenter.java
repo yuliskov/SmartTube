@@ -432,6 +432,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableQualityInfo(option.isSelected()),
                 mPlayerData.isQualityInfoEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info_bitrate),
+                option -> mPlayerTweaksData.enableQualityInfoBitrate(option.isSelected()),
+                mPlayerTweaksData.isQualityInfoBitrateEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_global_clock),
                 option -> mPlayerData.enableGlobalClock(option.isSelected()),
                 mPlayerData.isGlobalClockEnabled()));
@@ -443,6 +447,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_of_short_videos),
                 option -> mPlayerTweaksData.enableRememberPositionOfShortVideos(option.isSelected()),
                 mPlayerTweaksData.isRememberPositionOfShortVideosEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_speed_button_old_behavior),
+                option -> mPlayerTweaksData.enableSpeedButtonOldBehavior(option.isSelected()),
+                mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()));
 
         //OptionItem remainingTime = UiOptionItem.from(getContext().getString(R.string.player_show_remaining_time),
         //        option -> mPlayerData.enableRemainingTime(option.isSelected()), mPlayerData.isRemainingTimeEnabled());

@@ -52,6 +52,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
         mTrackSelectorManager = new TrackSelectorManager(LocaleUtility.getCurrentLocale(context).getLanguage());
         mTrackFormatter = new TrackInfoFormatter2();
+        mTrackFormatter.enableBitrate(PlayerTweaksData.instance(context).isQualityInfoBitrateEnabled());
 
         mMediaSourceFactory.setTrackErrorFixer(new TrackErrorFixer(mTrackSelectorManager));
 

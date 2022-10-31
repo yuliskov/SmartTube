@@ -53,6 +53,8 @@ public class PlayerTweaksData {
     private boolean mIsChatPlacedLeft;
     private boolean mIsRealChannelIconEnabled;
     private float mPixelRatio;
+    private boolean mIsQualityInfoBitrateEnabled;
+    private boolean mIsSpeedButtonOldBehaviorEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -271,6 +273,24 @@ public class PlayerTweaksData {
         return mPixelRatio;
     }
 
+    public boolean isQualityInfoBitrateEnabled() {
+        return mIsQualityInfoBitrateEnabled;
+    }
+
+    public void enableQualityInfoBitrate(boolean enable) {
+        mIsQualityInfoBitrateEnabled = enable;
+        persistData();
+    }
+
+    public boolean isSpeedButtonOldBehaviorEnabled() {
+        return mIsSpeedButtonOldBehaviorEnabled;
+    }
+
+    public void enableSpeedButtonOldBehavior(boolean enable) {
+        mIsSpeedButtonOldBehaviorEnabled = enable;
+        persistData();
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -299,6 +319,8 @@ public class PlayerTweaksData {
         mIsChatPlacedLeft = Helpers.parseBoolean(split, 19, false);
         mIsRealChannelIconEnabled = Helpers.parseBoolean(split, 20, true);
         mPixelRatio = Helpers.parseFloat(split, 21, 1.0f);
+        mIsQualityInfoBitrateEnabled = Helpers.parseBoolean(split, 22, false);
+        mIsSpeedButtonOldBehaviorEnabled = Helpers.parseBoolean(split, 23, false);
     }
 
     private void persistData() {
@@ -308,7 +330,7 @@ public class PlayerTweaksData {
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
                 mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
                 mIsBufferingFixEnabled, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
-                mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio
+                mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio, mIsQualityInfoBitrateEnabled, mIsSpeedButtonOldBehaviorEnabled
         ));
     }
 }

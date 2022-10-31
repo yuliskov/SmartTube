@@ -200,7 +200,7 @@
     <string name="video_preset_disabled">Without preset</string>
     <string name="video_preset_enabled">Format of the next video will be set according to preset</string>
     <string name="player_sleep_timer">Sleep timer</string>
-    <string name="player_show_quality_info">Show quality info in controls bar</string>
+    <string name="player_show_quality_info">Show quality info in the controls bar</string>
     <string name="player_remember_each_speed">Remember each video speed</string>
     <string name="player_remember_speed_none">None</string>
     <string name="player_remember_speed_all">Same on all videos</string>
@@ -479,4 +479,6 @@
     <string name="thumb_quality_middle">Middle of the video</string>
     <string name="thumb_quality_end">End of the video</string>
     <string name="content_block_status">Check SponsorBlock status</string>
+    <string name="player_show_quality_info_bitrate">Add bitrate into the quality info</string>
+    <string name="player_speed_button_old_behavior">Revert old behavior of the speed button</string>
 </resources>

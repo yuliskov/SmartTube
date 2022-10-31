@@ -256,7 +256,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public void onVideoSpeedClicked(boolean enabled) {
-        if (Helpers.floatEquals(mPlayerData.getLastSpeed(), 1.0f)) {
+        if (Helpers.floatEquals(mPlayerData.getLastSpeed(), 1.0f) || mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()) {
             onVideoSpeedLongClicked(enabled);
         } else {
             State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);

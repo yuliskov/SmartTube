@@ -471,4 +471,6 @@
     <string name="thumb_quality_middle">Середина видео</string>
     <string name="thumb_quality_end">Конец видео</string>
     <string name="content_block_status">Проверить состояние SponsorBlock</string>
+    <string name="player_show_quality_info_bitrate">Добавлять битрейт к информации о качестве видео</string>
+    <string name="player_speed_button_old_behavior">Вернуть старое поведение кнопки скорость</string>
 </resources>

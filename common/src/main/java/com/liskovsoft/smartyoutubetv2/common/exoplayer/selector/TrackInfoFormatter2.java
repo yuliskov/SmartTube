@@ -10,6 +10,7 @@ public class TrackInfoFormatter2 {
     private String mHdrStr;
     private String mSpeedStr;
     private String mChannelsStr;
+    private boolean mEnableBitrate;
 
     public void setFormat(Format format) {
         if (TrackSelectorUtil.isVideo(format)) {
@@ -32,8 +33,10 @@ public class TrackInfoFormatter2 {
         String codec = TrackSelectorUtil.extractCodec(format);
         mCodecStr = codec != null ? codec.toUpperCase() : "";
 
-        String bitrate = TrackSelectorUtil.extractBitrate(format, 0);
-        mBitrateStr = bitrate.isEmpty() ? "" : bitrate.toUpperCase() + "Mb";
+        if (mEnableBitrate) {
+            String bitrate = TrackSelectorUtil.extractBitrate(format, 0);
+            mBitrateStr = bitrate.isEmpty() ? "" : bitrate.toUpperCase() + "Mb";
+        }
 
         mHdrStr = TrackSelectorUtil.buildHDRString(format);
     }
@@ -80,5 +83,9 @@ public class TrackInfoFormatter2 {
 
     private static int extractFps(Format format) {
         return format.frameRate == Format.NO_VALUE ? 0 : Math.round(format.frameRate);
+    }
+
+    public void enableBitrate(boolean enable) {
+        mEnableBitrate = enable;
     }
 }
