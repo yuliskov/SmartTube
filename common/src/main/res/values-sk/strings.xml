@@ -424,7 +424,7 @@
     <string name="cant_do_this_for_foreign_playlist">Nemožno spraviť pre cudzí playlist</string>
     <string name="owned_playlist_warning">Chyba. Táto akcia je dostupná iba pre vlastné playlisty</string>
     <string name="content_block_alt_server">Použiť alternatívny server</string>
-    <string name="content_block_alt_server_desc">Povolte túto možnosť, keď SponsorBlock z nejakého dôvodu odmieta fungovať.</string>
+    <string name="content_block_alt_server_desc">Povoľte túto možnosť, keď SponsorBlock z nejakého dôvodu odmieta fungovať.</string>
     <string name="unset_stream_reminder">Zrušiť pripomenutie na živé vysielanie</string>
     <string name="set_stream_reminder">Nastaviť pripomenutie na živé vysielanie</string>
     <string name="playback_starts_shortly">Prehrávanie začne automaticky pri začatí živého vysielania</string>
@@ -478,4 +478,5 @@
     <string name="thumb_quality_start">Na začiatku videa</string>
     <string name="thumb_quality_middle">V strede videa</string>
     <string name="thumb_quality_end">Na konci videa</string>
+    <string name="content_block_status">Skontrolovať stav SponsorBlocku</string>
 </resources>
