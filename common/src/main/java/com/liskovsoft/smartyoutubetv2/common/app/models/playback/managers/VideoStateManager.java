@@ -262,6 +262,9 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
             State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
             float lastSpeed = state != null && mPlayerData.isRememberSpeedEachEnabled() ? state.speed : mPlayerData.getLastSpeed();
             mPlayerData.setSpeed(enabled ? 1.0f : lastSpeed);
+            if (state != null && mPlayerData.isRememberSpeedEachEnabled()) {
+                mStateService.save(new State(state.videoId, state.positionMs, state.durationMs, enabled ? 1.0f : lastSpeed));
+            }
             getController().setSpeed(enabled ? 1.0f : lastSpeed);
         }
     }
