@@ -414,7 +414,7 @@ public class AppDialogUtil {
         dialogPresenter.appendRadioCategory(context.getString(R.string.seek_interval), options);
     }
 
-    public static void appendSpeedDialogItems(Context context, AppDialogPresenter settingsPresenter, PlayerData playerData, PlaybackController playbackController) {
+    public static void appendSpeedDialogItems(Context context, AppDialogPresenter settingsPresenter, PlaybackController playbackController, PlayerData playerData) {
         List<OptionItem> items = new ArrayList<>();
         float[] speedValues = new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f};
 

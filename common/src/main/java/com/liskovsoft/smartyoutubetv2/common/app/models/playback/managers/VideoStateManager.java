@@ -277,9 +277,14 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
         // suppose live stream if buffering near the end
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
-        AppDialogUtil.appendSpeedDialogItems(getActivity(), settingsPresenter, mPlayerData, getController());
+        AppDialogUtil.appendSpeedDialogItems(getActivity(), settingsPresenter, getController(), mPlayerData);
 
-        settingsPresenter.showDialog();
+        settingsPresenter.showDialog(() -> {
+            State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
+            if (state != null && mPlayerData.isRememberSpeedEachEnabled()) {
+                mStateService.save(new State(state.videoId, state.positionMs, state.durationMs, mPlayerData.getSpeed()));
+            }
+        });
     }
 
     private void clearStateOfNextVideo() {
