@@ -478,4 +478,5 @@
     <string name="thumb_quality_start">Na začátku videa</string>
     <string name="thumb_quality_middle">Uprostřed videa</string>
     <string name="thumb_quality_end">Na konci videa</string>
+    <string name="content_block_status">Zkontrolovat stav SponsorBlocku</string>
 </resources>
