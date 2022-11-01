@@ -35,7 +35,7 @@
   <string name="video_buffer_size_low">منخفض</string>
   <string name="video_buffer_size_med">متوسط</string>
   <string name="video_buffer_size_high">عالي</string>
-  <string name="update_changelog">التغييرات</string>
+  <string name="update_changelog">سجل التغييرات</string>
   <string name="install_update">تثبيت التحديث</string>
   <string name="section_is_empty">لا يوجد شيء هنا.</string>
   <string name="dialog_add_to_playlist">إضافة/إزالة من قائمة التشغيل</string>
@@ -92,7 +92,7 @@
   <string name="color_scheme_dark_grey">الرمادي الداكن</string>
   <string name="disable_update_check">تعطيل التحقق من التحديث</string>
   <string name="show_again">عرض مرة أخرى</string>
-  <string name="check_updates_auto">اخبرني عن وجود تحديث جديد</string>
+  <string name="check_updates_auto">الإشعار عندما يتوفر تحديث جديد</string>
   <string name="select_account_on_boot">حدد الحساب عند بدء التشغيل</string>
   <string name="player_other">خيارات متفرقة</string>
   <string name="player_full_date">التاريخ الدقيق في الوصف</string>
@@ -300,7 +300,7 @@
   <string name="content_block_action_type">اختر الإجراء</string>
   <string name="content_block_action_none">لا تفعل شيئًا</string>
   <string name="content_block_action_only_skip">تخطي فقط</string>
-  <string name="content_block_action_toast">تخطي مع الإخطار</string>
+  <string name="content_block_action_toast">تخطي مع الإشعار</string>
   <string name="content_block_action_dialog">إظهار مربع حوار التأكيد</string>
   <string name="content_block_filler">خارج الموضوع (حشو)</string>
   <string name="keyboard_auto_show">إظهار لوحة المفاتيح تلقائيًا</string>
@@ -475,4 +475,8 @@
   <string name="thumb_quality_start">بداية الفيديو</string>
   <string name="thumb_quality_middle">منتصف الفيديو</string>
   <string name="thumb_quality_end">نهاية الفيديو</string>
+  <string name="video_buffer_size_none">بدون</string>
+  <string name="content_block_status">تحقق من حالة SpnsorBlock</string>
+  <string name="player_show_quality_info_bitrate">إضافة معدل البت (Bitrate) إلى معلومات الجودة</string>
+  <string name="player_speed_button_old_behavior">العودة الى السلوك القديم لزر السرعة</string>
 </resources>

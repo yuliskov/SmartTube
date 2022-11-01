@@ -113,8 +113,8 @@
   <string name="repeat_mode_pause">Pauzeren na elke video</string>
   <string name="repeat_mode_pause_alt">Pauzeren na elke video (n.v.t. op afspeellijsten)</string>
   <string name="repeat_mode_none">Stoppen na elke video</string>
-  <string name="subscribed_to_channel">Je bent nu geabonneerd</string>
-  <string name="unsubscribed_from_channel">Je bent niet geabonneerd</string>
+  <string name="subscribed_to_channel">Kanaal geabonneerd</string>
+  <string name="unsubscribed_from_channel">Kanaal niet geabonneerd</string>
   <string name="subtitle_yellow_transparent">Geel</string>
   <string name="subtitle_white_black">Zwarte achtergrond</string>
   <string name="player_seek_preview">Voorvertoning weergeven tijdens snelzoeken</string>
@@ -290,7 +290,7 @@
   <string name="action_subscribe">Abonneren</string>
   <string name="action_channel">Kanaal openen</string>
   <string name="action_pip">PIP</string>
-  <string name="action_video_info">Video beschrijving tonen</string>
+  <string name="action_video_info">Videobeschrijving tonen</string>
   <string name="action_screen_off">Scherm uit</string>
   <string name="action_playback_queue">Afspeelwachtrij tonen</string>
   <string name="action_video_speed">Videosnelheid</string>
@@ -472,4 +472,6 @@
   <string name="content_block_status">Controleer SponsorBlock status</string>
   <string name="player_seek_confirmation_pause">Met bevestiging (pauze tijdens zoeken)</string>
   <string name="player_seek_confirmation_play">Met bevestiging (spelen tijdens het zoeken)</string>
+  <string name="player_show_quality_info_bitrate">Bitrate toevoegen aan de kwaliteit informatie</string>
+  <string name="player_speed_button_old_behavior">Oude gedrag van de snelheidsknop terugzetten</string>
 </resources>
