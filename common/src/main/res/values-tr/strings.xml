@@ -407,7 +407,7 @@
     <string name="lb_playback_controls_skip_previous">Öncekine atla/Başlangıç konumuna geri sar</string>
     <string name="alt_presets_behavior">Alt. ön ayar davranışı (bant genişliğini sınırla)</string>
     <string name="alt_presets_behavior_desc">Uygulama çözünürlük, fps ve kod çözücü arasında eşleştirme yapmak yerine bant genişliğinin seçilen ön ayara karşılık gelmesini sağlamaya çalışacaktır.</string>
-    <string name="sleep_timer">Uyku zamanlayıcısı (bir saat)</string>
+    <string name="sleep_timer">Uyku zamanlayıcısı (uzaktan kumanda bir saat kullanılmadıysa)</string>
     <string name="sleep_timer_desc">Kullanıcı bir saat boyunca uzaktan kumandayı kullanmadıysa oynatmayı duraklatır.</string>
     <string name="disable_vsync">Dikey eşzamanlamaya uymayı devre dışı bırak</string>
     <string name="disable_vsync_desc">Oynatma performansını biraz artırır.</string>
@@ -463,7 +463,7 @@
     <string name="speech_recognizer_system">Sistem (tercih edilmiş)</string>
     <string name="speech_recognizer_external_1">Harici 1 (Ciddi hataları var, çalışması için mikrofona erişimi devre dışı bırakmanız gerekir)</string>
     <string name="speech_recognizer_external_2">Harici 2 (Ciddi hataları var)</string>
-    <string name="real_channel_icon">Kanal düğmesinde gerçek simgeyi göster</string>
+    <string name="real_channel_icon">Kanal düğmesinde simgeyi göster</string>
     <string name="subtitle_yellow_semi_transparent">Sarı (Yarı saydam arka plan)</string>
     <string name="subtitle_yellow_black">Sarı (Siyah arka plan)</string>
     <string name="player_pixel_ratio">Görüntü en boy oranı</string>
@@ -478,4 +478,7 @@
     <string name="thumb_quality_start">Videonun başlangıcından</string>
     <string name="thumb_quality_middle">Videonun ortasından</string>
     <string name="thumb_quality_end">Videonun sonundan</string>
+    <string name="content_block_status">SponsorBlock durumunu kontrol et</string>
+    <string name="player_show_quality_info_bitrate">Kalite bilgisine bit hızı ekle</string>
+    <string name="player_speed_button_old_behavior">Hız düğmesinin eski davranışına geri dön</string>
 </resources>
