@@ -91,7 +91,6 @@ public class VideoStateService {
         public final long positionMs;
         public final long durationMs;
         public final float speed;
-        public final float lastSpeed;
         public final long timestamp = System.currentTimeMillis();
 
         public State(String videoId, long positionMs) {
@@ -103,15 +102,10 @@ public class VideoStateService {
         }
 
         public State(String videoId, long positionMs, long durationMs, float speed) {
-            this(videoId, positionMs, durationMs, speed, speed);
-        }
-
-        public State(String videoId, long positionMs, long durationMs, float speed, float lastSpeed) {
             this.videoId = videoId;
             this.positionMs = positionMs;
             this.durationMs = durationMs;
             this.speed = speed;
-            this.lastSpeed = lastSpeed;
         }
 
         public static State from(String spec) {
