@@ -443,7 +443,7 @@ public class PlayerData extends DataChangeBase {
         return mSpeed;
     }
 
-    private void setLastSpeed(float speed) {
+    public void setLastSpeed(float speed) {
         if (speed > 0 && !Helpers.floatEquals(speed, 1.0f)) {
             mLastSpeed = speed;
         } else if (mSpeed > 0 && !Helpers.floatEquals(mSpeed, 1.0f)) {

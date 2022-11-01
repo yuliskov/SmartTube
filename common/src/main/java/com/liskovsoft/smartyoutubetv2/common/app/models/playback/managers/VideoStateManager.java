@@ -263,6 +263,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
             float lastSpeed = mPlayerData.getLastSpeed();
             if (state != null && mPlayerData.isRememberSpeedEachEnabled()) {
                 lastSpeed = !Helpers.floatEquals(1.0f, state.speed) ? state.speed : lastSpeed;
+                mPlayerData.setLastSpeed(lastSpeed);
                 mStateService.save(new State(state.videoId, state.positionMs, state.durationMs, enabled ? 1.0f : lastSpeed));
             }
             mPlayerData.setSpeed(enabled ? 1.0f : lastSpeed);
