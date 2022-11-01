@@ -286,7 +286,7 @@
   <string name="move_section_down">Sectie omlaag verplaatsen</string>
   <string name="player_buttons">Spelerknoppen instellen</string>
   <string name="action_playlist_add">Toevoegen aan afspeellijst</string>
-  <string name="action_video_stats">Geavanceerde video informatie tonen</string>
+  <string name="action_video_stats">ontwikkelaarsopties</string>
   <string name="action_subscribe">Abonneren</string>
   <string name="action_channel">Kanaal openen</string>
   <string name="action_pip">PIP</string>
