@@ -81,7 +81,14 @@ public class MotherActivity extends FragmentActivity {
             }
         }
 
-        return super.dispatchKeyEvent(event);
+        try {
+            return super.dispatchKeyEvent(event);
+        } catch (IllegalStateException e) {
+            // Fatal Exception: java.lang.IllegalStateException
+            // android.permission.RECORD_AUDIO required for search (Android 5 mostly)
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
