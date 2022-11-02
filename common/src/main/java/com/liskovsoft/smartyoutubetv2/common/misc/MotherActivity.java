@@ -178,7 +178,9 @@ public class MotherActivity extends FragmentActivity {
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             float uiScale = MainUIData.instance(this).getUIScale();
-            float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
+            // Take into the account screen orientation (e.g. when running on phone)
+            int widthPixels = Math.max(displayMetrics.widthPixels, displayMetrics.heightPixels);
+            float widthRatio = DEFAULT_WIDTH / widthPixels;
             float density = DEFAULT_DENSITY / widthRatio * uiScale;
             displayMetrics.density = density;
             displayMetrics.scaledDensity = density;
