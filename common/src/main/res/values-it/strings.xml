@@ -200,7 +200,7 @@
     <string name="video_preset_disabled">Senza preimpostazioni</string>
     <string name="video_preset_enabled">Il formato del video successivo sarà impostato in base alla preimpostazione</string>
     <string name="player_sleep_timer">Timer spegnimento</string>
-    <string name="player_show_quality_info">Visualizza informazioni sulla qualità video nella barra dei controlli</string>
+    <string name="player_show_quality_info">Mostra informazioni sulla qualità nella barra dei controlli</string>
     <string name="player_remember_each_speed">Ricorda la velocità di ogni video</string>
     <string name="player_remember_speed_none">Nessuna</string>
     <string name="player_remember_speed_all">Stessa in tutti i video</string>
@@ -478,4 +478,7 @@
     <string name="thumb_quality_start">Inizio del video</string>
     <string name="thumb_quality_middle">Metà del video</string>
     <string name="thumb_quality_end">Fine del video</string>
+    <string name="content_block_status">Controlla lo stato di SponsorBlock</string>
+    <string name="player_show_quality_info_bitrate">Aggiungi bitrate nelle informazioni sulla qualità</string>
+    <string name="player_speed_button_old_behavior">Ripristina il vecchio comportamento del pulsante di velocità</string>
 </resources>
