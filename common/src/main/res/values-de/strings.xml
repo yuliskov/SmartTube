@@ -478,4 +478,7 @@
     <string name="thumb_quality_start">Start des Videos</string>
     <string name="thumb_quality_middle">Mitte des Videos</string>
     <string name="thumb_quality_end">Ende des Videos</string>
+    <string name="content_block_status">Status von SponsorBlock prüfen</string>
+    <string name="player_show_quality_info_bitrate">Bitrate zu den Qualitätsinfos hinzufügen</string>
+    <string name="player_speed_button_old_behavior">Altes Verhalten der Geschwindigkeitstaste wiederherstellen</string>
 </resources>
