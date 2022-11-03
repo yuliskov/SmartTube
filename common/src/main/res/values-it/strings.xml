@@ -461,7 +461,7 @@
     <string name="use_alt_speech_recognizer_desc">Funziona male. Usalo solo se hai problemi con il riconoscimento vocale predefinito.</string>
     <string name="speech_recognizer">Riconoscimento vocale</string>
     <string name="speech_recognizer_system">Sistema (preferito)</string>
-    <string name="speech_recognizer_external_1">Esterno 1 (gravemente difettato, per funzionare è necessario disabilitare l\\'accesso al microfono)</string>
+    <string name="speech_recognizer_external_1">Esterno 1 (gravemente difettato, per funzionare è necessario disabilitare l\'accesso al microfono)</string>
     <string name="speech_recognizer_external_2">Esterno 2 (seriamente difettato)</string>
     <string name="real_channel_icon">Mostra icona sul pulsante del canale</string>
     <string name="subtitle_yellow_semi_transparent">Giallo su sfondo semitrasparente</string>
