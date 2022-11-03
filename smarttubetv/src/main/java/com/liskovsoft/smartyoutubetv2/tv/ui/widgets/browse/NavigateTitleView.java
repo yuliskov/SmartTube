@@ -55,6 +55,7 @@ public class NavigateTitleView extends TitleView {
     private int mBrandingVisibility = View.INVISIBLE;
     private DateTimeView mGlobalClock;
     private DateTimeView mGlobalDate;
+    private SearchOrbView mSearchOrbView;
     private boolean mInitDone;
 
     public NavigateTitleView(Context context) {
@@ -133,6 +134,10 @@ public class NavigateTitleView extends TitleView {
         mBrandingVisibility = (flags & BRANDING_VIEW_VISIBLE) == BRANDING_VIEW_VISIBLE
                 ? View.VISIBLE : View.INVISIBLE;
 
+        if (mSearchOrbView != null) {
+            mSearchOrbView.setVisibility(View.GONE);
+        }
+
         if (mAccountView != null) {
             mAccountView.setVisibility(mSearchVisibility);
         }
@@ -160,7 +165,13 @@ public class NavigateTitleView extends TitleView {
             return;
         }
 
-        if (MainUIData.instance(getContext()).isButtonEnabled(MainUIData.BUTTON_BROWSE_ACCOUNTS)) {
+        MainUIData mainUIData = MainUIData.instance(getContext());
+        
+        if (!mainUIData.isButtonEnabled(MainUIData.BUTTON_SEARCH)) {
+            mSearchOrbView = (SearchOrbView) findViewById(R.id.title_orb);
+        }
+
+        if (mainUIData.isButtonEnabled(MainUIData.BUTTON_BROWSE_ACCOUNTS)) {
             mAccountView = (SearchOrbView) findViewById(R.id.account_orb);
             mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).show());
             TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
@@ -168,7 +179,7 @@ public class NavigateTitleView extends TitleView {
             updateAccountIcon();
         }
 
-        if (MainUIData.instance(getContext()).isButtonEnabled(MainUIData.BUTTON_CHANGE_LANGUAGE)) {
+        if (mainUIData.isButtonEnabled(MainUIData.BUTTON_CHANGE_LANGUAGE)) {
             mLanguageView = (SearchOrbView) findViewById(R.id.language_orb);
             mLanguageView.setOnOrbClickedListener(v -> LanguageSettingsPresenter.instance(getContext()).show());
             TooltipCompatHandler.setTooltipText(mLanguageView, getContext().getString(R.string.settings_language_country));
@@ -180,7 +191,7 @@ public class NavigateTitleView extends TitleView {
         mPipTitle = (TextView) findViewById(R.id.pip_title);
         mExitPip.setOnOrbClickedListener(v -> ViewManager.instance(getContext()).startView(PlaybackView.class));
         ViewUtil.enableMarquee(mPipTitle);
-        ViewUtil.setTextScrollSpeed(mPipTitle, MainUIData.instance(getContext()).getCardTextScrollSpeed());
+        ViewUtil.setTextScrollSpeed(mPipTitle, mainUIData.getCardTextScrollSpeed());
         TooltipCompatHandler.setTooltipText(mExitPip, getContext().getString(R.string.return_to_background_video));
 
         if (GeneralData.instance(getContext()).isGlobalClockEnabled()) {

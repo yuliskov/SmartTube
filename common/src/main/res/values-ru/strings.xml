@@ -473,4 +473,6 @@
     <string name="content_block_status">Проверить состояние SponsorBlock</string>
     <string name="player_show_quality_info_bitrate">Добавлять битрейт к информации о качестве видео</string>
     <string name="player_speed_button_old_behavior">Вернуть старое поведение кнопки скорость</string>
+    <string name="protect_settings_with_password">Защитить все настройки паролем</string>
+    <string name="enter_settings_password">Введите пароль для входа в настройки</string>
 </resources>

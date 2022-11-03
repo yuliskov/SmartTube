@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.proxy.WebProxyDialog;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -131,6 +132,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.settings_search, MainUIData.BUTTON_SEARCH},
                 {R.string.settings_language_country, MainUIData.BUTTON_CHANGE_LANGUAGE},
                 {R.string.settings_accounts, MainUIData.BUTTON_BROWSE_ACCOUNTS}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
@@ -329,6 +331,22 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.protect_settings_with_password),
+                option -> {
+                    if (option.isSelected()) {
+                        settingsPresenter.closeDialog();
+                        SimpleEditDialog.show(
+                                getContext(),
+                                "", mGeneralData::setSettingsPassword,
+                                getContext().getString(R.string.protect_settings_with_password),
+                                true
+                        );
+                    } else {
+                        mGeneralData.setSettingsPassword(null);
+                    }
+                },
+                mGeneralData.getSettingsPassword() != null));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_global_clock),
                 option -> {

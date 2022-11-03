@@ -40,6 +40,7 @@ public class MainUIData {
     public static final int MENU_ITEM_PLAYLIST_ORDER = 0b100000000000000000000;
     public static final int BUTTON_BROWSE_ACCOUNTS = 0b1;
     public static final int BUTTON_CHANGE_LANGUAGE = 0b10;
+    public static final int BUTTON_SEARCH = 0b100;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
