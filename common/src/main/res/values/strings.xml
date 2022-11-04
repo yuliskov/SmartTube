@@ -483,4 +483,6 @@
     <string name="player_speed_button_old_behavior">Revert old behavior of the speed button</string>
     <string name="protect_settings_with_password">Protect all settings with a password</string>
     <string name="enter_settings_password">Enter settings password</string>
+    <string name="child_mode">Child mode</string>
+    <string name="child_mode_desc">In this mode user is limited to Subscriptions and can\'t change the settings.</string>
 </resources>

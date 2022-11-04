@@ -332,6 +332,31 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.child_mode),
+                getContext().getString(R.string.child_mode_desc),
+                option -> {
+                    if (option.isSelected()) {
+                        if (mGeneralData.getSettingsPassword() == null) {
+                            settingsPresenter.closeDialog();
+                            SimpleEditDialog.show(
+                                    getContext(),
+                                    "", newValue -> {
+                                        mGeneralData.setSettingsPassword(newValue);
+                                        enableChildMode(option.isSelected());
+                                    },
+                                    getContext().getString(R.string.protect_settings_with_password),
+                                    true
+                            );
+                        } else {
+                            enableChildMode(option.isSelected());
+                        }
+                    } else {
+                        mGeneralData.setSettingsPassword(null);
+                        enableChildMode(option.isSelected());
+                    }
+                },
+                mGeneralData.isChildModeEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.protect_settings_with_password),
                 option -> {
                     if (option.isSelected()) {
@@ -418,6 +443,18 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     },
                     mGeneralData.isProxyEnabled()));
         }
+    }
+
+    private void enableChildMode(boolean enable) {
+        if (enable) {
+            // backup settings
+
+            // apply child tweaks
+        } else {
+            // restore backup
+        }
+
+        mRestartApp = true;
     }
 
     //private void appendOpenVPNManager(AppDialogPresenter settingsPresenter, List<OptionItem> options) {

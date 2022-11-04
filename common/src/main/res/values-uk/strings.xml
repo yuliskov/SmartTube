@@ -475,4 +475,6 @@
     <string name="player_speed_button_old_behavior">Повернути стару поведінку кнопки швидкість</string>
     <string name="protect_settings_with_password">Захистити усі налаштування паролем</string>
     <string name="enter_settings_password">Введіть пароль для входу в налаштування</string>
+    <string name="child_mode">Дитячий режим</string>
+    <string name="child_mode_desc">В цьому режимі користувач обмежений вмістом підписок і не може змінювати налаштування.</string>
 </resources>

@@ -62,6 +62,7 @@ public class GeneralData {
     private boolean mIsVPNEnabled;
     private boolean mIsGlobalClockEnabled;
     private String mSetttingsPassword;
+    private boolean mIsChildModeEnabled;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new ArrayList<>();
@@ -606,6 +607,16 @@ public class GeneralData {
         return mSetttingsPassword;
     }
 
+    public void enableChildMode(boolean enable) {
+        mIsChildModeEnabled = enable;
+
+        persistState();
+    }
+
+    public boolean isChildModeEnabled() {
+        return mIsChildModeEnabled;
+    }
+
     private void initSections() {
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mDefaultSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -668,6 +679,7 @@ public class GeneralData {
         mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, true);
         mTimeFormat = Helpers.parseInt(split, 32, LocaleUtility.is24HourLocale(mContext) ? TIME_FORMAT_24 : TIME_FORMAT_12);
         mSetttingsPassword = Helpers.parseStr(split, 33);
+        mIsChildModeEnabled = Helpers.parseBoolean(split, 34, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -727,6 +739,6 @@ public class GeneralData {
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
-                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSetttingsPassword));
+                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSetttingsPassword, mIsChildModeEnabled));
     }
 }

@@ -83,9 +83,11 @@ public class MotherActivity extends FragmentActivity {
 
         try {
             return super.dispatchKeyEvent(event);
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | SecurityException e) {
             // Fatal Exception: java.lang.IllegalStateException
             // android.permission.RECORD_AUDIO required for search (Android 5 mostly)
+            // Fatal Exception: java.lang.SecurityException
+            // Not allowed to bind to service Intent { act=android.speech.RecognitionService cmp=com.xgimi.duertts/com.baidu.duer.services.tvser
             e.printStackTrace();
             return false;
         }
