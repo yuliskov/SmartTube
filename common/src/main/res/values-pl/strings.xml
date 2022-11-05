@@ -476,4 +476,11 @@
   <string name="thumb_quality_end">Koniec wideo</string>
   <string name="card_content">Skąd pozyskać miniaturkę karty</string>
   <string name="card_real_thumbnails">Zastąp miniaturki klatką z wideo</string>
+  <string name="content_block_status">Sprawdź status SponsorBlock</string>
+  <string name="player_show_quality_info_bitrate">Dodaj bitrate do informacji o jakości</string>
+  <string name="player_speed_button_old_behavior">Przywróć stare zachowanie przycisku prędkości</string>
+  <string name="protect_settings_with_password">Chroń wszystkie ustawienia hasłem</string>
+  <string name="enter_settings_password">Wprowadź hasło do ustawień</string>
+  <string name="child_mode">Tryb dziecka</string>
+  <string name="child_mode_desc">W tym trybie użytkownik jest ograniczony do Subskrypcji i nie może zmieniać ustawień.</string>
 </resources>

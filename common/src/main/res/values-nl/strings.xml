@@ -207,7 +207,7 @@
   <string name="msg_player_error_renderer">De geselecteerde videokwaliteit wordt niet ondersteund</string>
   <string name="msg_player_error_unexpected">Onbekende video-decodeerfout</string>
   <string name="video_aspect">Beeldverhouding</string>
-  <string name="player_tweaks">Gavanceerde video informatie tonen</string>
+  <string name="player_tweaks">Ontwikkelaarsopties</string>
   <string name="header_uploads">Kanalen/Uploads</string>
   <string name="player_show_global_clock">Klok op videobeeld weergeven</string>
   <string name="player_show_global_ending_time">Eindtijd altijd op het scherm weergeven</string>
@@ -263,7 +263,7 @@
   <string name="content_block_preview_recap">Voorbeeld of samenvatting van de video</string>
   <string name="content_block_highlight">Punt of hoogtepunt van de video</string>
   <string name="removed_from_history">Video is verwijderd uit geschiedenis</string>
-  <string name="remove_from_history">Verwijderd uit geschiedenis</string>
+  <string name="remove_from_history">Verwijderen uit geschiedenis</string>
   <string name="upload_date">Uploaddatum</string>
   <string name="upload_date_any">Altijd</string>
   <string name="upload_date_today">Vandaag</string>
@@ -286,7 +286,7 @@
   <string name="move_section_down">Sectie omlaag verplaatsen</string>
   <string name="player_buttons">Spelerknoppen instellen</string>
   <string name="action_playlist_add">Toevoegen aan afspeellijst</string>
-  <string name="action_video_stats">ontwikkelaarsopties</string>
+  <string name="action_video_stats">Geavanceerde video informatie tonen</string>
   <string name="action_subscribe">Abonneren</string>
   <string name="action_channel">Kanaal openen</string>
   <string name="action_pip">PIP</string>
@@ -474,4 +474,6 @@
   <string name="player_seek_confirmation_play">Met bevestiging (spelen tijdens het zoeken)</string>
   <string name="player_show_quality_info_bitrate">Bitrate toevoegen aan de kwaliteit informatie</string>
   <string name="player_speed_button_old_behavior">Oude gedrag van de snelheidsknop terugzetten</string>
+  <string name="protect_settings_with_password">Bescherm alle instellingen met een wachtwoord</string>
+  <string name="enter_settings_password">Voer het instellingenwachtwoord in</string>
 </resources>
