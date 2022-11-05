@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.proxy.WebProxyDialog;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -336,20 +337,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.child_mode_desc),
                 option -> {
                     if (option.isSelected()) {
-                        if (mGeneralData.getSettingsPassword() == null) {
-                            settingsPresenter.closeDialog();
-                            SimpleEditDialog.show(
-                                    getContext(),
-                                    "", newValue -> {
-                                        mGeneralData.setSettingsPassword(newValue);
-                                        enableChildMode(option.isSelected());
-                                    },
-                                    getContext().getString(R.string.protect_settings_with_password),
-                                    true
-                            );
-                        } else {
-                            enableChildMode(option.isSelected());
-                        }
+                        showPasswordDialog(settingsPresenter, () -> enableChildMode(option.isSelected()));
                     } else {
                         mGeneralData.setSettingsPassword(null);
                         enableChildMode(option.isSelected());
@@ -360,13 +348,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.protect_settings_with_password),
                 option -> {
                     if (option.isSelected()) {
-                        settingsPresenter.closeDialog();
-                        SimpleEditDialog.show(
-                                getContext(),
-                                "", mGeneralData::setSettingsPassword,
-                                getContext().getString(R.string.protect_settings_with_password),
-                                true
-                        );
+                        showPasswordDialog(settingsPresenter, null);
                     } else {
                         mGeneralData.setSettingsPassword(null);
                     }
@@ -446,15 +428,58 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void enableChildMode(boolean enable) {
-        if (enable) {
-            // backup settings
+        int topBarButtons = MainUIData.BUTTON_SEARCH | MainUIData.BUTTON_CHANGE_LANGUAGE | MainUIData.BUTTON_BROWSE_ACCOUNTS;
+        int playerButtons =
+                PlayerTweaksData.PLAYER_BUTTON_CHAT | PlayerTweaksData.PLAYER_BUTTON_CONTENT_BLOCK | PlayerTweaksData.PLAYER_BUTTON_SHARE |
+                        PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO | PlayerTweaksData.PLAYER_BUTTON_NEXT | PlayerTweaksData.PLAYER_BUTTON_PREVIOUS |
+                        PlayerTweaksData.PLAYER_BUTTON_OPEN_CHANNEL | PlayerTweaksData.PLAYER_BUTTON_SEARCH | PlayerTweaksData.PLAYER_BUTTON_SUBSCRIBE;
+        int menuItems =
+                MainUIData.MENU_ITEM_SUBSCRIBE | MainUIData.MENU_ITEM_OPEN_DESCRIPTION | MainUIData.MENU_ITEM_SAVE_PLAYLIST |
+                        MainUIData.MENU_ITEM_SELECT_ACCOUNT | MainUIData.MENU_ITEM_SHARE_LINK | MainUIData.MENU_ITEM_SHARE_EMBED_LINK;
 
+        if (enable) {
             // apply child tweaks
+            mMainUIData.disableButton(topBarButtons);
+            mMainUIData.disableMenuItem(menuItems);
+            PlayerTweaksData.instance(getContext()).disablePlayerButton(playerButtons);
+            mGeneralData.enableSection(MediaGroup.TYPE_HOME, false);
+            mGeneralData.enableSection(MediaGroup.TYPE_GAMING, false);
+            mGeneralData.enableSection(MediaGroup.TYPE_NEWS, false);
+            mGeneralData.enableSection(MediaGroup.TYPE_MUSIC, false);
         } else {
-            // restore backup
+            // revert child tweaks
+            mMainUIData.enableButton(topBarButtons);
+            mMainUIData.enableMenuItem(menuItems);
+            PlayerTweaksData.instance(getContext()).enablePlayerButton(playerButtons);
+            mGeneralData.enableSection(MediaGroup.TYPE_HOME, true);
+            mGeneralData.enableSection(MediaGroup.TYPE_GAMING, true);
+            mGeneralData.enableSection(MediaGroup.TYPE_NEWS, true);
+            mGeneralData.enableSection(MediaGroup.TYPE_MUSIC, true);
         }
 
         mRestartApp = true;
+    }
+
+    private void showPasswordDialog(AppDialogPresenter settingsPresenter, Runnable onSuccess) {
+        if (mGeneralData.getSettingsPassword() != null) {
+            if (onSuccess != null) {
+                onSuccess.run();
+            }
+            return;
+        }
+
+        settingsPresenter.closeDialog();
+        SimpleEditDialog.show(
+                getContext(),
+                "", newValue -> {
+                    mGeneralData.setSettingsPassword(newValue);
+                    if (onSuccess != null) {
+                        onSuccess.run();
+                    }
+                },
+                getContext().getString(R.string.protect_settings_with_password),
+                true
+        );
     }
 
     //private void appendOpenVPNManager(AppDialogPresenter settingsPresenter, List<OptionItem> options) {
