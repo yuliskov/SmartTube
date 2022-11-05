@@ -481,4 +481,8 @@
     <string name="content_block_status">Controlla lo stato di SponsorBlock</string>
     <string name="player_show_quality_info_bitrate">Aggiungi bitrate nelle informazioni sulla qualità</string>
     <string name="player_speed_button_old_behavior">Ripristina il vecchio comportamento del pulsante di velocità</string>
+    <string name="protect_settings_with_password">Proteggi tutte le Impostazioni con una password</string>
+    <string name="enter_settings_password">Immetti la password delle Impostazioni</string>
+    <string name="child_mode">Modalità bambino</string>
+    <string name="child_mode_desc">In questa modalità l\'utente è limitato alle Iscrizioni e non può modificare le impostazioni.</string>
 </resources>
