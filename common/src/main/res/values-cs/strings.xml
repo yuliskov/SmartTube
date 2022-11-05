@@ -483,4 +483,6 @@
     <string name="player_speed_button_old_behavior">Vrátit staré chování tlačítka rychlosti</string>
     <string name="protect_settings_with_password">Chránit všechna nastavení heslem</string>
     <string name="enter_settings_password">Zadejte heslo</string>
+    <string name="child_mode">Dětský režim</string>
+    <string name="child_mode_desc">V tomto režimu je uživatel omezen na Odběry a nemůže měnit nastavení.</string>
 </resources>
