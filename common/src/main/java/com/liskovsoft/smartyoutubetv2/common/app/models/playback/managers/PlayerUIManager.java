@@ -468,7 +468,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onRepeatModeClicked(int modeIndex) {
-        mPlayerData.setPlaybackMode(modeIndex);
+        mPlayerData.setRepeatMode(modeIndex);
         //Utils.showRepeatInfo(getActivity(), modeIndex);
     }
 

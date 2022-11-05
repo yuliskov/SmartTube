@@ -5,6 +5,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -442,6 +443,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             mMainUIData.disableButton(topBarButtons);
             mMainUIData.disableMenuItem(menuItems);
             PlayerTweaksData.instance(getContext()).disablePlayerButton(playerButtons);
+            mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_CLOSE);
             mGeneralData.enableSection(MediaGroup.TYPE_HOME, false);
             mGeneralData.enableSection(MediaGroup.TYPE_GAMING, false);
             mGeneralData.enableSection(MediaGroup.TYPE_NEWS, false);
@@ -451,6 +453,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             mMainUIData.enableButton(topBarButtons);
             mMainUIData.enableMenuItem(menuItems);
             PlayerTweaksData.instance(getContext()).enablePlayerButton(playerButtons);
+            mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_ALL);
             mGeneralData.enableSection(MediaGroup.TYPE_HOME, true);
             mGeneralData.enableSection(MediaGroup.TYPE_GAMING, true);
             mGeneralData.enableSection(MediaGroup.TYPE_NEWS, true);

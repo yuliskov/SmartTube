@@ -59,7 +59,7 @@ public class PlayerData extends DataChangeBase {
     private int mAudioDelayMs;
     private boolean mIsRememberSpeedEnabled;
     private boolean mIsLegacyCodecsForced;
-    private int mPlaybackMode;
+    private int mRepeatMode;
     private boolean mIsSonyTimerFixEnabled;
     private boolean mIsQualityInfoEnabled;
     private boolean mIsRememberSpeedEachEnabled;
@@ -210,13 +210,13 @@ public class PlayerData extends DataChangeBase {
         return mBackgroundMode;
     }
 
-    public void setPlaybackMode(int type) {
-        mPlaybackMode = type;
+    public void setRepeatMode(int mode) {
+        mRepeatMode = mode;
         persistState();
     }
 
     public int getRepeatMode() {
-        return mPlaybackMode;
+        return mRepeatMode;
     }
 
     public boolean isRememberSpeedEnabled() {
@@ -581,7 +581,7 @@ public class PlayerData extends DataChangeBase {
         // old afr delay sec was there
         mAudioDelayMs = Helpers.parseInt(split, 20, 0);
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, false);
-        mPlaybackMode = Helpers.parseInt(split, 22, PlaybackUIController.REPEAT_MODE_ALL);
+        mRepeatMode = Helpers.parseInt(split, 22, PlaybackUIController.REPEAT_MODE_ALL);
         // didn't remember what was there
         mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, false);
         mIsSonyTimerFixEnabled = Helpers.parseBoolean(split, 25, false);
@@ -620,7 +620,7 @@ public class PlayerData extends DataChangeBase {
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs,
-                mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
+                mIsRememberSpeedEnabled, mRepeatMode, null, // didn't remember what was there
                 mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
