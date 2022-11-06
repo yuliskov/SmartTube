@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -429,38 +430,56 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void enableChildMode(boolean enable) {
+        mGeneralData.enableChildMode(enable);
+
         int topBarButtons = MainUIData.BUTTON_SEARCH | MainUIData.BUTTON_CHANGE_LANGUAGE | MainUIData.BUTTON_BROWSE_ACCOUNTS;
         int playerButtons =
-                PlayerTweaksData.PLAYER_BUTTON_CHAT | PlayerTweaksData.PLAYER_BUTTON_CONTENT_BLOCK | PlayerTweaksData.PLAYER_BUTTON_SHARE |
-                        PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO | PlayerTweaksData.PLAYER_BUTTON_NEXT | PlayerTweaksData.PLAYER_BUTTON_PREVIOUS |
-                        PlayerTweaksData.PLAYER_BUTTON_OPEN_CHANNEL | PlayerTweaksData.PLAYER_BUTTON_SEARCH | PlayerTweaksData.PLAYER_BUTTON_SUBSCRIBE;
+                    PlayerTweaksData.PLAYER_BUTTON_CONTENT_BLOCK | PlayerTweaksData.PLAYER_BUTTON_SHARE |
+                    PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO | PlayerTweaksData.PLAYER_BUTTON_NEXT | PlayerTweaksData.PLAYER_BUTTON_PREVIOUS |
+                    PlayerTweaksData.PLAYER_BUTTON_SEARCH | PlayerTweaksData.PLAYER_BUTTON_SUBSCRIBE | PlayerTweaksData.PLAYER_BUTTON_REPEAT_MODE |
+                    PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE | PlayerTweaksData.PLAYER_BUTTON_SEEK_INTERVAL | PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM |
+                    PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF | PlayerTweaksData.PLAYER_BUTTON_HIGH_QUALITY | PlayerTweaksData.PLAYER_BUTTON_VIDEO_STATS;
         int menuItems =
-                MainUIData.MENU_ITEM_SUBSCRIBE | MainUIData.MENU_ITEM_OPEN_DESCRIPTION | MainUIData.MENU_ITEM_SAVE_PLAYLIST |
-                        MainUIData.MENU_ITEM_SELECT_ACCOUNT | MainUIData.MENU_ITEM_SHARE_LINK | MainUIData.MENU_ITEM_SHARE_EMBED_LINK;
+                    MainUIData.MENU_ITEM_SUBSCRIBE | MainUIData.MENU_ITEM_OPEN_DESCRIPTION | MainUIData.MENU_ITEM_SAVE_PLAYLIST |
+                    MainUIData.MENU_ITEM_SELECT_ACCOUNT | MainUIData.MENU_ITEM_SHARE_LINK | MainUIData.MENU_ITEM_SHARE_EMBED_LINK |
+                    MainUIData.MENU_ITEM_SHOW_QUEUE | MainUIData.MENU_ITEM_ADD_TO_QUEUE | MainUIData.MENU_ITEM_MOVE_SECTION_UP | MainUIData.MENU_ITEM_MOVE_SECTION_DOWN |
+                    MainUIData.MENU_ITEM_PIN_TO_SIDEBAR | MainUIData.MENU_ITEM_PLAY_VIDEO | MainUIData.MENU_ITEM_RECENT_PLAYLIST;
+
+        PlayerTweaksData tweaksData = PlayerTweaksData.instance(getContext());
+
+        // Enable common parts before all tweaks
+        mMainUIData.enableButton(Integer.MAX_VALUE);
+        mMainUIData.enableMenuItem(Integer.MAX_VALUE);
+        tweaksData.enablePlayerButton(Integer.MAX_VALUE);
+        BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_SUBSCRIPTIONS, true);
+        BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HISTORY, true);
+        BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_USER_PLAYLISTS, true);
 
         if (enable) {
             // apply child tweaks
             mMainUIData.disableButton(topBarButtons);
             mMainUIData.disableMenuItem(menuItems);
-            PlayerTweaksData.instance(getContext()).disablePlayerButton(playerButtons);
+            tweaksData.disablePlayerButton(playerButtons);
+            tweaksData.disableSuggestions(true);
             mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_CLOSE);
-            mGeneralData.enableSection(MediaGroup.TYPE_HOME, false);
-            mGeneralData.enableSection(MediaGroup.TYPE_GAMING, false);
-            mGeneralData.enableSection(MediaGroup.TYPE_NEWS, false);
-            mGeneralData.enableSection(MediaGroup.TYPE_MUSIC, false);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HOME, false);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_GAMING, false);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_NEWS, false);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_MUSIC, false);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_CHANNEL_UPLOADS, false);
         } else {
             // revert child tweaks
             mMainUIData.enableButton(topBarButtons);
             mMainUIData.enableMenuItem(menuItems);
-            PlayerTweaksData.instance(getContext()).enablePlayerButton(playerButtons);
+            tweaksData.enablePlayerButton(playerButtons);
+            tweaksData.disableSuggestions(false);
             mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_ALL);
-            mGeneralData.enableSection(MediaGroup.TYPE_HOME, true);
-            mGeneralData.enableSection(MediaGroup.TYPE_GAMING, true);
-            mGeneralData.enableSection(MediaGroup.TYPE_NEWS, true);
-            mGeneralData.enableSection(MediaGroup.TYPE_MUSIC, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HOME, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_GAMING, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_NEWS, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_MUSIC, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_CHANNEL_UPLOADS, true);
         }
-
-        mRestartApp = true;
     }
 
     private void showPasswordDialog(AppDialogPresenter settingsPresenter, Runnable onSuccess) {
