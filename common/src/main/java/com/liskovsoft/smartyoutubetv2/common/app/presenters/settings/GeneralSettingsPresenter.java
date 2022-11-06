@@ -12,7 +12,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -135,17 +134,17 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
-                {R.string.settings_search, MainUIData.BUTTON_SEARCH},
-                {R.string.settings_language_country, MainUIData.BUTTON_CHANGE_LANGUAGE},
-                {R.string.settings_accounts, MainUIData.BUTTON_BROWSE_ACCOUNTS}}) {
+                {R.string.settings_search, MainUIData.TOP_BUTTON_SEARCH},
+                {R.string.settings_language_country, MainUIData.TOP_BUTTON_CHANGE_LANGUAGE},
+                {R.string.settings_accounts, MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {
-                    mMainUIData.enableButton(pair[1]);
+                    mMainUIData.enableTopButton(pair[1]);
                 } else {
-                    mMainUIData.disableButton(pair[1]);
+                    mMainUIData.disableTopButton(pair[1]);
                 }
                 mRestartApp = true;
-            }, mMainUIData.isButtonEnabled(pair[1])));
+            }, mMainUIData.isTopButtonEnabled(pair[1])));
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.various_buttons), options);
@@ -432,7 +431,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void enableChildMode(boolean enable) {
         mGeneralData.enableChildMode(enable);
 
-        int topBarButtons = MainUIData.BUTTON_SEARCH | MainUIData.BUTTON_CHANGE_LANGUAGE | MainUIData.BUTTON_BROWSE_ACCOUNTS;
+        int topBarButtons = MainUIData.TOP_BUTTON_SEARCH | MainUIData.TOP_BUTTON_CHANGE_LANGUAGE | MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS;
         int playerButtons =
                     PlayerTweaksData.PLAYER_BUTTON_CONTENT_BLOCK | PlayerTweaksData.PLAYER_BUTTON_SHARE |
                     PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO | PlayerTweaksData.PLAYER_BUTTON_NEXT | PlayerTweaksData.PLAYER_BUTTON_PREVIOUS |
@@ -447,17 +446,17 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         PlayerTweaksData tweaksData = PlayerTweaksData.instance(getContext());
 
-        // Enable common parts before all tweaks
-        mMainUIData.enableButton(Integer.MAX_VALUE);
-        mMainUIData.enableMenuItem(Integer.MAX_VALUE);
-        tweaksData.enablePlayerButton(Integer.MAX_VALUE);
-        BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_SUBSCRIPTIONS, true);
+        // Reset to defaults
+        mMainUIData.enableTopButton(MainUIData.TOP_BUTTON_DEFAULT);
+        mMainUIData.enableMenuItem(MainUIData.MENU_ITEM_DEFAULT);
+        tweaksData.enablePlayerButton(PlayerTweaksData.PLAYER_BUTTON_DEFAULT);
         BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HISTORY, true);
         BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_USER_PLAYLISTS, true);
+        BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_SUBSCRIPTIONS, true);
 
         if (enable) {
             // apply child tweaks
-            mMainUIData.disableButton(topBarButtons);
+            mMainUIData.disableTopButton(topBarButtons);
             mMainUIData.disableMenuItem(menuItems);
             tweaksData.disablePlayerButton(playerButtons);
             tweaksData.disableSuggestions(true);
@@ -469,16 +468,16 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_CHANNEL_UPLOADS, false);
         } else {
             // revert child tweaks
-            mMainUIData.enableButton(topBarButtons);
+            mMainUIData.enableTopButton(topBarButtons);
             mMainUIData.enableMenuItem(menuItems);
             tweaksData.enablePlayerButton(playerButtons);
             tweaksData.disableSuggestions(false);
             mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_ALL);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HOME, true);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_GAMING, true);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_NEWS, true);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_MUSIC, true);
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_CHANNEL_UPLOADS, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_GAMING, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_MUSIC, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_NEWS, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HOME, true);
         }
     }
 

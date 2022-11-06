@@ -10,7 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainUIData {
+public class MainUIData extends DataChangeBase {
     private static final String MAIN_UI_DATA = "main_ui_data2";
     public static final int CHANNEL_SORTING_UPDATE = 0;
     public static final int CHANNEL_SORTING_AZ = 1;
@@ -38,9 +38,12 @@ public class MainUIData {
     public static final int MENU_ITEM_SHARE_EMBED_LINK = 0b1000000000000000000;
     public static final int MENU_ITEM_SHOW_QUEUE = 0b10000000000000000000;
     public static final int MENU_ITEM_PLAYLIST_ORDER = 0b100000000000000000000;
-    public static final int BUTTON_BROWSE_ACCOUNTS = 0b1;
-    public static final int BUTTON_CHANGE_LANGUAGE = 0b10;
-    public static final int BUTTON_SEARCH = 0b100;
+    public static final int TOP_BUTTON_BROWSE_ACCOUNTS = 0b1;
+    public static final int TOP_BUTTON_CHANGE_LANGUAGE = 0b10;
+    public static final int TOP_BUTTON_SEARCH = 0b100;
+    public static final int TOP_BUTTON_DEFAULT = Integer.MAX_VALUE & ~(TOP_BUTTON_CHANGE_LANGUAGE); // all except this items
+    public static final int MENU_ITEM_DEFAULT = Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_NEW_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT |
+            MENU_ITEM_PLAY_VIDEO | MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_PIN_TO_SIDEBAR | MENU_ITEM_SHARE_EMBED_LINK); // all except this items
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
@@ -59,7 +62,7 @@ public class MainUIData {
     private boolean mIsUploadsAutoLoadEnabled;
     private float mCardTextScrollSpeed;
     private int mMenuItems;
-    private int mButtons;
+    private int mTopButtons;
     private int mThumbQuality;
 
     private MainUIData(Context context) {
@@ -218,18 +221,18 @@ public class MainUIData {
         return (mMenuItems & menuItems) == menuItems;
     }
 
-    public void enableButton(int button) {
-        mButtons |= button;
+    public void enableTopButton(int button) {
+        mTopButtons |= button;
         persistState();
     }
 
-    public void disableButton(int button) {
-        mButtons &= ~button;
+    public void disableTopButton(int button) {
+        mTopButtons &= ~button;
         persistState();
     }
 
-    public boolean isButtonEnabled(int button) {
-        return (mButtons & button) == button;
+    public boolean isTopButtonEnabled(int button) {
+        return (mTopButtons & button) == button;
     }
 
     private void initColorSchemes() {
@@ -288,20 +291,21 @@ public class MainUIData {
         mIsUploadsOldLookEnabled = Helpers.parseBoolean(split, 9, false);
         mIsUploadsAutoLoadEnabled = Helpers.parseBoolean(split, 10, true);
         mCardTextScrollSpeed = Helpers.parseFloat(split, 11, 2);
-        mMenuItems = Helpers.parseInt(split, 12,
-                Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_NEW_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT |
-                        MENU_ITEM_PLAY_VIDEO | MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_PIN_TO_SIDEBAR | MENU_ITEM_SHARE_EMBED_LINK)); // all except this items
-        mButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE & ~(BUTTON_CHANGE_LANGUAGE)); // all except this items
+        mMenuItems = Helpers.parseInt(split, 12, MENU_ITEM_DEFAULT);
+        mTopButtons = Helpers.parseInt(split, 13, TOP_BUTTON_DEFAULT);
         // 14
         mThumbQuality = Helpers.parseInt(split, 15, ClickbaitRemover.THUMB_QUALITY_DEFAULT);
     }
 
-    private void persistState() {
+    @Override
+    protected void persistState() {
         mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled,
                 mVideoGridScale, mUIScale, mColorSchemeIndex, mIsCardMultilineTitleEnabled,
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
-                mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mButtons,
+                mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,
                 null, mThumbQuality));
+
+        super.persistState();
     }
 
     public static class ColorScheme {

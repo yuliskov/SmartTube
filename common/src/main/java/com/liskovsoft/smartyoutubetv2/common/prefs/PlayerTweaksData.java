@@ -29,6 +29,7 @@ public class PlayerTweaksData {
     public static final int PLAYER_BUTTON_SEEK_INTERVAL = 0b100000000000000000000;
     public static final int PLAYER_BUTTON_CONTENT_BLOCK = 0b1000000000000000000000;
     public static final int PLAYER_BUTTON_CHAT = 0b10000000000000000000000;
+    public static final int PLAYER_BUTTON_DEFAULT = Integer.MAX_VALUE & ~(PLAYER_BUTTON_SEEK_INTERVAL | PLAYER_BUTTON_CONTENT_BLOCK); // all buttons, except these
     @SuppressLint("StaticFieldLeak")
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;
@@ -310,7 +311,7 @@ public class PlayerTweaksData {
         mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, false);
         mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTV(mPrefs.getContext()));
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
-        mPlayerButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE & ~(PLAYER_BUTTON_SEEK_INTERVAL | PLAYER_BUTTON_CONTENT_BLOCK)); // all buttons, except these
+        mPlayerButtons = Helpers.parseInt(split, 13, PLAYER_BUTTON_DEFAULT);
         mIsBufferingFixEnabled = Helpers.parseBoolean(split, 14, false);
         mIsNoFpsPresetsEnabled = Helpers.parseBoolean(split, 15, false);
         mIsRememberPositionOfShortVideosEnabled = Helpers.parseBoolean(split, 16, false);

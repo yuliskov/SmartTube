@@ -38,6 +38,7 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 import java.util.Locale;
 
 import static androidx.leanback.widget.TitleViewAdapter.BRANDING_VIEW_VISIBLE;
+import static androidx.leanback.widget.TitleViewAdapter.FULL_VIEW_VISIBLE;
 import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
 
 /**
@@ -57,6 +58,7 @@ public class NavigateTitleView extends TitleView {
     private DateTimeView mGlobalDate;
     private SearchOrbView mSearchOrbView;
     private boolean mInitDone;
+    private int mFlags = FULL_VIEW_VISIBLE;
 
     public NavigateTitleView(Context context) {
         super(context);
@@ -126,6 +128,8 @@ public class NavigateTitleView extends TitleView {
 
         super.updateComponentsVisibility(flags);
 
+        mFlags = flags;
+
         init();
 
         mSearchVisibility = (flags & SEARCH_VIEW_VISIBLE) == SEARCH_VIEW_VISIBLE
@@ -166,12 +170,13 @@ public class NavigateTitleView extends TitleView {
         }
 
         MainUIData mainUIData = MainUIData.instance(getContext());
+        mainUIData.setOnChange(() -> updateComponentsVisibility(mFlags));
         
-        if (!mainUIData.isButtonEnabled(MainUIData.BUTTON_SEARCH)) {
+        if (!mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_SEARCH)) {
             mSearchOrbView = (SearchOrbView) findViewById(R.id.title_orb);
         }
 
-        if (mainUIData.isButtonEnabled(MainUIData.BUTTON_BROWSE_ACCOUNTS)) {
+        if (mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS)) {
             mAccountView = (SearchOrbView) findViewById(R.id.account_orb);
             mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).show());
             TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
@@ -179,7 +184,7 @@ public class NavigateTitleView extends TitleView {
             updateAccountIcon();
         }
 
-        if (mainUIData.isButtonEnabled(MainUIData.BUTTON_CHANGE_LANGUAGE)) {
+        if (mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_CHANGE_LANGUAGE)) {
             mLanguageView = (SearchOrbView) findViewById(R.id.language_orb);
             mLanguageView.setOnOrbClickedListener(v -> LanguageSettingsPresenter.instance(getContext()).show());
             TooltipCompatHandler.setTooltipText(mLanguageView, getContext().getString(R.string.settings_language_country));
