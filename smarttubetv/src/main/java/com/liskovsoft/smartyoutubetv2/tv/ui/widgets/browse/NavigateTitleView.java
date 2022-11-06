@@ -27,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSet
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -47,7 +48,7 @@ import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
  * https://stackoverflow.com/questions/38169378/use-multiple-orb-buttons-or-other-buttons-in-the-leanbacks-title-view<br/>
  * https://stackoverflow.com/questions/40802470/add-button-to-browsefragment
  */
-public class NavigateTitleView extends TitleView {
+public class NavigateTitleView extends TitleView implements OnDataChange {
     private SearchOrbView mAccountView;
     private SearchOrbView mLanguageView;
     private SearchOrbView mExitPip;
@@ -128,9 +129,9 @@ public class NavigateTitleView extends TitleView {
 
         super.updateComponentsVisibility(flags);
 
-        mFlags = flags;
-
         init();
+
+        mFlags = flags;
 
         mSearchVisibility = (flags & SEARCH_VIEW_VISIBLE) == SEARCH_VIEW_VISIBLE
                 ? View.VISIBLE : View.INVISIBLE;
@@ -169,9 +170,19 @@ public class NavigateTitleView extends TitleView {
             return;
         }
 
+        setupButtons();
+
         MainUIData mainUIData = MainUIData.instance(getContext());
-        mainUIData.setOnChange(() -> updateComponentsVisibility(mFlags));
-        
+        mainUIData.setOnChange(this);
+
+        mInitDone = true;
+    }
+
+    private void setupButtons() {
+        cleanup();
+
+        MainUIData mainUIData = MainUIData.instance(getContext());
+
         if (!mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_SEARCH)) {
             mSearchOrbView = (SearchOrbView) findViewById(R.id.title_orb);
         }
@@ -209,8 +220,29 @@ public class NavigateTitleView extends TitleView {
             mGlobalDate.showDate(true);
             mGlobalDate.setVisibility(View.VISIBLE);
         }
+    }
 
-        mInitDone = true;
+    private void cleanup() {
+        if (mSearchOrbView != null) {
+            mSearchOrbView.setVisibility(View.GONE);
+            mSearchOrbView = null;
+        }
+        if (mAccountView != null) {
+            mAccountView.setVisibility(View.GONE);
+            mAccountView = null;
+        }
+        if (mLanguageView != null) {
+            mLanguageView.setVisibility(View.GONE);
+            mLanguageView = null;
+        }
+        if (mGlobalClock != null) {
+            mGlobalClock.setVisibility(View.GONE);
+            mGlobalClock = null;
+        }
+        if (mGlobalDate != null) {
+            mGlobalDate.setVisibility(View.GONE);
+            mGlobalDate = null;
+        }
     }
 
     @Override
@@ -305,5 +337,11 @@ public class NavigateTitleView extends TitleView {
                         view.setOrbIcon(resource);
                     }
                 });
+    }
+
+    @Override
+    public void onDataChange() {
+        setupButtons();
+        updateComponentsVisibility(mFlags);
     }
 }

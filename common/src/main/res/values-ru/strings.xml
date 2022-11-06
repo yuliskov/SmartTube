@@ -477,5 +477,5 @@
     <string name="enter_settings_password">Введите пароль для входа в настройки</string>
     <string name="child_mode">Детский режим</string>
     <string name="child_mode_desc">В этом режиме пользователь ограничен содержимым подписок, истории, плейлистов и не может менять настройки.</string>
-    <string name="lost_setting_warning">Вы потеряете часть своих настроек. Убедитесь, что у вас есть резервная копия.</string>
+    <string name="lost_setting_warning">Настройки приложения будут изменены. Убедитесь, что вы создали резервную копию настроек.</string>
 </resources>

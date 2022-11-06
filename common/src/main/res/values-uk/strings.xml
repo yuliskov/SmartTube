@@ -477,5 +477,5 @@
     <string name="enter_settings_password">Введіть пароль для входу в налаштування</string>
     <string name="child_mode">Дитячий режим</string>
     <string name="child_mode_desc">В цьому режимі користувач обмежений вмістом підписок, історії та плейлистів та не може змінювати налаштування.</string>
-    <string name="lost_setting_warning">Ви втратите частину налаштувань. Переконайтеся, що у вас є резервна копія.</string>
+    <string name="lost_setting_warning">Налаштування застосунку буде змінено. Переконайтеся, що ви створили резервну копію налаштувань.</string>
 </resources>
