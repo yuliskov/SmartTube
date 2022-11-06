@@ -484,5 +484,6 @@
     <string name="protect_settings_with_password">Protect all settings with a password</string>
     <string name="enter_settings_password">Enter settings password</string>
     <string name="child_mode">Child mode</string>
-    <string name="child_mode_desc">In this mode user is limited to Subscriptions and can\'t change the settings.</string>
+    <string name="child_mode_desc">In this mode user is limited to Subscriptions, History, Playlists and can\'t change the settings.</string>
+    <string name="lost_setting_warning">You\'ll lose part of your settings. Make sure that you have a backup.</string>
 </resources>

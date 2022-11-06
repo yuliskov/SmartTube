@@ -338,7 +338,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.child_mode_desc),
                 option -> {
                     if (option.isSelected()) {
-                        showPasswordDialog(settingsPresenter, () -> enableChildMode(option.isSelected()));
+                        AppDialogUtil.showConfirmationDialog(getContext(),
+                                () -> showPasswordDialog(settingsPresenter, () -> enableChildMode(option.isSelected())),
+                                getContext().getString(R.string.lost_setting_warning));
                     } else {
                         mGeneralData.setSettingsPassword(null);
                         enableChildMode(option.isSelected());
