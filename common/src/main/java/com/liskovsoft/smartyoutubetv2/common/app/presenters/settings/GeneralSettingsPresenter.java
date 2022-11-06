@@ -433,7 +433,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void enableChildMode(boolean enable) {
         mGeneralData.enableChildMode(enable);
 
-        int topBarButtons = MainUIData.TOP_BUTTON_SEARCH | MainUIData.TOP_BUTTON_CHANGE_LANGUAGE | MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS;
+        int topButtons = MainUIData.TOP_BUTTON_SEARCH | MainUIData.TOP_BUTTON_CHANGE_LANGUAGE | MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS;
         int playerButtons =
                     PlayerTweaksData.PLAYER_BUTTON_CONTENT_BLOCK | PlayerTweaksData.PLAYER_BUTTON_SHARE |
                     PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO | PlayerTweaksData.PLAYER_BUTTON_NEXT | PlayerTweaksData.PLAYER_BUTTON_PREVIOUS |
@@ -449,16 +449,16 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         PlayerTweaksData tweaksData = PlayerTweaksData.instance(getContext());
 
         // Reset to defaults
-        mMainUIData.enableTopButton(MainUIData.TOP_BUTTON_DEFAULT);
-        mMainUIData.enableMenuItem(MainUIData.MENU_ITEM_DEFAULT);
-        tweaksData.enablePlayerButton(PlayerTweaksData.PLAYER_BUTTON_DEFAULT);
-        BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HISTORY, true);
-        BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_USER_PLAYLISTS, true);
-        BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_SUBSCRIPTIONS, true);
+        mMainUIData.resetTopButton();
+        mMainUIData.resetMenuItem();
+        tweaksData.resetPlayerButton();
+        tweaksData.disableSuggestions(false);
+        mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_ALL);
+        BrowsePresenter.instance(getContext()).resetSections();
 
         if (enable) {
             // apply child tweaks
-            mMainUIData.disableTopButton(topBarButtons);
+            mMainUIData.disableTopButton(topButtons);
             mMainUIData.disableMenuItem(menuItems);
             tweaksData.disablePlayerButton(playerButtons);
             tweaksData.disableSuggestions(true);
@@ -468,18 +468,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_NEWS, false);
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_MUSIC, false);
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_CHANNEL_UPLOADS, false);
-        } else {
-            // revert child tweaks
-            mMainUIData.enableTopButton(topBarButtons);
-            mMainUIData.enableMenuItem(menuItems);
-            tweaksData.enablePlayerButton(playerButtons);
-            tweaksData.disableSuggestions(false);
-            mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_ALL);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_CHANNEL_UPLOADS, true);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_GAMING, true);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_MUSIC, true);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_NEWS, true);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HOME, true);
         }
     }
 

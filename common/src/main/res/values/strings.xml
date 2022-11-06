@@ -484,6 +484,6 @@
     <string name="protect_settings_with_password">Protect all settings with a password</string>
     <string name="enter_settings_password">Enter settings password</string>
     <string name="child_mode">Child mode</string>
-    <string name="child_mode_desc">In this mode user is limited to Subscriptions, History, Playlists and can\'t change the settings.</string>
+    <string name="child_mode_desc">In this mode, the user can\'t use search or see any suggested content. The settings will be under the password.</string>
     <string name="lost_setting_warning">The app settings will be changed. Make sure that you created a backup of the settings.</string>
 </resources>

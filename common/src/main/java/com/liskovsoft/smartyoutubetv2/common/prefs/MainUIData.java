@@ -41,8 +41,8 @@ public class MainUIData extends DataChangeBase {
     public static final int TOP_BUTTON_BROWSE_ACCOUNTS = 0b1;
     public static final int TOP_BUTTON_CHANGE_LANGUAGE = 0b10;
     public static final int TOP_BUTTON_SEARCH = 0b100;
-    public static final int TOP_BUTTON_DEFAULT = Integer.MAX_VALUE & ~(TOP_BUTTON_CHANGE_LANGUAGE); // all except this items
-    public static final int MENU_ITEM_DEFAULT = Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_NEW_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT |
+    private static final int TOP_BUTTON_DEFAULT = Integer.MAX_VALUE & ~(TOP_BUTTON_CHANGE_LANGUAGE); // all except this items
+    private static final int MENU_ITEM_DEFAULT = Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_NEW_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT |
             MENU_ITEM_PLAY_VIDEO | MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_PIN_TO_SIDEBAR | MENU_ITEM_SHARE_EMBED_LINK); // all except this items
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
@@ -207,6 +207,11 @@ public class MainUIData extends DataChangeBase {
         return mCardTextScrollSpeed;
     }
 
+    public void resetMenuItem() {
+        mMenuItems = MENU_ITEM_DEFAULT;
+        persistState();
+    }
+
     public void enableMenuItem(int menuItems) {
         mMenuItems |= menuItems;
         persistState();
@@ -219,6 +224,11 @@ public class MainUIData extends DataChangeBase {
 
     public boolean isMenuItemEnabled(int menuItems) {
         return (mMenuItems & menuItems) == menuItems;
+    }
+
+    public void resetTopButton() {
+        mTopButtons = TOP_BUTTON_DEFAULT;
+        persistState();
     }
 
     public void enableTopButton(int button) {
