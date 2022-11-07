@@ -143,7 +143,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 } else {
                     mMainUIData.disableTopButton(pair[1]);
                 }
-                mRestartApp = true;
             }, mMainUIData.isTopButtonEnabled(pair[1])));
         }
 
