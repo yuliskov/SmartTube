@@ -342,7 +342,7 @@
     <string name="proxy_test_cancelled">Test#%d: annullato.</string>
     <string name="proxy_type_invalid">Tipo di Proxy non impostato.</string>
     <string name="proxy_host_invalid">Host proxy non impostato.</string>
-    <string name="proxy_port_invalid">Porta proxy non valida, deve essere &amp;amp;gt; 0.</string>
+    <string name="proxy_port_invalid">Porta proxy non valida, deve essere più grande di 0.</string>
     <string name="proxy_credentials_invalid">Nome utente o password errati.</string>
     <string name="proxy_test_aborted">Test interrotto, correggere prima le impostazioni del proxy.</string>
     <string name="proxy_application_aborted">Per favore, correggi prima le impostazioni del proxy.</string>
@@ -360,7 +360,7 @@
     <string name="simple_edit_value_hint">Nuovo valore</string>
     <string name="seek_interval">Cerca intervallo</string>
     <string name="seek_interval_sec">%s sec</string>
-    <string name="subtitle_system">Stile del sistema (impostazioni Android &amp;gt; Accessibilità)</string>
+    <string name="subtitle_system">Stile del sistema (Impostazioni Android / Accessibilità)</string>
     <string name="subtitle_scale">Scala dei sottotitoli</string>
     <string name="audio_sync_fix_desc">Un modo alternativo per sincronizzare audio/video. Considerato obsoleto, ma, in alcuni casi, può aiutare.</string>
     <string name="audio_sync_fix">Correzione sincronizzazione audio</string>
@@ -484,5 +484,6 @@
     <string name="protect_settings_with_password">Proteggi tutte le Impostazioni con una password</string>
     <string name="enter_settings_password">Immetti la password delle Impostazioni</string>
     <string name="child_mode">Modalità bambino</string>
-    <string name="child_mode_desc">In questa modalità l\'utente è limitato alle Iscrizioni e non può modificare le impostazioni.</string>
+    <string name="child_mode_desc">In questa modalità, l\'utente non può utilizzare la ricerca o visualizzare alcun contenuto suggerito. Le impostazioni saranno protette da password.</string>
+    <string name="lost_setting_warning">Le impostazioni dell\'app verranno modificate. Assicurati di aver creato un backup delle impostazioni.</string>
 </resources>
