@@ -7,6 +7,10 @@ import androidx.leanback.widget.VerticalGridView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
+/**
+ * lb_rows_fragment.xml<br/>
+ * lb_vertical_grid.xml
+ */
 public class TouchVerticalGridView extends VerticalGridView {
     private static final String TAG = TouchVerticalGridView.class.getSimpleName();
 
