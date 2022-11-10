@@ -7,6 +7,9 @@ import androidx.leanback.widget.HorizontalGridView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
+/**
+ * NOT working!
+ */
 public class TouchHorizontalGridView extends HorizontalGridView {
     private static final String TAG = TouchHorizontalGridView.class.getSimpleName();
 

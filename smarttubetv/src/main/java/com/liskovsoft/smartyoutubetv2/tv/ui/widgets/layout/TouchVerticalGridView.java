@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
 /**
+ * NOT working!<br/>
  * lb_rows_fragment.xml<br/>
  * lb_vertical_grid.xml
  */
