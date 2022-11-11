@@ -47,6 +47,7 @@ public final class CacheDataSourceTest {
   private static final byte[] TEST_DATA = new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
   private static final int CACHE_FRAGMENT_SIZE = 3;
   private static final String DATASPEC_KEY = "dataSpecKey";
+  private static final int MIN_PARALLEL_CHUNCKS_DOWNLOADS = 2;
 
   private Uri testDataUri;
   private DataSpec unboundedDataSpec;
@@ -68,7 +69,20 @@ public final class CacheDataSourceTest {
     boundedDataSpecWithKey = buildDataSpec(/* unbounded= */ false, DATASPEC_KEY);
     defaultCacheKey = CacheUtil.DEFAULT_CACHE_KEY_FACTORY.buildCacheKey(unboundedDataSpec);
     customCacheKey = "customKey." + defaultCacheKey;
-    cacheKeyFactory = dataSpec -> customCacheKey;
+    cacheKeyFactory = new CacheKeyFactory() {
+      @Override
+      public String buildCacheKey(DataSpec dataSpec) {
+        return customCacheKey;
+      }
+
+      @Override
+      public int maxDownloadParallelSegments() {
+        // TODO Implement a better logic to determine the number of concurrent chunck downloads or
+        // provide a way to customize by client. For now it uses at least MIN_PARALLEL_CHUNCKS_DOWNLOADS
+        // and at most the half of the number of device processor.
+        return Math.max(MIN_PARALLEL_CHUNCKS_DOWNLOADS, Runtime.getRuntime().availableProcessors() / 2);
+      }
+    };
     tempFolder =
         Util.createTempDirectory(ApplicationProvider.getApplicationContext(), "ExoPlayerTest");
     cache = new SimpleCache(tempFolder, new NoOpCacheEvictor());
