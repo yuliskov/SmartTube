@@ -34,6 +34,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Queue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -64,17 +71,19 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
     }
   }
 
-  private static final int BUFFER_SIZE_BYTES = 128 * 1024;
+  private static final int MIN_PARALLEL_CHUNCKS_DOWNLOADS = 2;
   private static final long MAX_MERGED_SEGMENT_START_TIME_DIFF_US = 20 * C.MICROS_PER_SECOND;
 
   private final DataSpec manifestDataSpec;
   private final Cache cache;
-  private final CacheDataSource dataSource;
   private final CacheDataSource offlineDataSource;
   private final CacheKeyFactory cacheKeyFactory;
   private final PriorityTaskManager priorityTaskManager;
   private final ArrayList<StreamKey> streamKeys;
   private final AtomicBoolean isCanceled;
+
+  private final ResourcePoolProvider<CacheDataSource> cacheDataSources;
+  private final ResourcePoolProvider<byte[]> buffers;
 
   /**
    * @param manifestUri The {@link Uri} of the manifest to be downloaded.
@@ -87,10 +96,11 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
     this.manifestDataSpec = getCompressibleDataSpec(manifestUri);
     this.streamKeys = new ArrayList<>(streamKeys);
     this.cache = constructorHelper.getCache();
-    this.dataSource = constructorHelper.createCacheDataSource();
     this.offlineDataSource = constructorHelper.createOfflineCacheDataSource();
     this.cacheKeyFactory = constructorHelper.getCacheKeyFactory();
     this.priorityTaskManager = constructorHelper.getPriorityTaskManager();
+    this.cacheDataSources = new ResourcePoolProvider<>(constructorHelper::createCacheDataSource);
+    this.buffers = new ResourcePoolProvider<>(() -> new byte[CacheUtil.DEFAULT_BUFFER_SIZE_BYTES]);
     isCanceled = new AtomicBoolean();
   }
 
@@ -104,16 +114,24 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
   @Override
   public final void download(@Nullable ProgressListener progressListener)
       throws IOException, InterruptedException {
+    ExecutorService executorService = Executors.newFixedThreadPool(maxParallelChunksDownloads());
     priorityTaskManager.add(C.PRIORITY_DOWNLOAD);
     try {
       // Get the manifest and all of the segments.
-      M manifest = getManifest(dataSource, manifestDataSpec);
-      if (!streamKeys.isEmpty()) {
-        manifest = manifest.copy(streamKeys);
+      List<Segment> segments;
+      CacheDataSource dataSource = cacheDataSources.obtain();
+      try {
+        M manifest = getManifest(dataSource, manifestDataSpec);
+        if (!streamKeys.isEmpty()) {
+          manifest = manifest.copy(streamKeys);
+        }
+        segments = getSegments(dataSource, manifest, /* allowIncompleteList= */
+            false);
+        Collections.sort(segments);
+        mergeSegments(segments, cacheKeyFactory);
+      } finally {
+        cacheDataSources.release(dataSource);
       }
-      List<Segment> segments = getSegments(dataSource, manifest, /* allowIncompleteList= */ false);
-      Collections.sort(segments);
-      mergeSegments(segments, cacheKeyFactory);
 
       // Scan the segments, removing any that are fully downloaded.
       int totalSegments = segments.size();
@@ -152,25 +170,20 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
                 bytesDownloaded,
                 segmentsDownloaded);
       }
-      byte[] buffer = new byte[BUFFER_SIZE_BYTES];
+      final int size = segments.size();
+      final CountDownLatch countDownLatch = new CountDownLatch(size);
       for (int i = 0; i < segments.size(); i++) {
-        CacheUtil.cache(
-            segments.get(i).dataSpec,
-            cache,
-            cacheKeyFactory,
-            dataSource,
-            buffer,
-            priorityTaskManager,
-            C.PRIORITY_DOWNLOAD,
-            progressNotifier,
-            isCanceled,
-            true);
-        if (progressNotifier != null) {
-          progressNotifier.onSegmentDownloaded();
-        }
+        executorService.submit(
+            new SegmentDownloadTask(
+                this,
+                segments.get(i),
+                progressNotifier,
+                countDownLatch));
       }
+      countDownLatch.await();
     } finally {
       priorityTaskManager.remove(C.PRIORITY_DOWNLOAD);
+      executorService.shutdownNow();
     }
   }
 
@@ -275,6 +288,12 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
         && dataSpec1.httpRequestHeaders.equals(dataSpec2.httpRequestHeaders);
   }
 
+  private static int maxParallelChunksDownloads() {
+    // TODO Implement a better logic to determine the number of concurrent chunck downloads or
+    // provide a way to customize by client.
+    return Math.max(MIN_PARALLEL_CHUNCKS_DOWNLOADS, Runtime.getRuntime().availableProcessors() / 2);
+  }
+
   private static final class ProgressNotifier implements CacheUtil.ProgressListener {
 
     private final ProgressListener progressListener;
@@ -285,7 +304,7 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
     private long bytesDownloaded;
     private int segmentsDownloaded;
 
-    public ProgressNotifier(
+    ProgressNotifier(
         ProgressListener progressListener,
         long contentLength,
         int totalSegments,
@@ -304,7 +323,7 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
       progressListener.onProgress(contentLength, bytesDownloaded, getPercentDownloaded());
     }
 
-    public void onSegmentDownloaded() {
+    void onSegmentDownloaded() {
       segmentsDownloaded++;
       progressListener.onProgress(contentLength, bytesDownloaded, getPercentDownloaded());
     }
@@ -318,5 +337,77 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
         return C.PERCENTAGE_UNSET;
       }
     }
+  }
+
+  private static final class SegmentDownloadTask implements Callable<Void> {
+    private final SegmentDownloader downloader;
+    private final Segment segment;
+    private final ProgressNotifier progressNotifier;
+    private final CountDownLatch countDownLatch;
+
+    SegmentDownloadTask(
+        SegmentDownloader downloader,
+        Segment segment,
+        ProgressNotifier progressNotifier,
+        CountDownLatch countDownLatch) {
+      this.downloader = downloader;
+      this.segment = segment;
+      this.progressNotifier = progressNotifier;
+      this.countDownLatch = countDownLatch;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Void call() throws Exception {
+      byte[] buffer = (byte[]) downloader.buffers.obtain();
+      CacheDataSource cacheDataSource = (CacheDataSource) downloader.cacheDataSources.obtain();
+      try {
+        CacheUtil.cache(
+            segment.dataSpec,
+            downloader.cache,
+            downloader.cacheKeyFactory,
+            cacheDataSource,
+            buffer,
+            downloader.priorityTaskManager,
+            C.PRIORITY_DOWNLOAD,
+            progressNotifier,
+            downloader.isCanceled,
+            true);
+        if (progressNotifier != null) {
+          progressNotifier.onSegmentDownloaded();
+        }
+      } finally {
+        downloader.cacheDataSources.release(cacheDataSource);
+        downloader.buffers.release(buffer);
+        countDownLatch.countDown();
+      }
+      return null;
+    }
+  }
+
+  private static class ResourcePoolProvider<T> {
+    private final Queue<T> pool = new ConcurrentLinkedQueue<>();
+    private final ResourceProvider<T> provider;
+
+    ResourcePoolProvider(ResourceProvider<T> provider) {
+      this.provider = provider;
+    }
+
+    public T obtain() {
+      try {
+        return pool.remove();
+      } catch (NoSuchElementException ex) {
+        // create a new resource
+      }
+      return provider.provide();
+    }
+
+    public void release(T resource) {
+      pool.add(resource);
+    }
+  }
+
+  private interface ResourceProvider<T> {
+    T provide();
   }
 }
