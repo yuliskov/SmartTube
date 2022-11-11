@@ -26,11 +26,13 @@ import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheKeyFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheUtil;
+import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.PriorityTaskManager;
 import com.google.android.exoplayer2.util.Util;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -63,6 +65,7 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
   }
 
   private static final int BUFFER_SIZE_BYTES = 128 * 1024;
+  private static final long MAX_MERGED_SEGMENT_START_TIME_DIFF_US = 20 * C.MICROS_PER_SECOND;
 
   private final DataSpec manifestDataSpec;
   private final Cache cache;
@@ -109,6 +112,8 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
         manifest = manifest.copy(streamKeys);
       }
       List<Segment> segments = getSegments(dataSource, manifest, /* allowIncompleteList= */ false);
+      Collections.sort(segments);
+      mergeSegments(segments, cacheKeyFactory);
 
       // Scan the segments, removing any that are fully downloaded.
       int totalSegments = segments.size();
@@ -135,7 +140,6 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
           contentLength = C.LENGTH_UNSET;
         }
       }
-      Collections.sort(segments);
 
       // Download the segments.
       ProgressNotifier progressNotifier = null;
@@ -231,6 +235,44 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
         /* length= */ C.LENGTH_UNSET,
         /* key= */ null,
         /* flags= */ DataSpec.FLAG_ALLOW_GZIP);
+  }
+
+  private static void mergeSegments(List<Segment> segments, CacheKeyFactory keyFactory) {
+    HashMap<String, Integer> lastIndexByCacheKey = new HashMap<>();
+    int nextOutIndex = 0;
+    for (int i = 0; i < segments.size(); i++) {
+      Segment segment = segments.get(i);
+      String cacheKey = keyFactory.buildCacheKey(segment.dataSpec);
+      @Nullable Integer lastIndex = lastIndexByCacheKey.get(cacheKey);
+      @Nullable Segment lastSegment = lastIndex == null ? null : segments.get(lastIndex);
+      if (lastSegment == null
+          || segment.startTimeUs > lastSegment.startTimeUs + MAX_MERGED_SEGMENT_START_TIME_DIFF_US
+          || !canMergeSegments(lastSegment.dataSpec, segment.dataSpec)) {
+        lastIndexByCacheKey.put(cacheKey, nextOutIndex);
+        segments.set(nextOutIndex, segment);
+        nextOutIndex++;
+      } else {
+        long mergedLength =
+            segment.dataSpec.length == C.LENGTH_UNSET
+                ? C.LENGTH_UNSET
+                : lastSegment.dataSpec.length + segment.dataSpec.length;
+        DataSpec mergedDataSpec = lastSegment.dataSpec.subrange(/* offset= */ 0, mergedLength);
+        segments.set(
+            Assertions.checkNotNull(lastIndex),
+            new Segment(lastSegment.startTimeUs, mergedDataSpec));
+      }
+    }
+    Util.removeRange(segments, /* fromIndex= */ nextOutIndex, /* toIndex= */ segments.size());
+  }
+
+  private static boolean canMergeSegments(DataSpec dataSpec1, DataSpec dataSpec2) {
+    return dataSpec1.uri.equals(dataSpec2.uri)
+        && dataSpec1.length != C.LENGTH_UNSET
+        && (dataSpec1.absoluteStreamPosition + dataSpec1.length == dataSpec2.absoluteStreamPosition)
+        && Util.areEqual(dataSpec1.key, dataSpec2.key)
+        && dataSpec1.flags == dataSpec2.flags
+        && dataSpec1.httpMethod == dataSpec2.httpMethod
+        && dataSpec1.httpRequestHeaders.equals(dataSpec2.httpRequestHeaders);
   }
 
   private static final class ProgressNotifier implements CacheUtil.ProgressListener {
