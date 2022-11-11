@@ -71,7 +71,6 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
     }
   }
 
-  private static final int MIN_PARALLEL_CHUNCKS_DOWNLOADS = 2;
   private static final long MAX_MERGED_SEGMENT_START_TIME_DIFF_US = 20 * C.MICROS_PER_SECOND;
 
   private final DataSpec manifestDataSpec;
@@ -114,7 +113,8 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
   @Override
   public final void download(@Nullable ProgressListener progressListener)
       throws IOException, InterruptedException {
-    ExecutorService executorService = Executors.newFixedThreadPool(maxParallelChunksDownloads());
+    ExecutorService executorService = Executors.newFixedThreadPool(
+        Math.max(1, cacheKeyFactory.maxDownloadParallelSegments()));
     priorityTaskManager.add(C.PRIORITY_DOWNLOAD);
     try {
       // Get the manifest and all of the segments.
@@ -310,12 +310,6 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
         segments.set(i, new Segment(segment.startTimeUs, dataSpec));
       }
     }
-  }
-
-  private static int maxParallelChunksDownloads() {
-    // TODO Implement a better logic to determine the number of concurrent chunck downloads or
-    // provide a way to customize by client.
-    return Math.max(MIN_PARALLEL_CHUNCKS_DOWNLOADS, Runtime.getRuntime().availableProcessors() / 2);
   }
 
   private static final class ProgressNotifier implements CacheUtil.ProgressListener {
