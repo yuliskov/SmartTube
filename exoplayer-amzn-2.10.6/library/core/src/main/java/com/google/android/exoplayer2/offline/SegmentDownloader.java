@@ -133,7 +133,8 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
 
       // Sort, merge and reassign segment cache key
       Collections.sort(segments);
-      mergeSegments(segments, cacheKeyFactory);
+      // TODO Merge segment can cause in playback with the current approach
+      //mergeSegments(segments, cacheKeyFactory);
       reassignCacheKey(segments);
 
       // Scan the segments, removing any that are fully downloaded.
