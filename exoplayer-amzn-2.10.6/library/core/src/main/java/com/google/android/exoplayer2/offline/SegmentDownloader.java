@@ -127,11 +127,14 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
         }
         segments = getSegments(dataSource, manifest, /* allowIncompleteList= */
             false);
-        Collections.sort(segments);
-        mergeSegments(segments, cacheKeyFactory);
       } finally {
         cacheDataSources.release(dataSource);
       }
+
+      // Sort, merge and reassign segment cache key
+      Collections.sort(segments);
+      mergeSegments(segments, cacheKeyFactory);
+      reassignCacheKey(segments);
 
       // Scan the segments, removing any that are fully downloaded.
       int totalSegments = segments.size();
@@ -197,6 +200,7 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
     try {
       M manifest = getManifest(offlineDataSource, manifestDataSpec);
       List<Segment> segments = getSegments(offlineDataSource, manifest, true);
+      reassignCacheKey(segments);
       for (int i = 0; i < segments.size(); i++) {
         removeDataSpec(segments.get(i).dataSpec);
       }
@@ -286,6 +290,26 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
         && dataSpec1.flags == dataSpec2.flags
         && dataSpec1.httpMethod == dataSpec2.httpMethod
         && dataSpec1.httpRequestHeaders.equals(dataSpec2.httpRequestHeaders);
+  }
+
+  private static void reassignCacheKey(List<Segment> segments) {
+    int size = segments.size();
+    for (int i = 0; i < size; i++) {
+      Segment segment = segments.get(i);
+      if (segment.dataSpec.key == null) {
+        DataSpec dataSpec = new DataSpec(
+            segment.dataSpec.uri,
+            segment.dataSpec.httpMethod,
+            segment.dataSpec.httpBody,
+            segment.dataSpec.absoluteStreamPosition,
+            segment.dataSpec.position,
+            segment.dataSpec.length,
+            segment.dataSpec.uri + "-" + segment.startTimeUs,
+            segment.dataSpec.flags,
+            segment.dataSpec.httpRequestHeaders);
+        segments.set(i, new Segment(segment.startTimeUs, dataSpec));
+      }
+    }
   }
 
   private static int maxParallelChunksDownloads() {
