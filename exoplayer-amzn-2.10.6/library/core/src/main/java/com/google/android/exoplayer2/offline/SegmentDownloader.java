@@ -292,7 +292,7 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
         && dataSpec1.httpRequestHeaders.equals(dataSpec2.httpRequestHeaders);
   }
 
-  private static void reassignCacheKey(List<Segment> segments) {
+  private void reassignCacheKey(List<Segment> segments) {
     int size = segments.size();
     for (int i = 0; i < size; i++) {
       Segment segment = segments.get(i);
@@ -304,7 +304,7 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
             segment.dataSpec.absoluteStreamPosition,
             segment.dataSpec.position,
             segment.dataSpec.length,
-            segment.dataSpec.uri + "-" + segment.startTimeUs,
+            cacheKeyFactory.buildCacheKey(segment.dataSpec),
             segment.dataSpec.flags,
             segment.dataSpec.httpRequestHeaders);
         segments.set(i, new Segment(segment.startTimeUs, dataSpec));

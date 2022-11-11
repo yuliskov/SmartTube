@@ -55,15 +55,15 @@ public final class CacheUtil {
 
   /** Default {@link CacheKeyFactory}. */
   public static final CacheKeyFactory DEFAULT_CACHE_KEY_FACTORY =
-      (dataSpec) -> dataSpec.key != null ? dataSpec.key : generateKey(dataSpec.uri);
+      (dataSpec) -> dataSpec.key != null ? dataSpec.key : generateKey(dataSpec);
 
   /**
-   * Generates a cache key out of the given {@link Uri}.
+   * Generates a cache key out of the given {@link DataSpec}.
    *
-   * @param uri Uri of a content which the requested key is for.
+   * @param dataSpec DataSpec of a content which the requested key is for.
    */
-  public static String generateKey(Uri uri) {
-    return uri.toString();
+  public static String generateKey(DataSpec dataSpec) {
+    return dataSpec.toString() + "-" +  + dataSpec.absoluteStreamPosition;
   }
 
   /**
