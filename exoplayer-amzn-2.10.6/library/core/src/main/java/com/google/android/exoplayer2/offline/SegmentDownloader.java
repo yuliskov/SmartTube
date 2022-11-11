@@ -39,8 +39,10 @@ import java.util.Queue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -175,16 +177,29 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
                 segmentsDownloaded);
       }
       final int size = segments.size();
-      final CountDownLatch countDownLatch = new CountDownLatch(size);
-      for (int i = 0; i < segments.size(); i++) {
-        executorService.submit(
-            new SegmentDownloadTask(
-                this,
-                segments.get(i),
-                progressNotifier,
-                countDownLatch));
+      final AbortableCountDownLatch countDownLatch = new AbortableCountDownLatch(size);
+      final List<Future<SegmentDownloadTaskResult>> futures = new ArrayList<>(size);
+      for (Segment segment : segments) {
+        futures.add(
+            executorService.submit(
+                new SegmentDownloadTask<>(
+                    this,
+                    segment,
+                    progressNotifier,
+                    countDownLatch)));
       }
       countDownLatch.await();
+      executorService.shutdownNow();
+      for (Future<SegmentDownloadTaskResult> future : futures) {
+        try {
+          SegmentDownloadTaskResult result = future.get();
+          if (result.cause != null) {
+            throw result.cause;
+          }
+        } catch (ExecutionException ex) {
+          // ignore
+        }
+      }
     } finally {
       priorityTaskManager.remove(C.PRIORITY_DOWNLOAD);
       executorService.shutdownNow();
@@ -358,17 +373,27 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
     }
   }
 
-  private static final class SegmentDownloadTask implements Callable<Void> {
-    private final SegmentDownloader downloader;
+  private static final class SegmentDownloadTaskResult {
+    public final Segment segment;
+    public final IOException cause;
+
+    public SegmentDownloadTaskResult(Segment segment, IOException cause) {
+      this.segment = segment;
+      this.cause = cause;
+    }
+  }
+
+  private static final class SegmentDownloadTask<M extends FilterableManifest<M>> implements Callable<SegmentDownloadTaskResult> {
+    private final SegmentDownloader<M> downloader;
     private final Segment segment;
     private final ProgressNotifier progressNotifier;
     private final CountDownLatch countDownLatch;
 
     SegmentDownloadTask(
-        SegmentDownloader downloader,
+        SegmentDownloader<M> downloader,
         Segment segment,
         ProgressNotifier progressNotifier,
-        CountDownLatch countDownLatch) {
+        AbortableCountDownLatch countDownLatch) {
       this.downloader = downloader;
       this.segment = segment;
       this.progressNotifier = progressNotifier;
@@ -376,31 +401,50 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Void call() throws Exception {
-      byte[] buffer = (byte[]) downloader.buffers.obtain();
-      CacheDataSource cacheDataSource = (CacheDataSource) downloader.cacheDataSources.obtain();
+    public SegmentDownloadTaskResult call() {
       try {
-        CacheUtil.cache(
-            segment.dataSpec,
-            downloader.cache,
-            downloader.cacheKeyFactory,
-            cacheDataSource,
-            buffer,
-            downloader.priorityTaskManager,
-            C.PRIORITY_DOWNLOAD,
-            progressNotifier,
-            downloader.isCanceled,
-            true);
-        if (progressNotifier != null) {
-          progressNotifier.onSegmentDownloaded();
+        byte[] buffer = downloader.buffers.obtain();
+        CacheDataSource cacheDataSource = downloader.cacheDataSources.obtain();
+        try {
+          CacheUtil.cache(
+              segment.dataSpec,
+              downloader.cache,
+              downloader.cacheKeyFactory,
+              cacheDataSource,
+              buffer,
+              downloader.priorityTaskManager,
+              C.PRIORITY_DOWNLOAD,
+              progressNotifier,
+              downloader.isCanceled,
+              true);
+          if (progressNotifier != null) {
+            progressNotifier.onSegmentDownloaded();
+          }
+          return new SegmentDownloadTaskResult(segment, null);
+        } finally {
+          downloader.cacheDataSources.release(cacheDataSource);
+          downloader.buffers.release(buffer);
         }
+      } catch (Exception ex) {
+        if (ex instanceof IOException) {
+          return new SegmentDownloadTaskResult(segment, (IOException) ex);
+        }
+        return new SegmentDownloadTaskResult(segment, new IOException(ex));
       } finally {
-        downloader.cacheDataSources.release(cacheDataSource);
-        downloader.buffers.release(buffer);
         countDownLatch.countDown();
       }
-      return null;
+    }
+  }
+
+  private static class AbortableCountDownLatch extends CountDownLatch {
+    public AbortableCountDownLatch(int count) {
+      super(count);
+    }
+
+    public void abort() {
+      while(getCount() > 0) {
+        countDown();
+      }
     }
   }
 
