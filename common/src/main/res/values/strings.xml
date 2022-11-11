@@ -486,4 +486,5 @@
     <string name="child_mode">Child mode</string>
     <string name="child_mode_desc">In this mode, the user can\'t use search or see any suggested content. The settings will be under the password.</string>
     <string name="lost_setting_warning">The app settings will be changed. Make sure that you created a backup of the settings.</string>
+    <string name="player_button_long_click">A short click on the button to quick action and a long to settings dialog</string>
 </resources>

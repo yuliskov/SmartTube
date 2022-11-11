@@ -395,6 +395,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_button_long_click),
+                option -> mPlayerTweaksData.enableButtonLongClick(option.isSelected()),
+                mPlayerTweaksData.isButtonLongClickEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.sleep_timer),
                 //getContext().getString(R.string.sleep_timer_desc),
                 option -> mPlayerData.enableSonyTimerFix(option.isSelected()),

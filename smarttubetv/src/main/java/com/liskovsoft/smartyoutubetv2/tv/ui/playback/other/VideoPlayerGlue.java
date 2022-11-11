@@ -426,8 +426,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
             return false;
         }
 
-        // Replace short click action with long if long click is disabled in the settings
-        if (mGeneralData.isOkButtonLongPressDisabled() && dispatchLongClickAction(action)) {
+        // Long press actions usually more important than short ones. So, try to use it first in case long click is disabled.
+        if ((mGeneralData.isOkButtonLongPressDisabled() || !mPlayerTweaksData.isButtonLongClickEnabled()) && dispatchLongClickAction(action)) {
             return true;
         }
 
