@@ -52,8 +52,7 @@ dependencies {
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion
     androidTestImplementation 'androidx.test.ext:junit:' + testXSupportLibraryVersion
-
-    //implementation project(':openvpn')
+    
     implementation project(':sharedutils')
     implementation project(':mediaserviceinterfaces')
     implementation project(':youtubeapi')
