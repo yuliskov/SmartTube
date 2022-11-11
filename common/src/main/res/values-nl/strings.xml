@@ -286,7 +286,7 @@
   <string name="move_section_down">Sectie omlaag verplaatsen</string>
   <string name="player_buttons">Spelerknoppen instellen</string>
   <string name="action_playlist_add">Toevoegen aan afspeellijst</string>
-  <string name="action_video_stats">Geavanceerde video informatie tonen</string>
+  <string name="action_video_stats">Ontwikkelaarsopties</string>
   <string name="action_subscribe">Abonneren</string>
   <string name="action_channel">Kanaal openen</string>
   <string name="action_pip">PIP</string>
@@ -405,7 +405,7 @@
   <string name="lb_playback_controls_skip_previous">Vorige/terugspoelen om positie te starten</string>
   <string name="alt_presets_behavior">Alt-presets  behavior (bandbreedte beperken)</string>
   <string name="alt_presets_behavior_desc">De app zal proberen de bandbreedte te behouden die overeenkomt met de geselecteerde preset in plaats van te matchen tussen resolutie, fps en codec.</string>
-  <string name="sleep_timer">Slaapklok (afstandsbediening uur inactief)</string>
+  <string name="sleep_timer">Slaaptimerundefined(afstandsbediening uur inactief)</string>
   <string name="sleep_timer_desc">Pauzeer het afspelen als de gebruiker de afstandsbediening een uur lang niet heeft gebruikt</string>
   <string name="disable_vsync_desc">Verbetert de afspeelprestaties een beetje</string>
   <string name="skip_codec_profile_check_desc">Controleer de codec-ondersteuning niet bij het starten van een video.  Zou handig kunnen zijn bij buggy-firmware.</string>
@@ -476,4 +476,7 @@
   <string name="player_speed_button_old_behavior">Oude gedrag van de snelheidsknop terugzetten</string>
   <string name="protect_settings_with_password">Bescherm alle instellingen met een wachtwoord</string>
   <string name="enter_settings_password">Voer het instellingenwachtwoord in</string>
+  <string name="child_mode">Kinder modus</string>
+  <string name="child_mode_desc">In deze modus kan de gebruiker de zoekfunctie niet gebruiken of voorgestelde inhoud bekijken.  De instellingen staan ​​onder het wachtwoord.</string>
+  <string name="lost_setting_warning">De app-instellingen worden gewijzigd.  Zorg ervoor dat u een back-up van de instellingen hebt gemaakt.</string>
 </resources>

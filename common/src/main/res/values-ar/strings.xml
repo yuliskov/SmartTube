@@ -75,7 +75,7 @@
   <string name="player_only_ui">واجهة المستخدم فقط</string>
   <string name="player_ui_and_pause">واجهة المستخدم وإيقاف الفيديو</string>
   <string name="player_only_pause">فقط إيقاف الفيديو</string>
-  <string name="check_for_updates">تحقق من وجود تحديثات</string>
+  <string name="check_for_updates">تحقق من توفر تحديثات</string>
   <string name="update_not_found">أنت تستخدم أحدث إصدار</string>
   <string name="update_in_progress">إنتظر…</string>
   <string name="player_ui_hide_behavior">إخفاء واجهة المستخدم أليًا</string>
@@ -479,4 +479,9 @@
   <string name="content_block_status">تحقق من حالة SpnsorBlock</string>
   <string name="player_show_quality_info_bitrate">إضافة معدل البت (Bitrate) إلى معلومات الجودة</string>
   <string name="player_speed_button_old_behavior">العودة الى السلوك القديم لزر السرعة</string>
+  <string name="protect_settings_with_password">حماية جميع الإعدادات بكلمة مرور</string>
+  <string name="enter_settings_password">أدخل كلمة مرور الإعدادات</string>
+  <string name="child_mode">وضع الطفل</string>
+  <string name="child_mode_desc">في هذا الوضع ، لا يمكن للمستخدم استخدام البحث أو مشاهدة أي محتوى مقترح.  ستكون الإعدادات تحت كلمة المرور.</string>
+  <string name="lost_setting_warning">سيتم تغيير إعدادات التطبيق.  تأكد من إنشاء نسخة احتياطية من الإعدادات.</string>
 </resources>
