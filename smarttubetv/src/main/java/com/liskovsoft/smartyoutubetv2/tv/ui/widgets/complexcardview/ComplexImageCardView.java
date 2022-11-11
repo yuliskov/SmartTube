@@ -123,6 +123,17 @@ public class ComplexImageCardView extends ImageCardView {
         titleView.setLines(lines);
     }
 
+    public void setContentLinesNum(int lines) {
+        TextView contentView = findViewById(R.id.content_text);
+
+        if (contentView == null || lines <= 0) {
+            return;
+        }
+
+        contentView.setMaxLines(lines);
+        contentView.setLines(lines);
+    }
+
     public void enableBadge(boolean enabled) {
         mIsBadgeEnabled = enabled;
     }

@@ -77,6 +77,7 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
         };
 
         cardView.setTitleLinesNum(mIsCardMultilineTitleEnabled ? 2 : 1);
+        cardView.setContentLinesNum(mIsCardMultilineTitleEnabled ? 2 : 1);
         cardView.enableTextAutoScroll(mIsCardTextAutoScrollEnabled);
         cardView.setTextScrollSpeed(mCardTextScrollSpeed);
         cardView.setFocusable(true);
