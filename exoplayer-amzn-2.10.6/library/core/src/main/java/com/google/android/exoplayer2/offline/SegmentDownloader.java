@@ -387,7 +387,7 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
     private final SegmentDownloader<M> downloader;
     private final Segment segment;
     private final ProgressNotifier progressNotifier;
-    private final CountDownLatch countDownLatch;
+    private final AbortableCountDownLatch countDownLatch;
 
     SegmentDownloadTask(
         SegmentDownloader<M> downloader,
@@ -402,6 +402,7 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
 
     @Override
     public SegmentDownloadTaskResult call() {
+      boolean abort = false;
       try {
         byte[] buffer = downloader.buffers.obtain();
         CacheDataSource cacheDataSource = downloader.cacheDataSources.obtain();
@@ -426,12 +427,16 @@ public abstract class SegmentDownloader<M extends FilterableManifest<M>> impleme
           downloader.buffers.release(buffer);
         }
       } catch (Exception ex) {
+        abort = true;
         if (ex instanceof IOException) {
           return new SegmentDownloadTaskResult(segment, (IOException) ex);
         }
         return new SegmentDownloadTaskResult(segment, new IOException(ex));
       } finally {
         countDownLatch.countDown();
+        if (abort) {
+          countDownLatch.abort();
+        }
       }
     }
   }
