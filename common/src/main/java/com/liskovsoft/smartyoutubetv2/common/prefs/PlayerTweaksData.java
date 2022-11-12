@@ -29,7 +29,7 @@ public class PlayerTweaksData {
     public static final int PLAYER_BUTTON_SEEK_INTERVAL = 0b100000000000000000000;
     public static final int PLAYER_BUTTON_CONTENT_BLOCK = 0b1000000000000000000000;
     public static final int PLAYER_BUTTON_CHAT = 0b10000000000000000000000;
-    private static final int PLAYER_BUTTON_DEFAULT = Integer.MAX_VALUE & ~(PLAYER_BUTTON_SEEK_INTERVAL | PLAYER_BUTTON_CONTENT_BLOCK); // all buttons, except these
+    public static final int PLAYER_BUTTON_DEFAULT = Integer.MAX_VALUE & ~(PLAYER_BUTTON_SEEK_INTERVAL | PLAYER_BUTTON_CONTENT_BLOCK); // all buttons, except these
     @SuppressLint("StaticFieldLeak")
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;
@@ -186,11 +186,6 @@ public class PlayerTweaksData {
 
     public void enableTunneledPlayback(boolean enable) {
         mIsTunneledPlaybackEnabled = enable;
-        persistData();
-    }
-
-    public void resetPlayerButton() {
-        mPlayerButtons = PLAYER_BUTTON_DEFAULT;
         persistData();
     }
 

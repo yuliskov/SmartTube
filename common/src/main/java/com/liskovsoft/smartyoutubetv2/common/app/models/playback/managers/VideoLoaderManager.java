@@ -21,6 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.Sugges
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -140,7 +141,11 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
     @Override
     public boolean onNextClicked() {
-        loadNext();
+        if (GeneralData.instance(getActivity()).isChildModeEnabled()) {
+            onPlayEnd();
+        } else {
+            loadNext();
+        }
 
         return true;
     }
@@ -459,7 +464,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                 } else {
                     getController().showSuggestions(true);
                     getController().setPlayWhenReady(false);
-                    getController().setPositionMs(0);
+                    getController().setPositionMs(getController().getDurationMs());
                     Utils.showRepeatInfo(getActivity(), repeatMode);
                 }
                 break;

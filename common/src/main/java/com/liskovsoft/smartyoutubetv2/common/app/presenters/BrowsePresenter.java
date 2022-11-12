@@ -428,15 +428,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateSections();
     }
 
-    public void resetSections() {
-        enableSection(MediaGroup.TYPE_HISTORY, true);
-        enableSection(MediaGroup.TYPE_USER_PLAYLISTS, true);
-        enableSection(MediaGroup.TYPE_SUBSCRIPTIONS, true);
-        enableSection(MediaGroup.TYPE_CHANNEL_UPLOADS, true);
-        enableSection(MediaGroup.TYPE_GAMING, true);
-        enableSection(MediaGroup.TYPE_MUSIC, true);
-        enableSection(MediaGroup.TYPE_NEWS, true);
-        enableSection(MediaGroup.TYPE_HOME, true);
+    public void enableAllSections(boolean enable) {
+        enableSection(MediaGroup.TYPE_HISTORY, enable);
+        enableSection(MediaGroup.TYPE_USER_PLAYLISTS, enable);
+        enableSection(MediaGroup.TYPE_SUBSCRIPTIONS, enable);
+        enableSection(MediaGroup.TYPE_CHANNEL_UPLOADS, enable);
+        enableSection(MediaGroup.TYPE_GAMING, enable);
+        enableSection(MediaGroup.TYPE_MUSIC, enable);
+        enableSection(MediaGroup.TYPE_NEWS, enable);
+        enableSection(MediaGroup.TYPE_HOME, enable);
     }
 
     public void enableSection(int sectionId, boolean enable) {

@@ -432,41 +432,42 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void enableChildMode(boolean enable) {
         mGeneralData.enableChildMode(enable);
 
-        int topButtons = MainUIData.TOP_BUTTON_SEARCH | MainUIData.TOP_BUTTON_CHANGE_LANGUAGE | MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS;
-        int playerButtons =
-                    PlayerTweaksData.PLAYER_BUTTON_CONTENT_BLOCK | PlayerTweaksData.PLAYER_BUTTON_SHARE |
-                    PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO | PlayerTweaksData.PLAYER_BUTTON_NEXT | PlayerTweaksData.PLAYER_BUTTON_PREVIOUS |
-                    PlayerTweaksData.PLAYER_BUTTON_SEARCH | PlayerTweaksData.PLAYER_BUTTON_SUBSCRIBE | PlayerTweaksData.PLAYER_BUTTON_REPEAT_MODE |
-                    PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE | PlayerTweaksData.PLAYER_BUTTON_SEEK_INTERVAL | PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM |
-                    PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF | PlayerTweaksData.PLAYER_BUTTON_HIGH_QUALITY | PlayerTweaksData.PLAYER_BUTTON_VIDEO_STATS;
-        int menuItems =
-                    MainUIData.MENU_ITEM_SUBSCRIBE | MainUIData.MENU_ITEM_OPEN_DESCRIPTION | MainUIData.MENU_ITEM_SAVE_PLAYLIST |
-                    MainUIData.MENU_ITEM_SELECT_ACCOUNT | MainUIData.MENU_ITEM_SHARE_LINK | MainUIData.MENU_ITEM_SHARE_EMBED_LINK |
-                    MainUIData.MENU_ITEM_SHOW_QUEUE | MainUIData.MENU_ITEM_ADD_TO_QUEUE | MainUIData.MENU_ITEM_MOVE_SECTION_UP | MainUIData.MENU_ITEM_MOVE_SECTION_DOWN |
-                    MainUIData.MENU_ITEM_PIN_TO_SIDEBAR | MainUIData.MENU_ITEM_PLAY_VIDEO | MainUIData.MENU_ITEM_RECENT_PLAYLIST;
+        int topButtons = MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS;
+        int playerButtons = PlayerTweaksData.PLAYER_BUTTON_PLAY_PAUSE | PlayerTweaksData.PLAYER_BUTTON_NEXT | PlayerTweaksData.PLAYER_BUTTON_PREVIOUS |
+                    PlayerTweaksData.PLAYER_BUTTON_DISLIKE | PlayerTweaksData.PLAYER_BUTTON_LIKE | PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF |
+                    PlayerTweaksData.PLAYER_BUTTON_SEEK_INTERVAL | PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE | PlayerTweaksData.PLAYER_BUTTON_OPEN_CHANNEL |
+                    PlayerTweaksData.PLAYER_BUTTON_PIP | PlayerTweaksData.PLAYER_BUTTON_VIDEO_SPEED | PlayerTweaksData.PLAYER_BUTTON_SUBTITLES |
+                    PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM | PlayerTweaksData.PLAYER_BUTTON_ADD_TO_PLAYLIST;
+        int menuItems = MainUIData.MENU_ITEM_SHOW_QUEUE | MainUIData.MENU_ITEM_ADD_TO_QUEUE | MainUIData.MENU_ITEM_SELECT_ACCOUNT |
+                    MainUIData.MENU_ITEM_STREAM_REMINDER | MainUIData.MENU_ITEM_SAVE_PLAYLIST | MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY;
 
         PlayerTweaksData tweaksData = PlayerTweaksData.instance(getContext());
 
-        // Reset to defaults
-        mMainUIData.resetTopButton();
-        mMainUIData.resetMenuItem();
-        tweaksData.resetPlayerButton();
-        tweaksData.disableSuggestions(false);
-        mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_ALL);
-        BrowsePresenter.instance(getContext()).resetSections();
+        // Remove all
+        mMainUIData.disableTopButton(Integer.MAX_VALUE);
+        tweaksData.disablePlayerButton(Integer.MAX_VALUE);
+        mMainUIData.disableMenuItem(Integer.MAX_VALUE);
+        BrowsePresenter.instance(getContext()).enableAllSections(false);
 
         if (enable) {
             // apply child tweaks
-            mMainUIData.disableTopButton(topButtons);
-            mMainUIData.disableMenuItem(menuItems);
-            tweaksData.disablePlayerButton(playerButtons);
+            mMainUIData.enableTopButton(topButtons);
+            tweaksData.enablePlayerButton(playerButtons);
+            mMainUIData.enableMenuItem(menuItems);
             tweaksData.disableSuggestions(true);
-            mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_CLOSE);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HOME, false);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_GAMING, false);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_NEWS, false);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_MUSIC, false);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_CHANNEL_UPLOADS, false);
+            mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_LIST);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HOME, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_GAMING, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_NEWS, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_MUSIC, true);
+        } else {
+            // apply default tweaks
+            mMainUIData.enableTopButton(MainUIData.TOP_BUTTON_DEFAULT);
+            tweaksData.enablePlayerButton(PlayerTweaksData.PLAYER_BUTTON_DEFAULT);
+            mMainUIData.enableMenuItem(MainUIData.MENU_ITEM_DEFAULT);
+            BrowsePresenter.instance(getContext()).enableAllSections(true);
+            tweaksData.disableSuggestions(false);
+            mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_ALL);
         }
     }
 
