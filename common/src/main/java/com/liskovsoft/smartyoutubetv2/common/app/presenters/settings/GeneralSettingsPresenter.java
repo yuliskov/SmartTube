@@ -343,6 +343,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     } else {
                         mGeneralData.setSettingsPassword(null);
                         enableChildMode(option.isSelected());
+                        settingsPresenter.closeDialog();
                     }
                 },
                 mGeneralData.isChildModeEnabled()));

@@ -16,6 +16,7 @@ import androidx.leanback.widget.SearchOrbView;
 import androidx.leanback.widget.SearchOrbView.Colors;
 import androidx.leanback.widget.TitleView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
@@ -328,6 +329,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange {
         Glide.with(view.getContext())
                 .load(url)
                 .apply(ViewUtil.glideOptions())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .circleCrop() // resize image
                 .into(new SimpleTarget<Drawable>(view.getWidth(), view.getHeight()) {
                     @Override
