@@ -258,13 +258,13 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 if (video.playlistId == null) {
                     MessageHelpers.showMessage(getContext(), R.string.cant_delete_empty_playlist);
                 } else {
-                    AppDialogUtil.showConfirmationDialog(getContext(), () -> {
+                    AppDialogUtil.showConfirmationDialog(getContext(), String.format("%s: %s", video.title, getContext().getString(R.string.remove_playlist)), () -> {
                         removePlaylist(video);
                         if (getCallback() != null) {
                             getCallback().onItemAction(getVideo(), VideoMenuCallback.ACTION_REMOVE);
                             closeDialog();
                         }
-                    }, String.format("%s: %s", video.title, getContext().getString(R.string.remove_playlist)));
+                    });
                 }
             } else {
                 savePlaylist(video);

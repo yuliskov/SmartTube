@@ -310,21 +310,21 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 String.format("%s:\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
                 option -> {
-                    AppDialogUtil.showConfirmationDialog(getContext(), () -> {
+                    AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_backup), () -> {
                         mGeneralData.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
                         mGeneralData.enableSettingsSection(true); // prevent Settings lock
                         backupManager.checkPermAndBackup();
                         MessageHelpers.showMessage(getContext(), R.string.msg_done);
-                    }, getContext().getString(R.string.app_backup));
+                    });
                 }));
 
         options.add(UiOptionItem.from(
                 String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupManager.getBackupPath()),
                 option -> {
-                    AppDialogUtil.showConfirmationDialog(getContext(), () -> {
+                    AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
                         backupManager.checkPermAndRestore();
                         MessageHelpers.showMessage(getContext(), R.string.msg_done);
-                    }, getContext().getString(R.string.app_restore));
+                    });
                 }));
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.app_backup_restore), options);
@@ -337,9 +337,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.child_mode_desc),
                 option -> {
                     if (option.isSelected()) {
-                        AppDialogUtil.showConfirmationDialog(getContext(),
+                        AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.lost_setting_warning),
                                 () -> showPasswordDialog(settingsPresenter, () -> enableChildMode(option.isSelected())),
-                                getContext().getString(R.string.lost_setting_warning));
+                                settingsPresenter::closeDialog);
                     } else {
                         mGeneralData.setSettingsPassword(null);
                         enableChildMode(option.isSelected());

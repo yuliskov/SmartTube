@@ -374,7 +374,11 @@ public class AppDialogUtil {
         return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, videoZoomTitle, options);
     }
 
-    public static void showConfirmationDialog(Context context, Runnable onConfirm, String title) {
+    public static void showConfirmationDialog(Context context, String title, Runnable onConfirm) {
+        showConfirmationDialog(context, title, onConfirm, () -> {});
+    }
+
+    public static void showConfirmationDialog(Context context, String title, Runnable onConfirm, Runnable onCancel) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(context);
         settingsPresenter.clear();
 
@@ -387,7 +391,10 @@ public class AppDialogUtil {
                 }));
 
         options.add(UiOptionItem.from(context.getString(R.string.cancel),
-                option -> settingsPresenter.goBack()));
+                option -> {
+                    settingsPresenter.goBack();
+                    onCancel.run();
+                }));
 
         settingsPresenter.appendStringsCategory(title, options);
 

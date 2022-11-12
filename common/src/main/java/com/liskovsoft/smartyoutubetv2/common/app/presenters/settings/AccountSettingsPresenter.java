@@ -102,14 +102,11 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
             optionItems.add(UiOptionItem.from(
                     getFullName(account), option ->
                         AppDialogUtil.showConfirmationDialog(
-                                getContext(),
-                                () -> {
+                                getContext(), getContext().getString(R.string.dialog_remove_account), () -> {
                                     removeAccount(account);
                                     settingsPresenter.closeDialog();
                                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
-                                },
-                                getContext().getString(R.string.dialog_remove_account)
-                        )
+                                })
             ));
         }
 
