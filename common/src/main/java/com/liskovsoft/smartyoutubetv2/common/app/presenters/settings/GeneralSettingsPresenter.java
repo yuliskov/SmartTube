@@ -456,10 +456,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             mMainUIData.enableMenuItem(menuItems);
             tweaksData.disableSuggestions(true);
             mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_LIST);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HOME, true);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_GAMING, true);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_NEWS, true);
-            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_MUSIC, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HISTORY, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_USER_PLAYLISTS, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_SUBSCRIPTIONS, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_CHANNEL_UPLOADS, true);
         } else {
             // apply default tweaks
             mMainUIData.enableTopButton(MainUIData.TOP_BUTTON_DEFAULT);
