@@ -454,7 +454,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             mMainUIData.enableTopButton(topButtons);
             tweaksData.enablePlayerButton(playerButtons);
             mMainUIData.enableMenuItem(menuItems);
-            tweaksData.disableSuggestions(true);
             mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_LIST);
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HISTORY, true);
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_USER_PLAYLISTS, true);

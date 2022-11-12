@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -236,9 +237,18 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         appendUserQueueIfNeeded(video);
 
         int groupIndex = -1;
+        int suggestRows = -1;
+
+        if (GeneralData.instance(getActivity()).isChildModeEnabled()) {
+            suggestRows = video.hasPlaylist() ? 1 : 0;
+        }
 
         for (MediaGroup group : suggestions) {
             groupIndex++;
+
+            if (groupIndex == suggestRows) {
+                break;
+            }
 
             if (group != null && !group.isEmpty()) {
                 VideoGroup videoGroup = VideoGroup.from(group);
