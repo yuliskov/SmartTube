@@ -484,5 +484,6 @@
     <string name="protect_settings_with_password">Chránit všechna nastavení heslem</string>
     <string name="enter_settings_password">Zadejte heslo</string>
     <string name="child_mode">Dětský režim</string>
-    <string name="child_mode_desc">V tomto režimu je uživatel omezen na Odběry a nemůže měnit nastavení.</string>
+    <string name="child_mode_desc">V tomto režimu uživatel nemůže použít vyhledávání ani vidět žádný navrhovaný obsah. Nastavení bude zaheslováno.</string>
+    <string name="lost_setting_warning">Nastavení aplikace se změní. Ujistěte se, že jste si vytvořili zálohu nastavení.</string>
 </resources>
