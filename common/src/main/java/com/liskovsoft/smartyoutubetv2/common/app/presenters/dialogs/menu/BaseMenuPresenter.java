@@ -35,6 +35,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private boolean mIsAccountSelectionEnabled;
     private boolean mIsAddToNewPlaylistEnabled;
     private boolean mIsToggleHistoryEnabled;
+    private boolean mIsClearHistoryEnabled;
 
     protected BaseMenuPresenter(Context context) {
         super(context);
@@ -56,23 +57,6 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     protected void appendTogglePinVideoToSidebarButton() {
         appendTogglePinPlaylistButton();
         appendTogglePinChannelButton();
-    }
-
-    protected void appendToggleHistoryButton() {
-        if (!mIsToggleHistoryEnabled) {
-            return;
-        }
-
-        GeneralData generalData = GeneralData.instance(getContext());
-        boolean enabled = generalData.isHistoryEnabled();
-
-        getDialogPresenter().appendSingleButton(
-                UiOptionItem.from(getContext().getString(enabled ? R.string.pause_history : R.string.resume_history),
-                        optionItem -> {
-                            mServiceManager.enableHistory(!enabled);
-                            generalData.enableHistory(!enabled);
-                            getDialogPresenter().closeDialog();
-                        }));
     }
 
     private void appendTogglePinPlaylistButton() {
@@ -478,6 +462,43 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         );
     }
 
+    protected void appendToggleHistoryButton() {
+        if (!mIsToggleHistoryEnabled) {
+            return;
+        }
+
+        GeneralData generalData = GeneralData.instance(getContext());
+        boolean enabled = generalData.isHistoryEnabled();
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(getContext().getString(enabled ? R.string.pause_history : R.string.resume_history),
+                        optionItem -> {
+                            mServiceManager.enableHistory(!enabled);
+                            generalData.enableHistory(!enabled);
+                            getDialogPresenter().closeDialog();
+                        }));
+    }
+
+    protected void appendClearHistoryButton() {
+        if (!mIsClearHistoryEnabled) {
+            return;
+        }
+
+        BrowsePresenter presenter = BrowsePresenter.instance(getContext());
+
+        if (!presenter.isHistorySection()) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.clear_history),
+                        optionItem -> {
+                            mServiceManager.clearHistory();
+                            presenter.refresh();
+                            getDialogPresenter().closeDialog();
+                        }));
+    }
+
     protected void updateEnabledMenuItems() {
         MainUIData mainUIData = MainUIData.instance(getContext());
         
@@ -487,5 +508,6 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         mIsAccountSelectionEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SELECT_ACCOUNT);
         mIsAddToNewPlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_NEW_PLAYLIST);
         mIsToggleHistoryEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_TOGGLE_HISTORY);
+        mIsClearHistoryEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_CLEAR_HISTORY);
     }
 }

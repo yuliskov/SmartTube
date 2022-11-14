@@ -480,5 +480,6 @@
     <string name="lost_setting_warning">Налаштування застосунку буде змінено. Переконайтеся, що ви створили резервну копію налаштувань.</string>
     <string name="player_button_long_click">Коротке натискання кнопки для швидкої дії та довге для діалогового вікна налаштувань</string>
     <string name="pause_history">Поставити історію на паузу</string>
-    <string name="resume_history">Resume history</string>
+    <string name="resume_history">Відновити історію</string>
+    <string name="clear_history">Очистити історію</string>
 </resources>

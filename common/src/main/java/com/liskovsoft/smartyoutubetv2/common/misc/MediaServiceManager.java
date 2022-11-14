@@ -346,4 +346,8 @@ public class MediaServiceManager {
     public void enableHistory(boolean enable) {
         RxUtils.runAsyncUser(() -> mGroupManager.enableHistory(enable));
     }
+
+    public void clearHistory() {
+        RxUtils.runAsyncUser(mGroupManager::clearHistory);
+    }
 }
