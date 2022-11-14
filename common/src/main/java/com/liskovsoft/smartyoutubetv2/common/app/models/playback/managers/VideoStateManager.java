@@ -40,7 +40,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     private boolean mIsBuffering;
     private final Runnable mStreamEndCheck = () -> {
         if (getVideo() != null && getVideo().isLive && mIsBuffering &&
-                getController().getDurationMs() - getController().getPositionMs() < 60_000) {
+                getController().getDurationMs() - getController().getPositionMs() < 3 * 60_000) {
             getController().reloadPlayback();
         }
     };
