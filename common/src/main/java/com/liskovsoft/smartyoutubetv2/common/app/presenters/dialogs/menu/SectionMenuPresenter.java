@@ -36,6 +36,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
     private boolean mIsRefreshEnabled;
     private boolean mIsMoveSectionEnabled;
     private boolean mIsRenameSectionEnabled;
+    private boolean mIsToggleHistoryEnabled;
 
     private SectionMenuPresenter(Context context) {
         super(context);
@@ -88,6 +89,11 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         return mIsAccountSelectionEnabled;
     }
 
+    @Override
+    protected boolean isToggleHistoryEnabled() {
+        return mIsToggleHistoryEnabled;
+    }
+
     public void showMenu(BrowseSection section) {
         mIsReturnToBackgroundVideoEnabled = true;
         mIsUnpinFromSidebarEnabled = true;
@@ -97,6 +103,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         mIsMarkAllChannelsWatchedEnabled = true;
         mIsMoveSectionEnabled = true;
         mIsRenameSectionEnabled = true;
+        mIsToggleHistoryEnabled = true;
 
         showMenuInt(section);
     }
@@ -136,6 +143,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         appendMoveSectionButton();
         appendRenameSectionButton();
         appendCreatePlaylistButton();
+        appendToggleHistoryButton();
 
         if (!mDialogPresenter.isEmpty()) {
             String title = mSection != null ? mSection.getTitle() : null;

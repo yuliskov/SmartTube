@@ -41,6 +41,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     protected abstract boolean isCreatePlaylistEnabled();
     protected abstract boolean isAddToNewPlaylistEnabled();
     protected abstract boolean isAccountSelectionEnabled();
+    protected abstract boolean isToggleHistoryEnabled();
 
     public void closeDialog() {
         if (getDialogPresenter() != null) {
@@ -52,6 +53,23 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     protected void appendTogglePinVideoToSidebarButton() {
         appendTogglePinPlaylistButton();
         appendTogglePinChannelButton();
+    }
+
+    protected void appendToggleHistoryButton() {
+        if (!isToggleHistoryEnabled()) {
+            return;
+        }
+
+        GeneralData generalData = GeneralData.instance(getContext());
+        boolean enabled = generalData.isHistoryEnabled();
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(getContext().getString(enabled ? R.string.pause_history : R.string.resume_history),
+                        optionItem -> {
+                            mServiceManager.enableHistory(!enabled);
+                            generalData.enableHistory(!enabled);
+                            getDialogPresenter().closeDialog();
+                        }));
     }
 
     private void appendTogglePinPlaylistButton() {

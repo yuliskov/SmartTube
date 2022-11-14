@@ -68,6 +68,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsPlayVideoButtonEnabled;
     private boolean mIsPlaylistOrderButtonEnabled;
     private boolean mIsStreamReminderButtonEnabled;
+    private boolean mIsToggleHistoryEnabled;
     private VideoMenuCallback mCallback;
     private List<PlaylistInfo> mPlaylistInfos;
 
@@ -133,6 +134,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         return mIsAccountSelectionEnabled;
     }
 
+    @Override
+    protected boolean isToggleHistoryEnabled() {
+        return mIsToggleHistoryEnabled;
+    }
+
     public void showMenu(Video item, VideoMenuCallback callback) {
         mCallback = callback;
         showVideoMenu(item);
@@ -165,6 +171,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsPlayVideoButtonEnabled = true;
         mIsPlaylistOrderButtonEnabled = true;
         mIsStreamReminderButtonEnabled = true;
+        mIsToggleHistoryEnabled = true;
 
         showMenuInt(video);
     }
@@ -234,6 +241,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendShareLinkButton();
         appendShareEmbedLinkButton();
         appendAccountSelectionButton();
+        appendToggleHistoryButton();
 
         if (!mDialogPresenter.isEmpty()) {
             String title = mVideo != null ? mVideo.title : null;

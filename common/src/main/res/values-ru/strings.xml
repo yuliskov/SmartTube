@@ -479,4 +479,6 @@
     <string name="child_mode_desc">В этом режиме пользователь не может использовать поиск или просматривать предлагаемый контент. Настройки будут под паролем.</string>
     <string name="lost_setting_warning">Настройки приложения будут изменены. Убедитесь, что вы создали резервную копию настроек.</string>
     <string name="player_button_long_click">Короткое нажатие на кнопку для быстрого действия и длинное для диалога настроек</string>
+    <string name="pause_history">Поставить историю на паузу</string>
+    <string name="resume_history">Відновити історію</string>
 </resources>

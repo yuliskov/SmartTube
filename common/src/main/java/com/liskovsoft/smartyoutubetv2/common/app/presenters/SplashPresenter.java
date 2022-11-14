@@ -13,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -84,6 +85,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             //configureOpenVPN();
             initVideoStateService();
             initStreamReminderService();
+            resumeHistory();
             sRunOnce = true;
         }
     }
@@ -124,12 +126,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
     }
 
-    //private void configureOpenVPN() {
-    //    if (getContext() != null && GeneralData.instance(getContext()).isVPNEnabled()) {
-    //        OpenVPNManager.instance(getContext(), null).configureOpenVPN();
-    //    }
-    //}
-
     private void initVideoStateService() {
         if (getContext() != null) {
             VideoStateService.instance(getContext());
@@ -140,6 +136,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         if (getContext() != null) {
             StreamReminderService.instance(getContext()).start();
         }
+    }
+
+    private void resumeHistory() {
+        GeneralData.instance(getContext()).enableHistory(true);
+        MediaServiceManager.instance().enableHistory(true);
     }
 
     private void runRefreshCachePeriodicTask() {

@@ -79,6 +79,11 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
         return true;
     }
 
+    @Override
+    protected boolean isToggleHistoryEnabled() {
+        return false;
+    }
+
     public void showMenu(Video video, VideoMenuCallback callback) {
         mCallback = callback;
         showMenu(video);

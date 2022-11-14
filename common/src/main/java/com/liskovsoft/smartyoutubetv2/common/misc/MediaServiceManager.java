@@ -342,4 +342,8 @@ public class MediaServiceManager {
 
         mContinuations.put(group.getId(), new Pair<>(totalSize, currentTimeMillis));
     }
+
+    public void enableHistory(boolean enable) {
+        RxUtils.runAsyncUser(() -> mGroupManager.enableHistory(enable));
+    }
 }
