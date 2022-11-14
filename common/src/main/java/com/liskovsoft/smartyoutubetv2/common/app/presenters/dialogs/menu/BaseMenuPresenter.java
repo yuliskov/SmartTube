@@ -9,6 +9,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
@@ -18,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelec
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
@@ -27,6 +29,12 @@ import java.util.List;
 
 public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private final MediaServiceManager mServiceManager;
+    private boolean mIsPinToSidebarEnabled;
+    private boolean mIsSavePlaylistEnabled;
+    private boolean mIsCreatePlaylistEnabled;
+    private boolean mIsAccountSelectionEnabled;
+    private boolean mIsAddToNewPlaylistEnabled;
+    private boolean mIsToggleHistoryEnabled;
 
     protected BaseMenuPresenter(Context context) {
         super(context);
@@ -34,14 +42,9 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     protected abstract Video getVideo();
+    protected BrowseSection getSection() { return null; }
     protected abstract AppDialogPresenter getDialogPresenter();
     protected abstract VideoMenuCallback getCallback();
-    protected abstract boolean isPinToSidebarEnabled();
-    protected abstract boolean isSavePlaylistEnabled();
-    protected abstract boolean isCreatePlaylistEnabled();
-    protected abstract boolean isAddToNewPlaylistEnabled();
-    protected abstract boolean isAccountSelectionEnabled();
-    protected abstract boolean isToggleHistoryEnabled();
 
     public void closeDialog() {
         if (getDialogPresenter() != null) {
@@ -56,7 +59,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     protected void appendToggleHistoryButton() {
-        if (!isToggleHistoryEnabled()) {
+        if (!mIsToggleHistoryEnabled) {
             return;
         }
 
@@ -73,7 +76,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendTogglePinPlaylistButton() {
-        if (!isPinToSidebarEnabled()) {
+        if (!mIsPinToSidebarEnabled) {
             return;
         }
 
@@ -89,7 +92,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendTogglePinChannelButton() {
-        if (!isPinToSidebarEnabled()) {
+        if (!mIsPinToSidebarEnabled) {
             return;
         }
 
@@ -174,8 +177,46 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         return section;
     }
 
+    protected void appendUnpinVideoFromSidebarButton() {
+        if (!mIsPinToSidebarEnabled) {
+            return;
+        }
+
+        Video video = getVideo();
+
+        if (video == null || (!video.hasPlaylist() && !video.hasReloadPageKey() && !video.hasChannel())) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.unpin_from_sidebar),
+                        optionItem -> {
+                            togglePinToSidebar(video);
+                            closeDialog();
+                        }));
+    }
+
+    protected void appendUnpinSectionFromSidebarButton() {
+        if (!mIsPinToSidebarEnabled) {
+            return;
+        }
+
+        BrowseSection section = getSection();
+
+        if (section == null || section.getId() == MediaGroup.TYPE_SETTINGS || getVideo() != null) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.unpin_from_sidebar),
+                        optionItem -> {
+                            BrowsePresenter.instance(getContext()).enableSection(section.getId(), false);
+                            closeDialog();
+                        }));
+    }
+
     protected void appendAccountSelectionButton() {
-        if (!isAccountSelectionEnabled()) {
+        if (!mIsAccountSelectionEnabled) {
             return;
         }
 
@@ -187,7 +228,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     protected void appendSaveRemovePlaylistButton() {
-        if (!isSavePlaylistEnabled()) {
+        if (!mIsSavePlaylistEnabled) {
             return;
         }
 
@@ -319,7 +360,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     protected void appendCreatePlaylistButton() {
-        if (!isCreatePlaylistEnabled()) {
+        if (!mIsCreatePlaylistEnabled) {
             return;
         }
 
@@ -337,7 +378,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     protected void appendAddToNewPlaylistButton() {
-        if (!isAddToNewPlaylistEnabled()) {
+        if (!mIsAddToNewPlaylistEnabled) {
             return;
         }
 
@@ -380,7 +421,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     protected void appendRenamePlaylistButton() {
-        if (!isCreatePlaylistEnabled()) {
+        if (!mIsCreatePlaylistEnabled) {
             return;
         }
 
@@ -435,5 +476,16 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                     );
                 }
         );
+    }
+
+    protected void updateEnabledMenuItems() {
+        MainUIData mainUIData = MainUIData.instance(getContext());
+        
+        mIsPinToSidebarEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR);
+        mIsSavePlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SAVE_PLAYLIST);
+        mIsCreatePlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_CREATE_PLAYLIST);
+        mIsAccountSelectionEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SELECT_ACCOUNT);
+        mIsAddToNewPlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_NEW_PLAYLIST);
+        mIsToggleHistoryEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_TOGGLE_HISTORY);
     }
 }

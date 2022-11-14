@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -18,30 +17,22 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.Iterator;
 
 public class SectionMenuPresenter extends BaseMenuPresenter {
     private static final String TAG = SectionMenuPresenter.class.getSimpleName();
     private final AppDialogPresenter mDialogPresenter;
-    private final MediaServiceManager mServiceManager;
     private Video mVideo;
     private BrowseSection mSection;
-    private boolean mIsUnpinFromSidebarEnabled;
-    private boolean mIsUnpinSectionFromSidebarEnabled;
     private boolean mIsReturnToBackgroundVideoEnabled;
-    private boolean mIsAccountSelectionEnabled;
     private boolean mIsMarkAllChannelsWatchedEnabled;
     private boolean mIsRefreshEnabled;
     private boolean mIsMoveSectionEnabled;
     private boolean mIsRenameSectionEnabled;
-    private boolean mIsToggleHistoryEnabled;
 
     private SectionMenuPresenter(Context context) {
         super(context);
-        MediaService service = YouTubeMediaService.instance();
-        mServiceManager = MediaServiceManager.instance();
         mDialogPresenter = AppDialogPresenter.instance(context);
     }
 
@@ -55,6 +46,11 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
     }
 
     @Override
+    protected BrowseSection getSection() {
+        return mSection;
+    }
+
+    @Override
     protected AppDialogPresenter getDialogPresenter() {
         return mDialogPresenter;
     }
@@ -64,51 +60,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         return null;
     }
 
-    @Override
-    protected boolean isPinToSidebarEnabled() {
-        return mIsUnpinFromSidebarEnabled;
-    }
-
-    @Override
-    protected boolean isSavePlaylistEnabled() {
-        return false;
-    }
-
-    @Override
-    protected boolean isCreatePlaylistEnabled() {
-        return true;
-    }
-
-    @Override
-    protected boolean isAddToNewPlaylistEnabled() {
-        return false;
-    }
-
-    @Override
-    protected boolean isAccountSelectionEnabled() {
-        return mIsAccountSelectionEnabled;
-    }
-
-    @Override
-    protected boolean isToggleHistoryEnabled() {
-        return mIsToggleHistoryEnabled;
-    }
-
     public void showMenu(BrowseSection section) {
-        mIsReturnToBackgroundVideoEnabled = true;
-        mIsUnpinFromSidebarEnabled = true;
-        mIsUnpinSectionFromSidebarEnabled = true;
-        mIsAccountSelectionEnabled = true;
-        mIsRefreshEnabled = true;
-        mIsMarkAllChannelsWatchedEnabled = true;
-        mIsMoveSectionEnabled = true;
-        mIsRenameSectionEnabled = true;
-        mIsToggleHistoryEnabled = true;
-
-        showMenuInt(section);
-    }
-
-    private void showMenuInt(BrowseSection section) {
         if (section == null) {
             return;
         }
@@ -172,40 +124,6 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
             String title = mSection != null ? mSection.getTitle() : null;
             mDialogPresenter.showDialog(title, this::disposeActions);
         }
-    }
-
-    private void appendUnpinVideoFromSidebarButton() {
-        if (!mIsUnpinFromSidebarEnabled) {
-            return;
-        }
-
-        if (mVideo == null || (!mVideo.hasPlaylist() && !mVideo.hasReloadPageKey() && !mVideo.hasChannel())) {
-            return;
-        }
-
-        getDialogPresenter().appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.unpin_from_sidebar),
-                        optionItem -> {
-                            togglePinToSidebar(mVideo);
-                            mDialogPresenter.closeDialog();
-                        }));
-    }
-
-    private void appendUnpinSectionFromSidebarButton() {
-        if (!mIsUnpinSectionFromSidebarEnabled) {
-            return;
-        }
-
-        if (mSection == null || mSection.getId() == MediaGroup.TYPE_SETTINGS || mVideo != null) {
-            return;
-        }
-
-        mDialogPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.unpin_from_sidebar),
-                        optionItem -> {
-                            BrowsePresenter.instance(getContext()).enableSection(mSection.getId(), false);
-                            mDialogPresenter.closeDialog();
-                        }));
     }
 
     private void appendRefreshButton() {
@@ -335,28 +253,20 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         //RxUtils.disposeActions(mPlaylistAction);
     }
 
-    private void updateEnabledMenuItems() {
+    @Override
+    protected void updateEnabledMenuItems() {
+        super.updateEnabledMenuItems();
+
+        mIsReturnToBackgroundVideoEnabled = true;
+        mIsRefreshEnabled = true;
+        mIsMarkAllChannelsWatchedEnabled = true;
+        mIsMoveSectionEnabled = true;
+        mIsRenameSectionEnabled = true;
+
         MainUIData mainUIData = MainUIData.instance(getContext());
 
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR)) {
-            mIsUnpinFromSidebarEnabled = false;
-            mIsUnpinSectionFromSidebarEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SELECT_ACCOUNT)) {
-            mIsAccountSelectionEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_MOVE_SECTION_UP)) {
-            mIsMoveSectionEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_MOVE_SECTION_DOWN)) {
-            mIsMoveSectionEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_RENAME_SECTION)) {
-            mIsRenameSectionEnabled = false;
-        }
+        mIsMoveSectionEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_MOVE_SECTION_UP);
+        mIsMoveSectionEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_MOVE_SECTION_DOWN);
+        mIsRenameSectionEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_RENAME_SECTION);
     }
 }

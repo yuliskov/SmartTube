@@ -54,36 +54,6 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
         return mCallback;
     }
 
-    @Override
-    protected boolean isPinToSidebarEnabled() {
-        return true;
-    }
-
-    @Override
-    protected boolean isSavePlaylistEnabled() {
-        return true;
-    }
-
-    @Override
-    protected boolean isCreatePlaylistEnabled() {
-        return false;
-    }
-
-    @Override
-    protected boolean isAddToNewPlaylistEnabled() {
-        return false;
-    }
-
-    @Override
-    protected boolean isAccountSelectionEnabled() {
-        return true;
-    }
-
-    @Override
-    protected boolean isToggleHistoryEnabled() {
-        return false;
-    }
-
     public void showMenu(Video video, VideoMenuCallback callback) {
         mCallback = callback;
         showMenu(video);
