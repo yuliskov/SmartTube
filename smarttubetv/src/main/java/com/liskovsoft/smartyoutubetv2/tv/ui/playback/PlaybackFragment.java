@@ -301,17 +301,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         releasePlayer();
         initializePlayer();
-
-        //if (mPlayer != null) {
-        //    mEventListener.onEngineReleased();
-        //}
-        //
-        //destroyPlayerObjects();
-        //createPlayerObjects();
-        //
-        //if (mPlayer != null) {
-        //    mEventListener.onEngineInitialized();
-        //}
     }
 
     @Override

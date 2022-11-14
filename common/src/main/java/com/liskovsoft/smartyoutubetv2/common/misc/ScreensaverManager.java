@@ -22,7 +22,6 @@ public class ScreensaverManager {
     private static final String TAG = ScreensaverManager.class.getSimpleName();
     private static final int SCREEN_OFF_RES_ID = R.color.black;
     private static final int DIMMING_RES_ID = R.color.dimming;
-    private final Handler mHandler;
     private final WeakReference<Activity> mActivity;
     private final Runnable mDimScreen = this::dimScreen;
     private final Runnable mUndimScreen = this::undimScreen;
@@ -32,7 +31,6 @@ public class ScreensaverManager {
 
     public ScreensaverManager(Activity activity) {
         mActivity = new WeakReference<>(activity);
-        mHandler = new Handler(Looper.getMainLooper());
         mGeneralData = GeneralData.instance(activity);
         enable();
     }
@@ -66,20 +64,20 @@ public class ScreensaverManager {
         int delayMs = mGeneralData.getScreenDimmingTimeoutMin() == GeneralData.SCREEN_DIMMING_NEVER ?
                 10_000 :
                 mGeneralData.getScreenDimmingTimeoutMin() * 60 * 1_000;
-        Utils.postDelayed(mHandler, mDimScreen, delayMs);
+        Utils.postDelayed(mDimScreen, delayMs);
     }
 
     public void disable() {
         Log.d(TAG, "Disable screensaver");
         mDimColorResId = DIMMING_RES_ID;
-        Utils.removeCallbacks(mHandler, mDimScreen);
-        Utils.postDelayed(mHandler, mUndimScreen, 0);
+        Utils.removeCallbacks(mDimScreen);
+        Utils.postDelayed(mUndimScreen, 0);
     }
 
     public void doScreenOff() {
         disable();
         mDimColorResId = SCREEN_OFF_RES_ID;
-        Utils.postDelayed(mHandler, mDimScreen, 0);
+        Utils.postDelayed(mDimScreen, 0);
     }
 
     public boolean isScreenOff() {

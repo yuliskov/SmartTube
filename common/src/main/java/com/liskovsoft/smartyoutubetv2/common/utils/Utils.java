@@ -23,6 +23,7 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -43,7 +44,6 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
@@ -69,6 +69,7 @@ public class Utils {
     private static final String QR_CODE_URL_TEMPLATE = "https://api.qrserver.com/v1/create-qr-code/?data=%s";
     private static final int GLOBAL_VOLUME_TYPE = AudioManager.STREAM_MUSIC;
     private static final String GLOBAL_VOLUME_SERVICE = Context.AUDIO_SERVICE;
+    private static final Handler sHandler = new Handler(Looper.getMainLooper());
 
     /**
      * Limit the maximum size of a Map by removing oldest entries when limit reached
@@ -356,18 +357,18 @@ public class Utils {
         customTabsIntent.launchUrl(context, Uri.parse(url));
     }
 
-    public static void postDelayed(Handler handler, Runnable callback, int delayMs) {
-        handler.removeCallbacks(callback);
-        handler.postDelayed(callback, delayMs);
+    public static void postDelayed(Runnable callback, int delayMs) {
+        sHandler.removeCallbacks(callback);
+        sHandler.postDelayed(callback, delayMs);
     }
 
-    public static void removeCallbacks(Handler handler, Runnable... callbacks) {
+    public static void removeCallbacks(Runnable... callbacks) {
         if (callbacks == null) {
             return;
         }
 
         for (Runnable callback : callbacks) {
-             handler.removeCallbacks(callback);
+             sHandler.removeCallbacks(callback);
         }
     }
 

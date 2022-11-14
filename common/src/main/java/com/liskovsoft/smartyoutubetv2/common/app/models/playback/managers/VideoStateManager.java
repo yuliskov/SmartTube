@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -36,6 +37,13 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     private VideoStateService mStateService;
     private boolean mIsPlayBlocked;
     private int mTickleLeft;
+    private boolean mIsBuffering;
+    private final Runnable mStreamEndCheck = () -> {
+        if (getVideo() != null && getVideo().isLive && mIsBuffering &&
+                getController().getDurationMs() - getController().getPositionMs() < 60_000) {
+            getController().reloadPlayback();
+        }
+    };
 
     @Override
     public void onInitDone() { // called each time a video opened from the browser
@@ -127,6 +135,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
             setPlayEnabled(getController().getPlayWhenReady());
             saveState();
         }
+
+        Utils.removeCallbacks(mStreamEndCheck);
     }
 
     @Override
@@ -139,9 +149,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
         // Restore speed on LIVE end
         restoreSpeed();
-        //if (isLiveThreshold()) {
-        //    getController().setSpeed(1.0f);
-        //}
     }
 
     @Override
@@ -159,6 +166,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public void onVideoLoaded(Video item) {
+        mIsBuffering = false;
         // Actual video that match currently loaded one.
         mVideo = item;
 
@@ -180,6 +188,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public void onPlay() {
+        mIsBuffering = false;
         setPlayEnabled(true);
         showHideScreensaver(false);
     }
@@ -217,14 +226,15 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public void onBuffering() {
+        mIsBuffering = true;
+
         // Live stream starts to buffer after the end
         showHideScreensaver(true);
 
         // Restore speed on LIVE end or after seek
         restoreSpeed();
-        //if (isLiveThreshold()) {
-        //    getController().setSpeed(1.0f);
-        //}
+
+        Utils.postDelayed(mStreamEndCheck, 10_000);
     }
 
     @Override

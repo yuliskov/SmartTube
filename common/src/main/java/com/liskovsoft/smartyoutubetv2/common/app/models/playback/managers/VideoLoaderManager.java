@@ -40,7 +40,6 @@ import java.util.Map;
 public class VideoLoaderManager extends PlayerEventListenerHelper implements MetadataListener, OnDataChange {
     private static final String TAG = VideoLoaderManager.class.getSimpleName();
     private final Playlist mPlaylist;
-    private final Handler mHandler;
     private final SuggestionsLoaderManager mSuggestionsLoader;
     private final UniqueRandom mRandom;
     private Video mLastVideo;
@@ -69,7 +68,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     public VideoLoaderManager(SuggestionsLoaderManager suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
         mPlaylist = Playlist.instance();
-        mHandler = new Handler(Looper.getMainLooper());
         mRandom = new UniqueRandom();
     }
 
@@ -263,7 +261,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
             // Short videos next fix (suggestions aren't loaded yet)
             boolean isEnded = getController() != null && Math.abs(getController().getDurationMs() - getController().getPositionMs()) < 100;
             if (isEnded) {
-                Utils.postDelayed(mHandler, mPendingNext, 1_000);
+                Utils.postDelayed(mPendingNext, 1_000);
             }
         }
     }
@@ -333,7 +331,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         if (getController().isEngineInitialized()) {
             Log.d(TAG, "Starting check for the future stream...");
             getController().showOverlay(true);
-            Utils.postDelayed(mHandler, mReloadVideoHandler, reloadIntervalMs);
+            Utils.postDelayed(mReloadVideoHandler, reloadIntervalMs);
         }
     }
 
@@ -370,7 +368,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     private void disposeActions() {
         MediaServiceManager.instance().disposeActions();
         RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
-        Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
+        Utils.removeCallbacks(mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
     }
 
     private void initErrorActions() {
@@ -403,7 +401,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         }
 
         // Delay to fix frequent requests
-        Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000);
+        Utils.postDelayed(mPendingRestartEngine, 3_000);
     }
 
     private List<String> applyFix(List<String> urlList) {
@@ -494,7 +492,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
     @Override
     public void onDataChange() {
-        Utils.postDelayed(mHandler, mLoadRandomNext, 3_000);
+        Utils.postDelayed(mLoadRandomNext, 3_000);
     }
 
     private void loadRandomNext() {

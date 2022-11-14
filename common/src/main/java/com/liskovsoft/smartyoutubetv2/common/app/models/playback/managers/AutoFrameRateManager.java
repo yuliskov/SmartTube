@@ -35,7 +35,6 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private final ModeSyncManager mModeSyncManager;
     private final Runnable mApplyAfr = this::applyAfr;
     private final Runnable mApplyAfrStop = this::applyAfrStop;
-    private final Handler mHandler;
     private PlayerData mPlayerData;
     private boolean mIsPlay;
     private final Runnable mPlaybackResumeHandler = () -> {
@@ -52,7 +51,6 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         mAutoFrameRateHelper.setListener(this);
         mModeSyncManager = ModeSyncManager.instance();
         mModeSyncManager.setAfrHelper(mAutoFrameRateHelper);
-        mHandler = new Handler(Looper.getMainLooper());
     }
 
     @Override
@@ -131,7 +129,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     private void applyAfrStopDelayed() {
-        Utils.postDelayed(mHandler, mApplyAfrStop, 200);
+        Utils.postDelayed(mApplyAfrStop, 200);
     }
 
     private void applyAfrStop() {
@@ -162,7 +160,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     private void applyAfrDelayed() {
-        Utils.postDelayed(mHandler, mApplyAfr, 500);
+        Utils.postDelayed(mApplyAfr, 500);
     }
 
     private void applyAfr() {
@@ -210,7 +208,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             delayMs = mPlayerData.getAfrPauseMs();
         }
 
-        Utils.postDelayed(mHandler, mPlaybackResumeHandler, delayMs);
+        Utils.postDelayed(mPlaybackResumeHandler, delayMs);
     }
 
     private void savePlayback() {
