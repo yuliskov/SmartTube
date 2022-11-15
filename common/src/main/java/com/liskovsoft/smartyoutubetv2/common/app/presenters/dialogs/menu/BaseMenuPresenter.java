@@ -467,6 +467,10 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
+        if (getSection() != null && getSection().getId() != MediaGroup.TYPE_HISTORY) {
+            return;
+        }
+
         GeneralData generalData = GeneralData.instance(getContext());
         boolean enabled = generalData.isHistoryEnabled();
 
@@ -484,9 +488,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        BrowsePresenter presenter = BrowsePresenter.instance(getContext());
-
-        if (!presenter.isHistorySection()) {
+        if (getSection() != null && getSection().getId() != MediaGroup.TYPE_HISTORY) {
             return;
         }
 
@@ -494,8 +496,8 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 UiOptionItem.from(getContext().getString(R.string.clear_history),
                         optionItem -> {
                             mServiceManager.clearHistory();
-                            presenter.refresh();
                             getDialogPresenter().closeDialog();
+                            BrowsePresenter.instance(getContext()).refresh();
                         }));
     }
 
