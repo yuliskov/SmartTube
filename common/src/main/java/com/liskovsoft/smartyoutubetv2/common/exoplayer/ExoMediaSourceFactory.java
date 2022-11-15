@@ -34,10 +34,9 @@ import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.ErrorDefaultDashChunkSource;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErrorHandlingPolicy;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.ErrorDefaultDashChunkSource;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.app.AppConstants;
 import com.liskovsoft.youtubeapi.common.helpers.RetrofitHelper;
@@ -163,7 +162,8 @@ public class ExoMediaSourceFactory {
                 return ssSource;
             case C.TYPE_DASH:
                 DashMediaSource dashSource =
-                        new DashMediaSource.Factory(getDashChunkSourceFactory(),
+                        new DashMediaSource.Factory(
+                                getDashChunkSourceFactory(),
                                 buildDataSourceFactory(USE_BANDWIDTH_METER)
                         )
                                 .setManifestParser(new LiveDashManifestParser()) // Don't make static! Need state reset for each live source.
@@ -195,7 +195,8 @@ public class ExoMediaSourceFactory {
 
     private MediaSource buildMPDMediaSource(Uri uri, InputStream mpdContent) {
         // Are you using FrameworkSampleSource or ExtractorSampleSource when you build your player?
-        DashMediaSource dashSource = new DashMediaSource.Factory(getDashChunkSourceFactory(),
+        DashMediaSource dashSource = new DashMediaSource.Factory(
+                getDashChunkSourceFactory(),
                 null
         )
                 .setLoadErrorHandlingPolicy(new DashDefaultLoadErrorHandlingPolicy())
