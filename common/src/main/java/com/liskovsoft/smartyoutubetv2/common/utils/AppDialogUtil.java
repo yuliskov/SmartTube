@@ -84,18 +84,25 @@ public class AppDialogUtil {
      * Adds share link items to existing dialog.
      */
     public static void appendShareEmbedLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video) {
+        appendShareEmbedLinkDialogItem(context, dialogPresenter, video, -1);
+    }
+
+    /**
+     * Adds share link items to existing dialog.
+     */
+    public static void appendShareEmbedLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video, int positionSec) {
         if (video == null) {
             return;
         }
 
-        if (video.videoId == null && video.channelId == null) {
+        if (video.videoId == null) {
             return;
         }
 
         dialogPresenter.appendSingleButton(
                 UiOptionItem.from(context.getString(R.string.share_embed_link), optionItem -> {
                     if (video.videoId != null) {
-                        Utils.displayShareEmbedVideoDialog(context, video.videoId);
+                        Utils.displayShareEmbedVideoDialog(context, video.videoId, positionSec == -1 ? Utils.toSec(video.getPositionMs()) : positionSec);
                     }
                 }));
     }
@@ -121,6 +128,7 @@ public class AppDialogUtil {
 
         dialogPresenter.appendSingleButton(
                 UiOptionItem.from(context.getString(R.string.share_link) + " (QR)", optionItem -> {
+                    dialogPresenter.closeDialog(); // pause bg video
                     if (video.videoId != null) {
                         Utils.openLink(context, Utils.toQrCodeLink(
                                 Utils.convertToFullVideoUrl(video.videoId, positionSec == -1 ? Utils.toSec(video.getPositionMs()) : positionSec).toString()));

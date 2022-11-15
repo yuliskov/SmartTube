@@ -419,6 +419,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         int positionSec = Utils.toSec(getController().getPositionMs());
         AppDialogUtil.appendShareLinkDialogItem(getActivity(), dialogPresenter, getController().getVideo(), positionSec);
         AppDialogUtil.appendShareQRLinkDialogItem(getActivity(), dialogPresenter, getController().getVideo(), positionSec);
+        AppDialogUtil.appendShareEmbedLinkDialogItem(getActivity(), dialogPresenter, getController().getVideo(), positionSec);
 
         dialogPresenter.showDialog(getController().getVideo().title);
 
