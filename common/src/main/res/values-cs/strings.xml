@@ -486,4 +486,7 @@
     <string name="child_mode">Dětský režim</string>
     <string name="child_mode_desc">V tomto režimu uživatel nemůže použít vyhledávání ani vidět žádný navrhovaný obsah. Nastavení bude zaheslováno.</string>
     <string name="lost_setting_warning">Nastavení aplikace se změní. Ujistěte se, že jste si vytvořili zálohu nastavení.</string>
+    <string name="player_button_long_click">Krátké kliknutí na tlačítko pro rychlou akci a dlouhé pro dialog nastavení</string>
+    <string name="pause_history">Pozastavit historii</string>
+    <string name="resume_history">Obnovit historii</string>
 </resources>
