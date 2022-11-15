@@ -55,6 +55,13 @@ public class AppDialogUtil {
      * Adds share link items to existing dialog.
      */
     public static void appendShareLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video) {
+        appendShareLinkDialogItem(context, dialogPresenter, video, -1);
+    }
+
+    /**
+     * Adds share link items to existing dialog.
+     */
+    public static void appendShareLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video, int positionSec) {
         if (video == null) {
             return;
         }
@@ -66,7 +73,7 @@ public class AppDialogUtil {
         dialogPresenter.appendSingleButton(
                 UiOptionItem.from(context.getString(R.string.share_link), optionItem -> {
                     if (video.videoId != null) {
-                        Utils.displayShareVideoDialog(context, video.videoId, (int)(video.getPositionMs() / 1_000));
+                        Utils.displayShareVideoDialog(context, video.videoId, positionSec == -1 ? Utils.toSec(video.getPositionMs()) : positionSec);
                     } else if (video.channelId != null) {
                         Utils.displayShareChannelDialog(context, video.channelId);
                     }
@@ -89,6 +96,34 @@ public class AppDialogUtil {
                 UiOptionItem.from(context.getString(R.string.share_embed_link), optionItem -> {
                     if (video.videoId != null) {
                         Utils.displayShareEmbedVideoDialog(context, video.videoId);
+                    }
+                }));
+    }
+
+    /**
+     * Adds QR code item to existing dialog.
+     */
+    public static void appendShareQRLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video) {
+        appendShareQRLinkDialogItem(context, dialogPresenter, video, -1);
+    }
+
+    /**
+     * Adds QR code item to existing dialog.
+     */
+    public static void appendShareQRLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video, int positionSec) {
+        if (video == null) {
+            return;
+        }
+
+        if (video.videoId == null) {
+            return;
+        }
+
+        dialogPresenter.appendSingleButton(
+                UiOptionItem.from(context.getString(R.string.share_link) + " (QR)", optionItem -> {
+                    if (video.videoId != null) {
+                        Utils.openLink(context, Utils.toQrCodeLink(
+                                Utils.convertToFullVideoUrl(video.videoId, positionSec == -1 ? Utils.toSec(video.getPositionMs()) : positionSec).toString()));
                     }
                 }));
     }

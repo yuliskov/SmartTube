@@ -412,20 +412,21 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
-        //AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
-        //dialogPresenter.clear();
+        dialogPresenter.clear();
 
-        //AppDialogUtil.appendShareLinkDialogItem(getActivity(), dialogPresenter, getController().getVideo());
-        //AppDialogUtil.appendShareEmbedLinkDialogItem(getActivity(), dialogPresenter, getController().getVideo());
+        int positionSec = Utils.toSec(getController().getPositionMs());
+        AppDialogUtil.appendShareLinkDialogItem(getActivity(), dialogPresenter, getController().getVideo(), positionSec);
+        AppDialogUtil.appendShareQRLinkDialogItem(getActivity(), dialogPresenter, getController().getVideo(), positionSec);
 
-        //dialogPresenter.showDialog(getController().getVideo().title);
+        dialogPresenter.showDialog(getController().getVideo().title);
 
-        if (video.videoId != null) {
-            Utils.displayShareVideoDialog(getActivity(), video.videoId, (int)(getController().getPositionMs() / 1_000));
-        } else if (video.channelId != null) {
-            Utils.displayShareChannelDialog(getActivity(), video.channelId);
-        }
+        //if (video.videoId != null) {
+        //    Utils.displayShareVideoDialog(getActivity(), video.videoId, (int)(getController().getPositionMs() / 1_000));
+        //} else if (video.channelId != null) {
+        //    Utils.displayShareChannelDialog(getActivity(), video.channelId);
+        //}
     }
 
     @Override

@@ -144,7 +144,7 @@ public class Utils {
      * https://youtu.be/nragduYePsQ?t=193<br/>
      * https://www.youtube.com/watch?v=nragduYePsQ&t=193
      */
-    private static Uri convertToFullVideoUrl(String videoId, int posSec) {
+    public static Uri convertToFullVideoUrl(String videoId, int posSec) {
         String url = String.format("https://youtu.be/%s?t=%s", videoId, posSec);
         return Uri.parse(url);
     }
@@ -152,12 +152,12 @@ public class Utils {
     /**
      * https://www.youtube.com/embed/nragduYePsQ?start=193
      */
-    private static Uri convertToEmbedVideoUrl(String videoId, int posSec) {
+    public static Uri convertToEmbedVideoUrl(String videoId, int posSec) {
         String url = String.format("https://www.youtube.com/embed/%s?start=%s", videoId, posSec);
         return Uri.parse(url);
     }
 
-    private static Uri convertToFullChannelUrl(String channelId) {
+    public static Uri convertToFullChannelUrl(String channelId) {
         String url = String.format("https://www.youtube.com/channel/%s", channelId);
         return Uri.parse(url);
     }
@@ -567,5 +567,9 @@ public class Utils {
         if (view != null) {
             view.getController().showOverlay(show);
         }
+    }
+
+    public static int toSec(long ms) {
+        return (int) (ms / 1_000);
     }
 }
