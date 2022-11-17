@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -36,6 +37,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private boolean mIsAddToNewPlaylistEnabled;
     private boolean mIsToggleHistoryEnabled;
     private boolean mIsClearHistoryEnabled;
+    private boolean mIsUpdateCheckEnabled;
 
     protected BaseMenuPresenter(Context context) {
         super(context);
@@ -488,7 +490,8 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (getSection() != null && getSection().getId() != MediaGroup.TYPE_HISTORY) {
+        BrowsePresenter presenter = BrowsePresenter.instance(getContext());
+        if (!presenter.isHistorySection()) {
             return;
         }
 
@@ -497,8 +500,18 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                         optionItem -> {
                             mServiceManager.clearHistory();
                             getDialogPresenter().closeDialog();
-                            BrowsePresenter.instance(getContext()).refresh();
+                            presenter.refresh();
                         }));
+    }
+
+    protected void appendUpdateCheckButton() {
+        if (!mIsUpdateCheckEnabled) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(UiOptionItem.from(
+                getContext().getString(R.string.check_for_updates),
+                option -> AppUpdatePresenter.instance(getContext()).start(true)));
     }
 
     protected void updateEnabledMenuItems() {
@@ -511,5 +524,6 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         mIsAddToNewPlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_NEW_PLAYLIST);
         mIsToggleHistoryEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_TOGGLE_HISTORY);
         mIsClearHistoryEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_CLEAR_HISTORY);
+        mIsUpdateCheckEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_UPDATE_CHECK);
     }
 }

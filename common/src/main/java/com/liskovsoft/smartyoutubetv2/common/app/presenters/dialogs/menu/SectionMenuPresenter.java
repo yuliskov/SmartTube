@@ -97,6 +97,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         appendCreatePlaylistButton();
         appendToggleHistoryButton();
         appendClearHistoryButton();
+        appendUpdateCheckButton();
 
         if (!mDialogPresenter.isEmpty()) {
             String title = mSection != null ? mSection.getTitle() : null;

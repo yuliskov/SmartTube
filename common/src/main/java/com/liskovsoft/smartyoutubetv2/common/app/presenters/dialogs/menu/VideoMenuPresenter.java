@@ -174,6 +174,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendShareEmbedLinkButton();
         appendAccountSelectionButton();
         appendToggleHistoryButton();
+        appendClearHistoryButton();
 
         if (!mDialogPresenter.isEmpty()) {
             String title = mVideo != null ? mVideo.title : null;

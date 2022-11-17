@@ -479,4 +479,8 @@
   <string name="child_mode">Kinder modus</string>
   <string name="child_mode_desc">In deze modus kan de gebruiker de zoekfunctie niet gebruiken of voorgestelde inhoud bekijken.  De instellingen staan ​​onder het wachtwoord.</string>
   <string name="lost_setting_warning">De app-instellingen worden gewijzigd.  Zorg ervoor dat u een back-up van de instellingen hebt gemaakt.</string>
+  <string name="player_button_long_click">Een korte klik op de knop naar snelle actie en een lange naar instellingen dialoog</string>
+  <string name="pause_history">Geschiedenis onderbreken</string>
+  <string name="resume_history">Geschiedenis hervatten</string>
+  <string name="clear_history">Geschiedenis wissen</string>
 </resources>
