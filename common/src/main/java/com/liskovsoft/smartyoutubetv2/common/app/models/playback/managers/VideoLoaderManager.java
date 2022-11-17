@@ -428,7 +428,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
             case PlaybackUIController.REPEAT_MODE_ONE:
                 getController().setPositionMs(0);
                 getController().setPlayWhenReady(true);
-                Utils.showRepeatInfo(getActivity(), repeatMode);
+                //Utils.showRepeatInfo(getActivity(), repeatMode);
                 break;
             case PlaybackUIController.REPEAT_MODE_CLOSE:
                 // Close player if suggestions not shown
@@ -450,7 +450,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                     getController().showSuggestions(true);
                     getController().setPlayWhenReady(false);
                     getController().setPositionMs(getController().getDurationMs());
-                    Utils.showRepeatInfo(getActivity(), repeatMode);
+                    //Utils.showRepeatInfo(getActivity(), repeatMode);
                 }
                 break;
             case PlaybackUIController.REPEAT_MODE_LIST:
@@ -463,7 +463,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                     getController().showSuggestions(true);
                     getController().setPlayWhenReady(false);
                     getController().setPositionMs(getController().getDurationMs());
-                    Utils.showRepeatInfo(getActivity(), repeatMode);
+                    //Utils.showRepeatInfo(getActivity(), repeatMode);
                 }
                 break;
         }
