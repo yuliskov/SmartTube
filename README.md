@@ -2,10 +2,10 @@
 
 SmartTubeNext is an advanced YouTube app for **Android TVs** and **TV boxes**, free & open source. It is not a live TV client and does not support ["YouTube TV"](https://tv.youtube.com/).
 
-:white_check_mark: **Features**: no ads | SponsorBlock | adjustable playback speed | 4k and higher | 60fps | HDR | does not require Google Services | helpful international community
+:white_check_mark: **Features**: no ads ‧ SponsorBlock ‧ adjustable playback speed ‧ 8k support ‧ 60fps ‧ HDR ‧ read live chat ‧ customizable buttons ‧ no Google Services ‧ helpful international community
 
-:x: **Disadvantages**: no live chat | no comments
-stability, voice search and casting support **might** be worse than in the official YouTube, depending on your device
+:x: **Disadvantages**: no comments
+stability, voice search and casting support **might** be worse than in the official YouTube, depending on your device; give it a try!
 
 **Do you have any question?** Ctrl+F or ⌘F this readme first!
 
@@ -20,8 +20,7 @@ stability, voice search and casting support **might** be worse than in the offic
 
 ## Installation
 
-> [![video of the installation](images/new/zPV0imF.jpg)](images/new/zPV0imF.mp4) 
-> (click to watch installation video)
+> [video of the installation](images/new/zPV0imF.mp4) (note: download url changed to `kutt.it/stn_beta` or `kutt.it/stn_stable`)
 
 **Do not** download SmartTubeNext from any **app store**, APK websites or blogs; these were uploaded by other people and may contain malware or ads. SmartTubeNext is not officially published on any app store. Sadly, the Google PlayStore does not allow ad-free Youtube apps using unofficial APIs.
 
@@ -30,41 +29,64 @@ There is a **beta release** (recommended) and a **stable release**. Beta gets ne
 You can use either of the following methods to install the app:
 
 - (**easiest**) install [Downloader by AFTVnews](https://www.aftvnews.com/downloader/) on your Android TV, open it and enter `kutt.it/stn_beta` or `kutt.it/stn_stable`, then read, understand and confirm the security prompts. (<small>You can also enter [**79015**](https://aftv.news/79015) (for beta) or [**28544**](https://aftv.news/28544) (for stable), but this requires an extra step to install the AFTVnews Downloader browser addon if you haven't already.</small>)
-- install a file transfer app on your Android TV, download the APK on your phone or computer and transfer it to your TV (e.g. [_Send Files to TV_](https://sendfilestotv.app/)\*)
-- download the APK onto a USB stick, put the USB stick into your TV and use a file manager app (e.g. [_FX File Explorer_](https://play.google.com/store/apps/details?id=nextapp.fx)\* or [_FileCommander_](https://play.google.com/store/apps/details?id=com.mobisystems.fileman)\*). Android's preinstalled file manager does not work!
+- install a file transfer app on your Android TV, download the APK on your phone or computer and transfer it to your TV (e.g. [_Send Files to TV_](https://sendfilestotv.app/) from the Google Play Store / Amazon AppStore)
+- download the APK onto a USB stick, put the USB stick into your TV and use a file manager app from the Google Play Store / Amazon AppStore (e.g. [_FX File Explorer_](https://play.google.com/store/apps/details?id=nextapp.fx) or [_X-plore_](https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore)). Android's preinstalled file manager does not work! Do **not** get the ad-infested _FileCommander_.
 - if you are an advanced user, you can install it using ADB. [guide](https://fossbytes.com/side-load-apps-android-tv/#h-how-to-sideload-apps-on-your-android-tv-using-adb) | [alternative guide](https://www.aftvnews.com/sideload/)
 
-<small>\* The above mentioned apps are available in the Google Playstore and Amazon AppStore.</small>
+**Troubleshooting:** See device specific notes below. If installation fails, either your **disk space is full** or the APK file didn't download correctly; clear up space and try downloading again. If the app installed, but crashes when opening, make sure to install it to internal memory, not to an SD card / external storage.
 
-**The app has a built-in updater** with changelog. You can also find all releases and the **changelog** on the [Telegram channel @SmartTubeNextNewsEN](https://t.me/s/SmartTubeNextNewsEN) (no login required) or on [Github](https://github.com/yuliskov/SmartTubeNext/releases/).
+**The app has a built-in updater** with changelog. You can also find all releases and the **changelog** on the [Telegram channel @SmartTubeNextNewsEN](https://t.me/s/SmartTubeNextNewsEN) (readable without account) or on [Github](https://github.com/yuliskov/SmartTubeNext/releases/).
 
 > latest [**beta download**](https://github.com/yuliskov/SmartTubeNext/releases/download/latest/smarttube_beta.apk)
 >
 > latest [stable download](https://github.com/yuliskov/SmartTubeNext/releases/download/latest/smarttube_stable.apk)
 
 
+### Installation (Chromecast with Google TV)
+
+On **Chromecast with Google TV**, installation of apps is blocked by default, so an extra step is required:
+
+> **4.1. Enable Developer Options**
+>
+> On your Chromecast, open the side menu and go to _Settings > System > About_. Scroll down to the _Android TV OS build_ section and click that repeatedly. A toast message will appear, explaining that you are a few steps away from being a developer. Continue clicking until you trigger it.
+>
+>
+> **4.2. Turn on the "unknown sources" setting**
+>
+> Go back to the main _Settings_ page and select _Apps > Security & Restrictions > Unknown sources_. Turn on the toggle for \[_Downloader by AFTVnews_ or\] whichever file browser you decided to use [...].
+>
+> [[source & picture guide](https://www.androidpolice.com/2021/02/07/how-to-sideload-any-apk-on-the-chromecast-with-android-tv/#install-the-apk)]
+
+After this, you can follow the [general installation guide](#installation) above.
+
+
+### Installation (Xiaomi devices with Chinese firmware)
+
+Xiaomi's **Chinese firmware** might block the installation **of the beta version**. The international firmware is not affected. Solutions:
+1. use SmartTubeNext's **stable version** instead (**recommended**)
+2. use the international firmware for your device
+3. (if your device is from 2020 or before) You can do a factory reset and then install SmartTubeNext beta before doing any system updates. You can then safely update your system, SmartTubeNext should continue working.
+
+
 ### Updating
 
 The app has a built-in updater. You only need to follow the installation procedure **once**. A few seconds after launching SmartTubeNext, it will notify you if there is any update and also show a changelog. You can disable disable automatic update checks or manually update in the settings under "about".
 
+If the installation fails, either your **disk space is full** or the update didn't download correctly; clear up space and try updating again (_Settings > About > Check for updates_).
+
 
 ## Compatibility
 
-SmartTubeNext requires Android 4.3 or above. It does not work on non-Android devices. This is a TV app, so it mostly does not work on smartphones or tablets.
+SmartTubeNext requires Android 4.3 or above. It does not work on non-Android devices (incl. LG or Samsung TVs). On unsupported TVs, you can use a TV stick or TV box. Though this app technically runs on smartphones and tablets, it is not optimized for such and offers no official support!
 
 It has been successfully tested on TVs, TV boxes and TV sticks that are based on Android, including:
 
 - Android TVs & Google TVs (e.g. Philips, Sony)
+- Chromecast with Google TV & TVs with _Chromecast built-in_
+- Amazon FireTV stick (all generations)
 - NVIDIA Shield
-- Amazon FireTV stick
-- Chromecast with Google TV
 - TV boxes running Android (many cheap chinese no-name boxes)
-- Xiaomi Mi Box\*
-  > The **Chinese firmware** might block the installation of the beta version. solutions:
-  > 1. install the **stable version** instead (**recommended**)
-  > 2. install the international firmware
-  > 3. You can might be able to bypass the restriction by doing a factory reset (to revert the update that blocks the installation). You can then install SmartTubeNext beta before doing any system updates. You can then safely update your system, SmartTubeNext should continue working. It is currently not confirmed if installing updates works.
-
+- Xiaomi Mi Box
 
 
 ## Features
@@ -80,7 +102,7 @@ SmartTubeNext includes a SponsorBlock integration. From the [SponsorBlock websit
 
 > SponsorBlock is an open-source crowdsourced browser extension and open API for **skipping sponsor segments** in YouTube videos. [...] the extension automatically skips sponsors **it knows about** using a privacy preserving query system. It also supports skipping **other categories**, such as intros, outros and reminders to subscribe [and non-music parts in music videos].
 
-You can select which categories you want to skip in the settings. Unlike the browser addon, in SmartTubeNext you cannot submit new segments (TVs and TV remotes aren't great devices for such precise operations).
+You can select which categories you want to skip in the settings. Unlike the browser addon, in SmartTubeNext you cannot submit new segments (TVs and TV remotes aren't great devices for such precise operations). Note that SponsorBlock is a free and voluntary project based on user submissions, so don't expect it to 100% work every time. Sometimes, sponsor segments are not yet submitted to the database, sometimes the SponsorBlock servers are offline/overloaded.
 
 
 ### Casting
@@ -94,10 +116,12 @@ To cast videos from your phone (or other devices), you must link that device to 
 
 [**Screenshot guide**](https://t.me/SmartTubeNext_en/8514)
 
+Due to technical limitations, you need to open the app on the TV before casting; SmartTubeNext cannot automatically wake up the TV.
+
 
 ### Picture-in-Picture (PiP)
 
-SmartTubeNext supports playing videos in PiP mode. This needs to be enabled under _Settings \> General \> Background playback \> Picture in picture_. The video will go into PiP mode when you press home while playing a video, and also when you press _back_ if enabled in _Settings \> General \> Background playback (activation)_.
+SmartTubeNext supports playing videos in PiP mode. This needs to be enabled under _Settings > General > Background playback > Picture in picture_. The video will go into PiP mode when you press home while playing a video, and also when you press _back_ if enabled in _Settings > General > Background playback (activation)_.
 
 
 ### Adjust Speed
@@ -109,17 +133,23 @@ You can adjust the playback speed pressing the speed-indicator icon (gauge) in t
 
 To enable global voice search, an additional app must be installed alongside SmartTubeNext. This _bridge app_ can intercept the System's attempts to open the original YouTube app and open SmartTubeNext instead. For this to work, you must uninstall the original YouTube app. We know this sucks, but you can always reinstall it if you change your mind. The _bridge app_ will not show up in your launcher and you do cannot to launch it directly; it is only used internally by the system's voice search. On some devices, you need to explicitly say "Youtube" when searching (e.g. say "youtube cute cats" instead of just "cute cats").
 
-**On Amazon Fire TV**, to enable voice search support you need to: 
+**On Amazon Fire TV**: 
 
-1. uninstall the original YouTube app (no root required on Amazon FireTV stick)
-2. download and install the Amazon Bridge SmartTubeNext app: https://kutt.it/stn_bridge_amazon (e.g. via _Downloader for AFTVnews_)
+1. uninstall the original YouTube app (no root required)
+2. download and install the Amazon Bridge SmartTubeNext app: https://kutt.it/stn_bridge_amazon (e.g. via _Downloader by AFTVnews_)
+
+
+**On Google Chromecast with Google TV**: 
+
+1. uninstall the original YouTube app (no root required)
+3. download and install the ATV Bridge SmartTubeNext app: https://kutt.it/stn_bridge_atv (e.g. via _Downloader by AFTVnews_)
 
 
 **On all other Android devices**, sadly root is required to enable this:
 
 1. root your device (search for a guide for your specific device)
 2. uninstall the official YouTube app using root (`adb shell pm uninstall com.google.android.youtube.tv`)
-3. download and install the ATV Bridge SmartTubeNext app: https://kutt.it/stn_bridge_atv (e.g. via _Downloader for AFTVnews_)
+3. download and install the ATV Bridge SmartTubeNext app: https://kutt.it/stn_bridge_atv (e.g. via _Downloader by AFTVnews_)
 
 
 ## Donation
@@ -142,7 +172,7 @@ If you want to support my developments you are welcome to buy me a cup of coffee
 You can report in our Telegram group or via [issue tracker on Github](https://github.com/yuliskov/SmartTubeNext/issues) (account required).
 
 > **Telegram group (international)**: [@SmartTubeNext_en](http://t.me/SmartTubeNext_en)  
-> **Telegram group (RU/UA)**: [@SmartTubeNext](http://t.me/SmartTubeNext)  
+> **Telegram group (RU/UA/BY)**: [@SmartTubeNext](http://t.me/SmartTubeNext)  
 > **Email**: first.hash at gmail dot com
 
 The international group is in **English only**. But don't worry if your English is not perfect, we have a friendly international community.
@@ -151,6 +181,7 @@ The international group is in **English only**. But don't worry if your English 
 ## Team
 
 SmartTubeNext is developed single-handedly by Yurii; there is no larger team or company behind this. This is an open source, hobby project. Several others have helped with translations, some of which can be seen on [Github](https://github.com/yuliskov/SmartTubeNext/graphs/contributors), some have sent their translations directly to Yurii. There are also helpful people in the support chat.
+
 
 ## Build
     
@@ -165,9 +196,11 @@ adb connect <device_ip_address>
 gradlew clean installStorigDebug
 ```
 
+
 ## Video codecs
 
 Video codecs are the algorithms used for video compression.
+
 
 ### Which codec to choose / overview
 
@@ -220,23 +253,6 @@ Because AV01 is very new, **most** TVs and TV boxes **not not** offer hardware s
 If your device has hardware support for a codec, videos using that codec should play smoothly. High resolutions might also be slow in VP9 on cheap TV boxes that don't officially support 4k. Your device probably can play VP9 videos even without hardware support, however this requires a powerful CPU to run smoothly. Fixing AV01 without hardware support is technically possible, but currently not planned and probably not efficient enough.
 
 
-### Q: What is SmartYouTubeTV (SYTV)? What is the Difference?
-
-A: SmartYouTubeTV was the first 3rd party Android TV Youtube client. It is **no longer maintained**, as all development efforts are now focused on SmartTubeNext. While both SmartYouTubeTV and SmartTubeNext do the same thing, they use different approaches:
-
-- SmartYouTubeTV is like the original YouTube TV but with an addon for enhancements
-- SmartTubeNext is a native Android app that does not rely on the original YouTube TV code
-
-The original YouTube TV app is a **webapp**. Google can and does constantly update the web code, thereby sometimes breaking SmartYouTubeTV. There is nothing we (or you) can do to prevent this. These changes apply even without updating the app. Because some changes only apply to some countries or randomly chosen users, it is hard for [the developer](#Team) to debug and fix any issues. Years of hard work on this app can be wasted in a single update by Google.
-
-SmartTubeNext is a native app that can load a lot faster, is more stable, and is easier to maintain and develop further. SmartTubeNext does not look as good as SmartYouTubeTV, but that's only a small issue.
-
-
-### Q: What to do if I like SmartYouTubeTV better?
-
-A: That's your choice. SmartYouTubeTV won't receive any frequent updates or fixes anymore, so you're on your own. We recommend not being obsessed with the differences and embracing SmartTubeNext instead.
-
-
 ### Q: Can you make SmartTubeNext look like the original app? / Can the search page be improved?
 
 A: We try, but it takes a lot of effort and time, so please be patient. You definitely are not the first to suggest this.
@@ -244,16 +260,9 @@ A: We try, but it takes a lot of effort and time, so please be patient. You defi
 SmartTubeNext is following Google's officially recommended design/template for TV apps and is using the official, preinstalled Android TV keyboard. Sadly, Google did a really bad job regarding the search page and keyboard. Maybe a future SmartTubeNext update can add an embedded keyboard, similar to the original YouTube or other major Android TV apps. Maybe it can improve the looks to be as good or better than in the official YouTube app. But for now, it is the way it is due to lack of time and due to Google's official recommendations being bad.
 
 
-### Q: Installation is blocked in China?
+### Q: Can I install this on a Samsung Tizen TV / LG webOS TV / iOS / toaster?
 
-A: Yes, currently the installation of the beta version is blocked on devices with current chinese firmware. (maybe only Xiaomi?)
-
-See [the section _Compatibility_](#compatibility) for more information.
-
-
-### Q: Can I install this on a Samsung Tizen TV / LG webOS / iOS / toaster?
-
-A: No, this only works on **Android** devices. The app cannot easily be ported over and we have no plans to even. **Please do not ask**.
+A: No, this only works on **Android** devices. The app cannot easily be ported over and we have no plans to even. **Please do not ask**. You can use a separate TV stick or TV box instead.
 
 
 ### Q: Can I install this on a smartphone? / Can you add portrait mode? / Scrolling doesn't work.
