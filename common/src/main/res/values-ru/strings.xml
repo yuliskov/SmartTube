@@ -482,5 +482,5 @@
     <string name="pause_history">Поставить историю на паузу</string>
     <string name="resume_history">Возобновить историю</string>
     <string name="clear_history">Очистить историю</string>
-    <string name="chapters">Chapters</string>
+    <string name="chapters">Эпизоды</string>
 </resources>
