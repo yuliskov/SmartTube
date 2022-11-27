@@ -481,4 +481,13 @@
     <string name="content_block_status">Status von SponsorBlock prüfen</string>
     <string name="player_show_quality_info_bitrate">Bitrate zu den Qualitätsinfos hinzufügen</string>
     <string name="player_speed_button_old_behavior">Altes Verhalten der Geschwindigkeitstaste wiederherstellen</string>
+    <string name="protect_settings_with_password">Alle Einstellungen mit einem Passwort schützen</string>
+    <string name="enter_settings_password">Passwort für Einstellungen eingeben</string>
+    <string name="child_mode">Kindermodus</string>
+    <string name="child_mode_desc">In diesem Modus kann der Benutzer die Suche nicht verwenden und keine vorgeschlagenen Inhalte sehen. Die Einstellungen werden mit dem Passwort gesichert.</string>
+    <string name="lost_setting_warning">Die Einstellungen der App werden geändert. Stellen Sie sicher, dass Sie eine Sicherung der Einstellungen erstellt haben.</string>
+    <string name="player_button_long_click">Ein kurzer Klick auf die Taste führt zu einer schnellen Aktion und ein langer zum Einstellungsdialog.</string>
+    <string name="pause_history">Verlauf pausieren</string>
+    <string name="resume_history">Verlauf fortsetzen</string>
+    <string name="clear_history">Verlauf löschen</string>
 </resources>
