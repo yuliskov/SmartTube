@@ -486,4 +486,8 @@
     <string name="child_mode">Modalità bambino</string>
     <string name="child_mode_desc">In questa modalità, l\'utente non può utilizzare la ricerca o visualizzare alcun contenuto suggerito. Le impostazioni saranno protette da password.</string>
     <string name="lost_setting_warning">Le impostazioni dell\'app verranno modificate. Assicurati di aver creato un backup delle impostazioni.</string>
+    <string name="player_button_long_click">Un breve clic sul pulsante per avviare un\'azione rapida, un lungo clic per aprire la finestra di dialogo delle impostazioni</string>
+    <string name="pause_history">Metti in pausa la cronologia</string>
+    <string name="resume_history">Riprendi la cronologia</string>
+    <string name="clear_history">Cancella la cronologia</string>
 </resources>
