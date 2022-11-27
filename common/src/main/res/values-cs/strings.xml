@@ -489,4 +489,5 @@
     <string name="player_button_long_click">Krátké kliknutí na tlačítko pro rychlou akci a dlouhé pro dialog nastavení</string>
     <string name="pause_history">Pozastavit historii</string>
     <string name="resume_history">Obnovit historii</string>
+    <string name="clear_history">Smazat historii</string>
 </resources>
