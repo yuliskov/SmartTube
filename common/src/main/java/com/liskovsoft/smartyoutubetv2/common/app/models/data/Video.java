@@ -13,6 +13,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.ArrayList;
@@ -185,6 +186,7 @@ public final class Video implements Parcelable {
         video.title = chapter.getTitle();
         video.cardImageUrl = chapter.getCardImageUrl();
         video.startTimeMs = chapter.getStartTimeMs();
+        video.badge = ServiceHelper.millisToTimeText(chapter.getStartTimeMs());
         return video;
     }
 
