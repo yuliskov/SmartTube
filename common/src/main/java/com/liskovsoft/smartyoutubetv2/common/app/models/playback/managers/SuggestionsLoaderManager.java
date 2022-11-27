@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -234,6 +235,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         getController().clearSuggestions(); // clear previous videos
 
+        appendChaptersIfNeeded(mediaItemMetadata);
+
         appendUserQueueIfNeeded(video);
 
         int groupIndex = -1;
@@ -282,6 +285,18 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             Playlist.instance().addAll(videoGroup.getVideos());
             Playlist.instance().setCurrent(video);
         }
+    }
+
+    private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
+        List<ChapterItem> chapters = mediaItemMetadata.getChapters();
+
+        if (chapters == null) {
+            return;
+        }
+
+        VideoGroup videoGroup = VideoGroup.fromChapters(chapters, getActivity().getString(R.string.chapters));
+
+        getController().updateSuggestions(videoGroup);
     }
 
     private void appendUserQueueIfNeeded(Video video) {

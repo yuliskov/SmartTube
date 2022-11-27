@@ -832,23 +832,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public boolean isSettingsSection() {
-        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SETTINGS;
+        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SETTINGS && inForeground();
     }
 
     public boolean isPlaylistsSection() {
-        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_USER_PLAYLISTS;
+        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_USER_PLAYLISTS && inForeground();
     }
 
     public boolean isHistorySection() {
-        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_HISTORY;
-    }
-
-    public boolean isPlaylistsSectionActive() {
-        return isPlaylistsSection() && inForeground();
+        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_HISTORY && inForeground();
     }
 
     public boolean isSubscriptionsSection() {
-        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SUBSCRIPTIONS;
+        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SUBSCRIPTIONS && inForeground();
     }
 
     public void selectSection(int sectionId) {

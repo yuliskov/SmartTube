@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
+import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -105,6 +106,20 @@ public class VideoGroup {
                     video.percentWatched = state.positionMs / (state.durationMs / 100f);
                 }
             }
+            videoGroup.mVideos.add(video);
+        }
+
+        return videoGroup;
+    }
+
+    public static VideoGroup fromChapters(List<ChapterItem> chapters, String title) {
+        VideoGroup videoGroup = new VideoGroup();
+        videoGroup.mTitle = title;
+        videoGroup.mVideos = new ArrayList<>();
+
+        for (ChapterItem chapter : chapters) {
+            Video video = Video.from(chapter);
+            video.group = videoGroup;
             videoGroup.mVideos.add(video);
         }
 

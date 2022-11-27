@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.Play
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -351,14 +352,16 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
         disposeActions();
 
-        if (item.hasVideo()) {
-            getController().showOverlay(true);
-            getBridge().openVideo(item);
-        } else if (item.hasChannel()) {
-            ChannelPresenter.instance(getActivity()).openChannel(item);
-        } else {
-            Log.e(TAG, "Video item doesn't contain needed data!");
-        }
+        VideoActionPresenter.instance(getActivity()).apply(item);
+
+        //if (item.hasVideo()) {
+        //    getController().showOverlay(true);
+        //    getBridge().openVideo(item);
+        //} else if (item.hasChannel()) {
+        //    ChannelPresenter.instance(getActivity()).openChannel(item);
+        //} else {
+        //    Log.e(TAG, "Video item doesn't contain needed data!");
+        //}
     }
 
     private boolean isActionsRunning() {

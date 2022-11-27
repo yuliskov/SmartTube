@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
@@ -58,6 +59,7 @@ public final class Video implements Parcelable {
     public boolean hasNewContent;
     public boolean isLive;
     public boolean isUpcoming;
+    public boolean isChapter;
     private boolean isMovie;
     public boolean isSubscribed;
     public boolean isRemote;
@@ -66,7 +68,7 @@ public final class Video implements Parcelable {
     public boolean isSynced;
     public final long timestamp = System.currentTimeMillis();
     public int extra = -1;
-    public int pendingPosMs;
+    public long pendingPosMs;
     public boolean fromQueue;
     public boolean isPending;
     public boolean finishOnEnded;
@@ -174,6 +176,15 @@ public final class Video implements Parcelable {
     public static Video from(String videoId) {
         Video video = new Video();
         video.videoId = videoId;
+        return video;
+    }
+
+    public static Video from(ChapterItem chapter) {
+        Video video = new Video();
+        video.isChapter = true;
+        video.title = chapter.getTitle();
+        video.cardImageUrl = chapter.getCardImageUrl();
+        video.startTimeMs = chapter.getStartTimeMs();
         return video;
     }
 

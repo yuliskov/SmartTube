@@ -490,4 +490,5 @@
     <string name="pause_history">Pause history</string>
     <string name="resume_history">Resume history</string>
     <string name="clear_history">Clear history</string>
+    <string name="chapters">Chapters</string>
 </resources>

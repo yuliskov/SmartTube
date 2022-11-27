@@ -225,7 +225,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         }
 
         // Allow removing user playlist only from Playlists section to prevent accidental deletion
-        if (BrowsePresenter.instance(getContext()).isPlaylistsSection() && !BrowsePresenter.instance(getContext()).inForeground()) {
+        if (!BrowsePresenter.instance(getContext()).isPlaylistsSection()) {
             return;
         }
 
@@ -352,7 +352,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo() != null ? getVideo() : new Video();
 
-        if (!BrowsePresenter.instance(getContext()).isPlaylistsSectionActive() || original.hasVideo()) {
+        if (original.hasVideo() || !BrowsePresenter.instance(getContext()).isPlaylistsSection()) {
             return;
         }
 
@@ -413,7 +413,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo();
 
-        if (original == null || !BrowsePresenter.instance(getContext()).isPlaylistsSectionActive()) {
+        if (original == null || !BrowsePresenter.instance(getContext()).isPlaylistsSection()) {
             return;
         }
 
@@ -491,6 +491,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         }
 
         BrowsePresenter presenter = BrowsePresenter.instance(getContext());
+
         if (!presenter.isHistorySection()) {
             return;
         }

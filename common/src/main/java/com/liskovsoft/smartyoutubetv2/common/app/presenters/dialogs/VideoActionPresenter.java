@@ -35,6 +35,8 @@ public class VideoActionPresenter extends BasePresenter<Void> {
             Utils.chooseChannelPresenter(getContext(), item);
         } else if (item.hasPlaylist()) {
             ChannelUploadsPresenter.instance(getContext()).openChannel(item);
+        } else if (item.isChapter) {
+            PlaybackPresenter.instance(getContext()).setPosition(item.startTimeMs);
         }
     }
 }
