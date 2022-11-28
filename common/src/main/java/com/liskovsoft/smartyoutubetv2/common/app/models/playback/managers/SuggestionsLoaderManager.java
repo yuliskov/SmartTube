@@ -92,6 +92,20 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         getController().resetSuggestedPosition();
     }
 
+    @Override
+    public void onControlsShown(boolean shown) {
+        if (shown) {
+            focusCurrentChapter();
+        }
+    }
+
+    @Override
+    public void onSeekEnd() {
+        if (getController().isOverlayShown()) {
+            focusCurrentChapter();
+        }
+    }
+
     private void continueGroup(VideoGroup group) {
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
@@ -322,6 +336,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         if (afterCurrent != null && afterCurrent.contains(item)) {
             item.fromQueue = true;
         }
+    }
+
+    private void focusCurrentChapter() {
+
     }
 
     /**
