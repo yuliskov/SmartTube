@@ -490,4 +490,5 @@
     <string name="pause_history">Verlauf pausieren</string>
     <string name="resume_history">Verlauf fortsetzen</string>
     <string name="clear_history">Verlauf löschen</string>
+    <string name="chapters">Kapitel</string>
 </resources>
