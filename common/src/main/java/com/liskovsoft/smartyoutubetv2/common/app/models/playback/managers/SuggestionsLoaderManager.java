@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import androidx.core.content.ContextCompat;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
@@ -12,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -30,7 +32,7 @@ import java.util.Set;
 public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsLoaderManager.class.getSimpleName();
     private final Set<MetadataListener> mListeners = new HashSet<>();
-    private List<Disposable> mActions = new ArrayList<>();
+    private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
     private VideoGroup mLastScrollGroup;
 
@@ -222,6 +224,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private void updateSuggestions(MediaItemMetadata mediaItemMetadata, Video video) {
         syncCurrentVideo(mediaItemMetadata, video);
 
+        addChapterMarkersIfNeeded(mediaItemMetadata);
+
         appendSuggestions(video, mediaItemMetadata);
 
         // After video suggestions
@@ -301,6 +305,16 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         }
     }
 
+    private void addChapterMarkersIfNeeded(MediaItemMetadata mediaItemMetadata) {
+        List<ChapterItem> chapters = mediaItemMetadata.getChapters();
+
+        if (chapters == null) {
+            return;
+        }
+
+        getController().setSeekBarSegments(toSeekBarSegments(chapters));
+    }
+
     private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
         List<ChapterItem> chapters = mediaItemMetadata.getChapters();
 
@@ -345,7 +359,12 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             return;
         }
 
-        getController().focusSuggestedItem(findCurrentChapterIndex(group.getVideos()));
+        int index = findCurrentChapterIndex(group.getVideos());
+
+        if (index != -1) {
+            getController().focusSuggestedItem(index);
+            getController().setTitle(group.getVideos().get(index).title);
+        }
     }
 
     private int findCurrentChapterIndex(List<Video> videos) {
@@ -363,6 +382,31 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         }
 
         return currentChapter;
+    }
+
+    private List<SeekBarSegment> toSeekBarSegments(List<ChapterItem> chapters) {
+        if (chapters == null) {
+            return null;
+        }
+
+        List<SeekBarSegment> result = new ArrayList<>();
+        long markLengthMs = getController().getDurationMs() / 100;
+
+        for (ChapterItem chapter : chapters) {
+            if (chapter.getStartTimeMs() == 0) {
+                continue;
+            }
+
+            SeekBarSegment seekBarSegment = new SeekBarSegment();
+            double startRatio = (double) chapter.getStartTimeMs() / getController().getDurationMs(); // Range: [0, 1]
+            double endRatio = (double) (chapter.getStartTimeMs() + markLengthMs) / getController().getDurationMs(); // Range: [0, 1]
+            seekBarSegment.startProgress = (int) (startRatio * Integer.MAX_VALUE); // Could safely cast to int
+            seekBarSegment.endProgress = (int) (endRatio * Integer.MAX_VALUE); // Could safely cast to int
+            seekBarSegment.color = ContextCompat.getColor(getActivity(), R.color.black);
+            result.add(seekBarSegment);
+        }
+
+        return result;
     }
 
     /**
