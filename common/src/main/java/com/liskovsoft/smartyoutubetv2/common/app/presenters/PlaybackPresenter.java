@@ -117,6 +117,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
         if (Utils.isPlayerInForeground(getContext()) && getView() != null) {
             getView().getController().setPositionMs(positionMs);
             getView().getController().setPlayWhenReady(true);
+            getView().getController().showOverlay(false);
         } else {
             Video video = VideoMenuPresenter.sVideoHolder.get();
             if (video != null) {

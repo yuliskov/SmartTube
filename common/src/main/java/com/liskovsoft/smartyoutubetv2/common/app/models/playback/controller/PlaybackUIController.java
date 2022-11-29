@@ -20,6 +20,7 @@ public interface PlaybackUIController {
     void removeSuggestions(VideoGroup group);
     int getSuggestionsIndex(VideoGroup group);
     VideoGroup getSuggestionsByIndex(int index);
+    void focusSuggestedItem(int index);
     void resetSuggestedPosition();
     boolean isSuggestionsEmpty();
     void clearSuggestions();

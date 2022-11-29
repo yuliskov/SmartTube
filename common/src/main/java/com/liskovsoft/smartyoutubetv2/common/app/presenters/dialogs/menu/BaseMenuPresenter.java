@@ -469,6 +469,12 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
+        Video original = getVideo();
+
+        if (original != null && original.isChapter) {
+            return;
+        }
+
         if (getSection() != null && getSection().getId() != MediaGroup.TYPE_HISTORY) {
             return;
         }

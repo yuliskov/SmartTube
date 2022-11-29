@@ -69,11 +69,11 @@ public final class Video implements Parcelable {
     public boolean isSynced;
     public final long timestamp = System.currentTimeMillis();
     public int extra = -1;
+    public long startTimeMs;
     public long pendingPosMs;
     public boolean fromQueue;
     public boolean isPending;
     public boolean finishOnEnded;
-    public long startTimeMs;
     private int startSegmentNum;
 
     public Video() {

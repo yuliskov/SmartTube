@@ -1473,6 +1473,17 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public void focusSuggestedItem(int index) {
+        if (mRowsSupportFragment != null) {
+            ViewHolder vh = mRowsSupportFragment.getRowViewHolder(SUGGESTIONS_START_INDEX);
+            // Skip PlaybackRowPresenter.ViewHolder
+            if (vh instanceof ListRowPresenter.ViewHolder) {
+                ((ListRowPresenter.ViewHolder) vh).getGridView().setSelectedPosition(index);
+            }
+        }
+    }
+
+    @Override
     public void resetSuggestedPosition() {
         setPlayerRowIndex(0);
     }

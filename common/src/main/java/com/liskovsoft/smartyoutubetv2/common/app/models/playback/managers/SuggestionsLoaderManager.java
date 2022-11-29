@@ -101,7 +101,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
     @Override
     public void onSeekEnd() {
-        if (getController().isOverlayShown()) {
+        if (getController().isControlsShown()) {
             focusCurrentChapter();
         }
     }
@@ -339,7 +339,30 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void focusCurrentChapter() {
+        VideoGroup group = getController().getSuggestionsByIndex(0);
 
+        if (group == null || group.getVideos() == null) {
+            return;
+        }
+
+        getController().focusSuggestedItem(findCurrentChapterIndex(group.getVideos()));
+    }
+
+    private int findCurrentChapterIndex(List<Video> videos) {
+        if (videos == null || !videos.get(0).isChapter) {
+            return -1;
+        }
+
+        int currentChapter = -1;
+        long positionMs = getController().getPositionMs();
+        for (Video chapter : videos) {
+            if (chapter.startTimeMs > positionMs) {
+                break;
+            }
+            currentChapter++;
+        }
+
+        return currentChapter;
     }
 
     /**
