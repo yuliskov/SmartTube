@@ -2,6 +2,7 @@
 <resources>
     <string-array name="supported_languages">
         <item>English|en_US</item>
+        <item>Croatian|hr</item>
         <item>Українська|uk_UA</item>
         <item>Русский|ru_RU</item>
         <item>Armenian|hy</item>
