@@ -71,7 +71,7 @@
             android:layout_marginStart="@dimen/search_bar_right_items_margin"
             android:nextFocusRight="@id/account_orb"
             android:nextFocusLeft="@id/exit_pip"
-            app:searchOrbIcon="@drawable/search_bar_language_orb"
+            app:searchOrbIcon="@drawable/search_bar_settings_orb"
             app:searchOrbColor="@color/orb_color"
             app:searchOrbBrightColor="@color/orb_bright_color"
             app:searchOrbIconColor="@color/orb_icon_color"
