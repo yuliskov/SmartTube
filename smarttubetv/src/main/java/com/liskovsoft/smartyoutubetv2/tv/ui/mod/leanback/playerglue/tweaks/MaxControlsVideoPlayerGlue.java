@@ -87,7 +87,8 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                 viewHolder.setDateVisibility(isControlsVisible());
                 // Reset to defaults
                 viewHolder.setSeekPreviewTitle(null);
-                viewHolder.setSeekBarSegments(null);
+                // Don't uncomment
+                //viewHolder.setSeekBarSegments(null);
             }
             @Override
             protected void onUnbindRowViewHolder(RowPresenter.ViewHolder vh) {

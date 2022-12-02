@@ -1535,8 +1535,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // Hide last frame of the previous video
         showBackgroundColor(R.color.player_background);
         setChatReceiver(null);
-        //setSeekBarSegments(null);
-        //setSeekPreviewTitle(null);
+        setSeekBarSegments(null);
     }
 
     /**
