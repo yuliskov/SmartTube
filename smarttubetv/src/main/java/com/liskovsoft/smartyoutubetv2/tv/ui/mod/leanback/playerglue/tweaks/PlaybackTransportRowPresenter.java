@@ -38,6 +38,7 @@ import androidx.leanback.widget.PlaybackSeekDataProvider;
 import androidx.leanback.widget.PlaybackSeekUi;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.RowPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
@@ -45,13 +46,12 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.Con
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlLongClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlSelectedListener;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.PlayPauseListener;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.QualityInfoListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.seekpreview.ThumbsBar;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.ControlsVisibilityListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.widget.OnActionLongClickedListener;
 
+import java.lang.ref.WeakReference;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * A PlaybackTransportRowPresenter renders a {@link PlaybackControlsRow} to display a
@@ -95,6 +95,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final ViewGroup mTopEdge;
         final SeekBar mProgressBar;
         final ThumbsBar mThumbsBar;
+        final TextView mThumbsBarTitle;
+        final ViewGroup mThumbsBarWrapper;
         final String mRemainingTimeFormat;
         final String mEndingTimeFormat;
         long mTotalTimeInMs = Long.MIN_VALUE;
@@ -122,10 +124,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final PlayerData mPlayerData;
 
         // MOD: update quality info
-        final QualityInfoListener mQualityInfoListener = this::setQualityInfo;
-        final ControlsVisibilityListener mVisibilityListener = this::updateVisibility;
-        final PlayPauseListener mPlayPauseListener = this::onPlay;
-        TopEdgeFocusListener mTopEdgeFocusListener = null;
+        private WeakReference<TopEdgeFocusListener> mTopEdgeFocusListener = null;
 
         final PlaybackControlsRow.OnPlaybackProgressCallback mListener =
                 new PlaybackControlsRow.OnPlaybackProgressCallback() {
@@ -438,8 +437,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 if (hasFocus) {
                     mTopEdge.clearFocus();
 
-                    if (mTopEdgeFocusListener != null) {
-                        mTopEdgeFocusListener.onTopEdgeFocused();
+                    if (mTopEdgeFocusListener != null && mTopEdgeFocusListener.get() != null) {
+                        mTopEdgeFocusListener.get().onTopEdgeFocused();
                     }
                 }
             });
@@ -551,6 +550,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 mDescriptionDock.addView(mDescriptionViewHolder.view);
             }
             mThumbsBar = (ThumbsBar) rootView.findViewById(R.id.thumbs_row);
+            mThumbsBarTitle = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.thumbs_row_title);
+            mThumbsBarWrapper = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.thumbs_row_wrapper);
         }
 
         /**
@@ -617,7 +618,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     mSecondaryControlsVh.view.setVisibility(View.VISIBLE);
                     mDescriptionViewHolder.view.setVisibility(View.VISIBLE);
                     mAdditionalInfo.setVisibility(View.VISIBLE);
-                    mThumbsBar.setVisibility(View.INVISIBLE);
+                    // Don't set to GONE or carousel will crash (can't properly calculate length)
+                    mThumbsBarWrapper.setVisibility(View.INVISIBLE);
                     break;
                 case CONTROLS_MODE_COMPACT:
                     mControlsVh.view.setVisibility(View.GONE);
@@ -625,7 +627,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     mSecondaryControlsVh.view.setVisibility(View.GONE);
                     mDescriptionViewHolder.view.setVisibility(View.GONE);
                     mAdditionalInfo.setVisibility(View.GONE);
-                    mThumbsBar.setVisibility(View.VISIBLE);
+                    mThumbsBarWrapper.setVisibility(View.VISIBLE);
                     break;
             }
         }
@@ -773,7 +775,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             }
         }
 
-        void updateVisibility(boolean isVisible) {
+        void setDateVisibility(boolean isVisible) {
             if (mPlayerData.isClockEnabled()) {
                 mDateTime.setVisibility(View.VISIBLE);
             } else {
@@ -781,8 +783,25 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             }
         }
 
-        void onPlay(boolean play) {
+        void setSeekPreviewTitle(String title) {
+            if (title != null) {
+                mThumbsBarTitle.setText(title);
+                mThumbsBarTitle.setVisibility(View.VISIBLE);
+            } else {
+                mThumbsBarTitle.setVisibility(View.GONE);
+            }
+        }
+
+        void setSeekBarSegments(List<SeekBarSegment> segments) {
+            mProgressBar.setSegments(segments);
+        }
+
+        void setPlay(boolean play) {
             mIsPlaying = play;
+        }
+
+        void setTopEdgeFocusListener(TopEdgeFocusListener listener) {
+            mTopEdgeFocusListener = new WeakReference<>(listener);
         }
 
         void updateTotalTime() {

@@ -40,7 +40,7 @@ public interface PlaybackUIController {
     void setContentBlockButtonState(boolean selected);
     void setChatButtonState(int buttonState);
     void setChannelIcon(String iconUrl);
-    void setTitle(String title);
+    void setSeekPreviewTitle(String title);
     void setNextTitle(String title);
     void setDebugButtonState(boolean show);
     void showDebugInfo(boolean show);

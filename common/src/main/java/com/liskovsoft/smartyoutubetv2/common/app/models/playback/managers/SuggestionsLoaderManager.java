@@ -363,7 +363,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         if (index != -1) {
             getController().focusSuggestedItem(index);
-            getController().setTitle(group.getVideos().get(index).title);
+            getController().setSeekPreviewTitle(group.getVideos().get(index).title);
         }
     }
 
@@ -390,7 +390,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         }
 
         List<SeekBarSegment> result = new ArrayList<>();
-        long markLengthMs = getController().getDurationMs() / 100;
+        long markLengthMs = getController().getDurationMs() / 300;
 
         for (ChapterItem chapter : chapters) {
             if (chapter.getStartTimeMs() == 0) {

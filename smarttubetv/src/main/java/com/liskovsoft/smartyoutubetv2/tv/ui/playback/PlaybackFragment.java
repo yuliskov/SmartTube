@@ -68,7 +68,6 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListene
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.SeekModePlaybackFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface.SurfacePlaybackFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigator;
@@ -888,14 +887,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void setSeekBarSegments(List<SeekBarSegment> segments) {
-        if (getActivity() == null) {
-            return;
-        }
-
-        SeekBar seekBar = getActivity().findViewById(R.id.playback_progress);
-
-        if (seekBar != null) {
-            seekBar.setSegments(segments);
+        if (mPlayerGlue != null) {
+            mPlayerGlue.setSeekBarSegments(segments);
         }
     }
 
@@ -1335,9 +1328,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setTitle(String title) {
+    public void setSeekPreviewTitle(String title) {
         if (mPlayerGlue != null) {
-            mPlayerGlue.setTitle(title);
+            mPlayerGlue.setSeekPreviewTitle(title);
         }
     }
 
@@ -1542,6 +1535,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // Hide last frame of the previous video
         showBackgroundColor(R.color.player_background);
         setChatReceiver(null);
+        //setSeekBarSegments(null);
+        //setSeekPreviewTitle(null);
     }
 
     /**

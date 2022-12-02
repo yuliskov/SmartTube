@@ -180,7 +180,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         //mVideo = null;
 
         // Reset colors
-        getController().setSeekBarSegments(null);
+        //getController().setSeekBarSegments(null);
         // Reset previously found segment (fix no dialog popup)
         mLastSkipPosMs = 0;
     }
