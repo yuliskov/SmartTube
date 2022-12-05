@@ -490,4 +490,5 @@
     <string name="pause_history">Metti in pausa la cronologia</string>
     <string name="resume_history">Riprendi la cronologia</string>
     <string name="clear_history">Cancella la cronologia</string>
+    <string name="chapters">Capitoli</string>
 </resources>
