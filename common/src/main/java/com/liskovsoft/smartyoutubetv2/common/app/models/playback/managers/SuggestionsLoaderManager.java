@@ -390,7 +390,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         }
 
         List<SeekBarSegment> result = new ArrayList<>();
-        long markLengthMs = getController().getDurationMs() / 300;
+        long markLengthMs = getController().getDurationMs() / 10000;
 
         for (ChapterItem chapter : chapters) {
             if (chapter.getStartTimeMs() == 0) {
