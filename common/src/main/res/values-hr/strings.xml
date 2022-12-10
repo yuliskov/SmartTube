@@ -232,7 +232,7 @@
     <string name="hide_shorts">Sakrij Shorts u pretplatama</string>
     <string name="key_remapping">Mapiranje tipki</string>
     <string name="screen_dimming">Zatamnjenje zaslona</string>
-    <string name="removed_from_playback_queue">Ukloni iz popis izvođenja</string>
+    <string name="removed_from_playback_queue">Ukloni iz reda izvođenja</string>
     <string name="added_to_playback_queue">Dodano u red izvođenja</string>
     <string name="add_remove_from_playback_queue">Dodaj/Ukloni iz reda izvođenja</string>
     <string name="add_to_playback_queue">Dodaj u red izvođenja</string>
@@ -290,7 +290,7 @@
     <string name="move_section_down">Pomakni odjeljak dolje</string>
     <string name="player_buttons">Podesi tipke reproduktora</string>
     <string name="action_playlist_add">Dodaj na popis izvođenja</string>
-    <string name="action_video_stats">Statistika video zapisa</string>
+    <string name="action_video_stats">Statistika videozapisa</string>
     <string name="action_subscribe">Pretplati se</string>
     <string name="action_channel">Otvori kanal</string>
     <string name="action_pip">Slika u slici</string>
