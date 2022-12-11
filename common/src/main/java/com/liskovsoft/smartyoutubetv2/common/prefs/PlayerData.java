@@ -501,9 +501,7 @@ public class PlayerData extends DataChangeBase {
     }
 
     public FormatItem getDefaultAudioFormat() {
-        String language = LocaleUtility.getCurrentLanguage(mPrefs.getContext());
-
-        return ExoFormatItem.fromAudioSpecs(String.format("%s,%s", "mp4a", language));
+        return ExoFormatItem.fromAudioSpecs(String.format("%s,null", "mp4a"));
     }
 
     public FormatItem getDefaultVideoFormat() {

@@ -298,6 +298,10 @@ public class ExoFormatItem implements FormatItem {
         return formatItem;
     }
 
+    /**
+     * Codec and language (lower case) delimited by comma
+     * @param spec codec, language
+     */
     public static ExoFormatItem fromAudioSpecs(String spec) {
         if (spec == null) {
             return null;
