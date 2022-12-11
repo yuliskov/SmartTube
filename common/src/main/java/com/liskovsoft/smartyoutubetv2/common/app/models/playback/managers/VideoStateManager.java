@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -33,6 +34,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     private FormatItem mTempVideoFormat;
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
+    private GeneralData mGeneralData;
     private PlayerTweaksData mPlayerTweaksData;
     private VideoStateService mStateService;
     private boolean mIsPlayBlocked;
@@ -48,6 +50,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     @Override
     public void onInitDone() { // called each time a video opened from the browser
         mPlayerData = PlayerData.instance(getActivity());
+        mGeneralData = GeneralData.instance(getActivity());
         mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
         mStateService = VideoStateService.instance(getActivity());
 
@@ -315,9 +318,9 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         State state = mStateService.getByVideoId(item.videoId);
 
         // Reset position of music videos
-        boolean isShort = state != null && (state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled());
+        boolean isShort = state != null && state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled();
 
-        if (isShort || item.isLive) {
+        if (isShort || item.isLive || !mGeneralData.isHistoryEnabled()) {
             resetPosition(item);
         }
     }
