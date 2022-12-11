@@ -491,4 +491,5 @@
     <string name="resume_history">Resume history</string>
     <string name="clear_history">Clear history</string>
     <string name="chapters">Chapters</string>
+    <string name="card_multiline_subtitle">Multiline subtitles</string>
 </resources>

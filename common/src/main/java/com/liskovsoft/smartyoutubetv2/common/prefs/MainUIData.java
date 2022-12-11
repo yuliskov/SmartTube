@@ -53,6 +53,7 @@ public class MainUIData extends DataChangeBase {
     private final AppPrefs mPrefs;
     private boolean mIsCardAnimatedPreviewsEnabled;
     private boolean mIsCardMultilineTitleEnabled;
+    private boolean mIsCardMultilineSubtitleEnabled;
     private boolean mIsCardTextAutoScrollEnabled;
     private int mCardTitleLinesNum;
     private float mUIScale;
@@ -99,6 +100,15 @@ public class MainUIData extends DataChangeBase {
 
     public boolean isCardMultilineTitleEnabled() {
         return mIsCardMultilineTitleEnabled;
+    }
+
+    public void enableCardMultilineSubtitle(boolean enable) {
+        mIsCardMultilineSubtitleEnabled = enable;
+        persistState();
+    }
+
+    public boolean isCardMultilineSubtitleEnabled() {
+        return mIsCardMultilineSubtitleEnabled;
     }
 
     public void enableCardTextAutoScroll(boolean enable) {
@@ -298,6 +308,7 @@ public class MainUIData extends DataChangeBase {
         mTopButtons = Helpers.parseInt(split, 13, TOP_BUTTON_DEFAULT);
         // 14
         mThumbQuality = Helpers.parseInt(split, 15, ClickbaitRemover.THUMB_QUALITY_DEFAULT);
+        mIsCardMultilineSubtitleEnabled = Helpers.parseBoolean(split, 16, true);
     }
 
     @Override
@@ -306,7 +317,7 @@ public class MainUIData extends DataChangeBase {
                 mVideoGridScale, mUIScale, mColorSchemeIndex, mIsCardMultilineTitleEnabled,
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
                 mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,
-                null, mThumbQuality));
+                null, mThumbQuality, mIsCardMultilineSubtitleEnabled));
 
         super.persistState();
     }

@@ -483,4 +483,5 @@
     <string name="resume_history">Возобновить историю</string>
     <string name="clear_history">Очистить историю</string>
     <string name="chapters">Эпизоды</string>
+    <string name="card_multiline_subtitle">Несколько строк в подзаголовках</string>
 </resources>
