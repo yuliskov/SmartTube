@@ -76,6 +76,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             // Need to be the first line and executed on earliest stage once.
             // Inits service language and context.
             //Utils.initGlobalData(getContext()); // Init already done in BasePresenter
+            RxUtils.setupGlobalErrorHandler();
             initIntentChain();
             updateChannels();
             getBackupDataOnce();
