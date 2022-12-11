@@ -491,4 +491,5 @@
     <string name="resume_history">Pokreni povijest</string>
     <string name="clear_history">Ukloni povijest</string>
     <string name="chapters">Poglavlja</string>
+    <string name="card_multiline_subtitle">Višeredni podnaslovi</string>
 </resources>
