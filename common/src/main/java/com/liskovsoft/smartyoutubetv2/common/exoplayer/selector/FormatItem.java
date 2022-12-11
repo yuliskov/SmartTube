@@ -21,6 +21,7 @@ public interface FormatItem {
     boolean isSelected();
     boolean isPreset();
     float getFrameRate();
+    String getLanguage();
     int getWidth();
     int getHeight();
     int getType();

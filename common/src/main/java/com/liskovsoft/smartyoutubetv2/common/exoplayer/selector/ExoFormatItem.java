@@ -360,6 +360,11 @@ public class ExoFormatItem implements FormatItem {
     }
 
     @Override
+    public String getLanguage() {
+        return mLanguage;
+    }
+
+    @Override
     public int getWidth() {
         return mWidth;
     }
