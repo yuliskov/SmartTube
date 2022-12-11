@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
@@ -70,19 +71,22 @@ public class EndingTimeView extends TextView implements TickleListener {
     public void update() {
         if (getVisibility() == View.VISIBLE) {
             String endingTime = getEndingTime();
-            if (endingTime != null) {
-                // https://stackoverflow.com/questions/5437674/what-unicode-characters-represent-time/9454080
-                //setText(TextUtils.concat( Utils.icon(getContext(), R.drawable.action_pip, getLineHeight()), " ", endingTime));
-                setText(String.format("⌛ %s", endingTime));
-                //setText(String.format("(%s)", endingTime));
 
+            setText(!TextUtils.isEmpty(endingTime) ? String.format("⌛ %s", endingTime) : null);
 
-                // Use external icon
-                //setText(endingTime);
-                //if (!mIconIsSet) {
-                //    setIcon();
-                //}
-            }
+            //if (endingTime != null) {
+            //    // https://stackoverflow.com/questions/5437674/what-unicode-characters-represent-time/9454080
+            //    //setText(TextUtils.concat( Utils.icon(getContext(), R.drawable.action_pip, getLineHeight()), " ", endingTime));
+            //    setText(String.format("⌛ %s", endingTime));
+            //    //setText(String.format("(%s)", endingTime));
+            //
+            //
+            //    // Use external icon
+            //    //setText(endingTime);
+            //    //if (!mIconIsSet) {
+            //    //    setIcon();
+            //    //}
+            //}
         }
     }
 
