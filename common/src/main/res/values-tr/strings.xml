@@ -389,9 +389,9 @@
     <string name="pressing_home">ANA EKRAN\'a basarak</string>
     <string name="pressing_home_back">ANA EKRAN\'a ya da GERİ\'ye basarak</string>
     <string name="player_number_key_seek">Sayı tuşlarıyla arama</string>
-    <string name="save_remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümüne Ekle/Sil</string>
-    <string name="remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümünden kalıcı olarak sil</string>
-    <string name="removed_from_playlists">Oynatma Listeleri bölümünden silindi</string>
+    <string name="save_remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümüne Ekle/Kaldır</string>
+    <string name="remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümünden kalıcı olarak kaldır</string>
+    <string name="removed_from_playlists">Oynatma Listeleri bölümünden kaldırıldı</string>
     <string name="saved_to_playlists">Oynatma Listeleri bölümüne eklendi</string>
     <string name="create_playlist">Oynatma listesi oluştur</string>
     <string name="add_video_to_new_playlist">Bu videoyu yeni oynatma listesine ekle</string>
@@ -491,4 +491,5 @@
     <string name="resume_history">Geçmişi devam ettir</string>
     <string name="clear_history">Geçmişi temizle</string>
     <string name="chapters">Bölümler</string>
+    <string name="card_multiline_subtitle">Çok satırlı altyazılar</string>
 </resources>
