@@ -131,14 +131,16 @@ public class MotherActivity extends FragmentActivity {
         // E.g. Hide bottom navigation bar (couldn't be done in styles).
         Helpers.makeActivityFullscreen(this);
 
-        mScreensaverManager.enable();
+        // Called on player's next track. Reason unknown.
+        //mScreensaverManager.enable();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        
-        mScreensaverManager.disable();
+
+        // Called on player's next track. Reason unknown.
+        //mScreensaverManager.disable();
     }
 
     @Override
