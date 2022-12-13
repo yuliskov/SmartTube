@@ -68,6 +68,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
 
         mMainPlayerEventBridge.openVideo(item);
 
+        // NOTE: onPause/onResume called even if player is running
         mViewManager.startView(PlaybackView.class);
 
         if (getView() != null) {
