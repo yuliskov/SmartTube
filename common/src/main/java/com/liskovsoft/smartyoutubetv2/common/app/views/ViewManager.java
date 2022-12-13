@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.HashMap;
@@ -87,7 +88,16 @@ public class ViewManager {
         startView(viewClass, false);
     }
 
+    /**
+     * Use carefully<br/>
+     * On running activity, this method invokes standard activity lifecycle: pause, resume etc...
+     */
     public void startView(Class<?> viewClass, boolean forceStart) {
+        // Skip starting activity twice to get rid of pausing/resuming activity cycle
+        if (Utils.isAppInForeground() && getTopView() != null && getTopView() == viewClass) {
+            return;
+        }
+
         mIsMoveToBackEnabled = false; // Essential part or new view will be pause immediately
 
         //if (!forceStart && doThrottle()) {

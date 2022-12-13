@@ -40,6 +40,8 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
 
     @Override
     public void onViewInitialized() {
+        super.onViewInitialized();
+
         mMainPlayerEventBridge.setController(getView().getController());
         getView().setEventListener(mMainPlayerEventBridge);
     }
@@ -68,7 +70,6 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
 
         mMainPlayerEventBridge.openVideo(item);
 
-        // NOTE: onPause/onResume called even if player is running
         mViewManager.startView(PlaybackView.class);
 
         if (getView() != null) {

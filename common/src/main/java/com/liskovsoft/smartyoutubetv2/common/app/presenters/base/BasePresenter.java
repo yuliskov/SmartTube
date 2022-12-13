@@ -7,9 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
@@ -26,13 +24,13 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class BasePresenter<T> implements Presenter<T> {
-    private static boolean sSync;
     private WeakReference<T> mView = new WeakReference<>(null);
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private WeakReference<Context> mApplicationContext = new WeakReference<>(null);
     private Runnable mOnDone;
     private static boolean sRunOnce;
     private long mUpdateCheckMs;
+    private static boolean mNeedSync;
 
     public BasePresenter(Context context) {
         setContext(context);
@@ -93,6 +91,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void onViewInitialized() {
+        enableSync();
         showBootDialogs();
     }
 
@@ -105,7 +104,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void onViewResumed() {
-        if (sSync && canViewBeSynced()) {
+        if (mNeedSync && canViewBeSynced()) {
             // NOTE: don't place cleanup in the onViewResumed!!! This could cause errors when view is resumed.
             syncItem(Playlist.instance().getChangedItems());
         }
@@ -166,7 +165,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         T view = getView();
 
         if (updateView(syncGroup, view)) {
-            sSync = false;
+            mNeedSync = false;
         }
     }
 
@@ -194,20 +193,24 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         return true;
     }
 
-    protected static void enableSync() {
-        sSync = true;
-        Playlist.instance().onNewSession();
+    private void enableSync() {
+        if (this instanceof PlaybackPresenter) {
+            mNeedSync = true;
+            Playlist.instance().onNewSession();
+        }
     }
 
     private void showBootDialogs() {
-        long currentTimeMs = System.currentTimeMillis();
+        if (this instanceof BrowsePresenter) {
+            long currentTimeMs = System.currentTimeMillis();
 
-        if (this instanceof BrowsePresenter && currentTimeMs - mUpdateCheckMs > 60 * 60 * 1_000) {
-            BootDialogPresenter updatePresenter = BootDialogPresenter.instance(getContext());
-            updatePresenter.start();
-            updatePresenter.unhold();
-            Utils.updateRemoteControlService(getContext());
-            mUpdateCheckMs = currentTimeMs;
+            if (currentTimeMs - mUpdateCheckMs > 60 * 60 * 1_000) {
+                BootDialogPresenter updatePresenter = BootDialogPresenter.instance(getContext());
+                updatePresenter.start();
+                updatePresenter.unhold();
+                Utils.updateRemoteControlService(getContext());
+                mUpdateCheckMs = currentTimeMs;
+            }
         }
     }
 }

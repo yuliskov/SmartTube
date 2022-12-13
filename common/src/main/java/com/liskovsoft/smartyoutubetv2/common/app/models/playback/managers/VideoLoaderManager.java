@@ -352,13 +352,15 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
         disposeActions();
 
-        if (item.hasVideo()) {
-            // NOTE: Bypass calling onPause/onResume on PlaybackActivity
-            getController().showOverlay(true);
-            getBridge().openVideo(item);
-        } else {
-            VideoActionPresenter.instance(getActivity()).apply(item);
-        }
+        //if (item.hasVideo()) {
+        //    // NOTE: Bypass calling onPause/onResume on PlaybackActivity
+        //    getController().showOverlay(true);
+        //    getBridge().openVideo(item);
+        //} else {
+        //    VideoActionPresenter.instance(getActivity()).apply(item);
+        //}
+
+        VideoActionPresenter.instance(getActivity()).apply(item);
     }
 
     private boolean isActionsRunning() {
