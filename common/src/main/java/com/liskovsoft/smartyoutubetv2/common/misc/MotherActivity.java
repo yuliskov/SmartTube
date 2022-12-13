@@ -122,22 +122,6 @@ public class MotherActivity extends FragmentActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        // Don't use on Pause/Resume. Called on player's next track. Reason unknown.
-        mScreensaverManager.enable();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // Don't use on Pause/Resume. Called on player's next track. Reason unknown.
-        mScreensaverManager.disable();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
 
@@ -146,6 +130,17 @@ public class MotherActivity extends FragmentActivity {
         // Most of the fullscreen tweaks could be performed in styles but not all.
         // E.g. Hide bottom navigation bar (couldn't be done in styles).
         Helpers.makeActivityFullscreen(this);
+
+        // Called on player's next track. Reason unknown.
+        mScreensaverManager.enable();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Called on player's next track. Reason unknown.
+        mScreensaverManager.disable();
     }
 
     @Override
