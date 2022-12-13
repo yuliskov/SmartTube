@@ -491,4 +491,5 @@
     <string name="resume_history">Riprendi la cronologia</string>
     <string name="clear_history">Cancella la cronologia</string>
     <string name="chapters">Capitoli</string>
+    <string name="card_multiline_subtitle">Sottotitoli multilinea</string>
 </resources>
