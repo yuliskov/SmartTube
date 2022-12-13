@@ -141,6 +141,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public void setPlayWhenReady(boolean play) {
         if (mPlayer != null) {
+            // Fix: unable to seek after playback ends (repeat mode on pause)
+            if (!play && getPositionMs() == getDurationMs()) {
+                return;
+            }
+
             mPlayer.setPlayWhenReady(play);
         }
     }
