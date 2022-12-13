@@ -453,7 +453,7 @@
   <string name="time_format">时间格式</string>
   <string name="time_format_24">24 小时</string>
   <string name="time_format_12">12 小时(AM/PM)</string>
-  <string name="use_alt_speech_recognizer_desc">有严重的缺陷。只有在默认识别器有问题时才使用它。</string>
+  <string name="use_alt_speech_recognizer_desc">有严重的缺陷。只有在你对默认识别器有问题时才使用它。</string>
   <string name="speech_recognizer_system">系统(首选)	</string>
   <string name="speech_recognizer_external_1">例外情况 1 (严重失灵，为了正常使用，你需要禁止对麦克风的访问。)	</string>
   <string name="speech_recognizer_external_2">例外情况 2 (严重困扰)	</string>
@@ -474,4 +474,20 @@
   <string name="thumb_quality_start">视频的起始画面</string>
   <string name="thumb_quality_middle">视频的中间画面</string>
   <string name="thumb_quality_end">视频的结束画面</string>
+  <string name="content_block_status">检查 SponsorBlock 状态</string>
+  <string name="player_show_quality_info_bitrate">在视频品质信息中显示比特率</string>
+  <string name="player_speed_button_old_behavior">恢复速度按钮为旧的修复方式</string>
+  <string name="protect_settings_with_password">更改所有设置时需要输入密码</string>
+  <string name="enter_settings_password">进入设置的密码</string>
+  <string name="child_mode">儿童模式</string>
+  <string name="child_mode_desc">在这种模式下，用户不能使用搜索或看到任何推荐内容。这些设置将需要输入密码后进行。</string>
+  <string name="lost_setting_warning">应用程序的设置将被改变。请确保你已经创建了设置的备份。</string>
+  <string name="player_button_long_click">短按可进入快捷操作，长按可进入设置对话框。</string>
+  <string name="pause_history">暂停历史记录</string>
+  <string name="resume_history">恢复历史记录</string>
+  <string name="clear_history">清除历史记录</string>
+  <string name="chapters">章节</string>
+  <string name="card_multiline_subtitle">多行字幕</string>
+  <string name="add_to_playback_queue">增加到播放队列</string>
+  <string name="remove_from_playback_queue">从播放队列移除</string>
 </resources>
