@@ -3,10 +3,12 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
@@ -241,6 +243,24 @@ public class MotherActivity extends FragmentActivity {
     //    outState.putString("WORKAROUND_FOR_BUG_19917_KEY", "WORKAROUND_FOR_BUG_19917_VALUE");
     //    super.onSaveInstanceState(outState);
     //}
+
+    /**
+     * Fatal Exception: java.lang.IllegalStateException <br/>
+     * Can not perform this action after onSaveInstanceState <br/>
+     * <a href="https://issuetracker.google.com/issues/37094575#comment28">More info</a>
+     */
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Bug on Android 4, 5, 6
+        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT <= 23) {
+            final View rootView = findViewById(android.R.id.content);
+            if (rootView != null) {
+                rootView.cancelPendingInputEvents();
+            }
+        }
+    }
 
     public void addOnPermissions(OnPermissions onPermissions) {
         if (mOnPermissions == null) {
