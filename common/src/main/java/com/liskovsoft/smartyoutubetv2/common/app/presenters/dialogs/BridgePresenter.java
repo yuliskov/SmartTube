@@ -73,7 +73,7 @@ abstract class BridgePresenter extends BasePresenter<Void> {
         PackageInfo info = getPackageSignature(getPackageName());
 
         if (info != null) { // bridge or original tube installed
-            if (Helpers.isUserApp(info) && !Helpers.equalsAny(info.signatures[0].hashCode(), (Object[]) getPackageSignatureHash())) {
+            if (Helpers.isUserApp(info) && !Helpers.equalsAny(info.signatures[0].hashCode(), getPackageSignatureHash())) {
                 // Original tube installed
                 mRemoveOldApkFirst = true;
                 // Download apk first and start dialog when download complete

@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutSettingsPresenter;
@@ -21,6 +22,10 @@ import java.util.List;
 
 public class AppDataSourceManager {
     private static AppDataSourceManager sInstance;
+    private static final String[] SIGNED_PACKAGES = {
+            "com.liskovsoft.smarttubetv.beta",
+            "com.teamsmart.videomanager.tv"
+    };
 
     private AppDataSourceManager() {
     }
@@ -46,8 +51,6 @@ public class AppDataSourceManager {
                 context.getString(R.string.settings_general), () -> GeneralSettingsPresenter.instance(context).show(), R.drawable.settings_app));
         settingItems.add(new SettingsItem(
                 context.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(context).show(), R.drawable.settings_main_ui));
-        //settingItems.add(new SettingsItem(
-        //        context.getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(context).show(), R.drawable.settings_ui_scale));
         settingItems.add(new SettingsItem(
                 context.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(context).show(), R.drawable.settings_player));
         // Don't add afr support check here.
@@ -60,8 +63,11 @@ public class AppDataSourceManager {
                 context.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(context).show(), R.drawable.settings_search));
         settingItems.add(new SettingsItem(
                 context.getString(R.string.content_block_provider), () -> ContentBlockSettingsPresenter.instance(context).show(), R.drawable.settings_block));
-        settingItems.add(new SettingsItem(
-                context.getString(R.string.settings_about), () -> AboutSettingsPresenter.instance(context).show(), R.drawable.settings_about));
+
+        if (Helpers.equalsAny(context.getPackageName(), SIGNED_PACKAGES)) {
+            settingItems.add(new SettingsItem(
+                    context.getString(R.string.settings_about), () -> AboutSettingsPresenter.instance(context).show(), R.drawable.settings_about));
+        }
 
         return settingItems;
     }
