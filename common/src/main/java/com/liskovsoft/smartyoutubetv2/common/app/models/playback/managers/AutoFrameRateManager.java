@@ -255,6 +255,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             OptionCategory afrPauseCategory = createAutoFrameRatePauseCategory(
                     getActivity(), PlayerData.instance(getActivity()));
 
+            OptionCategory modesCategory = createAutoFrameRateModesCategory(getActivity());
+
             // Create nested dialogs
 
             List<OptionItem> options = new ArrayList<>();
@@ -269,6 +271,12 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
                 dialogPresenter.clear();
                 dialogPresenter.appendRadioCategory(afrPauseCategory.title, afrPauseCategory.options);
                 dialogPresenter.showDialog(afrPauseCategory.title);
+            }));
+            options.add(UiOptionItem.from(modesCategory.title, optionItem -> {
+                AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+                dialogPresenter.clear();
+                dialogPresenter.appendStringsCategory(modesCategory.title, modesCategory.options);
+                dialogPresenter.showDialog(modesCategory.title);
             }));
 
             mUiManager.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING, getActivity().getString(R.string.auto_frame_rate), options));
@@ -354,7 +362,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         UhdHelper uhdHelper = new UhdHelper(context);
 
         for (Mode mode : uhdHelper.getSupportedModes()) {
-            options.add(UiOptionItem.from(mode.toString()));
+            options.add(UiOptionItem.from(String.format("%sx%s@%s", mode.getPhysicalWidth(), mode.getPhysicalHeight(), mode.getRefreshRate())));
         }
 
         return OptionCategory.from(AUTO_FRAME_RATE_MODES_ID, OptionCategory.TYPE_STRING, title, options);
