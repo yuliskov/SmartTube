@@ -29,6 +29,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private static final String TAG = AutoFrameRateManager.class.getSimpleName();
     private static final int AUTO_FRAME_RATE_ID = 21;
     private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
+    private static final int AUTO_FRAME_RATE_MODES_ID = 23;
     private final HQDialogManager mUiManager;
     private final VideoStateManager mStateUpdater;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
@@ -343,5 +344,19 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         }
 
         return OptionCategory.from(AUTO_FRAME_RATE_DELAY_ID, OptionCategory.TYPE_RADIO, title, options);
+    }
+
+    public static OptionCategory createAutoFrameRateModesCategory(Context context) {
+        String title = context.getString(R.string.auto_frame_rate_modes);
+
+        List<OptionItem> options = new ArrayList<>();
+
+        UhdHelper uhdHelper = new UhdHelper(context);
+
+        for (Mode mode : uhdHelper.getSupportedModes()) {
+            options.add(UiOptionItem.from(mode.toString()));
+        }
+
+        return OptionCategory.from(AUTO_FRAME_RATE_MODES_ID, OptionCategory.TYPE_STRING, title, options);
     }
 }

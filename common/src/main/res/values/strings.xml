@@ -492,4 +492,5 @@
     <string name="clear_history">Clear history</string>
     <string name="chapters">Chapters</string>
     <string name="card_multiline_subtitle">Multiline subtitles</string>
+    <string name="auto_frame_rate_modes">Supported modes</string>
 </resources>

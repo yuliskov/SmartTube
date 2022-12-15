@@ -26,6 +26,7 @@ public class AutoFrameRateSettingsPresenter extends BasePresenter<Void> {
 
         appendAutoFrameRateCategory(settingsPresenter);
         appendAutoFrameRatePauseCategory(settingsPresenter);
+        appendAutoFrameRateModesCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.auto_frame_rate));
     }
@@ -37,6 +38,11 @@ public class AutoFrameRateSettingsPresenter extends BasePresenter<Void> {
 
     private void appendAutoFrameRatePauseCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = AutoFrameRateManager.createAutoFrameRatePauseCategory(getContext(), mPlayerData);
+        settingsPresenter.appendRadioCategory(category.title, category.options);
+    }
+
+    private void appendAutoFrameRateModesCategory(AppDialogPresenter settingsPresenter) {
+        OptionCategory category = AutoFrameRateManager.createAutoFrameRateModesCategory(getContext());
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 }
