@@ -687,8 +687,8 @@ public class GeneralData {
         String pendingStreams = Helpers.parseStr(split, 30);
         mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, true);
         mTimeFormat = TIME_FORMAT_24;
-        mSettingsPassword = Helpers.parseStr(split, 33);
-        mIsChildModeEnabled = Helpers.parseBoolean(split, 34, false);
+        mSettingsPassword = null;
+        mIsChildModeEnabled = false;
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
