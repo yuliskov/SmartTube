@@ -1,0 +1,31 @@
+<tt xmlns:ttm="http://www.w3.org/2006/10/ttaf1#metadata"
+    xmlns:ttp="http://www.w3.org/2006/10/ttaf1#parameter"
+    xmlns:tts="http://www.w3.org/2006/10/ttaf1#style"
+    xmlns="http://www.w3.org/ns/ttml"
+    xmlns="http://www.w3.org/2006/10/ttaf1">
+  <head>
+    <styling>
+      <style id="s0"
+        tts:textDecoration="underline"/>
+      <style id="s1"
+        tts:textDecoration="lineThrough"/>
+    </styling>
+  </head>
+  <body>
+    <div>
+      <p begin="10s" end="18s" tts:fontSize="32px">text 1</p>
+    </div>
+    <div>
+      <p begin="20s" end="28s" tts:fontSize="2.2em">text 2</p>
+    </div>
+    <div>
+      <p begin="30s" end="38s" tts:fontSize="150%">text 3</p>
+    </div>
+    <div>
+      <p begin="40s" end="48s" tts:fontSize="32px 16px">two values</p>
+    </div>
+    <div>
+      <p begin="50s" end="58s" tts:fontSize=".5em">leading dot</p>
+    </div>
+  </body>
+</tt>

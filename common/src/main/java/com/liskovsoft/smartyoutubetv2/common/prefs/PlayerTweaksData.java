@@ -29,6 +29,7 @@ public class PlayerTweaksData {
     public static final int PLAYER_BUTTON_SEEK_INTERVAL = 0b100000000000000000000;
     public static final int PLAYER_BUTTON_CONTENT_BLOCK = 0b1000000000000000000000;
     public static final int PLAYER_BUTTON_CHAT = 0b10000000000000000000000;
+    public static final int PLAYER_BUTTON_DEFAULT = Integer.MAX_VALUE & ~(PLAYER_BUTTON_SEEK_INTERVAL | PLAYER_BUTTON_CONTENT_BLOCK); // all buttons, except these
     @SuppressLint("StaticFieldLeak")
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;
@@ -53,6 +54,9 @@ public class PlayerTweaksData {
     private boolean mIsChatPlacedLeft;
     private boolean mIsRealChannelIconEnabled;
     private float mPixelRatio;
+    private boolean mIsQualityInfoBitrateEnabled;
+    private boolean mIsSpeedButtonOldBehaviorEnabled;
+    private boolean mIsButtonLongClickEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -271,6 +275,33 @@ public class PlayerTweaksData {
         return mPixelRatio;
     }
 
+    public boolean isQualityInfoBitrateEnabled() {
+        return mIsQualityInfoBitrateEnabled;
+    }
+
+    public void enableQualityInfoBitrate(boolean enable) {
+        mIsQualityInfoBitrateEnabled = enable;
+        persistData();
+    }
+
+    public boolean isSpeedButtonOldBehaviorEnabled() {
+        return mIsSpeedButtonOldBehaviorEnabled;
+    }
+
+    public void enableSpeedButtonOldBehavior(boolean enable) {
+        mIsSpeedButtonOldBehaviorEnabled = enable;
+        persistData();
+    }
+
+    public boolean isButtonLongClickEnabled() {
+        return mIsButtonLongClickEnabled;
+    }
+
+    public void enableButtonLongClick(boolean enable) {
+        mIsButtonLongClickEnabled = enable;
+        persistData();
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -290,7 +321,7 @@ public class PlayerTweaksData {
         mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, false);
         mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTV(mPrefs.getContext()));
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
-        mPlayerButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE & ~(PLAYER_BUTTON_SEEK_INTERVAL | PLAYER_BUTTON_CONTENT_BLOCK)); // all buttons, except these
+        mPlayerButtons = Helpers.parseInt(split, 13, PLAYER_BUTTON_DEFAULT);
         mIsBufferingFixEnabled = Helpers.parseBoolean(split, 14, false);
         mIsNoFpsPresetsEnabled = Helpers.parseBoolean(split, 15, false);
         mIsRememberPositionOfShortVideosEnabled = Helpers.parseBoolean(split, 16, false);
@@ -299,6 +330,9 @@ public class PlayerTweaksData {
         mIsChatPlacedLeft = Helpers.parseBoolean(split, 19, false);
         mIsRealChannelIconEnabled = Helpers.parseBoolean(split, 20, true);
         mPixelRatio = Helpers.parseFloat(split, 21, 1.0f);
+        mIsQualityInfoBitrateEnabled = Helpers.parseBoolean(split, 22, false);
+        mIsSpeedButtonOldBehaviorEnabled = Helpers.parseBoolean(split, 23, false);
+        mIsButtonLongClickEnabled = Helpers.parseBoolean(split, 24, true);
     }
 
     private void persistData() {
@@ -308,7 +342,8 @@ public class PlayerTweaksData {
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
                 mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
                 mIsBufferingFixEnabled, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
-                mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio
+                mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio, mIsQualityInfoBitrateEnabled,
+                mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled
         ));
     }
 }

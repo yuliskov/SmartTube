@@ -81,7 +81,16 @@ public class MotherActivity extends FragmentActivity {
             }
         }
 
-        return super.dispatchKeyEvent(event);
+        try {
+            return super.dispatchKeyEvent(event);
+        } catch (IllegalStateException | SecurityException e) {
+            // Fatal Exception: java.lang.IllegalStateException
+            // android.permission.RECORD_AUDIO required for search (Android 5 mostly)
+            // Fatal Exception: java.lang.SecurityException
+            // Not allowed to bind to service Intent { act=android.speech.RecognitionService cmp=com.xgimi.duertts/com.baidu.duer.services.tvser
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -178,7 +187,9 @@ public class MotherActivity extends FragmentActivity {
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             float uiScale = MainUIData.instance(this).getUIScale();
-            float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
+            // Take into the account screen orientation (e.g. when running on phone)
+            int widthPixels = Math.max(displayMetrics.widthPixels, displayMetrics.heightPixels);
+            float widthRatio = DEFAULT_WIDTH / widthPixels;
             float density = DEFAULT_DENSITY / widthRatio * uiScale;
             displayMetrics.density = density;
             displayMetrics.scaledDensity = density;

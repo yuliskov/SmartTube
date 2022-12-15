@@ -5,6 +5,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -16,9 +17,11 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.proxy.WebProxyDialog;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -94,6 +97,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.check_for_updates, MainUIData.MENU_ITEM_UPDATE_CHECK},
+                {R.string.clear_history, MainUIData.MENU_ITEM_CLEAR_HISTORY},
+                {R.string.pause_history, MainUIData.MENU_ITEM_TOGGLE_HISTORY},
                 {R.string.playlist_order, MainUIData.MENU_ITEM_PLAYLIST_ORDER},
                 {R.string.add_remove_from_playback_queue, MainUIData.MENU_ITEM_ADD_TO_QUEUE},
                 {R.string.action_playback_queue, MainUIData.MENU_ITEM_SHOW_QUEUE},
@@ -131,16 +137,16 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
-                {R.string.settings_language_country, MainUIData.BUTTON_CHANGE_LANGUAGE},
-                {R.string.settings_accounts, MainUIData.BUTTON_BROWSE_ACCOUNTS}}) {
+                {R.string.settings_search, MainUIData.TOP_BUTTON_SEARCH},
+                {R.string.settings_language_country, MainUIData.TOP_BUTTON_CHANGE_LANGUAGE},
+                {R.string.settings_accounts, MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {
-                    mMainUIData.enableButton(pair[1]);
+                    mMainUIData.enableTopButton(pair[1]);
                 } else {
-                    mMainUIData.disableButton(pair[1]);
+                    mMainUIData.disableTopButton(pair[1]);
                 }
-                mRestartApp = true;
-            }, mMainUIData.isButtonEnabled(pair[1])));
+            }, mMainUIData.isTopButtonEnabled(pair[1])));
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.various_buttons), options);
@@ -307,21 +313,21 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 String.format("%s:\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
                 option -> {
-                    AppDialogUtil.showConfirmationDialog(getContext(), () -> {
+                    AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_backup), () -> {
                         mGeneralData.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
                         mGeneralData.enableSettingsSection(true); // prevent Settings lock
                         backupManager.checkPermAndBackup();
                         MessageHelpers.showMessage(getContext(), R.string.msg_done);
-                    }, getContext().getString(R.string.app_backup));
+                    });
                 }));
 
         options.add(UiOptionItem.from(
                 String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupManager.getBackupPath()),
                 option -> {
-                    AppDialogUtil.showConfirmationDialog(getContext(), () -> {
+                    AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
                         backupManager.checkPermAndRestore();
                         MessageHelpers.showMessage(getContext(), R.string.msg_done);
-                    }, getContext().getString(R.string.app_restore));
+                    });
                 }));
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.app_backup_restore), options);
@@ -329,6 +335,31 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.child_mode),
+                getContext().getString(R.string.child_mode_desc),
+                option -> {
+                    if (option.isSelected()) {
+                        AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.lost_setting_warning),
+                                () -> showPasswordDialog(settingsPresenter, () -> enableChildMode(option.isSelected())),
+                                settingsPresenter::closeDialog);
+                    } else {
+                        mGeneralData.setSettingsPassword(null);
+                        enableChildMode(option.isSelected());
+                        settingsPresenter.closeDialog();
+                    }
+                },
+                mGeneralData.isChildModeEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.protect_settings_with_password),
+                option -> {
+                    if (option.isSelected()) {
+                        showPasswordDialog(settingsPresenter, null);
+                    } else {
+                        mGeneralData.setSettingsPassword(null);
+                    }
+                },
+                mGeneralData.getSettingsPassword() != null));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_global_clock),
                 option -> {
@@ -400,6 +431,69 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     },
                     mGeneralData.isProxyEnabled()));
         }
+    }
+
+    private void enableChildMode(boolean enable) {
+        mGeneralData.enableChildMode(enable);
+
+        int topButtons = MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS;
+        int playerButtons = PlayerTweaksData.PLAYER_BUTTON_PLAY_PAUSE | PlayerTweaksData.PLAYER_BUTTON_NEXT | PlayerTweaksData.PLAYER_BUTTON_PREVIOUS |
+                    PlayerTweaksData.PLAYER_BUTTON_DISLIKE | PlayerTweaksData.PLAYER_BUTTON_LIKE | PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF |
+                    PlayerTweaksData.PLAYER_BUTTON_SEEK_INTERVAL | PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE | PlayerTweaksData.PLAYER_BUTTON_OPEN_CHANNEL |
+                    PlayerTweaksData.PLAYER_BUTTON_PIP | PlayerTweaksData.PLAYER_BUTTON_VIDEO_SPEED | PlayerTweaksData.PLAYER_BUTTON_SUBTITLES |
+                    PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM | PlayerTweaksData.PLAYER_BUTTON_ADD_TO_PLAYLIST;
+        int menuItems = MainUIData.MENU_ITEM_SHOW_QUEUE | MainUIData.MENU_ITEM_ADD_TO_QUEUE | MainUIData.MENU_ITEM_SELECT_ACCOUNT |
+                    MainUIData.MENU_ITEM_STREAM_REMINDER | MainUIData.MENU_ITEM_SAVE_PLAYLIST;
+
+        PlayerTweaksData tweaksData = PlayerTweaksData.instance(getContext());
+
+        // Remove all
+        mMainUIData.disableTopButton(Integer.MAX_VALUE);
+        tweaksData.disablePlayerButton(Integer.MAX_VALUE);
+        mMainUIData.disableMenuItem(Integer.MAX_VALUE);
+        BrowsePresenter.instance(getContext()).enableAllSections(false);
+
+        if (enable) {
+            // apply child tweaks
+            mMainUIData.enableTopButton(topButtons);
+            tweaksData.enablePlayerButton(playerButtons);
+            mMainUIData.enableMenuItem(menuItems);
+            mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_LIST);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HISTORY, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_USER_PLAYLISTS, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_SUBSCRIPTIONS, true);
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_CHANNEL_UPLOADS, true);
+        } else {
+            // apply default tweaks
+            mMainUIData.enableTopButton(MainUIData.TOP_BUTTON_DEFAULT);
+            tweaksData.enablePlayerButton(PlayerTweaksData.PLAYER_BUTTON_DEFAULT);
+            mMainUIData.enableMenuItem(MainUIData.MENU_ITEM_DEFAULT);
+            BrowsePresenter.instance(getContext()).enableAllSections(true);
+            tweaksData.disableSuggestions(false);
+            mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_ALL);
+        }
+    }
+
+    private void showPasswordDialog(AppDialogPresenter settingsPresenter, Runnable onSuccess) {
+        if (mGeneralData.getSettingsPassword() != null) {
+            if (onSuccess != null) {
+                onSuccess.run();
+            }
+            return;
+        }
+
+        settingsPresenter.closeDialog();
+        SimpleEditDialog.show(
+                getContext(),
+                "", newValue -> {
+                    mGeneralData.setSettingsPassword(newValue);
+                    if (onSuccess != null) {
+                        onSuccess.run();
+                    }
+                },
+                getContext().getString(R.string.protect_settings_with_password),
+                true
+        );
     }
 
     //private void appendOpenVPNManager(AppDialogPresenter settingsPresenter, List<OptionItem> options) {

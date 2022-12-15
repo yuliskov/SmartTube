@@ -1,0 +1,55 @@
+seekMap:
+  isSeekable = true
+  duration = 766
+  getPosition(0) = [[timeUs=0, position=0]]
+numberOfTracks = 2
+track 192:
+  format:
+    bitrate = -1
+    id = 192
+    containerMimeType = null
+    sampleMimeType = audio/mpeg-L2
+    maxInputSize = 4096
+    width = -1
+    height = -1
+    frameRate = -1.0
+    rotationDegrees = 0
+    pixelWidthHeightRatio = 1.0
+    channelCount = 1
+    sampleRate = 44100
+    pcmEncoding = -1
+    encoderDelay = 0
+    encoderPadding = 0
+    subsampleOffsetUs = 9223372036854775807
+    selectionFlags = 0
+    language = null
+    drmInitData = -
+    initializationData:
+  total output bytes = 0
+  sample count = 0
+track 224:
+  format:
+    bitrate = -1
+    id = 224
+    containerMimeType = null
+    sampleMimeType = video/mpeg2
+    maxInputSize = -1
+    width = 640
+    height = 426
+    frameRate = -1.0
+    rotationDegrees = 0
+    pixelWidthHeightRatio = 1.0
+    channelCount = -1
+    sampleRate = -1
+    pcmEncoding = -1
+    encoderDelay = 0
+    encoderPadding = 0
+    subsampleOffsetUs = 9223372036854775807
+    selectionFlags = 0
+    language = null
+    drmInitData = -
+    initializationData:
+      data = length 22, hash 743CC6F8
+  total output bytes = 1585
+  sample count = 0
+tracksEnded = true

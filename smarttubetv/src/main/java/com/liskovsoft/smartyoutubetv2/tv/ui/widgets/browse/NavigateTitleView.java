@@ -16,6 +16,7 @@ import androidx.leanback.widget.SearchOrbView;
 import androidx.leanback.widget.SearchOrbView.Colors;
 import androidx.leanback.widget.TitleView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
@@ -27,6 +28,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSet
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -38,6 +40,7 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 import java.util.Locale;
 
 import static androidx.leanback.widget.TitleViewAdapter.BRANDING_VIEW_VISIBLE;
+import static androidx.leanback.widget.TitleViewAdapter.FULL_VIEW_VISIBLE;
 import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
 
 /**
@@ -46,7 +49,7 @@ import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
  * https://stackoverflow.com/questions/38169378/use-multiple-orb-buttons-or-other-buttons-in-the-leanbacks-title-view<br/>
  * https://stackoverflow.com/questions/40802470/add-button-to-browsefragment
  */
-public class NavigateTitleView extends TitleView {
+public class NavigateTitleView extends TitleView implements OnDataChange {
     private SearchOrbView mAccountView;
     private SearchOrbView mLanguageView;
     private SearchOrbView mExitPip;
@@ -55,7 +58,9 @@ public class NavigateTitleView extends TitleView {
     private int mBrandingVisibility = View.INVISIBLE;
     private DateTimeView mGlobalClock;
     private DateTimeView mGlobalDate;
+    private SearchOrbView mSearchOrbView;
     private boolean mInitDone;
+    private int mFlags = FULL_VIEW_VISIBLE;
 
     public NavigateTitleView(Context context) {
         super(context);
@@ -127,11 +132,17 @@ public class NavigateTitleView extends TitleView {
 
         init();
 
+        mFlags = flags;
+
         mSearchVisibility = (flags & SEARCH_VIEW_VISIBLE) == SEARCH_VIEW_VISIBLE
                 ? View.VISIBLE : View.INVISIBLE;
 
         mBrandingVisibility = (flags & BRANDING_VIEW_VISIBLE) == BRANDING_VIEW_VISIBLE
                 ? View.VISIBLE : View.INVISIBLE;
+
+        if (mSearchOrbView != null) {
+            mSearchOrbView.setVisibility(View.GONE);
+        }
 
         if (mAccountView != null) {
             mAccountView.setVisibility(mSearchVisibility);
@@ -160,7 +171,24 @@ public class NavigateTitleView extends TitleView {
             return;
         }
 
-        if (MainUIData.instance(getContext()).isButtonEnabled(MainUIData.BUTTON_BROWSE_ACCOUNTS)) {
+        setupButtons();
+
+        MainUIData mainUIData = MainUIData.instance(getContext());
+        mainUIData.setOnChange(this);
+
+        mInitDone = true;
+    }
+
+    private void setupButtons() {
+        cleanup();
+
+        MainUIData mainUIData = MainUIData.instance(getContext());
+
+        if (!mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_SEARCH)) {
+            mSearchOrbView = (SearchOrbView) findViewById(R.id.title_orb);
+        }
+
+        if (mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS)) {
             mAccountView = (SearchOrbView) findViewById(R.id.account_orb);
             mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).show());
             TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
@@ -168,7 +196,7 @@ public class NavigateTitleView extends TitleView {
             updateAccountIcon();
         }
 
-        if (MainUIData.instance(getContext()).isButtonEnabled(MainUIData.BUTTON_CHANGE_LANGUAGE)) {
+        if (mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_CHANGE_LANGUAGE)) {
             mLanguageView = (SearchOrbView) findViewById(R.id.language_orb);
             mLanguageView.setOnOrbClickedListener(v -> LanguageSettingsPresenter.instance(getContext()).show());
             TooltipCompatHandler.setTooltipText(mLanguageView, getContext().getString(R.string.settings_language_country));
@@ -180,7 +208,7 @@ public class NavigateTitleView extends TitleView {
         mPipTitle = (TextView) findViewById(R.id.pip_title);
         mExitPip.setOnOrbClickedListener(v -> ViewManager.instance(getContext()).startView(PlaybackView.class));
         ViewUtil.enableMarquee(mPipTitle);
-        ViewUtil.setTextScrollSpeed(mPipTitle, MainUIData.instance(getContext()).getCardTextScrollSpeed());
+        ViewUtil.setTextScrollSpeed(mPipTitle, mainUIData.getCardTextScrollSpeed());
         TooltipCompatHandler.setTooltipText(mExitPip, getContext().getString(R.string.return_to_background_video));
 
         if (GeneralData.instance(getContext()).isGlobalClockEnabled()) {
@@ -193,8 +221,29 @@ public class NavigateTitleView extends TitleView {
             mGlobalDate.showDate(true);
             mGlobalDate.setVisibility(View.VISIBLE);
         }
+    }
 
-        mInitDone = true;
+    private void cleanup() {
+        if (mSearchOrbView != null) {
+            mSearchOrbView.setVisibility(View.GONE);
+            mSearchOrbView = null;
+        }
+        if (mAccountView != null) {
+            mAccountView.setVisibility(View.GONE);
+            mAccountView = null;
+        }
+        if (mLanguageView != null) {
+            mLanguageView.setVisibility(View.GONE);
+            mLanguageView = null;
+        }
+        if (mGlobalClock != null) {
+            mGlobalClock.setVisibility(View.GONE);
+            mGlobalClock = null;
+        }
+        if (mGlobalDate != null) {
+            mGlobalDate.setVisibility(View.GONE);
+            mGlobalDate = null;
+        }
     }
 
     @Override
@@ -280,6 +329,7 @@ public class NavigateTitleView extends TitleView {
         Glide.with(view.getContext())
                 .load(url)
                 .apply(ViewUtil.glideOptions())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .circleCrop() // resize image
                 .into(new SimpleTarget<Drawable>(view.getWidth(), view.getHeight()) {
                     @Override
@@ -289,5 +339,11 @@ public class NavigateTitleView extends TitleView {
                         view.setOrbIcon(resource);
                     }
                 });
+    }
+
+    @Override
+    public void onDataChange() {
+        setupButtons();
+        updateComponentsVisibility(mFlags);
     }
 }

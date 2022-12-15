@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">Mos përsërit asnjë</string>
+  <string name="exo_media_action_repeat_one_description">Përsërit një</string>
+  <string name="exo_media_action_repeat_all_description">Përsërit të gjitha</string>
+</resources>

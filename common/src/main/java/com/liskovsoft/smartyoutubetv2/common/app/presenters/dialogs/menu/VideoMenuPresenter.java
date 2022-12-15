@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
+import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -55,12 +55,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsShareEmbedLinkButtonEnabled;
     private boolean mIsAddToPlaylistButtonEnabled;
     private boolean mIsAddToRecentPlaylistButtonEnabled;
-    private boolean mIsAccountSelectionEnabled;
     private boolean mIsReturnToBackgroundVideoEnabled;
-    private boolean mIsPinToSidebarEnabled;
-    private boolean mIsSavePlaylistButtonEnabled;
-    private boolean mIsCreatePlaylistButtonEnabled;
-    private boolean mIsAddToNewPlaylistButtonEnabled;
     private boolean mIsOpenPlaylistButtonEnabled;
     private boolean mIsAddToPlaybackQueueButtonEnabled;
     private boolean mIsShowPlaybackQueueButtonEnabled;
@@ -69,7 +64,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsPlaylistOrderButtonEnabled;
     private boolean mIsStreamReminderButtonEnabled;
     private VideoMenuCallback mCallback;
-    private List<VideoPlaylistInfo> mVideoPlaylistInfos;
+    private List<PlaylistInfo> mPlaylistInfos;
 
     public interface VideoMenuCallback {
         int ACTION_UNDEFINED = 0;
@@ -108,68 +103,12 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         return mCallback;
     }
 
-    @Override
-    protected boolean isPinToSidebarEnabled() {
-        return mIsPinToSidebarEnabled;
-    }
-
-    @Override
-    protected boolean isSavePlaylistEnabled() {
-        return mIsSavePlaylistButtonEnabled;
-    }
-
-    @Override
-    protected boolean isCreatePlaylistEnabled() {
-        return mIsCreatePlaylistButtonEnabled;
-    }
-
-    @Override
-    protected boolean isAddToNewPlaylistEnabled() {
-        return mIsAddToNewPlaylistButtonEnabled;
-    }
-
-    @Override
-    protected boolean isAccountSelectionEnabled() {
-        return mIsAccountSelectionEnabled;
-    }
-
-    public void showMenu(Video item, VideoMenuCallback callback) {
+    public void showMenu(Video video, VideoMenuCallback callback) {
         mCallback = callback;
-        showVideoMenu(item);
+        showMenu(video);
     }
 
-    public void showMenu(Video item) {
-        showVideoMenu(item);
-    }
-
-    public void showVideoMenu(Video video) {
-        mIsAddToPlaylistButtonEnabled = true;
-        mIsAddToRecentPlaylistButtonEnabled = true;
-        mIsAddToPlaybackQueueButtonEnabled = true;
-        mIsShowPlaybackQueueButtonEnabled = true;
-        mIsOpenChannelButtonEnabled = true;
-        mIsOpenChannelUploadsButtonEnabled = true;
-        mIsOpenPlaylistButtonEnabled = true;
-        mIsSubscribeButtonEnabled = true;
-        mIsNotInterestedButtonEnabled = true;
-        mIsRemoveFromHistoryButtonEnabled = true;
-        mIsShareLinkButtonEnabled = true;
-        mIsShareEmbedLinkButtonEnabled = true;
-        mIsAccountSelectionEnabled = true;
-        mIsReturnToBackgroundVideoEnabled = true;
-        mIsPinToSidebarEnabled = true;
-        mIsSavePlaylistButtonEnabled = true;
-        mIsCreatePlaylistButtonEnabled = true;
-        mIsAddToNewPlaylistButtonEnabled = true;
-        mIsOpenDescriptionButtonEnabled = true;
-        mIsPlayVideoButtonEnabled = true;
-        mIsPlaylistOrderButtonEnabled = true;
-        mIsStreamReminderButtonEnabled = true;
-
-        showMenuInt(video);
-    }
-
-    private void showMenuInt(Video video) {
+    public void showMenu(Video video) {
         if (video == null) {
             return;
         }
@@ -185,15 +124,15 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void bootstrapPrepareAndShowDialogSigned() {
-        mVideoPlaylistInfos = null;
+        mPlaylistInfos = null;
         RxUtils.disposeActions(mPlaylistsInfoAction);
         if (isAddToRecentPlaylistButtonEnabled()) {
-            mPlaylistsInfoAction = mItemManager.getVideoPlaylistsInfoObserve(mVideo.videoId)
+            mPlaylistsInfoAction = mItemManager.getPlaylistsInfoObserve(mVideo.videoId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             videoPlaylistInfos -> {
-                                mVideoPlaylistInfos = videoPlaylistInfos;
+                                mPlaylistInfos = videoPlaylistInfos;
                                 prepareAndShowDialogSigned();
                             },
                             error -> Log.e(TAG, "Add to recent playlist error: %s", error.getMessage())
@@ -229,11 +168,13 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendOpenPlaylistButton();
         appendSubscribeButton();
         appendTogglePinVideoToSidebarButton();
-        appendSavePlaylistButton();
+        appendSaveRemovePlaylistButton();
         appendOpenDescriptionButton();
         appendShareLinkButton();
         appendShareEmbedLinkButton();
         appendAccountSelectionButton();
+        appendToggleHistoryButton();
+        appendClearHistoryButton();
 
         if (!mDialogPresenter.isEmpty()) {
             String title = mVideo != null ? mVideo.title : null;
@@ -304,12 +245,12 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void appendSimpleAddToRecentPlaylistButton(String playlistId, String playlistTitle) {
-        if (mVideoPlaylistInfos == null) {
+        if (mPlaylistInfos == null) {
             return;
         }
 
         boolean isSelected = false;
-        for (VideoPlaylistInfo playlistInfo : mVideoPlaylistInfos) {
+        for (PlaylistInfo playlistInfo : mPlaylistInfos) {
             if (playlistInfo.getPlaylistId().equals(playlistId)) {
                 isSelected = playlistInfo.isSelected();
                 break;
@@ -613,7 +554,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo == null || !BrowsePresenter.instance(getContext()).isPlaylistsSectionActive()) {
+        if (mVideo == null || !BrowsePresenter.instance(getContext()).isPlaylistsSection()) {
             return;
         }
 
@@ -729,79 +670,42 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 video.getAuthor() + ": " + getContext().getString(!video.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel));
     }
 
-    private void updateEnabledMenuItems() {
+    @Override
+    protected void updateEnabledMenuItems() {
+        super.updateEnabledMenuItems();
+
+        mIsAddToPlaylistButtonEnabled = true;
+        mIsAddToRecentPlaylistButtonEnabled = true;
+        mIsAddToPlaybackQueueButtonEnabled = true;
+        mIsShowPlaybackQueueButtonEnabled = true;
+        mIsOpenChannelButtonEnabled = true;
+        mIsOpenChannelUploadsButtonEnabled = true;
+        mIsOpenPlaylistButtonEnabled = true;
+        mIsSubscribeButtonEnabled = true;
+        mIsNotInterestedButtonEnabled = true;
+        mIsRemoveFromHistoryButtonEnabled = true;
+        mIsShareLinkButtonEnabled = true;
+        mIsShareEmbedLinkButtonEnabled = true;
+        mIsReturnToBackgroundVideoEnabled = true;
+        mIsOpenDescriptionButtonEnabled = true;
+        mIsPlayVideoButtonEnabled = true;
+        mIsPlaylistOrderButtonEnabled = true;
+        mIsStreamReminderButtonEnabled = true;
+
         MainUIData mainUIData = MainUIData.instance(getContext());
 
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_RECENT_PLAYLIST)) {
-            mIsAddToRecentPlaylistButtonEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_QUEUE)) {
-            mIsAddToPlaybackQueueButtonEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_PLAYLIST)) {
-            mIsAddToPlaylistButtonEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_LINK)) {
-            mIsShareLinkButtonEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_EMBED_LINK)) {
-            mIsShareEmbedLinkButtonEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR)) {
-            mIsPinToSidebarEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SELECT_ACCOUNT)) {
-            mIsAccountSelectionEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_NOT_INTERESTED)) {
-            mIsNotInterestedButtonEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY)) {
-            mIsRemoveFromHistoryButtonEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_DESCRIPTION)) {
-            mIsOpenDescriptionButtonEnabled = false;
-        }
-        
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAY_VIDEO)) {
-            mIsPlayVideoButtonEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SAVE_PLAYLIST)) {
-            mIsSavePlaylistButtonEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_CREATE_PLAYLIST)) {
-            mIsCreatePlaylistButtonEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_NEW_PLAYLIST)) {
-            mIsAddToNewPlaylistButtonEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SUBSCRIBE)) {
-            mIsSubscribeButtonEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_STREAM_REMINDER)) {
-            mIsStreamReminderButtonEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHOW_QUEUE)) {
-            mIsShowPlaybackQueueButtonEnabled = false;
-        }
-
-        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAYLIST_ORDER)) {
-            mIsPlaylistOrderButtonEnabled = false;
-        }
+        mIsAddToRecentPlaylistButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_RECENT_PLAYLIST);
+        mIsAddToPlaybackQueueButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_QUEUE);
+        mIsAddToPlaylistButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_PLAYLIST);
+        mIsShareLinkButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_LINK);
+        mIsShareEmbedLinkButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_EMBED_LINK);
+        mIsNotInterestedButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_NOT_INTERESTED);
+        mIsRemoveFromHistoryButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY);
+        mIsOpenDescriptionButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_DESCRIPTION);
+        mIsPlayVideoButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAY_VIDEO);
+        mIsSubscribeButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SUBSCRIBE);
+        mIsStreamReminderButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_STREAM_REMINDER);
+        mIsShowPlaybackQueueButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHOW_QUEUE);
+        mIsPlaylistOrderButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAYLIST_ORDER);
     }
 }

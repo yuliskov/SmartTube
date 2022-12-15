@@ -61,6 +61,9 @@ public class GeneralData {
     private boolean mIsScreensaverDisabled;
     private boolean mIsVPNEnabled;
     private boolean mIsGlobalClockEnabled;
+    private String mSettingsPassword;
+    private boolean mIsChildModeEnabled;
+    private boolean mIsHistoryEnabled = true;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new ArrayList<>();
@@ -595,6 +598,34 @@ public class GeneralData {
         persistState();
     }
 
+    public void setSettingsPassword(String password) {
+        mSettingsPassword = password;
+
+        persistState();
+    }
+
+    public String getSettingsPassword() {
+        return mSettingsPassword;
+    }
+
+    public void enableChildMode(boolean enable) {
+        mIsChildModeEnabled = enable;
+
+        persistState();
+    }
+
+    public boolean isChildModeEnabled() {
+        return mIsChildModeEnabled;
+    }
+
+    public boolean isHistoryEnabled() {
+        return mIsHistoryEnabled;
+    }
+
+    public void enableHistory(boolean enabled) {
+        mIsHistoryEnabled = enabled;
+    }
+
     private void initSections() {
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mDefaultSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -656,6 +687,8 @@ public class GeneralData {
         String pendingStreams = Helpers.parseStr(split, 30);
         mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, true);
         mTimeFormat = TIME_FORMAT_24;
+        mSettingsPassword = Helpers.parseStr(split, 33);
+        mIsChildModeEnabled = Helpers.parseBoolean(split, 34, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -715,6 +748,6 @@ public class GeneralData {
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
-                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat));
+                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled));
     }
 }

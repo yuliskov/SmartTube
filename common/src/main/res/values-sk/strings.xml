@@ -34,6 +34,7 @@
     <string name="video_speed">Rýchlosť prehrávania</string>
     <string name="resolution_switch">Prepnúť rozlíšenie</string>
     <string name="video_buffer">Vyrovnávacia pamäť videa</string>
+    <string name="video_buffer_size_none">Žiadna</string>
     <string name="video_buffer_size_low">Nízka</string>
     <string name="video_buffer_size_med">Stredná</string>
     <string name="video_buffer_size_high">Vysoká</string>
@@ -42,7 +43,7 @@
     <string name="section_is_empty">Hups! Žiadne videá</string>
     <string name="dialog_add_to_playlist">Uložiť do zoznamu</string>
     <string name="msg_signed_users_only">Iba pre prihlásených</string>
-    <string name="msg_cant_load_content">Nemožno načítať obsah.\n1) Skontrolujte sieťové pripojenie.\n2) Skúste sa prihlásiť do vášho účtu.</string>
+    <string name="msg_cant_load_content">Nemožno načítať obsah.\n1) Skontrolujte dátum a čas na zariadení.\n2) Skontrolujte sieťové pripojenie.\n3) Skontrolujte nastavenia proxy.\n4) Skúste sa prihlásiť do vášho účtu.\n5) Je možné, že tu nie je žiaden obsah.</string>
     <string name="title_video_presets">Video prednastavenia</string>
     <string name="settings_accounts">Účty</string>
     <string name="settings_left_panel">Upraviť kategórie</string>
@@ -316,7 +317,7 @@
     <string name="cancel_dialog">Zrušiť</string>
     <string name="msg_player_error_source2">Zdroj videa nefunguje</string>
     <string name="hide_upcoming">Skryť nadchádzajúce z Odberov</string>
-    <string name="search_background_playback">Zapnúť PIP pri vyhľadávaní z prehrávania</string>
+    <string name="search_background_playback">Zapnúť PIP pri vyhľadávaní/otvorení kanála z prehrávania</string>
     <string name="trending_row_name">Trendy</string>
     <string name="player_seek_type">Typ pratáčania</string>
     <string name="player_seek_regular">Bežné</string>
@@ -378,7 +379,7 @@
     <string name="master_volume">Hlavná hlasitosť</string>
     <string name="volume_limit">Obmedzenie hlasitosti</string>
     <string name="play_video">Prehrať</string>
-    <string name="remember_position_of_short_videos">Zapamätať pozíciu v krátkych videách (menej ako 10 min)</string>
+    <string name="remember_position_of_short_videos">Zapamätať pozíciu v krátkych videách (menej ako 5 min)</string>
     <string name="player_show_tooltips">Zobraziť popis tlačítok</string>
     <string name="action_like_unset">"Páči sa" nie je nastavené</string>
     <string name="action_dislike_unset">"Nepáči sa" nie je nastavené</string>
@@ -406,7 +407,7 @@
     <string name="lb_playback_controls_skip_previous">Preskočiť Predchádzajúce/Pretočiť na začiatok</string>
     <string name="alt_presets_behavior">Alternatívne správanie predvolieb (obmedzenie šírky pásma)</string>
     <string name="alt_presets_behavior_desc">Aplikácia sa bude snažiť udržať prednastavenú šírku pásma namiesto zhody medzi rozlíšením, fps a kodekom.</string>
-    <string name="sleep_timer">Povoliť časovač spánku (1 hodina)</string>
+    <string name="sleep_timer">Časovač spánku (1 hodina neaktivity)</string>
     <string name="sleep_timer_desc">Pozastaviť prehrávanie ak používateľ nepoužije ovládač počas jednej hodiny</string>
     <string name="disable_vsync">Vypnúť vertikálnu synchronizáciu</string>
     <string name="disable_vsync_desc">Mierne vylepšuje výkon prehrávania</string>
@@ -423,7 +424,7 @@
     <string name="cant_do_this_for_foreign_playlist">Nemožno spraviť pre cudzí playlist</string>
     <string name="owned_playlist_warning">Chyba. Táto akcia je dostupná iba pre vlastné playlisty</string>
     <string name="content_block_alt_server">Použiť alternatívny server</string>
-    <string name="content_block_alt_server_desc">Povolte túto možnosť, keď SponsorBlock z nejakého dôvodu odmieta fungovať.</string>
+    <string name="content_block_alt_server_desc">Povoľte túto možnosť, keď SponsorBlock z nejakého dôvodu odmieta fungovať.</string>
     <string name="unset_stream_reminder">Zrušiť pripomenutie na živé vysielanie</string>
     <string name="set_stream_reminder">Nastaviť pripomenutie na živé vysielanie</string>
     <string name="playback_starts_shortly">Prehrávanie začne automaticky pri začatí živého vysielania</string>
@@ -454,7 +455,7 @@
     <string name="open_chat">Chat</string>
     <string name="place_chat_left">Zobraziť chat na ľavej strane</string>
     <string name="use_alt_speech_recognizer">Alternatívne rozpoznávanie jazyka</string>
-    <string name="time_format">Režim času</string>
+    <string name="time_format">Formát času</string>
     <string name="time_format_24">24 hodín</string>
     <string name="time_format_12">12 hodín (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Dosť zabugované. Použite ho iba v prípade, že máte problémy s predvoleným rozpoznávačom.</string>
@@ -462,10 +463,20 @@
     <string name="speech_recognizer_system">Systém (odporúčané)</string>
     <string name="speech_recognizer_external_1">Externé 1 (dosť zabugované, pre funkčnosť musíte zakázať prístup k mikrofónu)</string>
     <string name="speech_recognizer_external_2">Externé 2 (dosť zabugované)</string>
-    <string name="real_channel_icon">Zobraziť skutočnú ikonu na tlačidle kanála</string>
+    <string name="real_channel_icon">Zobraziť ikonu na tlačidle kanála</string>
     <string name="subtitle_yellow_semi_transparent">Žlté na polo-priehľadnom pozadí</string>
     <string name="subtitle_yellow_black">Žlté na tmavom pozadí</string>
     <string name="player_pixel_ratio">Pomer pixelov</string>
     <string name="color_scheme_dark_grey_monochrome">Tmavo-šedá (monochromatická)</string>
     <string name="disable_mic_permission">Prosím, zakážte aplikácii prístup k mikrofónu, aby tento rozpoznávač fungoval správne.</string>
+    <string name="repeat_mode_shuffle">Náhodné prehrávanie playlistov</string>
+    <string name="chat_left">Vľavo</string>
+    <string name="chat_right">Vpravo</string>
+    <string name="card_real_thumbnails">Vyberať náhľadové obrázky z videa</string>
+    <string name="card_content">Výber snímku z videa</string>
+    <string name="thumb_quality_default">Predvolené</string>
+    <string name="thumb_quality_start">Na začiatku videa</string>
+    <string name="thumb_quality_middle">V strede videa</string>
+    <string name="thumb_quality_end">Na konci videa</string>
+    <string name="content_block_status">Skontrolovať stav SponsorBlocku</string>
 </resources>

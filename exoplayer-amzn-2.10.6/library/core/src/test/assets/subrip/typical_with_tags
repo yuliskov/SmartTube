@@ -1,0 +1,56 @@
+1
+00:00:00,000 --> 00:00:01,234
+This is {\an1} the first subtitle.
+
+2
+00:00:02,345 --> 00:00:03,456
+This is the second subtitle.
+Second {\ an 2} subtitle with second line.
+
+3
+00:00:04,567 --> 00:00:08,901
+This {\an2} is the third {\ tag} subtitle.
+
+4
+00:00:09,567 --> 00:00:12,901
+This { \an2} is not a valid tag due to the space after the opening bracket.
+
+5
+00:00:013,567 --> 00:00:14,901
+This {\an2} is the fifth subtitle with multiple {\xyz} valid {\qwe} tags.
+
+6
+00:00:015,567 --> 00:00:15,901
+This {\an1} is a lines.
+
+7
+00:00:016,567 --> 00:00:16,901
+This {\an2} is a line.
+
+8
+00:00:017,567 --> 00:00:17,901
+This {\an3} is a line.
+
+9
+00:00:018,567 --> 00:00:18,901
+This {\an4} is a line.
+
+10
+00:00:019,567 --> 00:00:19,901
+This {\an5} is a line.
+
+11
+00:00:020,567 --> 00:00:20,901
+This {\an6} is a line.
+
+12
+00:00:021,567 --> 00:00:22,901
+This {\an7} is a line.
+
+13
+00:00:023,567 --> 00:00:23,901
+This {\an8} is a line.
+
+14
+00:00:024,567 --> 00:00:24,901
+This {\an9} is a line.

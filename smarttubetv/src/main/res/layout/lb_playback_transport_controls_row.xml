@@ -44,14 +44,28 @@
                 android:clipToPadding="false"
                 android:gravity="bottom" />
         </LinearLayout>
-        <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.seekpreview.ThumbsBar
-            android:id="@+id/thumbs_row"
-            android:orientation="horizontal"
+        <LinearLayout
+            android:id="@+id/thumbs_row_wrapper"
             android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="@dimen/lb_playback_transport_thumbs_bottom_margin" />
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/lb_playback_transport_thumbs_bottom_margin" >
+            <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.seekpreview.ThumbsBar
+                android:id="@+id/thumbs_row"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/thumbs_row_title"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Hello World!"
+                style="?attr/playbackControlsTimeStyle" />
+        </LinearLayout>
     </FrameLayout>
 
     <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowView
@@ -186,39 +200,6 @@
                         style="?attr/playbackControlsTimeStyle" />
                 </RelativeLayout>
             </RelativeLayout>
-
-            <!--
-            <TextView
-                android:id="@+id/current_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:layout_toStartOf="@+id/separate_time"
-                android:layout_marginStart="@dimen/lb_playback_transport_time_margin"
-                android:layout_marginTop="@dimen/lb_playback_transport_time_margin_top"
-                style="?attr/playbackControlsTimeStyle" />
-
-            <TextView
-                android:id="@+id/separate_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lb_playback_time_separator"
-                android:layout_gravity="top"
-                android:layout_toStartOf="@+id/total_time"
-                android:layout_marginStart="@dimen/lb_playback_transport_time_margin"
-                android:layout_marginTop="@dimen/lb_playback_transport_time_margin_top"
-                style="?attr/playbackControlsTimeStyle" />
-
-            <TextView
-                android:id="@+id/total_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="@dimen/lb_playback_transport_time_margin"
-                android:layout_marginTop="@dimen/lb_playback_transport_time_margin_top"
-                style="?attr/playbackControlsTimeStyle" />
-             -->
         </RelativeLayout>
 
 

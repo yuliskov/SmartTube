@@ -455,7 +455,7 @@
     <string name="speech_recognizer_system">Системный (наилучший)</string>
     <string name="speech_recognizer_external_1">Внешний 1 (серьезно забагован, для работы нужно отключить доступ к микрофону)</string>
     <string name="speech_recognizer_external_2">Внешний 2 (серьезно забагован)</string>
-    <string name="real_channel_icon">Показать реальную иконку на кнопке канала</string>
+    <string name="real_channel_icon">Показать иконку на кнопке канала</string>
     <string name="subtitle_yellow_semi_transparent">Жёлтые на полупрозрачном фоне</string>
     <string name="subtitle_yellow_black">Жёлтые на чёрном фоне</string>
     <string name="player_pixel_ratio">Соотношение сторон пикселя</string>
@@ -470,5 +470,19 @@
     <string name="thumb_quality_start">Начало видео</string>
     <string name="thumb_quality_middle">Середина видео</string>
     <string name="thumb_quality_end">Конец видео</string>
+    <string name="content_block_status">Проверить состояние SponsorBlock</string>
+    <string name="player_show_quality_info_bitrate">Добавлять битрейт к информации о качестве видео</string>
+    <string name="player_speed_button_old_behavior">Вернуть старое поведение кнопки скорость</string>
+    <string name="protect_settings_with_password">Защитить все настройки паролем</string>
+    <string name="enter_settings_password">Введите пароль для входа в настройки</string>
+    <string name="child_mode">Детский режим</string>
+    <string name="child_mode_desc">В этом режиме пользователь не может использовать поиск или просматривать предлагаемый контент. Настройки будут под паролем.</string>
+    <string name="lost_setting_warning">Настройки приложения будут изменены. Убедитесь, что вы создали резервную копию настроек.</string>
+    <string name="player_button_long_click">Короткое нажатие на кнопку для быстрого действия и длинное для диалога настроек</string>
+    <string name="pause_history">Поставить историю на паузу</string>
+    <string name="resume_history">Возобновить историю</string>
+    <string name="clear_history">Очистить историю</string>
+    <string name="chapters">Эпизоды</string>
+    <string name="card_multiline_subtitle">Несколько строк в подзаголовках</string>
     <string name="cancel">Отмена</string>
 </resources>

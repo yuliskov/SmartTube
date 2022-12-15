@@ -1,0 +1,106 @@
+seekMap:
+  isSeekable = false
+  duration = UNSET TIME
+  getPosition(0) = [[timeUs=0, position=0]]
+numberOfTracks = 1
+track 0:
+  format:
+    bitrate = -1
+    id = 0
+    containerMimeType = null
+    sampleMimeType = audio/ac4
+    maxInputSize = -1
+    width = -1
+    height = -1
+    frameRate = -1.0
+    rotationDegrees = 0
+    pixelWidthHeightRatio = 1.0
+    channelCount = 2
+    sampleRate = 48000
+    pcmEncoding = -1
+    encoderDelay = 0
+    encoderPadding = 0
+    subsampleOffsetUs = 9223372036854775807
+    selectionFlags = 0
+    language = null
+    drmInitData = -
+    initializationData:
+  total output bytes = 7594
+  sample count = 19
+  sample 0:
+    time = 0
+    flags = 1
+    data = length 366, hash B4277F9E
+  sample 1:
+    time = 40000
+    flags = 1
+    data = length 366, hash E8E0A142
+  sample 2:
+    time = 80000
+    flags = 1
+    data = length 366, hash 2E5073D0
+  sample 3:
+    time = 120000
+    flags = 1
+    data = length 366, hash 850E71D8
+  sample 4:
+    time = 160000
+    flags = 1
+    data = length 366, hash 69CD444E
+  sample 5:
+    time = 200000
+    flags = 1
+    data = length 366, hash BD24F36D
+  sample 6:
+    time = 240000
+    flags = 1
+    data = length 366, hash E24F2490
+  sample 7:
+    time = 280000
+    flags = 1
+    data = length 366, hash EE6F1F06
+  sample 8:
+    time = 320000
+    flags = 1
+    data = length 366, hash 2DAB000F
+  sample 9:
+    time = 360000
+    flags = 1
+    data = length 366, hash 8102B7EC
+  sample 10:
+    time = 400000
+    flags = 1
+    data = length 366, hash 55BF59AC
+  sample 11:
+    time = 440000
+    flags = 1
+    data = length 494, hash CBC2E09F
+  sample 12:
+    time = 480000
+    flags = 1
+    data = length 519, hash 9DAF56E9
+  sample 13:
+    time = 520000
+    flags = 1
+    data = length 598, hash 8169EE2
+  sample 14:
+    time = 560000
+    flags = 1
+    data = length 435, hash 28C21246
+  sample 15:
+    time = 600000
+    flags = 1
+    data = length 365, hash FF14716D
+  sample 16:
+    time = 640000
+    flags = 1
+    data = length 392, hash 4CC96B29
+  sample 17:
+    time = 680000
+    flags = 1
+    data = length 373, hash D7AC6D4E
+  sample 18:
+    time = 720000
+    flags = 1
+    data = length 392, hash 99F2511F
+tracksEnded = true

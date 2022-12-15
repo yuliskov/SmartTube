@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">எதையும் மீண்டும் இயக்காதே</string>
+  <string name="exo_media_action_repeat_one_description">இதை மட்டும் மீண்டும் இயக்கு</string>
+  <string name="exo_media_action_repeat_all_description">அனைத்தையும் மீண்டும் இயக்கு</string>
+</resources>

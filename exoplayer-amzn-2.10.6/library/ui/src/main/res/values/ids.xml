@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+
+  <item name="exo_content_frame" type="id"/>
+  <item name="exo_shutter" type="id"/>
+  <item name="exo_subtitles" type="id"/>
+  <item name="exo_artwork" type="id"/>
+  <item name="exo_controller_placeholder" type="id"/>
+  <item name="exo_controller" type="id"/>
+  <item name="exo_ad_overlay" type="id"/>
+  <item name="exo_overlay" type="id"/>
+  <item name="exo_play" type="id"/>
+  <item name="exo_pause" type="id"/>
+  <item name="exo_rew" type="id"/>
+  <item name="exo_ffwd" type="id"/>
+  <item name="exo_prev" type="id"/>
+  <item name="exo_next" type="id"/>
+  <item name="exo_shuffle" type="id"/>
+  <item name="exo_repeat_toggle" type="id"/>
+  <item name="exo_duration" type="id"/>
+  <item name="exo_position" type="id"/>
+  <item name="exo_progress_placeholder" type="id"/>
+  <item name="exo_progress" type="id"/>
+  <item name="exo_buffering" type="id"/>
+  <item name="exo_error_message" type="id"/>
+  <item name="exo_vr" type="id"/>
+
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MPD type="static" duration="1s" mediaPresentationDuration="PT1S">
+ <Period>
+  <SegmentTemplate startNumber="0" timescale="1000" media="sq/$Number$">
+   <SegmentTimeline>
+    <S d="1000"/>
+   </SegmentTimeline>
+  </SegmentTemplate>
+  <AdaptationSet id="0" mimeType="audio/mp4" subsegmentAlignment="true" label="audio label">
+   <Representation id="0" codecs="mp4a.40.2" audioSamplingRate="48000" bandwidth="144000">
+    <BaseURL>https://test.com/0</BaseURL>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet id="1" mimeType="video/mp4" subsegmentAlignment="true" label="ignored label">
+   <Representation id="1" codecs="avc1.4d4015" width="426" height="240" bandwidth="258000">
+    <BaseURL>https://test.com/1</BaseURL>
+   </Representation>
+   <Label>video label</Label>
+  </AdaptationSet>
+ </Period>
+</MPD>

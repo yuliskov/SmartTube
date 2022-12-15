@@ -1,0 +1,32 @@
+seekMap:
+  isSeekable = true
+  duration = 2741000
+  getPosition(0) = [[timeUs=0, position=3995]]
+numberOfTracks = 1
+track 0:
+  format:
+    bitrate = 112000
+    id = null
+    containerMimeType = null
+    sampleMimeType = audio/vorbis
+    maxInputSize = -1
+    width = -1
+    height = -1
+    frameRate = -1.0
+    rotationDegrees = 0
+    pixelWidthHeightRatio = 1.0
+    channelCount = 2
+    sampleRate = 48000
+    pcmEncoding = -1
+    encoderDelay = 0
+    encoderPadding = 0
+    subsampleOffsetUs = 9223372036854775807
+    selectionFlags = 0
+    language = null
+    drmInitData = -
+    initializationData:
+      data = length 30, hash 9A8FF207
+      data = length 3832, hash 8A406249
+  total output bytes = 0
+  sample count = 0
+tracksEnded = true

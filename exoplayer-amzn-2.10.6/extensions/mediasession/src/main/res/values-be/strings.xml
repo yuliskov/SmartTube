@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">Не паўтараць нічога</string>
+  <string name="exo_media_action_repeat_one_description">Паўтарыць адзін элемент</string>
+  <string name="exo_media_action_repeat_all_description">Паўтарыць усе</string>
+</resources>

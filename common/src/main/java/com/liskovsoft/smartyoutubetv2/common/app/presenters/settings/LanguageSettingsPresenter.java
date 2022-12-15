@@ -3,13 +3,13 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -105,13 +105,13 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
         String language = LocaleUtility.getCurrentLocale(getContext()).getDisplayLanguage();
         map.put(getContext().getResources().getString(R.string.default_lang) + " - " + language, "");
-        return Helpers.getMap(getContext().getResources().getStringArray(R.array.supported_languages), "|", map);
+        return Helpers.getMap(Helpers.sortNatural(getContext().getResources().getStringArray(R.array.supported_languages)), "|", map);
     }
 
     private Map<String, String> getSupportedCountries() {
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
         String country = LocaleUtility.getCurrentLocale(getContext()).getDisplayCountry();
         map.put(getContext().getResources().getString(R.string.default_lang) + " - " + country, "");
-        return Helpers.getMap(getContext().getResources().getStringArray(R.array.supported_countries), "|", map);
+        return Helpers.getMap(Helpers.sortNatural(getContext().getResources().getStringArray(R.array.supported_countries)), "|", map);
     }
 }

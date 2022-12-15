@@ -35,6 +35,7 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         appendSponsorBlockSwitch(settingsPresenter);
         appendActionsSection(settingsPresenter);
         appendColorMarkersSection(settingsPresenter);
+        appendStatusCheckSection(settingsPresenter);
         appendMiscSection(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.content_block_provider));
@@ -132,6 +133,12 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.sponsor_color_markers), options);
+    }
+
+    private void appendStatusCheckSection(AppDialogPresenter settingsPresenter) {
+        OptionItem statsCheckOption = UiOptionItem.from(getContext().getString(R.string.content_block_status),
+                option -> Utils.openLink(getContext(), getContext().getString(R.string.content_block_status_url)));
+        settingsPresenter.appendSingleButton(statsCheckOption);
     }
 
     private void appendMiscSection(AppDialogPresenter settingsPresenter) {

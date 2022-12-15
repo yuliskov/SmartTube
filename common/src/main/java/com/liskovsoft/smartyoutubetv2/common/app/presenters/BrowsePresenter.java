@@ -427,6 +427,17 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateSections();
     }
 
+    public void enableAllSections(boolean enable) {
+        enableSection(MediaGroup.TYPE_HISTORY, enable);
+        enableSection(MediaGroup.TYPE_USER_PLAYLISTS, enable);
+        enableSection(MediaGroup.TYPE_SUBSCRIPTIONS, enable);
+        enableSection(MediaGroup.TYPE_CHANNEL_UPLOADS, enable);
+        enableSection(MediaGroup.TYPE_GAMING, enable);
+        enableSection(MediaGroup.TYPE_MUSIC, enable);
+        enableSection(MediaGroup.TYPE_NEWS, enable);
+        enableSection(MediaGroup.TYPE_HOME, enable);
+    }
+
     public void enableSection(int sectionId, boolean enable) {
         mGeneralData.enableSection(sectionId, enable);
 
@@ -656,8 +667,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
-        
-        getView().showProgressBar(true);
+
+        // Small amount of items == small load time. Loading bar are useless?
+        //getView().showProgressBar(true);
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
@@ -819,19 +831,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public boolean isSettingsSection() {
-        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SETTINGS;
+        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SETTINGS && inForeground();
     }
 
     public boolean isPlaylistsSection() {
-        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_USER_PLAYLISTS;
+        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_USER_PLAYLISTS && inForeground();
     }
 
-    public boolean isPlaylistsSectionActive() {
-        return isPlaylistsSection() && inForeground();
+    public boolean isHistorySection() {
+        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_HISTORY && inForeground();
     }
 
     public boolean isSubscriptionsSection() {
-        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SUBSCRIPTIONS;
+        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SUBSCRIPTIONS && inForeground();
     }
 
     public void selectSection(int sectionId) {

@@ -20,9 +20,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.Play
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -41,7 +43,6 @@ import java.util.Map;
 public class VideoLoaderManager extends PlayerEventListenerHelper implements MetadataListener, OnDataChange {
     private static final String TAG = VideoLoaderManager.class.getSimpleName();
     private final Playlist mPlaylist;
-    private final Handler mHandler;
     private final SuggestionsLoaderManager mSuggestionsLoader;
     private final UniqueRandom mRandom;
     private Video mLastVideo;
@@ -72,7 +73,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     public VideoLoaderManager(SuggestionsLoaderManager suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
         mPlaylist = Playlist.instance();
-        mHandler = new Handler(Looper.getMainLooper());
         mRandom = new UniqueRandom();
     }
 
@@ -101,7 +101,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
             if (!item.equals(mLastVideo)) {
                 loadVideo(item); // force play immediately
             } else {
-                loadSuggestions(item);
+                loadSuggestions(item); // update suggestions only
             }
         } else {
             mLastVideo = item; // save for later
@@ -128,6 +128,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", error);
 
         mLastError = error;
+
         startErrorAction(error);
         if (!mIsWasVideoStartError && mLastVideo != null) {
             Analytics.sendVideoStartError(mLastVideo.videoId,
@@ -153,6 +154,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         }
     }
 
+    @Override
     public boolean onPreviousClicked() {
         loadPrevious();
 
@@ -161,7 +163,11 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
     @Override
     public boolean onNextClicked() {
-        loadNext();
+        if (GeneralData.instance(getActivity()).isChildModeEnabled()) {
+            onPlayEnd();
+        } else {
+            loadNext();
+        }
 
         return true;
     }
@@ -279,7 +285,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
             // Short videos next fix (suggestions aren't loaded yet)
             boolean isEnded = getController() != null && Math.abs(getController().getDurationMs() - getController().getPositionMs()) < 100;
             if (isEnded) {
-                Utils.postDelayed(mHandler, mPendingNext, 1_000);
+                Utils.postDelayed(mPendingNext, 1_000);
             }
         }
     }
@@ -296,6 +302,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                 .subscribe(this::processFormatInfo,
                            error -> {
                                Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
+                               Log.e(TAG, "Probably no internet connection");
                                scheduleReloadVideoTimer(1_000);
                                if (!mIsWasVideoStartError) {
                                    Analytics.sendVideoStartError(video.videoId,
@@ -313,7 +320,9 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
         if (formatInfo.isUnplayable() || formatInfo.isAgeRestricted()) {
             getController().showError(formatInfo.getPlayabilityStatus());
+            mSuggestionsLoader.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
+            loadNext();
             if (!mIsWasVideoStartError) {
                 Analytics.sendVideoStartError(mLastVideo.videoId,
                         mLastVideo.title,
@@ -368,7 +377,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         if (getController().isEngineInitialized()) {
             Log.d(TAG, "Starting check for the future stream...");
             getController().showOverlay(true);
-            Utils.postDelayed(mHandler, mReloadVideoHandler, reloadIntervalMs);
+            Utils.postDelayed(mReloadVideoHandler, reloadIntervalMs);
         }
     }
 
@@ -388,14 +397,16 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
         disposeActions();
 
-        if (item.hasVideo()) {
-            getController().showOverlay(true);
-            getBridge().openVideo(item);
-        } else if (item.hasChannel()) {
-            ChannelPresenter.instance(getActivity()).openChannel(item);
-        } else {
-            Log.e(TAG, "Video item doesn't contain needed data!");
-        }
+        VideoActionPresenter.instance(getActivity()).apply(item);
+
+        //if (item.hasVideo()) {
+        //    getController().showOverlay(true);
+        //    getBridge().openVideo(item);
+        //} else if (item.hasChannel()) {
+        //    ChannelPresenter.instance(getActivity()).openChannel(item);
+        //} else {
+        //    Log.e(TAG, "Video item doesn't contain needed data!");
+        //}
     }
 
     private boolean isActionsRunning() {
@@ -405,7 +416,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     private void disposeActions() {
         MediaServiceManager.instance().disposeActions();
         RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
-        Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
+        Utils.removeCallbacks(mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
     }
 
     private void initErrorActions() {
@@ -438,7 +449,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         }
 
         // Delay to fix frequent requests
-        Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000);
+        Utils.postDelayed(mPendingRestartEngine, 3_000);
     }
 
     private List<String> applyFix(List<String> urlList) {
@@ -465,7 +476,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
             case PlaybackUIController.REPEAT_MODE_ONE:
                 getController().setPositionMs(0);
                 getController().setPlayWhenReady(true);
-                Utils.showRepeatInfo(getActivity(), repeatMode);
+                //Utils.showRepeatInfo(getActivity(), repeatMode);
                 break;
             case PlaybackUIController.REPEAT_MODE_CLOSE:
                 // Close player if suggestions not shown
@@ -486,8 +497,8 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                 } else {
                     getController().showSuggestions(true);
                     getController().setPlayWhenReady(false);
-                    getController().setPositionMs(0);
-                    Utils.showRepeatInfo(getActivity(), repeatMode);
+                    getController().setPositionMs(getController().getDurationMs());
+                    //Utils.showRepeatInfo(getActivity(), repeatMode);
                 }
                 break;
             case PlaybackUIController.REPEAT_MODE_LIST:
@@ -499,8 +510,8 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                 } else {
                     getController().showSuggestions(true);
                     getController().setPlayWhenReady(false);
-                    getController().setPositionMs(0);
-                    Utils.showRepeatInfo(getActivity(), repeatMode);
+                    getController().setPositionMs(getController().getDurationMs());
+                    //Utils.showRepeatInfo(getActivity(), repeatMode);
                 }
                 break;
         }
@@ -529,7 +540,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
     @Override
     public void onDataChange() {
-        Utils.postDelayed(mHandler, mLoadRandomNext, 3_000);
+        Utils.postDelayed(mLoadRandomNext, 3_000);
     }
 
     private void loadRandomNext() {

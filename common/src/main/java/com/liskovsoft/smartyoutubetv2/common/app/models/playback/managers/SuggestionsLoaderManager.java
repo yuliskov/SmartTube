@@ -1,7 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import androidx.core.content.ContextCompat;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -11,7 +13,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -28,7 +32,7 @@ import java.util.Set;
 public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsLoaderManager.class.getSimpleName();
     private final Set<MetadataListener> mListeners = new HashSet<>();
-    private List<Disposable> mActions = new ArrayList<>();
+    private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
     private VideoGroup mLastScrollGroup;
 
@@ -88,6 +92,20 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         // Update UI to response to user clicks
         getController().resetSuggestedPosition();
+    }
+
+    @Override
+    public void onControlsShown(boolean shown) {
+        if (shown) {
+            focusCurrentChapter();
+        }
+    }
+
+    @Override
+    public void onSeekEnd() {
+        if (getController().isControlsShown()) {
+            focusCurrentChapter();
+        }
     }
 
     private void continueGroup(VideoGroup group) {
@@ -206,6 +224,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private void updateSuggestions(MediaItemMetadata mediaItemMetadata, Video video) {
         syncCurrentVideo(mediaItemMetadata, video);
 
+        addChapterMarkersIfNeeded(mediaItemMetadata);
+
         appendSuggestions(video, mediaItemMetadata);
 
         // After video suggestions
@@ -233,12 +253,23 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         getController().clearSuggestions(); // clear previous videos
 
+        appendChaptersIfNeeded(mediaItemMetadata);
+
         appendUserQueueIfNeeded(video);
 
         int groupIndex = -1;
+        int suggestRows = -1;
+
+        if (GeneralData.instance(getActivity()).isChildModeEnabled()) {
+            suggestRows = video.hasPlaylist() ? 1 : 0;
+        }
 
         for (MediaGroup group : suggestions) {
             groupIndex++;
+
+            if (groupIndex == suggestRows) {
+                break;
+            }
 
             if (group != null && !group.isEmpty()) {
                 VideoGroup videoGroup = VideoGroup.from(group);
@@ -274,6 +305,28 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         }
     }
 
+    private void addChapterMarkersIfNeeded(MediaItemMetadata mediaItemMetadata) {
+        List<ChapterItem> chapters = mediaItemMetadata.getChapters();
+
+        if (chapters == null) {
+            return;
+        }
+
+        getController().setSeekBarSegments(toSeekBarSegments(chapters));
+    }
+
+    private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
+        List<ChapterItem> chapters = mediaItemMetadata.getChapters();
+
+        if (chapters == null) {
+            return;
+        }
+
+        VideoGroup videoGroup = VideoGroup.fromChapters(chapters, getActivity().getString(R.string.chapters));
+
+        getController().updateSuggestions(videoGroup);
+    }
+
     private void appendUserQueueIfNeeded(Video video) {
         // Exclude situations when phone cast just started or next item is null
         if ((video.isRemote && video.remotePlaylistId != null) || !Playlist.instance().hasNext()) {
@@ -297,6 +350,63 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         if (afterCurrent != null && afterCurrent.contains(item)) {
             item.fromQueue = true;
         }
+    }
+
+    private void focusCurrentChapter() {
+        VideoGroup group = getController().getSuggestionsByIndex(0);
+
+        if (group == null || group.getVideos() == null) {
+            return;
+        }
+
+        int index = findCurrentChapterIndex(group.getVideos());
+
+        if (index != -1) {
+            getController().focusSuggestedItem(index);
+            getController().setSeekPreviewTitle(group.getVideos().get(index).title);
+        }
+    }
+
+    private int findCurrentChapterIndex(List<Video> videos) {
+        if (videos == null || !videos.get(0).isChapter) {
+            return -1;
+        }
+
+        int currentChapter = -1;
+        long positionMs = getController().getPositionMs();
+        for (Video chapter : videos) {
+            if (chapter.startTimeMs > positionMs) {
+                break;
+            }
+            currentChapter++;
+        }
+
+        return currentChapter;
+    }
+
+    private List<SeekBarSegment> toSeekBarSegments(List<ChapterItem> chapters) {
+        if (chapters == null) {
+            return null;
+        }
+
+        List<SeekBarSegment> result = new ArrayList<>();
+        long markLengthMs = getController().getDurationMs() / 10000;
+
+        for (ChapterItem chapter : chapters) {
+            if (chapter.getStartTimeMs() == 0) {
+                continue;
+            }
+
+            SeekBarSegment seekBarSegment = new SeekBarSegment();
+            double startRatio = (double) chapter.getStartTimeMs() / getController().getDurationMs(); // Range: [0, 1]
+            double endRatio = (double) (chapter.getStartTimeMs() + markLengthMs) / getController().getDurationMs(); // Range: [0, 1]
+            seekBarSegment.startProgress = (int) (startRatio * Integer.MAX_VALUE); // Could safely cast to int
+            seekBarSegment.endProgress = (int) (endRatio * Integer.MAX_VALUE); // Could safely cast to int
+            seekBarSegment.color = ContextCompat.getColor(getActivity(), R.color.black);
+            result.add(seekBarSegment);
+        }
+
+        return result;
     }
 
     /**

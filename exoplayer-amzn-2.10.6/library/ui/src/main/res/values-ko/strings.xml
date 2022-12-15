@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">이전 트랙</string>
+  <string name="exo_controls_next_description">다음 트랙</string>
+  <string name="exo_controls_pause_description">일시중지</string>
+  <string name="exo_controls_play_description">재생</string>
+  <string name="exo_controls_stop_description">중지</string>
+  <string name="exo_controls_rewind_description">되감기</string>
+  <string name="exo_controls_fastforward_description">빨리 감기</string>
+  <string name="exo_controls_repeat_off_description">반복 안함</string>
+  <string name="exo_controls_repeat_one_description">현재 미디어 반복</string>
+  <string name="exo_controls_repeat_all_description">모두 반복</string>
+  <string name="exo_controls_shuffle_on_description">셔플 사용</string>
+  <string name="exo_controls_shuffle_off_description">셔플 사용 안함</string>
+  <string name="exo_controls_fullscreen_description">전체화면 모드</string>
+  <string name="exo_controls_vr_description">가상 현실 모드</string>
+  <string name="exo_download_description">다운로드</string>
+  <string name="exo_download_notification_channel_name">다운로드</string>
+  <string name="exo_download_downloading">다운로드 중</string>
+  <string name="exo_download_completed">다운로드 완료</string>
+  <string name="exo_download_failed">다운로드 실패</string>
+  <string name="exo_download_removing">다운로드 항목 삭제 중</string>
+  <string name="exo_track_selection_title_video">동영상</string>
+  <string name="exo_track_selection_title_audio">오디오</string>
+  <string name="exo_track_selection_title_text">문자 메시지</string>
+  <string name="exo_track_selection_none">없음</string>
+  <string name="exo_track_selection_auto">자동</string>
+  <string name="exo_track_unknown">알 수 없음</string>
+  <string name="exo_track_resolution">%1$d×%2$d</string>
+  <string name="exo_track_mono">모노</string>
+  <string name="exo_track_stereo">스테레오</string>
+  <string name="exo_track_surround">서라운드 사운드</string>
+  <string name="exo_track_surround_5_point_1">5.1 서라운드 사운드</string>
+  <string name="exo_track_surround_7_point_1">7.1 서라운드 사운드</string>
+  <string name="exo_track_role_alternate">대체</string>
+  <string name="exo_track_role_supplementary">추가</string>
+  <string name="exo_track_role_commentary">논평</string>
+  <string name="exo_track_role_closed_captions">자막</string>
+  <string name="exo_track_bitrate">%1$.2fMbps</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

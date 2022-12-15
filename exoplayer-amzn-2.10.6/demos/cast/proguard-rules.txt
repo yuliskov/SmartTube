@@ -1,0 +1,6 @@
+# Proguard rules specific to the Cast demo app.
+
+# Accessed via menu.xml
+-keep class androidx.mediarouter.app.MediaRouteActionProvider {
+  *;
+}

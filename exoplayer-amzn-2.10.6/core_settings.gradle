@@ -1,0 +1,64 @@
+// Copyright (C) 2017 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+def rootDir = gradle.ext.exoplayerRoot
+def modulePrefix = ':'
+if (gradle.ext.has('exoplayerModulePrefix')) {
+    modulePrefix += gradle.ext.exoplayerModulePrefix
+}
+
+include modulePrefix + 'library'
+include modulePrefix + 'library-core'
+include modulePrefix + 'library-dash'
+include modulePrefix + 'library-hls'
+include modulePrefix + 'library-smoothstreaming'
+include modulePrefix + 'library-ui'
+include modulePrefix + 'testutils'
+include modulePrefix + 'testutils-robolectric'
+include modulePrefix + 'extension-ffmpeg'
+include modulePrefix + 'extension-flac'
+// include modulePrefix + 'extension-gvr' // absent in mavenCentral
+// include modulePrefix + 'extension-ima' // absent in mavenCentral
+include modulePrefix + 'extension-cast'
+include modulePrefix + 'extension-cronet'
+include modulePrefix + 'extension-mediasession'
+include modulePrefix + 'extension-okhttp'
+include modulePrefix + 'extension-opus'
+include modulePrefix + 'extension-vp9'
+// include modulePrefix + 'extension-rtmp' // absent in mavenCentral
+include modulePrefix + 'extension-leanback'
+// include modulePrefix + 'extension-jobdispatcher' // absent in mavenCentral
+include modulePrefix + 'extension-workmanager'
+
+project(modulePrefix + 'library').projectDir = new File(rootDir, 'library/all')
+project(modulePrefix + 'library-core').projectDir = new File(rootDir, 'library/core')
+project(modulePrefix + 'library-dash').projectDir = new File(rootDir, 'library/dash')
+project(modulePrefix + 'library-hls').projectDir = new File(rootDir, 'library/hls')
+project(modulePrefix + 'library-smoothstreaming').projectDir = new File(rootDir, 'library/smoothstreaming')
+project(modulePrefix + 'library-ui').projectDir = new File(rootDir, 'library/ui')
+project(modulePrefix + 'testutils').projectDir = new File(rootDir, 'testutils')
+project(modulePrefix + 'testutils-robolectric').projectDir = new File(rootDir, 'testutils_robolectric')
+project(modulePrefix + 'extension-ffmpeg').projectDir = new File(rootDir, 'extensions/ffmpeg')
+project(modulePrefix + 'extension-flac').projectDir = new File(rootDir, 'extensions/flac')
+// project(modulePrefix + 'extension-gvr').projectDir = new File(rootDir, 'extensions/gvr') // absent in mavenCentral
+// project(modulePrefix + 'extension-ima').projectDir = new File(rootDir, 'extensions/ima') // absent in mavenCentral
+project(modulePrefix + 'extension-cast').projectDir = new File(rootDir, 'extensions/cast')
+project(modulePrefix + 'extension-cronet').projectDir = new File(rootDir, 'extensions/cronet')
+project(modulePrefix + 'extension-mediasession').projectDir = new File(rootDir, 'extensions/mediasession')
+project(modulePrefix + 'extension-okhttp').projectDir = new File(rootDir, 'extensions/okhttp')
+project(modulePrefix + 'extension-opus').projectDir = new File(rootDir, 'extensions/opus')
+project(modulePrefix + 'extension-vp9').projectDir = new File(rootDir, 'extensions/vp9')
+// project(modulePrefix + 'extension-rtmp').projectDir = new File(rootDir, 'extensions/rtmp')
+project(modulePrefix + 'extension-leanback').projectDir = new File(rootDir, 'extensions/leanback')
+// project(modulePrefix + 'extension-jobdispatcher').projectDir = new File(rootDir, 'extensions/jobdispatcher') // absent in mavenCentral
+project(modulePrefix + 'extension-workmanager').projectDir = new File(rootDir, 'extensions/workmanager')

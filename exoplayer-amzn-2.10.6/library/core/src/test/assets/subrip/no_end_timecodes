@@ -1,0 +1,11 @@
+1
+00:00:00,000 -->
+SubRip doesn't technically allow missing end timecodes.
+
+2
+00:00:02,345 -->
+We interpret it to mean that a subtitle extends to the start of the next one.
+
+3
+00:00:03,456 -->
+Or to the end of the media.

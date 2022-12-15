@@ -5,13 +5,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
-import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
+import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.ArrayList;
@@ -53,11 +55,13 @@ public final class Video implements Parcelable {
     public MediaItem mediaItem;
     public MediaItem nextMediaItem;
     public MediaItem nextMediaItemBackup;
-    public VideoPlaylistInfo playlistInfo;
+    public PlaylistInfo playlistInfo;
     public VideoGroup group; // Memory leak. Used to get next page when scrolling.
     public boolean hasNewContent;
     public boolean isLive;
     public boolean isUpcoming;
+    public boolean isChapter;
+    private boolean isMovie;
     public boolean isSubscribed;
     public boolean isRemote;
     public int groupPosition = -1; // group position in multi-grid fragments
@@ -65,11 +69,11 @@ public final class Video implements Parcelable {
     public boolean isSynced;
     public final long timestamp = System.currentTimeMillis();
     public int extra = -1;
-    public int pendingPosMs;
+    public long startTimeMs;
+    public long pendingPosMs;
     public boolean fromQueue;
     public boolean isPending;
     public boolean finishOnEnded;
-    public long startTimeMs;
     private int startSegmentNum;
 
     public Video() {
@@ -133,6 +137,7 @@ public final class Video implements Parcelable {
         video.reloadPageKey = item.getReloadPageKey();
         video.isLive = item.isLive();
         video.isUpcoming = item.isUpcoming();
+        video.isMovie = item.isMovie();
         video.clickTrackingParams = item.getClickTrackingParams();
         video.mediaItem = item;
 
@@ -172,6 +177,16 @@ public final class Video implements Parcelable {
     public static Video from(String videoId) {
         Video video = new Video();
         video.videoId = videoId;
+        return video;
+    }
+
+    public static Video from(ChapterItem chapter) {
+        Video video = new Video();
+        video.isChapter = true;
+        video.title = chapter.getTitle();
+        video.cardImageUrl = chapter.getCardImageUrl();
+        video.startTimeMs = chapter.getStartTimeMs();
+        video.badge = ServiceHelper.millisToTimeText(chapter.getStartTimeMs());
         return video;
     }
 
@@ -418,14 +433,15 @@ public final class Video implements Parcelable {
     }
 
     public boolean isPlaylistInChannel() {
-        return belongsToChannel() && hasPlaylist() && mediaItem != null && mediaItem.getDurationMs() <= 0;
+        return belongsToChannel() && hasPlaylist() && !belongsToSamePlaylistGroup();
     }
 
     public boolean isEmpty() {
-        return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId);
+        // NOTE: Movies labeled as "Free with Ads" not supported yet
+        return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId) || isMovie;
     }
 
-    public boolean belongsToPlaylists() {
+    public boolean belongsToUserPlaylists() {
         return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_USER_PLAYLISTS;
     }
 

@@ -407,7 +407,7 @@
     <string name="lb_playback_controls_skip_previous">Přeskočit Předchozí/Přetočit do výchozí pozice</string>
     <string name="alt_presets_behavior">Náhradní chování předvoleb (omezit šířku pásma)</string>
     <string name="alt_presets_behavior_desc">Aplikace se pokusí zachovat šířku pásma odpovídající vybrané předvolbě namísto shody mezi rozlišením, fps a kodekem.</string>    
-    <string name="sleep_timer">Časovač spánku (1 hodina)</string>
+    <string name="sleep_timer">Časovač spánku (1 hodina od posledního použití ovladače)</string>
     <string name="sleep_timer_desc">Pozastav přehrávání pokud uživatel nepoužil ovladač během hodiny</string>
     <string name="disable_vsync">Zakázat vertikální synchronizaci</string>
     <string name="disable_vsync_desc">Částečně zlepšuje výkon přehrávání</string>
@@ -463,7 +463,7 @@
     <string name="speech_recognizer_system">Systémový (preferovaný)</string>
     <string name="speech_recognizer_external_1">Externí 1 (vážně zabugováno - aby fungovalo, musíte zakázat přístup k mikrofonu)</string>
     <string name="speech_recognizer_external_2">Externí 2 (vážně zabugováno)</string>
-    <string name="real_channel_icon">Zobraz opravdovou ikonu na tlačítku kanálu</string>
+    <string name="real_channel_icon">Zobraz ikonu na tlačítku kanálu</string>
     <string name="subtitle_yellow_semi_transparent">Žlutá na poloprůhledném pozadí</string>
     <string name="subtitle_yellow_black">Žlutá na černém pozadí</string>
     <string name="player_pixel_ratio">Poměr pixelů</string>
@@ -478,4 +478,18 @@
     <string name="thumb_quality_start">Na začátku videa</string>
     <string name="thumb_quality_middle">Uprostřed videa</string>
     <string name="thumb_quality_end">Na konci videa</string>
+    <string name="content_block_status">Zkontrolovat stav SponsorBlocku</string>
+    <string name="player_show_quality_info_bitrate">Přidej bitrate do informací o kvalitě</string>
+    <string name="player_speed_button_old_behavior">Vrátit staré chování tlačítka rychlosti</string>
+    <string name="protect_settings_with_password">Chránit všechna nastavení heslem</string>
+    <string name="enter_settings_password">Zadejte heslo</string>
+    <string name="child_mode">Dětský režim</string>
+    <string name="child_mode_desc">V tomto režimu uživatel nemůže použít vyhledávání ani vidět žádný navrhovaný obsah. Nastavení bude zaheslováno.</string>
+    <string name="lost_setting_warning">Nastavení aplikace se změní. Ujistěte se, že jste si vytvořili zálohu nastavení.</string>
+    <string name="player_button_long_click">Krátké kliknutí na tlačítko pro rychlou akci a dlouhé pro dialog nastavení</string>
+    <string name="pause_history">Pozastavit historii</string>
+    <string name="resume_history">Obnovit historii</string>
+    <string name="clear_history">Smazat historii</string>
+    <string name="chapters">Kapitoly</string>
+    <string name="card_multiline_subtitle">Víceřádkové titulky</string>
 </resources>

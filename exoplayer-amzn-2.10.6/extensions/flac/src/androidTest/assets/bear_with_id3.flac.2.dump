@@ -1,0 +1,78 @@
+seekMap:
+  isSeekable = true
+  duration = 2741000
+  getPosition(0) = [[timeUs=0, position=55284]]
+numberOfTracks = 1
+track 0:
+  format:
+    bitrate = 768000
+    id = null
+    containerMimeType = null
+    sampleMimeType = audio/raw
+    maxInputSize = 16384
+    width = -1
+    height = -1
+    frameRate = -1.0
+    rotationDegrees = 0
+    pixelWidthHeightRatio = 1.0
+    channelCount = 2
+    sampleRate = 48000
+    pcmEncoding = 2
+    encoderDelay = 0
+    encoderPadding = 0
+    subsampleOffsetUs = 9223372036854775807
+    selectionFlags = 0
+    language = null
+    drmInitData = -
+    initializationData:
+  total output bytes = 182208
+  sample count = 12
+  sample 0:
+    time = 1792000
+    flags = 1
+    data = length 16384, hash 48AB8B45
+  sample 1:
+    time = 1877333
+    flags = 1
+    data = length 16384, hash 13C9640A
+  sample 2:
+    time = 1962666
+    flags = 1
+    data = length 16384, hash 499E4A0B
+  sample 3:
+    time = 2048000
+    flags = 1
+    data = length 16384, hash F9A783E6
+  sample 4:
+    time = 2133333
+    flags = 1
+    data = length 16384, hash D2B77598
+  sample 5:
+    time = 2218666
+    flags = 1
+    data = length 16384, hash CE5B826C
+  sample 6:
+    time = 2304000
+    flags = 1
+    data = length 16384, hash E99EE956
+  sample 7:
+    time = 2389333
+    flags = 1
+    data = length 16384, hash F2DB1486
+  sample 8:
+    time = 2474666
+    flags = 1
+    data = length 16384, hash 1636EAB
+  sample 9:
+    time = 2560000
+    flags = 1
+    data = length 16384, hash 23457C08
+  sample 10:
+    time = 2645333
+    flags = 1
+    data = length 16384, hash 30EB8381
+  sample 11:
+    time = 2730666
+    flags = 1
+    data = length 1984, hash 59CFDE1B
+tracksEnded = true

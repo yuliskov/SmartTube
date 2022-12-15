@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">ഒന്നും ആവർത്തിക്കരുത്</string>
+  <string name="exo_media_action_repeat_one_description">ഒരെണ്ണം ആവർത്തിക്കുക</string>
+  <string name="exo_media_action_repeat_all_description">എല്ലാം ആവർത്തിക്കുക</string>
+</resources>

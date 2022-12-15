@@ -27,9 +27,11 @@ public class TrackErrorFixer {
     }
 
     /**
-     * Blacklisting audio track for certain live streams.<br/>
+     * 1) Blacklist non-playable audio tracks for live streams.<br/>
      * Last segment of such streams produce 404 error.<br/>
-     * See DrLupo streams, for example.
+     * See DrLupo streams, for example.<br/.
+     * <br/>
+     * 2) Blacklist non-playable tracks for regular videos (error 503).<br/>
      */
     public boolean fixError(Exception e) {
         if (!(e instanceof InvalidResponseCodeException)) {

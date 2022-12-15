@@ -83,7 +83,7 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
         }
     }
 
-    static class ControlButtonPresenter extends Presenter {
+    public static class ControlButtonPresenter extends Presenter {
         private int mLayoutResourceId;
         private boolean tooltipsEnabled;
 
@@ -147,6 +147,11 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
         public void setOnClickListener(ViewHolder viewHolder,
                                        View.OnClickListener listener) {
             ((ActionViewHolder) viewHolder).mFocusableView.setOnClickListener(listener);
+        }
+
+        public void setOnLongClickListener(ViewHolder viewHolder,
+                                       View.OnLongClickListener listener) {
+            ((ActionViewHolder) viewHolder).mFocusableView.setOnLongClickListener(listener);
         }
     }
 }

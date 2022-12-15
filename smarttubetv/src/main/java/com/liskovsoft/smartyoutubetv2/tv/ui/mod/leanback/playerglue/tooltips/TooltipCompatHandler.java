@@ -102,9 +102,13 @@ public class TooltipCompatHandler implements View.OnLongClickListener, View.OnHo
             sActiveHandler.hide();
         }
 
-        view.setOnLongClickListener(null);
-        view.setLongClickable(false);
-        view.setOnHoverListener(null);
+        // MODIFIED: listener already added in ControlBarPresenter
+        //view.setOnLongClickListener(null);
+        //view.setLongClickable(false);
+
+        // Invisible controls bar can react on mouse pointer
+        //view.setOnHoverListener(null);
+
         view.setOnFocusChangeListener(null);
 
         if (!TextUtils.isEmpty(tooltipText)) {
@@ -124,9 +128,12 @@ public class TooltipCompatHandler implements View.OnLongClickListener, View.OnHo
                 ViewConfiguration.get(mAnchor.getContext()));
         clearAnchorPos();
 
-        mAnchor.setOnLongClickListener(this);
+        // MODIFIED: listener already added in ControlBarPresenter
+        //mAnchor.setOnLongClickListener(this);
+
         // Invisible controls bar can react on mouse pointer
         //mAnchor.setOnHoverListener(this);
+
         mAnchor.setOnFocusChangeListener(this);
     }
 

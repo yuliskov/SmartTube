@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">Traccia precedente</string>
+  <string name="exo_controls_next_description">Traccia successiva</string>
+  <string name="exo_controls_pause_description">Pausa</string>
+  <string name="exo_controls_play_description">Riproduci</string>
+  <string name="exo_controls_stop_description">Interrompi</string>
+  <string name="exo_controls_rewind_description">Riavvolgi</string>
+  <string name="exo_controls_fastforward_description">Avanti veloce</string>
+  <string name="exo_controls_repeat_off_description">Non ripetere nulla</string>
+  <string name="exo_controls_repeat_one_description">Ripeti uno</string>
+  <string name="exo_controls_repeat_all_description">Ripeti tutto</string>
+  <string name="exo_controls_shuffle_on_description">Attiva riproduzione casuale</string>
+  <string name="exo_controls_shuffle_off_description">Disattiva riproduzione casuale</string>
+  <string name="exo_controls_fullscreen_description">Modalità a schermo intero</string>
+  <string name="exo_controls_vr_description">Modalità VR</string>
+  <string name="exo_download_description">Scarica</string>
+  <string name="exo_download_notification_channel_name">Download</string>
+  <string name="exo_download_downloading">Download…</string>
+  <string name="exo_download_completed">Download completato</string>
+  <string name="exo_download_failed">Download non riuscito</string>
+  <string name="exo_download_removing">Rimozione dei download…</string>
+  <string name="exo_track_selection_title_video">Video</string>
+  <string name="exo_track_selection_title_audio">Audio</string>
+  <string name="exo_track_selection_title_text">Testo</string>
+  <string name="exo_track_selection_none">Nessuno</string>
+  <string name="exo_track_selection_auto">Auto</string>
+  <string name="exo_track_unknown">Sconosciuta</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">Mono</string>
+  <string name="exo_track_stereo">Stereo</string>
+  <string name="exo_track_surround">Audio surround</string>
+  <string name="exo_track_surround_5_point_1">Audio surround 5.1</string>
+  <string name="exo_track_surround_7_point_1">Audio surround 7.1</string>
+  <string name="exo_track_role_alternate">Versione alternativa</string>
+  <string name="exo_track_role_supplementary">Contenuti supplementari</string>
+  <string name="exo_track_role_commentary">Commenti</string>
+  <string name="exo_track_role_closed_captions">Sottotitoli</string>
+  <string name="exo_track_bitrate">%1$.2f Mbps</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

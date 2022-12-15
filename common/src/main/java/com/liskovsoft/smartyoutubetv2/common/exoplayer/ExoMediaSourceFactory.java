@@ -5,12 +5,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
+import androidx.annotation.NonNull;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MediaSourceEventListener;
+import com.google.android.exoplayer2.source.dash.DashChunkSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.dash.manifest.DashManifest;
@@ -32,8 +34,8 @@ import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.ErrorDefaultDashChunkSource;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErrorHandlingPolicy;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.ErrorDefaultDashChunkSource;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.app.AppConstants;
@@ -160,7 +162,7 @@ public class ExoMediaSourceFactory {
             case C.TYPE_DASH:
                 DashMediaSource dashSource =
                         new DashMediaSource.Factory(
-                                new ErrorDefaultDashChunkSource.Factory(mMediaDataSourceFactory, mTrackErrorFixer),
+                                getDashChunkSourceFactory(),
                                 buildDataSourceFactory(USE_BANDWIDTH_METER)
                         )
                                 .setManifestParser(new LiveDashManifestParser()) // Don't make static! Need state reset for each live source.
@@ -193,7 +195,7 @@ public class ExoMediaSourceFactory {
     private MediaSource buildMPDMediaSource(Uri uri, InputStream mpdContent) {
         // Are you using FrameworkSampleSource or ExtractorSampleSource when you build your player?
         DashMediaSource dashSource = new DashMediaSource.Factory(
-                new ErrorDefaultDashChunkSource.Factory(mMediaDataSourceFactory, mTrackErrorFixer),
+                getDashChunkSourceFactory(),
                 null
         )
                 .setLoadErrorHandlingPolicy(new DashDefaultLoadErrorHandlingPolicy())
@@ -314,6 +316,16 @@ public class ExoMediaSourceFactory {
         // dataSourceFactory.getDefaultRequestProperties().set("Accept-Encoding", AppConstants.ACCEPT_ENCODING);
     }
 
+    public void setTrackErrorFixer(TrackErrorFixer trackErrorFixer) {
+        mTrackErrorFixer = trackErrorFixer;
+    }
+
+    @NonNull
+    private DashChunkSource.Factory getDashChunkSourceFactory() {
+        //return new ErrorDefaultDashChunkSource.Factory(mMediaDataSourceFactory, mTrackErrorFixer);
+        return new DefaultDashChunkSource.Factory(mMediaDataSourceFactory, ErrorDefaultDashChunkSource.MAX_SEGMENTS_PER_LOAD);
+    }
+
     // EXO: 2.10 - 2.12
     private static class StaticDashManifestParser extends DashManifestParser {
         @Override
@@ -379,8 +391,4 @@ public class ExoMediaSourceFactory {
     //                periods);
     //    }
     //}
-
-    public void setTrackErrorFixer(TrackErrorFixer trackErrorFixer) {
-        mTrackErrorFixer = trackErrorFixer;
-    }
 }

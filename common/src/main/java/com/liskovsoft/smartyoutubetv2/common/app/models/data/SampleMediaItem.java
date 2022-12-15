@@ -47,6 +47,11 @@ public final class SampleMediaItem implements MediaItem {
     }
 
     @Override
+    public boolean isMovie() {
+        return false;
+    }
+
+    @Override
     public int getPercentWatched() {
         return 0;
     }

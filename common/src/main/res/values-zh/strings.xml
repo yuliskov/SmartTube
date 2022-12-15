@@ -450,10 +450,10 @@
   <string name="open_chat">聊天</string>
   <string name="place_chat_left">把聊天放在左边</string>
   <string name="use_alt_speech_recognizer">替代语音识别器</string>
-  <string name="time_format">时间模式</string>
+  <string name="time_format">时间格式</string>
   <string name="time_format_24">24 小时</string>
   <string name="time_format_12">12 小时(AM/PM)</string>
-  <string name="use_alt_speech_recognizer_desc">有严重的缺陷。只有在你对默认识别器有问题时才使用它。</string>
+  <string name="use_alt_speech_recognizer_desc">有严重的缺陷。只有在默认识别器有问题时才使用它。</string>
   <string name="speech_recognizer_system">系统(首选)	</string>
   <string name="speech_recognizer_external_1">例外情况 1 (严重失灵，为了正常使用，你需要禁止对麦克风的访问。)	</string>
   <string name="speech_recognizer_external_2">例外情况 2 (严重困扰)	</string>
@@ -462,4 +462,16 @@
   <string name="subtitle_yellow_black">黄色带黑色背景</string>
   <string name="player_pixel_ratio">像素比率</string>
   <string name="color_scheme_dark_grey_monochrome">深灰色（单色）</string>
+  <string name="speech_recognizer">语音识别器</string>
+  <string name="video_buffer_size_none">无</string>
+  <string name="disable_mic_permission">为了让这个识别器可以正常工作，请关闭应用程序的麦克风访问。</string>
+  <string name="repeat_mode_shuffle">乱序播放任何播放列表</string>
+  <string name="chat_left">左边</string>
+  <string name="chat_right">右边</string>
+  <string name="card_real_thumbnails">替换缩略图为视频中的一个画面</string>
+  <string name="card_content">在哪里获取卡片缩略图</string>
+  <string name="thumb_quality_default">默认</string>
+  <string name="thumb_quality_start">视频的起始画面</string>
+  <string name="thumb_quality_middle">视频的中间画面</string>
+  <string name="thumb_quality_end">视频的结束画面</string>
 </resources>

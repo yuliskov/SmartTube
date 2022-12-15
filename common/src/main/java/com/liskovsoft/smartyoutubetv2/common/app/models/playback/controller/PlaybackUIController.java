@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager.SeekBarSegment;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 
 import java.util.List;
@@ -20,6 +20,7 @@ public interface PlaybackUIController {
     void removeSuggestions(VideoGroup group);
     int getSuggestionsIndex(VideoGroup group);
     VideoGroup getSuggestionsByIndex(int index);
+    void focusSuggestedItem(int index);
     void resetSuggestedPosition();
     boolean isSuggestionsEmpty();
     void clearSuggestions();
@@ -39,6 +40,7 @@ public interface PlaybackUIController {
     void setContentBlockButtonState(boolean selected);
     void setChatButtonState(int buttonState);
     void setChannelIcon(String iconUrl);
+    void setSeekPreviewTitle(String title);
     void setNextTitle(String title);
     void setDebugButtonState(boolean show);
     void showDebugInfo(boolean show);

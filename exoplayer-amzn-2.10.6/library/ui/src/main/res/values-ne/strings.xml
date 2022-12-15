@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">अघिल्लो ट्रयाक</string>
+  <string name="exo_controls_next_description">अर्को ट्र्याक</string>
+  <string name="exo_controls_pause_description">पज गर्नुहोस्</string>
+  <string name="exo_controls_play_description">प्ले गर्नुहोस्</string>
+  <string name="exo_controls_stop_description">रोक्नुहोस्</string>
+  <string name="exo_controls_rewind_description">रिवाइन्ड गर्नुहोस्</string>
+  <string name="exo_controls_fastforward_description">फास्ट फर्वार्ड गर्नुहोस्</string>
+  <string name="exo_controls_repeat_off_description">कुनै पनि नदोहोर्‍याउनुहोस्</string>
+  <string name="exo_controls_repeat_one_description">एउटा दोहोर्‍याउनुहोस्</string>
+  <string name="exo_controls_repeat_all_description">सबै दोहोर्‍याउनुहोस्</string>
+  <string name="exo_controls_shuffle_on_description">मिसाउने सुविधा सक्रिय छ</string>
+  <string name="exo_controls_shuffle_off_description">मिसाउने सुविधा निष्क्रिय छ</string>
+  <string name="exo_controls_fullscreen_description">पूर्ण स्क्रिन मोड</string>
+  <string name="exo_controls_vr_description">VR मोड</string>
+  <string name="exo_download_description">डाउनलोड गर्नुहोस्</string>
+  <string name="exo_download_notification_channel_name">डाउनलोडहरू</string>
+  <string name="exo_download_downloading">डाउनलोड गरिँदै छ</string>
+  <string name="exo_download_completed">डाउनलोड सम्पन्न भयो</string>
+  <string name="exo_download_failed">डाउनलोड गर्न सकिएन</string>
+  <string name="exo_download_removing">डाउनलोडहरू हटाउँदै</string>
+  <string name="exo_track_selection_title_video">भिडियो</string>
+  <string name="exo_track_selection_title_audio">अडियो</string>
+  <string name="exo_track_selection_title_text">पाठ</string>
+  <string name="exo_track_selection_none">कुनै पनि होइन</string>
+  <string name="exo_track_selection_auto">स्वतः</string>
+  <string name="exo_track_unknown">अज्ञात</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">मोनो</string>
+  <string name="exo_track_stereo">स्टेरियो</string>
+  <string name="exo_track_surround">सराउन्ड साउन्ड</string>
+  <string name="exo_track_surround_5_point_1">5.1 सराउन्ड साउन्ड</string>
+  <string name="exo_track_surround_7_point_1">7.1 सराउन्ड साउन्ड</string>
+  <string name="exo_track_role_alternate">वैकल्पिक</string>
+  <string name="exo_track_role_supplementary">पूरक</string>
+  <string name="exo_track_role_commentary">टिप्पणी</string>
+  <string name="exo_track_role_closed_captions">उपशीर्षकहरू</string>
+  <string name="exo_track_bitrate">%1$.2f Mbps</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

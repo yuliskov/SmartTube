@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <com.google.android.exoplayer2.ui.AspectRatioFrameLayout android:id="@id/exo_content_frame"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_gravity="center">
+
+    <!-- Video surface will be inserted as the first child of the content frame. -->
+
+    <View android:id="@id/exo_shutter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"/>
+
+    <ImageView android:id="@id/exo_artwork"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"/>
+
+    <com.google.android.exoplayer2.ui.SubtitleView android:id="@id/exo_subtitles"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ProgressBar android:id="@id/exo_buffering"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_gravity="center"/>
+
+    <TextView android:id="@id/exo_error_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@color/exo_error_message_background_color"
+        android:padding="16dp"/>
+
+  </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
+
+  <FrameLayout android:id="@id/exo_ad_overlay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+
+  <FrameLayout android:id="@id/exo_overlay"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
+
+  <View android:id="@id/exo_controller_placeholder"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
+
+</merge>

@@ -11,7 +11,7 @@ public interface FormatItem {
     FormatItem VIDEO_FHD_AVC_60 = ExoFormatItem.fromVideoSpec("1920,1080,60,avc", false);
     FormatItem VIDEO_FHD_VP9_60 = ExoFormatItem.fromVideoSpec("1920,1080,60,vp9", false);
     FormatItem VIDEO_4K_VP9_60 = ExoFormatItem.fromVideoSpec("3840,2160,60,vp9", false);
-    FormatItem SUBTITLE_AUTO = ExoFormatItem.fromSubtitleParams(null);
+    FormatItem SUBTITLE_DEFAULT = ExoFormatItem.fromSubtitleParams(null);
     FormatItem AUDIO_HQ_MP4A = ExoFormatItem.fromAudioData(ExoFormatItem.FORMAT_MP4A);
     int TYPE_VIDEO = 0;
     int TYPE_AUDIO = 1;
@@ -22,6 +22,7 @@ public interface FormatItem {
     boolean isSelected();
     boolean isPreset();
     float getFrameRate();
+    String getLanguage();
     int getWidth();
     int getHeight();
     int getType();

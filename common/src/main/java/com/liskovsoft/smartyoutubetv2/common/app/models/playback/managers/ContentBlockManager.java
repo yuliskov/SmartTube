@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import android.graphics.Color;
 import androidx.core.content.ContextCompat;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
@@ -14,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
@@ -37,12 +37,6 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     private Disposable mProgressAction;
     private Disposable mSegmentsAction;
     private long mLastSkipPosMs;
-
-    public static class SeekBarSegment {
-        public int startProgress;
-        public int endProgress;
-        public int color = Color.GREEN;
-    }
 
     public static class SegmentAction {
         public String segmentCategory;
@@ -130,6 +124,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
 
+        if (item.equals(mVideo)) {
+            startSponsorWatcher();
+            return;
+        }
+
         // NOTE: SponsorBlock (when happened java.net.SocketTimeoutException) could block whole application with Schedulers.io()
         // Because Schedulers.io() reuses blocked threads in RxJava 2: https://github.com/ReactiveX/RxJava/issues/6542
         mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getEnabledCategories())
@@ -139,15 +138,25 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                         segments -> {
                             mVideo = item;
                             mSponsorSegments = segments;
-                            if (mContentBlockData.isColorMarkersEnabled()) {
-                                getController().setSeekBarSegments(toSeekBarSegments(segments));
-                            }
-                            if (mContentBlockData.isActionsEnabled()) {
-                                startPlaybackWatcher();
-                            }
+                            startSponsorWatcher();
                         },
-                        error -> Log.d(TAG, "It's ok. Nothing to block in this video. Error msg: %s", error.getMessage())
+                        error -> {
+                            Log.d(TAG, "It's ok. Nothing to block in this video. Error msg: %s", error.getMessage());
+                        }
                 );
+    }
+
+    private void startSponsorWatcher() {
+        if (mSponsorSegments == null) {
+            return;
+        }
+
+        if (mContentBlockData.isColorMarkersEnabled()) {
+            getController().setSeekBarSegments(toSeekBarSegments(mSponsorSegments));
+        }
+        if (mContentBlockData.isActionsEnabled()) {
+            startPlaybackWatcher();
+        }
     }
 
     private void startPlaybackWatcher() {
@@ -167,11 +176,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
     private void disposeActions() {
         RxUtils.disposeActions(mProgressAction, mSegmentsAction);
-        mSponsorSegments = null;
-        mVideo = null;
+        //mSponsorSegments = null;
+        //mVideo = null;
 
         // Reset colors
-        getController().setSeekBarSegments(null);
+        //getController().setSeekBarSegments(null);
         // Reset previously found segment (fix no dialog popup)
         mLastSkipPosMs = 0;
     }

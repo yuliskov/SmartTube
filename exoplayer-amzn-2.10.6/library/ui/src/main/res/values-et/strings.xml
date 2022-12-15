@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">Eelmine lugu</string>
+  <string name="exo_controls_next_description">Järgmine lugu</string>
+  <string name="exo_controls_pause_description">Peata</string>
+  <string name="exo_controls_play_description">Esita</string>
+  <string name="exo_controls_stop_description">Lõpeta</string>
+  <string name="exo_controls_rewind_description">Keri tagasi</string>
+  <string name="exo_controls_fastforward_description">Keri edasi</string>
+  <string name="exo_controls_repeat_off_description">Ära korda ühtegi</string>
+  <string name="exo_controls_repeat_one_description">Korda ühte</string>
+  <string name="exo_controls_repeat_all_description">Korda kõiki</string>
+  <string name="exo_controls_shuffle_on_description">Lülita juh. järj. esit. sisse</string>
+  <string name="exo_controls_shuffle_off_description">Lülita juh. järj. esit. välja</string>
+  <string name="exo_controls_fullscreen_description">Täisekraani režiim</string>
+  <string name="exo_controls_vr_description">VR-režiim</string>
+  <string name="exo_download_description">Allalaadimine</string>
+  <string name="exo_download_notification_channel_name">Allalaadimised</string>
+  <string name="exo_download_downloading">Allalaadimine</string>
+  <string name="exo_download_completed">Allalaadimine lõpetati</string>
+  <string name="exo_download_failed">Allalaadimine ebaõnnestus</string>
+  <string name="exo_download_removing">Allalaadimiste eemaldamine</string>
+  <string name="exo_track_selection_title_video">Video</string>
+  <string name="exo_track_selection_title_audio">Heli</string>
+  <string name="exo_track_selection_title_text">Tekst</string>
+  <string name="exo_track_selection_none">Ühtegi</string>
+  <string name="exo_track_selection_auto">Automaatne</string>
+  <string name="exo_track_unknown">Teadmata</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">Mono</string>
+  <string name="exo_track_stereo">Stereo</string>
+  <string name="exo_track_surround">Ruumiline heli</string>
+  <string name="exo_track_surround_5_point_1">Ruumiline heli 5.1</string>
+  <string name="exo_track_surround_7_point_1">Ruumiline heli 7.1</string>
+  <string name="exo_track_role_alternate">Alternatiiv</string>
+  <string name="exo_track_role_supplementary">Lisalugu</string>
+  <string name="exo_track_role_commentary">Kommentaar</string>
+  <string name="exo_track_role_closed_captions">Subtiitrid</string>
+  <string name="exo_track_bitrate">%1$.2f Mbit/s</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

@@ -40,6 +40,7 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
     private Drawable mDefaultCardImage;
     private boolean mIsAnimatedPreviewsEnabled;
     private boolean mIsCardMultilineTitleEnabled;
+    private boolean mIsCardMultilineSubtitleEnabled;
     private boolean mIsCardTextAutoScrollEnabled;
     private float mCardTextScrollSpeed;
     private int mThumbQuality;
@@ -62,6 +63,7 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
 
         mIsAnimatedPreviewsEnabled = isCardAnimatedPreviewsEnabled(context);
         mIsCardMultilineTitleEnabled = isCardMultilineTitleEnabled(context);
+        mIsCardMultilineSubtitleEnabled = isCardMultilineSubtitleEnabled(context);
         mIsCardTextAutoScrollEnabled = isCardTextAutoScrollEnabled(context);
         mCardTextScrollSpeed = getCardTextScrollSpeed(context);
         mThumbQuality = getThumbQuality(context);
@@ -77,6 +79,7 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
         };
 
         cardView.setTitleLinesNum(mIsCardMultilineTitleEnabled ? 2 : 1);
+        cardView.setContentLinesNum(mIsCardMultilineSubtitleEnabled ? 2 : 1);
         cardView.enableTextAutoScroll(mIsCardTextAutoScrollEnabled);
         cardView.setTextScrollSpeed(mCardTextScrollSpeed);
         cardView.setFocusable(true);
@@ -184,6 +187,10 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
 
     protected boolean isCardMultilineTitleEnabled(Context context) {
         return MainUIData.instance(context).isCardMultilineTitleEnabled();
+    }
+
+    protected boolean isCardMultilineSubtitleEnabled(Context context) {
+        return MainUIData.instance(context).isCardMultilineSubtitleEnabled();
     }
 
     protected float getCardTextScrollSpeed(Context context) {

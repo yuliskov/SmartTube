@@ -149,11 +149,12 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
         switch (SearchData.instance(getContext()).getSpeechRecognizerType()) {
             case SearchData.SPEECH_RECOGNIZER_SYSTEM:
+                // Don't uncomment. Sometimes system recognizer works on lower api
                 // Do nothing unless we have old api.
                 // Internal recognizer needs API >= 23. See: androidx.leanback.widget.SearchBar.startRecognition()
-                if (Build.VERSION.SDK_INT < 23) {
-                    setSpeechRecognitionCallback(mDefaultCallback);
-                }
+                //if (Build.VERSION.SDK_INT < 23) {
+                //    setSpeechRecognitionCallback(mDefaultCallback);
+                //}
                 break;
             case SearchData.SPEECH_RECOGNIZER_EXTERNAL_1:
                 setSpeechRecognitionCallback(mDefaultCallback);

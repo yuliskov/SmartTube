@@ -17,11 +17,13 @@ import android.content.Context;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import androidx.leanback.R;
 import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.Presenter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.ControlButtonPresenterSelector;
 
 /**
  * A presenter that assumes a LinearLayout container for a series
@@ -64,6 +66,14 @@ class ControlBarPresenter extends Presenter {
     interface OnControlClickedListener {
         void onControlClicked(Presenter.ViewHolder controlViewHolder, Object item,
                 BoundData data);
+    }
+
+    /**
+     * MODIFIED: Listener for control long clicked events.
+     */
+    interface OnControlLongClickedListener {
+        boolean onControlLongClicked(Presenter.ViewHolder controlViewHolder, Object item,
+                              BoundData data);
     }
 
     class ViewHolder extends Presenter.ViewHolder {
@@ -174,6 +184,19 @@ class ControlBarPresenter extends Presenter {
                         }
                     }
                 });
+                // MODIFIED: player controls: enable long clicks
+                ((ControlButtonPresenterSelector.ControlButtonPresenter) presenter).setOnLongClickListener(vh, new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Object item = getDisplayedAdapter().get(position);
+                        if (mOnControlLongClickedListener != null) {
+                            return mOnControlLongClickedListener.onControlLongClicked(itemViewHolder, item,
+                                    mData);
+                        }
+
+                        return false;
+                    }
+                });
             }
             if (vh.view.getParent() == null) {
                 mControlBar.addView(vh.view);
@@ -191,6 +214,7 @@ class ControlBarPresenter extends Presenter {
     }
 
     OnControlClickedListener mOnControlClickedListener;
+    OnControlLongClickedListener mOnControlLongClickedListener;
     OnControlSelectedListener mOnControlSelectedListener;
     private int mLayoutResourceId;
     private static int sChildMarginDefault;
@@ -219,6 +243,13 @@ class ControlBarPresenter extends Presenter {
      */
     public void setOnControlClickedListener(OnControlClickedListener listener) {
         mOnControlClickedListener = listener;
+    }
+
+    /**
+     * MODIFIED: Sets the listener for control long clicked events.
+     */
+    public void setOnControlLongClickedListener(OnControlLongClickedListener listener) {
+        mOnControlLongClickedListener = listener;
     }
 
     /**

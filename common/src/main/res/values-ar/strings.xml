@@ -35,7 +35,7 @@
   <string name="video_buffer_size_low">منخفض</string>
   <string name="video_buffer_size_med">متوسط</string>
   <string name="video_buffer_size_high">عالي</string>
-  <string name="update_changelog">التغييرات</string>
+  <string name="update_changelog">سجل التغييرات</string>
   <string name="install_update">تثبيت التحديث</string>
   <string name="section_is_empty">لا يوجد شيء هنا.</string>
   <string name="dialog_add_to_playlist">إضافة/إزالة من قائمة التشغيل</string>
@@ -75,7 +75,7 @@
   <string name="player_only_ui">واجهة المستخدم فقط</string>
   <string name="player_ui_and_pause">واجهة المستخدم وإيقاف الفيديو</string>
   <string name="player_only_pause">فقط إيقاف الفيديو</string>
-  <string name="check_for_updates">تحقق من وجود تحديثات</string>
+  <string name="check_for_updates">تحقق من توفر تحديثات</string>
   <string name="update_not_found">أنت تستخدم أحدث إصدار</string>
   <string name="update_in_progress">إنتظر…</string>
   <string name="player_ui_hide_behavior">إخفاء واجهة المستخدم أليًا</string>
@@ -92,7 +92,7 @@
   <string name="color_scheme_dark_grey">الرمادي الداكن</string>
   <string name="disable_update_check">تعطيل التحقق من التحديث</string>
   <string name="show_again">عرض مرة أخرى</string>
-  <string name="check_updates_auto">اخبرني عن وجود تحديث جديد</string>
+  <string name="check_updates_auto">الإشعار عندما يتوفر تحديث جديد</string>
   <string name="select_account_on_boot">حدد الحساب عند بدء التشغيل</string>
   <string name="player_other">خيارات متفرقة</string>
   <string name="player_full_date">التاريخ الدقيق في الوصف</string>
@@ -300,7 +300,7 @@
   <string name="content_block_action_type">اختر الإجراء</string>
   <string name="content_block_action_none">لا تفعل شيئًا</string>
   <string name="content_block_action_only_skip">تخطي فقط</string>
-  <string name="content_block_action_toast">تخطي مع الإخطار</string>
+  <string name="content_block_action_toast">تخطي مع الإشعار</string>
   <string name="content_block_action_dialog">إظهار مربع حوار التأكيد</string>
   <string name="content_block_filler">خارج الموضوع (حشو)</string>
   <string name="keyboard_auto_show">إظهار لوحة المفاتيح تلقائيًا</string>
@@ -465,6 +465,23 @@
   <string name="subtitle_yellow_black">صفراء على خلفية سوداء</string>
   <string name="player_pixel_ratio">معدل البكسلات</string>
   <string name="color_scheme_dark_grey_monochrome">رمادي مظلم(معكوس)</string>
-  <string name="disable_mic_permission">الرجاء,تعطيل الوصول الى المايكروفون لهاذا التطبيق لكي يعمل هذا الباحث بنجاح</string>
+  <string name="disable_mic_permission">من فضلك ، قم بتعطيل الوصول إلى الميكروفون للتطبيق حتى تعمل أداة التعرف هذه بشكل صحيح.</string>
   <string name="repeat_mode_shuffle">تبديل أي قائمة تشغيل عشوائيًا</string>
+  <string name="chat_left">اليسار</string>
+  <string name="chat_right">اليمين</string>
+  <string name="card_real_thumbnails">استبدال الصور المصغرة بإطار من الفيديو</string>
+  <string name="card_content">مكان انتزاع الصور المصغرة للبطاقة</string>
+  <string name="thumb_quality_default">إفتراضي</string>
+  <string name="thumb_quality_start">بداية الفيديو</string>
+  <string name="thumb_quality_middle">منتصف الفيديو</string>
+  <string name="thumb_quality_end">نهاية الفيديو</string>
+  <string name="video_buffer_size_none">بدون</string>
+  <string name="content_block_status">تحقق من حالة SpnsorBlock</string>
+  <string name="player_show_quality_info_bitrate">إضافة معدل البت (Bitrate) إلى معلومات الجودة</string>
+  <string name="player_speed_button_old_behavior">العودة الى السلوك القديم لزر السرعة</string>
+  <string name="protect_settings_with_password">حماية جميع الإعدادات بكلمة مرور</string>
+  <string name="enter_settings_password">أدخل كلمة مرور الإعدادات</string>
+  <string name="child_mode">وضع الطفل</string>
+  <string name="child_mode_desc">في هذا الوضع ، لا يمكن للمستخدم استخدام البحث أو مشاهدة أي محتوى مقترح.  ستكون الإعدادات تحت كلمة المرور.</string>
+  <string name="lost_setting_warning">سيتم تغيير إعدادات التطبيق.  تأكد من إنشاء نسخة احتياطية من الإعدادات.</string>
 </resources>

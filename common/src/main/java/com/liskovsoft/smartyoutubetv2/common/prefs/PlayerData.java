@@ -51,6 +51,7 @@ public class PlayerData extends DataChangeBase {
     private float mVideoAspectRatio;
     private int mSeekPreviewMode;
     private float mSpeed;
+    private float mLastSpeed;
     private boolean mIsAfrEnabled;
     private boolean mIsAfrFpsCorrectionEnabled;
     private boolean mIsAfrResSwitchEnabled;
@@ -58,7 +59,7 @@ public class PlayerData extends DataChangeBase {
     private int mAudioDelayMs;
     private boolean mIsRememberSpeedEnabled;
     private boolean mIsLegacyCodecsForced;
-    private int mPlaybackMode;
+    private int mRepeatMode;
     private boolean mIsSonyTimerFixEnabled;
     private boolean mIsQualityInfoEnabled;
     private boolean mIsRememberSpeedEachEnabled;
@@ -75,6 +76,7 @@ public class PlayerData extends DataChangeBase {
     private boolean mIsNumberKeySeekEnabled;
     private boolean mIsSkip24RateEnabled;
     private boolean mIsLiveChatEnabled;
+    private FormatItem mLastSubtitleFormat;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -208,13 +210,13 @@ public class PlayerData extends DataChangeBase {
         return mBackgroundMode;
     }
 
-    public void setPlaybackMode(int type) {
-        mPlaybackMode = type;
+    public void setRepeatMode(int mode) {
+        mRepeatMode = mode;
         persistState();
     }
 
     public int getRepeatMode() {
-        return mPlaybackMode;
+        return mRepeatMode;
     }
 
     public boolean isRememberSpeedEnabled() {
@@ -340,11 +342,24 @@ public class PlayerData extends DataChangeBase {
                 mAudioFormat = format;
                 break;
             case FormatItem.TYPE_SUBTITLE:
+                setLastSubtitleFormat(format);
                 mSubtitleFormat = format;
                 break;
         }
         
         persistState();
+    }
+
+    public FormatItem getLastSubtitleFormat() {
+        return mLastSubtitleFormat;
+    }
+
+    private void setLastSubtitleFormat(FormatItem format) {
+        if (format != null && !format.isDefault()) {
+            mLastSubtitleFormat = format;
+        } else if (mSubtitleFormat != null && !mSubtitleFormat.isDefault()) {
+            mLastSubtitleFormat = mSubtitleFormat;
+        }
     }
 
     public void setVideoBufferType(int type) {
@@ -419,12 +434,25 @@ public class PlayerData extends DataChangeBase {
             return;
         }
 
+        setLastSpeed(speed);
         mSpeed = speed;
         persistState();
     }
 
     public float getSpeed() {
         return mSpeed;
+    }
+
+    public void setLastSpeed(float speed) {
+        if (speed > 0 && !Helpers.floatEquals(speed, 1.0f)) {
+            mLastSpeed = speed;
+        } else if (mSpeed > 0 && !Helpers.floatEquals(mSpeed, 1.0f)) {
+            mLastSpeed = mSpeed;
+        }
+    }
+
+    public float getLastSpeed() {
+        return mLastSpeed;
     }
 
     public int getAudioDelayMs() {
@@ -473,9 +501,7 @@ public class PlayerData extends DataChangeBase {
     }
 
     public FormatItem getDefaultAudioFormat() {
-        String language = LocaleUtility.getCurrentLanguage(mPrefs.getContext());
-
-        return ExoFormatItem.fromAudioSpecs(String.format("%s,%s", "mp4a", language));
+        return ExoFormatItem.fromAudioSpecs(String.format("%s,null", "mp4a"));
     }
 
     public FormatItem getDefaultVideoFormat() {
@@ -557,7 +583,7 @@ public class PlayerData extends DataChangeBase {
         // old afr delay sec was there
         mAudioDelayMs = Helpers.parseInt(split, 20, 0);
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, false);
-        mPlaybackMode = Helpers.parseInt(split, 22, PlaybackUIController.REPEAT_MODE_ALL);
+        mRepeatMode = Helpers.parseInt(split, 22, PlaybackUIController.REPEAT_MODE_ALL);
         // didn't remember what was there
         mIsLegacyCodecsForced = Build.VERSION.SDK_INT <= 19;
         mIsSonyTimerFixEnabled = Helpers.parseBoolean(split, 25, false);
@@ -581,6 +607,8 @@ public class PlayerData extends DataChangeBase {
         mIsSkip24RateEnabled = Helpers.parseBoolean(split, 44, false);
         mAfrPauseMs = Helpers.parseInt(split, 45, 0);
         mIsLiveChatEnabled = Helpers.parseBoolean(split, 46, Build.VERSION.SDK_INT > 19);
+        mLastSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 47)), FormatItem.SUBTITLE_DEFAULT);
+        mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -594,12 +622,12 @@ public class PlayerData extends DataChangeBase {
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs,
-                mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
+                mIsRememberSpeedEnabled, mRepeatMode, null, // didn't remember what was there
                 mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
-                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled));
+                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, Helpers.toString(mLastSubtitleFormat), mLastSpeed));
 
         super.persistState();
     }

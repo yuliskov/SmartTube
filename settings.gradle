@@ -1,4 +1,4 @@
-include ':smarttubetv', ':common', ':openvpn', ':chatkit'
+include ':smarttubetv', ':common', ':chatkit'
 
 def rootDir = settingsDir
 
@@ -11,6 +11,11 @@ gradle.ext.sharedModulesConstants = new File(gradle.ext.sharedModulesRoot, 'cons
 // git submodule
 gradle.ext.mediaServiceCoreRoot = new File(rootDir, '../MediaServiceCore').exists() ? new File(rootDir, '../MediaServiceCore') : new File(rootDir, './MediaServiceCore')
 apply from: new File(gradle.ext.mediaServiceCoreRoot, 'core_settings.gradle')
+
+// git submodule
+gradle.ext.exoplayerRoot = new File(rootDir, './exoplayer-amzn-2.10.6')
+gradle.ext.exoplayerModulePrefix = 'exoplayer-'
+apply from: new File(gradle.ext.exoplayerRoot, 'core_settings.gradle')
 
 // git submodule
 // gradle.ext.exoplayerRoot = new File(rootDir, '../AmznExoPlayer2.10.6').exists() ? new File(rootDir, '../AmznExoPlayer2.10.6') : new File(rootDir, './AmznExoPlayer2.10.6')

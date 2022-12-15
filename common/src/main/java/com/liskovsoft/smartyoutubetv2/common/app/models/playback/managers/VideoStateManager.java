@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
@@ -15,8 +16,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -30,14 +34,23 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     private FormatItem mTempVideoFormat;
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
+    private GeneralData mGeneralData;
     private PlayerTweaksData mPlayerTweaksData;
     private VideoStateService mStateService;
     private boolean mIsPlayBlocked;
     private int mTickleLeft;
+    private boolean mIsBuffering;
+    private final Runnable mStreamEndCheck = () -> {
+        if (getVideo() != null && getVideo().isLive && mIsBuffering &&
+                getController().getDurationMs() - getController().getPositionMs() < 3 * 60_000) {
+            getController().reloadPlayback();
+        }
+    };
 
     @Override
     public void onInitDone() { // called each time a video opened from the browser
         mPlayerData = PlayerData.instance(getActivity());
+        mGeneralData = GeneralData.instance(getActivity());
         mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
         mStateService = VideoStateService.instance(getActivity());
 
@@ -55,6 +68,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         // Ensure that we aren't running on presenter init stage
         if (getController() != null) {
             if (!item.equals(getVideo())) { // video might be opened twice (when remote connection enabled). Fix for that.
+                // Reset auto-save history timer
+                mTickleLeft = 0;
                 // Save state of the previous video.
                 // In case video opened from phone and other stuff.
                 saveState();
@@ -103,6 +118,9 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public void onEngineInitialized() {
+        // Reset auto-save history timer
+        mTickleLeft = 0;
+
         // Restore before video loaded.
         // This way we override auto track selection mechanism.
         //restoreFormats();
@@ -115,13 +133,13 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public void onEngineReleased() {
-        mTickleLeft = 0;
-
         // Save previous state
         if (getController().containsMedia()) {
             setPlayEnabled(getController().getPlayWhenReady());
             saveState();
         }
+
+        Utils.removeCallbacks(mStreamEndCheck);
     }
 
     @Override
@@ -134,9 +152,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
         // Restore speed on LIVE end
         restoreSpeed();
-        //if (isLiveThreshold()) {
-        //    getController().setSpeed(1.0f);
-        //}
     }
 
     @Override
@@ -154,6 +169,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public void onVideoLoaded(Video item) {
+        mIsBuffering = false;
         // Actual video that match currently loaded one.
         mVideo = item;
 
@@ -175,6 +191,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public void onPlay() {
+        mIsBuffering = false;
         setPlayEnabled(true);
         showHideScreensaver(false);
     }
@@ -212,14 +229,15 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public void onBuffering() {
+        mIsBuffering = true;
+
         // Live stream starts to buffer after the end
         showHideScreensaver(true);
 
         // Restore speed on LIVE end or after seek
         restoreSpeed();
-        //if (isLiveThreshold()) {
-        //    getController().setSpeed(1.0f);
-        //}
+
+        Utils.postDelayed(mStreamEndCheck, 10_000);
     }
 
     @Override
@@ -249,6 +267,40 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         persistState();
     }
 
+    @Override
+    public void onVideoSpeedClicked(boolean enabled) {
+        if (Helpers.floatEquals(mPlayerData.getLastSpeed(), 1.0f) || mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()) {
+            onVideoSpeedLongClicked(enabled);
+        } else {
+            State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
+            float lastSpeed = mPlayerData.getLastSpeed();
+            if (state != null && mPlayerData.isRememberSpeedEachEnabled()) {
+                lastSpeed = !Helpers.floatEquals(1.0f, state.speed) ? state.speed : lastSpeed;
+                mPlayerData.setLastSpeed(lastSpeed);
+                mStateService.save(new State(state.videoId, state.positionMs, state.durationMs, enabled ? 1.0f : lastSpeed));
+            }
+            mPlayerData.setSpeed(enabled ? 1.0f : lastSpeed);
+            getController().setSpeed(enabled ? 1.0f : lastSpeed);
+        }
+    }
+
+    @Override
+    public void onVideoSpeedLongClicked(boolean enabled) {
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
+        settingsPresenter.clear();
+
+        // suppose live stream if buffering near the end
+        // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
+        AppDialogUtil.appendSpeedDialogItems(getActivity(), settingsPresenter, getController(), mPlayerData);
+
+        settingsPresenter.showDialog(() -> {
+            State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
+            if (state != null && mPlayerData.isRememberSpeedEachEnabled()) {
+                mStateService.save(new State(state.videoId, state.positionMs, state.durationMs, mPlayerData.getSpeed()));
+            }
+        });
+    }
+
     private void clearStateOfNextVideo() {
         if (getVideo() != null && getVideo().nextMediaItem != null) {
             resetPosition(getVideo().nextMediaItem.getVideoId());
@@ -266,9 +318,9 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         State state = mStateService.getByVideoId(item.videoId);
 
         // Reset position of music videos
-        boolean isShort = state != null && (state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled());
+        boolean isShort = state != null && state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled();
 
-        if (isShort || item.isLive) {
+        if (isShort || item.isLive || !mGeneralData.isHistoryEnabled()) {
             resetPosition(item);
         }
     }
@@ -406,7 +458,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
             return;
         }
 
-        RxUtils.disposeActions(mHistoryAction);
+        // Is this really safe? Could I lost history because of this?
+        //RxUtils.disposeActions(mHistoryAction);
 
         MediaService service = YouTubeMediaService.instance();
         MediaItemService mediaItemManager = service.getMediaItemService();

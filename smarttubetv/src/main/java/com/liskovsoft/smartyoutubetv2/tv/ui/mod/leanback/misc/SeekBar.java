@@ -30,7 +30,7 @@ import android.view.View;
 import androidx.annotation.RestrictTo;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.leanback.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager.SeekBarSegment;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +84,6 @@ public final class SeekBar extends View {
     private int mActiveRadius;
     private int mBarHeight;
     private int mActiveBarHeight;
-    private List<SeekBarSegment> mSegments;
     private final List<SeekBarRectangle> mSeekBarRectangles = new ArrayList<>();
 
     private AccessibilitySeekListener mAccessibilitySeekListener;
@@ -133,7 +132,7 @@ public final class SeekBar extends View {
             int direction, Rect previouslyFocusedRect) {
         super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
         calculate();
-        calculateSegments();
+        //calculateSegments();
     }
 
     @Override
@@ -282,14 +281,13 @@ public final class SeekBar extends View {
     }
 
     public void setSegments(List<SeekBarSegment> segments) {
-        mSegments = segments;
-        calculateSegments();
+        calculateSegments(segments);
     }
 
-    private void calculateSegments() {
-        mSeekBarRectangles.clear();
-
-        if (mSegments == null) {
+    private void calculateSegments(List<SeekBarSegment> segments) {
+        if (segments == null) {
+            mSeekBarRectangles.clear();
+            //invalidate();
             return;
         }
 
@@ -302,7 +300,7 @@ public final class SeekBar extends View {
         final int radius = isFocused() ? mActiveRadius : mBarHeight / 2;
         final int progressWidth = width - radius * 2;
 
-        for (SeekBarSegment segment : mSegments) {
+        for (SeekBarSegment segment : segments) {
             if (segment.endProgress > mMax || segment.endProgress < 0) {
                 continue;
             }
@@ -319,7 +317,7 @@ public final class SeekBar extends View {
             mSeekBarRectangles.add(rect);
         }
 
-        invalidate();
+        //invalidate();
     }
 
     // Touch interceptor

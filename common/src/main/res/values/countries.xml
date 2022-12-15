@@ -3,6 +3,7 @@
     <string-array name="supported_countries">
         <item>United States|US</item>
         <item>Great Britain|GB</item>
+        <item>Croatia|HR</item>
         <item>Scotland|GB-SCT</item>
         <item>Canada|CA</item>
         <item>Україна|UA</item>
@@ -36,10 +37,12 @@
         <item>Slovenia|SL</item>
         <item>Sweden|SE</item>
         <item>New Zealand|NZ</item>
+        <item>Nigeria|NG</item>
         <item>Australia|AU</item>
         <item>Switzerland|CH</item>
         <item>Israel|IL</item>
         <item>Saudi Arabia|SA</item>
+        <item>Morocco|MA</item>
         <item>Bangladesh|BD</item>
         <item>Brasil|BR</item>
         <item>Portugalia|PT</item>

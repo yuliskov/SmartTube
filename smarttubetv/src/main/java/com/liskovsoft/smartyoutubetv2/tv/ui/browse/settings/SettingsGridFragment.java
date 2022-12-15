@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.ArrayObjectAdapter;
-import androidx.leanback.widget.FocusHighlight;
 import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
@@ -14,6 +13,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.SettingsCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsCategoryFragment;
@@ -117,11 +118,27 @@ public class SettingsGridFragment extends GridFragment implements SettingsCatego
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof SettingsItem) {
-                ((SettingsItem) item).onClick.run();
+                String password = GeneralData.instance(getContext()).getSettingsPassword();
+
+                if (password == null) {
+                    ((SettingsItem) item).onClick.run();
+                } else {
+                    SimpleEditDialog.show(
+                            getContext(),
+                            "", newValue -> {
+                                if (password.equals(newValue)) {
+                                    ((SettingsItem) item).onClick.run();
+                                }
+                            },
+                            getContext().getString(R.string.enter_settings_password),
+                            true
+                    );
+                }
+
                 // Close PIP inside Settings section
                 PlaybackPresenter.instance(getContext()).forceFinish();
             } else {
-                Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), item.toString(), Toast.LENGTH_SHORT).show();
             }
         }
     }

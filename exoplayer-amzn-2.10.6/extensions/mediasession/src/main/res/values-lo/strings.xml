@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">ບໍ່ຫຼິ້ນຊ້ຳ</string>
+  <string name="exo_media_action_repeat_one_description">ຫຼິ້ນຊໍ້າ</string>
+  <string name="exo_media_action_repeat_all_description">ຫຼິ້ນຊ້ຳທັງໝົດ</string>
+</resources>

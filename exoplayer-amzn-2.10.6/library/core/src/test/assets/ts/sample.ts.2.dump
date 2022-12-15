@@ -1,0 +1,103 @@
+seekMap:
+  isSeekable = true
+  duration = 66733
+  getPosition(0) = [[timeUs=0, position=0]]
+numberOfTracks = 3
+track 256:
+  format:
+    bitrate = -1
+    id = 1/256
+    containerMimeType = null
+    sampleMimeType = video/mpeg2
+    maxInputSize = -1
+    width = 640
+    height = 426
+    frameRate = -1.0
+    rotationDegrees = 0
+    pixelWidthHeightRatio = 1.0
+    channelCount = -1
+    sampleRate = -1
+    pcmEncoding = -1
+    encoderDelay = 0
+    encoderPadding = 0
+    subsampleOffsetUs = 9223372036854775807
+    selectionFlags = 0
+    language = null
+    drmInitData = -
+    initializationData:
+      data = length 22, hash CE183139
+  total output bytes = 45026
+  sample count = 2
+  sample 0:
+    time = 77854
+    flags = 1
+    data = length 20711, hash 34341E8
+  sample 1:
+    time = 111221
+    flags = 0
+    data = length 18112, hash EC44B35B
+track 257:
+  format:
+    bitrate = -1
+    id = 1/257
+    containerMimeType = null
+    sampleMimeType = audio/mpeg-L2
+    maxInputSize = 4096
+    width = -1
+    height = -1
+    frameRate = -1.0
+    rotationDegrees = 0
+    pixelWidthHeightRatio = 1.0
+    channelCount = 1
+    sampleRate = 44100
+    pcmEncoding = -1
+    encoderDelay = 0
+    encoderPadding = 0
+    subsampleOffsetUs = 9223372036854775807
+    selectionFlags = 0
+    language = und
+    drmInitData = -
+    initializationData:
+  total output bytes = 5015
+  sample count = 4
+  sample 0:
+    time = 66943
+    flags = 1
+    data = length 1253, hash 727FD1C6
+  sample 1:
+    time = 93065
+    flags = 1
+    data = length 1254, hash 73FB07B8
+  sample 2:
+    time = 119188
+    flags = 1
+    data = length 1254, hash 73FB07B8
+  sample 3:
+    time = 145310
+    flags = 1
+    data = length 1254, hash 73FB07B8
+track 8448:
+  format:
+    bitrate = -1
+    id = 1/8448
+    containerMimeType = null
+    sampleMimeType = application/cea-608
+    maxInputSize = -1
+    width = -1
+    height = -1
+    frameRate = -1.0
+    rotationDegrees = 0
+    pixelWidthHeightRatio = 1.0
+    channelCount = -1
+    sampleRate = -1
+    pcmEncoding = -1
+    encoderDelay = 0
+    encoderPadding = 0
+    subsampleOffsetUs = 9223372036854775807
+    selectionFlags = 0
+    language = null
+    drmInitData = -
+    initializationData:
+  total output bytes = 0
+  sample count = 0
+tracksEnded = true

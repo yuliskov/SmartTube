@@ -1,0 +1,6 @@
+# Proguard rules specific to the IMA extension.
+
+-keep class com.google.ads.interactivemedia.** { *; }
+-keep interface com.google.ads.interactivemedia.** { *; }
+-keep class com.google.obf.** { *; }
+-keep interface com.google.obf.** { *; }

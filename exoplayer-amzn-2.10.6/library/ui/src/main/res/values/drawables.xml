@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+  <drawable name="exo_controls_play">@drawable/exo_icon_play</drawable>
+  <drawable name="exo_controls_pause">@drawable/exo_icon_pause</drawable>
+  <drawable name="exo_controls_next">@drawable/exo_icon_next</drawable>
+  <drawable name="exo_controls_previous">@drawable/exo_icon_previous</drawable>
+  <drawable name="exo_controls_fastforward">@drawable/exo_icon_fastforward</drawable>
+  <drawable name="exo_controls_rewind">@drawable/exo_icon_rewind</drawable>
+  <drawable name="exo_notification_play">@drawable/exo_icon_play</drawable>
+  <drawable name="exo_notification_pause">@drawable/exo_icon_pause</drawable>
+  <drawable name="exo_notification_next">@drawable/exo_icon_next</drawable>
+  <drawable name="exo_notification_previous">@drawable/exo_icon_previous</drawable>
+  <drawable name="exo_notification_fastforward">@drawable/exo_icon_fastforward</drawable>
+  <drawable name="exo_notification_rewind">@drawable/exo_icon_rewind</drawable>
+  <drawable name="exo_notification_stop">@drawable/exo_icon_stop</drawable>
+</resources>

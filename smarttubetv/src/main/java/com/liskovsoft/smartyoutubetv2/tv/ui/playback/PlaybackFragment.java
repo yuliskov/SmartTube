@@ -31,7 +31,6 @@ import com.google.android.exoplayer2.ControlDispatcher;
 import com.google.android.exoplayer2.DefaultControlDispatcher;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
@@ -44,7 +43,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager.SeekBarSegment;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -69,7 +68,6 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListene
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.SeekModePlaybackFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface.SurfacePlaybackFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigator;
@@ -302,17 +300,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         releasePlayer();
         initializePlayer();
-
-        //if (mPlayer != null) {
-        //    mEventListener.onEngineReleased();
-        //}
-        //
-        //destroyPlayerObjects();
-        //createPlayerObjects();
-        //
-        //if (mPlayer != null) {
-        //    mEventListener.onEngineInitialized();
-        //}
     }
 
     @Override
@@ -738,8 +725,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onClosedCaptions() {
-            mEventListener.onSubtitleClicked();
+        public void onClosedCaptions(boolean enabled) {
+            mEventListener.onSubtitleClicked(enabled);
+        }
+
+        @Override
+        public void onClosedCaptionsLongPress(boolean enabled) {
+            mEventListener.onSubtitleLongClicked(enabled);
         }
 
         @Override
@@ -753,8 +745,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onVideoSpeed() {
-            mEventListener.onVideoSpeedClicked();
+        public void onVideoSpeed(boolean enabled) {
+            mEventListener.onVideoSpeedClicked(enabled);
+        }
+
+        @Override
+        public void onVideoSpeedLongPress(boolean enabled) {
+            mEventListener.onVideoSpeedLongClicked(enabled);
         }
 
         @Override
@@ -768,8 +765,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onChat() {
-            mEventListener.onChatClicked();
+        public void onChat(boolean enabled) {
+            mEventListener.onChatClicked(enabled);
+        }
+
+        @Override
+        public void onChatLongPress(boolean enabled) {
+            mEventListener.onChatLongClicked(enabled);
         }
 
         @Override
@@ -885,14 +887,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void setSeekBarSegments(List<SeekBarSegment> segments) {
-        if (getActivity() == null) {
-            return;
-        }
-
-        SeekBar seekBar = getActivity().findViewById(R.id.playback_progress);
-
-        if (seekBar != null) {
-            seekBar.setSegments(segments);
+        if (mPlayerGlue != null) {
+            mPlayerGlue.setSeekBarSegments(segments);
         }
     }
 
@@ -1332,6 +1328,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public void setSeekPreviewTitle(String title) {
+        if (mPlayerGlue != null) {
+            mPlayerGlue.setSeekPreviewTitle(title);
+        }
+    }
+
+    @Override
     public void setNextTitle(String title) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setNextTitle(title);
@@ -1470,6 +1473,17 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public void focusSuggestedItem(int index) {
+        if (mRowsSupportFragment != null) {
+            ViewHolder vh = mRowsSupportFragment.getRowViewHolder(SUGGESTIONS_START_INDEX);
+            // Skip PlaybackRowPresenter.ViewHolder
+            if (vh instanceof ListRowPresenter.ViewHolder) {
+                ((ListRowPresenter.ViewHolder) vh).getGridView().setSelectedPosition(index);
+            }
+        }
+    }
+
+    @Override
     public void resetSuggestedPosition() {
         setPlayerRowIndex(0);
     }
@@ -1521,6 +1535,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // Hide last frame of the previous video
         showBackgroundColor(R.color.player_background);
         setChatReceiver(null);
+        setSeekBarSegments(null);
     }
 
     /**

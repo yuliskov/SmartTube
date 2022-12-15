@@ -3,9 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 
 public interface PlayerUiEventListener {
-    int REPEAT_NONE = 0;
-    int REPEAT_ONE = 1;
-    int REPEAT_ALL = 2;
     void onSuggestionItemClicked(Video item);
     void onSuggestionItemLongClicked(Video item);
     void onScrollEnd(Video item);
@@ -20,13 +17,16 @@ public interface PlayerUiEventListener {
     void onDislikeClicked(boolean dislike);
     void onLikeClicked(boolean like);
     void onChannelClicked();
-    void onSubtitleClicked();
+    void onSubtitleClicked(boolean enabled);
+    void onSubtitleLongClicked(boolean enabled);
     void onPlaylistAddClicked();
     void onDebugInfoClicked(boolean enabled);
-    void onVideoSpeedClicked();
+    void onVideoSpeedClicked(boolean enabled);
+    void onVideoSpeedLongClicked(boolean enabled);
     void onSeekIntervalClicked();
     void onContentBlockClicked(boolean enabled);
-    void onChatClicked();
+    void onChatClicked(boolean enabled);
+    void onChatLongClicked(boolean enabled);
     void onVideoInfoClicked();
     void onShareLinkClicked();
     void onSearchClicked();

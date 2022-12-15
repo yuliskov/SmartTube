@@ -52,8 +52,7 @@ dependencies {
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion
     androidTestImplementation 'androidx.test.ext:junit:' + testXSupportLibraryVersion
-
-    //implementation project(':openvpn')
+    
     implementation project(':sharedutils')
     implementation project(':mediaserviceinterfaces')
     implementation project(':youtubeapi')
@@ -63,16 +62,16 @@ dependencies {
 
     //////// BEGIN EXOPLAYER /////////
 
-    implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
-    implementation 'com.amazon.android:extension-okhttp:' + amazonExoplayerVersion
+    implementation project(':exoplayer-library')
+    implementation project(':exoplayer-extension-okhttp')
+
+    // implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
+    // implementation 'com.amazon.android:extension-okhttp:' + amazonExoplayerVersion
 
     // implementation 'com.google.android.exoplayer:exoplayer:' + exoplayerVersion
     // implementation 'com.google.android.exoplayer:extension-okhttp:' + exoplayerVersion
 
     // implementation 'com.github.amzn:exoplayer-amazon-port:' + amazonExoplayerJitpackVersion
-
-    // implementation project(':exoplayer-library')
-    // implementation project(':exoplayer-extension-okhttp')
 
     //////// END EXOPLAYER //////////
 

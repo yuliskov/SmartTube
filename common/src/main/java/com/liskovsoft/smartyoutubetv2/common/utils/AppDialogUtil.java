@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
-import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
+import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -29,7 +29,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
-import com.liskovsoft.youtubeapi.service.data.YouTubeVideoPlaylistInfo;
+import com.liskovsoft.youtubeapi.service.data.YouTubePlaylistInfo;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -55,6 +55,13 @@ public class AppDialogUtil {
      * Adds share link items to existing dialog.
      */
     public static void appendShareLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video) {
+        appendShareLinkDialogItem(context, dialogPresenter, video, -1);
+    }
+
+    /**
+     * Adds share link items to existing dialog.
+     */
+    public static void appendShareLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video, int positionSec) {
         if (video == null) {
             return;
         }
@@ -66,7 +73,7 @@ public class AppDialogUtil {
         dialogPresenter.appendSingleButton(
                 UiOptionItem.from(context.getString(R.string.share_link), optionItem -> {
                     if (video.videoId != null) {
-                        Utils.displayShareVideoDialog(context, video.videoId, (int)(video.getPositionMs() / 1_000));
+                        Utils.displayShareVideoDialog(context, video.videoId, positionSec == -1 ? Utils.toSec(video.getPositionMs()) : positionSec);
                     } else if (video.channelId != null) {
                         Utils.displayShareChannelDialog(context, video.channelId);
                     }
@@ -77,18 +84,54 @@ public class AppDialogUtil {
      * Adds share link items to existing dialog.
      */
     public static void appendShareEmbedLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video) {
+        appendShareEmbedLinkDialogItem(context, dialogPresenter, video, -1);
+    }
+
+    /**
+     * Adds share link items to existing dialog.
+     */
+    public static void appendShareEmbedLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video, int positionSec) {
         if (video == null) {
             return;
         }
 
-        if (video.videoId == null && video.channelId == null) {
+        if (video.videoId == null) {
             return;
         }
 
         dialogPresenter.appendSingleButton(
                 UiOptionItem.from(context.getString(R.string.share_embed_link), optionItem -> {
                     if (video.videoId != null) {
-                        Utils.displayShareEmbedVideoDialog(context, video.videoId);
+                        Utils.displayShareEmbedVideoDialog(context, video.videoId, positionSec == -1 ? Utils.toSec(video.getPositionMs()) : positionSec);
+                    }
+                }));
+    }
+
+    /**
+     * Adds QR code item to existing dialog.
+     */
+    public static void appendShareQRLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video) {
+        appendShareQRLinkDialogItem(context, dialogPresenter, video, -1);
+    }
+
+    /**
+     * Adds QR code item to existing dialog.
+     */
+    public static void appendShareQRLinkDialogItem(Context context, AppDialogPresenter dialogPresenter, Video video, int positionSec) {
+        if (video == null) {
+            return;
+        }
+
+        if (video.videoId == null) {
+            return;
+        }
+
+        dialogPresenter.appendSingleButton(
+                UiOptionItem.from(context.getString(R.string.share_link) + " (QR)", optionItem -> {
+                    dialogPresenter.closeDialog(); // pause bg video
+                    if (video.videoId != null) {
+                        Utils.openLink(context, Utils.toQrCodeLink(
+                                Utils.convertToFullVideoUrl(video.videoId, positionSec == -1 ? Utils.toSec(video.getPositionMs()) : positionSec).toString()));
                     }
                 }));
     }
@@ -374,7 +417,11 @@ public class AppDialogUtil {
         return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, videoZoomTitle, options);
     }
 
-    public static void showConfirmationDialog(Context context, Runnable onConfirm, String title) {
+    public static void showConfirmationDialog(Context context, String title, Runnable onConfirm) {
+        showConfirmationDialog(context, title, onConfirm, () -> {});
+    }
+
+    public static void showConfirmationDialog(Context context, String title, Runnable onConfirm, Runnable onCancel) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(context);
         settingsPresenter.clear();
 
@@ -387,7 +434,10 @@ public class AppDialogUtil {
                 }));
 
         options.add(UiOptionItem.from(context.getString(R.string.cancel),
-                option -> settingsPresenter.goBack()));
+                option -> {
+                    settingsPresenter.goBack();
+                    onCancel.run();
+                }));
 
         settingsPresenter.appendStringsCategory(title, options);
 
@@ -397,7 +447,7 @@ public class AppDialogUtil {
     public static void appendSeekIntervalDialogItems(Context context, AppDialogPresenter dialogPresenter, PlayerData playerData, boolean closeOnSelect) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (int intervalMs : new int[] {1_000, 2_000, 3_000, 5_000, 10_000, 15_000, 20_000, 30_000, 60_000}) {
+        for (int intervalMs : new int[] {1_000, 2_000, 3_000, 5_000, 7_000, 10_000, 15_000, 20_000, 30_000, 60_000}) {
             options.add(UiOptionItem.from(context.getString(R.string.seek_interval_sec, Helpers.toString(intervalMs / 1_000f)),
                     optionItem -> {
                         playerData.setStartSeekIncrementMs(intervalMs);
@@ -414,7 +464,7 @@ public class AppDialogUtil {
         dialogPresenter.appendRadioCategory(context.getString(R.string.seek_interval), options);
     }
 
-    public static void appendSpeedDialogItems(Context context, AppDialogPresenter settingsPresenter, PlayerData playerData, PlaybackController playbackController) {
+    public static void appendSpeedDialogItems(Context context, AppDialogPresenter settingsPresenter, PlaybackController playbackController, PlayerData playerData) {
         List<OptionItem> items = new ArrayList<>();
         float[] speedValues = new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f};
 
@@ -424,7 +474,6 @@ public class AppDialogUtil {
                     optionItem -> {
                         playerData.setSpeed(speed);
                         playbackController.setSpeed(speed);
-                        //settingsPresenter.closeDialog();
                     },
                     playbackController.getSpeed() == speed));
         }
@@ -443,7 +492,7 @@ public class AppDialogUtil {
 
         MediaItemService itemManager = YouTubeMediaItemService.instance();
 
-        Disposable playlistsInfoAction = itemManager.getVideoPlaylistsInfoObserve(video.videoId)
+        Disposable playlistsInfoAction = itemManager.getPlaylistsInfoObserve(video.videoId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -455,8 +504,8 @@ public class AppDialogUtil {
                 );
     }
 
-    public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback, List<VideoPlaylistInfo> videoPlaylistInfos, Runnable onFinish) {
-        if (videoPlaylistInfos == null) {
+    public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback, List<PlaylistInfo> playlistInfos, Runnable onFinish) {
+        if (playlistInfos == null) {
             MessageHelpers.showMessage(context, R.string.msg_signed_users_only);
             return;
         }
@@ -464,22 +513,22 @@ public class AppDialogUtil {
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(context);
         dialogPresenter.clear();
 
-        appendPlaylistDialogContent(context, video, callback, dialogPresenter, videoPlaylistInfos);
+        appendPlaylistDialogContent(context, video, callback, dialogPresenter, playlistInfos);
         dialogPresenter.showDialog(context.getString(R.string.dialog_add_to_playlist), () -> {
             if (onFinish != null) onFinish.run();
         });
     }
 
     private static void appendPlaylistDialogContent(
-            Context context, Video video, VideoMenuCallback callback, AppDialogPresenter dialogPresenter, List<VideoPlaylistInfo> videoPlaylistInfos) {
+            Context context, Video video, VideoMenuCallback callback, AppDialogPresenter dialogPresenter, List<PlaylistInfo> playlistInfos) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
+        for (PlaylistInfo playlistInfo : playlistInfos) {
             options.add(UiOptionItem.from(
                     playlistInfo.getTitle(),
                     (item) -> {
-                        if (playlistInfo instanceof YouTubeVideoPlaylistInfo) {
-                            ((YouTubeVideoPlaylistInfo) playlistInfo).setSelected(item.isSelected());
+                        if (playlistInfo instanceof YouTubePlaylistInfo) {
+                            ((YouTubePlaylistInfo) playlistInfo).setSelected(item.isSelected());
                         }
                         addRemoveFromPlaylist(context, video, callback, playlistInfo.getPlaylistId(), item.isSelected());
                         GeneralData.instance(context).setLastPlaylistId(playlistInfo.getPlaylistId());
@@ -515,7 +564,7 @@ public class AppDialogUtil {
 
         if (video.hasPlaylist()) {
             showPlaylistOrderDialog(context, video.playlistId, onClose);
-        } else if (video.belongsToPlaylists()) {
+        } else if (video.belongsToUserPlaylists()) {
             MediaServiceManager.instance().loadChannelUploads(video, group -> {
                 MediaItem first = group.getMediaItems().get(0);
                 String playlistId = first.getPlaylistId();

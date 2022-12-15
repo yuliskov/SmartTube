@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.google.android.exoplayer2.demo">
+
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+  <uses-feature android:name="android.software.leanback" android:required="false"/>
+  <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
+  <uses-sdk/>
+
+  <application
+      android:label="@string/application_name"
+      android:icon="@mipmap/ic_launcher"
+      android:banner="@drawable/ic_banner"
+      android:largeHeap="true"
+      android:allowBackup="false"
+      android:name="com.google.android.exoplayer2.demo.DemoApplication"
+      tools:ignore="UnusedAttribute">
+
+    <activity android:name="com.google.android.exoplayer2.demo.SampleChooserActivity"
+        android:configChanges="keyboardHidden"
+        android:label="@string/application_name"
+        android:theme="@style/Theme.AppCompat">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+        <category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="http"/>
+        <data android:scheme="https"/>
+        <data android:scheme="content"/>
+        <data android:scheme="asset"/>
+        <data android:scheme="file"/>
+        <data android:host="*"/>
+        <data android:pathPattern=".*\\.exolist\\.json"/>
+      </intent-filter>
+    </activity>
+
+    <activity android:name="com.google.android.exoplayer2.demo.PlayerActivity"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+        android:launchMode="singleTop"
+        android:label="@string/application_name"
+        android:theme="@style/PlayerTheme">
+      <intent-filter>
+        <action android:name="com.google.android.exoplayer.demo.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:scheme="http"/>
+        <data android:scheme="https"/>
+        <data android:scheme="content"/>
+        <data android:scheme="asset"/>
+        <data android:scheme="file"/>
+      </intent-filter>
+      <intent-filter>
+        <action android:name="com.google.android.exoplayer.demo.action.VIEW_LIST"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
+    </activity>
+
+    <service android:name="com.google.android.exoplayer2.demo.DemoDownloadService"
+        android:exported="false">
+      <intent-filter>
+        <action android:name="com.google.android.exoplayer.downloadService.action.RESTART"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
+    </service>
+
+    <service android:name="com.google.android.exoplayer2.scheduler.PlatformScheduler$PlatformSchedulerService"
+        android:permission="android.permission.BIND_JOB_SERVICE"
+        android:exported="true"/>
+
+  </application>
+
+</manifest>

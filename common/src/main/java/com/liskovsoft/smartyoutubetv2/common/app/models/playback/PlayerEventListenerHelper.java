@@ -194,7 +194,12 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onSubtitleClicked() {
+    public void onSubtitleClicked(boolean enabled) {
+        // NOP
+    }
+
+    @Override
+    public void onSubtitleLongClicked(boolean enabled) {
         // NOP
     }
 
@@ -214,7 +219,12 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onVideoSpeedClicked() {
+    public void onVideoSpeedClicked(boolean enabled) {
+        // NOP
+    }
+
+    @Override
+    public void onVideoSpeedLongClicked(boolean enabled) {
         // NOP
     }
 
@@ -229,7 +239,12 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onChatClicked() {
+    public void onChatClicked(boolean enabled) {
+        // NOP
+    }
+
+    @Override
+    public void onChatLongClicked(boolean enabled) {
         // NOP
     }
 

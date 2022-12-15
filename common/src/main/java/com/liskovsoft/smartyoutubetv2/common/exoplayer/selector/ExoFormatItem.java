@@ -301,6 +301,10 @@ public class ExoFormatItem implements FormatItem {
         return formatItem;
     }
 
+    /**
+     * Codec and language (lower case) delimited by comma
+     * @param spec codec, language
+     */
     public static ExoFormatItem fromAudioSpecs(String spec) {
         if (spec == null) {
             return null;
@@ -330,6 +334,7 @@ public class ExoFormatItem implements FormatItem {
         formatItem.mTrack = mediaTrack;
         formatItem.mType = TYPE_SUBTITLE;
         formatItem.mLanguage = langCode;
+        formatItem.mIsDefault = langCode == null;
 
         mediaTrack.format = Format.createTextSampleFormat(null, null, -1, langCode);
 
@@ -359,6 +364,11 @@ public class ExoFormatItem implements FormatItem {
     @Override
     public float getFrameRate() {
         return mFrameRate;
+    }
+
+    @Override
+    public String getLanguage() {
+        return mLanguage;
     }
 
     @Override

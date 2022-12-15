@@ -200,7 +200,7 @@
     <string name="video_preset_disabled">Without preset</string>
     <string name="video_preset_enabled">Format of the next video will be set according to preset</string>
     <string name="player_sleep_timer">Sleep timer</string>
-    <string name="player_show_quality_info">Show quality info in controls bar</string>
+    <string name="player_show_quality_info">Show quality info in the controls bar</string>
     <string name="player_remember_each_speed">Remember each video speed</string>
     <string name="player_remember_speed_none">None</string>
     <string name="player_remember_speed_all">Same on all videos</string>
@@ -389,9 +389,9 @@
     <string name="pressing_home">by pressing HOME</string>
     <string name="pressing_home_back">by pressing HOME or BACK</string>
     <string name="player_number_key_seek">Seek with number keys</string>
-    <string name="save_remove_playlist">Add/Delete playlist from Playlists section</string>
-    <string name="remove_playlist">Delete playlist from Playlists section permanently</string>
-    <string name="removed_from_playlists">Deleted from Playlists section</string>
+    <string name="save_remove_playlist">Add/Remove playlist from Playlists section</string>
+    <string name="remove_playlist">Remove playlist from Playlists section permanently</string>
+    <string name="removed_from_playlists">Removed from Playlists section</string>
     <string name="saved_to_playlists">Added to Playlists section</string>
     <string name="create_playlist">Create playlist</string>
     <string name="add_video_to_new_playlist">Add to new playlist</string>
@@ -463,7 +463,7 @@
     <string name="speech_recognizer_system">System (preferred)</string>
     <string name="speech_recognizer_external_1">External 1 (seriously bugged, in order to work you need to disable access to the microphone)</string>
     <string name="speech_recognizer_external_2">External 2 (seriously bugged)</string>
-    <string name="real_channel_icon">Show real icon on the channel button</string>
+    <string name="real_channel_icon">Show icon on the channel button</string>
     <string name="subtitle_yellow_semi_transparent">Yellow on semitransparent background</string>
     <string name="subtitle_yellow_black">Yellow on black background</string>
     <string name="player_pixel_ratio">Pixel ratio</string>
@@ -478,5 +478,19 @@
     <string name="thumb_quality_start">Start of the video</string>
     <string name="thumb_quality_middle">Middle of the video</string>
     <string name="thumb_quality_end">End of the video</string>
+    <string name="content_block_status">Check SponsorBlock status</string>
+    <string name="player_show_quality_info_bitrate">Add bitrate into the quality info</string>
+    <string name="player_speed_button_old_behavior">Revert old behavior of the speed button</string>
+    <string name="protect_settings_with_password">Protect all settings with a password</string>
+    <string name="enter_settings_password">Enter settings password</string>
+    <string name="child_mode">Child mode</string>
+    <string name="child_mode_desc">In this mode, the user can\'t use search or see any suggested content. The settings will be under the password.</string>
+    <string name="lost_setting_warning">The app settings will be changed. Make sure that you created a backup of the settings.</string>
+    <string name="player_button_long_click">A short click on the button to quick action and a long to settings dialog</string>
+    <string name="pause_history">Pause history</string>
+    <string name="resume_history">Resume history</string>
+    <string name="clear_history">Clear history</string>
+    <string name="chapters">Chapters</string>
+    <string name="card_multiline_subtitle">Multiline subtitles</string>
     <string name="cancel">Cancel</string>
 </resources>

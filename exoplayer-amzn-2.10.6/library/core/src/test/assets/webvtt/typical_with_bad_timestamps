@@ -1,0 +1,14 @@
+WEBVTT # This comment is allowed
+
+# First timestamp is missing the 1/1000ths component, but parse anyway.
+00:00 --> 00:01.234
+This is the first subtitle.
+
+02.345 --> 00:03.456
+This is the second subtitle.
+
+0.0.0 --> 00:05.678
+This should be discarded (too many dots).
+
+00:06.789 --> not-a-timestamp
+This should be discarded (not a timestamp).

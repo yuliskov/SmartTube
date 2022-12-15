@@ -15,6 +15,7 @@ import com.google.android.exoplayer2.upstream.TransferListener;
 import java.util.List;
 
 public class ErrorDefaultDashChunkSource extends DefaultDashChunkSource {
+    public static final int MAX_SEGMENTS_PER_LOAD = 2;
     private final TrackErrorFixer mTrackErrorFixer;
 
     public static final class Factory implements DashChunkSource.Factory {
@@ -24,7 +25,7 @@ public class ErrorDefaultDashChunkSource extends DefaultDashChunkSource {
         private final TrackErrorFixer trackErrorFixer;
 
         public Factory(DataSource.Factory dataSourceFactory, TrackErrorFixer trackErrorFixer) {
-            this(dataSourceFactory, trackErrorFixer, 1);
+            this(dataSourceFactory, trackErrorFixer, MAX_SEGMENTS_PER_LOAD);
         }
 
         public Factory(DataSource.Factory dataSourceFactory, TrackErrorFixer trackErrorFixer, int maxSegmentsPerLoad) {

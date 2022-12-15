@@ -4,10 +4,10 @@ import android.content.Context;
 import android.os.Build.VERSION;
 import android.util.AttributeSet;
 import android.view.View;
-import androidx.appcompat.widget.AppCompatTextView;
+import android.widget.TextView;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
-public class MarqueeTextView extends AppCompatTextView implements View.OnLayoutChangeListener {
+public class MarqueeTextView extends TextView implements View.OnLayoutChangeListener {
     private float mDefaultMarqueeSpeed;
     private float mMarqueeSpeedFactor = 2.0f;
 
