@@ -1198,6 +1198,26 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
    */
   protected void onInputFormatChanged(Format newFormat) throws ExoPlaybackException {
     log.i("onInputFormatChanged: format = " + formatHolder.format);
+    if (newFormat.sampleMimeType != null
+            && newFormat.sampleMimeType.startsWith("video/")
+            && newFormat.frameRate >= 30
+            && "Vermax UHD".equals(Util.MODEL)) {
+      newFormat = Format.createVideoSampleFormat(newFormat.id,
+              newFormat.sampleMimeType,
+              newFormat.codecs,
+              newFormat.bitrate,
+              newFormat.maxInputSize,
+              newFormat.width,
+              newFormat.height,
+              25,
+              newFormat.initializationData,
+              newFormat.rotationDegrees,
+              newFormat.pixelWidthHeightRatio,
+              newFormat.projectionData,
+              newFormat.stereoMode,
+              newFormat.colorInfo,
+              newFormat.drmInitData);
+    }
     Format oldFormat = inputFormat;
     inputFormat = newFormat;
     waitingForFirstSampleInFormat = true;
