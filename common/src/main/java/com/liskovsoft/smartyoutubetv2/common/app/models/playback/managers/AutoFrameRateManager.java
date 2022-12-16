@@ -23,6 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.TvQuickActions;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AutoFrameRateManager extends PlayerEventListenerHelper implements AutoFrameRateListener {
@@ -361,7 +362,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
         UhdHelper uhdHelper = new UhdHelper(context);
 
-        for (Mode mode : uhdHelper.getSupportedModes()) {
+        Mode[] supportedModes = uhdHelper.getSupportedModes();
+        Arrays.sort(supportedModes);
+
+        for (Mode mode : supportedModes) {
             options.add(UiOptionItem.from(String.format("%sx%s@%s", mode.getPhysicalWidth(), mode.getPhysicalHeight(), mode.getRefreshRate())));
         }
 
