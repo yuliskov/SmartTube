@@ -158,7 +158,7 @@ public class DisplayHolder {
         @Override
         public int compareTo(Mode o) {
             if (getPhysicalWidth() == o.getPhysicalWidth()) {
-                return (int) Math.ceil(o.getRefreshRate() - getRefreshRate() / 1_000);
+                return (int) ((o.getRefreshRate() * 1_000) - (getRefreshRate() * 1_000));
             }
 
             return o.getPhysicalWidth() - getPhysicalWidth();
