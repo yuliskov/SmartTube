@@ -492,4 +492,5 @@
     <string name="clear_history">Smazat historii</string>
     <string name="chapters">Kapitoly</string>
     <string name="card_multiline_subtitle">Víceřádkové titulky</string>
+    <string name="auto_frame_rate_modes">Podporované režimy</string>
 </resources>
