@@ -43,6 +43,6 @@ public class AutoFrameRateSettingsPresenter extends BasePresenter<Void> {
 
     private void appendAutoFrameRateModesCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = AutoFrameRateManager.createAutoFrameRateModesCategory(getContext());
-        settingsPresenter.appendStringsCategory(category.title, category.options);
+        settingsPresenter.appendLongTextCategory(category.title, category.option);
     }
 }

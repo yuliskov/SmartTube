@@ -276,7 +276,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             options.add(UiOptionItem.from(modesCategory.title, optionItem -> {
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
                 dialogPresenter.clear();
-                dialogPresenter.appendStringsCategory(modesCategory.title, modesCategory.options);
+                dialogPresenter.appendLongTextCategory(modesCategory.title, modesCategory.option);
                 dialogPresenter.showDialog(modesCategory.title);
             }));
 
@@ -358,17 +358,17 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     public static OptionCategory createAutoFrameRateModesCategory(Context context) {
         String title = context.getString(R.string.auto_frame_rate_modes);
 
-        List<OptionItem> options = new ArrayList<>();
-
         UhdHelper uhdHelper = new UhdHelper(context);
 
         Mode[] supportedModes = uhdHelper.getSupportedModes();
         Arrays.sort(supportedModes);
 
+        StringBuilder result = new StringBuilder();
+
         for (Mode mode : supportedModes) {
-            options.add(UiOptionItem.from(String.format("%sx%s@%s", mode.getPhysicalWidth(), mode.getPhysicalHeight(), mode.getRefreshRate())));
+            result.append(UiOptionItem.from(String.format("%sx%s@%s\n", mode.getPhysicalWidth(), mode.getPhysicalHeight(), mode.getRefreshRate())));
         }
 
-        return OptionCategory.from(AUTO_FRAME_RATE_MODES_ID, OptionCategory.TYPE_STRING, title, options);
+        return OptionCategory.from(AUTO_FRAME_RATE_MODES_ID, OptionCategory.TYPE_LONG_TEXT, title, UiOptionItem.from(result.toString()));
     }
 }

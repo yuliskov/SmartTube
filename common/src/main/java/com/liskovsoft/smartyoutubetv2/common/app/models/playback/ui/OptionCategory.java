@@ -7,6 +7,7 @@ public class OptionCategory {
     public static final int TYPE_CHECKED = 1;
     public static final int TYPE_SINGLE = 2;
     public static final int TYPE_STRING = 3;
+    public static final int TYPE_LONG_TEXT = 4;
     public final int id;
     public final int type;
     public final String title;
@@ -31,6 +32,10 @@ public class OptionCategory {
 
     public static OptionCategory from(int id, int type, String title, List<OptionItem> options) {
         return new OptionCategory(id, type, title, options);
+    }
+
+    public static OptionCategory from(int id, int type, String title, OptionItem option) {
+        return new OptionCategory(id, type, title, null, option);
     }
 
     public static OptionCategory from(int id, OptionItem option) {
