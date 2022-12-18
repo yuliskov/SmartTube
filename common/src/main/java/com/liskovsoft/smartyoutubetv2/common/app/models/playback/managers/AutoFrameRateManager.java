@@ -366,7 +366,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         StringBuilder result = new StringBuilder();
 
         for (Mode mode : supportedModes) {
-            result.append(UiOptionItem.from(String.format("%sx%s@%s\n", mode.getPhysicalWidth(), mode.getPhysicalHeight(), mode.getRefreshRate())));
+            result.append(String.format("%sx%s@%s\n", mode.getPhysicalWidth(), mode.getPhysicalHeight(), mode.getRefreshRate()));
         }
 
         return OptionCategory.from(AUTO_FRAME_RATE_MODES_ID, OptionCategory.TYPE_LONG_TEXT, title, UiOptionItem.from(result.toString()));
