@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.browse;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -326,7 +327,13 @@ public class NavigateTitleView extends TitleView implements OnDataChange {
             return;
         }
 
-        Glide.with(view.getContext())
+        Context context = view.getContext();
+
+        if (context instanceof Activity && !Utils.checkActivity((Activity) context)) {
+            return;
+        }
+
+        Glide.with(context)
                 .load(url)
                 .apply(ViewUtil.glideOptions())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

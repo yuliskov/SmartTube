@@ -26,9 +26,10 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
 public class VideoStateManager extends PlayerEventListenerHelper implements MetadataListener {
+    private static final String TAG = VideoStateManager.class.getSimpleName();
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 90_000;
-    private static final String TAG = VideoStateManager.class.getSimpleName();
+    private static final long MAX_REMAINING_TIME_MS = 10_000;
     private boolean mIsPlayEnabled;
     private Video mVideo = new Video();
     private FormatItem mTempVideoFormat;
@@ -319,7 +320,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
         // Reset position of music videos
         boolean isShort = state != null && state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled();
-        boolean isVideoEnded = state != null && state.durationMs - state.positionMs < 3_000;
+        boolean isVideoEnded = state != null && state.durationMs - state.positionMs < MAX_REMAINING_TIME_MS;
 
         if (isShort || isVideoEnded || item.isLive || !mGeneralData.isHistoryEnabled()) {
             resetPosition(item);
