@@ -483,4 +483,7 @@
   <string name="pause_history">Geschiedenis onderbreken</string>
   <string name="resume_history">Geschiedenis hervatten</string>
   <string name="clear_history">Geschiedenis wissen</string>
+  <string name="auto_frame_rate_modes">Ondersteunde video-modi</string>
+  <string name="chapters">Hoofdstukken</string>
+  <string name="card_multiline_subtitle">Meerregelige ondertitels</string>
 </resources>
