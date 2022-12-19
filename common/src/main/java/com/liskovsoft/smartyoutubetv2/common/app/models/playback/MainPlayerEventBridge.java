@@ -38,6 +38,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     private static MainPlayerEventBridge sInstance;
     private WeakReference<PlaybackController> mController = new WeakReference<>(null);
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
+    private Video mPendingVideo;
 
     public MainPlayerEventBridge(Context context) {
         if (context instanceof Activity) {
@@ -88,6 +89,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
                 mActivity = new WeakReference<>(((Fragment) controller).getActivity());
                 process(PlayerEventListener::onInitDone);
             }
+
+            if (mPendingVideo != null) {
+                openVideo(mPendingVideo);
+                mPendingVideo = null;
+            }
         }
     }
 
@@ -102,8 +108,13 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     // Core events
 
     @Override
-    public void openVideo(Video item) {
-        process(listener -> listener.openVideo(item));
+    public void openVideo(Video video) {
+        if (mController.get() == null) {
+            mPendingVideo = video;
+            return;
+        }
+
+        process(listener -> listener.openVideo(video));
     }
 
     @Override

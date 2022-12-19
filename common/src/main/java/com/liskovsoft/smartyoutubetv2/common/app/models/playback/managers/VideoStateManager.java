@@ -53,10 +53,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         mGeneralData = GeneralData.instance(getActivity());
         mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
         mStateService = VideoStateService.instance(getActivity());
-
-        // onInitDone usually called after openVideo (if PlaybackView is destroyed)
-        // So, we need to repeat some things again.
-        resetPositionIfNeeded(getVideo());
     }
 
     /**
