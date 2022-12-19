@@ -375,39 +375,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         //persistState();
     }
 
-    //private void savePosition() {
-    //    Video video = getVideo();
-    //
-    //    if (video == null || getController() == null || !getController().containsMedia()) {
-    //        return;
-    //    }
-    //
-    //    // Exceptional cases:
-    //    // 1) Track is ended
-    //    // 2) Pause on end enabled
-    //    // 3) Watching live stream in real time
-    //    long durationMs = getController().getDurationMs();
-    //    long positionMs = getController().getPositionMs();
-    //    long remainsMs = durationMs - positionMs;
-    //    boolean isPositionActual = remainsMs > 1_000;
-    //    boolean isRealLiveStream = video.isLive && remainsMs < LIVE_THRESHOLD_MS;
-    //    if ((isPositionActual && !isRealLiveStream) || !getPlayEnabled()) { // Is pause after each video enabled?
-    //        mStateService.save(new State(video.videoId, positionMs, durationMs, getController().getSpeed()));
-    //        // Sync video. You could safely use it later to restore state.
-    //        video.percentWatched = positionMs / (durationMs / 100f);
-    //    } else {
-    //        // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
-    //        mStateService.save(new State(video.videoId, durationMs, durationMs, 1.0f));
-    //        video.percentWatched = 100;
-    //
-    //        // NOTE: Storage optimization!!!
-    //        // Reset position when video almost ended
-    //        //resetPosition(video);
-    //    }
-    //
-    //    Playlist.instance().sync(video);
-    //}
-
     private void savePosition() {
         Video video = getVideo();
 
@@ -436,46 +403,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         Playlist.instance().sync(video);
     }
 
-    //private void restorePosition() {
-    //    Video item = getVideo();
-    //
-    //    State state = mStateService.getByVideoId(item.videoId);
-    //
-    //    boolean stateIsOutdated = state == null || state.timestamp < item.timestamp;
-    //    if (item.getPositionMs() > 0 && stateIsOutdated) {
-    //        // Web state is buggy on short videos (e.g. video clips)
-    //        boolean isLongVideo = getController().getDurationMs() > MUSIC_VIDEO_MAX_DURATION_MS;
-    //        if (isLongVideo) {
-    //            state = new State(item.videoId, item.getPositionMs());
-    //        }
-    //    }
-    //
-    //    // Web live position is broken. Ignore it.
-    //    if (stateIsOutdated && item.isLive) {
-    //        state = null;
-    //    }
-    //
-    //    // Set actual position for live videos with uncommon length
-    //    if ((state == null || state.positionMs == state.durationMs) && item.isLive) {
-    //        // Add buffer. Should I take into account segment offset???
-    //        state = new State(item.videoId, getController().getDurationMs() - 60_000);
-    //    }
-    //
-    //    // Do I need to check that item isn't live? (state != null && !item.isLive)
-    //    if (state != null) {
-    //        long remainsMs = getController().getDurationMs() - state.positionMs;
-    //        // Url list videos at this stage has undefined (-1) length. So, we need to ensure that remains is positive.
-    //        boolean isVideoEnded = remainsMs >= 0 && remainsMs < (item.isLive ? 30_000 : 1_000); // live buffer fix
-    //        if (!isVideoEnded || !getPlayEnabled()) {
-    //            setPositionMs(state.positionMs);
-    //        }
-    //    }
-    //
-    //    if (!mIsPlayBlocked) {
-    //        getController().setPlayWhenReady(getPlayEnabled());
-    //    }
-    //}
-
     private void restorePosition() {
         Video item = getVideo();
 
@@ -502,7 +429,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         }
 
         // Do I need to check that item isn't live? (state != null && !item.isLive)
-        if (state != null && state.positionMs != state.durationMs) {
+        if (state != null) {
             setPositionMs(state.positionMs);
         }
 
