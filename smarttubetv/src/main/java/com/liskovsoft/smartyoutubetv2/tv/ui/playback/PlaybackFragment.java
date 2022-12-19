@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.media.MediaMetadataCompat;
@@ -169,6 +170,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // Should be called on earlier stage.
         hideControlsOverlay(mIsAnimationEnabled);
 
+        if ("Vermax UHD".equals(Build.MODEL)) {
+            for (Map.Entry<String, String> prop: AMLOGIC_PLAYER_PROPS.entrySet()) {
+                setSystemProperty(prop.getKey(), prop.getValue());
+            }
+        }
         if (Util.SDK_INT > 23) {
             initializePlayer();
         }
@@ -183,6 +189,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         if (Util.SDK_INT > 23) {
             maybeReleasePlayer();
+        }
+        if ("Vermax UHD".equals(Build.MODEL)) {
+            for (Map.Entry<String, String> prop: ORIGINAL_PLAYER_PROPS.entrySet()) {
+                setSystemProperty(prop.getKey(), prop.getValue());
+            }
         }
     }
 
@@ -1556,6 +1567,28 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             if (liveChat != null) {
                 liveChat.setVisibility(show ? View.VISIBLE : View.GONE);
             }
+        }
+    }
+
+    private static final Map<String, String> AMLOGIC_PLAYER_PROPS = new HashMap<String, String>() {{
+        put("media.omx.single_mode", "1");
+        put("media.omx.stream_mode", "1");
+        put("media.omx.display_mode", "1");
+    }};
+
+    private static final Map<String, String> ORIGINAL_PLAYER_PROPS = new HashMap<String, String>() {{
+        put("media.omx.single_mode", "0");
+        put("media.omx.stream_mode", "0");
+        put("media.omx.display_mode", "0");
+    }};
+
+    private static void setSystemProperty(String key, String value) {
+        try {
+            Class.forName("android.os.SystemProperties")
+                    .getMethod("set", String.class, String.class)
+                    .invoke(null, key, value);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
