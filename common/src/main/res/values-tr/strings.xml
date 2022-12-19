@@ -492,4 +492,5 @@
     <string name="clear_history">Geçmişi temizle</string>
     <string name="chapters">Bölümler</string>
     <string name="card_multiline_subtitle">Çok satırlı altyazılar</string>
+    <string name="auto_frame_rate_modes">Desteklenen modlar</string>
 </resources>
