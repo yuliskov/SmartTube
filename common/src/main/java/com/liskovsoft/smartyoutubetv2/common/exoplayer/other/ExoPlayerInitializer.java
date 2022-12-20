@@ -8,16 +8,12 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.analytics.AnalyticsCollector;
 import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.TransferListener;
-import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 public class ExoPlayerInitializer {
@@ -51,6 +47,8 @@ public class ExoPlayerInitializer {
         //);
 
         enableAudioFocus(player);
+
+        //player.setRepeatMode(Player.REPEAT_MODE_ONE);
 
         return player;
     }
