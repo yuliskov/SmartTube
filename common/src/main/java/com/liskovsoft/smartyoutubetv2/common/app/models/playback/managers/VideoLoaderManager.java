@@ -448,6 +448,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                     getController().showOverlay(true);
                 } else {
                     getController().showSuggestions(true);
+                    getController().setPlayWhenReady(false);
                     getController().setPositionMs(getController().getDurationMs());
                 }
                 break;
@@ -459,6 +460,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                     getController().showOverlay(true);
                 } else {
                     getController().showSuggestions(true);
+                    getController().setPlayWhenReady(false);
                     getController().setPositionMs(getController().getDurationMs());
                 }
                 break;
