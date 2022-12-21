@@ -249,18 +249,18 @@ public class MotherActivity extends FragmentActivity {
      * Can not perform this action after onSaveInstanceState <br/>
      * <a href="https://issuetracker.google.com/issues/37094575#comment28">More info</a>
      */
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        // Bug on Android 4, 5, 6
-        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT <= 23) {
-            final View rootView = findViewById(android.R.id.content);
-            if (rootView != null) {
-                rootView.cancelPendingInputEvents();
-            }
-        }
-    }
+    //@Override
+    //protected void onSaveInstanceState(@NonNull Bundle outState) {
+    //    super.onSaveInstanceState(outState);
+    //
+    //    // Bug on Android 4, 5, 6
+    //    if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT <= 23) {
+    //        final View rootView = findViewById(android.R.id.content);
+    //        if (rootView != null) {
+    //            rootView.cancelPendingInputEvents();
+    //        }
+    //    }
+    //}
 
     public void addOnPermissions(OnPermissions onPermissions) {
         if (mOnPermissions == null) {
