@@ -46,6 +46,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private SimpleExoPlayer mPlayer;
     private PlayerView mPlayerView;
     private float mCurrentSpeed = 1.0f;
+    private boolean mIsEnded;
 
     public ExoPlayerController(Context context) {
         mContext = context.getApplicationContext();
@@ -329,14 +330,15 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             Log.d(TAG, "onPlayerStateChanged: " + TrackSelectorUtil.stateToString(playbackState));
         }
 
-        //if (Player.STATE_READY == playbackState) {
-        //    notifyOnVideoLoad();
-        //}
-
         boolean isPlayPressed = Player.STATE_READY == playbackState && playWhenReady;
         boolean isPausePressed = Player.STATE_READY == playbackState && !playWhenReady;
         boolean isPlaybackEnded = Player.STATE_ENDED == playbackState && playWhenReady;
         boolean isBuffering = Player.STATE_BUFFERING == playbackState && playWhenReady;
+
+        // Fix chapters (seek and play) after playback ends
+        if (isPlaybackEnded && mIsEnded) {
+            return;
+        }
 
         if (isPlayPressed) {
             mEventListener.onPlay();
@@ -344,8 +346,13 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             mEventListener.onPause();
         } else if (isPlaybackEnded) {
             mEventListener.onPlayEnd();
+            mIsEnded = true;
         } else if (isBuffering) {
             mEventListener.onBuffering();
+        }
+
+        if (getPositionMs() < getDurationMs()) {
+            mIsEnded = false;
         }
     }
 

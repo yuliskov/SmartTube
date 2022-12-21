@@ -447,9 +447,9 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                     loadNext();
                     getController().showOverlay(true);
                 } else {
-                    getController().showSuggestions(true);
-                    getController().setPlayWhenReady(false);
                     getController().setPositionMs(getController().getDurationMs());
+                    getController().setPlayWhenReady(false);
+                    getController().showSuggestions(true);
                 }
                 break;
             case PlaybackUIController.REPEAT_MODE_LIST:
@@ -459,9 +459,9 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                     loadNext();
                     getController().showOverlay(true);
                 } else {
-                    getController().showSuggestions(true);
-                    getController().setPlayWhenReady(false);
                     getController().setPositionMs(getController().getDurationMs());
+                    getController().setPlayWhenReady(false);
+                    getController().showSuggestions(true);
                 }
                 break;
         }
