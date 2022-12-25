@@ -352,7 +352,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
         disposeActions();
 
-        if (item.hasVideo()) {
+        if (item.hasVideo() && !item.isMix()) {
             // NOTE: Bypass PIP fullscreen on next caused by startView
             getBridge().openVideo(item);
             getController().showOverlay(true);

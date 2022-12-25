@@ -24,17 +24,12 @@ public class VideoActionPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (item.hasNestedItems() || item.isPlaylistInChannel()) {
-            // Below doesn't work right now. Api doesn't support channel id.
-            //ChannelPresenter.instance(getContext()).openChannel(item);
-
-            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
-        } else if (item.hasVideo()) {
+        if (item.hasVideo() && !item.isMix()) {
             PlaybackPresenter.instance(getContext()).openVideo(item);
+        } else if (item.hasPlaylist() || item.hasNestedItems()) {
+            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         } else if (item.hasChannel()) {
             Utils.chooseChannelPresenter(getContext(), item);
-        } else if (item.hasPlaylist()) {
-            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         } else if (item.isChapter) {
             PlaybackPresenter.instance(getContext()).setPosition(item.startTimeMs);
         } else {

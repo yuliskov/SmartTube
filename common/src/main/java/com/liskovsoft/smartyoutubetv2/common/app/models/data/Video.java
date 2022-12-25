@@ -436,6 +436,10 @@ public final class Video implements Parcelable {
         return belongsToChannel() && hasPlaylist() && !belongsToSamePlaylistGroup();
     }
 
+    public boolean isMix() {
+        return mediaItem != null && mediaItem.getDurationMs() <= 0 && (hasPlaylist() || hasChannel() || hasNestedItems());
+    }
+
     public boolean isEmpty() {
         // NOTE: Movies labeled as "Free with Ads" not supported yet
         return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId) || isMovie;
