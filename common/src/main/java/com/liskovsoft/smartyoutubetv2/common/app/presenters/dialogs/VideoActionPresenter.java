@@ -24,7 +24,8 @@ public class VideoActionPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (item.hasVideo() && !item.isMix()) {
+        // Show playlist contents in channel instead of instant playback
+        if (item.hasVideo() && !item.isPlaylistInChannel()) {
             PlaybackPresenter.instance(getContext()).openVideo(item);
         } else if (item.hasPlaylist() || item.hasNestedItems()) {
             ChannelUploadsPresenter.instance(getContext()).openChannel(item);
