@@ -85,8 +85,6 @@ public class StreamReminderService implements TickleListener {
         List<Observable<MediaItemFormatInfo>> observables = toObservables();
 
         mReminderAction = Observable.mergeDelayError(observables)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::processMetadata,
                         error -> Log.e(TAG, "loadMetadata error: %s", error.getMessage())

@@ -128,8 +128,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         RxUtils.disposeActions(mPlaylistsInfoAction);
         if (isAddToRecentPlaylistButtonEnabled()) {
             mPlaylistsInfoAction = mItemManager.getPlaylistsInfoObserve(mVideo.videoId)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             videoPlaylistInfos -> {
                                 mPlaylistInfos = videoPlaylistInfos;
@@ -271,8 +269,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     //                    R.string.dialog_add_remove_from, playlistTitle),
     //                    optionItem -> {
     //                        mPlaylistsInfoAction = mItemManager.getVideoPlaylistsInfoObserve(mVideo.videoId)
-    //                                .subscribeOn(Schedulers.io())
-    //                                .observeOn(AndroidSchedulers.mainThread())
     //                                .subscribe(
     //                                        videoPlaylistInfos -> {
     //                                            for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
@@ -347,8 +343,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.not_interested), optionItem -> {
                     mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
                                     var -> {},
                                     error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage()),
@@ -376,8 +370,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.remove_from_history), optionItem -> {
                     mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
                                     var -> {},
                                     error -> Log.e(TAG, "Remove from history error: %s", error.getMessage()),

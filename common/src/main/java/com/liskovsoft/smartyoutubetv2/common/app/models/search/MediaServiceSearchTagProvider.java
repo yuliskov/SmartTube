@@ -25,8 +25,6 @@ public class MediaServiceSearchTagProvider implements SearchTagsProvider {
         RxUtils.disposeActions(mTagsAction);
 
         mTagsAction = mGroupManager.getSearchTagsObserve(query)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         tags -> callback.onResults(Tag.from(tags)),
                         error -> Log.e(TAG, "Result is empty. Just ignore it. Error msg: %s", error.getMessage())

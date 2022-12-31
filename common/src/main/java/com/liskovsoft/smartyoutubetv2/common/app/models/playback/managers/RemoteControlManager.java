@@ -206,8 +206,6 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
         }
 
         mListeningAction = mRemoteManager.getCommandObserve()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::processCommand,
                         error -> {

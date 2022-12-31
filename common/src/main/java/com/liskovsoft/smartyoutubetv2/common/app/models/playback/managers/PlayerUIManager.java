@@ -605,8 +605,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         mPlaylistInfos = null;
         Disposable playlistsInfoAction =
                 YouTubeMediaService.instance().getMediaItemService().getPlaylistsInfoObserve(videoId)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 videoPlaylistInfos -> {
                                     mPlaylistInfos = videoPlaylistInfos;

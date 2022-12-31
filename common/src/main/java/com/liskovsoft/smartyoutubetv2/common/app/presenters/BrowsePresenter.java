@@ -575,8 +575,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         final AtomicInteger emissionIndex = new AtomicInteger(-1);
 
         Disposable updateAction = groups
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroups -> {
                             filterIfNeeded(mediaGroups);
@@ -630,8 +628,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         Disposable updateAction = group
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroup -> {
                             if (getView() == null) {
@@ -683,8 +679,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         Disposable continueAction = continuation
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueGroup -> {
                             VideoGroup videoGroup = VideoGroup.from(continueGroup, group.getSection(), group.getPosition());
@@ -717,8 +711,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         getView().showProgressBar(true);
 
         Disposable signCheckAction = mSignInManager.isSignedObserve()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         isSigned -> {
                             if (isSigned) {

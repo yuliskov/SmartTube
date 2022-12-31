@@ -166,8 +166,6 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 Observable.interval(1, TimeUnit.SECONDS);
 
         mProgressAction = playbackProgressObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::skipSegment,
                         error -> Log.e(TAG, "startPlaybackWatcher error: %s", error.getMessage())

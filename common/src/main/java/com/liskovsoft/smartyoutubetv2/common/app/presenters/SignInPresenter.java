@@ -64,8 +64,6 @@ public class SignInPresenter extends BasePresenter<SignInView> {
 
     private void updateUserCode() {
         mSignInAction = mMediaService.getSignInService().signInObserve()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         userCode -> getView().showCode(userCode),
                         error -> Log.e(TAG, "Sign in error: %s", error.getMessage()),

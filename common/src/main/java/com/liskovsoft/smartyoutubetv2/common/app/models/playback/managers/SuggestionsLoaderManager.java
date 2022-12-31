@@ -118,8 +118,6 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         MediaItemService mediaItemManager = YouTubeMediaService.instance().getMediaItemService();
 
         Disposable continueAction = mediaItemManager.continueGroupObserve(mediaGroup)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> {
                             getController().showProgressBar(false);
@@ -196,8 +194,6 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         clearSuggestionsIfNeeded(video);
 
         Disposable metadataAction = observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         metadata -> updateSuggestions(metadata, video),
                         error -> {

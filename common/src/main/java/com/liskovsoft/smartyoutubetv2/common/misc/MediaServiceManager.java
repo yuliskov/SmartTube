@@ -112,8 +112,6 @@ public class MediaServiceManager {
         }
 
         mMetadataAction = observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onMetadata::onMetadata,
                         error -> Log.e(TAG, "loadMetadata error: %s", error.getMessage())
@@ -135,8 +133,6 @@ public class MediaServiceManager {
         observable = mItemManager.getMetadataObserve(mediaItem);
 
         mMetadataAction = observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onMetadata::onMetadata,
                         error -> Log.e(TAG, "loadMetadata error: %s", error.getMessage())
@@ -161,8 +157,6 @@ public class MediaServiceManager {
         Observable<MediaGroup> observable = mGroupManager.getGroupObserve(item);
 
         mUploadsAction = observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onMediaGroup::onMediaGroup,
                         error -> {
@@ -178,8 +172,6 @@ public class MediaServiceManager {
         Observable<MediaGroup> observable = mGroupManager.getSubscribedChannelsUpdateObserve();
 
         mSubscribedChannelsAction = observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onMediaGroup::onMediaGroup,
                         error -> Log.e(TAG, "loadSubscribedChannels error: %s", error.getMessage())
@@ -197,8 +189,6 @@ public class MediaServiceManager {
                 mGroupManager.getChannelObserve(item.mediaItem) : mGroupManager.getChannelObserve(item.channelId);
 
         mRowsAction = observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onMediaGroupList::onMediaGroupList,
                         error -> Log.e(TAG, "loadChannelRows error: %s", error.getMessage())
@@ -222,8 +212,6 @@ public class MediaServiceManager {
         Observable<MediaItemFormatInfo> observable = mItemManager.getFormatInfoObserve(item.videoId);
 
         mFormatInfoAction = observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onFormatInfo::onFormatInfo,
                         error -> Log.e(TAG, "loadFormatInfo error: %s", error.getMessage())
@@ -240,8 +228,6 @@ public class MediaServiceManager {
         Observable<MediaGroup> observable = mGroupManager.getEmptyPlaylistsObserve();
 
         mPlaylistGroupAction = observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onPlaylistGroup::onMediaGroup,
                         error -> Log.e(TAG, "loadPlaylists error: %s", error.getMessage())
@@ -254,8 +240,6 @@ public class MediaServiceManager {
         Observable<List<PlaylistInfo>> observable = mItemManager.getPlaylistsInfoObserve(null);
 
         mPlaylistInfosAction = observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onPlaylistInfos::onPlaylistInfos,
                         error -> Log.e(TAG, "getPlaylistInfos error: %s", error.getMessage())
@@ -266,8 +250,6 @@ public class MediaServiceManager {
         RxUtils.disposeActions(mAccountListAction);
 
         mAccountListAction = mSingInManager.getAccountsObserve()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onAccountList::onAccountList,
                         error -> Log.e(TAG, "Get signed accounts error: %s", error.getMessage())
@@ -282,8 +264,6 @@ public class MediaServiceManager {
         RxUtils.disposeActions(mSignCheckAction);
 
         mSignCheckAction = mSingInManager.isSignedObserve()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         isSigned -> {
                             if (isSigned) {

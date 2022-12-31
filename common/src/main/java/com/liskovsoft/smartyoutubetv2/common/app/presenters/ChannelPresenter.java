@@ -208,8 +208,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         Observable<List<MediaGroup>> channelObserve = mMediaService.getMediaGroupService().getChannelObserve(channelId);
 
         mUpdateAction = channelObserve
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::updateRows,
                         error -> Log.e(TAG, "updateRows error: %s", error.getMessage())
@@ -253,8 +251,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
 
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
                         error -> {

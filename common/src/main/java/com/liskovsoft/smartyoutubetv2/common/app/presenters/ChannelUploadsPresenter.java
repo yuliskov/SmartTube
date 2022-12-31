@@ -199,8 +199,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         }
 
         mScrollAction = continuation
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
                         error -> {
@@ -219,8 +217,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         getView().showProgressBar(true);
 
         mUpdateAction = group
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::updateGrid,
                         error -> Log.e(TAG, "updateGridHeader error: %s", error.getMessage()),
@@ -257,8 +253,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         Observable<MediaGroup> group = mGroupManager.getGroupObserve(mediaItem);
 
         mUpdateAction = group
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         callback::onGroup,
                         error -> Log.e(TAG, "updateVideoGrid error: %s", error.getMessage())

@@ -56,8 +56,6 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
         }
 
         mAccountsAction = mSignInManager.getAccountsObserve()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         accounts -> createAndShowDialog(accounts, force),
                         error -> Log.e(TAG, "Get accounts error: %s", error.getMessage())

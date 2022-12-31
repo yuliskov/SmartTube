@@ -116,7 +116,7 @@
   <string name="subtitle_yellow_transparent">Keltainen läpinäkyvällä taustalla</string>
   <string name="subtitle_white_black">Valkoinen mustalla taustalla</string>
   <string name="player_seek_preview">Esikatselu</string>
-  <string name="color_scheme_dark_grey_oled">Tummanharmaa (OLED)</string>
+  <string name="color_scheme_dark_grey_oled">Tummanharmaa(OLED)</string>
   <string name="channels_section_sorting">Kanavien lajittelu</string>
   <string name="sorting_by_new_content">Uusi sisältö</string>
   <string name="sorting_alphabetically">Aakkosittain</string>
@@ -259,7 +259,7 @@
   <string name="content_block_preview_recap">Esikatselu tai tiivistelmä videosta</string>
   <string name="content_block_highlight">Kohta videosta tai kohokohta</string>
   <string name="removed_from_history">Video on poistettu katseluhistoriasta</string>
-  <string name="remove_from_history">Poista katseluihistoriasta</string>
+  <string name="remove_from_history">Poista katseluhistoriasta</string>
   <string name="upload_date">Latauspäivämäärä</string>
   <string name="upload_date_any">Kaikkien aikojen</string>
   <string name="upload_date_today">Tänään</string>
@@ -369,8 +369,8 @@
   <string name="play_video">Toista</string>
   <string name="remember_position_of_short_videos">Muista lyhyiden videoiden sijainti (alle 10 min)</string>
   <string name="player_show_tooltips">Näytä painikkeiden työkaluvihjeet</string>
-  <string name="action_like_unset">Tykkää-toiminto om asettamatta</string>
-  <string name="action_dislike_unset">En tykkää-toiminto om asettamatta</string>
+  <string name="action_like_unset">Tykkää-toiminto on asettamatta</string>
+  <string name="action_dislike_unset">En tykkää-toiminto on asettamatta</string>
   <string name="various_buttons">Painikkeet pääikkunan yläosassa</string>
   <string name="not_compatible_with">Valittu vaihtoehto ei ole yhteensopiva</string>
   <string name="subtitle_position">Tekstityksen alasiirto</string>
@@ -412,11 +412,11 @@
   <string name="cant_do_this_for_foreign_playlist">Tätä ei voi tehdä ulkomaisille soittolistoille</string>
   <string name="owned_playlist_warning">Tätä toimintoa voidaan soveltaa vain omistamiisi soittolistoihin.</string>
   <string name="content_block_alt_server">Käytä vaihtoehtoista palvelinta</string>
-  <string name="content_block_alt_server_desc">Ota tämä vaihtoehto käyttöön jos SponsorBlock ei toimi jostakin syystä.</string>
+  <string name="content_block_alt_server_desc">Ota tämä vaihtoehto käyttöön jos SponsorBlock ei jostakin syystä toimi.</string>
   <string name="unset_stream_reminder">Poista striimi-muistutus</string>
   <string name="set_stream_reminder">Lisää striimi-muistutus</string>
   <string name="playback_starts_shortly">Toisto alkaa automaattisesti kun striimi alkaa</string>
-  <string name="starting_stream">Striimiä aloitetaan</string>
+  <string name="starting_stream">Videostriimiä aloitetaan</string>
   <string name="action_playlist_remove">Poista soittolistatsta</string>
   <string name="signin_view_title">Käyttäjäkoodi latautuu</string>
   <string name="signin_view_description">Kirjaudu sisään antamalla tämä koodi sivulla %s</string>
@@ -475,4 +475,19 @@
   <string name="thumb_quality_middle">Videon keskeltä</string>
   <string name="thumb_quality_end">Videon lopusta</string>
   <string name="video_buffer_size_none">Ei valintaa</string>
+  <string name="content_block_status">Tarkista SponsorBlock-palvelimen tilanne</string>
+  <string name="player_show_quality_info_bitrate">Lisää bittinopeus tiedot</string>
+  <string name="player_speed_button_old_behavior">Palauta nopeuspainikkeen vanha toimintatapa</string>
+  <string name="protect_settings_with_password">Suojaa kaikki asetukset salasanalla</string>
+  <string name="enter_settings_password">Syötä asetusten salasana</string>
+  <string name="child_mode">Lapsilukko</string>
+  <string name="child_mode_desc">Tässä tilassa käyttäjä ei voi käyttää hakua tai nähdä ehdotettuja sisältöjä. Asetukset ovat suojattu salasanalla.</string>
+  <string name="lost_setting_warning">Sovelluksen asetuksia muutetaan. Varmista, että olet luonut varmuuskopion asetuksista.</string>
+  <string name="player_button_long_click">Lyhyt painallus nopeaan toimintaan ja pitkä painallus asetusten valintaikkunaan.</string>
+  <string name="pause_history">Keskeytä historiatoiminto</string>
+  <string name="resume_history">Palauta historiatoiminto</string>
+  <string name="clear_history">Tyhjennä historia</string>
+  <string name="chapters">Videon osat</string>
+  <string name="card_multiline_subtitle">Monirivinen tekstitys</string>
+  <string name="auto_frame_rate_modes">Tuetut tilat</string>
 </resources>

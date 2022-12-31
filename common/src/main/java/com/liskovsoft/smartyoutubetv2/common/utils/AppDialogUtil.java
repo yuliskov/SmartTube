@@ -493,8 +493,6 @@ public class AppDialogUtil {
         MediaItemService itemManager = YouTubeMediaItemService.instance();
 
         Disposable playlistsInfoAction = itemManager.getPlaylistsInfoObserve(video.videoId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         videoPlaylistInfos -> showAddToPlaylistDialog(context, video, callback, videoPlaylistInfos, null),
                         error -> {

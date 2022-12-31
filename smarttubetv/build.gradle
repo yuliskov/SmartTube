@@ -59,8 +59,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 850
-        versionName "16.60"
+        versionCode 854
+        versionName "16.64"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 

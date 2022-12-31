@@ -362,6 +362,11 @@ public class Utils {
         sHandler.postDelayed(callback, delayMs);
     }
 
+    public static void post(Runnable callback) {
+        sHandler.removeCallbacks(callback);
+        sHandler.post(callback);
+    }
+
     public static void removeCallbacks(Runnable... callbacks) {
         if (callbacks == null) {
             return;

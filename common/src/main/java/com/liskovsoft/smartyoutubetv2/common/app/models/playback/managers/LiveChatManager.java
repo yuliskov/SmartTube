@@ -67,8 +67,6 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         getController().setChatReceiver(chatReceiver);
 
         mChatAction = mChatService.openLiveChatObserve(mLiveChatKey)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         chatItem -> {
                             Log.d(TAG, chatItem.getMessage());

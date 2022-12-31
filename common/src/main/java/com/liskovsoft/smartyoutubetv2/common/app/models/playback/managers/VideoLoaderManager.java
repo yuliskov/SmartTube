@@ -274,8 +274,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         service.enableOldStreams(mPlayerTweaksData.isLiveStreamFixEnabled());
         MediaItemService mediaItemManager = service.getMediaItemService();
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processFormatInfo,
                            error -> {
                                Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
@@ -298,8 +296,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             dashManifest -> getController().openDash(dashManifest),
                             error -> Log.e(TAG, "createMpdStream error: %s", error.getMessage())
