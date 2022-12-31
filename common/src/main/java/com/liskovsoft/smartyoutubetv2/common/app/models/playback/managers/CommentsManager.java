@@ -1,14 +1,13 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import com.liskovsoft.mediaserviceinterfaces.CommentsService;
-import com.liskovsoft.mediaserviceinterfaces.data.CommentGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.disposables.Disposable;
 
@@ -41,15 +40,18 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
-        mCommentsAction = RxUtils.runAsync(() -> {
-            CommentGroup comments = mCommentsService.getComments(mCommentsKey);
-
-            AppDialogPresenter appDialogPresenter = AppDialogPresenter.instance(getActivity());
-
-            
-
-            Utils.post(appDialogPresenter::showDialog);
-        });
+        mCommentsAction = mCommentsService.getCommentsObserve(mCommentsKey)
+                .subscribe(
+                        commentGroup -> {
+                            AppDialogPresenter appDialogPresenter = AppDialogPresenter.instance(getActivity());
+                            //appDialogPresenter.appendChatCategory();
+                            appDialogPresenter.showDialog();
+                        },
+                        error -> {
+                            Log.e(TAG, error.getMessage());
+                            error.printStackTrace();
+                        }
+                );
 
         //ChatReceiver chatReceiver = new ChatReceiverImpl();
         //getController().setChatReceiver(chatReceiver);
