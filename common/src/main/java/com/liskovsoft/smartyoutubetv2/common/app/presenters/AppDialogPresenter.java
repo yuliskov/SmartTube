@@ -45,6 +45,10 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
             return new OptionCategory(title, Collections.singletonList(item), TYPE_CHAT);
         }
 
+        public static OptionCategory comments(String title, OptionItem item) {
+            return new OptionCategory(title, Collections.singletonList(item), TYPE_COMMENTS);
+        }
+
         public static OptionCategory singleSwitch(OptionItem item) {
             ArrayList<OptionItem> items = new ArrayList<>();
             items.add(item);
@@ -70,6 +74,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         public static final int TYPE_STRING_LIST = 4;
         public static final int TYPE_LONG_TEXT = 5;
         public static final int TYPE_CHAT = 6;
+        public static final int TYPE_COMMENTS = 7;
         public int type;
         public String title;
         public List<OptionItem> items;
@@ -193,6 +198,10 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
     public void appendChatCategory(String categoryTitle, OptionItem item) {
         mCategories.add(OptionCategory.chat(categoryTitle, item));
+    }
+
+    public void appendCommentsCategory(String categoryTitle, OptionItem item) {
+        mCategories.add(OptionCategory.comments(categoryTitle, item));
     }
 
     public void appendSingleSwitch(OptionItem optionItem) {

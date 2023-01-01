@@ -160,8 +160,13 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         Wrapper<MESSAGE> element = new Wrapper<>(message);
         items.add(0, element);
         notifyItemRangeInserted(0, isNewMessageToday ? 2 : 1);
-        if (layoutManager != null && scroll) {
-            layoutManager.scrollToPosition(0);
+        //if (layoutManager != null && scroll) {
+        //    layoutManager.scrollToPosition(0);
+        //}
+
+        if (layoutManager != null) {
+            // TODO: Remember position when user performs manual scrolling
+            layoutManager.scrollToPosition(scroll ? 0 : items.size() - 1);
         }
 
         trimEnd();

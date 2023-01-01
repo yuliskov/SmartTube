@@ -52,7 +52,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         VideoStateManager stateUpdater = new VideoStateManager();
         ContentBlockManager contentBlockManager = new ContentBlockManager();
         LiveChatManager liveChatManager = new LiveChatManager();
-        //CommentsManager commentsManager = new CommentsManager();
+        CommentsManager commentsManager = new CommentsManager();
 
         RemoteControlManager commandManager = new RemoteControlManager(context, suggestionsLoader, videoLoader);
         HQDialogManager hqDialogManager = new HQDialogManager(stateUpdater);
@@ -63,7 +63,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         suggestionsLoader.addMetadataListener(stateUpdater);
         suggestionsLoader.addMetadataListener(contentBlockManager);
         suggestionsLoader.addMetadataListener(liveChatManager);
-        //suggestionsLoader.addMetadataListener(commentsManager);
+        suggestionsLoader.addMetadataListener(commentsManager);
 
         // NOTE: position matters!!!
         mEventListeners.add(autoFrameRateManager);
@@ -75,6 +75,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         mEventListeners.add(commandManager);
         mEventListeners.add(contentBlockManager);
         mEventListeners.add(liveChatManager);
+        mEventListeners.add(commentsManager);
     }
 
     public static MainPlayerEventBridge instance(Context context) {

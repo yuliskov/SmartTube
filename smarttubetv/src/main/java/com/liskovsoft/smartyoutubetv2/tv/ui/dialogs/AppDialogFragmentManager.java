@@ -13,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.O
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreference;
+import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.CommentsPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
 
 import java.util.HashSet;
@@ -62,6 +63,8 @@ public class AppDialogFragmentManager {
                 return createLongTextPreference(category);
             case OptionCategory.TYPE_CHAT:
                 return createChatPreference(category);
+            case OptionCategory.TYPE_COMMENTS:
+                return createCommentsPreference(category);
         }
 
         throw  new IllegalStateException("Can't find matched preference for type: " + category.type);
@@ -90,6 +93,17 @@ public class AppDialogFragmentManager {
 
         OptionItem optionItem = category.items.get(0);
         pref.setChatReceiver(optionItem.getChatReceiver());
+
+        initDialogPreference(category, pref);
+
+        return pref;
+    }
+
+    private Preference createCommentsPreference(OptionCategory category) {
+        CommentsPreference pref = new CommentsPreference(mStyledContext);
+
+        OptionItem optionItem = category.items.get(0);
+        pref.setCommentsReceiver(optionItem.getCommentsReceiver());
 
         initDialogPreference(category, pref);
 

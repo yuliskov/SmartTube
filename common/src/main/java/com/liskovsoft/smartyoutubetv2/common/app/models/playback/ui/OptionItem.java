@@ -12,4 +12,5 @@ public interface OptionItem {
     void setRadio(OptionItem... items);
     OptionItem[] getRadio();
     ChatReceiver getChatReceiver();
+    CommentsReceiver getCommentsReceiver();
 }

@@ -1,12 +1,16 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import com.liskovsoft.mediaserviceinterfaces.CommentsService;
+import com.liskovsoft.mediaserviceinterfaces.data.CommentGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiver;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.disposables.Disposable;
@@ -40,36 +44,45 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
+        CommentsReceiver commentsReceiver = new CommentsReceiver() {
+            private Callback mCallback;
+
+            @Override
+            public void addCommentGroup(CommentGroup commentGroup) {
+                if (mCallback != null) {
+                    mCallback.onCommentGroup(commentGroup);
+                }
+            }
+
+            @Override
+            public void setCallback(Callback callback) {
+                mCallback = callback;
+            }
+
+            @Override
+            public void onGroupEnd(CommentGroup commentGroup) {
+
+            }
+
+            @Override
+            public void onCommentClicked(CommentItem commentItem) {
+
+            }
+        };
+
+        AppDialogPresenter appDialogPresenter = AppDialogPresenter.instance(getActivity());
+        String title = getController().getVideo().getTitle();
+        appDialogPresenter.appendCommentsCategory(title, UiOptionItem.from(title, commentsReceiver));
+        appDialogPresenter.showDialog();
+
         mCommentsAction = mCommentsService.getCommentsObserve(mCommentsKey)
                 .subscribe(
-                        commentGroup -> {
-                            AppDialogPresenter appDialogPresenter = AppDialogPresenter.instance(getActivity());
-                            //appDialogPresenter.appendChatCategory();
-                            appDialogPresenter.showDialog();
-                        },
+                        commentsReceiver::addCommentGroup,
                         error -> {
                             Log.e(TAG, error.getMessage());
                             error.printStackTrace();
                         }
                 );
-
-        //ChatReceiver chatReceiver = new ChatReceiverImpl();
-        //getController().setChatReceiver(chatReceiver);
-        //
-        //mCommentsAction = mChatService.openLiveChatObserve(mLiveChatKey)
-        //        .subscribe(
-        //                chatItem -> {
-        //                    Log.d(TAG, chatItem.getMessage());
-        //                    if (checkItem(chatItem)) {
-        //                        chatReceiver.addChatItem(chatItem);
-        //                    }
-        //                },
-        //                error -> {
-        //                    Log.e(TAG, error.getMessage());
-        //                    error.printStackTrace();
-        //                },
-        //                () -> Log.e(TAG, "Live chat session has been closed")
-        //        );
     }
 
     @Override

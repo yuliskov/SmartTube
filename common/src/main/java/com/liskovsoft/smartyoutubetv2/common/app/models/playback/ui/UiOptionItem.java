@@ -16,6 +16,7 @@ public class UiOptionItem implements OptionItem {
     private OptionItem[] mRequiredItems;
     private OptionItem[] mRadioItems;
     private ChatReceiver mChatReceiver;
+    private CommentsReceiver mCommentsReceiver;
 
     public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback) {
         return from(formats, callback, null);
@@ -94,6 +95,14 @@ public class UiOptionItem implements OptionItem {
         return uiOptionItem;
     }
 
+    public static OptionItem from(CharSequence title, CommentsReceiver commentsReceiver) {
+        UiOptionItem uiOptionItem = new UiOptionItem();
+        uiOptionItem.mTitle = title;
+        uiOptionItem.mCommentsReceiver = commentsReceiver;
+
+        return uiOptionItem;
+    }
+
     public static FormatItem toFormat(OptionItem option) {
         if (option instanceof UiOptionItem) {
             return ((UiOptionItem) option).mFormat;
@@ -167,5 +176,10 @@ public class UiOptionItem implements OptionItem {
     @Override
     public ChatReceiver getChatReceiver() {
         return mChatReceiver;
+    }
+
+    @Override
+    public CommentsReceiver getCommentsReceiver() {
+        return mCommentsReceiver;
     }
 }
