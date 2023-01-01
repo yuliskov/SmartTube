@@ -391,6 +391,12 @@ public class Utils {
         return spannable;
     }
 
+    public static CharSequence bold(CharSequence string) {
+        SpannableString spannable = new SpannableString(string);
+        spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannable;
+    }
+
     public static CharSequence icon(Context context, int resId, int lineHeight) {
         SpannableString spannable = new SpannableString(" ");
         Drawable drawable = ContextCompat.getDrawable(context, resId);

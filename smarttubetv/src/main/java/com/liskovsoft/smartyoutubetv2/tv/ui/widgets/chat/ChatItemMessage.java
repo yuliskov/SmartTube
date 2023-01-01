@@ -1,8 +1,10 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat;
 
+import android.text.TextUtils;
 import com.liskovsoft.mediaserviceinterfaces.data.ChatItem;
 import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.stfalcon.chatkit.commons.models.IMessage;
 
@@ -10,7 +12,7 @@ import java.util.Date;
 
 public class ChatItemMessage implements IMessage {
     private String mId;
-    private String mText;
+    private CharSequence mText;
     private ChatItemAuthor mAuthor;
     private Date mCreatedAt;
     private String mNestedCommentsKey;
@@ -31,12 +33,12 @@ public class ChatItemMessage implements IMessage {
         ChatItemMessage message = new ChatItemMessage();
         message.mId = commentItem.getId();
         if (commentItem.getMessage() != null && !commentItem.getMessage().trim().isEmpty()) {
-            message.mText = String.format("%s: %s",
-                    ServiceHelper.combineItems(" " + Video.TERTIARY_TEXT_DELIM + " ",
-                            commentItem.getAuthorName(),
-                            commentItem.getLikesCount(),
-                            commentItem.getPublishedDate()),
-                        commentItem.getMessage());
+            String header = ServiceHelper.combineItems(
+                    " " + Video.TERTIARY_TEXT_DELIM + " ",
+                    commentItem.getAuthorName(),
+                    commentItem.getLikesCount(),
+                    commentItem.getPublishedDate());
+            message.mText = TextUtils.concat(Utils.bold(header), "\n", commentItem.getMessage());
         }
         message.mAuthor = ChatItemAuthor.from(commentItem);
         message.mCreatedAt = new Date();
@@ -51,7 +53,7 @@ public class ChatItemMessage implements IMessage {
     }
 
     @Override
-    public String getText() {
+    public CharSequence getText() {
         return mText;
     }
 
