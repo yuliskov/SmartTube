@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat;
 import com.liskovsoft.mediaserviceinterfaces.data.ChatItem;
 import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.stfalcon.chatkit.commons.models.IMessage;
 
 import java.util.Date;
@@ -12,6 +13,7 @@ public class ChatItemMessage implements IMessage {
     private String mText;
     private ChatItemAuthor mAuthor;
     private Date mCreatedAt;
+    private String mNestedCommentsKey;
 
     public static ChatItemMessage from(ChatItem chatItem) {
         ChatItemMessage message = new ChatItemMessage();
@@ -29,11 +31,16 @@ public class ChatItemMessage implements IMessage {
         ChatItemMessage message = new ChatItemMessage();
         message.mId = commentItem.getId();
         if (commentItem.getMessage() != null && !commentItem.getMessage().trim().isEmpty()) {
-            message.mText = String.format("%s %s %s: %s",
-                    commentItem.getAuthorName(), Video.TERTIARY_TEXT_DELIM, commentItem.getPublishedDate(), commentItem.getMessage());
+            message.mText = String.format("%s: %s",
+                    ServiceHelper.combineItems(" " + Video.TERTIARY_TEXT_DELIM + " ",
+                            commentItem.getAuthorName(),
+                            commentItem.getLikesCount(),
+                            commentItem.getPublishedDate()),
+                        commentItem.getMessage());
         }
         message.mAuthor = ChatItemAuthor.from(commentItem);
         message.mCreatedAt = new Date();
+        message.mNestedCommentsKey = commentItem.getNestedCommentsKey();
 
         return message;
     }
@@ -56,5 +63,9 @@ public class ChatItemMessage implements IMessage {
     @Override
     public Date getCreatedAt() {
         return mCreatedAt;
+    }
+
+    public String getNestedCommentsKey() {
+        return mNestedCommentsKey;
     }
 }

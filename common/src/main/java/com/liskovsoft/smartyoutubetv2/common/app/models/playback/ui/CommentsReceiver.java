@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui;
 
 import com.liskovsoft.mediaserviceinterfaces.data.CommentGroup;
-import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
 
 public interface CommentsReceiver {
     interface Callback {
@@ -10,5 +9,5 @@ public interface CommentsReceiver {
     void addCommentGroup(CommentGroup commentGroup);
     void setCallback(Callback callback);
     void onLoadMore(String nextCommentsKey);
-    void onCommentClicked(CommentItem commentItem);
+    void onCommentClicked(String nestedCommentsKey);
 }

@@ -1,8 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import com.liskovsoft.mediaserviceinterfaces.CommentsService;
-import com.liskovsoft.mediaserviceinterfaces.data.CommentGroup;
-import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
@@ -10,6 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventList
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiver;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiverImpl;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -44,54 +43,30 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
-        CommentsReceiver commentsReceiver = new CommentsReceiver() {
-            private Callback mCallback;
-
-            @Override
-            public void addCommentGroup(CommentGroup commentGroup) {
-                if (mCallback != null) {
-                    mCallback.onCommentGroup(commentGroup);
-                }
-            }
-
-            @Override
-            public void setCallback(Callback callback) {
-                mCallback = callback;
-            }
-
+        CommentsReceiver commentsReceiver = new CommentsReceiverImpl() {
             @Override
             public void onLoadMore(String nextCommentsKey) {
-                disposeActions();
-
-                mCommentsAction = mCommentsService.getCommentsObserve(nextCommentsKey)
-                        .subscribe(
-                                this::addCommentGroup,
-                                error -> {
-                                    Log.e(TAG, error.getMessage());
-                                    error.printStackTrace();
-                                }
-                        );
+                loadComments(this, nextCommentsKey);
             }
 
             @Override
-            public void onCommentClicked(CommentItem commentItem) {
+            public void onCommentClicked(String nestedCommentsKey) {
+                CommentsReceiver nestedReceiver = new CommentsReceiverImpl() {
+                    @Override
+                    public void onLoadMore(String nextCommentsKey) {
+                        loadComments(this, nextCommentsKey);
+                    }
+                };
 
+                showDialog(nestedReceiver);
+
+                loadComments(nestedReceiver, nestedCommentsKey);
             }
         };
 
-        AppDialogPresenter appDialogPresenter = AppDialogPresenter.instance(getActivity());
-        String title = getController().getVideo().getTitle();
-        appDialogPresenter.appendCommentsCategory(title, UiOptionItem.from(title, commentsReceiver));
-        appDialogPresenter.showDialog();
+        showDialog(commentsReceiver);
 
-        mCommentsAction = mCommentsService.getCommentsObserve(mCommentsKey)
-                .subscribe(
-                        commentsReceiver::addCommentGroup,
-                        error -> {
-                            Log.e(TAG, error.getMessage());
-                            error.printStackTrace();
-                        }
-                );
+        loadComments(commentsReceiver, mCommentsKey);
     }
 
     @Override
@@ -113,5 +88,25 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
 
     private void disposeActions() {
         RxUtils.disposeActions(mCommentsAction);
+    }
+
+    private void loadComments(CommentsReceiver receiver, String commentsKey) {
+        disposeActions();
+
+        mCommentsAction = mCommentsService.getCommentsObserve(commentsKey)
+                .subscribe(
+                        receiver::addCommentGroup,
+                        error -> {
+                            Log.e(TAG, error.getMessage());
+                            error.printStackTrace();
+                        }
+                );
+    }
+
+    private void showDialog(CommentsReceiver receiver) {
+        AppDialogPresenter appDialogPresenter = AppDialogPresenter.instance(getActivity());
+        String title = getController().getVideo().getTitle();
+        appDialogPresenter.appendCommentsCategory(title, UiOptionItem.from(title, receiver));
+        appDialogPresenter.showDialog();
     }
 }
