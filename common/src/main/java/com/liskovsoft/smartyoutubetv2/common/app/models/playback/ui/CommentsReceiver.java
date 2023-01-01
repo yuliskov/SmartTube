@@ -9,6 +9,6 @@ public interface CommentsReceiver {
     }
     void addCommentGroup(CommentGroup commentGroup);
     void setCallback(Callback callback);
-    void onGroupEnd(CommentGroup commentGroup);
+    void onLoadMore(String nextCommentsKey);
     void onCommentClicked(CommentItem commentItem);
 }

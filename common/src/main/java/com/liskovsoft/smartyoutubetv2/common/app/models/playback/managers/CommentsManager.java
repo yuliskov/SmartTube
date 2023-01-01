@@ -60,8 +60,17 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
             }
 
             @Override
-            public void onGroupEnd(CommentGroup commentGroup) {
+            public void onLoadMore(String nextCommentsKey) {
+                disposeActions();
 
+                mCommentsAction = mCommentsService.getCommentsObserve(nextCommentsKey)
+                        .subscribe(
+                                this::addCommentGroup,
+                                error -> {
+                                    Log.e(TAG, error.getMessage());
+                                    error.printStackTrace();
+                                }
+                        );
             }
 
             @Override
@@ -103,9 +112,6 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
     }
 
     private void disposeActions() {
-        if (RxUtils.isAnyActionRunning(mCommentsAction)) {
-            RxUtils.disposeActions(mCommentsAction);
-            getController().setChatReceiver(null);
-        }
+        RxUtils.disposeActions(mCommentsAction);
     }
 }

@@ -23,6 +23,7 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
     private boolean mIsTransparent;
     private CommentsReceiver mCommentsReceiver;
     private CharSequence mDialogTitle;
+    private String mNextCommentsKey;
 
     public static CommentsPreferenceDialogFragment newInstance(CommentsReceiver commentsReceiver, String key) {
         final Bundle args = new Bundle(1);
@@ -65,6 +66,7 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
                     .apply(ViewUtil.glideOptions())
                     .circleCrop() // resize image
                     .into(imageView));
+        adapter.setLoadMoreListener((page, totalItemsCount) -> mCommentsReceiver.onLoadMore(mNextCommentsKey));
         messagesList.setAdapter(adapter);
 
         if (mCommentsReceiver != null) {
@@ -72,6 +74,10 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
                 for (CommentItem commentItem : commentGroup.getComments()) {
                     adapter.addToStart(ChatItemMessage.from(commentItem), false);
                 }
+                if (mNextCommentsKey == null) {
+                    adapter.scrollToTop();
+                }
+                mNextCommentsKey = commentGroup.getNextCommentsKey();
             });
         }
 
