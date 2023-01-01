@@ -68,6 +68,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
     private MessagesListStyle messagesListStyle;
     private DateFormatter.Formatter dateHeadersFormatter;
     private SparseArray<OnMessageViewClickListener> viewClickListenersArray = new SparseArray<>();
+    private boolean isTopDateEnabled;
 
     /**
      * For default list item layout and view holder.
@@ -153,7 +154,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
             return;
         }
 
-        boolean isNewMessageToday = !isPreviousSameDate(0, message.getCreatedAt());
+        boolean isNewMessageToday = isTopDateEnabled && !isPreviousSameDate(0, message.getCreatedAt());
         if (isNewMessageToday) {
             items.add(0, new Wrapper<>(message.getCreatedAt()));
         }
@@ -390,6 +391,10 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
     public void disableSelectionMode() {
         this.selectionListener = null;
         unselectAllItems();
+    }
+
+    public void enableTopDate(boolean enable) {
+        isTopDateEnabled = enable;
     }
 
     /**
