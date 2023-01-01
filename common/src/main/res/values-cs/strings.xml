@@ -452,7 +452,7 @@
     <string name="sources">Zdroje</string>
     <string name="releases">Vydané verze</string>
     <string name="prefer_avc_over_vp9">Výběr kodeku: preferování AVC nad VP9</string>
-    <string name="open_chat">Chat</string>
+    <string name="open_chat">Chat/Komentáře</string>
     <string name="place_chat_left">Umístit chat na levou stranu</string>
     <string name="use_alt_speech_recognizer">Alternativní rozpoznávač řeči</string>
     <string name="time_format">Časový režim</string>
