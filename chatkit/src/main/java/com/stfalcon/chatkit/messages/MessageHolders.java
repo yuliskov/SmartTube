@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
@@ -744,6 +745,8 @@ public class MessageHolders {
 
         protected ViewGroup bubble;
         protected TextView text;
+        // See: item_incoming_text_message.xml
+        protected RelativeLayout wrapper;
 
         @Deprecated
         public IncomingTextMessageViewHolder(View itemView) {
@@ -789,6 +792,10 @@ public class MessageHolders {
                 // Link configurator makes textView focusable.
                 if (style.isMessageFocusable()) {
                     configureLinksBehavior(text);
+                    wrapper.setFocusable(true);
+                    wrapper.setFocusableInTouchMode(true);
+                    wrapper.setClickable(true);
+                    wrapper.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
                 }
             }
         }
@@ -796,6 +803,7 @@ public class MessageHolders {
         private void init(View itemView) {
             bubble = itemView.findViewById(R.id.bubble);
             text = itemView.findViewById(R.id.messageText);
+            wrapper = (RelativeLayout) itemView;
         }
     }
 
@@ -807,6 +815,8 @@ public class MessageHolders {
 
         protected ViewGroup bubble;
         protected TextView text;
+        // See: item_outcoming_text_message.xml
+        protected RelativeLayout wrapper;
 
         @Deprecated
         public OutcomingTextMessageViewHolder(View itemView) {
@@ -852,6 +862,10 @@ public class MessageHolders {
                 // Link configurator makes textView focusable.
                 if (style.isMessageFocusable()) {
                     configureLinksBehavior(text);
+                    wrapper.setFocusable(true);
+                    wrapper.setFocusableInTouchMode(true);
+                    wrapper.setClickable(true);
+                    wrapper.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
                 }
             }
         }
@@ -859,6 +873,7 @@ public class MessageHolders {
         private void init(View itemView) {
             bubble = itemView.findViewById(R.id.bubble);
             text = itemView.findViewById(R.id.messageText);
+            wrapper = (RelativeLayout) itemView;
         }
     }
 

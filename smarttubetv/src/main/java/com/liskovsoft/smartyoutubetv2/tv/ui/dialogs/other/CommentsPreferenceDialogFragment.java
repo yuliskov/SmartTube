@@ -67,7 +67,7 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
                     .circleCrop() // resize image
                     .into(imageView));
         adapter.setLoadMoreListener((page, totalItemsCount) -> mCommentsReceiver.onLoadMore(mNextCommentsKey));
-        adapter.setOnMessageLongClickListener(message -> mCommentsReceiver.onCommentClicked(message.getNestedCommentsKey()));
+        adapter.setOnMessageClickListener(message -> mCommentsReceiver.onCommentClicked(message.getNestedCommentsKey()));
         messagesList.setAdapter(adapter);
 
         if (mCommentsReceiver != null) {

@@ -27,6 +27,8 @@ class RecyclerScrollMoreListener
     private OnLoadMoreListener loadMoreListener;
     private int currentPage = 0;
     private int previousTotalItemCount = 0;
+    private int currentScrollPos = 0;
+    private int maxScrollPos = 0;
     private boolean loading = true;
 
     private RecyclerView.LayoutManager mLayoutManager;
@@ -51,6 +53,13 @@ class RecyclerScrollMoreListener
     @Override
     public void onScrolled(RecyclerView view, int dx, int dy) {
         if (loadMoreListener != null) {
+            // MODIFIED: throttle calls
+            currentScrollPos += dy;
+            if (currentScrollPos <= maxScrollPos) {
+                return;
+            }
+            maxScrollPos += dy;
+
             int lastVisibleItemPosition = 0;
             int totalItemCount = mLayoutManager.getItemCount();
 
