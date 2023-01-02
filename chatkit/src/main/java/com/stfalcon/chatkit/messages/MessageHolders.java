@@ -796,6 +796,7 @@ public class MessageHolders {
                     wrapper.setFocusableInTouchMode(true);
                     wrapper.setClickable(true);
                     wrapper.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+                    wrapper.requestFocus();
                 }
             }
         }
@@ -866,6 +867,7 @@ public class MessageHolders {
                     wrapper.setFocusableInTouchMode(true);
                     wrapper.setClickable(true);
                     wrapper.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+                    wrapper.requestFocus();
                 }
             }
         }
