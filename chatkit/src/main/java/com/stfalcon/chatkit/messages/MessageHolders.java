@@ -792,11 +792,19 @@ public class MessageHolders {
                 // Link configurator makes textView focusable.
                 if (style.isMessageFocusable()) {
                     configureLinksBehavior(text);
-                    wrapper.setFocusable(true);
-                    wrapper.setFocusableInTouchMode(true);
-                    wrapper.setClickable(true);
-                    wrapper.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-                    wrapper.requestFocus();
+
+                    text.setFocusable(true);
+                    text.setFocusableInTouchMode(true);
+                    text.setClickable(true);
+                    text.setBackgroundResource(R.drawable.bgchange);
+                    text.requestFocus();
+
+                    //wrapper.setFocusable(true);
+                    //wrapper.setFocusableInTouchMode(true);
+                    //wrapper.setClickable(true);
+                    //wrapper.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+                    //wrapper.requestFocus();
+                    //wrapper.setBackgroundResource(R.drawable.bgchange);
                 }
             }
         }

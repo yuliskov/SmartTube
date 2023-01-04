@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true" android:drawable="@color/tg_selected_bg"/>
+    <!--<item android:drawable="@color/white"/> &lt;!&ndash; default &ndash;&gt;-->
+    <!--<item android:state_focused="true" android:color="#000000"/>-->
+    <!--<item android:color="#FFFFFF" />  &lt;!&ndash; default &ndash;&gt;-->
+</selector>
