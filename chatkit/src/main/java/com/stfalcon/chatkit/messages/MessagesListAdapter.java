@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.LayoutRes;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.stfalcon.chatkit.R;
 import com.stfalcon.chatkit.commons.ImageLoader;
@@ -153,6 +154,8 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         if (!checkMessage(message)) {
             return;
         }
+
+        removeLoadingMessageIfNeeded();
 
         boolean isNewMessageToday = isTopDateEnabled && !isPreviousSameDate(0, message.getCreatedAt());
         if (isNewMessageToday) {
@@ -395,6 +398,25 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
 
     public void enableTopDate(boolean enable) {
         isTopDateEnabled = enable;
+    }
+
+    public void setLoadingMessage(String message, boolean alignBottom) {
+        if (message == null || !items.isEmpty()) {
+            return;
+        }
+
+        ((LinearLayoutManager) layoutManager).setReverseLayout(alignBottom);
+        items.add(new Wrapper<>(message));
+        notifyItemInserted(0);
+    }
+
+    private void removeLoadingMessageIfNeeded() {
+        if (items.size() == 1 && items.get(0).item instanceof String) {
+            // Reset to defaults (see MessagesList.setAdapter)
+            ((LinearLayoutManager) layoutManager).setReverseLayout(true);
+            items.remove(0);
+            notifyItemRemoved(0);
+        }
     }
 
     /**

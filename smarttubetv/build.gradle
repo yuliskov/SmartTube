@@ -125,11 +125,11 @@ android {
             versionCode 11000 + defaultConfig.versionCode
             applicationId "com.redboxtv.smartyoutubetv"
         }
-        stsibsetru {
-            // matchingFallbacks = ['lite']
-            versionCode 11000 + defaultConfig.versionCode
-            applicationId "com.sibsetru.smartyoutubetv"
-        }
+        // stsibsetru {
+        //     // matchingFallbacks = ['lite']
+        //     versionCode 11000 + defaultConfig.versionCode
+        //     applicationId "com.sibsetru.smartyoutubetv"
+        // }
     }
 
     // naming example: SmartYouTubeTV_Xwalk_v6.8.12_r.apk

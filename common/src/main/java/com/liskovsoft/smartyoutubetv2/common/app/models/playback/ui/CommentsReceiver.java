@@ -10,4 +10,5 @@ public interface CommentsReceiver {
     void setCallback(Callback callback);
     void onLoadMore(String nextCommentsKey);
     void onCommentClicked(String nestedCommentsKey);
+    String getLoadingMessage();
 }

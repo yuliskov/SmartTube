@@ -69,18 +69,17 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
         adapter.setLoadMoreListener((page, totalItemsCount) -> mCommentsReceiver.onLoadMore(mNextCommentsKey));
         adapter.setOnMessageClickListener(message -> mCommentsReceiver.onCommentClicked(message.getNestedCommentsKey()));
         messagesList.setAdapter(adapter);
+        adapter.setLoadingMessage(mCommentsReceiver.getLoadingMessage(), false);
 
-        if (mCommentsReceiver != null) {
-            mCommentsReceiver.setCallback(commentGroup -> {
-                for (CommentItem commentItem : commentGroup.getComments()) {
-                    adapter.addToStart(ChatItemMessage.from(commentItem), false);
-                }
-                if (mNextCommentsKey == null) {
-                    adapter.scrollToTop();
-                }
-                mNextCommentsKey = commentGroup.getNextCommentsKey();
-            });
-        }
+        mCommentsReceiver.setCallback(commentGroup -> {
+            for (CommentItem commentItem : commentGroup.getComments()) {
+                adapter.addToStart(ChatItemMessage.from(commentItem), false);
+            }
+            if (mNextCommentsKey == null) {
+                adapter.scrollToTop();
+            }
+            mNextCommentsKey = commentGroup.getNextCommentsKey();
+        });
 
         if (mIsTransparent) {
             ViewUtil.enableTransparentDialog(getActivity(), view);

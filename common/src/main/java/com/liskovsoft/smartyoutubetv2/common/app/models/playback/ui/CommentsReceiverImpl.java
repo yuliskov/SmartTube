@@ -26,4 +26,9 @@ public class CommentsReceiverImpl implements CommentsReceiver {
     public void onCommentClicked(String nestedCommentsKey) {
 
     }
+
+    @Override
+    public String getLoadingMessage() {
+        return null;
+    }
 }
