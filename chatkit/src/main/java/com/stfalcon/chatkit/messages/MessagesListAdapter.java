@@ -46,7 +46,7 @@ import java.util.List;
  */
 @SuppressWarnings("WeakerAccess")
 public class MessagesListAdapter<MESSAGE extends IMessage>
-        extends RecyclerView.Adapter<ViewHolder>
+        extends RecyclerView.Adapter<ViewHolder<MESSAGE>>
         implements RecyclerScrollMoreListener.OnLoadMoreListener {
 
     protected static boolean isSelectionModeEnabled;

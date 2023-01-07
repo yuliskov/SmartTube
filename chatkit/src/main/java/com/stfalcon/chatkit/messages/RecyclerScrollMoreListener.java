@@ -50,27 +50,20 @@ class RecyclerScrollMoreListener
         return maxSize;
     }
 
+    // MODIFIED: fully custom
+    // Fix: lastVisibleItemPositions is wrong. Solution: remove it altogether.
     @Override
     public void onScrolled(RecyclerView view, int dx, int dy) {
         if (loadMoreListener != null) {
             // MODIFIED: throttle calls
+            // Swallow scrolling up. Continue on scroll down.
             currentScrollPos += dy;
             if (currentScrollPos <= maxScrollPos) {
                 return;
             }
             maxScrollPos += dy;
 
-            int lastVisibleItemPosition = 0;
             int totalItemCount = mLayoutManager.getItemCount();
-
-            if (mLayoutManager instanceof StaggeredGridLayoutManager) {
-                int[] lastVisibleItemPositions = ((StaggeredGridLayoutManager) mLayoutManager).findLastVisibleItemPositions(null);
-                lastVisibleItemPosition = getLastVisibleItem(lastVisibleItemPositions);
-            } else if (mLayoutManager instanceof LinearLayoutManager) {
-                lastVisibleItemPosition = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
-            } else if (mLayoutManager instanceof GridLayoutManager) {
-                lastVisibleItemPosition = ((GridLayoutManager) mLayoutManager).findLastVisibleItemPosition();
-            }
 
             if (totalItemCount < previousTotalItemCount) {
                 this.currentPage = 0;
@@ -85,14 +78,51 @@ class RecyclerScrollMoreListener
                 previousTotalItemCount = totalItemCount;
             }
 
-            int visibleThreshold = 5;
-            if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
+            if (!loading) {
                 currentPage++;
                 loadMoreListener.onLoadMore(loadMoreListener.getMessagesCount(), totalItemCount);
                 loading = true;
             }
         }
     }
+
+    // ORIGIN
+    //@Override
+    //public void onScrolled(RecyclerView view, int dx, int dy) {
+    //    if (loadMoreListener != null) {
+    //        int lastVisibleItemPosition = 0;
+    //        int totalItemCount = mLayoutManager.getItemCount();
+    //
+    //        if (mLayoutManager instanceof StaggeredGridLayoutManager) {
+    //            int[] lastVisibleItemPositions = ((StaggeredGridLayoutManager) mLayoutManager).findLastVisibleItemPositions(null);
+    //            lastVisibleItemPosition = getLastVisibleItem(lastVisibleItemPositions);
+    //        } else if (mLayoutManager instanceof LinearLayoutManager) {
+    //            lastVisibleItemPosition = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
+    //        } else if (mLayoutManager instanceof GridLayoutManager) {
+    //            lastVisibleItemPosition = ((GridLayoutManager) mLayoutManager).findLastVisibleItemPosition();
+    //        }
+    //
+    //        if (totalItemCount < previousTotalItemCount) {
+    //            this.currentPage = 0;
+    //            this.previousTotalItemCount = totalItemCount;
+    //            if (totalItemCount == 0) {
+    //                this.loading = true;
+    //            }
+    //        }
+    //
+    //        if (loading && (totalItemCount > previousTotalItemCount)) {
+    //            loading = false;
+    //            previousTotalItemCount = totalItemCount;
+    //        }
+    //
+    //        int visibleThreshold = 5;
+    //        if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
+    //            currentPage++;
+    //            loadMoreListener.onLoadMore(loadMoreListener.getMessagesCount(), totalItemCount);
+    //            loading = true;
+    //        }
+    //    }
+    //}
 
     interface OnLoadMoreListener {
         void onLoadMore(int page, int total);

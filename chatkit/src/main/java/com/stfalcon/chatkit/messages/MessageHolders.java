@@ -800,18 +800,18 @@ public class MessageHolders {
                 if (style.isMessageFocusable()) {
                     configureLinksBehavior(text);
 
-                    text.setFocusable(true);
-                    text.setFocusableInTouchMode(true);
-                    text.setClickable(true);
-                    text.setBackgroundResource(R.drawable.bgchange);
-                    text.requestFocus();
+                    //text.setFocusable(true);
+                    //text.setFocusableInTouchMode(true);
+                    //text.setClickable(true);
+                    //text.setBackgroundResource(R.drawable.bgchange);
+                    //text.requestFocus();
 
-                    //wrapper.setFocusable(true);
+                    wrapper.setFocusable(true);
                     //wrapper.setFocusableInTouchMode(true);
                     //wrapper.setClickable(true);
                     //wrapper.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
                     //wrapper.requestFocus();
-                    //wrapper.setBackgroundResource(R.drawable.bgchange);
+                    wrapper.setBackgroundResource(R.drawable.bgchange);
                 }
             }
         }
