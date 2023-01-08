@@ -110,6 +110,11 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
                 getMessageLongClickListener(wrapper),
                 dateHeadersFormatter,
                 viewClickListenersArray);
+
+        // Default focus on top message
+        if ((items.size() - 1) == position && holder.itemView.isFocusable()) {
+            holder.itemView.requestFocus();
+        }
     }
 
     @Override

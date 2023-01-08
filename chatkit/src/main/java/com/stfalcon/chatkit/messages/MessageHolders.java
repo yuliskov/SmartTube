@@ -811,7 +811,10 @@ public class MessageHolders {
                     //wrapper.setClickable(true);
                     //wrapper.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
                     //wrapper.requestFocus();
-                    wrapper.setBackgroundResource(R.drawable.bgchange);
+                    //wrapper.setBackgroundResource(R.drawable.bgchange);
+                    wrapper.setOnFocusChangeListener((v, hasFocus) -> {
+                        text.setBackgroundResource(hasFocus ? R.color.tg_selected_bg : R.color.transparent);
+                    });
                 }
             }
         }
