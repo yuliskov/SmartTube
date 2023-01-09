@@ -18,12 +18,15 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
+import java.lang.ref.WeakReference;
+
 public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFragment {
     private static final String SENDER_ID = CommentsPreferenceDialogFragment.class.getSimpleName();
     private boolean mIsTransparent;
     private CommentsReceiver mCommentsReceiver;
     private CharSequence mDialogTitle;
     private String mNextCommentsKey;
+    private WeakReference<View> mFocusedView = new WeakReference<>(null);
 
     public static CommentsPreferenceDialogFragment newInstance(CommentsReceiver commentsReceiver, String key) {
         final Bundle args = new Bundle(1);
@@ -67,8 +70,12 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
                     .circleCrop() // resize image
                     .into(imageView));
         adapter.setLoadMoreListener((page, totalItemsCount) -> mCommentsReceiver.onLoadMore(mNextCommentsKey));
-        adapter.setOnMessageClickListener(message -> mCommentsReceiver.onCommentClicked(message.getNestedCommentsKey()));
+        adapter.setOnMessageViewClickListener((v, message) -> {
+            mFocusedView = new WeakReference<>(v);
+            mCommentsReceiver.onCommentClicked(message.getNestedCommentsKey());
+        });
         messagesList.setAdapter(adapter);
+        adapter.enableStackFromEnd(true);
         adapter.setLoadingMessage(mCommentsReceiver.getLoadingMessage(), false);
 
         mCommentsReceiver.setCallback(commentGroup -> {
@@ -90,5 +97,11 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
 
     public void enableTransparent(boolean enable) {
         mIsTransparent = enable;
+    }
+
+    public void restoreFocus() {
+        if (mFocusedView.get() != null) {
+            mFocusedView.get().requestFocus();
+        }
     }
 }

@@ -5,7 +5,6 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
-import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
@@ -46,7 +45,7 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
-        CommentsReceiver commentsReceiver = new CommentsReceiverImpl() {
+        CommentsReceiver commentsReceiver = new CommentsReceiverImpl(getActivity()) {
             @Override
             public void onLoadMore(String nextCommentsKey) {
                 loadComments(this, nextCommentsKey);
@@ -58,7 +57,7 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
                     return;
                 }
 
-                CommentsReceiver nestedReceiver = new CommentsReceiverImpl() {
+                CommentsReceiver nestedReceiver = new CommentsReceiverImpl(getActivity()) {
                     @Override
                     public void onLoadMore(String nextCommentsKey) {
                         loadComments(this, nextCommentsKey);
@@ -68,11 +67,6 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
                 showDialogNested(nestedReceiver);
 
                 loadComments(nestedReceiver, nestedCommentsKey);
-            }
-
-            @Override
-            public String getLoadingMessage() {
-                return getActivity().getString(R.string.loading);
             }
         };
 
@@ -104,9 +98,9 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
     }
 
     private void loadComments(CommentsReceiver receiver, String commentsKey) {
-        if (Helpers.equals(mLastCommentsKey, commentsKey)) {
-            return;
-        }
+        //if (Helpers.equals(mLastCommentsKey, commentsKey)) {
+        //    return;
+        //}
 
         disposeActions();
 

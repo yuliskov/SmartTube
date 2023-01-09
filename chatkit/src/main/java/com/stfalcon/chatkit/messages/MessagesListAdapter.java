@@ -31,6 +31,7 @@ import androidx.annotation.LayoutRes;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.stfalcon.chatkit.R;
+import com.stfalcon.chatkit.commons.DebouncedOnClickListener;
 import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.commons.ViewHolder;
 import com.stfalcon.chatkit.commons.models.IMessage;
@@ -405,12 +406,19 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         isTopDateEnabled = enable;
     }
 
+    public void enableStackFromEnd(boolean enable) {
+        // The solution for aligning items to the top instead of bottom
+        // https://stackoverflow.com/questions/46168245/recyclerview-reverse-order
+        ((LinearLayoutManager) layoutManager).setStackFromEnd(enable);
+    }
+
     public void setLoadingMessage(String message, boolean alignBottom) {
         if (message == null || !items.isEmpty()) {
             return;
         }
 
-        ((LinearLayoutManager) layoutManager).setReverseLayout(alignBottom);
+        // Align top
+        //((LinearLayoutManager) layoutManager).setReverseLayout(alignBottom);
         items.add(new Wrapper<>(message));
         notifyItemInserted(0);
     }
@@ -418,7 +426,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
     private void removeLoadingMessageIfNeeded() {
         if (items.size() == 1 && items.get(0).item instanceof String) {
             // Reset to defaults (see MessagesList.setAdapter)
-            ((LinearLayoutManager) layoutManager).setReverseLayout(true);
+            //((LinearLayoutManager) layoutManager).setReverseLayout(true);
             items.remove(0);
             notifyItemRemoved(0);
         }
@@ -671,18 +679,21 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
     }
 
     private View.OnClickListener getMessageClickListener(final Wrapper<MESSAGE> wrapper) {
-        return view -> {
-            if (selectionListener != null && isSelectionModeEnabled) {
-                wrapper.isSelected = !wrapper.isSelected;
+        return new DebouncedOnClickListener(3_000) {
+            @Override
+            public void onDebouncedClick(View view) {
+                if (selectionListener != null && isSelectionModeEnabled) {
+                    wrapper.isSelected = !wrapper.isSelected;
 
-                if (wrapper.isSelected) incrementSelectedItemsCount();
-                else decrementSelectedItemsCount();
+                    if (wrapper.isSelected) incrementSelectedItemsCount();
+                    else decrementSelectedItemsCount();
 
-                MESSAGE message = (wrapper.item);
-                notifyItemChanged(getMessagePositionById(message.getId()));
-            } else {
-                notifyMessageClicked(wrapper.item);
-                notifyMessageViewClicked(view, wrapper.item);
+                    MESSAGE message = (wrapper.item);
+                    notifyItemChanged(getMessagePositionById(message.getId()));
+                } else {
+                    notifyMessageClicked(wrapper.item);
+                    notifyMessageViewClicked(view, wrapper.item);
+                }
             }
         };
     }

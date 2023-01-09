@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.CommentsPreference;
@@ -37,6 +40,8 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     private AppPreferenceFragment mPreferenceFragment;
     private AppDialogPresenter mSettingsPresenter;
     private boolean mIsTransparent;
+    private static final String PREFERENCE_FRAGMENT_TAG =
+            "androidx.leanback.preference.LeanbackSettingsFragment.PREFERENCE_FRAGMENT";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,7 +100,9 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     }
 
     private AppPreferenceFragment buildPreferenceFragment() {
-        return new AppPreferenceFragment();
+        AppPreferenceFragment fragment = new AppPreferenceFragment();
+        fragment.setIsRoot(mPreferenceFragment == null);
+        return fragment;
     }
 
     @Override
@@ -200,6 +207,24 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     public void onFinish() {
         mSettingsPresenter.onFinish();
     }
+
+    @Override
+    public void startPreferenceFragment(@NonNull Fragment fragment) {
+        final FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        final Fragment prevFragment =
+                getChildFragmentManager().findFragmentByTag(PREFERENCE_FRAGMENT_TAG);
+        if (prevFragment != null) {
+            transaction
+                    .addToBackStack(null)
+                    .add(R.id.settings_preference_fragment_container, fragment,
+                            PREFERENCE_FRAGMENT_TAG);
+        } else {
+            transaction
+                    .add(R.id.settings_preference_fragment_container, fragment,
+                            PREFERENCE_FRAGMENT_TAG);
+        }
+        transaction.commit();
+    }
     
     public static class AppPreferenceFragment extends LeanbackPreferenceFragment {
         private static final String TAG = AppPreferenceFragment.class.getSimpleName();
@@ -208,7 +233,9 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         private AppDialogFragmentManager mManager;
         private String mTitle;
         private int mBackStackCount;
+        private int mMyBackStackIdx;
         private boolean mIsTransparent;
+        private boolean mIsRoot;
 
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {
@@ -268,6 +295,8 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
                     if (getFragmentManager() != null) {
                         mBackStackCount = 0;
+                        int count = getFragmentManager().getBackStackEntryCount();
+                        mMyBackStackIdx = count > 0 ? count + 1 : mIsRoot ? 0 : 1;
 
                         getFragmentManager().addOnBackStackChangedListener(this::onBackPressed);
                     }
@@ -305,16 +334,27 @@ public class AppDialogFragment extends LeanbackSettingsFragment
             }
         }
 
+        public void setIsRoot(boolean isRoot) {
+            mIsRoot = isRoot;
+        }
+
         private void onBackPressed() {
             if (getFragmentManager() != null) {
+                Fragment current = getFragmentManager().findFragmentByTag(PREFERENCE_FRAGMENT_TAG);
+
+                if (current instanceof CommentsPreferenceDialogFragment) {
+                    ((CommentsPreferenceDialogFragment) current).restoreFocus();
+                }
+
                 int currentBackStackCount = getFragmentManager().getBackStackEntryCount();
 
-                if (currentBackStackCount < mBackStackCount) {
+                if (currentBackStackCount < mBackStackCount &&
+                        currentBackStackCount == mMyBackStackIdx) {
                     if (currentBackStackCount == 0) {
-                        // single dialog
+                        // finish dialog
                         getActivity().finish();
                     } else {
-                        // multiple stacked dialogs
+                        // one level back
                         getFragmentManager().popBackStack();
                     }
                 }
