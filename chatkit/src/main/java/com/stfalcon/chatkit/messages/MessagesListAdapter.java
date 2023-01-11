@@ -71,6 +71,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
     private DateFormatter.Formatter dateHeadersFormatter;
     private SparseArray<OnMessageViewClickListener> viewClickListenersArray = new SparseArray<>();
     private boolean isTopDateEnabled;
+    private int currentPosition = -1;
 
     /**
      * For default list item layout and view holder.
@@ -708,6 +709,15 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
                 view.performClick();
             }
             return true;
+        };
+    }
+
+    private View.OnFocusChangeListener getMessageFocusChangeListener(final Wrapper<MESSAGE> wrapper) {
+        return (v, hasFocus) -> {
+            if (hasFocus) {
+                MESSAGE message = (wrapper.item);
+                currentPosition = getMessagePositionById(message.getId());
+            }
         };
     }
 
