@@ -389,9 +389,9 @@
     <string name="pressing_home">durch Drücken von HOME</string>
     <string name="pressing_home_back">durch Drücken von HOME oder BACK</string>
     <string name="player_number_key_seek">Spulen mit Zifferntasten</string>
-    <string name="save_remove_playlist">Wiedergabeliste zur Wiedergabelisten-Kategorie hinzufügen/löschen</string>
-    <string name="remove_playlist">Wiedergabeliste dauerhaft aus Wiedergabelisten-Kategorie löschen</string>
-    <string name="removed_from_playlists">Gelöscht aus der Wiedergabelisten-Kategorie</string>
+    <string name="save_remove_playlist">Wiedergabeliste zur Wiedergabelisten-Kategorie hinzufügen/entfernen</string>
+    <string name="remove_playlist">Wiedergabeliste dauerhaft aus Wiedergabelisten-Kategorie entfernen</string>
+    <string name="removed_from_playlists">Entfernt aus der Wiedergabelisten-Kategorie</string>
     <string name="saved_to_playlists">Hinzugefügt zur Wiedergabelisten-Kategorie</string>
     <string name="create_playlist">Wiedergabeliste erstellen</string>
     <string name="add_video_to_new_playlist">Hinzufügen zu neuer Wiedergabeliste</string>
@@ -452,7 +452,7 @@
     <string name="sources">Quellen</string>
     <string name="releases">Versionen</string>
     <string name="prefer_avc_over_vp9">Codec-Auswahl: avc statt vp9 bevorzugen</string>
-    <string name="open_chat">Chat</string>
+    <string name="open_chat">Chat/Kommentare</string>
     <string name="place_chat_left">Chat auf linker Seite platzieren</string>
     <string name="use_alt_speech_recognizer">Alternative Spracherkennung</string>
     <string name="time_format">Stunden-Format</string>
@@ -491,4 +491,7 @@
     <string name="resume_history">Verlauf fortsetzen</string>
     <string name="clear_history">Verlauf löschen</string>
     <string name="chapters">Kapitel</string>
+    <string name="card_multiline_subtitle">Mehrzeilige Untertitel</string>
+    <string name="auto_frame_rate_modes">Unterstützte Modi</string>
+    <string name="loading">Wird geladen…</string>
 </resources>
