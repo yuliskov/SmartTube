@@ -469,4 +469,27 @@
   <string name="color_scheme_dark_grey_monochrome">Gris foncé (monochrome)</string>
   <string name="disable_mic_permission">Veuillez désactiver l\'accès au microphone pour l\'application afin que cet outil de reconnaissance fonctionne correctement.</string>
   <string name="repeat_mode_shuffle">Lecture aléatoire de n\'importe quelle playlist</string>
+  <string name="chat_left">Gauche</string>
+  <string name="chat_right">Droit</string>
+  <string name="card_real_thumbnails">Remplacer les vignettes par une image de la vidéo</string>
+  <string name="card_content">Où trouver les vignettes</string>
+  <string name="thumb_quality_default">Défaut</string>
+  <string name="thumb_quality_start">Début de la vidéo</string>
+  <string name="thumb_quality_middle">Milieu de la vidéo</string>
+  <string name="thumb_quality_end">Fin de la vidéo</string>
+  <string name="content_block_status">Vérifier le statut de SponsorBlock</string>
+  <string name="player_show_quality_info_bitrate">Ajouter le débit binaire sur la qualité dans les informations</string>
+  <string name="player_speed_button_old_behavior">Rétablir l'ancien comportement du bouton de vitesse</string>
+  <string name="protect_settings_with_password">Protéger tous les paramètres avec un mot de passe</string>
+  <string name="enter_settings_password">Entrez le mot de passe des paramètres</string>
+  <string name="child_mode">Mode enfant</string>
+  <string name="child_mode_desc">Dans ce mode, l'utilisateur ne peut pas utiliser la recherche ni voir de contenu suggéré. Les paramètres seront sous le mot de passe.</string>
+  <string name="lost_setting_warning">Les paramètres de l'application seront modifiés. Assurez-vous d'avoir créé une sauvegarde des paramètres.</string>
+  <string name="player_button_long_click">Un clic court sur le bouton pour une action rapide et un long pour la boîte de dialogue des paramètres.</string>
+  <string name="pause_history">Suspendre l'historique</string>
+  <string name="resume_history">Reprendre l'historique</string>
+  <string name="clear_history">Effacer l'historique</string>
+  <string name="chapters">Chapitres</string>
+  <string name="card_multiline_subtitle">Sous-titres multilignes</string>
+  <string name="auto_frame_rate_modes">Modes supportés</string>
 </resources>
