@@ -279,8 +279,8 @@ public class ExoMediaSourceFactory {
         //        AppConstants.APP_USER_AGENT, bandwidthMeter);
 
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
-                AppConstants.APP_USER_AGENT, bandwidthMeter, DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
-                DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, true); // allowCrossProtocolRedirects = true
+                AppConstants.APP_USER_AGENT, bandwidthMeter, (int) OkHttpCommons.CONNECT_TIMEOUT_MS,
+                (int) OkHttpCommons.READ_TIMEOUT_MS, true); // allowCrossProtocolRedirects = true
 
         addCommonHeaders(dataSourceFactory); // cause troubles for some users
         //if (YouTubeSignInManager.mAuthorizationHeaderCached != null) {
