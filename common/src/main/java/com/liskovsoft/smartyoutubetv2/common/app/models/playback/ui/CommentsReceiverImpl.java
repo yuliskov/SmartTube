@@ -4,7 +4,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.CommentGroup;
 import com.liskovsoft.smartyoutubetv2.common.R;
 
-public class CommentsReceiverImpl implements CommentsReceiver {
+public abstract class CommentsReceiverImpl implements CommentsReceiver {
     private final Context mContext;
     private Callback mCallback;
 

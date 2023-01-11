@@ -88,6 +88,8 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
             mNextCommentsKey = commentGroup.getNextCommentsKey();
         });
 
+        mCommentsReceiver.onStart();
+
         if (mIsTransparent) {
             ViewUtil.enableTransparentDialog(getActivity(), view);
         }

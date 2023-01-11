@@ -9,6 +9,7 @@ public interface CommentsReceiver {
     void addCommentGroup(CommentGroup commentGroup);
     void setCallback(Callback callback);
     void onLoadMore(String nextCommentsKey);
+    void onStart();
     void onCommentClicked(String nestedCommentsKey);
     String getLoadingMessage();
 }

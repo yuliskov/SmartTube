@@ -207,29 +207,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     public void onFinish() {
         mSettingsPresenter.onFinish();
     }
-
-    @Override
-    public void startPreferenceFragment(@NonNull Fragment fragment) {
-        if (fragment instanceof CommentsPreferenceDialogFragment) {
-            final FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-            final Fragment prevFragment =
-                    getChildFragmentManager().findFragmentByTag(PREFERENCE_FRAGMENT_TAG);
-            if (prevFragment != null) {
-                transaction
-                        .addToBackStack(null)
-                        // 'add' instead of 'replace' to avoid fragment recreation
-                        .add(R.id.settings_preference_fragment_container, fragment,
-                                PREFERENCE_FRAGMENT_TAG);
-            } else {
-                transaction
-                        .add(R.id.settings_preference_fragment_container, fragment,
-                                PREFERENCE_FRAGMENT_TAG);
-            }
-            transaction.commit();
-        } else {
-            super.startPreferenceFragment(fragment);
-        }
-    }
     
     public static class AppPreferenceFragment extends LeanbackPreferenceFragment {
         private static final String TAG = AppPreferenceFragment.class.getSimpleName();
@@ -345,12 +322,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
         private void onBackPressed() {
             if (getFragmentManager() != null) {
-                Fragment current = getFragmentManager().findFragmentByTag(PREFERENCE_FRAGMENT_TAG);
-
-                if (current instanceof CommentsPreferenceDialogFragment) {
-                    ((CommentsPreferenceDialogFragment) current).restoreFocus();
-                }
-
                 int currentBackStackCount = getFragmentManager().getBackStackEntryCount();
 
                 if (currentBackStackCount < mBackStackCount &&

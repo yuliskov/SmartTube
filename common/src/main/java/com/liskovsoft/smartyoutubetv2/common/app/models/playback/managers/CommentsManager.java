@@ -52,6 +52,11 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
             }
 
             @Override
+            public void onStart() {
+                loadComments(this, mCommentsKey);
+            }
+
+            @Override
             public void onCommentClicked(String nestedCommentsKey) {
                 if (nestedCommentsKey == null) {
                     return;
@@ -62,17 +67,18 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
                     public void onLoadMore(String nextCommentsKey) {
                         loadComments(this, nextCommentsKey);
                     }
+
+                    @Override
+                    public void onStart() {
+                        loadComments(this, nestedCommentsKey);
+                    }
                 };
 
                 showDialogNested(nestedReceiver);
-
-                loadComments(nestedReceiver, nestedCommentsKey);
             }
         };
 
         showDialog(commentsReceiver);
-
-        loadComments(commentsReceiver, mCommentsKey);
     }
 
     @Override
