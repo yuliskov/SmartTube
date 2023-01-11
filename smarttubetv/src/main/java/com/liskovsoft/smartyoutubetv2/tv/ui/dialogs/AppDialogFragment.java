@@ -210,20 +210,25 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
     @Override
     public void startPreferenceFragment(@NonNull Fragment fragment) {
-        final FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        final Fragment prevFragment =
-                getChildFragmentManager().findFragmentByTag(PREFERENCE_FRAGMENT_TAG);
-        if (prevFragment != null) {
-            transaction
-                    .addToBackStack(null)
-                    .add(R.id.settings_preference_fragment_container, fragment,
-                            PREFERENCE_FRAGMENT_TAG);
+        if (fragment instanceof CommentsPreferenceDialogFragment) {
+            final FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            final Fragment prevFragment =
+                    getChildFragmentManager().findFragmentByTag(PREFERENCE_FRAGMENT_TAG);
+            if (prevFragment != null) {
+                transaction
+                        .addToBackStack(null)
+                        // 'add' instead of 'replace' to avoid fragment recreation
+                        .add(R.id.settings_preference_fragment_container, fragment,
+                                PREFERENCE_FRAGMENT_TAG);
+            } else {
+                transaction
+                        .add(R.id.settings_preference_fragment_container, fragment,
+                                PREFERENCE_FRAGMENT_TAG);
+            }
+            transaction.commit();
         } else {
-            transaction
-                    .add(R.id.settings_preference_fragment_container, fragment,
-                            PREFERENCE_FRAGMENT_TAG);
+            super.startPreferenceFragment(fragment);
         }
-        transaction.commit();
     }
     
     public static class AppPreferenceFragment extends LeanbackPreferenceFragment {
