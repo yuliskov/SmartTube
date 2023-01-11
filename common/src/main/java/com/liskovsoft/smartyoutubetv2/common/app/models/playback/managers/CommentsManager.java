@@ -74,7 +74,7 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
                     }
                 };
 
-                showDialogNested(nestedReceiver);
+                showDialog(nestedReceiver);
             }
         };
 
@@ -131,14 +131,14 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
         appDialogPresenter.showDialog();
     }
 
-    private void showDialogNested(CommentsReceiver receiver) {
-        AppDialogPresenter appDialogPresenter = AppDialogPresenter.instance(getActivity());
-        appDialogPresenter.clear();
-        String title = getController().getVideo().getTitle();
-
-        appDialogPresenter.appendCommentsCategory(title, UiOptionItem.from(title, receiver));
-        appDialogPresenter.showDialog();
-    }
+    //private void showDialogNested(CommentsReceiver receiver) {
+    //    AppDialogPresenter appDialogPresenter = AppDialogPresenter.instance(getActivity());
+    //    appDialogPresenter.clear();
+    //    String title = getController().getVideo().getTitle();
+    //
+    //    appDialogPresenter.appendCommentsCategory(title, UiOptionItem.from(title, receiver));
+    //    appDialogPresenter.showDialog();
+    //}
 
     //private void showDialog(CommentsReceiver receiver) {
     //    //VideoMenuPresenter.instance(getActivity()).showMenu(getController().getVideo());

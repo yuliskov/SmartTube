@@ -52,7 +52,6 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
 
     private void createAndShowDialog() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
 
         appendDeviceLinkSwitch(settingsPresenter);
         appendAddDeviceButton(settingsPresenter);

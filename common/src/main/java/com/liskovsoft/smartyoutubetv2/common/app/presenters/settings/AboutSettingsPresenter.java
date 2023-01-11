@@ -37,7 +37,6 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
                 AppInfoHelpers.getAppVersionName(getContext()));
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
 
         String country = LocaleUtility.getCurrentLocale(getContext()).getCountry();
 

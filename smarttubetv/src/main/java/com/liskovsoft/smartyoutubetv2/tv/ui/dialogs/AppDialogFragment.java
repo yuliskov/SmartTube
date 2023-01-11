@@ -1,7 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,7 +20,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.CommentsPreference;
@@ -40,8 +37,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     private AppPreferenceFragment mPreferenceFragment;
     private AppDialogPresenter mSettingsPresenter;
     private boolean mIsTransparent;
-    private static final String PREFERENCE_FRAGMENT_TAG =
-            "androidx.leanback.preference.LeanbackSettingsFragment.PREFERENCE_FRAGMENT";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,10 +66,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment
             // Fix mSettingsPresenter in null after init stage.
             // Seems concurrency between dialogs.
             mSettingsPresenter.setView(this);
-
-            mPreferenceFragment = buildPreferenceFragment();
-            mPreferenceFragment.enableTransparent(mIsTransparent);
-            startPreferenceFragment(mPreferenceFragment);
 
             mSettingsPresenter.onViewInitialized();
         } catch (IllegalStateException e) {
@@ -106,24 +97,18 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     }
 
     @Override
-    public void setTitle(String title) {
-        if (mPreferenceFragment != null) {
-            mPreferenceFragment.setTitle(title);
-        }
-    }
+    public void show(List<OptionCategory> categories, String title) {
+        mPreferenceFragment = buildPreferenceFragment();
+        mPreferenceFragment.addCategories(categories);
+        mPreferenceFragment.setTitle(title);
+        mPreferenceFragment.enableTransparent(mIsTransparent);
+        startPreferenceFragment(mPreferenceFragment);
 
-    @Override
-    public void addCategories(List<OptionCategory> categories) {
-        if (mPreferenceFragment != null) {
-            mPreferenceFragment.addCategories(categories);
-        }
-    }
-
-    @Override
-    public void clear() {
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(this::onPreferenceStartInitialScreen);
-        }
+        //if (categories != null && categories.size() == 1) {
+        //    onPreferenceDisplayDialog(mPreferenceFragment, mManager.createPreference(categories.get(0)));
+        //} else {
+        //    startPreferenceFragment(mPreferenceFragment);
+        //}
     }
 
     @Override

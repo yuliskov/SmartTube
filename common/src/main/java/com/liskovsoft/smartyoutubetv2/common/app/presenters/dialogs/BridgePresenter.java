@@ -53,7 +53,6 @@ abstract class BridgePresenter extends BasePresenter<Void> {
 
     private void startDialog() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
 
         OptionItem updateCheckOption = UiOptionItem.from(
                 getContext().getString(R.string.enable_voice_search),

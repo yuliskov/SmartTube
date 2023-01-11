@@ -236,7 +236,6 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
-        settingsPresenter.clear();
 
         OptionItem acceptOption = UiOptionItem.from(
                 getActivity().getString(R.string.confirm_segment_skip, category),

@@ -423,7 +423,6 @@ public class AppDialogUtil {
 
     public static void showConfirmationDialog(Context context, String title, Runnable onConfirm, Runnable onCancel) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(context);
-        settingsPresenter.clear();
 
         List<OptionItem> options = new ArrayList<>();
 
@@ -509,7 +508,6 @@ public class AppDialogUtil {
         }
 
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(context);
-        dialogPresenter.clear();
 
         appendPlaylistDialogContent(context, video, callback, dialogPresenter, playlistInfos);
         dialogPresenter.showDialog(context.getString(R.string.dialog_add_to_playlist), () -> {
@@ -574,7 +572,6 @@ public class AppDialogUtil {
 
     public static void showPlaylistOrderDialog(Context context, String playlistId, Runnable onClose) {
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(context);
-        dialogPresenter.clear();
 
         GeneralData generalData = GeneralData.instance(context);
 
@@ -619,8 +616,6 @@ public class AppDialogUtil {
         String playbackQueueCategoryTitle = context.getString(R.string.playback_queue_category_title);
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(context);
-
-        settingsPresenter.clear();
 
         List<OptionItem> options = new ArrayList<>();
 

@@ -160,8 +160,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
 
-        settingsPresenter.clear();
-
         settingsPresenter.appendRadioCategory(subtitlesCategoryTitle,
                 UiOptionItem.from(subtitleFormats,
                         option -> getController().setFormat(UiOptionItem.toFormat(option)),
@@ -370,7 +368,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onSeekIntervalClicked() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
-        settingsPresenter.clear();
 
         AppDialogUtil.appendSeekIntervalDialogItems(getActivity(), settingsPresenter, mPlayerData, true);
 
@@ -395,8 +392,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
-        dialogPresenter.clear();
-
         String title = String.format("%s - %s", video.getTitle(), video.getAuthor());
 
         dialogPresenter.appendLongTextCategory(title, UiOptionItem.from(description));
@@ -413,8 +408,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
 
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
-
-        dialogPresenter.clear();
 
         int positionSec = Utils.toSec(getController().getPositionMs());
         AppDialogUtil.appendShareLinkDialogItem(getActivity(), dialogPresenter, getController().getVideo(), positionSec);
@@ -445,7 +438,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
                 getActivity(), mPlayerData, () -> getController().setVideoAspectRatio(mPlayerData.getVideoAspectRatio()));
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
-        settingsPresenter.clear();
         settingsPresenter.appendRadioCategory(videoAspectCategory.title, videoAspectCategory.options);
         settingsPresenter.appendRadioCategory(videoZoomCategory.title, videoZoomCategory.options);
         settingsPresenter.showDialog(getActivity().getString(R.string.video_aspect));

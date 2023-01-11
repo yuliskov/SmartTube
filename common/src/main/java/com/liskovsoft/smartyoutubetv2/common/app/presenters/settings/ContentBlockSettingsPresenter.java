@@ -30,7 +30,6 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
 
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
         
         appendSponsorBlockSwitch(settingsPresenter);
         appendActionsSection(settingsPresenter);
@@ -91,7 +90,6 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
                     getColoredString(mContentBlockData.getLocalizedRes(action.segmentCategory), mContentBlockData.getColorRes(action.segmentCategory)),
                     optionItem -> {
                         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
-                        dialogPresenter.clear();
 
                         List<OptionItem> nestedOptions = new ArrayList<>();
                         nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_none),

@@ -263,19 +263,16 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             List<OptionItem> options = new ArrayList<>();
             options.add(UiOptionItem.from(afrCategory.title, optionItem -> {
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
-                dialogPresenter.clear();
                 dialogPresenter.appendCheckedCategory(afrCategory.title, afrCategory.options);
                 dialogPresenter.showDialog(afrCategory.title);
             }));
             options.add(UiOptionItem.from(afrPauseCategory.title, optionItem -> {
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
-                dialogPresenter.clear();
                 dialogPresenter.appendRadioCategory(afrPauseCategory.title, afrPauseCategory.options);
                 dialogPresenter.showDialog(afrPauseCategory.title);
             }));
             options.add(UiOptionItem.from(modesCategory.title, optionItem -> {
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
-                dialogPresenter.clear();
                 dialogPresenter.appendLongTextCategory(modesCategory.title, modesCategory.option);
                 dialogPresenter.showDialog(modesCategory.title);
             }));

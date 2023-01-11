@@ -84,8 +84,6 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        mDialogPresenter.clear();
-
         appendReturnToBackgroundVideoButton();
         appendRefreshButton();
         appendUnpinVideoFromSidebarButton();
@@ -109,8 +107,6 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         if (getContext() == null) {
             return;
         }
-
-        mDialogPresenter.clear();
 
         appendReturnToBackgroundVideoButton();
         appendRefreshButton();

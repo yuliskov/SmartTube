@@ -283,7 +283,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     @Override
     public void onVideoSpeedLongClicked(boolean enabled) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
-        settingsPresenter.clear();
 
         // suppose live stream if buffering near the end
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;

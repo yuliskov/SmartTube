@@ -95,8 +95,6 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
 
-        settingsPresenter.clear();
-
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getActivity().getString(R.string.option_disabled),

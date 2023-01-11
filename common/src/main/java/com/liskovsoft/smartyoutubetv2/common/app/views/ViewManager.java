@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.views;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Fragment;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -429,5 +430,17 @@ public class ViewManager {
         } else if (topView == ChannelUploadsView.class) {
             ChannelUploadsPresenter.instance(mContext).refresh();
         }
+    }
+
+    public static boolean isVisible(Object view) {
+        if (view instanceof Fragment) {
+            return ((Fragment) view).isVisible();
+        }
+
+        if (view instanceof androidx.fragment.app.Fragment) {
+            return ((androidx.fragment.app.Fragment) view).isVisible();
+        }
+
+        return false;
     }
 }

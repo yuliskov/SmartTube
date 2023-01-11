@@ -85,8 +85,6 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
     }
 
     private void showUpdateDialog(String versionName, List<String> changelog, String apkPath) {
-        mSettingsPresenter.clear();
-
         mSettingsPresenter.appendStringsCategory(getContext().getString(R.string.update_changelog), createChangelogOptions(changelog));
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.install_update), optionItem -> {

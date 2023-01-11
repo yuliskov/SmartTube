@@ -48,7 +48,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
 
         appendBootToSection(settingsPresenter);
         appendEnabledSections(settingsPresenter);

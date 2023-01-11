@@ -48,8 +48,6 @@ public class HQDialogManager extends PlayerEventListenerHelper {
 
     @Override
     public void onHighQualityClicked() {
-        mAppDialogPresenter.clear();
-
         addQualityCategories();
         addVideoBufferCategory();
         addPresetsCategory();

@@ -72,8 +72,6 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
     }
 
     private void prepareAndShowDialog() {
-        mDialogPresenter.clear();
-
         // Doesn't need this since this is the main action.
         //appendOpenChannelUploadsButton();
         appendOpenChannelButton();

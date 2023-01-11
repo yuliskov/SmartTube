@@ -32,7 +32,6 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
 
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
 
         appendLanguageCategory(settingsPresenter);
         appendCountryCategory(settingsPresenter);

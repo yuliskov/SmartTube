@@ -49,7 +49,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
     private void createAndShowDialog(List<Account> accounts) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
 
         appendSelectAccountSection(accounts, settingsPresenter);
         appendAddAccountButton(settingsPresenter);

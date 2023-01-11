@@ -28,7 +28,6 @@ public class UIScaleSettingsPresenter extends BasePresenter<Void> {
 
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
 
         appendScaleUI(settingsPresenter);
         appendVideoGridScale(settingsPresenter);

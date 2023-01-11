@@ -73,7 +73,6 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
         }
 
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
-        dialogPresenter.clear();
 
         appendAccountSelection(accounts, dialogPresenter);
 

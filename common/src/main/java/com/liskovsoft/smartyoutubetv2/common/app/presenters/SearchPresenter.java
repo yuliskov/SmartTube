@@ -247,7 +247,6 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     private void showSettingsDialog() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
 
         appendSortByDateCategory(settingsPresenter);
 
