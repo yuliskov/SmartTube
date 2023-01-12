@@ -72,6 +72,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
     private SparseArray<OnMessageViewClickListener> viewClickListenersArray = new SparseArray<>();
     private boolean isTopDateEnabled;
     private int currentPosition = -1;
+    private MESSAGE focusedMessage;
 
     /**
      * For default list item layout and view holder.
@@ -114,8 +115,9 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
                 viewClickListenersArray);
 
         // Default focus on top message
-        if ((items.size() - 1) == position && holder.itemView.isFocusable()) {
+        if (wrapper.item == focusedMessage && holder.itemView.isFocusable()) {
             holder.itemView.requestFocus();
+            focusedMessage = null;
         }
     }
 
@@ -189,12 +191,16 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
 
         if (reverse) Collections.reverse(messages);
 
+        removeLoadingMessageIfNeeded();
+
         if (!items.isEmpty()) {
             int lastItemPosition = items.size() - 1;
-            Date lastItem = (Date) items.get(lastItemPosition).item;
-            if (DateFormatter.isSameDay(messages.get(0).getCreatedAt(), lastItem)) {
-                items.remove(lastItemPosition);
-                notifyItemRemoved(lastItemPosition);
+            if (items.get(lastItemPosition).item instanceof Date) {
+                Date lastItem = (Date) items.get(lastItemPosition).item;
+                if (DateFormatter.isSameDay(messages.get(0).getCreatedAt(), lastItem)) {
+                    items.remove(lastItemPosition);
+                    notifyItemRemoved(lastItemPosition);
+                }
             }
         }
 
@@ -342,6 +348,10 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         this.maxItemsCount = maxItemsCount;
     }
 
+    public void setFocusedMessage(MESSAGE message) {
+        this.focusedMessage = message;
+    }
+
     /**
      * Returns {@code true} if, and only if, messages count in adapter is non-zero.
      *
@@ -447,6 +457,16 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
             }
         }
         return selectedMessages;
+    }
+
+    public ArrayList<MESSAGE> getMessages() {
+        ArrayList<MESSAGE> messages = new ArrayList<>();
+        for (Wrapper wrapper : items) {
+            if (wrapper.item instanceof IMessage) {
+                messages.add((MESSAGE) wrapper.item);
+            }
+        }
+        return messages;
     }
 
     /**
