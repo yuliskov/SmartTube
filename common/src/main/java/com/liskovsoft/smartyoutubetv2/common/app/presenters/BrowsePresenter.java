@@ -20,7 +20,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.ChannelUploadsMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.SectionMenuPresenter;
@@ -38,9 +37,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.ScreenHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -68,6 +65,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final MediaItemService mItemManager;
     private final SignInService mSignInManager;
     private final List<Disposable> mActions;
+    private final Runnable mRefreshSection = this::refresh;
     private BrowseSection mCurrentSection;
     private Video mCurrentVideo;
     private long mLastUpdateTimeMs;
@@ -604,6 +602,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                                 getView().showError(new CategoryEmptyError(getContext()));
+                                Utils.postDelayed(mRefreshSection, 30_000);
                             }
                         });
 
@@ -651,6 +650,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                                 getView().showError(new CategoryEmptyError(getContext()));
+                                Utils.postDelayed(mRefreshSection, 30_000);
                             }
                         });
 
@@ -737,6 +737,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private void disposeActions() {
         RxUtils.disposeActions(mActions);
+        Utils.removeCallbacks(mRefreshSection);
         mLastScrollGroup = null;
         mLastUpdateTimeMs = 0;
     }
