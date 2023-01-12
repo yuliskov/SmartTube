@@ -493,4 +493,5 @@
     <string name="chapters">Poglavlja</string>
     <string name="card_multiline_subtitle">Višeredni podnaslovi</string>
     <string name="auto_frame_rate_modes">Podržani načini</string>
+    <string name="loading">Učitavanje…</string>
 </resources>
