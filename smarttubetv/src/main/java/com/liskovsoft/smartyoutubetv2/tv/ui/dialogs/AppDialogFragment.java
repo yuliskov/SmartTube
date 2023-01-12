@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.CommentsPreference;
@@ -37,6 +40,8 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     private AppPreferenceFragment mPreferenceFragment;
     private AppDialogPresenter mSettingsPresenter;
     private boolean mIsTransparent;
+    private static final String PREFERENCE_FRAGMENT_TAG =
+            "androidx.leanback.preference.LeanbackSettingsFragment.PREFERENCE_FRAGMENT";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,7 +104,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     @Override
     public void show(List<OptionCategory> categories, String title) {
         mPreferenceFragment = buildPreferenceFragment();
-        mPreferenceFragment.addCategories(categories);
+        mPreferenceFragment.setCategories(categories);
         mPreferenceFragment.setTitle(title);
         mPreferenceFragment.enableTransparent(mIsTransparent);
         startPreferenceFragment(mPreferenceFragment);
@@ -110,6 +115,31 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         //    startPreferenceFragment(mPreferenceFragment);
         //}
     }
+
+    //@Override
+    //public void startPreferenceFragment(@NonNull Fragment fragment) {
+    //    final FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+    //    final Fragment prevFragment =
+    //            getChildFragmentManager().findFragmentByTag(PREFERENCE_FRAGMENT_TAG);
+    //    if (prevFragment != null) {
+    //        if (!skipBackStack(fragment.getTargetFragment())) {
+    //            transaction.addToBackStack(null);
+    //        }
+    //
+    //        transaction
+    //                .replace(R.id.settings_preference_fragment_container, fragment,
+    //                        PREFERENCE_FRAGMENT_TAG);
+    //    } else {
+    //        transaction
+    //                .add(R.id.settings_preference_fragment_container, fragment,
+    //                        PREFERENCE_FRAGMENT_TAG);
+    //    }
+    //    transaction.commit();
+    //}
+
+    //private boolean skipBackStack(Fragment fragment) {
+    //    return fragment instanceof AppPreferenceFragment && ((AppPreferenceFragment) fragment).isSkipBackStack();
+    //}
 
     @Override
     public boolean onPreferenceDisplayDialog(@NonNull PreferenceFragment caller, Preference pref) {
@@ -203,6 +233,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         private int mMyBackStackIdx;
         private boolean mIsTransparent;
         private boolean mIsRoot;
+        private boolean mSkipBackStack;
 
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {
@@ -232,12 +263,12 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
             screen.setTitle(mTitle);
 
-            addCategories(screen);
+            addPreferences(screen);
 
             setSingleCategoryAsRoot(screen);
         }
 
-        private void addCategories(PreferenceScreen screen) {
+        private void addPreferences(PreferenceScreen screen) {
             if (mCategories != null) {
                 for (OptionCategory category : mCategories) {
                     if (category.items != null) {
@@ -283,8 +314,12 @@ public class AppDialogFragment extends LeanbackSettingsFragment
             return super.onPreferenceTreeClick(preference);
         }
 
-        public void addCategories(List<OptionCategory> categories) {
+        public void setCategories(List<OptionCategory> categories) {
             mCategories = categories;
+
+            if (categories != null && categories.size() == 1) {
+                mSkipBackStack = true;
+            }
         }
 
         public void setTitle(String title) {
@@ -303,6 +338,10 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
         public void setIsRoot(boolean isRoot) {
             mIsRoot = isRoot;
+        }
+
+        public boolean isSkipBackStack() {
+            return mSkipBackStack;
         }
 
         private void onBackPressed() {
