@@ -32,6 +32,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppDialogFragment extends LeanbackSettingsFragment
@@ -42,6 +43,8 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     private boolean mIsTransparent;
     private static final String PREFERENCE_FRAGMENT_TAG =
             "androidx.leanback.preference.LeanbackSettingsFragment.PREFERENCE_FRAGMENT";
+    private int mBackStackCount;
+    private final List<Integer> mMyBackStackIdx = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         mSettingsPresenter = AppDialogPresenter.instance(getActivity());
         mSettingsPresenter.setView(this);
         mIsTransparent = mSettingsPresenter.isTransparent();
+        getChildFragmentManager().addOnBackStackChangedListener(this::onBackStackChanged);
     }
 
     @Override
@@ -109,11 +113,10 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         mPreferenceFragment.enableTransparent(mIsTransparent);
         startPreferenceFragment(mPreferenceFragment);
 
-        //if (categories != null && categories.size() == 1) {
-        //    onPreferenceDisplayDialog(mPreferenceFragment, mManager.createPreference(categories.get(0)));
-        //} else {
-        //    startPreferenceFragment(mPreferenceFragment);
-        //}
+        if (mPreferenceFragment.isSkipBackStack()) {
+            int count = getChildFragmentManager().getBackStackEntryCount();
+            mMyBackStackIdx.add(count > 0 ? count + 1 : mPreferenceFragment.isRoot() ? 0 : 1);
+        }
     }
 
     //@Override
@@ -121,12 +124,14 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     //    final FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
     //    final Fragment prevFragment =
     //            getChildFragmentManager().findFragmentByTag(PREFERENCE_FRAGMENT_TAG);
+    //
     //    if (prevFragment != null) {
     //        if (!skipBackStack(fragment.getTargetFragment())) {
     //            transaction.addToBackStack(null);
     //        }
     //
     //        transaction
+    //                .addToBackStack(null)
     //                .replace(R.id.settings_preference_fragment_container, fragment,
     //                        PREFERENCE_FRAGMENT_TAG);
     //    } else {
@@ -140,6 +145,25 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     //private boolean skipBackStack(Fragment fragment) {
     //    return fragment instanceof AppPreferenceFragment && ((AppPreferenceFragment) fragment).isSkipBackStack();
     //}
+
+    private void onBackStackChanged() {
+        if (getChildFragmentManager() != null) {
+            int currentBackStackCount = getChildFragmentManager().getBackStackEntryCount();
+
+            if (currentBackStackCount < mBackStackCount && mMyBackStackIdx.contains(currentBackStackCount)) {
+                mMyBackStackIdx.remove((Integer) currentBackStackCount);
+                if (currentBackStackCount == 0) {
+                    // finish dialog
+                    finish();
+                } else {
+                    // one level back
+                    getChildFragmentManager().popBackStack();
+                }
+            }
+
+            mBackStackCount = currentBackStackCount;
+        }
+    }
 
     @Override
     public boolean onPreferenceDisplayDialog(@NonNull PreferenceFragment caller, Preference pref) {
@@ -229,11 +253,9 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         private Context mExtractedContext;
         private AppDialogFragmentManager mManager;
         private String mTitle;
-        private int mBackStackCount;
-        private int mMyBackStackIdx;
         private boolean mIsTransparent;
-        private boolean mIsRoot;
         private boolean mSkipBackStack;
+        private boolean mIsRoot;
 
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {
@@ -290,14 +312,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
                 if (preference instanceof DialogPreference) {
                     onDisplayPreferenceDialog(preference);
-
-                    if (getFragmentManager() != null) {
-                        mBackStackCount = 0;
-                        int count = getFragmentManager().getBackStackEntryCount();
-                        mMyBackStackIdx = count > 0 ? count + 1 : mIsRoot ? 0 : 1;
-
-                        getFragmentManager().addOnBackStackChangedListener(this::onBackPressed);
-                    }
                 }
 
                 // NOTE: we should avoid open simple buttons because we don't know what is hidden behind them: new dialog on action
@@ -336,31 +350,16 @@ public class AppDialogFragment extends LeanbackSettingsFragment
             }
         }
 
-        public void setIsRoot(boolean isRoot) {
-            mIsRoot = isRoot;
-        }
-
         public boolean isSkipBackStack() {
             return mSkipBackStack;
         }
 
-        private void onBackPressed() {
-            if (getFragmentManager() != null) {
-                int currentBackStackCount = getFragmentManager().getBackStackEntryCount();
+        public void setIsRoot(boolean isRoot) {
+            mIsRoot = isRoot;
+        }
 
-                if (currentBackStackCount < mBackStackCount &&
-                        currentBackStackCount == mMyBackStackIdx) {
-                    if (currentBackStackCount == 0) {
-                        // finish dialog
-                        getActivity().finish();
-                    } else {
-                        // one level back
-                        getFragmentManager().popBackStack();
-                    }
-                }
-
-                mBackStackCount = currentBackStackCount;
-            }
+        public boolean isRoot() {
+            return mIsRoot;
         }
     }
 }
