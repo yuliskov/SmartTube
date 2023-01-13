@@ -6,6 +6,7 @@ import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,10 +141,10 @@ public class ExoFormatItem implements FormatItem {
                             mWidth == formatItem.mWidth &&
                             mHeight == formatItem.mHeight &&
                             Helpers.equals(mCodecs, formatItem.mCodecs) &&
-                            Helpers.contains(mLanguage, formatItem.mLanguage);
+                            Helpers.contains(SubtitleTrack.trim(mLanguage), SubtitleTrack.trim(formatItem.mLanguage));
                 case TYPE_SUBTITLE:
                     return mType == formatItem.mType &&
-                            Helpers.contains(mLanguage, formatItem.mLanguage);
+                            Helpers.contains(SubtitleTrack.trim(mLanguage), SubtitleTrack.trim(formatItem.mLanguage));
             }
         }
 

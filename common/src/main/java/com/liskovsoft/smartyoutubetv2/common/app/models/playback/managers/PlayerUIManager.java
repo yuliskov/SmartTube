@@ -28,6 +28,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -37,9 +38,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
 
@@ -154,16 +153,32 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onSubtitleLongClicked(boolean enabled) {
-        List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
-
-        String subtitlesCategoryTitle = getActivity().getString(R.string.subtitle_category_title);
+        String subtitlesOrigCategoryTitle = getActivity().getString(R.string.subtitle_category_title);
+        String subtitlesAutoCategoryTitle = subtitlesOrigCategoryTitle + " (Auto)";
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
 
-        settingsPresenter.appendRadioCategory(subtitlesCategoryTitle,
-                UiOptionItem.from(subtitleFormats,
-                        option -> getController().setFormat(UiOptionItem.toFormat(option)),
-                        getActivity().getString(R.string.subtitles_disabled)));
+        settingsPresenter.appendSingleButton(UiOptionItem.from(subtitlesOrigCategoryTitle, optionItem -> {
+            List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
+            List<FormatItem> subtitleOrigFormats = Helpers.filter(subtitleFormats,
+                    value -> value.isDefault() || !SubtitleTrack.isAuto(value.getLanguage()));
+            settingsPresenter.appendRadioCategory(subtitlesOrigCategoryTitle,
+                    UiOptionItem.from(subtitleOrigFormats,
+                            option -> getController().setFormat(UiOptionItem.toFormat(option)),
+                            getActivity().getString(R.string.subtitles_disabled)));
+            settingsPresenter.showDialog();
+        }));
+
+        settingsPresenter.appendSingleButton(UiOptionItem.from(subtitlesAutoCategoryTitle, optionItem -> {
+            List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
+            List<FormatItem> subtitleAutoFormats = Helpers.filter(subtitleFormats,
+                    value -> value.isDefault() || SubtitleTrack.isAuto(value.getLanguage()));
+            settingsPresenter.appendRadioCategory(subtitlesAutoCategoryTitle,
+                    UiOptionItem.from(subtitleAutoFormats,
+                            option -> getController().setFormat(UiOptionItem.toFormat(option)),
+                            getActivity().getString(R.string.subtitles_disabled)));
+            settingsPresenter.showDialog();
+        }));
 
         OptionCategory stylesCategory = AppDialogUtil.createSubtitleStylesCategory(getActivity(), mPlayerData);
         settingsPresenter.appendRadioCategory(stylesCategory.title, stylesCategory.options);
@@ -174,7 +189,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         OptionCategory positionCategory = AppDialogUtil.createSubtitlePositionCategory(getActivity(), mPlayerData);
         settingsPresenter.appendRadioCategory(positionCategory.title, positionCategory.options);
 
-        settingsPresenter.showDialog(subtitlesCategoryTitle, this::setSubtitleButtonState);
+        settingsPresenter.showDialog(subtitlesOrigCategoryTitle, this::setSubtitleButtonState);
     }
 
     @Override
