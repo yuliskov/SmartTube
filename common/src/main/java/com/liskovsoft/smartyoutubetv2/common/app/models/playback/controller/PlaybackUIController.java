@@ -38,7 +38,7 @@ public interface PlaybackUIController {
     void setSubtitleButtonState(boolean selected);
     void setSpeedButtonState(boolean selected);
     void setContentBlockButtonState(boolean selected);
-    void setChatButtonState(int buttonState);
+    void setChatButtonState(boolean selected);
     void setChannelIcon(String iconUrl);
     void setSeekPreviewTitle(String title);
     void setNextTitle(String title);

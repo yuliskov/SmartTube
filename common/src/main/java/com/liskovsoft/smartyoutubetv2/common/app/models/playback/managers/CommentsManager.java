@@ -34,7 +34,7 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
         mCommentsKey = metadata != null && metadata.getCommentsKey() != null ? metadata.getCommentsKey() : null;
 
         if (mCommentsKey != null && mLiveChatKey == null) {
-            getController().setChatButtonState(PlaybackUIController.BUTTON_STATE_OFF);
+            getController().setChatButtonState(false);
         }
     }
 

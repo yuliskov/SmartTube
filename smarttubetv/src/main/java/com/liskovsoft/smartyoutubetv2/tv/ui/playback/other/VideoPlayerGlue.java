@@ -179,9 +179,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SHARE)) {
             adapter.add(mShareAction);
         }
-        //if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_CHAT)) {
-        //    adapter.add(mChatAction);
-        //}
+        if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_CHAT)) {
+            adapter.add(mChatAction);
+        }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SEARCH)) {
             adapter.add(mSearchAction);
         }
@@ -326,17 +326,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         invalidateUi(mContentBlockAction);
     }
 
-    public void setChatButtonState(int buttonState) {
-        if (!mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_CHAT)) {
-            return;
-        }
-
-        if (buttonState == -1) {
-            removePrimaryAction(mChatAction);
-        } else {
-            addPrimaryAction(mChatAction, 9);
-            mChatAction.setIndex(buttonState);
-        }
+    public void setChatButtonState(boolean selected) {
+        mChatAction.setIndex(selected ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
         invalidateUi(mChatAction);
     }
 

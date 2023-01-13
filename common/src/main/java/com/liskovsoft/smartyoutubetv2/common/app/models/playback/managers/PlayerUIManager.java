@@ -268,7 +268,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().setPlaylistAddButtonState(false);
         getController().setSubtitleButtonState(false);
         getController().setSpeedButtonState(false);
-        getController().setChatButtonState(PlaybackUIController.BUTTON_STATE_DISABLED);
+        getController().setChatButtonState(false);
     }
 
     @Override

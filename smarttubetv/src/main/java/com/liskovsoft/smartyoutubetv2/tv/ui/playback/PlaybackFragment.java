@@ -1306,9 +1306,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setChatButtonState(int buttonState) {
+    public void setChatButtonState(boolean selected) {
         if (mPlayerGlue != null) {
-            mPlayerGlue.setChatButtonState(buttonState);
+            mPlayerGlue.setChatButtonState(selected);
         }
     }
 

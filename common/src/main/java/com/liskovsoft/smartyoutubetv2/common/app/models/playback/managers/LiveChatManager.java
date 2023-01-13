@@ -48,7 +48,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         mLiveChatKey = metadata != null && metadata.getLiveChatKey() != null ? metadata.getLiveChatKey() : null;
 
         if (mLiveChatKey != null) {
-            getController().setChatButtonState(mPlayerData.isLiveChatEnabled() ? PlaybackUIController.BUTTON_STATE_ON : PlaybackUIController.BUTTON_STATE_OFF);
+            getController().setChatButtonState(mPlayerData.isLiveChatEnabled());
         }
 
         if (mPlayerData.isLiveChatEnabled()) {
@@ -167,7 +167,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         mPlayerData.enableLiveChat(enabled);
 
         if (mLiveChatKey != null) {
-            getController().setChatButtonState(enabled ? PlaybackUIController.BUTTON_STATE_ON : PlaybackUIController.BUTTON_STATE_OFF);
+            getController().setChatButtonState(enabled);
         }
     }
 }
