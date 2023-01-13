@@ -48,6 +48,7 @@ public class ExoPlayerInitializer {
 
         enableAudioFocus(player);
 
+        // Lead to numbered errors
         //player.setRepeatMode(Player.REPEAT_MODE_ONE);
 
         return player;

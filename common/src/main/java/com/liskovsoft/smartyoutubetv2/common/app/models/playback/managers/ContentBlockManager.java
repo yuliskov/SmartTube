@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -289,11 +290,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         long durationMs = getController().getDurationMs();
 
         // Sponsor block fix. Position may exceed real media length.
-        if (durationMs > 0 && positionMs > durationMs) {
-            positionMs = durationMs;
-        }
-
-        getController().setPositionMs(positionMs);
+        // SimpleExoPlayer: Player is accessed on the wrong thread. See https://exoplayer.dev/issues/player-accessed-on-wrong-thread
+        Utils.post(() -> getController().setPositionMs(Math.min(positionMs, durationMs)));
     }
 
     private List<SponsorSegment> findMatchedSegments(long positionMs) {
