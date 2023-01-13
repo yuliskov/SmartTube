@@ -452,7 +452,7 @@
     <string name="sources">Kaynaklar</string>
     <string name="releases">Sürümler</string>
     <string name="prefer_avc_over_vp9">Kod çözücü seçimi: avc\'yi vp9\'a tercih et</string>
-    <string name="open_chat">Sohbet</string>
+    <string name="open_chat">Sohbet/Yorumlar</string>
     <string name="place_chat_left">Sohbeti sola yerleştir</string>
     <string name="use_alt_speech_recognizer">Alternatif konuşma tanıyıcı</string>
     <string name="time_format">Saat modu</string>
@@ -493,4 +493,5 @@
     <string name="chapters">Bölümler</string>
     <string name="card_multiline_subtitle">Çok satırlı altyazılar</string>
     <string name="auto_frame_rate_modes">Desteklenen modlar</string>
+    <string name="loading">Yükleniyor…</string>
 </resources>
