@@ -265,7 +265,7 @@
     <string name="removed_from">Удалено из %s</string>
     <string name="video_preset_adaptive">Адаптивный</string>
     <string name="content_block_preview_recap">Содержание предыдущего эпизода</string>
-    <string name="content_block_highlight">Краткое содержание видео</string>
+    <string name="content_block_highlight">Интересный момент (закладка)</string>
     <string name="removed_from_history">Видео удалено из истории</string>
     <string name="remove_from_history">Удалить из истории</string>
     <string name="upload_date">Дата загрузки</string>
