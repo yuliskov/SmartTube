@@ -57,6 +57,8 @@
         app:incomingBubblePaddingRight="10sp"
         app:incomingBubblePaddingTop="0sp"
         app:incomingBubblePaddingBottom="0sp"
+        app:incomingAvatarWidth="30dp"
+        app:incomingAvatarHeight="30dp"
         />
 
 </LinearLayout>

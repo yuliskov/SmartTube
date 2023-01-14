@@ -70,7 +70,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
     private MessagesListStyle messagesListStyle;
     private DateFormatter.Formatter dateHeadersFormatter;
     private SparseArray<OnMessageViewClickListener> viewClickListenersArray = new SparseArray<>();
-    private boolean isTopDateEnabled;
+    private boolean isDateHeaderEnabled;
     private int currentPosition = -1;
     private MESSAGE focusedMessage;
 
@@ -166,7 +166,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
 
         removeLoadingMessageIfNeeded();
 
-        boolean isNewMessageToday = isTopDateEnabled && !isPreviousSameDate(0, message.getCreatedAt());
+        boolean isNewMessageToday = isDateHeaderEnabled && !isPreviousSameDate(0, message.getCreatedAt());
         if (isNewMessageToday) {
             items.add(0, new Wrapper<>(message.getCreatedAt()));
         }
@@ -413,8 +413,8 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         unselectAllItems();
     }
 
-    public void enableTopDate(boolean enable) {
-        isTopDateEnabled = enable;
+    public void enableDateHeader(boolean enable) {
+        isDateHeaderEnabled = enable;
     }
 
     public void enableStackFromEnd(boolean enable) {
@@ -615,6 +615,11 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         for (int i = 0; i < messages.size(); i++) {
             MESSAGE message = messages.get(i);
             this.items.add(new Wrapper<>(message));
+
+            if (!isDateHeaderEnabled) {
+                continue;
+            }
+
             if (messages.size() > i + 1) {
                 MESSAGE nextMessage = messages.get(i + 1);
                 if (!DateFormatter.isSameDay(message.getCreatedAt(), nextMessage.getCreatedAt())) {

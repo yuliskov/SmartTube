@@ -813,7 +813,8 @@ public class MessageHolders {
                     //wrapper.requestFocus();
                     //wrapper.setBackgroundResource(R.drawable.bgchange);
                     wrapper.setOnFocusChangeListener((v, hasFocus) -> {
-                        text.setBackgroundResource(hasFocus ? R.color.tg_selected_bg : R.color.transparent);
+                        //text.setBackgroundResource(hasFocus ? R.color.tg_selected_bg : R.color.transparent);
+                        bubble.setBackgroundResource(hasFocus ? R.drawable.shape_incoming_message_focused : R.drawable.shape_incoming_message);
                     });
                 }
             }

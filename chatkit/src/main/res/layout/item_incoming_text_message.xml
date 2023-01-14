@@ -1,9 +1,7 @@
 <!-- MODIFIED -->
 <!-- Android 9 message focused bug fix: RelativeLayout focusable="false" -->
-<!-- Decrease space between messages: RelativeLayout android:layout_marginBottom="8dp"->"3dp" android:layout_marginTop="8dp"->"3dp" -->
+<!-- Decrease space between messages: RelativeLayout android:layout_marginBottom="8dp"->"3dp" android:layout_marginTop="8dp"->"0dp" -->
 <!-- Margins: android:layout_marginRight="16dp"->"3dp" -->
-<!-- Text: android:fontFamily="sans-serif-condensed" -->
-<!-- Text: android:lineSpacingMultiplier="0.8" -->
 <com.stfalcon.chatkit.commons.widgets.FocusFixRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -12,7 +10,7 @@
     android:layout_marginBottom="3dp"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="3dp"
-    android:layout_marginTop="3dp"
+    android:layout_marginTop="0dp"
     android:focusable="false">
 
     <!-- Move author icon to the top android:layout_alignParentBottom="true"->android:layout_alignParentTop="true", add new android:layout_marginTop="2dp" -->
@@ -43,10 +41,14 @@
 
         <!-- Tweaks from video info dialog: leanback_list_preference_fragment.xml:26 -->
         <!-- More info: com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.LeanbackListPreferenceDialogFragment -->
+        <!-- Text: add android:fontFamily="sans-serif-condensed" -->
+        <!-- Text: add android:lineSpacingMultiplier="0.9" -->
         <TextView
             android:id="@id/messageText"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:lineSpacingMultiplier="0.9" />
 
         <TextView
             android:id="@id/messageTime"

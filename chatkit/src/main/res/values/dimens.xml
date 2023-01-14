@@ -27,7 +27,9 @@
     <dimen name="message_padding_right">16dp</dimen>
     <dimen name="message_padding_top">16dp</dimen>
     <dimen name="message_padding_bottom">16dp</dimen>
-    <dimen name="message_text_size">17sp</dimen>
+    <!-- Incoming/Outcoming text message size -->
+    <!-- MODIFIED: message_text_size: "17sp"->"14sp" -->
+    <dimen name="message_text_size">14sp</dimen>
     <dimen name="message_time_text_size">14sp</dimen>
     <dimen name="message_date_header_text_size">16sp</dimen>
     <dimen name="message_date_header_padding">16dp</dimen>
