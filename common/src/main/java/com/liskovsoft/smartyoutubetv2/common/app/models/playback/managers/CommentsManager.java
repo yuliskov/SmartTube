@@ -29,10 +29,6 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
     public void onMetadata(MediaItemMetadata metadata) {
         mLiveChatKey = metadata != null && metadata.getLiveChatKey() != null ? metadata.getLiveChatKey() : null;
         mCommentsKey = metadata != null && metadata.getCommentsKey() != null ? metadata.getCommentsKey() : null;
-
-        if (mCommentsKey != null && mLiveChatKey == null) {
-            getController().setChatButtonState(false);
-        }
     }
 
     private void openCommentsDialog() {
