@@ -85,7 +85,7 @@ public class TrackSelectorUtil {
     }
 
     private static String buildLanguageString(Format format) {
-        return TextUtils.isEmpty(format.language) || "und".equals(format.language) ? "" : SubtitleTrack.trimMarker(format.language);
+        return TextUtils.isEmpty(format.language) || "und".equals(format.language) ? "" : SubtitleTrack.trim(format.language);
     }
 
     private static String buildBitrateString(Format format) {
