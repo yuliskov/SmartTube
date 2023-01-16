@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.leanback.preference.LeanbackPreferenceFragment;
 import androidx.leanback.preference.LeanbackSettingsFragment;
-import androidx.preference.DialogPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.MultiSelectListPreference;
 import androidx.preference.Preference;
@@ -33,12 +32,10 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.List;
 
-public class AppDialogFragment extends LeanbackSettingsFragment
-        implements DialogPreference.TargetFragment, AppDialogView {
+public class AppDialogFragment extends LeanbackSettingsFragment implements AppDialogView {
     private static final String TAG = AppDialogFragment.class.getSimpleName();
-    private AppPreferenceFragment mPreferenceFragment;
     private AppDialogPresenter mPresenter;
-    private AppDialogFragmentManager mManager;
+    private AppPreferenceManager mManager;
     private boolean mIsTransparent;
 
     @Override
@@ -48,7 +45,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         mPresenter = AppDialogPresenter.instance(getActivity());
         mPresenter.setView(this);
         mIsTransparent = mPresenter.isTransparent();
-        mManager = new AppDialogFragmentManager(getActivity());
+        mManager = new AppPreferenceManager(getActivity());
     }
 
     @Override
@@ -79,38 +76,32 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
     @Override
     public boolean onPreferenceStartFragment(PreferenceFragment preferenceFragment, Preference preference) {
+        // Contains only child fragments.
         return false;
     }
 
     @Override
     public boolean onPreferenceStartScreen(PreferenceFragment preferenceFragment, PreferenceScreen preferenceScreen) {
-        PreferenceFragment frag = buildPreferenceFragment();
-        startPreferenceFragment(frag);
-        return true;
+        // Contains only child fragments.
+        return false;
     }
 
-    @Override
-    public Preference findPreference(CharSequence charSequence) {
-        return mPreferenceFragment.findPreference(charSequence);
-    }
-
-    private AppPreferenceFragment buildPreferenceFragment() {
-        return new AppPreferenceFragment();
+    private AppPreferenceFragment buildPreferenceFragment(List<OptionCategory> categories, String title) {
+        AppPreferenceFragment fragment = new AppPreferenceFragment();
+        fragment.setCategories(categories);
+        fragment.setTitle(title);
+        fragment.enableTransparent(mIsTransparent);
+        return fragment;
     }
 
     @Override
     public void show(List<OptionCategory> categories, String title) {
-        mPreferenceFragment = buildPreferenceFragment();
-        mPreferenceFragment.setCategories(categories);
-        mPreferenceFragment.setTitle(title);
-        mPreferenceFragment.enableTransparent(mIsTransparent);
+        AppPreferenceFragment fragment = buildPreferenceFragment(categories, title);
 
-        boolean skipBackStack = categories != null && categories.size() == 1;
-
-        if (skipBackStack) {
-            onPreferenceDisplayDialog(mPreferenceFragment, mManager.createPreference(categories.get(0)));
+        if (fragment.isSkipBackStack()) {
+            onPreferenceDisplayDialog(fragment, mManager.createPreference(categories.get(0)));
         } else {
-            startPreferenceFragment(mPreferenceFragment);
+            startPreferenceFragment(fragment);
         }
     }
 
@@ -200,8 +191,8 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
     @Override
     public void goBack() {
-        if (mPreferenceFragment != null) {
-            mPreferenceFragment.goBack();
+        if (getChildFragmentManager() != null) {
+            getChildFragmentManager().popBackStack();
         }
     }
 
@@ -218,15 +209,17 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         private static final String TAG = AppPreferenceFragment.class.getSimpleName();
         private List<OptionCategory> mCategories;
         private Context mExtractedContext;
-        private AppDialogFragmentManager mManager;
+        private AppPreferenceManager mManager;
         private String mTitle;
         private boolean mIsTransparent;
+        private boolean mSkipBackStack;
 
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {
             // Note, place in field with different name to avoid field overlapping
             mExtractedContext = (Context) Helpers.getField(this, "mStyledContext");
-            mManager = new AppDialogFragmentManager(mExtractedContext);
+            // Note, don't use external manager (probable focus lost and visual bugs)
+            mManager = new AppPreferenceManager(mExtractedContext);
 
             initPrefs();
 
@@ -275,6 +268,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
         public void setCategories(List<OptionCategory> categories) {
             mCategories = categories;
+            mSkipBackStack = categories != null && categories.size() == 1;
         }
 
         public void setTitle(String title) {
@@ -285,10 +279,8 @@ public class AppDialogFragment extends LeanbackSettingsFragment
             mIsTransparent = enable;
         }
 
-        public void goBack() {
-            if (getFragmentManager() != null) {
-                getFragmentManager().popBackStack();
-            }
+        public boolean isSkipBackStack() {
+            return mSkipBackStack;
         }
     }
 }

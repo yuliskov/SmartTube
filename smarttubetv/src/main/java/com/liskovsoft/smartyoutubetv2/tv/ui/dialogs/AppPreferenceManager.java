@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class AppDialogFragmentManager {
+public class AppPreferenceManager {
     private final Context mContext;
     private final Runnable mOnChange;
 
@@ -38,11 +38,11 @@ public class AppDialogFragmentManager {
         }
     }
 
-    public AppDialogFragmentManager(Context context) {
+    public AppPreferenceManager(Context context) {
         this(context, null);
     }
 
-    public AppDialogFragmentManager(Context context, Runnable onChange) {
+    public AppPreferenceManager(Context context, Runnable onChange) {
         mContext = context;
         mOnChange = onChange;
     }
