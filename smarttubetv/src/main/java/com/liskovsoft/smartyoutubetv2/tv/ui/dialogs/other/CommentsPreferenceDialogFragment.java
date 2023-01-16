@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiver;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.base.LeanbackPreferenceDialogFragmentBase;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.preference.LeanbackPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.ChatItemMessage;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 import com.stfalcon.chatkit.messages.MessagesList;
@@ -20,7 +20,7 @@ import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
 import java.util.List;
 
-public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFragmentBase {
+public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFragment {
     private static final String SENDER_ID = CommentsPreferenceDialogFragment.class.getSimpleName();
     private boolean mIsTransparent;
     private CommentsReceiver mCommentsReceiver;

@@ -11,13 +11,13 @@ import androidx.preference.DialogPreference;
 import com.bumptech.glide.Glide;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.base.LeanbackPreferenceDialogFragmentBase;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.preference.LeanbackPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.ChatItemMessage;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
-public class ChatPreferenceDialogFragment extends LeanbackPreferenceDialogFragmentBase {
+public class ChatPreferenceDialogFragment extends LeanbackPreferenceDialogFragment {
     private static final String SENDER_ID = ChatPreferenceDialogFragment.class.getSimpleName();
     private boolean mIsTransparent;
     private ChatReceiver mChatReceiver;

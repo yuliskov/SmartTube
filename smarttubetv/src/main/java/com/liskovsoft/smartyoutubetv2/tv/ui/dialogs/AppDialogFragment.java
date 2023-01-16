@@ -20,7 +20,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.base.LeanbackListPreferenceDialogFragmentBase;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.CommentsPreference;
@@ -28,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.CommentsPreferenceDial
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.RadioListPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreferenceDialogFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.preference.LeanbackListPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.List;
@@ -151,7 +151,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
             return true;
         } else if (pref instanceof MultiSelectListPreference) {
             MultiSelectListPreference listPreference = (MultiSelectListPreference) pref;
-            LeanbackListPreferenceDialogFragmentBase f = LeanbackListPreferenceDialogFragmentBase.newInstanceMulti(listPreference.getKey());
+            LeanbackListPreferenceDialogFragment f = LeanbackListPreferenceDialogFragment.newInstanceMulti(listPreference.getKey());
             f.setTargetFragment(caller, 0);
             f.setPreference(pref);
             startPreferenceFragment(f);
