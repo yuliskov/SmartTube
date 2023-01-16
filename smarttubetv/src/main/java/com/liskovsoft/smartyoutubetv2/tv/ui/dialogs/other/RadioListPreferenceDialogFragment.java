@@ -9,10 +9,10 @@ import androidx.leanback.widget.VerticalGridView;
 import androidx.preference.ListPreference;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.LeanbackListPreferenceDialogFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.base.LeanbackListPreferenceDialogFragmentBase;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
-public class RadioListPreferenceDialogFragment extends LeanbackListPreferenceDialogFragment {
+public class RadioListPreferenceDialogFragment extends LeanbackListPreferenceDialogFragmentBase {
     private boolean mIsTransparent;
 
     @Override
