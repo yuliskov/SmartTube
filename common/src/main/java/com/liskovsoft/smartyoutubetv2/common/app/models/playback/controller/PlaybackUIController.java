@@ -7,9 +7,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver
 import java.util.List;
 
 public interface PlaybackUIController {
-    int BUTTON_STATE_DISABLED = -1;
-    int BUTTON_STATE_OFF = 0;
-    int BUTTON_STATE_ON = 1;
     int REPEAT_MODE_CLOSE = 0;
     int REPEAT_MODE_ONE = 1;
     int REPEAT_MODE_ALL = 2;
