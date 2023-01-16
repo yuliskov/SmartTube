@@ -16,6 +16,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.AudioTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector.TrackSelectorCallback;
@@ -438,6 +439,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
             MediaTrack[][] mediaTracks = filterByLanguage(renderer.mediaTracks, originTrack);
 
+            outerloop:
             for (int groupIndex = 0; groupIndex < mediaTracks.length; groupIndex++) {
                 prevResult = result;
 
@@ -464,10 +466,13 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                             result = mediaTrack;
                             // Don't do break for VideoTrack because we don't know whether there 30/60 fps.
                             if (!(originTrack instanceof VideoTrack)) {
-                                break;
+                                break outerloop;
                             }
                         } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
                             result = mediaTrack;
+                            if (originTrack instanceof SubtitleTrack) {
+                                break outerloop;
+                            }
                         }
                     } else if (compare > 0) {
                         // Select track with higher possible quality or by preferred codec
