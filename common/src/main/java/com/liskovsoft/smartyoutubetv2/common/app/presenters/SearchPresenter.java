@@ -17,14 +17,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionP
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +101,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     @Override
     public boolean hasPendingActions() {
-        return RxUtils.isAnyActionRunning(mLoadAction, mScrollAction);
+        return RxHelper.isAnyActionRunning(mLoadAction, mScrollAction);
     }
 
     public void onSearch(String searchText) {
@@ -165,7 +162,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
     
     private void continueGroup(VideoGroup group) {
-        if (RxUtils.isAnyActionRunning(mScrollAction)) {
+        if (RxHelper.isAnyActionRunning(mScrollAction)) {
             return;
         }
 
@@ -239,7 +236,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
 
     public void disposeActions() {
-        RxUtils.disposeActions(mLoadAction, mScrollAction);
+        RxHelper.disposeActions(mLoadAction, mScrollAction);
         if (getView() != null) {
             getView().showProgressBar(false);
         }

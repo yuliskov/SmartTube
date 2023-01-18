@@ -9,11 +9,10 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
-import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -341,7 +340,7 @@ public class ViewManager {
             // Fix: can't start finished app activity from history.
             // Do reset state because the app should continue to run in the background.
             // NOTE: Don't rely on MotherActivity.onDestroy() because activity can be killed silently.
-            RxUtils.runAsync(() -> {
+            RxHelper.runAsync(() -> {
                 clearCaches();
                 BrowsePresenter.unhold();
                 MotherActivity.invalidate();

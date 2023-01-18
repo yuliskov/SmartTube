@@ -7,7 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -28,9 +28,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -115,7 +113,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         updateEnabledMenuItems();
 
-        RxUtils.disposeActions(mAddToPlaylistAction, mNotInterestedAction, mSubscribeAction);
+        RxHelper.disposeActions(mAddToPlaylistAction, mNotInterestedAction, mSubscribeAction);
 
         mVideo = video;
         sVideoHolder = new WeakReference<>(video);
@@ -125,7 +123,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
     private void bootstrapPrepareAndShowDialogSigned() {
         mPlaylistInfos = null;
-        RxUtils.disposeActions(mPlaylistsInfoAction);
+        RxHelper.disposeActions(mPlaylistsInfoAction);
         if (isAddToRecentPlaylistButtonEnabled()) {
             mPlaylistsInfoAction = mItemManager.getPlaylistsInfoObserve(mVideo.videoId)
                     .subscribe(
@@ -577,7 +575,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private void addRemoveFromPlaylist(String playlistId, String playlistTitle, boolean add) {
         if (add) {
             Observable<Void> editObserve = mItemManager.addToPlaylistObserve(playlistId, mVideo.videoId);
-            mAddToPlaylistAction = RxUtils.execute(editObserve);
+            mAddToPlaylistAction = RxHelper.execute(editObserve);
             mDialogPresenter.closeDialog();
             MessageHelpers.showMessage(getContext(),
                     getContext().getString(R.string.added_to, playlistTitle));
@@ -587,7 +585,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST);
             }
             Observable<Void> editObserve = mItemManager.removeFromPlaylistObserve(playlistId, mVideo.videoId);
-            mAddToPlaylistAction = RxUtils.execute(editObserve);
+            mAddToPlaylistAction = RxHelper.execute(editObserve);
             mDialogPresenter.closeDialog();
             MessageHelpers.showMessage(getContext(),
                     getContext().getString(R.string.removed_from, playlistTitle));
@@ -645,7 +643,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         Observable<Void> observable = video.isSubscribed ?
                 mItemManager.unsubscribeObserve(video.channelId) : mItemManager.subscribeObserve(video.channelId);
 
-        mSubscribeAction = RxUtils.execute(observable);
+        mSubscribeAction = RxHelper.execute(observable);
 
         video.isSubscribed = !video.isSubscribed;
 

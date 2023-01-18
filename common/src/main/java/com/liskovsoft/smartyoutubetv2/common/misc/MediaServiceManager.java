@@ -15,14 +15,12 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +95,7 @@ public class MediaServiceManager {
             return;
         }
 
-        RxUtils.disposeActions(mMetadataAction);
+        RxHelper.disposeActions(mMetadataAction);
 
         Observable<MediaItemMetadata> observable;
 
@@ -126,7 +124,7 @@ public class MediaServiceManager {
             return;
         }
 
-        RxUtils.disposeActions(mMetadataAction);
+        RxHelper.disposeActions(mMetadataAction);
 
         Observable<MediaItemMetadata> observable;
 
@@ -152,7 +150,7 @@ public class MediaServiceManager {
             return;
         }
 
-        RxUtils.disposeActions(mUploadsAction);
+        RxHelper.disposeActions(mUploadsAction);
 
         Observable<MediaGroup> observable = mGroupManager.getGroupObserve(item);
 
@@ -167,7 +165,7 @@ public class MediaServiceManager {
     }
 
     public void loadSubscribedChannels(OnMediaGroup onMediaGroup) {
-        RxUtils.disposeActions(mSubscribedChannelsAction);
+        RxHelper.disposeActions(mSubscribedChannelsAction);
 
         Observable<MediaGroup> observable = mGroupManager.getSubscribedChannelsUpdateObserve();
 
@@ -183,7 +181,7 @@ public class MediaServiceManager {
             return;
         }
 
-        RxUtils.disposeActions(mRowsAction);
+        RxHelper.disposeActions(mRowsAction);
 
         Observable<List<MediaGroup>> observable = item.mediaItem != null ?
                 mGroupManager.getChannelObserve(item.mediaItem) : mGroupManager.getChannelObserve(item.channelId);
@@ -207,7 +205,7 @@ public class MediaServiceManager {
             return;
         }
 
-        RxUtils.disposeActions(mFormatInfoAction);
+        RxHelper.disposeActions(mFormatInfoAction);
 
         Observable<MediaItemFormatInfo> observable = mItemManager.getFormatInfoObserve(item.videoId);
 
@@ -223,7 +221,7 @@ public class MediaServiceManager {
             return;
         }
 
-        RxUtils.disposeActions(mPlaylistGroupAction);
+        RxHelper.disposeActions(mPlaylistGroupAction);
 
         Observable<MediaGroup> observable = mGroupManager.getEmptyPlaylistsObserve();
 
@@ -235,7 +233,7 @@ public class MediaServiceManager {
     }
 
     public void getPlaylistInfos(OnPlaylistInfos onPlaylistInfos) {
-        RxUtils.disposeActions(mPlaylistInfosAction);
+        RxHelper.disposeActions(mPlaylistInfosAction);
 
         Observable<List<PlaylistInfo>> observable = mItemManager.getPlaylistsInfoObserve(null);
 
@@ -247,7 +245,7 @@ public class MediaServiceManager {
     }
 
     public void loadAccounts(OnAccountList onAccountList) {
-        RxUtils.disposeActions(mAccountListAction);
+        RxHelper.disposeActions(mAccountListAction);
 
         mAccountListAction = mSingInManager.getAccountsObserve()
                 .subscribe(
@@ -261,7 +259,7 @@ public class MediaServiceManager {
             return;
         }
 
-        RxUtils.disposeActions(mSignCheckAction);
+        RxHelper.disposeActions(mSignCheckAction);
 
         mSignCheckAction = mSingInManager.isSignedObserve()
                 .subscribe(
@@ -282,7 +280,7 @@ public class MediaServiceManager {
     }
 
     public void disposeActions() {
-        RxUtils.disposeActions(mMetadataAction, mUploadsAction, mSignCheckAction);
+        RxHelper.disposeActions(mMetadataAction, mUploadsAction, mSignCheckAction);
     }
 
     /**
@@ -324,10 +322,10 @@ public class MediaServiceManager {
     }
 
     public void enableHistory(boolean enable) {
-        RxUtils.runAsyncUser(() -> mGroupManager.enableHistory(enable));
+        RxHelper.runAsyncUser(() -> mGroupManager.enableHistory(enable));
     }
 
     public void clearHistory() {
-        RxUtils.runAsyncUser(mGroupManager::clearHistory);
+        RxHelper.runAsyncUser(mGroupManager::clearHistory);
     }
 }

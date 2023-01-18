@@ -5,7 +5,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -460,7 +460,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
             historyObservable = mediaItemManager.updateHistoryPositionObserve(video.videoId, positionSec);
         }
 
-        mHistoryAction = RxUtils.execute(historyObservable);
+        mHistoryAction = RxHelper.execute(historyObservable);
     }
 
     /**

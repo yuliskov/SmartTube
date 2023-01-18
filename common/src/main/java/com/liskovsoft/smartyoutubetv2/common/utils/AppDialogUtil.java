@@ -8,7 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -31,9 +31,7 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import com.liskovsoft.youtubeapi.service.data.YouTubePlaylistInfo;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -550,7 +548,7 @@ public class AppDialogUtil {
             editObserve = itemManager.removeFromPlaylistObserve(playlistId, video.videoId);
         }
 
-        Disposable addRemoveAction = RxUtils.execute(editObserve); // ignore results (do the work in the background)
+        Disposable addRemoveAction = RxHelper.execute(editObserve); // ignore results (do the work in the background)
     }
 
     public static void showPlaylistOrderDialog(Context context, Video video, Runnable onClose) {
@@ -586,7 +584,7 @@ public class AppDialogUtil {
         }) {
             options.add(UiOptionItem.from(context.getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {
-                    RxUtils.execute(
+                    RxHelper.execute(
                             YouTubeMediaItemService.instance().setPlaylistOrderObserve(playlistId, pair[1]),
                             () -> MessageHelpers.showMessage(context, R.string.owned_playlist_warning),
                             () -> {

@@ -17,13 +17,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegme
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
-import com.liskovsoft.sharedutils.rx.RxUtils;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,8 +130,6 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         // NOTE: SponsorBlock (when happened java.net.SocketTimeoutException) could block whole application with Schedulers.io()
         // Because Schedulers.io() reuses blocked threads in RxJava 2: https://github.com/ReactiveX/RxJava/issues/6542
         mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getEnabledCategories())
-                .subscribeOn(Schedulers.newThread()) // fix blocking
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         segments -> {
                             mVideo = item;
@@ -164,7 +159,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         // Warn. Try to not access player object here.
         // Or you'll get "Player is accessed on the wrong thread" error.
         Observable<Long> playbackProgressObservable =
-                Observable.interval(1, TimeUnit.SECONDS);
+                RxHelper.interval(1, TimeUnit.SECONDS);
 
         mProgressAction = playbackProgressObservable
                 .subscribe(
@@ -174,7 +169,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private void disposeActions() {
-        RxUtils.disposeActions(mProgressAction, mSegmentsAction);
+        RxHelper.disposeActions(mProgressAction, mSegmentsAction);
         //mSponsorSegments = null;
         //mVideo = null;
 
@@ -290,8 +285,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         long durationMs = getController().getDurationMs();
 
         // Sponsor block fix. Position may exceed real media length.
-        // SimpleExoPlayer: Player is accessed on the wrong thread. See https://exoplayer.dev/issues/player-accessed-on-wrong-thread
-        Utils.post(() -> getController().setPositionMs(Math.min(positionMs, durationMs)));
+        getController().setPositionMs(Math.min(positionMs, durationMs));
     }
 
     private List<SponsorSegment> findMatchedSegments(long positionMs) {

@@ -5,7 +5,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -66,7 +66,7 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
 
         mVideo = video;
 
-        RxUtils.disposeActions(mUnsubscribeAction);
+        RxHelper.disposeActions(mUnsubscribeAction);
 
         prepareAndShowDialog();
     }
@@ -154,8 +154,8 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        RxUtils.disposeActions(mUnsubscribeAction);
-        mUnsubscribeAction = RxUtils.execute(mItemManager.unsubscribeObserve(channelId));
+        RxHelper.disposeActions(mUnsubscribeAction);
+        mUnsubscribeAction = RxHelper.execute(mItemManager.unsubscribeObserve(channelId));
 
         if (mCallback != null) {
             mDialogPresenter.closeDialog();

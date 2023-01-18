@@ -10,7 +10,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
@@ -387,7 +387,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public boolean hasPendingActions() {
-        return RxUtils.isAnyActionRunning(mActions);
+        return RxHelper.isAnyActionRunning(mActions);
     }
 
     public boolean isItemPinned(Video item) {
@@ -736,7 +736,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void disposeActions() {
-        RxUtils.disposeActions(mActions);
+        RxHelper.disposeActions(mActions);
         Utils.removeCallbacks(mRefreshSection);
         mLastScrollGroup = null;
         mLastUpdateTimeMs = 0;

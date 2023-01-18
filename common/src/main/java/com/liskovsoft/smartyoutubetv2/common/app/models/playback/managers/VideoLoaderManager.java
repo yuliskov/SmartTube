@@ -6,7 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SampleMediaItem;
@@ -354,12 +354,12 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     }
 
     private boolean isActionsRunning() {
-        return RxUtils.isAnyActionRunning(mFormatInfoAction, mMpdStreamAction);
+        return RxHelper.isAnyActionRunning(mFormatInfoAction, mMpdStreamAction);
     }
 
     private void disposeActions() {
         MediaServiceManager.instance().disposeActions();
-        RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
+        RxHelper.disposeActions(mFormatInfoAction, mMpdStreamAction);
         Utils.removeCallbacks(mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
     }
 
