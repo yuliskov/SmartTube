@@ -43,12 +43,15 @@
         <!-- More info: com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.LeanbackListPreferenceDialogFragment -->
         <!-- Text: add android:fontFamily="sans-serif-condensed" -->
         <!-- Text: add android:lineSpacingMultiplier="0.9" -->
+        <!-- Messages exceeding certain length cause crashes. RecycleView bug? -->
+        <!-- add android:maxLines="130" -->
         <TextView
             android:id="@id/messageText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:lineSpacingMultiplier="0.9" />
+            android:lineSpacingMultiplier="0.9"
+            android:maxLines="130" />
 
         <TextView
             android:id="@id/messageTime"
