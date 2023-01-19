@@ -418,8 +418,8 @@ public class ViewManager {
         return System.currentTimeMillis() - mPendingActivityMs < 1_000;
     }
 
-    public boolean isNewViewPending(Class<?> currentView) {
-        return isNewViewPending() && mViewMapping.get(currentView) != mPendingActivityClass;
+    public boolean isViewPending(Class<?> viewClass) {
+        return isNewViewPending() && mViewMapping.get(viewClass) == mPendingActivityClass;
     }
 
     public void refreshCurrentView() {
