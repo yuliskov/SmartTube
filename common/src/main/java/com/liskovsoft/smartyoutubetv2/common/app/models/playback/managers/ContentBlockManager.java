@@ -16,6 +16,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
+import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -331,7 +333,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
             long skipPosMs = lastSegment.getEndMs();
 
-            if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode()) {
+            if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode() || isScreenOff()) {
                 simpleSkip(skipPosMs);
             } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
                 messageSkip(skipPosMs, localizedCategory);
@@ -341,5 +343,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         mLastSkipPosMs = foundSegment != null ? foundSegment.get(foundSegment.size() - 1).getEndMs() : 0;
+    }
+
+    private boolean isScreenOff() {
+        ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
+
+        return manager != null && manager.isScreenOff();
     }
 }
