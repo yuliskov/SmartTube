@@ -16,8 +16,8 @@
   <string name="library_signin_to_show_more">구독하거나 저장 또는 좋아요 표시한 동영상 보기</string>
   <string name="library_signin_subtitle">로그인하여 라이브러리를 확인하세요</string>
   <string name="action_signin">로그인</string>
-  <string name="title_video_formats">동영상 포맷</string>
-  <string name="title_audio_formats">오디오 포맷</string>
+  <string name="title_video_formats">동영상 형식</string>
+  <string name="title_audio_formats">오디오 형식</string>
   <string name="subtitle_category_title">자막</string>
   <string name="playback_queue_category_title">재생 대기열</string>
   <string name="video_max_quality">자동 (최고 품질)</string>
@@ -34,7 +34,7 @@
   <string name="video_speed">재생 속도</string>
   <string name="resolution_switch">해상도 변경</string>
   <string name="video_buffer">동영상 버퍼</string>
-  <string name="video_buffer_size_none">없음</string> 
+  <string name="video_buffer_size_none">없음</string>
   <string name="video_buffer_size_low">낮음</string>
   <string name="video_buffer_size_med">중간</string>
   <string name="video_buffer_size_high">높음</string>
@@ -120,7 +120,7 @@
   <string name="subtitle_white_transparent">투명한 배경에 흰색</string>
   <string name="subtitle_white_black">검정색 배경에 흰색</string>
   <string name="player_seek_preview">탐색바 사용중 미리보기</string>
-  <string name="color_scheme_dark_grey_oled">어두운 회색(OLED)</string>
+  <string name="color_scheme_dark_grey_oled">어두운 회색 (OLED)</string>
   <string name="channels_section_sorting">채널 섹션의 정렬</string>
   <string name="sorting_by_new_content">새 콘텐츠순</string>
   <string name="sorting_alphabetically">알파벳순</string>
@@ -145,7 +145,7 @@
   <string name="video_zoom_fit_both">가로 또는 세로 맞춤</string>
   <string name="video_zoom_stretch">전체화면으로 늘이기</string>
   <string name="color_scheme_teal">청록색</string>
-  <string name="color_scheme_teal_oled">청록색(OLED)</string>
+  <string name="color_scheme_teal_oled">청록색 (OLED)</string>
   <string name="player_seek_preview_none">사용 안 함</string>
   <string name="player_seek_preview_single">단일 프레임</string>
   <string name="player_seek_preview_carousel">구간보기</string>
@@ -214,7 +214,7 @@
   <string name="player_show_global_clock">화면에 시계를 계속 표시</string>
   <string name="player_show_global_ending_time">화면에 동영상 종료 시간을 계속 표시</string>
   <string name="uploads_old_look">업로드 섹션 화면을 구버전으로 되돌리기</string>
-  <string name="background_playback_activation">백그라운드 재생(활성화)</string>
+  <string name="background_playback_activation">백그라운드 재생 (활성화)</string>
   <string name="channels_old_look">채널 섹션 화면을 구버전으로 되돌리기</string>
   <string name="channels_auto_load">채널 섹션 콘텐츠를 자동으로 로드하기</string>
   <string name="return_to_background_video">백그라운드에서 실행 중인 동영상으로 돌아가기</string>
@@ -371,15 +371,15 @@
   <string name="live_stream_fix_desc">저사양 장치에서 라이브 스트림 성능을 크게 향상시킵니다. 최대 해상도는 1080p입니다.</string>
   <string name="live_stream_fix">생방송 스트림 수정 (1080p)</string>
   <string name="playback_notifications_fix_desc">트랙 변경 알림을 숨깁니다. AOSP 기반 펌웨어에서 유용할 수 있습니다.</string>
-  <string name="playback_notifications_fix">재생 알림 비활성화</string>																																   
+  <string name="playback_notifications_fix">재생 알림 비활성화</string>
   <string name="amlogic_fix_desc">Amlogic 기반 장치의 프레임 드롭 수정</string>
   <string name="amlogic_fix">Amlogic 1080p\@60fps 수정</string>
-  <string name="tunneled_video_playback_desc">참고: 일시중지가 제대로 작동하지 않을 수 있습니다! 터널링된 동영상 재생은 더 나은 오디오/동영상 동기화 (AV 동기화) 및 더 부드러운 재생과 같은 이점을 약속합니다. 필수 안드로이드 5 이상입니다.</string>												 
+  <string name="tunneled_video_playback_desc">참고: 일시중지가 제대로 작동하지 않을 수 있습니다! 터널링된 동영상 재생은 더 나은 오디오/동영상 동기화 (AV 동기화) 및 더 부드러운 재생과 같은 이점을 약속합니다. 필수 안드로이드 5 이상입니다.</string>
   <string name="tunneled_video_playback">터널링된 동영상 재생 (안드로이드 5 이상)</string>
   <string name="master_volume">마스터 볼륨</string>
   <string name="volume_limit">볼륨 제한</string>
   <string name="play_video">재생</string>
-  <string name="remember_position_of_short_videos">짧은 동영상의 위치 기억 (5분 이내)</string>									   
+  <string name="remember_position_of_short_videos">짧은 동영상의 위치 기억 (5분 이내)</string>
   <string name="player_show_tooltips">버튼 툴팁 표시</string>
   <string name="action_like_unset">좋아요 설정되지 않음</string>
   <string name="action_dislike_unset">싫어요 설정 해제됨</string>
@@ -409,7 +409,7 @@
   <string name="alt_presets_behavior_desc">앱은 해상도, fps, 코덱을 일치시키는 대신 선택한 사전 설정에 해당하는 대역폭을 유지하려고 합니다.</string>
   <string name="sleep_timer">취침 타이머 (리모컨을 1시간 동안 사용하지 않은 경우)</string>
   <string name="sleep_timer_desc">사용자가 1시간 동안 리모컨을 사용하지 않으면 재생을 일시 중지합니다.</string>
-  <string name="disable_vsync">v동기화로 스냅 비활성화</string>
+  <string name="disable_vsync">수직동기화로 스냅 비활성화</string>
   <string name="disable_vsync_desc">재생 성능을 약간 향상시킵니다.</string>
   <string name="skip_codec_profile_check">코덱 프로파일 수준 확인 건너뛰기</string>
   <string name="skip_codec_profile_check_desc">동영상을 시작할 때 코덱 지원을 확인하지 마세요. 버그가 있는 펌웨어에 도움이 될 수 있습니다.</string>
@@ -430,7 +430,6 @@
   <string name="playback_starts_shortly">스트림이 준비되면 재생이 자동으로 시작됩니다.</string>
   <string name="starting_stream">스트림 시작 중...</string>
   <string name="action_playlist_remove">재생목록에서 삭제</string>
-    <!-- BEGIN Moved strings -->
   <string name="signin_view_title">사용자 코드 불러오는 중...</string>
   <string name="signin_view_description">로그인하려면 %s페이지에 이 코드를 입력하세요.\n참고. 파이어폭스 또는 크롬 브라우저에서만 작동합니다.</string>
   <string name="signin_view_action_text">완료</string>
@@ -445,7 +444,6 @@
   <string name="playback_controls_repeat_list">반복 목록</string>
   <string name="action_subscribe_off">구독 해제</string>
   <string name="action_subscribe_on">구독하기</string>
-    <!-- END Moved strings -->
   <string name="skip_24_rate">24fps 형식 건너뛰기 (실제 시네마 모드 수정\?)</string>
   <string name="player_disable_suggestions">제안 비활성화</string>
   <string name="feedback">피드백</string>
@@ -491,5 +489,7 @@
   <string name="resume_history">기록 다시 시작</string>
   <string name="clear_history">기록 지우기</string>
   <string name="chapters">장</string>
-  <string name="card_multiline_subtitle">여러 줄 자막</string>														 
+  <string name="card_multiline_subtitle">여러 줄 자막</string>
+  <string name="auto_frame_rate_modes">지원되는 모드</string>
+  <string name="loading">불러오기 중...</string>
 </resources>
