@@ -140,8 +140,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     private void resumeHistory() {
-        GeneralData.instance(getContext()).enableHistory(true);
-        MediaServiceManager.instance().enableHistory(true);
+        MediaServiceManager.instance().enableHistory(GeneralData.instance(getContext()).isHistoryEnabled());
     }
 
     private void runRefreshCachePeriodicTask() {

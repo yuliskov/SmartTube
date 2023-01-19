@@ -63,7 +63,7 @@ public class GeneralData {
     private boolean mIsGlobalClockEnabled;
     private String mSettingsPassword;
     private boolean mIsChildModeEnabled;
-    private boolean mIsHistoryEnabled = true;
+    private boolean mIsHistoryEnabled;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new ArrayList<>();
@@ -624,6 +624,8 @@ public class GeneralData {
 
     public void enableHistory(boolean enabled) {
         mIsHistoryEnabled = enabled;
+
+        persistState();
     }
 
     private void initSections() {
@@ -689,6 +691,7 @@ public class GeneralData {
         mTimeFormat = Helpers.parseInt(split, 32, LocaleUtility.is24HourLocale(mContext) ? TIME_FORMAT_24 : TIME_FORMAT_12);
         mSettingsPassword = Helpers.parseStr(split, 33);
         mIsChildModeEnabled = Helpers.parseBoolean(split, 34, false);
+        mIsHistoryEnabled = Helpers.parseBoolean(split, 35, true);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -748,6 +751,6 @@ public class GeneralData {
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
-                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled));
+                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled));
     }
 }
