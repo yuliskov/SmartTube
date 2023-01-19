@@ -265,7 +265,7 @@
     <string name="removed_from">Odobrané z %s</string>
     <string name="video_preset_adaptive">Adaptívne</string>
     <string name="content_block_preview_recap">Náhľad alebo zrhnutie videa</string>
-    <string name="content_block_highlight">Pointa alebo highlight videa</string>
+    <string name="content_block_highlight">Zaujímavý bod (záložka)</string>
     <string name="removed_from_history">Video bolo zmazané z histórie</string>
     <string name="remove_from_history">Zmazať z histórie</string>
     <string name="upload_date">Dátum nahrania</string>
