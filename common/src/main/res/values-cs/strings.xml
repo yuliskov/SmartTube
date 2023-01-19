@@ -265,7 +265,7 @@
     <string name="removed_from">Odebráno z %s</string>
     <string name="video_preset_adaptive">Adaptivní</string>
     <string name="content_block_preview_recap">Náhled nebo shrnutí videa</string>
-    <string name="content_block_highlight">Pointa videa</string>
+    <string name="content_block_highlight">Zajímavá pointa (záložka)</string>
     <string name="removed_from_history">Video bylo smazáno z historie</string>
     <string name="remove_from_history">Smazat z historie</string>
     <string name="upload_date">Datum nahrání</string>
