@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Placing the view at topmost position -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:id="@+id/dim_container"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:elevation="1dp"
+             android:translationZ="1dp"
              android:visibility="gone"/>
