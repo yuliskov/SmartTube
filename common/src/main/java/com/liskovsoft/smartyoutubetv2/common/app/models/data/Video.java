@@ -402,6 +402,10 @@ public final class Video implements Parcelable {
         return playlistId != null || (playlistParams != null && !Helpers.containsAny(playlistParams, sNotPlaylistParams));
     }
 
+    public boolean hasNextPlaylist() {
+        return hasPlaylist() && hasNextItem() && getPlaylistId().equals(nextMediaItem.getPlaylistId());
+    }
+
     /**
      * Persist on Channels and User playlists sections
      */
@@ -411,6 +415,10 @@ public final class Video implements Parcelable {
 
     public boolean hasNextPageKey() {
         return getNextPageKey() != null;
+    }
+
+    public boolean hasNextItem() {
+        return nextMediaItem != null;
     }
 
     public boolean hasNestedItems() {

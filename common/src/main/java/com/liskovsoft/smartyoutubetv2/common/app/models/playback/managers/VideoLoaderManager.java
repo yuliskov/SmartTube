@@ -445,7 +445,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
             case PlaybackUIController.REPEAT_MODE_LIST:
                 // stop player (if not playing playlist)
                 Video video = getController().getVideo();
-                if ((video != null && video.hasPlaylist()) || mPlaylist.getNext() != null) {
+                if ((video != null && video.hasNextPlaylist()) || mPlaylist.getNext() != null) {
                     loadNext();
                     getController().showOverlay(true);
                 } else {
