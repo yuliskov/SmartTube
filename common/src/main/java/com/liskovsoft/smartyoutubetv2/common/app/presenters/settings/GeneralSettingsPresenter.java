@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -264,15 +265,23 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.option_never),
-                option -> mGeneralData.setScreenDimmingTimeoutMin(GeneralData.SCREEN_DIMMING_NEVER),
-                mGeneralData.getScreenDimmingTimeoutMin() == GeneralData.SCREEN_DIMMING_NEVER));
+                option -> mGeneralData.setScreenDimmingTimeoutMs(GeneralData.SCREEN_DIMMING_NEVER),
+                mGeneralData.getScreenDimmingTimeoutMs() == GeneralData.SCREEN_DIMMING_NEVER));
+
+        for (int timeoutSec : Helpers.range(15, 30, 15)) {
+            int timeoutMs = timeoutSec * 1_000;
+            options.add(UiOptionItem.from(
+                    getContext().getString(R.string.ui_hide_timeout_sec, timeoutSec),
+                    option -> mGeneralData.setScreenDimmingTimeoutMs(timeoutMs),
+                    mGeneralData.getScreenDimmingTimeoutMs() == timeoutMs));
+        }
 
         for (int i = 1; i <= 15; i++) {
-            int timeoutMin = i;
+            int timeoutMs = i * 60 * 1_000;
             options.add(UiOptionItem.from(
                     getContext().getString(R.string.screen_dimming_timeout_min, i),
-                    option -> mGeneralData.setScreenDimmingTimeoutMin(timeoutMin),
-                    mGeneralData.getScreenDimmingTimeoutMin() == i));
+                    option -> mGeneralData.setScreenDimmingTimeoutMs(timeoutMs),
+                    mGeneralData.getScreenDimmingTimeoutMs() == timeoutMs));
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.screen_dimming), options);

@@ -59,9 +59,9 @@ public class ScreensaverManager {
         Log.d(TAG, "Enable screensaver");
 
         disable();
-        int delayMs = mGeneralData.getScreenDimmingTimeoutMin() == GeneralData.SCREEN_DIMMING_NEVER ?
+        int delayMs = mGeneralData.getScreenDimmingTimeoutMs() == GeneralData.SCREEN_DIMMING_NEVER ?
                 10_000 :
-                mGeneralData.getScreenDimmingTimeoutMin() * 60 * 1_000;
+                mGeneralData.getScreenDimmingTimeoutMs();
         Utils.postDelayed(mDimScreen, delayMs);
     }
 
@@ -104,7 +104,7 @@ public class ScreensaverManager {
 
         // Disable dimming on certain circumstances
         if (show && mDimColorResId == DIMMING_RES_ID &&
-                (isPlaying() || isSigning() || mGeneralData.getScreenDimmingTimeoutMin() == GeneralData.SCREEN_DIMMING_NEVER)
+                (isPlaying() || isSigning() || mGeneralData.getScreenDimmingTimeoutMs() == GeneralData.SCREEN_DIMMING_NEVER)
         ) {
             return;
         }
