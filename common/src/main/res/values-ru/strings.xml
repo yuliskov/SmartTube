@@ -485,5 +485,6 @@
     <string name="chapters">Эпизоды</string>
     <string name="card_multiline_subtitle">Несколько строк в подзаголовках</string>
     <string name="auto_frame_rate_modes">Поддерживаемые режимы</string>
-    <string name="loading">Загрузка...</string>
+    <string name="loading">Загрузка…</string>
+    <string name="hide_streams">Скрывать прямые трансляции из Подписок</string>
 </resources>

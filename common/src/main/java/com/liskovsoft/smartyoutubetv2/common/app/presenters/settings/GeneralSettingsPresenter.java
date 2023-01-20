@@ -384,6 +384,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.hideShortsFromSubscriptions(option.isSelected()),
                 mGeneralData.isHideShortsFromSubscriptionsEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_streams),
+                option -> mGeneralData.hideStreamsFromSubscriptions(option.isSelected()),
+                mGeneralData.isHideStreamsFromSubscriptionsEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_history),
                 option -> mGeneralData.hideShortsFromHistory(option.isSelected()),
                 mGeneralData.isHideShortsFromHistoryEnabled()));

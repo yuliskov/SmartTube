@@ -485,5 +485,6 @@
     <string name="chapters">Розділи</string>
     <string name="card_multiline_subtitle">Декілька рядків у підзаголовках</string>
     <string name="auto_frame_rate_modes">Підтримувані режими</string>
-    <string name="loading">Завантаження...</string>
+    <string name="loading">Завантаження…</string>
+    <string name="hide_streams">Приховувати прямі трансляції з Підписок</string>
 </resources>

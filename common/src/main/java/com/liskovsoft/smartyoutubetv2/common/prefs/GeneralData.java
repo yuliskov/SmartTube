@@ -339,6 +339,14 @@ public class GeneralData {
         return GlobalPreferences.sInstance.isHideShortsFromSubscriptionsEnabled();
     }
 
+    public void hideStreamsFromSubscriptions(boolean enable) {
+        GlobalPreferences.sInstance.hideStreamsFromSubscriptions(enable);
+    }
+
+    public boolean isHideStreamsFromSubscriptionsEnabled() {
+        return GlobalPreferences.sInstance.isHideStreamsFromSubscriptionsEnabled();
+    }
+
     public void hideShortsFromHome(boolean enable) {
         GlobalPreferences.sInstance.hideShortsFromHome(enable);
     }
