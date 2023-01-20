@@ -44,14 +44,14 @@
         <!-- Text: add android:fontFamily="sans-serif-condensed" -->
         <!-- Text: add android:lineSpacingMultiplier="0.9" -->
         <!-- Messages exceeding certain length cause crashes. RecycleView bug? -->
-        <!-- add android:maxLines="130" -->
+        <!-- add android:maxLines="130" (max 130, optimal for reading 50) -->
         <TextView
             android:id="@id/messageText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:lineSpacingMultiplier="0.9"
-            android:maxLines="130" />
+            android:maxLines="50" />
 
         <TextView
             android:id="@id/messageTime"
