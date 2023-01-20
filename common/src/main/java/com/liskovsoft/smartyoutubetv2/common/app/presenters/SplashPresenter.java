@@ -64,6 +64,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
         runRefreshCachePeriodicTask();
         showAccountSelection();
+        resumeHistory();
 
         if (getView() != null) {
             applyNewIntent(getView().getNewIntent());
@@ -86,7 +87,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             //configureOpenVPN();
             initVideoStateService();
             initStreamReminderService();
-            resumeHistory();
+            //resumeHistory();
             sRunOnce = true;
         }
     }
