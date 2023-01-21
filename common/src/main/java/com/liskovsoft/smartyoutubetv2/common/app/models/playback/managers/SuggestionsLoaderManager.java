@@ -33,9 +33,14 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
     private VideoGroup mLastScrollGroup;
+    private int mContinuationCount = -1;
 
     public interface MetadataListener {
         void onMetadata(MediaItemMetadata metadata);
+    }
+
+    private interface OnVideoGroup {
+        void onVideoGroup(VideoGroup group);
     }
 
     @Override
@@ -107,6 +112,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void continueGroup(VideoGroup group) {
+        continueGroup(group, null);
+    }
+
+    private void continueGroup(VideoGroup group, OnVideoGroup callback) {
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         getController().showProgressBar(true);
@@ -129,7 +138,11 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                                 Playlist.instance().setCurrent(video);
                             }
 
-                            continueGroupIfNeeded(videoGroup);
+                            if (callback != null) {
+                                callback.onVideoGroup(videoGroup);
+                            } else {
+                                continueGroupIfNeeded(videoGroup);
+                            }
                         },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
@@ -274,7 +287,11 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
                 getController().updateSuggestions(videoGroup);
 
-                continueGroupIfNeeded(videoGroup);
+                if (groupIndex == 0) {
+                    focusAndContinueIfNeeded(videoGroup);
+                } else {
+                    continueGroupIfNeeded(videoGroup);
+                }
             }
         }
     }
@@ -408,6 +425,30 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
      */
     private void continueGroupIfNeeded(VideoGroup group) {
         MediaServiceManager.instance().shouldContinueTheGroup(getActivity(), group, () -> continueGroup(group));
+    }
+
+    public void focusAndContinueIfNeeded(VideoGroup group) {
+        Video video = getController().getVideo();
+
+        if (group == null || group.isEmpty() || video == null || !video.hasPlaylist() || !video.hasVideo()) {
+            return;
+        }
+
+        int index = group.getVideos().indexOf(video);
+
+        if (index >= 0) {
+            Log.d(TAG, "Found current video index: %s", index);
+            getController().focusSuggestedItem(group.getVideos().get(index));
+            // Stop the continuation loop
+            mContinuationCount = 0;
+        } else if (mContinuationCount > 5) {
+            // Stop the continuation loop
+            mContinuationCount = 0;
+        } else {
+            // load more and repeat
+            continueGroup(group, this::focusAndContinueIfNeeded);
+            mContinuationCount++;
+        }
     }
 
     public void addMetadataListener(MetadataListener listener) {

@@ -111,6 +111,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private MediaSessionConnector mMediaSessionConnector;
     private boolean mIsAfrRunning;
     private Boolean mIsControlsShownPreviously;
+    private Video mPendingFocus;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -555,22 +556,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             protected void onBindRowViewHolder(RowPresenter.ViewHolder holder, Object item) {
                 super.onBindRowViewHolder(holder, item);
 
-                // Set position of item inside first row (playlist items)
-                //if (getVideo() != null && getVideo().playlistIndex > 0 &&
-                //        mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
-                //    ViewHolder vh = (ViewHolder) holder;
-                //    vh.getGridView().setSelectedPosition(getVideo().playlistIndex);
-                //}
-
-                // Set position of item inside first row (playlist items)
-                if (mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
-                    int index = getCurrentVideoIndex();
-
-                    if (index > 0) {
-                        ViewHolder vh = (ViewHolder) holder;
-                        vh.getGridView().setSelectedPosition(index);
-                    }
+                if (mRowsSupportFragment == null) {
+                    return;
                 }
+
+                int previousPos = mRowsSupportFragment.getVerticalGridView().getSelectedPosition();
+
+                focusPendingSuggestedItem(holder, previousPos + 1);
             }
 
             @Override
@@ -582,37 +574,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         };
 
         mCardPresenter = new VideoCardPresenter();
-    }
-
-    private int getCurrentVideoIndex() {
-        if (getVideo() == null || !getVideo().hasPlaylist() || !getVideo().hasVideo()) {
-            return -1;
-        }
-
-        // NOTE: skip first row. It's PlaybackControlsRow
-        Object row = mRowsAdapter != null && mRowsAdapter.size() > 1 ? mRowsAdapter.get(1) : null;
-        int index = -1;
-
-        if (row instanceof ListRow) {
-            VideoGroupObjectAdapter adapter = (VideoGroupObjectAdapter) ((ListRow) row).getAdapter();
-            index = adapter.indexOfAlt(getVideo());
-
-            // Below doesn't work. onBindRowViewHolder won't called on update hidden list.
-            //if (index == -1) {
-            //    mEventListener.onScrollEnd((Video) adapter.get(adapter.size() - 1));
-            //}
-
-            // Select last possible item on fail (NOTE: skip queue because it doesn't contain current video)
-            if (index == -1 && !adapter.isEmpty()) {
-                int lastIndex = adapter.size() - 1;
-                Video lastVideo = (Video) adapter.get(lastIndex);
-                if (lastVideo.hasNextPageKey()) {
-                    index = lastIndex;
-                }
-            }
-        }
-
-        return index;
     }
 
     private void setupEventListeners() {
@@ -1434,22 +1395,28 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(group.getId());
 
+        int index = getRowAdapterIndex(existingAdapter);
+
+        return index != -1 ? index - SUGGESTIONS_START_INDEX : -1;
+    }
+
+    private int getRowAdapterIndex(VideoGroupObjectAdapter adapter) {
         int index = -1;
 
         for (int i = 0; i < mRowsAdapter.size(); i++) {
             Object row = mRowsAdapter.get(i);
 
             if (row instanceof ListRow) {
-                ObjectAdapter adapter = ((ListRow) row).getAdapter();
+                ObjectAdapter current = ((ListRow) row).getAdapter();
 
-                if (adapter == existingAdapter) {
+                if (current == adapter) {
                     index = mRowsAdapter.indexOf(row);
                     break;
                 }
             }
         }
 
-        return index != -1 ? index - SUGGESTIONS_START_INDEX : -1;
+        return index;
     }
 
     @Override
@@ -1480,6 +1447,53 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             if (vh instanceof ListRowPresenter.ViewHolder) {
                 ((ListRowPresenter.ViewHolder) vh).getGridView().setSelectedPosition(index);
             }
+        }
+    }
+
+    @Override
+    public void focusSuggestedItem(Video video) {
+        if (video == null || video.group == null) {
+            return;
+        }
+
+        mPendingFocus = video;
+
+        if (mRowsSupportFragment != null) {
+            VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(video.group.getId());
+
+            if (existingAdapter == null) {
+                return;
+            }
+
+            int rowIndex = getRowAdapterIndex(existingAdapter);
+
+            ViewHolder vh = mRowsSupportFragment.getRowViewHolder(rowIndex);
+
+            focusPendingSuggestedItem(vh, rowIndex);
+        }
+    }
+
+    public void focusPendingSuggestedItem(ViewHolder rowViewHolder, int rowIndex) {
+        if (mPendingFocus == null || mPendingFocus.group == null || rowViewHolder == null) {
+            return;
+        }
+
+        VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mPendingFocus.group.getId());
+
+        if (existingAdapter == null) {
+            return;
+        }
+
+        if (getRowAdapterIndex(existingAdapter) != rowIndex) {
+            return;
+        }
+
+        int index = existingAdapter.indexOf(mPendingFocus);
+
+        // Skip PlaybackRowPresenter.ViewHolder
+        if (rowViewHolder instanceof ListRowPresenter.ViewHolder) {
+            mPendingFocus = null;
+            ((ListRowPresenter.ViewHolder) rowViewHolder).getGridView().setSelectedPosition(index);
         }
     }
 
