@@ -21,6 +21,8 @@ import java.util.Map.Entry;
 
 public class GeneralData {
     public static final int SCREEN_DIMMING_NEVER = 0;
+    public static final int SCREEN_DIMMING_MODE_NORMAL = 0;
+    public static final int SCREEN_DIMMING_MODE_SCREEN_OFF = 1;
     private static final String GENERAL_DATA = "general_data";
     public static final int EXIT_NONE = 0;
     public static final int EXIT_DOUBLE_BACK = 1;
@@ -42,6 +44,7 @@ public class GeneralData {
     private boolean mIsHideUpcomingEnabled;
     private boolean mIsRemapFastForwardToNextEnabled;
     private int mScreenDimmingTimeoutMs;
+    private int mScreenDimmingMode;
     private int mTimeFormat;
     private boolean mIsProxyEnabled;
     private boolean mIsBridgeCheckEnabled;
@@ -490,6 +493,15 @@ public class GeneralData {
         return mScreenDimmingTimeoutMs;
     }
 
+    public void setScreenDimmingMode(int mode) {
+        mScreenDimmingMode = mode;
+        persistState();
+    }
+
+    public int getScreenDimmingMode() {
+        return mScreenDimmingMode;
+    }
+
     public void setTimeFormat(int format) {
         mTimeFormat = format;
         persistState();
@@ -701,6 +713,7 @@ public class GeneralData {
         mIsChildModeEnabled = Helpers.parseBoolean(split, 34, false);
         mIsHistoryEnabled = Helpers.parseBoolean(split, 35, true);
         mScreenDimmingTimeoutMs = Helpers.parseInt(split, 36, 60 * 1_000);
+        mScreenDimmingMode = Helpers.parseInt(split, 37, SCREEN_DIMMING_MODE_NORMAL);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -761,6 +774,6 @@ public class GeneralData {
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
                 playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
-                mScreenDimmingTimeoutMs));
+                mScreenDimmingTimeoutMs, mScreenDimmingMode));
     }
 }

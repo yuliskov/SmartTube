@@ -18,26 +18,54 @@ import java.lang.ref.WeakReference;
 
 public class ScreensaverManager {
     private static final String TAG = ScreensaverManager.class.getSimpleName();
-    private static final int SCREEN_OFF_RES_ID = R.color.black;
-    private static final int DIMMING_RES_ID = R.color.dimming;
+    private static final int MODE_DIMMING = 0;
+    private static final int MODE_SCREEN_OFF = 1;
     private final WeakReference<Activity> mActivity;
+    private final WeakReference<View> mDimContainer;
     private final Runnable mDimScreen = this::dimScreen;
     private final Runnable mUndimScreen = this::undimScreen;
     private final GeneralData mGeneralData;
-    private int mDimColorResId;
+    private int mMode = MODE_DIMMING;
+    private final int mDimColorResId = R.color.dimming;
+    private final int mScreenOffColorResId = R.color.black;
     private boolean mIsScreenOff;
 
     public ScreensaverManager(Activity activity) {
         mActivity = new WeakReference<>(activity);
+        mDimContainer = new WeakReference<>(createDimContainer(activity));
         mGeneralData = GeneralData.instance(activity);
         enable();
+    }
+
+    private View createDimContainer(Activity activity) {
+        View rootView = activity.getWindow().getDecorView().getRootView();
+
+        View dimContainer = rootView.findViewById(R.id.dim_container);
+
+        if (dimContainer == null) {
+            LayoutInflater layoutInflater = activity.getLayoutInflater();
+            dimContainer = layoutInflater.inflate(R.layout.dim_container, null);
+            if (rootView instanceof ViewGroup) {
+                // Add negative margin to fix un-proper viewport positioning on some devices
+                // NOTE: below code is not working!!!
+                // NOTE: comment out code below if you don't want this
+                //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                //        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                //params.setMargins(-200, -200, -200, -200);
+                //((ViewGroup) rootView).addView(dimContainer, params);
+
+                ((ViewGroup) rootView).addView(dimContainer);
+            }
+        }
+
+        return dimContainer;
     }
 
     /**
      * Screen off check
      */
     public void enableChecked() {
-        if (mDimColorResId == SCREEN_OFF_RES_ID) {
+        if (mMode == MODE_SCREEN_OFF) {
             return;
         }
 
@@ -48,7 +76,7 @@ public class ScreensaverManager {
      * Screen off check
      */
     public void disableChecked() {
-        if (mDimColorResId == SCREEN_OFF_RES_ID) {
+        if (mMode == MODE_SCREEN_OFF) {
             return;
         }
 
@@ -67,14 +95,14 @@ public class ScreensaverManager {
 
     public void disable() {
         Log.d(TAG, "Disable screensaver");
-        mDimColorResId = DIMMING_RES_ID;
+        mMode = MODE_DIMMING;
         Utils.removeCallbacks(mDimScreen);
         Utils.postDelayed(mUndimScreen, 0);
     }
 
     public void doScreenOff() {
         disable();
-        mDimColorResId = SCREEN_OFF_RES_ID;
+        mMode = MODE_SCREEN_OFF;
         Utils.postDelayed(mDimScreen, 0);
     }
 
@@ -97,42 +125,24 @@ public class ScreensaverManager {
 
     private void showHideDimming(boolean show) {
         Activity activity = mActivity.get();
+        View dimContainer = mDimContainer.get();
 
-        if (activity == null) {
+        if (activity == null || dimContainer == null) {
             return;
         }
 
         // Disable dimming on certain circumstances
-        if (show && mDimColorResId == DIMMING_RES_ID &&
+        if (show && mMode == MODE_DIMMING &&
                 (isPlaying() || isSigning() || mGeneralData.getScreenDimmingTimeoutMs() == GeneralData.SCREEN_DIMMING_NEVER)
         ) {
             return;
         }
 
-        View rootView = activity.getWindow().getDecorView().getRootView();
-
-        View dimContainer = rootView.findViewById(R.id.dim_container);
-
-        if (dimContainer == null) {
-            LayoutInflater layoutInflater = activity.getLayoutInflater();
-            dimContainer = layoutInflater.inflate(R.layout.dim_container, null);
-            if (rootView instanceof ViewGroup) {
-                // Add negative margin to fix un-proper viewport positioning on some devices
-                // NOTE: below code is not working!!!
-                // NOTE: comment out code below if you don't want this
-                //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                //        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                //params.setMargins(-200, -200, -200, -200);
-                //((ViewGroup) rootView).addView(dimContainer, params);
-
-                ((ViewGroup) rootView).addView(dimContainer);
-            }
-        }
-
-        dimContainer.setBackgroundResource(mDimColorResId);
+        dimContainer.setBackgroundResource((mMode == MODE_DIMMING && mGeneralData.getScreenDimmingMode() == GeneralData.SCREEN_DIMMING_MODE_NORMAL) ?
+                mDimColorResId : mScreenOffColorResId);
         dimContainer.setVisibility(show ? View.VISIBLE : View.GONE);
 
-        mIsScreenOff = mDimColorResId == SCREEN_OFF_RES_ID && show;
+        mIsScreenOff = mMode == MODE_SCREEN_OFF && show;
 
         if (mIsScreenOff) {
             hidePlayerOverlay();
