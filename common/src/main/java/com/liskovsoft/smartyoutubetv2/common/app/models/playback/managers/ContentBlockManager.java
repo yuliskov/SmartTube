@@ -238,7 +238,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         OptionItem acceptOption = UiOptionItem.from(
                 getActivity().getString(R.string.confirm_segment_skip, category),
                 option -> {
-                    settingsPresenter.closeDialog();
+                    // return to previous dialog or close if no other dialogs in stack
+                    settingsPresenter.goBack();
                     setPositionMs(skipPosMs);
                 }
         );
