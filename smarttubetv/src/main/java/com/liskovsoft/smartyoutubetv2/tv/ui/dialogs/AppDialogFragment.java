@@ -191,8 +191,10 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
 
     @Override
     public void goBack() {
-        if (getChildFragmentManager() != null) {
+        if (getChildFragmentManager() != null && getChildFragmentManager().getBackStackEntryCount() > 0) {
             getChildFragmentManager().popBackStack();
+        } else {
+            finish();
         }
     }
 
