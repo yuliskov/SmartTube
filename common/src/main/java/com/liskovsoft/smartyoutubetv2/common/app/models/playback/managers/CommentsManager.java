@@ -38,6 +38,8 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
+        getController().showControls(false);
+
         String title = getController().getVideo().getTitle();
 
         CommentsReceiver commentsReceiver = new CommentsReceiverImpl(getActivity()) {
@@ -105,7 +107,7 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
                         receiver::addCommentGroup,
                         error -> {
                             Log.e(TAG, error.getMessage());
-                            error.printStackTrace();
+                            receiver.addCommentGroup(null); // remove loading message
                         }
                 );
     }

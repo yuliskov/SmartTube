@@ -76,10 +76,16 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
             mCommentsReceiver.onCommentClicked(message.getNestedCommentsKey());
         });
         messagesList.setAdapter(adapter);
+        messagesList.requestFocus(); // hold focus even when there's no messages
         adapter.enableStackFromEnd(true);
         adapter.setLoadingMessage(mCommentsReceiver.getLoadingMessage(), false);
 
         mCommentsReceiver.setCallback(commentGroup -> {
+            if (commentGroup == null || commentGroup.getComments() == null) {
+                adapter.removeLoadingMessageIfNeeded();
+                return;
+            }
+
             for (CommentItem commentItem : commentGroup.getComments()) {
                 ChatItemMessage message = ChatItemMessage.from(commentItem);
 

@@ -399,8 +399,12 @@ public final class Video implements Parcelable {
      * NOTE: Channels section uses <em>playlistParams</em> instead of <em>playlistId</em>
      */
     public boolean hasPlaylist() {
-        return playlistId != null || (playlistParams != null && !Helpers.containsAny(playlistParams, sNotPlaylistParams));
+        return playlistId != null || belongsToChannelUploads();
     }
+
+    //public boolean hasPlaylist() {
+    //    return playlistId != null || (playlistParams != null && !Helpers.containsAny(playlistParams, sNotPlaylistParams));
+    //}
 
     public boolean hasNextPlaylist() {
         return hasPlaylist() && hasNextItem() && getPlaylistId().equals(nextMediaItem.getPlaylistId());

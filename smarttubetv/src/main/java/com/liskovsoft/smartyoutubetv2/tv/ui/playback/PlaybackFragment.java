@@ -1159,8 +1159,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     @Override
     public void showOverlay(boolean show) {
-        if (isInPIPMode()) {
-            // UI couldn't be properly displayed in PIP mode
+        if (shouldHideOverlay(show)) {
             return;
         }
 
@@ -1173,8 +1172,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void showSuggestions(boolean show) {
-        if (isInPIPMode()) {
-            // UI couldn't be properly displayed in PIP mode
+        if (shouldHideOverlay(show)) {
             return;
         }
 
@@ -1190,8 +1188,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     @Override
     public void showControls(boolean show) {
-        if (isInPIPMode()) {
-            // UI couldn't be properly displayed in PIP mode
+        if (shouldHideOverlay(show)) {
             return;
         }
 
@@ -1571,5 +1568,12 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
                 liveChat.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         }
+    }
+
+    /**
+     * UI couldn't be properly displayed in PIP mode or behind dialogs
+     */
+    private boolean shouldHideOverlay(boolean show) {
+        return show && (isInPIPMode() || AppDialogPresenter.instance(getActivity()).isDialogShown());
     }
 }

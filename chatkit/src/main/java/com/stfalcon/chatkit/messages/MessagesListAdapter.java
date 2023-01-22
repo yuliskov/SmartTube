@@ -434,7 +434,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         notifyItemInserted(0);
     }
 
-    private void removeLoadingMessageIfNeeded() {
+    public void removeLoadingMessageIfNeeded() {
         if (items.size() == 1 && items.get(0).item instanceof String) {
             // Reset to defaults (see MessagesList.setAdapter)
             //((LinearLayoutManager) layoutManager).setReverseLayout(true);
