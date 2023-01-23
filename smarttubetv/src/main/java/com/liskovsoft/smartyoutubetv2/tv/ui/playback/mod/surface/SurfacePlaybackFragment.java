@@ -10,6 +10,7 @@ import androidx.leanback.app.PlaybackSupportFragment;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.ResizeMode;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 /**
@@ -28,7 +29,8 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
-        mVideoSurfaceWrapper = PlayerTweaksData.instance(getContext()).isTextureViewEnabled() ?
+        mVideoSurfaceWrapper = (PlayerTweaksData.instance(getContext()).isTextureViewEnabled() ||
+                PlayerData.instance(getContext()).getVideoRotateAngle() != 0) ?
                 new TextureViewWrapper(getContext(), root) : new SurfaceViewWrapper(getContext(), root);
         mVideoSurfaceRoot = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.surface_root);
         mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
@@ -84,7 +86,13 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     }
 
     public void setRotateAngle(int angle) {
-        //mVideoSurfaceRoot.setRotation(angle);
+        if (mVideoSurfaceWrapper instanceof TextureViewWrapper) {
+            if (Helpers.floatEquals(mVideoSurfaceRoot.getRotation(), angle)) {
+                return;
+            }
+
+            mVideoSurfaceRoot.setRotation(angle);
+        }
     }
 
     public void setPixelRatio(float pixelRatio) {

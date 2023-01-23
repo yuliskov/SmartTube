@@ -82,6 +82,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         // Could be set once per activity creation (view layout stuff)
         getController().setVideoZoomMode(mPlayerData.getVideoZoomMode());
         getController().setVideoAspectRatio(mPlayerData.getVideoAspectRatio());
+        getController().setVideoRotateAngle(mPlayerData.getVideoRotateAngle());
     }
 
     @Override
