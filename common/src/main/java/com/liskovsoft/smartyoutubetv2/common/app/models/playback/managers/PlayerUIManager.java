@@ -451,9 +451,13 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         OptionCategory videoAspectCategory = AppDialogUtil.createVideoAspectCategory(
                 getActivity(), mPlayerData, () -> getController().setVideoAspectRatio(mPlayerData.getVideoAspectRatio()));
 
+        OptionCategory videoRotateCategory = AppDialogUtil.createVideoRotateCategory(
+                getActivity(), mPlayerData, () -> getController().setVideoRotateAngle(mPlayerData.getVideoRotateAngle()));
+
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
         settingsPresenter.appendRadioCategory(videoAspectCategory.title, videoAspectCategory.options);
         settingsPresenter.appendRadioCategory(videoZoomCategory.title, videoZoomCategory.options);
+        settingsPresenter.appendRadioCategory(videoRotateCategory.title, videoRotateCategory.options);
         settingsPresenter.showDialog(getActivity().getString(R.string.video_aspect));
     }
 

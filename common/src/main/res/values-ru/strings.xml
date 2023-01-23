@@ -487,4 +487,5 @@
     <string name="auto_frame_rate_modes">Поддерживаемые режимы</string>
     <string name="loading">Загрузка…</string>
     <string name="hide_streams">Скрывать прямые трансляции из Подписок</string>
+    <string name="video_rotate">Вращать</string>
 </resources>

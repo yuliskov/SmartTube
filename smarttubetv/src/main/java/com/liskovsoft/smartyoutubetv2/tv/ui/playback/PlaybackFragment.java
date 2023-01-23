@@ -1034,6 +1034,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         setAspectRatio(ratio);
     }
 
+    @Override
+    public void setVideoRotateAngle(int angle) {
+        setRotateAngle(angle);
+    }
+
     // End Engine Events
 
     @Override

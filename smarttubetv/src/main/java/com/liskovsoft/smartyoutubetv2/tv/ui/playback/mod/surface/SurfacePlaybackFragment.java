@@ -83,6 +83,10 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         mVideoSurfaceRoot.setAspectRatio(calculateAspectRatio());
     }
 
+    public void setRotateAngle(int angle) {
+        //mVideoSurfaceRoot.setRotation(angle);
+    }
+
     public void setPixelRatio(float pixelRatio) {
         mPixelRatio = pixelRatio;
     }

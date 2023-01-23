@@ -49,6 +49,7 @@ public class PlayerData extends DataChangeBase {
     private int mSubtitleStyleIndex;
     private int mVideoZoomMode;
     private float mVideoAspectRatio;
+    private int mVideoRotateAngle;
     private int mSeekPreviewMode;
     private float mSpeed;
     private float mLastSpeed;
@@ -429,6 +430,15 @@ public class PlayerData extends DataChangeBase {
         return mVideoAspectRatio;
     }
 
+    public void setVideoRotateAngle(int ratio) {
+        mVideoRotateAngle = ratio;
+        persistState();
+    }
+
+    public int getVideoRotateAngle() {
+        return mVideoRotateAngle;
+    }
+
     public void setSpeed(float speed) {
         if (mSpeed == speed) {
             return;
@@ -605,6 +615,7 @@ public class PlayerData extends DataChangeBase {
         mIsLiveChatEnabled = Helpers.parseBoolean(split, 46, Build.VERSION.SDK_INT > 19);
         mLastSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 47)), FormatItem.SUBTITLE_DEFAULT);
         mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
+        mVideoRotateAngle = Helpers.parseInt(split, 49, 0);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -623,7 +634,7 @@ public class PlayerData extends DataChangeBase {
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
-                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, Helpers.toString(mLastSubtitleFormat), mLastSpeed));
+                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, Helpers.toString(mLastSubtitleFormat), mLastSpeed, mVideoRotateAngle));
 
         super.persistState();
     }

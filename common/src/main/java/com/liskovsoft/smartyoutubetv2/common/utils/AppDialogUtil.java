@@ -415,6 +415,22 @@ public class AppDialogUtil {
         return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, videoZoomTitle, options);
     }
 
+    public static OptionCategory createVideoRotateCategory(Context context, PlayerData playerData, Runnable onRotate) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int angle : new int[] {0, 90, 180, 270}) {
+            options.add(UiOptionItem.from(String.valueOf(angle),
+                    optionItem -> {
+                        playerData.setVideoRotateAngle(angle);
+                        onRotate.run();
+                    }, playerData.getVideoRotateAngle() == angle));
+        }
+
+        String videoRotateTitle = context.getString(R.string.video_rotate);
+
+        return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, videoRotateTitle, options);
+    }
+
     public static void showConfirmationDialog(Context context, String title, Runnable onConfirm) {
         showConfirmationDialog(context, title, onConfirm, () -> {});
     }
