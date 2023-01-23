@@ -78,11 +78,11 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
         messagesList.setAdapter(adapter);
         messagesList.requestFocus(); // hold focus even when there's no messages
         adapter.enableStackFromEnd(true);
-        adapter.setLoadingMessage(mCommentsReceiver.getLoadingMessage(), false);
+        adapter.setLoadingMessage(mCommentsReceiver.getLoadingMessage());
 
         mCommentsReceiver.setCallback(commentGroup -> {
             if (commentGroup == null || commentGroup.getComments() == null) {
-                adapter.removeLoadingMessageIfNeeded();
+                adapter.setLoadingMessage(mCommentsReceiver.getErrorMessage());
                 return;
             }
 

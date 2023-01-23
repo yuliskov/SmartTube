@@ -423,21 +423,19 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         ((LinearLayoutManager) layoutManager).setStackFromEnd(enable);
     }
 
-    public void setLoadingMessage(String message, boolean alignBottom) {
+    public void setLoadingMessage(String message) {
+        removeLoadingMessageIfNeeded();
+
         if (message == null || !items.isEmpty()) {
             return;
         }
 
-        // Align top
-        //((LinearLayoutManager) layoutManager).setReverseLayout(alignBottom);
         items.add(new Wrapper<>(message));
         notifyItemInserted(0);
     }
 
-    public void removeLoadingMessageIfNeeded() {
+    private void removeLoadingMessageIfNeeded() {
         if (items.size() == 1 && items.get(0).item instanceof String) {
-            // Reset to defaults (see MessagesList.setAdapter)
-            //((LinearLayoutManager) layoutManager).setReverseLayout(true);
             items.remove(0);
             notifyItemRemoved(0);
         }

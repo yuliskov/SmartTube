@@ -38,4 +38,9 @@ public abstract class CommentsReceiverImpl implements CommentsReceiver {
     public String getLoadingMessage() {
         return mContext.getString(R.string.loading);
     }
+
+    @Override
+    public String getErrorMessage() {
+        return mContext.getString(R.string.section_is_empty);
+    }
 }

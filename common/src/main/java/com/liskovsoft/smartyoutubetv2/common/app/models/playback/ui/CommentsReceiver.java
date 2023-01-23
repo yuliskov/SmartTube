@@ -12,4 +12,5 @@ public interface CommentsReceiver {
     void onStart();
     void onCommentClicked(String nestedCommentsKey);
     String getLoadingMessage();
+    String getErrorMessage();
 }
