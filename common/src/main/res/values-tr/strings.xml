@@ -495,4 +495,5 @@
     <string name="auto_frame_rate_modes">Desteklenen modlar</string>
     <string name="loading">Yükleniyor…</string>
     <string name="hide_streams">Abonelikler\'de canlı yayınları gizle</string>
+    <string name="video_rotate">Döndür</string>
 </resources>
