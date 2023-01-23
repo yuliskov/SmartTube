@@ -196,7 +196,7 @@ public class ViewUtil {
         }
         if (title instanceof FrameLayout) {
             title.setBackgroundColor(semiTransparent);
-            title.setVisibility(View.INVISIBLE);
+            title.setVisibility(View.GONE);
         }
     }
 
