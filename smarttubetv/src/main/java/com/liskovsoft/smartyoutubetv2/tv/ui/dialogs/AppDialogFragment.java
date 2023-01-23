@@ -95,10 +95,10 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     }
 
     @Override
-    public void show(List<OptionCategory> categories, String title) {
+    public void show(List<OptionCategory> categories, String title, boolean isExpandable) {
         AppPreferenceFragment fragment = buildPreferenceFragment(categories, title);
 
-        if (fragment.isSkipBackStack()) {
+        if (isExpandable && categories != null && categories.size() == 1) {
             onPreferenceDisplayDialog(fragment, mManager.createPreference(categories.get(0)));
         } else {
             startPreferenceFragment(fragment);
@@ -161,6 +161,11 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
         //
         //        }
         else {
+            // Single button item. Imitate click on it (expandable = true).
+            if (pref.getOnPreferenceClickListener() != null) {
+                pref.getOnPreferenceClickListener().onPreferenceClick(pref);
+            }
+
             return false;
         }
 
@@ -214,7 +219,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
         private AppPreferenceManager mManager;
         private String mTitle;
         private boolean mIsTransparent;
-        private boolean mSkipBackStack;
 
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {
@@ -270,7 +274,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
 
         public void setCategories(List<OptionCategory> categories) {
             mCategories = categories;
-            mSkipBackStack = categories != null && categories.size() == 1;
         }
 
         public void setTitle(String title) {
@@ -279,10 +282,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
 
         public void enableTransparent(boolean enable) {
             mIsTransparent = enable;
-        }
-
-        public boolean isSkipBackStack() {
-            return mSkipBackStack;
         }
     }
 }

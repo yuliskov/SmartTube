@@ -244,16 +244,17 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 }
         );
 
-        OptionItem cancelOption = UiOptionItem.from(
-                getActivity().getString(R.string.cancel_dialog),
-                option -> settingsPresenter.closeDialog()
-        );
+        //OptionItem cancelOption = UiOptionItem.from(
+        //        getActivity().getString(R.string.cancel_dialog),
+        //        option -> settingsPresenter.goBack()
+        //);
 
         settingsPresenter.appendSingleButton(acceptOption);
-        settingsPresenter.appendSingleButton(cancelOption);
+        //settingsPresenter.appendSingleButton(cancelOption);
         settingsPresenter.setCloseTimeoutMs(skipPosMs - getController().getPositionMs());
 
         settingsPresenter.enableTransparent(true);
+        settingsPresenter.enableExpandable(false);
         settingsPresenter.showDialog(getActivity().getString(R.string.content_block_provider));
     }
 

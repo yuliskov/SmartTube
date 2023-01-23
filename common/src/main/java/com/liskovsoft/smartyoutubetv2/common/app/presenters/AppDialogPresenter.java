@@ -23,6 +23,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     private long mTimeoutMs;
     private boolean mIsTransparent;
     private List<OptionCategory> mCategories;
+    private boolean mIsExpandable = true;
 
     public static class OptionCategory {
         public static OptionCategory radioList(String title, List<OptionItem> items) {
@@ -118,12 +119,14 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         mIsTransparent = false;
         mHandler.removeCallbacks(mCloseDialog);
         mCategories = new ArrayList<>();
+        mIsExpandable = true;
     }
 
     @Override
     public void onViewInitialized() {
-        getView().show(mCategories, mTitle);
+        getView().show(mCategories, mTitle, mIsExpandable);
         mCategories = new ArrayList<>();
+        mIsExpandable = true;
     }
 
     /**
@@ -227,6 +230,10 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
     public void enableTransparent(boolean enable) {
         mIsTransparent = enable;
+    }
+
+    public void enableExpandable(boolean enable) {
+        mIsExpandable = enable;
     }
 
     public boolean isTransparent() {
