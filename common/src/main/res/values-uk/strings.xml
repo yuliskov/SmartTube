@@ -40,7 +40,7 @@
     <string name="video_buffer_size_high">Високий</string>
     <string name="update_changelog">Зміни</string>
     <string name="install_update">Встановити оновлення</string>
-    <string name="section_is_empty">Халепа! Тут нічого нема.</string>
+    <string name="section_is_empty">Тут нічого немає</string>
     <string name="dialog_add_to_playlist">Додати/Видалити із плейлиста</string>
     <string name="msg_signed_users_only">Необхідно увійти в обліковий запис</string>
     <string name="msg_cant_load_content">Не вдалося завантажити вміст.\n1) Перевірте дату та час на пристрої.\n2) Перевірте мережеве з\`єднання.\n3) Перевірте налаштування проксі.\n4) Спробуйте увійти в обліковий запис.\n5) Можливо, тут нічого не має.</string>

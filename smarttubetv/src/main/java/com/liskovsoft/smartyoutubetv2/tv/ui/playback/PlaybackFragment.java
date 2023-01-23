@@ -1159,7 +1159,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     @Override
     public void showOverlay(boolean show) {
-        if (shouldHideOverlay(show)) {
+        if (forbidShowOverlay(show)) {
             return;
         }
 
@@ -1172,7 +1172,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void showSuggestions(boolean show) {
-        if (shouldHideOverlay(show)) {
+        if (forbidShowOverlay(show)) {
             return;
         }
 
@@ -1188,7 +1188,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     @Override
     public void showControls(boolean show) {
-        if (shouldHideOverlay(show)) {
+        if (forbidShowOverlay(show)) {
             return;
         }
 
@@ -1571,9 +1571,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     /**
-     * UI couldn't be properly displayed in PIP mode or behind dialogs
+     * UI couldn't be properly displayed in PIP mode
      */
-    private boolean shouldHideOverlay(boolean show) {
-        return show && (isInPIPMode() || AppDialogPresenter.instance(getActivity()).isDialogShown());
+    private boolean forbidShowOverlay(boolean show) {
+        return show && isInPIPMode();
     }
 }
