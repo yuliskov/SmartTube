@@ -120,8 +120,10 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         int width, height;
 
         if (Helpers.floatEquals(angle, 90) || Helpers.floatEquals(angle, 270)) {
+            float ratio = mVideoSurfaceRoot.getWidth() / ((float) mVideoSurfaceRoot.getHeight());
+
             width = mVideoSurfaceRoot.getHeight();
-            height = mVideoSurfaceRoot.getWidth() / 3;
+            height = (int) (mVideoSurfaceRoot.getHeight() / ratio);
         } else {
             width = mVideoSurfaceRoot.getWidth();
             height = mVideoSurfaceRoot.getHeight();
