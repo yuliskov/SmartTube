@@ -1,11 +1,13 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import androidx.leanback.app.PlaybackSupportFragment;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.ResizeMode;
@@ -35,6 +37,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
                 new TextureViewWrapper(getContext(), root) : new SurfaceViewWrapper(getContext(), root);
         mVideoSurfaceRoot = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.surface_root);
         mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
+        mVideoSurfaceRoot.setAspectRatioListener((targetAspectRatio, naturalAspectRatio, aspectRatioMismatch) -> scaleIfNeeded());
         setBackgroundType(PlaybackSupportFragment.BG_LIGHT);
         return root;
     }
@@ -101,6 +104,36 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
 
             ((PlaybackEngineController) this).restartEngine();
         }
+    }
+
+    private void scaleIfNeeded() {
+        if (!(mVideoSurfaceWrapper instanceof TextureViewWrapper)) {
+            return;
+        }
+
+        if (mVideoSurfaceRoot.getWidth() == 0 || mVideoSurfaceRoot.getHeight() == 0) {
+            return;
+        }
+
+        float angle = mVideoSurfaceRoot.getRotation();
+
+        int width, height;
+
+        if (Helpers.floatEquals(angle, 90) || Helpers.floatEquals(angle, 270)) {
+            width = mVideoSurfaceRoot.getHeight();
+            height = mVideoSurfaceRoot.getWidth() / 3;
+        } else {
+            width = mVideoSurfaceRoot.getWidth();
+            height = mVideoSurfaceRoot.getHeight();
+        }
+
+        // https://stackoverflow.com/questions/52196362/how-resize-textureview-to-fullscreen-when-rotation-90
+        View textureView = mVideoSurfaceWrapper.getSurfaceView();
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) textureView.getLayoutParams();
+        params.width = width;
+        params.height = height;
+        params.gravity = Gravity.CENTER;
+        textureView.setLayoutParams(params);
     }
 
     public void setPixelRatio(float pixelRatio) {
