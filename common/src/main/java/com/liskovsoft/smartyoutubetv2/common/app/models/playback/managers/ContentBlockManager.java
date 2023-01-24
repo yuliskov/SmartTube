@@ -233,29 +233,29 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
 
-        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
         OptionItem acceptOption = UiOptionItem.from(
                 getActivity().getString(R.string.confirm_segment_skip, category),
                 option -> {
                     // return to previous dialog or close if no other dialogs in stack
-                    settingsPresenter.goBack();
+                    dialogPresenter.goBack();
                     setPositionMs(skipPosMs);
                 }
         );
 
         //OptionItem cancelOption = UiOptionItem.from(
         //        getActivity().getString(R.string.cancel_dialog),
-        //        option -> settingsPresenter.goBack()
+        //        option -> dialogPresenter.goBack()
         //);
 
-        settingsPresenter.appendSingleButton(acceptOption);
-        //settingsPresenter.appendSingleButton(cancelOption);
-        settingsPresenter.setCloseTimeoutMs(skipPosMs - getController().getPositionMs());
+        dialogPresenter.appendSingleButton(acceptOption);
+        //dialogPresenter.appendSingleButton(cancelOption);
+        dialogPresenter.setCloseTimeoutMs(skipPosMs - getController().getPositionMs());
 
-        settingsPresenter.enableTransparent(true);
-        settingsPresenter.enableExpandable(false);
-        settingsPresenter.showDialog(getActivity().getString(R.string.content_block_provider));
+        dialogPresenter.enableTransparent(true);
+        dialogPresenter.enableExpandable(false);
+        dialogPresenter.showDialog(getActivity().getString(R.string.content_block_provider));
     }
 
     private List<SeekBarSegment> toSeekBarSegments(List<SponsorSegment> segments) {
