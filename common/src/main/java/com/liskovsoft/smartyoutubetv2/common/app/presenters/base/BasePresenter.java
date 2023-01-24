@@ -76,13 +76,13 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     public Context getContext() {
         Activity activity = null;
 
+        Activity viewActivity = getViewActivity(mView.get());
+
         // Trying to find localized context.
         // First, try the view that belongs to this presenter.
         // Second, try the activity that presenter called (could be destroyed).
-        if (mView.get() instanceof Fragment) { // regular fragment
-            activity = ((Fragment) mView.get()).getActivity();
-        } else if (mView.get() instanceof android.app.Fragment) { // dialog fragment
-            activity = ((android.app.Fragment) mView.get()).getActivity();
+        if (viewActivity != null) {
+            activity = viewActivity;
         } else if (mActivity.get() != null) {
             activity = mActivity.get();
         }
@@ -221,14 +221,21 @@ public abstract class BasePresenter<T> implements Presenter<T> {
      * Check that view's activity is alive
      */
     private static <T> boolean checkView(T view) {
+        Activity activity = getViewActivity(view);
+
+        return Utils.checkActivity(activity);
+    }
+
+    private static <T> Activity getViewActivity(T view) {
         Activity activity = null;
 
         if (view instanceof Fragment) { // regular fragment
             activity = ((Fragment) view).getActivity();
         } else if (view instanceof android.app.Fragment) { // dialog fragment
             activity = ((android.app.Fragment) view).getActivity();
+        } else if (view instanceof Activity) { // splash view
+            activity = (Activity) view;
         }
-
-        return Utils.checkActivity(activity);
+        return activity;
     }
 }
