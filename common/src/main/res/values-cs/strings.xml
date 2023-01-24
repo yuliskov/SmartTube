@@ -40,7 +40,7 @@
     <string name="video_buffer_size_high">Vysoká</string>
     <string name="update_changelog">Seznam změn</string>
     <string name="install_update">Instalovat aktualizace</string>
-    <string name="section_is_empty">Jejda! Tady nic není.</string>
+    <string name="section_is_empty">Tady nic není</string>
     <string name="dialog_add_to_playlist">Přidat do playlistu</string>
     <string name="msg_signed_users_only">Pouze přihlášení uživatelé</string>
     <string name="msg_cant_load_content">Jejda. Nelze načíst obsah.\n1) Zkontrolujte čas a datum zařízení.\n2) Zkontrolujte připojení k síti.\n3) Zkontrolujte nastavení proxy.\n4) Zkuste se přihlásit do svého účtu.\n5) Možná tu nic není.</string>   
@@ -495,4 +495,5 @@
     <string name="auto_frame_rate_modes">Podporované režimy</string>
     <string name="loading">Načítání…</string>
     <string name="hide_streams">Skrýt živá vysílání z Odběrů</string>
+    <string name="video_rotate">Otočit</string>
 </resources>
