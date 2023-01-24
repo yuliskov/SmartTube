@@ -45,7 +45,8 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public T getView() {
-        return mView.get();
+        T view = mView.get();
+        return checkView(view) ? view : null;
     }
 
     @Override
@@ -78,8 +79,10 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         // Trying to find localized context.
         // First, try the view that belongs to this presenter.
         // Second, try the activity that presenter called (could be destroyed).
-        if (mView.get() instanceof Fragment) {
+        if (mView.get() instanceof Fragment) { // regular fragment
             activity = ((Fragment) mView.get()).getActivity();
+        } else if (mView.get() instanceof android.app.Fragment) { // dialog fragment
+            activity = ((android.app.Fragment) mView.get()).getActivity();
         } else if (mActivity.get() != null) {
             activity = mActivity.get();
         }
@@ -212,5 +215,20 @@ public abstract class BasePresenter<T> implements Presenter<T> {
                 mUpdateCheckMs = currentTimeMs;
             }
         }
+    }
+
+    /**
+     * Check that view's activity is alive
+     */
+    private static <T> boolean checkView(T view) {
+        Activity activity = null;
+
+        if (view instanceof Fragment) { // regular fragment
+            activity = ((Fragment) view).getActivity();
+        } else if (view instanceof android.app.Fragment) { // dialog fragment
+            activity = ((android.app.Fragment) view).getActivity();
+        }
+
+        return Utils.checkActivity(activity);
     }
 }
