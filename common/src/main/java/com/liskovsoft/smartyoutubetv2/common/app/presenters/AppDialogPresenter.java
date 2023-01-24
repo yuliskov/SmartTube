@@ -116,17 +116,18 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
     private void clear() {
         mTimeoutMs = 0;
-        mIsTransparent = false;
         mHandler.removeCallbacks(mCloseDialog);
         mCategories = new ArrayList<>();
         mIsExpandable = true;
+        mIsTransparent = false;
     }
 
     @Override
     public void onViewInitialized() {
-        getView().show(mCategories, mTitle, mIsExpandable);
+        getView().show(mCategories, mTitle, mIsExpandable, mIsTransparent);
         mCategories = new ArrayList<>();
         mIsExpandable = true;
+        mIsTransparent = false;
     }
 
     /**
@@ -153,6 +154,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     public void showDialog(String dialogTitle, Runnable onFinish) {
         if (mTimeoutMs > 0 && isDialogShown()) {
             // Don't overlap normal dialogs with auto destroyable ones
+            clear();
             return;
         }
 
@@ -239,10 +241,6 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
     public void enableExpandable(boolean enable) {
         mIsExpandable = enable;
-    }
-
-    public boolean isTransparent() {
-        return mIsTransparent;
     }
 
     public boolean isEmpty() {

@@ -31,7 +31,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
         mVideoSurfaceWrapper = (PlayerTweaksData.instance(getContext()).isTextureViewEnabled() ||
-                PlayerData.instance(getContext()).getVideoRotateAngle() != 0) ?
+                PlayerData.instance(getContext()).getVideoRotation() != 0) ?
                 new TextureViewWrapper(getContext(), root) : new SurfaceViewWrapper(getContext(), root);
         mVideoSurfaceRoot = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.surface_root);
         mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
@@ -86,7 +86,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         mVideoSurfaceRoot.setAspectRatio(calculateAspectRatio());
     }
 
-    public void setRotateAngle(int angle) {
+    public void setRotation(int angle) {
         if (Helpers.floatEquals(mVideoSurfaceRoot.getRotation(), angle)) {
             return;
         }

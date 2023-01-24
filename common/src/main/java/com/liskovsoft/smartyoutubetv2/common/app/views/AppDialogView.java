@@ -5,7 +5,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.O
 import java.util.List;
 
 public interface AppDialogView {
-    void show(List<OptionCategory> categories, String title, boolean isExpandable);
+    void show(List<OptionCategory> categories, String title, boolean isExpandable, boolean isTransparent);
     void finish();
     void goBack();
     boolean isShown();

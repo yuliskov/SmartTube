@@ -173,7 +173,7 @@ public class ViewUtil {
             return;
         }
 
-        View mainContainer = rootView.findViewById(R.id.settings_preference_fragment_container);
+        View mainContainer = rootView.findViewById(R.id.settings_preference_fragment_container); // null usually
         View mainFrame = rootView.findViewById(R.id.main_frame);
         View itemsContainer = rootView.findViewById(R.id.list);
         View title = rootView.findViewById(R.id.decor_title_container);
@@ -195,7 +195,7 @@ public class ViewUtil {
             );
         }
         if (title instanceof FrameLayout) {
-            title.setBackgroundColor(semiTransparent);
+            title.setBackgroundColor(transparent);
             title.setVisibility(View.GONE);
         }
     }

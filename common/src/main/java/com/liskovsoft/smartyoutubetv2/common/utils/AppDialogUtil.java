@@ -421,9 +421,9 @@ public class AppDialogUtil {
         for (int angle : new int[] {0, 90, 180, 270}) {
             options.add(UiOptionItem.from(String.valueOf(angle),
                     optionItem -> {
-                        playerData.setVideoRotateAngle(angle);
+                        playerData.setVideoRotation(angle);
                         onRotate.run();
-                    }, playerData.getVideoRotateAngle() == angle));
+                    }, playerData.getVideoRotation() == angle));
         }
 
         String videoRotateTitle = context.getString(R.string.video_rotate);
