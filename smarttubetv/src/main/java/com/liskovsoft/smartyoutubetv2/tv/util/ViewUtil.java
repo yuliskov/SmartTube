@@ -173,13 +173,15 @@ public class ViewUtil {
             return;
         }
 
-        View mainContainer = rootView.findViewById(R.id.settings_preference_fragment_container); // null usually
+        // Usually null. Present only on parent fragment.
+        View mainContainer = rootView.findViewById(R.id.settings_preference_fragment_container);
         View mainFrame = rootView.findViewById(R.id.main_frame);
         View itemsContainer = rootView.findViewById(R.id.list);
         View title = rootView.findViewById(R.id.decor_title_container);
         int transparent = ContextCompat.getColor(context, R.color.transparent);
         int semiTransparent = ContextCompat.getColor(context, R.color.semi_grey);
 
+        // Disable shadow outline on parent fragment
         if (mainContainer instanceof FrameLayout) {
             // ViewOutlineProvider: NoClassDefFoundError on API 19
             mainContainer.setOutlineProvider(ViewOutlineProvider.BACKGROUND);

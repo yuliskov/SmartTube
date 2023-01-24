@@ -179,18 +179,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-
-        if (mIsTransparent && view != null) {
-            // Enable transparent background (this is the only place to do it)
-            ViewUtil.enableTransparentDialog(getActivity(), view);
-        }
-
-        return view;
-    }
-
-    @Override
     public void finish() {
         if (getActivity() != null) {
             getActivity().finish();
@@ -240,6 +228,9 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
             View view = super.onCreateView(inflater, container, savedInstanceState);
 
             if (mIsTransparent && view != null) {
+                // Enable transparent shadow outline on parent (R.id.settings_preference_fragment_container)
+                ViewUtil.enableTransparentDialog(getActivity(), getParentFragment().getView());
+                // Enable transparency on child fragment itself (isn't attached to parent yet)
                 ViewUtil.enableTransparentDialog(getActivity(), view);
             }
 
