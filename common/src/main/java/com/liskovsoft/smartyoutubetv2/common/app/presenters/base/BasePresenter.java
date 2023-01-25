@@ -38,7 +38,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void setView(T view) {
-        if (view != null) {
+        if (checkView(view)) {
             mView = new WeakReference<>(view);
         }
     }
@@ -100,9 +100,10 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void onViewDestroyed() {
+        // Multiple views with same presenter fix?
         // View stays in RAM after has been destroyed. Is it a bug?
-        mView = new WeakReference<>(null);
-        mActivity = new WeakReference<>(null);
+        //mView = new WeakReference<>(null);
+        //mActivity = new WeakReference<>(null);
     }
 
     @Override
