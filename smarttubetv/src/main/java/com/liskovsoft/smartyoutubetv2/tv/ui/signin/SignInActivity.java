@@ -8,7 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
-public class SignInActivity extends LeanbackActivity {
+public class SignInActivity extends LeanbackActivity implements SignInView {
     private SignInView signInView;
 
     @Override
@@ -16,18 +16,7 @@ public class SignInActivity extends LeanbackActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.acitivity_sign_in);
-        signInView = new SignInView() {
-            @Override
-            public void showCode(String userCode) {
-                ((TextView)findViewById(R.id.user_code)).setText(userCode);
-            }
-
-            @Override
-            public void close() {
-                finish();
-            }
-        };
-        SignInPresenter.instance(this).setView(signInView);
+        SignInPresenter.instance(this).setView(this);
     }
 
     @Override
@@ -47,5 +36,15 @@ public class SignInActivity extends LeanbackActivity {
     protected void onDestroy() {
         super.onDestroy();
         SignInPresenter.instance(this).onViewDestroyed();
+    }
+
+    @Override
+    public void showCode(String userCode) {
+        ((TextView)findViewById(R.id.user_code)).setText(userCode);
+    }
+
+    @Override
+    public void close() {
+        finish();
     }
 }
