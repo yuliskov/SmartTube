@@ -30,6 +30,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChatAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ContentBlockAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.RotateAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SeekIntervalAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ShareAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoInfoAction;
@@ -94,6 +95,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     private final SeekIntervalAction mSeekIntervalAction;
     private final ContentBlockAction mContentBlockAction;
     private final ChatAction mChatAction;
+    private final RotateAction mRotateAction;
     private final OnActionClickedListener mActionListener;
     private final PlayerTweaksData mPlayerTweaksData;
     private final GeneralData mGeneralData;
@@ -138,6 +140,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         mSeekIntervalAction = new SeekIntervalAction(context);
         mContentBlockAction = new ContentBlockAction(context);
         mChatAction = new ChatAction(context);
+        mRotateAction = new RotateAction(context);
     }
 
     @Override
@@ -184,6 +187,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM)) {
             adapter.add(mVideoZoomAction);
+        }
+        if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_ROTATE)) {
+            adapter.add(mRotateAction);
         }
     }
 

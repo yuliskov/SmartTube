@@ -29,6 +29,7 @@ public class PlayerTweaksData {
     public static final int PLAYER_BUTTON_SEEK_INTERVAL = 0b100000000000000000000;
     public static final int PLAYER_BUTTON_CONTENT_BLOCK = 0b1000000000000000000000;
     public static final int PLAYER_BUTTON_CHAT = 0b10000000000000000000000;
+    public static final int PLAYER_BUTTON_VIDEO_ROTATE = 0b100000000000000000000000;
     public static final int PLAYER_BUTTON_DEFAULT = Integer.MAX_VALUE & ~(PLAYER_BUTTON_SEEK_INTERVAL | PLAYER_BUTTON_CONTENT_BLOCK); // all buttons, except these
     @SuppressLint("StaticFieldLeak")
     private static PlayerTweaksData sInstance;
