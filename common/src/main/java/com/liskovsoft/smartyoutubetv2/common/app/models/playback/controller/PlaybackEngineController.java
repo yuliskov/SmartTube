@@ -61,4 +61,5 @@ public interface PlaybackEngineController {
     void setVideoZoomMode(int mode);
     int getVideoZoomMode();
     void setVideoAspectRatio(float mode);
+    void setVideoRotation(int angle);
 }

@@ -6,4 +6,5 @@
     <string name="content_block_provider" translatable="false">SponsorBlock</string>
     <string name="content_block_provider_url" translatable="false">https://sponsor.ajay.app</string>
     <string name="content_block_status_url" translatable="false">https://status.sponsor.ajay.app</string>
+    <string name="app_id" translatable="false"/>
 </resources>

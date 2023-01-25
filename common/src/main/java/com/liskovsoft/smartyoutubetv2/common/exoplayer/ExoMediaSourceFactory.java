@@ -34,6 +34,7 @@ import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.okhttp.OkHttpCommons;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.ErrorDefaultDashChunkSource;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
@@ -277,8 +278,8 @@ public class ExoMediaSourceFactory {
         //        AppConstants.APP_USER_AGENT, bandwidthMeter);
 
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
-                AppConstants.APP_USER_AGENT, bandwidthMeter, DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
-                DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, true); // allowCrossProtocolRedirects = true
+                AppConstants.APP_USER_AGENT, bandwidthMeter, (int) OkHttpCommons.CONNECT_TIMEOUT_MS,
+                (int) OkHttpCommons.READ_TIMEOUT_MS, true); // allowCrossProtocolRedirects = true
 
         addCommonHeaders(dataSourceFactory); // cause troubles for some users
         //if (YouTubeSignInManager.mAuthorizationHeaderCached != null) {

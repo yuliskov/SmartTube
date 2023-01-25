@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
 
 import android.content.Context;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -23,20 +24,17 @@ public class VideoActionPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (item.hasNestedItems() || item.isPlaylistInChannel()) {
-            // Below doesn't work right now. Api doesn't contains channel id.
-            //ChannelPresenter.instance(getContext()).openChannel(item);
-
-            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
-        } else if (item.hasVideo()) {
-            BasePresenter.enableSync();
+        // Show playlist contents in channel instead of instant playback
+        if (item.hasVideo() && !item.isPlaylistInChannel()) {
             PlaybackPresenter.instance(getContext()).openVideo(item);
+        } else if (item.hasPlaylist() || item.hasNestedItems()) {
+            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         } else if (item.hasChannel()) {
             Utils.chooseChannelPresenter(getContext(), item);
-        } else if (item.hasPlaylist()) {
-            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         } else if (item.isChapter) {
             PlaybackPresenter.instance(getContext()).setPosition(item.startTimeMs);
+        } else {
+            Log.e(TAG, "Video item doesn't contain needed data!");
         }
     }
 }

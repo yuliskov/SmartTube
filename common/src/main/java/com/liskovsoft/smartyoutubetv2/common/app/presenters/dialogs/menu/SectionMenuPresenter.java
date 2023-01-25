@@ -84,12 +84,10 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        mDialogPresenter.clear();
-
-//        appendReturnToBackgroundVideoButton();
+        // appendReturnToBackgroundVideoButton();
         appendRefreshButton();
         appendUnpinVideoFromSidebarButton();
-//        appendUnpinSectionFromSidebarButton();
+        // appendUnpinSectionFromSidebarButton();
         appendMarkAllChannelsWatchedButton();
         appendAccountSelectionButton();
         appendMoveSectionButton();
@@ -110,12 +108,10 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        mDialogPresenter.clear();
-
-//        appendReturnToBackgroundVideoButton();
+        // appendReturnToBackgroundVideoButton();
         appendRefreshButton();
-//        appendUnpinFromSidebarButton();
-//        appendUnpinSectionFromSidebarButton();
+        // appendUnpinVideoFromSidebarButton();
+        // appendUnpinSectionFromSidebarButton();
         appendAccountSelectionButton();
         appendMoveSectionButton();
         appendRenameSectionButton();

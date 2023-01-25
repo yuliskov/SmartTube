@@ -19,6 +19,7 @@ public class UiOptionItem implements OptionItem {
     private OptionItem[] mRequiredItems;
     private OptionItem[] mRadioItems;
     private ChatReceiver mChatReceiver;
+    private CommentsReceiver mCommentsReceiver;
 
     private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
             Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
@@ -130,6 +131,14 @@ public class UiOptionItem implements OptionItem {
         return uiOptionItem;
     }
 
+    public static OptionItem from(CharSequence title, CommentsReceiver commentsReceiver) {
+        UiOptionItem uiOptionItem = new UiOptionItem();
+        uiOptionItem.mTitle = title;
+        uiOptionItem.mCommentsReceiver = commentsReceiver;
+
+        return uiOptionItem;
+    }
+
     public static FormatItem toFormat(OptionItem option) {
         if (option instanceof UiOptionItem) {
             return ((UiOptionItem) option).mFormat;
@@ -203,5 +212,10 @@ public class UiOptionItem implements OptionItem {
     @Override
     public ChatReceiver getChatReceiver() {
         return mChatReceiver;
+    }
+
+    @Override
+    public CommentsReceiver getCommentsReceiver() {
+        return mCommentsReceiver;
     }
 }

@@ -10,7 +10,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -23,9 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
 
@@ -121,7 +119,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     @Override
     public boolean hasPendingActions() {
-        return RxUtils.isAnyActionRunning(mScrollAction, mUpdateAction);
+        return RxHelper.isAnyActionRunning(mScrollAction, mUpdateAction);
     }
 
     public void openChannel(Video item) {
@@ -168,7 +166,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     private void disposeActions() {
-        RxUtils.disposeActions(mUpdateAction, mScrollAction);
+        RxHelper.disposeActions(mUpdateAction, mScrollAction);
     }
 
     private void continueVideoGroup(VideoGroup group) {
@@ -199,8 +197,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         }
 
         mScrollAction = continuation
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
                         error -> {
@@ -219,8 +215,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         getView().showProgressBar(true);
 
         mUpdateAction = group
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::updateGrid,
                         error -> Log.e(TAG, "updateGridHeader error: %s", error.getMessage()),
@@ -257,8 +251,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         Observable<MediaGroup> group = mGroupManager.getGroupObserve(mediaItem);
 
         mUpdateAction = group
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         callback::onGroup,
                         error -> Log.e(TAG, "updateVideoGrid error: %s", error.getMessage())

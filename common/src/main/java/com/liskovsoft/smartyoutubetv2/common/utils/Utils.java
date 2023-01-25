@@ -362,6 +362,11 @@ public class Utils {
         sHandler.postDelayed(callback, delayMs);
     }
 
+    public static void post(Runnable callback) {
+        sHandler.removeCallbacks(callback);
+        sHandler.post(callback);
+    }
+
     public static void removeCallbacks(Runnable... callbacks) {
         if (callbacks == null) {
             return;
@@ -383,6 +388,12 @@ public class Utils {
     public static CharSequence italic(CharSequence string) {
         SpannableString spannable = new SpannableString(string);
         spannable.setSpan(new StyleSpan(Typeface.ITALIC), 0, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannable;
+    }
+
+    public static CharSequence bold(CharSequence string) {
+        SpannableString spannable = new SpannableString(string);
+        spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannable;
     }
 

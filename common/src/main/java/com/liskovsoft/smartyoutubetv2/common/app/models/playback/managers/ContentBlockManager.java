@@ -16,13 +16,13 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
+import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,8 +132,6 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         // NOTE: SponsorBlock (when happened java.net.SocketTimeoutException) could block whole application with Schedulers.io()
         // Because Schedulers.io() reuses blocked threads in RxJava 2: https://github.com/ReactiveX/RxJava/issues/6542
         mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getEnabledCategories())
-                .subscribeOn(Schedulers.newThread()) // fix blocking
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         segments -> {
                             mVideo = item;
@@ -163,11 +161,9 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         // Warn. Try to not access player object here.
         // Or you'll get "Player is accessed on the wrong thread" error.
         Observable<Long> playbackProgressObservable =
-                Observable.interval(1, TimeUnit.SECONDS);
+                RxHelper.interval(1, TimeUnit.SECONDS);
 
         mProgressAction = playbackProgressObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::skipSegment,
                         error -> Log.e(TAG, "startPlaybackWatcher error: %s", error.getMessage())
@@ -175,7 +171,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private void disposeActions() {
-        RxUtils.disposeActions(mProgressAction, mSegmentsAction);
+        RxHelper.disposeActions(mProgressAction, mSegmentsAction);
         //mSponsorSegments = null;
         //mVideo = null;
 
@@ -237,28 +233,29 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
 
-        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
-        settingsPresenter.clear();
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
         OptionItem acceptOption = UiOptionItem.from(
                 getActivity().getString(R.string.confirm_segment_skip, category),
                 option -> {
-                    settingsPresenter.closeDialog();
+                    // return to previous dialog or close if no other dialogs in stack
+                    dialogPresenter.goBack();
                     setPositionMs(skipPosMs);
                 }
         );
 
-        OptionItem cancelOption = UiOptionItem.from(
-                getActivity().getString(R.string.cancel_dialog),
-                option -> settingsPresenter.closeDialog()
-        );
+        //OptionItem cancelOption = UiOptionItem.from(
+        //        getActivity().getString(R.string.cancel_dialog),
+        //        option -> dialogPresenter.goBack()
+        //);
 
-        settingsPresenter.appendSingleButton(acceptOption);
-        settingsPresenter.appendSingleButton(cancelOption);
-        settingsPresenter.setCloseTimeoutMs(skipPosMs - getController().getPositionMs());
+        dialogPresenter.appendSingleButton(acceptOption);
+        //dialogPresenter.appendSingleButton(cancelOption);
+        dialogPresenter.setCloseTimeoutMs(skipPosMs - getController().getPositionMs());
 
-        settingsPresenter.enableTransparent(true);
-        settingsPresenter.showDialog(getActivity().getString(R.string.content_block_provider));
+        dialogPresenter.enableTransparent(true);
+        dialogPresenter.enableExpandable(false);
+        dialogPresenter.showDialog(getActivity().getString(R.string.content_block_provider));
     }
 
     private List<SeekBarSegment> toSeekBarSegments(List<SponsorSegment> segments) {
@@ -292,11 +289,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         long durationMs = getController().getDurationMs();
 
         // Sponsor block fix. Position may exceed real media length.
-        if (durationMs > 0 && positionMs > durationMs) {
-            positionMs = durationMs;
-        }
-
-        getController().setPositionMs(positionMs);
+        getController().setPositionMs(Math.min(positionMs, durationMs));
     }
 
     private List<SponsorSegment> findMatchedSegments(long positionMs) {
@@ -342,7 +335,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
             long skipPosMs = lastSegment.getEndMs();
 
-            if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode()) {
+            if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode() || isScreenOff()) {
                 simpleSkip(skipPosMs);
             } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
                 messageSkip(skipPosMs, localizedCategory);
@@ -352,5 +345,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         mLastSkipPosMs = foundSegment != null ? foundSegment.get(foundSegment.size() - 1).getEndMs() : 0;
+    }
+
+    private boolean isScreenOff() {
+        ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
+
+        return manager != null && manager.isScreenOff();
     }
 }

@@ -25,7 +25,7 @@ public class DisplayHolder {
     /**
      * Inner class {@link Mode} holds the mode information.
      */
-    public static class Mode implements Parcelable {
+    public static class Mode implements Parcelable, Comparable<Mode> {
 
         private int mModeId;
         private int mHeight;
@@ -152,6 +152,16 @@ public class DisplayHolder {
             }
         };
 
+        /**
+         * Sort in descendant order
+         */
+        @Override
+        public int compareTo(Mode o) {
+            if (getPhysicalWidth() == o.getPhysicalWidth()) {
+                return (int) ((o.getRefreshRate() * 1_000) - (getRefreshRate() * 1_000));
+            }
 
+            return o.getPhysicalWidth() - getPhysicalWidth();
+        }
     }
 }

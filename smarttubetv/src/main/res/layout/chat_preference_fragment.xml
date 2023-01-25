@@ -52,6 +52,13 @@
         android:layout_height="match_parent"
         app:textAutoLink="web"
         app:showIncomingTime="false"
+        app:isMessageFocusable="true"
+        app:incomingBubblePaddingLeft="10sp"
+        app:incomingBubblePaddingRight="10sp"
+        app:incomingBubblePaddingTop="0sp"
+        app:incomingBubblePaddingBottom="0sp"
+        app:incomingAvatarWidth="30dp"
+        app:incomingAvatarHeight="30dp"
         />
 
 </LinearLayout>

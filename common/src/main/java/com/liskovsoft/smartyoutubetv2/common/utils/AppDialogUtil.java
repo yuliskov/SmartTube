@@ -8,7 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -31,9 +31,7 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import com.liskovsoft.youtubeapi.service.data.YouTubePlaylistInfo;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -417,13 +415,28 @@ public class AppDialogUtil {
         return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, videoZoomTitle, options);
     }
 
+    public static OptionCategory createVideoRotateCategory(Context context, PlayerData playerData, Runnable onRotate) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int angle : new int[] {0, 90, 180, 270}) {
+            options.add(UiOptionItem.from(String.valueOf(angle),
+                    optionItem -> {
+                        playerData.setVideoRotation(angle);
+                        onRotate.run();
+                    }, playerData.getVideoRotation() == angle));
+        }
+
+        String videoRotateTitle = context.getString(R.string.video_rotate);
+
+        return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, videoRotateTitle, options);
+    }
+
     public static void showConfirmationDialog(Context context, String title, Runnable onConfirm) {
         showConfirmationDialog(context, title, onConfirm, () -> {});
     }
 
     public static void showConfirmationDialog(Context context, String title, Runnable onConfirm, Runnable onCancel) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(context);
-        settingsPresenter.clear();
 
         List<OptionItem> options = new ArrayList<>();
 
@@ -493,8 +506,6 @@ public class AppDialogUtil {
         MediaItemService itemManager = YouTubeMediaItemService.instance();
 
         Disposable playlistsInfoAction = itemManager.getPlaylistsInfoObserve(video.videoId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         videoPlaylistInfos -> showAddToPlaylistDialog(context, video, callback, videoPlaylistInfos, null),
                         error -> {
@@ -511,7 +522,6 @@ public class AppDialogUtil {
         }
 
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(context);
-        dialogPresenter.clear();
 
         appendPlaylistDialogContent(context, video, callback, dialogPresenter, playlistInfos);
         dialogPresenter.showDialog(context.getString(R.string.dialog_add_to_playlist), () -> {
@@ -554,7 +564,7 @@ public class AppDialogUtil {
             editObserve = itemManager.removeFromPlaylistObserve(playlistId, video.videoId);
         }
 
-        Disposable addRemoveAction = RxUtils.execute(editObserve); // ignore results (do the work in the background)
+        Disposable addRemoveAction = RxHelper.execute(editObserve); // ignore results (do the work in the background)
     }
 
     public static void showPlaylistOrderDialog(Context context, Video video, Runnable onClose) {
@@ -576,7 +586,6 @@ public class AppDialogUtil {
 
     public static void showPlaylistOrderDialog(Context context, String playlistId, Runnable onClose) {
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(context);
-        dialogPresenter.clear();
 
         GeneralData generalData = GeneralData.instance(context);
 
@@ -591,7 +600,7 @@ public class AppDialogUtil {
         }) {
             options.add(UiOptionItem.from(context.getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {
-                    RxUtils.execute(
+                    RxHelper.execute(
                             YouTubeMediaItemService.instance().setPlaylistOrderObserve(playlistId, pair[1]),
                             () -> MessageHelpers.showMessage(context, R.string.owned_playlist_warning),
                             () -> {
@@ -621,8 +630,6 @@ public class AppDialogUtil {
         String playbackQueueCategoryTitle = context.getString(R.string.playback_queue_category_title);
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(context);
-
-        settingsPresenter.clear();
 
         List<OptionItem> options = new ArrayList<>();
 

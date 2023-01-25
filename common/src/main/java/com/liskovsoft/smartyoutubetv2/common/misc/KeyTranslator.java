@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.view.KeyEvent;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public abstract class KeyTranslator {
             Integer newKeyCode = mKeyMapping.get(event.getKeyCode());
             KeyEvent newKeyEvent = translate(event, newKeyCode);
             if (newKeyEvent != event) {
-                RxUtils.runAsync(() -> Utils.sendKey(newKeyEvent));
+                RxHelper.runAsync(() -> Utils.sendKey(newKeyEvent));
                 handled = true;
             }
         }

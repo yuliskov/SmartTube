@@ -3,20 +3,21 @@ package com.liskovsoft.smartyoutubetv2.common.app.views;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Fragment;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
-import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.HashMap;
@@ -87,7 +88,16 @@ public class ViewManager {
         startView(viewClass, false);
     }
 
+    /**
+     * Use carefully<br/>
+     * On running activity, this method invokes standard activity lifecycle: pause, resume etc...
+     */
     public void startView(Class<?> viewClass, boolean forceStart) {
+        // Skip starting activity twice to get rid of pausing/resuming activity cycle
+        if (Utils.isAppInForeground() && getTopView() != null && getTopView() == viewClass) {
+            return;
+        }
+
         mIsMoveToBackEnabled = false; // Essential part or new view will be pause immediately
 
         //if (!forceStart && doThrottle()) {
@@ -330,7 +340,7 @@ public class ViewManager {
             // Fix: can't start finished app activity from history.
             // Do reset state because the app should continue to run in the background.
             // NOTE: Don't rely on MotherActivity.onDestroy() because activity can be killed silently.
-            RxUtils.runAsync(() -> {
+            RxHelper.runAsync(() -> {
                 clearCaches();
                 BrowsePresenter.unhold();
                 MotherActivity.invalidate();
@@ -408,8 +418,8 @@ public class ViewManager {
         return System.currentTimeMillis() - mPendingActivityMs < 1_000;
     }
 
-    public boolean isNewViewPending(Class<?> currentView) {
-        return isNewViewPending() && mViewMapping.get(currentView) != mPendingActivityClass;
+    public boolean isViewPending(Class<?> viewClass) {
+        return isNewViewPending() && mViewMapping.get(viewClass) == mPendingActivityClass;
     }
 
     public void refreshCurrentView() {
@@ -419,5 +429,17 @@ public class ViewManager {
         } else if (topView == ChannelUploadsView.class) {
             ChannelUploadsPresenter.instance(mContext).refresh();
         }
+    }
+
+    public static boolean isVisible(Object view) {
+        if (view instanceof Fragment) {
+            return ((Fragment) view).isVisible();
+        }
+
+        if (view instanceof androidx.fragment.app.Fragment) {
+            return ((androidx.fragment.app.Fragment) view).isVisible();
+        }
+
+        return false;
     }
 }

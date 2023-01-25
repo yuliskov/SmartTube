@@ -23,12 +23,14 @@ import com.liskovsoft.smartyoutubetv2.common.utils.TvQuickActions;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AutoFrameRateManager extends PlayerEventListenerHelper implements AutoFrameRateListener {
     private static final String TAG = AutoFrameRateManager.class.getSimpleName();
     private static final int AUTO_FRAME_RATE_ID = 21;
     private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
+    private static final int AUTO_FRAME_RATE_MODES_ID = 23;
     private final HQDialogManager mUiManager;
     private final VideoStateManager mStateUpdater;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
@@ -254,20 +256,25 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             OptionCategory afrPauseCategory = createAutoFrameRatePauseCategory(
                     getActivity(), PlayerData.instance(getActivity()));
 
+            OptionCategory modesCategory = createAutoFrameRateModesCategory(getActivity());
+
             // Create nested dialogs
 
             List<OptionItem> options = new ArrayList<>();
             options.add(UiOptionItem.from(afrCategory.title, optionItem -> {
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
-                dialogPresenter.clear();
                 dialogPresenter.appendCheckedCategory(afrCategory.title, afrCategory.options);
                 dialogPresenter.showDialog(afrCategory.title);
             }));
             options.add(UiOptionItem.from(afrPauseCategory.title, optionItem -> {
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
-                dialogPresenter.clear();
                 dialogPresenter.appendRadioCategory(afrPauseCategory.title, afrPauseCategory.options);
                 dialogPresenter.showDialog(afrPauseCategory.title);
+            }));
+            options.add(UiOptionItem.from(modesCategory.title, optionItem -> {
+                AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+                dialogPresenter.appendLongTextCategory(modesCategory.title, modesCategory.option);
+                dialogPresenter.showDialog(modesCategory.title);
             }));
 
             mUiManager.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING, getActivity().getString(R.string.auto_frame_rate), options));
@@ -343,5 +350,22 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         }
 
         return OptionCategory.from(AUTO_FRAME_RATE_DELAY_ID, OptionCategory.TYPE_RADIO, title, options);
+    }
+
+    public static OptionCategory createAutoFrameRateModesCategory(Context context) {
+        String title = context.getString(R.string.auto_frame_rate_modes);
+
+        UhdHelper uhdHelper = new UhdHelper(context);
+
+        Mode[] supportedModes = uhdHelper.getSupportedModes();
+        Arrays.sort(supportedModes);
+
+        StringBuilder result = new StringBuilder();
+
+        for (Mode mode : supportedModes) {
+            result.append(String.format("%sx%s@%s\n", mode.getPhysicalWidth(), mode.getPhysicalHeight(), mode.getRefreshRate()));
+        }
+
+        return OptionCategory.from(AUTO_FRAME_RATE_MODES_ID, OptionCategory.TYPE_LONG_TEXT, title, UiOptionItem.from(result.toString()));
     }
 }

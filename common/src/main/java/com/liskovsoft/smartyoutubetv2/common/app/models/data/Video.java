@@ -399,7 +399,15 @@ public final class Video implements Parcelable {
      * NOTE: Channels section uses <em>playlistParams</em> instead of <em>playlistId</em>
      */
     public boolean hasPlaylist() {
-        return playlistId != null || (playlistParams != null && !Helpers.containsAny(playlistParams, sNotPlaylistParams));
+        return playlistId != null || belongsToChannelUploads();
+    }
+
+    //public boolean hasPlaylist() {
+    //    return playlistId != null || (playlistParams != null && !Helpers.containsAny(playlistParams, sNotPlaylistParams));
+    //}
+
+    public boolean hasNextPlaylist() {
+        return hasPlaylist() && hasNextItem() && getPlaylistId().equals(nextMediaItem.getPlaylistId());
     }
 
     /**
@@ -411,6 +419,10 @@ public final class Video implements Parcelable {
 
     public boolean hasNextPageKey() {
         return getNextPageKey() != null;
+    }
+
+    public boolean hasNextItem() {
+        return nextMediaItem != null;
     }
 
     public boolean hasNestedItems() {
@@ -434,6 +446,10 @@ public final class Video implements Parcelable {
 
     public boolean isPlaylistInChannel() {
         return belongsToChannel() && hasPlaylist() && !belongsToSamePlaylistGroup();
+    }
+
+    public boolean isMix() {
+        return mediaItem != null && mediaItem.getDurationMs() <= 0 && (hasPlaylist() || hasChannel() || hasNestedItems());
     }
 
     public boolean isEmpty() {

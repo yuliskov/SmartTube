@@ -20,6 +20,9 @@ import java.util.List;
 
 public class AppDataSourceManager {
     private static AppDataSourceManager sInstance;
+    private static final String[] UNKNOWN_PACKAGES = {
+            "com.armanych.youtube"
+    };
 
     private AppDataSourceManager() {
     }

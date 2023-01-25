@@ -4,10 +4,9 @@ import com.liskovsoft.mediaserviceinterfaces.LiveChatService;
 import com.liskovsoft.mediaserviceinterfaces.data.ChatItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiverImpl;
@@ -17,9 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +45,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         mLiveChatKey = metadata != null && metadata.getLiveChatKey() != null ? metadata.getLiveChatKey() : null;
 
         if (mLiveChatKey != null) {
-            getController().setChatButtonState(mPlayerData.isLiveChatEnabled() ? PlaybackUIController.BUTTON_STATE_ON : PlaybackUIController.BUTTON_STATE_OFF);
+            getController().setChatButtonState(mPlayerData.isLiveChatEnabled());
         }
 
         if (mPlayerData.isLiveChatEnabled()) {
@@ -67,8 +64,6 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         getController().setChatReceiver(chatReceiver);
 
         mChatAction = mChatService.openLiveChatObserve(mLiveChatKey)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         chatItem -> {
                             Log.d(TAG, chatItem.getMessage());
@@ -96,8 +91,6 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         String chatCategoryTitle = getActivity().getString(R.string.open_chat);
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
-
-        settingsPresenter.clear();
 
         List<OptionItem> options = new ArrayList<>();
 
@@ -140,8 +133,8 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
     }
 
     private void disposeActions() {
-        if (RxUtils.isAnyActionRunning(mChatAction)) {
-            RxUtils.disposeActions(mChatAction);
+        if (RxHelper.isAnyActionRunning(mChatAction)) {
+            RxHelper.disposeActions(mChatAction);
             getController().setChatReceiver(null);
         }
     }
@@ -171,7 +164,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         mPlayerData.enableLiveChat(enabled);
 
         if (mLiveChatKey != null) {
-            getController().setChatButtonState(enabled ? PlaybackUIController.BUTTON_STATE_ON : PlaybackUIController.BUTTON_STATE_OFF);
+            getController().setChatButtonState(enabled);
         }
     }
 }

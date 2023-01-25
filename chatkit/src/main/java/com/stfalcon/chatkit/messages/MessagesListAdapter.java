@@ -28,8 +28,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.LayoutRes;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.stfalcon.chatkit.R;
+import com.stfalcon.chatkit.commons.DebouncedOnClickListener;
 import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.commons.ViewHolder;
 import com.stfalcon.chatkit.commons.models.IMessage;
@@ -45,7 +47,7 @@ import java.util.List;
  */
 @SuppressWarnings("WeakerAccess")
 public class MessagesListAdapter<MESSAGE extends IMessage>
-        extends RecyclerView.Adapter<ViewHolder>
+        extends RecyclerView.Adapter<ViewHolder<MESSAGE>>
         implements RecyclerScrollMoreListener.OnLoadMoreListener {
 
     protected static boolean isSelectionModeEnabled;
@@ -68,6 +70,9 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
     private MessagesListStyle messagesListStyle;
     private DateFormatter.Formatter dateHeadersFormatter;
     private SparseArray<OnMessageViewClickListener> viewClickListenersArray = new SparseArray<>();
+    private boolean isDateHeaderEnabled;
+    private int currentPosition = -1;
+    private MESSAGE focusedMessage;
 
     /**
      * For default list item layout and view holder.
@@ -108,6 +113,12 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
                 getMessageLongClickListener(wrapper),
                 dateHeadersFormatter,
                 viewClickListenersArray);
+
+        // Default focus on top message
+        if (wrapper.item == focusedMessage && holder.itemView.isFocusable()) {
+            holder.itemView.requestFocus();
+            focusedMessage = null;
+        }
     }
 
     @Override
@@ -153,7 +164,9 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
             return;
         }
 
-        boolean isNewMessageToday = !isPreviousSameDate(0, message.getCreatedAt());
+        removeLoadingMessageIfNeeded();
+
+        boolean isNewMessageToday = isDateHeaderEnabled && !isPreviousSameDate(0, message.getCreatedAt());
         if (isNewMessageToday) {
             items.add(0, new Wrapper<>(message.getCreatedAt()));
         }
@@ -178,12 +191,16 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
 
         if (reverse) Collections.reverse(messages);
 
+        removeLoadingMessageIfNeeded();
+
         if (!items.isEmpty()) {
             int lastItemPosition = items.size() - 1;
-            Date lastItem = (Date) items.get(lastItemPosition).item;
-            if (DateFormatter.isSameDay(messages.get(0).getCreatedAt(), lastItem)) {
-                items.remove(lastItemPosition);
-                notifyItemRemoved(lastItemPosition);
+            if (items.get(lastItemPosition).item instanceof Date) {
+                Date lastItem = (Date) items.get(lastItemPosition).item;
+                if (DateFormatter.isSameDay(messages.get(0).getCreatedAt(), lastItem)) {
+                    items.remove(lastItemPosition);
+                    notifyItemRemoved(lastItemPosition);
+                }
             }
         }
 
@@ -331,6 +348,10 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         this.maxItemsCount = maxItemsCount;
     }
 
+    public void setFocusedMessage(MESSAGE message) {
+        this.focusedMessage = message;
+    }
+
     /**
      * Returns {@code true} if, and only if, messages count in adapter is non-zero.
      *
@@ -356,6 +377,12 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
             if (notifyDataSetChanged) {
                 notifyDataSetChanged();
             }
+        }
+    }
+
+    public void scrollToTop() {
+        if (layoutManager != null && !items.isEmpty()) {
+            layoutManager.scrollToPosition(items.size() - 1);
         }
     }
 
@@ -386,6 +413,34 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         unselectAllItems();
     }
 
+    public void enableDateHeader(boolean enable) {
+        isDateHeaderEnabled = enable;
+    }
+
+    public void enableStackFromEnd(boolean enable) {
+        // The solution for aligning items to the top instead of bottom
+        // https://stackoverflow.com/questions/46168245/recyclerview-reverse-order
+        ((LinearLayoutManager) layoutManager).setStackFromEnd(enable);
+    }
+
+    public void setLoadingMessage(String message) {
+        removeLoadingMessageIfNeeded();
+
+        if (message == null || !items.isEmpty()) {
+            return;
+        }
+
+        items.add(new Wrapper<>(message));
+        notifyItemInserted(0);
+    }
+
+    private void removeLoadingMessageIfNeeded() {
+        if (items.size() == 1 && items.get(0).item instanceof String) {
+            items.remove(0);
+            notifyItemRemoved(0);
+        }
+    }
+
     /**
      * Returns the list of selected messages.
      *
@@ -400,6 +455,16 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
             }
         }
         return selectedMessages;
+    }
+
+    public ArrayList<MESSAGE> getMessages() {
+        ArrayList<MESSAGE> messages = new ArrayList<>();
+        for (Wrapper wrapper : items) {
+            if (wrapper.item instanceof IMessage) {
+                messages.add((MESSAGE) wrapper.item);
+            }
+        }
+        return messages;
     }
 
     /**
@@ -548,6 +613,11 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         for (int i = 0; i < messages.size(); i++) {
             MESSAGE message = messages.get(i);
             this.items.add(new Wrapper<>(message));
+
+            if (!isDateHeaderEnabled) {
+                continue;
+            }
+
             if (messages.size() > i + 1) {
                 MESSAGE nextMessage = messages.get(i + 1);
                 if (!DateFormatter.isSameDay(message.getCreatedAt(), nextMessage.getCreatedAt())) {
@@ -633,18 +703,21 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
     }
 
     private View.OnClickListener getMessageClickListener(final Wrapper<MESSAGE> wrapper) {
-        return view -> {
-            if (selectionListener != null && isSelectionModeEnabled) {
-                wrapper.isSelected = !wrapper.isSelected;
+        return new DebouncedOnClickListener(3_000) {
+            @Override
+            public void onDebouncedClick(View view) {
+                if (selectionListener != null && isSelectionModeEnabled) {
+                    wrapper.isSelected = !wrapper.isSelected;
 
-                if (wrapper.isSelected) incrementSelectedItemsCount();
-                else decrementSelectedItemsCount();
+                    if (wrapper.isSelected) incrementSelectedItemsCount();
+                    else decrementSelectedItemsCount();
 
-                MESSAGE message = (wrapper.item);
-                notifyItemChanged(getMessagePositionById(message.getId()));
-            } else {
-                notifyMessageClicked(wrapper.item);
-                notifyMessageViewClicked(view, wrapper.item);
+                    MESSAGE message = (wrapper.item);
+                    notifyItemChanged(getMessagePositionById(message.getId()));
+                } else {
+                    notifyMessageClicked(wrapper.item);
+                    notifyMessageViewClicked(view, wrapper.item);
+                }
             }
         };
     }
@@ -659,6 +732,15 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
                 view.performClick();
             }
             return true;
+        };
+    }
+
+    private View.OnFocusChangeListener getMessageFocusChangeListener(final Wrapper<MESSAGE> wrapper) {
+        return (v, hasFocus) -> {
+            if (hasFocus) {
+                MESSAGE message = (wrapper.item);
+                currentPosition = getMessagePositionById(message.getId());
+            }
         };
     }
 

@@ -141,7 +141,10 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
                 //.asBitmap() // disable animation (webp, gif)
                 .load(ClickbaitRemover.updateThumbnail(video, mThumbQuality))
                 //.placeholder(mDefaultCardImage)
-                .apply(ViewUtil.glideOptions())
+                .apply(ViewUtil.glideOptions()
+                    // improve image compression on low end devices
+                    .override(mWidth, mHeight)
+                )
                 .listener(mErrorListener)
                 .error(
                     // Updated thumbnail url not found

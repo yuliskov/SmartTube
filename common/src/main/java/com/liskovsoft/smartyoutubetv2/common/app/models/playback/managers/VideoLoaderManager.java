@@ -1,7 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import android.os.Handler;
-import android.os.Looper;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
@@ -9,17 +7,16 @@ import com.liskovsoft.sharedutils.Analytics;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.SampleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.SampleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
@@ -31,9 +28,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.UniqueRandom;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -297,8 +292,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         service.enableOldStreams(mPlayerTweaksData.isLiveStreamFixEnabled());
         MediaItemService mediaItemManager = service.getMediaItemService();
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processFormatInfo,
                            error -> {
                                Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
@@ -337,8 +330,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             dashManifest -> getController().openDash(dashManifest),
                             error -> Log.e(TAG, "createMpdStream error: %s", error.getMessage())
@@ -397,25 +388,23 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
         disposeActions();
 
-        VideoActionPresenter.instance(getActivity()).apply(item);
-
-        //if (item.hasVideo()) {
-        //    getController().showOverlay(true);
-        //    getBridge().openVideo(item);
-        //} else if (item.hasChannel()) {
-        //    ChannelPresenter.instance(getActivity()).openChannel(item);
-        //} else {
-        //    Log.e(TAG, "Video item doesn't contain needed data!");
-        //}
+        if (item.hasVideo()) {
+            // NOTE: Next clicked: instant playback even a mix
+            // NOTE: Bypass PIP fullscreen on next caused by startView
+            getBridge().openVideo(item);
+            getController().showOverlay(true);
+        } else {
+            VideoActionPresenter.instance(getActivity()).apply(item);
+        }
     }
 
     private boolean isActionsRunning() {
-        return RxUtils.isAnyActionRunning(mFormatInfoAction, mMpdStreamAction);
+        return RxHelper.isAnyActionRunning(mFormatInfoAction, mMpdStreamAction);
     }
 
     private void disposeActions() {
         MediaServiceManager.instance().disposeActions();
-        RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
+        RxHelper.disposeActions(mFormatInfoAction, mMpdStreamAction);
         Utils.removeCallbacks(mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
     }
 
@@ -475,8 +464,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                 break;
             case PlaybackUIController.REPEAT_MODE_ONE:
                 getController().setPositionMs(0);
-                getController().setPlayWhenReady(true);
-                //Utils.showRepeatInfo(getActivity(), repeatMode);
                 break;
             case PlaybackUIController.REPEAT_MODE_CLOSE:
                 // Close player if suggestions not shown
@@ -495,23 +482,21 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                     loadNext();
                     getController().showOverlay(true);
                 } else {
-                    getController().showSuggestions(true);
-                    getController().setPlayWhenReady(false);
                     getController().setPositionMs(getController().getDurationMs());
-                    //Utils.showRepeatInfo(getActivity(), repeatMode);
+                    getController().setPlayWhenReady(false);
+                    getController().showSuggestions(true);
                 }
                 break;
             case PlaybackUIController.REPEAT_MODE_LIST:
                 // stop player (if not playing playlist)
                 Video video = getController().getVideo();
-                if ((video != null && video.hasPlaylist()) || mPlaylist.getNext() != null) {
+                if ((video != null && video.hasNextPlaylist()) || mPlaylist.getNext() != null) {
                     loadNext();
                     getController().showOverlay(true);
                 } else {
-                    getController().showSuggestions(true);
-                    getController().setPlayWhenReady(false);
                     getController().setPositionMs(getController().getDurationMs());
-                    //Utils.showRepeatInfo(getActivity(), repeatMode);
+                    getController().setPlayWhenReady(false);
+                    getController().showSuggestions(true);
                 }
                 break;
         }

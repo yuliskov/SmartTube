@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -48,7 +49,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
 
         appendBootToSection(settingsPresenter);
         appendEnabledSections(settingsPresenter);
@@ -58,6 +58,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBackgroundPlaybackCategory(settingsPresenter);
         //appendBackgroundPlaybackActivationCategory(settingsPresenter);
         appendScreenDimmingCategory(settingsPresenter);
+        appendScreenOffCategory(settingsPresenter);
         appendTimeFormatCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
         appendAppBackupCategory(settingsPresenter);
@@ -261,22 +262,50 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendScreenDimmingCategory(AppDialogPresenter settingsPresenter) {
+        appendScreenDimmingCategory(settingsPresenter, getContext().getString(R.string.screen_dimming), GeneralData.SCREEN_DIMMING_MODE_NORMAL);
+    }
+
+    private void appendScreenOffCategory(AppDialogPresenter settingsPresenter) {
+        appendScreenDimmingCategory(settingsPresenter, getContext().getString(R.string.action_screen_off), GeneralData.SCREEN_DIMMING_MODE_SCREEN_OFF);
+    }
+
+    private void appendScreenDimmingCategory(AppDialogPresenter settingsPresenter, String title, int activeMode) {
         List<OptionItem> options = new ArrayList<>();
+
+        int screenDimmingTimeoutMs = activeMode != mGeneralData.getScreenDimmingMode() ?
+                GeneralData.SCREEN_DIMMING_NEVER : mGeneralData.getScreenDimmingTimeoutMs();
 
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.option_never),
-                option -> mGeneralData.setScreenDimmingTimeoutMin(GeneralData.SCREEN_DIMMING_NEVER),
-                mGeneralData.getScreenDimmingTimeoutMin() == GeneralData.SCREEN_DIMMING_NEVER));
+                option -> {
+                    mGeneralData.setScreenDimmingMode(activeMode);
+                    mGeneralData.setScreenDimmingTimeoutMs(GeneralData.SCREEN_DIMMING_NEVER);
+                },
+                screenDimmingTimeoutMs == GeneralData.SCREEN_DIMMING_NEVER));
 
-        for (int i = 1; i <= 15; i++) {
-            int timeoutMin = i;
+        for (int timeoutSec : new int[] {5, 15, 30}) {
+            int timeoutMs = timeoutSec * 1_000;
             options.add(UiOptionItem.from(
-                    getContext().getString(R.string.screen_dimming_timeout_min, i),
-                    option -> mGeneralData.setScreenDimmingTimeoutMin(timeoutMin),
-                    mGeneralData.getScreenDimmingTimeoutMin() == i));
+                    getContext().getString(R.string.ui_hide_timeout_sec, timeoutSec),
+                    option -> {
+                        mGeneralData.setScreenDimmingMode(activeMode);
+                        mGeneralData.setScreenDimmingTimeoutMs(timeoutMs);
+                    },
+                    screenDimmingTimeoutMs == timeoutMs));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.screen_dimming), options);
+        for (int i = 1; i <= 15; i++) {
+            int timeoutMs = i * 60 * 1_000;
+            options.add(UiOptionItem.from(
+                    getContext().getString(R.string.screen_dimming_timeout_min, i),
+                    option -> {
+                        mGeneralData.setScreenDimmingMode(activeMode);
+                        mGeneralData.setScreenDimmingTimeoutMs(timeoutMs);
+                    },
+                    screenDimmingTimeoutMs == timeoutMs));
+        }
+
+        settingsPresenter.appendRadioCategory(title, options);
     }
 
     private void appendTimeFormatCategory(AppDialogPresenter settingsPresenter) {
@@ -375,6 +404,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts),
                 option -> mGeneralData.hideShortsFromSubscriptions(option.isSelected()),
                 mGeneralData.isHideShortsFromSubscriptionsEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_streams),
+                option -> mGeneralData.hideStreamsFromSubscriptions(option.isSelected()),
+                mGeneralData.isHideStreamsFromSubscriptionsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_history),
                 option -> mGeneralData.hideShortsFromHistory(option.isSelected()),

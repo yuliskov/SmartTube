@@ -452,7 +452,7 @@
     <string name="sources">Sorgenti</string>
     <string name="releases">Rilasci</string>
     <string name="prefer_avc_over_vp9">Selezione codec: preferisci avc a vp9</string>
-    <string name="open_chat">Chat</string>
+    <string name="open_chat">Chat/Commenti</string>
     <string name="place_chat_left">Posiziona la chat a sinistra</string>
     <string name="use_alt_speech_recognizer">Metodo alternativo per riconoscimento vocale</string>
     <string name="time_format">Formato orario</string>
@@ -491,4 +491,7 @@
     <string name="resume_history">Riprendi la cronologia</string>
     <string name="clear_history">Cancella la cronologia</string>
     <string name="chapters">Capitoli</string>
+    <string name="card_multiline_subtitle">Sottotitoli multilinea</string>
+    <string name="auto_frame_rate_modes">Modalità supportate</string>
+    <string name="loading">Caricamento in corso…</string>
 </resources>

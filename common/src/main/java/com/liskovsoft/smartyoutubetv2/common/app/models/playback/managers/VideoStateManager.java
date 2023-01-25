@@ -5,7 +5,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -26,9 +26,9 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
 public class VideoStateManager extends PlayerEventListenerHelper implements MetadataListener {
+    private static final String TAG = VideoStateManager.class.getSimpleName();
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 90_000;
-    private static final String TAG = VideoStateManager.class.getSimpleName();
     private boolean mIsPlayEnabled;
     private Video mVideo = new Video();
     private FormatItem mTempVideoFormat;
@@ -53,10 +53,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         mGeneralData = GeneralData.instance(getActivity());
         mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
         mStateService = VideoStateService.instance(getActivity());
-
-        // onInitDone usually called after openVideo (if PlaybackView is destroyed)
-        // So, we need to repeat some things again.
-        resetPositionIfNeeded(getVideo());
     }
 
     /**
@@ -287,7 +283,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     @Override
     public void onVideoSpeedLongClicked(boolean enabled) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
-        settingsPresenter.clear();
 
         // suppose live stream if buffering near the end
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
@@ -319,8 +314,9 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
         // Reset position of music videos
         boolean isShort = state != null && state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled();
+        boolean isVideoEnded = state != null && state.durationMs - state.positionMs < 3_000;
 
-        if (isShort || item.isLive || !mGeneralData.isHistoryEnabled()) {
+        if (isShort || isVideoEnded || item.isLive || !mGeneralData.isHistoryEnabled()) {
             resetPosition(item);
         }
     }
@@ -393,19 +389,14 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         long positionMs = getController().getPositionMs();
         long remainsMs = durationMs - positionMs;
         boolean isPositionActual = remainsMs > 1_000;
-        boolean isRealLiveStream = video.isLive && remainsMs < LIVE_THRESHOLD_MS;
-        if ((isPositionActual && !isRealLiveStream) || !getPlayEnabled()) { // Is pause after each video enabled?
+        if (isPositionActual) { // partially viewed
             mStateService.save(new State(video.videoId, positionMs, durationMs, getController().getSpeed()));
             // Sync video. You could safely use it later to restore state.
             video.percentWatched = positionMs / (durationMs / 100f);
-        } else {
+        } else { // fully viewed
             // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
-            mStateService.save(new State(video.videoId, durationMs, durationMs, 1.0f));
+            mStateService.save(new State(video.videoId, durationMs, durationMs, getController().getSpeed()));
             video.percentWatched = 100;
-
-            // NOTE: Storage optimization!!!
-            // Reset position when video almost ended
-            //resetPosition(video);
         }
 
         Playlist.instance().sync(video);
@@ -431,19 +422,14 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         }
 
         // Set actual position for live videos with uncommon length
-        if ((state == null || state.positionMs == state.durationMs) && item.isLive) {
+        if ((state == null || state.durationMs - state.positionMs < LIVE_THRESHOLD_MS) && item.isLive) {
             // Add buffer. Should I take into account segment offset???
             state = new State(item.videoId, getController().getDurationMs() - 60_000);
         }
 
         // Do I need to check that item isn't live? (state != null && !item.isLive)
         if (state != null) {
-            long remainsMs = getController().getDurationMs() - state.positionMs;
-            // Url list videos at this stage has undefined (-1) length. So, we need to ensure that remains is positive.
-            boolean isVideoEnded = remainsMs >= 0 && remainsMs < (item.isLive ? 30_000 : 1_000); // live buffer fix
-            if (!isVideoEnded || !getPlayEnabled()) {
-                setPositionMs(state.positionMs);
-            }
+            setPositionMs(state.positionMs);
         }
 
         if (!mIsPlayBlocked) {
@@ -474,7 +460,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
             historyObservable = mediaItemManager.updateHistoryPositionObserve(video.videoId, positionSec);
         }
 
-        mHistoryAction = RxUtils.execute(historyObservable);
+        mHistoryAction = RxHelper.execute(historyObservable);
     }
 
     /**

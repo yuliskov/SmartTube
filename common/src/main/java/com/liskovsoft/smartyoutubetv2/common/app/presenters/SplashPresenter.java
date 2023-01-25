@@ -6,7 +6,7 @@ import android.content.Intent;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -64,6 +64,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
         runRefreshCachePeriodicTask();
         showAccountSelection();
+        resumeHistory();
 
         if (getView() != null) {
             applyNewIntent(getView().getNewIntent());
@@ -76,7 +77,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             // Need to be the first line and executed on earliest stage once.
             // Inits service language and context.
             //Utils.initGlobalData(getContext()); // Init already done in BasePresenter
-            RxUtils.setupGlobalErrorHandler();
+            RxHelper.setupGlobalErrorHandler();
             initIntentChain();
             updateChannels();
             getBackupDataOnce();
@@ -86,7 +87,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             //configureOpenVPN();
             initVideoStateService();
             initStreamReminderService();
-            resumeHistory();
+            //resumeHistory();
             sRunOnce = true;
         }
     }
@@ -140,16 +141,15 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     private void resumeHistory() {
-        GeneralData.instance(getContext()).enableHistory(true);
-        MediaServiceManager.instance().enableHistory(true);
+        MediaServiceManager.instance().enableHistory(GeneralData.instance(getContext()).isHistoryEnabled());
     }
 
     private void runRefreshCachePeriodicTask() {
-        if (RxUtils.isAnyActionRunning(mRefreshCachePeriodicAction)) {
+        if (RxHelper.isAnyActionRunning(mRefreshCachePeriodicAction)) {
             return;
         }
 
-        mRefreshCachePeriodicAction = RxUtils.startInterval(YouTubeMediaService.instance()::refreshCacheIfNeeded, 30 * 60);
+        mRefreshCachePeriodicAction = RxHelper.startInterval(YouTubeMediaService.instance()::refreshCacheIfNeeded, 30 * 60);
     }
 
     private void checkTouchSupport() {

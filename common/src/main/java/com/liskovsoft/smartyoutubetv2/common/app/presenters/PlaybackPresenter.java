@@ -40,6 +40,8 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
 
     @Override
     public void onViewInitialized() {
+        super.onViewInitialized();
+
         mMainPlayerEventBridge.setController(getView().getController());
         getView().setEventListener(mMainPlayerEventBridge);
     }

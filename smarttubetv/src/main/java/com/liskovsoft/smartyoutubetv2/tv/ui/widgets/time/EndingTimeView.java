@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
@@ -72,7 +73,7 @@ public class EndingTimeView extends TextView implements TickleListener {
         if (getVisibility() == View.VISIBLE) {
             String endingTime = getEndingTime();
 
-            setText(!TextUtils.isEmpty(endingTime) ? String.format("⌛ %s", endingTime) : null);
+            setText(!TextUtils.isEmpty(endingTime) ? String.format("%s %s", Helpers.HOURGLASS, endingTime) : null);
 
             //if (endingTime != null) {
             //    // https://stackoverflow.com/questions/5437674/what-unicode-characters-represent-time/9454080

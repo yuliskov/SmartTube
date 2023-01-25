@@ -7,7 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -20,9 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,9 +33,14 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
     private VideoGroup mLastScrollGroup;
+    private int mContinuationCount = -1;
 
     public interface MetadataListener {
         void onMetadata(MediaItemMetadata metadata);
+    }
+
+    private interface OnVideoGroup {
+        void onVideoGroup(VideoGroup group);
     }
 
     @Override
@@ -109,6 +112,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void continueGroup(VideoGroup group) {
+        continueGroup(group, null);
+    }
+
+    private void continueGroup(VideoGroup group, OnVideoGroup callback) {
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         getController().showProgressBar(true);
@@ -118,8 +125,6 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         MediaItemService mediaItemManager = YouTubeMediaService.instance().getMediaItemService();
 
         Disposable continueAction = mediaItemManager.continueGroupObserve(mediaGroup)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> {
                             getController().showProgressBar(false);
@@ -133,7 +138,11 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                                 Playlist.instance().setCurrent(video);
                             }
 
-                            continueGroupIfNeeded(videoGroup);
+                            if (callback != null) {
+                                callback.onVideoGroup(videoGroup);
+                            } else {
+                                continueGroupIfNeeded(videoGroup);
+                            }
                         },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
@@ -196,8 +205,6 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         clearSuggestionsIfNeeded(video);
 
         Disposable metadataAction = observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         metadata -> updateSuggestions(metadata, video),
                         error -> {
@@ -280,7 +287,11 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
                 getController().updateSuggestions(videoGroup);
 
-                continueGroupIfNeeded(videoGroup);
+                if (groupIndex == 0) {
+                    focusAndContinueIfNeeded(videoGroup);
+                } else {
+                    continueGroupIfNeeded(videoGroup);
+                }
             }
         }
     }
@@ -416,6 +427,30 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         MediaServiceManager.instance().shouldContinueTheGroup(getActivity(), group, () -> continueGroup(group));
     }
 
+    public void focusAndContinueIfNeeded(VideoGroup group) {
+        Video video = getController().getVideo();
+
+        if (group == null || group.isEmpty() || video == null || !video.hasPlaylist() || !video.hasVideo()) {
+            return;
+        }
+
+        int index = group.getVideos().indexOf(video);
+
+        if (index >= 0) {
+            Log.d(TAG, "Found current video index: %s", index);
+            getController().focusSuggestedItem(group.getVideos().get(index));
+            // Stop the continuation loop
+            mContinuationCount = 0;
+        } else if (mContinuationCount > 5) {
+            // Stop the continuation loop
+            mContinuationCount = 0;
+        } else {
+            // load more and repeat
+            continueGroup(group, this::focusAndContinueIfNeeded);
+            mContinuationCount++;
+        }
+    }
+
     public void addMetadataListener(MetadataListener listener) {
         mListeners.add(listener);
     }
@@ -429,7 +464,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void disposeActions() {
-        RxUtils.disposeActions(mActions);
+        RxHelper.disposeActions(mActions);
         mLastScrollGroup = null;
     }
 }

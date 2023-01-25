@@ -40,7 +40,7 @@
     <string name="video_buffer_size_high">High</string>
     <string name="update_changelog">Changelog</string>
     <string name="install_update">Install update</string>
-    <string name="section_is_empty">Oops! There is nothing in here.</string>
+    <string name="section_is_empty">Oops! There is nothing in here</string>
     <string name="dialog_add_to_playlist">Add/Remove from playlist</string>
     <string name="msg_signed_users_only">Signed users only</string>
     <string name="msg_cant_load_content">Can\'t load content.\n1) Check date and time on the device.\n2) Check network connection.\n3) Check your proxy settings.\n4) Try to sign in to your account.\n5) Maybe there is nothing in here.</string>
@@ -265,7 +265,7 @@
     <string name="removed_from">Removed from %s</string>
     <string name="video_preset_adaptive">Adaptive</string>
     <string name="content_block_preview_recap">Preview or recap of the video</string>
-    <string name="content_block_highlight">Point or highlight of the video</string>
+    <string name="content_block_highlight">Interesting point (bookmark)</string>
     <string name="removed_from_history">Video has been removed from history</string>
     <string name="remove_from_history">Remove from history</string>
     <string name="upload_date">Upload date</string>
@@ -452,7 +452,7 @@
     <string name="sources">Sources</string>
     <string name="releases">Releases</string>
     <string name="prefer_avc_over_vp9">Codec selection: prefer avc over vp9</string>
-    <string name="open_chat">Chat</string>
+    <string name="open_chat">Chat/Comments</string>
     <string name="place_chat_left">Place chat to the left</string>
     <string name="use_alt_speech_recognizer">Alt speech recognizer</string>
     <string name="time_format">Time format</string>
@@ -492,5 +492,9 @@
     <string name="clear_history">Clear history</string>
     <string name="chapters">Chapters</string>
     <string name="card_multiline_subtitle">Multiline subtitles</string>
+    <string name="auto_frame_rate_modes">Supported modes</string>
+    <string name="loading">Loading…</string>
+    <string name="hide_streams">Hide streams from Subscriptions</string>
+    <string name="video_rotate">Rotate</string>
     <string name="cancel">Cancel</string>
 </resources>

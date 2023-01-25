@@ -9,11 +9,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
-import androidx.core.text.util.LinkifyCompat;
 import androidx.core.view.ViewCompat;
 
 import com.stfalcon.chatkit.R;
@@ -36,10 +36,12 @@ import java.util.List;
 public class MessageHolders {
 
     private static final short VIEW_TYPE_DATE_HEADER = 130;
+    private static final short VIEW_TYPE_STRING_HEADER = 133;
     private static final short VIEW_TYPE_TEXT_MESSAGE = 131;
     private static final short VIEW_TYPE_IMAGE_MESSAGE = 132;
 
     private Class<? extends ViewHolder<Date>> dateHeaderHolder;
+    private Class<? extends ViewHolder<String>> stringHeaderHolder;
     private int dateHeaderLayout;
 
     private HolderConfig<IMessage> incomingTextConfig;
@@ -53,6 +55,8 @@ public class MessageHolders {
     public MessageHolders() {
         this.dateHeaderHolder = DefaultDateHeaderViewHolder.class;
         this.dateHeaderLayout = R.layout.item_date_header;
+
+        this.stringHeaderHolder = DefaultStringHeaderViewHolder.class;
 
         this.incomingTextConfig = new HolderConfig<>(DefaultIncomingTextMessageViewHolder.class, R.layout.item_incoming_text_message);
         this.outcomingTextConfig = new HolderConfig<>(DefaultOutcomingTextMessageViewHolder.class, R.layout.item_outcoming_text_message);
@@ -543,6 +547,8 @@ public class MessageHolders {
         switch (viewType) {
             case VIEW_TYPE_DATE_HEADER:
                 return getHolder(parent, dateHeaderLayout, dateHeaderHolder, messagesListStyle, null);
+            case VIEW_TYPE_STRING_HEADER:
+                return getHolder(parent, dateHeaderLayout, stringHeaderHolder, messagesListStyle, null);
             case VIEW_TYPE_TEXT_MESSAGE:
                 return getHolder(parent, incomingTextConfig, messagesListStyle);
             case -VIEW_TYPE_TEXT_MESSAGE:
@@ -602,6 +608,8 @@ public class MessageHolders {
             isOutcoming = message.getUser().getId().contentEquals(senderId);
             viewType = getContentViewType(message);
 
+        } else if (item instanceof String) {
+            viewType = VIEW_TYPE_STRING_HEADER;
         } else viewType = VIEW_TYPE_DATE_HEADER;
 
         return isOutcoming ? viewType * -1 : viewType;
@@ -744,6 +752,8 @@ public class MessageHolders {
 
         protected ViewGroup bubble;
         protected TextView text;
+        // See: item_incoming_text_message.xml
+        protected RelativeLayout wrapper;
 
         @Deprecated
         public IncomingTextMessageViewHolder(View itemView) {
@@ -789,6 +799,23 @@ public class MessageHolders {
                 // Link configurator makes textView focusable.
                 if (style.isMessageFocusable()) {
                     configureLinksBehavior(text);
+
+                    //text.setFocusable(true);
+                    //text.setFocusableInTouchMode(true);
+                    //text.setClickable(true);
+                    //text.setBackgroundResource(R.drawable.bgchange);
+                    //text.requestFocus();
+
+                    wrapper.setFocusable(true);
+                    //wrapper.setFocusableInTouchMode(true);
+                    //wrapper.setClickable(true);
+                    //wrapper.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+                    //wrapper.requestFocus();
+                    //wrapper.setBackgroundResource(R.drawable.bgchange);
+                    wrapper.setOnFocusChangeListener((v, hasFocus) -> {
+                        //text.setBackgroundResource(hasFocus ? R.color.tg_selected_bg : R.color.transparent);
+                        bubble.setBackgroundResource(hasFocus ? R.drawable.shape_incoming_message_focused : R.drawable.shape_incoming_message);
+                    });
                 }
             }
         }
@@ -796,6 +823,7 @@ public class MessageHolders {
         private void init(View itemView) {
             bubble = itemView.findViewById(R.id.bubble);
             text = itemView.findViewById(R.id.messageText);
+            wrapper = (RelativeLayout) itemView;
         }
     }
 
@@ -807,6 +835,8 @@ public class MessageHolders {
 
         protected ViewGroup bubble;
         protected TextView text;
+        // See: item_outcoming_text_message.xml
+        protected RelativeLayout wrapper;
 
         @Deprecated
         public OutcomingTextMessageViewHolder(View itemView) {
@@ -852,6 +882,11 @@ public class MessageHolders {
                 // Link configurator makes textView focusable.
                 if (style.isMessageFocusable()) {
                     configureLinksBehavior(text);
+                    wrapper.setFocusable(true);
+                    wrapper.setFocusableInTouchMode(true);
+                    wrapper.setClickable(true);
+                    wrapper.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+                    wrapper.requestFocus();
                 }
             }
         }
@@ -859,6 +894,7 @@ public class MessageHolders {
         private void init(View itemView) {
             bubble = itemView.findViewById(R.id.bubble);
             text = itemView.findViewById(R.id.messageText);
+            wrapper = (RelativeLayout) itemView;
         }
     }
 
@@ -1037,6 +1073,35 @@ public class MessageHolders {
             }
             dateFormat = style.getDateHeaderFormat();
             dateFormat = dateFormat == null ? DateFormatter.Template.STRING_DAY_MONTH_YEAR.get() : dateFormat;
+        }
+    }
+
+    public static class DefaultStringHeaderViewHolder extends ViewHolder<String>
+            implements DefaultMessageViewHolder {
+
+        protected TextView text;
+
+        public DefaultStringHeaderViewHolder(View itemView) {
+            super(itemView);
+            text = itemView.findViewById(R.id.messageText);
+        }
+
+        @Override
+        public void onBind(String message) {
+            if (text != null) {
+                text.setText(message);
+            }
+        }
+
+        @Override
+        public void applyStyle(MessagesListStyle style) {
+            if (text != null) {
+                text.setTextColor(style.getDateHeaderTextColor());
+                text.setTextSize(TypedValue.COMPLEX_UNIT_PX, style.getDateHeaderTextSize());
+                text.setTypeface(text.getTypeface(), style.getDateHeaderTextStyle());
+                text.setPadding(style.getDateHeaderPadding(), style.getDateHeaderPadding(),
+                        style.getDateHeaderPadding(), style.getDateHeaderPadding());
+            }
         }
     }
 

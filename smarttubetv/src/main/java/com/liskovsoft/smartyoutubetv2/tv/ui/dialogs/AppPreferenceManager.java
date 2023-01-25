@@ -13,14 +13,15 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.O
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreference;
+import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.CommentsPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class AppDialogFragmentManager {
-    private final Context mStyledContext;
+public class AppPreferenceManager {
+    private final Context mContext;
     private final Runnable mOnChange;
 
     public static class ListPreferenceData {
@@ -37,12 +38,12 @@ public class AppDialogFragmentManager {
         }
     }
 
-    public AppDialogFragmentManager(Context styledContext) {
-        this(styledContext, null);
+    public AppPreferenceManager(Context context) {
+        this(context, null);
     }
 
-    public AppDialogFragmentManager(Context styledContext, Runnable onChange) {
-        mStyledContext = styledContext;
+    public AppPreferenceManager(Context context, Runnable onChange) {
+        mContext = context;
         mOnChange = onChange;
     }
 
@@ -62,13 +63,15 @@ public class AppDialogFragmentManager {
                 return createLongTextPreference(category);
             case OptionCategory.TYPE_CHAT:
                 return createChatPreference(category);
+            case OptionCategory.TYPE_COMMENTS:
+                return createCommentsPreference(category);
         }
 
         throw  new IllegalStateException("Can't find matched preference for type: " + category.type);
     }
 
     private Preference createStringListPreference(OptionCategory category) {
-        MultiSelectListPreference pref = new StringListPreference(mStyledContext);
+        MultiSelectListPreference pref = new StringListPreference(mContext);
 
         initMultiSelectListPreference(category, pref);
 
@@ -76,7 +79,7 @@ public class AppDialogFragmentManager {
     }
 
     private Preference createLongTextPreference(OptionCategory category) {
-        MultiSelectListPreference pref = new StringListPreference(mStyledContext);
+        MultiSelectListPreference pref = new StringListPreference(mContext);
 
         pref.setDialogMessage(category.items.get(0).getTitle());
 
@@ -86,10 +89,21 @@ public class AppDialogFragmentManager {
     }
 
     private Preference createChatPreference(OptionCategory category) {
-        ChatPreference pref = new ChatPreference(mStyledContext);
+        ChatPreference pref = new ChatPreference(mContext);
 
         OptionItem optionItem = category.items.get(0);
         pref.setChatReceiver(optionItem.getChatReceiver());
+
+        initDialogPreference(category, pref);
+
+        return pref;
+    }
+
+    private Preference createCommentsPreference(OptionCategory category) {
+        CommentsPreference pref = new CommentsPreference(mContext);
+
+        OptionItem optionItem = category.items.get(0);
+        pref.setCommentsReceiver(optionItem.getCommentsReceiver());
 
         initDialogPreference(category, pref);
 
@@ -101,7 +115,7 @@ public class AppDialogFragmentManager {
 
         if (category.items.size() == 1) {
             OptionItem item = category.items.get(0);
-            Preference preference = new Preference(mStyledContext);
+            Preference preference = new Preference(mContext);
             preference.setPersistent(false);
             preference.setTitle(item.getTitle());
             preference.setOnPreferenceClickListener(pref -> {
@@ -120,7 +134,7 @@ public class AppDialogFragmentManager {
 
         if (category.items.size() == 1) {
             OptionItem item = category.items.get(0);
-            Preference preference = new SwitchPreference(mStyledContext);
+            Preference preference = new SwitchPreference(mContext);
             preference.setPersistent(false);
             preference.setTitle(item.getTitle());
             preference.setDefaultValue(item.isSelected());
@@ -136,7 +150,7 @@ public class AppDialogFragmentManager {
     }
 
     public Preference createRadioListPreference(OptionCategory category) {
-        ListPreference pref = new ListPreference(mStyledContext);
+        ListPreference pref = new ListPreference(mContext);
 
         initSingleSelectListPreference(category, pref);
 
@@ -144,7 +158,7 @@ public class AppDialogFragmentManager {
     }
 
     public Preference createCheckedListPreference(OptionCategory category) {
-        MultiSelectListPreference pref = new MultiSelectListPreference(mStyledContext);
+        MultiSelectListPreference pref = new MultiSelectListPreference(mContext);
 
         initMultiSelectListPreference(category, pref);
 
@@ -200,7 +214,7 @@ public class AppDialogFragmentManager {
                             if (requiredItems != null) {
                                 for (OptionItem requiredItem : requiredItems) {
                                     if (!requiredItem.isSelected()) {
-                                        MessageHelpers.showMessageThrottled(mStyledContext, mStyledContext.getString(R.string.require_checked, requiredItem.getTitle()));
+                                        MessageHelpers.showMessageThrottled(mContext, mContext.getString(R.string.require_checked, requiredItem.getTitle()));
                                     }
                                 }
                             }

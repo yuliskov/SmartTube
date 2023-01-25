@@ -7,7 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -321,7 +321,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         MediaItemService manager = YouTubeMediaItemService.instance();
         Observable<Void> action = manager.removePlaylistObserve(video.playlistId);
         GeneralData.instance(getContext()).setPlaylistOrder(video.playlistId, -1);
-        RxUtils.execute(action,
+        RxHelper.execute(action,
                 () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.cant_delete_empty_playlist)),
                 () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.removed_from_playlists))
         );
@@ -330,7 +330,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private void savePlaylist(Video video) {
         MediaItemService manager = YouTubeMediaItemService.instance();
         Observable<Void> action = manager.savePlaylistObserve(video.playlistId);
-        RxUtils.execute(action,
+        RxHelper.execute(action,
                 () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.cant_save_playlist)),
                 () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.saved_to_playlists))
         );
@@ -389,7 +389,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 newValue -> {
                     MediaItemService manager = YouTubeMediaItemService.instance();
                     Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
-                    RxUtils.execute(
+                    RxHelper.execute(
                             action,
                             () -> MessageHelpers.showMessage(getContext(), newValue + ": " + getContext().getString(R.string.cant_save_playlist)),
                             () -> {
@@ -448,7 +448,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                             newValue -> {
                                 MediaItemService manager = YouTubeMediaItemService.instance();
                                 Observable<Void> action = manager.renamePlaylistObserve(firstItem.getPlaylistId(), newValue);
-                                RxUtils.execute(
+                                RxHelper.execute(
                                         action,
                                         () -> MessageHelpers.showMessage(getContext(), R.string.owned_playlist_warning),
                                         () -> {

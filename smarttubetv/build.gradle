@@ -49,7 +49,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    android.ndkVersion "24.0.8215888"
+
     compileSdkVersion project.properties.compileSdkVersion
     buildToolsVersion project.properties.buildToolsVersion
     testOptions.unitTests.includeAndroidResources = true
@@ -59,8 +59,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 844
-        versionName "16.54"
+        versionCode 883
+        versionName "16.93"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -131,11 +131,11 @@ android {
             versionCode 11000 + defaultConfig.versionCode
             applicationId "com.redboxtv.smartyoutubetv"
         }
-        stsibsetru {
-            // matchingFallbacks = ['lite']
-            versionCode 11000 + defaultConfig.versionCode
-            applicationId "com.sibsetru.smartyoutubetv"
-        }
+        // stsibsetru {
+        //     // matchingFallbacks = ['lite']
+        //     versionCode 11000 + defaultConfig.versionCode
+        //     applicationId "com.sibsetru.smartyoutubetv"
+        // }
     }
 
     // naming example: SmartYouTubeTV_Xwalk_v6.8.12_r.apk

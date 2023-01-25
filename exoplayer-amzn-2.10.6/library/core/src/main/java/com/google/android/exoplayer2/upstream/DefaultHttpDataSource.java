@@ -25,6 +25,8 @@ import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.Predicate;
 import com.google.android.exoplayer2.util.Util;
+import info.guardianproject.netcipher.NetCipher;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -521,7 +523,10 @@ public class DefaultHttpDataSource extends BaseDataSource implements HttpDataSou
       boolean allowIcyMetadata,
       boolean followRedirects)
       throws IOException {
-    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    //HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    // MODIFIED: Add modern TLS ciphers to HttpUrlConnection
+    // https://stackoverflow.com/questions/16299531/how-to-override-the-cipherlist-sent-to-the-server-by-android-when-using-httpsurl
+    HttpURLConnection connection = NetCipher.getHttpsURLConnection(url);
     connection.setConnectTimeout(connectTimeoutMillis);
     connection.setReadTimeout(readTimeoutMillis);
     if (defaultRequestProperties != null) {

@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
@@ -49,6 +48,7 @@ public class PlayerData extends DataChangeBase {
     private int mSubtitleStyleIndex;
     private int mVideoZoomMode;
     private float mVideoAspectRatio;
+    private int mVideoRotation;
     private int mSeekPreviewMode;
     private float mSpeed;
     private float mLastSpeed;
@@ -429,6 +429,15 @@ public class PlayerData extends DataChangeBase {
         return mVideoAspectRatio;
     }
 
+    public void setVideoRotation(int angle) {
+        mVideoRotation = angle;
+        persistState();
+    }
+
+    public int getVideoRotation() {
+        return mVideoRotation;
+    }
+
     public void setSpeed(float speed) {
         if (mSpeed == speed) {
             return;
@@ -609,6 +618,7 @@ public class PlayerData extends DataChangeBase {
         mIsLiveChatEnabled = Helpers.parseBoolean(split, 46, Build.VERSION.SDK_INT > 19);
         mLastSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 47)), FormatItem.SUBTITLE_DEFAULT);
         mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
+        mVideoRotation = Helpers.parseInt(split, 49, 0);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -627,7 +637,7 @@ public class PlayerData extends DataChangeBase {
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
-                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, Helpers.toString(mLastSubtitleFormat), mLastSpeed));
+                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, Helpers.toString(mLastSubtitleFormat), mLastSpeed, mVideoRotation));
 
         super.persistState();
     }

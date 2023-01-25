@@ -48,8 +48,6 @@ public class HQDialogManager extends PlayerEventListenerHelper {
 
     @Override
     public void onHighQualityClicked() {
-        mAppDialogPresenter.clear();
-
         addQualityCategories();
         addVideoBufferCategory();
         //addPresetsCategory();
@@ -188,6 +186,9 @@ public class HQDialogManager extends PlayerEventListenerHelper {
                     break;
                 case OptionCategory.TYPE_STRING:
                     mAppDialogPresenter.appendStringsCategory(category.title, category.options);
+                    break;
+                case OptionCategory.TYPE_LONG_TEXT:
+                    mAppDialogPresenter.appendLongTextCategory(category.title, category.option);
                     break;
                 case OptionCategory.TYPE_SINGLE:
                     mAppDialogPresenter.appendSingleSwitch(category.option);

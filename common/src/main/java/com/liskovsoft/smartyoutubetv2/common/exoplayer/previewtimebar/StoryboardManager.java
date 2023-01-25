@@ -15,13 +15,11 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemStoryboard;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemStoryboard.Size;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.Set;
 
@@ -57,7 +55,7 @@ public class StoryboardManager {
         mStoryboard = null;
         mCachedImageNums.clear();
 
-        RxUtils.disposeActions(mFormatAction);
+        RxHelper.disposeActions(mFormatAction);
 
         if (video == null || video.isLive || video.isUpcoming) {
             return;
@@ -72,8 +70,6 @@ public class StoryboardManager {
         }
 
         mFormatAction = storyboardObserve
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         storyboard -> {
                             mStoryboard = storyboard;

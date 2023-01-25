@@ -10,7 +10,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
@@ -37,9 +37,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.ScreenHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -67,6 +65,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final MediaItemService mItemManager;
     private final SignInService mSignInManager;
     private final List<Disposable> mActions;
+    private final Runnable mRefreshSection = this::refresh;
     private BrowseSection mCurrentSection;
     private Video mCurrentVideo;
     private long mLastUpdateTimeMs;
@@ -388,7 +387,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public boolean hasPendingActions() {
-        return RxUtils.isAnyActionRunning(mActions);
+        return RxHelper.isAnyActionRunning(mActions);
     }
 
     public boolean isItemPinned(Video item) {
@@ -574,8 +573,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         final AtomicInteger emissionIndex = new AtomicInteger(-1);
 
         Disposable updateAction = groups
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroups -> {
                             filterIfNeeded(mediaGroups);
@@ -605,6 +602,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                                 getView().showError(new CategoryEmptyError(getContext()));
+                                Utils.postDelayed(mRefreshSection, 30_000);
                             }
                         });
 
@@ -629,8 +627,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         Disposable updateAction = group
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroup -> {
                             if (getView() == null) {
@@ -654,6 +650,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                                 getView().showError(new CategoryEmptyError(getContext()));
+                                Utils.postDelayed(mRefreshSection, 30_000);
                             }
                         });
 
@@ -682,8 +679,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         Disposable continueAction = continuation
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueGroup -> {
                             VideoGroup videoGroup = VideoGroup.from(continueGroup, group.getSection(), group.getPosition());
@@ -716,8 +711,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         getView().showProgressBar(true);
 
         Disposable signCheckAction = mSignInManager.isSignedObserve()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         isSigned -> {
                             if (isSigned) {
@@ -743,7 +736,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void disposeActions() {
-        RxUtils.disposeActions(mActions);
+        RxHelper.disposeActions(mActions);
+        Utils.removeCallbacks(mRefreshSection);
         mLastScrollGroup = null;
         mLastUpdateTimeMs = 0;
     }

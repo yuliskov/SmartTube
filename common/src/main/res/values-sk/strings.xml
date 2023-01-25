@@ -39,7 +39,7 @@
     <string name="video_buffer_size_med">Stredná</string>
     <string name="video_buffer_size_high">Vysoká</string>
     <string name="update_changelog">Zoznam zmien</string>
-    <string name="install_update">Inštalovať auktualizáciu</string>
+    <string name="install_update">Inštalovať aktualizáciu</string>
     <string name="section_is_empty">Hups! Žiadne videá</string>
     <string name="dialog_add_to_playlist">Uložiť do zoznamu</string>
     <string name="msg_signed_users_only">Iba pre prihlásených</string>
@@ -265,7 +265,7 @@
     <string name="removed_from">Odobrané z %s</string>
     <string name="video_preset_adaptive">Adaptívne</string>
     <string name="content_block_preview_recap">Náhľad alebo zrhnutie videa</string>
-    <string name="content_block_highlight">Pointa alebo highlight videa</string>
+    <string name="content_block_highlight">Zaujímavý bod (záložka)</string>
     <string name="removed_from_history">Video bolo zmazané z histórie</string>
     <string name="remove_from_history">Zmazať z histórie</string>
     <string name="upload_date">Dátum nahrania</string>
@@ -479,4 +479,19 @@
     <string name="thumb_quality_middle">V strede videa</string>
     <string name="thumb_quality_end">Na konci videa</string>
     <string name="content_block_status">Skontrolovať stav SponsorBlocku</string>
+    <string name="player_show_quality_info_bitrate">Pridaj bitrate do informácií o kvalite</string>
+    <string name="player_speed_button_old_behavior">Vrátiť staré správanie tlačidla rýchlosti</string>
+    <string name="protect_settings_with_password">Chrániť všetky nastavenia heslom</string>
+    <string name="enter_settings_password">Zadajte heslo</string>
+    <string name="child_mode">Detský režim</string>
+    <string name="child_mode_desc">V tomto režime používateľ nemôže použiť vyhľadávanie ani vidieť žiadny navrhovaný obsah. Nastavenia budú zaheslované.</string>
+    <string name="lost_setting_warning">Nastavenia aplikácie sa zmenia. Skontrolujte, či máte vytvorenú zálohu nastavení.</string>
+    <string name="player_button_long_click">Krátke kliknutie na tlačidlo pre rýchlu akciu a dlhé pre dialóg nastavení</string>
+    <string name="pause_history">Pozastaviť históriu</string>
+    <string name="resume_history">Obnoviť históriu</string>
+    <string name="clear_history">Zmazať históriu</string>
+    <string name="chapters">Kapitoly</string>
+    <string name="card_multiline_subtitle">Viacriadkové titulky</string>
+    <string name="auto_frame_rate_modes">Podporované režimy</string>
+    <string name="loading">Načítavanie…</string>
 </resources>

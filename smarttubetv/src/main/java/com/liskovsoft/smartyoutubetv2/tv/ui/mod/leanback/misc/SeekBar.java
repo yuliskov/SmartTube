@@ -255,6 +255,11 @@ public final class SeekBar extends View {
                 mBarHeight / 2 + secondProgressPixels, height - verticalPadding);
 
         mKnobx = radius + (int) progressPixels;
+
+        for (SeekBarRectangle seekBarRectangle : mSeekBarRectangles) {
+            seekBarRectangle.rect.set(seekBarRectangle.rect.left, verticalPadding, seekBarRectangle.rect.right, height - verticalPadding);
+        }
+
         invalidate();
     }
 

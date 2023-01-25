@@ -21,6 +21,8 @@ import java.util.Map.Entry;
 
 public class GeneralData {
     public static final int SCREEN_DIMMING_NEVER = 0;
+    public static final int SCREEN_DIMMING_MODE_NORMAL = 0;
+    public static final int SCREEN_DIMMING_MODE_SCREEN_OFF = 1;
     private static final String GENERAL_DATA = "general_data";
     public static final int EXIT_NONE = 0;
     public static final int EXIT_DOUBLE_BACK = 1;
@@ -41,7 +43,8 @@ public class GeneralData {
     private boolean mIsHideShortsFromSubscriptionsEnabled;
     private boolean mIsHideUpcomingEnabled;
     private boolean mIsRemapFastForwardToNextEnabled;
-    private int mScreenDimmingTimeoutMin;
+    private int mScreenDimmingTimeoutMs;
+    private int mScreenDimmingMode;
     private int mTimeFormat;
     private boolean mIsProxyEnabled;
     private boolean mIsBridgeCheckEnabled;
@@ -63,7 +66,7 @@ public class GeneralData {
     private boolean mIsGlobalClockEnabled;
     private String mSettingsPassword;
     private boolean mIsChildModeEnabled;
-    private boolean mIsHistoryEnabled = true;
+    private boolean mIsHistoryEnabled;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new ArrayList<>();
@@ -339,6 +342,14 @@ public class GeneralData {
         return GlobalPreferences.sInstance.isHideShortsFromSubscriptionsEnabled();
     }
 
+    public void hideStreamsFromSubscriptions(boolean enable) {
+        GlobalPreferences.sInstance.hideStreamsFromSubscriptions(enable);
+    }
+
+    public boolean isHideStreamsFromSubscriptionsEnabled() {
+        return GlobalPreferences.sInstance.isHideStreamsFromSubscriptionsEnabled();
+    }
+
     public void hideShortsFromHome(boolean enable) {
         GlobalPreferences.sInstance.hideShortsFromHome(enable);
     }
@@ -473,13 +484,22 @@ public class GeneralData {
         return mIsRemapChannelUpToSearchEnabled;
     }
 
-    public void setScreenDimmingTimeoutMin(int timeoutMin) {
-        mScreenDimmingTimeoutMin = timeoutMin;
+    public void setScreenDimmingTimeoutMs(int timeoutMs) {
+        mScreenDimmingTimeoutMs = timeoutMs;
         persistState();
     }
 
-    public int getScreenDimmingTimeoutMin() {
-        return mScreenDimmingTimeoutMin;
+    public int getScreenDimmingTimeoutMs() {
+        return mScreenDimmingTimeoutMs;
+    }
+
+    public void setScreenDimmingMode(int mode) {
+        mScreenDimmingMode = mode;
+        persistState();
+    }
+
+    public int getScreenDimmingMode() {
+        return mScreenDimmingMode;
     }
 
     public void setTimeFormat(int format) {
@@ -624,6 +644,8 @@ public class GeneralData {
 
     public void enableHistory(boolean enabled) {
         mIsHistoryEnabled = enabled;
+
+        persistState();
     }
 
     private void initSections() {
@@ -663,12 +685,12 @@ public class GeneralData {
         String pinnedItems = Helpers.parseStr(split, 6);
         mIsHideShortsFromSubscriptionsEnabled = Helpers.parseBoolean(split, 7, false);
         mIsRemapFastForwardToNextEnabled = Helpers.parseBoolean(split, 8, false);
-        mScreenDimmingTimeoutMin = Helpers.parseInt(split, 9, 1);
+        //mScreenDimmingTimeoutMs = Helpers.parseInt(split, 9, 1);
         mIsProxyEnabled = Helpers.parseBoolean(split, 10, false);
         mIsBridgeCheckEnabled = Helpers.parseBoolean(split, 11, true);
         mIsOkButtonLongPressDisabled = Helpers.parseBoolean(split, 12, false);
         mLastPlaylistId = Helpers.parseStr(split, 13);
-        String selectedSections = Helpers.parseStr(split, 14);
+        //String selectedSections = Helpers.parseStr(split, 14);
         mIsHideUpcomingEnabled = Helpers.parseBoolean(split, 15, false);
         mIsRemapPageUpToNextEnabled = Helpers.parseBoolean(split, 16, false);
         mIsRemapPageUpToLikeEnabled = Helpers.parseBoolean(split, 17, false);
@@ -689,6 +711,9 @@ public class GeneralData {
         mTimeFormat = TIME_FORMAT_24;
         mSettingsPassword = null;
         mIsChildModeEnabled = false;
+        mIsHistoryEnabled = Helpers.parseBoolean(split, 35, true);
+        mScreenDimmingTimeoutMs = Helpers.parseInt(split, 36, 60 * 1_000);
+        mScreenDimmingMode = Helpers.parseInt(split, 37, SCREEN_DIMMING_MODE_NORMAL);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -742,12 +767,13 @@ public class GeneralData {
         // Zero index is skipped. Selected sections were there.
         mPrefs.setData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
                 mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems, mIsHideShortsFromSubscriptionsEnabled,
-                mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
+                mIsRemapFastForwardToNextEnabled, null,
                 mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
-                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled));
+                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
+                mScreenDimmingTimeoutMs, mScreenDimmingMode));
     }
 }

@@ -35,7 +35,7 @@ public interface IMessage {
      *
      * @return the message text
      */
-    String getText();
+    CharSequence getText();
 
     /**
      * Returns message author. See the {@link IUser} for more details

@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.FocusHighlight;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.RowPresenter;
+import androidx.leanback.widget.VerticalGridView;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.liskovsoft.smartyoutubetv2.tv.R;
@@ -172,23 +173,33 @@ public class ViewUtil {
             return;
         }
 
-        View container = rootView.findViewById(R.id.settings_preference_fragment_container);
+        // Usually null. Present only on parent fragment.
+        View mainContainer = rootView.findViewById(R.id.settings_preference_fragment_container);
         View mainFrame = rootView.findViewById(R.id.main_frame);
+        View itemsContainer = rootView.findViewById(R.id.list);
         View title = rootView.findViewById(R.id.decor_title_container);
         int transparent = ContextCompat.getColor(context, R.color.transparent);
         int semiTransparent = ContextCompat.getColor(context, R.color.semi_grey);
 
-        if (container instanceof FrameLayout) {
+        // Disable shadow outline on parent fragment
+        if (mainContainer instanceof FrameLayout) {
             // ViewOutlineProvider: NoClassDefFoundError on API 19
-            container.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+            mainContainer.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
         }
         if (mainFrame instanceof LinearLayout) {
-            mainFrame.setBackgroundColor(semiTransparent);
+            mainFrame.setBackgroundColor(transparent);
+        }
+        if (itemsContainer instanceof VerticalGridView) {
+            // Set background for individual buttons in the list.
+            // This is the only way to do this because items haven't been added yet to the container.
+            ((VerticalGridView) itemsContainer).setOnChildLaidOutListener(
+                    (parent, view, position, id) -> view.setBackgroundResource(R.drawable.transparent_dialog_item_bg)
+            );
         }
         if (title instanceof FrameLayout) {
             title.setBackgroundColor(transparent);
+            title.setVisibility(View.GONE);
         }
-        // Can't set bg of individual items here because ones isn't added yet.
     }
 
     public static void makeMonochrome(ImageView iconView) {

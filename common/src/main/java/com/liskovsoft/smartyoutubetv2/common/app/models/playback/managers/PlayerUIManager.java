@@ -12,13 +12,12 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -28,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -37,9 +37,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
 
@@ -84,6 +82,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         // Could be set once per activity creation (view layout stuff)
         getController().setVideoZoomMode(mPlayerData.getVideoZoomMode());
         getController().setVideoAspectRatio(mPlayerData.getVideoAspectRatio());
+        getController().setVideoRotation(mPlayerData.getVideoRotation());
     }
 
     @Override
@@ -154,18 +153,32 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onSubtitleLongClicked(boolean enabled) {
-        List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
-
-        String subtitlesCategoryTitle = getActivity().getString(R.string.subtitle_category_title);
+        String subtitlesOrigCategoryTitle = getActivity().getString(R.string.subtitle_category_title);
+        String subtitlesAutoCategoryTitle = subtitlesOrigCategoryTitle + " (Auto)";
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
 
-        settingsPresenter.clear();
+        settingsPresenter.appendSingleButton(UiOptionItem.from(subtitlesOrigCategoryTitle, optionItem -> {
+            List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
+            List<FormatItem> subtitleOrigFormats = Helpers.filter(subtitleFormats,
+                    value -> value.isDefault() || !SubtitleTrack.isAuto(value.getLanguage()));
+            settingsPresenter.appendRadioCategory(subtitlesOrigCategoryTitle,
+                    UiOptionItem.from(subtitleOrigFormats,
+                            option -> getController().setFormat(UiOptionItem.toFormat(option)),
+                            getActivity().getString(R.string.subtitles_disabled)));
+            settingsPresenter.showDialog();
+        }));
 
-        settingsPresenter.appendRadioCategory(subtitlesCategoryTitle,
-                UiOptionItem.from(subtitleFormats,
-                        option -> getController().setFormat(UiOptionItem.toFormat(option)),
-                        getActivity().getString(R.string.subtitles_disabled)));
+        settingsPresenter.appendSingleButton(UiOptionItem.from(subtitlesAutoCategoryTitle, optionItem -> {
+            List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
+            List<FormatItem> subtitleAutoFormats = Helpers.filter(subtitleFormats,
+                    value -> value.isDefault() || SubtitleTrack.isAuto(value.getLanguage()));
+            settingsPresenter.appendRadioCategory(subtitlesAutoCategoryTitle,
+                    UiOptionItem.from(subtitleAutoFormats,
+                            option -> getController().setFormat(UiOptionItem.toFormat(option)),
+                            getActivity().getString(R.string.subtitles_disabled)));
+            settingsPresenter.showDialog();
+        }));
 
         OptionCategory stylesCategory = AppDialogUtil.createSubtitleStylesCategory(getActivity(), mPlayerData);
         settingsPresenter.appendRadioCategory(stylesCategory.title, stylesCategory.options);
@@ -176,7 +189,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         OptionCategory positionCategory = AppDialogUtil.createSubtitlePositionCategory(getActivity(), mPlayerData);
         settingsPresenter.appendRadioCategory(positionCategory.title, positionCategory.options);
 
-        settingsPresenter.showDialog(subtitlesCategoryTitle, this::setSubtitleButtonState);
+        settingsPresenter.showDialog(subtitlesOrigCategoryTitle, this::setSubtitleButtonState);
     }
 
     @Override
@@ -255,7 +268,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().setPlaylistAddButtonState(false);
         getController().setSubtitleButtonState(false);
         getController().setSpeedButtonState(false);
-        getController().setChatButtonState(PlaybackUIController.BUTTON_STATE_DISABLED);
+        getController().setChatButtonState(false);
     }
 
     @Override
@@ -370,7 +383,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onSeekIntervalClicked() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
-        settingsPresenter.clear();
 
         AppDialogUtil.appendSeekIntervalDialogItems(getActivity(), settingsPresenter, mPlayerData, true);
 
@@ -395,8 +407,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
-        dialogPresenter.clear();
-
         String title = String.format("%s - %s", video.getTitle(), video.getAuthor());
 
         dialogPresenter.appendLongTextCategory(title, UiOptionItem.from(description));
@@ -413,8 +423,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
 
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
-
-        dialogPresenter.clear();
 
         int positionSec = Utils.toSec(getController().getPositionMs());
         AppDialogUtil.appendShareLinkDialogItem(getActivity(), dialogPresenter, getController().getVideo(), positionSec);
@@ -444,10 +452,13 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         OptionCategory videoAspectCategory = AppDialogUtil.createVideoAspectCategory(
                 getActivity(), mPlayerData, () -> getController().setVideoAspectRatio(mPlayerData.getVideoAspectRatio()));
 
+        OptionCategory videoRotateCategory = AppDialogUtil.createVideoRotateCategory(
+                getActivity(), mPlayerData, () -> getController().setVideoRotation(mPlayerData.getVideoRotation()));
+
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
-        settingsPresenter.clear();
         settingsPresenter.appendRadioCategory(videoAspectCategory.title, videoAspectCategory.options);
         settingsPresenter.appendRadioCategory(videoZoomCategory.title, videoZoomCategory.options);
+        settingsPresenter.appendRadioCategory(videoRotateCategory.title, videoRotateCategory.options);
         settingsPresenter.showDialog(getActivity().getString(R.string.video_aspect));
     }
 
@@ -515,7 +526,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
         Observable<Void> observable = callable.call(video.mediaItem);
 
-        RxUtils.execute(observable);
+        RxHelper.execute(observable);
     }
 
     private boolean handleBackKey(int keyCode) {
@@ -605,8 +616,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         mPlaylistInfos = null;
         Disposable playlistsInfoAction =
                 YouTubeMediaService.instance().getMediaItemService().getPlaylistsInfoObserve(videoId)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 videoPlaylistInfos -> {
                                     mPlaylistInfos = videoPlaylistInfos;

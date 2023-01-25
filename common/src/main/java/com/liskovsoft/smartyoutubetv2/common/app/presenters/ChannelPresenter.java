@@ -18,13 +18,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
 
@@ -124,7 +122,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     @Override
     public boolean hasPendingActions() {
-        return RxUtils.isAnyActionRunning(mScrollAction, mUpdateAction);
+        return RxHelper.isAnyActionRunning(mScrollAction, mUpdateAction);
     }
 
     public static boolean canOpenChannel(Video item) {
@@ -183,7 +181,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         if (getView() != null) {
             getView().clear();
-            updateRows(mChannelId);
+            updateRows(channelId);
             // Fix double results. Prevent from doing the same in onViewInitialized()
             mChannelId = null;
         }
@@ -192,7 +190,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     private void disposeActions() {
-        RxUtils.disposeActions(mUpdateAction, mScrollAction);
+        RxHelper.disposeActions(mUpdateAction, mScrollAction);
         mServiceManager.disposeActions();
     }
 
@@ -208,8 +206,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         Observable<List<MediaGroup>> channelObserve = mMediaService.getMediaGroupService().getChannelObserve(channelId);
 
         mUpdateAction = channelObserve
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::updateRows,
                         error -> Log.e(TAG, "updateRows error: %s", error.getMessage())
@@ -253,8 +249,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
 
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
                         error -> {

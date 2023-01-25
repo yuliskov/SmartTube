@@ -60,7 +60,7 @@ public class ContentBlockData {
         mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_INTERACTION, R.string.content_block_interaction);
         mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, R.string.content_block_music_off_topic);
         mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_PREVIEW_RECAP, R.string.content_block_preview_recap);
-        mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_HIGHLIGHT, R.string.content_block_highlight);
+        mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_POI_HIGHLIGHT, R.string.content_block_highlight);
         mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_FILLER, R.string.content_block_filler);
     }
 
@@ -73,7 +73,7 @@ public class ContentBlockData {
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_INTERACTION, R.color.magenta);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, R.color.orange_peel);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_PREVIEW_RECAP, R.color.light_blue);
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_HIGHLIGHT, R.color.white);
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_POI_HIGHLIGHT, R.color.white);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_FILLER, R.color.electric_violet);
     }
 
@@ -86,7 +86,7 @@ public class ContentBlockData {
         mAllCategories.add(SponsorSegment.CATEGORY_SELF_PROMO);
         mAllCategories.add(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC);
         mAllCategories.add(SponsorSegment.CATEGORY_PREVIEW_RECAP);
-        mAllCategories.add(SponsorSegment.CATEGORY_HIGHLIGHT);
+        mAllCategories.add(SponsorSegment.CATEGORY_POI_HIGHLIGHT);
         mAllCategories.add(SponsorSegment.CATEGORY_FILLER);
     }
 

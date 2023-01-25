@@ -55,6 +55,8 @@ public class AppDialogActivity extends MotherActivity {
 
         // NOTE: Fragment's onDestroy/onDestroyView are not reliable way to catch dialog finish
         Log.d(TAG, "Dialog finish");
-        mFragment.onFinish();
+        if (mFragment != null) { // fragment isn't created yet (expandable = true)
+            mFragment.onFinish();
+        }
     }
 }

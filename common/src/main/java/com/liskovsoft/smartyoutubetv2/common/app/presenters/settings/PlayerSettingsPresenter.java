@@ -36,7 +36,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
 
         appendVideoPresetsCategory(settingsPresenter);
         appendVideoBufferCategory(settingsPresenter);

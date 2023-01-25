@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.Player
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerUiEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.ViewEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.CommentsManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.LiveChatManager;
@@ -38,6 +39,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     private static MainPlayerEventBridge sInstance;
     private WeakReference<PlaybackController> mController = new WeakReference<>(null);
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
+    private Video mPendingVideo;
 
     public MainPlayerEventBridge(Context context) {
         if (context instanceof Activity) {
@@ -50,6 +52,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         VideoStateManager stateUpdater = new VideoStateManager();
 //        ContentBlockManager contentBlockManager = new ContentBlockManager();
         LiveChatManager liveChatManager = new LiveChatManager();
+        CommentsManager commentsManager = new CommentsManager();
 
 //        RemoteControlManager commandManager = new RemoteControlManager(context, suggestionsLoader, videoLoader);
         HQDialogManager hqDialogManager = new HQDialogManager(stateUpdater);
@@ -60,6 +63,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         suggestionsLoader.addMetadataListener(stateUpdater);
 //        suggestionsLoader.addMetadataListener(contentBlockManager);
         suggestionsLoader.addMetadataListener(liveChatManager);
+        suggestionsLoader.addMetadataListener(commentsManager);
 
         // NOTE: position matters!!!
         mEventListeners.add(autoFrameRateManager);
@@ -71,6 +75,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
 //        mEventListeners.add(commandManager);
 //        mEventListeners.add(contentBlockManager);
         mEventListeners.add(liveChatManager);
+        mEventListeners.add(commentsManager);
     }
 
     public static MainPlayerEventBridge instance(Context context) {
@@ -88,6 +93,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
                 mActivity = new WeakReference<>(((Fragment) controller).getActivity());
                 process(PlayerEventListener::onInitDone);
             }
+
+            if (mPendingVideo != null) {
+                openVideo(mPendingVideo);
+                mPendingVideo = null;
+            }
         }
     }
 
@@ -102,8 +112,13 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     // Core events
 
     @Override
-    public void openVideo(Video item) {
-        process(listener -> listener.openVideo(item));
+    public void openVideo(Video video) {
+        if (mController.get() == null) {
+            mPendingVideo = video;
+            return;
+        }
+
+        process(listener -> listener.openVideo(video));
     }
 
     @Override

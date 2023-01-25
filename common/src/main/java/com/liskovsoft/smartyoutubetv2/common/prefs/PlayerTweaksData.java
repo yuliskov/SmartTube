@@ -319,7 +319,7 @@ public class PlayerTweaksData {
         mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 8, false);
         mIsKeepFinishedActivityEnabled = Helpers.parseBoolean(split, 9, false);
         mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, false);
-        mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTV(mPrefs.getContext()));
+        mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTVLauncher(mPrefs.getContext()));
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
         mPlayerButtons = Helpers.parseInt(split, 13, PLAYER_BUTTON_DEFAULT);
         mIsBufferingFixEnabled = Helpers.parseBoolean(split, 14, false);
