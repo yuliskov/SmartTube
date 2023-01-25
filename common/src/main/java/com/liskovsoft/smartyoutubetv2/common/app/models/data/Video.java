@@ -407,7 +407,7 @@ public final class Video implements Parcelable {
     //}
 
     public boolean hasNextPlaylist() {
-        return getPlaylistId() != null && hasNextItem() && getPlaylistId().equals(nextMediaItem.getPlaylistId());
+        return hasNextItem() && getPlaylistId() != null && getPlaylistId().equals(nextMediaItem.getPlaylistId());
     }
 
     /**

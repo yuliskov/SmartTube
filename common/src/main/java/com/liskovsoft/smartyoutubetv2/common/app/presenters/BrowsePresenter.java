@@ -610,10 +610,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void updateVideoGrid(BrowseSection section, Observable<MediaGroup> group, int position) {
+        disposeActions();
+
+        if (getView() == null) {
+            Log.e(TAG, "Browse view has been unloaded from the memory. Low RAM?");
+            ViewManager.instance(getContext()).startView(BrowseView.class);
+            return;
+        }
+
         Log.d(TAG, "updateGridHeader: Start loading section: " + section.getTitle());
 
-        disposeActions();
-        
         getView().showProgressBar(true);
 
         VideoGroup firstGroup = VideoGroup.from(section, position);

@@ -240,6 +240,11 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     private void continueGroup(VideoGroup group) {
+        if (getView() == null) {
+            Log.e(TAG, "Can't continue group. The view is null.");
+            return;
+        }
+
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         getView().showProgressBar(true);
