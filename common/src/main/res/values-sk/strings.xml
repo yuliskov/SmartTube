@@ -494,4 +494,6 @@
     <string name="card_multiline_subtitle">Viacriadkové titulky</string>
     <string name="auto_frame_rate_modes">Podporované režimy</string>
     <string name="loading">Načítavanie…</string>
+    <string name="hide_streams">Skryť živé vysielanie z Odberov</string>
+    <string name="video_rotate">Otočiť</string>
 </resources>
