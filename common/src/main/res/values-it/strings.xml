@@ -40,7 +40,7 @@
     <string name="video_buffer_size_high">Alto</string>
     <string name="update_changelog">Registro modifiche</string>
     <string name="install_update">Installa aggiornamento</string>
-    <string name="section_is_empty">Ops! Non c\'è niente qui dentro.</string>
+    <string name="section_is_empty">Ops! Non c\'è niente qui dentro</string>
     <string name="dialog_add_to_playlist">Aggiungi/Rimuovi dalla playlist</string>
     <string name="msg_signed_users_only">Solo utenti registrati</string>
     <string name="msg_cant_load_content">Impossibile caricare i contenuti.\n1) Controlla la data e l\'ora sul dispositivo.\n2) Controlla la connessione di rete.\n3) Controlla le impostazioni del proxy.\n4) Prova ad accedere al tuo account.\n5) Forse non c\'è niente qui dentro.</string>
@@ -265,7 +265,7 @@
     <string name="removed_from">Rimosso da %s</string>
     <string name="video_preset_adaptive">Adattivo</string>
     <string name="content_block_preview_recap">Anteprima o riepilogo del video</string>
-    <string name="content_block_highlight">Parti evidenziate del video</string>
+    <string name="content_block_highlight">Punto interessante (segnalibro)</string>
     <string name="removed_from_history">Il video è stato rimosso dalla Cronologia</string>
     <string name="remove_from_history">Rimuovi dalla Cronologia</string>
     <string name="upload_date">Data di caricamento</string>
@@ -368,8 +368,8 @@
     <string name="ambilight_ratio_fix">Correzione Ambilight/Proporzioni/Screenshot</string>
     <string name="force_legacy_codecs_desc">Migliora significativamente le prestazioni sui dispositivi di fascia bassa. La risoluzione massima è 720p.</string>
     <string name="force_legacy_codecs">Forza codec obsoleti (720p)</string>
-    <string name="live_stream_fix_desc">Migliora significativamente le prestazioni del live streaming sui dispositivi di fascia bassa. La risoluzione massima è 1080p.</string>
-    <string name="live_stream_fix">Correzione live streaming (1080p)</string>
+    <string name="live_stream_fix_desc">Migliora significativamente le prestazioni delle trasmissioni live sui dispositivi di fascia bassa. La risoluzione massima è 1080p.</string>
+    <string name="live_stream_fix">Correzione trasmissione live (1080p)</string>
     <string name="playback_notifications_fix_desc">Nasconde le notifiche di cambio traccia. Potrebbe essere utile su firmware basati su AOSP.</string>
     <string name="playback_notifications_fix">Disabilita le notifiche di riproduzione</string>
     <string name="amlogic_fix_desc">Correzione del frame drop su dispositivi basati su Amlogic.</string>
@@ -425,9 +425,9 @@
     <string name="owned_playlist_warning">Errore. Questa azione può essere applicata solo alle playlist di tua proprietà.</string>
     <string name="content_block_alt_server">Usa server alternativo</string>
     <string name="content_block_alt_server_desc">Abilita questa opzione se SponsorBlock si rifiuta di lavorare per motivi diversi.</string>
-    <string name="unset_stream_reminder">Annulla l\'impostazione del promemoria dello streaming</string>
-    <string name="set_stream_reminder">Imposta promemoria streaming</string>
-    <string name="playback_starts_shortly">La riproduzione inizierà automaticamente quando lo streaming sarà pronto</string>
+    <string name="unset_stream_reminder">Disabilita l\'impostazione del promemoria della trasmissione</string>
+    <string name="set_stream_reminder">Imposta promemoria trasmissione</string>
+    <string name="playback_starts_shortly">La riproduzione inizierà automaticamente quando la trasmissione sarà pronto</string>
     <string name="starting_stream">Sto avviando lo stream…</string>
     <string name="action_playlist_remove">Rimuovi dalla playlist</string>
     <!-- BEGIN Moved strings -->
@@ -494,4 +494,6 @@
     <string name="card_multiline_subtitle">Sottotitoli multilinea</string>
     <string name="auto_frame_rate_modes">Modalità supportate</string>
     <string name="loading">Caricamento in corso…</string>
+    <string name="hide_streams">Nascondi le trasmissioni dalle iscrizioni</string>
+    <string name="video_rotate">Ruota</string>
 </resources>
