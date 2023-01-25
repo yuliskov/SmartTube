@@ -51,7 +51,9 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
-        mPresenter.onViewDestroyed();
+        if (mPresenter.getView() == this) {
+            mPresenter.onViewDestroyed();
+        }
     }
 
     @Override

@@ -1073,7 +1073,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // E.g. after closing dialogs.
         releasePlayer();
 
-        mPlaybackPresenter.onViewDestroyed();
+        if (mPlaybackPresenter.getView() == this) {
+            mPlaybackPresenter.onViewDestroyed();
+        }
     }
 
     @Override
