@@ -424,5 +424,10 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         process(PlayerUiEventListener::onPlaybackQueueClicked);
     }
 
+    @Override
+    public void onButtonClicked(int buttonId, int buttonState) {
+        process(listener -> listener.onButtonClicked(buttonId, buttonState));
+    }
+
     // End UI events
 }

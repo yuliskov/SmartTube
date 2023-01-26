@@ -34,5 +34,6 @@ public interface PlayerUiEventListener {
     void onPipClicked();
     void onScreenOffClicked();
     void onPlaybackQueueClicked();
+    void onButtonClicked(int buttonId, int buttonState);
     void onControlsShown(boolean shown);
 }

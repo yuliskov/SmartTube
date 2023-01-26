@@ -14,6 +14,7 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
+import androidx.leanback.widget.PlaybackControlsRow.MultiAction;
 import androidx.leanback.widget.PlaybackRowPresenter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -49,6 +50,8 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoStatsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoZoomAction;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -95,7 +98,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     private final SeekIntervalAction mSeekIntervalAction;
     private final ContentBlockAction mContentBlockAction;
     private final ChatAction mChatAction;
-    private final RotateAction mRotateAction;
+    private final Map<Integer, Action> mActions = new HashMap<>();
     private final OnActionClickedListener mActionListener;
     private final PlayerTweaksData mPlayerTweaksData;
     private final GeneralData mGeneralData;
@@ -140,7 +143,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         mSeekIntervalAction = new SeekIntervalAction(context);
         mContentBlockAction = new ContentBlockAction(context);
         mChatAction = new ChatAction(context);
-        mRotateAction = new RotateAction(context);
+
+        putAction(new RotateAction(context));
     }
 
     @Override
@@ -189,7 +193,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
             adapter.add(mVideoZoomAction);
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_ROTATE)) {
-            adapter.add(mRotateAction);
+            adapter.add(mActions.get(R.id.action_rotate));
         }
     }
 
@@ -335,6 +339,10 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     public void setChatButtonState(boolean selected) {
         mChatAction.setIndex(selected ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
         invalidateUi(mChatAction);
+    }
+
+    public void setActionIndex(int actionId, int actionIndex) {
+        setActionIndex(mActions.get(actionId), actionIndex);
     }
 
     public boolean isContentBlockButtonPressed() {
@@ -503,6 +511,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         } else if (action == mChatAction) {
             mActionListener.onChat(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
+        } else if (mActions.containsKey((int) action.getId())) {
+            mActionListener.onAction((int) action.getId(), getActionIndex(action));
+            handled = true;
         }
 
         if (handled) {
@@ -631,6 +642,17 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         return action;
     }
 
+    private void putAction(Action action) {
+        mActions.put((int) action.getId(), action);
+    }
+
+    private void setActionIndex(Action action, int actionIndex) {
+        if (action instanceof MultiAction) {
+            ((MultiAction) action).setIndex(actionIndex);
+            invalidateUi(action);
+        }
+    }
+
     @Override
     protected void onAttachedToHost(PlaybackGlueHost host) {
         super.onAttachedToHost(host);
@@ -701,8 +723,11 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
 
         void onPlaybackQueue();
 
+        void onAction(int actionId, int actionIndex);
+
         void onTopEdgeFocused();
 
         boolean onKeyDown(int keyCode);
+
     }
 }

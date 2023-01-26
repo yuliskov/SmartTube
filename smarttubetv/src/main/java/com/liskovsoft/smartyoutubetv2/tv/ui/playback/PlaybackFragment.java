@@ -771,6 +771,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
+        public void onAction(int actionId, int actionIndex) {
+            mEventListener.onButtonClicked(actionId, actionIndex);
+        }
+
+        @Override
         public void onTopEdgeFocused() {
             showOverlay(false);
         }
@@ -1274,6 +1279,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void setChatButtonState(boolean selected) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setChatButtonState(selected);
+        }
+    }
+
+    @Override
+    public void setButtonState(int buttonId, int buttonState) {
+        if (mPlayerGlue != null) {
+            mPlayerGlue.setActionIndex(buttonId, buttonState);
         }
     }
 

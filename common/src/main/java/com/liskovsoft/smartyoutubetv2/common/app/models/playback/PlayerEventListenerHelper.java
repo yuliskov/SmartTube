@@ -284,6 +284,11 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
+    public void onButtonClicked(int buttonId, int buttonState) {
+        // NOP
+    }
+
+    @Override
     public void onTickle() {
         // NOP
     }

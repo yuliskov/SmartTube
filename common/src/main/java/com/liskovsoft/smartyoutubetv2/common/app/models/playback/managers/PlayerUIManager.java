@@ -485,6 +485,16 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         //Utils.showRepeatInfo(getActivity(), modeIndex);
     }
 
+    @Override
+    public void onButtonClicked(int buttonId, int buttonState) {
+        if (buttonId == R.id.action_rotate) {
+            int rotation = mPlayerData.getVideoRotation() == 0 ? 90 : 0;
+            getController().setVideoRotation(rotation);
+            getController().setButtonState(buttonId, rotation == 0 ? 0 : 1);
+            mPlayerData.setVideoRotation(rotation);
+        }
+    }
+
     private void disableUiAutoHideTimeout() {
         Log.d(TAG, "Stopping auto hide ui timer...");
         mHandler.removeCallbacks(mUiAutoHideHandler);
