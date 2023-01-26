@@ -179,7 +179,7 @@
   <string name="content_block_outro">الاعتمادات/تترات النهاية</string>
   <string name="content_block_interaction">تذكير بالتفاعل (الإشتراك في القناة)</string>
   <string name="content_block_self_promo">ترويج شخصي/غير مدفوع الأجر</string>
-  <string name="content_block_music_off_topic">قسم غير الموسيقي في المقطع</string>
+  <string name="content_block_music_off_topic">قسم غير الموسيقى في المقطع</string>
   <string name="confirm_segment_skip">هل تريد تخطي المقطع%s\"\?</string>
   <string name="cancel_segment_skip">إلغاء تخطي المقطع</string>
   <string name="msg_skipping_segment">تخطي المقطع\"%s\"…</string>
@@ -301,7 +301,7 @@
   <string name="content_block_action_none">لا تفعل شيئًا</string>
   <string name="content_block_action_only_skip">تخطي فقط</string>
   <string name="content_block_action_toast">تخطي مع الإشعار</string>
-  <string name="content_block_action_dialog">إظهار مربع حوار التأكيد</string>
+  <string name="content_block_action_dialog">عرض زر التخطي</string>
   <string name="content_block_filler">خارج الموضوع (حشو)</string>
   <string name="keyboard_auto_show">إظهار لوحة المفاتيح تلقائيًا</string>
   <string name="cancel_dialog">إلغاء</string>
@@ -446,10 +446,10 @@
   <string name="player_disable_suggestions">تعطيل الاقتراحات</string>
   <string name="sources">المصادر</string>
   <string name="releases">الإصدارات</string>
-  <string name="feedback">ردود الفعل حول التطبيق</string>
+  <string name="feedback">الملاحظات</string>
   <string name="prefer_avc_over_vp9">اختيار برنامج الترميز: تفضيل avc على vp9</string>
-  <string name="open_chat">دردشة</string>
-  <string name="place_chat_left">ضع الدردشة على اليسار</string>
+  <string name="open_chat">التعليقات/المحادثات المباشرة</string>
+  <string name="place_chat_left">ضع التعليقات على اليسار</string>
   <string name="use_alt_speech_recognizer">أداة التعرف على الكلام البديلة</string>
   <string name="time_format">وضع الوقت</string>
   <string name="time_format_24">24 ساعة</string>
@@ -477,11 +477,21 @@
   <string name="thumb_quality_end">نهاية الفيديو</string>
   <string name="video_buffer_size_none">بدون</string>
   <string name="content_block_status">تحقق من حالة SpnsorBlock</string>
-  <string name="player_show_quality_info_bitrate">إضافة معدل البت (Bitrate) إلى معلومات الجودة</string>
+  <string name="player_show_quality_info_bitrate">إضافة معدل البث (Bitrate) إلى معلومات الجودة</string>
   <string name="player_speed_button_old_behavior">العودة الى السلوك القديم لزر السرعة</string>
   <string name="protect_settings_with_password">حماية جميع الإعدادات بكلمة مرور</string>
   <string name="enter_settings_password">أدخل كلمة مرور الإعدادات</string>
   <string name="child_mode">وضع الطفل</string>
   <string name="child_mode_desc">في هذا الوضع ، لا يمكن للمستخدم استخدام البحث أو مشاهدة أي محتوى مقترح.  ستكون الإعدادات تحت كلمة المرور.</string>
   <string name="lost_setting_warning">سيتم تغيير إعدادات التطبيق.  تأكد من إنشاء نسخة احتياطية من الإعدادات.</string>
+  <string name="pause_history">إيقاف سجل المشاهدة</string>
+  <string name="clear_history">محو سجل المشاهدة</string>
+  <string name="resume_history">استعادة سجل المشاهدة</string>
+  <string name="chapters">الفصول</string>
+  <string name="auto_frame_rate_modes">الأوضاع المدعومة</string>
+  <string name="loading">جارٍ التحميل…</string>
+  <string name="video_rotate">تدوير</string>
+  <string name="hide_streams">إخفاء البث من الاشتراكات</string>
+  <string name="card_multiline_subtitle">ترجمة متعددة الأسطر</string>
+  <string name="player_button_long_click">نقرة قصيرة على الزر لإجراء سريع ونقرة طويلة لفتح الإعدادات في نافذة منبثقة</string>
 </resources>
