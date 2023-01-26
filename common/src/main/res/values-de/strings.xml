@@ -494,4 +494,6 @@
     <string name="card_multiline_subtitle">Mehrzeilige Untertitel</string>
     <string name="auto_frame_rate_modes">Unterstützte Modi</string>
     <string name="loading">Wird geladen…</string>
+    <string name="hide_streams">Streams in Abos ausblenden</string>
+    <string name="video_rotate">Drehen</string>
 </resources>
