@@ -166,6 +166,14 @@ public class AppDialogUtil {
                         onSetCallback.run();
                     }, playerData.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_PIP &&
                     generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK));
+
+            options.add(UiOptionItem.from(String.format("%s (%s)", pip, context.getString(R.string.pressing_back)),
+                    optionItem -> {
+                        playerData.setBackgroundMode(PlaybackEngine.BACKGROUND_MODE_PIP);
+                        generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_BACK);
+                        onSetCallback.run();
+                    }, playerData.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_PIP &&
+                            generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_BACK));
         }
 
         String audio = context.getString(R.string.option_background_playback_only_audio);
@@ -183,6 +191,13 @@ public class AppDialogUtil {
                     onSetCallback.run();
                 }, playerData.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_SOUND &&
                     generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK));
+        options.add(UiOptionItem.from(String.format("%s (%s)", audio, context.getString(R.string.pressing_back)),
+                optionItem -> {
+                    playerData.setBackgroundMode(PlaybackEngine.BACKGROUND_MODE_SOUND);
+                    generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_BACK);
+                    onSetCallback.run();
+                }, playerData.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_SOUND &&
+                        generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_BACK));
 
         if (Helpers.isAndroidTV(context) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
             String behind = context.getString(R.string.option_background_playback_behind);

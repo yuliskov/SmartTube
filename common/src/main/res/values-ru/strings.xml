@@ -384,6 +384,7 @@
     <string name="subtitle_position">Нижний сдвиг субтитров</string>
     <string name="pressing_home">по нажатию ДОМОЙ</string>
     <string name="pressing_home_back">по нажатию ДОМОЙ или НАЗАД</string>
+    <string name="pressing_back">по нажатию НАЗАД</string>
     <string name="player_number_key_seek">Перематывать цифровыми клавишами</string>
     <string name="save_remove_playlist">Добавить/Удалить плейлист из раздела Плейлисты</string>
     <string name="remove_playlist">Удалить плейлист из раздела Плейлисты навсегда</string>

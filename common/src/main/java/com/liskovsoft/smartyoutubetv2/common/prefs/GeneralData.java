@@ -29,6 +29,7 @@ public class GeneralData {
     public static final int EXIT_SINGLE_BACK = 2;
     public static final int BACKGROUND_PLAYBACK_SHORTCUT_HOME = 0;
     public static final int BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK = 1;
+    public static final int BACKGROUND_PLAYBACK_SHORTCUT_BACK = 2;
     public static final int TIME_FORMAT_24 = 0;
     public static final int TIME_FORMAT_12 = 1;
     @SuppressLint("StaticFieldLeak")

@@ -34,7 +34,7 @@ public class PlaybackActivity extends LeanbackActivity {
     private ViewManager mViewManager;
     private PlayerTweaksData mPlayerTweaksData;
     private GeneralData mGeneralData;
-    private boolean mBackPressed;
+    private boolean mSkipPip;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -165,11 +165,11 @@ public class PlaybackActivity extends LeanbackActivity {
 
         // NOTE: block back button for PIP.
         // User pressed PIP button in the player.
-        if (!mBackPressed) {
+        if (!mSkipPip) {
             enterPipMode(); // NOTE: without this call app will hangs when pressing on PIP button
         }
 
-        if (doNotDestroy() && !mBackPressed) {
+        if (doNotDestroy() && !mSkipPip) {
             // Ensure to opening this activity when the user is returning to the app
             mViewManager.blockTop(this);
             mViewManager.startParentView(this);
@@ -192,13 +192,13 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void onBackPressed() {
-        mBackPressed = mGeneralData.getBackgroundPlaybackShortcut() != GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK;
+        mSkipPip = mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME;
         super.onBackPressed();
     }
 
     @Override
     protected void onResume() {
-        mBackPressed = false;
+        mSkipPip = false;
         super.onResume();
     }
 
@@ -252,9 +252,11 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void onUserLeaveHint() {
+        // Handle HOME only. Note, BACK is handled inside finish()
         // Check that user not open dialog/search activity instead of really leaving the activity
         // Activity may be overlapped by the dialog, back is pressed or new view started
-        if (AppDialogPresenter.instance(this).isDialogShown() || mBackPressed || mViewManager.isNewViewPending()) {
+        if (AppDialogPresenter.instance(this).isDialogShown() || mSkipPip || mViewManager.isNewViewPending() ||
+                mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_BACK) {
             return;
         }
 
