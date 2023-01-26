@@ -41,7 +41,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
@@ -106,7 +106,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private UriBackgroundManager mBackgroundManager;
     private RowsSupportFragment mRowsSupportFragment;
     private final boolean mIsAnimationEnabled = true;
-    private int mPlaybackMode = PlaybackEngineController.BACKGROUND_MODE_DEFAULT;
+    private int mPlaybackMode = PlaybackEngine.BACKGROUND_MODE_DEFAULT;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
     private boolean mIsAfrRunning;
@@ -234,7 +234,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void onFinish() {
         // Fix background play when playing trailers from NUM
         // On API > 23 onStop not immediately occurred after onPause
-        if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
+        if (getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_DEFAULT) {
             if (Util.SDK_INT > 23) {
                 maybeReleasePlayer();
             }
@@ -327,7 +327,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         //}
 
         // Ensure to continue playback in audio mode (activity should be blocked)
-        if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
+        if (getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_SOUND &&
                 ViewManager.instance(getContext()).getBlockedTop() == PlaybackActivity.class &&
                 !isInPIPMode()) {
             Log.d(TAG, "releasePlayer: Playback activity is blocked. Exiting...");

@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEventBridge;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -87,7 +87,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
 
     public boolean isRunningInBackground() {
         return getView() != null &&
-                getView().getController().getBackgroundMode() != PlaybackEngineController.BACKGROUND_MODE_DEFAULT &&
+                getView().getController().getBackgroundMode() != PlaybackEngine.BACKGROUND_MODE_DEFAULT &&
                 getView().getController().isEngineInitialized() &&
                 !Utils.isPlayerInForeground(getContext()) &&
                 getContext() instanceof Activity && Utils.checkActivity((Activity) getContext()); // Check that activity is not in Finishing state
@@ -100,7 +100,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     private boolean isPreferBackground() {
         int mode = PlayerData.instance(getContext()).getBackgroundMode();
 
-        return mode != PlaybackEngineController.BACKGROUND_MODE_DEFAULT;
+        return mode != PlaybackEngine.BACKGROUND_MODE_DEFAULT;
     }
 
     public void forceFinish() {

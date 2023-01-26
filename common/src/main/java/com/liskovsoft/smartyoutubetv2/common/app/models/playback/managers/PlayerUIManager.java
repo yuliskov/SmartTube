@@ -17,8 +17,8 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -294,7 +294,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
         setPlaylistAddButtonStateCached();
         setSubtitleButtonState();
-        getController().setButtonState(R.id.action_rotate, mPlayerData.getVideoRotation() == 0 ? PlaybackUIController.BUTTON_OFF : PlaybackUIController.BUTTON_ON);
+        getController().setButtonState(R.id.action_rotate, mPlayerData.getVideoRotation() == 0 ? PlaybackUI.BUTTON_OFF : PlaybackUI.BUTTON_ON);
     }
 
     @Override
@@ -469,7 +469,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().showOverlay(false);
         getController().setBackgroundMode(
                 Helpers.isPictureInPictureSupported(getActivity()) ?
-                        PlaybackEngineController.BACKGROUND_MODE_PIP : PlaybackEngineController.BACKGROUND_MODE_SOUND
+                        PlaybackEngine.BACKGROUND_MODE_PIP : PlaybackEngine.BACKGROUND_MODE_SOUND
         );
         getController().finish();
     }
@@ -492,7 +492,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         if (buttonId == R.id.action_rotate) {
             int rotation = mPlayerData.getVideoRotation() == 0 ? 90 : 0;
             getController().setVideoRotation(rotation);
-            getController().setButtonState(buttonId, rotation == 0 ? PlaybackUIController.BUTTON_OFF : PlaybackUIController.BUTTON_ON);
+            getController().setButtonState(buttonId, rotation == 0 ? PlaybackUI.BUTTON_OFF : PlaybackUI.BUTTON_ON);
             mPlayerData.setVideoRotation(rotation);
         }
     }

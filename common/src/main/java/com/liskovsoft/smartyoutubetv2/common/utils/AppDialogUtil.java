@@ -13,7 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -144,61 +144,61 @@ public class AppDialogUtil {
         List<OptionItem> options = new ArrayList<>();
         options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_off),
                 optionItem -> {
-                    playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_DEFAULT);
+                    playerData.setBackgroundMode(PlaybackEngine.BACKGROUND_MODE_DEFAULT);
                     generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME);
                     onSetCallback.run();
-                }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT));
+                }, playerData.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_DEFAULT));
 
         if (Helpers.isPictureInPictureSupported(context)) {
             String pip = context.getString(R.string.option_background_playback_pip);
             options.add(UiOptionItem.from(String.format("%s (%s)", pip, context.getString(R.string.pressing_home)),
                     optionItem -> {
-                        playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
+                        playerData.setBackgroundMode(PlaybackEngine.BACKGROUND_MODE_PIP);
                         generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME);
                         onSetCallback.run();
-                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PIP &&
+                    }, playerData.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_PIP &&
                     generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME));
 
             options.add(UiOptionItem.from(String.format("%s (%s)", pip, context.getString(R.string.pressing_home_back)),
                     optionItem -> {
-                        playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
+                        playerData.setBackgroundMode(PlaybackEngine.BACKGROUND_MODE_PIP);
                         generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
                         onSetCallback.run();
-                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PIP &&
+                    }, playerData.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_PIP &&
                     generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK));
         }
 
         String audio = context.getString(R.string.option_background_playback_only_audio);
         options.add(UiOptionItem.from(String.format("%s (%s)", audio, context.getString(R.string.pressing_home)),
                 optionItem -> {
-                    playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_SOUND);
+                    playerData.setBackgroundMode(PlaybackEngine.BACKGROUND_MODE_SOUND);
                     generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME);
                     onSetCallback.run();
-                }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
+                }, playerData.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_SOUND &&
                     generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME));
         options.add(UiOptionItem.from(String.format("%s (%s)", audio, context.getString(R.string.pressing_home_back)),
                 optionItem -> {
-                    playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_SOUND);
+                    playerData.setBackgroundMode(PlaybackEngine.BACKGROUND_MODE_SOUND);
                     generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
                     onSetCallback.run();
-                }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
+                }, playerData.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_SOUND &&
                     generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK));
 
         if (Helpers.isAndroidTV(context) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
             String behind = context.getString(R.string.option_background_playback_behind);
             options.add(UiOptionItem.from(String.format("%s (%s - %s)", behind, "Android TV 5,6,7", context.getString(R.string.pressing_home)),
                     optionItem -> {
-                        playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND);
+                        playerData.setBackgroundMode(PlaybackEngine.BACKGROUND_MODE_PLAY_BEHIND);
                         generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME);
                         onSetCallback.run();
-                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND &&
+                    }, playerData.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_PLAY_BEHIND &&
                         generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME));
             options.add(UiOptionItem.from(String.format("%s (%s - %s)", behind, "Android TV 5,6,7", context.getString(R.string.pressing_home_back)),
                     optionItem -> {
-                        playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND);
+                        playerData.setBackgroundMode(PlaybackEngine.BACKGROUND_MODE_PLAY_BEHIND);
                         generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
                         onSetCallback.run();
-                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND &&
+                    }, playerData.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_PLAY_BEHIND &&
                         generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK));
         }
 
@@ -266,10 +266,10 @@ public class AppDialogUtil {
     public static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData, Runnable onBufferSelected) {
         String videoBufferTitle = context.getString(R.string.video_buffer);
         List<OptionItem> optionItems = new ArrayList<>();
-        optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_none, PlaybackEngineController.BUFFER_NONE, onBufferSelected));
-        optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_low, PlaybackEngineController.BUFFER_LOW, onBufferSelected));
-        optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_med, PlaybackEngineController.BUFFER_MEDIUM, onBufferSelected));
-        optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_high, PlaybackEngineController.BUFFER_HIGH, onBufferSelected));
+        optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_none, PlaybackEngine.BUFFER_NONE, onBufferSelected));
+        optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_low, PlaybackEngine.BUFFER_LOW, onBufferSelected));
+        optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_med, PlaybackEngine.BUFFER_MEDIUM, onBufferSelected));
+        optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_high, PlaybackEngine.BUFFER_HIGH, onBufferSelected));
         return OptionCategory.from(VIDEO_BUFFER_ID, OptionCategory.TYPE_RADIO, videoBufferTitle, optionItems);
     }
 
@@ -368,11 +368,11 @@ public class AppDialogUtil {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
-                {R.string.video_zoom_default, PlaybackEngineController.ZOOM_MODE_DEFAULT},
-                {R.string.video_zoom_fit_width, PlaybackEngineController.ZOOM_MODE_FIT_WIDTH},
-                {R.string.video_zoom_fit_height, PlaybackEngineController.ZOOM_MODE_FIT_HEIGHT},
-                {R.string.video_zoom_fit_both, PlaybackEngineController.ZOOM_MODE_FIT_BOTH},
-                {R.string.video_zoom_stretch, PlaybackEngineController.ZOOM_MODE_STRETCH}}) {
+                {R.string.video_zoom_default, PlaybackEngine.ZOOM_MODE_DEFAULT},
+                {R.string.video_zoom_fit_width, PlaybackEngine.ZOOM_MODE_FIT_WIDTH},
+                {R.string.video_zoom_fit_height, PlaybackEngine.ZOOM_MODE_FIT_HEIGHT},
+                {R.string.video_zoom_fit_both, PlaybackEngine.ZOOM_MODE_FIT_BOTH},
+                {R.string.video_zoom_stretch, PlaybackEngine.ZOOM_MODE_STRETCH}}) {
             options.add(UiOptionItem.from(context.getString(pair[0]),
                     optionItem -> {
                         playerData.setVideoZoomMode(pair[1]);
@@ -390,17 +390,17 @@ public class AppDialogUtil {
         List<OptionItem> options = new ArrayList<>();
 
         Map<String, Float> pairs = new LinkedHashMap<>();
-        pairs.put(context.getString(R.string.video_zoom_default), PlaybackEngineController.ASPECT_RATIO_DEFAULT);
-        pairs.put("1:1", PlaybackEngineController.ASPECT_RATIO_1_1);
-        pairs.put("4:3", PlaybackEngineController.ASPECT_RATIO_4_3);
-        pairs.put("5:4", PlaybackEngineController.ASPECT_RATIO_5_4);
-        pairs.put("16:9", PlaybackEngineController.ASPECT_RATIO_16_9);
-        pairs.put("16:10", PlaybackEngineController.ASPECT_RATIO_16_10);
-        pairs.put("21:9 (2.33:1)", PlaybackEngineController.ASPECT_RATIO_21_9);
-        pairs.put("64:27 (2.37:1)", PlaybackEngineController.ASPECT_RATIO_64_27);
-        pairs.put("2.21:1", PlaybackEngineController.ASPECT_RATIO_221_1);
-        pairs.put("2.35:1", PlaybackEngineController.ASPECT_RATIO_235_1);
-        pairs.put("2.39:1", PlaybackEngineController.ASPECT_RATIO_239_1);
+        pairs.put(context.getString(R.string.video_zoom_default), PlaybackEngine.ASPECT_RATIO_DEFAULT);
+        pairs.put("1:1", PlaybackEngine.ASPECT_RATIO_1_1);
+        pairs.put("4:3", PlaybackEngine.ASPECT_RATIO_4_3);
+        pairs.put("5:4", PlaybackEngine.ASPECT_RATIO_5_4);
+        pairs.put("16:9", PlaybackEngine.ASPECT_RATIO_16_9);
+        pairs.put("16:10", PlaybackEngine.ASPECT_RATIO_16_10);
+        pairs.put("21:9 (2.33:1)", PlaybackEngine.ASPECT_RATIO_21_9);
+        pairs.put("64:27 (2.37:1)", PlaybackEngine.ASPECT_RATIO_64_27);
+        pairs.put("2.21:1", PlaybackEngine.ASPECT_RATIO_221_1);
+        pairs.put("2.35:1", PlaybackEngine.ASPECT_RATIO_235_1);
+        pairs.put("2.39:1", PlaybackEngine.ASPECT_RATIO_239_1);
 
         for (Entry<String, Float> entry: pairs.entrySet()) {
             options.add(UiOptionItem.from(entry.getKey(),

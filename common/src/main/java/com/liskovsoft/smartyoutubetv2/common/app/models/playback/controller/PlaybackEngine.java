@@ -6,7 +6,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import java.io.InputStream;
 import java.util.List;
 
-public interface PlaybackEngineController {
+public interface PlaybackEngine {
     int BACKGROUND_MODE_DEFAULT = 0;
     int BACKGROUND_MODE_SOUND = 1;
     int BACKGROUND_MODE_PIP = 2;

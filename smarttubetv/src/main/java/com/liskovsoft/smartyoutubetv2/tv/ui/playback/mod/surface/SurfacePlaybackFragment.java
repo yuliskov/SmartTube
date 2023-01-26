@@ -12,7 +12,7 @@ import androidx.leanback.app.PlaybackSupportFragment;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.ResizeMode;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
@@ -102,7 +102,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
             mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
             mVideoSurfaceRoot.setRotation(angle);
 
-            ((PlaybackEngineController) this).restartEngine();
+            ((PlaybackEngine) this).restartEngine();
         }
     }
 
