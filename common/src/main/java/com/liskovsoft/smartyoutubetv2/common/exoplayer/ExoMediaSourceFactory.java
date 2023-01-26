@@ -294,7 +294,7 @@ public class ExoMediaSourceFactory {
         //HeaderManager headerManager = new HeaderManager(context);
         //HashMap<String, String> headers = headerManager.getHeaders();
 
-        // NOTE: "Accept-Encoding" should set to "identity" or not present
+        // NOTE: "Accept-Encoding" should not be set manually (gzip is added by default).
 
         //for (String header : headers.keySet()) {
         //    if (EXO_HEADERS.contains(header)) {
@@ -313,9 +313,11 @@ public class ExoMediaSourceFactory {
         //dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-mode", "cors");
         //dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-site", "cross-site");
 
-        // WARN: Won't work on Exo 2.10!!!
-        // Compress response (WARN: gzip, deflate or br aren't supported in dash urls)
-        // dataSourceFactory.getDefaultRequestProperties().set("Accept-Encoding", AppConstants.ACCEPT_ENCODING);
+        // WARN: Compression won't work with legacy streams.
+        // "Accept-Encoding" should not be set manually (gzip is added by default).
+        // Otherwise you should do decompression yourself.
+        // Source: https://stackoverflow.com/questions/18898959/httpurlconnection-not-decompressing-gzip/42346308#42346308
+        //dataSourceFactory.getDefaultRequestProperties().set("Accept-Encoding", AppConstants.ACCEPT_ENCODING_DEFAULT);
     }
 
     public void setTrackErrorFixer(TrackErrorFixer trackErrorFixer) {
