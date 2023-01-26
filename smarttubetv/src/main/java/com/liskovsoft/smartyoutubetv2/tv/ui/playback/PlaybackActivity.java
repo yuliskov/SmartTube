@@ -34,7 +34,7 @@ public class PlaybackActivity extends LeanbackActivity {
     private ViewManager mViewManager;
     private PlayerTweaksData mPlayerTweaksData;
     private GeneralData mGeneralData;
-    private boolean mSkipPip;
+    private boolean mBackPressed;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -165,11 +165,11 @@ public class PlaybackActivity extends LeanbackActivity {
 
         // NOTE: block back button for PIP.
         // User pressed PIP button in the player.
-        if (!mSkipPip) {
+        if (!skipPip()) {
             enterPipMode(); // NOTE: without this call app will hangs when pressing on PIP button
         }
 
-        if (doNotDestroy() && !mSkipPip) {
+        if (doNotDestroy() && !skipPip()) {
             // Ensure to opening this activity when the user is returning to the app
             mViewManager.blockTop(this);
             mViewManager.startParentView(this);
@@ -192,13 +192,13 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void onBackPressed() {
-        mSkipPip = mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME;
+        mBackPressed = true;
         super.onBackPressed();
     }
 
     @Override
     protected void onResume() {
-        mSkipPip = false;
+        mBackPressed = false;
         super.onResume();
     }
 
@@ -252,10 +252,9 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void onUserLeaveHint() {
-        // Handle HOME only. Note, BACK is handled inside finish()
         // Check that user not open dialog/search activity instead of really leaving the activity
         // Activity may be overlapped by the dialog, back is pressed or new view started
-        if (AppDialogPresenter.instance(this).isDialogShown() || mSkipPip || mViewManager.isNewViewPending() ||
+        if (AppDialogPresenter.instance(this).isDialogShown() || skipPip() || mViewManager.isNewViewPending() ||
                 mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_BACK) {
             return;
         }
@@ -295,5 +294,9 @@ public class PlaybackActivity extends LeanbackActivity {
 
     public PlaybackView getPlaybackView() {
         return mPlaybackFragment;
+    }
+
+    private boolean skipPip() {
+        return mBackPressed && mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME;
     }
 }
