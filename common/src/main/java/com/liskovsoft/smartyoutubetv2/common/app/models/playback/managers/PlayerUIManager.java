@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -293,6 +294,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
         setPlaylistAddButtonStateCached();
         setSubtitleButtonState();
+        getController().setButtonState(R.id.action_rotate, mPlayerData.getVideoRotation() == 0 ? PlaybackUIController.BUTTON_OFF : PlaybackUIController.BUTTON_ON);
     }
 
     @Override
@@ -490,7 +492,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         if (buttonId == R.id.action_rotate) {
             int rotation = mPlayerData.getVideoRotation() == 0 ? 90 : 0;
             getController().setVideoRotation(rotation);
-            getController().setButtonState(buttonId, rotation == 0 ? 0 : 1);
+            getController().setButtonState(buttonId, rotation == 0 ? PlaybackUIController.BUTTON_OFF : PlaybackUIController.BUTTON_ON);
             mPlayerData.setVideoRotation(rotation);
         }
     }

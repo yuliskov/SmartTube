@@ -14,6 +14,8 @@ public interface PlaybackUIController {
     int REPEAT_MODE_PAUSE = 3;
     int REPEAT_MODE_LIST = 4;
     int REPEAT_MODE_SHUFFLE = 5;
+    int BUTTON_OFF = 0;
+    int BUTTON_ON = 1;
     void updateSuggestions(VideoGroup group);
     void removeSuggestions(VideoGroup group);
     int getSuggestionsIndex(VideoGroup group);
