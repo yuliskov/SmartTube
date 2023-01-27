@@ -490,7 +490,8 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onButtonClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_rotate) {
-            int rotation = mPlayerData.getVideoRotation() == 0 ? 90 : 0;
+            int oldRotation = mPlayerData.getVideoRotation();
+            int rotation = oldRotation == 0 ? 90 : oldRotation == 90 ? 270 : 0;
             getController().setVideoRotation(rotation);
             getController().setButtonState(buttonId, rotation == 0 ? PlaybackUI.BUTTON_OFF : PlaybackUI.BUTTON_ON);
             mPlayerData.setVideoRotation(rotation);
