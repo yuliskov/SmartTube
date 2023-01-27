@@ -311,7 +311,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
     }
 
-    private void maybeReleasePlayer() {
+    /**
+     * Internal method. Intended for enclosed Activity.
+     */
+    public void maybeReleasePlayer() {
         // Inside dialogs we could change engine settings on fly
         if (AppDialogPresenter.instance(getContext()).isDialogShown()) {
             Log.d(TAG, "releasePlayer: Engine release is blocked by dialog. Exiting...");

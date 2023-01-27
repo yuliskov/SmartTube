@@ -154,6 +154,9 @@ public class PlaybackActivity extends LeanbackActivity {
         return mPlaybackFragment != null && mPlaybackFragment.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
     }
 
+    /**
+     * BACK pressed, PIP player's button pressed
+     */
     @Override
     public void finish() {
         Log.d(TAG, "Finishing activity...");
@@ -177,6 +180,9 @@ public class PlaybackActivity extends LeanbackActivity {
             if (mPlayerTweaksData.isKeepFinishedActivityEnabled()) {
                 //moveTaskToBack(true); // Don't do this or you'll have problems when player overlaps other apps (e.g. casting)
                 mViewManager.startParentView(this);
+
+                // Player with TextureView keeps running in background because onStop() fired with huge delay (~5sec).
+                mPlaybackFragment.maybeReleasePlayer();
             } else {
                 mPlaybackFragment.onFinish();
                 super.finish();
@@ -250,6 +256,9 @@ public class PlaybackActivity extends LeanbackActivity {
         }
     }
 
+    /**
+     * HOME or BACK pressed
+     */
     @Override
     public void onUserLeaveHint() {
         // Check that user not open dialog/search activity instead of really leaving the activity
