@@ -391,9 +391,20 @@ public class AppDialogUtil {
             options.add(UiOptionItem.from(context.getString(pair[0]),
                     optionItem -> {
                         playerData.setVideoZoomMode(pair[1]);
+                        playerData.setVideoZoom(-1);
                         onSelectZoomMode.run();
                     },
-                    playerData.getVideoZoomMode() == pair[1]));
+                    playerData.getVideoZoomMode() == pair[1] && playerData.getVideoZoom() == -1));
+        }
+
+        for (int zoomPercents : Helpers.range(100, 300, 25)) {
+            options.add(UiOptionItem.from(String.format("%s%%", zoomPercents),
+                    optionItem -> {
+                        playerData.setVideoZoom(zoomPercents);
+                        playerData.setVideoZoomMode(PlaybackEngine.ZOOM_MODE_DEFAULT);
+                        onSelectZoomMode.run();
+                    },
+                    playerData.getVideoZoom() == zoomPercents));
         }
 
         String videoZoomTitle = context.getString(R.string.video_zoom);

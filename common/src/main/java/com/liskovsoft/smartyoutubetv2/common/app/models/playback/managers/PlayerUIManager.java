@@ -82,6 +82,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
         // Could be set once per activity creation (view layout stuff)
         getController().setVideoZoomMode(mPlayerData.getVideoZoomMode());
+        getController().setVideoZoom(mPlayerData.getVideoZoom());
         getController().setVideoAspectRatio(mPlayerData.getVideoAspectRatio());
         getController().setVideoRotation(mPlayerData.getVideoRotation());
     }
@@ -449,7 +450,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onVideoZoomClicked() {
         OptionCategory videoZoomCategory = AppDialogUtil.createVideoZoomCategory(
-                getActivity(), mPlayerData, () -> getController().setVideoZoomMode(mPlayerData.getVideoZoomMode()));
+                getActivity(), mPlayerData, () -> {
+                    getController().setVideoZoomMode(mPlayerData.getVideoZoomMode());
+                    getController().setVideoZoom(mPlayerData.getVideoZoom());
+                    getController().showControls(false);
+                });
 
         OptionCategory videoAspectCategory = AppDialogUtil.createVideoAspectCategory(
                 getActivity(), mPlayerData, () -> getController().setVideoAspectRatio(mPlayerData.getVideoAspectRatio()));

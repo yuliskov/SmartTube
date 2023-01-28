@@ -59,6 +59,7 @@ public interface PlaybackEngine {
     void setVolume(float volume);
     float getVolume();
     void setVideoZoomMode(int mode);
+    void setVideoZoom(int percents);
     int getVideoZoomMode();
     void setVideoAspectRatio(float mode);
     void setVideoRotation(int angle);

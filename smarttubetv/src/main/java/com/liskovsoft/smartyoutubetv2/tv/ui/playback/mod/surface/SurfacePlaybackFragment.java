@@ -79,6 +79,10 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         mVideoSurfaceRoot.setResizeMode(resizeMode);
     }
 
+    public void setZoom(int percents) {
+        mVideoSurfaceRoot.setZoom(percents);
+    }
+
     /** Returns the {@link ResizeMode}. */
     public @ResizeMode int getResizeMode() {
         return mVideoSurfaceRoot.getResizeMode();

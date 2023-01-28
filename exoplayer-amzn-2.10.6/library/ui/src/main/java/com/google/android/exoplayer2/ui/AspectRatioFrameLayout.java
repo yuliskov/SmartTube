@@ -102,6 +102,7 @@ public final class AspectRatioFrameLayout extends FrameLayout {
 
   private float videoAspectRatio;
   @ResizeMode private int resizeMode;
+  private int zoomPercents;
 
   public AspectRatioFrameLayout(Context context) {
     this(context, /* attrs= */ null);
@@ -110,6 +111,7 @@ public final class AspectRatioFrameLayout extends FrameLayout {
   public AspectRatioFrameLayout(Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
     resizeMode = RESIZE_MODE_FIT;
+    zoomPercents = -1;
     if (attrs != null) {
       TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
           R.styleable.AspectRatioFrameLayout, 0, 0);
@@ -161,9 +163,19 @@ public final class AspectRatioFrameLayout extends FrameLayout {
     }
   }
 
+  /**
+   * MODIFIED: Set video zoom in percents
+   */
+  public void setZoom(int percents) {
+    if (zoomPercents != percents) {
+      zoomPercents = percents;
+      requestLayout();
+    }
+  }
+
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    super.onMeasure(widthMeasureSpec, heightMeasureSpec); // Zoom 100%
     if (videoAspectRatio <= 0) {
       // Aspect ratio not set.
       return;
@@ -176,6 +188,16 @@ public final class AspectRatioFrameLayout extends FrameLayout {
     if (Math.abs(aspectDeformation) <= MAX_ASPECT_RATIO_DEFORMATION_FRACTION) {
       // We're within the allowed tolerance.
       aspectRatioUpdateDispatcher.scheduleUpdate(videoAspectRatio, viewAspectRatio, false);
+
+      // MODIFIED
+      if (zoomPercents > 0 && zoomPercents != 100) {
+        width = (width / 100) * zoomPercents;
+        height = (height / 100) * zoomPercents;
+
+        super.onMeasure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
+      }
+
       return;
     }
 
@@ -205,6 +227,13 @@ public final class AspectRatioFrameLayout extends FrameLayout {
         // Ignore target aspect ratio
         break;
     }
+
+    // MODIFIED
+    if (zoomPercents > 0 && zoomPercents != 100) {
+      width = (width / 100) * zoomPercents;
+      height = (height / 100) * zoomPercents;
+    }
+
     aspectRatioUpdateDispatcher.scheduleUpdate(videoAspectRatio, viewAspectRatio, true);
     super.onMeasure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
         MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));

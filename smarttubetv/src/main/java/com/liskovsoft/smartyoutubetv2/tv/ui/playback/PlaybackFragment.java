@@ -1038,6 +1038,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public void setVideoZoom(int percents) {
+        setZoom(percents);
+    }
+
+    @Override
     public void setVideoAspectRatio(float ratio) {
         setAspectRatio(ratio);
     }

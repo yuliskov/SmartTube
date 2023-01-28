@@ -47,6 +47,7 @@ public class PlayerData extends DataChangeBase {
     private final Map<String, FormatItem> mDefaultVideoFormats = new HashMap<>();
     private int mSubtitleStyleIndex;
     private int mVideoZoomMode;
+    private int mVideoZoom;
     private float mVideoAspectRatio;
     private int mVideoRotation;
     private int mSeekPreviewMode;
@@ -420,6 +421,15 @@ public class PlayerData extends DataChangeBase {
         return mVideoZoomMode;
     }
 
+    public void setVideoZoom(int percents) {
+        mVideoZoom = percents;
+        persistState();
+    }
+
+    public int getVideoZoom() {
+        return mVideoZoom;
+    }
+
     public void setVideoAspectRatio(float ratio) {
         mVideoAspectRatio = ratio;
         persistState();
@@ -615,6 +625,7 @@ public class PlayerData extends DataChangeBase {
         mLastSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 47)), FormatItem.SUBTITLE_DEFAULT);
         mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
         mVideoRotation = Helpers.parseInt(split, 49, 0);
+        mVideoZoom = Helpers.parseInt(split, 50, -1);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -623,7 +634,8 @@ public class PlayerData extends DataChangeBase {
 
     @Override
     protected void persistState() {
-        mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsAbsoluteDateEnabled, mSeekPreviewMode, mIsSeekConfirmPauseEnabled,
+        mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsAbsoluteDateEnabled,
+                mSeekPreviewMode, mIsSeekConfirmPauseEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
@@ -633,7 +645,8 @@ public class PlayerData extends DataChangeBase {
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
-                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, Helpers.toString(mLastSubtitleFormat), mLastSpeed, mVideoRotation));
+                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, Helpers.toString(mLastSubtitleFormat), mLastSpeed, mVideoRotation,
+                mVideoZoom));
 
         super.persistState();
     }
