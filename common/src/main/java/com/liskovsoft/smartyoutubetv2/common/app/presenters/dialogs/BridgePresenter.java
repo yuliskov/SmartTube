@@ -41,10 +41,12 @@ abstract class BridgePresenter extends BasePresenter<Void> {
 
     public void start() {
         if (!checkLauncher()) {
+            onFinish();
             return;
         }
 
         if (!mGeneralData.isBridgeCheckEnabled()) {
+            onFinish();
             return;
         }
         
@@ -65,6 +67,7 @@ abstract class BridgePresenter extends BasePresenter<Void> {
         );
         settingsPresenter.appendSingleButton(updateCheckOption);
 
+        settingsPresenter.setOnDone(getOnDone());
         settingsPresenter.showDialog(getContext().getString(R.string.enable_voice_search));
     }
 

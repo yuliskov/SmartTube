@@ -18,11 +18,9 @@ public class VideoStateService {
     // As one video might correspond to multiple Video objects.
     private final Map<String, State> mStates = Utils.createLRUMap(MAX_PERSISTENT_STATE_SIZE);
     private final AppPrefs mPrefs;
-    private final PlayerData mPlayerData;
 
     private VideoStateService(Context context) {
         mPrefs = AppPrefs.instance(context);
-        mPlayerData = PlayerData.instance(context);
 
         restoreState();
     }
@@ -40,7 +38,7 @@ public class VideoStateService {
     }
 
     public boolean isEmpty() {
-        return mStates.size() == 0;
+        return mStates.isEmpty();
     }
 
     public void save(State state) {

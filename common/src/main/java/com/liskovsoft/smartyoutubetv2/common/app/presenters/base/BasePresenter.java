@@ -122,13 +122,19 @@ public abstract class BasePresenter<T> implements Presenter<T> {
             PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
             ViewManager.instance(getContext()).startView(SplashView.class);
         }
+
+        onDone();
     }
 
     public void setOnDone(Runnable onDone) {
         mOnDone = onDone;
     }
 
-    protected void onDone() {
+    public Runnable getOnDone() {
+        return mOnDone;
+    }
+
+    private void onDone() {
         if (mOnDone != null) {
             mOnDone.run();
             mOnDone = null;

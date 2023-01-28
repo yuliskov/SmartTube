@@ -334,10 +334,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext());
 
-        if (getContext() instanceof MotherActivity) {
-            ((MotherActivity) getContext()).addOnPermissions(backupManager);
-        }
-
         options.add(UiOptionItem.from(
                 String.format("%s:\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
                 option -> {
@@ -349,8 +345,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     });
                 }));
 
+        String backupPathCheck = backupManager.getBackupPathCheck();
         options.add(UiOptionItem.from(
-                String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupManager.getBackupPath()),
+                String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupPathCheck != null ? backupPathCheck : ""),
                 option -> {
                     AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
                         backupManager.checkPermAndRestore();

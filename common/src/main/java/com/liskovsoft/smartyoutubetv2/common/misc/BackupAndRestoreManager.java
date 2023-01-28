@@ -107,7 +107,11 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     }
 
     private void verifyStoragePermissionsAndReturn() {
-        PermissionHelpers.verifyStoragePermissions(mContext);
+        if (mContext instanceof MotherActivity) {
+            ((MotherActivity) mContext).addOnPermissions(this);
+
+            PermissionHelpers.verifyStoragePermissions(mContext);
+        }
     }
 
     private File getBackup() {
@@ -125,7 +129,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         File currentBackup = null;
 
         for (File backupDir : mBackupDirs) {
-            if (backupDir.exists() && !FileHelpers.isEmpty(backupDir)) {
+            // FileHelpers.isEmpty(backupDir) needs access device storage permission
+            if (backupDir.exists()) {
                 currentBackup = backupDir;
                 break;
             }
@@ -150,6 +155,12 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
     public String getBackupPath() {
         File currentBackup = getBackup();
+
+        return currentBackup != null ? currentBackup.toString() : null;
+    }
+
+    public String getBackupPathCheck() {
+        File currentBackup = getBackupCheck();
 
         return currentBackup != null ? currentBackup.toString() : null;
     }

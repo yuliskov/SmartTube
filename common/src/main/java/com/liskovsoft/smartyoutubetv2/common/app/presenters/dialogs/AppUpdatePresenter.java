@@ -81,7 +81,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
             }
         }
 
-        onDone();
+        onFinish();
     }
 
     private void showUpdateDialog(String versionName, List<String> changelog, String apkPath) {
@@ -95,6 +95,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
             mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
         }, mUpdateChecker.isUpdateCheckEnabled()));
 
+        mSettingsPresenter.setOnDone(getOnDone());
         mSettingsPresenter.showDialog(String.format("%s %s", getContext().getString(R.string.app_name), versionName), this::unhold);
     }
 
