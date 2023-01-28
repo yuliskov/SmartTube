@@ -388,6 +388,7 @@
     <string name="subtitle_position">Spodní posun titulků</string>
     <string name="pressing_home">stisknutím tlačítka DOMŮ</string>
     <string name="pressing_home_back">stisknutím tlačítka DOMŮ nebo ZPĚT</string>
+    <string name="pressing_back">stisknutím tlačítka ZPĚT</string>
     <string name="player_number_key_seek">Posuv pomocí čísel</string>
     <string name="save_remove_playlist">Přidat/Odebrat playlist ze sekce Playlisty</string>
     <string name="remove_playlist">Odstranit playlist ze sekce Playlisty natrvalo</string>
