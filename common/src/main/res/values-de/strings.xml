@@ -388,6 +388,7 @@
     <string name="subtitle_position">Untertitel-Verschiebung von unten</string>
     <string name="pressing_home">durch Drücken von HOME</string>
     <string name="pressing_home_back">durch Drücken von HOME oder BACK</string>
+    <string name="pressing_back">durch Drücken von BACK</string>
     <string name="player_number_key_seek">Spulen mit Zifferntasten</string>
     <string name="save_remove_playlist">Wiedergabeliste zur Wiedergabelisten-Kategorie hinzufügen/entfernen</string>
     <string name="remove_playlist">Wiedergabeliste dauerhaft aus Wiedergabelisten-Kategorie entfernen</string>
