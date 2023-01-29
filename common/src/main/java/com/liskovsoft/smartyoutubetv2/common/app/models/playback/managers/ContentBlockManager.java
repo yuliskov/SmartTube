@@ -235,6 +235,13 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
+        if (dialogPresenter.isDialogShown() || getController().isSuggestionsShown()) {
+            // Another dialog is opened. Don't distract a user.
+            return;
+        }
+
+        getController().showControls(false);
+
         OptionItem acceptOption = UiOptionItem.from(
                 getActivity().getString(R.string.confirm_segment_skip, category),
                 option -> {
@@ -244,13 +251,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 }
         );
 
-        //OptionItem cancelOption = UiOptionItem.from(
-        //        getActivity().getString(R.string.cancel_dialog),
-        //        option -> dialogPresenter.goBack()
-        //);
-
         dialogPresenter.appendSingleButton(acceptOption);
-        //dialogPresenter.appendSingleButton(cancelOption);
         dialogPresenter.setCloseTimeoutMs(skipPosMs - getController().getPositionMs());
 
         dialogPresenter.enableTransparent(true);

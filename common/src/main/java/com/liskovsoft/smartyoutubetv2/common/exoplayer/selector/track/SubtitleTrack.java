@@ -73,15 +73,23 @@ public class SubtitleTrack extends MediaTrack {
             return null;
         }
 
-        return trimMarker(language)
-                .replaceAll(" \\(.*", "") // english (us) bla -> english
+        return trimAuto(language)
                 .replaceAll(" - .*", ""); // english - us bla -> english
+    }
+
+    public static String trimAuto(String language) {
+        if (language == null) {
+            return null;
+        }
+
+        return trimMarker(language)
+                .replaceAll(" \\(.*", ""); // english (us) bla -> english
     }
 
     /**
      * Removes auto translate marker
      */
-    public static String trimMarker(String language) {
+    private static String trimMarker(String language) {
         if (language != null && language.endsWith(TranslatedCaptionTrack.TRANSLATE_MARKER)) {
             return language.replaceFirst(".$","");
         } else {
@@ -89,11 +97,11 @@ public class SubtitleTrack extends MediaTrack {
         }
     }
 
-    public static boolean hasMarker(String language) {
-        return language != null && language.endsWith(TranslatedCaptionTrack.TRANSLATE_MARKER);
-    }
-
     public static boolean isAuto(String language) {
         return hasMarker(language) || isAutoUser(language);
+    }
+
+    private static boolean hasMarker(String language) {
+        return language != null && language.endsWith(TranslatedCaptionTrack.TRANSLATE_MARKER);
     }
 }
