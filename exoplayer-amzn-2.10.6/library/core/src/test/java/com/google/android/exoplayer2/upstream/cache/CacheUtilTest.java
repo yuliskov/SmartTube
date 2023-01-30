@@ -106,18 +106,17 @@ public final class CacheUtilTest {
 
   @Test
   public void testGenerateKey() {
-    assertThat(CacheUtil.generateKey(new DataSpec(Uri.EMPTY))).isNotNull();
+    assertThat(CacheUtil.generateKey(Uri.EMPTY)).isNotNull();
 
     Uri testUri = Uri.parse("test");
-    DataSpec testDataSpec = new DataSpec(testUri);
-    String key = CacheUtil.generateKey(testDataSpec);
+    String key = CacheUtil.generateKey(testUri);
     assertThat(key).isNotNull();
 
     // Should generate the same key for the same input.
-    assertThat(CacheUtil.generateKey(testDataSpec)).isEqualTo(key);
+    assertThat(CacheUtil.generateKey(testUri)).isEqualTo(key);
 
     // Should generate different key for different input.
-    assertThat(key.equals(CacheUtil.generateKey(new DataSpec(Uri.parse("test2"))))).isFalse();
+    assertThat(key.equals(CacheUtil.generateKey(Uri.parse("test2")))).isFalse();
   }
 
   @Test

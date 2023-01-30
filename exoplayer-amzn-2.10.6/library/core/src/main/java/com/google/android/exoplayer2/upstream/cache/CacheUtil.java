@@ -15,6 +15,7 @@
  */
 package com.google.android.exoplayer2.upstream.cache;
 
+import android.net.Uri;
 import androidx.annotation.Nullable;
 import android.util.Pair;
 import com.google.android.exoplayer2.C;
@@ -53,30 +54,16 @@ public final class CacheUtil {
   public static final int DEFAULT_BUFFER_SIZE_BYTES = 128 * 1024;
 
   /** Default {@link CacheKeyFactory}. */
-  public static final CacheKeyFactory DEFAULT_CACHE_KEY_FACTORY = new CacheKeyFactory() {
-    private static final int MIN_PARALLEL_CHUNCKS_DOWNLOADS = 2;
-
-    @Override
-    public String buildCacheKey(DataSpec dataSpec) {
-      return dataSpec.key != null ? dataSpec.key : generateKey(dataSpec);
-    }
-
-    @Override
-    public int maxDownloadParallelSegments() {
-      // TODO Implement a better logic to determine the number of concurrent chunck downloads or
-      // provide a way to customize by client. For now it uses at least MIN_PARALLEL_CHUNCKS_DOWNLOADS
-      // and at most the half of the number of device processor.
-      return Math.max(MIN_PARALLEL_CHUNCKS_DOWNLOADS, Runtime.getRuntime().availableProcessors() / 2);
-    }
-  };
+  public static final CacheKeyFactory DEFAULT_CACHE_KEY_FACTORY =
+      (dataSpec) -> dataSpec.key != null ? dataSpec.key : generateKey(dataSpec.uri);
 
   /**
-   * Generates a cache key out of the given {@link DataSpec}.
+   * Generates a cache key out of the given {@link Uri}.
    *
-   * @param dataSpec DataSpec of a content which the requested key is for.
+   * @param uri Uri of a content which the requested key is for.
    */
-  public static String generateKey(DataSpec dataSpec) {
-    return dataSpec.toString() + "-" +  + dataSpec.absoluteStreamPosition;
+  public static String generateKey(Uri uri) {
+    return uri.toString();
   }
 
   /**

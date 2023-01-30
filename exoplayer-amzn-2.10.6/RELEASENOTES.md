@@ -2,8 +2,6 @@
 
 ### 2.10.6 (2019-10-18) ###
 
-* Downloads: Merge downloads in `SegmentDownloader` to improve overall download
-  speed ([#5978](https://github.com/google/ExoPlayer/issues/5978))
 * Add `Player.onPlaybackSuppressionReasonChanged` to allow listeners to
   detect playbacks suppressions (e.g. transient audio focus loss) directly
   ([#6203](https://github.com/google/ExoPlayer/issues/6203)).
