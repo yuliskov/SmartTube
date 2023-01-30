@@ -30,21 +30,21 @@ public class BootDialogPresenter extends BasePresenter<Void> {
     }
 
     public void start() {
-        startUpdatePresenter();
-    }
-
-    private void startUpdatePresenter() {
-        AppUpdatePresenter updatePresenter = AppUpdatePresenter.instance(getContext());
-        updatePresenter.setOnDone(this::startBackupPresenter);
-        updatePresenter.start(false);
-        updatePresenter.unhold();
+        startBackupPresenter();
     }
 
     private void startBackupPresenter() {
         QuickRestorePresenter quickRestorePresenter = QuickRestorePresenter.instance(getContext());
-        quickRestorePresenter.setOnDone(this::startBridgePresenter);
+        quickRestorePresenter.setOnDone(this::startUpdatePresenter);
         quickRestorePresenter.start();
         quickRestorePresenter.unhold();
+    }
+
+    private void startUpdatePresenter() {
+        AppUpdatePresenter updatePresenter = AppUpdatePresenter.instance(getContext());
+        updatePresenter.setOnDone(this::startBridgePresenter);
+        updatePresenter.start(false);
+        updatePresenter.unhold();
     }
 
     private void startBridgePresenter() {
