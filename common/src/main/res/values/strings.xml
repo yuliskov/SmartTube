@@ -497,4 +497,5 @@
     <string name="loading">Loading…</string>
     <string name="hide_streams">Hide streams from Subscriptions</string>
     <string name="video_rotate">Rotate</string>
+    <string name="trending_searches">Trending searches</string>
 </resources>
