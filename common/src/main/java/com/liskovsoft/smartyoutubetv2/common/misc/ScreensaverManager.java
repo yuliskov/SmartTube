@@ -133,7 +133,11 @@ public class ScreensaverManager {
 
         // Disable dimming on certain circumstances
         if (show && mMode == MODE_DIMMING &&
-                (isPlaying() || isSigning() || mGeneralData.getScreenDimmingTimeoutMs() == GeneralData.SCREEN_DIMMING_NEVER)
+                (       isPlaying() ||
+                        isSigning() ||
+                        mGeneralData.getScreenDimmingTimeoutMs() == GeneralData.SCREEN_DIMMING_NEVER ||
+                        Helpers.isKeyboardShown(activity)
+                )
         ) {
             return;
         }
