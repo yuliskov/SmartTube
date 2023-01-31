@@ -497,4 +497,5 @@
     <string name="loading">Načítání…</string>
     <string name="hide_streams">Skrýt živá vysílání z Odběrů</string>
     <string name="video_rotate">Otočit</string>
+    <string name="trending_searches">Vyhledávací trendy</string>
 </resources>
