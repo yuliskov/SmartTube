@@ -34,6 +34,7 @@
     <string name="video_speed">Velocidad de vídeo</string>
     <string name="resolution_switch">Cambiar resolución</string>
     <string name="video_buffer">Búfer de video</string>
+    <string name="video_buffer_size_none">Nada</string>   
     <string name="video_buffer_size_low">Bajo</string>
     <string name="video_buffer_size_med">Medio</string>
     <string name="video_buffer_size_high">Alto</string>
@@ -116,6 +117,7 @@
     <string name="subscribed_to_channel">Suscrito al canal</string>
     <string name="unsubscribed_from_channel">No estás Suscrito al canal</string>
     <string name="subtitle_yellow_transparent">Amarillo sobre fondo transparente</string>
+    <string name="subtitle_white_transparent">Blanco sobre fondo transparente</string>    
     <string name="subtitle_white_black">Blanco sobre fondo negro</string>
     <string name="player_seek_preview">Previsualizar mientras busca</string>
     <string name="color_scheme_dark_grey_oled">Gris oscuro (OLED)</string>
@@ -233,6 +235,8 @@
     <string name="removed_from_playback_queue">Eliminado de cola de reproducción</string>
     <string name="added_to_playback_queue">Añadido a cola de reproducción</string>
     <string name="add_remove_from_playback_queue">Añadir/Eliminar de cola de reproducción</string>
+    <string name="add_to_playback_queue">Añadir a cola de reproducción</string>    
+    <string name="remove_from_playback_queue">Eliminar de cola de reproducción</string>
     <string name="proxy_enabled">Proxy activado</string>
     <string name="proxy_disabled">Proxy desactivado</string>
     <string name="uploads_row_name">Subidas</string>
@@ -290,7 +294,8 @@
     <string name="action_subscribe">Suscribirse</string>
     <string name="action_channel">Abrir canal</string>
     <string name="action_pip">PIP</string>
-    <string name="action_screen_off">Apagar pantalla</string>
+    <string name="action_video_info">Descripción del vídeo</string>
+    <string name="action_screen_off">Apagar pantalla</string>    
     <string name="action_playback_queue">Cola reproducción</string>
     <string name="action_video_speed">Velocidad vídeo</string>
     <string name="action_subtitles">Subtítulos</string>
@@ -320,8 +325,6 @@
     <string name="player_seek_confirmation_play">Con confirmación (play mientras busca)</string>
     <string name="hide_shorts_from_home">Ocultar shorts en Inicio</string>
     <string name="finish_on_disconnect">Finalizar la aplicación después de desconectar el teléfono/tableta</string>
-    <string name="subtitle_white_transparent">Blanco sobre fondo transparente</string>
-    <string name="action_video_info">Descripción del vídeo</string>
     <string name="update_error">Error de actualización</string>
     <string name="hide_shorts_from_history">Ocultar Cortos en Historial</string>
     <string name="disable_screensaver">Desactivar salvapantallas</string>
@@ -335,6 +338,7 @@
     <string name="proxy_not_supported">Utilizar un Proxy Web (requiere Android 4.4+)</string>
     <string name="proxy_test_btn">Probar</string>
     <string name="proxy_settings_title">Configuración del Servidor Proxy</string>
+    <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com	</string>    
     <string name="proxy_test_cancelled">Prueba#%d: cancelada.</string>
     <string name="proxy_type_invalid">Tipo de proxy no configurado.</string>
     <string name="proxy_host_invalid">Proxy host no configurado.</string>
@@ -343,6 +347,7 @@
     <string name="proxy_test_aborted">Prueba abortada, por favor arregle la configuración del proxy primero.</string>
     <string name="proxy_application_aborted">Por favor, corrija primero la configuración del proxy.</string>
     <string name="proxy_test_start">Prueba#%d: %s …</string>
+    <string name="proxy_test_error">Fallo#%d: %s</string>    
     <string name="proxy_test_status">Estado#%d: %s %d %s</string>
     <string name="openvpn_config_address_hint">Dirección del archivo de configuración (*.ovpn)</string>
     <string name="enable_openvpn">Utilizar OpenVPN</string>
@@ -375,10 +380,6 @@
     <string name="volume_limit">Límite de volumen</string>
     <string name="play_video">Reproducir</string>
     <string name="remember_position_of_short_videos">Recuerde la posición de los vídeos cortos (menos de 10 minutos)</string>
-    <string name="add_to_playback_queue">Añadir a la cola de reproducción</string>
-    <string name="remove_from_playback_queue">Eliminar de la cola de reproducción</string>
-    <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com	</string>
-    <string name="proxy_test_error">Fallo#%d: %s</string>
     <string name="player_show_tooltips">Mostrar información sobre los botones</string>
     <string name="action_like_unset">Como no está establecido</string>
     <string name="action_dislike_unset">No se ha establecido el \"Dislike\".</string>
@@ -387,6 +388,7 @@
     <string name="subtitle_position">Desplazamiento inferior de los subtítulos</string>
     <string name="pressing_home">pulsando HOME</string>
     <string name="pressing_home_back">pulsando HOME o BACK</string>
+    <string name="pressing_back">pulsando ATRÁS</string>    
     <string name="player_number_key_seek">Búsqueda con teclas numéricas</string>
     <string name="save_remove_playlist">Añadir/borrar lista de la sección de listas de reproducción</string>
     <string name="remove_playlist">Eliminar permanentemente la lista de la sección de listas de reproducción</string>
@@ -469,4 +471,30 @@
     <string name="color_scheme_dark_grey_monochrome">Gris oscuro (monocromo)</string>
     <string name="disable_mic_permission">Por favor, desactiva el acceso al micrófono de la aplicación para que este reconocedor funcione correctamente.</string>
     <string name="repeat_mode_shuffle">Mezcla cualquier lista</string>
+    <string name="chat_left">Izquierda</string>
+    <string name="chat_right">Derecha</string>
+    <string name="card_real_thumbnails">Reemplazar miniaturas con frame del vídeo</string>
+    <string name="card_content">Dónde obtener miniaturas</string>
+    <string name="thumb_quality_default">Por defecto</string>
+    <string name="thumb_quality_start">Inicio del vídeo</string>
+    <string name="thumb_quality_middle">Mitad del vídeo</string>
+    <string name="thumb_quality_end">Final del vídeo</string>
+    <string name="content_block_status">Comprobar estatus de SponsorBlock</string>
+    <string name="player_show_quality_info_bitrate">Añadir bitrate a la información de calidad</string>
+    <string name="player_speed_button_old_behavior">Revertir comportamiento del bóton speed</string>
+    <string name="protect_settings_with_password">Proteger configuración con contraseña</string>
+    <string name="enter_settings_password">Introducir contraseña de configuración</string>
+    <string name="child_mode">Modo infantil</string>
+    <string name="child_mode_desc">En este modo el usuario no puede buscar o ver contenido sugerido. La configuración se hallará bajo contraseña.</string>
+    <string name="lost_setting_warning">La configuración de la aplicación será cambiada. Asegúrese de que ha creado una copia de seguridad de la misma.</string>
+    <string name="player_button_long_click">Un clic corto en el botón para acción rápida y uno largo para el diálogo de configuración</string>
+    <string name="pause_history">Pausar historia</string>
+    <string name="resume_history">Resumir historia</string>
+    <string name="clear_history">Limpiar historia</string>
+    <string name="chapters">Capítulos</string>
+    <string name="card_multiline_subtitle">Subtítulos multilínea</string>
+    <string name="auto_frame_rate_modes">Modos soportados</string>
+    <string name="loading">Cargando…</string>
+    <string name="hide_streams">Ocultar streams de Suscripciones</string>
+    <string name="video_rotate">Rotar</string>    
 </resources>
