@@ -24,7 +24,7 @@
   <string name="audio_max_quality">Automatisch (max. kwaliteit)</string>
   <string name="subtitles_disabled">Geen ondertiteling</string>
   <string name="auto_frame_rate">Automatische framerate</string>
-  <string name="frame_rate_correction">FPS:\n%s</string>
+  <string name="frame_rate_correction"></string>
   <string name="category_background_playback">Afspelen op achtergrond</string>
   <string name="not_implemented">Niet-geïmplementeerd</string>
   <string name="option_background_playback_off">Uit</string>
@@ -407,9 +407,9 @@
   <string name="lb_playback_controls_skip_previous">Vorige/terugspoelen om positie te starten</string>
   <string name="alt_presets_behavior">Alt-presets  behavior (bandbreedte beperken)</string>
   <string name="alt_presets_behavior_desc">De app zal proberen de bandbreedte te behouden die overeenkomt met de geselecteerde preset in plaats van te matchen tussen resolutie, fps en codec.</string>
-  <string name="sleep_timer">Slaaptimerundefined(afstandsbediening uur inactief)</string>
+  <string name="sleep_timer">Slaaptimer (afstandsbediening uur inactief)</string>
   <string name="sleep_timer_desc">Pauzeer het afspelen als de gebruiker de afstandsbediening een uur lang niet heeft gebruikt</string>
-  <string name="disable_vsync">snap naar vsync uitzetten</string>
+  <string name="disable_vsync"></string>
   <string name="disable_vsync_desc">Verbetert de afspeelprestaties een beetje</string>
   <string name="skip_codec_profile_check">Controle op codec-profielniveau overslaan</string>
   <string name="skip_codec_profile_check_desc">Controleer de codec-ondersteuning niet bij het starten van een video.  Zou handig kunnen zijn bij buggy-firmware.</string>
@@ -422,7 +422,7 @@
   <string name="playlist_order_published_date_older_first">Publicatiedatum (ouder eerst)</string>
   <string name="playlist_order_popularity">Populariteit</string>
   <string name="cant_do_this_for_foreign_playlist">Kan dit niet doen voor buitenlandse afspeellijsten</string>
-  <string name="owned_playlist_warning">Fout.  Deze actie kan alleen worden toegepast op afspeellijsten die eigendom zijn van jou</string>
+  <string name="owned_playlist_warning">Fout. Deze actie kan alleen worden toegepast op afspeellijsten die eigendom zijn van jou</string>
   <string name="content_block_alt_server">Gebruik alternatieve server</string>
   <string name="content_block_alt_server_desc">Schakel deze optie in als SponsorBlock om verschillende redenen weigert te werken.</string>
   <string name="unset_stream_reminder">Streamherinnering uitschakelen</string>
@@ -430,7 +430,6 @@
   <string name="playback_starts_shortly">Het afspelen start automatisch wanneer de stream klaar is</string>
   <string name="starting_stream">De stream starten…</string>
   <string name="action_playlist_remove">Verwijderen uit afspeellijst</string>
-  <!-- BEGIN Moved strings -->
   <string name="signin_view_title">Gebruikerscode wordt geladen...</string>
   <string name="signin_view_description">Voer deze code in op pagina %s\n om in te loggen. Opmerking: Werkt alleen met Firefox- of Chrome-browsers.</string>
   <string name="signin_view_action_text">Gedaan</string>
@@ -445,14 +444,13 @@
   <string name="playback_controls_repeat_list">Herhaal lijst</string>
   <string name="action_subscribe_off">Abonneren uit</string>
   <string name="action_subscribe_on">Abonneren aan</string>
-  <!-- END Moved strings -->
   <string name="skip_24_rate">Sla 24fps-formaten over (real cinema fix\?)</string>
   <string name="player_disable_suggestions">Suggesties uitschakelen</string>
   <string name="feedback"></string>
   <string name="sources"></string>
   <string name="releases"></string>
   <string name="prefer_avc_over_vp9">Codec-selectie: geef de voorkeur aan avc boven vp9</string>
-  <string name="open_chat"></string>
+  <string name="open_chat">Chat/Opmerkingen</string>
   <string name="place_chat_left">Chat aan de linkerkant plaatsen</string>
   <string name="use_alt_speech_recognizer">Alt-spraakherkenning</string>
   <string name="time_format">Tijd formaat</string>
@@ -493,4 +491,9 @@
   <string name="chapters">Hoofdstukken</string>
   <string name="card_multiline_subtitle">Meerregelige ondertitels</string>
   <string name="auto_frame_rate_modes">Ondersteunde video-modi</string>
+  <string name="loading">Bezig met laden…</string>
+  <string name="hide_streams">Verberg streams van abonnementen</string>
+  <string name="video_rotate">Draaien</string>
+  <string name="trending_searches">Populaire zoekopdrachten</string>
+  <string name="pressing_back">door op TERUG te drukken</string>
 </resources>
