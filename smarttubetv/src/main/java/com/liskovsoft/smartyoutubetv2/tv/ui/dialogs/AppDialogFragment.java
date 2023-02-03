@@ -104,7 +104,10 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
         AppPreferenceFragment fragment = buildPreferenceFragment(categories, title);
 
         if (isExpandable && categories != null && categories.size() == 1) {
-            onPreferenceDisplayDialog(fragment, mManager.createPreference(categories.get(0)));
+            OptionCategory category = categories.get(0);
+            if (category.items != null) {
+                onPreferenceDisplayDialog(fragment, mManager.createPreference(category));
+            }
         } else {
             startPreferenceFragment(fragment);
         }
