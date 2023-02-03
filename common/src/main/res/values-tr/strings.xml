@@ -388,6 +388,7 @@
     <string name="subtitle_position">Altyazı alttan kaydırma</string>
     <string name="pressing_home">ANA EKRAN\'a basarak</string>
     <string name="pressing_home_back">ANA EKRAN\'a ya da GERİ\'ye basarak</string>
+    <string name="pressing_back">GERİ\'ye basarak</string>
     <string name="player_number_key_seek">Sayı tuşlarıyla arama</string>
     <string name="save_remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümüne Ekle/Kaldır</string>
     <string name="remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümünden kalıcı olarak kaldır</string>
@@ -496,4 +497,5 @@
     <string name="loading">Yükleniyor…</string>
     <string name="hide_streams">Abonelikler\'de canlı yayınları gizle</string>
     <string name="video_rotate">Döndür</string>
+    <string name="trending_searches">Trend olan aramalar</string>
 </resources>
