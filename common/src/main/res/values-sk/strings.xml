@@ -388,6 +388,7 @@
     <string name="subtitle_position">Spodné posunutie titulkov</string>
     <string name="pressing_home">stlačením tlačidla DOMOV</string>
     <string name="pressing_home_back">stlačením tlačidla DOMOV alebo SPÄŤ</string>
+    <string name="pressing_back">stlačením tlačidla SPÄŤ</string>
     <string name="player_number_key_seek">Pretáčanie s číslami</string>
     <string name="save_remove_playlist">Pridať/Zmazať playlist zo sekcie Playlisty</string>
     <string name="remove_playlist">Zmazať playlist zo sekcie Playlisty natrvalo</string>
@@ -496,4 +497,5 @@
     <string name="loading">Načítavanie…</string>
     <string name="hide_streams">Skryť živé vysielanie z Odberov</string>
     <string name="video_rotate">Otočiť</string>
+    <string name="trending_searches">Vyhľadávacie trendy</string>
 </resources>
