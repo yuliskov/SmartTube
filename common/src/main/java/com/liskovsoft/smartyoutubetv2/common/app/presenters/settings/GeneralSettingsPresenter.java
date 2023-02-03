@@ -97,6 +97,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.open_channel, MainUIData.MENU_ITEM_OPEN_CHANNEL},
                 {R.string.check_for_updates, MainUIData.MENU_ITEM_UPDATE_CHECK},
                 {R.string.clear_history, MainUIData.MENU_ITEM_CLEAR_HISTORY},
                 {R.string.pause_history, MainUIData.MENU_ITEM_TOGGLE_HISTORY},
