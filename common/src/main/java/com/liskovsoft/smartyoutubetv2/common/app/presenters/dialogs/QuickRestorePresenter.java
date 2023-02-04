@@ -7,6 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoSt
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 public class QuickRestorePresenter extends BasePresenter<Void> {
     private static QuickRestorePresenter sInstance;
@@ -31,11 +32,9 @@ public class QuickRestorePresenter extends BasePresenter<Void> {
 
     public void start() {
         BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext());
-        VideoStateService stateService = VideoStateService.instance(getContext());
 
-        // Check first run and backup is exist
         // NOTE: we don't have storage permission yet
-        if (stateService.isEmpty() && backupManager.hasBackup()) {
+        if (Utils.isFirstRun(getContext()) && backupManager.hasBackup()) {
             AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
                 backupManager.checkPermAndRestore();
                 MessageHelpers.showMessage(getContext(), R.string.msg_done);
