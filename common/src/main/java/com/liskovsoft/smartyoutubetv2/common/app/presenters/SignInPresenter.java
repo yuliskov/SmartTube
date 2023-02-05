@@ -76,8 +76,8 @@ public class SignInPresenter extends BasePresenter<SignInView> {
                             mSplashPresenter.updateChannels();
 
                             // User history might be turned off (common issue).
-                            GeneralData.instance(getContext()).enableHistory(true);
-                            MediaServiceManager.instance().enableHistory(true);
+                            boolean enabled = GeneralData.instance(getContext()).isHistoryEnabled();
+                            MediaServiceManager.instance().enableHistory(enabled);
                         }
                  );
     }

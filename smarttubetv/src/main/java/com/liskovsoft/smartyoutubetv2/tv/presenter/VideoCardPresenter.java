@@ -19,6 +19,7 @@ import com.bumptech.glide.request.target.Target;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 import com.liskovsoft.smartyoutubetv2.tv.R;
@@ -39,10 +40,7 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
     private int mSelectedTextColor = -1;
     private Drawable mDefaultCardImage;
     private boolean mIsAnimatedPreviewsEnabled;
-    private boolean mIsCardMultilineTitleEnabled;
-    private boolean mIsCardMultilineSubtitleEnabled;
-    private boolean mIsCardTextAutoScrollEnabled;
-    private float mCardTextScrollSpeed;
+    private boolean mIsProgressEnabled;
     private int mThumbQuality;
     private int mWidth;
     private int mHeight;
@@ -62,11 +60,13 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
         mDefaultCardImage = new ColorDrawable(ContextCompat.getColor(context, R.color.lb_grey));
 
         mIsAnimatedPreviewsEnabled = isCardAnimatedPreviewsEnabled(context);
-        mIsCardMultilineTitleEnabled = isCardMultilineTitleEnabled(context);
-        mIsCardMultilineSubtitleEnabled = isCardMultilineSubtitleEnabled(context);
-        mIsCardTextAutoScrollEnabled = isCardTextAutoScrollEnabled(context);
-        mCardTextScrollSpeed = getCardTextScrollSpeed(context);
         mThumbQuality = getThumbQuality(context);
+        mIsProgressEnabled = isProgressEnabled(context);
+
+        boolean isCardMultilineTitleEnabled = isCardMultilineTitleEnabled(context);
+        boolean isCardMultilineSubtitleEnabled = isCardMultilineSubtitleEnabled(context);
+        boolean isCardTextAutoScrollEnabled = isCardTextAutoScrollEnabled(context);
+        float cardTextScrollSpeed = getCardTextScrollSpeed(context);
 
         updateDimensions(context);
 
@@ -78,10 +78,10 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
             }
         };
 
-        cardView.setTitleLinesNum(mIsCardMultilineTitleEnabled ? 2 : 1);
-        cardView.setContentLinesNum(mIsCardMultilineSubtitleEnabled ? 2 : 1);
-        cardView.enableTextAutoScroll(mIsCardTextAutoScrollEnabled);
-        cardView.setTextScrollSpeed(mCardTextScrollSpeed);
+        cardView.setTitleLinesNum(isCardMultilineTitleEnabled ? 2 : 1);
+        cardView.setContentLinesNum(isCardMultilineSubtitleEnabled ? 2 : 1);
+        cardView.enableTextAutoScroll(isCardTextAutoScrollEnabled);
+        cardView.setTextScrollSpeed(cardTextScrollSpeed);
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
         cardView.enableBadge(isBadgeEnabled());
@@ -124,8 +124,12 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
 
         cardView.setTitleText(video.title);
         cardView.setContentText(video.secondTitle);
-        // Count progress that very close to zero. E.g. when user closed video immediately.
-        cardView.setProgress(video.percentWatched > 0 && video.percentWatched < 1 ? 1 : Math.round(video.percentWatched));
+        if (mIsProgressEnabled) {
+            // Count progress that very close to zero. E.g. when user closed video immediately.
+            cardView.setProgress(video.percentWatched > 0 && video.percentWatched < 1 ? 1 : Math.round(video.percentWatched));
+        } else {
+            cardView.setProgress(0);
+        }
         cardView.setBadgeText(video.hasNewContent ?
                 context.getString(R.string.badge_new_content) : video.isLive ? context.getString(R.string.badge_live) : video.badge);
         cardView.setBadgeColor(video.hasNewContent || video.isLive || video.isUpcoming ?
@@ -202,6 +206,10 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
 
     protected int getThumbQuality(Context context) {
         return MainUIData.instance(context).getThumbQuality();
+    }
+
+    protected boolean isProgressEnabled(Context context) {
+        return GeneralData.instance(context).isHistoryEnabled();
     }
 
     protected boolean isContentEnabled() {
