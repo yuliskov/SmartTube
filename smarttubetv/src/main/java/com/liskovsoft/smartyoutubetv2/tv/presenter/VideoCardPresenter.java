@@ -40,7 +40,6 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
     private int mSelectedTextColor = -1;
     private Drawable mDefaultCardImage;
     private boolean mIsAnimatedPreviewsEnabled;
-    private boolean mIsProgressEnabled;
     private int mThumbQuality;
     private int mWidth;
     private int mHeight;
@@ -61,7 +60,6 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
 
         mIsAnimatedPreviewsEnabled = isCardAnimatedPreviewsEnabled(context);
         mThumbQuality = getThumbQuality(context);
-        mIsProgressEnabled = isProgressEnabled(context);
 
         boolean isCardMultilineTitleEnabled = isCardMultilineTitleEnabled(context);
         boolean isCardMultilineSubtitleEnabled = isCardMultilineSubtitleEnabled(context);
@@ -124,12 +122,8 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
 
         cardView.setTitleText(video.title);
         cardView.setContentText(video.secondTitle);
-        if (mIsProgressEnabled) {
-            // Count progress that very close to zero. E.g. when user closed video immediately.
-            cardView.setProgress(video.percentWatched > 0 && video.percentWatched < 1 ? 1 : Math.round(video.percentWatched));
-        } else {
-            cardView.setProgress(0);
-        }
+        // Count progress that very close to zero. E.g. when user closed video immediately.
+        cardView.setProgress(video.percentWatched > 0 && video.percentWatched < 1 ? 1 : Math.round(video.percentWatched));
         cardView.setBadgeText(video.hasNewContent ?
                 context.getString(R.string.badge_new_content) : video.isLive ? context.getString(R.string.badge_live) : video.badge);
         cardView.setBadgeColor(video.hasNewContent || video.isLive || video.isUpcoming ?
@@ -206,10 +200,6 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
 
     protected int getThumbQuality(Context context) {
         return MainUIData.instance(context).getThumbQuality();
-    }
-
-    protected boolean isProgressEnabled(Context context) {
-        return GeneralData.instance(context).isHistoryEnabled();
     }
 
     protected boolean isContentEnabled() {
