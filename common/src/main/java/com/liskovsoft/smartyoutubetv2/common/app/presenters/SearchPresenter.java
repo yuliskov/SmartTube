@@ -276,7 +276,6 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
                         if (searchText != null && !searchText.isEmpty()) {
                             loadSearchResultAlt(searchText);
-                            settingsPresenter.closeDialog();
                         }
                     },
                     mUploadDateOptions == pair[1]));
@@ -300,7 +299,6 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
                         if (searchText != null && !searchText.isEmpty()) {
                             loadSearchResultAlt(searchText);
-                            settingsPresenter.closeDialog();
                         }
                     },
                     mDurationOptions == pair[1]));
@@ -325,7 +323,6 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
                         if (searchText != null && !searchText.isEmpty()) {
                             loadSearchResultAlt(searchText);
-                            settingsPresenter.closeDialog();
                         }
                     },
                     mTypeOptions == pair[1]));
@@ -338,24 +335,22 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
-                {R.string.video_feature_any, 0},
                 {R.string.video_feature_live, SearchOptions.FEATURE_LIVE},
                 {R.string.video_feature_4k, SearchOptions.FEATURE_4K},
                 {R.string.video_feature_hdr, SearchOptions.FEATURE_HDR}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]),
                     optionItem -> {
-                        mFeatureOptions = pair[1];
+                        mFeatureOptions = optionItem.isSelected() ? mFeatureOptions | pair[1] : mFeatureOptions & ~pair[1];
                         String searchText = getView().getSearchText();
 
                         if (searchText != null && !searchText.isEmpty()) {
                             loadSearchResultAlt(searchText);
-                            settingsPresenter.closeDialog();
                         }
                     },
-                    mFeatureOptions == pair[1]));
+                    (mFeatureOptions & pair[1]) == pair[1]));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.video_features), options);
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.video_features), options);
     }
 
     public void forceFinish() {
