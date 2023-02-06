@@ -498,4 +498,20 @@
     <string name="hide_streams">Skrýt živá vysílání z Odběrů</string>
     <string name="video_rotate">Otočit</string>
     <string name="trending_searches">Vyhledávací trendy</string>
+    <string name="video_duration_any">Any</string>
+    <string name="video_duration">Duration</string>
+    <string name="video_duration_under_4">Under 4 minutes</string>
+    <string name="video_duration_between_4_20">4–20 minutes</string>
+    <string name="video_duration_over_20">Over 20 minutes</string>
+    <string name="content_type">Typ</string>
+    <string name="content_type_any">Vše</string>
+    <string name="content_type_video">Video</string>
+    <string name="content_type_channel">Kanál</string>
+    <string name="content_type_playlist">Playlist</string>
+    <string name="content_type_movie">Film</string>
+    <string name="video_features">Vlastnosti</string>
+    <string name="video_feature_any">Vše</string>
+    <string name="video_feature_live">Živě</string>
+    <string name="video_feature_4k">4K</string>
+    <string name="video_feature_hdr">HDR</string>
 </resources>
