@@ -242,6 +242,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         } else {
             selectAllText();
             loadSearchTags("");
+            // Show suggested videos on empty search
+            loadSearchResult("");
 
             if (enableRecognition && SpeechRecognizer.isRecognitionAvailable(getContext())) {
                 startRecognition();
@@ -296,7 +298,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     }
 
     private void loadSearchResult(String searchQuery) {
-        if (!TextUtils.isEmpty(searchQuery) && !searchQuery.equals(mSearchQuery)) {
+        if (searchQuery != null && !searchQuery.equals(mSearchQuery)) {
             mSearchQuery = searchQuery;
             mSearchPresenter.onSearch(searchQuery);
         }

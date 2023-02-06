@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -345,7 +346,7 @@ public class SearchSupportFragment extends Fragment {
             //}
 
             // User clicked on tag and tries to edit search query
-            if (focused) {
+            if (focused && !TextUtils.isEmpty(getSearchBarText())) {
                 SearchPresenter.instance(v.getContext()).disposeActions();
             }
 
