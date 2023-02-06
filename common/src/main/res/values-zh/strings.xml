@@ -275,7 +275,7 @@
   <string name="proxy_application_aborted">请先正确设置服务器代理。</string>
   <string name="proxy_test_aborted">测试中止，请先修复代理服务器设置。</string>
   <string name="proxy_credentials_invalid">无效的用户名或密码。</string>
-  <string name="proxy_port_invalid">无效的代理服务器端口，必须 > 0。</string>
+  <string name="proxy_port_invalid">无效的代理服务器端口，必须 &gt; 0。</string>
   <string name="proxy_host_invalid">代理主机没有设置。</string>
   <string name="proxy_type_invalid">代理服务器类型没有设置。</string>
   <string name="proxy_test_cancelled">测试#%d: 已取消。</string>
@@ -356,7 +356,7 @@
   <string name="player_seek_regular">常规</string>
   <string name="seek_interval">快进间隔</string>
   <string name="seek_interval_sec">%s 秒</string>
-  <string name="subtitle_system">系统样式 (Android 设置 > 辅助)</string>
+  <string name="subtitle_system">系统样式 (Android 设置 &gt; 辅助)</string>
   <string name="subtitle_scale">字幕缩放</string>
   <string name="audio_sync_fix_desc">声音和视频同步的另一种方法。它被认为已经过时，但在某些情况下可能会有所帮助。</string>
   <string name="audio_sync_fix">音频同步修正</string>
@@ -412,7 +412,7 @@
   <string name="skip_codec_profile_check_desc">启动视频时不检查编解码器支持。可能对有缺陷的固件有所帮助。</string>
   <string name="force_sw_codec">强制软件视频解码器</string>
   <string name="force_sw_codec_desc">几乎可以播放任何视频，但性能非常差。</string>
-   <string name="playlist_order">播放列表</string>
+  <string name="playlist_order">播放列表</string>
   <string name="playlist_order_added_date_newer_first">添加时间（从新到旧）</string>
   <string name="playlist_order_added_date_older_first">添加时间（从旧到新）</string>
   <string name="playlist_order_published_date_newer_first">发布时间（从新到旧）</string>
@@ -490,4 +490,9 @@
   <string name="card_multiline_subtitle">多行字幕</string>
   <string name="add_to_playback_queue">增加到播放队列</string>
   <string name="remove_from_playback_queue">从播放队列移除</string>
+  <string name="auto_frame_rate_modes">支持的模式</string>
+  <string name="loading">加载中...</string>
+  <string name="hide_streams">隐藏订阅的直播</string>
+  <string name="video_rotate">旋转</string>
+  <string name="trending_searches">热搜</string>
 </resources>
