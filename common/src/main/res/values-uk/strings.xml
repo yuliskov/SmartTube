@@ -490,4 +490,20 @@
     <string name="hide_streams">Приховувати прямі трансляції з Підписок</string>
     <string name="video_rotate">Обертати</string>
     <string name="trending_searches">Популярні пошукові запити</string>
+    <string name="video_duration_any">Будь-яка</string>
+    <string name="video_duration">Тривалість</string>
+    <string name="video_duration_under_4">Меньше 4 хвилин</string>
+    <string name="video_duration_between_4_20">4–20 хвилин</string>
+    <string name="video_duration_over_20">Більше 20 хвилин</string>
+    <string name="content_type">Тип</string>
+    <string name="content_type_any">Будь-який</string>
+    <string name="content_type_video">Відео</string>
+    <string name="content_type_channel">Канал</string>
+    <string name="content_type_playlist">Плейлист</string>
+    <string name="content_type_movie">Фільм</string>
+    <string name="video_features">Характеристики</string>
+    <string name="video_feature_any">Будь-які</string>
+    <string name="video_feature_live">Прямі трансляції</string>
+    <string name="video_feature_4k">4K</string>
+    <string name="video_feature_hdr">HDR</string>
 </resources>
