@@ -497,4 +497,21 @@
     <string name="loading">Wird geladen…</string>
     <string name="hide_streams">Streams in Abos ausblenden</string>
     <string name="video_rotate">Drehen</string>
+    <string name="trending_searches">Beliebte Suchen</string>
+    <string name="video_duration_any">Beliebig</string>
+    <string name="video_duration">Dauer</string>
+    <string name="video_duration_under_4">Unter 4 Minuten</string>
+    <string name="video_duration_between_4_20">4–20 Minuten</string>
+    <string name="video_duration_over_20">Über 20 Minuten</string>
+    <string name="content_type">Typ</string>
+    <string name="content_type_any">Beliebig</string>
+    <string name="content_type_video">Video</string>
+    <string name="content_type_channel">Kanal</string>
+    <string name="content_type_playlist">Wiedergabeliste</string>
+    <string name="content_type_movie">Film</string>
+    <string name="video_features">Eigenschaften</string>
+    <string name="video_feature_any">Beliebig</string>
+    <string name="video_feature_live">Live</string>
+    <string name="video_feature_4k">4K</string>
+    <string name="video_feature_hdr">HDR</string>
 </resources>
