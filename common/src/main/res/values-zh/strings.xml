@@ -495,4 +495,20 @@
   <string name="hide_streams">隐藏订阅的直播</string>
   <string name="video_rotate">旋转</string>
   <string name="trending_searches">热搜</string>
+  <string name="video_duration_any">任意</string>
+  <string name="video_duration">时长</string>
+  <string name="video_duration_under_4">4 分钟以下</string>
+  <string name="video_duration_between_4_20">4-20 分钟</string>
+  <string name="video_duration_over_20">20 分钟以上</string>
+  <string name="content_type">类型</string>
+  <string name="content_type_any">任意</string>
+  <string name="content_type_video">视频</string>
+  <string name="content_type_channel">频道</string>
+  <string name="content_type_playlist">播放列表</string>
+  <string name="content_type_movie">电影</string>
+  <string name="video_features">特性</string>
+  <string name="video_feature_any">任意</string>
+  <string name="video_feature_live">直播</string>
+  <string name="video_feature_4k">4K</string>
+  <string name="video_feature_hdr">HDR</string>
 </resources>
