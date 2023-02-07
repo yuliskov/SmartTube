@@ -489,4 +489,11 @@
   <string name="clear_history">Wyczyść historię odtwarzania</string>
   <string name="chapters">Rozdziały</string>
   <string name="player_button_long_click">Krótkie naciśnięcie przycisku dla szybkiej akcji, długie dla ustawień</string>
+  <string name="pressing_back">naciskając WSTECZ</string>
+  <string name="auto_frame_rate_modes">Wspierane tryby</string>
+  <string name="loading">Wczytywanie...</string>
+  <string name="video_rotate">Obróć</string>
+  <string name="card_multiline_subtitle">Napisy wielowierszowe</string>
+  <string name="hide_streams">Ukryj transmisje w Subskrypcjach</string>
+  <string name="trending_searches">Popularne wyszukiwania</string>
 </resources>
