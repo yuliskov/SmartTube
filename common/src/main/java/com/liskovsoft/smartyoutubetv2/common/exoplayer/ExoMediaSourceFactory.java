@@ -33,7 +33,7 @@ import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.okhttp.DefaultHeaders;
+import com.liskovsoft.youtubeapi.common.helpers.DefaultHeaders;
 import com.liskovsoft.sharedutils.okhttp.OkHttpCommons;
 import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErrorHandlingPolicy;
