@@ -41,6 +41,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private int mDurationOptions;
     private int mTypeOptions;
     private int mFeatureOptions;
+    private int mSortingOptions;
 
     private SearchPresenter(Context context) {
         super(context);
@@ -79,6 +80,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         mDurationOptions = 0;
         mTypeOptions = 0;
         mFeatureOptions = 0;
+        mSortingOptions = 0;
         mIsVoice = false;
     }
 
@@ -133,7 +135,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         getView().clearSearch();
 
-        mLoadAction = mediaGroupManager.getSearchObserve(searchText, mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions)
+        mLoadAction = mediaGroupManager.getSearchObserve(searchText, mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions | mSortingOptions)
                 .subscribe(
                         mediaGroup -> {
                             Log.d(TAG, "Receiving results for '%s'", searchText);
@@ -154,7 +156,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         getView().clearSearch();
 
-        mLoadAction = mediaGroupManager.getSearchAltObserve(searchText, mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions)
+        mLoadAction = mediaGroupManager.getSearchAltObserve(searchText, mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions | mSortingOptions)
                 .subscribe(
                         mediaGroups -> {
                             Log.d(TAG, "Receiving results for '%s'", searchText);
@@ -251,15 +253,16 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private void showSettingsDialog() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
-        appendSortByDateCategory(settingsPresenter);
-        appendSortByDurationCategory(settingsPresenter);
-        appendSortByTypeCategory(settingsPresenter);
-        appendSortByFeatureCategory(settingsPresenter);
+        appendFilterByDateCategory(settingsPresenter);
+        appendFilterByDurationCategory(settingsPresenter);
+        appendFilterByTypeCategory(settingsPresenter);
+        appendFilterByFeatureCategory(settingsPresenter);
+        appendSortByCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_search));
     }
 
-    private void appendSortByDateCategory(AppDialogPresenter settingsPresenter) {
+    private void appendFilterByDateCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
@@ -284,7 +287,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.upload_date), options);
     }
 
-    private void appendSortByDurationCategory(AppDialogPresenter settingsPresenter) {
+    private void appendFilterByDurationCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
@@ -307,7 +310,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.video_duration), options);
     }
 
-    private void appendSortByTypeCategory(AppDialogPresenter settingsPresenter) {
+    private void appendFilterByTypeCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
@@ -331,7 +334,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.content_type), options);
     }
 
-    private void appendSortByFeatureCategory(AppDialogPresenter settingsPresenter) {
+    private void appendFilterByFeatureCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
@@ -351,6 +354,29 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.video_features), options);
+    }
+
+    private void appendSortByCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.sort_by_relevance, 0},
+                {R.string.sort_by_date, SearchOptions.SORT_BY_UPLOAD_DATE},
+                {R.string.sort_by_views, SearchOptions.SORT_BY_VIEW_COUNT},
+                {R.string.sort_by_rating, SearchOptions.SORT_BY_RATING}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]),
+                    optionItem -> {
+                        mSortingOptions = pair[1];
+                        String searchText = getView().getSearchText();
+
+                        if (searchText != null && !searchText.isEmpty()) {
+                            loadSearchResultAlt(searchText);
+                        }
+                    },
+                    mSortingOptions == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.search_sorting), options);
     }
 
     public void forceFinish() {

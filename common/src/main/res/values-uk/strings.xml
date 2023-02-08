@@ -506,4 +506,9 @@
     <string name="video_feature_live">Прямі трансляції</string>
     <string name="video_feature_4k">4K</string>
     <string name="video_feature_hdr">HDR</string>
+    <string name="search_sorting">Сортувати</string>
+    <string name="sort_by_relevance">Відповідність</string>
+    <string name="sort_by_views">Кількість переглядів</string>
+    <string name="sort_by_date">Дата завантаження</string>
+    <string name="sort_by_rating">Оцінка</string>
 </resources>

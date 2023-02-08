@@ -514,4 +514,9 @@
     <string name="video_feature_live">Live</string>
     <string name="video_feature_4k">4K</string>
     <string name="video_feature_hdr">HDR</string>
+    <string name="search_sorting">Sort by</string>
+    <string name="sort_by_relevance">Relevance</string>
+    <string name="sort_by_views">View count</string>
+    <string name="sort_by_date">Upload date</string>
+    <string name="sort_by_rating">Rating</string>
 </resources>
