@@ -388,6 +388,7 @@
     <string name="subtitle_position">Spostamento in basso dei sottotitoli</string>
     <string name="pressing_home">premendo HOME</string>
     <string name="pressing_home_back">premendo HOME o INDIETRO</string>
+    <string name="pressing_back">premendo INDIETRO</string>														  
     <string name="player_number_key_seek">Ricerca con i tasti numerici</string>
     <string name="save_remove_playlist">Aggiungi/Elimina playlist dalla sezione Playlist</string>
     <string name="remove_playlist">Elimina la playlist dalla sezione Playlist in modo permanente</string>
@@ -496,4 +497,26 @@
     <string name="loading">Caricamento in corso…</string>
     <string name="hide_streams">Nascondi le trasmissioni dalle iscrizioni</string>
     <string name="video_rotate">Ruota</string>
+    <string name="trending_searches">Ricerca per tendenze</string>
+    <string name="video_duration_any">Qualsiasi</string>
+    <string name="video_duration">Durata</string>
+    <string name="video_duration_under_4">Meno di 4 minuti</string>
+    <string name="video_duration_between_4_20">4-20 minuti</string>
+    <string name="video_duration_over_20">Più di 20 minuti</string>
+    <string name="content_type">Tipo</string>
+    <string name="content_type_any">Qualsiasi</string>
+    <string name="content_type_video">Video</string>
+    <string name="content_type_channel">Canale</string>
+    <string name="content_type_playlist">Playlist</string>
+    <string name="content_type_movie">Film</string>
+    <string name="video_features">Caratteristiche</string>
+    <string name="video_feature_any">Qualsiasi</string>
+    <string name="video_feature_live">Live</string>
+    <string name="video_feature_4k">4K</string>
+    <string name="video_feature_hdr">HDR</string>
+    <string name="search_sorting">Ordina per</string>
+    <string name="sort_by_relevance">Rilevanza</string>
+    <string name="sort_by_views">Numero di visualizzazioni</string>
+    <string name="sort_by_date">Data di caricamento</string>
+    <string name="sort_by_rating">Valutazione</string>
 </resources>
