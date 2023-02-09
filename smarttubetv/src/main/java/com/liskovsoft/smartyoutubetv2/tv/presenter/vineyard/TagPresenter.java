@@ -7,10 +7,10 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.User;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.ExtendedCardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.vineyard.TagCardView;
 
-public class TagPresenter extends ExtendedCardPresenter {
+public class TagPresenter extends LongClickPresenter {
     private static int sDefaultBackgroundColor;
     private static int sDefaultTextColor;
     private static int sSelectedBackgroundColor;

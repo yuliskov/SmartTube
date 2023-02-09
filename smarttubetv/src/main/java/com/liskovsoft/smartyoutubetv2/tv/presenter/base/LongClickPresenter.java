@@ -5,7 +5,7 @@ import androidx.leanback.widget.Presenter;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
-public abstract class ExtendedCardPresenter extends Presenter {
+public abstract class LongClickPresenter extends Presenter {
     private OnItemLongPressedListener mLongPressedListener;
 
     public void setOnItemViewLongPressedListener(OnItemLongPressedListener listener) {

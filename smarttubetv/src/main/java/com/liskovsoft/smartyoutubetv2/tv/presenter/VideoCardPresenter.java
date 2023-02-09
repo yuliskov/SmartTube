@@ -19,11 +19,10 @@ import com.bumptech.glide.request.target.Target;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.ExtendedCardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageCardView;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
@@ -32,7 +31,7 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
  * It contains an Image CardView
  */
-public class VideoCardPresenter extends ExtendedCardPresenter {
+public class VideoCardPresenter extends LongClickPresenter {
     private static final String TAG = VideoCardPresenter.class.getSimpleName();
     private int mDefaultBackgroundColor = -1;
     private int mDefaultTextColor = -1;
