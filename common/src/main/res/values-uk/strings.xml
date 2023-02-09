@@ -511,4 +511,5 @@
     <string name="sort_by_views">Кількість переглядів</string>
     <string name="sort_by_date">Дата завантаження</string>
     <string name="sort_by_rating">Оцінка</string>
+    <string name="clear_search_history">Видалити історію пошуку</string>
 </resources>

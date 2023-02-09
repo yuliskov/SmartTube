@@ -291,4 +291,15 @@
   <string name="app_backup">Criar backup</string>
   <string name="app_restore">Restaurar dados de um backup</string>
   <string name="proxy_test_btn">Testar</string>
+  <string name="subtitle_yellow_semi_transparent">Amarelo em fundo transparente</string>
+  <string name="subtitle_yellow_black">Amarelo em fundo preto</string>
+  <string name="color_scheme_dark_grey_monochrome">Cinza escuro (monocromático)</string>
+  <string name="disable_mic_permission">Por favor, desative a permissão de acesso a microfone, para permitir o correto funcionamento do reconhecimento de voz</string>
+  <string name="subtitle_system">Estilo definido no sistema (Definições Android &gt; Sistema &gt; Legendas)</string>
+  <string name="subtitle_scale">Escala das legendas</string>
+  <string name="subtitle_position">Posição (Relativa ao fundo do ecrã)</string>
+  <string name="action_next">Próximo vídeo</string>
+  <string name="action_previous">Vídeo anterior</string>
+  <string name="action_high_quality">Qualidade do vídeo</string>
+  <string name="content_block_no_skipping_mode"></string>
 </resources>

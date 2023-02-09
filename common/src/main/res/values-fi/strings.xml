@@ -66,7 +66,7 @@
   <string name="dialog_main_ui">Valikko</string>
   <string name="card_animated_previews">Animoidut esikatselut</string>
   <string name="web_site">Verkkosivu</string>
-  <string name="donation">Lahjoita projektille.</string>
+  <string name="donation">Lahjoita projektille</string>
   <string name="dialog_about">Tietoja</string>
   <string name="dialog_player_ui">Videosoitin</string>
   <string name="player_show_ui_on_pause">Näytä valikko kun pysäytetty</string>
@@ -77,7 +77,7 @@
   <string name="player_only_pause">Vain pysäytys</string>
   <string name="check_for_updates">Tarkista päivitykset</string>
   <string name="update_not_found">Uusin versio on jo käytössä.</string>
-  <string name="update_in_progress">Odota…</string>
+  <string name="update_in_progress">Odota</string>
   <string name="player_ui_hide_behavior">Piilota valikko automaattisesti</string>
   <string name="option_never">Ei koskaan</string>
   <string name="side_panel_sections">Järjestä valikot</string>
@@ -304,7 +304,7 @@
   <string name="content_block_action_toast">Ohita ilmoituksella</string>
   <string name="content_block_action_dialog">Näytä vahvistusikkuna</string>
   <string name="content_block_filler">Aiheen ohi</string>
-  <string name="keyboard_auto_show">Näytä näppäimitö automaattisesti</string>
+  <string name="keyboard_auto_show">Näytä näppäimistö automaattisesti</string>
   <string name="cancel_dialog">Peruuta</string>
   <string name="msg_player_error_source2">Videolähde ei toimi tai kellon aika on väärä</string>
   <string name="hide_upcoming">Piilota tulevat tilauksista</string>
@@ -375,7 +375,7 @@
   <string name="not_compatible_with">Valittu vaihtoehto ei ole yhteensopiva</string>
   <string name="subtitle_position">Tekstityksen alasiirto</string>
   <string name="pressing_home">painamalla Koti</string>
-  <string name="pressing_home_back">painamalla Koti tai Takaisin</string>
+  <string name="pressing_home_back">painamalla Koti tai takaisin</string>
   <string name="player_number_key_seek">Etsi numeronäppäimillä</string>
   <string name="save_remove_playlist">Lisää/poista soittolista soittolistat-osiosta</string>
   <string name="remove_playlist">Poista soittolista</string>
@@ -490,4 +490,30 @@
   <string name="chapters">Videon osat</string>
   <string name="card_multiline_subtitle">Monirivinen tekstitys</string>
   <string name="auto_frame_rate_modes">Tuetut tilat</string>
+  <string name="loading">Ladataan</string>
+  <string name="hide_streams">Piilota streamit tilauksista</string>
+  <string name="video_rotate">Käännä</string>
+  <string name="trending_searches">Trendaavat haut</string>
+  <string name="video_duration_any">Mikä tahansa</string>
+  <string name="video_duration">Kesto</string>
+  <string name="video_duration_under_4">Alle 4 minuuttia</string>
+  <string name="video_duration_between_4_20">4-20 minuuttia</string>
+  <string name="video_duration_over_20">Yli 20 minuuttia</string>
+  <string name="content_type">Tyyppi</string>
+  <string name="content_type_any">Mikä tahansa</string>
+  <string name="content_type_video">Video</string>
+  <string name="content_type_channel">Kanava</string>
+  <string name="content_type_playlist">Soittolista</string>
+  <string name="content_type_movie">Elokuva</string>
+  <string name="video_features">Ominaisuudet</string>
+  <string name="video_feature_any">Mikä tahansa</string>
+  <string name="video_feature_live">Live</string>
+  <string name="video_feature_4k">4K</string>
+  <string name="video_feature_hdr">HDR</string>
+  <string name="search_sorting">Lajittele</string>
+  <string name="sort_by_relevance">Merkityksellisyys</string>
+  <string name="sort_by_views">Katselukerrat</string>
+  <string name="sort_by_date">Julkaisupäivämäärä</string>
+  <string name="sort_by_rating">Luokitus</string>
+  <string name="pressing_back">painamalla takaisin</string>
 </resources>

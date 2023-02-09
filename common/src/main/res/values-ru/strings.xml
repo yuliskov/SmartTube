@@ -511,4 +511,5 @@
     <string name="sort_by_views">Число просмотров</string>
     <string name="sort_by_date">Дата загрузки</string>
     <string name="sort_by_rating">Рейтинг</string>
+    <string name="clear_search_history">Очистить историю поиска</string>
 </resources>

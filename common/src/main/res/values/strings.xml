@@ -519,4 +519,5 @@
     <string name="sort_by_views">View count</string>
     <string name="sort_by_date">Upload date</string>
     <string name="sort_by_rating">Rating</string>
+    <string name="clear_search_history">Clear search history</string>
 </resources>

@@ -12,14 +12,17 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.disposables.Disposable;
 
@@ -107,6 +110,20 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         VideoMenuPresenter.instance(getContext()).showMenu(item);
     }
 
+    public void onTagLongClicked(Tag item) {
+        if (getView() == null) {
+            return;
+        }
+
+        AppDialogUtil.showConfirmationDialog(
+                getContext(),
+                getContext().getString(R.string.clear_search_history),
+                () -> {
+                    MediaServiceManager.instance().clearSearchHistory();
+                    startSearch(null);
+                });
+    }
+
     @Override
     public boolean hasPendingActions() {
         return RxHelper.isAnyActionRunning(mLoadAction, mScrollAction);
@@ -135,7 +152,8 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         getView().clearSearch();
 
-        mLoadAction = mediaGroupManager.getSearchObserve(searchText, mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions | mSortingOptions)
+        mLoadAction = mediaGroupManager.getSearchObserve(searchText,
+                mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions | mSortingOptions)
                 .subscribe(
                         mediaGroup -> {
                             Log.d(TAG, "Receiving results for '%s'", searchText);
@@ -156,7 +174,8 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         getView().clearSearch();
 
-        mLoadAction = mediaGroupManager.getSearchAltObserve(searchText, mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions | mSortingOptions)
+        mLoadAction = mediaGroupManager.getSearchAltObserve(searchText,
+                mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions | mSortingOptions)
                 .subscribe(
                         mediaGroups -> {
                             Log.d(TAG, "Receiving results for '%s'", searchText);

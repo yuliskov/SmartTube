@@ -3,14 +3,14 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter.vineyard;
 import android.view.ViewGroup;
 
 import androidx.core.content.ContextCompat;
-import androidx.leanback.widget.Presenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.User;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.ExtendedCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.vineyard.TagCardView;
 
-public class TagPresenter extends Presenter {
+public class TagPresenter extends ExtendedCardPresenter {
     private static int sDefaultBackgroundColor;
     private static int sDefaultTextColor;
     private static int sSelectedBackgroundColor;
@@ -53,6 +53,8 @@ public class TagPresenter extends Presenter {
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
+        super.onBindViewHolder(viewHolder, item);
+
         if (item instanceof Tag) {
             Tag post = (Tag) item;
             TagCardView cardView = (TagCardView) viewHolder.view;

@@ -54,7 +54,9 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     }
 
     private void setupEventListeners() {
-        mCardPresenter.setOnItemViewLongPressedListener(new ItemViewLongPressedListener());
+        ItemViewLongPressedListener listener = new ItemViewLongPressedListener();
+        mCardPresenter.setOnItemViewLongPressedListener(listener);
+        setSearchTagsLongPressListener(listener);
     }
 
     @Override
@@ -339,7 +341,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
             if (item instanceof Video) {
                 mSearchPresenter.onVideoItemLongClicked((Video) item);
             } else if (item instanceof Tag) {
-                startSearch(((Tag) item).tag, false);
+                mSearchPresenter.onTagLongClicked((Tag) item);
+                //startSearch(((Tag) item).tag, false);
             }
         }
     }
