@@ -264,7 +264,7 @@ public class ExoMediaSourceFactory {
     private static HttpDataSource.Factory buildOkHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         // OkHttpHelpers.getOkHttpClient()
         // RetrofitHelper.createOkHttpClient()
-        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpHelpers.getOkHttpClient(), DefaultHeaders.APP_USER_AGENT,
+        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpHelpers.getClient(), DefaultHeaders.APP_USER_AGENT,
                 bandwidthMeter);
         addCommonHeaders(dataSourceFactory);
         return dataSourceFactory;

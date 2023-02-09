@@ -116,7 +116,7 @@ public class WebProxyDialog {
         mProxyManager.configureSystemProxy();
 
         String[] testUrls = mContext.getString(R.string.proxy_test_urls).split("\n");
-        OkHttpClient okHttpClient = OkHttpHelpers.getOkHttpClient();
+        OkHttpClient okHttpClient = OkHttpHelpers.getClient();
 
         for (String urlString: testUrls) {
             int serialNo = ++ mNumTests;
