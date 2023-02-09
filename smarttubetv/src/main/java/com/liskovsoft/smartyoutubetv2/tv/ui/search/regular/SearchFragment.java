@@ -180,6 +180,11 @@ public class SearchFragment extends SearchSupportFragment
     }
 
     @Override
+    public void clearSearchTags() {
+        // NOP
+    }
+
+    @Override
     public void showProgressBar(boolean show) {
         if (show) {
             mProgressBarManager.show();

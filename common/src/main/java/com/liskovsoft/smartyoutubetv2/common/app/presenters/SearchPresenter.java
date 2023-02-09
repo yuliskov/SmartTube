@@ -120,7 +120,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                 getContext().getString(R.string.clear_search_history),
                 () -> {
                     MediaServiceManager.instance().clearSearchHistory();
-                    startSearch(null);
+                    getView().clearSearchTags();
                 });
     }
 

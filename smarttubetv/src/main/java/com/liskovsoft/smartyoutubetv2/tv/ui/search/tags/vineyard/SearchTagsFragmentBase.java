@@ -247,7 +247,13 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         }
     }
 
-    private boolean containsAdapter(ObjectAdapter adapter) {
+    protected void clearTags() {
+        if (containsAdapter(mSearchTagsAdapter)) {
+            detachAdapter(0);
+        }
+    }
+
+    protected boolean containsAdapter(ObjectAdapter adapter) {
         if (mResultsAdapter != null) {
             for (int i = 0; i < mResultsAdapter.size(); i++) {
                 ListRow row = (ListRow) mResultsAdapter.get(i);

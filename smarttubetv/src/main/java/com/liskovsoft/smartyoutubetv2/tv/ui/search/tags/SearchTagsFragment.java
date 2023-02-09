@@ -109,9 +109,18 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         int size = resultsAdapter.size();
 
         for (int i = 0; i < size; i++) {
-            // Notify about changes (could help with search autofocus)
-            detachAdapter(1); // first adapter is tag adapter
+            Object row = resultsAdapter.get(0);
+            if (row instanceof ListRow &&
+                    ((ListRow) row).getAdapter() instanceof VideoGroupObjectAdapter) {
+                // Notify about changes (could help with search autofocus)
+                detachAdapter(0);
+            }
         }
+    }
+
+    @Override
+    public void clearSearchTags() {
+        clearTags();
     }
 
     @Override
