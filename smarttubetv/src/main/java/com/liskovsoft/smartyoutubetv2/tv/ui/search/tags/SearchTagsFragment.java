@@ -107,13 +107,16 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         }
 
         int size = resultsAdapter.size();
+        int index = 0;
 
         for (int i = 0; i < size; i++) {
-            Object row = resultsAdapter.get(0);
+            Object row = resultsAdapter.get(index);
             if (row instanceof ListRow &&
                     ((ListRow) row).getAdapter() instanceof VideoGroupObjectAdapter) {
                 // Notify about changes (could help with search autofocus)
-                detachAdapter(0);
+                detachAdapter(index);
+            } else {
+                index++;
             }
         }
     }
