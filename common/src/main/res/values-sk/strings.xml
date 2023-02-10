@@ -519,4 +519,5 @@
     <string name="sort_by_views">Počet zhliadnutí</string>
     <string name="sort_by_date">Dátum nahratia</string>
     <string name="sort_by_rating">Hodnotenie</string>
+    <string name="clear_search_history">Zmazať históriu vyhľadávania</string>
 </resources>
