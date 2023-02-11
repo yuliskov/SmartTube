@@ -514,4 +514,10 @@
     <string name="video_feature_live">Živě</string>
     <string name="video_feature_4k">4K</string>
     <string name="video_feature_hdr">HDR</string>
+    <string name="search_sorting">Řadit podle</string>
+    <string name="sort_by_relevance">Relevance</string>
+    <string name="sort_by_views">Počet zhlédnutí</string>
+    <string name="sort_by_date">Datum nahrání</string>
+    <string name="sort_by_rating">Hodnocení</string>
+    <string name="clear_search_history">Vymazat historii vyhledávání</string>
 </resources>
