@@ -183,7 +183,10 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                                 getView().updateSearch(VideoGroup.from(mediaGroup));
                             }
                         },
-                        error -> Log.e(TAG, "loadSearchData error: %s", error.getMessage()),
+                        error -> {
+                            Log.e(TAG, "loadSearchData error: %s", error.getMessage());
+                            getView().showProgressBar(false);
+                        },
                         () -> getView().showProgressBar(false)
                 );
     }
