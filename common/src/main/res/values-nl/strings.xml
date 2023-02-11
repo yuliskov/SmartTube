@@ -512,4 +512,10 @@
   <string name="video_duration">Duur</string>
   <string name="video_duration_under_4">Onder de 4 minuten</string>
   <string name="video_duration_between_4_20">4-20 minuten</string>
+  <string name="search_sorting">Sorteer op</string>
+  <string name="sort_by_relevance">Relevantie</string>
+  <string name="sort_by_views">Aantal weergaven</string>
+  <string name="sort_by_date">Upload datum</string>
+  <string name="sort_by_rating">Beoordeling</string>
+  <string name="clear_search_history">Verwijder zoekgeschiedenis</string>
 </resources>
