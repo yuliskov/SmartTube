@@ -113,8 +113,8 @@
   <string name="repeat_mode_pause">影片結束後暫停播放</string>
   <string name="repeat_mode_pause_alt">在每個非播放清單影片後暫停播放</string>
   <string name="repeat_mode_none">影片結束後停止播放</string>
-  <string name="subscribed_to_channel">訂閱頻道</string>
-  <string name="unsubscribed_from_channel">取消訂閱</string>
+  <string name="subscribed_to_channel">已訂閱頻道</string>
+  <string name="unsubscribed_from_channel">未訂閱頻道</string>
   <string name="subtitle_yellow_transparent">黃色</string>
   <string name="subtitle_white_transparent">白色透明</string>
   <string name="subtitle_white_black">背景播放</string>
