@@ -498,4 +498,26 @@
     <string name="hide_streams">Abonelikler\'de canlı yayınları gizle</string>
     <string name="video_rotate">Döndür</string>
     <string name="trending_searches">Trend olan aramalar</string>
+    <string name="video_duration_any">Herhangi biri</string>
+    <string name="video_duration">Süre</string>
+    <string name="video_duration_under_4">4 dakikadan kısa</string>
+    <string name="video_duration_between_4_20">4-20 dakika</string>
+    <string name="video_duration_over_20">20 dakikadan fazla</string>
+    <string name="content_type">Tür</string>
+    <string name="content_type_any">Herhangi biri</string>
+    <string name="content_type_video">Video</string>
+    <string name="content_type_channel">Kanal</string>
+    <string name="content_type_playlist">Oynatma Listesi</string>
+    <string name="content_type_movie">Film</string>
+    <string name="video_features">Özellikler</string>
+    <string name="video_feature_any">Herhangi biri</string>
+    <string name="video_feature_live">Canlı</string>
+    <string name="video_feature_4k">4K</string>
+    <string name="video_feature_hdr">HDR</string>
+    <string name="search_sorting">Sıralama Ölçütü</string>
+    <string name="sort_by_relevance">Alaka düzeyi</string>
+    <string name="sort_by_views">Görüntüleme sayısı</string>
+    <string name="sort_by_date">Yüklenme tarihi</string>
+    <string name="sort_by_rating">Derecelendirme</string>
+    <string name="clear_search_history">Arama geçmişini temizle</string>
 </resources>
