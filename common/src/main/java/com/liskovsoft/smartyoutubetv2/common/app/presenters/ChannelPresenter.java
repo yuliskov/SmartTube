@@ -208,7 +208,10 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         mUpdateAction = channelObserve
                 .subscribe(
                         this::updateRows,
-                        error -> Log.e(TAG, "updateRows error: %s", error.getMessage())
+                        error -> {
+                            Log.e(TAG, "updateRows error: %s", error.getMessage());
+                            getView().showProgressBar(false);
+                        }
                  );
     }
 
