@@ -519,4 +519,5 @@
     <string name="sort_by_views">Anzahl der Aufrufe</string>
     <string name="sort_by_date">Upload-Datum</string>
     <string name="sort_by_rating">Bewertung</string>
+    <string name="clear_search_history">Suchverlauf löschen</string>
 </resources>
