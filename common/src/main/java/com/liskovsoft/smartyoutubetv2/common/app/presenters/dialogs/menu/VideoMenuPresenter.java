@@ -11,6 +11,7 @@ import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
@@ -373,6 +374,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                                         } else {
                                             MessageHelpers.showMessage(getContext(), R.string.removed_from_history);
                                         }
+                                        VideoStateService.instance(getContext()).removeByVideoId(mVideo.videoId);
                                     }
                             );
                     mDialogPresenter.closeDialog();
