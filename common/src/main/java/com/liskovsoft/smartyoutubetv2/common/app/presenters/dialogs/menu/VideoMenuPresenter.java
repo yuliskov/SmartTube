@@ -47,6 +47,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     public static WeakReference<Video> sVideoHolder = new WeakReference<>(null);
     private boolean mIsNotInterestedButtonEnabled;
     private boolean mIsRemoveFromHistoryButtonEnabled;
+    private boolean mIsRemoveFromSubscriptionsButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
     private boolean mIsOpenChannelUploadsButtonEnabled;
     private boolean mIsSubscribeButtonEnabled;
@@ -147,8 +148,9 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendReturnToBackgroundVideoButton();
         appendPlayVideoButton();
         //appendNotInterestedButton();
-        appendStreamReminderButton();
         appendRemoveFromHistoryButton();
+        appendRemoveFromSubscriptionsButton();
+        appendStreamReminderButton();
         appendAddToRecentPlaylistButton();
         appendAddToPlaylistButton();
         appendCreatePlaylistButton();
@@ -375,6 +377,31 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                                             MessageHelpers.showMessage(getContext(), R.string.removed_from_history);
                                         }
                                         VideoStateService.instance(getContext()).removeByVideoId(mVideo.videoId);
+                                    }
+                            );
+                    mDialogPresenter.closeDialog();
+                }));
+    }
+
+    private void appendRemoveFromSubscriptionsButton() {
+        if (mVideo == null || mVideo.mediaItem == null || mVideo.mediaItem.getFeedbackToken() == null) {
+            return;
+        }
+
+        if (!mVideo.belongsToSubscriptions() || !mIsRemoveFromSubscriptionsButtonEnabled) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.remove_from_subscriptions), optionItem -> {
+                    mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
+                            .subscribe(
+                                    var -> {},
+                                    error -> Log.e(TAG, "Remove from subscriptions error: %s", error.getMessage()),
+                                    () -> {
+                                        if (mCallback != null) {
+                                            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+                                        }
                                     }
                             );
                     mDialogPresenter.closeDialog();
@@ -671,6 +698,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsSubscribeButtonEnabled = true;
         mIsNotInterestedButtonEnabled = true;
         mIsRemoveFromHistoryButtonEnabled = true;
+        mIsRemoveFromSubscriptionsButtonEnabled = true;
         mIsShareLinkButtonEnabled = true;
         mIsShareEmbedLinkButtonEnabled = true;
         mIsReturnToBackgroundVideoEnabled = true;
@@ -689,6 +717,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsShareEmbedLinkButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_EMBED_LINK);
         mIsNotInterestedButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_NOT_INTERESTED);
         mIsRemoveFromHistoryButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY);
+        mIsRemoveFromSubscriptionsButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS);
         mIsOpenDescriptionButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_DESCRIPTION);
         mIsPlayVideoButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAY_VIDEO);
         mIsSubscribeButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SUBSCRIBE);

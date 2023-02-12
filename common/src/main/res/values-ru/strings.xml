@@ -512,4 +512,5 @@
     <string name="sort_by_date">Дата загрузки</string>
     <string name="sort_by_rating">Рейтинг</string>
     <string name="clear_search_history">Очистить историю поиска</string>
+    <string name="remove_from_subscriptions">Скрыть</string>
 </resources>

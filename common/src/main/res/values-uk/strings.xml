@@ -512,4 +512,5 @@
     <string name="sort_by_date">Дата завантаження</string>
     <string name="sort_by_rating">Оцінка</string>
     <string name="clear_search_history">Видалити історію пошуку</string>
+    <string name="remove_from_subscriptions">Приховати</string>
 </resources>
