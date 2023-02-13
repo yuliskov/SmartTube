@@ -333,7 +333,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo.belongsToHistory() || !mIsNotInterestedButtonEnabled) {
+        if (!mVideo.belongsToHome() || !mIsNotInterestedButtonEnabled) {
             return;
         }
 

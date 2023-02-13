@@ -517,6 +517,10 @@ public final class Video implements Parcelable {
         return playlist1 != null && playlist2 != null && Helpers.equals(playlist1, playlist2);
     }
 
+    public boolean belongsToHome() {
+        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_HOME;
+    }
+
     public boolean belongsToChannel() {
         return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_CHANNEL;
     }
