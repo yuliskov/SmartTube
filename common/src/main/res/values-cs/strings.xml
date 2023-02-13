@@ -520,4 +520,5 @@
     <string name="sort_by_date">Datum nahrání</string>
     <string name="sort_by_rating">Hodnocení</string>
     <string name="clear_search_history">Vymazat historii vyhledávání</string>
+    <string name="remove_from_subscriptions">Skrýt</string>
 </resources>
