@@ -429,10 +429,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 !mGeneralData.isSettingsSectionEnabled()));
 
-        // Disable long press on buggy controllers.
-        options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
-                option -> mGeneralData.disableOkButtonLongPress(option.isSelected()),
-                mGeneralData.isOkButtonLongPressDisabled()));
+        //// Disable long press on buggy controllers.
+        //options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
+        //        option -> mGeneralData.disableOkButtonLongPress(option.isSelected()),
+        //        mGeneralData.isOkButtonLongPressDisabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }

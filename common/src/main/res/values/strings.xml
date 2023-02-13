@@ -251,6 +251,7 @@
     <string name="app_restore">Restore data from backup</string>
     <string name="skip_each_segment_once">Don\'t skip segments again</string>
     <string name="disable_ok_long_press">Disable OK button long press</string>
+    <string name="disable_ok_long_press_desc">Intended for buggy controllers where OK button is not function properly</string>
     <string name="player_time_correction">Display the time with respect of speed</string>
     <string name="sponsor_color_markers">Color markers on progress bar</string>
     <string name="refresh_section">Refresh section</string>

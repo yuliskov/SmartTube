@@ -251,6 +251,7 @@
     <string name="app_restore">Восстановить данные из бэкапа</string>
     <string name="skip_each_segment_once">Не пропускать сегменты повторно</string>
     <string name="disable_ok_long_press">Не обрабатывать долгое удержание кнопки ОК</string>
+    <string name="disable_ok_long_press_desc">Предназначено для глючных пультов, где кнопка OK не работает должным образом</string>
     <string name="player_time_correction">Отображать время с учётом скорости воспроизведения</string>
     <string name="sponsor_color_markers">Цветовые метки на шкале прогресса</string>
     <string name="refresh_section">Обновить раздел</string>
