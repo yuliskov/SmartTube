@@ -37,7 +37,7 @@
             android:layout_height="match_parent"
             app:showIncomingTime="false"
             app:isMessageFocusable="false"
-            app:incomingDefaultBubbleColor="@color/semi_transparent"
+            app:incomingDefaultBubbleColor="@color/live_chat_bg"
             app:incomingTextColor="@color/white"
             app:incomingBubblePaddingLeft="10sp"
             app:incomingBubblePaddingRight="10sp"
