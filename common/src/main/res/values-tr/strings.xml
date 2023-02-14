@@ -251,6 +251,7 @@
     <string name="app_restore">Veriyi yedekten geri yükle</string>
     <string name="skip_each_segment_once">Bölümleri tekrar atlama</string>
     <string name="disable_ok_long_press">TAMAM düğmesine uzun basmayı devre dışı bırak</string>
+    <string name="disable_ok_long_press_desc">TAMAM düğmesinin düzgün çalışmadığı hatalı denetleyiciler için tasarlanmıştır</string>
     <string name="player_time_correction">Hıza göre zamanı göster</string>
     <string name="sponsor_color_markers">İlerleme çubuğunda renkli işaretçiler</string>
     <string name="refresh_section">Bölümü yenile</string>
@@ -520,4 +521,5 @@
     <string name="sort_by_date">Yüklenme tarihi</string>
     <string name="sort_by_rating">Derecelendirme</string>
     <string name="clear_search_history">Arama geçmişini temizle</string>
+    <string name="remove_from_subscriptions">Gizle</string>
 </resources>
