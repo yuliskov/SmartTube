@@ -249,7 +249,6 @@
   <string name="app_backup">データをバックアップ</string>
   <string name="app_restore">データを復元</string>
   <string name="skip_each_segment_once">2度目はセグメントをスキップしない</string>
-  <string name="disable_ok_long_press">OKボタンの長押しを無効化</string>
   <string name="player_time_correction">速度に応じた時間を表示</string>
   <string name="sponsor_color_markers">シークバーのマーカーの色</string>
   <string name="refresh_section">セクションを更新</string>
