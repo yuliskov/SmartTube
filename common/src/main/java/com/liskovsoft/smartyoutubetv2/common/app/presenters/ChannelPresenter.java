@@ -261,7 +261,9 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                         continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
-                            getView().showProgressBar(false);
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
                         },
                         () -> getView().showProgressBar(false)
                 );

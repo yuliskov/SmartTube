@@ -196,6 +196,10 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
+        if (getView() == null) {
+            return;
+        }
+
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         getView().showProgressBar(true);

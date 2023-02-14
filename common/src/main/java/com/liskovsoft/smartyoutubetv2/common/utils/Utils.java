@@ -11,6 +11,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -138,7 +139,11 @@ public class Utils {
         Intent chooserIntent = Intent.createChooser(primaryIntent, context.getResources().getText(R.string.share_link));
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { secondaryIntent });
         chooserIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-        context.startActivity(chooserIntent);
+        try {
+            context.startActivity(chooserIntent);
+        } catch (ActivityNotFoundException e) {
+            Log.e(TAG, "Chooser intent not found", e);
+        }
     }
 
     /**

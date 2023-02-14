@@ -530,6 +530,10 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     }
 
     private boolean isLiveThreshold() {
+        if (getController() == null) {
+            return false;
+        }
+
         Video item = getVideo();
         boolean isLiveThreshold = getController().getDurationMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
         return item.isLive && isLiveThreshold;
