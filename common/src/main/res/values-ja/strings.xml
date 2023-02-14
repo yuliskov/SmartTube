@@ -249,7 +249,6 @@
   <string name="app_backup">データをバックアップ</string>
   <string name="app_restore">データを復元</string>
   <string name="skip_each_segment_once">2度目はセグメントをスキップしない</string>
-  <string name="disable_ok_long_press">OKボタンの長押しを無効化</string>
   <string name="player_time_correction">速度に応じた時間を表示</string>
   <string name="sponsor_color_markers">シークバーのマーカーの色</string>
   <string name="refresh_section">セクションを更新</string>
@@ -488,4 +487,11 @@
   <string name="video_feature_4k">4K</string>
   <string name="video_feature_hdr">HDR</string>
   <string name="pressing_back">戻るボタンを押下</string>
+  <string name="search_sorting">並べ替え</string>
+  <string name="sort_by_relevance">関連度順</string>
+  <string name="sort_by_views">視聴回数</string>
+  <string name="sort_by_date">アップロード日</string>
+  <string name="sort_by_rating">評価</string>
+  <string name="clear_search_history">検索履歴を消去</string>
+  <string name="remove_from_subscriptions">隠す</string>
 </resources>
