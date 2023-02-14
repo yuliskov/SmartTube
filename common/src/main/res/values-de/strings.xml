@@ -251,6 +251,7 @@
     <string name="app_restore">Daten aus Sicherung wiederherstellen</string>
     <string name="skip_each_segment_once">Jedes Segment nur einmal überspringen</string>
     <string name="disable_ok_long_press">Langes Drücken der OK-Taste deaktivieren</string>
+    <string name="disable_ok_long_press_desc">Vorgesehen für fehlerhafte Fernbedienungen, bei denen die OK-Taste nicht richtig funktioniert</string>
     <string name="player_time_correction">Anzeige der Zeit in Abhängigkeit von der Geschwindigkeit</string>
     <string name="sponsor_color_markers">Farbige Markierungen auf dem Fortschrittsbalken</string>
     <string name="refresh_section">Kategorie aktualisieren</string>
@@ -520,4 +521,5 @@
     <string name="sort_by_date">Upload-Datum</string>
     <string name="sort_by_rating">Bewertung</string>
     <string name="clear_search_history">Suchverlauf löschen</string>
+    <string name="remove_from_subscriptions">Ausblenden</string>
 </resources>
