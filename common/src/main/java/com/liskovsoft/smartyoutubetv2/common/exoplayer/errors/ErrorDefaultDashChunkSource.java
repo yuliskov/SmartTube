@@ -15,7 +15,7 @@ import com.google.android.exoplayer2.upstream.TransferListener;
 import java.util.List;
 
 public class ErrorDefaultDashChunkSource extends DefaultDashChunkSource {
-    public static final int MAX_SEGMENTS_PER_LOAD = 3; // Value > 1 adds special header?
+    public static final int MAX_SEGMENTS_PER_LOAD = 1; // Value > 1 adds special header?
     private final TrackErrorFixer mTrackErrorFixer;
 
     public static final class Factory implements DashChunkSource.Factory {
