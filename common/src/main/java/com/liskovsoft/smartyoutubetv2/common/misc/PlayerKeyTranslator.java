@@ -123,7 +123,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
 
     private void speedUp(boolean up) {
         float[] speedSteps =
-                new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f};
+                new float[] {0.25f, 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f, 2f};
 
         PlaybackView playbackView = getPlaybackView();
 
@@ -131,15 +131,17 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             float currentSpeed = playbackView.getController().getSpeed();
             int currentIndex = Arrays.binarySearch(speedSteps, currentSpeed);
 
-            if (currentIndex >= 0) {
-                int newIndex = up ? currentIndex + 1 : currentIndex - 1;
-
-                float speed = newIndex >= 0 && newIndex < speedSteps.length ? speedSteps[newIndex] : speedSteps[currentIndex];
-
-                PlayerData.instance(mContext).setSpeed(speed);
-                playbackView.getController().setSpeed(speed);
-                MessageHelpers.showMessage(mContext, String.format("%sx", speed));
+            if (currentIndex < 0) {
+                currentIndex = 3;
             }
+
+            int newIndex = up ? currentIndex + 1 : currentIndex - 1;
+
+            float speed = newIndex >= 0 && newIndex < speedSteps.length ? speedSteps[newIndex] : speedSteps[currentIndex];
+
+            PlayerData.instance(mContext).setSpeed(speed);
+            playbackView.getController().setSpeed(speed);
+            MessageHelpers.showMessage(mContext, String.format("%sx", speed));
         }
     }
 
