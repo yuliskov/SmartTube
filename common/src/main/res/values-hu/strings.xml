@@ -52,7 +52,7 @@
   <string name="settings_linked_devices">Társított eszközök</string>
   <string name="settings_about">Rólunk</string>
   <string name="dialog_account_list">Aktuális fiók</string>
-  <string name="dialog_account_none">Nincs</string>
+  <string name="dialog_account_none">Fiók nélkül</string>
   <string name="dialog_remove_account">Fiók törlése</string>
   <string name="dialog_add_account">Fiók hozzáadása</string>
   <string name="default_lang">Rendszer</string>
@@ -126,7 +126,7 @@
   <string name="playlists_style_grid">Rácsnézet</string>
   <string name="playlists_style_rows">Lista</string>
   <string name="player_show_clock">Óra megjelenítése a kezelőpanelen</string>
-  <string name="player_show_remaining_time">Hátralevő időt mutat</string>
+  <string name="player_show_remaining_time">Hátralevő idő megjelenítése a kezelőpanelen</string>
   <string name="open_channel_uploads">Csatorna feltöltések megnyitása</string>
   <string name="app_exit_shortcut">Kilépés módjának beállítása</string>
   <string name="app_exit_none">Ne lépjen ki</string>
@@ -325,7 +325,7 @@
   <string name="player_seek_confirmation_play">Megerősítéssel (lejátszás tekerés közben)</string>
   <string name="hide_shorts_from_home">Rövid klipek elrejtése a kezdőlapon</string>
   <string name="finish_on_disconnect">A telefon/táblagép leválasztása után zárja be az alkalmazást</string>
-  <string name="update_error">Frissítési hiba</string>
+  <string name="update_error">Frissítési hiba!</string>
   <string name="hide_shorts_from_history">Rövid klipek elrejtése az előzményekből</string>
   <string name="disable_screensaver">Képernyővédő tiltása</string>
   <string name="description_not_found">Leírás nem található</string>
@@ -364,7 +364,7 @@
   <string name="audio_sync_fix_desc">A hang/videó szinkronizálásának alternatív módja. Elavultnak tekinthető, de bizonyos esetekben segíthet.</string>
   <string name="audio_sync_fix">Hangszinkron javítás</string>
   <string name="ambilight_ratio_fix_desc">Javítja a hiányzó torzítású világítást. Javítja a helytelen képarányt. Javítja az üres képernyőképeket. Befolyásolja a teljesítményt!</string>
-  <string name="ambilight_ratio_fix">Ambilight/Képarány/Képernyőképek javítva</string>
+  <string name="ambilight_ratio_fix">Ambilight/Képarány/Képernyőképek javítása</string>
   <string name="force_legacy_codecs_desc">Jelentősen javítja a teljesítményt az alsó kategóriás eszközökön. A maximális felbontás 720p.</string>
   <string name="force_legacy_codecs">Legacy kodekek kényszerítése (720p)</string>
   <string name="live_stream_fix_desc">Jelentősen javítja az élő közvetítések teljesítményét alacsony kategóriás eszközökön. A maximális felbontás 1080p.</string>
@@ -407,7 +407,7 @@
   <string name="alt_presets_behavior">Az Alt előre beállítja a viselkedést (korlátozza a sávszélességet)</string>
   <string name="alt_presets_behavior_desc">Az alkalmazás megpróbálja fenntartani a sávszélességet a kiválasztott előre beállított értéknek megfelelően a felbontás, az fps és a kodek közötti egyeztetés helyett.</string>
   <string name="sleep_timer">Elalváskapcsoló</string>
-  <string name="sleep_timer_desc">Szüneteltesse a lejátszást, ha a felhasználó egy órán keresztül nem használta a távirányítót.</string>
+  <string name="sleep_timer_desc">Lejátszás szüneteltetése, ha a felhasználó egy órán keresztül nem használja a távirányítót.</string>
   <string name="disable_vsync">vsync letiltása</string>
   <string name="disable_vsync_desc">Kicsit javítja a lejátszási teljesítményt</string>
   <string name="skip_codec_profile_check">A kodekprofilszint-ellenőrzés kihagyása</string>
@@ -511,4 +511,12 @@
   <string name="video_feature_4k">4K</string>
   <string name="video_feature_hdr">HDR</string>
   <string name="pressing_back">a BACK megnyomásával</string>
+  <string name="search_sorting">Rendezési elv</string>
+  <string name="sort_by_relevance">Fontosság szerint</string>
+  <string name="sort_by_views">Megtekintés száma szerint</string>
+  <string name="sort_by_date">Feltöltés dátuma szerint</string>
+  <string name="sort_by_rating">Értékelés szerint</string>
+  <string name="clear_search_history">Keresési előzmények törlése</string>
+  <string name="remove_from_subscriptions">Eltávolítás a feliratkozásokból</string>
+  <string name="disable_ok_long_press_desc">Hibás vezérlőkhöz való, ahol az OK gomb nem működik megfelelően</string>
 </resources>
