@@ -251,6 +251,7 @@
     <string name="app_restore">Ripristino dati dal backup</string>
     <string name="skip_each_segment_once">Non saltare di nuovo i segmenti</string>
     <string name="disable_ok_long_press">Disattiva pressione prolungata del pulsante OK</string>
+    <string name="disable_ok_long_press_desc">Destinato a controller difettosi in cui il pulsante OK non funziona correttamente</string>
     <string name="player_time_correction">Visualizza la durata in base alla velocità</string>
     <string name="sponsor_color_markers">Indicatori colorati sulla barra di avanzamento</string>
     <string name="refresh_section">Aggiorna sezione</string>
@@ -519,4 +520,6 @@
     <string name="sort_by_views">Numero di visualizzazioni</string>
     <string name="sort_by_date">Data di caricamento</string>
     <string name="sort_by_rating">Valutazione</string>
+    <string name="clear_search_history">Cancella la cronologia delle ricerche</string>
+    <string name="remove_from_subscriptions">Nascondi</string>
 </resources>
