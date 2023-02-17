@@ -4,6 +4,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 
 public final class SampleMediaItem implements MediaItem {
+    private int mId;
     private String mVideoId;
     private String mPlaylistId;
     private String mTitle;
@@ -12,6 +13,20 @@ public final class SampleMediaItem implements MediaItem {
     private String mCardImageUrl;
     private String mParams;
     private String mSecondTitle;
+    private String mContentType;
+    private int mType;
+    private String mVideoUrl;
+    private String mBackgroundImageUrl;
+    private String mAuthor;
+    private int mPercentWatched;
+    private String mBadgeText;
+    private boolean mHaseNewContent;
+    private String mVideoPreviewUrl;
+    private int mPlaylistIndex;
+    private boolean mIsLive;
+    private boolean mIsUpcoming;
+    private boolean mIsMovie;
+    private String mClickTrackingParams;
 
     private SampleMediaItem() {
     }
@@ -31,34 +46,64 @@ public final class SampleMediaItem implements MediaItem {
         return mediaItem;
     }
 
+    public static MediaItem from(Video video) {
+        SampleMediaItem mediaItem = new SampleMediaItem();
+
+        mediaItem.mId = (int) video.id;
+        mediaItem.mTitle = video.title;
+        mediaItem.mSecondTitle = video.secondTitle;
+        mediaItem.mContentType = video.category;
+        mediaItem.mType = video.itemType;
+        mediaItem.mVideoId = video.videoId;
+        mediaItem.mChannelId = video.channelId;
+        mediaItem.mVideoUrl = video.videoUrl;
+        mediaItem.mBackgroundImageUrl = video.bgImageUrl;
+        mediaItem.mCardImageUrl = video.cardImageUrl;
+        mediaItem.mAuthor = video.author;
+        mediaItem.mPercentWatched = (int) video.percentWatched;
+        mediaItem.mBadgeText = video.badge;
+        mediaItem.mHaseNewContent = video.hasNewContent;
+        mediaItem.mVideoPreviewUrl = video.previewUrl;
+        mediaItem.mPlaylistId = video.playlistId;
+        mediaItem.mPlaylistIndex = video.playlistIndex;
+        mediaItem.mParams = video.playlistParams;
+        mediaItem.mReloadPageKey = video.reloadPageKey;
+        mediaItem.mIsLive = video.isLive;
+        mediaItem.mIsUpcoming = video.isUpcoming;
+        mediaItem.mIsMovie = video.isMovie;
+        mediaItem.mClickTrackingParams = video.clickTrackingParams;
+
+        return mediaItem;
+    }
+
     @Override
     public int getType() {
-        return 0;
+        return mType;
     }
 
     @Override
     public boolean isLive() {
-        return false;
+        return mIsLive;
     }
 
     @Override
     public boolean isUpcoming() {
-        return false;
+        return mIsUpcoming;
     }
 
     @Override
     public boolean isMovie() {
-        return false;
+        return mIsMovie;
     }
 
     @Override
     public int getPercentWatched() {
-        return 0;
+        return mPercentWatched;
     }
 
     @Override
     public String getAuthor() {
-        return null;
+        return mAuthor;
     }
 
     @Override
@@ -73,7 +118,7 @@ public final class SampleMediaItem implements MediaItem {
 
     @Override
     public int getPlaylistIndex() {
-        return 0;
+        return mPlaylistIndex;
     }
 
     @Override
@@ -88,12 +133,12 @@ public final class SampleMediaItem implements MediaItem {
 
     @Override
     public boolean hasNewContent() {
-        return false;
+        return mHaseNewContent;
     }
 
     @Override
     public int getId() {
-        return 0;
+        return mId;
     }
 
     @Override
@@ -108,7 +153,7 @@ public final class SampleMediaItem implements MediaItem {
 
     @Override
     public String getVideoUrl() {
-        return null;
+        return mVideoUrl;
     }
 
     @Override
@@ -118,7 +163,7 @@ public final class SampleMediaItem implements MediaItem {
 
     @Override
     public String getContentType() {
-        return null;
+        return mContentType;
     }
 
     @Override
@@ -128,7 +173,7 @@ public final class SampleMediaItem implements MediaItem {
 
     @Override
     public String getBadgeText() {
-        return null;
+        return mBadgeText;
     }
 
     @Override
@@ -143,7 +188,7 @@ public final class SampleMediaItem implements MediaItem {
 
     @Override
     public String getBackgroundImageUrl() {
-        return null;
+        return mBackgroundImageUrl;
     }
 
     @Override
@@ -168,7 +213,7 @@ public final class SampleMediaItem implements MediaItem {
 
     @Override
     public String getVideoPreviewUrl() {
-        return null;
+        return mVideoPreviewUrl;
     }
 
     @Override
@@ -203,7 +248,7 @@ public final class SampleMediaItem implements MediaItem {
 
     @Override
     public String getClickTrackingParams() {
-        return null;
+        return mClickTrackingParams;
     }
 
     @Override

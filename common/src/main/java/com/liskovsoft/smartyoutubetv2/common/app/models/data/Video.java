@@ -61,7 +61,7 @@ public final class Video implements Parcelable {
     public boolean isLive;
     public boolean isUpcoming;
     public boolean isChapter;
-    private boolean isMovie;
+    public boolean isMovie;
     public boolean isSubscribed;
     public boolean isRemote;
     public int groupPosition = -1; // group position in multi-grid fragments
@@ -705,6 +705,10 @@ public final class Video implements Parcelable {
 
         long posMs = (long) (mediaItem.getDurationMs() / 100 * percentWatched);
         return posMs > 0 && posMs < mediaItem.getDurationMs() ? posMs : 0;
+    }
+
+    public MediaItem toMediaItem() {
+        return SampleMediaItem.from(this);
     }
 
     // Builder for Video object.

@@ -537,12 +537,12 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private void callMediaItemObservable(MediaItemObservable callable) {
         Video video = getController().getVideo();
 
-        if (video == null || video.mediaItem == null) {
+        if (video == null) {
             Log.e(TAG, "Seems that video isn't initialized yet. Cancelling...");
             return;
         }
 
-        Observable<Void> observable = callable.call(video.mediaItem);
+        Observable<Void> observable = callable.call(video.mediaItem != null ? video.mediaItem : video.toMediaItem());
 
         RxHelper.execute(observable);
     }
