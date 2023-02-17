@@ -589,6 +589,9 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 }
             } else {
                 mPositionsLength = 0;
+
+                // MOD: Clear thumb bar if there's no seek previews
+                mThumbsBar.clearThumbBitmaps();
             }
 
             return true;

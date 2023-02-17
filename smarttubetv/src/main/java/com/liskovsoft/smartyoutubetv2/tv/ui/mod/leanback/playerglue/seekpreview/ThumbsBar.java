@@ -304,9 +304,10 @@ public class ThumbsBar extends LinearLayout {
      */
     public void setThumbBitmap(int index, Bitmap bitmap) {
         mBitmaps.put(index, bitmap);
-        ((ImageView) getChildAt(index)).setImageBitmap(bitmap);
+        ImageView imageView = (ImageView) getChildAt(index);
+        imageView.setImageBitmap(bitmap);
         // MOD: exclude impact to final size of invisible images
-        ((ImageView) getChildAt(index)).setVisibility(bitmap != null ? View.VISIBLE : View.GONE);
+        imageView.setVisibility(bitmap != null ? View.VISIBLE : View.GONE);
     }
 
     public void setThumbsRotation(int angle) {
