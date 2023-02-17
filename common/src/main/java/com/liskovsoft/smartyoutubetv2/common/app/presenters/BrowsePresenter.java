@@ -297,7 +297,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (isMultiGridChannelUploadsSection() && item.belongsToChannelUploads() && !item.hasVideo()) {
+        if (belongsToChannelUploadsMultiGrid(item)) {
             if (mMainUIData.isUploadsAutoLoadEnabled()) {
                 updateMultiGrid(item);
             } else {
@@ -315,8 +315,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         // Check that channels new look enabled and we're on the first column
-        if (isMultiGridChannelUploadsSection() && item.belongsToChannelUploads() && !item.hasVideo()) {
-            updateMultiGrid(item);
+        if (belongsToChannelUploadsMultiGrid(item)) {
+            //updateMultiGrid(item);
+            ChannelPresenter.instance(getContext()).openChannel(item);
         } else {
             VideoActionPresenter.instance(getContext()).apply(item);
         }
@@ -330,7 +331,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (item.belongsToChannelUploads() && !item.hasVideo()) { // We need to be sure we exactly on Channels section
+        if (belongsToChannelUploads(item)) { // We need to be sure we exactly on Channels section
             ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
                 if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE) { // works with any uploads section look
                     removeItem(item);
@@ -754,6 +755,14 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         updateVideoGrid(mCurrentSection, ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item), 1, true);
+    }
+
+    private boolean belongsToChannelUploadsMultiGrid(Video item) {
+        return isMultiGridChannelUploadsSection() && belongsToChannelUploads(item);
+    }
+
+    private boolean belongsToChannelUploads(Video item) {
+        return item.belongsToChannelUploads() && !item.hasVideo();
     }
 
     private BrowseSection findSectionById(int sectionId) {
