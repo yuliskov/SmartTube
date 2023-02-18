@@ -251,6 +251,7 @@
     <string name="app_restore">Obnoviť dáta zo zálohy</string>
     <string name="skip_each_segment_once">Už viac nepreskakovať segmenty</string>
     <string name="disable_ok_long_press">Vypnúť dlhé stlačenie tlačidla OK</string>
+    <string name="disable_ok_long_press_desc">Určené pre chybné ovládače, kde tlačidlo OK nefunguje správne</string>
     <string name="player_time_correction">Zobraziť čas vzhľadom na rýchlosť</string>
     <string name="sponsor_color_markers">Farebné značky na ukazovateli priebehu</string>
     <string name="refresh_section">Aktualizovať sekciu</string>
@@ -520,4 +521,5 @@
     <string name="sort_by_date">Dátum nahratia</string>
     <string name="sort_by_rating">Hodnotenie</string>
     <string name="clear_search_history">Zmazať históriu vyhľadávania</string>
+    <string name="remove_from_subscriptions">Skryť</string>
 </resources>
