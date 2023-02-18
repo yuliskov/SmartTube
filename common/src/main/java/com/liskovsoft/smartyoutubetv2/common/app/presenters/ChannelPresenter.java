@@ -37,6 +37,14 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
 
+    private interface OnChannelId {
+        void onChannelId(String channelId);
+    }
+
+    public interface OnUploadsRow {
+        void onUploadsRow(Observable<MediaGroup> row);
+    }
+
     public ChannelPresenter(Context context) {
         super(context);
         mMediaService = YouTubeMediaService.instance();
@@ -134,40 +142,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     public void openChannel(Video item) {
-        if (item != null) {
-            if (item.channelId != null) {
-                openChannel(item.channelId);
-            } else if (item.videoId != null) {
-                LoadingManager.showLoading(getContext(), true);
-                //MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
-                mServiceManager.loadMetadata(item, metadata -> {
-                    LoadingManager.showLoading(getContext(), false);
-                    openChannel(metadata.getChannelId());
-                    item.channelId = metadata.getChannelId();
-                });
-            } else if (item.belongsToChannelUploads()) {
-                LoadingManager.showLoading(getContext(), true);
-                // Maybe this is subscribed items view
-                ChannelUploadsPresenter.instance(getContext())
-                        .obtainVideoGroup(item, group -> {
-                            LoadingManager.showLoading(getContext(), false);
-                            // Some uploads groups doesn't contain channel button.
-                            // Use data from first item instead.
-                            if (group.getChannelId() == null) {
-                                List<MediaItem> mediaItems = group.getMediaItems();
-
-                                if (mediaItems != null && mediaItems.size() > 0) {
-                                    openChannel(Video.from(mediaItems.get(0)));
-                                }
-
-                                return;
-                            }
-
-                            openChannel(group.getChannelId());
-                            item.channelId = group.getChannelId();
-                        });
-            }
-        }
+        extractChannelId(item, this::openChannel);
     }
 
     public void openChannel(String channelId) {
@@ -297,5 +272,55 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         if (getView() != null) {
             getView().clear();
         }
+    }
+
+    private void extractChannelId(Video item, OnChannelId callback) {
+        if (item != null) {
+            if (item.channelId != null) {
+                callback.onChannelId(item.channelId);
+            } else if (item.videoId != null) {
+                LoadingManager.showLoading(getContext(), true);
+                //MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+                mServiceManager.loadMetadata(item, metadata -> {
+                    LoadingManager.showLoading(getContext(), false);
+                    callback.onChannelId(metadata.getChannelId());
+                    item.channelId = metadata.getChannelId();
+                });
+            } else if (item.belongsToChannelUploads()) {
+                LoadingManager.showLoading(getContext(), true);
+                // Maybe this is subscribed items view
+                ChannelUploadsPresenter.instance(getContext())
+                        .obtainVideoGroup(item, group -> {
+                            LoadingManager.showLoading(getContext(), false);
+                            // Some uploads groups doesn't contain channel button.
+                            // Use data from first item instead.
+                            if (group.getChannelId() == null) {
+                                List<MediaItem> mediaItems = group.getMediaItems();
+
+                                if (mediaItems != null && mediaItems.size() > 0) {
+                                    extractChannelId(Video.from(mediaItems.get(0)), callback);
+                                }
+
+                                return;
+                            }
+
+                            callback.onChannelId(group.getChannelId());
+                            item.channelId = group.getChannelId();
+                        });
+            }
+        }
+    }
+
+    public void obtainUploadsRowObservable(Video item, OnUploadsRow callback) {
+        extractChannelId(item, channelId -> {
+            if (channelId == null) {
+                return;
+            }
+
+            callback.onUploadsRow(mMediaService.getMediaGroupService().getChannelObserve(channelId).map(mediaGroups -> {
+                moveToTop(mediaGroups, R.string.uploads_row_name);
+                return mediaGroups.get(0);
+            }));
+        });
     }
 }

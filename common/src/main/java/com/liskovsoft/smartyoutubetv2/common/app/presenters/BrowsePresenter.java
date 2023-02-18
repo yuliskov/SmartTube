@@ -299,9 +299,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         if (belongsToChannelUploadsMultiGrid(item)) {
             if (mMainUIData.isUploadsAutoLoadEnabled()) {
-                updateMultiGrid(item);
+                updateChannelUploadsMultiGrid(item);
             } else {
-                updateMultiGrid(null); // clear
+                updateChannelUploadsMultiGrid(null); // clear
             }
         }
 
@@ -316,8 +316,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         // Check that channels new look enabled and we're on the first column
         if (belongsToChannelUploadsMultiGrid(item)) {
-            //updateMultiGrid(item);
-            ChannelPresenter.instance(getContext()).openChannel(item);
+            updateChannelUploadsMultiGrid(item);
+            //ChannelPresenter.instance(getContext()).openChannel(item);
         } else {
             VideoActionPresenter.instance(getContext()).apply(item);
         }
@@ -749,12 +749,14 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mLastUpdateTimeMs = 0;
     }
 
-    private void updateMultiGrid(Video item) {
+    private void updateChannelUploadsMultiGrid(Video item) {
         if (mCurrentSection == null) {
             return;
         }
 
-        updateVideoGrid(mCurrentSection, ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item), 1, true);
+        //updateVideoGrid(mCurrentSection, ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item), 1, true);
+
+        ChannelPresenter.instance(getContext()).obtainUploadsRowObservable(item, row -> updateVideoGrid(mCurrentSection, row, 1, true));
     }
 
     private boolean belongsToChannelUploadsMultiGrid(Video item) {
