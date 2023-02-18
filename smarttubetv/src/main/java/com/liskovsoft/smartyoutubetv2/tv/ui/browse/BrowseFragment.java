@@ -244,13 +244,13 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public void showError(ErrorFragmentData data) {
         replaceMainFragment(new ErrorDialogFragment(data));
-        // Why show only if empty?
-        //showErrorIfEmpty(data);
+        updateTitleView();
     }
 
     private void showErrorIfEmpty(ErrorFragmentData data) {
         if (mSectionFragmentFactory.isEmpty()) {
             replaceMainFragment(new ErrorDialogFragment(data));
+            updateTitleView();
         }
     }
 
@@ -299,6 +299,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mSectionFragmentFactory.updateCurrentFragment(group);
 
         fixInvisibleSearchOrb();
+
+        updateTitleView();
     }
 
     @Override
@@ -306,6 +308,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         restoreMainFragment();
 
         mSectionFragmentFactory.updateCurrentFragment(group);
+
+        updateTitleView();
     }
 
     @Override
@@ -321,7 +325,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         startHeadersTransitionSafe(false);
         if (getMainFragment() != null && getMainFragment().getView() != null) {
             getMainFragment().getView().requestFocus();
-            updateTitleView();
         }
     }
 

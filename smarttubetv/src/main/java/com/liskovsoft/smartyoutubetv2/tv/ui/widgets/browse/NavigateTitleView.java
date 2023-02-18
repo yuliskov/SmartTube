@@ -35,6 +35,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.search.LongClickSearchOrbView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
@@ -51,7 +52,7 @@ import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
  * https://stackoverflow.com/questions/40802470/add-button-to-browsefragment
  */
 public class NavigateTitleView extends TitleView implements OnDataChange {
-    private SearchOrbView mAccountView;
+    private LongClickSearchOrbView mAccountView;
     private SearchOrbView mLanguageView;
     private SearchOrbView mExitPip;
     private TextView mPipTitle;
@@ -190,8 +191,12 @@ public class NavigateTitleView extends TitleView implements OnDataChange {
         }
 
         if (mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS)) {
-            mAccountView = (SearchOrbView) findViewById(R.id.account_orb);
-            mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).show());
+            mAccountView = (LongClickSearchOrbView) findViewById(R.id.account_orb);
+            mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).nextAccountOrDialog());
+            mAccountView.setOnOrbLongClickedListener(v -> {
+                AccountSettingsPresenter.instance(getContext()).show();
+                return true;
+            });
             TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
 
             updateAccountIcon();

@@ -489,9 +489,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void refresh() {
+        refresh(true);
+    }
+
+    public void refresh(boolean focusOnContent) {
         if (mCurrentSection != null) {
             updateSection(mCurrentSection.getId());
-            if (getView() != null) {
+            if (focusOnContent && getView() != null) {
                 getView().focusOnContent();
             }
         }
