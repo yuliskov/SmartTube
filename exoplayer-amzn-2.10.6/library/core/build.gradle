@@ -35,16 +35,17 @@ android {
         testInstrumentationRunnerArguments clearPackageData: 'true'
     }
 
+    // MOD: intellij fix: root already belongs to module testutils
     // Workaround to prevent circular dependency on project :testutils.
-    sourceSets {
-        androidTest {
-            java.srcDirs += '../../testutils/src/main/java/'
-        }
-        test {
-            java.srcDirs += '../../testutils/src/main/java/'
-            java.srcDirs += '../../testutils_robolectric/src/main/java/'
-        }
-    }
+    // sourceSets {
+    //     androidTest {
+    //         java.srcDirs += '../../testutils/src/main/java/'
+    //     }
+    //     test {
+    //         java.srcDirs += '../../testutils/src/main/java/'
+    //         java.srcDirs += '../../testutils_robolectric/src/main/java/'
+    //     }
+    // }
 
     buildTypes {
         // Re-enable test coverage when the following issue is fixed:
