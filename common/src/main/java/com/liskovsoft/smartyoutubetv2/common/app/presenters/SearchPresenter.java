@@ -185,7 +185,9 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                         },
                         error -> {
                             Log.e(TAG, "loadSearchData error: %s", error.getMessage());
-                            getView().showProgressBar(false);
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
                         },
                         () -> getView().showProgressBar(false)
                 );
@@ -213,7 +215,9 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                         continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup)),
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
-                            getView().showProgressBar(false);
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
                         },
                         () -> getView().showProgressBar(false)
                 );
