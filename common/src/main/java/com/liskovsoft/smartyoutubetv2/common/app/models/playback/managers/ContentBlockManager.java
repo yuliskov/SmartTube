@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ContentBlockManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = ContentBlockManager.class.getSimpleName();
+    private static final long POLL_INTERVAL_MS = 500;
     private MediaItemService mMediaItemManager;
     private ContentBlockData mContentBlockData;
     private Video mVideo;
@@ -161,7 +162,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         // Warn. Try to not access player object here.
         // Or you'll get "Player is accessed on the wrong thread" error.
         Observable<Long> playbackProgressObservable =
-                RxHelper.interval(1, TimeUnit.SECONDS);
+                RxHelper.interval(POLL_INTERVAL_MS, TimeUnit.MILLISECONDS);
 
         mProgressAction = playbackProgressObservable
                 .subscribe(
