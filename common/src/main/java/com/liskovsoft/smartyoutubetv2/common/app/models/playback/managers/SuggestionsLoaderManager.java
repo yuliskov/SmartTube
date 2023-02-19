@@ -409,10 +409,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             }
 
             SeekBarSegment seekBarSegment = new SeekBarSegment();
-            double startRatio = (double) chapter.getStartTimeMs() / getController().getDurationMs(); // Range: [0, 1]
-            double endRatio = (double) (chapter.getStartTimeMs() + markLengthMs) / getController().getDurationMs(); // Range: [0, 1]
-            seekBarSegment.startProgress = (int) (startRatio * Integer.MAX_VALUE); // Could safely cast to int
-            seekBarSegment.endProgress = (int) (endRatio * Integer.MAX_VALUE); // Could safely cast to int
+            float startRatio = (float) chapter.getStartTimeMs() / getController().getDurationMs(); // Range: [0, 1]
+            float endRatio = (float) (chapter.getStartTimeMs() + markLengthMs) / getController().getDurationMs(); // Range: [0, 1]
+            seekBarSegment.startProgress = startRatio;
+            seekBarSegment.endProgress = endRatio;
             seekBarSegment.color = ContextCompat.getColor(getActivity(), R.color.black);
             result.add(seekBarSegment);
         }
