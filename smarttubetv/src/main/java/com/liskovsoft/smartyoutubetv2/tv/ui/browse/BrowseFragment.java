@@ -51,6 +51,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private BrowseSectionFragmentFactory mSectionFragmentFactory;
     private Handler mHandler;
     private ProgressBarManager mProgressBarManager;
+    private NavigateTitleView mTitleView;
     private boolean mIsFragmentCreated;
     private int mRestoredHeaderIndex = -1;
     private int mRestoredItemIndex = -1;
@@ -92,6 +93,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         View root = super.onCreateView(inflater, container, savedInstanceState);
 
         mProgressBarManager.setRootView((ViewGroup) root);
+        mTitleView = root.findViewById(R.id.browse_title_group);
 
         return root;
     }
@@ -457,12 +459,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void updateTitleView() {
-        if (getView() != null) {
-            NavigateTitleView titleView = getView().findViewById(R.id.browse_title_group);
-
-            if (titleView != null) {
-                titleView.update();
-            }
+        if (mTitleView != null) {
+            mTitleView.update();
         }
     }
 }
