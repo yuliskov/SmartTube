@@ -404,6 +404,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_long_speed_list),
+                option -> mPlayerTweaksData.enableLongSpeedList(option.isSelected()),
+                mPlayerTweaksData.isLongSpeedListEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_button_long_click),
                 option -> mPlayerTweaksData.enableButtonLongClick(option.isSelected()),
                 mPlayerTweaksData.isButtonLongClickEnabled()));

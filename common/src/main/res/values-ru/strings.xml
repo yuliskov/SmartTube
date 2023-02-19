@@ -514,4 +514,5 @@
     <string name="sort_by_rating">Рейтинг</string>
     <string name="clear_search_history">Очистить историю поиска</string>
     <string name="remove_from_subscriptions">Скрыть</string>
+    <string name="player_long_speed_list">Длинный список скоростей</string>
 </resources>

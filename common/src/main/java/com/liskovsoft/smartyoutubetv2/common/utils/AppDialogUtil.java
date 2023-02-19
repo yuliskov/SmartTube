@@ -27,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import com.liskovsoft.youtubeapi.service.data.YouTubePlaylistInfo;
@@ -505,9 +506,8 @@ public class AppDialogUtil {
 
     public static void appendSpeedDialogItems(Context context, AppDialogPresenter settingsPresenter, PlaybackController playbackController, PlayerData playerData) {
         List<OptionItem> items = new ArrayList<>();
-        float[] speedValues = new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f};
 
-        for (float speed : speedValues) {
+        for (float speed : PlayerTweaksData.instance(context).isLongSpeedListEnabled() ? Utils.SPEED_LIST_LONG : Utils.SPEED_LIST_SHORT) {
             items.add(UiOptionItem.from(
                     String.valueOf(speed),
                     optionItem -> {

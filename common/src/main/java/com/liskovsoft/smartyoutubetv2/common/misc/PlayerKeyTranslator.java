@@ -8,6 +8,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -122,8 +124,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
     }
 
     private void speedUp(boolean up) {
-        float[] speedSteps =
-                new float[] {0.25f, 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 2.25f, 2.5f, 2.75f, 3.0f};
+        float[] speedSteps = PlayerTweaksData.instance(mContext).isLongSpeedListEnabled() ? Utils.SPEED_LIST_LONG : Utils.SPEED_LIST_SHORT;
 
         PlaybackView playbackView = getPlaybackView();
 
@@ -132,7 +133,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             int currentIndex = Arrays.binarySearch(speedSteps, currentSpeed);
 
             if (currentIndex < 0) {
-                currentIndex = 3;
+                currentIndex = Arrays.binarySearch(speedSteps, 1.0f);
             }
 
             int newIndex = up ? currentIndex + 1 : currentIndex - 1;

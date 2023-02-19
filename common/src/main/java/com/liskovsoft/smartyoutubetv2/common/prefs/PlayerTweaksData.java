@@ -58,6 +58,7 @@ public class PlayerTweaksData {
     private boolean mIsQualityInfoBitrateEnabled;
     private boolean mIsSpeedButtonOldBehaviorEnabled;
     private boolean mIsButtonLongClickEnabled;
+    private boolean mIsLongSpeedListEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -303,6 +304,15 @@ public class PlayerTweaksData {
         persistData();
     }
 
+    public boolean isLongSpeedListEnabled() {
+        return mIsLongSpeedListEnabled;
+    }
+
+    public void enableLongSpeedList(boolean enable) {
+        mIsLongSpeedListEnabled = enable;
+        persistData();
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -334,6 +344,7 @@ public class PlayerTweaksData {
         mIsQualityInfoBitrateEnabled = Helpers.parseBoolean(split, 22, false);
         mIsSpeedButtonOldBehaviorEnabled = Helpers.parseBoolean(split, 23, false);
         mIsButtonLongClickEnabled = Helpers.parseBoolean(split, 24, true);
+        mIsLongSpeedListEnabled = Helpers.parseBoolean(split, 25, false);
     }
 
     private void persistData() {
@@ -344,7 +355,7 @@ public class PlayerTweaksData {
                 mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
                 mIsBufferingFixEnabled, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
                 mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio, mIsQualityInfoBitrateEnabled,
-                mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled
+                mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled
         ));
     }
 }

@@ -522,4 +522,5 @@
     <string name="sort_by_rating">Rating</string>
     <string name="clear_search_history">Clear search history</string>
     <string name="remove_from_subscriptions">Hide</string>
+    <string name="player_long_speed_list">Long speed list</string>
 </resources>
