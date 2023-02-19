@@ -262,7 +262,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
             ft.replace(R.id.scale_frame, fragment);
-            mFocusOnContent = !isShowingHeaders(); // Fix focus lost when error fragment shown and sidebar is hidden
+            //mFocusOnContent = !isShowingHeaders(); // Fix focus lost when error fragment shown and sidebar is hidden
+            mFocusOnContent = hasFocus(); // Maintain focus
             ft.runOnCommit(this::focusOnContentIfNeeded);
             ft.commitAllowingStateLoss(); // FIX: "Can not perform this action after onSaveInstanceState"
         }
@@ -336,6 +337,14 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             focusOnContent();
             mFocusOnContent = false;
         }
+    }
+
+    private boolean hasFocus() {
+        if (getMainFragment() == null || getMainFragment().getView() == null) {
+            return false;
+        }
+
+        return getMainFragment().getView().hasFocus();
     }
 
     @Override

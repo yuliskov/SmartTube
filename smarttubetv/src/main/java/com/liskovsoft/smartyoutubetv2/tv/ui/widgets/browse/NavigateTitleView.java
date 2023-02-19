@@ -308,7 +308,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange {
                 Colors orbColors = mAccountView.getOrbColors();
                 mAccountView.setOrbColors(new Colors(orbColors.color, orbColors.brightColor, ContextCompat.getColor(getContext(), R.color.orb_icon_color)));
                 mAccountView.setOrbIcon(ContextCompat.getDrawable(getContext(), R.drawable.browse_title_account));
-                TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
+                TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.dialog_account_none));
             }
         });
     }

@@ -128,7 +128,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void nextAccountOrDialog(List<Account> accounts) {
-        if (accounts == null || accounts.size() <= 1) {
+        if (accounts == null || accounts.isEmpty()) {
             createAndShowDialog(accounts);
             return;
         }
@@ -145,7 +145,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         int index = accounts.indexOf(current);
 
         int nextIndex = index + 1;
-        selectAccount(accounts.get(nextIndex == accounts.size() ? 0 : nextIndex));
+        selectAccount(nextIndex == accounts.size() ? null : accounts.get(nextIndex));
     }
 
     private String getFullName(Account account) {
