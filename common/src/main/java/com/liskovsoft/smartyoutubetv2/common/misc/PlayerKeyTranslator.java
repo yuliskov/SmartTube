@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
 import android.view.KeyEvent;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -129,7 +130,15 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
 
         if (playbackView != null && playbackView.getController() != null) {
             float currentSpeed = playbackView.getController().getSpeed();
-            int currentIndex = Arrays.binarySearch(speedSteps, currentSpeed);
+            int currentIndex = -1;
+
+            for (int i = 0; i < speedSteps.length; i++) {
+                float step = speedSteps[i];
+                if (Helpers.floatEquals(currentSpeed, step) || Math.abs(currentSpeed - step) < 0.25f) {
+                    currentIndex = i;
+                    break;
+                }
+            }
 
             if (currentIndex < 0) {
                 currentIndex = 3;
