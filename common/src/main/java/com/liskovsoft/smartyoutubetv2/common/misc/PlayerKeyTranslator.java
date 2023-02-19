@@ -134,7 +134,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
 
             for (int i = 0; i < speedSteps.length; i++) {
                 float step = speedSteps[i];
-                if (Helpers.floatEquals(currentSpeed, step) || Math.abs(currentSpeed - step) < 0.25f) {
+                if (Helpers.floatEquals(currentSpeed, step) || Math.abs(currentSpeed - step) < 0.13f) {
                     currentIndex = i;
                     break;
                 }
