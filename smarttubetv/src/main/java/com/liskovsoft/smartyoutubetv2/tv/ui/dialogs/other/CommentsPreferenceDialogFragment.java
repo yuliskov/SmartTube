@@ -64,6 +64,10 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
             titleView.setText(title);
         }
 
+        if (mCommentsReceiver == null) {
+            return view;
+        }
+
         MessagesList messagesList = (MessagesList) view.findViewById(R.id.messagesList);
         MessagesListAdapter<ChatItemMessage> adapter = new MessagesListAdapter<>(SENDER_ID, (imageView, url, payload) ->
                 Glide.with(view.getContext())
