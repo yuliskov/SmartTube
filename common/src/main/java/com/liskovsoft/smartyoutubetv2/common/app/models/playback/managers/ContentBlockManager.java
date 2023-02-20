@@ -199,7 +199,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         applyActions(foundSegment);
 
         // Skip each segment only once
-        if (foundSegment != null && mContentBlockData.isSkipEachSegmentOnceEnabled()) {
+        if (foundSegment != null && mContentBlockData.isDontSkipSegmentAgainEnabled()) {
             mSponsorSegments.removeAll(foundSegment);
         }
     }
