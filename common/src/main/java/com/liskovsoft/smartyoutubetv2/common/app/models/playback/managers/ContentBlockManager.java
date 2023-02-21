@@ -36,8 +36,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     private MediaItemService mMediaItemManager;
     private ContentBlockData mContentBlockData;
     private Video mVideo;
-    private List<SponsorSegment> mColorSegments;
-    private List<SponsorSegment> mSponsorSegments;
+    private List<SponsorSegment> mOriginalSegments;
+    private List<SponsorSegment> mActiveSegments;
     private Disposable mProgressAction;
     private Disposable mSegmentsAction;
     private long mLastSkipPosMs;
@@ -89,7 +89,6 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         disposeActions();
 
         getController().setButtonState(R.id.action_content_block, mContentBlockData.isSponsorBlockEnabled() ? PlaybackUI.BUTTON_ON : PlaybackUI.BUTTON_OFF);
-        getController().setSeekBarSegments(null); // reset colors
 
         if (mContentBlockData.isSponsorBlockEnabled() && checkVideo(item)) {
             updateSponsorSegmentsAndWatch(item);
@@ -132,7 +131,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
     private void updateSponsorSegmentsAndWatch(Video item) {
         if (item == null || item.videoId == null || mContentBlockData.getEnabledCategories().isEmpty()) {
-            mSponsorSegments = mColorSegments = null;
+            mActiveSegments = mOriginalSegments = null;
             return;
         }
 
@@ -147,8 +146,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 .subscribe(
                         segments -> {
                             mVideo = item;
-                            mSponsorSegments = segments;
-                            mColorSegments = new ArrayList<>(segments);
+                            mOriginalSegments = segments;
+                            mActiveSegments = new ArrayList<>(segments);
                             startSponsorWatcher();
                         },
                         error -> {
@@ -158,12 +157,14 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private void startSponsorWatcher() {
-        if (mSponsorSegments == null) {
+        if (mActiveSegments == null) {
             return;
         }
 
+        getController().setSeekBarSegments(null); // reset colors
+
         if (mContentBlockData.isColorMarkersEnabled()) {
-            getController().setSeekBarSegments(toSeekBarSegments(mColorSegments));
+            getController().setSeekBarSegments(toSeekBarSegments(mOriginalSegments));
         }
         if (mContentBlockData.isActionsEnabled()) {
             startPlaybackWatcher();
@@ -191,7 +192,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private void skipSegment(long interval) {
-        if (mSponsorSegments == null || mSponsorSegments.isEmpty() || !Video.equals(mVideo, getController().getVideo())) {
+        if (mActiveSegments == null || mActiveSegments.isEmpty() || !Video.equals(mVideo, getController().getVideo())) {
             disposeActions();
             return;
         }
@@ -209,7 +210,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
         // Skip each segment only once
         if (foundSegment != null && mContentBlockData.isDontSkipSegmentAgainEnabled()) {
-            mSponsorSegments.removeAll(foundSegment);
+            mActiveSegments.removeAll(foundSegment);
         }
     }
 
@@ -304,13 +305,13 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private List<SponsorSegment> findMatchedSegments(long positionMs) {
-        if (mSponsorSegments == null) {
+        if (mActiveSegments == null) {
             return null;
         }
 
         List<SponsorSegment> foundSegment = null;
 
-        for (SponsorSegment segment : mSponsorSegments) {
+        for (SponsorSegment segment : mActiveSegments) {
             int action = mContentBlockData.getAction(segment.getCategory());
             boolean isSkipAction = action == ContentBlockData.ACTION_SKIP_ONLY ||
                     action == ContentBlockData.ACTION_SKIP_WITH_TOAST;
