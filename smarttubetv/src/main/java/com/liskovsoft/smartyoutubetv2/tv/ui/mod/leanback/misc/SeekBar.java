@@ -316,6 +316,13 @@ public final class SeekBar extends View {
 
             float rightPixels = segment.endProgress * width;
             float leftPixels = segment.startProgress * width;
+
+            // Bookmark segment (1px width) fix
+            float bookmarkWidth = mBarHeight / 2f;
+            if (rightPixels - leftPixels < bookmarkWidth) {
+                rightPixels += bookmarkWidth;
+            }
+
             SeekBarRectangle rect = new SeekBarRectangle();
             rect.rect.set(leftPixels, verticalPadding, rightPixels, height - verticalPadding);
             rect.paint.setColor(segment.color);

@@ -298,7 +298,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         // Prepare to special type of channels that work as playlist
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
-                        mVideo.isPlaylistAsChannel() ? R.string.open_playlist : R.string.open_channel), optionItem -> Utils.chooseChannelPresenter(getContext(), mVideo)));
+                        mVideo.isPlaylistAsChannel() ? R.string.open_playlist : R.string.open_channel), optionItem -> {
+                    Utils.chooseChannelPresenter(getContext(), mVideo);
+                    mDialogPresenter.closeDialog();
+                }));
     }
 
     private void appendOpenPlaylistButton() {
