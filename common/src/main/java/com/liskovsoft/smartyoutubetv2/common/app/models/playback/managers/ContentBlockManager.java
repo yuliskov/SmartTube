@@ -36,6 +36,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     private MediaItemService mMediaItemManager;
     private ContentBlockData mContentBlockData;
     private Video mVideo;
+    private List<SponsorSegment> mColorSegments;
     private List<SponsorSegment> mSponsorSegments;
     private Disposable mProgressAction;
     private Disposable mSegmentsAction;
@@ -88,6 +89,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         disposeActions();
 
         getController().setButtonState(R.id.action_content_block, mContentBlockData.isSponsorBlockEnabled() ? PlaybackUI.BUTTON_ON : PlaybackUI.BUTTON_OFF);
+        getController().setSeekBarSegments(null); // reset colors
 
         if (mContentBlockData.isSponsorBlockEnabled() && checkVideo(item)) {
             updateSponsorSegmentsAndWatch(item);
@@ -130,7 +132,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
     private void updateSponsorSegmentsAndWatch(Video item) {
         if (item == null || item.videoId == null || mContentBlockData.getEnabledCategories().isEmpty()) {
-            mSponsorSegments = null;
+            mSponsorSegments = mColorSegments = null;
             return;
         }
 
@@ -146,6 +148,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                         segments -> {
                             mVideo = item;
                             mSponsorSegments = segments;
+                            mColorSegments = new ArrayList<>(segments);
                             startSponsorWatcher();
                         },
                         error -> {
@@ -160,7 +163,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         if (mContentBlockData.isColorMarkersEnabled()) {
-            getController().setSeekBarSegments(toSeekBarSegments(mSponsorSegments));
+            getController().setSeekBarSegments(toSeekBarSegments(mColorSegments));
         }
         if (mContentBlockData.isActionsEnabled()) {
             startPlaybackWatcher();
@@ -182,17 +185,14 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
     private void disposeActions() {
         RxHelper.disposeActions(mProgressAction, mSegmentsAction);
-        //mSponsorSegments = null;
-        //mVideo = null;
 
-        // Reset colors
-        getController().setSeekBarSegments(null);
         // Reset previously found segment (fix no dialog popup)
         mLastSkipPosMs = 0;
     }
 
     private void skipSegment(long interval) {
-        if (mSponsorSegments == null || !Video.equals(mVideo, getController().getVideo())) {
+        if (mSponsorSegments == null || mSponsorSegments.isEmpty() || !Video.equals(mVideo, getController().getVideo())) {
+            disposeActions();
             return;
         }
 
