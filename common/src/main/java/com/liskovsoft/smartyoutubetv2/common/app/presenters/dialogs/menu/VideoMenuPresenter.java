@@ -488,7 +488,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo == null || mVideo.isPlaylistAsChannel() || (!mVideo.canSubscribe() && !mVideo.hasVideo())) {
+        if (mVideo == null || mVideo.isPlaylistAsChannel() || (!mVideo.isChannel() && !mVideo.hasVideo())) {
             return;
         }
 
@@ -655,7 +655,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         // Until synced we won't really know weather we subscribed to a channel.
         // Exclusion: channel item (can't be synced)
         // Note, regular items (from subscribed section etc) aren't contain channel id
-        if (mVideo.isSynced || mVideo.canSubscribe()) {
+        if (mVideo.isSynced || mVideo.isChannel()) {
             toggleSubscribe(mVideo);
         } else {
             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);

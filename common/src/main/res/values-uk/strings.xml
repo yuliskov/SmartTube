@@ -114,8 +114,8 @@
     <string name="repeat_mode_pause">Ставити відтворення на паузу після кожного відео</string>
     <string name="repeat_mode_pause_alt">Відтворювати безперервно тільки відео з плейлиста</string>
     <string name="repeat_mode_none">Завершувати відтворення після одного відео</string>
-    <string name="subscribed_to_channel">Підписка на канал оформлена</string>
-    <string name="unsubscribed_from_channel">Підписка на канал не оформлена</string>
+    <string name="subscribed_to_channel">Підписка оформлена</string>
+    <string name="unsubscribed_from_channel">Підписка скасована</string>
     <string name="subtitle_yellow_transparent">Жовті на прозорому фоні</string>
     <string name="subtitle_white_transparent">Білі на прозорому фоні</string>
     <string name="subtitle_white_black">Білі на чорному фоні</string>

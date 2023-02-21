@@ -114,8 +114,8 @@
     <string name="repeat_mode_pause">Pause playback after each video</string>
     <string name="repeat_mode_pause_alt">Play only playlist videos continuously</string>
     <string name="repeat_mode_none">Stop playback after one video</string>
-    <string name="subscribed_to_channel">Channel subscribed</string>
-    <string name="unsubscribed_from_channel">Channel not subscribed</string>
+    <string name="subscribed_to_channel">Subscribed</string>
+    <string name="unsubscribed_from_channel">Unsubscribed</string>
     <string name="subtitle_yellow_transparent">Yellow on transparent background</string>
     <string name="subtitle_white_transparent">White on transparent background</string>
     <string name="subtitle_white_black">White on black background</string>
