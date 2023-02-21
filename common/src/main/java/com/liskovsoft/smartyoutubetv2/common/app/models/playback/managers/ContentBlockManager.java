@@ -11,11 +11,13 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.ContentBlockSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
@@ -85,6 +87,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     public void onVideoLoaded(Video item) {
         disposeActions();
 
+        getController().setButtonState(R.id.action_content_block, mContentBlockData.isSponsorBlockEnabled() ? PlaybackUI.BUTTON_ON : PlaybackUI.BUTTON_OFF);
+
         if (mContentBlockData.isSponsorBlockEnabled() && checkVideo(item)) {
             updateSponsorSegmentsAndWatch(item);
         }
@@ -100,19 +104,24 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     @Override
-    public void onEngineInitialized() {
-        getController().setContentBlockButtonState(mContentBlockData.isSponsorBlockEnabled());
-    }
-
-    @Override
     public void onEngineReleased() {
         disposeActions();
     }
 
     @Override
-    public void onContentBlockClicked(boolean enabled) {
-        mContentBlockData.enableSponsorBlock(enabled);
-        onVideoLoaded(getController().getVideo());
+    public void onButtonClicked(int buttonId, int buttonState) {
+        if (buttonId == R.id.action_content_block) {
+            boolean enabled = buttonState == PlaybackUI.BUTTON_ON;
+            mContentBlockData.enableSponsorBlock(!enabled);
+            onVideoLoaded(getController().getVideo());
+        }
+    }
+
+    @Override
+    public void onButtonLongClicked(int buttonId, int buttonState) {
+        if (buttonId == R.id.action_content_block) {
+            ContentBlockSettingsPresenter.instance(getActivity()).show(() -> onVideoLoaded(getController().getVideo()));
+        }
     }
 
     private boolean checkVideo(Video video) {
@@ -177,7 +186,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         //mVideo = null;
 
         // Reset colors
-        //getController().setSeekBarSegments(null);
+        getController().setSeekBarSegments(null);
         // Reset previously found segment (fix no dialog popup)
         mLastSkipPosMs = 0;
     }

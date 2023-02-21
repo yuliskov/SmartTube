@@ -24,7 +24,6 @@ public interface PlayerUiEventListener {
     void onVideoSpeedClicked(boolean enabled);
     void onVideoSpeedLongClicked(boolean enabled);
     void onSeekIntervalClicked();
-    void onContentBlockClicked(boolean enabled);
     void onChatClicked(boolean enabled);
     void onChatLongClicked(boolean enabled);
     void onVideoInfoClicked();
@@ -35,5 +34,6 @@ public interface PlayerUiEventListener {
     void onScreenOffClicked();
     void onPlaybackQueueClicked();
     void onButtonClicked(int buttonId, int buttonState);
+    void onButtonLongClicked(int buttonId, int buttonState);
     void onControlsShown(boolean shown);
 }

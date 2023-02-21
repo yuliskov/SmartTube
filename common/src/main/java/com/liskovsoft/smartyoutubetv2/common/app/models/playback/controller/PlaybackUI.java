@@ -38,7 +38,6 @@ public interface PlaybackUI {
     void setPlaylistAddButtonState(boolean selected);
     void setSubtitleButtonState(boolean selected);
     void setSpeedButtonState(boolean selected);
-    void setContentBlockButtonState(boolean selected);
     void setChatButtonState(boolean selected);
     void setButtonState(int buttonId, int buttonState);
     void setChannelIcon(String iconUrl);

@@ -724,11 +724,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onContentBlock(boolean enabled) {
-            mEventListener.onContentBlockClicked(enabled);
-        }
-
-        @Override
         public void onChat(boolean enabled) {
             mEventListener.onChatClicked(enabled);
         }
@@ -776,6 +771,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         @Override
         public void onAction(int actionId, int actionIndex) {
             mEventListener.onButtonClicked(actionId, actionIndex);
+        }
+
+        @Override
+        public void onLongAction(int actionId, int actionIndex) {
+            mEventListener.onButtonLongClicked(actionId, actionIndex);
         }
 
         @Override
@@ -1277,13 +1277,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setContentBlockButtonState(boolean selected) {
-        if (mPlayerGlue != null) {
-            mPlayerGlue.setContentBlockButtonState(selected);
-        }
-    }
-
-    @Override
     public void setChatButtonState(boolean selected) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setChatButtonState(selected);
@@ -1295,14 +1288,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         if (mPlayerGlue != null) {
             mPlayerGlue.setActionIndex(buttonId, buttonState);
         }
-    }
-
-    private boolean isContentBlockEnabled() {
-        if (mPlayerGlue != null) {
-            return mPlayerGlue.isContentBlockButtonPressed();
-        }
-
-        return false;
     }
 
     @Override

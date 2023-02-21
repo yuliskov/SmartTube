@@ -96,7 +96,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     private final VideoInfoAction mVideoInfoAction;
     private final ShareAction mShareAction;
     private final SeekIntervalAction mSeekIntervalAction;
-    private final ContentBlockAction mContentBlockAction;
     private final ChatAction mChatAction;
     private final Map<Integer, Action> mActions = new HashMap<>();
     private final OnActionClickedListener mActionListener;
@@ -141,10 +140,10 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         mVideoInfoAction = new VideoInfoAction(context);
         mShareAction = new ShareAction(context);
         mSeekIntervalAction = new SeekIntervalAction(context);
-        mContentBlockAction = new ContentBlockAction(context);
         mChatAction = new ChatAction(context);
 
         putAction(new RotateAction(context));
+        putAction(new ContentBlockAction(context));
     }
 
     @Override
@@ -234,7 +233,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
             adapter.add(mPlaybackQueueAction);
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_CONTENT_BLOCK)) {
-            adapter.add(mContentBlockAction);
+            adapter.add(mActions.get(R.id.action_content_block));
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_STATS)) {
             adapter.add(mVideoStatsAction);
@@ -331,11 +330,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         invalidateUi(mClosedCaptioningAction);
     }
 
-    public void setContentBlockButtonState(boolean selected) {
-        mContentBlockAction.setIndex(selected ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
-        invalidateUi(mContentBlockAction);
-    }
-
     public void setChatButtonState(boolean selected) {
         mChatAction.setIndex(selected ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
         invalidateUi(mChatAction);
@@ -343,10 +337,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
 
     public void setActionIndex(int actionId, int actionIndex) {
         setActionIndex(mActions.get(actionId), actionIndex);
-    }
-
-    public boolean isContentBlockButtonPressed() {
-        return mContentBlockAction.getIndex() == TwoStateAction.INDEX_ON;
     }
 
     public void setSpeedButtonState(boolean selected) {
@@ -503,10 +493,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         } else if (action == mSeekIntervalAction) {
             mActionListener.onSeekInterval();
             handled = true;
-        } else if (action == mContentBlockAction) {
-            incrementActionIndex(action);
-            mActionListener.onContentBlock(getActionIndex(action) == TwoStateAction.INDEX_ON);
-            handled = true;
         } else if (action == mChatAction) {
             mActionListener.onChat(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
@@ -545,6 +531,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
             handled = true;
         } else if (action == mVideoSpeedAction) {
             mActionListener.onVideoSpeedLongPress(getActionIndex(action) == TwoStateAction.INDEX_ON);
+            handled = true;
+        } else if (mActions.containsKey((int) action.getId())) {
+            mActionListener.onLongAction((int) action.getId(), getActionIndex(action));
             handled = true;
         }
 
@@ -726,8 +715,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
 
         void onSeekInterval();
 
-        void onContentBlock(boolean enabled);
-
         void onChat(boolean enabled);
 
         void onChatLongPress(boolean enabled);
@@ -748,9 +735,10 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
 
         void onAction(int actionId, int actionIndex);
 
+        void onLongAction(int actionId, int actionIndex);
+
         void onTopEdgeFocused();
 
         boolean onKeyDown(int keyCode);
-
     }
 }
