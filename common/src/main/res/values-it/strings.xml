@@ -114,8 +114,8 @@
     <string name="repeat_mode_pause">Metti in pausa la riproduzione dopo ogni video</string>
     <string name="repeat_mode_pause_alt">Riproduci solo i video della playlist continuamente</string>
     <string name="repeat_mode_none">Interrompi la riproduzione dopo un video</string>
-    <string name="subscribed_to_channel">Canale sottoscritto</string>
-    <string name="unsubscribed_from_channel">Canale non sottoscritto</string>
+    <string name="subscribed_to_channel">Sottoscritto</string>
+    <string name="unsubscribed_from_channel">Non sottoscritto</string>
     <string name="subtitle_yellow_transparent">Giallo su sfondo trasparente</string>
     <string name="subtitle_white_transparent">Bianco su sfondo trasparente</string>
     <string name="subtitle_white_black">Bianco su sfondo nero</string>
@@ -522,4 +522,5 @@
     <string name="sort_by_rating">Valutazione</string>
     <string name="clear_search_history">Cancella la cronologia delle ricerche</string>
     <string name="remove_from_subscriptions">Nascondi</string>
+    <string name="player_long_speed_list">Elenco lungo velocità</string>
 </resources>
