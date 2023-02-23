@@ -114,8 +114,8 @@
     <string name="repeat_mode_pause">Wiedergabe nach jedem Video pausieren</string>
     <string name="repeat_mode_pause_alt">Nur Videos der Wiedergabeliste fortlaufend abspielen</string>
     <string name="repeat_mode_none">Wiedergabe nach einem Video stoppen</string>
-    <string name="subscribed_to_channel">Kanal abonniert</string>
-    <string name="unsubscribed_from_channel">Kanal nicht abonniert</string>
+    <string name="subscribed_to_channel">Abonniert</string>
+    <string name="unsubscribed_from_channel">Nicht mehr abonniert</string>
     <string name="subtitle_yellow_transparent">Gelb auf transparentem Hintergrund</string>
     <string name="subtitle_white_transparent">Weiß auf transparentem Hintergrund</string>
     <string name="subtitle_white_black">Weiß auf schwarzem Hintergrund</string>
@@ -522,4 +522,5 @@
     <string name="sort_by_rating">Bewertung</string>
     <string name="clear_search_history">Suchverlauf löschen</string>
     <string name="remove_from_subscriptions">Ausblenden</string>
+    <string name="player_long_speed_list">Mehr Optionen für Video-Geschwindigkeit</string>
 </resources>
