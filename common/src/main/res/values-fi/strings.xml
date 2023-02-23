@@ -516,4 +516,7 @@
   <string name="sort_by_date">Julkaisupäivämäärä</string>
   <string name="sort_by_rating">Luokitus</string>
   <string name="pressing_back">painamalla takaisin</string>
+  <string name="clear_search_history">Tyhjennä hakuhistoria</string>
+  <string name="remove_from_subscriptions">Piilota</string>
+  <string name="player_long_speed_list">Laaja nopeuslista </string>
 </resources>
