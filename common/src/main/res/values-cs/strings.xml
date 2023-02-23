@@ -114,8 +114,8 @@
     <string name="repeat_mode_pause">Pozastavit přehrávání po každém videu</string>
     <string name="repeat_mode_pause_alt">Hraj videa nepřetržitě pouze pro playlist</string>    
     <string name="repeat_mode_none">Ukončit přehrávání po jednom videu</string>
-    <string name="subscribed_to_channel">Přihlášen k odběru kanálu</string>
-    <string name="unsubscribed_from_channel">Odhlášen z odběru kanálu</string>
+    <string name="subscribed_to_channel">Přihlášeno k odběru</string>
+    <string name="unsubscribed_from_channel">Odhlášeno z odběru</string>
     <string name="subtitle_yellow_transparent">Žlutá</string>
     <string name="subtitle_white_transparent">Bílá na průhledném pozadí</string>
     <string name="subtitle_white_black">Černé pozadí</string>
@@ -522,4 +522,5 @@
     <string name="sort_by_rating">Hodnocení</string>
     <string name="clear_search_history">Vymazat historii vyhledávání</string>
     <string name="remove_from_subscriptions">Skrýt</string>
+    <string name="player_long_speed_list">Více možností rychlosti videa</string>
 </resources>
