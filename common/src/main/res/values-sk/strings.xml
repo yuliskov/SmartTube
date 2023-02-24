@@ -114,8 +114,8 @@
     <string name="repeat_mode_pause">Pozastaviť prehrávanie po každom videu</string>
     <string name="repeat_mode_pause_alt">Pozastaviť prehrávanie po každom videu, ktoré nie je v poradí</string>
     <string name="repeat_mode_none">Vypnúť prehrávanie po jednom videu</string>
-    <string name="subscribed_to_channel">Prihlásený na odber kanála</string>
-    <string name="unsubscribed_from_channel">Odber kanála bol zrušený</string>
+    <string name="subscribed_to_channel">Odoberané</string>
+    <string name="unsubscribed_from_channel">Odber zrušený</string>
     <string name="subtitle_yellow_transparent">Žlté na priehľadnom pozadí</string>
     <string name="subtitle_white_transparent">Biele na priehľadnom pozadí</string>
     <string name="subtitle_white_black">Biele na čiernom pozadí</string>
@@ -522,4 +522,5 @@
     <string name="sort_by_rating">Hodnotenie</string>
     <string name="clear_search_history">Zmazať históriu vyhľadávania</string>
     <string name="remove_from_subscriptions">Skryť</string>
+    <string name="player_long_speed_list">Možnosti rýchlosti videa</string>
 </resources>
