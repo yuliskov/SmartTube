@@ -65,8 +65,6 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        updateEnabledMenuItems();
-
         disposeActions();
 
         mSection = section;

@@ -113,8 +113,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        updateEnabledMenuItems();
-
         RxHelper.disposeActions(mAddToPlaylistAction, mNotInterestedAction, mSubscribeAction);
 
         mVideo = video;

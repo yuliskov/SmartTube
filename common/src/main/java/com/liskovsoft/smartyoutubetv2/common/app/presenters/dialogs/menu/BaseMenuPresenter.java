@@ -42,6 +42,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     protected BaseMenuPresenter(Context context) {
         super(context);
         mServiceManager = MediaServiceManager.instance();
+        updateEnabledMenuItems();
     }
 
     protected abstract Video getVideo();
