@@ -47,7 +47,7 @@ public interface PlaybackUI {
     void showDebugInfo(boolean show);
     void showSubtitles(boolean show);
     void loadStoryboard();
-    void showError(String errorInfo);
+    void setTitle(String title);
     void showProgressBar(boolean show);
     void setSeekBarSegments(List<SeekBarSegment> segments);
     void updateEndingTime();

@@ -836,9 +836,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void showError(String errorMessage) {
-        mPlayerGlue.setTitle(errorMessage);
-        showOverlay(true);
+    public void setTitle(String title) {
+        mPlayerGlue.setTitle(title);
     }
 
     @Override

@@ -373,8 +373,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         int index = findCurrentChapterIndex(group.getVideos());
 
         if (index != -1) {
+            String title = group.getVideos().get(index).title;
             getController().focusSuggestedItem(index);
-            getController().setSeekPreviewTitle(group.getVideos().get(index).title);
+            getController().setSeekPreviewTitle(title);
+            getController().setTitle(title);
         }
     }
 

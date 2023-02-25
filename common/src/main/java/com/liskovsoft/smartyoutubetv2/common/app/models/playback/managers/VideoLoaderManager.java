@@ -212,7 +212,8 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     private void checkSleepTimer() {
         if (mPlayerData.isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
             getController().setPlayWhenReady(false);
-            getController().showError(getActivity().getString(R.string.sleep_timer));
+            getController().setTitle(getActivity().getString(R.string.sleep_timer));
+            getController().showOverlay(true);
         }
     }
 
@@ -283,7 +284,8 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         mLastVideo.sync(formatInfo);
 
         if (formatInfo.isUnplayable()) {
-            getController().showError(formatInfo.getPlayabilityStatus());
+            getController().setTitle(formatInfo.getPlayabilityStatus());
+            getController().showOverlay(true);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
             loadNext();
