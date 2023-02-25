@@ -515,4 +515,5 @@
     <string name="clear_search_history">Видалити історію пошуку</string>
     <string name="remove_from_subscriptions">Приховати</string>
     <string name="player_long_speed_list">Довгий список швидкостей</string>
+    <string name="alt_app_icon">Альтернативна іконка застосунку (потрібне перезавантаження)</string>
 </resources>

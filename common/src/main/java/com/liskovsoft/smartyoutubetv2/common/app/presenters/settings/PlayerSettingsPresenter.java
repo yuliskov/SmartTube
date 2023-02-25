@@ -307,6 +307,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> GlobalPreferences.instance(getContext()).enableChannelsService(!option.isSelected()),
                 !GlobalPreferences.instance(getContext()).isChannelsServiceEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.alt_app_icon),
+                option -> mGeneralData.enableAltAppIcon(option.isSelected()),
+                mGeneralData.isAltAppIconEnabled()));
+
         // Disabled inside RetrofitHelper
         //options.add(UiOptionItem.from("Prefer IPv4 DNS",
         //        option -> GlobalPreferences.instance(getContext()).preferIPv4Dns(option.isSelected()),

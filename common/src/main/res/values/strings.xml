@@ -523,4 +523,5 @@
     <string name="clear_search_history">Clear search history</string>
     <string name="remove_from_subscriptions">Hide</string>
     <string name="player_long_speed_list">Long speed list</string>
+    <string name="alt_app_icon">Alternative app icon (needs reboot)</string>
 </resources>

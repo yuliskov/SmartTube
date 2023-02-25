@@ -68,6 +68,7 @@ public class GeneralData {
     private String mSettingsPassword;
     private boolean mIsChildModeEnabled;
     private boolean mIsHistoryEnabled;
+    private boolean mIsAltAppIconEnabled;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new ArrayList<>();
@@ -649,6 +650,16 @@ public class GeneralData {
         persistState();
     }
 
+    public void enableAltAppIcon(boolean enable) {
+        mIsAltAppIconEnabled = enable;
+
+        persistState();
+    }
+
+    public boolean isAltAppIconEnabled() {
+        return mIsAltAppIconEnabled;
+    }
+
     private void initSections() {
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mDefaultSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -715,6 +726,7 @@ public class GeneralData {
         mIsHistoryEnabled = Helpers.parseBoolean(split, 35, true);
         mScreenDimmingTimeoutMs = Helpers.parseInt(split, 36, 60 * 1_000);
         mScreenDimmingMode = Helpers.parseInt(split, 37, SCREEN_DIMMING_MODE_NORMAL);
+        mIsAltAppIconEnabled = Helpers.parseBoolean(split, 38, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -775,6 +787,6 @@ public class GeneralData {
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
                 playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
-                mScreenDimmingTimeoutMs, mScreenDimmingMode));
+                mScreenDimmingTimeoutMs, mScreenDimmingMode, mIsAltAppIconEnabled));
     }
 }
