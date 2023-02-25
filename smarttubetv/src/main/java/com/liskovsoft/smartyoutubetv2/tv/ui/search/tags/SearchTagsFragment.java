@@ -312,7 +312,9 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     }
 
     private void loadSearchResult(String searchQuery) {
-        if (searchQuery != null && !searchQuery.equals(mSearchQuery)) {
+        // Don't show suggested videos (empty query).
+        // They are inaccurate and usually have problems with layout.
+        if (!TextUtils.isEmpty(searchQuery) && !searchQuery.equals(mSearchQuery)) {
             mSearchQuery = searchQuery;
             mSearchPresenter.onSearch(searchQuery);
         }
