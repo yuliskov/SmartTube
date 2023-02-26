@@ -1558,6 +1558,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         showBackgroundColor(R.color.player_background);
         setChatReceiver(null);
         setSeekBarSegments(null);
+        setSeekPreviewTitle(null);
     }
 
     /**

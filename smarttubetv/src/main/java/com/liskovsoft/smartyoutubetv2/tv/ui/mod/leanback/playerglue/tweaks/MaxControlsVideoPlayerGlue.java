@@ -85,8 +85,9 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                 viewHolder.setTopEdgeFocusListener(MaxControlsVideoPlayerGlue.this);
                 viewHolder.setQualityInfo(mQualityInfo);
                 viewHolder.setDateVisibility(isControlsVisible());
+                // Don't uncomment
                 // Reset to defaults
-                viewHolder.setSeekPreviewTitle(null);
+                //viewHolder.setSeekPreviewTitle(null);
                 // Don't uncomment
                 //viewHolder.setSeekBarSegments(null);
             }
