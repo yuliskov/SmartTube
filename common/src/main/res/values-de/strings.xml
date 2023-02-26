@@ -412,7 +412,7 @@
     <string name="sleep_timer">Sleep-Timer (wenn Fernbedienung eine Stunde nicht benutzt)</string>
     <string name="sleep_timer_desc">Pausiert die Wiedergabe, wenn die Fernbedienung eine Stunde lang nicht benutzt wurde.</string>
     <string name="disable_vsync">Snap-to-VSync deaktivieren</string>
-    <string name="disable_vsync_desc">Verbessert die Wiedergabeperformance ein wenig.</string>
+    <string name="disable_vsync_desc">Diese Option deaktiviert das Ausrichten von Bildern mit dem vertikalen Synchronisationssignal des Displays. Dies könnte die Leistung auf Low-End-Geräten verbessern, indem CPU-Ressourcen freigegeben werden.</string>
     <string name="skip_codec_profile_check">Überprüfung des Codec-Profil-Level überspringen</string>
     <string name="skip_codec_profile_check_desc">Überprüft nicht die Codec-Unterstützung beim Starten eines Videos. Könnte bei fehlerhaften Firmwares hilfreich sein.</string>
     <string name="force_sw_codec">SW-Video-Decoder erzwingen</string>
@@ -523,4 +523,5 @@
     <string name="clear_search_history">Suchverlauf löschen</string>
     <string name="remove_from_subscriptions">Ausblenden</string>
     <string name="player_long_speed_list">Mehr Optionen für Video-Geschwindigkeit</string>
+    <string name="alt_app_icon">Alternatives App-Symbol (Neustart erforderlich)</string>
 </resources>
