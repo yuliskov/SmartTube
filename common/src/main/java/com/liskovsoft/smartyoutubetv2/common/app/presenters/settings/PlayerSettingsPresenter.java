@@ -308,7 +308,13 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 !GlobalPreferences.instance(getContext()).isChannelsServiceEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.alt_app_icon),
-                option -> mGeneralData.enableAltAppIcon(option.isSelected()),
+                option -> {
+                    mGeneralData.enableAltAppIcon(option.isSelected());
+                    Helpers.enableActivity(getContext(), option.isSelected() ?
+                            "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity" : "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivityAlt", false);
+                    Helpers.enableActivity(getContext(), option.isSelected() ?
+                            "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivityAlt" : "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity", true);
+                },
                 mGeneralData.isAltAppIconEnabled()));
 
         // Disabled inside RetrofitHelper
