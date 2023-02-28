@@ -78,11 +78,11 @@ public class ExoPlayerInitializer {
         //DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS // 2_500
         //DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS // 5_000
 
-        // Medium buffer is default one
-        int minBufferMs = 50_000;
-        int maxBufferMs = 50_000;
+        // Default values
+        int minBufferMs = 30_000;
+        int maxBufferMs = 30_000;
         int bufferForPlaybackMs = 2_500;
-        int bufferForPlaybackAfterRebufferMs = 5_000;
+        int bufferForPlaybackAfterRebufferMs = 2_500;
 
         switch (mPlayerData.getVideoBufferType()) {
             case PlaybackEngine.BUFFER_HIGH:
@@ -90,6 +90,12 @@ public class ExoPlayerInitializer {
                 maxBufferMs = 36_000_000; // technical infinity, recommended here a very high number, the max will be based on setTargetBufferBytes() value
                 baseBuilder
                         .setTargetBufferBytes(mDeviceRam);
+                baseBuilder.setBackBuffer(maxBufferMs, true);
+                break;
+            case PlaybackEngine.BUFFER_MEDIUM:
+                minBufferMs = 50_000;
+                maxBufferMs = 50_000;
+                baseBuilder.setBackBuffer(maxBufferMs, true);
                 break;
             case PlaybackEngine.BUFFER_LOW:
                 minBufferMs = 30_000;
