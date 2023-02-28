@@ -412,7 +412,7 @@
     <string name="sleep_timer">Timer di spegnimento (se il telecomando non viene utilizzato per un\'ora)</string>
     <string name="sleep_timer_desc">Metti in pausa la riproduzione se l\'utente non ha utilizzato il telecomando per un\'ora</string>
     <string name="disable_vsync">Disabilita lo snap a vsync</string>
-    <string name="disable_vsync_desc">Migliora un po\' le prestazioni di riproduzione</string>
+    <string name="disable_vsync_desc">Questa opzione disabilita l\'allineamento dei fotogrammi con il segnale di sincronizzazione verticale del display. Questo potrebbe migliorare le prestazioni sui dispositivi di fascia bassa rilasciando risorse della CPU.</string>
     <string name="skip_codec_profile_check">Salta il controllo del livello del profilo del codec</string>
     <string name="skip_codec_profile_check_desc">Non controllare il supporto del codec quando avvii un video. Potrebbe essere utile su firmware difettoso.</string>
     <string name="force_sw_codec">Forza decodificatore video SW</string>
@@ -523,4 +523,5 @@
     <string name="clear_search_history">Cancella la cronologia delle ricerche</string>
     <string name="remove_from_subscriptions">Nascondi</string>
     <string name="player_long_speed_list">Elenco lungo velocità</string>
+    <string name="alt_app_icon">Icona alternativa dell\'app (è necessario riavviare)</string>
 </resources>
