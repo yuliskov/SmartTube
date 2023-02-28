@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
+import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -14,7 +16,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -77,6 +78,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             // Need to be the first line and executed on earliest stage once.
             // Inits service language and context.
             //Utils.initGlobalData(getContext()); // Init already done in BasePresenter
+            clearCache();
             RxHelper.setupGlobalErrorHandler();
             initIntentChain();
             updateChannels();
@@ -136,6 +138,18 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private void initStreamReminderService() {
         if (getContext() != null) {
             StreamReminderService.instance(getContext()).start();
+        }
+    }
+
+    private void clearCache() {
+        if (getContext() != null) {
+            int versionCode = AppInfoHelpers.getAppVersionCode(getContext());
+            if (GeneralData.instance(getContext()).getVersionCode() != versionCode) {
+                GeneralData.instance(getContext()).setVersionCode(versionCode);
+
+                FileHelpers.deleteCache(getContext());
+                ViewManager.instance(getContext()).clearCaches();
+            }
         }
     }
 
