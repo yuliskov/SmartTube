@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.previewtimebar;
+package com.liskovsoft.smartyoutubetv2.tv.ui.playback.previewtimebar;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,6 +17,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemStoryboard.Size;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -144,6 +145,7 @@ public class StoryboardManager {
         Glide.with(mContext)
                 .asBitmap()
                 .load(mStoryboard.getGroupUrl(groupNum))
+                .apply(ViewUtil.glideOptions())
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .transform(transformation)
                 .into(new CustomTarget<Bitmap>() {
