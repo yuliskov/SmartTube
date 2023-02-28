@@ -82,7 +82,7 @@ public class ExoPlayerInitializer {
         int minBufferMs = 30_000;
         int maxBufferMs = 30_000;
         int bufferForPlaybackMs = 2_500;
-        int bufferForPlaybackAfterRebufferMs = 2_500;
+        int bufferForPlaybackAfterRebufferMs = 5_000;
 
         switch (mPlayerData.getVideoBufferType()) {
             case PlaybackEngine.BUFFER_HIGH:
