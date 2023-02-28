@@ -412,7 +412,7 @@
     <string name="sleep_timer">Časovač spánku (1 hodina od posledního použití ovladače)</string>
     <string name="sleep_timer_desc">Pozastav přehrávání pokud uživatel nepoužil ovladač během hodiny</string>
     <string name="disable_vsync">Zakázat vertikální synchronizaci</string>
-    <string name="disable_vsync_desc">Částečně zlepšuje výkon přehrávání</string>
+    <string name="disable_vsync_desc">Tato možnost zakáže zarovnání snímků se signálem vertikální synchronizace displeje. Tím se sníží zátěž CPU a zlepší výkon na slabších zařízeních.</string>
     <string name="skip_codec_profile_check">Přeskočit kontrolu kodeku</string>
     <string name="skip_codec_profile_check_desc">Přeskočí kontrolu podpory kodeku při spuštění videa. Může být užitečné pro zabugovaný firmware.</string>
     <string name="force_sw_codec">Vynutit softwarový dekodér videa</string>
@@ -523,4 +523,5 @@
     <string name="clear_search_history">Vymazat historii vyhledávání</string>
     <string name="remove_from_subscriptions">Skrýt</string>
     <string name="player_long_speed_list">Více možností rychlosti videa</string>
+    <string name="alt_app_icon">Alternativní ikona aplikace (vyžaduje restart)</string>
 </resources>
