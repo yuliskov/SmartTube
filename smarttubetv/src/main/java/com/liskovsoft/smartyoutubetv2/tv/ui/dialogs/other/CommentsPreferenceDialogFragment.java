@@ -101,6 +101,9 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
                     adapter.setFocusedMessage(message);
                 }
             }
+            if (adapter.getMessagesCount() == 0) { // No comments under the video
+                adapter.setLoadingMessage(mCommentsReceiver.getErrorMessage());
+            }
             if (mNextCommentsKey == null) {
                 adapter.scrollToTop();
             }
