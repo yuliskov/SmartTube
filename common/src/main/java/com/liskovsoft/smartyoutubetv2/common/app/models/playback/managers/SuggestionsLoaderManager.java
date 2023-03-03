@@ -376,7 +376,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             String title = group.getVideos().get(index).title;
             getController().focusSuggestedItem(index);
             getController().setSeekPreviewTitle(title);
-            getController().setTitle(title);
+            //getController().setTitle(title);
         }
     }
 

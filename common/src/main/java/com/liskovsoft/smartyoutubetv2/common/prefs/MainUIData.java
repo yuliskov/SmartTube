@@ -48,7 +48,7 @@ public class MainUIData extends DataChangeBase {
     public static final int TOP_BUTTON_SEARCH = 0b100;
     public static final int TOP_BUTTON_DEFAULT = Integer.MAX_VALUE & ~(TOP_BUTTON_CHANGE_LANGUAGE); // all except this items
     public static final int MENU_ITEM_DEFAULT = Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_NEW_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT |
-            MENU_ITEM_PLAY_VIDEO | MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_PIN_TO_SIDEBAR | MENU_ITEM_SHARE_EMBED_LINK); // all except this items
+            MENU_ITEM_PLAY_VIDEO | MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_SHARE_EMBED_LINK); // all except these items
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
