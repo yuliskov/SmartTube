@@ -6,6 +6,9 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class PlayerTweaksData {
     private static final String VIDEO_PLAYER_TWEAKS_DATA = "video_player_tweaks_data";
+    public static final int PLAYER_DATA_SOURCE_DEFAULT = 0;
+    public static final int PLAYER_DATA_SOURCE_OKHTTP = 1;
+    public static final int PLAYER_DATA_SOURCE_CRONET = 2;
     public static final int PLAYER_BUTTON_VIDEO_ZOOM = 0b1;
     public static final int PLAYER_BUTTON_SEARCH = 0b10;
     public static final int PLAYER_BUTTON_PIP = 0b100;
@@ -47,7 +50,6 @@ public class PlayerTweaksData {
     private boolean mIsPlaybackNotificationsDisabled;
     private boolean mIsTunneledPlaybackEnabled;
     private int mPlayerButtons;
-    private boolean mIsBufferingFixEnabled;
     private boolean mIsNoFpsPresetsEnabled;
     private boolean mIsRememberPositionOfShortVideosEnabled;
     private boolean mIsSuggestionsDisabled;
@@ -59,6 +61,7 @@ public class PlayerTweaksData {
     private boolean mIsSpeedButtonOldBehaviorEnabled;
     private boolean mIsButtonLongClickEnabled;
     private boolean mIsLongSpeedListEnabled;
+    private int mPlayerDataSource;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -205,13 +208,13 @@ public class PlayerTweaksData {
         return (mPlayerButtons & menuItems) == menuItems;
     }
 
-    public void enableBufferingFix(boolean enable) {
-        mIsBufferingFixEnabled = enable;
+    public void setPlayerDataSource(int dataSource) {
+        mPlayerDataSource = dataSource;
         persistData();
     }
 
-    public boolean isBufferingFixEnabled() {
-        return mIsBufferingFixEnabled;
+    public int getPlayerDataSource() {
+        return mPlayerDataSource;
     }
 
     public void enableNoFpsPresets(boolean enable) {
@@ -333,7 +336,7 @@ public class PlayerTweaksData {
         mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTVLauncher(mPrefs.getContext()));
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
         mPlayerButtons = Helpers.parseInt(split, 13, PLAYER_BUTTON_DEFAULT);
-        mIsBufferingFixEnabled = Helpers.parseBoolean(split, 14, false);
+        // Buffering fix was there.
         mIsNoFpsPresetsEnabled = Helpers.parseBoolean(split, 15, false);
         mIsRememberPositionOfShortVideosEnabled = Helpers.parseBoolean(split, 16, false);
         mIsSuggestionsDisabled = Helpers.parseBoolean(split, 17, false);
@@ -345,6 +348,7 @@ public class PlayerTweaksData {
         mIsSpeedButtonOldBehaviorEnabled = Helpers.parseBoolean(split, 23, false);
         mIsButtonLongClickEnabled = Helpers.parseBoolean(split, 24, true);
         mIsLongSpeedListEnabled = Helpers.parseBoolean(split, 25, false);
+        mPlayerDataSource = Helpers.parseInt(split, 26, PLAYER_DATA_SOURCE_DEFAULT);
     }
 
     private void persistData() {
@@ -353,9 +357,9 @@ public class PlayerTweaksData {
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
                 mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
-                mIsBufferingFixEnabled, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
+                null, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
                 mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio, mIsQualityInfoBitrateEnabled,
-                mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled
+                mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource
         ));
     }
 }

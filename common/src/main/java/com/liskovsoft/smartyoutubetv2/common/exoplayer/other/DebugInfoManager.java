@@ -345,7 +345,10 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
     private void appendVersion() {
         appendRow("ExoPlayer Version", ExoPlayerLibraryInfo.VERSION);
-        appendRow("ExoPlayer DataSource", PlayerTweaksData.instance(mContext).isBufferingFixEnabled() ? "OkHttp" : "Default");
+        appendRow("ExoPlayer DataSource",
+                PlayerTweaksData.instance(mContext).getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? "OkHttp" :
+                        PlayerTweaksData.instance(mContext).getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET ? "Cronet" :
+                        "Default");
         appendRow(mAppVersion, AppInfoHelpers.getAppVersionName(mContext));
     }
 

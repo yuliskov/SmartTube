@@ -368,14 +368,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     private void initErrorActions() {
         // Some ciphered data could be outdated.
         // Might happen when the app wasn't used quite a long time.
-        mErrorActions.put(PlayerEventListener.ERROR_TYPE_SOURCE, () -> {
-            // This buffering setting could also cause such errors.
-            if (mPlayerTweaksData.isBufferingFixEnabled()) {
-                mPlayerTweaksData.enableBufferingFix(false);
-            }
-
-            MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_source2);
-        });
+        mErrorActions.put(PlayerEventListener.ERROR_TYPE_SOURCE, () -> MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_source2));
         mErrorActions.put(PlayerEventListener.ERROR_TYPE_RENDERER, () -> MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_renderer));
 
         // Hide unknown error on stable build only

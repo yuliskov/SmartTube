@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -295,9 +296,21 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isFrameDropFixEnabled()));
 
-        options.add(UiOptionItem.from("Buffering fix (experimental)",
-                option -> mPlayerTweaksData.enableBufferingFix(option.isSelected()),
-                mPlayerTweaksData.isBufferingFixEnabled()));
+        options.add(UiOptionItem.from("Enable OkHttp player engine",
+                option -> {
+                    mPlayerTweaksData.setPlayerDataSource(option.isSelected() ? PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP :
+                            PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
+                    ExoMediaSourceFactory.unhold();
+                },
+                mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP));
+
+        options.add(UiOptionItem.from("Enable Cronet player engine",
+                option -> {
+                    mPlayerTweaksData.setPlayerDataSource(option.isSelected() ? PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET :
+                            PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
+                    ExoMediaSourceFactory.unhold();
+                },
+                mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET));
 
         options.add(UiOptionItem.from("Keep finished activities",
                 option -> mPlayerTweaksData.enableKeepFinishedActivity(option.isSelected()),
