@@ -6,6 +6,9 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryString;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryStringFactory;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class IntentExtractor {
     private static final String TAG = IntentExtractor.class.getSimpleName();
     /**
@@ -34,29 +37,39 @@ public class IntentExtractor {
 
         UrlQueryString parser = UrlQueryStringFactory.parse(extractUri(intent));
         String time = parser.get(VIDEO_TIME_KEY);
-        if (time == null) {
+        Pattern pattern = Pattern.compile("^(\\d+)([A-Za-z]{0,2})$");
+        Matcher matcher = pattern.matcher(time);
+
+        if (!matcher.matches()) {
             return null;
         }
 
+        String strValue = matcher.group(1);
+        String unit = matcher.group(2);
+
         long multiplier = 1;
-        if (time.endsWith("ms")) {
-            time = time.substring(0, time.length() - 2);
-        } else if (time.endsWith("s")) {
-            multiplier = 1000;
-            time = time.substring(0, time.length() - 1);
-        } else if (time.endsWith("m")) {
-            multiplier = 60 * 1000;
-            time = time.substring(0, time.length() - 1);
-        } else if (time.endsWith("h")) {
-            multiplier = 60 * 60 * 1000;
-            time = time.substring(0, time.length() - 1);
+
+        if (unit != null && !unit.isEmpty()) {
+            switch (unit.toLowerCase()) {
+                case "s":
+                    multiplier = 1000;
+                    break;
+                case "m":
+                    multiplier = 60 * 1000;
+                    break;
+                case "h":
+                    multiplier = 60 * 60 * 1000;
+                    break;
+                default:
+                    return null;
+            }
         } else {
-            // Assume seconds if no time unit suffix is present
+            // Assume seconds if no unit is present
             multiplier = 1000;
         }
 
         try {
-            return multiplier * Long.parseLong(time);
+            return multiplier * Long.parseLong(strValue);
         } catch (NumberFormatException e) {
             return null;
         }
