@@ -500,7 +500,7 @@
     <string name="content_type_channel">Kanał</string>
     <string name="content_type_playlist">Lista odtwarzania</string>
     <string name="content_type_movie">Film</string>
-    <string name="video_features">Cechy</string>
+    <string name="video_features">Właściwości</string>
     <string name="video_feature_any">Wszystkie</string>
     <string name="video_feature_live">Na żywo</string>
     <string name="video_feature_4k">4K</string>
@@ -510,4 +510,8 @@
     <string name="sort_by_views">Wyświetleń</string>
     <string name="sort_by_date">Daty przesłania</string>
     <string name="sort_by_rating">Oceny</string>
+	<string name="clear_search_history">Wyczyść historię wyszukiwania</string>
+    <string name="remove_from_subscriptions">Ukryj</string>
+	<string name="player_long_speed_list">Długa lista prędkości</string>
+	<string name="alt_app_icon">Alternatywna ikona aplikacji (wymaga restartu)</string>
 </resources>
