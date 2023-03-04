@@ -14,6 +14,7 @@ public class IntentExtractor {
      */
     private static final String[] SEARCH_KEYS = {"search_query", "query"};
     private static final String VIDEO_ID_KEY = "v";
+    private static final String VIDEO_TIME_KEY = "t";
     private static final String VIDEO_ID_LIST_KEY = "video_ids";
     /**
      * https://youtube.com/channel/BLABLA/video
@@ -25,6 +26,21 @@ public class IntentExtractor {
     private static final String HISTORY_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEmy_youtube"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String RECOMMENDED_URL = "https://www.youtube.com/tv#/zylon-surface?c=default"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String PLAYLIST_KEY = "list";
+
+    public static Integer extractVideoTime(Intent intent) {
+        if (isEmptyIntent(intent)) {
+            return null;
+        }
+
+        UrlQueryString parser = UrlQueryStringFactory.parse(extractUri(intent));
+        String time = parser.get(VIDEO_TIME_KEY);
+
+        try {
+            return Integer.parseInt(time);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     public static String extractVideoId(Intent intent) {
         if (isEmptyIntent(intent)) {
