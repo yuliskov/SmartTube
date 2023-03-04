@@ -49,14 +49,14 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     /**
      * Opens video item from splash view
      */
-    public void openVideo(String videoId, boolean finishOnEnded, Integer time) {
+    public void openVideo(String videoId, boolean finishOnEnded, Integer timeMs) {
         if (videoId == null) {
             return;
         }
 
         Video video = Video.from(videoId);
         video.finishOnEnded = finishOnEnded;
-        video.pendingPosMs = time == null ? 0 : time * 1000;
+        video.pendingPosMs = timeMs;
         openVideo(video);
     }
 

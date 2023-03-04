@@ -242,9 +242,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                     viewManager.setSinglePlayerMode(true);
                 }
 
-                String time = IntentExtractor.extractVideoTime(intent);
+                Long timeMs = IntentExtractor.extractVideoTimeMs(intent);
                 PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
-                playbackPresenter.openVideo(videoId, IntentExtractor.hasFinishOnEndedFlag(intent), time);
+                playbackPresenter.openVideo(videoId, IntentExtractor.hasFinishOnEndedFlag(intent), timeMs);
 
                 return true;
             }

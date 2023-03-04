@@ -27,17 +27,37 @@ public class IntentExtractor {
     private static final String RECOMMENDED_URL = "https://www.youtube.com/tv#/zylon-surface?c=default"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String PLAYLIST_KEY = "list";
 
-    public static Integer extractVideoTime(Intent intent) {
+    public static Long extractVideoTimeMs(Intent intent) {
         if (isEmptyIntent(intent)) {
             return null;
         }
 
         UrlQueryString parser = UrlQueryStringFactory.parse(extractUri(intent));
         String time = parser.get(VIDEO_TIME_KEY);
+        if (time == null) {
+            return null;
+        }
+
+        long multiplier = 1;
+        if (time.endsWith("ms")) {
+            time = time.substring(0, time.length() - 2);
+        } else if (time.endsWith("s")) {
+            multiplier = 1000;
+            time = time.substring(0, time.length() - 1);
+        } else if (time.endsWith("m")) {
+            multiplier = 60 * 1000;
+            time = time.substring(0, time.length() - 1);
+        } else if (time.endsWith("h")) {
+            multiplier = 60 * 60 * 1000;
+            time = time.substring(0, time.length() - 1);
+        } else {
+            // Assume seconds if no time unit suffix is present
+            multiplier = 1000;
+        }
 
         try {
-            return Integer.parseInt(time);
-        } catch (Exception e) {
+            return multiplier * Long.parseLong(time);
+        } catch (NumberFormatException e) {
             return null;
         }
     }
