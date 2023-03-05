@@ -516,4 +516,5 @@
     <string name="remove_from_subscriptions">Приховати</string>
     <string name="player_long_speed_list">Довгий список швидкостей</string>
     <string name="alt_app_icon">Альтернативна іконка застосунку (потрібне перезавантаження)</string>
+    <string name="download_data_with">Завантажувати дані за допомогою %s</string>
 </resources>

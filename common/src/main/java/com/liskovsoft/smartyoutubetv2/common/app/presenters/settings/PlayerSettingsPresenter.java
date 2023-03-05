@@ -296,7 +296,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isFrameDropFixEnabled()));
 
-        options.add(UiOptionItem.from("Enable OkHttp player engine",
+        options.add(UiOptionItem.from(getContext().getString(R.string.download_data_with, "OkHttp"),
                 option -> {
                     mPlayerTweaksData.setPlayerDataSource(option.isSelected() ? PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP :
                             PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
@@ -304,7 +304,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP));
 
-        options.add(UiOptionItem.from("Enable Cronet player engine",
+        options.add(UiOptionItem.from(getContext().getString(R.string.download_data_with, "Cronet (Chromium engine)"),
                 option -> {
                     mPlayerTweaksData.setPlayerDataSource(option.isSelected() ? PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET :
                             PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
