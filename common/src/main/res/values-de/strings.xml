@@ -369,7 +369,7 @@
     <string name="ambilight_ratio_fix">Ambilight/Seitenverhältnis/Screenshots-Fix</string>
     <string name="force_legacy_codecs_desc">Erhebliche Verbesserung der Leistung auf Low-End-Geräten. Die maximale Auflösung beträgt 720p.</string>
     <string name="force_legacy_codecs">Legacy-Codecs erzwingen (720p)</string>
-    <string name="live_stream_fix_desc">Erhebliche Verbesserung der Live-Stream-Leistung auf Low-End-Geräten. Die maximale Auflösung beträgt 1080p.</string>
+    <string name="live_stream_fix_desc">Warnung, dieser Tweak deaktiviert das Zurückspulen von Streams. Erhebliche Verbesserung der Live-Stream-Leistung auf Low-End-Geräten. Die maximale Auflösung beträgt 1080p.</string>
     <string name="live_stream_fix">Live-Stream-Fix (1080p)</string>
     <string name="playback_notifications_fix_desc">Ausblenden von Benachrichtigungen. Könnte auf AOSP-basierten Firmwares nützlich sein.</string>
     <string name="playback_notifications_fix">Wiedergabe-Benachrichtigungen deaktivieren</string>
