@@ -68,7 +68,7 @@ public class UrlProvider extends ContentProvider {
         final long startTime = System.currentTimeMillis();
         final String videoPageUrl = uri.getQueryParameter("url");
         final VideoInfo videoInfo = VideoInfoService.instance()
-                .getVideoInfo(Uri.parse(videoPageUrl).getQueryParameter("v"), "", "");
+                .getVideoInfo(Uri.parse(videoPageUrl).getQueryParameter("v"), "");
         String playlistContent = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             YouTubeMediaItemFormatInfo formatInfo = YouTubeMediaItemFormatInfo.from(videoInfo);
