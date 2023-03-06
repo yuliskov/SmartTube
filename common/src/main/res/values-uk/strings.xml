@@ -114,8 +114,8 @@
     <string name="repeat_mode_pause">Ставити відтворення на паузу після кожного відео</string>
     <string name="repeat_mode_pause_alt">Відтворювати безперервно тільки відео з плейлиста</string>
     <string name="repeat_mode_none">Завершувати відтворення після одного відео</string>
-    <string name="subscribed_to_channel">Підписка на канал оформлена</string>
-    <string name="unsubscribed_from_channel">Підписка на канал не оформлена</string>
+    <string name="subscribed_to_channel">Підписка оформлена</string>
+    <string name="unsubscribed_from_channel">Підписка скасована</string>
     <string name="subtitle_yellow_transparent">Жовті на прозорому фоні</string>
     <string name="subtitle_white_transparent">Білі на прозорому фоні</string>
     <string name="subtitle_white_black">Білі на чорному фоні</string>
@@ -251,6 +251,7 @@
     <string name="app_restore">Відновити дані з бекапу</string>
     <string name="skip_each_segment_once">Не пропускати сегменти повторно</string>
     <string name="disable_ok_long_press">Не обробляти довге утримання кнопки ОК</string>
+    <string name="disable_ok_long_press_desc">Призначено для глючних пультів, де кнопка OK не працює належним чином</string>
     <string name="player_time_correction">Відображати час з урахуванням швидкості відтворення</string>
     <string name="sponsor_color_markers">Кольорові помітки на шкалі прогресу</string>
     <string name="refresh_section">Оновити розділ</string>
@@ -384,6 +385,7 @@
     <string name="subtitle_position">Зсув субтитрів внизу</string>
     <string name="pressing_home">натиснувши ДОДОМУ</string>
     <string name="pressing_home_back">натиснувши ДОДОМУ або ПОВЕРНУТИСЯ</string>
+    <string name="pressing_back">натиснувши ПОВЕРНУТИСЯ</string>
     <string name="player_number_key_seek">Перемотувати цифровими клавішами</string>
     <string name="save_remove_playlist">Додати/Видалити плейлист з розділу Плейлисти</string>
     <string name="remove_playlist">Видалити плейлист з розділу Плейлисти назавжди</string>
@@ -406,7 +408,7 @@
     <string name="sleep_timer">Таймер сна (якщо пульт не використовувался одну годину)</string>
     <string name="sleep_timer_desc">Ставити відтворення на паузу, якщо користувач не використовував пульт дистанційного керування протягом однієї години</string>
     <string name="disable_vsync">Вимкнути вертикальну синхронізацію</string>
-    <string name="disable_vsync_desc">Трохи покращує продуктивність при відтворенні</string>
+    <string name="disable_vsync_desc">Цей параметр вимикає вирівнювання кадрів із сигналом вертикальної синхронізації дисплея. Може підвищити продуктивність на слабких пристроях, звільнивши ресурси ЦП.</string>
     <string name="skip_codec_profile_check">Пропустити перевірку кодеків</string>
     <string name="skip_codec_profile_check_desc">Не перевіряти підтримку кодеків під час запуску відео. Може бути корисним для глючних прошивок.</string>
     <string name="force_sw_codec">Активувати програмний декодер</string>
@@ -488,4 +490,30 @@
     <string name="loading">Завантаження…</string>
     <string name="hide_streams">Приховувати прямі трансляції з Підписок</string>
     <string name="video_rotate">Обертати</string>
+    <string name="trending_searches">Популярні пошукові запити</string>
+    <string name="video_duration_any">Будь-яка</string>
+    <string name="video_duration">Тривалість</string>
+    <string name="video_duration_under_4">Меньше 4 хвилин</string>
+    <string name="video_duration_between_4_20">4–20 хвилин</string>
+    <string name="video_duration_over_20">Більше 20 хвилин</string>
+    <string name="content_type">Тип</string>
+    <string name="content_type_any">Будь-який</string>
+    <string name="content_type_video">Відео</string>
+    <string name="content_type_channel">Канал</string>
+    <string name="content_type_playlist">Плейлист</string>
+    <string name="content_type_movie">Фільм</string>
+    <string name="video_features">Характеристики</string>
+    <string name="video_feature_any">Будь-які</string>
+    <string name="video_feature_live">Прямі трансляції</string>
+    <string name="video_feature_4k">4K</string>
+    <string name="video_feature_hdr">HDR</string>
+    <string name="search_sorting">Сортувати</string>
+    <string name="sort_by_relevance">Відповідність</string>
+    <string name="sort_by_views">Кількість переглядів</string>
+    <string name="sort_by_date">Дата завантаження</string>
+    <string name="sort_by_rating">Оцінка</string>
+    <string name="clear_search_history">Видалити історію пошуку</string>
+    <string name="remove_from_subscriptions">Приховати</string>
+    <string name="player_long_speed_list">Довгий список швидкостей</string>
+    <string name="alt_app_icon">Альтернативна іконка застосунку (потрібне перезавантаження)</string>
 </resources>

@@ -47,6 +47,7 @@ public class ThumbsBar extends LinearLayout {
     // flag to determine if the number of thumbs in thumbs bar is set by user through
     // setNumberofThumbs API or auto-calculated according to android tv design spec.
     private boolean mIsUserSets = false;
+    private int mRotation;
 
     public ThumbsBar(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -274,6 +275,9 @@ public class ThumbsBar extends LinearLayout {
     protected View createThumbView(ViewGroup parent) {
         ImageView imageView = new ImageView(parent.getContext());
         imageView.setAdjustViewBounds(true); // MOD: fit width
+        if (mRotation > 0) {
+            imageView.setRotation((float) mRotation);
+        }
         return imageView;
     }
 
@@ -300,8 +304,17 @@ public class ThumbsBar extends LinearLayout {
      */
     public void setThumbBitmap(int index, Bitmap bitmap) {
         mBitmaps.put(index, bitmap);
-        ((ImageView) getChildAt(index)).setImageBitmap(bitmap);
+        ImageView imageView = (ImageView) getChildAt(index);
+        imageView.setImageBitmap(bitmap);
         // MOD: exclude impact to final size of invisible images
-        ((ImageView) getChildAt(index)).setVisibility(bitmap != null ? View.VISIBLE : View.GONE);
+        imageView.setVisibility(bitmap != null ? View.VISIBLE : View.GONE);
+    }
+
+    public void setThumbsRotation(int angle) {
+        mRotation = angle;
+
+        for (int i = 0; i < getChildCount(); i++) {
+            ((ImageView) getChildAt(i)).setRotation((float) mRotation);
+        }
     }
 }

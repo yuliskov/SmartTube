@@ -3,6 +3,9 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
+import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -13,7 +16,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -64,7 +66,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
         runRefreshCachePeriodicTask();
         showAccountSelection();
-        resumeHistory();
 
         if (getView() != null) {
             applyNewIntent(getView().getNewIntent());
@@ -77,6 +78,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             // Need to be the first line and executed on earliest stage once.
             // Inits service language and context.
             //Utils.initGlobalData(getContext()); // Init already done in BasePresenter
+            clearCache();
             RxHelper.setupGlobalErrorHandler();
             initIntentChain();
             updateChannels();
@@ -87,7 +89,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             //configureOpenVPN();
             initVideoStateService();
             initStreamReminderService();
-            //resumeHistory();
             sRunOnce = true;
         }
     }
@@ -140,8 +141,16 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
     }
 
-    private void resumeHistory() {
-        MediaServiceManager.instance().enableHistory(GeneralData.instance(getContext()).isHistoryEnabled());
+    private void clearCache() {
+        if (getContext() != null) {
+            int versionCode = AppInfoHelpers.getAppVersionCode(getContext());
+            if (GeneralData.instance(getContext()).getVersionCode() != versionCode) {
+                GeneralData.instance(getContext()).setVersionCode(versionCode);
+
+                FileHelpers.deleteCache(getContext());
+                ViewManager.instance(getContext()).clearCaches();
+            }
+        }
     }
 
     private void runRefreshCachePeriodicTask() {
@@ -255,25 +264,25 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         });
 
         // NOTE: doesn't work very well. E.g. there's problems with focus or conflicts with 'boot to' section option.
-        //mIntentChain.add(intent -> {
-        //    int sectionId = -1;
-        //
-        //    // ATV channel icon clicked
-        //    if (IntentExtractor.isSubscriptionsUrl(intent)) {
-        //        sectionId = MediaGroup.TYPE_SUBSCRIPTIONS;
-        //    } else if (IntentExtractor.isHistoryUrl(intent)) {
-        //        sectionId = MediaGroup.TYPE_HISTORY;
-        //    } else if (IntentExtractor.isRecommendedUrl(intent)) {
-        //        sectionId = MediaGroup.TYPE_HOME;
-        //    }
-        //
-        //    if (sectionId != -1) {
-        //        BrowsePresenter.instance(getContext()).selectSection(sectionId);
-        //        return true;
-        //    }
-        //
-        //    return false;
-        //});
+        mIntentChain.add(intent -> {
+            int sectionId = -1;
+
+            // ATV channel icon clicked
+            if (IntentExtractor.isSubscriptionsUrl(intent)) {
+                sectionId = MediaGroup.TYPE_SUBSCRIPTIONS;
+            } else if (IntentExtractor.isHistoryUrl(intent)) {
+                sectionId = MediaGroup.TYPE_HISTORY;
+            } else if (IntentExtractor.isRecommendedUrl(intent)) {
+                sectionId = MediaGroup.TYPE_HOME;
+            }
+
+            if (sectionId != -1) {
+                BrowsePresenter.instance(getContext()).selectSection(sectionId);
+                return true;
+            }
+
+            return false;
+        });
 
         // Should come last
         mIntentChain.add(intent -> {

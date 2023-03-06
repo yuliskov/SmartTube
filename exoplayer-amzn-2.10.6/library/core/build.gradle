@@ -35,6 +35,7 @@ android {
         testInstrumentationRunnerArguments clearPackageData: 'true'
     }
 
+    // MOD: comment out to fix: intellij: root already belongs to module
     // Workaround to prevent circular dependency on project :testutils.
     sourceSets {
         androidTest {
@@ -58,10 +59,9 @@ android {
 }
 
 dependencies {
+    // MODIFIED: add custom dns resolver
+    implementation project(':sharedutils')
     implementation 'androidx.annotation:annotation:1.1.0'
-    // MODIFIED: add modern TLS ciphers to HttpUrlConnection
-    // https://stackoverflow.com/questions/16299531/how-to-override-the-cipherlist-sent-to-the-server-by-android-when-using-httpsurl
-    implementation 'info.guardianproject.netcipher:netcipher:2.1.0'
     compileOnly 'org.checkerframework:checker-qual:' + checkerframeworkVersion
     compileOnly 'org.checkerframework:checker-compat-qual:' + checkerframeworkVersion
     androidTestImplementation 'androidx.test:runner:' + androidXTestVersion

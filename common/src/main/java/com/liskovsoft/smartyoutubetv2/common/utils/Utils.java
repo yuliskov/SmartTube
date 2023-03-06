@@ -11,6 +11,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -44,7 +45,8 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -70,12 +72,14 @@ public class Utils {
     private static final int GLOBAL_VOLUME_TYPE = AudioManager.STREAM_MUSIC;
     private static final String GLOBAL_VOLUME_SERVICE = Context.AUDIO_SERVICE;
     private static final Handler sHandler = new Handler(Looper.getMainLooper());
+    public static final float[] SPEED_LIST_LONG = new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f};
+    public static final float[] SPEED_LIST_SHORT = new float[] {0.25f, 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 2.25f, 2.5f, 2.75f, 3.0f};
 
     /**
      * Limit the maximum size of a Map by removing oldest entries when limit reached
      */
     public static <K, V> Map<K, V> createLRUMap(final int maxEntries) {
-        return new LinkedHashMap<K, V>(maxEntries*10/7, 0.7f, true) {
+        return new LinkedHashMap<K, V>(maxEntries + 1, 0.75f, true) {
             @Override
             protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
                 return size() > maxEntries;
@@ -137,7 +141,11 @@ public class Utils {
         Intent chooserIntent = Intent.createChooser(primaryIntent, context.getResources().getText(R.string.share_link));
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { secondaryIntent });
         chooserIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-        context.startActivity(chooserIntent);
+        try {
+            context.startActivity(chooserIntent);
+        } catch (ActivityNotFoundException e) {
+            Log.e(TAG, "Chooser intent not found", e);
+        }
     }
 
     /**
@@ -489,19 +497,19 @@ public class Utils {
 
     public static void showRepeatInfo(Context context, int modeIndex) {
         switch (modeIndex) {
-            case PlaybackUIController.REPEAT_MODE_ALL:
+            case PlaybackUI.REPEAT_MODE_ALL:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_all);
                 break;
-            case PlaybackUIController.REPEAT_MODE_ONE:
+            case PlaybackUI.REPEAT_MODE_ONE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_one);
                 break;
-            case PlaybackUIController.REPEAT_MODE_PAUSE:
+            case PlaybackUI.REPEAT_MODE_PAUSE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_pause);
                 break;
-            case PlaybackUIController.REPEAT_MODE_LIST:
+            case PlaybackUI.REPEAT_MODE_LIST:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_pause_alt);
                 break;
-            case PlaybackUIController.REPEAT_MODE_CLOSE:
+            case PlaybackUI.REPEAT_MODE_CLOSE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_none);
                 break;
         }
@@ -582,5 +590,11 @@ public class Utils {
 
     public static int toSec(long ms) {
         return (int) (ms / 1_000);
+    }
+
+    public static boolean isFirstRun(Context context) {
+        VideoStateService stateService = VideoStateService.instance(context);
+
+        return stateService.isEmpty();
     }
 }

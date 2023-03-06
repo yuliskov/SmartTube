@@ -17,7 +17,8 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -81,6 +82,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
         // Could be set once per activity creation (view layout stuff)
         getController().setVideoZoomMode(mPlayerData.getVideoZoomMode());
+        getController().setVideoZoom(mPlayerData.getVideoZoom());
         getController().setVideoAspectRatio(mPlayerData.getVideoAspectRatio());
         getController().setVideoRotation(mPlayerData.getVideoRotation());
     }
@@ -293,6 +295,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
         setPlaylistAddButtonStateCached();
         setSubtitleButtonState();
+        getController().setButtonState(R.id.action_rotate, mPlayerData.getVideoRotation() == 0 ? PlaybackUI.BUTTON_OFF : PlaybackUI.BUTTON_ON);
     }
 
     @Override
@@ -447,7 +450,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onVideoZoomClicked() {
         OptionCategory videoZoomCategory = AppDialogUtil.createVideoZoomCategory(
-                getActivity(), mPlayerData, () -> getController().setVideoZoomMode(mPlayerData.getVideoZoomMode()));
+                getActivity(), mPlayerData, () -> {
+                    getController().setVideoZoomMode(mPlayerData.getVideoZoomMode());
+                    getController().setVideoZoom(mPlayerData.getVideoZoom());
+                    getController().showControls(false);
+                });
 
         OptionCategory videoAspectCategory = AppDialogUtil.createVideoAspectCategory(
                 getActivity(), mPlayerData, () -> getController().setVideoAspectRatio(mPlayerData.getVideoAspectRatio()));
@@ -467,7 +474,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().showOverlay(false);
         getController().setBackgroundMode(
                 Helpers.isPictureInPictureSupported(getActivity()) ?
-                        PlaybackEngineController.BACKGROUND_MODE_PIP : PlaybackEngineController.BACKGROUND_MODE_SOUND
+                        PlaybackEngine.BACKGROUND_MODE_PIP : PlaybackEngine.BACKGROUND_MODE_SOUND
         );
         getController().finish();
     }
@@ -483,6 +490,17 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     public void onRepeatModeClicked(int modeIndex) {
         mPlayerData.setRepeatMode(modeIndex);
         //Utils.showRepeatInfo(getActivity(), modeIndex);
+    }
+
+    @Override
+    public void onButtonClicked(int buttonId, int buttonState) {
+        if (buttonId == R.id.action_rotate) {
+            int oldRotation = mPlayerData.getVideoRotation();
+            int rotation = oldRotation == 0 ? 90 : oldRotation == 90 ? 180 : oldRotation == 180 ? 270 : 0;
+            getController().setVideoRotation(rotation);
+            getController().setButtonState(buttonId, rotation == 0 ? PlaybackUI.BUTTON_OFF : PlaybackUI.BUTTON_ON);
+            mPlayerData.setVideoRotation(rotation);
+        }
     }
 
     private void disableUiAutoHideTimeout() {
@@ -519,12 +537,12 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private void callMediaItemObservable(MediaItemObservable callable) {
         Video video = getController().getVideo();
 
-        if (video == null || video.mediaItem == null) {
+        if (video == null) {
             Log.e(TAG, "Seems that video isn't initialized yet. Cancelling...");
             return;
         }
 
-        Observable<Void> observable = callable.call(video.mediaItem);
+        Observable<Void> observable = callable.call(video.mediaItem != null ? video.mediaItem : video.toMediaItem());
 
         RxHelper.execute(observable);
     }

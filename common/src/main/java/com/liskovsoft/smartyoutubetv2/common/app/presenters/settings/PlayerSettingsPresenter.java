@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
@@ -22,12 +23,14 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private final PlayerData mPlayerData;
     private final PlayerTweaksData mPlayerTweaksData;
     private final SearchData mSearchData;
+    private final GeneralData mGeneralData;
 
     private PlayerSettingsPresenter(Context context) {
         super(context);
         mPlayerData = PlayerData.instance(context);
         mPlayerTweaksData = PlayerTweaksData.instance(context);
         mSearchData = SearchData.instance(context);
+        mGeneralData = GeneralData.instance(context);
     }
 
     public static PlayerSettingsPresenter instance(Context context) {
@@ -171,6 +174,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.video_rotate, PlayerTweaksData.PLAYER_BUTTON_VIDEO_ROTATE},
                 {R.string.open_chat, PlayerTweaksData.PLAYER_BUTTON_CHAT},
                 {R.string.content_block_provider, PlayerTweaksData.PLAYER_BUTTON_CONTENT_BLOCK},
                 {R.string.seek_interval, PlayerTweaksData.PLAYER_BUTTON_SEEK_INTERVAL},
@@ -209,6 +213,12 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
     private void appendTweaksCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        // Disable long press on buggy controllers.
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
+                getContext().getString(R.string.disable_ok_long_press_desc),
+                option -> mGeneralData.disableOkButtonLongPress(option.isSelected()),
+                mGeneralData.isOkButtonLongPressDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.audio_sync_fix),
                 getContext().getString(R.string.audio_sync_fix_desc),
@@ -296,6 +306,16 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from("Disable Channels service",
                 option -> GlobalPreferences.instance(getContext()).enableChannelsService(!option.isSelected()),
                 !GlobalPreferences.instance(getContext()).isChannelsServiceEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.alt_app_icon),
+                option -> {
+                    mGeneralData.enableAltAppIcon(option.isSelected());
+                    Helpers.enableActivity(getContext(), option.isSelected() ?
+                            "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity" : "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivityAlt", false);
+                    Helpers.enableActivity(getContext(), option.isSelected() ?
+                            "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivityAlt" : "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity", true);
+                },
+                mGeneralData.isAltAppIconEnabled()));
 
         // Disabled inside RetrofitHelper
         //options.add(UiOptionItem.from("Prefer IPv4 DNS",
@@ -393,6 +413,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_long_speed_list),
+                option -> mPlayerTweaksData.enableLongSpeedList(option.isSelected()),
+                mPlayerTweaksData.isLongSpeedListEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_button_long_click),
                 option -> mPlayerTweaksData.enableButtonLongClick(option.isSelected()),

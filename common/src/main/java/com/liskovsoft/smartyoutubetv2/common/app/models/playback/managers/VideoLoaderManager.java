@@ -14,7 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.SampleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
@@ -136,7 +136,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     @Override
     public void onVideoLoaded(Video video) {
         mLastError = -1;
-        getController().setRepeatButtonState(video.finishOnEnded ? PlaybackUIController.REPEAT_MODE_CLOSE : mPlayerData.getRepeatMode());
+        getController().setRepeatButtonState(video.finishOnEnded ? PlaybackUI.REPEAT_MODE_CLOSE : mPlayerData.getRepeatMode());
     }
 
     @Override
@@ -199,7 +199,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
 
         Video video = getController().getVideo();
         if (video != null && video.finishOnEnded) {
-            repeatMode = PlaybackUIController.REPEAT_MODE_CLOSE;
+            repeatMode = PlaybackUI.REPEAT_MODE_CLOSE;
         }
 
         applyRepeatMode(repeatMode);
@@ -235,7 +235,8 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     private void checkSleepTimer() {
         if (mPlayerData.isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
             getController().setPlayWhenReady(false);
-            getController().showError(getActivity().getString(R.string.sleep_timer));
+            getController().setTitle(getActivity().getString(R.string.sleep_timer));
+            getController().showOverlay(true);
         }
     }
 
@@ -312,7 +313,8 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         mLastVideo.sync(formatInfo);
 
         if (formatInfo.isUnplayable() || formatInfo.isAgeRestricted()) {
-            getController().showError(formatInfo.getPlayabilityStatus());
+            getController().setTitle(formatInfo.getPlayabilityStatus());
+            getController().showOverlay(true);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
             loadNext();
@@ -457,15 +459,15 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         }
 
         switch (repeatMode) {
-            case PlaybackUIController.REPEAT_MODE_ALL:
-            case PlaybackUIController.REPEAT_MODE_SHUFFLE:
+            case PlaybackUI.REPEAT_MODE_ALL:
+            case PlaybackUI.REPEAT_MODE_SHUFFLE:
                 loadNext();
                 getController().showOverlay(true);
                 break;
-            case PlaybackUIController.REPEAT_MODE_ONE:
+            case PlaybackUI.REPEAT_MODE_ONE:
                 getController().setPositionMs(0);
                 break;
-            case PlaybackUIController.REPEAT_MODE_CLOSE:
+            case PlaybackUI.REPEAT_MODE_CLOSE:
                 // Close player if suggestions not shown
                 // Except when playing from queue
                 if (mPlaylist.getNext() != null) {
@@ -475,7 +477,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                     getController().finishReally();
                 }
                 break;
-            case PlaybackUIController.REPEAT_MODE_PAUSE:
+            case PlaybackUI.REPEAT_MODE_PAUSE:
                 // Stop player after each video.
                 // Except when playing from queue
                 if (mPlaylist.getNext() != null) {
@@ -487,7 +489,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                     getController().showSuggestions(true);
                 }
                 break;
-            case PlaybackUIController.REPEAT_MODE_LIST:
+            case PlaybackUI.REPEAT_MODE_LIST:
                 // stop player (if not playing playlist)
                 Video video = getController().getVideo();
                 if ((video != null && video.hasNextPlaylist()) || mPlaylist.getNext() != null) {
@@ -535,7 +537,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
             return;
         }
 
-        if (mPlayerData.getRepeatMode() == PlaybackUIController.REPEAT_MODE_SHUFFLE) {
+        if (mPlayerData.getRepeatMode() == PlaybackUI.REPEAT_MODE_SHUFFLE) {
             Video video = new Video();
             video.playlistId = mLastVideo.playlistId;
             VideoGroup topRow = getController().getSuggestionsByIndex(0);

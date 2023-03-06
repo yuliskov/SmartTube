@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.os.Handler;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
@@ -15,8 +16,8 @@ import java.util.List;
 public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private static final String TAG = BackupAndRestoreManager.class.getSimpleName();
     private final Context mContext;
-    private final List<File> mDataDirs;
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
+    private final List<File> mDataDirs;
     private final List<File> mBackupDirs;
     private Runnable mPendingHandler;
 
@@ -28,6 +29,10 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         mBackupDirs = new ArrayList<>();
         mBackupDirs.add(new File(FileHelpers.getBackupDir(mContext), "Backup"));
         mBackupDirs.add(new File(FileHelpers.getExternalFilesDir(mContext), "Backup")); // isn't used at a moment
+        // Fallback dir: Stable (in case app installed from scratch)
+        mBackupDirs.add(new File(new File(Environment.getExternalStorageDirectory(), "data/com.teamsmart.videomanager.tv"), "Backup"));
+        // Fallback dir: Beta (in case app installed from scratch)
+        mBackupDirs.add(new File(new File(Environment.getExternalStorageDirectory(), "data/com.liskovsoft.smarttubetv.beta"), "Backup"));
     }
 
     public void checkPermAndRestore() {
@@ -77,7 +82,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private void restoreData() {
         Log.d(TAG, "App just updated. Restoring data...");
 
-        File currentBackup = getBackup();
+        File currentBackup = getBackupCheck();
 
         if (FileHelpers.isEmpty(currentBackup)) {
             Log.d(TAG, "Oops. Backup not exists.");
@@ -102,7 +107,11 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     }
 
     private void verifyStoragePermissionsAndReturn() {
-        PermissionHelpers.verifyStoragePermissions(mContext);
+        if (mContext instanceof MotherActivity) {
+            ((MotherActivity) mContext).addOnPermissions(this);
+
+            PermissionHelpers.verifyStoragePermissions(mContext);
+        }
     }
 
     private File getBackup() {
@@ -111,6 +120,20 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         for (File backupDir : mBackupDirs) {
             currentBackup = backupDir;
             break;
+        }
+
+        return currentBackup;
+    }
+
+    private File getBackupCheck() {
+        File currentBackup = null;
+
+        for (File backupDir : mBackupDirs) {
+            // FileHelpers.isEmpty(backupDir) needs access device storage permission
+            if (backupDir.exists()) {
+                currentBackup = backupDir;
+                break;
+            }
         }
 
         return currentBackup;
@@ -134,5 +157,15 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         File currentBackup = getBackup();
 
         return currentBackup != null ? currentBackup.toString() : null;
+    }
+
+    public String getBackupPathCheck() {
+        File currentBackup = getBackupCheck();
+
+        return currentBackup != null ? currentBackup.toString() : null;
+    }
+
+    public boolean hasBackup() {
+        return getBackupCheck() != null;
     }
 }

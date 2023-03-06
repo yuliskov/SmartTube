@@ -27,20 +27,19 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSource.Factory;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.youtubeapi.common.helpers.DefaultHeaders;
 import com.liskovsoft.sharedutils.okhttp.OkHttpCommons;
+import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.ErrorDefaultDashChunkSource;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
-import com.liskovsoft.youtubeapi.app.AppConstants;
-import com.liskovsoft.youtubeapi.common.helpers.RetrofitHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -264,7 +263,7 @@ public class ExoMediaSourceFactory {
     private static HttpDataSource.Factory buildOkHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         // OkHttpHelpers.getOkHttpClient()
         // RetrofitHelper.createOkHttpClient()
-        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(RetrofitHelper.createOkHttpClient(), AppConstants.APP_USER_AGENT,
+        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpHelpers.getClient(), DefaultHeaders.APP_USER_AGENT,
                 bandwidthMeter);
         addCommonHeaders(dataSourceFactory);
         return dataSourceFactory;
@@ -278,7 +277,7 @@ public class ExoMediaSourceFactory {
         //        AppConstants.APP_USER_AGENT, bandwidthMeter);
 
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
-                AppConstants.APP_USER_AGENT, bandwidthMeter, (int) OkHttpCommons.CONNECT_TIMEOUT_MS,
+                DefaultHeaders.APP_USER_AGENT, bandwidthMeter, (int) OkHttpCommons.CONNECT_TIMEOUT_MS,
                 (int) OkHttpCommons.READ_TIMEOUT_MS, true); // allowCrossProtocolRedirects = true
 
         addCommonHeaders(dataSourceFactory); // cause troubles for some users
@@ -293,7 +292,7 @@ public class ExoMediaSourceFactory {
         //HeaderManager headerManager = new HeaderManager(context);
         //HashMap<String, String> headers = headerManager.getHeaders();
 
-        // NOTE: "Accept-Encoding" should set to "identity" or not present
+        // NOTE: "Accept-Encoding" should not be set manually (gzip is added by default).
 
         //for (String header : headers.keySet()) {
         //    if (EXO_HEADERS.contains(header)) {
@@ -312,9 +311,11 @@ public class ExoMediaSourceFactory {
         //dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-mode", "cors");
         //dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-site", "cross-site");
 
-        // WARN: Won't work on Exo 2.10!!!
-        // Compress response (WARN: gzip, deflate or br aren't supported in dash urls)
-        // dataSourceFactory.getDefaultRequestProperties().set("Accept-Encoding", AppConstants.ACCEPT_ENCODING);
+        // WARN: Compression won't work with legacy streams.
+        // "Accept-Encoding" should not be set manually (gzip is added by default).
+        // Otherwise you should do decompression yourself.
+        // Source: https://stackoverflow.com/questions/18898959/httpurlconnection-not-decompressing-gzip/42346308#42346308
+        //dataSourceFactory.getDefaultRequestProperties().set("Accept-Encoding", AppConstants.ACCEPT_ENCODING_DEFAULT);
     }
 
     public void setTrackErrorFixer(TrackErrorFixer trackErrorFixer) {

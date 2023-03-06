@@ -8,6 +8,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.disposables.Disposable;
 
@@ -67,11 +69,15 @@ public class SignInPresenter extends BasePresenter<SignInView> {
                         error -> Log.e(TAG, "Sign in error: %s", error.getMessage()),
                         () -> {
                             // Success
-                            mBrowsePresenter.refresh();
                             if (getView() != null) {
                                 getView().close();
                             }
+                            mBrowsePresenter.refresh();
                             mSplashPresenter.updateChannels();
+
+                            // Account history might be turned off (common issue).
+                            GeneralData.instance(getContext()).enableHistory(true);
+                            MediaServiceManager.instance().enableHistory(true);
                         }
                  );
     }

@@ -28,7 +28,7 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         return new ContentBlockSettingsPresenter(context);
     }
 
-    public void show() {
+    public void show(Runnable onFinish) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         
         appendSponsorBlockSwitch(settingsPresenter);
@@ -37,7 +37,11 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         appendStatusCheckSection(settingsPresenter);
         appendMiscSection(settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.content_block_provider));
+        settingsPresenter.showDialog(getContext().getString(R.string.content_block_provider), onFinish);
+    }
+
+    public void show() {
+        show(null);
     }
 
     private void appendSponsorBlockSwitch(AppDialogPresenter settingsPresenter) {
@@ -143,8 +147,8 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.skip_each_segment_once),
-                optionItem -> mContentBlockData.enableSkipEachSegmentOnce(optionItem.isSelected()),
-                mContentBlockData.isSkipEachSegmentOnceEnabled()));
+                optionItem -> mContentBlockData.enableDontSkipSegmentAgain(optionItem.isSelected()),
+                mContentBlockData.isDontSkipSegmentAgainEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.content_block_alt_server),
                 getContext().getString(R.string.content_block_alt_server_desc),

@@ -228,7 +228,7 @@
   <string name="share_embed_link">Partager le lien intégré</string>
   <string name="card_text_scroll_factor">Vitesse de défilement du texte des tuiles</string>
   <string name="preferred_update_source">Source de mise à jour</string>
-  <string name="hide_shorts">Masquer les passages de demande d\'Abonnements</string>
+  <string name="hide_shorts">Masquer les shorts des abonnements</string>
   <string name="key_remapping">Remplacement des touches</string>
   <string name="screen_dimming">Gradation de l\'écran</string>
   <string name="removed_from_playback_queue">Suppression de la file d\'attente de lecture</string>

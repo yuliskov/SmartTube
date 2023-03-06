@@ -297,11 +297,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (isMultiGridChannelUploadsSection() && item.belongsToChannelUploads() && !item.hasVideo()) {
+        if (belongsToChannelUploadsMultiGrid(item)) {
             if (mMainUIData.isUploadsAutoLoadEnabled()) {
-                updateMultiGrid(item);
+                updateChannelUploadsMultiGrid(item);
             } else {
-                updateMultiGrid(null); // clear
+                updateChannelUploadsMultiGrid(null); // clear
             }
         }
 
@@ -315,8 +315,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         // Check that channels new look enabled and we're on the first column
-        if (isMultiGridChannelUploadsSection() && item.belongsToChannelUploads() && !item.hasVideo()) {
-            updateMultiGrid(item);
+        if (belongsToChannelUploadsMultiGrid(item)) {
+            updateChannelUploadsMultiGrid(item);
+            //ChannelPresenter.instance(getContext()).openChannel(item);
         } else {
             VideoActionPresenter.instance(getContext()).apply(item);
         }
@@ -330,7 +331,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (item.belongsToChannelUploads() && !item.hasVideo()) { // We need to be sure we exactly on Channels section
+        if (belongsToChannelUploads(item)) { // We need to be sure we exactly on Channels section
             ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
                 if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE) { // works with any uploads section look
                     removeItem(item);
@@ -488,9 +489,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void refresh() {
+        refresh(true);
+    }
+
+    public void refresh(boolean focusOnContent) {
         if (mCurrentSection != null) {
             updateSection(mCurrentSection.getId());
-            if (getView() != null) {
+            if (focusOnContent && getView() != null) {
                 getView().focusOnContent();
             }
         }
@@ -610,10 +615,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void updateVideoGrid(BrowseSection section, Observable<MediaGroup> group, int position) {
+        disposeActions();
+
+        if (getView() == null) {
+            Log.e(TAG, "Browse view has been unloaded from the memory. Low RAM?");
+            ViewManager.instance(getContext()).startView(BrowseView.class);
+            return;
+        }
+
         Log.d(TAG, "updateGridHeader: Start loading section: " + section.getTitle());
 
-        disposeActions();
-        
         getView().showProgressBar(true);
 
         VideoGroup firstGroup = VideoGroup.from(section, position);
@@ -742,12 +753,21 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mLastUpdateTimeMs = 0;
     }
 
-    private void updateMultiGrid(Video item) {
+    private void updateChannelUploadsMultiGrid(Video item) {
         if (mCurrentSection == null) {
             return;
         }
 
         updateVideoGrid(mCurrentSection, ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item), 1, true);
+        //ChannelPresenter.instance(getContext()).obtainUploadsRowObservable(item, row -> updateVideoGrid(mCurrentSection, row, 1, true));
+    }
+
+    private boolean belongsToChannelUploadsMultiGrid(Video item) {
+        return isMultiGridChannelUploadsSection() && belongsToChannelUploads(item);
+    }
+
+    private boolean belongsToChannelUploads(Video item) {
+        return item.belongsToChannelUploads() && !item.hasVideo();
     }
 
     private BrowseSection findSectionById(int sectionId) {

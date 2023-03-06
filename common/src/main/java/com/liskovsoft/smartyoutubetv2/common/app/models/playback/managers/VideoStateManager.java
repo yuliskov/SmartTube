@@ -316,7 +316,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         boolean isShort = state != null && state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled();
         boolean isVideoEnded = state != null && state.durationMs - state.positionMs < 3_000;
 
-        if (isShort || isVideoEnded || item.isLive || !mGeneralData.isHistoryEnabled()) {
+        //if (isShort || isVideoEnded || item.isLive || !mGeneralData.isHistoryEnabled()) {
+        if (isShort || isVideoEnded || item.isLive) {
             resetPosition(item);
         }
     }
@@ -529,6 +530,10 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     }
 
     private boolean isLiveThreshold() {
+        if (getController() == null) {
+            return false;
+        }
+
         Video item = getVideo();
         boolean isLiveThreshold = getController().getDurationMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
         return item.isLive && isLiveThreshold;

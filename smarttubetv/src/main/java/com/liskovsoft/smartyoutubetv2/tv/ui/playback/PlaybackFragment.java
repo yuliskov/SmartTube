@@ -42,7 +42,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
@@ -72,7 +72,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.SeekModePlaybackFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface.SurfacePlaybackFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigator;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.StoryboardSeekDataProvider;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.previewtimebar.StoryboardSeekDataProvider;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.LiveChatView;
@@ -107,7 +107,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private UriBackgroundManager mBackgroundManager;
     private RowsSupportFragment mRowsSupportFragment;
     private final boolean mIsAnimationEnabled = true;
-    private int mPlaybackMode = PlaybackEngineController.BACKGROUND_MODE_DEFAULT;
+    private int mPlaybackMode = PlaybackEngine.BACKGROUND_MODE_DEFAULT;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
     private boolean mIsAfrRunning;
@@ -235,7 +235,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void onFinish() {
         // Fix background play when playing trailers from NUM
         // On API > 23 onStop not immediately occurred after onPause
-        if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
+        if (getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_DEFAULT) {
             if (Util.SDK_INT > 23) {
                 maybeReleasePlayer();
             }
@@ -312,7 +312,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
     }
 
-    private void maybeReleasePlayer() {
+    /**
+     * Internal method. Intended for enclosed Activity.
+     */
+    public void maybeReleasePlayer() {
         // Inside dialogs we could change engine settings on fly
         if (AppDialogPresenter.instance(getContext()).isDialogShown()) {
             Log.d(TAG, "releasePlayer: Engine release is blocked by dialog. Exiting...");
@@ -328,7 +331,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         //}
 
         // Ensure to continue playback in audio mode (activity should be blocked)
-        if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
+        if (getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_SOUND &&
                 ViewManager.instance(getContext()).getBlockedTop() == PlaybackActivity.class &&
                 !isInPIPMode()) {
             Log.d(TAG, "releasePlayer: Playback activity is blocked. Exiting...");
@@ -722,11 +725,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onContentBlock(boolean enabled) {
-            mEventListener.onContentBlockClicked(enabled);
-        }
-
-        @Override
         public void onChat(boolean enabled) {
             mEventListener.onChatClicked(enabled);
         }
@@ -769,6 +767,16 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         @Override
         public void onPlaybackQueue() {
             mEventListener.onPlaybackQueueClicked();
+        }
+
+        @Override
+        public void onAction(int actionId, int actionIndex) {
+            mEventListener.onButtonClicked(actionId, actionIndex);
+        }
+
+        @Override
+        public void onLongAction(int actionId, int actionIndex) {
+            mEventListener.onButtonLongClicked(actionId, actionIndex);
         }
 
         @Override
@@ -829,9 +837,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void showError(String errorMessage) {
-        mPlayerGlue.setTitle(errorMessage);
-        showOverlay(true);
+    public void setTitle(String title) {
+        mPlayerGlue.setTitle(title);
     }
 
     @Override
@@ -1031,6 +1038,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public void setVideoZoom(int percents) {
+        setZoom(percents);
+    }
+
+    @Override
     public void setVideoAspectRatio(float ratio) {
         setAspectRatio(ratio);
     }
@@ -1074,7 +1086,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // E.g. after closing dialogs.
         releasePlayer();
 
-        mPlaybackPresenter.onViewDestroyed();
+        if (mPlaybackPresenter.getView() == this) {
+            mPlaybackPresenter.onViewDestroyed();
+        }
     }
 
     @Override
@@ -1263,25 +1277,17 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setContentBlockButtonState(boolean selected) {
-        if (mPlayerGlue != null) {
-            mPlayerGlue.setContentBlockButtonState(selected);
-        }
-    }
-
-    @Override
     public void setChatButtonState(boolean selected) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setChatButtonState(selected);
         }
     }
 
-    private boolean isContentBlockEnabled() {
+    @Override
+    public void setButtonState(int buttonId, int buttonState) {
         if (mPlayerGlue != null) {
-            return mPlayerGlue.isContentBlockButtonPressed();
+            mPlayerGlue.setActionIndex(buttonId, buttonState);
         }
-
-        return false;
     }
 
     @Override
@@ -1553,6 +1559,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         showBackgroundColor(R.color.player_background);
         setChatReceiver(null);
         setSeekBarSegments(null);
+        setSeekPreviewTitle(null);
     }
 
     /**

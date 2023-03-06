@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 import androidx.fragment.app.Fragment;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -151,9 +151,12 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     private boolean wannaEnterToPip() {
-        return mPlaybackFragment != null && mPlaybackFragment.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
+        return mPlaybackFragment != null && mPlaybackFragment.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
     }
 
+    /**
+     * BACK pressed, PIP player's button pressed
+     */
     @Override
     public void finish() {
         Log.d(TAG, "Finishing activity...");
@@ -165,11 +168,11 @@ public class PlaybackActivity extends LeanbackActivity {
 
         // NOTE: block back button for PIP.
         // User pressed PIP button in the player.
-        if (!mBackPressed) {
+        if (!skipPip()) {
             enterPipMode(); // NOTE: without this call app will hangs when pressing on PIP button
         }
 
-        if (doNotDestroy() && !mBackPressed) {
+        if (doNotDestroy() && !skipPip()) {
             // Ensure to opening this activity when the user is returning to the app
             mViewManager.blockTop(this);
             mViewManager.startParentView(this);
@@ -177,6 +180,9 @@ public class PlaybackActivity extends LeanbackActivity {
             if (mPlayerTweaksData.isKeepFinishedActivityEnabled()) {
                 //moveTaskToBack(true); // Don't do this or you'll have problems when player overlaps other apps (e.g. casting)
                 mViewManager.startParentView(this);
+
+                // Player with TextureView keeps running in background because onStop() fired with huge delay (~5sec).
+                mPlaybackFragment.maybeReleasePlayer();
             } else {
                 mPlaybackFragment.onFinish();
                 super.finish();
@@ -192,7 +198,7 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void onBackPressed() {
-        mBackPressed = mGeneralData.getBackgroundPlaybackShortcut() != GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK;
+        mBackPressed = true;
         super.onBackPressed();
     }
 
@@ -204,7 +210,7 @@ public class PlaybackActivity extends LeanbackActivity {
 
     private boolean doNotDestroy() {
         sIsInPipMode = isInPipMode();
-        return sIsInPipMode || mPlaybackFragment.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND;
+        return sIsInPipMode || mPlaybackFragment.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_SOUND;
     }
 
     @SuppressWarnings("deprecation")
@@ -250,20 +256,24 @@ public class PlaybackActivity extends LeanbackActivity {
         }
     }
 
+    /**
+     * HOME or BACK pressed
+     */
     @Override
     public void onUserLeaveHint() {
         // Check that user not open dialog/search activity instead of really leaving the activity
         // Activity may be overlapped by the dialog, back is pressed or new view started
-        if (AppDialogPresenter.instance(this).isDialogShown() || mBackPressed || mViewManager.isNewViewPending()) {
+        if (AppDialogPresenter.instance(this).isDialogShown() || skipPip() || mViewManager.isNewViewPending() ||
+                mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_BACK) {
             return;
         }
 
         switch (mPlaybackFragment.getBackgroundMode()) {
-            case PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND:
+            case PlaybackEngine.BACKGROUND_MODE_PLAY_BEHIND:
                 enterBackgroundPlayMode();
                 // Do we need to do something additional when running Play Behind?
                 break;
-            case PlaybackEngineController.BACKGROUND_MODE_PIP:
+            case PlaybackEngine.BACKGROUND_MODE_PIP:
                 enterPipMode();
                 if (doNotDestroy()) {
                     // Ensure to opening this activity when the user is returning to the app
@@ -274,7 +284,7 @@ public class PlaybackActivity extends LeanbackActivity {
                     mViewManager.enableMoveToBack(true);
                 }
                 break;
-            case PlaybackEngineController.BACKGROUND_MODE_SOUND:
+            case PlaybackEngine.BACKGROUND_MODE_SOUND:
                 if (doNotDestroy()) {
                     // Ensure to continue a playback
                     mViewManager.blockTop(this);
@@ -293,5 +303,9 @@ public class PlaybackActivity extends LeanbackActivity {
 
     public PlaybackView getPlaybackView() {
         return mPlaybackFragment;
+    }
+
+    private boolean skipPip() {
+        return mBackPressed && mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME;
     }
 }

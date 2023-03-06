@@ -42,6 +42,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     protected BaseMenuPresenter(Context context) {
         super(context);
         mServiceManager = MediaServiceManager.instance();
+        updateEnabledMenuItems();
     }
 
     protected abstract Video getVideo();
@@ -225,9 +226,9 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         }
 
         // Allow removing user playlist only from Playlists section to prevent accidental deletion
-        if (!BrowsePresenter.instance(getContext()).isPlaylistsSection()) {
-            return;
-        }
+        //if (!BrowsePresenter.instance(getContext()).isPlaylistsSection()) {
+        //    return;
+        //}
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
@@ -303,7 +304,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 if (video.playlistId == null) {
                     MessageHelpers.showMessage(getContext(), R.string.cant_delete_empty_playlist);
                 } else {
-                    AppDialogUtil.showConfirmationDialog(getContext(), String.format("%s: %s", video.title, getContext().getString(R.string.remove_playlist)), () -> {
+                    AppDialogUtil.showConfirmationDialog(getContext(), String.format("%s: %s", getContext().getString(R.string.remove_playlist), video.title), () -> {
                         removePlaylist(video);
                         if (getCallback() != null) {
                             getCallback().onItemAction(getVideo(), VideoMenuCallback.ACTION_REMOVE);
@@ -322,8 +323,8 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         Observable<Void> action = manager.removePlaylistObserve(video.playlistId);
         GeneralData.instance(getContext()).setPlaylistOrder(video.playlistId, -1);
         RxHelper.execute(action,
-                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.cant_delete_empty_playlist)),
-                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.removed_from_playlists))
+                () -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.cant_delete_empty_playlist), video.title)),
+                () -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.removed_from_playlists), video.title))
         );
     }
 
@@ -331,8 +332,8 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         MediaItemService manager = YouTubeMediaItemService.instance();
         Observable<Void> action = manager.savePlaylistObserve(video.playlistId);
         RxHelper.execute(action,
-                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.cant_save_playlist)),
-                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.saved_to_playlists))
+                () -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.cant_save_playlist), video.title)),
+                () -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.saved_to_playlists), video.title))
         );
     }
 

@@ -114,8 +114,8 @@
     <string name="repeat_mode_pause">Pozastavit přehrávání po každém videu</string>
     <string name="repeat_mode_pause_alt">Hraj videa nepřetržitě pouze pro playlist</string>    
     <string name="repeat_mode_none">Ukončit přehrávání po jednom videu</string>
-    <string name="subscribed_to_channel">Přihlášen k odběru kanálu</string>
-    <string name="unsubscribed_from_channel">Odhlášen z odběru kanálu</string>
+    <string name="subscribed_to_channel">Přihlášeno k odběru</string>
+    <string name="unsubscribed_from_channel">Odhlášeno z odběru</string>
     <string name="subtitle_yellow_transparent">Žlutá</string>
     <string name="subtitle_white_transparent">Bílá na průhledném pozadí</string>
     <string name="subtitle_white_black">Černé pozadí</string>
@@ -251,6 +251,7 @@
     <string name="app_restore">Obnovit data ze zálohy</string>
     <string name="skip_each_segment_once">Znovu nepřeskakovat segmenty</string>
     <string name="disable_ok_long_press">Deaktivovat dlouhé stisknutí tlačítka OK</string>
+    <string name="disable_ok_long_press_desc">Určeno pro zabugované ovladače, kde tlačítko OK nefunguje správně</string>
     <string name="player_time_correction">Zobrazit čas s ohledem na rychlost</string>
     <string name="sponsor_color_markers">Barevné značky na ukazateli průběhu</string>
     <string name="refresh_section">Aktualizovat sekci</string>
@@ -388,6 +389,7 @@
     <string name="subtitle_position">Spodní posun titulků</string>
     <string name="pressing_home">stisknutím tlačítka DOMŮ</string>
     <string name="pressing_home_back">stisknutím tlačítka DOMŮ nebo ZPĚT</string>
+    <string name="pressing_back">stisknutím tlačítka ZPĚT</string>
     <string name="player_number_key_seek">Posuv pomocí čísel</string>
     <string name="save_remove_playlist">Přidat/Odebrat playlist ze sekce Playlisty</string>
     <string name="remove_playlist">Odstranit playlist ze sekce Playlisty natrvalo</string>
@@ -410,7 +412,7 @@
     <string name="sleep_timer">Časovač spánku (1 hodina od posledního použití ovladače)</string>
     <string name="sleep_timer_desc">Pozastav přehrávání pokud uživatel nepoužil ovladač během hodiny</string>
     <string name="disable_vsync">Zakázat vertikální synchronizaci</string>
-    <string name="disable_vsync_desc">Částečně zlepšuje výkon přehrávání</string>
+    <string name="disable_vsync_desc">Tato možnost zakáže zarovnání snímků se signálem vertikální synchronizace displeje. Tím se sníží zátěž CPU a zlepší výkon na slabších zařízeních.</string>
     <string name="skip_codec_profile_check">Přeskočit kontrolu kodeku</string>
     <string name="skip_codec_profile_check_desc">Přeskočí kontrolu podpory kodeku při spuštění videa. Může být užitečné pro zabugovaný firmware.</string>
     <string name="force_sw_codec">Vynutit softwarový dekodér videa</string>
@@ -496,4 +498,30 @@
     <string name="loading">Načítání…</string>
     <string name="hide_streams">Skrýt živá vysílání z Odběrů</string>
     <string name="video_rotate">Otočit</string>
+    <string name="trending_searches">Vyhledávací trendy</string>
+    <string name="video_duration_any">Vše</string>
+    <string name="video_duration">Trvání</string>
+    <string name="video_duration_under_4">Méně než 4 minuty</string>
+    <string name="video_duration_between_4_20">4–20 minut</string>
+    <string name="video_duration_over_20">Více než 20 minut</string>
+    <string name="content_type">Typ</string>
+    <string name="content_type_any">Vše</string>
+    <string name="content_type_video">Video</string>
+    <string name="content_type_channel">Kanál</string>
+    <string name="content_type_playlist">Playlist</string>
+    <string name="content_type_movie">Film</string>
+    <string name="video_features">Vlastnosti</string>
+    <string name="video_feature_any">Vše</string>
+    <string name="video_feature_live">Živě</string>
+    <string name="video_feature_4k">4K</string>
+    <string name="video_feature_hdr">HDR</string>
+    <string name="search_sorting">Řadit podle</string>
+    <string name="sort_by_relevance">Relevance</string>
+    <string name="sort_by_views">Počet zhlédnutí</string>
+    <string name="sort_by_date">Datum nahrání</string>
+    <string name="sort_by_rating">Hodnocení</string>
+    <string name="clear_search_history">Vymazat historii vyhledávání</string>
+    <string name="remove_from_subscriptions">Skrýt</string>
+    <string name="player_long_speed_list">Více možností rychlosti videa</string>
+    <string name="alt_app_icon">Alternativní ikona aplikace (vyžaduje restart)</string>
 </resources>

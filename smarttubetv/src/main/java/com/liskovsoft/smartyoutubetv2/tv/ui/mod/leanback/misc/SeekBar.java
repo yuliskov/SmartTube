@@ -302,22 +302,29 @@ public final class SeekBar extends View {
         final int height = getHeight();
         final int verticalPadding = (height - barHeight) / 2;
 
-        final int radius = isFocused() ? mActiveRadius : mBarHeight / 2;
-        final int progressWidth = width - radius * 2;
+        //final int radius = isFocused() ? mActiveRadius : mBarHeight / 2;
+        //final int progressWidth = width - radius * 2;
 
         for (SeekBarSegment segment : segments) {
-            if (segment.endProgress > mMax || segment.endProgress < 0) {
+            if (segment.endProgress < 0 || segment.startProgress < 0) {
                 continue;
             }
 
-            if (segment.startProgress > mMax || segment.startProgress < 0) {
-                continue;
+            if (segment.endProgress > 1) {
+                segment.endProgress = 1;
             }
 
-            float rightPixels = segment.endProgress / (float) mMax * progressWidth;
-            float leftPixels = segment.startProgress / (float) mMax * progressWidth;
+            float rightPixels = segment.endProgress * width;
+            float leftPixels = segment.startProgress * width;
+
+            // Bookmark segment (1px width) fix
+            float bookmarkWidth = mBarHeight / 2f;
+            if (rightPixels - leftPixels < bookmarkWidth) {
+                rightPixels += bookmarkWidth;
+            }
+
             SeekBarRectangle rect = new SeekBarRectangle();
-            rect.rect.set(leftPixels, verticalPadding, mBarHeight / 2 + rightPixels, height - verticalPadding);
+            rect.rect.set(leftPixels, verticalPadding, rightPixels, height - verticalPadding);
             rect.paint.setColor(segment.color);
             mSeekBarRectangles.add(rect);
         }

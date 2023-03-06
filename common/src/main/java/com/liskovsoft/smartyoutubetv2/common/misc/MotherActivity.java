@@ -267,6 +267,7 @@ public class MotherActivity extends FragmentActivity {
             mOnPermissions = new ArrayList<>();
         }
 
+        mOnPermissions.remove(onPermissions);
         mOnPermissions.add(onPermissions);
     }
 

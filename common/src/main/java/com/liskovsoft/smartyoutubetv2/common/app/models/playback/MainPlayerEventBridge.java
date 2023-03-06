@@ -375,11 +375,6 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onContentBlockClicked(boolean enabled) {
-        process(listener -> listener.onContentBlockClicked(enabled));
-    }
-
-    @Override
     public void onChatClicked(boolean enabled) {
         process(listener -> listener.onChatClicked(enabled));
     }
@@ -422,6 +417,16 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     @Override
     public void onPlaybackQueueClicked() {
         process(PlayerUiEventListener::onPlaybackQueueClicked);
+    }
+
+    @Override
+    public void onButtonClicked(int buttonId, int buttonState) {
+        process(listener -> listener.onButtonClicked(buttonId, buttonState));
+    }
+
+    @Override
+    public void onButtonLongClicked(int buttonId, int buttonState) {
+        process(listener -> listener.onButtonLongClicked(buttonId, buttonState));
     }
 
     // End UI events

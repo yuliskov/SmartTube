@@ -20,6 +20,8 @@ import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.util.Assertions;
+import com.liskovsoft.sharedutils.helpers.Helpers;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -296,6 +298,8 @@ public final class DataSpec {
     this.key = key;
     this.flags = flags;
     this.httpRequestHeaders = Collections.unmodifiableMap(new HashMap<>(httpRequestHeaders));
+
+    applyRangeQuery();
   }
 
   /**
@@ -405,5 +409,27 @@ public final class DataSpec {
         key,
         flags,
         httpRequestHeaders);
+  }
+
+  /**
+   * MODIFIED: Google throttle fix. Found on googlevideo.com<br/>
+   * Source: https://github.com/yt-dlp/yt-dlp/issues/6369#issuecomment-1447763187<br/>
+   * Also see: {@link DefaultHttpDataSource}
+   */
+  private void applyRangeQuery() {
+    if (uri.getHost() != null && uri.getHost().endsWith(".googlevideo.com")
+            && !(position == 0 && length == C.LENGTH_UNSET)) {
+      String rangeRequest = "range=" + position + "-";
+      if (length != C.LENGTH_UNSET) {
+        rangeRequest += (position + length - 1);
+      }
+
+      String url = uri.toString() + "&" + rangeRequest;
+
+      Helpers.setField(this, "uri", Uri.parse(url));
+      // Required to skip Range header processing and bypass skipping when responseCode == 200 (Stream EOF fix)
+      Helpers.setField(this, "position", 0);
+      Helpers.setField(this, "length", C.LENGTH_UNSET);
+    }
   }
 }

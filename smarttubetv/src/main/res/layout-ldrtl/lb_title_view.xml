@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- MODIFIED: add custom widgets to the title -->
+
 <!--
      Copyright (C) 2014 The Android Open Source Project
 
@@ -49,7 +52,7 @@
             android:nextFocusLeft="@id/account_orb"
             android:visibility="invisible" />
 
-        <androidx.leanback.widget.SearchOrbView
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.search.LongClickSearchOrbView
             android:id="@+id/account_orb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

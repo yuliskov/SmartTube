@@ -2,11 +2,10 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -14,7 +13,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -98,6 +96,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.open_channel, MainUIData.MENU_ITEM_OPEN_CHANNEL},
                 {R.string.check_for_updates, MainUIData.MENU_ITEM_UPDATE_CHECK},
                 {R.string.clear_history, MainUIData.MENU_ITEM_CLEAR_HISTORY},
                 {R.string.pause_history, MainUIData.MENU_ITEM_TOGGLE_HISTORY},
@@ -114,6 +113,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 {R.string.play_video, MainUIData.MENU_ITEM_PLAY_VIDEO},
                 {R.string.not_interested, MainUIData.MENU_ITEM_NOT_INTERESTED},
                 {R.string.remove_from_history, MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY},
+                {R.string.remove_from_subscriptions, MainUIData.MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS},
                 {R.string.pin_unpin_from_sidebar, MainUIData.MENU_ITEM_PIN_TO_SIDEBAR},
                 {R.string.share_link, MainUIData.MENU_ITEM_SHARE_LINK},
                 {R.string.share_embed_link, MainUIData.MENU_ITEM_SHARE_EMBED_LINK},
@@ -335,10 +335,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext());
 
-        if (getContext() instanceof MotherActivity) {
-            ((MotherActivity) getContext()).addOnPermissions(backupManager);
-        }
-
         options.add(UiOptionItem.from(
                 String.format("%s:\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
                 option -> {
@@ -350,8 +346,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     });
                 }));
 
+        String backupPathCheck = backupManager.getBackupPathCheck();
         options.add(UiOptionItem.from(
-                String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupManager.getBackupPath()),
+                String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupPathCheck != null ? backupPathCheck : ""),
                 option -> {
                     AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
                         backupManager.checkPermAndRestore();
@@ -432,10 +429,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 !mGeneralData.isSettingsSectionEnabled()));
 
-        // Disable long press on buggy controllers.
-        options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
-                option -> mGeneralData.disableOkButtonLongPress(option.isSelected()),
-                mGeneralData.isOkButtonLongPressDisabled()));
+        //// Disable long press on buggy controllers.
+        //options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
+        //        option -> mGeneralData.disableOkButtonLongPress(option.isSelected()),
+        //        mGeneralData.isOkButtonLongPressDisabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
@@ -491,7 +488,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             mMainUIData.enableTopButton(topButtons);
             tweaksData.enablePlayerButton(playerButtons);
             mMainUIData.enableMenuItem(menuItems);
-            mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_LIST);
+            mPlayerData.setRepeatMode(PlaybackUI.REPEAT_MODE_LIST);
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HISTORY, true);
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_USER_PLAYLISTS, true);
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_SUBSCRIPTIONS, true);
@@ -503,7 +500,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             mMainUIData.enableMenuItem(MainUIData.MENU_ITEM_DEFAULT);
             BrowsePresenter.instance(getContext()).enableAllSections(true);
             tweaksData.disableSuggestions(false);
-            mPlayerData.setRepeatMode(PlaybackUIController.REPEAT_MODE_ALL);
+            mPlayerData.setRepeatMode(PlaybackUI.REPEAT_MODE_ALL);
         }
     }
 

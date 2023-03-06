@@ -38,7 +38,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void setView(T view) {
-        if (view != null) {
+        if (checkView(view)) {
             mView = new WeakReference<>(view);
         }
     }
@@ -100,9 +100,10 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void onViewDestroyed() {
+        // Multiple views with same presenter fix?
         // View stays in RAM after has been destroyed. Is it a bug?
-        mView = new WeakReference<>(null);
-        mActivity = new WeakReference<>(null);
+        //mView = new WeakReference<>(null);
+        //mActivity = new WeakReference<>(null);
     }
 
     @Override
@@ -121,13 +122,19 @@ public abstract class BasePresenter<T> implements Presenter<T> {
             PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
             ViewManager.instance(getContext()).startView(SplashView.class);
         }
+
+        onDone();
     }
 
     public void setOnDone(Runnable onDone) {
         mOnDone = onDone;
     }
 
-    protected void onDone() {
+    public Runnable getOnDone() {
+        return mOnDone;
+    }
+
+    private void onDone() {
         if (mOnDone != null) {
             mOnDone.run();
             mOnDone = null;

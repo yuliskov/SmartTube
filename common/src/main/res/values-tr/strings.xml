@@ -251,6 +251,7 @@
     <string name="app_restore">Veriyi yedekten geri yükle</string>
     <string name="skip_each_segment_once">Bölümleri tekrar atlama</string>
     <string name="disable_ok_long_press">TAMAM düğmesine uzun basmayı devre dışı bırak</string>
+    <string name="disable_ok_long_press_desc">TAMAM düğmesinin düzgün çalışmadığı hatalı denetleyiciler için tasarlanmıştır</string>
     <string name="player_time_correction">Hıza göre zamanı göster</string>
     <string name="sponsor_color_markers">İlerleme çubuğunda renkli işaretçiler</string>
     <string name="refresh_section">Bölümü yenile</string>
@@ -388,6 +389,7 @@
     <string name="subtitle_position">Altyazı alttan kaydırma</string>
     <string name="pressing_home">ANA EKRAN\'a basarak</string>
     <string name="pressing_home_back">ANA EKRAN\'a ya da GERİ\'ye basarak</string>
+    <string name="pressing_back">GERİ\'ye basarak</string>
     <string name="player_number_key_seek">Sayı tuşlarıyla arama</string>
     <string name="save_remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümüne Ekle/Kaldır</string>
     <string name="remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümünden kalıcı olarak kaldır</string>
@@ -496,4 +498,28 @@
     <string name="loading">Yükleniyor…</string>
     <string name="hide_streams">Abonelikler\'de canlı yayınları gizle</string>
     <string name="video_rotate">Döndür</string>
+    <string name="trending_searches">Trend olan aramalar</string>
+    <string name="video_duration_any">Herhangi biri</string>
+    <string name="video_duration">Süre</string>
+    <string name="video_duration_under_4">4 dakikadan kısa</string>
+    <string name="video_duration_between_4_20">4-20 dakika</string>
+    <string name="video_duration_over_20">20 dakikadan fazla</string>
+    <string name="content_type">Tür</string>
+    <string name="content_type_any">Herhangi biri</string>
+    <string name="content_type_video">Video</string>
+    <string name="content_type_channel">Kanal</string>
+    <string name="content_type_playlist">Oynatma Listesi</string>
+    <string name="content_type_movie">Film</string>
+    <string name="video_features">Özellikler</string>
+    <string name="video_feature_any">Herhangi biri</string>
+    <string name="video_feature_live">Canlı</string>
+    <string name="video_feature_4k">4K</string>
+    <string name="video_feature_hdr">HDR</string>
+    <string name="search_sorting">Sıralama Ölçütü</string>
+    <string name="sort_by_relevance">Alaka düzeyi</string>
+    <string name="sort_by_views">Görüntüleme sayısı</string>
+    <string name="sort_by_date">Yüklenme tarihi</string>
+    <string name="sort_by_rating">Derecelendirme</string>
+    <string name="clear_search_history">Arama geçmişini temizle</string>
+    <string name="remove_from_subscriptions">Gizle</string>
 </resources>

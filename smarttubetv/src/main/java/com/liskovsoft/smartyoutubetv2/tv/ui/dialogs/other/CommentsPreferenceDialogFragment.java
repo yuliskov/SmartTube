@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.preference.LeanbackPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.ChatItemMessage;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
+import com.stfalcon.chatkit.commons.models.IMessage;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
@@ -63,6 +64,10 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
             titleView.setText(title);
         }
 
+        if (mCommentsReceiver == null) {
+            return view;
+        }
+
         MessagesList messagesList = (MessagesList) view.findViewById(R.id.messagesList);
         MessagesListAdapter<ChatItemMessage> adapter = new MessagesListAdapter<>(SENDER_ID, (imageView, url, payload) ->
                 Glide.with(view.getContext())
@@ -91,10 +96,13 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
 
                 adapter.addToStart(message, false);
 
-                if (mFocusedMessage == null) {
+                if (mFocusedMessage == null && IMessage.checkMessage(message)) {
                     mFocusedMessage = message;
                     adapter.setFocusedMessage(message);
                 }
+            }
+            if (adapter.getMessagesCount() == 0) { // No comments under the video
+                adapter.setLoadingMessage(mCommentsReceiver.getErrorMessage());
             }
             if (mNextCommentsKey == null) {
                 adapter.scrollToTop();

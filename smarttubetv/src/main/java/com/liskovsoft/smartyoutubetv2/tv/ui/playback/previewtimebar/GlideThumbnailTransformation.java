@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.previewtimebar;
+package com.liskovsoft.smartyoutubetv2.tv.ui.playback.previewtimebar;
 
 import android.graphics.Bitmap;
 import androidx.annotation.NonNull;

@@ -51,7 +51,9 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
-        mPresenter.onViewDestroyed();
+        if (mPresenter.getView() == this) {
+            mPresenter.onViewDestroyed();
+        }
     }
 
     @Override
@@ -102,7 +104,10 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
         AppPreferenceFragment fragment = buildPreferenceFragment(categories, title);
 
         if (isExpandable && categories != null && categories.size() == 1) {
-            onPreferenceDisplayDialog(fragment, mManager.createPreference(categories.get(0)));
+            OptionCategory category = categories.get(0);
+            if (category.items != null) {
+                onPreferenceDisplayDialog(fragment, mManager.createPreference(category));
+            }
         } else {
             startPreferenceFragment(fragment);
         }

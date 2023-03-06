@@ -234,11 +234,6 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onContentBlockClicked(boolean enabled) {
-        // NOP
-    }
-
-    @Override
     public void onChatClicked(boolean enabled) {
         // NOP
     }
@@ -280,6 +275,16 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
 
     @Override
     public void onPlaybackQueueClicked() {
+        // NOP
+    }
+
+    @Override
+    public void onButtonClicked(int buttonId, int buttonState) {
+        // NOP
+    }
+
+    @Override
+    public void onButtonLongClicked(int buttonId, int buttonState) {
         // NOP
     }
 

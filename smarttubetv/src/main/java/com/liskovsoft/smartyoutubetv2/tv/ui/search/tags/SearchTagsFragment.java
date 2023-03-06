@@ -54,7 +54,9 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     }
 
     private void setupEventListeners() {
-        mCardPresenter.setOnItemViewLongPressedListener(new ItemViewLongPressedListener());
+        ItemViewLongPressedListener listener = new ItemViewLongPressedListener();
+        mCardPresenter.setOnItemViewLongPressedListener(listener);
+        setSearchTagsLongPressListener(listener);
     }
 
     @Override
@@ -105,11 +107,23 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         }
 
         int size = resultsAdapter.size();
+        int index = 0;
 
         for (int i = 0; i < size; i++) {
-            // Notify about changes (could help with search autofocus)
-            detachAdapter(1); // first adapter is tag adapter
+            Object row = resultsAdapter.get(index);
+            if (row instanceof ListRow &&
+                    ((ListRow) row).getAdapter() instanceof VideoGroupObjectAdapter) {
+                // Notify about changes (could help with search autofocus)
+                detachAdapter(index);
+            } else {
+                index++;
+            }
         }
+    }
+
+    @Override
+    public void clearSearchTags() {
+        clearTags();
     }
 
     @Override
@@ -242,6 +256,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         } else {
             selectAllText();
             loadSearchTags("");
+            // Show suggested videos on empty search
+            loadSearchResult("");
 
             if (enableRecognition && SpeechRecognizer.isRecognitionAvailable(getContext())) {
                 startRecognition();
@@ -296,6 +312,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     }
 
     private void loadSearchResult(String searchQuery) {
+        // Don't show suggested videos (empty query).
+        // They are inaccurate and usually have problems with layout.
         if (!TextUtils.isEmpty(searchQuery) && !searchQuery.equals(mSearchQuery)) {
             mSearchQuery = searchQuery;
             mSearchPresenter.onSearch(searchQuery);
@@ -337,7 +355,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
             if (item instanceof Video) {
                 mSearchPresenter.onVideoItemLongClicked((Video) item);
             } else if (item instanceof Tag) {
-                startSearch(((Tag) item).tag, false);
+                mSearchPresenter.onTagLongClicked((Tag) item);
+                //startSearch(((Tag) item).tag, false);
             }
         }
     }

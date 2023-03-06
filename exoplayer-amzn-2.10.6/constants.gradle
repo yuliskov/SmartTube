@@ -15,7 +15,9 @@ project.ext {
     // ExoPlayer version and version code.
     releaseVersion = '2.10.6'
     releaseVersionCode = 2010006
-    minSdkVersion = 16
+    // fix unmatched minSdk between exo and sharedutils
+    // minSdkVersion = 16
+    minSdkVersion = 17
     targetSdkVersion = 28
     compileSdkVersion = 28
     // dexmakerVersion = '2.21.0' // absent in mavenCentral

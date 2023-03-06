@@ -50,4 +50,9 @@ public interface IMessage {
      * @return the message creation date
      */
     Date getCreatedAt();
+
+    static boolean checkMessage(IMessage message) {
+        return message != null && message.getId() != null && message.getUser() != null && message.getUser().getId() != null
+                && message.getText() != null;
+    }
 }

@@ -327,4 +327,8 @@ public class MediaServiceManager {
     public void clearHistory() {
         RxHelper.runAsyncUser(mGroupManager::clearHistory);
     }
+
+    public void clearSearchHistory() {
+        RxHelper.runAsyncUser(mGroupManager::clearSearchHistory);
+    }
 }

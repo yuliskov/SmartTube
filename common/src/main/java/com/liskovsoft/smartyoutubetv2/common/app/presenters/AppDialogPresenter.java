@@ -152,12 +152,6 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     }
 
     public void showDialog(String dialogTitle, Runnable onFinish) {
-        if (mTimeoutMs > 0 && isDialogShown()) {
-            // Don't overlap normal dialogs with auto destroyable ones
-            clear();
-            return;
-        }
-
         mTitle = dialogTitle;
         mOnFinish.add(onFinish);
 

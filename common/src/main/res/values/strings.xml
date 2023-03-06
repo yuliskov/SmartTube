@@ -114,8 +114,8 @@
     <string name="repeat_mode_pause">Pause playback after each video</string>
     <string name="repeat_mode_pause_alt">Play only playlist videos continuously</string>
     <string name="repeat_mode_none">Stop playback after one video</string>
-    <string name="subscribed_to_channel">Channel subscribed</string>
-    <string name="unsubscribed_from_channel">Channel not subscribed</string>
+    <string name="subscribed_to_channel">Subscribed</string>
+    <string name="unsubscribed_from_channel">Unsubscribed</string>
     <string name="subtitle_yellow_transparent">Yellow on transparent background</string>
     <string name="subtitle_white_transparent">White on transparent background</string>
     <string name="subtitle_white_black">White on black background</string>
@@ -251,6 +251,7 @@
     <string name="app_restore">Restore data from backup</string>
     <string name="skip_each_segment_once">Don\'t skip segments again</string>
     <string name="disable_ok_long_press">Disable OK button long press</string>
+    <string name="disable_ok_long_press_desc">Intended for buggy controllers where OK button is not function properly</string>
     <string name="player_time_correction">Display the time with respect of speed</string>
     <string name="sponsor_color_markers">Color markers on progress bar</string>
     <string name="refresh_section">Refresh section</string>
@@ -388,6 +389,7 @@
     <string name="subtitle_position">Subtitle bottom shift</string>
     <string name="pressing_home">by pressing HOME</string>
     <string name="pressing_home_back">by pressing HOME or BACK</string>
+    <string name="pressing_back">by pressing BACK</string>
     <string name="player_number_key_seek">Seek with number keys</string>
     <string name="save_remove_playlist">Add/Remove playlist from Playlists section</string>
     <string name="remove_playlist">Remove playlist from Playlists section permanently</string>
@@ -410,7 +412,7 @@
     <string name="sleep_timer">Sleep timer (if remote not used one hour)</string>
     <string name="sleep_timer_desc">Pause the playback if user didn\'t use the remote during one hour</string>
     <string name="disable_vsync">Disable snap to vsync</string>
-    <string name="disable_vsync_desc">Improves playback performance a bit</string>
+    <string name="disable_vsync_desc">This option disables aligning frames with the display\'s vertical sync signal. This could improve performance on low-end devices by releasing CPU resources.</string>
     <string name="skip_codec_profile_check">Skip codec profile level check</string>
     <string name="skip_codec_profile_check_desc">Don\'t check codec support when starting a video. Could be helpful on buggy firmwares.</string>
     <string name="force_sw_codec">Force SW video decoder</string>
@@ -496,5 +498,31 @@
     <string name="loading">Loading…</string>
     <string name="hide_streams">Hide streams from Subscriptions</string>
     <string name="video_rotate">Rotate</string>
+    <string name="trending_searches">Trending searches</string>
+    <string name="video_duration_any">Any</string>
+    <string name="video_duration">Duration</string>
+    <string name="video_duration_under_4">Under 4 minutes</string>
+    <string name="video_duration_between_4_20">4–20 minutes</string>
+    <string name="video_duration_over_20">Over 20 minutes</string>
+    <string name="content_type">Type</string>
+    <string name="content_type_any">Any</string>
+    <string name="content_type_video">Video</string>
+    <string name="content_type_channel">Channel</string>
+    <string name="content_type_playlist">Playlist</string>
+    <string name="content_type_movie">Movie</string>
+    <string name="video_features">Features</string>
+    <string name="video_feature_any">Any</string>
+    <string name="video_feature_live">Live</string>
+    <string name="video_feature_4k">4K</string>
+    <string name="video_feature_hdr">HDR</string>
+    <string name="search_sorting">Sort by</string>
+    <string name="sort_by_relevance">Relevance</string>
+    <string name="sort_by_views">View count</string>
+    <string name="sort_by_date">Upload date</string>
+    <string name="sort_by_rating">Rating</string>
+    <string name="clear_search_history">Clear search history</string>
+    <string name="remove_from_subscriptions">Hide</string>
+    <string name="player_long_speed_list">Long speed list</string>
+    <string name="alt_app_icon">Alternative app icon (needs reboot)</string>
     <string name="cancel">Cancel</string>
 </resources>

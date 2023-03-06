@@ -115,6 +115,19 @@
             </intent-filter>
         </activity>
 
+        <activity-alias android:label="@string/app_name"
+                        android:icon="@mipmap/app_icon_alt"
+                        android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivityAlt"
+                        android:enabled="false"
+                        android:targetActivity="com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity"
             android:launchMode="singleInstance"

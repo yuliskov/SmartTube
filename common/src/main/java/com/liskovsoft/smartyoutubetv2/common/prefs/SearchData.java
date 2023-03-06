@@ -19,6 +19,7 @@ public class SearchData {
     private boolean mIsTempBackgroundModeEnabled;
     private int mSpeechRecognizerType;
     private Class<?> mTempBackgroundModeClass;
+    private boolean mIsTrendingSearchesEnabled;
 
     private SearchData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
@@ -69,6 +70,15 @@ public class SearchData {
         return mIsKeyboardAutoShowEnabled;
     }
 
+    public void enableTrendingSearches(boolean enabled) {
+        mIsTrendingSearchesEnabled = enabled;
+        persistData();
+    }
+
+    public boolean isTrendingSearchesEnabled() {
+        return mIsTrendingSearchesEnabled;
+    }
+
     public void enableTempBackgroundMode(boolean enabled) {
         mIsTempBackgroundModeEnabled = enabled;
         persistData();
@@ -110,11 +120,12 @@ public class SearchData {
         mIsTempBackgroundModeEnabled = Helpers.parseBoolean(split, 4, false);
         //mIsAltSpeechRecognizerEnabled
         mSpeechRecognizerType = Helpers.parseInt(split, 6, SPEECH_RECOGNIZER_SYSTEM);
+        mIsTrendingSearchesEnabled = Helpers.parseBoolean(split, 7, true);
     }
 
     private void persistData() {
         mAppPrefs.setData(SEARCH_DATA,
                 Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
-                        mIsKeyboardAutoShowEnabled, mIsTempBackgroundModeEnabled, null, mSpeechRecognizerType));
+                        mIsKeyboardAutoShowEnabled, mIsTempBackgroundModeEnabled, null, mSpeechRecognizerType, mIsTrendingSearchesEnabled));
     }
 }
