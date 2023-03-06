@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.vineyard;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,7 +60,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         mProgressBarManager = new ProgressBarManager();
         mResultsPresenter = new CustomListRowPresenter();
         mResultsAdapter = new ArrayObjectAdapter(mResultsPresenter);
-        mTagsPresenter = new TagPresenter(getSearchTextEditorId());
+        mTagsPresenter = new TagPresenter();
         mSearchTagsAdapter = new TagAdapter(getActivity(), mTagsPresenter, "");
         setSearchResultProvider(this);
         setupListenersAndPermissions();
@@ -72,6 +71,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         View root = super.onCreateView(inflater, container, savedInstanceState);
 
         mProgressBarManager.setRootView((ViewGroup) root);
+        mTagsPresenter.setNextFocusUpId(getSearchTextEditorId());
         return root;
     }
 
