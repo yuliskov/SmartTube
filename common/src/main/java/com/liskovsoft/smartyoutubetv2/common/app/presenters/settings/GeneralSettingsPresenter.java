@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
@@ -12,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -31,6 +33,7 @@ import java.util.Map.Entry;
 public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private final GeneralData mGeneralData;
     private final PlayerData mPlayerData;
+    private final PlayerTweaksData mPlayerTweaksData;
     private final MainUIData mMainUIData;
     private boolean mRestartApp;
 
@@ -38,6 +41,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         super(context);
         mGeneralData = GeneralData.instance(context);
         mPlayerData = PlayerData.instance(context);
+        mPlayerTweaksData = PlayerTweaksData.instance(context);
         mMainUIData = MainUIData.instance(context);
     }
 
@@ -453,11 +457,17 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         if (proxyManager.isProxySupported()) {
             options.add(UiOptionItem.from(getContext().getString(R.string.enable_web_proxy),
                     option -> {
+                        // Proxy with authentication supported only by OkHttp
+                        mPlayerTweaksData.setPlayerDataSource(
+                                option.isSelected() ? PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
                         mGeneralData.enableProxy(option.isSelected());
                         new WebProxyDialog(getContext()).enable(option.isSelected());
                         if (option.isSelected()) {
                             settingsPresenter.closeDialog();
                         }
+
+                        ExoMediaSourceFactory.unhold();
+                        OkHttpHelpers.unhold();
                     },
                     mGeneralData.isProxyEnabled()));
         }

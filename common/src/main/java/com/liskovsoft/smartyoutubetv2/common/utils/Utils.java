@@ -57,7 +57,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
+import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -314,23 +316,6 @@ public class Utils {
                 );
             }
         }
-    }
-
-    /**
-     * Need to be the first line and executed on earliest stage once.<br/>
-     * Inits media service language and context.<br/>
-     * NOTE: this command should run before using any of the media service api.
-     */
-    public static void initGlobalData(Context context) {
-        Log.d(TAG, "initGlobalData called...");
-
-        // 1) Auth token storage init
-        // 2) Media service language setup (I assume that context has proper language)
-        GlobalPreferences.instance(context);
-
-        // 1) Remove downloaded apks
-        // 2) Setup language
-        ViewManager.instance(context).clearCaches();
     }
 
     public static String toQrCodeLink(String data) {
