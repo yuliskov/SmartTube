@@ -7,7 +7,7 @@
   <string name="header_music">음악</string>
   <string name="header_news">뉴스</string>
   <string name="header_gaming">게임</string>
-  <string name="header_playlists">재생 목록</string>
+  <string name="header_playlists">재생목록</string>
   <string name="header_settings">설정</string>
   <string name="header_channels">채널</string>
   <string name="subscriptions_signin_title">좋아하는 채널의 최신 정보 보기</string>
@@ -30,7 +30,7 @@
   <string name="option_background_playback_off">사용 안 함</string>
   <string name="option_background_playback_pip">픽처 인 픽처</string>
   <string name="option_background_playback_only_audio">오디오만 듣기</string>
-  <string name="playback_settings">재생 설정</string>
+  <string name="playback_settings">재생 품질 설정</string>
   <string name="video_speed">재생 속도</string>
   <string name="resolution_switch">해상도 변경</string>
   <string name="video_buffer">동영상 버퍼</string>
@@ -251,6 +251,7 @@
   <string name="app_restore">백업에서 데이터 복원</string>
   <string name="skip_each_segment_once">구간을 다시 건너뛰지 않음</string>
   <string name="disable_ok_long_press">확인 버튼 길게 누르기 비활성화</string>
+  <string name="disable_ok_long_press_desc">확인 버튼이 제대로 작동하지 않는 버그가 있는 컨트롤러용</string>
   <string name="player_time_correction">속도에 따라서 시간 표시</string>
   <string name="sponsor_color_markers">재생바에 색상 마커 표시</string>
   <string name="refresh_section">섹션 새로 고침</string>
@@ -299,7 +300,7 @@
   <string name="action_playback_queue">재생 대기열</string>
   <string name="action_video_speed">동영상 속도</string>
   <string name="action_subtitles">자막</string>
-  <string name="action_like">링크</string>
+  <string name="action_like">좋아요</string>
   <string name="action_dislike">싫어요</string>
   <string name="action_play_pause">재생/일시정지</string>
   <string name="action_repeat_mode">재생 모드</string>
@@ -388,6 +389,7 @@
   <string name="subtitle_position">자막 하단 이동</string>
   <string name="pressing_home">홈을 누름</string>
   <string name="pressing_home_back">홈 또는 뒤로가기를 누름</string>
+  <string name="pressing_back">뒤로가기를 누름</string>
   <string name="player_number_key_seek">숫자 키로 찾기</string>
   <string name="save_remove_playlist">재생목록 섹션에서 재생목록 추가/삭제</string>
   <string name="remove_playlist">재생목록 섹션에서 재생목록을 영구적으로 삭제</string>
@@ -430,6 +432,7 @@
   <string name="playback_starts_shortly">스트림이 준비되면 재생이 자동으로 시작됩니다.</string>
   <string name="starting_stream">스트림 시작 중...</string>
   <string name="action_playlist_remove">재생목록에서 삭제</string>
+  <!-- BEGIN Moved strings -->
   <string name="signin_view_title">사용자 코드 불러오는 중...</string>
   <string name="signin_view_description">로그인하려면 %s페이지에 이 코드를 입력하세요.\n참고. 파이어폭스 또는 크롬 브라우저에서만 작동합니다.</string>
   <string name="signin_view_action_text">완료</string>
@@ -444,6 +447,7 @@
   <string name="playback_controls_repeat_list">반복 목록</string>
   <string name="action_subscribe_off">구독 해제</string>
   <string name="action_subscribe_on">구독하기</string>
+  <!-- END Moved strings -->
   <string name="skip_24_rate">24fps 형식 건너뛰기 (실제 시네마 모드 수정\?)</string>
   <string name="player_disable_suggestions">제안 비활성화</string>
   <string name="feedback">피드백</string>
@@ -482,7 +486,7 @@
   <string name="protect_settings_with_password">비밀번호로 모든 설정 보호</string>
   <string name="enter_settings_password">설정 비밀번호 입력</string>
   <string name="child_mode">어린이 모드</string>
-  <string name="child_mode_desc">이 모드에서 사용자는 검색을 사용하거나 제안된 콘텐츠를 볼 수 없습니다. 설정은 암호 아래에 있습니다.</string>
+  <string name="child_mode_desc">이 모드에서 사용자는 검색을 사용하거나 제안된 콘텐츠를 볼 수 없습니다. 설정은 비밀번호 아래에 있습니다.</string>
   <string name="lost_setting_warning">앱 설정이 변경됩니다. 설정 백업을 생성했는지 확인하세요.</string>
   <string name="player_button_long_click">버튼을 짧게 클릭하면 빠른 작업이 가능하고 길게 설정 대화상자가 표시됩니다.</string>
   <string name="pause_history">일시중지 내역</string>
@@ -492,4 +496,32 @@
   <string name="card_multiline_subtitle">여러 줄 자막</string>
   <string name="auto_frame_rate_modes">지원되는 모드</string>
   <string name="loading">불러오기 중...</string>
+  <string name="hide_streams">구독에서 스트림 숨기기</string>
+  <string name="video_rotate">회전</string>
+  <string name="trending_searches">인기 검색어</string>
+  <string name="video_duration_any">모두</string>
+  <string name="video_duration">기간</string>
+  <string name="video_duration_under_4">4 분 미만</string>
+  <string name="video_duration_between_4_20">4~20 분</string>
+  <string name="video_duration_over_20">20 분 이상</string>
+  <string name="content_type">유형</string>
+  <string name="content_type_any">모두</string>
+  <string name="content_type_video">동영상</string>
+  <string name="content_type_channel">채널</string>
+  <string name="content_type_playlist">재생목록</string>
+  <string name="content_type_movie">영화</string>
+  <string name="video_features">기능</string>
+  <string name="video_feature_any">모두</string>
+  <string name="video_feature_live">라이브</string>
+  <string name="video_feature_4k">4K</string>
+  <string name="video_feature_hdr">HDR</string>
+  <string name="search_sorting">정렬 기준</string>
+  <string name="sort_by_relevance">관련성</string>
+  <string name="sort_by_views">조회수 보기</string>
+  <string name="sort_by_date">업로드 날짜</string>
+  <string name="sort_by_rating">평점</string>
+  <string name="clear_search_history">검색 기록 지우기</string>
+  <string name="remove_from_subscriptions">숨기기</string>
+  <string name="player_long_speed_list">긴 속도 목록</string>
+  <string name="alt_app_icon">대체 앱 아이콘 (재부팅 필요)</string>
 </resources>
