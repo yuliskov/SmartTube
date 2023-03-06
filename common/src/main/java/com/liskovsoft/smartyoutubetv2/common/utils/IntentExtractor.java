@@ -6,6 +6,9 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryString;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryStringFactory;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class IntentExtractor {
     private static final String TAG = IntentExtractor.class.getSimpleName();
     /**
@@ -14,6 +17,7 @@ public class IntentExtractor {
      */
     private static final String[] SEARCH_KEYS = {"search_query", "query"};
     private static final String VIDEO_ID_KEY = "v";
+    private static final String VIDEO_TIME_KEY = "t";
     private static final String VIDEO_ID_LIST_KEY = "video_ids";
     /**
      * https://youtube.com/channel/BLABLA/video
@@ -25,6 +29,51 @@ public class IntentExtractor {
     private static final String HISTORY_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEmy_youtube"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String RECOMMENDED_URL = "https://www.youtube.com/tv#/zylon-surface?c=default"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String PLAYLIST_KEY = "list";
+
+    public static Long extractVideoTimeMs(Intent intent) {
+        if (isEmptyIntent(intent)) {
+            return null;
+        }
+
+        UrlQueryString parser = UrlQueryStringFactory.parse(extractUri(intent));
+        String time = parser.get(VIDEO_TIME_KEY);
+        Pattern pattern = Pattern.compile("^(\\d+)([A-Za-z]{0,2})$");
+        Matcher matcher = pattern.matcher(time);
+
+        if (!matcher.matches()) {
+            return null;
+        }
+
+        String strValue = matcher.group(1);
+        String unit = matcher.group(2);
+
+        long multiplier = 1;
+
+        if (unit != null && !unit.isEmpty()) {
+            switch (unit.toLowerCase()) {
+                case "s":
+                    multiplier = 1000;
+                    break;
+                case "m":
+                    multiplier = 60 * 1000;
+                    break;
+                case "h":
+                    multiplier = 60 * 60 * 1000;
+                    break;
+                default:
+                    return null;
+            }
+        } else {
+            // Assume seconds if no unit is present
+            multiplier = 1000;
+        }
+
+        try {
+            return multiplier * Long.parseLong(strValue);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
 
     public static String extractVideoId(Intent intent) {
         if (isEmptyIntent(intent)) {
