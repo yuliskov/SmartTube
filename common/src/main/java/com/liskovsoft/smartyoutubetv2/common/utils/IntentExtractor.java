@@ -30,6 +30,7 @@ public class IntentExtractor {
     private static final String RECOMMENDED_URL = "https://www.youtube.com/tv#/zylon-surface?c=default"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String PLAYLIST_KEY = "list";
     private static final Pattern timePattern = Pattern.compile("^(\\d+)([A-Za-z]{0,2})$");
+    private static final Pattern voiceQueryPattern = Pattern.compile(":\\{\"query\":\"([^\"]*)\"");
 
     public static String extractVideoId(Intent intent) {
         if (isEmptyIntent(intent)) {
@@ -194,7 +195,7 @@ public class IntentExtractor {
      * Example: https://www.youtube.com/tv?voice={"youtubeAssistantRequest":{"query":"Russian YouTube","queryIntent":"CgxTZWFyY2hJbnRlbnQSFAoFcXVlcnkSCxoJCgdSdXNzaWFuEiYKCGRvY190eXBlEhoaGAoWWU9VVFVCRV9ET0NfVFlQRV9WSURFTw==","youtubeAssistantParams":{"personalDataParams":{"showPersonalData":false}},"enablePrefetchLogging":true},"updateYoutubeSettings":{"enableSafetyMode":false,"enablePersonalResults":false},"hasEntityBar":false}&command_id=CWGIYL6nN8Gi3AP_5Y6wAQ&launch=voice&vq=Russian%20YouTube
      */
     private static String extractVoiceQuery(Uri data) {
-        return Helpers.runMultiMatcher(data.toString(), ":\\{\"query\":\"([^\"]*)\"");
+        return Helpers.runMultiMatcher(data.toString(), voiceQueryPattern);
     }
 
     private static boolean isEmptyIntent(Intent intent) {
