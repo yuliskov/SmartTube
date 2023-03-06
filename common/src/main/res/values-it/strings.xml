@@ -369,7 +369,7 @@
     <string name="ambilight_ratio_fix">Correzione Ambilight/Proporzioni/Screenshot</string>
     <string name="force_legacy_codecs_desc">Migliora significativamente le prestazioni sui dispositivi di fascia bassa. La risoluzione massima è 720p.</string>
     <string name="force_legacy_codecs">Forza codec obsoleti (720p)</string>
-    <string name="live_stream_fix_desc">Migliora significativamente le prestazioni delle trasmissioni live sui dispositivi di fascia bassa. La risoluzione massima è 1080p.</string>
+    <string name="live_stream_fix_desc">Attenzione, questa modifica disabilita il riavvolgimento dei flussi. Migliora significativamente le prestazioni delle trasmissioni live sui dispositivi di fascia bassa. La risoluzione massima è 1080p.</string>
     <string name="live_stream_fix">Correzione trasmissione live (1080p)</string>
     <string name="playback_notifications_fix_desc">Nasconde le notifiche di cambio traccia. Potrebbe essere utile su firmware basati su AOSP.</string>
     <string name="playback_notifications_fix">Disabilita le notifiche di riproduzione</string>
@@ -523,5 +523,6 @@
     <string name="clear_search_history">Cancella la cronologia delle ricerche</string>
     <string name="remove_from_subscriptions">Nascondi</string>
     <string name="player_long_speed_list">Elenco lungo velocità</string>
-    <string name="alt_app_icon">Icona alternativa dell\'app (è necessario riavviare)</string>
+    <string name="alt_app_icon">Icona alternativa dell\'app (è necessario riavviare)</string>>
+    <string name="download_data_with">Scarica i dati con %s</string>
 </resources>
