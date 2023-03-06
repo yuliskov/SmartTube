@@ -29,51 +29,7 @@ public class IntentExtractor {
     private static final String HISTORY_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEmy_youtube"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String RECOMMENDED_URL = "https://www.youtube.com/tv#/zylon-surface?c=default"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String PLAYLIST_KEY = "list";
-
-    public static Long extractVideoTimeMs(Intent intent) {
-        if (isEmptyIntent(intent)) {
-            return null;
-        }
-
-        UrlQueryString parser = UrlQueryStringFactory.parse(extractUri(intent));
-        String time = parser.get(VIDEO_TIME_KEY);
-        Pattern pattern = Pattern.compile("^(\\d+)([A-Za-z]{0,2})$");
-        Matcher matcher = pattern.matcher(time);
-
-        if (!matcher.matches()) {
-            return null;
-        }
-
-        String strValue = matcher.group(1);
-        String unit = matcher.group(2);
-
-        long multiplier = 1;
-
-        if (unit != null && !unit.isEmpty()) {
-            switch (unit.toLowerCase()) {
-                case "s":
-                    multiplier = 1000;
-                    break;
-                case "m":
-                    multiplier = 60 * 1000;
-                    break;
-                case "h":
-                    multiplier = 60 * 60 * 1000;
-                    break;
-                default:
-                    return null;
-            }
-        } else {
-            // Assume seconds if no unit is present
-            multiplier = 1000;
-        }
-
-        try {
-            return multiplier * Long.parseLong(strValue);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
+    private static final Pattern timePattern = Pattern.compile("^(\\d+)([A-Za-z]{0,2})$");
 
     public static String extractVideoId(Intent intent) {
         if (isEmptyIntent(intent)) {
@@ -223,6 +179,17 @@ public class IntentExtractor {
         return intent != null && intent.getBooleanExtra("finish_on_ended", false);
     }
 
+    public static long extractVideoTimeMs(Intent intent) {
+        if (isEmptyIntent(intent)) {
+            return -1;
+        }
+
+        UrlQueryString parser = UrlQueryStringFactory.parse(extractUri(intent));
+        String time = parser.get(VIDEO_TIME_KEY);
+
+        return parseTimeStr(time);
+    }
+
     /**
      * Example: https://www.youtube.com/tv?voice={"youtubeAssistantRequest":{"query":"Russian YouTube","queryIntent":"CgxTZWFyY2hJbnRlbnQSFAoFcXVlcnkSCxoJCgdSdXNzaWFuEiYKCGRvY190eXBlEhoaGAoWWU9VVFVCRV9ET0NfVFlQRV9WSURFTw==","youtubeAssistantParams":{"personalDataParams":{"showPersonalData":false}},"enablePrefetchLogging":true},"updateYoutubeSettings":{"enableSafetyMode":false,"enablePersonalResults":false},"hasEntityBar":false}&command_id=CWGIYL6nN8Gi3AP_5Y6wAQ&launch=voice&vq=Russian%20YouTube
      */
@@ -242,5 +209,47 @@ public class IntentExtractor {
         return intent.getData() != null ? intent.getData() :
                 intent.getStringExtra(Intent.EXTRA_TEXT) != null ?
                         Uri.parse(intent.getStringExtra(Intent.EXTRA_TEXT)) : null;
+    }
+
+    private static long parseTimeStr(String time) {
+        if (time == null) {
+            return -1;
+        }
+
+        Matcher matcher = timePattern.matcher(time);
+
+        if (!matcher.matches()) {
+            return -1;
+        }
+
+        String strValue = matcher.group(1);
+        String unit = matcher.group(2);
+
+        long multiplier = 1;
+
+        if (unit != null && !unit.isEmpty()) {
+            switch (unit.toLowerCase()) {
+                case "s":
+                    multiplier = 1000;
+                    break;
+                case "m":
+                    multiplier = 60 * 1000;
+                    break;
+                case "h":
+                    multiplier = 60 * 60 * 1000;
+                    break;
+                default:
+                    return -1;
+            }
+        } else {
+            // Assume seconds if no unit is present
+            multiplier = 1000;
+        }
+
+        try {
+            return multiplier * Long.parseLong(strValue);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 }
