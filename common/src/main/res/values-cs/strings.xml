@@ -369,7 +369,7 @@
     <string name="ambilight_ratio_fix">Oprava Ambilight/Poměru stran/Screenshotů</string>
     <string name="force_legacy_codecs_desc">Výrazně zlepšuje výkon na zařízeních nižší třídy. Maximální rozlišení je 720p.</string>
     <string name="force_legacy_codecs">Vynucení starších kodeků (720p)</string>
-    <string name="live_stream_fix_desc">Výrazně zlepšuje výkon živého vysílání na zařízeních nižší třídy. Maximální rozlišení je 1080p.</string>
+    <string name="live_stream_fix_desc">Pozor: Přetáčení vysílání nebude k dispozici. Výrazně zlepšuje výkon živého vysílání na zařízeních nižší třídy. Maximální rozlišení je 1080p.</string>
     <string name="live_stream_fix">Oprava živého vysílání (1080p)</string>
     <string name="playback_notifications_fix_desc">Skryje oznámení změny stopy. Mohlo by to být užitečné pro firmware založený na AOSP.</string>
     <string name="playback_notifications_fix">Zakázat oznámení přehrávání</string>
@@ -524,4 +524,5 @@
     <string name="remove_from_subscriptions">Skrýt</string>
     <string name="player_long_speed_list">Více možností rychlosti videa</string>
     <string name="alt_app_icon">Alternativní ikona aplikace (vyžaduje restart)</string>
+    <string name="download_data_with">Stáhnout data s %s</string>
 </resources>
