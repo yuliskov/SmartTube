@@ -524,5 +524,5 @@
     <string name="remove_from_subscriptions">Ausblenden</string>
     <string name="player_long_speed_list">Mehr Optionen für Video-Geschwindigkeit</string>
     <string name="alt_app_icon">Alternatives App-Symbol (Neustart erforderlich)</string>
-    <string name="download_data_with">Daten herunterladen mit %s</string>
+    <string name="network_stack">Daten herunterladen mit %s</string>
 </resources>

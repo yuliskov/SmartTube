@@ -524,5 +524,8 @@
     <string name="remove_from_subscriptions">Hide</string>
     <string name="player_long_speed_list">Long speed list</string>
     <string name="alt_app_icon">Alternative app icon (needs reboot)</string>
-    <string name="download_data_with">Download data with %s</string>
+    <string name="network_stack">Prefer %s network stack</string>
+    <string name="cronet_desc">Cronet is a Chromium network stack. Usually faster than others. Preferred choice.</string>
+    <string name="unlock_all_formats">Unlock all video formats</string>
+    <string name="unlock_all_formats_desc">Unlock formats that are probably not supported by your hardware.</string>
 </resources>

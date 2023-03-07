@@ -296,7 +296,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isFrameDropFixEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.download_data_with, "OkHttp"),
+        options.add(UiOptionItem.from(getContext().getString(R.string.network_stack, "OkHttp"),
                 option -> {
                     mPlayerTweaksData.setPlayerDataSource(option.isSelected() ? PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP :
                             PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
@@ -304,13 +304,19 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.download_data_with, "Cronet (Chromium engine)"),
+        options.add(UiOptionItem.from(getContext().getString(R.string.network_stack, "Cronet"),
+                getContext().getString(R.string.cronet_desc),
                 option -> {
                     mPlayerTweaksData.setPlayerDataSource(option.isSelected() ? PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET :
                             PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
                     ExoMediaSourceFactory.unhold();
                 },
                 mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.unlock_all_formats),
+                getContext().getString(R.string.unlock_all_formats_desc),
+                option -> mPlayerTweaksData.unlockAllFormats(option.isSelected()),
+                mPlayerTweaksData.isAllFormatsUnlocked()));
 
         options.add(UiOptionItem.from("Keep finished activities",
                 option -> mPlayerTweaksData.enableKeepFinishedActivity(option.isSelected()),

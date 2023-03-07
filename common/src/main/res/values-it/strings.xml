@@ -524,5 +524,5 @@
     <string name="remove_from_subscriptions">Nascondi</string>
     <string name="player_long_speed_list">Elenco lungo velocità</string>
     <string name="alt_app_icon">Icona alternativa dell\'app (è necessario riavviare)</string>>
-    <string name="download_data_with">Scarica i dati con %s</string>
+    <string name="network_stack">Scarica i dati con %s</string>
 </resources>

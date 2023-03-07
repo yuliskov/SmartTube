@@ -524,5 +524,5 @@
     <string name="remove_from_subscriptions">Skrýt</string>
     <string name="player_long_speed_list">Více možností rychlosti videa</string>
     <string name="alt_app_icon">Alternativní ikona aplikace (vyžaduje restart)</string>
-    <string name="download_data_with">Stáhnout data s %s</string>
+    <string name="network_stack">Stáhnout data s %s</string>
 </resources>

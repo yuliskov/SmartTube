@@ -516,5 +516,8 @@
     <string name="remove_from_subscriptions">Скрыть</string>
     <string name="player_long_speed_list">Длинный список скоростей</string>
     <string name="alt_app_icon">Альтернативный значок приложения (требуется перезагрузка)</string>
-    <string name="download_data_with">Загружать данные при помощи %s</string>
+    <string name="network_stack">Предпочитать сетевой стек %s</string>
+    <string name="cronet_desc">Cronet — это сетевой стек Chromium. Обычно быстрее других. Предпочтительный выбор.</string>
+    <string name="unlock_all_formats">Разблокировать все видео форматы</string>
+    <string name="unlock_all_formats_desc">Разблокировать форматы, которые, вероятно, не поддерживаются вашим устройством.</string>
 </resources>
