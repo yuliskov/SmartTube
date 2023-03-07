@@ -517,7 +517,9 @@
     <string name="player_long_speed_list">Довгий список швидкостей</string>
     <string name="alt_app_icon">Альтернативна іконка застосунку (потрібне перезавантаження)</string>
     <string name="network_stack">Надавати перевагу мережевому стеку %s</string>
-    <string name="cronet_desc">Cronet — мережевий стек Chromium. Зазвичай швидше за інших. Бажаний вибір.</string>
+    <string name="cronet_desc">Cronet — мережевий стек Chromium. Зазвичай швидше за інших. Це може допомогти у проблемах буферизації.</string>
     <string name="unlock_all_formats">Розблокувати усі відео формати</string>
     <string name="unlock_all_formats_desc">Розблокувати формати, які, ймовірно, не підтримуються вашим пристроєм.</string>
+    <string name="okhttp_desc">Цей мережевий стек є найповільнішим, але має добру стабільність.</string>
+    <string name="select_channel_section">Відкривати відповідний розділ, коли застосунок запущений з каналів ATV</string>
 </resources>

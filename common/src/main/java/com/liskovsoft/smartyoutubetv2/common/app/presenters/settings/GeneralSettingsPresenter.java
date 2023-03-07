@@ -426,12 +426,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.enableReturnToLauncher(option.isSelected()),
                 mGeneralData.isReturnToLauncherEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.hide_settings_section),
-                option -> {
-                    mGeneralData.enableSettingsSection(!option.isSelected());
-                    mRestartApp = true;
-                },
-                !mGeneralData.isSettingsSectionEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.select_channel_section),
+                option -> mGeneralData.enableSelectChannelSection(option.isSelected()),
+                mGeneralData.isSelectChannelSectionEnabled()));
 
         //// Disable long press on buggy controllers.
         //options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
