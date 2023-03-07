@@ -525,7 +525,9 @@
     <string name="player_long_speed_list">Mehr Optionen für Video-Geschwindigkeit</string>
     <string name="alt_app_icon">Alternatives App-Symbol (Neustart erforderlich)</string>
     <string name="network_stack">Netzwerkstack %s bevorzugen</string>
-    <string name="cronet_desc">Cronet ist ein Chromium-Netzwerkstack. Normalerweise schneller als andere. Bevorzugte Wahl.</string>
+    <string name="cronet_desc">Cronet ist ein Chromium-Netzwerkstack. Normalerweise schneller als andere. Das kann bei Pufferproblemen helfen.</string>
     <string name="unlock_all_formats">Alle Video-Formate freischalten</string>
     <string name="unlock_all_formats_desc">Formate anzeigen, die wahrscheinlich nicht von Ihrer Hardware unterstützt werden.</string>
+    <string name="okhttp_desc">Dieser Netzwerkstack ist am langsamsten, hat aber eine gute Stabilität.</string>
+    <string name="select_channel_section">Die entsprechende Kategorie öffnen, wenn die App über ATV-Kanäle gestartet wird</string>
 </resources>
