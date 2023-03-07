@@ -114,7 +114,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendVideoPresetsCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AppDialogUtil.createVideoPresetsCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createVideoPresetsCategory(getContext());
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 

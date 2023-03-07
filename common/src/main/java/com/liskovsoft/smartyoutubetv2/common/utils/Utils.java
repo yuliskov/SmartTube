@@ -54,6 +54,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.WebBrowserPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
@@ -581,5 +584,29 @@ public class Utils {
         VideoStateService stateService = VideoStateService.instance(context);
 
         return stateService.isEmpty();
+    }
+
+    public static boolean isPresetSupported(VideoPreset preset) {
+        if (preset.isVP9Preset() && !Helpers.isVP9ResolutionSupported(preset.getHeight())) {
+            return false;
+        }
+
+        if (preset.isAV1Preset() && !Helpers.isAV1ResolutionSupported(preset.getHeight())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean isTrackSupported(MediaTrack mediaTrack) {
+        if (mediaTrack.isVP9Codec() && !Helpers.isVP9ResolutionSupported(mediaTrack.getHeight())) {
+            return false;
+        }
+
+        if (mediaTrack.isAV1Codec() && !Helpers.isAV1ResolutionSupported(mediaTrack.getHeight())) {
+            return false;
+        }
+
+        return true;
     }
 }

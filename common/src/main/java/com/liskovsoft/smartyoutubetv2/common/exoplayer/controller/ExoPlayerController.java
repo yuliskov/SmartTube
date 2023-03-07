@@ -49,9 +49,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private boolean mIsEnded;
 
     public ExoPlayerController(Context context) {
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
         mContext = context.getApplicationContext();
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
-        mTrackSelectorManager = new TrackSelectorManager(LocaleUtility.getCurrentLanguage(context));
+        mTrackSelectorManager = new TrackSelectorManager(LocaleUtility.getCurrentLanguage(context), playerTweaksData.isAllFormatsUnlocked());
         mTrackFormatter = new TrackInfoFormatter2();
         mTrackFormatter.enableBitrate(PlayerTweaksData.instance(context).isQualityInfoBitrateEnabled());
 
@@ -59,7 +60,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         // Shield 720p fix???
         initFormats();
-        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
         VideoTrack.sIsNoFpsPresetsEnabled = playerTweaksData.isNoFpsPresetsEnabled();
         MediaTrack.preferAvcOverVp9(playerTweaksData.isAvcOverVp9Preferred());
     }

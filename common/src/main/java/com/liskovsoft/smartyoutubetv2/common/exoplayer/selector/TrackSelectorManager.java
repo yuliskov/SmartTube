@@ -1,7 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Pair;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.TrackGroup;
@@ -20,10 +18,10 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTr
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector.TrackSelectorCallback;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -31,24 +29,21 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class TrackSelectorManager implements TrackSelectorCallback {
-    private final Handler mHandler = new Handler(Looper.getMainLooper());
     public static final int RENDERER_INDEX_VIDEO = 0;
     public static final int RENDERER_INDEX_AUDIO = 1;
     public static final int RENDERER_INDEX_SUBTITLE = 2;
-    //private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
-    //private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
     private final String mLanguage;
+    private final boolean mIsAllFormatsUnlocked;
 
     private DefaultTrackSelector mTrackSelector;
-    //private TrackSelection.Factory mTrackSelectionFactory;
 
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
-    private long mTracksInitTimeMs;
 
-    public TrackSelectorManager(String language) {
+    public TrackSelectorManager(String language, boolean isAllFormatsUnlocked) {
         mLanguage = language;
+        mIsAllFormatsUnlocked = isAllFormatsUnlocked;
     }
 
     public void invalidate() {
@@ -179,11 +174,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 mediaTrack.groupIndex = groupIndex;
                 mediaTrack.trackIndex = trackIndex;
 
-                if (mediaTrack.isVP9Codec() && !Helpers.isVP9ResolutionSupported(mediaTrack.getHeight())) {
-                    continue;
-                }
-
-                if (mediaTrack.isAV1Codec() && !Helpers.isAV1ResolutionSupported(mediaTrack.getHeight())) {
+                if (!mIsAllFormatsUnlocked && !Utils.isTrackSupported(mediaTrack)) {
                     continue;
                 }
 
@@ -193,8 +184,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 renderer.sortedTracks.add(mediaTrack);
             }
         }
-
-        mTracksInitTimeMs = System.currentTimeMillis();
     }
 
     /**
