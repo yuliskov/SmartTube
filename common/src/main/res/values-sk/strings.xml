@@ -367,9 +367,9 @@
     <string name="audio_sync_fix">Oprava Audio synchronizácie</string>
     <string name="ambilight_ratio_fix_desc">Opravuje chýbajúce podsvietenie. Opravuje nesprávny pomer strán. Opravuje prázdne snímky obrazovky. Ovplyvňuje výkon!</string>
     <string name="ambilight_ratio_fix">Oprava pre Ambilight/Pomeru strán/Snímok obrazovky</string>
-    <string name="force_legacy_codecs_desc">Výrazne zlepšuje výkon na low-end zariadeniach. Maximálne rozlíšenie je 720p.</string>
+    <string name="force_legacy_codecs_desc">Výrazne zlepšuje výkon na slabších zariadeniach. Maximálne rozlíšenie je 720p.</string>
     <string name="force_legacy_codecs">Vynútenie zastaralých kodekov (720p)</string>
-    <string name="live_stream_fix_desc">Výrazne zlepšuje živé vysielanie na low-end zariadeniach. Maximálne rozlíšenie je 1080p.</string>
+    <string name="live_stream_fix_desc">Varovanie: Pretáčanie živého vysielania bude nedostupné. Výrazne zlepšuje živé vysielanie na slabších zariadeniach. Maximálne rozlíšenie je 1080p.</string>
     <string name="live_stream_fix">Oprava živého vysielania (1080p)</string>
     <string name="playback_notifications_fix_desc">Skyje notifikáciu pri zmene skladby. Môže byť uzitočné na AOSP firmvéroch.</string>
     <string name="playback_notifications_fix">Vypnúť notifikácie pri prehrávaní</string>
@@ -412,7 +412,7 @@
     <string name="sleep_timer">Časovač spánku (1 hodina neaktivity)</string>
     <string name="sleep_timer_desc">Pozastaviť prehrávanie ak používateľ nepoužije ovládač počas jednej hodiny</string>
     <string name="disable_vsync">Vypnúť vertikálnu synchronizáciu</string>
-    <string name="disable_vsync_desc">Mierne vylepšuje výkon prehrávania</string>
+    <string name="disable_vsync_desc">Táto možnosť zakáže zarovnanie snímkov so signálom vertikálnej synchronizácie displeja. Môže pomôcť znížiť CPU záťaž na slabších zariadeniach.</string>
     <string name="skip_codec_profile_check">Preskočiť kontrolu kodeku</string>
     <string name="skip_codec_profile_check_desc">Preskočí kontrolu podpory kodeku pri spúšťaní videa. Môže pomôcť pri starších firmvéroch.</string>
     <string name="force_sw_codec">Vynútiť softvérový video dekóder</string>
@@ -523,4 +523,11 @@
     <string name="clear_search_history">Zmazať históriu vyhľadávania</string>
     <string name="remove_from_subscriptions">Skryť</string>
     <string name="player_long_speed_list">Možnosti rýchlosti videa</string>
+    <string name="alt_app_icon">Alternatívna ikonka aplikácie (potrebný reštart)</string>
+    <string name="network_stack">Preferovať sieťový zásobník %s</string>
+    <string name="cronet_desc">Cronet je Chromium sieťový zásobník. Zvyčajne rýchlejší ako ostatné. Môže pomôcť pri problémoch s ukladaním do medzipamäte.</string>
+    <string name="unlock_all_formats">Odblokovať všetky video formáty</string>
+    <string name="unlock_all_formats_desc">Odblokuje formáty, ktoré nemusia byť podporované na vašom hardvéri.</string>
+    <string name="okhttp_desc">Tento sieťový zásobník je najpomalší, ale najstabilnejší.</string>
+    <string name="select_channel_section">Otvoriť zodpovedajúcu sekciu po otvorení aplikácie z kanálov ATV</string>
 </resources>
