@@ -66,7 +66,7 @@ dependencies {
     implementation project(':exoplayer-extension-okhttp')
     implementation project(':exoplayer-extension-cronet')
 
-    // Comment out to use versions of cronet hardcoded inside okhttp
+    // Uncomment to use specific version of Cronet instead of one hardcoded inside okhttp extension
     // implementation 'com.google.android.gms:play-services-cronet:' + playServicesCronetVersion
     // implementation 'org.chromium.net:cronet-api:' + cronetApiVersion
 
