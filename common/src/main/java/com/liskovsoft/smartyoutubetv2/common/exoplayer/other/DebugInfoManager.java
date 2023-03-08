@@ -33,6 +33,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import org.chromium.net.ApiVersion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -349,6 +350,8 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
                 PlayerTweaksData.instance(mContext).getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? "OkHttp" :
                         PlayerTweaksData.instance(mContext).getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET ? "Cronet" :
                         "Default");
+        appendRow("Cronet version", ApiVersion.getCronetVersion());
+        //appendRow("OkHttp version", Version.userAgent());
         appendRow(mAppVersion, AppInfoHelpers.getAppVersionName(mContext));
     }
 
