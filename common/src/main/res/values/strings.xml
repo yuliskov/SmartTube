@@ -244,7 +244,7 @@
     <string name="popular_uploads_row_name">Popular uploads</string>
     <string name="breaking_news_row_name">Breaking news</string>
     <string name="covid_news_row_name">COVID-19 news</string>
-    <string name="enable_voice_search">Enable voice search</string>
+    <string name="enable_voice_search">Enable global search (firmware support needed)</string>
     <string name="subscribe_unsubscribe_from_channel">Subscribe/Unsubscribe from channel</string>
     <string name="app_backup_restore">Backup/Restore</string>
     <string name="app_backup">Backup data</string>
@@ -525,9 +525,10 @@
     <string name="player_long_speed_list">Long speed list</string>
     <string name="alt_app_icon">Alternative app icon (needs reboot)</string>
     <string name="network_stack">Prefer %s network stack</string>
-    <string name="cronet_desc">Cronet is a Chromium network stack. Usually faster than others. It can help with the buffering issues.</string>
+    <string name="cronet_desc">Cronet is the Chromium network stack. Cronet can reduce the latency and increase networking performance, which can help with buffering issues.</string>
     <string name="unlock_all_formats">Unlock all video formats</string>
-    <string name="unlock_all_formats_desc">Unlock formats that are probably not supported by your hardware.</string>
+    <string name="unlock_all_formats_desc">On some devices the firmware incorrectly reports some formats as unsupported, even if they are.\n
+        (e.g. 1080p smart TVs tend to report 4k as not supported).</string>
     <string name="okhttp_desc">This network stack is the slowest one but has good stability.</string>
     <string name="select_channel_section">Open corresponding section when the app launched from ATV Channels</string>
 </resources>

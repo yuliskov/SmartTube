@@ -244,7 +244,7 @@
     <string name="popular_uploads_row_name">Популярные</string>
     <string name="breaking_news_row_name">Важные новости</string>
     <string name="covid_news_row_name">Новости о коронавирусе COVID-19</string>
-    <string name="enable_voice_search">Включить голосовой поиск</string>
+    <string name="enable_voice_search">Включить глобальный поиск (требуется поддержка прошивки)</string>
     <string name="subscribe_unsubscribe_from_channel">Подписаться/Отписаться от канала</string>
     <string name="app_backup_restore">Бэкап и восстановление</string>
     <string name="app_backup">Создать бэкап данных</string>
