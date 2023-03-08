@@ -750,7 +750,7 @@ public class GeneralData {
         mScreenDimmingMode = Helpers.parseInt(split, 37, SCREEN_DIMMING_MODE_NORMAL);
         mIsAltAppIconEnabled = Helpers.parseBoolean(split, 38, false);
         mVersionCode = Helpers.parseInt(split, 39, -1);
-        mIsSelectChannelSectionEnabled = Helpers.parseBoolean(split, 40, false);
+        mIsSelectChannelSectionEnabled = Helpers.parseBoolean(split, 40, true);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);

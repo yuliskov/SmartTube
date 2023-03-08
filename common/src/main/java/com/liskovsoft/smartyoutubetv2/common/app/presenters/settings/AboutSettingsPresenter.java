@@ -9,6 +9,8 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.ATVBridgePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AmazonBridgePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -45,6 +47,8 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         appendUpdateCheckButton(settingsPresenter);
 
         appendUpdateSource(settingsPresenter);
+
+        appendInstallBridge(settingsPresenter);
 
         if (!Helpers.equalsAny(country, "RU", "UA")) {
             appendDonation(settingsPresenter);
@@ -139,5 +143,23 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         if (!feedbackOptions.isEmpty()) {
             settingsPresenter.appendStringsCategory(getContext().getString(R.string.feedback), feedbackOptions);
         }
+    }
+
+    private void appendInstallBridge(AppDialogPresenter settingsPresenter) {
+        OptionItem installBridgeOption = UiOptionItem.from(
+                getContext().getString(R.string.enable_voice_search),
+                option -> startBridgePresenter());
+
+        settingsPresenter.appendSingleButton(installBridgeOption);
+    }
+
+    private void startBridgePresenter() {
+        ATVBridgePresenter atvPresenter = ATVBridgePresenter.instance(getContext());
+        atvPresenter.runBridgeInstaller(true);
+        atvPresenter.unhold();
+
+        AmazonBridgePresenter amazonPresenter = AmazonBridgePresenter.instance(getContext());
+        amazonPresenter.runBridgeInstaller(true);
+        amazonPresenter.unhold();
     }
 }
