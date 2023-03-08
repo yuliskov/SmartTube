@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
-import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers;
+import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
@@ -463,8 +463,8 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                             settingsPresenter.closeDialog();
                         }
 
-                        ExoMediaSourceFactory.unhold();
-                        OkHttpHelpers.unhold();
+                        ExoMediaSourceFactory.unhold(); // reset data source
+                        OkHttpManager.unhold();
                     },
                     mGeneralData.isProxyEnabled()));
         }

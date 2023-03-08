@@ -35,9 +35,9 @@ import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.youtubeapi.common.helpers.DefaultHeaders;
 import com.liskovsoft.sharedutils.okhttp.OkHttpCommons;
-import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.ErrorDefaultDashChunkSource;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
@@ -258,7 +258,7 @@ public class ExoMediaSourceFactory {
      * Use OkHttp for networking
      */
     private HttpDataSource.Factory buildOkHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpHelpers.getClient(), DefaultHeaders.APP_USER_AGENT,
+        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpManager.instance().getClient(), DefaultHeaders.APP_USER_AGENT,
                 bandwidthMeter);
         addCommonHeaders(dataSourceFactory);
         return dataSourceFactory;
