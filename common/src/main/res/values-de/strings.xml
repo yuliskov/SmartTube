@@ -528,7 +528,7 @@
     <string name="cronet_desc">Cronet ist der Chromium-Netzwerkstack. Cronet kann die Latenz verringern und die Netzwerkleistung erhöhen, was bei Pufferproblemen helfen kann.</string>
     <string name="unlock_all_formats">Alle Video-Formate freischalten</string>
     <string name="unlock_all_formats_desc">Bei einigen Geräten meldet die Firmware fälschlicherweise, dass einige Formate nicht unterstützt werden, auch wenn sie es sind.\n
-        (z. B. melden 1080p-Smart-TVs oft, dass 4k nicht unterstützt wird).</string>
+        (z.B. melden 1080p-Smart-TVs oft, dass 4k nicht unterstützt wird).</string>
     <string name="okhttp_desc">Dieser Netzwerkstack ist am langsamsten, hat aber eine gute Stabilität.</string>
     <string name="select_channel_section">Die entsprechende Kategorie öffnen, wenn die App über ATV-Kanäle gestartet wird</string>
 </resources>
