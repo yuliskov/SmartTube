@@ -244,7 +244,7 @@
     <string name="popular_uploads_row_name">Popüler yüklemeler</string>
     <string name="breaking_news_row_name">Yeni haberler</string>
     <string name="covid_news_row_name">COVID-19 haberleri</string>
-    <string name="enable_voice_search">Sesle aramayı etkinleştir</string>
+    <string name="enable_voice_search">Genel aramayı etkinleştir (aygıt yazılımı desteği gerekli)</string>
     <string name="subscribe_unsubscribe_from_channel">Kanala Abone ol/Aboneliği iptal et</string>
     <string name="app_backup_restore">Yedekle/Geri al</string>
     <string name="app_backup">Veriyi yedekle</string>
@@ -525,9 +525,9 @@
     <string name="player_long_speed_list">Uzun oynatma hızı listesi/string>
     <string name="alt_app_icon">Alternatif uygulama simgesi (yeniden başlatma gerekli)</string>
     <string name="network_stack">%s ağ yığınını tercih et</string>
-    <string name="cronet_desc">Cronet bir Chromium ağ yığınıdır. Genellikle diğerlerinden daha hızlıdır. Arabelleğe alma sorunlarına yardımcı olabilir.</string>
+    <string name="cronet_desc">Cronet, Chromium ağ yığınıdır. Cronet, ara belleğe alma sorunlarına yardımcı olabilecek gecikmeyi azaltabilir ve ağ performansını artırabilir.</string>
     <string name="unlock_all_formats">Tüm video biçimlerinin kilidini aç</string>
-    <string name="unlock_all_formats_desc">Muhtemelen donanımınız tarafından desteklenmeyen biçimlerin kilidini açar.</string>
+    <string name="unlock_all_formats_desc">Bazı cihazlarda aygıt yazılımı, desteklense bile bazı biçimlerin desteklenmediğini hatalı bir şekilde bildirir.\n (ör. 1080p akıllı TV'ler genellikle 4k'yı desteklenmiyor olarak bildirir).</string>
     <string name="okhttp_desc">Bu ağ yığını en yavaş olanıdır ancak iyi bir kararlılığa sahiptir.</string>
     <string name="select_channel_section">Uygulama ATV Kanallarından açıldığında ilgili bölümü aç</string>
 </resources>
