@@ -244,7 +244,7 @@
     <string name="popular_uploads_row_name">Beliebte Uploads</string>
     <string name="breaking_news_row_name">Eilmeldungen</string>
     <string name="covid_news_row_name">Nachrichten zu COVID-19</string>
-    <string name="enable_voice_search">Sprachsuche aktivieren</string>
+    <string name="enable_voice_search">Globale Sprachsuche aktivieren (Firmware-Unterstützung erforderlich)</string>
     <string name="subscribe_unsubscribe_from_channel">Kanal abonnieren/nicht mehr abonnieren</string>
     <string name="app_backup_restore">Sichern/Wiederherstellen</string>
     <string name="app_backup">Daten sichern</string>
@@ -525,9 +525,10 @@
     <string name="player_long_speed_list">Mehr Optionen für Video-Geschwindigkeit</string>
     <string name="alt_app_icon">Alternatives App-Symbol (Neustart erforderlich)</string>
     <string name="network_stack">Netzwerkstack %s bevorzugen</string>
-    <string name="cronet_desc">Cronet ist ein Chromium-Netzwerkstack. Normalerweise schneller als andere. Das kann bei Pufferproblemen helfen.</string>
+    <string name="cronet_desc">Cronet ist der Chromium-Netzwerkstack. Cronet kann die Latenz verringern und die Netzwerkleistung erhöhen, was bei Pufferproblemen helfen kann.</string>
     <string name="unlock_all_formats">Alle Video-Formate freischalten</string>
-    <string name="unlock_all_formats_desc">Formate anzeigen, die wahrscheinlich nicht von Ihrer Hardware unterstützt werden.</string>
+    <string name="unlock_all_formats_desc">Bei einigen Geräten meldet die Firmware fälschlicherweise, dass einige Formate nicht unterstützt werden, auch wenn sie es sind.\n
+        (z.B. melden 1080p-Smart-TVs oft, dass 4k nicht unterstützt wird).</string>
     <string name="okhttp_desc">Dieser Netzwerkstack ist am langsamsten, hat aber eine gute Stabilität.</string>
     <string name="select_channel_section">Die entsprechende Kategorie öffnen, wenn die App über ATV-Kanäle gestartet wird</string>
 </resources>
