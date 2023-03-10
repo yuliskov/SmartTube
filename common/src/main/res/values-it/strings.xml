@@ -244,7 +244,7 @@
     <string name="popular_uploads_row_name">Caricamenti popolari</string>
     <string name="breaking_news_row_name">Ultime notizie</string>
     <string name="covid_news_row_name">Notizie su COVID-19</string>
-    <string name="enable_voice_search">Abilita ricerca vocale</string>
+    <string name="enable_voice_search">Abilita ricerca vocale (supporto firmware necessario)</string>
     <string name="subscribe_unsubscribe_from_channel">Iscriviti/Disiscriviti dal canale</string>
     <string name="app_backup_restore">Backup e ripristino</string>
     <string name="app_backup">Backup dati</string>
@@ -523,6 +523,12 @@
     <string name="clear_search_history">Cancella la cronologia delle ricerche</string>
     <string name="remove_from_subscriptions">Nascondi</string>
     <string name="player_long_speed_list">Elenco lungo velocità</string>
-    <string name="alt_app_icon">Icona alternativa dell\'app (è necessario riavviare)</string>>
-    <string name="network_stack">Scarica i dati con %s</string>
+    <string name="alt_app_icon">Icona alternativa dell\'app (è necessario riavviare)</string>
+    <string name="network_stack">Preferisci stack di rete %s</string>
+    <string name="cronet_desc">Cronet è lo stack di rete di Chromium. Cronet può ridurre la latenza e aumentare le prestazioni di rete, il che può aiutare con problemi di buffering.</string>
+    <string name="unlock_all_formats">Sblocca tutti i formati video</string>
+    <string name="unlock_all_formats_desc">Su alcuni dispositivi il firmware riporta erroneamente alcuni formati come non supportati, anche se lo sono.\n
+        (ad esempio, le smart TV 1080p tendono a segnalare 4k come non supportato).</string>
+    <string name="okhttp_desc">Questo stack di rete è il più lento ma ha una buona stabilità.</string>
+    <string name="select_channel_section">Apri la sezione corrispondente quando l\'app è stata avviata dai canali ATV</string>
 </resources>
