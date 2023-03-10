@@ -244,7 +244,7 @@
     <string name="popular_uploads_row_name">Populární nahraná videa</string>
     <string name="breaking_news_row_name">Nejnovější zprávy</string>
     <string name="covid_news_row_name">COVID-19 zprávy</string>
-    <string name="enable_voice_search">Povolit hlasové vyhledávání</string>
+    <string name="enable_voice_search">Povolit globální vyhledávání (nutná podpora firmwaru)</string>
     <string name="subscribe_unsubscribe_from_channel">Přihlásit/Odhlásit k odběru kanálu</string>
     <string name="app_backup_restore">Záloha/Obnovení</string>
     <string name="app_backup">Zálohovat data</string>
@@ -525,9 +525,10 @@
     <string name="player_long_speed_list">Více možností rychlosti videa</string>
     <string name="alt_app_icon">Alternativní ikona aplikace (vyžaduje restart)</string>
     <string name="network_stack">Preferovat síťový zásobník %s</string>
-    <string name="cronet_desc">Cronet je Chromium síťový zásobník. Obvykle rychlejší než ostatní. Může pomoci s problémy s vyrovnávací pamětí.</string>
+    <string name="cronet_desc">Cronet je Chromium síťový zásobník. Může snížit latenci a zvýšit výkon sítě, což může pomoci s problémy s vyrovnávací pamětí.</string>
     <string name="unlock_all_formats">Odblokovat všechny formáty videa</string>
-    <string name="unlock_all_formats_desc">Odblokuje formáty, které váš hardware pravděpodobně nepodporuje.</string>
+    <string name="unlock_all_formats_desc">Na některých zařízeních firmware nesprávně hlásí určité formáty jako nepodporované i když podporované jsou.\n
+        (např. chytré televize s rozlišením 1080p mají tendenci hlásit 4K jako nepodporované)</string>
     <string name="okhttp_desc">Tento síťový zásobník je nejpomalejší, ale má dobrou stabilitu.</string>
     <string name="select_channel_section">Otevřít odpovídající sekci při spuštění aplikace z kanálů ATV</string>
 </resources>
