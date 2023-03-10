@@ -277,7 +277,6 @@
   <string name="focus_on_search_results">検索結果に自動でカーソルを合わせる</string>
   <string name="context_menu">コンテキストメニュー</string>
   <string name="add_remove_from_recent_playlist">直近の再生リストに追加/削除</string>
-  <string name="hide_settings_section">設定セクションを隠す (危険です!)</string>
   <string name="volume">音量 %s%%</string>
   <string name="auto_frame_rate_sec">%s秒</string>
   <string name="audio_shift_sec">%s秒</string>
@@ -456,7 +455,7 @@
   <string name="protect_settings_with_password">すべての設定をパスワードで保護する</string>
   <string name="enter_settings_password">設定パスワードを入力</string>
   <string name="child_mode">チャイルドモード</string>
-  <string name="child_mode_desc">このモードでは、検索とおすすめの機能が制限されます。設定はパスワードで保護されます。</string>
+  <string name="child_mode_desc">このモードでは、検索とおすすめの機能は使用できません。設定はパスワードで保護されます。</string>
   <string name="lost_setting_warning">設定が変更されます。バックアップを作成しておいてください。</string>
   <string name="player_button_long_click">ボタンをクリックでクイック設定、ロングクリックで詳細設定を開く</string>
   <string name="pause_history">履歴を一時停止</string>
@@ -495,4 +494,5 @@
   <string name="clear_search_history">検索履歴を消去</string>
   <string name="remove_from_subscriptions">隠す</string>
   <string name="player_long_speed_list">詳細な再生速度</string>
+  <string name="select_channel_section">ATVチャンネルから起動した際に対応したセクションを開く</string>
 </resources>
