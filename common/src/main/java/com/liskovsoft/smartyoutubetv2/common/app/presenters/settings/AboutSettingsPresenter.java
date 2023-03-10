@@ -4,6 +4,7 @@ import android.content.Context;
 import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -154,6 +155,8 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void startBridgePresenter() {
+        MessageHelpers.showLongMessage(getContext(), R.string.enable_voice_search_desc);
+
         ATVBridgePresenter atvPresenter = ATVBridgePresenter.instance(getContext());
         atvPresenter.runBridgeInstaller(true);
         atvPresenter.unhold();
