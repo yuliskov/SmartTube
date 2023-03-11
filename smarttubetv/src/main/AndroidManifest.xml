@@ -190,6 +190,7 @@
         <!-- noHistory is essential for dialogs. Because otherwise you'll see previous dialog content when opening. -->
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.AppDialogActivity"
                   android:noHistory="true"
+                  android:excludeFromRecents="true"
                   android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
                   android:screenOrientation="landscape"
