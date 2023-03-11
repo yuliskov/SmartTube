@@ -251,6 +251,7 @@
   <string name="app_restore">Restaurer des données à partir d\'une sauvegarde</string>
   <string name="skip_each_segment_once">Ne plus sautez encore de sections</string>
   <string name="disable_ok_long_press">Désactiver le bouton OK pression longue</string>
+  <string name="disable_ok_long_press_desc">Destiné aux contrôleurs défectueux où le bouton OK ne fonctionne pas correctement.</string>
   <string name="player_time_correction">Affichage de l\'heure en fonction de la vitesse</string>
   <string name="sponsor_color_markers">Marqueurs de couleur sur la barre de progression</string>
   <string name="refresh_section">Rafraîchir la section</string>
@@ -388,6 +389,7 @@
   <string name="subtitle_position">Décalage des sous-titres en bas</string>
   <string name="pressing_home">en appuyant sur ACCUEIL</string>
   <string name="pressing_home_back">en appuyant sur ACCUEIL ou RETOUR</string>
+  <string name="pressing_back">en appuyant sur RETOUR</string>
   <string name="player_number_key_seek">Recherche avec les touches numériques</string>
   <string name="save_remove_playlist">Sauvegarder/Supprimer cette liste de lecture de la section Playlists</string>
   <string name="removed_from_playlists">Supprimé de la section Playlists</string>
@@ -523,4 +525,11 @@
   <string name="player_long_speed_list">Longue liste de vitesse</string>
   <string name="alt_app_icon">Icône d\'application alternative (nécessite un redémarrage)</string>
   <string name="network_stack">Télécharger des données avec %s</string>
+  <string name="cronet_desc">Cronet est la pile réseau Chromium. Cronet peut réduire la latence et augmenter les performances du réseau, ce qui peut aider à résoudre les problèmes de mise en mémoire tampon.</string>
+  <string name="unlock_all_formats">Déverrouiller tous les formats vidéo</string>
+  <string name="unlock_all_formats_desc">Sur certains appareils, le micrologiciel signale à tort certains formats comme non pris en charge, même s'ils sont.\n
+        (par exemple. Les téléviseurs intelligents 1080p ont tendance à signaler 4k comme non pris en charge).</string>
+  <string name="okhttp_desc">Cette pile réseau est la plus lente mais a une bonne stabilité.</string>
+  <string name="select_channel_section">Ouvrir la section correspondante lorsque l'application est lancée depuis ATV Channels</string>
+  <string name="enable_voice_search_desc">L'application officielle sera remplacée par une "passerelle". Un pont permet de transférer les demandes de recherche globales vers notre application.</string>
 </resources>
