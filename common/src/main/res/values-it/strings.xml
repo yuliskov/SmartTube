@@ -531,4 +531,5 @@
         (ad esempio, le smart TV 1080p tendono a segnalare 4k come non supportato).</string>
     <string name="okhttp_desc">Questo stack di rete è il più lento ma ha una buona stabilità.</string>
     <string name="select_channel_section">Apri la sezione corrispondente quando l\'app è stata avviata dai canali ATV</string>
+    <string name="enable_voice_search_desc">L\'app ufficiale verrà sostituita da un cosiddetto bridge (ponte). Un bridge aiuta a trasferire le richieste di ricerca globali alla nostra app.</string>
 </resources>
