@@ -105,7 +105,13 @@ public final class CronetEngineWrapper {
     for (int i = 0; i < cronetProviders.size() && cronetEngine == null; i++) {
       String providerName = cronetProviders.get(i).getName();
       try {
-        cronetEngine = cronetProviders.get(i).createBuilder().build();
+        // MODIFIED: enable Quic
+        //cronetEngine = cronetProviders.get(i).createBuilder().build();
+        cronetEngine = cronetProviders.get(i).createBuilder()
+                .enableQuic(true)
+                .enableHttp2(true)
+                .enableBrotli(true)
+                .build();
         if (providerComparator.isNativeProvider(providerName)) {
           cronetEngineSource = SOURCE_NATIVE;
         } else if (providerComparator.isGMSCoreProvider(providerName)) {
