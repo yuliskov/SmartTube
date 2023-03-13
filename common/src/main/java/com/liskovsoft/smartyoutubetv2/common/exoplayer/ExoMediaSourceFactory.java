@@ -33,6 +33,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.liskovsoft.sharedutils.cronet.CronetManager;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
@@ -267,7 +268,7 @@ public class ExoMediaSourceFactory {
     private HttpDataSource.Factory buildCronetDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         CronetDataSourceFactory dataSourceFactory =
                 new CronetDataSourceFactory(
-                        new CronetEngineWrapper(mContext), Executors.newSingleThreadExecutor(), null, bandwidthMeter, DefaultHeaders.APP_USER_AGENT);
+                        new CronetEngineWrapper(CronetManager.getEngine(mContext)), Executors.newSingleThreadExecutor(), null, bandwidthMeter, DefaultHeaders.APP_USER_AGENT);
         addCommonHeaders(dataSourceFactory);
         return dataSourceFactory;
     }
