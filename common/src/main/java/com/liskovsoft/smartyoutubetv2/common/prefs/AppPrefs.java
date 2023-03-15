@@ -71,13 +71,12 @@ public class AppPrefs extends SharedPreferencesBase {
 
     public void setData(String key, String data) {
         if (checkData(key, data)) {
-            return;
+            putString(key, data);
         }
-
-        putString(key, data);
     }
 
     public String getData(String key) {
+        // Don't sync hash here. Hashes won't match.
         return getString(key, null);
     }
 
@@ -121,11 +120,11 @@ public class AppPrefs extends SharedPreferencesBase {
         int newHashCode = data != null ? data.hashCode() : -1;
 
         if (oldHashCode != null && oldHashCode == newHashCode) {
-            return true;
+            return false;
         }
 
         mDataHashes.put(key, newHashCode);
 
-        return false;
+        return true;
     }
 }
