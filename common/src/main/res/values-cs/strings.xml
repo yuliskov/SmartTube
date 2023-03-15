@@ -531,4 +531,5 @@
         (např. chytré televize s rozlišením 1080p mají tendenci hlásit 4K jako nepodporované)</string>
     <string name="okhttp_desc">Tento síťový zásobník je nejpomalejší, ale má dobrou stabilitu.</string>
     <string name="select_channel_section">Otevřít odpovídající sekci při spuštění aplikace z kanálů ATV</string>
+    <string name="enable_voice_search_desc">Oficiální aplikace bude nahrazena tzv. mostem. Most pomáhá přenášet požadavky globálního vyhledávání do této aplikace.</string>
 </resources>
