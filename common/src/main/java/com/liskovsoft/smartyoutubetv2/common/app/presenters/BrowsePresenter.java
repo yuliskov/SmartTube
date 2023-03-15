@@ -662,6 +662,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 getView().showError(new CategoryEmptyError(getContext()));
                                 Utils.postDelayed(mRefreshSection, 30_000);
                             }
+
+                            if (isHistorySection()) {
+                                mGeneralData.enableHistory(false);
+                            }
                         });
 
         mActions.add(updateAction);
