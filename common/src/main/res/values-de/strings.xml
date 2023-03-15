@@ -531,4 +531,5 @@
         (z.B. melden 1080p-Smart-TVs oft, dass 4k nicht unterstützt wird).</string>
     <string name="okhttp_desc">Dieser Netzwerkstack ist am langsamsten, hat aber eine gute Stabilität.</string>
     <string name="select_channel_section">Die entsprechende Kategorie öffnen, wenn die App über ATV-Kanäle gestartet wird</string>
+    <string name="enable_voice_search_desc">Die offizielle App wird durch eine sogenannte Bridge ersetzt. Eine Bridge hilft dabei, globale Suchanfragen an unsere App zu übertragen.</string>
 </resources>
