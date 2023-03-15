@@ -654,6 +654,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             }
 
                             continueGroupIfNeeded(videoGroup);
+
+                            if (isHistorySection()) {
+                                mGeneralData.enableHistory(true);
+                            }
                         },
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());

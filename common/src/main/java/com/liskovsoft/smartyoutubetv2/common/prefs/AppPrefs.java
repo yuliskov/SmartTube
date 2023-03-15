@@ -5,6 +5,9 @@ import android.content.Context;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
 import com.liskovsoft.smartyoutubetv2.common.R;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AppPrefs extends SharedPreferencesBase {
     private static final String TAG = AppPrefs.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
@@ -20,6 +23,7 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String ANTIZAPRET_PROFILE = "https://antizapret.prostovpn.org/antizapret-tcp.ovpn";
     private static final String ZABORONA_PROFILE = "https://zaborona.help/openvpn-client-config/zaborona-help_maxroutes.ovpn";
     private String mBootResolution;
+    private final Map<String, Integer> mDataHashes = new HashMap<>();
 
     private AppPrefs(Context context) {
         super(context, R.xml.app_prefs);
@@ -66,6 +70,10 @@ public class AppPrefs extends SharedPreferencesBase {
     }
 
     public void setData(String key, String data) {
+        if (checkData(key, data)) {
+            return;
+        }
+
         putString(key, data);
     }
 
@@ -103,5 +111,21 @@ public class AppPrefs extends SharedPreferencesBase {
 
     public void setOpenVPNEnabled(boolean enabled) {
         putBoolean(OPENVPN_ENABLED, enabled);
+    }
+
+    /**
+     * Check that the data has been modified.
+     */
+    private boolean checkData(String key, String data) {
+        Integer oldHashCode = mDataHashes.get(key);
+        int newHashCode = data != null ? data.hashCode() : -1;
+
+        if (oldHashCode != null && oldHashCode == newHashCode) {
+            return true;
+        }
+
+        mDataHashes.put(key, newHashCode);
+
+        return false;
     }
 }

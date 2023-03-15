@@ -566,7 +566,11 @@ public class Utils {
     }
 
     public static String getCountryFlagUrl(String countryCode) {
-        return "https://countryflagsapi.com/png/" + countryCode;
+        // Sometimes down
+        //return "https://countryflagsapi.com/png/" + countryCode;
+
+        // https://flagpedia.net/download/api
+        return String.format("https://flagcdn.com/w160/%s.png", countryCode.toLowerCase());
     }
 
     public static void showPlayerControls(Context context, boolean show) {
