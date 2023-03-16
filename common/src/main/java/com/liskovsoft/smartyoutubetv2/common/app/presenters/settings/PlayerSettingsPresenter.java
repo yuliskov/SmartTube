@@ -334,22 +334,22 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> GlobalPreferences.instance(getContext()).enableChannelsService(!option.isSelected()),
                 !GlobalPreferences.instance(getContext()).isChannelsServiceEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.alt_app_icon),
-                option -> {
-                    mGeneralData.enableAltAppIcon(option.isSelected());
-                    Helpers.enableActivity(getContext(), option.isSelected() ?
-                            "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity" : "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivityAlt", false);
-                    Helpers.enableActivity(getContext(), option.isSelected() ?
-                            "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivityAlt" : "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity", true);
-                },
-                mGeneralData.isAltAppIconEnabled()));
-
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_settings_section),
                 option -> {
                     mGeneralData.enableSettingsSection(!option.isSelected());
                     mRestartApp = true;
                 },
                 !mGeneralData.isSettingsSectionEnabled()));
+
+        //options.add(UiOptionItem.from(getContext().getString(R.string.alt_app_icon),
+        //        option -> {
+        //            mGeneralData.enableAltAppIcon(option.isSelected());
+        //            Helpers.enableActivity(getContext(), option.isSelected() ?
+        //                    "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity" : "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivityAlt", false);
+        //            Helpers.enableActivity(getContext(), option.isSelected() ?
+        //                    "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivityAlt" : "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity", true);
+        //        },
+        //        mGeneralData.isAltAppIconEnabled()));
 
         // Disabled inside RetrofitHelper
         //options.add(UiOptionItem.from("Prefer IPv4 DNS",
