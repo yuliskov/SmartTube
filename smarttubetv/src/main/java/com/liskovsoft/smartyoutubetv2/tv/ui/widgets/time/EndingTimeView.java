@@ -12,12 +12,14 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
+import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
-public class EndingTimeView extends TextView implements TickleListener {
+public class EndingTimeView extends TextView implements TickleListener, OnDataChange {
     private TickleManager mTickleManager;
+    private PlayerData mPlayerData;
     private boolean mIconIsSet;
 
     public EndingTimeView(Context context) {
@@ -37,6 +39,7 @@ public class EndingTimeView extends TextView implements TickleListener {
 
     private void init() {
         mTickleManager = TickleManager.instance();
+        mPlayerData = PlayerData.instance(getContext());
         updateListener();
     }
 
@@ -52,8 +55,10 @@ public class EndingTimeView extends TextView implements TickleListener {
     private void updateListener() {
         if (getVisibility() == View.VISIBLE) {
             mTickleManager.addListener(this);
+            mPlayerData.setOnChange(this);
         } else {
             mTickleManager.removeListener(this);
+            mPlayerData.removeOnChange(this);
         }
     }
 
@@ -62,6 +67,11 @@ public class EndingTimeView extends TextView implements TickleListener {
         super.setVisibility(visibility);
 
         updateListener();
+    }
+
+    @Override
+    public void onDataChange() {
+        update();
     }
 
     @Override
@@ -117,7 +127,7 @@ public class EndingTimeView extends TextView implements TickleListener {
     }
 
     private long applySpeedCorrection(long timeMs) {
-        timeMs = (long) (timeMs / PlayerData.instance(getContext()).getSpeed());
+        timeMs = (long) (timeMs / mPlayerData.getSpeed());
 
         return timeMs >= 0 ? timeMs : 0;
     }
