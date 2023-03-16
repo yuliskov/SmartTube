@@ -312,14 +312,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void onPlayerError(ExoPlaybackException error) {
         Log.e(TAG, "onPlayerError: " + error);
 
-        // Player is released at this point. So, there is no sense to restore the playback here.
-
-        //if (error.type == ExoPlaybackException.TYPE_UNEXPECTED &&
-        //    error.getCause() instanceof IllegalArgumentException) {
-        //    // Maybe it's because of auto frame rate.
-        //    // Such error may occur when pausing activity.
-        //    return;
-        //}
+        // NOTE: Player is released at this point. So, there is no sense to restore the playback here.
 
         mEventListener.onEngineError(error.type);
     }
