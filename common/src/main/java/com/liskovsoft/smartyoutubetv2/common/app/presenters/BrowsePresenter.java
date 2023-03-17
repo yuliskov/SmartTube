@@ -655,9 +655,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
                             continueGroupIfNeeded(videoGroup);
 
-                            if (isHistorySection()) {
-                                mGeneralData.enableHistory(true);
-                            }
+                            // Can't determine whether the history paused or not. Remember, it's paused not cleared.
                         },
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
@@ -667,9 +665,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 Utils.postDelayed(mRefreshSection, 30_000);
                             }
 
-                            if (isHistorySection()) {
-                                mGeneralData.enableHistory(false);
-                            }
+                            // Can't determine whether the history paused or not. Remember, it's paused not cleared.
                         });
 
         mActions.add(updateAction);
