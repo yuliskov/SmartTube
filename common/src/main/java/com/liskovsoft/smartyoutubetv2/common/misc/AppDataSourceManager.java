@@ -5,6 +5,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutSimpleSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AutoFrameRateSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.ContentBlockSettingsPresenter;
@@ -24,8 +25,7 @@ public class AppDataSourceManager {
     private static AppDataSourceManager sInstance;
     private static final String[] KNOWN_PACKAGES = {
             "com.liskovsoft.smarttubetv.beta",
-            "com.teamsmart.videomanager.tv",
-            "com.armanych.youtube"
+            "com.teamsmart.videomanager.tv"
     };
 
     private AppDataSourceManager() {
@@ -68,6 +68,9 @@ public class AppDataSourceManager {
         if (Helpers.equalsAny(context.getPackageName(), KNOWN_PACKAGES)) {
             settingItems.add(new SettingsItem(
                     context.getString(R.string.settings_about), () -> AboutSettingsPresenter.instance(context).show(), R.drawable.settings_about));
+        } else {
+            settingItems.add(new SettingsItem(
+                    context.getString(R.string.settings_about), () -> AboutSimpleSettingsPresenter.instance(context).show(), R.drawable.settings_about));
         }
 
         return settingItems;
