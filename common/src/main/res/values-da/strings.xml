@@ -14,7 +14,7 @@
   <string name="subscriptions_signin_subtitle">Log på for at se dine abonnementer</string>
   <string name="subscriptions_signin_button_text">LOG PÅ</string>
   <string name="library_signin_to_show_more">Se videoer du syntes om, gemt eller abonneret på</string>
-  <string name="library_signin_subtitle">Log på for at se dit biblioteket </string>
+  <string name="library_signin_subtitle">Log på for at se dit bibliotek </string>
   <string name="action_signin">LOG PÅ</string>
   <string name="title_video_formats">Video formater</string>
   <string name="title_audio_formats">Lyd formater</string>
@@ -22,7 +22,7 @@
   <string name="video_max_quality">Auto (højeste kvalitet)</string>
   <string name="audio_max_quality">Auto (højeste kvalitet)</string>
   <string name="subtitles_disabled">Undertekster deaktiveret</string>
-  <string name="auto_frame_rate">Automatisk bildefrekvens</string>
+  <string name="auto_frame_rate">Automatisk billedefrekvens</string>
   <string name="frame_rate_correction">Fiks fps:\n%s</string>
   <string name="category_background_playback">Afspil i baggrunden</string>
   <string name="not_implemented">Ikke implementeret</string>
@@ -31,13 +31,13 @@
   <string name="option_background_playback_only_audio">Kun lyd</string>
   <string name="playback_settings">Afspilningsindstillinger</string>
   <string name="video_speed">Videohastighed</string>
-  <string name="resolution_switch">Skift oppløsning</string>
+  <string name="resolution_switch">Skift opløsning</string>
   <string name="video_buffer">Videobuffer</string>
   <string name="video_buffer_size_low">Lav</string>
   <string name="video_buffer_size_med">Medium</string>
   <string name="video_buffer_size_high">Høj</string>
   <string name="update_changelog">Ændringslog</string>
-  <string name="install_update">Installer oppdatering</string>
+  <string name="install_update">Installer opdatering</string>
   <string name="section_is_empty">Beklager! Der er intet at se her.</string>
   <string name="dialog_add_to_playlist">Tilføj/Fjern fra afspilningsliste</string>
   <string name="msg_signed_users_only">Kun registrerede brugere</string>
@@ -60,7 +60,7 @@
   <string name="subtitle_default">Standard</string>
   <string name="subtitle_white_semi_transparent">Hvid på halv gennemsigtig baggrund</string>
   <string name="subtitle_style">Undertekststil</string>
-  <string name="subtitle_language">Undertekst sprog</string>
+  <string name="subtitle_language">Undertekstsprog</string>
   <string name="action_search">Start søgning</string>
   <string name="settings_main_ui">Brugergrænseflade</string>
   <string name="dialog_main_ui">Brugergrænseflade</string>
@@ -81,11 +81,11 @@
   <string name="player_ui_hide_behavior">Skjul automatisk brugergrænseflade</string>
   <string name="option_never">Aldrig</string>
   <string name="side_panel_sections">Opsætningssektioner</string>
-  <string name="boot_to_section">Opstarts sektion</string>
+  <string name="boot_to_section">Opstartssektion</string>
   <string name="large_ui">Stor brugergrænseflade</string>
   <string name="video_grid_scale">Video gitter skala</string>
   <string name="scale_ui">Brugergrænseflade skala</string>
-  <string name="color_scheme">Fargevalg</string>
+  <string name="color_scheme">Farvevalg</string>
   <string name="color_scheme_default">Standard</string>
   <string name="color_scheme_red_grey">Rød-grå</string>
   <string name="color_scheme_red">Rød</string>
@@ -145,7 +145,7 @@
   <string name="color_scheme_teal">Blågrøn</string>
   <string name="color_scheme_teal_oled">Blågrøn (OLED)</string>
   <string name="player_seek_preview_none">Deaktiveret</string>
-  <string name="mark_all_channels_watched">Marker she kanaler som set</string>
+  <string name="mark_all_channels_watched">Marker alle kanaler som set</string>
   <string name="screen_dimming_timeout_min">%s minutter</string>
   <string name="ui_hide_timeout_sec">%s sekunder</string>
   <string name="audio_shift_sec">%s sekunder</string>
@@ -163,8 +163,8 @@
   <string name="upload_date_today">Idag</string>
   <string name="upload_date_any">Altid</string>
   <string name="upload_date">Upload dato</string>
-  <string name="remove_from_history">Fjern fra historie</string>
-  <string name="removed_from_history">Videoen er fjernet fra historie</string>
+  <string name="remove_from_history">Fjern fra historik</string>
+  <string name="removed_from_history">Videoen er fjernet fra historik</string>
   <string name="content_block_highlight">videoens punkt eller højdepunkt</string>
   <string name="content_block_preview_recap">Forhåndsvisning eller opsummering af videoen</string>
   <string name="video_preset_adaptive">Tilpasset</string>
@@ -322,6 +322,6 @@
   <string name="hide_shorts_from_home">Skjul shorts fra startskærmen</string>
   <string name="finish_on_disconnect">Afslut appen efter at have afbrudt telefonen</string>
   <string name="update_error">Opdateringsfejl</string>
-  <string name="hide_shorts_from_history">Skjul shorts fra Historien</string>
+  <string name="hide_shorts_from_history">Skjul shorts fra historik</string>
   <string name="disable_screensaver">Deaktiver pauseskærm</string>
 </resources>
