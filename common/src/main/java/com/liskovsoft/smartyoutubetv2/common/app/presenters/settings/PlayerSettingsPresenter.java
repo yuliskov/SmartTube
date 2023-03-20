@@ -269,8 +269,19 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.live_stream_fix),
                 getContext().getString(R.string.live_stream_fix_desc),
-                option -> mPlayerTweaksData.enableLiveStreamFix(option.isSelected()),
-                mPlayerTweaksData.isLiveStreamFixEnabled()));
+                option -> {
+                    mPlayerTweaksData.forceHlsStreams(option.isSelected());
+                    mPlayerTweaksData.forceDashUrlStreams(false);
+                },
+                mPlayerTweaksData.isHlsStreamsForced()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.live_stream_fix_4k),
+                getContext().getString(R.string.live_stream_fix_4k_desc),
+                option -> {
+                    mPlayerTweaksData.forceDashUrlStreams(option.isSelected());
+                    mPlayerTweaksData.forceHlsStreams(false);
+                },
+                mPlayerTweaksData.isDashUrlStreamsForced()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.playback_notifications_fix),
                 getContext().getString(R.string.playback_notifications_fix_desc),

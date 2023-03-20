@@ -366,7 +366,9 @@
     <string name="force_legacy_codecs_desc">Значно покращує продуктивність на слабких пристроях. Максимальна роздільна здатність 720p.</string>
     <string name="force_legacy_codecs">Використовувати застарілі кодеки (720p)</string>
     <string name="live_stream_fix_desc">Увага: перемотування прямих трансляцій буде недоступним. Значно покращує продуктивність трансляцій на слабких пристроях. Максимальна роздільна здатність 1080p.</string>
+    <string name="live_stream_fix_4k_desc">Увага: перемотування прямих трансляцій буде недоступним. Значно покращує продуктивність трансляцій. Максимальна роздільна здатність 4K.</string>
     <string name="live_stream_fix">Виправлення прямих трансляцій (1080p)</string>
+    <string name="live_stream_fix_4k">Виправлення прямих трансляцій (4K)</string>
     <string name="playback_notifications_fix_desc">Приховує сповіщення про зміну відтворюваного треку. Може бути корисним на прошивках на базі AOSP.</string>
     <string name="playback_notifications_fix">Вимкнути сповіщення про відтворення</string>
     <string name="amlogic_fix_desc">Виправлення втрати кадрів на пристроях на базі Amlogic.</string>

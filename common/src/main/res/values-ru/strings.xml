@@ -366,7 +366,9 @@
     <string name="force_legacy_codecs_desc">Значительно повышает производительность на слабых устройствах. Максимальное разрешение 720p.</string>
     <string name="force_legacy_codecs">Использовать устаревшие кодеки (720p)</string>
     <string name="live_stream_fix_desc">Внимание: перемотка трансляций будет недоступна. Значительно повышает производительность трансляций на слабых устройствах. Максимальное разрешение 1080p.</string>
+    <string name="live_stream_fix_4k_desc">Внимание: перемотка трансляций будет недоступна. Значительно повышает производительность трансляций. Максимальное разрешение 4K.</string>
     <string name="live_stream_fix">Исправление прямых трансляций (1080p)</string>
+    <string name="live_stream_fix_4k">Исправление прямых трансляций (4K)</string>
     <string name="playback_notifications_fix_desc">Скрывает уведомление о смене воспроизводимого трека. Может быть полезным на прошивках на базе AOSP.</string>
     <string name="playback_notifications_fix">Отключить уведомления о воспроизведении</string>
     <string name="amlogic_fix_desc">Исправление потери кадров на устройствах на базе Amlogic.</string>

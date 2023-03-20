@@ -46,7 +46,8 @@ public class PlayerTweaksData {
     private boolean mIsSetOutputSurfaceWorkaroundEnabled;
     private boolean mIsAudioSyncFixEnabled;
     private boolean mIsKeepFinishedActivityEnabled;
-    private boolean mIsLiveStreamFixEnabled;
+    private boolean mIsHlsStreamsForced;
+    private boolean mIsDashUrlStreamsForced;
     private boolean mIsPlaybackNotificationsDisabled;
     private boolean mIsTunneledPlaybackEnabled;
     private int mPlayerButtons;
@@ -168,13 +169,22 @@ public class PlayerTweaksData {
         persistData();
     }
 
-    public void enableLiveStreamFix(boolean enable) {
-        mIsLiveStreamFixEnabled = enable;
+    public void forceHlsStreams(boolean enable) {
+        mIsHlsStreamsForced = enable;
         persistData();
     }
 
-    public boolean isLiveStreamFixEnabled() {
-        return mIsLiveStreamFixEnabled;
+    public boolean isHlsStreamsForced() {
+        return mIsHlsStreamsForced;
+    }
+
+    public void forceDashUrlStreams(boolean enable) {
+        mIsDashUrlStreamsForced = enable;
+        persistData();
+    }
+
+    public boolean isDashUrlStreamsForced() {
+        return mIsDashUrlStreamsForced;
     }
 
     public void disablePlaybackNotifications(boolean disable) {
@@ -342,7 +352,7 @@ public class PlayerTweaksData {
         mIsSetOutputSurfaceWorkaroundEnabled = Helpers.parseBoolean(split, 7, true);
         mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 8, false);
         mIsKeepFinishedActivityEnabled = Helpers.parseBoolean(split, 9, false);
-        mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, false);
+        mIsHlsStreamsForced = Helpers.parseBoolean(split, 10, false);
         mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTVLauncher(mPrefs.getContext()));
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
         mPlayerButtons = Helpers.parseInt(split, 13, PLAYER_BUTTON_DEFAULT);
@@ -360,17 +370,19 @@ public class PlayerTweaksData {
         mIsLongSpeedListEnabled = Helpers.parseBoolean(split, 25, false);
         mPlayerDataSource = Helpers.parseInt(split, 26, PLAYER_DATA_SOURCE_CRONET);
         mUnlockAllFormats = Helpers.parseBoolean(split, 27, false);
+        mIsDashUrlStreamsForced = Helpers.parseBoolean(split, 28, false);
     }
 
     private void persistData() {
         mPrefs.setData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
                 mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
-                null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
-                mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
+                null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled, mIsHlsStreamsForced,
+                mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
                 null, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
                 mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio, mIsQualityInfoBitrateEnabled,
-                mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats
+                mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
+                mIsDashUrlStreamsForced
         ));
     }
 }
