@@ -454,13 +454,16 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     }
 
     private boolean acceptDashVideoInfo(MediaItemFormatInfo formatInfo) {
-        boolean isLive = formatInfo.isLive() || formatInfo.isLiveContent();
-
-        if (isLive && mPlayerTweaksData.isDashUrlStreamsForced()) {
+        // Not enough info for full length live streams
+        if (formatInfo.isLive() && formatInfo.getStartTimeMs() == 0) {
             return false;
         }
 
-        if (isLive && mPlayerTweaksData.isHlsStreamsForced()) {
+        if (formatInfo.isLive() && mPlayerTweaksData.isDashUrlStreamsForced()) {
+            return false;
+        }
+
+        if (formatInfo.isLive() && mPlayerTweaksData.isHlsStreamsForced()) {
             return false;
         }
 
@@ -472,9 +475,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     }
 
     private boolean acceptDashUrl(MediaItemFormatInfo formatInfo) {
-        boolean isLive = formatInfo.isLive() || formatInfo.isLiveContent();
-
-        if (isLive && mPlayerTweaksData.isHlsStreamsForced() && formatInfo.containsHlsUrl()) {
+        if (formatInfo.isLive() && mPlayerTweaksData.isHlsStreamsForced() && formatInfo.containsHlsUrl()) {
             return false;
         }
 
