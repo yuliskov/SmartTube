@@ -319,10 +319,10 @@
     <string name="player_seek_regular">Reguler</string>
     <string name="player_seek_confirmation_pause">Dengan konfirmasi (jeda saat mencari)</string>
     <string name="player_seek_confirmation_play">Dengan konfirmasi (bermain sambil mencari)</string>
-    <string name="hide_shorts_from_home">Sembunyikan shorts dari Beranda</string>
+    <string name="hide_shorts_from_home">Sembunyikan vidio pendek dari Beranda</string>
     <string name="finish_on_disconnect">Selesaikan aplikasi setelah memutuskan sambungan telepon</string>
     <string name="update_error">Pembaharuan error</string>
-    <string name="hide_shorts_from_history">Sembunyikan shorts dari Riwayat</string>
+    <string name="hide_shorts_from_history">Sembunyikan vidio pendek dari Riwayat</string>
     <string name="disable_screensaver">Nonaktifkan screensaver</string>
     <string name="description_not_found">Deskripsi tidak ditemukan</string>
     <string name="proxy_port_hint">Port proxy</string>
@@ -359,8 +359,10 @@
     <string name="ambilight_ratio_fix">Perbaikan ambilight/rasio aspek/tangkapan layar</string>
     <string name="force_legacy_codecs_desc">Secara signifikan meningkatkan kinerja pada perangkat kelas bawah. Resolusi maksimum adalah 720p.</string>
     <string name="force_legacy_codecs">Paksa codec versi lama (720p)</string>
-    <string name="live_stream_fix_desc">Meningkatkan kinerja streaming langsung secara signifikan pada perangkat kelas bawah. Resolusi maksimum adalah 1080p.</string>
+    <string name="live_stream_fix_desc">Peringatan, tweak ini menonaktifkan pemutaran ulang streaming. Secara signifikan meningkatkan performa live streaming pada perangkat kelas bawah. Resolusi maksimum adalah 1080p.</string>
+    <string name="live_stream_fix_4k_desc">Peringatan, tweak ini menonaktifkan pemutaran ulang streaming. Secara signifikan meningkatkan performa streaming langsung. Resolusi maksimum adalah 4K.</string>
     <string name="live_stream_fix">Perbaikan live streaming (1080p)</string>
+    <string name="live_stream_fix_4k">Perbaikan live stream (4K)</string>
     <string name="playback_notifications_fix_desc">Menyembunyikan pemberitahuan perubahan trek. Bisa berguna pada firmware berbasis AOSP.</string>
     <string name="playback_notifications_fix">Nonaktifkan notifikasi pemutaran</string>
     <string name="amlogic_fix_desc">Perbaikan penurunan frame pada perangkat berbasis Amlogic.</string>
@@ -381,7 +383,7 @@
     <string name="pressing_home_back">dengan menekan HOME atau BACK</string>
     <string name="pressing_back">dengan menekan BACK</string>
     <string name="player_number_key_seek">Cari dengan tombol angka</string>
-    <string name="save_remove_playlist">Tambah/Hapus daftar putar dari bagian Daftar Putar</string>
+    <string name="save_remove_playlist">Simpan/Hapus daftar putar dari bagian Daftar Putar</string>
     <string name="remove_playlist">Hapus daftar putar dari bagian Daftar Putar secara permanen</string>
     <string name="removed_from_playlists">Dihapus dari bagian Daftar Putar</string>
     <string name="saved_to_playlists">Ditambahkan ke bagian Daftar Putar</string>
