@@ -393,7 +393,7 @@
     <string name="pressing_home_back">durch Drücken von HOME oder BACK</string>
     <string name="pressing_back">durch Drücken von BACK</string>
     <string name="player_number_key_seek">Spulen mit Zifferntasten</string>
-    <string name="save_remove_playlist">Wiedergabeliste in der Bibliothek speichern/entfernen</string>
+    <string name="save_remove_playlist">Wiedergabeliste in Mediathek speichern/entfernen</string>
     <string name="remove_playlist">Wiedergabeliste dauerhaft aus Wiedergabelisten-Kategorie entfernen</string>
     <string name="removed_from_playlists">Entfernt aus der Wiedergabelisten-Kategorie</string>
     <string name="saved_to_playlists">Hinzugefügt zur Wiedergabelisten-Kategorie</string>
