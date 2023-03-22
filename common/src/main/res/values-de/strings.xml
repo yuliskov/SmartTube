@@ -370,7 +370,9 @@
     <string name="force_legacy_codecs_desc">Erhebliche Verbesserung der Leistung auf Low-End-Geräten. Die maximale Auflösung beträgt 720p.</string>
     <string name="force_legacy_codecs">Legacy-Codecs erzwingen (720p)</string>
     <string name="live_stream_fix_desc">Achtung, diese Option deaktiviert das Zurückspulen von Streams. Erhebliche Verbesserung der Live-Stream-Leistung auf Low-End-Geräten. Die maximale Auflösung beträgt 1080p.</string>
+    <string name="live_stream_fix_4k_desc">Achtung, diese Option deaktiviert das Zurückspulen von Streams. Erhebliche Verbesserung der Live-Stream-Leistung. Die maximale Auflösung beträgt 4K.</string>
     <string name="live_stream_fix">Live-Stream-Fix (1080p)</string>
+    <string name="live_stream_fix_4k">Live-Stream-Fix (4K)</string>
     <string name="playback_notifications_fix_desc">Ausblenden von Benachrichtigungen. Könnte auf AOSP-basierten Firmwares nützlich sein.</string>
     <string name="playback_notifications_fix">Wiedergabe-Benachrichtigungen deaktivieren</string>
     <string name="amlogic_fix_desc">Frame-Drop-Fix auf Amlogic-basierten Geräten.</string>
@@ -391,7 +393,7 @@
     <string name="pressing_home_back">durch Drücken von HOME oder BACK</string>
     <string name="pressing_back">durch Drücken von BACK</string>
     <string name="player_number_key_seek">Spulen mit Zifferntasten</string>
-    <string name="save_remove_playlist">Wiedergabeliste zur Wiedergabelisten-Kategorie hinzufügen/entfernen</string>
+    <string name="save_remove_playlist">Wiedergabeliste in Mediathek speichern/entfernen</string>
     <string name="remove_playlist">Wiedergabeliste dauerhaft aus Wiedergabelisten-Kategorie entfernen</string>
     <string name="removed_from_playlists">Entfernt aus der Wiedergabelisten-Kategorie</string>
     <string name="saved_to_playlists">Hinzugefügt zur Wiedergabelisten-Kategorie</string>
