@@ -370,7 +370,9 @@
     <string name="force_legacy_codecs_desc">Výrazně zlepšuje výkon na zařízeních nižší třídy. Maximální rozlišení je 720p.</string>
     <string name="force_legacy_codecs">Vynucení starších kodeků (720p)</string>
     <string name="live_stream_fix_desc">Pozor: Přetáčení vysílání nebude k dispozici. Výrazně zlepšuje výkon živého vysílání na zařízeních nižší třídy. Maximální rozlišení je 1080p.</string>
+    <string name="live_stream_fix_4k_desc">Pozor: Přetáčení vysílání nebude k dispozici. Výrazně zlepšuje výkon živého vysílání. Maximální rozlišení je 4K.</string>
     <string name="live_stream_fix">Oprava živého vysílání (1080p)</string>
+    <string name="live_stream_fix_4k">Oprava živého vysílání (4K)</string>
     <string name="playback_notifications_fix_desc">Skryje oznámení změny stopy. Mohlo by to být užitečné pro firmware založený na AOSP.</string>
     <string name="playback_notifications_fix">Zakázat oznámení přehrávání</string>
     <string name="amlogic_fix_desc">Oprava poklesu snímků na Amlogic zařízeních.</string>
