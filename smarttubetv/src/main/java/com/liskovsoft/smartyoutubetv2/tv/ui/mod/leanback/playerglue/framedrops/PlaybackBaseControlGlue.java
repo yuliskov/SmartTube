@@ -123,6 +123,7 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
     boolean mIsPlaying = false;
     boolean mFadeWhenPlaying = true;
 
+    CharSequence mBody;
     CharSequence mSubtitle;
     CharSequence mTitle;
     Drawable mCover;
@@ -549,6 +550,28 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
      */
     public Drawable getArt() {
         return mCover;
+    }
+
+    /**
+     * Sets the media body (located under subtitle). The body will be rendered by default description presenter
+     * {@link PlaybackTransportRowPresenter#setDescriptionPresenter(Presenter)}.
+     * @param body Body to set.
+     */
+    public void setBody(CharSequence body) {
+        if (TextUtils.equals(body, mBody)) {
+            return;
+        }
+        mBody = body;
+        if (getHost() != null) {
+            getHost().notifyPlaybackRowChanged();
+        }
+    }
+
+    /**
+     * Return The media body (located under subtitle).
+     */
+    public CharSequence getBody() {
+        return mBody;
     }
 
     /**

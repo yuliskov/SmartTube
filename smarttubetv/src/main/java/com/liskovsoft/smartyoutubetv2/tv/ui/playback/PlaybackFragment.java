@@ -1300,6 +1300,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void setSeekPreviewTitle(String title) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setSeekPreviewTitle(title);
+            mPlayerGlue.setBody(title);
         }
     }
 

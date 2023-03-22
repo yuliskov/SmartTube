@@ -148,6 +148,8 @@ public class PlaybackTransportControlGlue<T extends PlayerAdapter>
                         PlaybackBaseControlGlue glue = (PlaybackBaseControlGlue) obj;
                         viewHolder.getTitle().setText(glue.getTitle());
                         viewHolder.getSubtitle().setText(glue.getSubtitle());
+                        // MOD: add extra title line
+                        viewHolder.getBody().setText(glue.getBody());
                     }
                 };
 
