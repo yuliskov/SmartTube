@@ -136,6 +136,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         if (item.equals(mVideo)) {
+            // Use cached data
             startSponsorWatcher();
             return;
         }
@@ -147,7 +148,6 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                         segments -> {
                             mVideo = item;
                             mOriginalSegments = segments;
-                            mActiveSegments = new ArrayList<>(segments);
                             startSponsorWatcher();
                         },
                         error -> {
@@ -157,9 +157,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private void startSponsorWatcher() {
-        if (mActiveSegments == null) {
+        if (mOriginalSegments == null || mOriginalSegments.isEmpty()) {
             return;
         }
+
+        mActiveSegments = new ArrayList<>(mOriginalSegments);
 
         getController().setSeekBarSegments(null); // reset colors
 
