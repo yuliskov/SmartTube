@@ -89,7 +89,7 @@ import java.util.Map;
  */
 public class PlaybackFragment extends SeekModePlaybackFragment implements PlaybackView, PlaybackController {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
-    private static final int UPDATE_DELAY_MS = 16;
+    private static final int UPDATE_DELAY_MS = 300;
     private static final int SUGGESTIONS_START_INDEX = 1;
     private VideoPlayerGlue mPlayerGlue;
     private SimpleExoPlayer mPlayer;
