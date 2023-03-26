@@ -519,4 +519,15 @@
   <string name="clear_search_history">Keresési előzmények törlése</string>
   <string name="remove_from_subscriptions">Eltávolítás a feliratkozásokból</string>
   <string name="disable_ok_long_press_desc">Hibás vezérlőkhöz való, ahol az OK gomb nem működik megfelelően</string>
+  <string name="live_stream_fix_4k_desc">Figyelem, ez a módosítás letiltja az adatfolyamok visszatekerését. Jelentősen javítja az élő közvetítés teljesítményét. A maximális felbontás 4K.</string>
+  <string name="live_stream_fix_4k">Élő közvetítés javítása (4K)</string>
+  <string name="player_long_speed_list">Hosszú sebességlista</string>
+  <string name="alt_app_icon">Alternatív alkalmazás ikonja (újraindítás szükséges)</string>
+  <string name="network_stack">A %s hálózati verem előnyben részesítése</string>
+  <string name="cronet_desc">A Cronet a Chromium hálózati verem. A Cronet csökkentheti a várakozási időt és növelheti a hálózati teljesítményt, ami segíthet a pufferelési problémákon.</string>
+  <string name="unlock_all_formats">Minden videó formátum feloldása</string>
+  <string name="unlock_all_formats_desc">Egyes eszközökön a firmware tévesen azt jelenti, hogy bizonyos formátumok nem támogatottak, még akkor is, ha támogatottak.\n (pl. az 1080p okostévék általában nem támogatottként jelzik a 4k-t).</string>
+  <string name="okhttp_desc">Stabil, de lassú hálózati verem.</string>
+  <string name="select_channel_section">Nyissa meg a megfelelő kategóriát, amikor az alkalmazás az ATV csatornákon keresztül indul el.</string>
+  <string name="enable_voice_search_desc">A hivatalos alkalmazást egy úgynevezett híd váltja fel. A híd segít a globális keresési kérelmek átvitelében az alkalmazásunkba.</string>
 </resources>
