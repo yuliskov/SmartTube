@@ -39,6 +39,7 @@ public class PlayerTweaksData {
     private final AppPrefs mPrefs;
     private boolean mIsAmlogicFixEnabled;
     private boolean mIsFrameDropFixEnabled;
+    private boolean mIsFrameDropSonyFixEnabled;
     private boolean mIsSnapToVsyncDisabled;
     private boolean mIsProfileLevelCheckSkipped;
     private boolean mIsSWDecoderForced;
@@ -94,6 +95,15 @@ public class PlayerTweaksData {
 
     public boolean isFrameDropFixEnabled() {
         return mIsFrameDropFixEnabled;
+    }
+
+    public void enableFrameDropSonyFix(boolean enable) {
+        mIsFrameDropSonyFixEnabled = enable;
+        persistData();
+    }
+
+    public boolean isFrameDropSonyFixEnabled() {
+        return mIsFrameDropSonyFixEnabled;
     }
 
     public void disableSnapToVsync(boolean disable) {
@@ -371,6 +381,7 @@ public class PlayerTweaksData {
         mPlayerDataSource = Helpers.parseInt(split, 26, PLAYER_DATA_SOURCE_CRONET);
         mUnlockAllFormats = Helpers.parseBoolean(split, 27, false);
         mIsDashUrlStreamsForced = Helpers.parseBoolean(split, 28, false);
+        mIsFrameDropSonyFixEnabled = Helpers.parseBoolean(split, 29, false);
     }
 
     private void persistData() {
@@ -382,7 +393,7 @@ public class PlayerTweaksData {
                 null, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
                 mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio, mIsQualityInfoBitrateEnabled,
                 mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
-                mIsDashUrlStreamsForced
+                mIsDashUrlStreamsForced, mIsFrameDropSonyFixEnabled
         ));
     }
 }

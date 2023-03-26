@@ -333,6 +333,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),
                 mPlayerTweaksData.isSWDecoderForced()));
 
+        options.add(UiOptionItem.from("Frame drop fix on Sony TV",
+                option -> mPlayerTweaksData.enableFrameDropSonyFix(option.isSelected()),
+                mPlayerTweaksData.isFrameDropSonyFixEnabled()));
+
         options.add(UiOptionItem.from("Frame drop fix (experimental)",
                 option -> mPlayerTweaksData.enableFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isFrameDropFixEnabled()));

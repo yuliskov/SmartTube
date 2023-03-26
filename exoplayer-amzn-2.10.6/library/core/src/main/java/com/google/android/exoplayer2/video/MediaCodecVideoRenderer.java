@@ -1129,23 +1129,19 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
   }
 
   /**
-   * MOD: Frame drop fixes on Sony Bravia<br/>
-   * https://github.com/google/ExoPlayer/issues/6348#issuecomment-718986083
+   * MOD: Make function overridable
    */
-  private static boolean isBufferLate(long earlyUs) {
+  protected boolean isBufferLate(long earlyUs) {
     // Class a buffer as late if it should have been presented more than 30 ms ago.
     return earlyUs < -30000;
-    //return earlyUs < -1000000;
   }
 
   /**
-   * MOD: Frame drop fixes on Sony Bravia<br/>
-   * https://github.com/google/ExoPlayer/issues/6348#issuecomment-718986083
+   * MOD: Make function overridable
    */
-  private static boolean isBufferVeryLate(long earlyUs) {
+  protected boolean isBufferVeryLate(long earlyUs) {
     // Class a buffer as very late if it should have been presented more than 500 ms ago.
     return earlyUs < -500000;
-    //return earlyUs < -1500000;
   }
 
   @TargetApi(23)
