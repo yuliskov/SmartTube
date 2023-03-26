@@ -159,7 +159,7 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
                     new DebugInfoMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
                         playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
 
-            videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
+            videoRenderer.enableSetOutputSurfaceWorkaround(true); // Force enable?
 
             replaceVideoRenderer(out, videoRenderer);
 
@@ -173,7 +173,7 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
         videoRenderer.enableFrameDropFix(mPlayerTweaksData.isFrameDropFixEnabled());
         videoRenderer.enableFrameDropSonyFix(mPlayerTweaksData.isFrameDropSonyFixEnabled());
         videoRenderer.enableAmlogicFix(mPlayerTweaksData.isAmlogicFixEnabled());
-        videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
+        videoRenderer.enableSetOutputSurfaceWorkaround(true); // Force enable?
 
         replaceVideoRenderer(out, videoRenderer);
     }
