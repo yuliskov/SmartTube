@@ -66,6 +66,7 @@ public class GeneralData {
     private boolean mIsVPNEnabled;
     private boolean mIsGlobalClockEnabled;
     private String mSettingsPassword;
+    private String mMasterPassword;
     private boolean mIsChildModeEnabled;
     private boolean mIsHistoryEnabled;
     private boolean mIsAltAppIconEnabled;
@@ -632,6 +633,16 @@ public class GeneralData {
         return mSettingsPassword;
     }
 
+    public void setMasterPassword(String password) {
+        mMasterPassword = password;
+
+        persistState();
+    }
+
+    public String getMasterPassword() {
+        return mMasterPassword;
+    }
+
     public void enableChildMode(boolean enable) {
         mIsChildModeEnabled = enable;
 
@@ -751,6 +762,7 @@ public class GeneralData {
         mIsAltAppIconEnabled = Helpers.parseBoolean(split, 38, false);
         mVersionCode = Helpers.parseInt(split, 39, -1);
         mIsSelectChannelSectionEnabled = Helpers.parseBoolean(split, 40, true);
+        mMasterPassword = Helpers.parseStr(split, 41);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -811,6 +823,6 @@ public class GeneralData {
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
                 playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
-                mScreenDimmingTimeoutMs, mScreenDimmingMode, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled));
+                mScreenDimmingTimeoutMs, mScreenDimmingMode, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword));
     }
 }

@@ -525,4 +525,6 @@
     <string name="okhttp_desc">Цей мережевий стек є найповільнішим, але має добру стабільність.</string>
     <string name="select_channel_section">Відкривати відповідний розділ, коли застосунок запущений з каналів ATV</string>
     <string name="enable_voice_search_desc">Офіційний застосунок буде замінений на так званий міст. Міст допомагає передавати запити глобального пошуку в наш застосунок.</string>
+    <string name="enable_master_password">Увімкнути головний пароль</string>
+    <string name="enter_master_password">Введіть головний пароль</string>
 </resources>

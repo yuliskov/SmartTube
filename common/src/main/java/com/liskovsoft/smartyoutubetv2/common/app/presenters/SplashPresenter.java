@@ -10,6 +10,8 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -20,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
+import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.disposables.Disposable;
@@ -67,7 +70,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         showAccountSelection();
 
         if (getView() != null) {
-            applyNewIntent(getView().getNewIntent());
+            checkMasterPassword(() -> applyNewIntent(getView().getNewIntent()));
         }
     }
 
@@ -299,6 +302,28 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             if (processor.process(intent)) {
                 break;
             }
+        }
+    }
+
+    private void checkMasterPassword(Runnable onSuccess) {
+        String password = GeneralData.instance(getContext()).getMasterPassword();
+
+        if (password == null) {
+            onSuccess.run();
+        } else {
+            SimpleEditDialog.show(
+                    getContext(),
+                    "", newValue -> {
+                        if (password.equals(newValue)) {
+                            onSuccess.run();
+                            return true;
+                        }
+
+                        return false;
+                    },
+                    getContext().getString(R.string.enter_master_password),
+                    true
+            );
         }
     }
 }

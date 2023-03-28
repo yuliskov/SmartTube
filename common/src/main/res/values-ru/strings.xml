@@ -525,4 +525,6 @@
     <string name="okhttp_desc">Этот сетевой стек является самым медленным, но имеет хорошую стабильность.</string>
     <string name="select_channel_section">Открывать соответствующий раздел при запуске приложения с каналов ATV.</string>
     <string name="enable_voice_search_desc">Официальное приложение будет заменено так называемым мостом. Мост помогает передавать глобальные поисковые запросы в наше приложение.</string>
+    <string name="enable_master_password">Включить мастер-пароль</string>
+    <string name="enter_master_password">Введите мастер-пароль</string>
 </resources>

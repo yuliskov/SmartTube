@@ -391,6 +391,16 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.getSettingsPassword() != null));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.enable_master_password),
+                option -> {
+                    if (option.isSelected()) {
+                        showMasterPasswordDialog(settingsPresenter, null);
+                    } else {
+                        mGeneralData.setMasterPassword(null);
+                    }
+                },
+                mGeneralData.getMasterPassword() != null));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_global_clock),
                 option -> {
                     mGeneralData.enableGlobalClock(option.isSelected());
@@ -527,8 +537,32 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     if (onSuccess != null) {
                         onSuccess.run();
                     }
+                    return true;
                 },
                 getContext().getString(R.string.protect_settings_with_password),
+                true
+        );
+    }
+
+    private void showMasterPasswordDialog(AppDialogPresenter settingsPresenter, Runnable onSuccess) {
+        if (mGeneralData.getMasterPassword() != null) {
+            if (onSuccess != null) {
+                onSuccess.run();
+            }
+            return;
+        }
+
+        settingsPresenter.closeDialog();
+        SimpleEditDialog.show(
+                getContext(),
+                "", newValue -> {
+                    mGeneralData.setMasterPassword(newValue);
+                    if (onSuccess != null) {
+                        onSuccess.run();
+                    }
+                    return true;
+                },
+                getContext().getString(R.string.enable_master_password),
                 true
         );
     }

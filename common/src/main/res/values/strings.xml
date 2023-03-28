@@ -485,7 +485,7 @@
     <string name="content_block_status">Check SponsorBlock status</string>
     <string name="player_show_quality_info_bitrate">Add bitrate into the quality info</string>
     <string name="player_speed_button_old_behavior">Revert old behavior of the speed button</string>
-    <string name="protect_settings_with_password">Protect all settings with a password</string>
+    <string name="protect_settings_with_password">Protect all settings with password</string>
     <string name="enter_settings_password">Enter settings password</string>
     <string name="child_mode">Child mode</string>
     <string name="child_mode_desc">In this mode, the user can\'t use search or see any suggested content. The settings will be under the password.</string>
@@ -534,4 +534,6 @@
     <string name="okhttp_desc">This network stack is the slowest one but has good stability.</string>
     <string name="select_channel_section">Open corresponding section when the app launched from ATV Channels</string>
     <string name="enable_voice_search_desc">The official app will be replaced with a so-called bridge. A bridge helps to transfer global search requests to our app.</string>
+    <string name="enable_master_password">Enable master password</string>
+    <string name="enter_master_password">Enter master password</string>
 </resources>

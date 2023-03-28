@@ -11,7 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 
 public class SimpleEditDialog {
     public interface OnChange {
-        void onChange(String newValue);
+        boolean onChange(String newValue);
     }
 
     public static void show(Context context, String defaultValue, OnChange onChange, String dialogTitle) {
@@ -46,8 +46,11 @@ public class SimpleEditDialog {
                 return;
             }
 
-            configDialog.dismiss();
-            onChange.onChange(newValue);
+            boolean dismiss = onChange.onChange(newValue);
+
+            if (dismiss) {
+                configDialog.dismiss();
+            }
         });
 
         configDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener((view) -> configDialog.dismiss());

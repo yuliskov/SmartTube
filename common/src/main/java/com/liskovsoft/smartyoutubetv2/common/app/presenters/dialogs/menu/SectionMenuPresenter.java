@@ -185,6 +185,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
                             newValue -> {
                                 mSection.setTitle(newValue);
                                 BrowsePresenter.instance(getContext()).renameSection(mSection);
+                                return true;
                             },
                             getContext().getString(R.string.rename_section)
                     );
