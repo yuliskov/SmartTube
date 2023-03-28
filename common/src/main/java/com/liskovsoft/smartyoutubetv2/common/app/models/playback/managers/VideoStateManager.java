@@ -28,7 +28,9 @@ import io.reactivex.disposables.Disposable;
 public class VideoStateManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = VideoStateManager.class.getSimpleName();
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
-    private static final long LIVE_THRESHOLD_MS = 90_000;
+    private static final long LIVE_THRESHOLD_MS = 90_000; // should be greater than the live buffer
+    private static final long LIVE_BUFFER_MS = 60_000;
+    private static final long BEGIN_THRESHOLD_MS = 10_000;
     private boolean mIsPlayEnabled;
     private Video mVideo = new Video();
     private FormatItem mTempVideoFormat;
@@ -42,7 +44,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     private boolean mIsBuffering;
     private final Runnable mStreamEndCheck = () -> {
         if (getVideo() != null && getVideo().isLive && mIsBuffering &&
-                getController().getDurationMs() - getController().getPositionMs() < 3 * 60_000) {
+                getController().getDurationMs() - getController().getPositionMs() < 3 * LIVE_BUFFER_MS) {
             getController().reloadPlayback();
         }
     };
@@ -83,9 +85,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public boolean onPreviousClicked() {
-        boolean isFarFromStart = getController().getPositionMs() > 10_000;
-
-        if (isFarFromStart) {
+        // Seek to the start on prev
+        if (getController().getPositionMs() > BEGIN_THRESHOLD_MS) {
             saveState(); // in case the user wants to go to previous video
             getController().setPositionMs(0);
             return true;
@@ -96,6 +97,12 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public boolean onNextClicked() {
+        // Seek to the actual live position on next
+        if (getVideo() != null && getVideo().isLive && (getController().getDurationMs() - getController().getPositionMs() > LIVE_THRESHOLD_MS)) {
+            getController().setPositionMs(getController().getDurationMs() - LIVE_BUFFER_MS);
+            return true;
+        }
+
         setPlayEnabled(true);
 
         saveState();
@@ -425,7 +432,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         // Set actual position for live videos with uncommon length
         if ((state == null || state.durationMs - state.positionMs < LIVE_THRESHOLD_MS) && item.isLive) {
             // Add buffer. Should I take into account segment offset???
-            state = new State(item.videoId, getController().getDurationMs() - 60_000);
+            state = new State(item.videoId, getController().getDurationMs() - LIVE_BUFFER_MS);
         }
 
         // Do I need to check that item isn't live? (state != null && !item.isLive)
@@ -545,7 +552,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     }
 
     private void setPositionMs(long positionMs) {
-        boolean samePositions = Math.abs(positionMs - getController().getPositionMs()) < 10_000;
+        boolean samePositions = Math.abs(positionMs - getController().getPositionMs()) < BEGIN_THRESHOLD_MS;
         if (!samePositions) {
             getController().setPositionMs(positionMs);
         }
