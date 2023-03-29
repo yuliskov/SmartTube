@@ -19,6 +19,10 @@ public class SimpleEditDialog {
     }
 
     public static void show(Context context, String defaultValue, OnChange onChange, String dialogTitle, boolean emptyValueCheck) {
+        show(context, defaultValue, onChange, dialogTitle, emptyValueCheck, null);
+    }
+
+    public static void show(Context context, String defaultValue, OnChange onChange, String dialogTitle, boolean emptyValueCheck, Runnable onDismiss) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppDialog);
         LayoutInflater inflater = LayoutInflater.from(context);
         View contentView = inflater.inflate(R.layout.simple_edit_dialog, null);
@@ -36,6 +40,9 @@ public class SimpleEditDialog {
                 .setNegativeButton(android.R.string.cancel, (dialog, which) -> { })
                 .create();
 
+        if (onDismiss != null) {
+            configDialog.setOnDismissListener(dialog -> onDismiss.run());
+        }
         configDialog.show();
 
         configDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((view) -> {
