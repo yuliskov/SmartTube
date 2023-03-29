@@ -307,7 +307,8 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private void checkMasterPassword(Runnable onSuccess) {
         String password = GeneralData.instance(getContext()).getMasterPassword();
 
-        if (password == null) {
+        // No passwd or the app already started
+        if (password == null || ViewManager.instance(getContext()).getTopView() != null) {
             onSuccess.run();
             getView().finishView();
         } else {
