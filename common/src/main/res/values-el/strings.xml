@@ -518,4 +518,14 @@
   <string name="sort_by_date">Ημερομηνία μεταμόρφωσης</string>
   <string name="sort_by_rating">Βαθμολογία </string>
   <string name="clear_search_history">Διαγραφή ιστορικού αναζήτησης</string>
+  <string name="remove_from_subscriptions">Απόκρυψη</string>
+  <string name="player_long_speed_list">Λίστα υψηλής ταχύτητας</string>
+  <string name="alt_app_icon">Εναλλακτικό εικονίδιο εφαρμογής (απαιτείται επανεκκίνηση)</string>
+  <string name="network_stack">Προτίμηση στοίβας δικτύου %s</string>
+  <string name="cronet_desc">Το Cronet είναι στοίβα δικτύου Chromium. Το Cronet μπορεί να μειώσει την καθυστέρηση και να αυξήσει την απόδοση του δικτύου, που μπορεί να βελτιώσει τα προβλήματα με το buffering.</string>
+  <string name="unlock_all_formats">Ξεκλείδωμα όλων των μορφών βίντεο</string>
+  <string name="unlock_all_formats_desc">Σε κάποιες συσκευές, το λογισμικό αναφέρει εσφαλμένα κάποιες μορφές ως μη υποστηριζόμενες ακόμα και αν είναι.\nundefined(πχ 1080p smart TVs τείνουν να αναφέρουν το 4Κ ως μη υποστηριζόμενο).</string>
+  <string name="okhttp_desc">Αυτή η στοίβα δικτύου είναι η πιο αργή αλλά, παρέχει σταθερότητα.</string>
+  <string name="select_channel_section">Άνοιγμα σχετικού τμήματος όταν η εφαρμογή ανοίγει από τα Κανάλια ATV</string>
+  <string name="enable_voice_search_desc">Η επίσημη εφαρμογή θα αντικατασταθεί από τη λεγόμενη γέφυρα. Μια γέφυρα βοηθάει στη μεταφορά καθολικών αποτελεσμάτων αναζήτησης στην εφαρμογή μας.</string>
 </resources>
