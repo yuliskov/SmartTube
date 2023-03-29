@@ -370,7 +370,9 @@
     <string name="force_legacy_codecs_desc">Migliora significativamente le prestazioni sui dispositivi di fascia bassa. La risoluzione massima è 720p.</string>
     <string name="force_legacy_codecs">Forza codec obsoleti (720p)</string>
     <string name="live_stream_fix_desc">Attenzione, questa modifica disabilita il riavvolgimento dei flussi. Migliora significativamente le prestazioni delle trasmissioni live sui dispositivi di fascia bassa. La risoluzione massima è 1080p.</string>
+    <string name="live_stream_fix_4k_desc">Attenzione, questa modifica disabilita il riavvolgimento dei flussi. Migliora significativamente le prestazioni delle trasmissioni live. La risoluzione massima è 4K.</string>
     <string name="live_stream_fix">Correzione trasmissione live (1080p)</string>
+    <string name="live_stream_fix_4k">Correzione trasmissione live (4K)</string>
     <string name="playback_notifications_fix_desc">Nasconde le notifiche di cambio traccia. Potrebbe essere utile su firmware basati su AOSP.</string>
     <string name="playback_notifications_fix">Disabilita le notifiche di riproduzione</string>
     <string name="amlogic_fix_desc">Correzione del frame drop su dispositivi basati su Amlogic.</string>
@@ -389,9 +391,9 @@
     <string name="subtitle_position">Spostamento in basso dei sottotitoli</string>
     <string name="pressing_home">premendo HOME</string>
     <string name="pressing_home_back">premendo HOME o INDIETRO</string>
-    <string name="pressing_back">premendo INDIETRO</string>														  
+    <string name="pressing_back">premendo INDIETRO</string>
     <string name="player_number_key_seek">Ricerca con i tasti numerici</string>
-    <string name="save_remove_playlist">Aggiungi/Elimina playlist dalla sezione Playlist</string>
+    <string name="save_remove_playlist">Salva/Elimina la playlist dalla Libreria</string>
     <string name="remove_playlist">Elimina la playlist dalla sezione Playlist in modo permanente</string>
     <string name="removed_from_playlists">Eliminata dalla sezione Playlist</string>
     <string name="saved_to_playlists">Aggiunta alla sezione Playlist</string>
