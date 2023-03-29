@@ -534,4 +534,6 @@
     <string name="okhttp_desc">Dieser Netzwerkstack ist am langsamsten, hat aber eine gute Stabilität.</string>
     <string name="select_channel_section">Die entsprechende Kategorie öffnen, wenn die App über ATV-Kanäle gestartet wird</string>
     <string name="enable_voice_search_desc">Die offizielle App wird durch eine sogenannte Bridge ersetzt. Eine Bridge hilft dabei, globale Suchanfragen an unsere App zu übertragen.</string>
+    <string name="enable_master_password">Master-Passwort aktivieren</string>
+    <string name="enter_master_password">Master-Passwort eingeben</string>
 </resources>
