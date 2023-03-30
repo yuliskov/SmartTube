@@ -358,7 +358,7 @@
     <string name="openvpn_address_invalid">Indirizzo di configurazione OpenVPN non impostato.</string>
     <string name="internet_censorship">Censura su Internet</string>
     <string name="rename_section">Rinomina questa sezione</string>
-    <string name="simple_edit_value_hint">Nuovo valore</string>
+    <string name="simple_edit_value_hint">Immetti valore</string>
     <string name="seek_interval">Cerca intervallo</string>
     <string name="seek_interval_sec">%s sec</string>
     <string name="subtitle_system">Stile del sistema (Impostazioni Android / Accessibilità)</string>
@@ -486,7 +486,7 @@
     <string name="player_show_quality_info_bitrate">Aggiungi bitrate nelle informazioni sulla qualità</string>
     <string name="player_speed_button_old_behavior">Ripristina il vecchio comportamento del pulsante di velocità</string>
     <string name="protect_settings_with_password">Proteggi tutte le Impostazioni con una password</string>
-    <string name="enter_settings_password">Immetti la password delle Impostazioni</string>
+    <string name="enter_settings_password">Immetti password per le Impostazioni</string>
     <string name="child_mode">Modalità bambino</string>
     <string name="child_mode_desc">In questa modalità, l\'utente non può utilizzare la ricerca o visualizzare alcun contenuto suggerito. Le impostazioni saranno protette da password.</string>
     <string name="lost_setting_warning">Le impostazioni dell\'app verranno modificate. Assicurati di aver creato un backup delle impostazioni.</string>
@@ -534,4 +534,6 @@
     <string name="okhttp_desc">Questo stack di rete è il più lento ma ha una buona stabilità.</string>
     <string name="select_channel_section">Apri la sezione corrispondente quando l\'app è stata avviata dai canali ATV</string>
     <string name="enable_voice_search_desc">L\'app ufficiale verrà sostituita da un cosiddetto bridge (ponte). Un bridge aiuta a trasferire le richieste di ricerca globali alla nostra app.</string>
+    <string name="enable_master_password">Abilita password principale.</string>
+    <string name="enter_master_password">Immetti password principale</string>
 </resources>
