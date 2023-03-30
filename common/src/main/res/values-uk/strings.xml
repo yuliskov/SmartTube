@@ -354,7 +354,7 @@
     <string name="openvpn_address_invalid">Адреса файла конфігурації не встановлена.</string>
     <string name="internet_censorship">Цензура в Інтернеті</string>
     <string name="rename_section">Перейменувати цей розділ</string>
-    <string name="simple_edit_value_hint">Нове значення</string>
+    <string name="simple_edit_value_hint">Введіть значення</string>
     <string name="seek_interval">Інтервал перемотування</string>
     <string name="seek_interval_sec">%s сек</string>
     <string name="subtitle_system">Системний стиль (Налаштування Андроід > Спец. можливості)</string>

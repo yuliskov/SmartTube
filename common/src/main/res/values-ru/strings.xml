@@ -354,7 +354,7 @@
     <string name="openvpn_address_invalid">Адрес файла конфигурации не задан.</string>
     <string name="internet_censorship">Интернет-цензура</string>
     <string name="rename_section">Переименовать этот раздел</string>
-    <string name="simple_edit_value_hint">Новое значение</string>
+    <string name="simple_edit_value_hint">Введите значение</string>
     <string name="seek_interval">Интервал перемотки</string>
     <string name="seek_interval_sec">%s сек</string>
     <string name="subtitle_system">Системный стиль (Настройки Андроид > Спец. возможности)</string>
