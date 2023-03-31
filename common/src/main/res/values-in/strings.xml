@@ -17,7 +17,7 @@
     <string name="library_signin_subtitle">Masuk untuk melihat perpustakaan Anda</string>
     <string name="action_signin">MASUK</string>
     <string name="title_video_formats">Format vidio</string>
-    <string name="title_audio_formats">Format audio</string>
+    <string name="title_audio_formats">Format suara</string>
     <string name="subtitle_category_title">Subtitle</string>
     <string name="playback_queue_category_title">Antrian pemutaran</string>
     <string name="video_max_quality">Otomatis (kualitas maks)</string>
@@ -29,7 +29,7 @@
     <string name="not_implemented">Tidak diimplementasikan</string>
     <string name="option_background_playback_off">Dimatikan</string>
     <string name="option_background_playback_pip">Gambar di dalam gambar</string>
-    <string name="option_background_playback_only_audio">Hanya audio</string>
+    <string name="option_background_playback_only_audio">Hanya suara</string>
     <string name="playback_settings">Pengaturan pemutaran</string>
     <string name="video_speed">Kecepatan vidio</string>
     <string name="resolution_switch">Ganti resolusi</string>
@@ -43,7 +43,7 @@
     <string name="dialog_add_to_playlist">Tambahkan ke Daftar Putar</string>
     <string name="msg_signed_users_only">Hanya pengguna yang terdaftar</string>
     <string name="msg_cant_load_content">Ups. Tidak dapat memuat konten.</string>
-    <string name="title_video_presets">Prasetel Video</string>
+    <string name="title_video_presets">Prasetel Vidio</string>
     <string name="settings_accounts">Akun</string>
     <string name="settings_left_panel">Edit kategori</string>
     <string name="settings_themes">Tema</string>
@@ -111,7 +111,7 @@
     <string name="repeat_mode_one">Ulangi vidio saat ini</string>
     <string name="repeat_mode_pause">Jeda pemutaran setelah setiap vidio</string>
     <string name="repeat_mode_pause_alt">Jeda pemutaran setelah setiap vidio yang bukan daftar putar</string>
-    <string name="repeat_mode_none">Hentikan pemutaran setelah satu video</string>
+    <string name="repeat_mode_none">Hentikan pemutaran setelah satu vidio</string>
     <string name="subscribed_to_channel">Berlangganan ke saluran</string>
     <string name="unsubscribed_from_channel">Berhenti berlangganan dari saluran</string>
     <string name="subtitle_yellow_transparent">Kuning latar belakang transparan</string>
@@ -157,7 +157,7 @@
     <string name="wait_data_loading">Harap tunggu sementara data sedang dimuat…</string>
     <string name="auto_frame_rate_pause">Jeda kecepatan bingkai otomatis</string>
     <string name="auto_frame_rate_applying">Menerapkan frekuensi gambar otomatis %sx%s@%s</string>
-    <string name="audio_shift">Pergeseran audio</string>
+    <string name="audio_shift">Pergeseran suara</string>
     <string name="player_remember_speed">Ingat kecepatan</string>
     <string name="mark_channel_as_watched">Tandai sebagai telah diawasi</string>
     <string name="channel_marked_as_watched">Channel telah ditandai sebagai ditonton</string>
@@ -197,19 +197,19 @@
     <string name="video_preset_disabled">Tanpa prasetel</string>
     <string name="video_preset_enabled">Format vidio selanjutnya akan diatur sesuai prasetel</string>
     <string name="player_sleep_timer">Pengatur waktu tidur</string>
-    <string name="player_show_quality_info">Tampilkan info kualitas video</string>
-    <string name="player_remember_each_speed">Ingat setiap kecepatan video</string>
+    <string name="player_show_quality_info">Tampilkan info kualitas vidio</string>
+    <string name="player_remember_each_speed">Ingat setiap kecepatan vidio</string>
     <string name="player_remember_speed_none">Tidak ada</string>
     <string name="player_remember_speed_all">Sama di semua vidio</string>
-    <string name="player_remember_speed_each">Per setiap video</string>
-    <string name="msg_player_error_source">Tidak dapat mengunduh video</string>
+    <string name="player_remember_speed_each">Per setiap vidio</string>
+    <string name="msg_player_error_source">Tidak dapat mengunduh vidio</string>
     <string name="msg_player_error_renderer">Format vidio yang dipilih tidak didukung</string>
-    <string name="msg_player_error_unexpected">Kesalahan dekoder video tidak dikenal</string>
+    <string name="msg_player_error_unexpected">Kesalahan dekoder vidio tidak dikenal</string>
     <string name="video_aspect">Rasio aspek</string>
     <string name="player_tweaks">Opsi pengembang</string>
     <string name="header_uploads">Unggahan</string>
     <string name="player_show_global_clock">Tampilkan jam di layar terus-menerus</string>
-    <string name="player_show_global_ending_time">Tampilkan waktu akhir video di layar terus-menerus</string>
+    <string name="player_show_global_ending_time">Tampilkan waktu akhir vidio di layar terus-menerus</string>
     <string name="uploads_old_look">Kembalikan tampilan lama bagian Unggahan</string>
     <string name="background_playback_activation">Pemutaran latar belakang (aktivasi)</string>
     <string name="channels_old_look">Kembalikan tampilan lama bagian Saluran</string>
@@ -262,9 +262,9 @@
     <string name="added_to">Ditambahkan ke %s</string>
     <string name="removed_from">Dihapus dari %s</string>
     <string name="video_preset_adaptive">Adaptif</string>
-    <string name="content_block_preview_recap">Pratinjau atau rekap video</string>
+    <string name="content_block_preview_recap">Pratinjau atau rekap vidio</string>
     <string name="content_block_highlight">Titik atau sorot vidio</string>
-    <string name="removed_from_history">Video telah dihapus dari riwayat</string>
+    <string name="removed_from_history">Vidio telah dihapus dari riwayat</string>
     <string name="remove_from_history">Hapus dari riwayat</string>
     <string name="upload_date">Tanggal unggah</string>
     <string name="upload_date_any">Sepanjang waktu</string>
@@ -287,10 +287,10 @@
     <string name="move_section_down">Pindahkan bagian ke bawah</string>
     <string name="player_buttons">Atur tombol pemutar</string>
     <string name="action_playlist_add">Tambahkan ke daftar putar</string>
-    <string name="action_video_stats">Statistik video</string>
+    <string name="action_video_stats">Statistik vidio</string>
     <string name="action_subscribe">Langganan</string>
     <string name="action_channel">Buka saluran</string>    
-    <string name="action_video_info">Deskripsi Video</string>
+    <string name="action_video_info">Deskripsi Vidio</string>
     <string name="action_screen_off">Layar mati</string>
     <string name="action_playback_queue">Antrian pemutaran</string>
     <string name="action_video_speed">Kecepatan vidio</string>
@@ -301,7 +301,7 @@
     <string name="action_repeat_mode">Mode pemutaran</string>
     <string name="action_next">Vidio berikutnya</string>
     <string name="action_previous">Vidio sebelumnya</string>
-    <string name="action_high_quality">Kualitas video</string>
+    <string name="action_high_quality">Kualitas vidio</string>
     <string name="content_block_no_skipping_mode">Mode tanpa lewati</string>
     <string name="content_block_action_type">Pilih tindakan</string>
     <string name="content_block_action_none">Tidak melakukan apapun</string>
@@ -353,8 +353,8 @@
     <string name="seek_interval_sec">%s detik</string>
     <string name="subtitle_system">Gaya system (AndroidPengaturan Android > Aksesibilitas)</string>
     <string name="subtitle_scale">Ukuran subtitle</string>
-    <string name="audio_sync_fix_desc">Cara alternatif untuk menyinkronkan audio/video. Ini dianggap usang, tetapi dalam beberapa kasus, dapat membantu.</string>
-    <string name="audio_sync_fix">Perbaikan sinkronisasi audio</string>
+    <string name="audio_sync_fix_desc">Cara alternatif untuk menyinkronkan suara/vidio. Ini dianggap usang, tetapi dalam beberapa kasus, dapat membantu.</string>
+    <string name="audio_sync_fix">Perbaikan sinkronisasi suara</string>
     <string name="ambilight_ratio_fix_desc">Memperbaiki pencahayaan bias yang tidak ada. Memperbaiki rasio aspek yang salah. Memperbaiki tangkapan layar kosong. Mempengaruhi kinerja!</string>
     <string name="ambilight_ratio_fix">Perbaikan ambilight/rasio aspek/tangkapan layar</string>
     <string name="force_legacy_codecs_desc">Secara signifikan meningkatkan kinerja pada perangkat kelas bawah. Resolusi maksimum adalah 720p.</string>
@@ -367,7 +367,7 @@
     <string name="playback_notifications_fix">Nonaktifkan notifikasi pemutaran</string>
     <string name="amlogic_fix_desc">Perbaikan penurunan frame pada perangkat berbasis Amlogic.</string>
     <string name="amlogic_fix">Perbaikan Amlogic 1080p@60fps</string>
-    <string name="tunneled_video_playback_desc">CATATAN: jeda mungkin tidak berfungsi dengan baik! Pemutaran tunneled vidio menjanjikan manfaat seperti sinkronisasi audio/vidio yang lebih baik (sinkronisasi AV) dan pemutaran yang lebih lancar. Diperlukan Android 5+</string>
+    <string name="tunneled_video_playback_desc">CATATAN: jeda mungkin tidak berfungsi dengan baik! Pemutaran tunneled vidio menjanjikan manfaat seperti sinkronisasi suara/vidio yang lebih baik (sinkronisasi AV) dan pemutaran yang lebih lancar. Diperlukan Android 5+</string>
     <string name="tunneled_video_playback">Pemutaran tunneled vidio (Android 5+)</string>
     <string name="master_volume">Volume utama</string>
     <string name="volume_limit">Batas volume</string>
@@ -406,9 +406,9 @@
     <string name="disable_vsync">Nonaktifkan snap ke vsync</string>
     <string name="disable_vsync_desc">Meningkatkan kinerja pemutaran sedikit</string>
     <string name="skip_codec_profile_check">Lewati pemeriksaan level profil codec</string>
-    <string name="skip_codec_profile_check_desc">Jangan periksa dukungan codec saat memulai video. Bisa membantu pada firmware buggy.</string>
+    <string name="skip_codec_profile_check_desc">Jangan periksa dukungan codec saat memulai vidio. Bisa membantu pada firmware buggy.</string>
     <string name="force_sw_codec">Paksa dekoder vidio SW</string>
-    <string name="force_sw_codec_desc">Dapat memutar hampir semua video tetapi kinerjanya sangat buruk.</string>
+    <string name="force_sw_codec_desc">Dapat memutar hampir semua vidio tetapi kinerjanya sangat buruk.</string>
     <string name="playlist_order">Susun daftar putar</string>
     <string name="playlist_order_added_date_newer_first">Tanggal ditambahkan (lebih baru dulu)</string>
     <string name="playlist_order_added_date_older_first">Tanggal ditambahkan (lebih lama dulu)</string>
@@ -424,7 +424,6 @@
     <string name="playback_starts_shortly">Pemutaran akan dimulai secara otomatis saat streaming sudah siap</string>
     <string name="starting_stream">Memulai stream…</string>
     <string name="action_playlist_remove">Hapus dari daftar putar</string>
-    
     <string name="signin_view_title">Kode Pengguna sedang dimuat…</string>
     <string name="signin_view_description">Untuk masuk, masukkan kode ini di halaman %s\nNote. Hanya berfungsi dengan browser Firefox atau Chrome.</string>
     <string name="signin_view_action_text">Selesai</string>
@@ -438,7 +437,6 @@
     <string name="playback_controls_repeat_list">Ulangi daftar</string>
     <string name="action_subscribe_off">Berlangganan Mati</string>
     <string name="action_subscribe_on">Berlangganan Aktif</string>
-    
     <string name="skip_24_rate">Lewati format 24fps (perbaikan real cinema mode?)</string>
     <string name="player_disable_suggestions">Nonaktifkan saran</string>
     <string name="feedback">Masukan</string>
@@ -465,7 +463,7 @@
     <string name="repeat_mode_shuffle">Mengacak daftar putar apa pun</string>
     <string name="chat_left">Kiri</string>
     <string name="chat_right">Kanan</string>
-    <string name="card_real_thumbnails">Mengganti thumbnails dengan frame dari video</string>
+    <string name="card_real_thumbnails">Mengganti thumbnails dengan frame dari vidio</string>
     <string name="card_content">Tempat mengambil kartu thumbnails</string>
     <string name="thumb_quality_start">Awal vidio</string>
     <string name="thumb_quality_middle">Tengah vidio</string>
@@ -511,9 +509,11 @@
     <string name="alt_app_icon">Ikon alternatif aplikasi (perlu reboot)</string>
     <string name="network_stack">Lebih suka %s tumpukan jaringan</string>
     <string name="cronet_desc">Cronet adalah tumpukan jaringan Chromium. Cronet dapat mengurangi latensi dan meningkatkan kinerja jaringan, yang dapat membantu mengatasi masalah buffering.</string>
-    <string name="unlock_all_formats">Membuka semua format video</string>
+    <string name="unlock_all_formats">Membuka semua format vidio</string>
     <string name="unlock_all_formats_desc">Pada beberapa perangkat, firmware salah melaporkan beberapa format sebagai format yang tidak didukung, meskipun sebenarnya format tersebut didukung. (misalnya, smart TV 1080p cenderung melaporkan 4k sebagai tidak didukung).</string>
     <string name="okhttp_desc">Tumpukan jaringan ini adalah yang paling lambat tetapi memiliki stabilitas yang baik.</string>
     <string name="select_channel_section">Buka bagian yang sesuai saat aplikasi diluncurkan dari ATV Channels</string>
     <string name="enable_voice_search_desc">Aplikasi resmi akan digantikan dengan apa yang disebut jembatan. Jembatan membantu mentransfer permintaan pencarian global ke aplikasi kami.</string>
+	<string name="enable_master_password">Aktifkan kata sandi utama</string>
+    <string name="enter_master_password">Masukkan kata sandi utama</string>
 </resources>
