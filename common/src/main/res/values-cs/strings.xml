@@ -358,7 +358,7 @@
     <string name="openvpn_address_invalid">Adresa konfigurace OpenVPN není nastavena.</string>
     <string name="internet_censorship">Cenzura internetu</string>
     <string name="rename_section">Přejmenovat tuto sekci</string>
-    <string name="simple_edit_value_hint">Nová hodnota</string>
+    <string name="simple_edit_value_hint">Zadejte hodnotu</string>
     <string name="seek_interval">Interval přeskakování</string>
     <string name="seek_interval_sec">%s sekund</string>
     <string name="subtitle_system">Systémový styl (nastavení Androidu > Přístupnost)</string>
@@ -534,4 +534,6 @@
     <string name="okhttp_desc">Tento síťový zásobník je nejpomalejší, ale má dobrou stabilitu.</string>
     <string name="select_channel_section">Otevřít odpovídající sekci při spuštění aplikace z kanálů ATV</string>
     <string name="enable_voice_search_desc">Oficiální aplikace bude nahrazena tzv. mostem. Most pomáhá přenášet požadavky globálního vyhledávání do této aplikace.</string>
+    <string name="enable_master_password">Povolit hlavní heslo</string>
+    <string name="enter_master_password">Zadejte hlavní heslo</string>
 </resources>
