@@ -358,7 +358,7 @@
     <string name="openvpn_address_invalid">OpenVPN-Konfigurationsadresse nicht gesetzt.</string>
     <string name="internet_censorship">Internet-Zensur</string>
     <string name="rename_section">Diese Kategorie umbenennen</string>
-    <string name="simple_edit_value_hint">Neuer Wert</string>
+    <string name="simple_edit_value_hint">Wert eingeben</string>
     <string name="seek_interval">Spulintervall</string>
     <string name="seek_interval_sec">%s sek.</string>
     <string name="subtitle_system">System-Stil (Android-Einstellungen > Barrierefreiheit)</string>
