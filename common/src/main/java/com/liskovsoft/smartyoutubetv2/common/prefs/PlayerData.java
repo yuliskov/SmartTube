@@ -621,7 +621,7 @@ public class PlayerData extends DataChangeBase {
         mIsNumberKeySeekEnabled = Helpers.parseBoolean(split, 43, true);
         mIsSkip24RateEnabled = Helpers.parseBoolean(split, 44, false);
         mAfrPauseMs = Helpers.parseInt(split, 45, 0);
-        mIsLiveChatEnabled = Helpers.parseBoolean(split, 46, Build.VERSION.SDK_INT > 19);
+        mIsLiveChatEnabled = Helpers.parseBoolean(split, 46, false);
         mLastSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 47)), FormatItem.SUBTITLE_DEFAULT);
         mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
         mVideoRotation = Helpers.parseInt(split, 49, 0);
