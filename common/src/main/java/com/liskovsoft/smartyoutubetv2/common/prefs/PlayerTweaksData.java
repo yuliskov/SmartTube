@@ -381,7 +381,7 @@ public class PlayerTweaksData {
         mPlayerDataSource = Helpers.parseInt(split, 26, PLAYER_DATA_SOURCE_CRONET);
         mUnlockAllFormats = Helpers.parseBoolean(split, 27, false);
         mIsDashUrlStreamsForced = Helpers.parseBoolean(split, 28, false);
-        mIsFrameDropSonyFixEnabled = Helpers.parseBoolean(split, 29, false);
+        mIsFrameDropSonyFixEnabled = Helpers.parseBoolean(split, 29, true);
     }
 
     private void persistData() {
