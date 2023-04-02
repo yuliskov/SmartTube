@@ -358,7 +358,7 @@
   <string name="openvpn_address_invalid">L\'adresse de configuration d\'OpenVPN n\'est pas définie.</string>
   <string name="internet_censorship">Censure d\'Internet</string>
   <string name="rename_section">Renommer la section</string>
-  <string name="simple_edit_value_hint">Nouvelle valeur</string>
+  <string name="simple_edit_value_hint">Saisissez une valeur</string>
   <string name="seek_interval">Intervalle de navigation vidéo</string>
   <string name="seek_interval_sec">%s sec</string>
   <string name="subtitle_system">Style du système (Paramètres Android &gt; Accessibilité)</string>
@@ -370,7 +370,9 @@
   <string name="force_legacy_codecs_desc">Améliore significativement les performances sur les appareils bas de gamme mais limite la résolution maximale à 720p.</string>
   <string name="force_legacy_codecs">Forcer les anciens codecs (720p)</string>
   <string name="live_stream_fix_desc">Attention ! Cette option désactive le retour en arrière pour les diffusions en direct. Améliore considérablement les performances des diffusions en direct sur les appareils bas de gamme mais limite la résolution maximale à 1080p.</string>
+  <string name="live_stream_fix_4k_desc">Attention ! Cette option désactive le retour en arrière pour les diffusions en direct. Améliore considérablement les performances des diffusions en direct sur les appareils bas de gamme mais limite la résolution maximale à 4K.</string>
   <string name="live_stream_fix">Correction des diffusions en direct (1080p)</string>
+  <string name="live_stream_fix_4k">Correction des diffusions en direct (4K)</string>
   <string name="playback_notifications_fix_desc">Masque les notifications de changement de piste. Peut être utile sur les micrologiciel basés sur AOSP.</string>
   <string name="playback_notifications_fix">Désactiver les notifications de lecture</string>
   <string name="amlogic_fix_desc">Correction de la perte d\'images sur les appareils basés sur Amlogic.</string>
@@ -530,4 +532,6 @@
   <string name="okhttp_desc">Cette pile réseau est la plus lente mais apporte une bonne stabilité.</string>
   <string name="select_channel_section">Ouvrir la section correspondante lorsque l\'application est lancée depuis les canaux ATV</string>
   <string name="enable_voice_search_desc">L\'application officielle sera remplacée par une \"passerelle\". Un pont permet de transférer les demandes de recherche globales vers notre application.</string>
+  <string name="enable_master_password">Protéger l\'application avec un mot de passe</string>
+  <string name="enter_master_password">Veuillez entrer le mot de passe</string>
 </resources>
