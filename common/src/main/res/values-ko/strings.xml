@@ -432,7 +432,6 @@
   <string name="playback_starts_shortly">스트림이 준비되면 재생이 자동으로 시작됩니다.</string>
   <string name="starting_stream">스트림 시작 중...</string>
   <string name="action_playlist_remove">재생목록에서 삭제</string>
-  <!-- BEGIN Moved strings -->
   <string name="signin_view_title">사용자 코드 불러오는 중...</string>
   <string name="signin_view_description">로그인하려면 %s페이지에 이 코드를 입력하세요.\n참고. 파이어폭스 또는 크롬 브라우저에서만 작동합니다.</string>
   <string name="signin_view_action_text">완료</string>
@@ -447,7 +446,6 @@
   <string name="playback_controls_repeat_list">반복 목록</string>
   <string name="action_subscribe_off">구독 해제</string>
   <string name="action_subscribe_on">구독하기</string>
-  <!-- END Moved strings -->
   <string name="skip_24_rate">24fps 형식 건너뛰기 (실제 시네마 모드 수정\?)</string>
   <string name="player_disable_suggestions">제안 비활성화</string>
   <string name="feedback">피드백</string>
@@ -524,4 +522,13 @@
   <string name="remove_from_subscriptions">숨기기</string>
   <string name="player_long_speed_list">긴 속도 목록</string>
   <string name="alt_app_icon">대체 앱 아이콘 (재부팅 필요)</string>
+  <string name="network_stack">%s 네트워크 스택 선호</string>
+  <string name="cronet_desc">Cronet은 Chromium 네트워크 스택입니다. Cronet은 대기 시간을 줄이고 네트워킹 성능을 향상시켜 버퍼링 문제를 해결할 수 있습니다.</string>
+  <string name="unlock_all_formats">모든 비디오 형식 잠금 해제</string>
+  <string name="unlock_all_formats_desc">일부 장치에서 펌웨어는 일부 형식이 지원되지 않더라도 잘못 보고합니다.\nundefined(예: 1080p 스마트 TV는 4k를 지원하지 않는 것으로 보고하는 경향이 있습니다).</string>
+  <string name="okhttp_desc">이 네트워크 스택은 가장 느리지만 안정성이 좋습니다.</string>
+  <string name="select_channel_section">앱이 ATV 채널에서 실행될 때 해당 섹션 열기</string>
+  <string name="enable_voice_search_desc">공식 앱은 소위 브리지로 대체됩니다. 브리지는 전역 검색 요청을 앱으로 전송하는 데 도움이 됩니다.</string>
+  <string name="enable_master_password">마스터 비밀번호 활성화</string>
+  <string name="enter_master_password">마스터 비밀번호 입력</string>
 </resources>
