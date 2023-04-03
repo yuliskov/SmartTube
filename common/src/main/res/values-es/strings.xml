@@ -208,7 +208,7 @@
   <string name="msg_player_error_source">No se puede descargar el vídeo</string>
   <string name="msg_player_error_renderer">El formato de vídeo seleccionado no es compatible</string>
   <string name="msg_player_error_unexpected">Error desconocido decodificando vídeo</string>
-  <string name="video_aspect">Ratio de aspecto</string>
+  <string name="video_aspect">Relación de aspecto</string>
   <string name="player_tweaks">Opciones de desarrollo</string>
   <string name="header_uploads">Subidas</string>
   <string name="player_show_global_clock">Mostrar reloj siempre en pantalla</string>
@@ -323,7 +323,7 @@
   <string name="player_seek_regular">Regular</string>
   <string name="player_seek_confirmation_pause">Con confirmación (pause mientras busca)</string>
   <string name="player_seek_confirmation_play">Con confirmación (play mientras busca)</string>
-  <string name="hide_shorts_from_home">Ocultar shorts en Inicio</string>
+  <string name="hide_shorts_from_home">Ocultar cortos en Inicio</string>
   <string name="finish_on_disconnect">Finalizar la aplicación después de desconectar el teléfono/tableta</string>
   <string name="update_error">Error de actualización</string>
   <string name="hide_shorts_from_history">Ocultar Cortos en Historial</string>
@@ -347,7 +347,7 @@
   <string name="proxy_test_aborted">Prueba abortada, por favor arregle la configuración del proxy primero.</string>
   <string name="proxy_application_aborted">Por favor, corrija primero la configuración del proxy.</string>
   <string name="proxy_test_start">Prueba#%d: %s …</string>
-  <string name="proxy_test_error">Fallo#%d: %s</string>
+  <string name="proxy_test_error">Error#%d: %s</string>
   <string name="proxy_test_status">Estado#%d: %s %d %s</string>
   <string name="openvpn_config_address_hint">Dirección del archivo de configuración (*.ovpn)</string>
   <string name="enable_openvpn">Utilizar OpenVPN</string>
@@ -443,8 +443,8 @@
   <string name="add_device_view_description">Para vincular el dispositivo introduzca este código en la aplicación de YouTube de su teléfono en la sección Ajustes/Mirar en la TV\nNOTA. Sólo funciona con el teclado Gboard.</string>
   <string name="playback_controls_repeat_pause">Repetir Pausa</string>
   <string name="playback_controls_repeat_list">Repetir Lista</string>
-  <string name="action_subscribe_off">Suscribirse Off</string>
-  <string name="action_subscribe_on">Suscribirse On</string>
+  <string name="action_subscribe_off">Desuscribirse</string>
+  <string name="action_subscribe_on">Suscribirse</string>
   <string name="skip_24_rate">Omitir los formatos de 24fps (¿Solución del modo de cine real\?)</string>
   <string name="player_disable_suggestions">Deshabilitar sugerencias</string>
   <string name="feedback">Feedback</string>
@@ -465,7 +465,7 @@
   <string name="real_channel_icon">Mostrar icono real en el botón del canal</string>
   <string name="subtitle_yellow_semi_transparent">Amarillo en fondo semitransparente</string>
   <string name="subtitle_yellow_black">Amarillo en fondo negro</string>
-  <string name="player_pixel_ratio">Relación de píxeles</string>
+  <string name="player_pixel_ratio">Proporción de píxeles</string>
   <string name="color_scheme_dark_grey_monochrome">Gris oscuro (monocromo)</string>
   <string name="disable_mic_permission">Por favor, desactiva el acceso al micrófono de la aplicación para que este reconocedor funcione correctamente.</string>
   <string name="repeat_mode_shuffle">Mezcla cualquier lista</string>
@@ -478,7 +478,7 @@
   <string name="thumb_quality_middle">Mitad del vídeo</string>
   <string name="thumb_quality_end">Final del vídeo</string>
   <string name="content_block_status">Comprobar estatus de SponsorBlock</string>
-  <string name="player_show_quality_info_bitrate">Añadir bitrate a la información de calidad</string>
+  <string name="player_show_quality_info_bitrate">Añadir tasa de bits a la información de calidad</string>
   <string name="player_speed_button_old_behavior">Revertir comportamiento del bóton speed</string>
   <string name="protect_settings_with_password">Proteger configuración con contraseña</string>
   <string name="enter_settings_password">Introducir contraseña de configuración</string>
@@ -486,9 +486,9 @@
   <string name="child_mode_desc">En este modo el usuario no puede buscar o ver contenido sugerido. La configuración se hallará bajo contraseña.</string>
   <string name="lost_setting_warning">La configuración de la aplicación será cambiada. Asegúrese de que ha creado una copia de seguridad de la misma.</string>
   <string name="player_button_long_click">Un clic corto en el botón para acción rápida y uno largo para el diálogo de configuración</string>
-  <string name="pause_history">Pausar historia</string>
-  <string name="resume_history">Resumir historia</string>
-  <string name="clear_history">Limpiar historia</string>
+  <string name="pause_history">Pausar historial</string>
+  <string name="resume_history">Reanudar el historial</string>
+  <string name="clear_history">Borrar el historial</string>
   <string name="chapters">Capítulos</string>
   <string name="card_multiline_subtitle">Subtítulos multilínea</string>
   <string name="auto_frame_rate_modes">Modos soportados</string>
@@ -529,4 +529,6 @@
   <string name="select_channel_section">Abrir la sección correspondiente cuando la aplicación se inicie desde ATV Channels</string>
   <string name="enable_voice_search_desc">La aplicación oficial será reemplazada por el llamado puente. Un puente ayuda a transferir solicitudes de búsqueda global a nuestra aplicación.</string>
   <string name="disable_ok_long_press_desc">Diseñado para controladores con errores donde el botón OK no funciona correctamente</string>
+  <string name="enable_master_password">Habilitar contraseña maestra</string>
+  <string name="enter_master_password">Ingrese la contraseña maestra</string>
 </resources>
