@@ -11,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -100,10 +101,10 @@ public class StreamReminderService implements TickleListener {
             Playlist playlist = Playlist.instance();
             Video current = playlist.getCurrent();
 
-            if (current != null && current.isPending && Utils.isPlayerInForeground(mContext)) {
+            if (current != null && current.isPending && ViewManager.instance(mContext).isPlayerInForeground()) {
                 playlist.add(video);
             } else {
-                Utils.movePlayerToForeground(mContext);
+                ViewManager.instance(mContext).movePlayerToForeground();
                 PlaybackPresenter.instance(mContext).openVideo(video);
                 MessageHelpers.showMessage(mContext, R.string.starting_stream);
             }

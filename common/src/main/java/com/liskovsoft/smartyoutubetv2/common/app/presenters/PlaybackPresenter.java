@@ -90,7 +90,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
         return getView() != null &&
                 getView().getController().getBackgroundMode() != PlaybackEngine.BACKGROUND_MODE_DEFAULT &&
                 getView().getController().isEngineInitialized() &&
-                !Utils.isPlayerInForeground(getContext()) &&
+                !ViewManager.instance(getContext()).isPlayerInForeground() &&
                 getContext() instanceof Activity && Utils.checkActivity((Activity) getContext()); // Check that activity is not in Finishing state
     }
 
@@ -117,7 +117,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     public void setPosition(long positionMs) {
         // Check that the user isn't open context menu on suggestion item
         // if (Utils.isPlayerInForeground(getContext()) && getView() != null && !getView().getController().isSuggestionsShown()) {
-        if (Utils.isPlayerInForeground(getContext()) && getView() != null) {
+        if (ViewManager.instance(getContext()).isPlayerInForeground() && getView() != null) {
             getView().getController().setPositionMs(positionMs);
             getView().getController().setPlayWhenReady(true);
             getView().getController().showOverlay(false);

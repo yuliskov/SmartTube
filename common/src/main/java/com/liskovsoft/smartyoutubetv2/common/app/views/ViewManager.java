@@ -442,4 +442,22 @@ public class ViewManager {
 
         return false;
     }
+
+    public boolean isPlayerInForeground() {
+        return Utils.isAppInForeground() && getTopView() == PlaybackView.class;
+    }
+
+    public void moveAppToForeground() {
+        if (!Utils.isAppInForeground()) {
+            startView(SplashView.class);
+        }
+    }
+
+    public void movePlayerToForeground() {
+        Utils.turnScreenOn(mContext);
+
+        if (!isPlayerInForeground()) {
+            startView(PlaybackView.class);
+        }
+    }
 }

@@ -176,30 +176,7 @@ public class Utils {
     public static boolean isAppInForeground() {
         ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
         ActivityManager.getMyMemoryState(appProcessInfo);
-        return (appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND ||
-                appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE);
-    }
-
-    public static boolean isPlayerInForeground(Context context) {
-        if (context == null) {
-            return false;
-        }
-
-        return isAppInForeground() && ViewManager.instance(context).getTopView() == PlaybackView.class;
-    }
-
-    public static void moveAppToForeground(Context context) {
-        if (!Utils.isAppInForeground()) {
-            ViewManager.instance(context).startView(SplashView.class);
-        }
-    }
-
-    public static void movePlayerToForeground(Context context) {
-        turnScreenOn(context);
-
-        if (!Utils.isPlayerInForeground(context)) {
-            ViewManager.instance(context).startView(PlaybackView.class);
-        }
+        return appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
     }
 
     /**
@@ -298,7 +275,7 @@ public class Utils {
      * <a href="https://stackoverflow.com/questions/2891337/turning-on-screen-programmatically">More info</a>
      */
     @SuppressWarnings("deprecation")
-    private static void turnScreenOn(Context context) {
+    public static void turnScreenOn(Context context) {
         if (context instanceof Activity) {
             Activity activity = (Activity) context;
             if (Build.VERSION.SDK_INT >= 27) {
