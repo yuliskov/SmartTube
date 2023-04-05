@@ -333,8 +333,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),
                 mPlayerTweaksData.isSWDecoderForced()));
 
-        options.add(UiOptionItem.from("Frame drop fix #1",
-                "Works great on Sony TV and some other devices. Note: possible problems with audio synchronization",
+        options.add(UiOptionItem.from(getContext().getString(R.string.sony_frame_drop_fix),
+                getContext().getString(R.string.sony_frame_drop_fix_desc),
                 option -> mPlayerTweaksData.enableSonyFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isSonyFrameDropFixEnabled()));
 
@@ -343,8 +343,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableAmazonFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isAmazonFrameDropFixEnabled()));
 
-        options.add(UiOptionItem.from("Disable buffer on streams",
-                "Fix for situations when the stream so far behind. Note: the stream may start to lag.",
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_stream_buffer),
+                getContext().getString(R.string.disable_stream_buffer_desc),
                 option -> mPlayerTweaksData.disableBufferOnStreams(option.isSelected()),
                 mPlayerTweaksData.isBufferOnStreamsDisabled()));
 

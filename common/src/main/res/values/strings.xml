@@ -536,4 +536,9 @@
     <string name="enable_voice_search_desc">The official app will be replaced with a so-called bridge. A bridge helps to transfer global search requests to our app.</string>
     <string name="enable_master_password">Enable master password</string>
     <string name="enter_master_password">Enter master password</string>
+    <string name="disable_stream_buffer">Disable buffer on streams</string>
+    <string name="disable_stream_buffer_desc">Fix for situations when the stream so far behind. Note: the stream may start to lag.</string>
+    <string name="sony_frame_drop_fix">Frame drop fix/playback lagging #1</string>
+    <string name="sony_frame_drop_fix_desc">Works great on Sony TV and some other devices. Note: possible problems with audio synchronization.
+    </string>
 </resources>

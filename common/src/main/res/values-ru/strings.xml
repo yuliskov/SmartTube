@@ -527,4 +527,9 @@
     <string name="enable_voice_search_desc">Официальное приложение будет заменено так называемым мостом. Мост помогает передавать глобальные поисковые запросы в наше приложение.</string>
     <string name="enable_master_password">Включить мастер-пароль</string>
     <string name="enter_master_password">Введите мастер-пароль</string>
+    <string name="disable_stream_buffer">Отключить буфер на стримах</string>
+    <string name="disable_stream_buffer_desc">Исправляет ситуации, когда стрим сильно отстает. Внимание: стрим может начать тормозить.</string>
+    <string name="sony_frame_drop_fix">Исправление выпадения кадров/лагов воспроизведения #1</string>
+    <string name="sony_frame_drop_fix_desc">Хорошо себя показало на телевизорах Сони и некоторых других устройствах. Внимание: возможны проблемы с синхронизацией аудио.
+    </string>
 </resources>
