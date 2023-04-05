@@ -529,7 +529,7 @@
     <string name="enter_master_password">Введіть головний пароль</string>
     <string name="disable_stream_buffer">Вимкнути буфер на стрімах</string>
     <string name="disable_stream_buffer_desc">Виправляє ситуації, коли стрім запізнюється. Увага: стрім може почати гальмувати.</string>
-    <string name="sony_frame_drop_fix">Виправлення випадіння кадрів/лагів відтворення #1</string>
-    <string name="sony_frame_drop_fix_desc">Добре працює на тв Соні та деяких інших пристроях. Увага: можливі проблеми с синхронизацією аудіо.
+    <string name="sony_frame_drop_fix">Виправлення випадіння кадрів #1</string>
+    <string name="sony_frame_drop_fix_desc">Виправляє лагання на тв Соні та деяких інших пристроях. Увага: можливі проблеми с синхронизацією аудіо.
     </string>
 </resources>

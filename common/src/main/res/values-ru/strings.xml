@@ -529,7 +529,7 @@
     <string name="enter_master_password">Введите мастер-пароль</string>
     <string name="disable_stream_buffer">Отключить буфер на стримах</string>
     <string name="disable_stream_buffer_desc">Исправляет ситуации, когда стрим сильно отстает. Внимание: стрим может начать тормозить.</string>
-    <string name="sony_frame_drop_fix">Исправление выпадения кадров/лагов воспроизведения #1</string>
-    <string name="sony_frame_drop_fix_desc">Хорошо себя показало на телевизорах Сони и некоторых других устройствах. Внимание: возможны проблемы с синхронизацией аудио.
+    <string name="sony_frame_drop_fix">Исправление выпадения кадров #1</string>
+    <string name="sony_frame_drop_fix_desc">Исправляет лаги на телевизорах Сони и некоторых других устройствах. Внимание: возможны проблемы с синхронизацией аудио.
     </string>
 </resources>
