@@ -343,6 +343,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableAmazonFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isAmazonFrameDropFixEnabled()));
 
+        options.add(UiOptionItem.from("Disable buffer on streams",
+                "Fix for situations when the stream so far behind. Note: the stream may start to lag.",
+                option -> mPlayerTweaksData.disableBufferOnStreams(option.isSelected()),
+                mPlayerTweaksData.isBufferOnStreamsDisabled()));
+
         options.add(UiOptionItem.from("Keep finished activities",
                 option -> mPlayerTweaksData.enableKeepFinishedActivity(option.isSelected()),
                 mPlayerTweaksData.isKeepFinishedActivityEnabled()));

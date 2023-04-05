@@ -99,7 +99,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     public boolean onNextClicked() {
         // Seek to the actual live position on next
         if (getVideo() != null && getVideo().isLive && (getController().getDurationMs() - getController().getPositionMs() > LIVE_THRESHOLD_MS)) {
-            getController().setPositionMs(getController().getDurationMs() - LIVE_BUFFER_MS);
+            long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? 0 : LIVE_BUFFER_MS;
+            getController().setPositionMs(getController().getDurationMs() - buffer);
             return true;
         }
 
@@ -432,7 +433,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         // Set actual position for live videos with uncommon length
         if ((state == null || state.durationMs - state.positionMs < LIVE_THRESHOLD_MS) && item.isLive) {
             // Add buffer. Should I take into account segment offset???
-            state = new State(item.videoId, getController().getDurationMs() - LIVE_BUFFER_MS);
+            long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? 0 : LIVE_BUFFER_MS;
+            state = new State(item.videoId, getController().getDurationMs() - buffer);
         }
 
         // Do I need to check that item isn't live? (state != null && !item.isLive)
