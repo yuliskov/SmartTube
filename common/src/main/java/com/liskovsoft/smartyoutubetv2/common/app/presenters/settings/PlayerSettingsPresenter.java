@@ -333,13 +333,15 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),
                 mPlayerTweaksData.isSWDecoderForced()));
 
-        options.add(UiOptionItem.from("Frame drop fix on Sony TV",
-                option -> mPlayerTweaksData.enableFrameDropSonyFix(option.isSelected()),
-                mPlayerTweaksData.isFrameDropSonyFixEnabled()));
+        options.add(UiOptionItem.from("Frame drop fix #1",
+                "Works great on Sony TV and some other devices. Note: possible problems with audio synchronization",
+                option -> mPlayerTweaksData.enableSonyFrameDropFix(option.isSelected()),
+                mPlayerTweaksData.isSonyFrameDropFixEnabled()));
 
-        options.add(UiOptionItem.from("Frame drop fix (experimental)",
-                option -> mPlayerTweaksData.enableFrameDropFix(option.isSelected()),
-                mPlayerTweaksData.isFrameDropFixEnabled()));
+        options.add(UiOptionItem.from("Frame drop fix #2",
+                "Created for Amazon Stick devices. This tweak isn't tested yet.",
+                option -> mPlayerTweaksData.enableAmazonFrameDropFix(option.isSelected()),
+                mPlayerTweaksData.isAmazonFrameDropFixEnabled()));
 
         options.add(UiOptionItem.from("Keep finished activities",
                 option -> mPlayerTweaksData.enableKeepFinishedActivity(option.isSelected()),

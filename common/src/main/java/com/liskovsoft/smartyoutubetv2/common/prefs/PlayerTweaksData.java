@@ -38,8 +38,8 @@ public class PlayerTweaksData {
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;
     private boolean mIsAmlogicFixEnabled;
-    private boolean mIsFrameDropFixEnabled;
-    private boolean mIsFrameDropSonyFixEnabled;
+    private boolean mIsAmazonFrameDropFixEnabled;
+    private boolean mIsSonyFrameDropFixEnabled;
     private boolean mIsSnapToVsyncDisabled;
     private boolean mIsProfileLevelCheckSkipped;
     private boolean mIsSWDecoderForced;
@@ -88,22 +88,22 @@ public class PlayerTweaksData {
         return mIsAmlogicFixEnabled;
     }
 
-    public void enableFrameDropFix(boolean enable) {
-        mIsFrameDropFixEnabled = enable;
+    public void enableAmazonFrameDropFix(boolean enable) {
+        mIsAmazonFrameDropFixEnabled = enable;
         persistData();
     }
 
-    public boolean isFrameDropFixEnabled() {
-        return mIsFrameDropFixEnabled;
+    public boolean isAmazonFrameDropFixEnabled() {
+        return mIsAmazonFrameDropFixEnabled;
     }
 
-    public void enableFrameDropSonyFix(boolean enable) {
-        mIsFrameDropSonyFixEnabled = enable;
+    public void enableSonyFrameDropFix(boolean enable) {
+        mIsSonyFrameDropFixEnabled = enable;
         persistData();
     }
 
-    public boolean isFrameDropSonyFixEnabled() {
-        return mIsFrameDropSonyFixEnabled;
+    public boolean isSonyFrameDropFixEnabled() {
+        return mIsSonyFrameDropFixEnabled;
     }
 
     public void disableSnapToVsync(boolean disable) {
@@ -352,7 +352,7 @@ public class PlayerTweaksData {
         String[] split = Helpers.splitObjectLegacy(data);
 
         mIsAmlogicFixEnabled = Helpers.parseBoolean(split, 0, false);
-        mIsFrameDropFixEnabled = Helpers.parseBoolean(split, 1, false);
+        mIsAmazonFrameDropFixEnabled = Helpers.parseBoolean(split, 1, false);
         mIsSnapToVsyncDisabled = Helpers.parseBoolean(split, 2, false);
         mIsProfileLevelCheckSkipped = Helpers.parseBoolean(split, 3, false);
         mIsSWDecoderForced = Helpers.parseBoolean(split, 4, false);
@@ -381,19 +381,19 @@ public class PlayerTweaksData {
         mPlayerDataSource = Helpers.parseInt(split, 26, PLAYER_DATA_SOURCE_CRONET);
         mUnlockAllFormats = Helpers.parseBoolean(split, 27, false);
         mIsDashUrlStreamsForced = Helpers.parseBoolean(split, 28, false);
-        mIsFrameDropSonyFixEnabled = Helpers.parseBoolean(split, 29, true);
+        mIsSonyFrameDropFixEnabled = Helpers.parseBoolean(split, 29, false);
     }
 
     private void persistData() {
         mPrefs.setData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
-                mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsSnapToVsyncDisabled,
+                mIsAmlogicFixEnabled, mIsAmazonFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled, mIsHlsStreamsForced,
                 mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
                 null, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
                 mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio, mIsQualityInfoBitrateEnabled,
                 mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
-                mIsDashUrlStreamsForced, mIsFrameDropSonyFixEnabled
+                mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled
         ));
     }
 }
