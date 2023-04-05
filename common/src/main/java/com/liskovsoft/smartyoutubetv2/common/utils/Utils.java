@@ -411,8 +411,15 @@ public class Utils {
             builder.setContentText(content);
         }
 
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            // IllegalArgumentException fix: Targeting S+ (version 31 and above) requires that one of FLAG_IMMUTABLE...
+            flags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+
         Intent targetIntent = new Intent(context, activityCls);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, targetIntent, flags);
         builder.setContentIntent(contentIntent);
 
         if (VERSION.SDK_INT >= 26) {
