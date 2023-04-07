@@ -233,6 +233,10 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         mIsTransparent = enable;
     }
 
+    public boolean isTransparent() {
+        return getView() != null && getView().isTransparent();
+    }
+
     public void enableExpandable(boolean enable) {
         mIsExpandable = enable;
     }
