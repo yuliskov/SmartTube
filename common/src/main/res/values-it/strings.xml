@@ -101,7 +101,9 @@
     <string name="open_channel">Apri canale</string>
     <string name="open_playlist">Apri playlist</string>
     <string name="not_interested">Non interessato</string>
+    <string name="not_recommend_channel">Non consigliare il canale</string>
     <string name="you_wont_see_this_video">Il video è stato rimosso dai consigliati</string>
+    <string name="you_wont_see_this_channel">Non vedrai questo canale nei consigli</string></string>
     <string name="settings_search">Cerca</string>
     <string name="dialog_search">Cerca</string>
     <string name="instant_voice_search">Ricerca vocale istantanea</string>
@@ -536,4 +538,9 @@
     <string name="enable_voice_search_desc">L\'app ufficiale verrà sostituita da un cosiddetto bridge (ponte). Un bridge aiuta a trasferire le richieste di ricerca globali alla nostra app.</string>
     <string name="enable_master_password">Abilita password principale.</string>
     <string name="enter_master_password">Immetti password principale</string>
+    <string name="disable_stream_buffer">Disabilita buffer sui flussi</string>
+    <string name="disable_stream_buffer_desc">Correzione per situazioni in cui il flusso è tanto indietro. Nota: il flusso potrebbe iniziare a rallentare.</string>
+    <string name="sony_frame_drop_fix">Correzione salto fotogrammi n. 1</string>
+    <string name="sony_frame_drop_fix_desc">Risolvi i ritardi sulle TV Sony e su alcuni altri dispositivi. Nota: possibili problemi con la sincronizzazione audio.
+    </string>
 </resources>
