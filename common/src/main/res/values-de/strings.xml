@@ -101,7 +101,9 @@
     <string name="open_channel">Kanal öffnen</string>
     <string name="open_playlist">Wiedergabeliste öffnen</string>
     <string name="not_interested">Kein Interesse</string>
+    <string name="not_recommend_channel">Kanal nicht empfehlen</string>
     <string name="you_wont_see_this_video">Video wurde aus den Empfehlungen entfernt</string>
+    <string name="you_wont_see_this_channel">Kanal wird nicht mehr in den Empfehlungen angezeigt</string>
     <string name="settings_search">Suche</string>
     <string name="dialog_search">Suche</string>
     <string name="instant_voice_search">Sprachsuche sofort starten</string>
@@ -115,7 +117,7 @@
     <string name="repeat_mode_pause_alt">Nur Videos der Wiedergabeliste fortlaufend abspielen</string>
     <string name="repeat_mode_none">Wiedergabe nach einem Video stoppen</string>
     <string name="subscribed_to_channel">Abonniert</string>
-    <string name="unsubscribed_from_channel">Nicht mehr abonniert</string>
+    <string name="unsubscribed_from_channel">Nicht abonniert</string>
     <string name="subtitle_yellow_transparent">Gelb auf transparentem Hintergrund</string>
     <string name="subtitle_white_transparent">Weiß auf transparentem Hintergrund</string>
     <string name="subtitle_white_black">Weiß auf schwarzem Hintergrund</string>
@@ -536,4 +538,9 @@
     <string name="enable_voice_search_desc">Die offizielle App wird durch eine sogenannte Bridge ersetzt. Eine Bridge hilft dabei, globale Suchanfragen an unsere App zu übertragen.</string>
     <string name="enable_master_password">Master-Passwort aktivieren</string>
     <string name="enter_master_password">Master-Passwort eingeben</string>
+      <string name="disable_stream_buffer">Puffer für Streams deaktivieren</string>
+    <string name="disable_stream_buffer_desc">Fix für Situationen, in denen der Stream sehr verzögert ist. Hinweis: Der Stream kann anfangen zu hängen.</string>
+    <string name="sony_frame_drop_fix">Frame-Drop-Fix #1</string>
+    <string name="sony_frame_drop_fix_desc">Behebt Verzögerungen/Lags auf Sony-TV und einigen anderen Geräten. Hinweis: Mögliche Probleme mit der Audio-Synchronisation.
+    </string>
 </resources>
