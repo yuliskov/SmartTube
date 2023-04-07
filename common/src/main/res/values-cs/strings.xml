@@ -536,4 +536,9 @@
     <string name="enable_voice_search_desc">Oficiální aplikace bude nahrazena tzv. mostem. Most pomáhá přenášet požadavky globálního vyhledávání do této aplikace.</string>
     <string name="enable_master_password">Povolit hlavní heslo</string>
     <string name="enter_master_password">Zadejte hlavní heslo</string>
+    <string name="disable_stream_buffer">Zakázat vyrovnávací paměť u vysílání</string>
+    <string name="disable_stream_buffer_desc">Oprava pro situace, kdy je vysílání dost pozadu. Pozor: vysílání se může začít zasekávat</string>
+    <string name="sony_frame_drop_fix">Oprava výpadku snímků #1</string>
+    <string name="sony_frame_drop_fix_desc">Opravuje záseky na televizích Sony a jiných zařízeních. Pozor: mohou nastat problémy se synchronizací audia
+    </string>
 </resources>
