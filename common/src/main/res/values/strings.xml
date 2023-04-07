@@ -101,7 +101,9 @@
     <string name="open_channel">Open channel</string>
     <string name="open_playlist">Open playlist</string>
     <string name="not_interested">Not interested</string>
+    <string name="not_recommend_channel">Don\'t recommend channel</string>
     <string name="you_wont_see_this_video">Video has been removed from recommended</string>
+    <string name="you_wont_see_this_channel">You won\'t see this channel in recommendations</string>
     <string name="settings_search">Search</string>
     <string name="dialog_search">Search</string>
     <string name="instant_voice_search">Instant voice search</string>

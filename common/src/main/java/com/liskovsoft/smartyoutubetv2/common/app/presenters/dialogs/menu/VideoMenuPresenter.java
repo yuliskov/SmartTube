@@ -46,6 +46,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private Video mVideo;
     public static WeakReference<Video> sVideoHolder = new WeakReference<>(null);
     private boolean mIsNotInterestedButtonEnabled;
+    private boolean mIsNotRecommendChannelEnabled;
     private boolean mIsRemoveFromHistoryButtonEnabled;
     private boolean mIsRemoveFromSubscriptionsButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
@@ -154,6 +155,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendCreatePlaylistButton();
         appendAddToNewPlaylistButton();
         appendNotInterestedButton();
+        appendNotRecommendChannelButton();
         appendRemoveFromSubscriptionsButton();
         appendRenamePlaylistButton();
         appendPlaylistOrderButton();
@@ -341,7 +343,34 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.not_interested), optionItem -> {
-                    mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
+                    mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken())
+                            .subscribe(
+                                    var -> {},
+                                    error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage()),
+                                    () -> {
+                                        if (mCallback != null) {
+                                            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+                                        } else {
+                                            MessageHelpers.showMessage(getContext(), R.string.you_wont_see_this_video);
+                                        }
+                                    }
+                            );
+                    mDialogPresenter.closeDialog();
+                }));
+    }
+
+    private void appendNotRecommendChannelButton() {
+        if (mVideo == null || mVideo.mediaItem == null || mVideo.mediaItem.getFeedbackToken2() == null) {
+            return;
+        }
+
+        if (!mVideo.belongsToHome() || !mIsNotRecommendChannelEnabled) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.not_recommend_channel), optionItem -> {
+                    mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken2())
                             .subscribe(
                                     var -> {},
                                     error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage()),
@@ -368,7 +397,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.remove_from_history), optionItem -> {
-                    mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
+                    mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken())
                             .subscribe(
                                     var -> {},
                                     error -> Log.e(TAG, "Remove from history error: %s", error.getMessage()),
@@ -396,7 +425,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.remove_from_subscriptions), optionItem -> {
-                    mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
+                    mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken())
                             .subscribe(
                                     var -> {},
                                     error -> Log.e(TAG, "Remove from subscriptions error: %s", error.getMessage()),
@@ -699,6 +728,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsOpenPlaylistButtonEnabled = true;
         mIsSubscribeButtonEnabled = true;
         mIsNotInterestedButtonEnabled = true;
+        mIsNotRecommendChannelEnabled = true;
         mIsRemoveFromHistoryButtonEnabled = true;
         mIsRemoveFromSubscriptionsButtonEnabled = true;
         mIsShareLinkButtonEnabled = true;
@@ -718,6 +748,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsShareLinkButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_LINK);
         mIsShareEmbedLinkButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_EMBED_LINK);
         mIsNotInterestedButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_NOT_INTERESTED);
+        mIsNotRecommendChannelEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_NOT_INTERESTED);
         mIsRemoveFromHistoryButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY);
         mIsRemoveFromSubscriptionsButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS);
         mIsOpenDescriptionButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_DESCRIPTION);

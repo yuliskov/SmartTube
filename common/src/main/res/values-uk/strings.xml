@@ -101,7 +101,9 @@
     <string name="open_channel">Перейти до каналу</string>
     <string name="open_playlist">Відкрити плейлист</string>
     <string name="not_interested">Більше не радити</string>
+    <string name="not_recommend_channel">Більше не радити канал</string>
     <string name="you_wont_see_this_video">Це відео більше не з\`явиться серед рекомендацій</string>
+    <string name="you_wont_see_this_channel">Цей канал більше не з\`явиться серед рекомендацій</string>
     <string name="settings_search">Пошук</string>
     <string name="dialog_search">Пошук</string>
     <string name="instant_voice_search">Відразу запускати голосовий пошук</string>
