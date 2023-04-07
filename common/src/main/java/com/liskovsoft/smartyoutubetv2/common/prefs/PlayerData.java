@@ -598,7 +598,7 @@ public class PlayerData extends DataChangeBase {
         // old afr delay sec was there
         mAudioDelayMs = Helpers.parseInt(split, 20, 0);
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, false);
-        mRepeatMode = Helpers.parseInt(split, 22, PlaybackUI.REPEAT_MODE_ALL);
+        // repeat mode was here
         // didn't remember what was there
         mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, false);
         mIsSonyTimerFixEnabled = Helpers.parseBoolean(split, 25, false);
@@ -626,6 +626,7 @@ public class PlayerData extends DataChangeBase {
         mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
         mVideoRotation = Helpers.parseInt(split, 49, 0);
         mVideoZoom = Helpers.parseInt(split, 50, -1);
+        mRepeatMode = Helpers.parseInt(split, 51, PlaybackUI.REPEAT_MODE_ALL);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;

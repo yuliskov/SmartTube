@@ -8,11 +8,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver
 import java.util.List;
 
 public interface PlaybackUI {
-    int REPEAT_MODE_SHUFFLE = 0;
+    int REPEAT_MODE_PAUSE = 0;
     int REPEAT_MODE_CLOSE = 1;
     int REPEAT_MODE_ALL = 2;
     int REPEAT_MODE_ONE = 3;
-    int REPEAT_MODE_PAUSE = 4;
+    int REPEAT_MODE_SHUFFLE = 4;
     int REPEAT_MODE_LIST = 5;
     int BUTTON_OFF = 0;
     int BUTTON_ON = 1;
