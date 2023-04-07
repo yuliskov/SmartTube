@@ -319,7 +319,7 @@ public class MediaServiceManager {
             totalSize = 0;
         }
 
-        LoadingManager.showLoading(context, groupTooSmall);
+        //LoadingManager.showLoading(context, groupTooSmall);
         mContinuations.put(group.getId(), new Pair<>(totalSize, currentTimeMillis));
     }
 
