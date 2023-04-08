@@ -101,7 +101,9 @@
     <string name="open_channel">Otevřít kanál</string>
     <string name="open_playlist">Otevřít playlist</string>
     <string name="not_interested">Nemám zájem</string>
+    <string name="not_recommend_channel">Nedoporučovat kanál</string>
     <string name="you_wont_see_this_video">Video bylo odebráno z doporučení</string>
+    <string name="you_wont_see_this_channel">Tento kanál neuvidíte v doporučeních</string>
     <string name="settings_search">Hledat</string>
     <string name="dialog_search">Hledat</string>
     <string name="instant_voice_search">Okamžité hlasové vyhledávání</string>
