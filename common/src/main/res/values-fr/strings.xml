@@ -101,7 +101,9 @@
   <string name="open_channel">Accéder à la chaîne</string>
   <string name="open_playlist">Ouvrir la playlist</string>
   <string name="not_interested">Pas intéressé</string>
+  <string name="not_recommend_channel">Ne pas recommander cette chaîne</string>
   <string name="you_wont_see_this_video">La vidéo a été supprimée de vos recommandations</string>
+  <string name="you_wont_see_this_channel">Cette chaîne n'apparaîtra plus dans vos recommandations</string>  
   <string name="settings_search">Recherche</string>
   <string name="dialog_search">Recherche</string>
   <string name="instant_voice_search">Recherche vocale instantanée</string>
@@ -534,4 +536,8 @@
   <string name="enable_voice_search_desc">L\'application officielle sera remplacée par une \"passerelle\". Un pont permet de transférer les demandes de recherche globales vers notre application.</string>
   <string name="enable_master_password">Protéger l\'application avec un mot de passe</string>
   <string name="enter_master_password">Veuillez entrer le mot de passe</string>
+  <string name="disable_stream_buffer">Désactiver la mémoire tampon pour les diffusions en direct</string>
+  <string name="disable_stream_buffer_desc">Corrige les situations où la diffusion est en retard. Avertissement : cette option peut provoquer des ralentissements du flux vidéo.</string>
+  <string name="sony_frame_drop_fix">Correction de pertes d\'images n°1</string>
+  <string name="sony_frame_drop_fix_desc">Corrige les ralentissements sur les téléviseurs Sony et certains autres appareils. Avertissement : cette option peut entraîner des problèmes de synchronisation audio.</string>
 </resources>
