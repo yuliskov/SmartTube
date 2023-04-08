@@ -103,7 +103,7 @@
   <string name="not_interested">Pas intéressé</string>
   <string name="not_recommend_channel">Ne pas recommander cette chaîne</string>
   <string name="you_wont_see_this_video">La vidéo a été supprimée de vos recommandations</string>
-  <string name="you_wont_see_this_channel">Cette chaîne n'apparaîtra plus dans vos recommandations</string>  
+  <string name="you_wont_see_this_channel">Cette chaîne n\'apparaîtra plus dans vos recommandations</string>
   <string name="settings_search">Recherche</string>
   <string name="dialog_search">Recherche</string>
   <string name="instant_voice_search">Recherche vocale instantanée</string>
