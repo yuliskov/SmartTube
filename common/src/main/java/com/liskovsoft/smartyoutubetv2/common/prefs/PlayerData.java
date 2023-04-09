@@ -641,13 +641,13 @@ public class PlayerData extends DataChangeBase {
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs,
-                mIsRememberSpeedEnabled, mRepeatMode, null, // didn't remember what was there
+                mIsRememberSpeedEnabled, null, null, // didn't remember what was there
                 mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
                 mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, Helpers.toString(mLastSubtitleFormat), mLastSpeed, mVideoRotation,
-                mVideoZoom));
+                mVideoZoom, mRepeatMode));
 
         super.persistState();
     }
