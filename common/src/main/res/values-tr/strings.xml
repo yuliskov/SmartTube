@@ -101,7 +101,9 @@
     <string name="open_channel">Kanalı aç</string>
     <string name="open_playlist">Oynatma listesini aç</string>
     <string name="not_interested">İlgilenmiyorum</string>
+    <string name="not_recommend_channel">Kanalı önerme</string>
     <string name="you_wont_see_this_video">Video önerilenlerden kaldırıldı</string>
+    <string name="you_wont_see_this_channel">Bu kanalı önerilenlerde görmeyeceksiniz</string>
     <string name="settings_search">Arama</string>
     <string name="dialog_search">Arama</string>
     <string name="instant_voice_search">Sesli arama</string>
@@ -536,4 +538,9 @@
     <string name="enable_voice_search_desc">Resmi uygulama sözde bir köprü ile değiştirilecek. Bir köprü, genel arama isteklerini uygulamamıza aktarmaya yardımcı olur.</string>
     <string name="enable_master_password">Ana şifreyi etkinleştir</string>
     <string name="enter_master_password">Ana şifreyi gir</string>
+    <string name="disable_stream_buffer">Canlı yayınlarda ara belleği devre dışı bırak</string>
+    <string name="disable_stream_buffer_desc">Canlı yayının çok geride olduğu durumlar için düzeltme. Not: Cnlı yayın gecikmeye başlayabilir.</string>
+    <string name="sony_frame_drop_fix">Kare bırakma düzeltmesi #1</string>
+    <string name="sony_frame_drop_fix_desc">Sony TV ve diğer bazı cihazlardaki gecikmeleri düzeltir. Not: Ses senkronizasyonu ile ilgili olası sorunlar olabilir.
+    </string>
 </resources>
