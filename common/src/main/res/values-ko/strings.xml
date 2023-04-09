@@ -531,4 +531,8 @@
   <string name="enable_voice_search_desc">공식 앱은 소위 브리지로 대체됩니다. 브리지는 전역 검색 요청을 앱으로 전송하는 데 도움이 됩니다.</string>
   <string name="enable_master_password">마스터 비밀번호 활성화</string>
   <string name="enter_master_password">마스터 비밀번호 입력</string>
+  <string name="disable_stream_buffer">스트림에서 버퍼 비활성화</string>
+  <string name="disable_stream_buffer_desc">스트림이 너무 뒤쳐지는 상황을 수정합니다. 참고: 스트림이 지연되기 시작할 수 있습니다.</string>
+  <string name="sony_frame_drop_fix">프레임 드랍 수정 #1</string>
+  <string name="sony_frame_drop_fix_desc">소니 TV 및 일부 다른 장치의 지연을 수정합니다. 참고: 오디오 동기화에 문제가 있을 수 있습니다.</string>
 </resources>
