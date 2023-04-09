@@ -836,8 +836,15 @@ public class SearchSupportFragment extends Fragment {
 
     void updateSearchBarVisibility() {
         int position = mRowsSupportFragment != null ? mRowsSupportFragment.getSelectedPosition() : -1;
-        mSearchBar.setVisibility(position <=0 || mResultAdapter == null
-                || mResultAdapter.size() == 0 ? View.VISIBLE : View.GONE);
+        try {
+            mSearchBar.setVisibility(position <=0 || mResultAdapter == null
+                    || mResultAdapter.size() == 0 ? View.VISIBLE : View.GONE);
+        } catch (NullPointerException e) {
+            // Fatal Exception: java.lang.NullPointerException
+            // Attempt to invoke interface method 'void android.view.autofill.IAutoFillManager.addClient(android.view.autofill
+            // .IAutoFillManagerClient, android.content.ComponentName, int, com.android.internal.os.IResultReceiver)' on a null object reference
+            e.printStackTrace();
+        }
     }
 
     void updateSearchBarNextFocusId() {
