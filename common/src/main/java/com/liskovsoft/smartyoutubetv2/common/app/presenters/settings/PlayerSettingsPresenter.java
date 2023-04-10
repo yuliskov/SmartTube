@@ -6,6 +6,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -43,6 +44,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
+        appendPlaybackModeCategory(settingsPresenter);
         appendVideoPresetsCategory(settingsPresenter);
         appendVideoBufferCategory(settingsPresenter);
         //appendVideoZoomCategory(settingsPresenter);
@@ -465,6 +467,27 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_pixel_ratio), options);
+    }
+
+    private void appendPlaybackModeCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+
+        for (int[] pair : new int[][] {
+                {R.string.repeat_mode_all, PlaybackUI.REPEAT_MODE_ALL},
+                {R.string.repeat_mode_one, PlaybackUI.REPEAT_MODE_ONE},
+                {R.string.repeat_mode_shuffle, PlaybackUI.REPEAT_MODE_SHUFFLE},
+                {R.string.repeat_mode_pause_alt, PlaybackUI.REPEAT_MODE_LIST},
+                {R.string.repeat_mode_pause, PlaybackUI.REPEAT_MODE_PAUSE},
+                {R.string.repeat_mode_none, PlaybackUI.REPEAT_MODE_CLOSE}
+        }) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]),
+                    optionItem -> mPlayerData.setRepeatMode(pair[1]),
+                    mPlayerData.getRepeatMode() == pair[1]
+            ));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.action_repeat_mode), options);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
