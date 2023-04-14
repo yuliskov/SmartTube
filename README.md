@@ -248,21 +248,25 @@ A: They're some reports that the latest update for "Google app for Android TV" c
 
 ### Q: AV01 does not play / Why is VP9 slow on my device?
 
-Because AV01 is very new, **most** TVs and TV boxes **not not** offer hardware support and **cannot** play AV01 **at all**.
+A: Because AV01 is very new, **most** TVs and TV boxes **not not** offer hardware support and **cannot** play AV01 **at all**.
 
 If your device has hardware support for a codec, videos using that codec should play smoothly. High resolutions might also be slow in VP9 on cheap TV boxes that don't officially support 4k. Your device probably can play VP9 videos even without hardware support, however this requires a powerful CPU to run smoothly. Fixing AV01 without hardware support is technically possible, but currently not planned and probably not efficient enough.
 
 
-### Q: Can you make SmartTubeNext look like the original app? / Can the search page be improved?
+### Q: Can you make SmartTubeNext look like the original app?
 
-A: We try, but it takes a lot of effort and time, so please be patient. You definitely are not the first to suggest this.
+A: Compared to SmartTube's UI, Stock Youtube and YT Kids are far ahead. However, we'd need someone who's skilled and willing to dedicate enough time and energy into making it. And into maintaining it longterm (incl. new features, bug fixes). All of this for free. If you are / got someone like that, please help.
+Not to mention that SmartTube follows Google's official template & recommendations for Android TV apps. It's Google's fault that the template is somewhat ugly. 😂
 
-SmartTubeNext is following Google's officially recommended design/template for TV apps and is using the official, preinstalled Android TV keyboard. Sadly, Google did a really bad job regarding the search page and keyboard. Maybe a future SmartTubeNext update can add an embedded keyboard, similar to the original YouTube or other major Android TV apps. Maybe it can improve the looks to be as good or better than in the official YouTube app. But for now, it is the way it is due to lack of time and due to Google's official recommendations being bad.
+
+### Q: Can the search page be improved?
+
+A: It can be, but it takes someone to do it, similar to the above FAQ-entry. SmartTubeNext is following Google's officially recommended design/template for TV apps and is using the official, preinstalled Android TV keyboard. Sadly, Google did a really bad job regarding the search page and keyboard. Maybe a future SmartTubeNext update can add an embedded keyboard, similar to the original YouTube or other major Android TV apps. Maybe it can improve the looks to be as good or better than in the official YouTube app. But for now, it is the way it is due to lack of time and due to Google's official recommendations being bad.
 
 
-### Q: Can I install this on a Samsung Tizen TV / LG webOS TV / iOS / toaster?
+### Q: Can I install this on a Samsung Tizen TV / LG webOS TV / Roku / iOS / toaster?
 
-A: No, this only works on **Android** devices. The app cannot easily be ported over and we have no plans to even. **Please do not ask**. You can use a separate TV stick or TV box instead.
+A: No, this only works on **Android** devices. If you look at an Android TV's product page, it usually says clearly that it's based on Android. The app **cannot** easily be ported over to other plattforms and we have no plans to even try. **Please do not ask**. Instead, you can connect a separate TV stick or TV box to your TV.
 
 
 ### Q: Can I install this on a smartphone? / Can you add portrait mode? / Scrolling doesn't work.
