@@ -1,10 +1,16 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+
+import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
+
+import java.util.Objects;
 
 public class SplashActivity extends MotherActivity implements SplashView {
     private static final String TAG = SplashActivity.class.getSimpleName();
@@ -13,9 +19,18 @@ public class SplashActivity extends MotherActivity implements SplashView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         mNewIntent = getIntent();
+        final String prefixPrefName = mNewIntent.getStringExtra("prefix_pref_name");
+        if (!Objects.equals(SharedPreferencesBase.getPrefixPrefName(getApplicationContext()), prefixPrefName)) {
+            SharedPreferencesBase.setSharedPrefPrefixName(getApplicationContext(), prefixPrefName);
+            startActivity(Intent.makeRestartActivityTask(getPackageManager()
+                    .getLaunchIntentForPackage(getPackageName())
+                    .getComponent())
+                    .putExtra("prefix_pref_name", prefixPrefName));
+            Runtime.getRuntime().exit(0);
+        }
+
+        super.onCreate(savedInstanceState);
 
         mPresenter = SplashPresenter.instance(this);
         mPresenter.setView(this);
