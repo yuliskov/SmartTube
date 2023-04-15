@@ -319,7 +319,8 @@ public class MediaServiceManager {
             totalSize = 0;
         }
 
-        //LoadingManager.showLoading(context, groupTooSmall);
+        // Show loading on subscriptions if almost all videos are hidden
+        LoadingManager.showLoading(context, groupTooSmall);
         mContinuations.put(group.getId(), new Pair<>(totalSize, currentTimeMillis));
     }
 
