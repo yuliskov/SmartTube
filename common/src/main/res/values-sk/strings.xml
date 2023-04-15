@@ -101,7 +101,9 @@
     <string name="open_channel">Otvoriť kanál</string>
     <string name="open_playlist">Otvoriť knižnicu</string>
     <string name="not_interested">Nemám záujem</string>
+    <string name="not_recommend_channel">Neodporúčať kanál</string>
     <string name="you_wont_see_this_video">Video bolo odstránené z odporúčaných</string>
+    <string name="you_wont_see_this_channel">Tento kanál neuvidíte v odporúčaných</string>
     <string name="settings_search">Hľadať</string>
     <string name="dialog_search">Hľadať</string>
     <string name="instant_voice_search">Okamžité hlasové vyhľadávanie</string>
@@ -244,7 +246,7 @@
     <string name="popular_uploads_row_name">Populárne nahraté videá</string>
     <string name="breaking_news_row_name">Najnovšie správy</string>
     <string name="covid_news_row_name">COVID-19 správy</string>
-    <string name="enable_voice_search">Zapnúť hlasové vyhľadávanie</string>
+    <string name="enable_voice_search">Zapnúť hlasové vyhľadávanie (nutná podpora firmvéru)</string>
     <string name="subscribe_unsubscribe_from_channel">Odoberať/Neodoberať kanál</string>
     <string name="app_backup_restore">Záloha/Obnovenie</string>
     <string name="app_backup">Zálohovať dáta</string>
@@ -358,7 +360,7 @@
     <string name="openvpn_address_invalid">Neplatná cesta ku konfiguračnému súboru OpenVPN.</string>
     <string name="internet_censorship">Internetová Cenzúra</string>
     <string name="rename_section">Premenovať túto sekciu</string>
-    <string name="simple_edit_value_hint">Nová hodnota</string>
+    <string name="simple_edit_value_hint">Zadajte hodnotu</string>
     <string name="seek_interval">Interval pratáčania</string>
     <string name="seek_interval_sec">%s sekúnd</string>
     <string name="subtitle_system">Systémový štýl (Nastavenia Androidu > Dostupnosť)</string>
@@ -370,7 +372,9 @@
     <string name="force_legacy_codecs_desc">Výrazne zlepšuje výkon na slabších zariadeniach. Maximálne rozlíšenie je 720p.</string>
     <string name="force_legacy_codecs">Vynútenie zastaralých kodekov (720p)</string>
     <string name="live_stream_fix_desc">Varovanie: Pretáčanie živého vysielania bude nedostupné. Výrazne zlepšuje živé vysielanie na slabších zariadeniach. Maximálne rozlíšenie je 1080p.</string>
+    <string name="live_stream_fix_4k_desc">Varovanie: Pretáčanie živého vysielania bude nedostupné. Výrazne zlepšuje výkon živého vysielania. Maximálne rozlíšenie je 4K.</string>
     <string name="live_stream_fix">Oprava živého vysielania (1080p)</string>
+    <string name="live_stream_fix_4k">Oprava živého vysielania (4K)</string>
     <string name="playback_notifications_fix_desc">Skyje notifikáciu pri zmene skladby. Môže byť uzitočné na AOSP firmvéroch.</string>
     <string name="playback_notifications_fix">Vypnúť notifikácie pri prehrávaní</string>
     <string name="amlogic_fix_desc">Opravuje poklesu snímok na Amlogic zariadeniach.</string>
@@ -391,7 +395,7 @@
     <string name="pressing_home_back">stlačením tlačidla DOMOV alebo SPÄŤ</string>
     <string name="pressing_back">stlačením tlačidla SPÄŤ</string>
     <string name="player_number_key_seek">Pretáčanie s číslami</string>
-    <string name="save_remove_playlist">Pridať/Zmazať playlist zo sekcie Playlisty</string>
+    <string name="save_remove_playlist">Uložiť/Zmazať playlist z Knižnice</string>
     <string name="remove_playlist">Zmazať playlist zo sekcie Playlisty natrvalo</string>
     <string name="removed_from_playlists">Zmazané zo sekcie Playlisty</string>
     <string name="saved_to_playlists">Pridané do sekcie Playlisty</string>
@@ -525,9 +529,18 @@
     <string name="player_long_speed_list">Možnosti rýchlosti videa</string>
     <string name="alt_app_icon">Alternatívna ikonka aplikácie (potrebný reštart)</string>
     <string name="network_stack">Preferovať sieťový zásobník %s</string>
-    <string name="cronet_desc">Cronet je Chromium sieťový zásobník. Zvyčajne rýchlejší ako ostatné. Môže pomôcť pri problémoch s ukladaním do medzipamäte.</string>
+    <string name="cronet_desc">Cronet je Chromium sieťový zásobník. Môže znížiť oneskorenie a zvýšiť výkon siete, čo môže pomôcť pri problémoch s ukladaním do medzipamäte.</string>
     <string name="unlock_all_formats">Odblokovať všetky video formáty</string>
-    <string name="unlock_all_formats_desc">Odblokuje formáty, ktoré nemusia byť podporované na vašom hardvéri.</string>
+    <string name="unlock_all_formats_desc">Na niektorých zariadeniach hlási firmvér niektoré formáty ako nepodporované aj keď podporované sú.\n
+        (napr. smart televízie s rozlíšením 1080p majú tendenciu hlásiť 4K ako nepodporované).</string>
     <string name="okhttp_desc">Tento sieťový zásobník je najpomalší, ale najstabilnejší.</string>
     <string name="select_channel_section">Otvoriť zodpovedajúcu sekciu po otvorení aplikácie z kanálov ATV</string>
+    <string name="enable_voice_search_desc">Oficiálna aplikácia bude nahradená tzv. mostom. Most pomáha prenášať požiadavky globálneho vyhľadávania do tejto aplikácie.</string>
+    <string name="enable_master_password">Povoliť hlavné heslo</string>
+    <string name="enter_master_password">Zadajte hlavné heslo</string>
+    <string name="disable_stream_buffer">Zakázať medzipamäť pri živom vysielaní</string>
+    <string name="disable_stream_buffer_desc">Oprava pre situácie, keď je živé vysielanie dosť pozadu. Pozor: živé vysielanie môže začať sekať.</string>
+    <string name="sony_frame_drop_fix">Oprava výpadkov prehrávania #1</string>
+    <string name="sony_frame_drop_fix_desc">Opravuje sekanie na Sony TV a iných zariadeniach. Pozor: môžu nastať problémy so synchronizáciou audia.
+    </string>
 </resources>
