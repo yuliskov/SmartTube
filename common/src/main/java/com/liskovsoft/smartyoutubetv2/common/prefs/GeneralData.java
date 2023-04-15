@@ -72,6 +72,7 @@ public class GeneralData {
     private boolean mIsAltAppIconEnabled;
     private int mVersionCode;
     private boolean mIsSelectChannelSectionEnabled;
+    private boolean mIsOldHomeLookEnabled;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new ArrayList<>();
@@ -693,6 +694,15 @@ public class GeneralData {
         return mIsSelectChannelSectionEnabled;
     }
 
+    public void enableOldHomeLook(boolean enable) {
+        mIsOldHomeLookEnabled = enable;
+        persistState();
+    }
+
+    public boolean isOldHomeLookEnabled() {
+        return mIsOldHomeLookEnabled;
+    }
+
     private void initSections() {
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mDefaultSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -763,6 +773,7 @@ public class GeneralData {
         mVersionCode = Helpers.parseInt(split, 39, -1);
         mIsSelectChannelSectionEnabled = Helpers.parseBoolean(split, 40, true);
         mMasterPassword = Helpers.parseStr(split, 41);
+        mIsOldHomeLookEnabled = Helpers.parseBoolean(split, 42, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -823,6 +834,7 @@ public class GeneralData {
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
                 playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
-                mScreenDimmingTimeoutMs, mScreenDimmingMode, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword));
+                mScreenDimmingTimeoutMs, mScreenDimmingMode, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
+                mIsOldHomeLookEnabled));
     }
 }

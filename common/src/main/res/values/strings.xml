@@ -544,4 +544,5 @@
     <string name="sony_frame_drop_fix_desc">Fix lags on Sony TV and some other devices. Note: possible problems with audio synchronization.
     </string>
     <string name="audio_language">Audio language</string>
+    <string name="old_home_look">The old look of the Home section</string>
 </resources>

@@ -408,6 +408,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.isGlobalClockEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.old_home_look),
+                option -> mGeneralData.enableOldHomeLook(option.isSelected()),
+                mGeneralData.isOldHomeLookEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_home),
                 option -> mGeneralData.hideShortsFromHome(option.isSelected()),
                 mGeneralData.isHideShortsFromHomeEnabled()));
