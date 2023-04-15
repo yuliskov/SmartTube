@@ -37,6 +37,7 @@ import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -45,6 +46,7 @@ public class AppDialogUtil {
     private static final int BACKGROUND_PLAYBACK_ID = 135;
     private static final int VIDEO_PRESETS_ID = 136;
     private static final int AUDIO_DELAY_ID = 137;
+    private static final int AUDIO_LANGUAGE_ID = 138;
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
@@ -295,6 +297,21 @@ public class AppDialogUtil {
                     onBufferSelected.run();
                 },
                 playerData.getVideoBufferType() == type);
+    }
+
+    public static OptionCategory createAudioLanguageCategory(Context context, PlayerData playerData) {
+        String title = context.getString(R.string.audio_language);
+
+        List<OptionItem> options = new ArrayList<>();
+
+        for (Locale locale : Locale.getAvailableLocales()) {
+            String languageCode = locale.getLanguage().toLowerCase();
+            options.add(UiOptionItem.from(locale.getDisplayLanguage(),
+                    optionItem -> playerData.setAudioLanguage(languageCode),
+                    languageCode.equals(playerData.getAudioLanguage())));
+        }
+
+        return OptionCategory.from(AUDIO_LANGUAGE_ID, OptionCategory.TYPE_RADIO, title, options);
     }
 
     public static OptionCategory createAudioShiftCategory(Context context, PlayerData playerData) {

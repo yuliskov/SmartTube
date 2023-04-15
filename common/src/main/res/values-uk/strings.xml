@@ -534,4 +534,5 @@
     <string name="sony_frame_drop_fix">Виправлення випадіння кадрів #1</string>
     <string name="sony_frame_drop_fix_desc">Виправляє лагання на тв Соні та деяких інших пристроях. Увага: можливі проблеми с синхронизацією аудіо.
     </string>
+    <string name="audio_language">Мова аудіо</string>
 </resources>

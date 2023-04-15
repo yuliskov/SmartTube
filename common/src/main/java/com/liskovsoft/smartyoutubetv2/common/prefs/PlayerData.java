@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
@@ -58,6 +59,7 @@ public class PlayerData extends DataChangeBase {
     private boolean mIsAfrResSwitchEnabled;
     private int mAfrPauseMs;
     private int mAudioDelayMs;
+    private String mAudioLanguage;
     private boolean mIsRememberSpeedEnabled;
     private boolean mIsLegacyCodecsForced;
     private int mRepeatMode;
@@ -483,6 +485,15 @@ public class PlayerData extends DataChangeBase {
         persistState();
     }
 
+    public String getAudioLanguage() {
+        return mAudioLanguage;
+    }
+
+    public void setAudioLanguage(String language) {
+        mAudioLanguage = language;
+        persistState();
+    }
+
     public void enableSonyTimerFix(boolean enable) {
         mIsSonyTimerFixEnabled = enable;
         persistState();
@@ -627,6 +638,7 @@ public class PlayerData extends DataChangeBase {
         mVideoRotation = Helpers.parseInt(split, 49, 0);
         mVideoZoom = Helpers.parseInt(split, 50, -1);
         mRepeatMode = Helpers.parseInt(split, 51, PlaybackUI.REPEAT_MODE_ALL);
+        mAudioLanguage = Helpers.parseStr(split, 52, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -647,7 +659,7 @@ public class PlayerData extends DataChangeBase {
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
                 mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, Helpers.toString(mLastSubtitleFormat), mLastSpeed, mVideoRotation,
-                mVideoZoom, mRepeatMode));
+                mVideoZoom, mRepeatMode, mAudioLanguage));
 
         super.persistState();
     }

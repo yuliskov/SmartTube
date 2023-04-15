@@ -534,4 +534,5 @@
     <string name="sony_frame_drop_fix">Исправление выпадения кадров #1</string>
     <string name="sony_frame_drop_fix_desc">Исправляет лаги на телевизорах Сони и некоторых других устройствах. Внимание: возможны проблемы с синхронизацией аудио.
     </string>
+    <string name="audio_language">Язык аудио</string>
 </resources>

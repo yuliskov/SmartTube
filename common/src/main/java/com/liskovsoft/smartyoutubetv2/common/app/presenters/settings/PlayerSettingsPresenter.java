@@ -48,6 +48,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendVideoPresetsCategory(settingsPresenter);
         appendVideoBufferCategory(settingsPresenter);
         //appendVideoZoomCategory(settingsPresenter);
+        appendAudioLanguageCategory(settingsPresenter);
         appendAudioShiftCategory(settingsPresenter);
         appendMasterVolumeCategory(settingsPresenter);
         appendOKButtonCategory(settingsPresenter);
@@ -122,6 +123,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
     private void appendVideoZoomCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = AppDialogUtil.createVideoZoomCategory(getContext(), mPlayerData);
+        settingsPresenter.appendRadioCategory(category.title, category.options);
+    }
+
+    private void appendAudioLanguageCategory(AppDialogPresenter settingsPresenter) {
+        OptionCategory category = AppDialogUtil.createAudioLanguageCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 

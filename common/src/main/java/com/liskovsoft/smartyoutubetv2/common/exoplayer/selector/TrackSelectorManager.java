@@ -34,6 +34,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     public static final int RENDERER_INDEX_AUDIO = 1;
     public static final int RENDERER_INDEX_SUBTITLE = 2;
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
+    private static final String DEFAULT_LANGUAGE = "en";
     private final String mLanguage;
     private final boolean mIsAllFormatsUnlocked;
 
@@ -566,7 +567,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         }
 
                         resultTracks.add(trackGroup);
-                    } else if (Helpers.equals(mediaTrack.format.language, "en")) {
+                    } else if (Helpers.equals(mediaTrack.format.language, DEFAULT_LANGUAGE)) {
                         if (resultTracksFallback == null) {
                             resultTracksFallback = new ArrayList<>();
                         }
