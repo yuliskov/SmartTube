@@ -54,8 +54,8 @@
   <string name="settings_about">このアプリについて</string>
   <string name="dialog_account_list">アカウントを選択</string>
   <string name="dialog_account_none">なし</string>
-  <string name="dialog_remove_account">アカウントを削除</string>
-  <string name="dialog_add_account">アカウントを追加</string>
+  <string name="dialog_remove_account">ログアウト</string>
+  <string name="dialog_add_account">ログイン</string>
   <string name="default_lang">デフォルト</string>
   <string name="dialog_select_language">言語</string>
   <string name="subtitle_default">デフォルト</string>
@@ -495,4 +495,9 @@
   <string name="remove_from_subscriptions">隠す</string>
   <string name="player_long_speed_list">詳細な再生速度</string>
   <string name="select_channel_section">ATVチャンネルから起動した際に対応したセクションを開く</string>
+  <string name="enable_voice_search_desc">公式アプリを「ブリッジ」に置き換えます。これには、グローバル検索リクエストをこのアプリへ転送する役割があります。</string>
+  <string name="enable_master_password">マスターパスワードを有効化</string>
+  <string name="enter_master_password">マスターパスワードを入力</string>
+  <string name="not_recommend_channel">チャンネルをおすすめに表示しない</string>
+  <string name="you_wont_see_this_channel">今後このチャンネルの動画はおすすめされなくなります</string>
 </resources>
