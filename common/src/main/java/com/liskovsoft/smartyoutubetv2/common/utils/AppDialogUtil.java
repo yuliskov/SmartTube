@@ -35,6 +35,8 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -304,12 +306,23 @@ public class AppDialogUtil {
 
         List<OptionItem> options = new ArrayList<>();
 
+        List<String> addedCodes = new ArrayList<>();
+
         for (Locale locale : Locale.getAvailableLocales()) {
             String languageCode = locale.getLanguage().toLowerCase();
+
+            if (addedCodes.contains(languageCode)) {
+                continue;
+            }
+
             options.add(UiOptionItem.from(locale.getDisplayLanguage(),
                     optionItem -> playerData.setAudioLanguage(languageCode),
                     languageCode.equals(playerData.getAudioLanguage())));
+            addedCodes.add(languageCode);
         }
+
+        // Alphabetical order
+        Collections.sort(options, Comparator.comparing(o -> ((String) o.getTitle())));
 
         return OptionCategory.from(AUDIO_LANGUAGE_ID, OptionCategory.TYPE_RADIO, title, options);
     }
