@@ -154,6 +154,10 @@ android {
         // Not working!
         // exclude '**/SearchOrbView.class'
     }
+
+    lintOptions {
+        checkReleaseBuilds false // fix for ClassNotFoundException: com.android.tools.lint.client.api.Vendor
+    }
 }
 
 dependencies {
