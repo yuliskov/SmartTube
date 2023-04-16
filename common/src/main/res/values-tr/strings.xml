@@ -543,4 +543,6 @@
     <string name="sony_frame_drop_fix">Kare bırakma düzeltmesi #1</string>
     <string name="sony_frame_drop_fix_desc">Sony TV ve diğer bazı cihazlardaki gecikmeleri düzeltir. Not: Ses senkronizasyonu ile ilgili olası sorunlar olabilir.
     </string>
+    <string name="audio_language">Ses dili</string>
+    <string name="old_home_look">Ana Sayfa bölümünün eski görünümü</string>
 </resources>
