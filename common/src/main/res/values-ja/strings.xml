@@ -500,4 +500,6 @@
   <string name="enter_master_password">マスターパスワードを入力</string>
   <string name="not_recommend_channel">チャンネルをおすすめに表示しない</string>
   <string name="you_wont_see_this_channel">今後このチャンネルの動画はおすすめされなくなります</string>
+  <string name="audio_language">音声言語</string>
+  <string name="old_home_look">ホームセクションを古い外観に戻す</string>
 </resources>
