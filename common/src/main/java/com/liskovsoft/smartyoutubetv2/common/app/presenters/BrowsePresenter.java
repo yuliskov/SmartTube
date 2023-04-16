@@ -291,6 +291,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     @Override
+    public void onViewPaused() {
+        super.onViewPaused();
+        disposeActions();
+    }
+
+    @Override
     public void onVideoItemSelected(Video item) {
         if (getView() == null) {
             return;

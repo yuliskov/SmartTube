@@ -110,6 +110,11 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     }
 
     @Override
+    public void onViewPaused() {
+        // NOP
+    }
+
+    @Override
     public void onViewResumed() {
         if (mNeedSync && canViewBeSynced()) {
             // NOTE: don't place cleanup in the onViewResumed!!! This could cause errors when view is resumed.
