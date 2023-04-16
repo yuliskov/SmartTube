@@ -110,7 +110,7 @@
     <string name="option_background_playback_behind">Riproduci in background</string>
     <string name="next_video_info_is_not_loaded_yet">Le informazioni sul prossimo video non sono ancora state caricate</string>
     <string name="card_multiline_title">Titoli multiriga</string>
-    <string name="cards_style">Stile riquadri</string>
+    <string name="cards_style">Stile cartoline</string>
     <string name="repeat_mode_all">Riproduci i video continuamente</string>
     <string name="repeat_mode_one">Ripeti video corrente</string>
     <string name="repeat_mode_pause">Metti in pausa la riproduzione dopo ogni video</string>
@@ -154,7 +154,7 @@
     <string name="player_seek_preview_carousel_slow">Carosello (lento, per fotogrammi chiave)</string>
     <string name="player_seek_preview_carousel_fast">Carosello (anteprima veloce, non precisa)</string>
     <string name="unsubscribe_from_channel">Disiscriviti dal canale</string>
-    <string name="card_title_lines_num">Numero linee titoli</string>
+    <string name="card_title_lines_num">Numero righe titoli cartoline</string>
     <string name="card_auto_scrolled_title">Scorrimento automatico titoli tagliati</string>
     <string name="share_link">Condividi link</string>
     <string name="subscribe_to_channel">Iscriviti al canale</string>
@@ -229,7 +229,7 @@
     <string name="dialog_select_country">Paese</string>
     <string name="settings_language_country">Lingua/Paese</string>
     <string name="share_embed_link">Condividi link incorporato</string>
-    <string name="card_text_scroll_factor">Velocità scorrimento testo titoli video</string>
+    <string name="card_text_scroll_factor">Velocità scorrimento testo titoli cartoline</string>
     <string name="preferred_update_source">Seleziona fonte aggiornamenti</string>
     <string name="hide_shorts">Nascondi i video corti dalle Iscrizioni</string>
     <string name="key_remapping">Rimappatura tasti</string>
@@ -479,7 +479,7 @@
     <string name="chat_left">Sinistra</string>
     <string name="chat_right">Destra</string>
     <string name="card_real_thumbnails">Sostituisci le miniature con un fotogramma del video</string>
-    <string name="card_content">Dove prendere le miniature delle carte</string>
+    <string name="card_content">Dove prendere le miniature delle cartoline</string>
     <string name="thumb_quality_default">Predefinito</string>
     <string name="thumb_quality_start">Inizio del video</string>
     <string name="thumb_quality_middle">Metà del video</string>
@@ -497,7 +497,7 @@
     <string name="resume_history">Riprendi la cronologia</string>
     <string name="clear_history">Cancella la cronologia</string>
     <string name="chapters">Capitoli</string>
-    <string name="card_multiline_subtitle">Sottotitoli multilinea</string>
+    <string name="card_multiline_subtitle">Sottotitoli multiriga</string>
     <string name="auto_frame_rate_modes">Modalità supportate</string>
     <string name="loading">Caricamento in corso…</string>
     <string name="hide_streams">Nascondi le trasmissioni dalle iscrizioni</string>
@@ -543,4 +543,6 @@
     <string name="sony_frame_drop_fix">Correzione salto fotogrammi n. 1</string>
     <string name="sony_frame_drop_fix_desc">Risolvi i ritardi sulle TV Sony e su alcuni altri dispositivi. Nota: possibili problemi con la sincronizzazione audio.
     </string>
+    <string name="audio_language">Lingua audio</string>
+    <string name="old_home_look">Il vecchio aspetto della sezione Home</string>
 </resources>
