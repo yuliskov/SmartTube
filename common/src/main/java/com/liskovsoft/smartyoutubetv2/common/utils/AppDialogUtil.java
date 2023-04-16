@@ -321,8 +321,9 @@ public class AppDialogUtil {
             addedCodes.add(languageCode);
         }
 
+        // NOTE: Comparator.comparing API >= 24
         // Alphabetical order
-        Collections.sort(options, Comparator.comparing(o -> ((String) o.getTitle())));
+        Collections.sort(options, (o1, o2) -> ((String) o1.getTitle()).compareTo((String) o2.getTitle()));
 
         return OptionCategory.from(AUDIO_LANGUAGE_ID, OptionCategory.TYPE_RADIO, title, options);
     }
