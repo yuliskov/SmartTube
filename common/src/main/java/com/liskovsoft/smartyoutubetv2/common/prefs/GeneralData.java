@@ -352,6 +352,14 @@ public class GeneralData {
         GlobalPreferences.sInstance.hideStreamsFromSubscriptions(enable);
     }
 
+    public void hideShortsEverywhere(boolean enable) {
+        GlobalPreferences.sInstance.hideShortsEverywhere(enable);
+    }
+
+    public boolean isHideShortsEverywhereEnabled() {
+        return GlobalPreferences.sInstance.isHideShortsEverywhereEnabled();
+    }
+
     public boolean isHideStreamsFromSubscriptionsEnabled() {
         return GlobalPreferences.sInstance.isHideStreamsFromSubscriptionsEnabled();
     }

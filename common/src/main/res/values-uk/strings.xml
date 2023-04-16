@@ -536,4 +536,5 @@
     </string>
     <string name="audio_language">Мова аудіо</string>
     <string name="old_home_look">Старий вигляд розділу Головна</string>
+    <string name="hide_shorts_everywhere">Приховувати короткі відео з усіх розділів</string>
 </resources>

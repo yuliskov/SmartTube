@@ -415,6 +415,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.isOldHomeLookEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_everywhere),
+                option -> mGeneralData.hideShortsEverywhere(option.isSelected()),
+                mGeneralData.isHideShortsEverywhereEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_home),
                 option -> mGeneralData.hideShortsFromHome(option.isSelected()),
                 mGeneralData.isHideShortsFromHomeEnabled()));

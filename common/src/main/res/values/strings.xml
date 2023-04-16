@@ -545,4 +545,5 @@
     </string>
     <string name="audio_language">Audio language</string>
     <string name="old_home_look">The old look of the Home section</string>
+    <string name="hide_shorts_everywhere">Hide shorts everywhere</string>
 </resources>

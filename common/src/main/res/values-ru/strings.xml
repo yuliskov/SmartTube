@@ -536,4 +536,5 @@
     </string>
     <string name="audio_language">Язык аудио</string>
     <string name="old_home_look">Старый вид Главного раздела</string>
+    <string name="hide_shorts_everywhere">Скрывать короткие видео повсюду</string>
 </resources>
