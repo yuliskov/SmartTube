@@ -502,4 +502,5 @@
   <string name="you_wont_see_this_channel">今後このチャンネルの動画はおすすめされなくなります</string>
   <string name="audio_language">音声言語</string>
   <string name="old_home_look">ホームセクションを古い外観に戻す</string>
+  <string name="hide_shorts_everywhere">ショートを完全に隠す</string>
 </resources>
