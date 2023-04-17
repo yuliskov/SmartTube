@@ -12,7 +12,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.youtubeapi.service.data.YouTubeMediaItemFormatInfo;
 import com.liskovsoft.youtubeapi.videoinfo.V2.VideoInfoService;
 import com.liskovsoft.youtubeapi.videoinfo.models.VideoInfo;
@@ -60,6 +60,7 @@ public class UrlProvider extends ContentProvider {
     public boolean onCreate() {
         Log.d(TAG, "onCreate() called");
         GlobalPreferences.instance(getContext());
+        ViewManager.instance(getContext()).clearCaches();
         return true;
     }
 
