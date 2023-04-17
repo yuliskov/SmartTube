@@ -87,7 +87,7 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:' + kotlinCoreVersion
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + kotlinCoreVersion
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + kotlinxVersion
 
     stbetaImplementation project(path: ':leanbackassistant')
     stbetaImplementation project(path: ':appupdatechecker2')
