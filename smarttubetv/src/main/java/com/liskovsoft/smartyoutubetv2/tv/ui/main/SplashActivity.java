@@ -33,7 +33,7 @@ public class SplashActivity extends MotherActivity implements SplashView {
         mPresenter.setView(this);
         mPresenter.onViewInitialized();
 
-        finish();
+        //finish();
     }
 
     @Override
@@ -54,6 +54,11 @@ public class SplashActivity extends MotherActivity implements SplashView {
     @Override
     public Intent getNewIntent() {
         return mNewIntent;
+    }
+
+    @Override
+    public void finishView() {
+        finish();
     }
 
     //@Override

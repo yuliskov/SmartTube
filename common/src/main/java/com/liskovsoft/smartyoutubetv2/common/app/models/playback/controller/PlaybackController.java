@@ -9,7 +9,6 @@ public interface PlaybackController extends PlaybackEngine, PlaybackUI {
     Video getVideo();
     void finish();
     void finishReally();
-    void setAfrRunning(boolean isRunning);
     void showBackground(String url);
     void showBackgroundColor(int colorResId);
     void resetPlayerState();

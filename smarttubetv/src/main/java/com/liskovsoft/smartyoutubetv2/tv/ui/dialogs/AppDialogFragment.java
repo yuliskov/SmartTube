@@ -204,6 +204,11 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
         return isVisible() && getUserVisibleHint();
     }
 
+    @Override
+    public boolean isTransparent() {
+        return mIsTransparent;
+    }
+
     public void onFinish() {
         mPresenter.onFinish();
     }

@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
+import android.text.TextUtils;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,10 +22,10 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTr
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector.TrackSelectorCallback;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -32,28 +33,25 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class TrackSelectorManager implements TrackSelectorCallback {
-    private final Handler mHandler = new Handler(Looper.getMainLooper());
     public static final int RENDERER_INDEX_VIDEO = 0;
     public static final int RENDERER_INDEX_AUDIO = 1;
     public static final int RENDERER_INDEX_SUBTITLE = 2;
-    //private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
-    //private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
     private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
             Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
     private final static float MAX_FRAME_RATE =
             Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1 ? 30f : 60f;
     private final String mLanguage;
+    private final boolean mIsAllFormatsUnlocked;
 
     private DefaultTrackSelector mTrackSelector;
-    //private TrackSelection.Factory mTrackSelectionFactory;
 
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
-    private long mTracksInitTimeMs;
 
-    public TrackSelectorManager(String language) {
+    public TrackSelectorManager(String language, boolean isAllFormatsUnlocked) {
         mLanguage = language;
+        mIsAllFormatsUnlocked = isAllFormatsUnlocked;
     }
 
     public void invalidate() {
@@ -184,11 +182,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 mediaTrack.groupIndex = groupIndex;
                 mediaTrack.trackIndex = trackIndex;
 
-                if (mediaTrack.isVP9Codec() && !Helpers.isVP9ResolutionSupported(mediaTrack.getHeight())) {
-                    continue;
-                }
-
-                if (mediaTrack.isAV1Codec() && !Helpers.isAV1ResolutionSupported(mediaTrack.getHeight())) {
+                if (!mIsAllFormatsUnlocked && !Utils.isTrackSupported(mediaTrack)) {
                     continue;
                 }
 
@@ -198,8 +192,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 renderer.sortedTracks.add(mediaTrack);
             }
         }
-
-        mTracksInitTimeMs = System.currentTimeMillis();
     }
 
     /**
@@ -581,8 +573,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             return trackGroupList;
         }
 
-        if (originTrack.format != null && originTrack.format.language != null) {
-            return trackGroupList;
+        String resultLanguage = mLanguage;
+
+        // Override default language with one from recently selected track
+        if (originTrack.format != null && !TextUtils.isEmpty(originTrack.format.language)) {
+            resultLanguage = originTrack.format.language;
         }
 
         List<MediaTrack[]> resultTracks = null;
@@ -594,7 +589,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 MediaTrack mediaTrack = trackGroup[0];
 
                 if (mediaTrack.format != null) {
-                    if (Helpers.equals(mediaTrack.format.language, mLanguage)) {
+                    if (Helpers.equals(mediaTrack.format.language, resultLanguage)) {
                         if (resultTracks == null) {
                             resultTracks = new ArrayList<>();
                         }

@@ -90,7 +90,7 @@ import java.util.Map;
  */
 public class PlaybackFragment extends SeekModePlaybackFragment implements PlaybackView, PlaybackController {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
-    private static final int UPDATE_DELAY_MS = 16;
+    private static final int UPDATE_DELAY_MS = 100;
     private static final int SUGGESTIONS_START_INDEX = 1;
     private VideoPlayerGlue mPlayerGlue;
     private SimpleExoPlayer mPlayer;
@@ -110,7 +110,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private int mPlaybackMode = PlaybackEngine.BACKGROUND_MODE_DEFAULT;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
-    private boolean mIsAfrRunning;
+    private long mResumeTimeMs;
     private Boolean mIsControlsShownPreviously;
     private Video mPendingFocus;
 
@@ -200,6 +200,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mEventListener.onViewResumed();
 
         showHideWidgets(true); // PIP mode fix
+
+        mResumeTimeMs = System.currentTimeMillis();
     }
 
     @Override
@@ -462,7 +464,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void createMediaSession() {
-        if (VERSION.SDK_INT <= 19) {
+        if (VERSION.SDK_INT <= 19 || PlayerTweaksData.instance(getContext()).isPlaybackNotificationsDisabled()) {
             // Fix Android 4.4 bug: java.lang.IllegalArgumentException: MediaButtonReceiver component may not be null
             return;
         }
@@ -481,7 +483,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         mMediaSessionConnector.setMediaMetadataProvider(player -> {
-            if (getVideo() == null || PlayerTweaksData.instance(getContext()).isPlaybackNotificationsDisabled()) {
+            if (getVideo() == null) {
                 return null;
             }
 
@@ -518,10 +520,16 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mMediaSessionConnector.setControlDispatcher(new DefaultControlDispatcher() {
             @Override
             public boolean dispatchSetPlayWhenReady(Player player, boolean playWhenReady) {
-                // Fix exoplayer pause when switching AFR.
-                // Also it's tied to activity state transitioning because window has different mode.
+                // Fix exoplayer pause after activity is resumed (AFR switching).
+                // It's tied to activity state transitioning because window has different mode.
                 // NOTE: may be a problems with background playback or bluetooth button events
-                if (mIsAfrRunning || (!isResumed() && !isInPIPMode())) {
+                //if (System.currentTimeMillis() - mResumeTimeMs < 5_000 ||
+                //        (!isResumed() && !isInPIPMode() && !AppDialogPresenter.instance(getContext()).isDialogShown())
+                //) {
+                //    return false;
+                //}
+
+                if (System.currentTimeMillis() - mResumeTimeMs < 5_000) {
                     return false;
                 }
 
@@ -822,11 +830,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         return result;
-    }
-
-    @Override
-    public void setAfrRunning(boolean isRunning) {
-        mIsAfrRunning = isRunning;
     }
 
     @Override
@@ -1301,6 +1304,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void setSeekPreviewTitle(String title) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setSeekPreviewTitle(title);
+            mPlayerGlue.setBody(title);
         }
     }
 

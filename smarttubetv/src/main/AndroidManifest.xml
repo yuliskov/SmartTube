@@ -66,8 +66,11 @@
         <!-- Not implemented yet( -->
         <!--<meta-data android:name="whisperplay" android:resource="@xml/whisperplay"/>-->
 
+        <!-- This activity name also stored in: smarttubetv\src\main\assets\common.properties -->
+        <!-- More info: com.liskovsoft.leanbackassistant.utils.AppUtil -->
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity"
+            android:exported="true"
             android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape">
@@ -115,9 +118,11 @@
             </intent-filter>
         </activity>
 
+        <!-- Alt app launcher icon -->
         <activity-alias android:label="@string/app_name"
                         android:icon="@mipmap/app_icon_alt"
                         android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivityAlt"
+                        android:exported="true"
                         android:enabled="false"
                         android:targetActivity="com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity">
             <intent-filter>
@@ -127,6 +132,17 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity-alias>
+
+        <!-- noHistory is essential for dialogs. Because otherwise you'll see previous dialog content when opening. -->
+        <!-- behind is important too. This fix crashes on Android 8 (api 26) and above. -->
+        <!-- More info about behind: https://stackoverflow.com/a/52426009/1279056 -->
+        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.AppDialogActivity"
+                  android:noHistory="true"
+                  android:excludeFromRecents="true"
+                  android:launchMode="singleInstance"
+                  android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+                  android:screenOrientation="behind"
+                  android:theme="@style/App.Theme.Leanback.Preferences"/>
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity"
@@ -169,12 +185,6 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape"/>
 
-        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.onboarding.OnboardingActivity"
-                  android:launchMode="singleInstance"
-                  android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
-                  android:screenOrientation="landscape"
-                  android:theme="@style/Theme.Leanback.Onboarding"/>
-
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity"
                   android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
@@ -187,21 +197,13 @@
                   android:screenOrientation="landscape"
                   android:theme="@style/App.Theme.Leanback.GuidedStep"/>
 
-        <!-- noHistory is essential for dialogs. Because otherwise you'll see previous dialog content when opening. -->
-        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.AppDialogActivity"
-                  android:noHistory="true"
-                  android:launchMode="singleInstance"
-                  android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
-                  android:screenOrientation="landscape"
-                  android:theme="@style/App.Theme.Leanback.Preferences"/>
-
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.webbrowser.WebBrowserActivity"
             android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape"/>
 
-        <!-- BEGIN Launchers -->
+        <!-- BEGIN Launchers (used inside tvQuickActions. Don't rename them or move!) -->
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.HomeLauncherActivity"
@@ -294,69 +296,6 @@
             android:screenOrientation="landscape"/>
 
         <!-- END Launchers -->
-
-        <!--
-
-        <meta-data android:name="android.app.default_searchable"
-            android:value="com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity"/>
-
-        <activity
-            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity"
-            android:launchMode="singleInstance"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Leanback.Details">
-
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
-
-        -->
-
-        <!-- Begin Old activities -->
-
-        <!--
-        <activity
-            android:name="com.liskovsoft.smartyoutubetv2.tv.old.ui.VerticalGridActivity"
-            android:exported="true"
-            android:parentActivityName="com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Leanback.VerticalGrid" />
-        <activity
-            android:name="com.liskovsoft.smartyoutubetv2.tv.old.ui.GuidedStepActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Example.Leanback.GuidedStep" />
-        -->
-
-        <!-- Provides search suggestions for keywords against video metadata. -->
-        <!--
-        <provider
-            android:name=".old.data.VideoProvider"
-            android:authorities="${packageName}"
-            android:permission="${applicationId}.ACCESS_VIDEO_DATA"
-            android:exported="true">
-            <path-permission
-                android:pathPrefix="/search"
-                android:readPermission="android.permission.GLOBAL_SEARCH" />
-        </provider>
-
-        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.old.ui.SettingsActivity"
-            android:exported="true"
-            android:screenOrientation="landscape"
-            android:theme="@style/App.Theme.Leanback.Preferences"
-            />
-
-        <activity
-            android:name="com.liskovsoft.smartyoutubetv2.tv.old.ui.AuthenticationActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Example.Leanback.GuidedStep" />
-        -->
-
-        <!-- End Old activities -->
         <provider
             android:name=".UrlProvider"
             android:authorities="com.liskovsoft.smartyoutubetv2.tv.url_provider"

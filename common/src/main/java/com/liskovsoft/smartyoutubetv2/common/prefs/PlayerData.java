@@ -602,7 +602,7 @@ public class PlayerData extends DataChangeBase {
         // old afr delay sec was there
         mAudioDelayMs = Helpers.parseInt(split, 20, 0);
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, false);
-        mRepeatMode = Helpers.parseInt(split, 22, PlaybackUI.REPEAT_MODE_ALL);
+        // repeat mode was here
         // didn't remember what was there
         mIsLegacyCodecsForced = Build.VERSION.SDK_INT <= 19;
         mIsSonyTimerFixEnabled = Helpers.parseBoolean(split, 25, false);
@@ -625,11 +625,12 @@ public class PlayerData extends DataChangeBase {
         mIsNumberKeySeekEnabled = Helpers.parseBoolean(split, 43, true);
         mIsSkip24RateEnabled = Helpers.parseBoolean(split, 44, false);
         mAfrPauseMs = Helpers.parseInt(split, 45, 0);
-        mIsLiveChatEnabled = Helpers.parseBoolean(split, 46, Build.VERSION.SDK_INT > 19);
+        mIsLiveChatEnabled = Helpers.parseBoolean(split, 46, false);
         mLastSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 47)), FormatItem.SUBTITLE_DEFAULT);
         mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
         mVideoRotation = Helpers.parseInt(split, 49, 0);
         mVideoZoom = Helpers.parseInt(split, 50, -1);
+        mRepeatMode = Helpers.parseInt(split, 51, PlaybackUI.REPEAT_MODE_ALL);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -644,13 +645,13 @@ public class PlayerData extends DataChangeBase {
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs,
-                mIsRememberSpeedEnabled, mRepeatMode, null, // didn't remember what was there
+                mIsRememberSpeedEnabled, null, null, // didn't remember what was there
                 mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
                 mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, Helpers.toString(mLastSubtitleFormat), mLastSpeed, mVideoRotation,
-                mVideoZoom));
+                mVideoZoom, mRepeatMode));
 
         super.persistState();
     }

@@ -401,6 +401,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                 }
                             }
                     );
+                    return true;
                 },
                 getContext().getString(R.string.create_playlist),
                 true
@@ -457,6 +458,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                             BrowsePresenter.instance(getContext()).syncItem(video);
                                         }
                                 );
+                                return true;
                             },
                             getContext().getString(R.string.rename_playlist),
                             true

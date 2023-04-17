@@ -221,11 +221,11 @@ public class AppDialogUtil {
         return OptionCategory.from(BACKGROUND_PLAYBACK_ID, OptionCategory.TYPE_RADIO, categoryTitle, options);
     }
 
-    public static OptionCategory createVideoPresetsCategory(Context context, PlayerData playerData) {
-        return createVideoPresetsCategory(context, playerData, () -> {});
+    public static OptionCategory createVideoPresetsCategory(Context context) {
+        return createVideoPresetsCategory(context, () -> {});
     }
 
-    public static OptionCategory createVideoPresetsCategory(Context context, PlayerData playerData, Runnable onFormatSelected) {
+    public static OptionCategory createVideoPresetsCategory(Context context, Runnable onFormatSelected) {
         return OptionCategory.from(
                 VIDEO_PRESETS_ID,
                 OptionCategory.TYPE_RADIO,
@@ -233,24 +233,22 @@ public class AppDialogUtil {
                 fromPresets(
                         context,
                         AppDataSourceManager.instance().getVideoPresets(),
-                        playerData,
                         onFormatSelected
                 )
         );
     }
 
-    private static List<OptionItem> fromPresets(Context context, VideoPreset[] presets, PlayerData playerData, Runnable onFormatSelected) {
+    private static List<OptionItem> fromPresets(Context context, VideoPreset[] presets, Runnable onFormatSelected) {
         List<OptionItem> result = new ArrayList<>();
 
+        PlayerData playerData = PlayerData.instance(context);
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
         FormatItem selectedFormat = playerData.getFormat(FormatItem.TYPE_VIDEO);
         boolean isPresetSelection = selectedFormat != null && selectedFormat.isPreset();
+        boolean isAllFormatsUnlocked = playerTweaksData.isAllFormatsUnlocked();
 
         for (VideoPreset preset : presets) {
-            if (preset.isVP9Preset() && !Helpers.isVP9ResolutionSupported(preset.getHeight())) {
-                continue;
-            }
-
-            if (preset.isAV1Preset() && !Helpers.isAV1ResolutionSupported(preset.getHeight())) {
+            if (!isAllFormatsUnlocked && !Utils.isPresetSupported(preset)) {
                 continue;
             }
 

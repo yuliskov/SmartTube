@@ -176,7 +176,7 @@
   <string name="content_block_categories">تخطي المقاطع</string>
   <string name="content_block_sponsor">الراعي</string>
   <string name="content_block_intro">المقدمة/فاصل</string>
-  <string name="content_block_outro">الاعتمادات/تترات النهاية</string>
+  <string name="content_block_outro">الخاتمة/تترات النهاية</string>
   <string name="content_block_interaction">تذكير بالتفاعل (الإشتراك في القناة)</string>
   <string name="content_block_self_promo">ترويج شخصي/غير مدفوع الأجر</string>
   <string name="content_block_music_off_topic">قسم غير الموسيقى في المقطع</string>
@@ -366,7 +366,7 @@
   <string name="force_legacy_codecs">فرض برامج الترميز القديمة (720 بكسل)</string>
   <string name="live_stream_fix_desc">يحسن أداء البث المباشر بشكل كبير على الأجهزة المنخفضة الجودة.  أقصى دقة 1080 بكسل.</string>
   <string name="live_stream_fix">إصلاح البث المباشر (1080 بكسل)</string>
-  <string name="playback_notifications_fix_desc">يخفي إخطارات تغيير المسار.  يمكن أن يكون مفيدًا في البرامج الثابتة المستندة إلى AOSP.</string>
+  <string name="playback_notifications_fix_desc">يخفي إشعارات تغيير المسار.  يمكن أن يكون مفيدًا في البرامج الثابتة المستندة إلى AOSP.</string>
   <string name="playback_notifications_fix">تعطيل إشعارات التشغيل</string>
   <string name="amlogic_fix_desc">إصلاح هبوط الإطارات على الأجهزة القائمة على Amlogic.</string>
   <string name="amlogic_fix">Amlogic 1080p\@60FPS fix إصلاح</string>
@@ -519,4 +519,16 @@
   <string name="clear_search_history">مسح سجل البحث</string>
   <string name="remove_from_subscriptions">إخفاء</string>
   <string name="player_long_speed_list">قائمة السرعة الطويلة</string>
+  <string name="disable_ok_long_press_desc">مخصص لأجهزة التحكم التي تحتوى على أخطاء حيث لا يعمل زر موافق بشكل صحيح</string>
+  <string name="pressing_back">بالضغط على \"BACK\"</string>
+  <string name="alt_app_icon">أيقونة للتطبيق بديلة (يحتاج إلى إعادة التشغيل)</string>
+  <string name="cronet_desc">Cronetundefined عبارة عن مكدس شبكة Chromium.  undefinedعادة أسرع من الآخرين. يمكن أن يساعد في مشاكل التخزين المؤقت.</string>
+  <string name="network_stack">يفضل %s مكدس شبكة الاتصال</string>
+  <string name="unlock_all_formats">فتح جميع صيغ الفيديو</string>
+  <string name="unlock_all_formats_desc">فتح التنسيقات التي ربما لا يدعمها جهازك.</string>
+  <string name="okhttp_desc">مكدس الشبكة هذا هو الأبطأ ولكنه يتمتع باستقرار جيد.</string>
+  <string name="select_channel_section">فتح القسم المقابل عند تشغيل التطبيق من قنوات ATV</string>
+  <string name="live_stream_fix_4k_desc">تحذير، هذا التعديل يعطل إعادة لف التدفقات. يحسن أداء البث المباشر بشكل كبير. الدقة القصوى هي 4K.</string>
+  <string name="live_stream_fix_4k">إصلاح البث المباشر (4K)</string>
+  <string name="enable_voice_search_desc">سيتم استبدال التطبيق الرسمي بما يسمى الجسر. يساعد الجسر في نقل طلبات البحث العالمية إلى تطبيقنا.</string>
 </resources>

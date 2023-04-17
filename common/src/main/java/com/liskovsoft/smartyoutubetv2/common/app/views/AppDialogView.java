@@ -9,4 +9,5 @@ public interface AppDialogView {
     void finish();
     void goBack();
     boolean isShown();
+    boolean isTransparent();
 }

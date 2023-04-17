@@ -33,7 +33,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
-import com.liskovsoft.smartyoutubetv2.common.utils.ScreenHelper;
+import com.liskovsoft.sharedutils.helpers.ScreenHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -83,7 +83,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mSectionsMapping = new HashMap<>();
         mMainUIData = MainUIData.instance(context);
         mGeneralData = GeneralData.instance(context);
-        ScreenHelper.initPipMode(context);
         ScreenHelper.updateScreenInfo(context);
 
         MediaService mediaService = YouTubeMediaService.instance();
@@ -655,6 +654,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             }
 
                             continueGroupIfNeeded(videoGroup);
+
+                            // Can't determine whether the history paused or not. Remember, it's paused not cleared.
                         },
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
@@ -663,6 +664,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 getView().showError(new CategoryEmptyError(getContext()));
                                 Utils.postDelayed(mRefreshSection, 30_000);
                             }
+
+                            // Can't determine whether the history paused or not. Remember, it's paused not cleared.
                         });
 
         mActions.add(updateAction);
@@ -699,11 +702,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
-                            if (getView() != null) {
-                                getView().showProgressBar(false);
-                            }
-                        },
-                        () -> {
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                             }

@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -317,6 +318,7 @@ public class MediaServiceManager {
             totalSize = 0;
         }
 
+        //LoadingManager.showLoading(context, groupTooSmall);
         mContinuations.put(group.getId(), new Pair<>(totalSize, currentTimeMillis));
     }
 

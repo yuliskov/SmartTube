@@ -6,6 +6,9 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class PlayerTweaksData {
     private static final String VIDEO_PLAYER_TWEAKS_DATA = "video_player_tweaks_data";
+    public static final int PLAYER_DATA_SOURCE_DEFAULT = 0;
+    public static final int PLAYER_DATA_SOURCE_OKHTTP = 1;
+    public static final int PLAYER_DATA_SOURCE_CRONET = 2;
     public static final int PLAYER_BUTTON_VIDEO_ZOOM = 0b1;
     public static final int PLAYER_BUTTON_SEARCH = 0b10;
     public static final int PLAYER_BUTTON_PIP = 0b100;
@@ -35,7 +38,8 @@ public class PlayerTweaksData {
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;
     private boolean mIsAmlogicFixEnabled;
-    private boolean mIsFrameDropFixEnabled;
+    private boolean mIsAmazonFrameDropFixEnabled;
+    private boolean mIsSonyFrameDropFixEnabled;
     private boolean mIsSnapToVsyncDisabled;
     private boolean mIsProfileLevelCheckSkipped;
     private boolean mIsSWDecoderForced;
@@ -43,11 +47,11 @@ public class PlayerTweaksData {
     private boolean mIsSetOutputSurfaceWorkaroundEnabled;
     private boolean mIsAudioSyncFixEnabled;
     private boolean mIsKeepFinishedActivityEnabled;
-    private boolean mIsLiveStreamFixEnabled;
+    private boolean mIsHlsStreamsForced;
+    private boolean mIsDashUrlStreamsForced;
     private boolean mIsPlaybackNotificationsDisabled;
     private boolean mIsTunneledPlaybackEnabled;
     private int mPlayerButtons;
-    private boolean mIsBufferingFixEnabled;
     private boolean mIsNoFpsPresetsEnabled;
     private boolean mIsRememberPositionOfShortVideosEnabled;
     private boolean mIsSuggestionsDisabled;
@@ -59,6 +63,9 @@ public class PlayerTweaksData {
     private boolean mIsSpeedButtonOldBehaviorEnabled;
     private boolean mIsButtonLongClickEnabled;
     private boolean mIsLongSpeedListEnabled;
+    private int mPlayerDataSource;
+    private boolean mUnlockAllFormats;
+    private boolean mIsBufferOnStreamsDisabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -82,13 +89,22 @@ public class PlayerTweaksData {
         return mIsAmlogicFixEnabled;
     }
 
-    public void enableFrameDropFix(boolean enable) {
-        mIsFrameDropFixEnabled = enable;
+    public void enableAmazonFrameDropFix(boolean enable) {
+        mIsAmazonFrameDropFixEnabled = enable;
         persistData();
     }
 
-    public boolean isFrameDropFixEnabled() {
-        return mIsFrameDropFixEnabled;
+    public boolean isAmazonFrameDropFixEnabled() {
+        return mIsAmazonFrameDropFixEnabled;
+    }
+
+    public void enableSonyFrameDropFix(boolean enable) {
+        mIsSonyFrameDropFixEnabled = enable;
+        persistData();
+    }
+
+    public boolean isSonyFrameDropFixEnabled() {
+        return mIsSonyFrameDropFixEnabled;
     }
 
     public void disableSnapToVsync(boolean disable) {
@@ -164,13 +180,22 @@ public class PlayerTweaksData {
         persistData();
     }
 
-    public void enableLiveStreamFix(boolean enable) {
-        mIsLiveStreamFixEnabled = enable;
+    public void forceHlsStreams(boolean enable) {
+        mIsHlsStreamsForced = enable;
         persistData();
     }
 
-    public boolean isLiveStreamFixEnabled() {
-        return mIsLiveStreamFixEnabled;
+    public boolean isHlsStreamsForced() {
+        return mIsHlsStreamsForced;
+    }
+
+    public void forceDashUrlStreams(boolean enable) {
+        mIsDashUrlStreamsForced = enable;
+        persistData();
+    }
+
+    public boolean isDashUrlStreamsForced() {
+        return mIsDashUrlStreamsForced;
     }
 
     public void disablePlaybackNotifications(boolean disable) {
@@ -205,13 +230,13 @@ public class PlayerTweaksData {
         return (mPlayerButtons & menuItems) == menuItems;
     }
 
-    public void enableBufferingFix(boolean enable) {
-        mIsBufferingFixEnabled = enable;
+    public void setPlayerDataSource(int dataSource) {
+        mPlayerDataSource = dataSource;
         persistData();
     }
 
-    public boolean isBufferingFixEnabled() {
-        return mIsBufferingFixEnabled;
+    public int getPlayerDataSource() {
+        return mPlayerDataSource;
     }
 
     public void enableNoFpsPresets(boolean enable) {
@@ -313,13 +338,31 @@ public class PlayerTweaksData {
         persistData();
     }
 
+    public void unlockAllFormats(boolean unlock) {
+        mUnlockAllFormats = unlock;
+        persistData();
+    }
+
+    public boolean isAllFormatsUnlocked() {
+        return mUnlockAllFormats;
+    }
+
+    public void disableBufferOnStreams(boolean disable) {
+        mIsBufferOnStreamsDisabled = disable;
+        persistData();
+    }
+
+    public boolean isBufferOnStreamsDisabled() {
+        return mIsBufferOnStreamsDisabled;
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
         String[] split = Helpers.splitObjectLegacy(data);
 
         mIsAmlogicFixEnabled = Helpers.parseBoolean(split, 0, false);
-        mIsFrameDropFixEnabled = Helpers.parseBoolean(split, 1, false);
+        mIsAmazonFrameDropFixEnabled = Helpers.parseBoolean(split, 1, false);
         mIsSnapToVsyncDisabled = Helpers.parseBoolean(split, 2, false);
         mIsProfileLevelCheckSkipped = Helpers.parseBoolean(split, 3, false);
         mIsSWDecoderForced = Helpers.parseBoolean(split, 4, false);
@@ -329,11 +372,11 @@ public class PlayerTweaksData {
         mIsSetOutputSurfaceWorkaroundEnabled = Helpers.parseBoolean(split, 7, true);
         mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 8, false);
         mIsKeepFinishedActivityEnabled = Helpers.parseBoolean(split, 9, false);
-        mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, false);
+        mIsHlsStreamsForced = Helpers.parseBoolean(split, 10, false);
         mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTVLauncher(mPrefs.getContext()));
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
         mPlayerButtons = Helpers.parseInt(split, 13, PLAYER_BUTTON_DEFAULT);
-        mIsBufferingFixEnabled = Helpers.parseBoolean(split, 14, false);
+        // Buffering fix was there.
         mIsNoFpsPresetsEnabled = Helpers.parseBoolean(split, 15, false);
         mIsRememberPositionOfShortVideosEnabled = Helpers.parseBoolean(split, 16, false);
         mIsSuggestionsDisabled = Helpers.parseBoolean(split, 17, false);
@@ -345,17 +388,23 @@ public class PlayerTweaksData {
         mIsSpeedButtonOldBehaviorEnabled = Helpers.parseBoolean(split, 23, false);
         mIsButtonLongClickEnabled = Helpers.parseBoolean(split, 24, true);
         mIsLongSpeedListEnabled = Helpers.parseBoolean(split, 25, false);
+        mPlayerDataSource = Helpers.parseInt(split, 26, PLAYER_DATA_SOURCE_CRONET);
+        mUnlockAllFormats = Helpers.parseBoolean(split, 27, false);
+        mIsDashUrlStreamsForced = Helpers.parseBoolean(split, 28, false);
+        mIsSonyFrameDropFixEnabled = Helpers.parseBoolean(split, 29, false);
+        mIsBufferOnStreamsDisabled = Helpers.parseBoolean(split, 30, false);
     }
 
     private void persistData() {
         mPrefs.setData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
-                mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsSnapToVsyncDisabled,
+                mIsAmlogicFixEnabled, mIsAmazonFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
-                null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
-                mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
-                mIsBufferingFixEnabled, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
+                null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled, mIsHlsStreamsForced,
+                mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
+                null, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
                 mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio, mIsQualityInfoBitrateEnabled,
-                mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled
+                mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
+                mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled
         ));
     }
 }

@@ -313,7 +313,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
                 break;
             case Command.TYPE_GET_STATE:
                 if (getController() != null) {
-                    Utils.moveAppToForeground(getActivity());
+                    ViewManager.instance(getActivity()).moveAppToForeground();
                     postStartPlaying(getController().getVideo(), getController().isPlaying());
                 } else {
                     postStartPlaying(null, false);
@@ -412,7 +412,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
     }
 
     private void openNewVideo(Video newVideo) {
-        if (Video.equals(mVideo, newVideo) && Utils.isPlayerInForeground(getActivity())) { // same video already playing
+        if (Video.equals(mVideo, newVideo) && ViewManager.instance(getActivity()).isPlayerInForeground()) { // same video already playing
             mVideo.playlistId = newVideo.playlistId;
             mVideo.playlistIndex = newVideo.playlistIndex;
             mVideo.playlistParams = newVideo.playlistParams;
@@ -451,10 +451,10 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
     }
 
     private void movePlayerToForeground() {
-        Utils.movePlayerToForeground(getActivity());
+        ViewManager.instance(getActivity()).movePlayerToForeground();
         // Device wake fix when player isn't started yet or been closed
         if (getController() == null || !Utils.checkActivity(getActivity())) {
-            new Handler(Looper.myLooper()).postDelayed(() -> Utils.movePlayerToForeground(getActivity()), 5_000);
+            new Handler(Looper.myLooper()).postDelayed(() -> ViewManager.instance(getActivity()).movePlayerToForeground(), 5_000);
         }
     }
 }

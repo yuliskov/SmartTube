@@ -25,6 +25,11 @@
                 <!-- Autostart fix on some devices? -->
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <!-- Nvidia Shield autostart fix? -->
+                <action android:name="android.intent.action.REBOOT" />
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
             </intent-filter>
         </receiver>
         <service android:name="com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService" android:enabled="true"/>

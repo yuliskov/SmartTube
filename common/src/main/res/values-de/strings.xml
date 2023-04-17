@@ -101,7 +101,9 @@
     <string name="open_channel">Kanal öffnen</string>
     <string name="open_playlist">Wiedergabeliste öffnen</string>
     <string name="not_interested">Kein Interesse</string>
+    <string name="not_recommend_channel">Kanal nicht empfehlen</string>
     <string name="you_wont_see_this_video">Video wurde aus den Empfehlungen entfernt</string>
+    <string name="you_wont_see_this_channel">Kanal wird nicht mehr in den Empfehlungen angezeigt</string>
     <string name="settings_search">Suche</string>
     <string name="dialog_search">Suche</string>
     <string name="instant_voice_search">Sprachsuche sofort starten</string>
@@ -115,7 +117,7 @@
     <string name="repeat_mode_pause_alt">Nur Videos der Wiedergabeliste fortlaufend abspielen</string>
     <string name="repeat_mode_none">Wiedergabe nach einem Video stoppen</string>
     <string name="subscribed_to_channel">Abonniert</string>
-    <string name="unsubscribed_from_channel">Nicht mehr abonniert</string>
+    <string name="unsubscribed_from_channel">Nicht abonniert</string>
     <string name="subtitle_yellow_transparent">Gelb auf transparentem Hintergrund</string>
     <string name="subtitle_white_transparent">Weiß auf transparentem Hintergrund</string>
     <string name="subtitle_white_black">Weiß auf schwarzem Hintergrund</string>
@@ -244,7 +246,7 @@
     <string name="popular_uploads_row_name">Beliebte Uploads</string>
     <string name="breaking_news_row_name">Eilmeldungen</string>
     <string name="covid_news_row_name">Nachrichten zu COVID-19</string>
-    <string name="enable_voice_search">Sprachsuche aktivieren</string>
+    <string name="enable_voice_search">Globale Sprachsuche aktivieren (Firmware-Unterstützung erforderlich)</string>
     <string name="subscribe_unsubscribe_from_channel">Kanal abonnieren/nicht mehr abonnieren</string>
     <string name="app_backup_restore">Sichern/Wiederherstellen</string>
     <string name="app_backup">Daten sichern</string>
@@ -358,7 +360,7 @@
     <string name="openvpn_address_invalid">OpenVPN-Konfigurationsadresse nicht gesetzt.</string>
     <string name="internet_censorship">Internet-Zensur</string>
     <string name="rename_section">Diese Kategorie umbenennen</string>
-    <string name="simple_edit_value_hint">Neuer Wert</string>
+    <string name="simple_edit_value_hint">Wert eingeben</string>
     <string name="seek_interval">Spulintervall</string>
     <string name="seek_interval_sec">%s sek.</string>
     <string name="subtitle_system">System-Stil (Android-Einstellungen > Barrierefreiheit)</string>
@@ -369,8 +371,10 @@
     <string name="ambilight_ratio_fix">Ambilight/Seitenverhältnis/Screenshots-Fix</string>
     <string name="force_legacy_codecs_desc">Erhebliche Verbesserung der Leistung auf Low-End-Geräten. Die maximale Auflösung beträgt 720p.</string>
     <string name="force_legacy_codecs">Legacy-Codecs erzwingen (720p)</string>
-    <string name="live_stream_fix_desc">Erhebliche Verbesserung der Live-Stream-Leistung auf Low-End-Geräten. Die maximale Auflösung beträgt 1080p.</string>
+    <string name="live_stream_fix_desc">Achtung, diese Option deaktiviert das Zurückspulen von Streams. Erhebliche Verbesserung der Live-Stream-Leistung auf Low-End-Geräten. Die maximale Auflösung beträgt 1080p.</string>
+    <string name="live_stream_fix_4k_desc">Achtung, diese Option deaktiviert das Zurückspulen von Streams. Erhebliche Verbesserung der Live-Stream-Leistung. Die maximale Auflösung beträgt 4K.</string>
     <string name="live_stream_fix">Live-Stream-Fix (1080p)</string>
+    <string name="live_stream_fix_4k">Live-Stream-Fix (4K)</string>
     <string name="playback_notifications_fix_desc">Ausblenden von Benachrichtigungen. Könnte auf AOSP-basierten Firmwares nützlich sein.</string>
     <string name="playback_notifications_fix">Wiedergabe-Benachrichtigungen deaktivieren</string>
     <string name="amlogic_fix_desc">Frame-Drop-Fix auf Amlogic-basierten Geräten.</string>
@@ -391,7 +395,7 @@
     <string name="pressing_home_back">durch Drücken von HOME oder BACK</string>
     <string name="pressing_back">durch Drücken von BACK</string>
     <string name="player_number_key_seek">Spulen mit Zifferntasten</string>
-    <string name="save_remove_playlist">Wiedergabeliste zur Wiedergabelisten-Kategorie hinzufügen/entfernen</string>
+    <string name="save_remove_playlist">Wiedergabeliste in Mediathek speichern/entfernen</string>
     <string name="remove_playlist">Wiedergabeliste dauerhaft aus Wiedergabelisten-Kategorie entfernen</string>
     <string name="removed_from_playlists">Entfernt aus der Wiedergabelisten-Kategorie</string>
     <string name="saved_to_playlists">Hinzugefügt zur Wiedergabelisten-Kategorie</string>
@@ -524,4 +528,19 @@
     <string name="remove_from_subscriptions">Ausblenden</string>
     <string name="player_long_speed_list">Mehr Optionen für Video-Geschwindigkeit</string>
     <string name="alt_app_icon">Alternatives App-Symbol (Neustart erforderlich)</string>
+    <string name="network_stack">Netzwerkstack %s bevorzugen</string>
+    <string name="cronet_desc">Cronet ist der Chromium-Netzwerkstack. Cronet kann die Latenz verringern und die Netzwerkleistung erhöhen, was bei Pufferproblemen helfen kann.</string>
+    <string name="unlock_all_formats">Alle Video-Formate freischalten</string>
+    <string name="unlock_all_formats_desc">Bei einigen Geräten meldet die Firmware fälschlicherweise, dass einige Formate nicht unterstützt werden, auch wenn sie es sind.\n
+        (z.B. melden 1080p-Smart-TVs oft, dass 4k nicht unterstützt wird).</string>
+    <string name="okhttp_desc">Dieser Netzwerkstack ist am langsamsten, hat aber eine gute Stabilität.</string>
+    <string name="select_channel_section">Die entsprechende Kategorie öffnen, wenn die App über ATV-Kanäle gestartet wird</string>
+    <string name="enable_voice_search_desc">Die offizielle App wird durch eine sogenannte Bridge ersetzt. Eine Bridge hilft dabei, globale Suchanfragen an unsere App zu übertragen.</string>
+    <string name="enable_master_password">Master-Passwort aktivieren</string>
+    <string name="enter_master_password">Master-Passwort eingeben</string>
+      <string name="disable_stream_buffer">Puffer für Streams deaktivieren</string>
+    <string name="disable_stream_buffer_desc">Fix für Situationen, in denen der Stream sehr verzögert ist. Hinweis: Der Stream kann anfangen zu hängen.</string>
+    <string name="sony_frame_drop_fix">Frame-Drop-Fix #1</string>
+    <string name="sony_frame_drop_fix_desc">Behebt Verzögerungen/Lags auf Sony-TV und einigen anderen Geräten. Hinweis: Mögliche Probleme mit der Audio-Synchronisation.
+    </string>
 </resources>

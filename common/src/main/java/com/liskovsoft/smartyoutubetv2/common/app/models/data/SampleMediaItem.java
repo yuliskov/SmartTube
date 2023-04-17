@@ -112,6 +112,11 @@ public final class SampleMediaItem implements MediaItem {
     }
 
     @Override
+    public String getFeedbackToken2() {
+        return null;
+    }
+
+    @Override
     public String getPlaylistId() {
         return mPlaylistId;
     }

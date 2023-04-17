@@ -101,7 +101,9 @@
     <string name="open_channel">Перейти до каналу</string>
     <string name="open_playlist">Відкрити плейлист</string>
     <string name="not_interested">Більше не радити</string>
+    <string name="not_recommend_channel">Більше не радити канал</string>
     <string name="you_wont_see_this_video">Це відео більше не з\`явиться серед рекомендацій</string>
+    <string name="you_wont_see_this_channel">Цей канал більше не з\`явиться серед рекомендацій</string>
     <string name="settings_search">Пошук</string>
     <string name="dialog_search">Пошук</string>
     <string name="instant_voice_search">Відразу запускати голосовий пошук</string>
@@ -244,7 +246,7 @@
     <string name="popular_uploads_row_name">Популярні завантаження</string>
     <string name="breaking_news_row_name">Важливі новини</string>
     <string name="covid_news_row_name">Новини про коронавірус COVID-19</string>
-    <string name="enable_voice_search">Увімкнути голосовий пошук</string>
+    <string name="enable_voice_search">Увімкнути глобальний пошук (потрібна підтримка прошивки)</string>
     <string name="subscribe_unsubscribe_from_channel">Підписатися/Відписатися від каналу</string>
     <string name="app_backup_restore">Бекап та відновлення</string>
     <string name="app_backup">Створити бекап даних</string>
@@ -354,7 +356,7 @@
     <string name="openvpn_address_invalid">Адреса файла конфігурації не встановлена.</string>
     <string name="internet_censorship">Цензура в Інтернеті</string>
     <string name="rename_section">Перейменувати цей розділ</string>
-    <string name="simple_edit_value_hint">Нове значення</string>
+    <string name="simple_edit_value_hint">Введіть значення</string>
     <string name="seek_interval">Інтервал перемотування</string>
     <string name="seek_interval_sec">%s сек</string>
     <string name="subtitle_system">Системний стиль (Налаштування Андроід > Спец. можливості)</string>
@@ -365,8 +367,10 @@
     <string name="ambilight_ratio_fix">Виправлення Ambilight, співвідношення сторін та скріншотів</string>
     <string name="force_legacy_codecs_desc">Значно покращує продуктивність на слабких пристроях. Максимальна роздільна здатність 720p.</string>
     <string name="force_legacy_codecs">Використовувати застарілі кодеки (720p)</string>
-    <string name="live_stream_fix_desc">Значно покращує продуктивність трансляцій на слабких пристроях. Максимальна роздільна здатність 1080p.</string>
+    <string name="live_stream_fix_desc">Увага: перемотування прямих трансляцій буде недоступним. Значно покращує продуктивність трансляцій на слабких пристроях. Максимальна роздільна здатність 1080p.</string>
+    <string name="live_stream_fix_4k_desc">Увага: перемотування прямих трансляцій буде недоступним. Значно покращує продуктивність трансляцій. Максимальна роздільна здатність 4K.</string>
     <string name="live_stream_fix">Виправлення прямих трансляцій (1080p)</string>
+    <string name="live_stream_fix_4k">Виправлення прямих трансляцій (4K)</string>
     <string name="playback_notifications_fix_desc">Приховує сповіщення про зміну відтворюваного треку. Може бути корисним на прошивках на базі AOSP.</string>
     <string name="playback_notifications_fix">Вимкнути сповіщення про відтворення</string>
     <string name="amlogic_fix_desc">Виправлення втрати кадрів на пристроях на базі Amlogic.</string>
@@ -387,7 +391,7 @@
     <string name="pressing_home_back">натиснувши ДОДОМУ або ПОВЕРНУТИСЯ</string>
     <string name="pressing_back">натиснувши ПОВЕРНУТИСЯ</string>
     <string name="player_number_key_seek">Перемотувати цифровими клавішами</string>
-    <string name="save_remove_playlist">Додати/Видалити плейлист з розділу Плейлисти</string>
+    <string name="save_remove_playlist">Додати/Видалити плейлист з бібліотеки</string>
     <string name="remove_playlist">Видалити плейлист з розділу Плейлисти назавжди</string>
     <string name="removed_from_playlists">Видалено з розділу Плейлисти</string>
     <string name="saved_to_playlists">Додано у розділ Плейлисти</string>
@@ -516,4 +520,18 @@
     <string name="remove_from_subscriptions">Приховати</string>
     <string name="player_long_speed_list">Довгий список швидкостей</string>
     <string name="alt_app_icon">Альтернативна іконка застосунку (потрібне перезавантаження)</string>
+    <string name="network_stack">Надавати перевагу мережевому стеку %s</string>
+    <string name="cronet_desc">Cronet — мережевий стек Chromium. Зазвичай швидше за інших. Це може допомогти у проблемах буферизації.</string>
+    <string name="unlock_all_formats">Розблокувати усі відео формати</string>
+    <string name="unlock_all_formats_desc">Розблокувати формати, які, ймовірно, не підтримуються вашим пристроєм.</string>
+    <string name="okhttp_desc">Цей мережевий стек є найповільнішим, але має добру стабільність.</string>
+    <string name="select_channel_section">Відкривати відповідний розділ, коли застосунок запущений з каналів ATV</string>
+    <string name="enable_voice_search_desc">Офіційний застосунок буде замінений на так званий міст. Міст допомагає передавати запити глобального пошуку в наш застосунок.</string>
+    <string name="enable_master_password">Увімкнути головний пароль</string>
+    <string name="enter_master_password">Введіть головний пароль</string>
+    <string name="disable_stream_buffer">Вимкнути буфер на стрімах</string>
+    <string name="disable_stream_buffer_desc">Виправляє ситуації, коли стрім запізнюється. Увага: стрім може почати гальмувати.</string>
+    <string name="sony_frame_drop_fix">Виправлення випадіння кадрів #1</string>
+    <string name="sony_frame_drop_fix_desc">Виправляє лагання на тв Соні та деяких інших пристроях. Увага: можливі проблеми с синхронизацією аудіо.
+    </string>
 </resources>

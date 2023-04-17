@@ -101,7 +101,9 @@
     <string name="open_channel">Open channel</string>
     <string name="open_playlist">Open playlist</string>
     <string name="not_interested">Not interested</string>
+    <string name="not_recommend_channel">Don\'t recommend channel</string>
     <string name="you_wont_see_this_video">Video has been removed from recommended</string>
+    <string name="you_wont_see_this_channel">You won\'t see this channel in recommendations</string>
     <string name="settings_search">Search</string>
     <string name="dialog_search">Search</string>
     <string name="instant_voice_search">Instant voice search</string>
@@ -244,7 +246,7 @@
     <string name="popular_uploads_row_name">Popular uploads</string>
     <string name="breaking_news_row_name">Breaking news</string>
     <string name="covid_news_row_name">COVID-19 news</string>
-    <string name="enable_voice_search">Enable voice search</string>
+    <string name="enable_voice_search">Enable global search (firmware support needed)</string>
     <string name="subscribe_unsubscribe_from_channel">Subscribe/Unsubscribe from channel</string>
     <string name="app_backup_restore">Backup/Restore</string>
     <string name="app_backup">Backup data</string>
@@ -358,7 +360,7 @@
     <string name="openvpn_address_invalid">OpenVPN config address not set.</string>
     <string name="internet_censorship">Internet Censorship</string>
     <string name="rename_section">Rename this section</string>
-    <string name="simple_edit_value_hint">New value</string>
+    <string name="simple_edit_value_hint">Enter value</string>
     <string name="seek_interval">Seek interval</string>
     <string name="seek_interval_sec">%s sec</string>
     <string name="subtitle_system">System style (Android settings > Accessibility)</string>
@@ -369,8 +371,10 @@
     <string name="ambilight_ratio_fix">Ambilight/Aspect ratio/Screenshots fix</string>
     <string name="force_legacy_codecs_desc">Significantly improves performance on low-end devices. Maximum resolution is 720p.</string>
     <string name="force_legacy_codecs">Force legacy codecs (720p)</string>
-    <string name="live_stream_fix_desc">Significantly improves live stream performance on low-end devices. Maximum resolution is 1080p.</string>
+    <string name="live_stream_fix_desc">Warn, this tweak disables the rewinding of streams. Significantly improves live stream performance on low-end devices. Maximum resolution is 1080p.</string>
+    <string name="live_stream_fix_4k_desc">Warn, this tweak disables the rewinding of streams. Significantly improves live stream performance. Maximum resolution is 4K.</string>
     <string name="live_stream_fix">Live stream fix (1080p)</string>
+    <string name="live_stream_fix_4k">Live stream fix (4K)</string>
     <string name="playback_notifications_fix_desc">Hides track change notifications. Could be useful on AOSP-based firmwares.</string>
     <string name="playback_notifications_fix">Disable playback notifications</string>
     <string name="amlogic_fix_desc">Frame drop fix on Amlogic-based devices.</string>
@@ -391,7 +395,7 @@
     <string name="pressing_home_back">by pressing HOME or BACK</string>
     <string name="pressing_back">by pressing BACK</string>
     <string name="player_number_key_seek">Seek with number keys</string>
-    <string name="save_remove_playlist">Add/Remove playlist from Playlists section</string>
+    <string name="save_remove_playlist">Save/Remove playlist from Library</string>
     <string name="remove_playlist">Remove playlist from Playlists section permanently</string>
     <string name="removed_from_playlists">Removed from Playlists section</string>
     <string name="saved_to_playlists">Added to Playlists section</string>
@@ -483,7 +487,7 @@
     <string name="content_block_status">Check SponsorBlock status</string>
     <string name="player_show_quality_info_bitrate">Add bitrate into the quality info</string>
     <string name="player_speed_button_old_behavior">Revert old behavior of the speed button</string>
-    <string name="protect_settings_with_password">Protect all settings with a password</string>
+    <string name="protect_settings_with_password">Protect all settings with password</string>
     <string name="enter_settings_password">Enter settings password</string>
     <string name="child_mode">Child mode</string>
     <string name="child_mode_desc">In this mode, the user can\'t use search or see any suggested content. The settings will be under the password.</string>
@@ -524,5 +528,20 @@
     <string name="remove_from_subscriptions">Hide</string>
     <string name="player_long_speed_list">Long speed list</string>
     <string name="alt_app_icon">Alternative app icon (needs reboot)</string>
+    <string name="network_stack">Prefer %s network stack</string>
+    <string name="cronet_desc">Cronet is the Chromium network stack. Cronet can reduce the latency and increase networking performance, which can help with buffering issues.</string>
+    <string name="unlock_all_formats">Unlock all video formats</string>
+    <string name="unlock_all_formats_desc">On some devices the firmware incorrectly reports some formats as unsupported, even if they are.\n
+        (e.g. 1080p smart TVs tend to report 4k as not supported).</string>
+    <string name="okhttp_desc">This network stack is the slowest one but has good stability.</string>
+    <string name="select_channel_section">Open corresponding section when the app launched from ATV Channels</string>
+    <string name="enable_voice_search_desc">The official app will be replaced with a so-called bridge. A bridge helps to transfer global search requests to our app.</string>
+    <string name="enable_master_password">Enable master password</string>
+    <string name="enter_master_password">Enter master password</string>
+    <string name="disable_stream_buffer">Disable buffer on streams</string>
+    <string name="disable_stream_buffer_desc">Fix for situations when the stream so far behind. Note: the stream may start to lag.</string>
+    <string name="sony_frame_drop_fix">Frame drop fix #1</string>
+    <string name="sony_frame_drop_fix_desc">Fix lags on Sony TV and some other devices. Note: possible problems with audio synchronization.
+    </string>
     <string name="cancel">Cancel</string>
 </resources>

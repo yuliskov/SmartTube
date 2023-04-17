@@ -101,7 +101,9 @@
     <string name="open_channel">Apri canale</string>
     <string name="open_playlist">Apri playlist</string>
     <string name="not_interested">Non interessato</string>
+    <string name="not_recommend_channel">Non consigliare il canale</string>
     <string name="you_wont_see_this_video">Il video è stato rimosso dai consigliati</string>
+    <string name="you_wont_see_this_channel">Non vedrai questo canale nei consigli</string>
     <string name="settings_search">Cerca</string>
     <string name="dialog_search">Cerca</string>
     <string name="instant_voice_search">Ricerca vocale istantanea</string>
@@ -244,7 +246,7 @@
     <string name="popular_uploads_row_name">Caricamenti popolari</string>
     <string name="breaking_news_row_name">Ultime notizie</string>
     <string name="covid_news_row_name">Notizie su COVID-19</string>
-    <string name="enable_voice_search">Abilita ricerca vocale</string>
+    <string name="enable_voice_search">Abilita ricerca vocale (supporto firmware necessario)</string>
     <string name="subscribe_unsubscribe_from_channel">Iscriviti/Disiscriviti dal canale</string>
     <string name="app_backup_restore">Backup e ripristino</string>
     <string name="app_backup">Backup dati</string>
@@ -358,7 +360,7 @@
     <string name="openvpn_address_invalid">Indirizzo di configurazione OpenVPN non impostato.</string>
     <string name="internet_censorship">Censura su Internet</string>
     <string name="rename_section">Rinomina questa sezione</string>
-    <string name="simple_edit_value_hint">Nuovo valore</string>
+    <string name="simple_edit_value_hint">Immetti valore</string>
     <string name="seek_interval">Cerca intervallo</string>
     <string name="seek_interval_sec">%s sec</string>
     <string name="subtitle_system">Stile del sistema (Impostazioni Android / Accessibilità)</string>
@@ -369,8 +371,10 @@
     <string name="ambilight_ratio_fix">Correzione Ambilight/Proporzioni/Screenshot</string>
     <string name="force_legacy_codecs_desc">Migliora significativamente le prestazioni sui dispositivi di fascia bassa. La risoluzione massima è 720p.</string>
     <string name="force_legacy_codecs">Forza codec obsoleti (720p)</string>
-    <string name="live_stream_fix_desc">Migliora significativamente le prestazioni delle trasmissioni live sui dispositivi di fascia bassa. La risoluzione massima è 1080p.</string>
+    <string name="live_stream_fix_desc">Attenzione, questa modifica disabilita il riavvolgimento dei flussi. Migliora significativamente le prestazioni delle trasmissioni live sui dispositivi di fascia bassa. La risoluzione massima è 1080p.</string>
+    <string name="live_stream_fix_4k_desc">Attenzione, questa modifica disabilita il riavvolgimento dei flussi. Migliora significativamente le prestazioni delle trasmissioni live. La risoluzione massima è 4K.</string>
     <string name="live_stream_fix">Correzione trasmissione live (1080p)</string>
+    <string name="live_stream_fix_4k">Correzione trasmissione live (4K)</string>
     <string name="playback_notifications_fix_desc">Nasconde le notifiche di cambio traccia. Potrebbe essere utile su firmware basati su AOSP.</string>
     <string name="playback_notifications_fix">Disabilita le notifiche di riproduzione</string>
     <string name="amlogic_fix_desc">Correzione del frame drop su dispositivi basati su Amlogic.</string>
@@ -389,9 +393,9 @@
     <string name="subtitle_position">Spostamento in basso dei sottotitoli</string>
     <string name="pressing_home">premendo HOME</string>
     <string name="pressing_home_back">premendo HOME o INDIETRO</string>
-    <string name="pressing_back">premendo INDIETRO</string>														  
+    <string name="pressing_back">premendo INDIETRO</string>
     <string name="player_number_key_seek">Ricerca con i tasti numerici</string>
-    <string name="save_remove_playlist">Aggiungi/Elimina playlist dalla sezione Playlist</string>
+    <string name="save_remove_playlist">Salva/Elimina la playlist dalla Libreria</string>
     <string name="remove_playlist">Elimina la playlist dalla sezione Playlist in modo permanente</string>
     <string name="removed_from_playlists">Eliminata dalla sezione Playlist</string>
     <string name="saved_to_playlists">Aggiunta alla sezione Playlist</string>
@@ -484,7 +488,7 @@
     <string name="player_show_quality_info_bitrate">Aggiungi bitrate nelle informazioni sulla qualità</string>
     <string name="player_speed_button_old_behavior">Ripristina il vecchio comportamento del pulsante di velocità</string>
     <string name="protect_settings_with_password">Proteggi tutte le Impostazioni con una password</string>
-    <string name="enter_settings_password">Immetti la password delle Impostazioni</string>
+    <string name="enter_settings_password">Immetti password per le Impostazioni</string>
     <string name="child_mode">Modalità bambino</string>
     <string name="child_mode_desc">In questa modalità, l\'utente non può utilizzare la ricerca o visualizzare alcun contenuto suggerito. Le impostazioni saranno protette da password.</string>
     <string name="lost_setting_warning">Le impostazioni dell\'app verranno modificate. Assicurati di aver creato un backup delle impostazioni.</string>
@@ -524,4 +528,19 @@
     <string name="remove_from_subscriptions">Nascondi</string>
     <string name="player_long_speed_list">Elenco lungo velocità</string>
     <string name="alt_app_icon">Icona alternativa dell\'app (è necessario riavviare)</string>
+    <string name="network_stack">Preferisci stack di rete %s</string>
+    <string name="cronet_desc">Cronet è lo stack di rete di Chromium. Cronet può ridurre la latenza e aumentare le prestazioni di rete, il che può aiutare con problemi di buffering.</string>
+    <string name="unlock_all_formats">Sblocca tutti i formati video</string>
+    <string name="unlock_all_formats_desc">Su alcuni dispositivi il firmware riporta erroneamente alcuni formati come non supportati, anche se lo sono.\n
+        (ad esempio, le smart TV 1080p tendono a segnalare 4k come non supportato).</string>
+    <string name="okhttp_desc">Questo stack di rete è il più lento ma ha una buona stabilità.</string>
+    <string name="select_channel_section">Apri la sezione corrispondente quando l\'app è stata avviata dai canali ATV</string>
+    <string name="enable_voice_search_desc">L\'app ufficiale verrà sostituita da un cosiddetto bridge (ponte). Un bridge aiuta a trasferire le richieste di ricerca globali alla nostra app.</string>
+    <string name="enable_master_password">Abilita password principale.</string>
+    <string name="enter_master_password">Immetti password principale</string>
+    <string name="disable_stream_buffer">Disabilita buffer sui flussi</string>
+    <string name="disable_stream_buffer_desc">Correzione per situazioni in cui il flusso è tanto indietro. Nota: il flusso potrebbe iniziare a rallentare.</string>
+    <string name="sony_frame_drop_fix">Correzione salto fotogrammi n. 1</string>
+    <string name="sony_frame_drop_fix_desc">Risolvi i ritardi sulle TV Sony e su alcuni altri dispositivi. Nota: possibili problemi con la sincronizzazione audio.
+    </string>
 </resources>

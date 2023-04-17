@@ -136,6 +136,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         if (item.equals(mVideo)) {
+            // Use cached data
             startSponsorWatcher();
             return;
         }
@@ -147,7 +148,6 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                         segments -> {
                             mVideo = item;
                             mOriginalSegments = segments;
-                            mActiveSegments = new ArrayList<>(segments);
                             startSponsorWatcher();
                         },
                         error -> {
@@ -157,9 +157,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private void startSponsorWatcher() {
-        if (mActiveSegments == null) {
+        if (mOriginalSegments == null || mOriginalSegments.isEmpty()) {
             return;
         }
+
+        mActiveSegments = new ArrayList<>(mOriginalSegments);
 
         getController().setSeekBarSegments(null); // reset colors
 
@@ -227,6 +229,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         setPositionMs(skipPosMs);
+        closeTransparentDialog();
     }
 
     private void messageSkip(long skipPosMs, String category) {
@@ -237,6 +240,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         MessageHelpers.showMessage(getActivity(),
                 String.format("%s: %s", getActivity().getString(R.string.content_block_provider), getActivity().getString(R.string.msg_skipping_segment, category)));
         setPositionMs(skipPosMs);
+        closeTransparentDialog();
     }
 
     private void confirmSkip(long skipPosMs, String category) {
@@ -363,5 +367,13 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
 
         return manager != null && manager.isScreenOff();
+    }
+
+    private void closeTransparentDialog() {
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+
+        if (dialogPresenter.isDialogShown() && dialogPresenter.isTransparent()) {
+            dialogPresenter.closeDialog();
+        }
     }
 }

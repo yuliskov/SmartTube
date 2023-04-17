@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.base;
 import android.app.Activity;
 import android.content.Context;
 import androidx.fragment.app.Fragment;
+import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -16,7 +18,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
+import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.lang.ref.WeakReference;
@@ -24,6 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class BasePresenter<T> implements Presenter<T> {
+    private static final String TAG = BasePresenter.class.getSimpleName();
     private WeakReference<T> mView = new WeakReference<>(null);
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private WeakReference<Context> mApplicationContext = new WeakReference<>(null);
@@ -55,12 +60,6 @@ public abstract class BasePresenter<T> implements Presenter<T> {
             return;
         }
 
-        if (!sRunOnce) {
-            sRunOnce = true;
-            // Init shared prefs used inside remote control service.
-            Utils.initGlobalData(context);
-        }
-
         // Localization fix: prefer Activity context
         if (context instanceof Activity && Utils.checkActivity((Activity) context)) {
             mActivity = new WeakReference<>((Activity) context);
@@ -69,7 +68,11 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         // In case view was disposed like SplashView does
         mApplicationContext = new WeakReference<>(context.getApplicationContext());
 
-        //initGlobalData();
+        if (!sRunOnce) {
+            sRunOnce = true;
+            // Init shared prefs used inside remote control service.
+            initGlobalData();
+        }
     }
 
     @Override
@@ -212,6 +215,32 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     private void showBootDialogs() {
 
+    }
+
+    /**
+     * Need to be the first line and executed on earliest stage once.<br/>
+     * Inits media service language and context.<br/>
+     * NOTE: this command should run before using any of the media service api.
+     */
+    private void initGlobalData() {
+        Log.d(TAG, "initGlobalData called...");
+
+        if (getContext() == null) {
+            return;
+        }
+
+        // 1) Auth token storage init
+        // 2) Media service language setup (I assume that context has proper language)
+        GlobalPreferences.instance(getContext());
+
+        // Apply proxy config after global prefs but before starting networking.
+        if (GeneralData.instance(getContext()).isProxyEnabled()) {
+            new ProxyManager(getContext()).configureSystemProxy();
+        }
+
+        // 1) Remove downloaded apks
+        // 2) Setup language
+        ViewManager.instance(getContext()).clearCaches();
     }
 
     /**

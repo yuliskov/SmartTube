@@ -290,7 +290,6 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         disposeActions();
 
         MediaService service = YouTubeMediaService.instance();
-        service.enableOldStreams(mPlayerTweaksData.isLiveStreamFixEnabled());
         MediaItemService mediaItemManager = service.getMediaItemService();
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribe(this::processFormatInfo,
@@ -328,7 +327,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                 SignInPresenter.instance(getActivity()).start();
                 getController().finish();
             }
-        } else if (formatInfo.containsDashVideoInfo() && !forceLegacyFormat(formatInfo)) {
+        } else if (formatInfo.containsDashVideoInfo() && acceptDashVideoInfo(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
@@ -336,10 +335,10 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
                             dashManifest -> getController().openDash(dashManifest),
                             error -> Log.e(TAG, "createMpdStream error: %s", error.getMessage())
                     );
-        } else if (formatInfo.isLive() && formatInfo.containsDashUrl() && !forceLegacyFormat(formatInfo)) {
+        } else if (formatInfo.isLive() && formatInfo.containsDashUrl() && acceptDashUrl(formatInfo)) {
             Log.d(TAG, "Found live video (current or past live stream) in dash format. Loading...");
             getController().openDashUrl(formatInfo.getDashManifestUrl());
-        } else if (formatInfo.isLive() && formatInfo.containsHlsUrl() && forceLegacyFormat(formatInfo)) {
+        } else if (formatInfo.isLive() && formatInfo.containsHlsUrl()) {
             Log.d(TAG, "Found live video (current or past live stream) in hls format. Loading...");
             getController().openHlsUrl(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsUrlListInfo()) {
@@ -413,14 +412,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
     private void initErrorActions() {
         // Some ciphered data could be outdated.
         // Might happen when the app wasn't used quite a long time.
-        mErrorActions.put(PlayerEventListener.ERROR_TYPE_SOURCE, () -> {
-            // This buffering setting could also cause such errors.
-            if (mPlayerTweaksData.isBufferingFixEnabled()) {
-                mPlayerTweaksData.enableBufferingFix(false);
-            }
-
-            MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_source2);
-        });
+        mErrorActions.put(PlayerEventListener.ERROR_TYPE_SOURCE, () -> MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_source2));
         mErrorActions.put(PlayerEventListener.ERROR_TYPE_RENDERER, () -> MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_renderer));
 
         // Hide unknown error on stable build only
@@ -506,18 +498,37 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         Log.e(TAG, "Undetected repeat mode " + repeatMode);
     }
 
-    private boolean forceLegacyFormat(MediaItemFormatInfo formatInfo) {
-        boolean isLive = formatInfo.isLive() || formatInfo.isLiveContent();
-
-        if (isLive && mPlayerTweaksData.isLiveStreamFixEnabled() && formatInfo.containsHlsUrl()) {
-            return true;
+    private boolean acceptDashVideoInfo(MediaItemFormatInfo formatInfo) {
+        // Not enough info for full length live streams
+        if (formatInfo.isLive() && formatInfo.getStartTimeMs() == 0) {
+            return false;
         }
 
-        if (!isLive && mPlayerData.isLegacyCodecsForced()) {
-            return true;
+        if (formatInfo.isLive() && mPlayerTweaksData.isDashUrlStreamsForced()) {
+            return false;
         }
 
-        return false;
+        if (formatInfo.isLive() && mPlayerTweaksData.isHlsStreamsForced()) {
+            return false;
+        }
+
+        if (mPlayerData.isLegacyCodecsForced()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean acceptDashUrl(MediaItemFormatInfo formatInfo) {
+        if (formatInfo.isLive() && mPlayerTweaksData.isHlsStreamsForced() && formatInfo.containsHlsUrl()) {
+            return false;
+        }
+
+        if (mPlayerData.isLegacyCodecsForced()) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override

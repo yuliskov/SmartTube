@@ -42,7 +42,7 @@ public class WebBrowserFragment extends Fragment implements WebBrowserView {
         webSettings.setJavaScriptEnabled(true);
 
         // No caching
-        webSettings.setAppCacheEnabled(false);
+        //webSettings.setAppCacheEnabled(false);
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
     }
 

@@ -137,6 +137,8 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
     private void backupMessages() {
         MessagesList messagesList = getView().findViewById(R.id.messagesList);
 
-        mBackupMessages = ((MessagesListAdapter<ChatItemMessage>) messagesList.getAdapter()).getMessages();
+        MessagesListAdapter<ChatItemMessage> adapter = (MessagesListAdapter<ChatItemMessage>) messagesList.getAdapter();
+
+        mBackupMessages = adapter != null ? adapter.getMessages() : null;
     }
 }
