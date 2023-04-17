@@ -3,7 +3,7 @@
     <string name="header_home">Beranda</string>
     <string name="title_search">Pencarian</string>
     <string name="header_subscriptions">Langganan</string>
-    <string name="header_history">Sejarah</string>
+    <string name="header_history">Riwayat</string>
     <string name="header_music">Musik</string>
     <string name="header_news">Berita</string>
     <string name="header_gaming">Permainan</string>
@@ -524,4 +524,5 @@
     <string name="sony_frame_drop_fix_desc">Memperbaiki lag pada TV Sony dan beberapa perangkat lain. Catatan: kemungkinan masalah dengan sinkronisasi suara.</string>
     <string name="audio_language">Bahasa suara</string>
     <string name="old_home_look">Tampilan lama bagian Beranda</string>
+    <string name="hide_shorts_everywhere">Sembunyikan vidio pendek di mana saja</string>
 </resources>
