@@ -11,6 +11,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.data.YouTubeMediaItemFormatInfo;
 import com.liskovsoft.youtubeapi.videoinfo.V2.VideoInfoService;
@@ -58,7 +59,8 @@ public class UrlProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         Log.d(TAG, "onCreate() called");
-        Utils.initGlobalData(getContext());
+//        Utils.initGlobalData(getContext());
+        GlobalPreferences.instance(getContext());
         return true;
     }
 
