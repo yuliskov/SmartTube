@@ -531,4 +531,14 @@
   <string name="disable_ok_long_press_desc">Diseñado para controladores con errores donde el botón OK no funciona correctamente</string>
   <string name="enable_master_password">Habilitar contraseña maestra</string>
   <string name="enter_master_password">Ingrese la contraseña maestra</string>
+  <string name="disable_stream_buffer">Deshabilitar el búfer en las transmisiones</string>
+  <string name="disable_stream_buffer_desc">Arreglo para situaciones en las que la transmisión está muy atrasada. Nota: la transmisión puede comenzar a retrasarse.</string>
+  <string name="sony_frame_drop_fix">Corrección de caída de cuadro #1</string>
+  <string name="sony_frame_drop_fix_desc">Soluciona los retrasos en Sony TV y algunos otros dispositivos. Nota: posibles problemas con la sincronización de audio.</string>
+  <string name="audio_language">Idioma de audio</string>
+  <string name="old_home_look">El aspecto antiguo de la sección Inicio</string>
+  <string name="hide_shorts_everywhere">Ocultar cortos en todas partes</string>
+  <string name="trending_searches">Búsquedas de tendencias</string>
+  <string name="not_recommend_channel">Canal no recomendado</string>
+  <string name="you_wont_see_this_channel">No verás este canal en las recomendaciones.</string>
 </resources>
