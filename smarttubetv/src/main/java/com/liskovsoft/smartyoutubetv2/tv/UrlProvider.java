@@ -59,7 +59,6 @@ public class UrlProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         Log.d(TAG, "onCreate() called");
-//        Utils.initGlobalData(getContext());
         GlobalPreferences.instance(getContext());
         return true;
     }
