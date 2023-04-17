@@ -543,4 +543,7 @@
     <string name="sony_frame_drop_fix">Oprava výpadku snímků #1</string>
     <string name="sony_frame_drop_fix_desc">Opravuje záseky na televizích Sony a jiných zařízeních. Pozor: mohou nastat problémy se synchronizací audia
     </string>
+    <string name="audio_language">Jazyk zvuku</string>
+    <string name="old_home_look">Starý vzhled sekce Domů</string>
+    <string name="hide_shorts_everywhere">Skrýt krátké klipy ze všech sekcí</string>
 </resources>
