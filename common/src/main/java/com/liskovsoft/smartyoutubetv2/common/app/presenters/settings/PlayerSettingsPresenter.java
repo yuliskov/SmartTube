@@ -139,7 +139,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendMasterVolumeCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (int scalePercent : Helpers.range(0, 200, 5)) {
+        for (int scalePercent : Helpers.range(0, 300, 5)) {
             float scale = scalePercent / 100f;
             options.add(UiOptionItem.from(String.format("%s%%", scalePercent),
                     optionItem -> mPlayerData.setPlayerVolume(scale),

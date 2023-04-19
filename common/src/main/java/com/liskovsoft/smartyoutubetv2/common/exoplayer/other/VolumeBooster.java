@@ -27,7 +27,7 @@ public class VolumeBooster implements AudioListener {
 
         mBooster = new LoudnessEnhancer(audioSessionId);
         mBooster.setEnabled(mEnabled);
-        mBooster.setTargetGain((int) (1500 * mVolume));
+        mBooster.setTargetGain((int) (1000 * mVolume));
     }
 
     public void setEnabled(boolean enabled) {
