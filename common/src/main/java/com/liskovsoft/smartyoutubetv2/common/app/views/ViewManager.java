@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import androidx.annotation.NonNull;
+import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -278,7 +279,9 @@ public class ViewManager {
 
     public void clearCaches() {
         YouTubeMediaService.instance().invalidateCache();
-        //FileHelpers.deleteCache(mContext);
+        // Note, also deletes cached flags (internal cache)
+        // Note, deletes cached apks (external cache)
+        FileHelpers.deleteCache(mContext);
         LocaleUpdater.clearCache();
     }
 
