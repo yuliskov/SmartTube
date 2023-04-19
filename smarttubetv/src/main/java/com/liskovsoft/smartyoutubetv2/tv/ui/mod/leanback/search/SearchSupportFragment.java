@@ -361,7 +361,7 @@ public class SearchSupportFragment extends Fragment {
             }
 
             if (mIsKeyboardAutoShowEnabled && focused) {
-                Helpers.showKeyboard(v.getContext());
+                Helpers.showKeyboardAlt(v.getContext(), v);
             }
         });
         KeyHelpers.fixEnterKey(mSearchTextEditor);
@@ -823,6 +823,12 @@ public class SearchSupportFragment extends Fragment {
             getActivity().getWindow().setSoftInputMode(enable ? WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED : WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
         mIsKeyboardAutoShowEnabled = enable;
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.d(TAG, "onHiddenChanged: ");
     }
 
     protected void showListening() {
