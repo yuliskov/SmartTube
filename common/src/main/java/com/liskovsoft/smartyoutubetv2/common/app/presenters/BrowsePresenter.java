@@ -292,12 +292,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     @Override
-    public void onViewPaused() {
-        super.onViewPaused();
-        disposeActions();
-    }
-
-    @Override
     public void onVideoItemSelected(Video item) {
         if (getView() == null) {
             return;
@@ -760,7 +754,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
     private void continueGroupIfNeeded(VideoGroup group) {
-        MediaServiceManager.instance().shouldContinueTheGroup(getContext(), group, () -> continueGroup(group));
+        MediaServiceManager.instance().shouldContinueTheGroup(
+                getContext(), group, () -> continueGroup(group), ViewManager.instance(getContext()).getTopView() == BrowseView.class
+        );
     }
 
     private void disposeActions() {

@@ -288,6 +288,13 @@ public class MediaServiceManager {
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
     public void shouldContinueTheGroup(Context context, VideoGroup group, Runnable onNeedContinue) {
+        shouldContinueTheGroup(context, group, onNeedContinue, true);
+    }
+
+    /**
+     * Most tiny ui has 8 cards in a row or 24 in grid.
+     */
+    public void shouldContinueTheGroup(Context context, VideoGroup group, Runnable onNeedContinue, boolean showLoading) {
         if (group == null) {
             return;
         }
@@ -319,8 +326,10 @@ public class MediaServiceManager {
             totalSize = 0;
         }
 
-        // Show loading on subscriptions if almost all videos are hidden
-        LoadingManager.showLoading(context, groupTooSmall);
+        if (showLoading) {
+            // Show loading on subscriptions if almost all videos are hidden
+            LoadingManager.showLoading(context, groupTooSmall);
+        }
         mContinuations.put(group.getId(), new Pair<>(totalSize, currentTimeMillis));
     }
 
