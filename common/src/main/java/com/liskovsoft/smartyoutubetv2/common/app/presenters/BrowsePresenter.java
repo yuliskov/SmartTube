@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyError;
+import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
@@ -467,6 +468,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
     }
 
+    public void pinItem(String title, int resId, ErrorFragmentData data) {
+        BrowseSection section = new BrowseSection(data.hashCode(), title, BrowseSection.TYPE_ERROR, resId, false, data);
+        mSections.add(section);
+
+        if (getView() != null) {
+            getView().addSection(0, section); // add first
+        }
+    }
+
     public void unpinItem(Video item) {
         mGeneralData.removePinnedItem(item);
 
@@ -542,6 +552,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             case BrowseSection.TYPE_MULTI_GRID:
                 Observable<MediaGroup> group2 = mGridMapping.get(section.getId());
                 updateVideoGrid(section, group2, 0, section.isAuthOnly());
+                break;
+            case BrowseSection.TYPE_ERROR:
+                getView().showError((ErrorFragmentData) section.getData());
                 break;
         }
 

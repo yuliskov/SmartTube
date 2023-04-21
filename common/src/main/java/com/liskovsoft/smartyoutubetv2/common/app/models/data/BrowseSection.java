@@ -7,13 +7,14 @@ public class BrowseSection {
     public static final int TYPE_ROW = 1;
     public static final int TYPE_SETTINGS_GRID = 2;
     public static final int TYPE_MULTI_GRID = 3;
+    public static final int TYPE_ERROR = 4;
     private static final int MAX_TITLE_LENGTH_CHARS = 30;
     private final int mId;
     private String mTitle;
     private final int mResId;
     private final String mIconUrl;
     private final boolean mIsAuthOnly;
-    private final Video mData;
+    private final Object mData;
     private boolean mEnabled;
     private int mType;
 
@@ -29,7 +30,7 @@ public class BrowseSection {
         this(id, title, type, -1, iconUrl, isAuthOnly, null);
     }
 
-    public BrowseSection(int id, String title, int type, String iconUrl, boolean isAuthOnly, Video data) {
+    public BrowseSection(int id, String title, int type, String iconUrl, boolean isAuthOnly, Object data) {
         this(id, title, type, -1, iconUrl, isAuthOnly, data);
     }
 
@@ -37,7 +38,11 @@ public class BrowseSection {
         this(id, title, type, resId, null, isAuthOnly, null);
     }
 
-    public BrowseSection(int id, String title, int type, int resId, String iconUrl, boolean isAuthOnly, Video data) {
+    public BrowseSection(int id, String title, int type, int resId, boolean isAuthOnly, Object data) {
+        this(id, title, type, resId, null, isAuthOnly, data);
+    }
+
+    public BrowseSection(int id, String title, int type, int resId, String iconUrl, boolean isAuthOnly, Object data) {
         mId = id;
         mTitle = Helpers.abbreviate(title, MAX_TITLE_LENGTH_CHARS);
         mType = type;
@@ -87,7 +92,7 @@ public class BrowseSection {
         return mEnabled;
     }
 
-    public Video getData() {
+    public Object getData() {
         return mData;
     }
 
