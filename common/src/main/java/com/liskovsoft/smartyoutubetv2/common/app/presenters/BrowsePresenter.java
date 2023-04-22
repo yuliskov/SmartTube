@@ -520,7 +520,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         mCurrentSection = findSectionById(sectionId);
 
-        if (getView() == null || sectionId < 0) {
+        if (getView() == null) {
             return;
         }
 

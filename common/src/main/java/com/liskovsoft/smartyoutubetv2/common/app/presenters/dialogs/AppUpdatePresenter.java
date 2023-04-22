@@ -145,7 +145,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
     private String createChangelog(List<String> changelog) {
         StringBuilder builder = new StringBuilder();
 
-        int maxLines = 10;
+        int maxLines = 30;
         int lineNum = 0;
 
         for (String change : changelog) {
