@@ -83,7 +83,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             RxHelper.setupGlobalErrorHandler();
             initIntentChain();
             updateChannels();
-            getBackupDataOnce();
             runRemoteControlTasks();
             //setupKeepAlive();
             //configureProxy();
@@ -96,24 +95,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private void showAccountSelection() {
         AccountSelectionPresenter.instance(getContext()).show();
-    }
-
-    public void saveBackupData() {
-        PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(null);
-        AppPrefs prefs = AppPrefs.instance(null);
-
-        if (playbackPresenter != null && prefs != null) {
-            prefs.setBackupData(
-                    playbackPresenter.getVideo() != null ? playbackPresenter.getVideo().videoId : ""
-            );
-        }
-    }
-
-    private String getBackupDataOnce() {
-        AppPrefs prefs = AppPrefs.instance(getContext());
-        String mBackupVideoId = prefs.getBackupData();
-        prefs.setBackupData(null);
-        return mBackupVideoId;
     }
 
     private void runRemoteControlTasks() {
@@ -241,18 +222,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
                 playbackPresenter.openVideo(videoId, IntentExtractor.hasFinishOnEndedFlag(intent), timeMs);
 
-                return true;
-            }
-
-            return false;
-        });
-
-        mIntentChain.add(intent -> {
-            String backupData = getBackupDataOnce();
-
-            if (backupData != null) {
-                PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
-                playbackPresenter.openVideo(backupData, false, -1);
                 return true;
             }
 

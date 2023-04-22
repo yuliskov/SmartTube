@@ -95,7 +95,6 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.install_update), optionItem -> {
                     mUpdateChecker.installUpdate();
-                    SplashPresenter.instance(getContext()).saveBackupData();
                 }, false));
         //mSettingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.show_again), optionItem -> {
         //    mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
@@ -115,7 +114,6 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
             @Override
             public void onAction() {
                 mUpdateChecker.installUpdate();
-                SplashPresenter.instance(getContext()).saveBackupData();
             }
 
             @Override

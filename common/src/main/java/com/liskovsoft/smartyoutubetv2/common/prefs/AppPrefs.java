@@ -13,7 +13,6 @@ public class AppPrefs extends SharedPreferencesBase {
     @SuppressLint("StaticFieldLeak")
     private static AppPrefs sInstance;
     private static final String COMPLETED_ONBOARDING = "completed_onboarding";
-    private static final String BACKUP_DATA = "backup_data";
     private static final String STATE_UPDATER_DATA = "state_updater_data";
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
     private static final String WEB_PROXY_URI = "web_proxy_uri";
@@ -51,14 +50,6 @@ public class AppPrefs extends SharedPreferencesBase {
 
     public String getBootResolution() {
         return mBootResolution;
-    }
-
-    public void setBackupData(String backupData) {
-        putString(BACKUP_DATA, backupData);
-    }
-
-    public String getBackupData() {
-        return getString(BACKUP_DATA, null);
     }
 
     public String getStateUpdaterData() {
