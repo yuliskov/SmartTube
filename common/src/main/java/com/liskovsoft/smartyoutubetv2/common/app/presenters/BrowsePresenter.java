@@ -463,8 +463,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void pinItem(String title, int resId, ErrorFragmentData data) {
-        BrowseSection section = new BrowseSection(data.hashCode(), title, BrowseSection.TYPE_ERROR, resId, false, data);
+        BrowseSection section = new BrowseSection(title.hashCode(), title, BrowseSection.TYPE_ERROR, resId, false, data);
         mSections.add(section);
+        mSectionsMapping.put(title.hashCode(), section);
 
         if (getView() != null) {
             getView().addSection(0, section); // add first
@@ -548,7 +549,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 updateVideoGrid(section, group2, 0, section.isAuthOnly());
                 break;
             case BrowseSection.TYPE_ERROR:
-                getView().showError((ErrorFragmentData) section.getData());
+                getView().showProgressBar(false);
                 break;
         }
 

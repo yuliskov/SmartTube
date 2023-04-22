@@ -65,7 +65,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mRestoredItemIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_ITEM_INDEX, -1) : -1;
         mIsFragmentCreated = true;
 
-        mSections = new LinkedHashMap<>();
+        mSections = new HashMap<>();
         mHandler = new Handler();
         mBrowsePresenter = BrowsePresenter.instance(getContext());
         mBrowsePresenter.setView(this);
@@ -161,13 +161,25 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         getMainFragmentRegistry().registerFragment(PageRow.class, mSectionFragmentFactory);
     }
 
+    //private int indexOf(long headerId) {
+    //    int index = 0;
+    //    for (Integer id : mSections.keySet()) {
+    //        if (id == headerId) {
+    //            return index;
+    //        }
+    //        index++;
+    //    }
+    //
+    //    return 0;
+    //}
+
     private int indexOf(long headerId) {
-        int index = 0;
-        for (Integer id : mSections.keySet()) {
-            if (id == headerId) {
-                return index;
+        for (int i = 0; i < mSectionRowAdapter.size(); i++) {
+            PageRow row = (PageRow) mSectionRowAdapter.get(i);
+            HeaderItem header = row.getHeaderItem();
+            if (header.getId() == headerId) {
+                return i;
             }
-            index++;
         }
 
         return 0;
