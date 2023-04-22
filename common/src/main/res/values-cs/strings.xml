@@ -395,7 +395,7 @@
     <string name="pressing_home_back">stisknutím tlačítka DOMŮ nebo ZPĚT</string>
     <string name="pressing_back">stisknutím tlačítka ZPĚT</string>
     <string name="player_number_key_seek">Posuv pomocí čísel</string>
-    <string name="save_remove_playlist">Uložit/Odebrat playlist z Knihovny</string>
+    <string name="save_remove_playlist">Přidat/Odebrat playlist ze sekce Playlisty</string>
     <string name="remove_playlist">Odstranit playlist ze sekce Playlisty natrvalo</string>
     <string name="removed_from_playlists">Odstraněno ze sekce Playlisty</string>
     <string name="saved_to_playlists">Přidáno do sekce Playlisty</string>
@@ -546,4 +546,5 @@
     <string name="audio_language">Jazyk zvuku</string>
     <string name="old_home_look">Starý vzhled sekce Domů</string>
     <string name="hide_shorts_everywhere">Skrýt krátké klipy ze všech sekcí</string>
+    <string name="update_found">Aktualizace</string>
 </resources>
