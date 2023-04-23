@@ -387,7 +387,7 @@ public class PlayerTweaksData {
         mIsQualityInfoBitrateEnabled = Helpers.parseBoolean(split, 22, false);
         mIsSpeedButtonOldBehaviorEnabled = Helpers.parseBoolean(split, 23, false);
         mIsButtonLongClickEnabled = Helpers.parseBoolean(split, 24, true);
-        mIsLongSpeedListEnabled = Helpers.parseBoolean(split, 25, false);
+        mIsLongSpeedListEnabled = Helpers.parseBoolean(split, 25, true);
         mPlayerDataSource = Helpers.parseInt(split, 26, PLAYER_DATA_SOURCE_CRONET);
         mUnlockAllFormats = Helpers.parseBoolean(split, 27, false);
         mIsDashUrlStreamsForced = Helpers.parseBoolean(split, 28, false);

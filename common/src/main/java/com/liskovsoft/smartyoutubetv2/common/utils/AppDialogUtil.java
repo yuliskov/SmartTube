@@ -426,7 +426,8 @@ public class AppDialogUtil {
                     playerData.getVideoZoomMode() == pair[1] && playerData.getVideoZoom() == -1));
         }
 
-        for (int zoomPercents : Helpers.range(100, 300, 25)) {
+        // Zoom above 100% has centering problems with 2K-4K videos
+        for (int zoomPercents : Helpers.range(50, 300, 5)) {
             options.add(UiOptionItem.from(String.format("%s%%", zoomPercents),
                     optionItem -> {
                         playerData.setVideoZoom(zoomPercents);
