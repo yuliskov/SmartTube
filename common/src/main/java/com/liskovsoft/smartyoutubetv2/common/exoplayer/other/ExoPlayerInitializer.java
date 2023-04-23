@@ -60,6 +60,9 @@ public class ExoPlayerInitializer {
         // Lead to numbered errors
         //player.setRepeatMode(Player.REPEAT_MODE_ONE);
 
+        // Fix still image while audio is playing (happens after format change or exit from sleep)
+        //player.setPlayWhenReady(true);
+
         return player;
     }
 
