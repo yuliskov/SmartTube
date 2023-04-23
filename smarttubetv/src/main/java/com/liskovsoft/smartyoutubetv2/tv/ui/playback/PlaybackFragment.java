@@ -463,7 +463,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void createMediaSession() {
-        if (VERSION.SDK_INT <= 19 || PlayerTweaksData.instance(getContext()).isPlaybackNotificationsDisabled()) {
+        if (VERSION.SDK_INT <= 19 || getContext() == null) {
             // Fix Android 4.4 bug: java.lang.IllegalArgumentException: MediaButtonReceiver component may not be null
             return;
         }
@@ -471,6 +471,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mMediaSession = new MediaSessionCompat(getContext(), getContext().getPackageName());
         mMediaSession.setActive(true);
         mMediaSessionConnector = new MediaSessionConnector(mMediaSession);
+        boolean disableNotifications = PlayerTweaksData.instance(getContext()).isPlaybackNotificationsDisabled();
 
         try {
             mMediaSessionConnector.setPlayer(mPlayer);
@@ -481,7 +482,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        mMediaSessionConnector.setMediaMetadataProvider(player -> {
+        mMediaSessionConnector.setMediaMetadataProvider(disableNotifications ? null : player -> {
             if (getVideo() == null) {
                 return null;
             }
