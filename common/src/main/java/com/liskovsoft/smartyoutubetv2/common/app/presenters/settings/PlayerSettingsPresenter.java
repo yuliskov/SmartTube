@@ -142,7 +142,13 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         for (int scalePercent : Helpers.range(0, 300, 5)) {
             float scale = scalePercent / 100f;
             options.add(UiOptionItem.from(String.format("%s%%", scalePercent),
-                    optionItem -> mPlayerData.setPlayerVolume(scale),
+                    optionItem -> {
+                        mPlayerData.setPlayerVolume(scale);
+
+                        if (scalePercent > 100) {
+                            MessageHelpers.showLongMessage(getContext(), R.string.volume_boost_warning);
+                        }
+                    },
                     Helpers.floatEquals(scale, mPlayerData.getPlayerVolume())));
         }
 
