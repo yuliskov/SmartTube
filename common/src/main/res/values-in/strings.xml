@@ -135,8 +135,8 @@
     <string name="open_channel_uploads">Buka upload channel</string>
     <string name="app_exit_shortcut">Keluar dari aplikasi</string>
     <string name="app_exit_none">Jangan keluar</string>
-    <string name="app_double_back_exit">Tekan kembali 2X </string>
-    <string name="app_single_back_exit">Tekan kembali sekali</string>
+    <string name="app_double_back_exit">Tekan BACK 2X </string>
+    <string name="app_single_back_exit">Tekan BACK sekali</string>
     <string name="action_video_zoom">Perbesaran vidio</string>
     <string name="video_zoom">Perbesaran vidio</string>
     <string name="video_zoom_default">Bawaan</string>
@@ -341,7 +341,7 @@
     <string name="proxy_port_invalid">Port proxy tidak valid, harus &gt; 0.</string>
     <string name="proxy_credentials_invalid">Username dan password salah.</string>
     <string name="proxy_test_aborted">Tes dibatalkan, harap perbaiki pengaturan proxy terlebih dahulu.</string>
-    <string name="proxy_application_aborted">Tolong, perbaiki pengaturan proxy terlebih dahulu.</string>    
+    <string name="proxy_application_aborted">Tolong perbaiki pengaturan proxy terlebih dahulu.</string>    
     <string name="openvpn_config_address_hint">Alamat file konfigurasi (*.ovpn)</string>
     <string name="enable_openvpn">Gunakan OpenVPN</string>
     <string name="openvpn_settings_title">Pengaturan OpenVPN</string>
@@ -525,4 +525,5 @@
     <string name="audio_language">Bahasa suara</string>
     <string name="old_home_look">Tampilan lama bagian Beranda</string>
     <string name="hide_shorts_everywhere">Sembunyikan vidio pendek di mana saja</string>
+    <string name="volume_boost_warning">Pengaturan apa pun yang melebihi batas dapat berpotensi merusak speaker</string>
 </resources>
