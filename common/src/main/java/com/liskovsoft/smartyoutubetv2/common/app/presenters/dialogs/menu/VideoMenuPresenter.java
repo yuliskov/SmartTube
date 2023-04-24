@@ -491,11 +491,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void appendPlayVideoButton() {
-        if (!mIsPlayVideoButtonEnabled || mVideo == null) {
-            return;
-        }
-
-        if (mVideo.videoId == null) {
+        if (!mIsPlayVideoButtonEnabled || mVideo == null || mVideo.videoId == null) {
             return;
         }
 
@@ -509,11 +505,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void appendPlayVideoIncognitoButton() {
-        if (!mIsPlayVideoIncognitoButtonEnabled || mVideo == null) {
-            return;
-        }
-
-        if (mVideo.videoId == null) {
+        if (!mIsPlayVideoIncognitoButtonEnabled || mVideo == null || mVideo.videoId == null ||
+            ViewManager.instance(getContext()).getTopView() == PlaybackView.class) {
             return;
         }
 
