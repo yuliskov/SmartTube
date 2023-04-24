@@ -547,6 +547,5 @@
     <string name="old_home_look">Starý vzhled sekce Domů</string>
     <string name="hide_shorts_everywhere">Skrýt krátké klipy ze všech sekcí</string>
     <string name="update_found">Aktualizace</string>
-    <string name="volume_boost_warning">Další nastavení nad limit může poškodit reproduktory</string>
-    
+    <string name="volume_boost_warning">Další nastavení nad limit může poškodit reproduktory</string>    
 </resources>
