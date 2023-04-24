@@ -531,4 +531,17 @@
   <string name="live_stream_fix_4k_desc">تحذير، هذا التعديل يعطل إعادة لف التدفقات. يحسن أداء البث المباشر بشكل كبير. الدقة القصوى هي 4K.</string>
   <string name="live_stream_fix_4k">إصلاح البث المباشر (4K)</string>
   <string name="enable_voice_search_desc">سيتم استبدال التطبيق الرسمي بما يسمى الجسر. يساعد الجسر في نقل طلبات البحث العالمية إلى تطبيقنا.</string>
+  <string name="not_recommend_channel">لا تنصح بالقناة</string>
+  <string name="you_wont_see_this_channel">لن ترى هذه القناة في التوصيات</string>
+  <string name="enable_master_password">تمكين كلمة السر الرئيسية</string>
+  <string name="enter_master_password">أدخل كلمة المرور الرئيسية</string>
+  <string name="disable_stream_buffer">تعطيل التخزين المؤقت في البث المباشر</string>
+  <string name="disable_stream_buffer_desc">إصلاح للمواقف التي يكون فيها البث المباشر بعيدًا جدًا.  ملاحظة: قد يبدأ البث المباشر في التأخر.</string>
+  <string name="sony_frame_drop_fix">إصلاح سقوط الإطار رقم 1</string>
+  <string name="sony_frame_drop_fix_desc">إصلاح التأخيرات على تلفزيون سوني وبعض الأجهزة الأخرى. ملاحظة: مشاكل المحتملة مع مزامنة الصوت.</string>
+  <string name="audio_language">لغة الصوت</string>
+  <string name="old_home_look">المظهر القديم لقسم الصفحة الرئيسية</string>
+  <string name="hide_shorts_everywhere">إخفاء مقاطع Shorts في كل مكان</string>
+  <string name="update_found">تحديث</string>
+  <string name="volume_boost_warning">قد يؤدي تجاوز الحد المسموح به إلى إتلاف مكبرات الصوت</string>
 </resources>
