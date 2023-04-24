@@ -367,8 +367,8 @@
     <string name="subtitle_scale">Altyazı ölçeği</string>
     <string name="audio_sync_fix_desc">Ses/video senkronize etmenin alternatif bir yolu. Eskimiş bir yöntem sayılır ama bazı durumlarda işe yarayabilir.</string>
     <string name="audio_sync_fix">Ses senk. düzeltmesi</string>
-    <string name="ambilight_ratio_fix_desc">Olmayan ön gerilim aydınlatmasını düzeltir. Yanlış en boy oranını düzeltir. Boş ekran görüntülerini düzeltir. Performansı etkiler!</string>
-    <string name="ambilight_ratio_fix">Ambilight/En boy oranı/Ekran görüntüleri düzeltmesi</string>
+    <string name="ambilight_ratio_fix_desc">Olmayan ön gerilim aydınlatmasını düzeltir. Yanlış en boy oranını ya da video ölçeğini düzeltir. Boş ekran görüntülerini düzeltir. Performansı etkiler!</string>
+    <string name="ambilight_ratio_fix">Ambilight/En boy oranı/Video ölçeği/Ekran görüntüleri düzeltmesi</string>
     <string name="force_legacy_codecs_desc">Alt sınıf cihazlarda performansı önemli ölçüde artırır. Maksimum çözünürlük 720p\'dir.</string>
     <string name="force_legacy_codecs">Eski kod çözücüleri zorla (720p)</string>
     <string name="live_stream_fix_desc">Uyarı, bu ince ayar canlı yayınların geri sarılmasını devre dışı bırakır. Alt sınıf cihazlarda canlı yayın performansını önemli ölçüde artırır. Maksimum çözünürlük 1080p\'dir.</string>
@@ -395,7 +395,7 @@
     <string name="pressing_home_back">ANA EKRAN\'a ya da GERİ\'ye basarak</string>
     <string name="pressing_back">GERİ\'ye basarak</string>
     <string name="player_number_key_seek">Sayı tuşlarıyla arama</string>
-    <string name="save_remove_playlist">Bu oynatma listesini Kitaplığa Kaydet/Kaldır</string>
+    <string name="save_remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümüne Ekle/Kaldır</string>
     <string name="remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümünden kalıcı olarak kaldır</string>
     <string name="removed_from_playlists">Oynatma Listeleri bölümünden kaldırıldı</string>
     <string name="saved_to_playlists">Oynatma Listeleri bölümüne eklendi</string>
@@ -545,4 +545,8 @@
     </string>
     <string name="audio_language">Ses dili</string>
     <string name="old_home_look">Ana Sayfa bölümünün eski görünümü</string>
+    <string name="hide_shorts_everywhere">Shortsları her yerde gizle</string>
+    <string name="update_found">Güncelleme</string>
+    <string name="volume_boost_warning">Sınırın üzerindeki herhangi bir ayar hoparlörlere zarar verebilir</string>
+    <string name="play_video_incognito">Gizli oynat</string>    
 </resources>
