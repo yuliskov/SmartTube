@@ -539,4 +539,5 @@
     <string name="hide_shorts_everywhere">Приховувати короткі відео з усіх розділів</string>
     <string name="update_found">Оновлення</string>
     <string name="volume_boost_warning">Налаштування, які перевищують ліміт можуть пошкодити динаміки</string>
+    <string name="play_video_incognito">Відтворити анонімно</string>
 </resources>

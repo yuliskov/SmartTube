@@ -115,6 +115,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 {R.string.dialog_add_to_playlist, MainUIData.MENU_ITEM_ADD_TO_PLAYLIST},
                 {R.string.add_remove_from_recent_playlist, MainUIData.MENU_ITEM_RECENT_PLAYLIST},
                 {R.string.play_video, MainUIData.MENU_ITEM_PLAY_VIDEO},
+                {R.string.play_video_incognito, MainUIData.MENU_ITEM_PLAY_VIDEO_INCOGNITO},
                 {R.string.not_interested, MainUIData.MENU_ITEM_NOT_INTERESTED},
                 {R.string.remove_from_history, MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY},
                 {R.string.remove_from_subscriptions, MainUIData.MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS},

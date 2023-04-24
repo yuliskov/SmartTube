@@ -548,4 +548,5 @@
     <string name="hide_shorts_everywhere">Hide shorts everywhere</string>
     <string name="update_found">Update</string>
     <string name="volume_boost_warning">Any settings over the limit can potentially damage speakers</string>
+    <string name="play_video_incognito">Play incognito</string>
 </resources>

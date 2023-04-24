@@ -42,6 +42,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     private boolean mIsPlayBlocked;
     private int mTickleLeft;
     private boolean mIsBuffering;
+    private boolean mIncognito;
     private final Runnable mStreamEndCheck = () -> {
         if (getVideo() != null && getVideo().isLive && mIsBuffering &&
                 getController().getDurationMs() - getController().getPositionMs() < 3 * LIVE_BUFFER_MS) {
@@ -77,6 +78,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         setPlayEnabled(true); // video just added
 
         mTempVideoFormat = null;
+
+        enableIncognitoIfNeeded(item);
 
         // Don't do reset on videoLoaded state because this will influences minimized music videos.
         resetPositionIfNeeded(item);
@@ -304,6 +307,11 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         });
     }
 
+    @Override
+    public void onFinish() {
+        mIncognito = false;
+    }
+
     private void clearStateOfNextVideo() {
         if (getVideo() != null && getVideo().nextMediaItem != null) {
             resetPosition(getVideo().nextMediaItem.getVideoId());
@@ -350,6 +358,19 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
             } else {
                 mStateService.removeByVideoId(videoId);
             }
+        }
+    }
+
+    private void enableIncognitoIfNeeded(Video item) {
+        if (item == null) {
+            return;
+        }
+
+        // Enable incognito per session
+        // Reset to default when player finished
+        if (item.incognito) {
+            mIncognito = true;
+            item.incognito = false;
         }
     }
 
@@ -450,7 +471,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     private void updateHistory() {
         Video video = getVideo();
 
-        if (video == null || !getController().containsMedia()) {
+        if (video == null || mIncognito || !getController().containsMedia()) {
             return;
         }
 

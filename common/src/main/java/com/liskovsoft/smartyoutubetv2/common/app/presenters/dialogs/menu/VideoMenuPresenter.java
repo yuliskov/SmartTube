@@ -62,6 +62,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsShowPlaybackQueueButtonEnabled;
     private boolean mIsOpenDescriptionButtonEnabled;
     private boolean mIsPlayVideoButtonEnabled;
+    private boolean mIsPlayVideoIncognitoButtonEnabled;
     private boolean mIsPlaylistOrderButtonEnabled;
     private boolean mIsStreamReminderButtonEnabled;
     private VideoMenuCallback mCallback;
@@ -146,6 +147,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         appendReturnToBackgroundVideoButton();
         appendPlayVideoButton();
+        appendPlayVideoIncognitoButton();
         //appendNotInterestedButton();
         //appendRemoveFromSubscriptionsButton();
         appendRemoveFromHistoryButton();
@@ -188,6 +190,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         appendReturnToBackgroundVideoButton();
         appendPlayVideoButton();
+        appendPlayVideoIncognitoButton();
         appendAddToPlaybackQueueButton();
         appendShowPlaybackQueueButton();
         appendOpenChannelButton();
@@ -505,6 +508,25 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 ));
     }
 
+    private void appendPlayVideoIncognitoButton() {
+        if (!mIsPlayVideoIncognitoButtonEnabled || mVideo == null) {
+            return;
+        }
+
+        if (mVideo.videoId == null) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.play_video_incognito),
+                        optionItem -> {
+                            mVideo.incognito = true;
+                            PlaybackPresenter.instance(getContext()).openVideo(mVideo);
+                            mDialogPresenter.closeDialog();
+                        }
+                ));
+    }
+
     private void showLongTextDialog(String description) {
         mDialogPresenter.appendLongTextCategory(mVideo.title, UiOptionItem.from(description));
         mDialogPresenter.showDialog(mVideo.title);
@@ -736,6 +758,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsReturnToBackgroundVideoEnabled = true;
         mIsOpenDescriptionButtonEnabled = true;
         mIsPlayVideoButtonEnabled = true;
+        mIsPlayVideoIncognitoButtonEnabled = true;
         mIsPlaylistOrderButtonEnabled = true;
         mIsStreamReminderButtonEnabled = true;
 
@@ -753,6 +776,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsRemoveFromSubscriptionsButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS);
         mIsOpenDescriptionButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_DESCRIPTION);
         mIsPlayVideoButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAY_VIDEO);
+        mIsPlayVideoIncognitoButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAY_VIDEO_INCOGNITO);
         mIsSubscribeButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SUBSCRIBE);
         mIsStreamReminderButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_STREAM_REMINDER);
         mIsShowPlaybackQueueButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHOW_QUEUE);

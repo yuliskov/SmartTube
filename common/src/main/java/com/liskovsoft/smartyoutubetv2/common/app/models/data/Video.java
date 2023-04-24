@@ -73,6 +73,7 @@ public final class Video implements Parcelable {
     public boolean fromQueue;
     public boolean isPending;
     public boolean finishOnEnded;
+    public boolean incognito;
     private int startSegmentNum;
 
     public Video() {

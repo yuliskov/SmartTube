@@ -539,4 +539,5 @@
     <string name="hide_shorts_everywhere">Скрывать короткие видео повсюду</string>
     <string name="update_found">Обновление</string>
     <string name="volume_boost_warning">Настройки привышающие лимит могу повредить динамики</string>
+    <string name="play_video_incognito">Воспроизвести анонимно</string>
 </resources>
