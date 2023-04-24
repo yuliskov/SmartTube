@@ -367,8 +367,8 @@
     <string name="subtitle_scale">Untertitel-Skalierung</string>
     <string name="audio_sync_fix_desc">Eine alternative Methode zur Synchronisierung von Audio/Video. Sie gilt als veraltet, kann aber in manchen Fällen hilfreich sein.</string>
     <string name="audio_sync_fix">Audio-Synchronisation-Fix</string>
-    <string name="ambilight_ratio_fix_desc">Behebt fehlende Bias-Beleuchtung. Korrigiert falsches Seitenverhältnis. Behebt leere Screenshots. Beeinträchtigt die Performance!</string>
-    <string name="ambilight_ratio_fix">Ambilight/Seitenverhältnis/Screenshots-Fix</string>
+    <string name="ambilight_ratio_fix_desc">Behebt fehlende Bias-Beleuchtung. Korrigiert falsches Seitenverhältnis oder Video-Skalierung. Behebt leere Screenshots. Beeinträchtigt die Performance!</string>
+    <string name="ambilight_ratio_fix">Ambilight/Seitenverhältnis/Video-Skalierung/Screenshots-Fix</string>
     <string name="force_legacy_codecs_desc">Erhebliche Verbesserung der Leistung auf Low-End-Geräten. Die maximale Auflösung beträgt 720p.</string>
     <string name="force_legacy_codecs">Legacy-Codecs erzwingen (720p)</string>
     <string name="live_stream_fix_desc">Achtung, diese Option deaktiviert das Zurückspulen von Streams. Erhebliche Verbesserung der Live-Stream-Leistung auf Low-End-Geräten. Die maximale Auflösung beträgt 1080p.</string>
@@ -546,4 +546,6 @@
     <string name="audio_language">Audio-Sprache</string>
     <string name="old_home_look">Altes Aussehen der Startseite</string>
     <string name="hide_shorts_everywhere">Kurzvideos überall ausblenden</string>
+    <string name="update_found">Update</string>
+    <string name="volume_boost_warning">Einstellungen über dem Grenzwert können die Lautsprecher möglicherweise beschädigen</string>
 </resources>
