@@ -367,8 +367,8 @@
     <string name="subtitle_scale">Velikost titulků</string>
     <string name="audio_sync_fix_desc">Jiný způsob synchronizace audia/videa. Pozažuje se za zastaralý, ale v některých případech může pomoci.</string>
     <string name="audio_sync_fix">Oprava synchronizace zvuku</string>
-    <string name="ambilight_ratio_fix_desc">Opravuje chybějící bias osvětlení. Opravuje nesprávný poměr stran. Opravuje prázdné screenshoty. Ovlivňuje výkon!</string>
-    <string name="ambilight_ratio_fix">Oprava Ambilight/Poměru stran/Screenshotů</string>
+    <string name="ambilight_ratio_fix_desc">Opravuje chybějící bias osvětlení. Opravuje nesprávný poměr stran nebo měřítko videa. Opravuje prázdné screenshoty. Ovlivňuje výkon!</string>
+    <string name="ambilight_ratio_fix">Oprava Ambilight/Poměru stran/Měřítka videa/Screenshotů</string>
     <string name="force_legacy_codecs_desc">Výrazně zlepšuje výkon na zařízeních nižší třídy. Maximální rozlišení je 720p.</string>
     <string name="force_legacy_codecs">Vynucení starších kodeků (720p)</string>
     <string name="live_stream_fix_desc">Pozor: Přetáčení vysílání nebude k dispozici. Výrazně zlepšuje výkon živého vysílání na zařízeních nižší třídy. Maximální rozlišení je 1080p.</string>
@@ -547,4 +547,6 @@
     <string name="old_home_look">Starý vzhled sekce Domů</string>
     <string name="hide_shorts_everywhere">Skrýt krátké klipy ze všech sekcí</string>
     <string name="update_found">Aktualizace</string>
+    <string name="volume_boost_warning">Další nastavení nad limit může poškodit reproduktory</string>
+    
 </resources>
