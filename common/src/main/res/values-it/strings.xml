@@ -24,7 +24,7 @@
     <string name="audio_max_quality">Automatico (qualità massima)</string>
     <string name="subtitles_disabled">Sottotitoli disabilitati</string>
     <string name="auto_frame_rate">Frequenza fotogrammi automatica</string>
-    <string name="frame_rate_correction">Correzione fps:\n%s</string>
+    <string name="frame_rate_correction">Correggi fps:\n%s</string>
     <string name="category_background_playback">Riproduzione in background</string>
     <string name="not_implemented">Non implementato</string>
     <string name="option_background_playback_off">Disattivato</string>
@@ -231,7 +231,7 @@
     <string name="share_embed_link">Condividi link incorporato</string>
     <string name="card_text_scroll_factor">Velocità scorrimento testo titoli cartoline</string>
     <string name="preferred_update_source">Seleziona fonte aggiornamenti</string>
-    <string name="hide_shorts">Nascondi i video corti dalle Iscrizioni</string>
+    <string name="hide_shorts">Nascondi i video brevi dalle Iscrizioni</string>
     <string name="key_remapping">Rimappatura tasti</string>
     <string name="screen_dimming">Oscuramento schermo</string>
     <string name="removed_from_playback_queue">Rimosso dalla coda di riproduzione</string>
@@ -326,10 +326,10 @@
     <string name="player_seek_regular">Regolare</string>
     <string name="player_seek_confirmation_pause">Con conferma (pausa durante la ricerca)</string>
     <string name="player_seek_confirmation_play">Con conferma (play durante la ricerca)</string>
-    <string name="hide_shorts_from_home">Nascondi i video corti dalla Home</string>
+    <string name="hide_shorts_from_home">Nascondi i video brevi dalla Home</string>
     <string name="finish_on_disconnect">Termina l\'app dopo aver scollegato il telefono/tablet</string>
     <string name="update_error">Errore di aggiornamento</string>
-    <string name="hide_shorts_from_history">Nascondi i video corti dalla Cronologia</string>
+    <string name="hide_shorts_from_history">Nascondi i video brevi dalla Cronologia</string>
     <string name="disable_screensaver">Disabilita il salvaschermo</string>
     <string name="description_not_found">Descrizione non trovata</string>
     <string name="proxy_port_hint">Porta proxy</string>
@@ -347,7 +347,7 @@
     <string name="proxy_host_invalid">Host proxy non impostato.</string>
     <string name="proxy_port_invalid">Porta proxy non valida, deve essere più grande di 0.</string>
     <string name="proxy_credentials_invalid">Nome utente o password errati.</string>
-    <string name="proxy_test_aborted">Test interrotto, correggere prima le impostazioni del proxy.</string>
+    <string name="proxy_test_aborted">Test interrotto, correggi prima le impostazioni del proxy.</string>
     <string name="proxy_application_aborted">Per favore, correggi prima le impostazioni del proxy.</string>
     <string name="proxy_test_start">Test#%d: %s …</string>
     <string name="proxy_test_error">Errore#%d: %s</string>
@@ -366,19 +366,19 @@
     <string name="subtitle_system">Stile del sistema (Impostazioni Android / Accessibilità)</string>
     <string name="subtitle_scale">Scala dei sottotitoli</string>
     <string name="audio_sync_fix_desc">Un modo alternativo per sincronizzare audio/video. Considerato obsoleto, ma, in alcuni casi, può aiutare.</string>
-    <string name="audio_sync_fix">Correzione sincronizzazione audio</string>
-    <string name="ambilight_ratio_fix_desc">Correzione illuminazione bias assente. Risolve proporzioni errate. Risolve schermate vuote. Influisce sulle prestazioni!</string>
-    <string name="ambilight_ratio_fix">Correzione Ambilight/Proporzioni/Screenshot</string>
+    <string name="audio_sync_fix">Correggi sincronizzazione audio</string>
+    <string name="ambilight_ratio_fix_desc">Correggi illuminazione bias assente. Correggi proporzioni errate o scala del video. Correggi screenshot vuoti. Influisce sulle prestazioni!</string>
+    <string name="ambilight_ratio_fix">Correggi Ambilight/Proporzioni/Scala video/Screenshot</string>
     <string name="force_legacy_codecs_desc">Migliora significativamente le prestazioni sui dispositivi di fascia bassa. La risoluzione massima è 720p.</string>
     <string name="force_legacy_codecs">Forza codec obsoleti (720p)</string>
     <string name="live_stream_fix_desc">Attenzione, questa modifica disabilita il riavvolgimento dei flussi. Migliora significativamente le prestazioni delle trasmissioni live sui dispositivi di fascia bassa. La risoluzione massima è 1080p.</string>
     <string name="live_stream_fix_4k_desc">Attenzione, questa modifica disabilita il riavvolgimento dei flussi. Migliora significativamente le prestazioni delle trasmissioni live. La risoluzione massima è 4K.</string>
-    <string name="live_stream_fix">Correzione trasmissione live (1080p)</string>
-    <string name="live_stream_fix_4k">Correzione trasmissione live (4K)</string>
+    <string name="live_stream_fix">Correggi trasmissione live (1080p)</string>
+    <string name="live_stream_fix_4k">Correggi trasmissione live (4K)</string>
     <string name="playback_notifications_fix_desc">Nasconde le notifiche di cambio traccia. Potrebbe essere utile su firmware basati su AOSP.</string>
     <string name="playback_notifications_fix">Disabilita le notifiche di riproduzione</string>
-    <string name="amlogic_fix_desc">Correzione del frame drop su dispositivi basati su Amlogic.</string>
-    <string name="amlogic_fix">Correzione Amlogic 1080p@60fps</string>
+    <string name="amlogic_fix_desc">Correggi frame drop su dispositivi basati su Amlogic.</string>
+    <string name="amlogic_fix">Correggi Amlogic 1080p@60fps</string>
     <string name="tunneled_video_playback_desc">NOTA: la pausa potrebbe non funzionare correttamente! La riproduzione video tunneled promette vantaggi come una migliore sincronizzazione audio/video (AV sync) e una riproduzione più fluida. Richiesto Android 5+</string>
     <string name="tunneled_video_playback">Riproduzione video con tunnel (Android 5+)</string>
     <string name="master_volume">Volume principale</string>
@@ -539,10 +539,13 @@
     <string name="enable_master_password">Abilita password principale.</string>
     <string name="enter_master_password">Immetti password principale</string>
     <string name="disable_stream_buffer">Disabilita buffer sui flussi</string>
-    <string name="disable_stream_buffer_desc">Correzione per situazioni in cui il flusso è tanto indietro. Nota: il flusso potrebbe iniziare a rallentare.</string>
-    <string name="sony_frame_drop_fix">Correzione salto fotogrammi n. 1</string>
-    <string name="sony_frame_drop_fix_desc">Risolvi i ritardi sulle TV Sony e su alcuni altri dispositivi. Nota: possibili problemi con la sincronizzazione audio.
+    <string name="disable_stream_buffer_desc">Correggi situazioni in cui il flusso è tanto indietro. Nota: il flusso potrebbe iniziare a rallentare.</string>
+    <string name="sony_frame_drop_fix">Correggi salto fotogrammi #1</string>
+    <string name="sony_frame_drop_fix_desc">Correggi ritardi sulle TV Sony e su alcuni altri dispositivi. Nota: possibili problemi con la sincronizzazione audio.
     </string>
     <string name="audio_language">Lingua audio</string>
     <string name="old_home_look">Il vecchio aspetto della sezione Home</string>
+    <string name="hide_shorts_everywhere">Nascondi video brevi ovunque</string>
+    <string name="update_found">Aggiornamento</string>
+    <string name="volume_boost_warning">Qualsiasi impostazione oltre il limite può potenzialmente danneggiare gli altoparlanti</string>
 </resources>
