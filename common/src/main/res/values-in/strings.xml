@@ -357,8 +357,8 @@
     <string name="subtitle_scale">Ukuran subtitle</string>
     <string name="audio_sync_fix_desc">Cara alternatif untuk menyinkronkan suara/vidio. Ini dianggap usang, tetapi dalam beberapa kasus, dapat membantu.</string>
     <string name="audio_sync_fix">Perbaikan sinkronisasi suara</string>
-    <string name="ambilight_ratio_fix_desc">Memperbaiki pencahayaan bias yang tidak ada. Memperbaiki rasio aspek yang salah. Memperbaiki tangkapan layar kosong. Mempengaruhi kinerja!</string>
-    <string name="ambilight_ratio_fix">Perbaikan ambilight/rasio aspek/tangkapan layar</string>
+    <string name="ambilight_ratio_fix_desc">Memperbaiki pencahayaan bias yang tidak ada. Memperbaiki rasio aspek/ukuran vidio yang salah. Memperbaiki tangkapan layar kosong. Mempengaruhi kinerja!</string>
+    <string name="ambilight_ratio_fix">Perbaikan ambilight/rasio aspek/ukuran vidio/tangkapan layar</string>
     <string name="force_legacy_codecs_desc">Secara signifikan meningkatkan kinerja pada perangkat kelas bawah. Resolusi maksimum adalah 720p.</string>
     <string name="force_legacy_codecs">Paksa codec versi lama (720p)</string>
     <string name="live_stream_fix_desc">Peringatan, tweak ini menonaktifkan pemutaran ulang streaming. Secara signifikan meningkatkan performa live streaming pada perangkat kelas bawah. Resolusi maksimum adalah 1080p.</string>
@@ -525,5 +525,7 @@
     <string name="audio_language">Bahasa suara</string>
     <string name="old_home_look">Tampilan lama bagian Beranda</string>
     <string name="hide_shorts_everywhere">Sembunyikan vidio pendek di mana saja</string>
+    <string name="update_found">Pembaharuan</string>
     <string name="volume_boost_warning">Pengaturan apa pun yang melebihi batas dapat berpotensi merusak speaker</string>
+    <string name="play_video_incognito">Mainkan di penyamaran</string>
 </resources>
