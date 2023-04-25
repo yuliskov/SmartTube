@@ -101,7 +101,9 @@
   <string name="open_channel">Abrir canal</string>
   <string name="open_playlist">Abrir lista de reproducción</string>
   <string name="not_interested">No me interesa</string>
+  <string name="not_recommend_channel">No recomendar canal</string>
   <string name="you_wont_see_this_video">Vídeo eliminado de recomendaciones</string>
+  <string name="you_wont_see_this_channel">No verás este canal en las recomendaciones.</string>  
   <string name="settings_search">Buscar</string>
   <string name="dialog_search">Buscar</string>
   <string name="instant_voice_search">Búsqueda instantánea de voz</string>
@@ -251,6 +253,7 @@
   <string name="app_restore">Restaurar copia de seguridad</string>
   <string name="skip_each_segment_once">No saltar segmentos de nuevo</string>
   <string name="disable_ok_long_press">Deshabilitar pulsación larga botón OK</string>
+  <string name="disable_ok_long_press_desc">Destinado a mandos con fallos en los que el botón OK no funciona correctamente</string>
   <string name="player_time_correction">Mostrar el tiempo respecto a la velocidad</string>
   <string name="sponsor_color_markers">Marcas de color en la barra de progreso</string>
   <string name="refresh_section">Actualizar sección</string>
@@ -368,8 +371,10 @@
   <string name="ambilight_ratio_fix">Corrección de Ambilight/Relación de aspecto/Capturas de pantalla</string>
   <string name="force_legacy_codecs_desc">Mejora significativamente el rendimiento en dispositivos de gama baja. La resolución máxima es de 720p.</string>
   <string name="force_legacy_codecs">Forzar códecs legacy (720p)</string>
-  <string name="live_stream_fix_desc">Mejora significativamente el rendimiento de la transmisión en vivo en dispositivos de gama baja. La resolución máxima es de 1080p.</string>
+  <string name="live_stream_fix_desc">Advertencia, este ajuste desactiva el rebobinado de las transmisiones. Mejora significativamente el rendimiento de las transmisiones en directo. La resolución máxima es de 1080p.</string>
+  <string name="live_stream_fix_4k_desc">Advertencia, este ajuste desactiva el rebobinado de las transmisiones. Mejora significativamente el rendimiento de las transmisiones en directo. La resolución máxima es 4K.</string>
   <string name="live_stream_fix">Corrección de la transmisión en vivo (1080p)</string>
+  <string name="live_stream_fix_4k">Corrección de la transmisión en vivo (4K)</string>
   <string name="playback_notifications_fix_desc">Oculta las notificaciones de cambio de pista. Podría ser útil en los firmwares basados en AOSP.</string>
   <string name="playback_notifications_fix">Desactivar notificaciones de reproducción</string>
   <string name="amlogic_fix_desc">Corrección de la caída de fotogramas en los dispositivos basados en Amlogic.</string>
@@ -431,6 +436,7 @@
   <string name="playback_starts_shortly">La reproducción se iniciará automáticamente cuando el stream esté listo</string>
   <string name="starting_stream">Iniciando el stream…</string>
   <string name="action_playlist_remove">Eliminar de lista</string>
+  <!-- BEGIN Moved strings -->
   <string name="signin_view_title">El código de usuario se está cargando...</string>
   <string name="signin_view_description">Para iniciar sesión introduzca este código en la página %s\nNOTA. Sólo funciona con los navegadores Firefox o Chrome.</string>
   <string name="signin_view_action_text">Hecho</string>
@@ -445,6 +451,7 @@
   <string name="playback_controls_repeat_list">Repetir Lista</string>
   <string name="action_subscribe_off">Desuscribirse</string>
   <string name="action_subscribe_on">Suscribirse</string>
+  <!-- END Moved strings -->
   <string name="skip_24_rate">Omitir los formatos de 24fps (¿Solución del modo de cine real\?)</string>
   <string name="player_disable_suggestions">Deshabilitar sugerencias</string>
   <string name="feedback">Feedback</string>
@@ -495,8 +502,7 @@
   <string name="loading">Cargando…</string>
   <string name="hide_streams">Ocultar streams de Suscripciones</string>
   <string name="video_rotate">Rotar</string>
-  <string name="live_stream_fix_4k_desc">Advertencia, este ajuste desactiva el rebobinado de secuencias. Mejora significativamente el rendimiento de la transmisión en vivo. La resolución máxima es 4K.</string>
-  <string name="live_stream_fix_4k">Corrección de la transmisión en vivo (4K)</string>
+  <string name="trending_searches">Búsquedas de tendencias</string>
   <string name="video_duration_any">Cualquiera</string>
   <string name="video_duration">Duración</string>
   <string name="video_duration_under_4">Menos de 4 minutos</string>
@@ -520,25 +526,27 @@
   <string name="sort_by_rating">Clasificación</string>
   <string name="clear_search_history">Limpiar historial de búsqueda</string>
   <string name="remove_from_subscriptions">Ocultar</string>
+  <string name="player_long_speed_list">Lista de velocidad larga</string>
   <string name="alt_app_icon">Ícono de aplicación alternativa (se necesita reiniciar)</string>
   <string name="network_stack">Preferir pila de red %s</string>
   <string name="cronet_desc">Cronet es la pila de red Chromium. Cronet puede reducir la latencia y aumentar el rendimiento de la red, lo que puede ayudar con los problemas de almacenamiento en búfer.</string>
   <string name="unlock_all_formats">Desbloquear todos los formatos de video</string>
-  <string name="unlock_all_formats_desc">En algunos dispositivos, el firmware informa incorrectamente que algunos formatos no son compatibles, incluso si lo son.\n (por ejemplo, los televisores inteligentes de 1080p tienden a informar que 4k no es compatible).</string>
+  <string name="unlock_all_formats_desc">En algunos dispositivos, el firmware informa incorrectamente que algunos formatos no son compatibles, incluso si lo son.\n
+   (por ejemplo, los televisores inteligentes de 1080p tienden a informar que 4k no es compatible).</string>
   <string name="okhttp_desc">Esta pila de red es la más lenta pero tiene buena estabilidad.</string>
   <string name="select_channel_section">Abrir la sección correspondiente cuando la aplicación se inicie desde ATV Channels</string>
   <string name="enable_voice_search_desc">La aplicación oficial será reemplazada por el llamado puente. Un puente ayuda a transferir solicitudes de búsqueda global a nuestra aplicación.</string>
-  <string name="disable_ok_long_press_desc">Diseñado para controladores con errores donde el botón OK no funciona correctamente</string>
   <string name="enable_master_password">Habilitar contraseña maestra</string>
   <string name="enter_master_password">Ingrese la contraseña maestra</string>
   <string name="disable_stream_buffer">Deshabilitar el búfer en las transmisiones</string>
   <string name="disable_stream_buffer_desc">Arreglo para situaciones en las que la transmisión está muy atrasada. Nota: la transmisión puede comenzar a retrasarse.</string>
   <string name="sony_frame_drop_fix">Corrección de caída de cuadro #1</string>
-  <string name="sony_frame_drop_fix_desc">Soluciona los retrasos en Sony TV y algunos otros dispositivos. Nota: posibles problemas con la sincronización de audio.</string>
+  <string name="sony_frame_drop_fix_desc">Soluciona los retrasos en Sony TV y algunos otros dispositivos. Nota: posibles problemas con la sincronización de audio.
+  </string>
   <string name="audio_language">Idioma de audio</string>
   <string name="old_home_look">El aspecto antiguo de la sección Inicio</string>
   <string name="hide_shorts_everywhere">Ocultar cortos en todas partes</string>
-  <string name="trending_searches">Búsquedas de tendencias</string>
-  <string name="not_recommend_channel">Canal no recomendado</string>
-  <string name="you_wont_see_this_channel">No verás este canal en las recomendaciones.</string>
+  <string name="update_found">Actualizar</string>
+  <string name="volume_boost_warning">Cualquier ajuste por encima del límite puede dañar los altavoces</string>
+  <string name="play_video_incognito">Reproducción de incógnito</string>  
 </resources>
