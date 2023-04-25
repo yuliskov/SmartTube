@@ -538,7 +538,7 @@
     <string name="enable_voice_search_desc">Die offizielle App wird durch eine sogenannte Bridge ersetzt. Eine Bridge hilft dabei, globale Suchanfragen an unsere App zu übertragen.</string>
     <string name="enable_master_password">Master-Passwort aktivieren</string>
     <string name="enter_master_password">Master-Passwort eingeben</string>
-      <string name="disable_stream_buffer">Puffer für Streams deaktivieren</string>
+    <string name="disable_stream_buffer">Puffer für Streams deaktivieren</string>
     <string name="disable_stream_buffer_desc">Fix für Situationen, in denen der Stream sehr verzögert ist. Hinweis: Der Stream kann anfangen zu hängen.</string>
     <string name="sony_frame_drop_fix">Frame-Drop-Fix #1</string>
     <string name="sony_frame_drop_fix_desc">Behebt Verzögerungen/Lags auf Sony-TV und einigen anderen Geräten. Hinweis: Mögliche Probleme mit der Audio-Synchronisation.
@@ -548,4 +548,5 @@
     <string name="hide_shorts_everywhere">Kurzvideos überall ausblenden</string>
     <string name="update_found">Update</string>
     <string name="volume_boost_warning">Einstellungen über dem Grenzwert können die Lautsprecher möglicherweise beschädigen</string>
+    <string name="play_video_incognito">Inkognito abspielen</string>
 </resources>
