@@ -506,7 +506,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
     private void appendPlayVideoIncognitoButton() {
         if (!mIsPlayVideoIncognitoButtonEnabled || mVideo == null || mVideo.videoId == null ||
-            ViewManager.instance(getContext()).getTopView() == PlaybackView.class) {
+            ViewManager.instance(getContext()).getTopView() == PlaybackView.class ||
+            BrowsePresenter.instance(getContext()).isHistorySection()) {
             return;
         }
 
