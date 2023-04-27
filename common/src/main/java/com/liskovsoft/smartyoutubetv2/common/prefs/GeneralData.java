@@ -161,43 +161,7 @@ public class GeneralData {
             }
         }
 
-        return correctIndex(sectionId, index);
-    }
-
-    private int correctIndex(int sectionId, int originIndex) {
-        if (originIndex > 0) {
-            int limit = Math.min(originIndex + 1, mPinnedItems.size());
-            for (int i = 0; i < limit; i++) {
-                // Skip non-section items
-                int currentSectionId = mPinnedItems.get(i).extra;
-                if (currentSectionId == -1 || beforeSection(sectionId, currentSectionId)) {
-                    originIndex--;
-                }
-
-                if (originIndex == 0) {
-                    break;
-                }
-            }
-        }
-
-        return originIndex;
-    }
-
-    private boolean beforeSection(int leftId, int rightId) {
-        int leftIndex = -1;
-        int rightIndex = -1;
-        int currentIndex = -1;
-
-        for (int sectionId : mDefaultSections.values()) {
-            currentIndex++;
-            if (sectionId == leftId) {
-                leftIndex = currentIndex;
-            } else if (sectionId == rightId) {
-                rightIndex = currentIndex;
-            }
-        }
-
-        return leftIndex < rightIndex;
+        return index;
     }
 
     public Collection<Integer> getEnabledSections() {
