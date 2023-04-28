@@ -528,4 +528,5 @@
     <string name="update_found">Pembaharuan</string>
     <string name="volume_boost_warning">Pengaturan apa pun yang melebihi batas dapat berpotensi merusak speaker</string>
     <string name="play_video_incognito">Mainkan di penyamaran</string>
+    <string name="header_kids_home">Anak-anak</string>
 </resources>
