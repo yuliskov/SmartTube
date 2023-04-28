@@ -275,7 +275,7 @@
   <string name="proxy_application_aborted">请先正确设置服务器代理。</string>
   <string name="proxy_test_aborted">测试中止，请先修复代理服务器设置。</string>
   <string name="proxy_credentials_invalid">无效的用户名或密码。</string>
-  <string name="proxy_port_invalid">无效的代理服务器端口，必须 &gt; 0。</string>
+  <string name="proxy_port_invalid">无效的代理服务器端口，必须 > 0。</string>
   <string name="proxy_host_invalid">代理主机没有设置。</string>
   <string name="proxy_type_invalid">代理服务器类型没有设置。</string>
   <string name="proxy_test_cancelled">测试#%d: 已取消。</string>
@@ -356,7 +356,7 @@
   <string name="player_seek_regular">常规</string>
   <string name="seek_interval">快进间隔</string>
   <string name="seek_interval_sec">%s 秒</string>
-  <string name="subtitle_system">系统样式 (Android 设置 &gt; 辅助)</string>
+  <string name="subtitle_system">系统样式 (Android 设置 > 辅助)</string>
   <string name="subtitle_scale">字幕缩放</string>
   <string name="audio_sync_fix_desc">声音和视频同步的另一种方法。它被认为已经过时，但在某些情况下可能会有所帮助。</string>
   <string name="audio_sync_fix">音频同步修正</string>
@@ -511,4 +511,33 @@
   <string name="video_feature_live">直播</string>
   <string name="video_feature_4k">4K</string>
   <string name="video_feature_hdr">HDR</string>
-</resources>
+  <string name="search_sorting">排序方式</string>
+  <string name="sort_by_relevance">相关性</string>
+  <string name="sort_by_views">播放次数</string>
+  <string name="sort_by_date">上传时间</string>
+  <string name="sort_by_rating">Rating</string>
+  <string name="clear_search_history">清空搜索记录</string>
+  <string name="remove_from_subscriptions">隐藏</string>
+  <string name="player_long_speed_list">播放速度详情</string>
+  <string name="alt_app_icon">替换应用图标 (需要重启)</string>
+  <string name="network_stack">优先选用 %s 网络栈</string>
+  <string name="cronet_desc">Cronet 是Chromium的网络栈。 Cronet 可以减少延迟，提高网络性能，可以帮助解决缓冲问题.</string>
+  <string name="unlock_all_formats">解锁所有视频格式</string>
+  <string name="unlock_all_formats_desc">在某些设备上，固件错误地将某些格式报告为不受支持，即使它们未必无法播放 .\n(例如，1080p智能电视往往报告不支持4k).</string>
+  <string name="okhttp_desc">这个网络堆栈是最慢的一个，但有很好的稳定性。</string>
+  <string name="select_channel_section">当应用程序从ATV频道启动时，打开相应的部分。</string>
+  <string name="enable_voice_search_desc">官方应用程序将被一个所谓的桥梁所取代。桥梁有助于将全球搜索请求返回到我们的应用程序。</string>
+  <string name="enable_master_password">启用主密码</string>
+  <string name="enter_master_password">输入主密码</string>
+  <string name="disable_stream_buffer">禁用直播流缓冲</string>
+  <string name="disable_stream_buffer_desc">修复当流媒体比实际远远落后的情况。注意：流可能开始滞后。	</string>
+  <string name="sony_frame_drop_fix">掉帧修复 #1	</string>
+  <string name="sony_frame_drop_fix_desc">修复索尼电视和其他一些设备上的卡顿问题。注意：可能存在音频同步的问题。 </string>
+  <string name="audio_language">音频语言</string>
+  <string name="old_home_look">主页部分的旧外观</string>
+  <string name="hide_shorts_everywhere">在所有情况下隐藏短视频</string>
+  <string name="update_found">更新</string>
+  <string name="volume_boost_warning">任何超过极限的设置都有可能损坏扬声器</string>
+  <string name="play_video_incognito">隐私模式播放</string>
+  <string name="header_kids_home">儿童</string>
+  </resources>
