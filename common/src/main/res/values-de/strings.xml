@@ -549,4 +549,5 @@
     <string name="update_found">Update</string>
     <string name="volume_boost_warning">Einstellungen über dem Grenzwert können die Lautsprecher möglicherweise beschädigen</string>
     <string name="play_video_incognito">Inkognito abspielen</string>
+    <string name="header_kids_home">Kinder</string>
 </resources>
