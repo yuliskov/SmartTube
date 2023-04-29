@@ -220,12 +220,12 @@
     <string name="channels_old_look">Вернуть старый вид раздела Каналы</string>
     <string name="channels_auto_load">Автоматически загружать содержимое раздела Каналы</string>
     <string name="return_to_background_video">Вернуться к фоновому видео</string>
-    <string name="pin_unpin_from_sidebar">Закрепить/Открепить от боковой панели</string>
-    <string name="pin_unpin_playlist">Закрепить/Открепить плейлист от боковой панели</string>
-    <string name="pin_unpin_channel">Закрепить/Открепить канал от боковой панели</string>
-    <string name="pinned_to_sidebar">Закреплено на боковой панели</string>
-    <string name="unpin_from_sidebar">Открепить от боковой панели</string>
-    <string name="unpinned_from_sidebar">Откреплено от боковой панели</string>
+    <string name="pin_unpin_from_sidebar">Добавить/Удалить из боковой панели</string>
+    <string name="pin_unpin_playlist">Добавить/Удалить плейлист из боковой панели</string>
+    <string name="pin_unpin_channel">Добавить/Удалить канал из боковой панели</string>
+    <string name="pinned_to_sidebar">Добавлено на боковую панель</string>
+    <string name="unpin_from_sidebar">Удалить из боковой панели</string>
+    <string name="unpinned_from_sidebar">Удалено из боковой панели</string>
     <string name="dialog_select_country">Страна</string>
     <string name="settings_language_country">Язык/Страна</string>
     <string name="share_embed_link">Поделиться встраиваемой ссылкой</string>
@@ -391,7 +391,7 @@
     <string name="pressing_home_back">по нажатию ДОМОЙ или НАЗАД</string>
     <string name="pressing_back">по нажатию НАЗАД</string>
     <string name="player_number_key_seek">Перематывать цифровыми клавишами</string>
-    <string name="save_remove_playlist">Добавить/Удалить плейлист из библиотеки</string>
+    <string name="save_remove_playlist">Добавить/Удалить плейлист из раздела Плейлисты</string>
     <string name="remove_playlist">Удалить плейлист из раздела Плейлисты навсегда</string>
     <string name="removed_from_playlists">Удалено из раздела Плейлисты</string>
     <string name="saved_to_playlists">Добавлено в раздел Плейлисты</string>
