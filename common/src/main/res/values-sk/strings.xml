@@ -367,8 +367,8 @@
     <string name="subtitle_scale">Veľkosť titulkov</string>
     <string name="audio_sync_fix_desc">Alternatívna Audio/Video synchronizácia. Považované za zastaralé, ale v niektorých prípadoch môže pomôcť.</string>
     <string name="audio_sync_fix">Oprava Audio synchronizácie</string>
-    <string name="ambilight_ratio_fix_desc">Opravuje chýbajúce podsvietenie. Opravuje nesprávny pomer strán. Opravuje prázdne snímky obrazovky. Ovplyvňuje výkon!</string>
-    <string name="ambilight_ratio_fix">Oprava pre Ambilight/Pomeru strán/Snímok obrazovky</string>
+    <string name="ambilight_ratio_fix_desc">Opravuje chýbajúce podsvietenie. Opravuje nesprávny pomer strán a škálovanie videa. Opravuje prázdne snímky obrazovky. Ovplyvňuje výkon!</string>
+    <string name="ambilight_ratio_fix">Oprava pre Ambilight/Pomeru strán/Škálovanie videa/Snímok obrazovky</string>
     <string name="force_legacy_codecs_desc">Výrazne zlepšuje výkon na slabších zariadeniach. Maximálne rozlíšenie je 720p.</string>
     <string name="force_legacy_codecs">Vynútenie zastaralých kodekov (720p)</string>
     <string name="live_stream_fix_desc">Varovanie: Pretáčanie živého vysielania bude nedostupné. Výrazne zlepšuje živé vysielanie na slabších zariadeniach. Maximálne rozlíšenie je 1080p.</string>
@@ -546,4 +546,7 @@
     <string name="audio_language">Jazyk zvuku</string>
     <string name="old_home_look">Starý vzhľad sekcie Domov</string>
     <string name="hide_shorts_everywhere">Skryť Shorts všade</string>
+    <string name="volume_boost_warning">Akékoľvek nastavenie nad limit môže poškodiť reproduktory</string>
+    <string name="play_video_incognito">Prehrať anonymne</string>
+    <string name="header_kids_home">Deti</string>
 </resources>
