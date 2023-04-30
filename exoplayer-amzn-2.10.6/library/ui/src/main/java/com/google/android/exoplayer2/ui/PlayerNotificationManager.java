@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import androidx.annotation.DrawableRes;
@@ -1311,8 +1312,14 @@ public class PlayerNotificationManager {
       String action, Context context, int instanceId) {
     Intent intent = new Intent(action).setPackage(context.getPackageName());
     intent.putExtra(EXTRA_INSTANCE_ID, instanceId);
+    // MOD: fix crashes on api >= 23
+    int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+    if (Build.VERSION.SDK_INT >= 23) {
+      // IllegalArgumentException fix: Targeting S+ (version 31 and above) requires that one of FLAG_IMMUTABLE...
+      flags |= PendingIntent.FLAG_IMMUTABLE;
+    }
     return PendingIntent.getBroadcast(
-        context, instanceId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        context, instanceId, intent, flags);
   }
 
   @SuppressWarnings("nullness:argument.type.incompatible")

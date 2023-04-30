@@ -7,11 +7,9 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AddDeviceView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
     private static final String TAG = AddDevicePresenter.class.getSimpleName();
@@ -36,7 +34,7 @@ public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
     }
 
     public void unhold() {
-        RxUtils.disposeActions(mDeviceCodeAction);
+        RxHelper.disposeActions(mDeviceCodeAction);
         sInstance = null;
     }
 
@@ -48,7 +46,7 @@ public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
 
     @Override
     public void onViewInitialized() {
-        RxUtils.disposeActions(mDeviceCodeAction);
+        RxHelper.disposeActions(mDeviceCodeAction);
         updateDeviceCode();
     }
 
@@ -57,7 +55,7 @@ public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
     }
 
     private void updateDeviceCode() {
-        mDeviceCodeAction = mMediaService.getRemoteService().getPairingCodeObserve()
+        mDeviceCodeAction = mMediaService.getRemoteControlService().getPairingCodeObserve()
                 .subscribe(
                         deviceCode -> getView().showCode(deviceCode),
                         error -> Log.e(TAG, "Get pairing code error: %s", error.getMessage())
@@ -65,7 +63,7 @@ public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
     }
 
     public void start() {
-        RxUtils.disposeActions(mDeviceCodeAction);
+        RxHelper.disposeActions(mDeviceCodeAction);
         ViewManager.instance(getContext()).startView(AddDeviceView.class);
     }
 }

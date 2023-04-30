@@ -7,16 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
-import androidx.leanback.preference.LeanbackPreferenceDialogFragment;
 import androidx.preference.DialogPreference;
 import com.bumptech.glide.Glide;
 import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiver;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.preference.LeanbackPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.ChatItemMessage;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
+import com.stfalcon.chatkit.commons.models.IMessage;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
+
+import java.util.List;
 
 public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFragment {
     private static final String SENDER_ID = CommentsPreferenceDialogFragment.class.getSimpleName();
@@ -24,6 +27,8 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
     private CommentsReceiver mCommentsReceiver;
     private CharSequence mDialogTitle;
     private String mNextCommentsKey;
+    private List<ChatItemMessage> mBackupMessages;
+    private ChatItemMessage mFocusedMessage;
 
     public static CommentsPreferenceDialogFragment newInstance(CommentsReceiver commentsReceiver, String key) {
         final Bundle args = new Bundle(1);
@@ -59,6 +64,10 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
             titleView.setText(title);
         }
 
+        if (mCommentsReceiver == null) {
+            return view;
+        }
+
         MessagesList messagesList = (MessagesList) view.findViewById(R.id.messagesList);
         MessagesListAdapter<ChatItemMessage> adapter = new MessagesListAdapter<>(SENDER_ID, (imageView, url, payload) ->
                 Glide.with(view.getContext())
@@ -67,19 +76,46 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
                     .circleCrop() // resize image
                     .into(imageView));
         adapter.setLoadMoreListener((page, totalItemsCount) -> mCommentsReceiver.onLoadMore(mNextCommentsKey));
-        adapter.setOnMessageClickListener(message -> mCommentsReceiver.onCommentClicked(message.getNestedCommentsKey()));
+        adapter.setOnMessageViewClickListener((v, message) -> {
+            mFocusedMessage = message;
+            mCommentsReceiver.onCommentClicked(message.getNestedCommentsKey());
+        });
         messagesList.setAdapter(adapter);
-        adapter.setLoadingMessage(mCommentsReceiver.getLoadingMessage(), false);
+        messagesList.requestFocus(); // hold focus even when there's no messages
+        adapter.enableStackFromEnd(true);
+        adapter.setLoadingMessage(mCommentsReceiver.getLoadingMessage());
 
         mCommentsReceiver.setCallback(commentGroup -> {
+            if (commentGroup == null || commentGroup.getComments() == null) {
+                adapter.setLoadingMessage(mCommentsReceiver.getErrorMessage());
+                return;
+            }
+
             for (CommentItem commentItem : commentGroup.getComments()) {
-                adapter.addToStart(ChatItemMessage.from(commentItem), false);
+                ChatItemMessage message = ChatItemMessage.from(commentItem);
+
+                adapter.addToStart(message, false);
+
+                if (mFocusedMessage == null && IMessage.checkMessage(message)) {
+                    mFocusedMessage = message;
+                    adapter.setFocusedMessage(message);
+                }
+            }
+            if (adapter.getMessagesCount() == 0) { // No comments under the video
+                adapter.setLoadingMessage(mCommentsReceiver.getErrorMessage());
             }
             if (mNextCommentsKey == null) {
                 adapter.scrollToTop();
             }
             mNextCommentsKey = commentGroup.getNextCommentsKey();
         });
+
+        if (mBackupMessages == null) {
+            mCommentsReceiver.onStart();
+        } else {
+            adapter.addToEnd(mBackupMessages, false);
+            adapter.setFocusedMessage(mFocusedMessage);
+        }
 
         if (mIsTransparent) {
             ViewUtil.enableTransparentDialog(getActivity(), view);
@@ -90,5 +126,19 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
 
     public void enableTransparent(boolean enable) {
         mIsTransparent = enable;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        backupMessages();
+    }
+
+    private void backupMessages() {
+        MessagesList messagesList = getView().findViewById(R.id.messagesList);
+
+        MessagesListAdapter<ChatItemMessage> adapter = (MessagesListAdapter<ChatItemMessage>) messagesList.getAdapter();
+
+        mBackupMessages = adapter != null ? adapter.getMessages() : null;
     }
 }

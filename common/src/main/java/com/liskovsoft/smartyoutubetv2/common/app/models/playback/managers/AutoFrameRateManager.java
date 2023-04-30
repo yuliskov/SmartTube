@@ -1,8 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -41,7 +39,6 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private boolean mIsPlay;
     private final Runnable mPlaybackResumeHandler = () -> {
         if (getController() != null) {
-            getController().setAfrRunning(false);
             restorePlayback();
         }
     };
@@ -202,7 +199,6 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             return;
         }
 
-        getController().setAfrRunning(true);
         int delayMs = 5_000;
 
         if (mPlayerData.getAfrPauseMs() > 0) {
@@ -216,8 +212,9 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private void savePlayback() {
         if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseMs() > 0) {
             mStateUpdater.blockPlay(true);
-            mIsPlay = mStateUpdater.getPlayEnabled();
         }
+
+        mIsPlay = mStateUpdater.getPlayEnabled();
     }
 
     private void restorePlayback() {
@@ -263,19 +260,16 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             List<OptionItem> options = new ArrayList<>();
             options.add(UiOptionItem.from(afrCategory.title, optionItem -> {
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
-                dialogPresenter.clear();
                 dialogPresenter.appendCheckedCategory(afrCategory.title, afrCategory.options);
                 dialogPresenter.showDialog(afrCategory.title);
             }));
             options.add(UiOptionItem.from(afrPauseCategory.title, optionItem -> {
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
-                dialogPresenter.clear();
                 dialogPresenter.appendRadioCategory(afrPauseCategory.title, afrPauseCategory.options);
                 dialogPresenter.showDialog(afrPauseCategory.title);
             }));
             options.add(UiOptionItem.from(modesCategory.title, optionItem -> {
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
-                dialogPresenter.clear();
                 dialogPresenter.appendLongTextCategory(modesCategory.title, modesCategory.option);
                 dialogPresenter.showDialog(modesCategory.title);
             }));

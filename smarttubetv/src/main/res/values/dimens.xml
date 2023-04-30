@@ -119,7 +119,4 @@
     <dimen name="tooltip_vertical_padding_mod">6.5dp</dimen>
     <dimen name="tooltip_y_offset_non_touch_mod">0dp</dimen>
     <dimen name="tooltip_y_offset_touch_mod">16dp</dimen>
-
-    <!-- Increase error view lines -->
-    <integer name="lb_error_message_max_lines">7</integer>
 </resources>

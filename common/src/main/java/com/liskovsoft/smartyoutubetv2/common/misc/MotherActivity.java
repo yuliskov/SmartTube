@@ -2,13 +2,12 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
@@ -31,9 +30,14 @@ public class MotherActivity extends FragmentActivity {
     protected static boolean sIsInPipMode;
     private ScreensaverManager mScreensaverManager;
     private List<OnPermissions> mOnPermissions;
+    private List<OnResult> mOnResults;
 
     public interface OnPermissions {
         void onPermissions(int requestCode, String[] permissions, int[] grantResults);
+    }
+
+    public interface OnResult {
+        void onResult(int requestCode, int resultCode, Intent data);
     }
 
     @Override
@@ -217,12 +221,27 @@ public class MotherActivity extends FragmentActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         if (mOnPermissions != null) {
             for (OnPermissions callback : mOnPermissions) {
                 callback.onPermissions(requestCode, permissions, grantResults);
             }
             mOnPermissions.clear();
             mOnPermissions = null;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (mOnResults != null) {
+            for (OnResult callback : mOnResults) {
+                callback.onResult(requestCode, resultCode, data);
+            }
+            mOnResults.clear();
+            mOnResults = null;
         }
     }
 
@@ -267,7 +286,17 @@ public class MotherActivity extends FragmentActivity {
             mOnPermissions = new ArrayList<>();
         }
 
+        mOnPermissions.remove(onPermissions);
         mOnPermissions.add(onPermissions);
+    }
+
+    public void addOnResult(OnResult onResult) {
+        if (mOnResults == null) {
+            mOnResults = new ArrayList<>();
+        }
+
+        mOnResults.remove(onResult);
+        mOnResults.add(onResult);
     }
 
     /**

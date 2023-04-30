@@ -7,7 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -20,9 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,9 +33,14 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
     private VideoGroup mLastScrollGroup;
+    private int mContinuationCount = -1;
 
     public interface MetadataListener {
         void onMetadata(MediaItemMetadata metadata);
+    }
+
+    private interface OnVideoGroup {
+        void onVideoGroup(VideoGroup group);
     }
 
     @Override
@@ -109,6 +112,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void continueGroup(VideoGroup group) {
+        continueGroup(group, null);
+    }
+
+    private void continueGroup(VideoGroup group, OnVideoGroup callback) {
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         getController().showProgressBar(true);
@@ -131,7 +138,11 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                                 Playlist.instance().setCurrent(video);
                             }
 
-                            continueGroupIfNeeded(videoGroup);
+                            if (callback != null) {
+                                callback.onVideoGroup(videoGroup);
+                            } else {
+                                continueGroupIfNeeded(videoGroup);
+                            }
                         },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
@@ -276,7 +287,11 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
                 getController().updateSuggestions(videoGroup);
 
-                continueGroupIfNeeded(videoGroup);
+                if (groupIndex == 0) {
+                    focusAndContinueIfNeeded(videoGroup);
+                } else {
+                    continueGroupIfNeeded(videoGroup);
+                }
             }
         }
     }
@@ -358,8 +373,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         int index = findCurrentChapterIndex(group.getVideos());
 
         if (index != -1) {
+            String title = group.getVideos().get(index).title;
             getController().focusSuggestedItem(index);
-            getController().setSeekPreviewTitle(group.getVideos().get(index).title);
+            getController().setSeekPreviewTitle(title);
+            //getController().setTitle(title);
         }
     }
 
@@ -394,10 +411,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             }
 
             SeekBarSegment seekBarSegment = new SeekBarSegment();
-            double startRatio = (double) chapter.getStartTimeMs() / getController().getDurationMs(); // Range: [0, 1]
-            double endRatio = (double) (chapter.getStartTimeMs() + markLengthMs) / getController().getDurationMs(); // Range: [0, 1]
-            seekBarSegment.startProgress = (int) (startRatio * Integer.MAX_VALUE); // Could safely cast to int
-            seekBarSegment.endProgress = (int) (endRatio * Integer.MAX_VALUE); // Could safely cast to int
+            float startRatio = (float) chapter.getStartTimeMs() / getController().getDurationMs(); // Range: [0, 1]
+            float endRatio = (float) (chapter.getStartTimeMs() + markLengthMs) / getController().getDurationMs(); // Range: [0, 1]
+            seekBarSegment.startProgress = startRatio;
+            seekBarSegment.endProgress = endRatio;
             seekBarSegment.color = ContextCompat.getColor(getActivity(), R.color.black);
             result.add(seekBarSegment);
         }
@@ -410,6 +427,30 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
      */
     private void continueGroupIfNeeded(VideoGroup group) {
         MediaServiceManager.instance().shouldContinueTheGroup(getActivity(), group, () -> continueGroup(group));
+    }
+
+    public void focusAndContinueIfNeeded(VideoGroup group) {
+        Video video = getController().getVideo();
+
+        if (group == null || group.isEmpty() || video == null || !video.hasPlaylist() || !video.hasVideo()) {
+            return;
+        }
+
+        int index = group.getVideos().indexOf(video);
+
+        if (index >= 0) {
+            Log.d(TAG, "Found current video index: %s", index);
+            getController().focusSuggestedItem(group.getVideos().get(index));
+            // Stop the continuation loop
+            mContinuationCount = 0;
+        } else if (mContinuationCount > 5) {
+            // Stop the continuation loop
+            mContinuationCount = 0;
+        } else {
+            // load more and repeat
+            continueGroup(group, this::focusAndContinueIfNeeded);
+            mContinuationCount++;
+        }
     }
 
     public void addMetadataListener(MetadataListener listener) {
@@ -425,7 +466,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void disposeActions() {
-        RxUtils.disposeActions(mActions);
+        RxHelper.disposeActions(mActions);
         mLastScrollGroup = null;
     }
 }

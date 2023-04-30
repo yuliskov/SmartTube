@@ -51,6 +51,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private BrowseSectionFragmentFactory mSectionFragmentFactory;
     private Handler mHandler;
     private ProgressBarManager mProgressBarManager;
+    private NavigateTitleView mTitleView;
     private boolean mIsFragmentCreated;
     private int mRestoredHeaderIndex = -1;
     private int mRestoredItemIndex = -1;
@@ -64,7 +65,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mRestoredItemIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_ITEM_INDEX, -1) : -1;
         mIsFragmentCreated = true;
 
-        mSections = new LinkedHashMap<>();
+        mSections = new HashMap<>();
         mHandler = new Handler();
         mBrowsePresenter = BrowsePresenter.instance(getContext());
         mBrowsePresenter.setView(this);
@@ -92,6 +93,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         View root = super.onCreateView(inflater, container, savedInstanceState);
 
         mProgressBarManager.setRootView((ViewGroup) root);
+        mTitleView = root.findViewById(R.id.browse_title_group);
 
         return root;
     }
@@ -159,13 +161,25 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         getMainFragmentRegistry().registerFragment(PageRow.class, mSectionFragmentFactory);
     }
 
+    //private int indexOf(long headerId) {
+    //    int index = 0;
+    //    for (Integer id : mSections.keySet()) {
+    //        if (id == headerId) {
+    //            return index;
+    //        }
+    //        index++;
+    //    }
+    //
+    //    return 0;
+    //}
+
     private int indexOf(long headerId) {
-        int index = 0;
-        for (Integer id : mSections.keySet()) {
-            if (id == headerId) {
-                return index;
+        for (int i = 0; i < mSectionRowAdapter.size(); i++) {
+            PageRow row = (PageRow) mSectionRowAdapter.get(i);
+            HeaderItem header = row.getHeaderItem();
+            if (header.getId() == headerId) {
+                return i;
             }
-            index++;
         }
 
         return 0;
@@ -244,13 +258,13 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public void showError(ErrorFragmentData data) {
         replaceMainFragment(new ErrorDialogFragment(data));
-        // Why show only if empty?
-        //showErrorIfEmpty(data);
+        updateTitleView();
     }
 
     private void showErrorIfEmpty(ErrorFragmentData data) {
         if (mSectionFragmentFactory.isEmpty()) {
             replaceMainFragment(new ErrorDialogFragment(data));
+            updateTitleView();
         }
     }
 
@@ -262,7 +276,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
             ft.replace(R.id.scale_frame, fragment);
-            mFocusOnContent = !isShowingHeaders(); // Fix focus lost when error fragment shown and sidebar is hidden
+            //mFocusOnContent = !isShowingHeaders(); // Fix focus lost when error fragment shown and sidebar is hidden
+            mFocusOnContent = hasFocus(); // Maintain focus
             ft.runOnCommit(this::focusOnContentIfNeeded);
             ft.commitAllowingStateLoss(); // FIX: "Can not perform this action after onSaveInstanceState"
         }
@@ -299,6 +314,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mSectionFragmentFactory.updateCurrentFragment(group);
 
         fixInvisibleSearchOrb();
+
+        updateTitleView();
     }
 
     @Override
@@ -306,6 +323,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         restoreMainFragment();
 
         mSectionFragmentFactory.updateCurrentFragment(group);
+
+        updateTitleView();
     }
 
     @Override
@@ -321,7 +340,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         startHeadersTransitionSafe(false);
         if (getMainFragment() != null && getMainFragment().getView() != null) {
             getMainFragment().getView().requestFocus();
-            updateTitleView();
         }
     }
 
@@ -333,6 +351,14 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             focusOnContent();
             mFocusOnContent = false;
         }
+    }
+
+    private boolean hasFocus() {
+        if (getMainFragment() == null || getMainFragment().getView() == null) {
+            return false;
+        }
+
+        return getMainFragment().getView().hasFocus();
     }
 
     @Override
@@ -404,6 +430,15 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+
+        if (!mIsFragmentCreated) {
+            mBrowsePresenter.onViewPaused();
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
@@ -445,12 +480,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void updateTitleView() {
-        if (getView() != null) {
-            NavigateTitleView titleView = getView().findViewById(R.id.browse_title_group);
-
-            if (titleView != null) {
-                titleView.update();
-            }
+        if (mTitleView != null) {
+            mTitleView.update();
         }
     }
 }

@@ -3,22 +3,25 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
+import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
-import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
+import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.disposables.Disposable;
@@ -66,7 +69,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         showAccountSelection();
 
         if (getView() != null) {
-            applyNewIntent(getView().getNewIntent());
+            checkMasterPassword(() -> applyNewIntent(getView().getNewIntent()));
         }
     }
 
@@ -76,17 +79,16 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             // Need to be the first line and executed on earliest stage once.
             // Inits service language and context.
             //Utils.initGlobalData(getContext()); // Init already done in BasePresenter
-            RxUtils.setupGlobalErrorHandler();
+            clearCache();
+            RxHelper.setupGlobalErrorHandler();
             initIntentChain();
             updateChannels();
-            getBackupDataOnce();
             runRemoteControlTasks();
             //setupKeepAlive();
-            configureProxy();
+            //configureProxy();
             //configureOpenVPN();
             initVideoStateService();
             initStreamReminderService();
-            resumeHistory();
             sRunOnce = true;
         }
     }
@@ -95,35 +97,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         AccountSelectionPresenter.instance(getContext()).show();
     }
 
-    public void saveBackupData() {
-        PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(null);
-        AppPrefs prefs = AppPrefs.instance(null);
-
-        if (playbackPresenter != null && prefs != null) {
-            prefs.setBackupData(
-                    playbackPresenter.getVideo() != null ? playbackPresenter.getVideo().videoId : ""
-            );
-        }
-    }
-
-    private String getBackupDataOnce() {
-        AppPrefs prefs = AppPrefs.instance(getContext());
-        String mBackupVideoId = prefs.getBackupData();
-        prefs.setBackupData(null);
-        return mBackupVideoId;
-    }
-
     private void runRemoteControlTasks() {
         // Fake service to prevent the app from destroying
         if (getContext() != null) {
             //Utils.startRemoteControlService(getContext());
             Utils.startRemoteControlWorkRequest(getContext());
-        }
-    }
-
-    private void configureProxy() {
-        if (getContext() != null && GeneralData.instance(getContext()).isProxyEnabled()) {
-            new ProxyManager(getContext()).configureSystemProxy();
         }
     }
 
@@ -139,17 +117,24 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
     }
 
-    private void resumeHistory() {
-        GeneralData.instance(getContext()).enableHistory(true);
-        MediaServiceManager.instance().enableHistory(true);
+    private void clearCache() {
+        if (getContext() != null) {
+            int versionCode = AppInfoHelpers.getAppVersionCode(getContext());
+            if (GeneralData.instance(getContext()).getVersionCode() != versionCode) {
+                GeneralData.instance(getContext()).setVersionCode(versionCode);
+
+                FileHelpers.deleteCache(getContext());
+                ViewManager.instance(getContext()).clearCaches();
+            }
+        }
     }
 
     private void runRefreshCachePeriodicTask() {
-        if (RxUtils.isAnyActionRunning(mRefreshCachePeriodicAction)) {
+        if (RxHelper.isAnyActionRunning(mRefreshCachePeriodicAction)) {
             return;
         }
 
-        mRefreshCachePeriodicAction = RxUtils.startInterval(YouTubeMediaService.instance()::refreshCacheIfNeeded, 30 * 60);
+        mRefreshCachePeriodicAction = RxHelper.startInterval(YouTubeMediaService.instance()::refreshCacheIfNeeded, 30 * 60);
     }
 
     private void checkTouchSupport() {
@@ -233,21 +218,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                     viewManager.setSinglePlayerMode(true);
                 }
 
+                long timeMs = IntentExtractor.extractVideoTimeMs(intent);
                 PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
-                playbackPresenter.openVideo(videoId, IntentExtractor.hasFinishOnEndedFlag(intent));
+                playbackPresenter.openVideo(videoId, IntentExtractor.hasFinishOnEndedFlag(intent), timeMs);
 
-                return true;
-            }
-
-            return false;
-        });
-
-        mIntentChain.add(intent -> {
-            String backupData = getBackupDataOnce();
-
-            if (backupData != null) {
-                PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
-                playbackPresenter.openVideo(backupData, false);
                 return true;
             }
 
@@ -255,25 +229,27 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         });
 
         // NOTE: doesn't work very well. E.g. there's problems with focus or conflicts with 'boot to' section option.
-        //mIntentChain.add(intent -> {
-        //    int sectionId = -1;
-        //
-        //    // ATV channel icon clicked
-        //    if (IntentExtractor.isSubscriptionsUrl(intent)) {
-        //        sectionId = MediaGroup.TYPE_SUBSCRIPTIONS;
-        //    } else if (IntentExtractor.isHistoryUrl(intent)) {
-        //        sectionId = MediaGroup.TYPE_HISTORY;
-        //    } else if (IntentExtractor.isRecommendedUrl(intent)) {
-        //        sectionId = MediaGroup.TYPE_HOME;
-        //    }
-        //
-        //    if (sectionId != -1) {
-        //        BrowsePresenter.instance(getContext()).selectSection(sectionId);
-        //        return true;
-        //    }
-        //
-        //    return false;
-        //});
+        if (GeneralData.instance(getContext()).isSelectChannelSectionEnabled()) {
+            mIntentChain.add(intent -> {
+                int sectionId = -1;
+
+                // ATV channel icon clicked
+                if (IntentExtractor.isSubscriptionsUrl(intent)) {
+                    sectionId = MediaGroup.TYPE_SUBSCRIPTIONS;
+                } else if (IntentExtractor.isHistoryUrl(intent)) {
+                    sectionId = MediaGroup.TYPE_HISTORY;
+                } else if (IntentExtractor.isRecommendedUrl(intent)) {
+                    sectionId = MediaGroup.TYPE_HOME;
+                }
+
+                if (sectionId != -1) {
+                    BrowsePresenter.instance(getContext()).selectSection(sectionId);
+                    return true;
+                }
+
+                return false;
+            });
+        }
 
         // Should come last
         mIntentChain.add(intent -> {
@@ -294,6 +270,31 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             if (processor.process(intent)) {
                 break;
             }
+        }
+    }
+
+    private void checkMasterPassword(Runnable onSuccess) {
+        String password = GeneralData.instance(getContext()).getMasterPassword();
+
+        // No passwd or the app already started
+        if (password == null || ViewManager.instance(getContext()).getTopView() != null) {
+            onSuccess.run();
+            getView().finishView();
+        } else {
+            SimpleEditDialog.show(
+                    getContext(),
+                    "", newValue -> {
+                        if (password.equals(newValue)) {
+                            onSuccess.run();
+                            return true;
+                        }
+
+                        return false;
+                    },
+                    getContext().getString(R.string.enter_master_password),
+                    true,
+                    () -> getView().finishView()
+            );
         }
     }
 }

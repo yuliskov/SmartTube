@@ -16,6 +16,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 public class TweaksMediaCodecVideoRenderer extends DebugInfoMediaCodecVideoRenderer {
     private static final String TAG = TweaksMediaCodecVideoRenderer.class.getSimpleName();
     private boolean mIsFrameDropFixEnabled;
+    private boolean mIsFrameDropSonyFixEnabled;
     private boolean mIsAmlogicFixEnabled;
 
     // Exo 2.9
@@ -79,8 +80,38 @@ public class TweaksMediaCodecVideoRenderer extends DebugInfoMediaCodecVideoRende
         return maxValues;
     }
 
+    /**
+     * Frame drop fixes on Sony Bravia<br/>
+     * https://github.com/google/ExoPlayer/issues/6348#issuecomment-718986083
+     */
+    @Override
+    protected boolean isBufferLate(long earlyUs) {
+        if (mIsFrameDropSonyFixEnabled) {
+            return earlyUs < -1000000;
+        }
+
+        return super.isBufferLate(earlyUs);
+    }
+
+    /**
+     * Frame drop fixes on Sony Bravia<br/>
+     * https://github.com/google/ExoPlayer/issues/6348#issuecomment-718986083
+     */
+    @Override
+    protected boolean isBufferVeryLate(long earlyUs) {
+        if (mIsFrameDropSonyFixEnabled) {
+            return earlyUs < -1500000;
+        }
+
+        return super.isBufferVeryLate(earlyUs);
+    }
+
     public void enableFrameDropFix(boolean enabled) {
         mIsFrameDropFixEnabled = enabled;
+    }
+
+    public void enableFrameDropSonyFix(boolean enabled) {
+        mIsFrameDropSonyFixEnabled = enabled;
     }
 
     public void enableAmlogicFix(boolean enabled) {

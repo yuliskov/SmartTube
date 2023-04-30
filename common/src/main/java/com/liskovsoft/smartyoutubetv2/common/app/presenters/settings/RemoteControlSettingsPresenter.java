@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.RemoteService;
+import com.liskovsoft.mediaserviceinterfaces.RemoteControlService;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -12,7 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AddDevicePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
@@ -23,12 +23,12 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
     @SuppressLint("StaticFieldLeak")
     private static RemoteControlSettingsPresenter sInstance;
     private final RemoteControlData mRemoteControlData;
-    private final RemoteService mRemoteManager;
+    private final RemoteControlService mRemoteManager;
 
     public RemoteControlSettingsPresenter(Context context) {
         super(context);
         MediaService mediaService = YouTubeMediaService.instance();
-        mRemoteManager = mediaService.getRemoteService();
+        mRemoteManager = mediaService.getRemoteControlService();
         mRemoteControlData = RemoteControlData.instance(context);
     }
 
@@ -52,7 +52,6 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
 
     private void createAndShowDialog() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
 
         appendDeviceLinkSwitch(settingsPresenter);
         appendAddDeviceButton(settingsPresenter);
@@ -85,7 +84,7 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
 
         OptionItem confirmItem = UiOptionItem.from(
                 getContext().getString(R.string.btn_confirm), option -> {
-                    RxUtils.execute(mRemoteManager.resetDataObserve());
+                    RxHelper.execute(mRemoteManager.resetDataObserve());
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                     settingsPresenter.closeDialog();
 

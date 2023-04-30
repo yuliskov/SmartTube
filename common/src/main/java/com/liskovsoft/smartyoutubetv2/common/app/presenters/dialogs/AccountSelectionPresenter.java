@@ -13,11 +13,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +61,7 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
     }
 
     public void unhold() {
-        RxUtils.disposeActions(mAccountsAction);
+        RxHelper.disposeActions(mAccountsAction);
         sInstance = null;
     }
 
@@ -73,7 +71,6 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
         }
 
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
-        dialogPresenter.clear();
 
         appendAccountSelection(accounts, dialogPresenter);
 

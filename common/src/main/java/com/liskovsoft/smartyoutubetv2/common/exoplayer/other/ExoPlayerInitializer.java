@@ -9,12 +9,21 @@ import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.audio.AudioAttributes;
+import com.google.android.exoplayer2.drm.DefaultDrmSessionManager;
+import com.google.android.exoplayer2.drm.DrmSessionManager;
+import com.google.android.exoplayer2.drm.ExoMediaDrm.KeyRequest;
+import com.google.android.exoplayer2.drm.ExoMediaDrm.ProvisionRequest;
+import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
+import com.google.android.exoplayer2.drm.MediaDrmCallback;
+import com.google.android.exoplayer2.drm.UnsupportedDrmException;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+
+import java.util.UUID;
 
 public class ExoPlayerInitializer {
     private final int mDeviceRam;
@@ -48,7 +57,11 @@ public class ExoPlayerInitializer {
 
         enableAudioFocus(player);
 
+        // Lead to numbered errors
         //player.setRepeatMode(Player.REPEAT_MODE_ONE);
+
+        // Fix still image while audio is playing (happens after format change or exit from sleep)
+        //player.setPlayWhenReady(true);
 
         return player;
     }
@@ -77,24 +90,30 @@ public class ExoPlayerInitializer {
         //DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS // 2_500
         //DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS // 5_000
 
-        // Medium buffer is default one
-        int minBufferMs = 50_000;
-        int maxBufferMs = 50_000;
+        // Default values
+        int minBufferMs = 30_000;
+        int maxBufferMs = 30_000;
         int bufferForPlaybackMs = 2_500;
         int bufferForPlaybackAfterRebufferMs = 5_000;
 
         switch (mPlayerData.getVideoBufferType()) {
-            case PlaybackEngineController.BUFFER_HIGH:
+            case PlaybackEngine.BUFFER_HIGH:
                 minBufferMs = 50_000;
                 maxBufferMs = 36_000_000; // technical infinity, recommended here a very high number, the max will be based on setTargetBufferBytes() value
                 baseBuilder
                         .setTargetBufferBytes(mDeviceRam);
+                //baseBuilder.setBackBuffer(maxBufferMs, true);
                 break;
-            case PlaybackEngineController.BUFFER_LOW:
+            case PlaybackEngine.BUFFER_MEDIUM:
+                minBufferMs = 50_000;
+                maxBufferMs = 50_000;
+                //baseBuilder.setBackBuffer(maxBufferMs, true);
+                break;
+            case PlaybackEngine.BUFFER_LOW:
                 minBufferMs = 30_000;
                 maxBufferMs = 30_000;
                 break;
-            case PlaybackEngineController.BUFFER_NONE:
+            case PlaybackEngine.BUFFER_NONE:
                 minBufferMs = 1_000;
                 maxBufferMs = 1_000;
                 bufferForPlaybackMs = 1_000;
@@ -106,6 +125,26 @@ public class ExoPlayerInitializer {
                 .setBufferDurationsMs(minBufferMs, maxBufferMs, bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs);
 
         return baseBuilder.createDefaultLoadControl();
+    }
+
+    private DrmSessionManager<FrameworkMediaCrypto> createDrmManager() {
+        try {
+            return DefaultDrmSessionManager.newWidevineInstance(new MediaDrmCallback() {
+                @Override
+                public byte[] executeProvisionRequest(UUID uuid, ProvisionRequest request) {
+                    return new byte[0];
+                }
+
+                @Override
+                public byte[] executeKeyRequest(UUID uuid, KeyRequest request) {
+                    return new byte[0];
+                }
+            }, null);
+        } catch (UnsupportedDrmException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private static final class DummyBandwidthMeter implements BandwidthMeter {

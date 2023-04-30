@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
-import android.os.Handler;
-import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Pair;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.TrackGroup;
@@ -16,13 +15,14 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.AudioTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector.TrackSelectorCallback;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -30,24 +30,22 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class TrackSelectorManager implements TrackSelectorCallback {
-    private final Handler mHandler = new Handler(Looper.getMainLooper());
     public static final int RENDERER_INDEX_VIDEO = 0;
     public static final int RENDERER_INDEX_AUDIO = 1;
     public static final int RENDERER_INDEX_SUBTITLE = 2;
-    //private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
-    //private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
+    private static final String DEFAULT_LANGUAGE = "en";
     private final String mLanguage;
+    private final boolean mIsAllFormatsUnlocked;
 
     private DefaultTrackSelector mTrackSelector;
-    //private TrackSelection.Factory mTrackSelectionFactory;
 
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
-    private long mTracksInitTimeMs;
 
-    public TrackSelectorManager(String language) {
+    public TrackSelectorManager(String language, boolean isAllFormatsUnlocked) {
         mLanguage = language;
+        mIsAllFormatsUnlocked = isAllFormatsUnlocked;
     }
 
     public void invalidate() {
@@ -178,11 +176,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 mediaTrack.groupIndex = groupIndex;
                 mediaTrack.trackIndex = trackIndex;
 
-                if (mediaTrack.isVP9Codec() && !Helpers.isVP9ResolutionSupported(mediaTrack.getHeight())) {
-                    continue;
-                }
-
-                if (mediaTrack.isAV1Codec() && !Helpers.isAV1ResolutionSupported(mediaTrack.getHeight())) {
+                if (!mIsAllFormatsUnlocked && !Utils.isTrackSupported(mediaTrack)) {
                     continue;
                 }
 
@@ -192,8 +186,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 renderer.sortedTracks.add(mediaTrack);
             }
         }
-
-        mTracksInitTimeMs = System.currentTimeMillis();
     }
 
     /**
@@ -438,6 +430,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
             MediaTrack[][] mediaTracks = filterByLanguage(renderer.mediaTracks, originTrack);
 
+            outerloop:
             for (int groupIndex = 0; groupIndex < mediaTracks.length; groupIndex++) {
                 prevResult = result;
 
@@ -464,10 +457,13 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                             result = mediaTrack;
                             // Don't do break for VideoTrack because we don't know whether there 30/60 fps.
                             if (!(originTrack instanceof VideoTrack)) {
-                                break;
+                                break outerloop;
                             }
                         } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
                             result = mediaTrack;
+                            if (originTrack instanceof SubtitleTrack) {
+                                break outerloop;
+                            }
                         }
                     } else if (compare > 0) {
                         // Select track with higher possible quality or by preferred codec
@@ -549,8 +545,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             return trackGroupList;
         }
 
-        if (originTrack.format != null && originTrack.format.language != null) {
-            return trackGroupList;
+        String resultLanguage = mLanguage;
+
+        // Override default language with one from recently selected track
+        if (originTrack.format != null && !TextUtils.isEmpty(originTrack.format.language)) {
+            resultLanguage = originTrack.format.language;
         }
 
         List<MediaTrack[]> resultTracks = null;
@@ -562,13 +561,13 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 MediaTrack mediaTrack = trackGroup[0];
 
                 if (mediaTrack.format != null) {
-                    if (Helpers.equals(mediaTrack.format.language, mLanguage)) {
+                    if (Helpers.equals(mediaTrack.format.language, resultLanguage)) {
                         if (resultTracks == null) {
                             resultTracks = new ArrayList<>();
                         }
 
                         resultTracks.add(trackGroup);
-                    } else if (Helpers.equals(mediaTrack.format.language, "en")) {
+                    } else if (Helpers.equals(mediaTrack.format.language, DEFAULT_LANGUAGE)) {
                         if (resultTracksFallback == null) {
                             resultTracksFallback = new ArrayList<>();
                         }

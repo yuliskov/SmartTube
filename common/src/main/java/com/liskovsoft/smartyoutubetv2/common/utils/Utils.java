@@ -11,6 +11,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -41,10 +42,10 @@ import androidx.work.WorkManager;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -52,6 +53,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.WebBrowserPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
@@ -70,12 +73,16 @@ public class Utils {
     private static final int GLOBAL_VOLUME_TYPE = AudioManager.STREAM_MUSIC;
     private static final String GLOBAL_VOLUME_SERVICE = Context.AUDIO_SERVICE;
     private static final Handler sHandler = new Handler(Looper.getMainLooper());
+    public static final float[] SPEED_LIST_LONG =
+            new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f, 3.25f, 3.5f, 3.75f, 4.0f};
+    public static final float[] SPEED_LIST_SHORT =
+            new float[] {0.25f, 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 2.25f, 2.5f, 2.75f, 3.0f, 3.25f, 3.5f, 3.75f, 4.0f};
 
     /**
      * Limit the maximum size of a Map by removing oldest entries when limit reached
      */
     public static <K, V> Map<K, V> createLRUMap(final int maxEntries) {
-        return new LinkedHashMap<K, V>(maxEntries*10/7, 0.7f, true) {
+        return new LinkedHashMap<K, V>(maxEntries + 1, 0.75f, true) {
             @Override
             protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
                 return size() > maxEntries;
@@ -137,7 +144,11 @@ public class Utils {
         Intent chooserIntent = Intent.createChooser(primaryIntent, context.getResources().getText(R.string.share_link));
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { secondaryIntent });
         chooserIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-        context.startActivity(chooserIntent);
+        try {
+            context.startActivity(chooserIntent);
+        } catch (ActivityNotFoundException e) {
+            Log.e(TAG, "Chooser intent not found", e);
+        }
     }
 
     /**
@@ -165,30 +176,7 @@ public class Utils {
     public static boolean isAppInForeground() {
         ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
         ActivityManager.getMyMemoryState(appProcessInfo);
-        return (appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND ||
-                appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE);
-    }
-
-    public static boolean isPlayerInForeground(Context context) {
-        if (context == null) {
-            return false;
-        }
-
-        return isAppInForeground() && ViewManager.instance(context).getTopView() == PlaybackView.class;
-    }
-
-    public static void moveAppToForeground(Context context) {
-        if (!Utils.isAppInForeground()) {
-            ViewManager.instance(context).startView(SplashView.class);
-        }
-    }
-
-    public static void movePlayerToForeground(Context context) {
-        turnScreenOn(context);
-
-        if (!Utils.isPlayerInForeground(context)) {
-            ViewManager.instance(context).startView(PlaybackView.class);
-        }
+        return appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
     }
 
     /**
@@ -287,7 +275,7 @@ public class Utils {
      * <a href="https://stackoverflow.com/questions/2891337/turning-on-screen-programmatically">More info</a>
      */
     @SuppressWarnings("deprecation")
-    private static void turnScreenOn(Context context) {
+    public static void turnScreenOn(Context context) {
         if (context instanceof Activity) {
             Activity activity = (Activity) context;
             if (Build.VERSION.SDK_INT >= 27) {
@@ -306,23 +294,6 @@ public class Utils {
                 );
             }
         }
-    }
-
-    /**
-     * Need to be the first line and executed on earliest stage once.<br/>
-     * Inits media service language and context.<br/>
-     * NOTE: this command should run before using any of the media service api.
-     */
-    public static void initGlobalData(Context context) {
-        Log.d(TAG, "initGlobalData called...");
-
-        // 1) Auth token storage init
-        // 2) Media service language setup (I assume that context has proper language)
-        GlobalPreferences.instance(context);
-
-        // 1) Remove downloaded apks
-        // 2) Setup language
-        ViewManager.instance(context).clearCaches();
     }
 
     public static String toQrCodeLink(String data) {
@@ -440,8 +411,15 @@ public class Utils {
             builder.setContentText(content);
         }
 
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            // IllegalArgumentException fix: Targeting S+ (version 31 and above) requires that one of FLAG_IMMUTABLE...
+            flags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+
         Intent targetIntent = new Intent(context, activityCls);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, targetIntent, flags);
         builder.setContentIntent(contentIntent);
 
         if (VERSION.SDK_INT >= 26) {
@@ -489,19 +467,19 @@ public class Utils {
 
     public static void showRepeatInfo(Context context, int modeIndex) {
         switch (modeIndex) {
-            case PlaybackUIController.REPEAT_MODE_ALL:
+            case PlaybackUI.REPEAT_MODE_ALL:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_all);
                 break;
-            case PlaybackUIController.REPEAT_MODE_ONE:
+            case PlaybackUI.REPEAT_MODE_ONE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_one);
                 break;
-            case PlaybackUIController.REPEAT_MODE_PAUSE:
+            case PlaybackUI.REPEAT_MODE_PAUSE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_pause);
                 break;
-            case PlaybackUIController.REPEAT_MODE_LIST:
+            case PlaybackUI.REPEAT_MODE_LIST:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_pause_alt);
                 break;
-            case PlaybackUIController.REPEAT_MODE_CLOSE:
+            case PlaybackUI.REPEAT_MODE_CLOSE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_none);
                 break;
         }
@@ -570,7 +548,11 @@ public class Utils {
     }
 
     public static String getCountryFlagUrl(String countryCode) {
-        return "https://countryflagsapi.com/png/" + countryCode;
+        // Sometimes down
+        //return "https://countryflagsapi.com/png/" + countryCode;
+
+        // https://flagpedia.net/download/api
+        return String.format("https://flagcdn.com/w160/%s.png", countryCode.toLowerCase());
     }
 
     public static void showPlayerControls(Context context, boolean show) {
@@ -582,5 +564,35 @@ public class Utils {
 
     public static int toSec(long ms) {
         return (int) (ms / 1_000);
+    }
+
+    public static boolean isFirstRun(Context context) {
+        VideoStateService stateService = VideoStateService.instance(context);
+
+        return stateService.isEmpty();
+    }
+
+    public static boolean isPresetSupported(VideoPreset preset) {
+        if (preset.isVP9Preset() && !Helpers.isVP9ResolutionSupported(preset.getHeight())) {
+            return false;
+        }
+
+        if (preset.isAV1Preset() && !Helpers.isAV1ResolutionSupported(preset.getHeight())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean isTrackSupported(MediaTrack mediaTrack) {
+        if (mediaTrack.isVP9Codec() && !Helpers.isVP9ResolutionSupported(mediaTrack.getHeight())) {
+            return false;
+        }
+
+        if (mediaTrack.isAV1Codec() && !Helpers.isAV1ResolutionSupported(mediaTrack.getHeight())) {
+            return false;
+        }
+
+        return true;
     }
 }

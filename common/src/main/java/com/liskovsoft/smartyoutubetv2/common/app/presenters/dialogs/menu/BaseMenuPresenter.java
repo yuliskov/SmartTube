@@ -7,7 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -42,6 +42,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     protected BaseMenuPresenter(Context context) {
         super(context);
         mServiceManager = MediaServiceManager.instance();
+        updateEnabledMenuItems();
     }
 
     protected abstract Video getVideo();
@@ -225,9 +226,9 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         }
 
         // Allow removing user playlist only from Playlists section to prevent accidental deletion
-        if (!BrowsePresenter.instance(getContext()).isPlaylistsSection()) {
-            return;
-        }
+        //if (!BrowsePresenter.instance(getContext()).isPlaylistsSection()) {
+        //    return;
+        //}
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
@@ -303,7 +304,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 if (video.playlistId == null) {
                     MessageHelpers.showMessage(getContext(), R.string.cant_delete_empty_playlist);
                 } else {
-                    AppDialogUtil.showConfirmationDialog(getContext(), String.format("%s: %s", video.title, getContext().getString(R.string.remove_playlist)), () -> {
+                    AppDialogUtil.showConfirmationDialog(getContext(), String.format("%s: %s", getContext().getString(R.string.remove_playlist), video.title), () -> {
                         removePlaylist(video);
                         if (getCallback() != null) {
                             getCallback().onItemAction(getVideo(), VideoMenuCallback.ACTION_REMOVE);
@@ -321,18 +322,18 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         MediaItemService manager = YouTubeMediaItemService.instance();
         Observable<Void> action = manager.removePlaylistObserve(video.playlistId);
         GeneralData.instance(getContext()).setPlaylistOrder(video.playlistId, -1);
-        RxUtils.execute(action,
-                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.cant_delete_empty_playlist)),
-                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.removed_from_playlists))
+        RxHelper.execute(action,
+                () -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.cant_delete_empty_playlist), video.title)),
+                () -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.removed_from_playlists), video.title))
         );
     }
 
     private void savePlaylist(Video video) {
         MediaItemService manager = YouTubeMediaItemService.instance();
         Observable<Void> action = manager.savePlaylistObserve(video.playlistId);
-        RxUtils.execute(action,
-                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.cant_save_playlist)),
-                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.saved_to_playlists))
+        RxHelper.execute(action,
+                () -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.cant_save_playlist), video.title)),
+                () -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.saved_to_playlists), video.title))
         );
     }
 
@@ -389,7 +390,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 newValue -> {
                     MediaItemService manager = YouTubeMediaItemService.instance();
                     Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
-                    RxUtils.execute(
+                    RxHelper.execute(
                             action,
                             () -> MessageHelpers.showMessage(getContext(), newValue + ": " + getContext().getString(R.string.cant_save_playlist)),
                             () -> {
@@ -400,6 +401,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                 }
                             }
                     );
+                    return true;
                 },
                 getContext().getString(R.string.create_playlist),
                 true
@@ -448,7 +450,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                             newValue -> {
                                 MediaItemService manager = YouTubeMediaItemService.instance();
                                 Observable<Void> action = manager.renamePlaylistObserve(firstItem.getPlaylistId(), newValue);
-                                RxUtils.execute(
+                                RxHelper.execute(
                                         action,
                                         () -> MessageHelpers.showMessage(getContext(), R.string.owned_playlist_warning),
                                         () -> {
@@ -456,6 +458,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                             BrowsePresenter.instance(getContext()).syncItem(video);
                                         }
                                 );
+                                return true;
                             },
                             getContext().getString(R.string.rename_playlist),
                             true

@@ -27,7 +27,6 @@ public final class Video implements Parcelable {
     public static final long MAX_DURATION_MS = 24 * 60 * 60 * 1_000;
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     private static final String[] sNotPlaylistParams = new String[] {"EAIYAQ%3D%3D"};
-    private static final String SECTION_PREFIX = "FE";
     private static final String BLACK_PLACEHOLDER_URL = "https://via.placeholder.com/1280x720/000000/000000";
     private static final float RESTORE_POSITION_PERCENTS = 10; // min value for immediately closed videos
     public long id;
@@ -61,7 +60,7 @@ public final class Video implements Parcelable {
     public boolean isLive;
     public boolean isUpcoming;
     public boolean isChapter;
-    private boolean isMovie;
+    public boolean isMovie;
     public boolean isSubscribed;
     public boolean isRemote;
     public int groupPosition = -1; // group position in multi-grid fragments
@@ -74,6 +73,7 @@ public final class Video implements Parcelable {
     public boolean fromQueue;
     public boolean isPending;
     public boolean finishOnEnded;
+    public boolean incognito;
     private int startSegmentNum;
 
     public Video() {
@@ -399,7 +399,15 @@ public final class Video implements Parcelable {
      * NOTE: Channels section uses <em>playlistParams</em> instead of <em>playlistId</em>
      */
     public boolean hasPlaylist() {
-        return playlistId != null || (playlistParams != null && !Helpers.containsAny(playlistParams, sNotPlaylistParams));
+        return playlistId != null || belongsToChannelUploads();
+    }
+
+    //public boolean hasPlaylist() {
+    //    return playlistId != null || (playlistParams != null && !Helpers.containsAny(playlistParams, sNotPlaylistParams));
+    //}
+
+    public boolean hasNextPlaylist() {
+        return hasNextItem() && getPlaylistId() != null && getPlaylistId().equals(nextMediaItem.getPlaylistId());
     }
 
     /**
@@ -411,6 +419,10 @@ public final class Video implements Parcelable {
 
     public boolean hasNextPageKey() {
         return getNextPageKey() != null;
+    }
+
+    public boolean hasNextItem() {
+        return nextMediaItem != null;
     }
 
     public boolean hasNestedItems() {
@@ -503,6 +515,10 @@ public final class Video implements Parcelable {
         String playlist2 = second.getPlaylistId() != null ? second.getPlaylistId() : second.getParams();
 
         return playlist1 != null && playlist2 != null && Helpers.equals(playlist1, playlist2);
+    }
+
+    public boolean belongsToHome() {
+        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_HOME;
     }
 
     public boolean belongsToChannel() {
@@ -629,10 +645,6 @@ public final class Video implements Parcelable {
         return video;
     }
 
-    public boolean canSubscribe() {
-        return hasChannel() && !channelId.startsWith(SECTION_PREFIX);
-    }
-
     public String getPlayerTitle() {
         return metadataTitle != null ? metadataTitle : title != null ? title : null;
     }
@@ -689,6 +701,10 @@ public final class Video implements Parcelable {
 
         long posMs = (long) (mediaItem.getDurationMs() / 100 * percentWatched);
         return posMs > 0 && posMs < mediaItem.getDurationMs() ? posMs : 0;
+    }
+
+    public MediaItem toMediaItem() {
+        return SampleMediaItem.from(this);
     }
 
     // Builder for Video object.

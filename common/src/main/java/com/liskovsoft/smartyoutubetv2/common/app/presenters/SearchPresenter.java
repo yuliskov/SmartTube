@@ -12,19 +12,19 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private Disposable mLoadAction;
     private String mSearchText;
     private boolean mIsVoice;
-    private int mSearchOptions;
+    private int mUploadDateOptions;
+    private int mDurationOptions;
+    private int mTypeOptions;
+    private int mFeatureOptions;
+    private int mSortingOptions;
 
     private SearchPresenter(Context context) {
         super(context);
@@ -75,7 +79,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         super.onFinish();
 
         mSearchText = null;
-        mSearchOptions = 0;
+        mUploadDateOptions = 0;
+        mDurationOptions = 0;
+        mTypeOptions = 0;
+        mFeatureOptions = 0;
+        mSortingOptions = 0;
         mIsVoice = false;
     }
 
@@ -102,9 +110,23 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         VideoMenuPresenter.instance(getContext()).showMenu(item);
     }
 
+    public void onTagLongClicked(Tag item) {
+        if (getView() == null) {
+            return;
+        }
+
+        AppDialogUtil.showConfirmationDialog(
+                getContext(),
+                getContext().getString(R.string.clear_search_history),
+                () -> {
+                    MediaServiceManager.instance().clearSearchHistory();
+                    getView().clearSearchTags();
+                });
+    }
+
     @Override
     public boolean hasPendingActions() {
-        return RxUtils.isAnyActionRunning(mLoadAction, mScrollAction);
+        return RxHelper.isAnyActionRunning(mLoadAction, mScrollAction);
     }
 
     public void onSearch(String searchText) {
@@ -130,7 +152,8 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         getView().clearSearch();
 
-        mLoadAction = mediaGroupManager.getSearchObserve(searchText, mSearchOptions)
+        mLoadAction = mediaGroupManager.getSearchObserve(searchText,
+                mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions | mSortingOptions)
                 .subscribe(
                         mediaGroup -> {
                             Log.d(TAG, "Receiving results for '%s'", searchText);
@@ -151,7 +174,8 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         getView().clearSearch();
 
-        mLoadAction = mediaGroupManager.getSearchAltObserve(searchText, mSearchOptions)
+        mLoadAction = mediaGroupManager.getSearchAltObserve(searchText,
+                mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions | mSortingOptions)
                 .subscribe(
                         mediaGroups -> {
                             Log.d(TAG, "Receiving results for '%s'", searchText);
@@ -159,13 +183,22 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                                 getView().updateSearch(VideoGroup.from(mediaGroup));
                             }
                         },
-                        error -> Log.e(TAG, "loadSearchData error: %s", error.getMessage()),
+                        error -> {
+                            Log.e(TAG, "loadSearchData error: %s", error.getMessage());
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
+                        },
                         () -> getView().showProgressBar(false)
                 );
     }
     
     private void continueGroup(VideoGroup group) {
-        if (RxUtils.isAnyActionRunning(mScrollAction)) {
+        if (RxHelper.isAnyActionRunning(mScrollAction)) {
+            return;
+        }
+
+        if (getView() == null) {
             return;
         }
 
@@ -182,7 +215,9 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                         continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup)),
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
-                            getView().showProgressBar(false);
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
                         },
                         () -> getView().showProgressBar(false)
                 );
@@ -239,7 +274,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
 
     public void disposeActions() {
-        RxUtils.disposeActions(mLoadAction, mScrollAction);
+        RxHelper.disposeActions(mLoadAction, mScrollAction);
         if (getView() != null) {
             getView().showProgressBar(false);
         }
@@ -247,14 +282,17 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     private void showSettingsDialog() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
 
-        appendSortByDateCategory(settingsPresenter);
+        appendFilterByDateCategory(settingsPresenter);
+        appendFilterByDurationCategory(settingsPresenter);
+        appendFilterByTypeCategory(settingsPresenter);
+        appendFilterByFeatureCategory(settingsPresenter);
+        appendSortByCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_search));
     }
 
-    private void appendSortByDateCategory(AppDialogPresenter settingsPresenter) {
+    private void appendFilterByDateCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
@@ -266,18 +304,109 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                 {R.string.upload_date_this_year, SearchOptions.UPLOAD_DATE_THIS_YEAR}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]),
                     optionItem -> {
-                        mSearchOptions = pair[1];
+                        mUploadDateOptions = pair[1];
                         String searchText = getView().getSearchText();
 
                         if (searchText != null && !searchText.isEmpty()) {
                             loadSearchResultAlt(searchText);
-                            settingsPresenter.closeDialog();
                         }
                     },
-                    mSearchOptions == pair[1]));
+                    mUploadDateOptions == pair[1]));
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.upload_date), options);
+    }
+
+    private void appendFilterByDurationCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.video_duration_any, 0},
+                {R.string.video_duration_under_4, SearchOptions.DURATION_UNDER_4},
+                {R.string.video_duration_between_4_20, SearchOptions.DURATION_BETWEEN_4_20},
+                {R.string.video_duration_over_20, SearchOptions.DURATION_OVER_20}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]),
+                    optionItem -> {
+                        mDurationOptions = pair[1];
+                        String searchText = getView().getSearchText();
+
+                        if (searchText != null && !searchText.isEmpty()) {
+                            loadSearchResultAlt(searchText);
+                        }
+                    },
+                    mDurationOptions == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.video_duration), options);
+    }
+
+    private void appendFilterByTypeCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.content_type_any, 0},
+                {R.string.content_type_video, SearchOptions.TYPE_VIDEO},
+                {R.string.content_type_channel, SearchOptions.TYPE_CHANNEL},
+                {R.string.content_type_playlist, SearchOptions.TYPE_PLAYLIST},
+                {R.string.content_type_movie, SearchOptions.TYPE_MOVIE}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]),
+                    optionItem -> {
+                        mTypeOptions = pair[1];
+                        String searchText = getView().getSearchText();
+
+                        if (searchText != null && !searchText.isEmpty()) {
+                            loadSearchResultAlt(searchText);
+                        }
+                    },
+                    mTypeOptions == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.content_type), options);
+    }
+
+    private void appendFilterByFeatureCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.video_feature_live, SearchOptions.FEATURE_LIVE},
+                {R.string.video_feature_4k, SearchOptions.FEATURE_4K},
+                {R.string.video_feature_hdr, SearchOptions.FEATURE_HDR}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]),
+                    optionItem -> {
+                        mFeatureOptions = optionItem.isSelected() ? mFeatureOptions | pair[1] : mFeatureOptions & ~pair[1];
+                        String searchText = getView().getSearchText();
+
+                        if (searchText != null && !searchText.isEmpty()) {
+                            loadSearchResultAlt(searchText);
+                        }
+                    },
+                    (mFeatureOptions & pair[1]) == pair[1]));
+        }
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.video_features), options);
+    }
+
+    private void appendSortByCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.sort_by_relevance, 0},
+                {R.string.sort_by_date, SearchOptions.SORT_BY_UPLOAD_DATE},
+                {R.string.sort_by_views, SearchOptions.SORT_BY_VIEW_COUNT},
+                {R.string.sort_by_rating, SearchOptions.SORT_BY_RATING}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]),
+                    optionItem -> {
+                        mSortingOptions = pair[1];
+                        String searchText = getView().getSearchText();
+
+                        if (searchText != null && !searchText.isEmpty()) {
+                            loadSearchResultAlt(searchText);
+                        }
+                    },
+                    mSortingOptions == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.search_sorting), options);
     }
 
     public void forceFinish() {

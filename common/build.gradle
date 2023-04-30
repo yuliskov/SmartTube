@@ -64,6 +64,7 @@ dependencies {
 
     implementation project(':exoplayer-library')
     implementation project(':exoplayer-extension-okhttp')
+    implementation project(':exoplayer-extension-cronet')
 
     // implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
     // implementation 'com.amazon.android:extension-okhttp:' + amazonExoplayerVersion
@@ -80,12 +81,13 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:' + glideVersion
 
     implementation 'androidx.work:work-runtime:' + workVersion
+    implementation 'com.google.guava:guava:' + guavaVersion // Work library deps
 
     implementation 'androidx.browser:browser:' + browserXVersion
 
     implementation 'androidx.core:core-ktx:' + kotlinCoreVersion
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + kotlinCoreVersion
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + kotlinxVersion
 
     stbetaImplementation project(path: ':leanbackassistant')
     stbetaImplementation project(path: ':appupdatechecker2')

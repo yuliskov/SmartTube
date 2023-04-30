@@ -32,7 +32,6 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
 
         appendColorScheme(settingsPresenter);
         appendCardStyle(settingsPresenter);

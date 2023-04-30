@@ -82,6 +82,10 @@ public class MessagesList extends RecyclerView {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, reverseLayout);
 
+        // The solution for aligning items to the top instead of bottom
+        // https://stackoverflow.com/questions/46168245/recyclerview-reverse-order
+        //layoutManager.setStackFromEnd(true);
+
         setItemAnimator(itemAnimator);
         setLayoutManager(layoutManager);
         adapter.setLayoutManager(layoutManager);

@@ -1128,12 +1128,18 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
   }
 
-  private static boolean isBufferLate(long earlyUs) {
+  /**
+   * MOD: Make function overridable
+   */
+  protected boolean isBufferLate(long earlyUs) {
     // Class a buffer as late if it should have been presented more than 30 ms ago.
     return earlyUs < -30000;
   }
 
-  private static boolean isBufferVeryLate(long earlyUs) {
+  /**
+   * MOD: Make function overridable
+   */
+  protected boolean isBufferVeryLate(long earlyUs) {
     // Class a buffer as very late if it should have been presented more than 500 ms ago.
     return earlyUs < -500000;
   }

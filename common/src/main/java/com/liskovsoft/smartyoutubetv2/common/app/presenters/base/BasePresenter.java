@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.base;
 import android.app.Activity;
 import android.content.Context;
 import androidx.fragment.app.Fragment;
+import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -16,7 +18,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
+import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.lang.ref.WeakReference;
@@ -24,6 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class BasePresenter<T> implements Presenter<T> {
+    private static final String TAG = BasePresenter.class.getSimpleName();
     private WeakReference<T> mView = new WeakReference<>(null);
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private WeakReference<Context> mApplicationContext = new WeakReference<>(null);
@@ -38,26 +43,21 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void setView(T view) {
-        if (view != null) {
+        if (checkView(view)) {
             mView = new WeakReference<>(view);
         }
     }
 
     @Override
     public T getView() {
-        return mView.get();
+        T view = mView.get();
+        return checkView(view) ? view : null;
     }
 
     @Override
     public void setContext(Context context) {
         if (context == null) {
             return;
-        }
-
-        if (!sRunOnce) {
-            sRunOnce = true;
-            // Init shared prefs used inside remote control service.
-            Utils.initGlobalData(context);
         }
 
         // Localization fix: prefer Activity context
@@ -68,18 +68,24 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         // In case view was disposed like SplashView does
         mApplicationContext = new WeakReference<>(context.getApplicationContext());
 
-        //initGlobalData();
+        if (!sRunOnce) {
+            sRunOnce = true;
+            // Init shared prefs used inside remote control service.
+            initGlobalData();
+        }
     }
 
     @Override
     public Context getContext() {
         Activity activity = null;
 
+        Activity viewActivity = getViewActivity(mView.get());
+
         // Trying to find localized context.
         // First, try the view that belongs to this presenter.
         // Second, try the activity that presenter called (could be destroyed).
-        if (mView.get() instanceof Fragment) {
-            activity = ((Fragment) mView.get()).getActivity();
+        if (viewActivity != null) {
+            activity = viewActivity;
         } else if (mActivity.get() != null) {
             activity = mActivity.get();
         }
@@ -97,9 +103,15 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void onViewDestroyed() {
+        // Multiple views with same presenter fix?
         // View stays in RAM after has been destroyed. Is it a bug?
-        mView = new WeakReference<>(null);
-        mActivity = new WeakReference<>(null);
+        //mView = new WeakReference<>(null);
+        //mActivity = new WeakReference<>(null);
+    }
+
+    @Override
+    public void onViewPaused() {
+        // NOP
     }
 
     @Override
@@ -118,13 +130,19 @@ public abstract class BasePresenter<T> implements Presenter<T> {
             PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
             ViewManager.instance(getContext()).startView(SplashView.class);
         }
+
+        onDone();
     }
 
     public void setOnDone(Runnable onDone) {
         mOnDone = onDone;
     }
 
-    protected void onDone() {
+    public Runnable getOnDone() {
+        return mOnDone;
+    }
+
+    private void onDone() {
         if (mOnDone != null) {
             mOnDone.run();
             mOnDone = null;
@@ -212,5 +230,53 @@ public abstract class BasePresenter<T> implements Presenter<T> {
                 mUpdateCheckMs = currentTimeMs;
             }
         }
+    }
+
+    /**
+     * Need to be the first line and executed on earliest stage once.<br/>
+     * Inits media service language and context.<br/>
+     * NOTE: this command should run before using any of the media service api.
+     */
+    private void initGlobalData() {
+        Log.d(TAG, "initGlobalData called...");
+
+        if (getContext() == null) {
+            return;
+        }
+
+        // 1) Auth token storage init
+        // 2) Media service language setup (I assume that context has proper language)
+        GlobalPreferences.instance(getContext());
+
+        // Apply proxy config after global prefs but before starting networking.
+        if (GeneralData.instance(getContext()).isProxyEnabled()) {
+            new ProxyManager(getContext()).configureSystemProxy();
+        }
+
+        // 1) Remove downloaded apks
+        // 2) Setup language
+        ViewManager.instance(getContext()).clearCaches();
+    }
+
+    /**
+     * Check that view's activity is alive
+     */
+    private static <T> boolean checkView(T view) {
+        Activity activity = getViewActivity(view);
+
+        return Utils.checkActivity(activity);
+    }
+
+    private static <T> Activity getViewActivity(T view) {
+        Activity activity = null;
+
+        if (view instanceof Fragment) { // regular fragment
+            activity = ((Fragment) view).getActivity();
+        } else if (view instanceof android.app.Fragment) { // dialog fragment
+            activity = ((android.app.Fragment) view).getActivity();
+        } else if (view instanceof Activity) { // splash view
+            activity = (Activity) view;
+        }
+        return activity;
     }
 }

@@ -5,19 +5,19 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.PlaybackControlsRow.MultiAction;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
  * An action for displaying two repeat states: none and all.
  */
 public class RepeatAction extends MultiAction {
-    public static final int INDEX_NONE = PlaybackUIController.REPEAT_MODE_CLOSE;
-    public static final int INDEX_ONE = PlaybackUIController.REPEAT_MODE_ONE;
-    public static final int INDEX_ALL = PlaybackUIController.REPEAT_MODE_ALL;
-    public static final int INDEX_PAUSE = PlaybackUIController.REPEAT_MODE_PAUSE;
-    public static final int INDEX_LIST = PlaybackUIController.REPEAT_MODE_LIST;
-    public static final int INDEX_SHUFFLE = PlaybackUIController.REPEAT_MODE_SHUFFLE;
+    public static final int INDEX_NONE = PlaybackUI.REPEAT_MODE_CLOSE;
+    public static final int INDEX_ONE = PlaybackUI.REPEAT_MODE_ONE;
+    public static final int INDEX_ALL = PlaybackUI.REPEAT_MODE_ALL;
+    public static final int INDEX_PAUSE = PlaybackUI.REPEAT_MODE_PAUSE;
+    public static final int INDEX_LIST = PlaybackUI.REPEAT_MODE_LIST;
+    public static final int INDEX_SHUFFLE = PlaybackUI.REPEAT_MODE_SHUFFLE;
 
     /**
      * Constructor

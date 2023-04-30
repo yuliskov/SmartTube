@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Build.VERSION;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -13,11 +14,11 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.VolumeBooster;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
@@ -45,13 +46,15 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private PlayerEventListener mEventListener;
     private SimpleExoPlayer mPlayer;
     private PlayerView mPlayerView;
+    private VolumeBooster mVolumeBooster;
     private float mCurrentSpeed = 1.0f;
     private boolean mIsEnded;
 
     public ExoPlayerController(Context context) {
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
         mContext = context.getApplicationContext();
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
-        mTrackSelectorManager = new TrackSelectorManager(LocaleUtility.getCurrentLanguage(context));
+        mTrackSelectorManager = new TrackSelectorManager(PlayerData.instance(context).getAudioLanguage(), playerTweaksData.isAllFormatsUnlocked());
         mTrackFormatter = new TrackInfoFormatter2();
         mTrackFormatter.enableBitrate(PlayerTweaksData.instance(context).isQualityInfoBitrateEnabled());
 
@@ -59,7 +62,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         // Shield 720p fix???
         initFormats();
-        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
         VideoTrack.sIsNoFpsPresetsEnabled = playerTweaksData.isNoFpsPresetsEnabled();
         MediaTrack.preferAvcOverVp9(playerTweaksData.isAvcOverVp9Preferred());
     }
@@ -312,14 +314,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void onPlayerError(ExoPlaybackException error) {
         Log.e(TAG, "onPlayerError: " + error);
 
-        // Player is released at this point. So, there is no sense to restore the playback here.
-
-        //if (error.type == ExoPlaybackException.TYPE_UNEXPECTED &&
-        //    error.getCause() instanceof IllegalArgumentException) {
-        //    // Maybe it's because of auto frame rate.
-        //    // Such error may occur when pausing activity.
-        //    return;
-        //}
+        // NOTE: Player is released at this point. So, there is no sense to restore the playback here.
 
         mEventListener.onEngineError(error.type);
     }
@@ -396,7 +391,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public void setVolume(float volume) {
         if (mPlayer != null && volume >= 0) {
-            mPlayer.setVolume(volume);
+            mPlayer.setVolume(Math.min(volume, 1f));
+
+            applyVolumeBoost(volume);
         }
     }
 
@@ -424,6 +421,22 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private void setQualityInfo(String qualityInfoStr) {
         if (mPlayerView != null && qualityInfoStr != null) {
             mPlayerView.setQualityInfo(qualityInfoStr);
+        }
+    }
+
+    private void applyVolumeBoost(float volume) {
+        if (mPlayer == null) {
+            return;
+        }
+
+        if (mVolumeBooster != null) {
+            mPlayer.removeAudioListener(mVolumeBooster);
+            mVolumeBooster = null;
+        }
+
+        if (volume > 1f && Build.VERSION.SDK_INT >= 19) {
+            mVolumeBooster = new VolumeBooster(true, volume);
+            mPlayer.addAudioListener(mVolumeBooster);
         }
     }
 }

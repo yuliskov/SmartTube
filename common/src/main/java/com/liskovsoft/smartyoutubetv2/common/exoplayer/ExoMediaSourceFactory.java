@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.ext.cronet.CronetDataSourceFactory;
+import com.google.android.exoplayer2.ext.cronet.CronetEngineWrapper;
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -27,24 +29,25 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSource.Factory;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.liskovsoft.sharedutils.cronet.CronetManager;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
+import com.liskovsoft.youtubeapi.common.helpers.DefaultHeaders;
 import com.liskovsoft.sharedutils.okhttp.OkHttpCommons;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.ErrorDefaultDashChunkSource;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
-import com.liskovsoft.youtubeapi.app.AppConstants;
-import com.liskovsoft.youtubeapi.common.helpers.RetrofitHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class ExoMediaSourceFactory {
     private static final String TAG = ExoMediaSourceFactory.class.getSimpleName();
@@ -81,6 +84,10 @@ public class ExoMediaSourceFactory {
         }
 
         return sInstance;
+    }
+
+    public static void unhold() {
+        sInstance = null;
     }
 
     //private void prepareMediaForPlaying(Uri mediaSourceUri) {
@@ -127,10 +134,8 @@ public class ExoMediaSourceFactory {
      * @return A new DataSource factory.
      */
     private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
-        PlayerTweaksData tweaksData = PlayerTweaksData.instance(mContext);
         DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
-        return new DefaultDataSourceFactory(mContext, bandwidthMeter,
-                tweaksData.isBufferingFixEnabled() ? buildOkHttpDataSourceFactory(bandwidthMeter) : buildDefaultHttpDataSourceFactory(bandwidthMeter));
+        return new DefaultDataSourceFactory(mContext, bandwidthMeter, buildHttpDataSourceFactory(useBandwidthMeter));
     }
 
     /**
@@ -142,8 +147,11 @@ public class ExoMediaSourceFactory {
      */
     private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
         PlayerTweaksData tweaksData = PlayerTweaksData.instance(mContext);
+        int source = tweaksData.getPlayerDataSource();
         DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
-        return tweaksData.isBufferingFixEnabled() ? buildOkHttpDataSourceFactory(bandwidthMeter) : buildDefaultHttpDataSourceFactory(bandwidthMeter);
+        return source == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? buildOkHttpDataSourceFactory(bandwidthMeter) :
+                        source == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET && CronetManager.getEngine(mContext) != null ? buildCronetDataSourceFactory(bandwidthMeter) :
+                                buildDefaultHttpDataSourceFactory(bandwidthMeter);
     }
 
     @SuppressWarnings("deprecation")
@@ -248,25 +256,20 @@ public class ExoMediaSourceFactory {
         return result;
     }
 
-    ///**
-    // * https://exoplayer.dev/network-stacks.html
-    // */
-    //private static HttpDataSource.Factory buildCronetDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-    //    // OkHttpHelpers.getOkHttpClient()
-    //    // RetrofitHelper.createOkHttpClient()
-    //    CronetDataSource.Factory dataSourceFactory = new CronetDataSource.Factory(cronetEngine, executor);
-    //    addCommonHeaders(dataSourceFactory);
-    //    return dataSourceFactory;
-    //}
-
     /**
      * Use OkHttp for networking
      */
-    private static HttpDataSource.Factory buildOkHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        // OkHttpHelpers.getOkHttpClient()
-        // RetrofitHelper.createOkHttpClient()
-        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(RetrofitHelper.createOkHttpClient(), AppConstants.APP_USER_AGENT,
+    private HttpDataSource.Factory buildOkHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpManager.instance().getClient(), DefaultHeaders.APP_USER_AGENT,
                 bandwidthMeter);
+        addCommonHeaders(dataSourceFactory);
+        return dataSourceFactory;
+    }
+
+    private HttpDataSource.Factory buildCronetDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        CronetDataSourceFactory dataSourceFactory =
+                new CronetDataSourceFactory(
+                        new CronetEngineWrapper(CronetManager.getEngine(mContext)), Executors.newSingleThreadExecutor(), null, bandwidthMeter, DefaultHeaders.APP_USER_AGENT);
         addCommonHeaders(dataSourceFactory);
         return dataSourceFactory;
     }
@@ -274,19 +277,12 @@ public class ExoMediaSourceFactory {
     /**
      * Use built-in component for networking
      */
-    private static HttpDataSource.Factory buildDefaultHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        //DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
-        //        AppConstants.APP_USER_AGENT, bandwidthMeter);
-
+    private HttpDataSource.Factory buildDefaultHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
-                AppConstants.APP_USER_AGENT, bandwidthMeter, (int) OkHttpCommons.CONNECT_TIMEOUT_MS,
+                DefaultHeaders.APP_USER_AGENT, bandwidthMeter, (int) OkHttpCommons.CONNECT_TIMEOUT_MS,
                 (int) OkHttpCommons.READ_TIMEOUT_MS, true); // allowCrossProtocolRedirects = true
 
         addCommonHeaders(dataSourceFactory); // cause troubles for some users
-        //if (YouTubeSignInManager.mAuthorizationHeaderCached != null) {
-        //    dataSourceFactory.getDefaultRequestProperties().set("Authorization", YouTubeSignInManager.mAuthorizationHeaderCached);
-        //}
-
         return dataSourceFactory;
     }
 
@@ -294,7 +290,7 @@ public class ExoMediaSourceFactory {
         //HeaderManager headerManager = new HeaderManager(context);
         //HashMap<String, String> headers = headerManager.getHeaders();
 
-        // NOTE: "Accept-Encoding" should set to "identity" or not present
+        // NOTE: "Accept-Encoding" should not be set manually (gzip is added by default).
 
         //for (String header : headers.keySet()) {
         //    if (EXO_HEADERS.contains(header)) {
@@ -313,9 +309,11 @@ public class ExoMediaSourceFactory {
         //dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-mode", "cors");
         //dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-site", "cross-site");
 
-        // WARN: Won't work on Exo 2.10!!!
-        // Compress response (WARN: gzip, deflate or br aren't supported in dash urls)
-        // dataSourceFactory.getDefaultRequestProperties().set("Accept-Encoding", AppConstants.ACCEPT_ENCODING);
+        // WARN: Compression won't work with legacy streams.
+        // "Accept-Encoding" should not be set manually (gzip is added by default).
+        // Otherwise you should do decompression yourself.
+        // Source: https://stackoverflow.com/questions/18898959/httpurlconnection-not-decompressing-gzip/42346308#42346308
+        //dataSourceFactory.getDefaultRequestProperties().set("Accept-Encoding", AppConstants.ACCEPT_ENCODING_DEFAULT);
     }
 
     public void setTrackErrorFixer(TrackErrorFixer trackErrorFixer) {

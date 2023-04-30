@@ -13,7 +13,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers;
+import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -116,7 +116,7 @@ public class WebProxyDialog {
         mProxyManager.configureSystemProxy();
 
         String[] testUrls = mContext.getString(R.string.proxy_test_urls).split("\n");
-        OkHttpClient okHttpClient = OkHttpHelpers.createOkHttpClient();
+        OkHttpClient okHttpClient = OkHttpManager.instance().getClient();
 
         for (String urlString: testUrls) {
             int serialNo = ++ mNumTests;
@@ -197,7 +197,8 @@ public class WebProxyDialog {
             } else {
                 Log.d(TAG, "Saving proxy info: " + proxy);
                 mProxyManager.saveProxyInfoToPrefs(proxy, true);
-                mProxyManager.configureSystemProxy();
+                // Proxy applied on dismiss
+                //mProxyManager.configureSystemProxy();
                 for (Call call: mUrlTests) call.cancel();
                 mProxyConfigDialog.dismiss();
             }
@@ -224,7 +225,8 @@ public class WebProxyDialog {
             }
             if (proxy != null) {
                 Log.d(TAG, "Saving proxy info: " + proxy);
-                mProxyManager.saveProxyInfoToPrefs(proxy, true);
+                // Proxy saved on OK button press
+                //mProxyManager.saveProxyInfoToPrefs(proxy, true);
                 mProxyManager.configureSystemProxy();
                 for (Call call: mUrlTests) call.cancel();
             }

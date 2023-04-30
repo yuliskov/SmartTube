@@ -7,11 +7,9 @@ import com.google.android.exoplayer2.Renderer;
 import com.google.android.exoplayer2.audio.AudioCapabilities;
 import com.google.android.exoplayer2.audio.AudioProcessor;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
-import com.google.android.exoplayer2.audio.AudioSink;
 import com.google.android.exoplayer2.audio.DefaultAudioSink;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
-import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 import com.google.android.exoplayer2.util.AmazonQuirks;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
@@ -152,8 +150,8 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
                                        long allowedVideoJoiningTimeMs, ArrayList<Renderer> out) {
         super.buildVideoRenderers(context, extensionRendererMode, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys,
                 enableDecoderFallback, eventHandler, eventListener, allowedVideoJoiningTimeMs, out);
-
-        if (!mPlayerTweaksData.isFrameDropFixEnabled() && !mPlayerTweaksData.isAmlogicFixEnabled()) {
+        
+        if (!mPlayerTweaksData.isAmazonFrameDropFixEnabled() && !mPlayerTweaksData.isSonyFrameDropFixEnabled() && !mPlayerTweaksData.isAmlogicFixEnabled()) {
             // Improve performance a bit by eliminating some if conditions presented in tweaks.
             // But we need to obtain codec real name somehow. So use interceptor below.
 
@@ -161,8 +159,9 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
                     new DebugInfoMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
                         playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
 
+            videoRenderer.enableSetOutputSurfaceWorkaround(true); // Force enable?
+
             replaceVideoRenderer(out, videoRenderer);
-            videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
 
             return;
         }
@@ -171,9 +170,10 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
                 new TweaksMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
                         playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
 
-        videoRenderer.enableFrameDropFix(mPlayerTweaksData.isFrameDropFixEnabled());
+        videoRenderer.enableFrameDropFix(mPlayerTweaksData.isAmazonFrameDropFixEnabled());
+        videoRenderer.enableFrameDropSonyFix(mPlayerTweaksData.isSonyFrameDropFixEnabled());
         videoRenderer.enableAmlogicFix(mPlayerTweaksData.isAmlogicFixEnabled());
-        videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
+        videoRenderer.enableSetOutputSurfaceWorkaround(true); // Force enable?
 
         replaceVideoRenderer(out, videoRenderer);
     }

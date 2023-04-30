@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEventBridge;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -49,13 +49,14 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     /**
      * Opens video item from splash view
      */
-    public void openVideo(String videoId, boolean finishOnEnded) {
+    public void openVideo(String videoId, boolean finishOnEnded, long timeMs) {
         if (videoId == null) {
             return;
         }
 
         Video video = Video.from(videoId);
         video.finishOnEnded = finishOnEnded;
+        video.pendingPosMs = timeMs;
         openVideo(video);
     }
 
@@ -87,9 +88,9 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
 
     public boolean isRunningInBackground() {
         return getView() != null &&
-                getView().getController().getBackgroundMode() != PlaybackEngineController.BACKGROUND_MODE_DEFAULT &&
+                getView().getController().getBackgroundMode() != PlaybackEngine.BACKGROUND_MODE_DEFAULT &&
                 getView().getController().isEngineInitialized() &&
-                !Utils.isPlayerInForeground(getContext()) &&
+                !ViewManager.instance(getContext()).isPlayerInForeground() &&
                 getContext() instanceof Activity && Utils.checkActivity((Activity) getContext()); // Check that activity is not in Finishing state
     }
 
@@ -100,7 +101,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     private boolean isPreferBackground() {
         int mode = PlayerData.instance(getContext()).getBackgroundMode();
 
-        return mode != PlaybackEngineController.BACKGROUND_MODE_DEFAULT;
+        return mode != PlaybackEngine.BACKGROUND_MODE_DEFAULT;
     }
 
     public void forceFinish() {
@@ -116,7 +117,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     public void setPosition(long positionMs) {
         // Check that the user isn't open context menu on suggestion item
         // if (Utils.isPlayerInForeground(getContext()) && getView() != null && !getView().getController().isSuggestionsShown()) {
-        if (Utils.isPlayerInForeground(getContext()) && getView() != null) {
+        if (ViewManager.instance(getContext()).isPlayerInForeground() && getView() != null) {
             getView().getController().setPositionMs(positionMs);
             getView().getController().setPlayWhenReady(true);
             getView().getController().showOverlay(false);

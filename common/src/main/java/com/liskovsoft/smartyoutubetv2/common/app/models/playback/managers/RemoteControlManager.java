@@ -6,15 +6,15 @@ import android.os.Looper;
 import android.view.KeyEvent;
 import androidx.annotation.Nullable;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.RemoteService;
+import com.liskovsoft.mediaserviceinterfaces.RemoteControlService;
 import com.liskovsoft.mediaserviceinterfaces.data.Command;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUIController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -23,13 +23,11 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class RemoteControlManager extends PlayerEventListenerHelper implements OnDataChange {
     private static final String TAG = RemoteControlManager.class.getSimpleName();
-    private final RemoteService mRemoteManager;
+    private final RemoteControlService mRemoteControlService;
     private final RemoteControlData mRemoteControlData;
     private final SuggestionsLoaderManager mSuggestionsLoader;
     private final VideoLoaderManager mVideoLoader;
@@ -48,7 +46,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
         MediaService mediaService = YouTubeMediaService.instance();
         mSuggestionsLoader = suggestionsLoader;
         mVideoLoader = videoLoader;
-        mRemoteManager = mediaService.getRemoteService();
+        mRemoteControlService = mediaService.getRemoteControlService();
         mRemoteControlData = RemoteControlData.instance(context);
         mRemoteControlData.setOnChange(this);
         tryListening();
@@ -101,12 +99,12 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
     @Override
     public void onPlayEnd() {
         switch (PlayerData.instance(getActivity()).getRepeatMode()) {
-            case PlaybackUIController.REPEAT_MODE_CLOSE:
-            case PlaybackUIController.REPEAT_MODE_PAUSE:
-            case PlaybackUIController.REPEAT_MODE_ALL:
+            case PlaybackUI.REPEAT_MODE_CLOSE:
+            case PlaybackUI.REPEAT_MODE_PAUSE:
+            case PlaybackUI.REPEAT_MODE_ALL:
                 postPlay(false);
                 break;
-            case PlaybackUIController.REPEAT_MODE_ONE:
+            case PlaybackUI.REPEAT_MODE_ONE:
                 postStartPlaying(getController().getVideo(), true);
                 break;
         }
@@ -149,10 +147,10 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
             return;
         }
 
-        RxUtils.disposeActions(mPostStartPlayAction);
+        RxHelper.disposeActions(mPostStartPlayAction);
 
-        mPostStartPlayAction = RxUtils.execute(
-                mRemoteManager.postStartPlayingObserve(videoId, positionMs, durationMs, isPlaying)
+        mPostStartPlayAction = RxHelper.execute(
+                mRemoteControlService.postStartPlayingObserve(videoId, positionMs, durationMs, isPlaying)
         );
     }
 
@@ -161,10 +159,10 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
             return;
         }
 
-        RxUtils.disposeActions(mPostStateAction);
+        RxHelper.disposeActions(mPostStateAction);
 
-        mPostStateAction = RxUtils.execute(
-                mRemoteManager.postStateChangeObserve(positionMs, durationMs, isPlaying)
+        mPostStateAction = RxHelper.execute(
+                mRemoteControlService.postStateChangeObserve(positionMs, durationMs, isPlaying)
         );
     }
 
@@ -185,10 +183,10 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
             return;
         }
 
-        RxUtils.disposeActions(mPostVolumeAction);
+        RxHelper.disposeActions(mPostVolumeAction);
 
-        mPostVolumeAction = RxUtils.execute(
-                mRemoteManager.postVolumeChangeObserve(volume)
+        mPostVolumeAction = RxHelper.execute(
+                mRemoteControlService.postVolumeChangeObserve(volume)
         );
     }
 
@@ -205,7 +203,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
             return;
         }
 
-        mListeningAction = mRemoteManager.getCommandObserve()
+        mListeningAction = mRemoteControlService.getCommandObserve()
                 .subscribe(
                         this::processCommand,
                         error -> {
@@ -223,7 +221,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
     }
 
     private void stopListening() {
-        RxUtils.disposeActions(mListeningAction, mPostStartPlayAction, mPostStateAction, mPostVolumeAction);
+        RxHelper.disposeActions(mListeningAction, mPostStartPlayAction, mPostStateAction, mPostVolumeAction);
     }
 
     private void processCommand(Command command) {
@@ -315,7 +313,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
                 break;
             case Command.TYPE_GET_STATE:
                 if (getController() != null) {
-                    Utils.moveAppToForeground(getActivity());
+                    ViewManager.instance(getActivity()).moveAppToForeground();
                     postStartPlaying(getController().getVideo(), getController().isPlaying());
                 } else {
                     postStartPlaying(null, false);
@@ -381,17 +379,17 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
                         break;
                 }
                 if (key != KeyEvent.KEYCODE_UNKNOWN) {
-                    RxUtils.disposeActions(mActionDown, mActionUp);
+                    RxHelper.disposeActions(mActionDown, mActionUp);
 
                     final int resultKey = key;
 
                     if (isLongAction) {
-                        mActionDown = RxUtils.runAsync(() ->
+                        mActionDown = RxHelper.runAsync(() ->
                                 Utils.sendKey(new KeyEvent(KeyEvent.ACTION_DOWN, resultKey)));
-                        mActionUp = RxUtils.runAsync(() ->
+                        mActionUp = RxHelper.runAsync(() ->
                                 Utils.sendKey(new KeyEvent(KeyEvent.ACTION_UP, resultKey)), 500);
                     } else {
-                        mActionDown = RxUtils.runAsync(() -> Utils.sendKey(resultKey));
+                        mActionDown = RxHelper.runAsync(() -> Utils.sendKey(resultKey));
                     }
                 }
                 break;
@@ -414,7 +412,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
     }
 
     private void openNewVideo(Video newVideo) {
-        if (Video.equals(mVideo, newVideo) && Utils.isPlayerInForeground(getActivity())) { // same video already playing
+        if (Video.equals(mVideo, newVideo) && ViewManager.instance(getActivity()).isPlayerInForeground()) { // same video already playing
             mVideo.playlistId = newVideo.playlistId;
             mVideo.playlistIndex = newVideo.playlistIndex;
             mVideo.playlistParams = newVideo.playlistParams;
@@ -453,10 +451,10 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
     }
 
     private void movePlayerToForeground() {
-        Utils.movePlayerToForeground(getActivity());
+        ViewManager.instance(getActivity()).movePlayerToForeground();
         // Device wake fix when player isn't started yet or been closed
         if (getController() == null || !Utils.checkActivity(getActivity())) {
-            new Handler(Looper.myLooper()).postDelayed(() -> Utils.movePlayerToForeground(getActivity()), 5_000);
+            new Handler(Looper.myLooper()).postDelayed(() -> ViewManager.instance(getActivity()).movePlayerToForeground(), 5_000);
         }
     }
 }

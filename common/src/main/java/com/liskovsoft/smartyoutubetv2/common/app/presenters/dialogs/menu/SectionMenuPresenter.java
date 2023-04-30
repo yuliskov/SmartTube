@@ -65,12 +65,10 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        updateEnabledMenuItems();
-
         disposeActions();
 
         mSection = section;
-        mVideo = section.getData();
+        mVideo = section.getData() instanceof Video ? (Video) section.getData() : null;
 
         MediaServiceManager.instance().authCheck(this::obtainPlaylistsAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
     }
@@ -83,8 +81,6 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         if (getContext() == null) {
             return;
         }
-
-        mDialogPresenter.clear();
 
         appendReturnToBackgroundVideoButton();
         appendRefreshButton();
@@ -109,8 +105,6 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         if (getContext() == null) {
             return;
         }
-
-        mDialogPresenter.clear();
 
         appendReturnToBackgroundVideoButton();
         appendRefreshButton();
@@ -191,6 +185,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
                             newValue -> {
                                 mSection.setTitle(newValue);
                                 BrowsePresenter.instance(getContext()).renameSection(mSection);
+                                return true;
                             },
                             getContext().getString(R.string.rename_section)
                     );

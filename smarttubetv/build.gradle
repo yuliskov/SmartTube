@@ -59,8 +59,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 857
-        versionName "16.67"
+        versionCode 972
+        versionName "17.82"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -151,6 +151,12 @@ android {
     packagingOptions {
         // openvpn module fix: More than one file was found with OS independent path 'META-INF/com.android.tools/proguard/coroutines.pro'
         //exclude 'META-INF/com.android.tools/proguard/coroutines.pro'
+        // Not working!
+        // exclude '**/SearchOrbView.class'
+    }
+
+    lintOptions {
+        checkReleaseBuilds false // fix for ClassNotFoundException: com.android.tools.lint.client.api.Vendor
     }
 }
 

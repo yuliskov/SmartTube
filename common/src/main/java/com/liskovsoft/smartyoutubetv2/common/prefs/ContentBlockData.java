@@ -30,7 +30,7 @@ public class ContentBlockData {
     private boolean mIsSponsorBlockEnabled;
     private final Set<String> mColorCategories = new LinkedHashSet<>();
     private final Set<SegmentAction> mActions = new LinkedHashSet<>();
-    private boolean mIsSkipEachSegmentOnceEnabled;
+    private boolean mIsDontSkipSegmentAgainEnabled;
     private Map<String, Integer> mSegmentLocalizedMapping;
     private Map<String, Integer> mSegmentColorMapping;
     private Set<String> mAllCategories;
@@ -60,7 +60,7 @@ public class ContentBlockData {
         mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_INTERACTION, R.string.content_block_interaction);
         mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, R.string.content_block_music_off_topic);
         mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_PREVIEW_RECAP, R.string.content_block_preview_recap);
-        mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_HIGHLIGHT, R.string.content_block_highlight);
+        mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_POI_HIGHLIGHT, R.string.content_block_highlight);
         mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_FILLER, R.string.content_block_filler);
     }
 
@@ -73,7 +73,7 @@ public class ContentBlockData {
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_INTERACTION, R.color.magenta);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, R.color.orange_peel);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_PREVIEW_RECAP, R.color.light_blue);
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_HIGHLIGHT, R.color.white);
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_POI_HIGHLIGHT, R.color.light_pink);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_FILLER, R.color.electric_violet);
     }
 
@@ -86,7 +86,7 @@ public class ContentBlockData {
         mAllCategories.add(SponsorSegment.CATEGORY_SELF_PROMO);
         mAllCategories.add(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC);
         mAllCategories.add(SponsorSegment.CATEGORY_PREVIEW_RECAP);
-        mAllCategories.add(SponsorSegment.CATEGORY_HIGHLIGHT);
+        mAllCategories.add(SponsorSegment.CATEGORY_POI_HIGHLIGHT);
         mAllCategories.add(SponsorSegment.CATEGORY_FILLER);
     }
 
@@ -171,12 +171,12 @@ public class ContentBlockData {
         return false;
     }
 
-    public boolean isSkipEachSegmentOnceEnabled() {
-        return mIsSkipEachSegmentOnceEnabled;
+    public boolean isDontSkipSegmentAgainEnabled() {
+        return mIsDontSkipSegmentAgainEnabled;
     }
 
-    public void enableSkipEachSegmentOnce(boolean enabled) {
-        mIsSkipEachSegmentOnceEnabled = enabled;
+    public void enableDontSkipSegmentAgain(boolean enabled) {
+        mIsDontSkipSegmentAgainEnabled = enabled;
         persistData();
     }
 
@@ -195,10 +195,11 @@ public class ContentBlockData {
 
         mIsSponsorBlockEnabled = Helpers.parseBoolean(split, 0, VERSION.SDK_INT > 19); // Android 4 may have memory problems
         // categories: index 2
-        mIsSkipEachSegmentOnceEnabled = Helpers.parseBoolean(split, 3, false);
+        // don't skip segment
         // colorMarkers: index 4
         String actions = Helpers.parseStr(split, 6);
         String colorCategories = Helpers.parseStr(split, 7);
+        mIsDontSkipSegmentAgainEnabled = Helpers.parseBoolean(split, 8, true);
 
         if (colorCategories != null) {
             String[] categoriesArr = Helpers.splitArray(colorCategories);
@@ -241,8 +242,8 @@ public class ContentBlockData {
         String actions = Helpers.mergeArray(mActions.toArray());
 
         mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeObject(
-                mIsSponsorBlockEnabled, null, null, mIsSkipEachSegmentOnceEnabled,
-                null, null, actions, colorCategories
+                mIsSponsorBlockEnabled, null, null, null,
+                null, null, actions, colorCategories, mIsDontSkipSegmentAgainEnabled
         ));
     }
 }

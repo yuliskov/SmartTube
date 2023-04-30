@@ -27,6 +27,8 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.vineyard.TagPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.search.SearchSupportFragment;
 import net.gotev.speech.Speech;
@@ -46,6 +48,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     //private ObjectAdapter mItemResultsAdapter;
     private ArrayObjectAdapter mResultsAdapter; // contains tags adapter and results adapter (see attachAdapter method)
     private ListRowPresenter mResultsPresenter;
+    private TagPresenter mTagsPresenter;
 
     private boolean mIsStopping;
     private SearchTagsProvider mSearchTagsProvider;
@@ -58,7 +61,8 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         mProgressBarManager = new ProgressBarManager();
         mResultsPresenter = new CustomListRowPresenter();
         mResultsAdapter = new ArrayObjectAdapter(mResultsPresenter);
-        mSearchTagsAdapter = new TagAdapter(getActivity(), "");
+        mTagsPresenter = new TagPresenter();
+        mSearchTagsAdapter = new TagAdapter(getActivity(), mTagsPresenter, "");
         setSearchResultProvider(this);
         setupListenersAndPermissions();
     }
@@ -126,6 +130,10 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         mSearchTagsProvider = provider;
     }
 
+    protected void setSearchTagsLongPressListener(OnItemLongPressedListener listener) {
+        mTagsPresenter.setOnItemViewLongPressedListener(listener);
+    }
+
     public boolean isStopping() {
         return mIsStopping;
     }
@@ -177,7 +185,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         performTagSearch(mSearchTagsAdapter);
     }
 
-    private void performTagSearch(PaginationAdapter adapter) {
+    private void performTagSearch(TagAdapter adapter) {
         String query = adapter.getAdapterOptions().get(PaginationAdapter.KEY_TAG);
         mSearchTagsProvider.search(query, results -> {
             adapter.addAllItems(results);
@@ -239,7 +247,13 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         }
     }
 
-    private boolean containsAdapter(ObjectAdapter adapter) {
+    protected void clearTags() {
+        if (containsAdapter(mSearchTagsAdapter)) {
+            detachAdapter(0);
+        }
+    }
+
+    protected boolean containsAdapter(ObjectAdapter adapter) {
         if (mResultsAdapter != null) {
             for (int i = 0; i < mResultsAdapter.size(); i++) {
                 ListRow row = (ListRow) mResultsAdapter.get(i);

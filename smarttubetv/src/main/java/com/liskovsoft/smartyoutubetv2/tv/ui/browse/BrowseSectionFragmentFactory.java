@@ -8,6 +8,8 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.CategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
@@ -65,6 +67,9 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
                 break;
             case BrowseSection.TYPE_MULTI_GRID:
                 fragment = new MultiVideoGridFragment();
+                break;
+            case BrowseSection.TYPE_ERROR:
+                fragment = new ErrorDialogFragment((ErrorFragmentData) ((SectionHeaderItem) header).getSection().getData());
                 break;
         }
 

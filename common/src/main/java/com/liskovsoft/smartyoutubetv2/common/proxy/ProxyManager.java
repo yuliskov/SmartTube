@@ -15,6 +15,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
 import java.net.URISyntaxException;
 
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
@@ -226,6 +228,16 @@ public class ProxyManager {
         PasswdInetSocketAddress proxyAddr = (PasswdInetSocketAddress) proxy.address();
         String username = proxyAddr != null ? proxyAddr.getUsername() : null;
         String password = proxyAddr != null ? proxyAddr.getPassword() : null;
+
+        if (username != null && password != null) {
+            Authenticator.setDefault(new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(username, password.toCharArray());
+                }
+            });
+        }
+
         switch (proxy.type()) {
             case HTTP:
                 System.setProperty("http.proxyHost", proxyAddr.getHostString());

@@ -22,7 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.ExtendedCardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageCardView;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
@@ -31,7 +31,7 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
  * It contains an Image CardView
  */
-public class VideoCardPresenter extends ExtendedCardPresenter {
+public class VideoCardPresenter extends LongClickPresenter {
     private static final String TAG = VideoCardPresenter.class.getSimpleName();
     private int mDefaultBackgroundColor = -1;
     private int mDefaultTextColor = -1;
@@ -39,10 +39,6 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
     private int mSelectedTextColor = -1;
     private Drawable mDefaultCardImage;
     private boolean mIsAnimatedPreviewsEnabled;
-    private boolean mIsCardMultilineTitleEnabled;
-    private boolean mIsCardMultilineSubtitleEnabled;
-    private boolean mIsCardTextAutoScrollEnabled;
-    private float mCardTextScrollSpeed;
     private int mThumbQuality;
     private int mWidth;
     private int mHeight;
@@ -62,11 +58,12 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
         mDefaultCardImage = new ColorDrawable(ContextCompat.getColor(context, R.color.lb_grey));
 
         mIsAnimatedPreviewsEnabled = isCardAnimatedPreviewsEnabled(context);
-        mIsCardMultilineTitleEnabled = isCardMultilineTitleEnabled(context);
-        mIsCardMultilineSubtitleEnabled = isCardMultilineSubtitleEnabled(context);
-        mIsCardTextAutoScrollEnabled = isCardTextAutoScrollEnabled(context);
-        mCardTextScrollSpeed = getCardTextScrollSpeed(context);
         mThumbQuality = getThumbQuality(context);
+
+        boolean isCardMultilineTitleEnabled = isCardMultilineTitleEnabled(context);
+        boolean isCardMultilineSubtitleEnabled = isCardMultilineSubtitleEnabled(context);
+        boolean isCardTextAutoScrollEnabled = isCardTextAutoScrollEnabled(context);
+        float cardTextScrollSpeed = getCardTextScrollSpeed(context);
 
         updateDimensions(context);
 
@@ -78,10 +75,10 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
             }
         };
 
-        cardView.setTitleLinesNum(mIsCardMultilineTitleEnabled ? 2 : 1);
-        cardView.setContentLinesNum(mIsCardMultilineSubtitleEnabled ? 2 : 1);
-        cardView.enableTextAutoScroll(mIsCardTextAutoScrollEnabled);
-        cardView.setTextScrollSpeed(mCardTextScrollSpeed);
+        cardView.setTitleLinesNum(isCardMultilineTitleEnabled ? 2 : 1);
+        cardView.setContentLinesNum(isCardMultilineSubtitleEnabled ? 2 : 1);
+        cardView.enableTextAutoScroll(isCardTextAutoScrollEnabled);
+        cardView.setTextScrollSpeed(cardTextScrollSpeed);
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
         cardView.enableBadge(isBadgeEnabled());
@@ -141,7 +138,10 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
                 //.asBitmap() // disable animation (webp, gif)
                 .load(ClickbaitRemover.updateThumbnail(video, mThumbQuality))
                 //.placeholder(mDefaultCardImage)
-                .apply(ViewUtil.glideOptions())
+                .apply(ViewUtil.glideOptions()
+                    // improve image compression on low end devices
+                    .override(mWidth, mHeight)
+                )
                 .listener(mErrorListener)
                 .error(
                     // Updated thumbnail url not found

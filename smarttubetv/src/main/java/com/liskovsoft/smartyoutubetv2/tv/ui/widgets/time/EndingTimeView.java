@@ -7,16 +7,19 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
+import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
-public class EndingTimeView extends TextView implements TickleListener {
+public class EndingTimeView extends TextView implements TickleListener, OnDataChange {
     private TickleManager mTickleManager;
+    private PlayerData mPlayerData;
     private boolean mIconIsSet;
 
     public EndingTimeView(Context context) {
@@ -36,6 +39,7 @@ public class EndingTimeView extends TextView implements TickleListener {
 
     private void init() {
         mTickleManager = TickleManager.instance();
+        mPlayerData = PlayerData.instance(getContext());
         updateListener();
     }
 
@@ -51,8 +55,10 @@ public class EndingTimeView extends TextView implements TickleListener {
     private void updateListener() {
         if (getVisibility() == View.VISIBLE) {
             mTickleManager.addListener(this);
+            mPlayerData.setOnChange(this);
         } else {
             mTickleManager.removeListener(this);
+            mPlayerData.removeOnChange(this);
         }
     }
 
@@ -64,6 +70,11 @@ public class EndingTimeView extends TextView implements TickleListener {
     }
 
     @Override
+    public void onDataChange() {
+        update();
+    }
+
+    @Override
     public void onTickle() {
         update();
     }
@@ -72,7 +83,7 @@ public class EndingTimeView extends TextView implements TickleListener {
         if (getVisibility() == View.VISIBLE) {
             String endingTime = getEndingTime();
 
-            setText(!TextUtils.isEmpty(endingTime) ? String.format("⌛ %s", endingTime) : null);
+            setText(!TextUtils.isEmpty(endingTime) ? String.format("%s %s", Helpers.HOURGLASS, endingTime) : null);
 
             //if (endingTime != null) {
             //    // https://stackoverflow.com/questions/5437674/what-unicode-characters-represent-time/9454080
@@ -116,7 +127,7 @@ public class EndingTimeView extends TextView implements TickleListener {
     }
 
     private long applySpeedCorrection(long timeMs) {
-        timeMs = (long) (timeMs / PlayerData.instance(getContext()).getSpeed());
+        timeMs = (long) (timeMs / mPlayerData.getSpeed());
 
         return timeMs >= 0 ? timeMs : 0;
     }

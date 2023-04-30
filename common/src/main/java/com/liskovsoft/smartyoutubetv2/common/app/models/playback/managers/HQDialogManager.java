@@ -48,8 +48,6 @@ public class HQDialogManager extends PlayerEventListenerHelper {
 
     @Override
     public void onHighQualityClicked() {
-        mAppDialogPresenter.clear();
-
         addQualityCategories();
         addVideoBufferCategory();
         addPresetsCategory();
@@ -135,7 +133,7 @@ public class HQDialogManager extends PlayerEventListenerHelper {
 
     private void addPresetsCategory() {
         addCategoryInt(AppDialogUtil.createVideoPresetsCategory(
-                getActivity(), mPlayerData, () -> {
+                getActivity(), () -> {
                     if (getController() == null) {
                         return;
                     }

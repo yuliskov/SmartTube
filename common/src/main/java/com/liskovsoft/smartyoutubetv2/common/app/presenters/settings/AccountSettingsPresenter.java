@@ -47,9 +47,12 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         mMediaServiceManager.loadAccounts(this::createAndShowDialog);
     }
 
+    public void nextAccountOrDialog() {
+        mMediaServiceManager.loadAccounts(this::nextAccountOrDialog);
+    }
+
     private void createAndShowDialog(List<Account> accounts) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
 
         appendSelectAccountSection(accounts, settingsPresenter);
         appendAddAccountButton(settingsPresenter);
@@ -124,6 +127,29 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         }, AccountsData.instance(getContext()).isSelectAccountOnBootEnabled()));
     }
 
+    private void nextAccountOrDialog(List<Account> accounts) {
+        if (accounts == null || accounts.isEmpty()) {
+            createAndShowDialog(accounts);
+            return;
+        }
+
+        Account current = null;
+
+        for (Account account : accounts) {
+            if (account.isSelected()) {
+                current = account;
+                break;
+            }
+        }
+
+        int index = accounts.indexOf(current);
+
+        int nextIndex = index + 1;
+        // null == 'without account'
+        selectAccount(nextIndex == accounts.size() ? null : accounts.get(nextIndex));
+        //selectAccount(accounts.get(nextIndex == accounts.size() ? 0 : nextIndex));
+    }
+
     private String getFullName(Account account) {
         String format;
 
@@ -142,11 +168,11 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
     private void selectAccount(Account account) {
         mMediaServiceManager.getSingInManager().selectAccount(account);
-        BrowsePresenter.instance(getContext()).refresh();
+        BrowsePresenter.instance(getContext()).refresh(false);
     }
 
     private void removeAccount(Account account) {
         mMediaServiceManager.getSingInManager().removeAccount(account);
-        BrowsePresenter.instance(getContext()).refresh();
+        BrowsePresenter.instance(getContext()).refresh(false);
     }
 }

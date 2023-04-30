@@ -41,7 +41,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
@@ -71,7 +71,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.SeekModePlaybackFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface.SurfacePlaybackFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigator;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.StoryboardSeekDataProvider;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.previewtimebar.StoryboardSeekDataProvider;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.LiveChatView;
@@ -89,7 +89,7 @@ import java.util.Map;
  */
 public class PlaybackFragment extends SeekModePlaybackFragment implements PlaybackView, PlaybackController {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
-    private static final int UPDATE_DELAY_MS = 16;
+    private static final int UPDATE_DELAY_MS = 100;
     private static final int SUGGESTIONS_START_INDEX = 1;
     private VideoPlayerGlue mPlayerGlue;
     private SimpleExoPlayer mPlayer;
@@ -105,12 +105,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private DebugInfoManager mDebugInfoManager;
     private UriBackgroundManager mBackgroundManager;
     private RowsSupportFragment mRowsSupportFragment;
-    private final boolean mIsAnimationEnabled = true;
-    private int mPlaybackMode = PlaybackEngineController.BACKGROUND_MODE_DEFAULT;
+    private final boolean mIsAnimationEnabled = false;
+    private int mPlaybackMode = PlaybackEngine.BACKGROUND_MODE_DEFAULT;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
-    private boolean mIsAfrRunning;
+    private long mResumeTimeMs;
     private Boolean mIsControlsShownPreviously;
+    private Video mPendingFocus;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -167,7 +168,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         // Fix controls pop-up on Activity start/resume.
         // Should be called on earlier stage.
-        hideControlsOverlay(mIsAnimationEnabled);
+        hideControlsOverlay(true);
 
         if (Util.SDK_INT > 23) {
             initializePlayer();
@@ -198,6 +199,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mEventListener.onViewResumed();
 
         showHideWidgets(true); // PIP mode fix
+
+        mResumeTimeMs = System.currentTimeMillis();
     }
 
     @Override
@@ -233,7 +236,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void onFinish() {
         // Fix background play when playing trailers from NUM
         // On API > 23 onStop not immediately occurred after onPause
-        if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
+        if (getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_DEFAULT) {
             if (Util.SDK_INT > 23) {
                 maybeReleasePlayer();
             }
@@ -310,7 +313,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
     }
 
-    private void maybeReleasePlayer() {
+    /**
+     * Internal method. Intended for enclosed Activity.
+     */
+    public void maybeReleasePlayer() {
         // Inside dialogs we could change engine settings on fly
         if (AppDialogPresenter.instance(getContext()).isDialogShown()) {
             Log.d(TAG, "releasePlayer: Engine release is blocked by dialog. Exiting...");
@@ -326,7 +332,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         //}
 
         // Ensure to continue playback in audio mode (activity should be blocked)
-        if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
+        if (getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_SOUND &&
                 ViewManager.instance(getContext()).getBlockedTop() == PlaybackActivity.class &&
                 !isInPIPMode()) {
             Log.d(TAG, "releasePlayer: Playback activity is blocked. Exiting...");
@@ -423,7 +429,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
         StoryboardSeekDataProvider.setSeekProvider(mPlayerGlue);
-        hideControlsOverlay(mIsAnimationEnabled); // fix player ui not synced correctly
+        hideControlsOverlay(true); // fix player ui not synced correctly
 
         mExoPlayerController.setPlayerView(mPlayerGlue);
     }
@@ -457,7 +463,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void createMediaSession() {
-        if (VERSION.SDK_INT <= 19) {
+        if (VERSION.SDK_INT <= 19 || getContext() == null) {
             // Fix Android 4.4 bug: java.lang.IllegalArgumentException: MediaButtonReceiver component may not be null
             return;
         }
@@ -465,6 +471,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mMediaSession = new MediaSessionCompat(getContext(), getContext().getPackageName());
         mMediaSession.setActive(true);
         mMediaSessionConnector = new MediaSessionConnector(mMediaSession);
+        boolean disableNotifications = PlayerTweaksData.instance(getContext()).isPlaybackNotificationsDisabled();
 
         try {
             mMediaSessionConnector.setPlayer(mPlayer);
@@ -475,8 +482,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        mMediaSessionConnector.setMediaMetadataProvider(player -> {
-            if (getVideo() == null || PlayerTweaksData.instance(getContext()).isPlaybackNotificationsDisabled()) {
+        mMediaSessionConnector.setMediaMetadataProvider(disableNotifications ? null : player -> {
+            if (getVideo() == null) {
                 return null;
             }
 
@@ -513,10 +520,16 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mMediaSessionConnector.setControlDispatcher(new DefaultControlDispatcher() {
             @Override
             public boolean dispatchSetPlayWhenReady(Player player, boolean playWhenReady) {
-                // Fix exoplayer pause when switching AFR.
-                // Also it's tied to activity state transitioning because window has different mode.
+                // Fix exoplayer pause after activity is resumed (AFR switching).
+                // It's tied to activity state transitioning because window has different mode.
                 // NOTE: may be a problems with background playback or bluetooth button events
-                if (mIsAfrRunning || (!isResumed() && !isInPIPMode())) {
+                //if (System.currentTimeMillis() - mResumeTimeMs < 5_000 ||
+                //        (!isResumed() && !isInPIPMode() && !AppDialogPresenter.instance(getContext()).isDialogShown())
+                //) {
+                //    return false;
+                //}
+
+                if (System.currentTimeMillis() - mResumeTimeMs < 5_000) {
                     return false;
                 }
 
@@ -555,22 +568,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             protected void onBindRowViewHolder(RowPresenter.ViewHolder holder, Object item) {
                 super.onBindRowViewHolder(holder, item);
 
-                // Set position of item inside first row (playlist items)
-                //if (getVideo() != null && getVideo().playlistIndex > 0 &&
-                //        mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
-                //    ViewHolder vh = (ViewHolder) holder;
-                //    vh.getGridView().setSelectedPosition(getVideo().playlistIndex);
-                //}
-
-                // Set position of item inside first row (playlist items)
-                if (mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
-                    int index = getCurrentVideoIndex();
-
-                    if (index > 0) {
-                        ViewHolder vh = (ViewHolder) holder;
-                        vh.getGridView().setSelectedPosition(index);
-                    }
+                if (mRowsSupportFragment == null) {
+                    return;
                 }
+
+                int previousPos = mRowsSupportFragment.getVerticalGridView().getSelectedPosition();
+
+                focusPendingSuggestedItem(holder, previousPos + 1);
             }
 
             @Override
@@ -582,37 +586,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         };
 
         mCardPresenter = new VideoCardPresenter();
-    }
-
-    private int getCurrentVideoIndex() {
-        if (getVideo() == null || !getVideo().hasPlaylist() || !getVideo().hasVideo()) {
-            return -1;
-        }
-
-        // NOTE: skip first row. It's PlaybackControlsRow
-        Object row = mRowsAdapter != null && mRowsAdapter.size() > 1 ? mRowsAdapter.get(1) : null;
-        int index = -1;
-
-        if (row instanceof ListRow) {
-            VideoGroupObjectAdapter adapter = (VideoGroupObjectAdapter) ((ListRow) row).getAdapter();
-            index = adapter.indexOfAlt(getVideo());
-
-            // Below doesn't work. onBindRowViewHolder won't called on update hidden list.
-            //if (index == -1) {
-            //    mEventListener.onScrollEnd((Video) adapter.get(adapter.size() - 1));
-            //}
-
-            // Select last possible item on fail (NOTE: skip queue because it doesn't contain current video)
-            if (index == -1 && !adapter.isEmpty()) {
-                int lastIndex = adapter.size() - 1;
-                Video lastVideo = (Video) adapter.get(lastIndex);
-                if (lastVideo.hasNextPageKey()) {
-                    index = lastIndex;
-                }
-            }
-        }
-
-        return index;
     }
 
     private void setupEventListeners() {
@@ -760,11 +733,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onContentBlock(boolean enabled) {
-            mEventListener.onContentBlockClicked(enabled);
-        }
-
-        @Override
         public void onChat(boolean enabled) {
             mEventListener.onChatClicked(enabled);
         }
@@ -807,6 +775,16 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         @Override
         public void onPlaybackQueue() {
             mEventListener.onPlaybackQueueClicked();
+        }
+
+        @Override
+        public void onAction(int actionId, int actionIndex) {
+            mEventListener.onButtonClicked(actionId, actionIndex);
+        }
+
+        @Override
+        public void onLongAction(int actionId, int actionIndex) {
+            mEventListener.onButtonLongClicked(actionId, actionIndex);
         }
 
         @Override
@@ -855,11 +833,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setAfrRunning(boolean isRunning) {
-        mIsAfrRunning = isRunning;
-    }
-
-    @Override
     public void loadStoryboard() {
         if (mPlayerGlue.getSeekProvider() instanceof StoryboardSeekDataProvider) {
             ((StoryboardSeekDataProvider) mPlayerGlue.getSeekProvider()).init(getVideo(), mExoPlayerController.getDurationMs());
@@ -867,9 +840,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void showError(String errorMessage) {
-        mPlayerGlue.setTitle(errorMessage);
-        showOverlay(true);
+    public void setTitle(String title) {
+        mPlayerGlue.setTitle(title);
     }
 
     @Override
@@ -1069,8 +1041,18 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public void setVideoZoom(int percents) {
+        setZoom(percents);
+    }
+
+    @Override
     public void setVideoAspectRatio(float ratio) {
         setAspectRatio(ratio);
+    }
+
+    @Override
+    public void setVideoRotation(int angle) {
+        setRotation(angle);
     }
 
     // End Engine Events
@@ -1107,7 +1089,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // E.g. after closing dialogs.
         releasePlayer();
 
-        mPlaybackPresenter.onViewDestroyed();
+        if (mPlaybackPresenter.getView() == this) {
+            mPlaybackPresenter.onViewDestroyed();
+        }
     }
 
     @Override
@@ -1153,7 +1137,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void showControlsOverlay(boolean runAnimation) {
-        super.showControlsOverlay(runAnimation);
+        super.showControlsOverlay(mIsAnimationEnabled);
 
         // Do throttle. Called so many times. Rely on boxing because initial state is unknown.
         if (mIsControlsShownPreviously != null && mIsControlsShownPreviously) {
@@ -1175,7 +1159,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void hideControlsOverlay(boolean runAnimation) {
-        super.hideControlsOverlay(runAnimation);
+        super.hideControlsOverlay(mIsAnimationEnabled);
 
         // Do throttle. Called so many times. Rely on boxing because initial state is unknown.
         if (mIsControlsShownPreviously != null && !mIsControlsShownPreviously) {
@@ -1198,22 +1182,20 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     @Override
     public void showOverlay(boolean show) {
-        if (isInPIPMode()) {
-            // UI couldn't be properly displayed in PIP mode
+        if (forbidShowOverlay(show)) {
             return;
         }
 
         if (show) {
-            showControlsOverlay(mIsAnimationEnabled);
+            showControlsOverlay(true);
         } else {
-            hideControlsOverlay(mIsAnimationEnabled);
+            hideControlsOverlay(true);
         }
     }
 
     @Override
     public void showSuggestions(boolean show) {
-        if (isInPIPMode()) {
-            // UI couldn't be properly displayed in PIP mode
+        if (forbidShowOverlay(show)) {
             return;
         }
 
@@ -1229,8 +1211,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     @Override
     public void showControls(boolean show) {
-        if (isInPIPMode()) {
-            // UI couldn't be properly displayed in PIP mode
+        if (forbidShowOverlay(show)) {
             return;
         }
 
@@ -1299,25 +1280,17 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setContentBlockButtonState(boolean selected) {
+    public void setChatButtonState(boolean selected) {
         if (mPlayerGlue != null) {
-            mPlayerGlue.setContentBlockButtonState(selected);
+            mPlayerGlue.setChatButtonState(selected);
         }
     }
 
     @Override
-    public void setChatButtonState(int buttonState) {
+    public void setButtonState(int buttonId, int buttonState) {
         if (mPlayerGlue != null) {
-            mPlayerGlue.setChatButtonState(buttonState);
+            mPlayerGlue.setActionIndex(buttonId, buttonState);
         }
-    }
-
-    private boolean isContentBlockEnabled() {
-        if (mPlayerGlue != null) {
-            return mPlayerGlue.isContentBlockButtonPressed();
-        }
-
-        return false;
     }
 
     @Override
@@ -1331,6 +1304,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void setSeekPreviewTitle(String title) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setSeekPreviewTitle(title);
+            mPlayerGlue.setBody(title);
         }
     }
 
@@ -1434,22 +1408,28 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(group.getId());
 
+        int index = getRowAdapterIndex(existingAdapter);
+
+        return index != -1 ? index - SUGGESTIONS_START_INDEX : -1;
+    }
+
+    private int getRowAdapterIndex(VideoGroupObjectAdapter adapter) {
         int index = -1;
 
         for (int i = 0; i < mRowsAdapter.size(); i++) {
             Object row = mRowsAdapter.get(i);
 
             if (row instanceof ListRow) {
-                ObjectAdapter adapter = ((ListRow) row).getAdapter();
+                ObjectAdapter current = ((ListRow) row).getAdapter();
 
-                if (adapter == existingAdapter) {
+                if (current == adapter) {
                     index = mRowsAdapter.indexOf(row);
                     break;
                 }
             }
         }
 
-        return index != -1 ? index - SUGGESTIONS_START_INDEX : -1;
+        return index;
     }
 
     @Override
@@ -1480,6 +1460,53 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             if (vh instanceof ListRowPresenter.ViewHolder) {
                 ((ListRowPresenter.ViewHolder) vh).getGridView().setSelectedPosition(index);
             }
+        }
+    }
+
+    @Override
+    public void focusSuggestedItem(Video video) {
+        if (video == null || video.group == null) {
+            return;
+        }
+
+        mPendingFocus = video;
+
+        if (mRowsSupportFragment != null) {
+            VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(video.group.getId());
+
+            if (existingAdapter == null) {
+                return;
+            }
+
+            int rowIndex = getRowAdapterIndex(existingAdapter);
+
+            ViewHolder vh = mRowsSupportFragment.getRowViewHolder(rowIndex);
+
+            focusPendingSuggestedItem(vh, rowIndex);
+        }
+    }
+
+    public void focusPendingSuggestedItem(ViewHolder rowViewHolder, int rowIndex) {
+        if (mPendingFocus == null || mPendingFocus.group == null || rowViewHolder == null) {
+            return;
+        }
+
+        VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mPendingFocus.group.getId());
+
+        if (existingAdapter == null) {
+            return;
+        }
+
+        if (getRowAdapterIndex(existingAdapter) != rowIndex) {
+            return;
+        }
+
+        int index = existingAdapter.indexOf(mPendingFocus);
+
+        // Skip PlaybackRowPresenter.ViewHolder
+        if (rowViewHolder instanceof ListRowPresenter.ViewHolder) {
+            mPendingFocus = null;
+            ((ListRowPresenter.ViewHolder) rowViewHolder).getGridView().setSelectedPosition(index);
         }
     }
 
@@ -1536,6 +1563,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         showBackgroundColor(R.color.player_background);
         setChatReceiver(null);
         setSeekBarSegments(null);
+        setSeekPreviewTitle(null);
     }
 
     /**
@@ -1557,5 +1585,12 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
                 liveChat.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         }
+    }
+
+    /**
+     * UI couldn't be properly displayed in PIP mode
+     */
+    private boolean forbidShowOverlay(boolean show) {
+        return show && isInPIPMode();
     }
 }

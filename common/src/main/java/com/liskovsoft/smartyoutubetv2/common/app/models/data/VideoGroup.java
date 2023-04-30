@@ -134,8 +134,16 @@ public class VideoGroup {
         return mTitle;
     }
 
+    /**
+     * The title is converted to unique row id.
+     */
     public void setTitle(String title) {
         mTitle = title;
+
+        // Important part. The title is converted to unique row id.
+        if (mMediaGroup != null) {
+            mMediaGroup.setTitle(title);
+        }
     }
 
     public int getId() {

@@ -25,7 +25,6 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
 
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        settingsPresenter.clear();
 
         appendSpeechRecognizerCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
@@ -62,6 +61,10 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.keyboard_auto_show),
                 option -> mSearchData.enableKeyboardAutoShow(option.isSelected()),
                 mSearchData.isKeyboardAutoShowEnabled()));
+
+        //options.add(UiOptionItem.from(getContext().getString(R.string.trending_searches),
+        //        option -> mSearchData.enableTrendingSearches(option.isSelected()),
+        //        mSearchData.isTrendingSearchesEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }

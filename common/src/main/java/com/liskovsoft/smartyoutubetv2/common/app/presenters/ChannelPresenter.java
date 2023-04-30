@@ -18,13 +18,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
 
@@ -38,6 +36,14 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private List<MediaGroup> mMediaGroups;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
+
+    private interface OnChannelId {
+        void onChannelId(String channelId);
+    }
+
+    public interface OnUploadsRow {
+        void onUploadsRow(Observable<MediaGroup> row);
+    }
 
     public ChannelPresenter(Context context) {
         super(context);
@@ -124,7 +130,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     @Override
     public boolean hasPendingActions() {
-        return RxUtils.isAnyActionRunning(mScrollAction, mUpdateAction);
+        return RxHelper.isAnyActionRunning(mScrollAction, mUpdateAction);
     }
 
     public static boolean canOpenChannel(Video item) {
@@ -136,40 +142,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     public void openChannel(Video item) {
-        if (item != null) {
-            if (item.channelId != null) {
-                openChannel(item.channelId);
-            } else if (item.videoId != null) {
-                LoadingManager.showLoading(getContext(), true);
-                //MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
-                mServiceManager.loadMetadata(item, metadata -> {
-                    LoadingManager.showLoading(getContext(), false);
-                    openChannel(metadata.getChannelId());
-                    item.channelId = metadata.getChannelId();
-                });
-            } else if (item.belongsToChannelUploads()) {
-                LoadingManager.showLoading(getContext(), true);
-                // Maybe this is subscribed items view
-                ChannelUploadsPresenter.instance(getContext())
-                        .obtainVideoGroup(item, group -> {
-                            LoadingManager.showLoading(getContext(), false);
-                            // Some uploads groups doesn't contain channel button.
-                            // Use data from first item instead.
-                            if (group.getChannelId() == null) {
-                                List<MediaItem> mediaItems = group.getMediaItems();
-
-                                if (mediaItems != null && mediaItems.size() > 0) {
-                                    openChannel(Video.from(mediaItems.get(0)));
-                                }
-
-                                return;
-                            }
-
-                            openChannel(group.getChannelId());
-                            item.channelId = group.getChannelId();
-                        });
-            }
-        }
+        extractChannelId(item, this::openChannel);
     }
 
     public void openChannel(String channelId) {
@@ -192,7 +165,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     private void disposeActions() {
-        RxUtils.disposeActions(mUpdateAction, mScrollAction);
+        RxHelper.disposeActions(mUpdateAction, mScrollAction);
         mServiceManager.disposeActions();
     }
 
@@ -210,7 +183,10 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         mUpdateAction = channelObserve
                 .subscribe(
                         this::updateRows,
-                        error -> Log.e(TAG, "updateRows error: %s", error.getMessage())
+                        error -> {
+                            Log.e(TAG, "updateRows error: %s", error.getMessage());
+                            getView().showProgressBar(false);
+                        }
                  );
     }
 
@@ -242,6 +218,11 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     private void continueGroup(VideoGroup group) {
+        if (getView() == null) {
+            Log.e(TAG, "Can't continue group. The view is null.");
+            return;
+        }
+
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         getView().showProgressBar(true);
@@ -255,7 +236,9 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                         continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
-                            getView().showProgressBar(false);
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
                         },
                         () -> getView().showProgressBar(false)
                 );
@@ -289,5 +272,55 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         if (getView() != null) {
             getView().clear();
         }
+    }
+
+    private void extractChannelId(Video item, OnChannelId callback) {
+        if (item != null) {
+            if (item.channelId != null) {
+                callback.onChannelId(item.channelId);
+            } else if (item.videoId != null) {
+                LoadingManager.showLoading(getContext(), true);
+                //MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+                mServiceManager.loadMetadata(item, metadata -> {
+                    LoadingManager.showLoading(getContext(), false);
+                    callback.onChannelId(metadata.getChannelId());
+                    item.channelId = metadata.getChannelId();
+                });
+            } else if (item.belongsToChannelUploads()) {
+                LoadingManager.showLoading(getContext(), true);
+                // Maybe this is subscribed items view
+                ChannelUploadsPresenter.instance(getContext())
+                        .obtainVideoGroup(item, group -> {
+                            LoadingManager.showLoading(getContext(), false);
+                            // Some uploads groups doesn't contain channel button.
+                            // Use data from first item instead.
+                            if (group.getChannelId() == null) {
+                                List<MediaItem> mediaItems = group.getMediaItems();
+
+                                if (mediaItems != null && mediaItems.size() > 0) {
+                                    extractChannelId(Video.from(mediaItems.get(0)), callback);
+                                }
+
+                                return;
+                            }
+
+                            callback.onChannelId(group.getChannelId());
+                            item.channelId = group.getChannelId();
+                        });
+            }
+        }
+    }
+
+    public void obtainUploadsRowObservable(Video item, OnUploadsRow callback) {
+        extractChannelId(item, channelId -> {
+            if (channelId == null) {
+                return;
+            }
+
+            callback.onUploadsRow(mMediaService.getMediaGroupService().getChannelObserve(channelId).map(mediaGroups -> {
+                moveToTop(mediaGroups, R.string.uploads_row_name);
+                return mediaGroups.get(0);
+            }));
+        });
     }
 }

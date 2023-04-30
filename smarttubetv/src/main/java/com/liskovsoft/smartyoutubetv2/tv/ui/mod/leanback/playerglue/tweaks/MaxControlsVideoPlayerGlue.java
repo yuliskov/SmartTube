@@ -49,6 +49,8 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                         PlaybackBaseControlGlue<?> glue = (PlaybackBaseControlGlue<?>) obj;
                         viewHolder.getTitle().setText(glue.getTitle());
                         viewHolder.getSubtitle().setText(glue.getSubtitle());
+                        // MOD: add extra title line
+                        viewHolder.getBody().setText(glue.getBody());
                     }
 
                     private void fixOverlappedTitle(ViewHolder viewHolder) {
@@ -64,12 +66,16 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                         Helpers.setField(viewHolder, "mTitleMargin", 0);
                     }
 
+                    /**
+                     * MOD: Also fixes cropped title, subtitle, body
+                     */
                     private void fixThumbOverlapping(ViewHolder viewHolder) {
                         LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams
                                 (LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
 
                         viewHolder.getTitle().setLayoutParams(textParam);
                         viewHolder.getSubtitle().setLayoutParams(textParam);
+                        viewHolder.getBody().setLayoutParams(textParam);
                     }
                 };
 
@@ -85,8 +91,9 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                 viewHolder.setTopEdgeFocusListener(MaxControlsVideoPlayerGlue.this);
                 viewHolder.setQualityInfo(mQualityInfo);
                 viewHolder.setDateVisibility(isControlsVisible());
+                // Don't uncomment
                 // Reset to defaults
-                viewHolder.setSeekPreviewTitle(null);
+                //viewHolder.setSeekPreviewTitle(null);
                 // Don't uncomment
                 //viewHolder.setSeekBarSegments(null);
             }

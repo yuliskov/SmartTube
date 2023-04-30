@@ -16,13 +16,14 @@ import java.util.List;
 public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     @SuppressLint("StaticFieldLeak")
     private static AppDialogPresenter sInstance;
-    private final List<OptionCategory> mCategories;
     private final Handler mHandler;
     private final Runnable mCloseDialog = this::closeDialog;
     private final List<Runnable> mOnFinish = new ArrayList<>();
     private String mTitle;
     private long mTimeoutMs;
     private boolean mIsTransparent;
+    private List<OptionCategory> mCategories;
+    private boolean mIsExpandable = true;
 
     public static class OptionCategory {
         public static OptionCategory radioList(String title, List<OptionItem> items) {
@@ -113,17 +114,20 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         mOnFinish.clear();
     }
 
-    public void clear() {
+    private void clear() {
         mTimeoutMs = 0;
-        mIsTransparent = false;
         mHandler.removeCallbacks(mCloseDialog);
-        mCategories.clear();
+        mCategories = new ArrayList<>();
+        mIsExpandable = true;
+        mIsTransparent = false;
     }
 
     @Override
     public void onViewInitialized() {
-        getView().setTitle(mTitle);
-        getView().addCategories(mCategories);
+        getView().show(mCategories, mTitle, mIsExpandable, mIsTransparent);
+        mCategories = new ArrayList<>();
+        mIsExpandable = true;
+        mIsTransparent = false;
     }
 
     /**
@@ -152,7 +156,6 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         mOnFinish.add(onFinish);
 
         if (getView() != null) {
-            getView().clear();
             onViewInitialized();
         }
 
@@ -177,7 +180,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         // Also check that current dialog almost closed (new view start is pending from a menu item)
         // Hmm. Maybe current dialog is pending. Check that view is null.
         // Also check that we aren't started the same view (nested dialog).
-        return !mCategories.isEmpty() && (!ViewManager.instance(getContext()).isNewViewPending(AppDialogView.class) || getView() == null);
+        return ViewManager.isVisible(getView()) || ViewManager.instance(getContext()).isViewPending(AppDialogView.class);
     }
 
     public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {
@@ -231,7 +234,11 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     }
 
     public boolean isTransparent() {
-        return mIsTransparent;
+        return getView() != null && getView().isTransparent();
+    }
+
+    public void enableExpandable(boolean enable) {
+        mIsExpandable = enable;
     }
 
     public boolean isEmpty() {

@@ -1,9 +1,16 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui;
 
+import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.CommentGroup;
+import com.liskovsoft.smartyoutubetv2.common.R;
 
-public class CommentsReceiverImpl implements CommentsReceiver {
+public abstract class CommentsReceiverImpl implements CommentsReceiver {
+    private final Context mContext;
     private Callback mCallback;
+
+    public CommentsReceiverImpl(Context context) {
+        mContext = context;
+    }
 
     @Override
     public void addCommentGroup(CommentGroup commentGroup) {
@@ -29,6 +36,11 @@ public class CommentsReceiverImpl implements CommentsReceiver {
 
     @Override
     public String getLoadingMessage() {
-        return null;
+        return mContext.getString(R.string.loading);
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return mContext.getString(R.string.section_is_empty);
     }
 }

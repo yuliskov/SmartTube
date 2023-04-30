@@ -5,7 +5,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -28,7 +28,9 @@ import io.reactivex.disposables.Disposable;
 public class VideoStateManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = VideoStateManager.class.getSimpleName();
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
-    private static final long LIVE_THRESHOLD_MS = 90_000;
+    private static final long LIVE_THRESHOLD_MS = 90_000; // should be greater than the live buffer
+    private static final long LIVE_BUFFER_MS = 60_000;
+    private static final long BEGIN_THRESHOLD_MS = 10_000;
     private boolean mIsPlayEnabled;
     private Video mVideo = new Video();
     private FormatItem mTempVideoFormat;
@@ -40,9 +42,10 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     private boolean mIsPlayBlocked;
     private int mTickleLeft;
     private boolean mIsBuffering;
+    private boolean mIncognito;
     private final Runnable mStreamEndCheck = () -> {
         if (getVideo() != null && getVideo().isLive && mIsBuffering &&
-                getController().getDurationMs() - getController().getPositionMs() < 3 * 60_000) {
+                getController().getDurationMs() - getController().getPositionMs() < 3 * LIVE_BUFFER_MS) {
             getController().reloadPlayback();
         }
     };
@@ -76,6 +79,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
         mTempVideoFormat = null;
 
+        enableIncognitoIfNeeded(item);
+
         // Don't do reset on videoLoaded state because this will influences minimized music videos.
         resetPositionIfNeeded(item);
         resetGlobalSpeedIfNeeded();
@@ -83,9 +88,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public boolean onPreviousClicked() {
-        boolean isFarFromStart = getController().getPositionMs() > 10_000;
-
-        if (isFarFromStart) {
+        // Seek to the start on prev
+        if (getController().getPositionMs() > BEGIN_THRESHOLD_MS) {
             saveState(); // in case the user wants to go to previous video
             getController().setPositionMs(0);
             return true;
@@ -96,6 +100,13 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public boolean onNextClicked() {
+        // Seek to the actual live position on next
+        if (getVideo() != null && getVideo().isLive && (getController().getDurationMs() - getController().getPositionMs() > LIVE_THRESHOLD_MS)) {
+            long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? 0 : LIVE_BUFFER_MS;
+            getController().setPositionMs(getController().getDurationMs() - buffer);
+            return true;
+        }
+
         setPlayEnabled(true);
 
         saveState();
@@ -283,7 +294,6 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     @Override
     public void onVideoSpeedLongClicked(boolean enabled) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
-        settingsPresenter.clear();
 
         // suppose live stream if buffering near the end
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
@@ -295,6 +305,11 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
                 mStateService.save(new State(state.videoId, state.positionMs, state.durationMs, mPlayerData.getSpeed()));
             }
         });
+    }
+
+    @Override
+    public void onFinish() {
+        mIncognito = false;
     }
 
     private void clearStateOfNextVideo() {
@@ -317,7 +332,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         boolean isShort = state != null && state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled();
         boolean isVideoEnded = state != null && state.durationMs - state.positionMs < 3_000;
 
-        if (isShort || isVideoEnded || item.isLive || !mGeneralData.isHistoryEnabled()) {
+        //if (isShort || isVideoEnded || item.isLive || !mGeneralData.isHistoryEnabled()) {
+        if (isShort || isVideoEnded || item.isLive) {
             resetPosition(item);
         }
     }
@@ -342,6 +358,19 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
             } else {
                 mStateService.removeByVideoId(videoId);
             }
+        }
+    }
+
+    private void enableIncognitoIfNeeded(Video item) {
+        if (item == null) {
+            return;
+        }
+
+        // Enable incognito per session
+        // Reset to default when player finished
+        if (item.incognito) {
+            mIncognito = true;
+            item.incognito = false;
         }
     }
 
@@ -425,7 +454,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         // Set actual position for live videos with uncommon length
         if ((state == null || state.durationMs - state.positionMs < LIVE_THRESHOLD_MS) && item.isLive) {
             // Add buffer. Should I take into account segment offset???
-            state = new State(item.videoId, getController().getDurationMs() - 60_000);
+            long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? 0 : LIVE_BUFFER_MS;
+            state = new State(item.videoId, getController().getDurationMs() - buffer);
         }
 
         // Do I need to check that item isn't live? (state != null && !item.isLive)
@@ -441,7 +471,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     private void updateHistory() {
         Video video = getVideo();
 
-        if (video == null || !getController().containsMedia()) {
+        if (video == null || mIncognito || !getController().containsMedia()) {
             return;
         }
 
@@ -461,7 +491,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
             historyObservable = mediaItemManager.updateHistoryPositionObserve(video.videoId, positionSec);
         }
 
-        mHistoryAction = RxUtils.execute(historyObservable);
+        mHistoryAction = RxHelper.execute(historyObservable);
     }
 
     /**
@@ -530,6 +560,10 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     }
 
     private boolean isLiveThreshold() {
+        if (getController() == null) {
+            return false;
+        }
+
         Video item = getVideo();
         boolean isLiveThreshold = getController().getDurationMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
         return item.isLive && isLiveThreshold;
@@ -541,7 +575,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     }
 
     private void setPositionMs(long positionMs) {
-        boolean samePositions = Math.abs(positionMs - getController().getPositionMs()) < 10_000;
+        boolean samePositions = Math.abs(positionMs - getController().getPositionMs()) < BEGIN_THRESHOLD_MS;
         if (!samePositions) {
             getController().setPositionMs(positionMs);
         }

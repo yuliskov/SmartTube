@@ -6,6 +6,7 @@ import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
 
 import java.util.HashMap;
 
@@ -84,7 +85,7 @@ public class TrackSelectorUtil {
     }
 
     private static String buildLanguageString(Format format) {
-        return TextUtils.isEmpty(format.language) || "und".equals(format.language) ? "" : format.language;
+        return TextUtils.isEmpty(format.language) || "und".equals(format.language) ? "" : SubtitleTrack.trimAuto(format.language);
     }
 
     private static String buildBitrateString(Format format) {

@@ -37,7 +37,8 @@ public class ChatItemMessage implements IMessage {
                     " " + Video.TERTIARY_TEXT_DELIM + " ",
                     commentItem.getAuthorName(),
                     commentItem.getLikesCount(),
-                    commentItem.getPublishedDate());
+                    commentItem.getPublishedDate(),
+                    commentItem.getRepliesCount());
             message.mText = TextUtils.concat(Utils.bold(header), "\n", commentItem.getMessage());
         }
         message.mAuthor = ChatItemAuthor.from(commentItem);

@@ -6,19 +6,18 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +79,7 @@ public class StreamReminderService implements TickleListener {
             return;
         }
 
-        RxUtils.disposeActions(mReminderAction);
+        RxHelper.disposeActions(mReminderAction);
 
         List<Observable<MediaItemFormatInfo>> observables = toObservables();
 
@@ -102,10 +101,10 @@ public class StreamReminderService implements TickleListener {
             Playlist playlist = Playlist.instance();
             Video current = playlist.getCurrent();
 
-            if (current != null && current.isPending && Utils.isPlayerInForeground(mContext)) {
+            if (current != null && current.isPending && ViewManager.instance(mContext).isPlayerInForeground()) {
                 playlist.add(video);
             } else {
-                Utils.movePlayerToForeground(mContext);
+                ViewManager.instance(mContext).movePlayerToForeground();
                 PlaybackPresenter.instance(mContext).openVideo(video);
                 MessageHelpers.showMessage(mContext, R.string.starting_stream);
             }

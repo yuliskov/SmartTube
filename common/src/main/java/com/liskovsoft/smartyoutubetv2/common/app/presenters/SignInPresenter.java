@@ -7,11 +7,11 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class SignInPresenter extends BasePresenter<SignInView> {
     private static final String TAG = SignInPresenter.class.getSimpleName();
@@ -40,7 +40,7 @@ public class SignInPresenter extends BasePresenter<SignInView> {
     }
 
     public void unhold() {
-        RxUtils.disposeActions(mSignInAction);
+        RxHelper.disposeActions(mSignInAction);
         sInstance = null;
     }
 
@@ -52,7 +52,7 @@ public class SignInPresenter extends BasePresenter<SignInView> {
 
     @Override
     public void onViewInitialized() {
-        RxUtils.disposeActions(mSignInAction);
+        RxHelper.disposeActions(mSignInAction);
         updateUserCode();
     }
 
@@ -69,17 +69,21 @@ public class SignInPresenter extends BasePresenter<SignInView> {
                         error -> Log.e(TAG, "Sign in error: %s", error.getMessage()),
                         () -> {
                             // Success
-                            mBrowsePresenter.refresh();
                             if (getView() != null) {
                                 getView().close();
                             }
+                            mBrowsePresenter.refresh();
                             mSplashPresenter.updateChannels();
+
+                            // Account history might be turned off (common issue).
+                            GeneralData.instance(getContext()).enableHistory(true);
+                            MediaServiceManager.instance().enableHistory(true);
                         }
                  );
     }
 
     public void start() {
-        RxUtils.disposeActions(mSignInAction);
+        RxHelper.disposeActions(mSignInAction);
         ViewManager.instance(getContext()).startView(SignInView.class);
     }
 }

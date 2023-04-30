@@ -21,12 +21,15 @@ import java.util.Map.Entry;
 
 public class GeneralData {
     public static final int SCREEN_DIMMING_NEVER = 0;
+    public static final int SCREEN_DIMMING_MODE_NORMAL = 0;
+    public static final int SCREEN_DIMMING_MODE_SCREEN_OFF = 1;
     private static final String GENERAL_DATA = "general_data";
     public static final int EXIT_NONE = 0;
     public static final int EXIT_DOUBLE_BACK = 1;
     public static final int EXIT_SINGLE_BACK = 2;
     public static final int BACKGROUND_PLAYBACK_SHORTCUT_HOME = 0;
     public static final int BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK = 1;
+    public static final int BACKGROUND_PLAYBACK_SHORTCUT_BACK = 2;
     public static final int TIME_FORMAT_24 = 0;
     public static final int TIME_FORMAT_12 = 1;
     @SuppressLint("StaticFieldLeak")
@@ -41,7 +44,8 @@ public class GeneralData {
     private boolean mIsHideShortsFromSubscriptionsEnabled;
     private boolean mIsHideUpcomingEnabled;
     private boolean mIsRemapFastForwardToNextEnabled;
-    private int mScreenDimmingTimeoutMin;
+    private int mScreenDimmingTimeoutMs;
+    private int mScreenDimmingMode;
     private int mTimeFormat;
     private boolean mIsProxyEnabled;
     private boolean mIsBridgeCheckEnabled;
@@ -62,8 +66,13 @@ public class GeneralData {
     private boolean mIsVPNEnabled;
     private boolean mIsGlobalClockEnabled;
     private String mSettingsPassword;
+    private String mMasterPassword;
     private boolean mIsChildModeEnabled;
-    private boolean mIsHistoryEnabled = true;
+    private boolean mIsHistoryEnabled;
+    private boolean mIsAltAppIconEnabled;
+    private int mVersionCode;
+    private boolean mIsSelectChannelSectionEnabled;
+    private boolean mIsOldHomeLookEnabled;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new ArrayList<>();
@@ -152,43 +161,7 @@ public class GeneralData {
             }
         }
 
-        return correctIndex(sectionId, index);
-    }
-
-    private int correctIndex(int sectionId, int originIndex) {
-        if (originIndex > 0) {
-            int limit = Math.min(originIndex + 1, mPinnedItems.size());
-            for (int i = 0; i < limit; i++) {
-                // Skip non-section items
-                int currentSectionId = mPinnedItems.get(i).extra;
-                if (currentSectionId == -1 || beforeSection(sectionId, currentSectionId)) {
-                    originIndex--;
-                }
-
-                if (originIndex == 0) {
-                    break;
-                }
-            }
-        }
-
-        return originIndex;
-    }
-
-    private boolean beforeSection(int leftId, int rightId) {
-        int leftIndex = -1;
-        int rightIndex = -1;
-        int currentIndex = -1;
-
-        for (int sectionId : mDefaultSections.values()) {
-            currentIndex++;
-            if (sectionId == leftId) {
-                leftIndex = currentIndex;
-            } else if (sectionId == rightId) {
-                rightIndex = currentIndex;
-            }
-        }
-
-        return leftIndex < rightIndex;
+        return index;
     }
 
     public Collection<Integer> getEnabledSections() {
@@ -339,6 +312,22 @@ public class GeneralData {
         return GlobalPreferences.sInstance.isHideShortsFromSubscriptionsEnabled();
     }
 
+    public void hideStreamsFromSubscriptions(boolean enable) {
+        GlobalPreferences.sInstance.hideStreamsFromSubscriptions(enable);
+    }
+
+    public void hideShortsEverywhere(boolean enable) {
+        GlobalPreferences.sInstance.hideShortsEverywhere(enable);
+    }
+
+    public boolean isHideShortsEverywhereEnabled() {
+        return GlobalPreferences.sInstance.isHideShortsEverywhereEnabled();
+    }
+
+    public boolean isHideStreamsFromSubscriptionsEnabled() {
+        return GlobalPreferences.sInstance.isHideStreamsFromSubscriptionsEnabled();
+    }
+
     public void hideShortsFromHome(boolean enable) {
         GlobalPreferences.sInstance.hideShortsFromHome(enable);
     }
@@ -473,13 +462,22 @@ public class GeneralData {
         return mIsRemapChannelUpToSearchEnabled;
     }
 
-    public void setScreenDimmingTimeoutMin(int timeoutMin) {
-        mScreenDimmingTimeoutMin = timeoutMin;
+    public void setScreenDimmingTimeoutMs(int timeoutMs) {
+        mScreenDimmingTimeoutMs = timeoutMs;
         persistState();
     }
 
-    public int getScreenDimmingTimeoutMin() {
-        return mScreenDimmingTimeoutMin;
+    public int getScreenDimmingTimeoutMs() {
+        return mScreenDimmingTimeoutMs;
+    }
+
+    public void setScreenDimmingMode(int mode) {
+        mScreenDimmingMode = mode;
+        persistState();
+    }
+
+    public int getScreenDimmingMode() {
+        return mScreenDimmingMode;
     }
 
     public void setTimeFormat(int format) {
@@ -608,6 +606,16 @@ public class GeneralData {
         return mSettingsPassword;
     }
 
+    public void setMasterPassword(String password) {
+        mMasterPassword = password;
+
+        persistState();
+    }
+
+    public String getMasterPassword() {
+        return mMasterPassword;
+    }
+
     public void enableChildMode(boolean enable) {
         mIsChildModeEnabled = enable;
 
@@ -624,10 +632,52 @@ public class GeneralData {
 
     public void enableHistory(boolean enabled) {
         mIsHistoryEnabled = enabled;
+
+        persistState();
+    }
+
+    public void enableAltAppIcon(boolean enable) {
+        mIsAltAppIconEnabled = enable;
+
+        persistState();
+    }
+
+    public boolean isAltAppIconEnabled() {
+        return mIsAltAppIconEnabled;
+    }
+
+    public int getVersionCode() {
+        return mVersionCode;
+    }
+
+    public void setVersionCode(int code) {
+        mVersionCode = code;
+
+        persistState();
+    }
+
+    public void enableSelectChannelSection(boolean enabled) {
+        mIsSelectChannelSectionEnabled = enabled;
+
+        persistState();
+    }
+
+    public boolean isSelectChannelSectionEnabled() {
+        return mIsSelectChannelSectionEnabled;
+    }
+
+    public void enableOldHomeLook(boolean enable) {
+        mIsOldHomeLookEnabled = enable;
+        persistState();
+    }
+
+    public boolean isOldHomeLookEnabled() {
+        return mIsOldHomeLookEnabled;
     }
 
     private void initSections() {
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
+        mDefaultSections.put(R.string.header_kids_home, MediaGroup.TYPE_KIDS_HOME);
         mDefaultSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
         mDefaultSections.put(R.string.header_news, MediaGroup.TYPE_NEWS);
         mDefaultSections.put(R.string.header_music, MediaGroup.TYPE_MUSIC);
@@ -663,12 +713,12 @@ public class GeneralData {
         String pinnedItems = Helpers.parseStr(split, 6);
         mIsHideShortsFromSubscriptionsEnabled = Helpers.parseBoolean(split, 7, false);
         mIsRemapFastForwardToNextEnabled = Helpers.parseBoolean(split, 8, false);
-        mScreenDimmingTimeoutMin = Helpers.parseInt(split, 9, 1);
+        //mScreenDimmingTimeoutMs = Helpers.parseInt(split, 9, 1);
         mIsProxyEnabled = Helpers.parseBoolean(split, 10, false);
         mIsBridgeCheckEnabled = Helpers.parseBoolean(split, 11, true);
         mIsOkButtonLongPressDisabled = Helpers.parseBoolean(split, 12, false);
         mLastPlaylistId = Helpers.parseStr(split, 13);
-        String selectedSections = Helpers.parseStr(split, 14);
+        //String selectedSections = Helpers.parseStr(split, 14);
         mIsHideUpcomingEnabled = Helpers.parseBoolean(split, 15, false);
         mIsRemapPageUpToNextEnabled = Helpers.parseBoolean(split, 16, false);
         mIsRemapPageUpToLikeEnabled = Helpers.parseBoolean(split, 17, false);
@@ -689,6 +739,14 @@ public class GeneralData {
         mTimeFormat = Helpers.parseInt(split, 32, LocaleUtility.is24HourLocale(mContext) ? TIME_FORMAT_24 : TIME_FORMAT_12);
         mSettingsPassword = Helpers.parseStr(split, 33);
         mIsChildModeEnabled = Helpers.parseBoolean(split, 34, false);
+        mIsHistoryEnabled = Helpers.parseBoolean(split, 35, true);
+        mScreenDimmingTimeoutMs = Helpers.parseInt(split, 36, 60 * 1_000);
+        mScreenDimmingMode = Helpers.parseInt(split, 37, SCREEN_DIMMING_MODE_NORMAL);
+        mIsAltAppIconEnabled = Helpers.parseBoolean(split, 38, false);
+        mVersionCode = Helpers.parseInt(split, 39, -1);
+        mIsSelectChannelSectionEnabled = Helpers.parseBoolean(split, 40, true);
+        mMasterPassword = Helpers.parseStr(split, 41);
+        mIsOldHomeLookEnabled = Helpers.parseBoolean(split, 42, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -742,12 +800,14 @@ public class GeneralData {
         // Zero index is skipped. Selected sections were there.
         mPrefs.setData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
                 mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems, mIsHideShortsFromSubscriptionsEnabled,
-                mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
+                mIsRemapFastForwardToNextEnabled, null,
                 mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
-                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled));
+                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
+                mScreenDimmingTimeoutMs, mScreenDimmingMode, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
+                mIsOldHomeLookEnabled));
     }
 }
