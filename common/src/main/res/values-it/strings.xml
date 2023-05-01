@@ -220,12 +220,12 @@
     <string name="channels_old_look">Ripristina il vecchio aspetto della sezione Canali</string>
     <string name="channels_auto_load">Carica automaticamente il contenuto della sezione Canali</string>
     <string name="return_to_background_video">Torna al video in esecuzione in background</string>
-    <string name="pin_unpin_from_sidebar">Blocca/Sblocca dalla barra laterale</string>
-    <string name="pin_unpin_playlist">Blocca/Sblocca playlist dalla barra laterale</string>
-    <string name="pin_unpin_channel">Blocca/Sblocca canale dalla barra laterale</string>
-    <string name="pinned_to_sidebar">Appuntato alla barra laterale</string>
-    <string name="unpin_from_sidebar">Sblocca dalla barra laterale</string>
-    <string name="unpinned_from_sidebar">Sbloccato dalla barra laterale</string>
+    <string name="pin_unpin_from_sidebar">Aggiungi/Rimuovi dalla barra laterale</string>
+    <string name="pin_unpin_playlist">Aggiungi/Rimuovi playlist dalla barra laterale</string>
+    <string name="pin_unpin_channel">Aggiungi/Rimuovi canale dalla barra laterale</string>
+    <string name="pinned_to_sidebar">Aggiungi alla barra laterale</string>
+    <string name="unpin_from_sidebar">Rimuovi dalla barra laterale</string>
+    <string name="unpinned_from_sidebar">Rimosso dalla barra laterale</string>
     <string name="dialog_select_country">Paese</string>
     <string name="settings_language_country">Lingua/Paese</string>
     <string name="share_embed_link">Condividi link incorporato</string>
@@ -549,4 +549,5 @@
     <string name="update_found">Aggiornamento</string>
     <string name="volume_boost_warning">Qualsiasi impostazione oltre il limite può potenzialmente danneggiare gli altoparlanti</string>
     <string name="play_video_incognito">Riproduci in incognito</string>
+    <string name="header_kids_home">Ragazzi</string>
 </resources>
