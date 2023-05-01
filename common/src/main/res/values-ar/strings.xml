@@ -544,4 +544,6 @@
   <string name="hide_shorts_everywhere">إخفاء مقاطع Shorts في كل مكان</string>
   <string name="update_found">تحديث</string>
   <string name="volume_boost_warning">قد يؤدي تجاوز الحد المسموح به إلى إتلاف مكبرات الصوت</string>
+  <string name="play_video_incognito">التشغيل بوضع التخفي</string>
+  <string name="header_kids_home">أطفال</string>
 </resources>
