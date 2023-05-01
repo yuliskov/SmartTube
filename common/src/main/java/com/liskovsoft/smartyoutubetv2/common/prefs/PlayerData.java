@@ -541,7 +541,7 @@ public class PlayerData extends DataChangeBase {
     }
 
     public FormatItem getDefaultAudioFormat() {
-        return ExoFormatItem.fromAudioSpecs(String.format("%s,null", "mp4a"));
+        return FormatItem.AUDIO_51_AC3; // Note, 5.1 mp4a won't work
     }
 
     public FormatItem getDefaultVideoFormat() {
