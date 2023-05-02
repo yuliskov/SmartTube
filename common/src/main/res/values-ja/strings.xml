@@ -506,4 +506,5 @@
   <string name="update_found">アップデート</string>
   <string name="volume_boost_warning">上限を超える設定はスピーカーを破損する恐れがあります</string>
   <string name="play_video_incognito">シークレットモードで再生</string>
+  <string name="header_kids_home">Kids</string>
 </resources>
