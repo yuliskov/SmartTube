@@ -165,7 +165,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mGroupManager.getSubscriptionsObserve());
         mGridMapping.put(MediaGroup.TYPE_HISTORY, mGroupManager.getHistoryObserve());
-        mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsUpdateObserve());
+        mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsByUpdateObserve());
     }
 
     private void initPinnedSections() {
@@ -240,13 +240,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         switch (sortingType) {
             case MainUIData.CHANNEL_SORTING_UPDATE:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsUpdateObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsByUpdateObserve());
                 break;
-            case MainUIData.CHANNEL_SORTING_AZ:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsSortedObserve());
+            case MainUIData.CHANNEL_SORTING_NAME:
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsByNameObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_LAST_VIEWED:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsLastViewedObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsByViewedObserve());
                 break;
         }
     }

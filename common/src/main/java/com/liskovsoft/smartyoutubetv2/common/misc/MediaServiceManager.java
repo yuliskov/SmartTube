@@ -168,7 +168,7 @@ public class MediaServiceManager {
     public void loadSubscribedChannels(OnMediaGroup onMediaGroup) {
         RxHelper.disposeActions(mSubscribedChannelsAction);
 
-        Observable<MediaGroup> observable = mGroupManager.getSubscribedChannelsUpdateObserve();
+        Observable<MediaGroup> observable = mGroupManager.getSubscribedChannelsByUpdateObserve();
 
         mSubscribedChannelsAction = observable
                 .subscribe(
