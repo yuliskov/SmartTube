@@ -165,7 +165,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mGroupManager.getSubscriptionsObserve());
         mGridMapping.put(MediaGroup.TYPE_HISTORY, mGroupManager.getHistoryObserve());
-        mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsUpdateObserve());
+        mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsV2Observe());
     }
 
     private void initPinnedSections() {
@@ -240,7 +240,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         switch (sortingType) {
             case MainUIData.CHANNEL_SORTING_UPDATE:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsUpdateObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsV2Observe());
                 break;
             case MainUIData.CHANNEL_SORTING_AZ:
                 mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsAZObserve());

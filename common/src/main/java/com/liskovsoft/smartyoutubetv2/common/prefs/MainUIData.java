@@ -300,7 +300,7 @@ public class MainUIData extends DataChangeBase {
         mUIScale = Helpers.parseFloat(split, 2, 1.0f);
         mColorSchemeIndex = Helpers.parseInt(split, 3, 1);
         mIsCardMultilineTitleEnabled = Helpers.parseBoolean(split, 4, true);
-        mChannelCategorySorting = Helpers.parseInt(split, 5, CHANNEL_SORTING_LAST_VIEWED);
+        mChannelCategorySorting = Helpers.parseInt(split, 5, CHANNEL_SORTING_UPDATE);
         mPlaylistsStyle = Helpers.parseInt(split, 6, PLAYLISTS_STYLE_GRID);
         mCardTitleLinesNum = Helpers.parseInt(split, 7, 1);
         mIsCardTextAutoScrollEnabled = Helpers.parseBoolean(split, 8, true);
