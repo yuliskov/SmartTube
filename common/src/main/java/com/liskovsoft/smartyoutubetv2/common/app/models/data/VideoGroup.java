@@ -78,7 +78,7 @@ public class VideoGroup {
         }
 
         videoGroup.mMediaGroup = mediaGroup;
-        videoGroup.mTitle = mediaGroup.getTitle();
+        videoGroup.mTitle = mediaGroup.getTitle() != null ? mediaGroup.getTitle() : section != null ? section.getTitle() : null;
         videoGroup.mId = mediaGroup.getId();
         videoGroup.mVideos = new ArrayList<>();
 

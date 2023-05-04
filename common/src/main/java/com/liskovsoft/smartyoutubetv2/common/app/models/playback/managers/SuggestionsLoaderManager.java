@@ -358,11 +358,12 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void appendSectionContentIfNeeded(Video video) {
-        if (video.playlistId != null || video.remotePlaylistId != null) {
+        if (video.playlistId != null || video.remotePlaylistId != null || !video.belongsToChannelUploads()) {
             return;
         }
 
         getController().updateSuggestions(video.group);
+        focusAndContinueIfNeeded(video.group);
     }
 
     private void markAsQueueIfNeeded(Video item) {
@@ -442,7 +443,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     public void focusAndContinueIfNeeded(VideoGroup group) {
         Video video = getController().getVideo();
 
-        if (group == null || group.isEmpty() || video == null || !video.hasPlaylist() || !video.hasVideo()) {
+        if (group == null || group.isEmpty() || video == null || !video.hasVideo()) {
             return;
         }
 
