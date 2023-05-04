@@ -451,7 +451,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         if (index >= 0) {
             Log.d(TAG, "Found current video index: %s", index);
-            getController().focusSuggestedItem(group.getVideos().get(index));
+            Video found = group.getVideos().get(index);
+            if (!found.isMix()) {
+                getController().focusSuggestedItem(found);
+            }
             // Stop the continuation loop
             mContinuationCount = 0;
         } else if (mContinuationCount > 5 || !video.hasPlaylist()) {

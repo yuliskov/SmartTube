@@ -572,9 +572,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
                     return;
                 }
 
-                int previousPos = mRowsSupportFragment.getVerticalGridView().getSelectedPosition();
-
-                focusPendingSuggestedItem(holder, previousPos + 1);
+                focusPendingSuggestedItem();
             }
 
             @Override
@@ -1472,23 +1470,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         mPendingFocus = video;
 
-        if (mRowsSupportFragment != null) {
-            VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(video.group.getId());
-
-            if (existingAdapter == null) {
-                return;
-            }
-
-            int rowIndex = getRowAdapterIndex(existingAdapter);
-
-            ViewHolder vh = mRowsSupportFragment.getRowViewHolder(rowIndex);
-
-            focusPendingSuggestedItem(vh, rowIndex);
-        }
+        focusPendingSuggestedItem();
     }
 
-    public void focusPendingSuggestedItem(ViewHolder rowViewHolder, int rowIndex) {
-        if (mPendingFocus == null || mPendingFocus.group == null || rowViewHolder == null) {
+    public void focusPendingSuggestedItem() {
+        if (mPendingFocus == null || mPendingFocus.group == null || mRowsSupportFragment == null) {
             return;
         }
 
@@ -1498,16 +1484,15 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        if (getRowAdapterIndex(existingAdapter) != rowIndex) {
-            return;
-        }
+        int rowIndex = getRowAdapterIndex(existingAdapter);
 
-        int index = existingAdapter.indexOf(mPendingFocus);
+        ViewHolder rowViewHolder = mRowsSupportFragment.getRowViewHolder(rowIndex);
 
         // Skip PlaybackRowPresenter.ViewHolder
         if (rowViewHolder instanceof ListRowPresenter.ViewHolder) {
-            mPendingFocus = null;
+            int index = existingAdapter.indexOf(mPendingFocus);
             ((ListRowPresenter.ViewHolder) rowViewHolder).getGridView().setSelectedPosition(index);
+            mPendingFocus = null;
         }
     }
 
