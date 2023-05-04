@@ -454,8 +454,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             getController().focusSuggestedItem(group.getVideos().get(index));
             // Stop the continuation loop
             mContinuationCount = 0;
-        } else if (mContinuationCount > 5) {
-            // Stop the continuation loop
+        } else if (mContinuationCount > 5 || !video.hasPlaylist()) {
+            // Stop the continuation loop. Maybe the video isn't there.
             mContinuationCount = 0;
         } else {
             // load more and repeat
