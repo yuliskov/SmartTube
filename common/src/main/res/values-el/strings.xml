@@ -540,5 +540,5 @@
   <string name="update_found">Ενημέρωση</string>
   <string name="volume_boost_warning">Τυχόν ρυθμίσεις πάνω από το όριο μπορεί να βλάψουν τα ηχεία</string>
   <string name="play_video_incognito">Παίξτε σε κατάσταση ανώνυμης περιήγησης</string>
-  <string name="header_kids_home">Παιδιά</string>
+  <string name="header_kids_home">Παιδικά</string>
 </resources>
