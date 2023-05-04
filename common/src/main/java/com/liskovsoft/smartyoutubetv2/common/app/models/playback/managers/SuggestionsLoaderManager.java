@@ -264,6 +264,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         appendUserQueueIfNeeded(video);
 
+        appendSectionContentIfNeeded(video);
+
         int groupIndex = -1;
         int suggestRows = -1;
 
@@ -353,6 +355,14 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             item.group = videoGroup;
         }
         getController().updateSuggestions(videoGroup);
+    }
+
+    private void appendSectionContentIfNeeded(Video video) {
+        if (video.playlistId != null || video.remotePlaylistId != null) {
+            return;
+        }
+
+        getController().updateSuggestions(video.group);
     }
 
     private void markAsQueueIfNeeded(Video item) {

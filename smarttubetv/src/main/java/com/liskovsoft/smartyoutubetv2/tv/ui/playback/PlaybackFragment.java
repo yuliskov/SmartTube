@@ -1364,10 +1364,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
             ListRow row = new ListRow(rowHeader, mediaGroupAdapter);
 
-            if (group.getPosition() == -1) {
+            int newPosition = group.getPosition() + SUGGESTIONS_START_INDEX;
+            if (group.getPosition() == -1 || newPosition > mRowsAdapter.size()) {
                 mRowsAdapter.add(row);
             } else {
-                mRowsAdapter.add(group.getPosition() + SUGGESTIONS_START_INDEX, row);
+                mRowsAdapter.add(newPosition, row);
             }
         } else {
             freeze(true);
