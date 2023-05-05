@@ -143,9 +143,9 @@ android {
             def flavor = variant.productFlavors[-1].name
             def buildType = variant.buildType.name.take(1)
             def version = variant.versionName
-            def code = output.getFilter(com.android.build.OutputFile.ABI)
+            def arch = output.getFilter(com.android.build.OutputFile.ABI)
 
-            def newApkName = sprintf("%s_%s_v%s_%s_%s.apk", [project, flavor, version, buildType, code])
+            def newApkName = sprintf("%s_%s_v%s_%s_%s.apk", [project, flavor, version, buildType, arch])
 
             // gradle 4.6 migration
             output.outputFileName = new File(newApkName)
