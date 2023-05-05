@@ -77,8 +77,13 @@ public class VideoGroup {
             return videoGroup;
         }
 
+        // Weak point. Title is used to obtain the group id.
+        if (mediaGroup.getTitle() == null && section != null) {
+            mediaGroup.setTitle(section.getTitle());
+        }
+
         videoGroup.mMediaGroup = mediaGroup;
-        videoGroup.mTitle = mediaGroup.getTitle() != null ? mediaGroup.getTitle() : section != null ? section.getTitle() : null;
+        videoGroup.mTitle = mediaGroup.getTitle();
         videoGroup.mId = mediaGroup.getId();
         videoGroup.mVideos = new ArrayList<>();
 
