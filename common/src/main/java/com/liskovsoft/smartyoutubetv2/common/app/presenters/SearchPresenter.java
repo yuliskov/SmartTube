@@ -230,7 +230,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
-        VideoGroup group = item.group;
+        VideoGroup group = item.getGroup();
 
         Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());
 

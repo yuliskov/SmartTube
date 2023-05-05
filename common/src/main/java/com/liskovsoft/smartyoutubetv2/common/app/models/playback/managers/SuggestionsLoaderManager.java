@@ -77,7 +77,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             return;
         }
 
-        VideoGroup group = item.group;
+        VideoGroup group = item.getGroup();
 
         if (mLastScrollGroup == group) {
             Log.d(TAG, "Can't continue group. Another action is running.");
@@ -352,7 +352,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         videoGroup.setTitle(getActivity().getString(R.string.action_playback_queue));
         videoGroup.setId(videoGroup.getTitle().hashCode());
         for (Video item : queue) {
-            item.group = videoGroup;
+            item.setGroup(videoGroup);
         }
         getController().updateSuggestions(videoGroup);
     }
@@ -362,9 +362,9 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             return;
         }
 
-        getController().updateSuggestions(video.group);
-        focusAndContinueIfNeeded(video.group);
-        appendNextVideoIfNeeded(video.group);
+        getController().updateSuggestions(video.getGroup());
+        focusAndContinueIfNeeded(video.getGroup());
+        appendNextVideoIfNeeded(video.getGroup());
     }
 
     private void markAsQueueIfNeeded(Video item) {

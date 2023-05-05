@@ -106,7 +106,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
             return;
         }
 
-        VideoGroup group = item.group;
+        VideoGroup group = item.getGroup();
 
         Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());
 

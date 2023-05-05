@@ -58,9 +58,9 @@ public class VideoGroup {
         VideoGroup videoGroup = new VideoGroup();
         // Getting topmost element. Could help when syncing multi rows fragments.
         Video topItem = findTopmostItemWithGroup(items);
-        if (topItem.group != null) {
-            videoGroup.mId = topItem.group.getId();
-            videoGroup.mTitle = topItem.group.getTitle();
+        if (topItem.getGroup() != null) {
+            videoGroup.mId = topItem.getGroup().getId();
+            videoGroup.mTitle = topItem.getGroup().getTitle();
         }
         videoGroup.mVideos = items;
         videoGroup.mPosition = groupPosition;
@@ -98,7 +98,7 @@ public class VideoGroup {
 
             // Group position in multi-grid fragments
             video.groupPosition = videoGroup.mPosition;
-            video.group = videoGroup;
+            video.setGroup(videoGroup);
             if (stateService != null && video.percentWatched == -1) {
                 State state = stateService.getByVideoId(video.videoId);
                 // Sync video.
@@ -119,7 +119,7 @@ public class VideoGroup {
 
         for (ChapterItem chapter : chapters) {
             Video video = Video.from(chapter);
-            video.group = videoGroup;
+            video.setGroup(videoGroup);
             videoGroup.mVideos.add(video);
         }
 
@@ -200,7 +200,7 @@ public class VideoGroup {
     private static Video findTopmostItemWithGroup(List<Video> items) {
         for (int i = (items.size() - 1); i >= 0; i--) {
             Video video = items.get(i);
-            if (video.group != null) {
+            if (video.getGroup() != null) {
                 return video;
             }
         }

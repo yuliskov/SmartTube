@@ -364,7 +364,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        VideoGroup group = item.group;
+        VideoGroup group = item.getGroup();
 
         if (mLastScrollGroup == group) {
             Log.d(TAG, "Can't continue group. Another action is running.");

@@ -9,20 +9,13 @@ import java.util.List;
  */
 public class Playlist {
     private static final int PLAYLIST_MAX_SIZE = 50;
-    private List<Video> mPlaylist;
+    private final List<Video> mPlaylist;
     private int mCurrentIndex;
     private static Playlist sInstance;
     private int mNewSessionIndex;
 
     private Playlist() {
-        mPlaylist = new ArrayList<Video>() {
-            @Override
-            public boolean add(Video video) {
-                // Memory leak fix. Creating lightweight copy of origin.
-                //return super.add(video.group != null ? video.copy() : video);
-                return super.add(video);
-            }
-        };
+        mPlaylist = new ArrayList<>();
         mCurrentIndex = -1;
     }
 

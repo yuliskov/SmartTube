@@ -314,7 +314,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
                 VideoGroup group = VideoGroup.from(newItem, 0);
                 group.setTitle(title);
                 group.setId(id);
-                newItem.group = group;
+                newItem.setGroup(group);
                 getController().updateSuggestions(group);
             }
         });

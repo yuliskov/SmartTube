@@ -1464,7 +1464,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void focusSuggestedItem(Video video) {
-        if (video == null || video.group == null) {
+        if (video == null || video.getGroup() == null) {
             return;
         }
 
@@ -1474,11 +1474,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     public void focusPendingSuggestedItem() {
-        if (mPendingFocus == null || mPendingFocus.group == null || mRowsSupportFragment == null) {
+        if (mPendingFocus == null || mPendingFocus.getGroup() == null || mRowsSupportFragment == null) {
             return;
         }
 
-        VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mPendingFocus.group.getId());
+        VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mPendingFocus.getGroup().getId());
 
         if (existingAdapter == null) {
             return;

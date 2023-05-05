@@ -279,7 +279,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         // Need correct playlist title to further comparison (decide whether save or remove)
         if (original.belongsToSamePlaylistGroup()) {
-            video.title = original.group.getTitle();
+            video.title = original.getGroup().getTitle();
         }
 
         if (!original.hasPlaylist() && playlistId != null) {
