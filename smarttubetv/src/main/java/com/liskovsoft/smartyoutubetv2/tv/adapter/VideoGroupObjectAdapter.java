@@ -14,7 +14,8 @@ import java.util.List;
 public class VideoGroupObjectAdapter extends ObjectAdapter {
     private static final String TAG = VideoGroupObjectAdapter.class.getSimpleName();
     private final List<Video> mVideoItems;
-    
+    private final List<VideoGroup> mVideoGroups = new ArrayList<>(); // keep groups from being garbage collected
+
     public VideoGroupObjectAdapter(VideoGroup videoGroup, Presenter presenter) {
         super(presenter);
         mVideoItems = new ArrayList<Video>() {
@@ -82,6 +83,7 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
             int begin = mVideoItems.size();
 
             mVideoItems.addAll(group.getVideos());
+            mVideoGroups.add(group);
 
             // Fix double item blinking by specifying exact range
             notifyItemRangeInserted(begin, mVideoItems.size() - begin);

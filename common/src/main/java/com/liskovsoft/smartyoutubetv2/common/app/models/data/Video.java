@@ -75,7 +75,7 @@ public final class Video implements Parcelable {
     public boolean finishOnEnded;
     public boolean incognito;
     private int startSegmentNum;
-    private VideoGroup group; // Memory leak fix. Used to get next page when scrolling.
+    private WeakReference<VideoGroup> group; // Memory leak fix. Used to get next page when scrolling.
 
     public Video() {
        // NOP
@@ -266,11 +266,11 @@ public final class Video implements Parcelable {
     }
 
     public VideoGroup getGroup() {
-        return group;
+        return group != null ? group.get() : null;
     }
 
     public void setGroup(VideoGroup group) {
-        this.group = group;
+        this.group = new WeakReference<>(group);
     }
 
     private static String extractAuthor(String secondTitle) {
