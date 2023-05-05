@@ -421,7 +421,7 @@ public final class Video {
     }
 
     public boolean isMix() {
-        return mediaItem != null && mediaItem.getDurationMs() <= 0 && (hasPlaylist() || hasChannel() || hasNestedItems());
+        return !isLive && mediaItem != null && mediaItem.getDurationMs() <= 0 && (hasPlaylist() || hasChannel() || hasNestedItems());
     }
 
     public boolean isEmpty() {
