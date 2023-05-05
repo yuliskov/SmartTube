@@ -1,10 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
-import android.media.MediaDescription;
-import android.os.Parcel;
-import android.os.Parcelable;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
@@ -677,94 +673,5 @@ public final class Video {
 
     public MediaItem toMediaItem() {
         return SampleMediaItem.from(this);
-    }
-
-    // Builder for Video object.
-    public static class VideoBuilder {
-        private long id;
-        private String category;
-        private String title;
-        private String desc;
-        private String bgImageUrl;
-        private String cardImageUrl;
-        private String videoId;
-        private String videoUrl;
-        private String studio;
-        private MediaItem mediaItem;
-        private MediaItemMetadata mediaItemMetadata;
-
-        public VideoBuilder id(long id) {
-            this.id = id;
-            return this;
-        }
-
-        public VideoBuilder category(String category) {
-            this.category = category;
-            return this;
-        }
-
-        public VideoBuilder title(String title) {
-            this.title = title;
-            return this;
-        }
-
-        public VideoBuilder description(String desc) {
-            this.desc = desc;
-            return this;
-        }
-
-        public VideoBuilder videoId(String videoId) {
-            this.videoId = videoId;
-            return this;
-        }
-
-        public VideoBuilder videoUrl(String videoUrl) {
-            this.videoUrl = videoUrl;
-            return this;
-        }
-
-        public VideoBuilder bgImageUrl(String bgImageUrl) {
-            this.bgImageUrl = bgImageUrl;
-            return this;
-        }
-
-        public VideoBuilder cardImageUrl(String cardImageUrl) {
-            this.cardImageUrl = cardImageUrl;
-            return this;
-        }
-
-        public VideoBuilder studio(String studio) {
-            this.studio = studio;
-            return this;
-        }
-
-        @RequiresApi(21)
-        public Video buildFromMediaDesc(MediaDescription desc) {
-            return new Video(
-                    Long.parseLong(desc.getMediaId()),
-                    "", // Category - not provided by MediaDescription.
-                    String.valueOf(desc.getTitle()),
-                    String.valueOf(desc.getDescription()),
-                    "", // Media ID - not provided by MediaDescription.
-                    "", // Media URI - not provided by MediaDescription.
-                    "", // Background Image URI - not provided by MediaDescription.
-                    String.valueOf(desc.getIconUri()),
-                    String.valueOf(desc.getSubtitle())
-            );
-        }
-
-        public Video build() {
-            return new Video(
-                    id,
-                    category,
-                    title,
-                    desc,
-                    videoId,
-                    videoUrl,
-                    bgImageUrl,
-                    cardImageUrl,
-                    studio
-            );
-        }
     }
 }
