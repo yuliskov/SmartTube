@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Video is an object that holds the various metadata associated with a single video.
  */
-public final class Video implements Parcelable {
+public final class Video {
     public static final String TERTIARY_TEXT_DELIM = "•";
     public static final long MAX_DURATION_MS = 24 * 60 * 60 * 1_000;
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
@@ -102,18 +102,6 @@ public final class Video implements Parcelable {
         this.author = author;
     }
 
-    protected Video(Parcel in) {
-        id = in.readLong();
-        category = in.readString();
-        title = in.readString();
-        secondTitle = in.readString();
-        bgImageUrl = in.readString();
-        cardImageUrl = in.readString();
-        videoId = in.readString();
-        videoUrl = in.readString();
-        author = in.readString();
-    }
-
     public static Video from(MediaItem item) {
         Video video = new Video();
 
@@ -190,18 +178,6 @@ public final class Video implements Parcelable {
         video.badge = ServiceHelper.millisToTimeText(chapter.getStartTimeMs());
         return video;
     }
-
-    public static final Creator<Video> CREATOR = new Creator<Video>() {
-        @Override
-        public Video createFromParcel(Parcel in) {
-            return new Video(in);
-        }
-
-        @Override
-        public Video[] newArray(int size) {
-            return new Video[size];
-        }
-    };
 
     ///**
     // * Don't change the logic from equality by reference!<br/>
@@ -308,19 +284,6 @@ public final class Video implements Parcelable {
 
     public int describeContents() {
         return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(category);
-        dest.writeString(title);
-        dest.writeString(secondTitle);
-        dest.writeString(bgImageUrl);
-        dest.writeString(cardImageUrl);
-        dest.writeString(videoId);
-        dest.writeString(videoUrl);
-        dest.writeString(author);
     }
 
     public static Video fromString(String spec) {
