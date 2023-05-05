@@ -33,6 +33,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
     private VideoGroup mLastScrollGroup;
+    private VideoGroup mGroupSection; // keep from garbage collected
     private int mContinuationCount = -1;
 
     public interface MetadataListener {
@@ -348,6 +349,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         List<Video> queue = Playlist.instance().getAllAfterCurrent();
 
+        if (queue.size() == 1 && mGroupSection != null) { // skip regular sequential playback of the section
+            return;
+        }
+
         VideoGroup videoGroup = VideoGroup.from(queue);
         videoGroup.setTitle(getActivity().getString(R.string.action_playback_queue));
         videoGroup.setId(videoGroup.getTitle().hashCode());
@@ -359,12 +364,14 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
     private void appendSectionContentIfNeeded(Video video) {
         if (video.playlistId != null || video.remotePlaylistId != null) {
+            mGroupSection = null;
             return;
         }
 
         getController().updateSuggestions(video.getGroup());
         focusAndContinueIfNeeded(video.getGroup());
         appendNextVideoIfNeeded(video.getGroup());
+        mGroupSection = video.getGroup(); // keep from garbage collected
     }
 
     private void markAsQueueIfNeeded(Video item) {
