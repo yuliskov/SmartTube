@@ -358,12 +358,13 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void appendSectionContentIfNeeded(Video video) {
-        if (video.playlistId != null || video.remotePlaylistId != null || !video.belongsToChannelUploads()) {
+        if (video.playlistId != null || video.remotePlaylistId != null) {
             return;
         }
 
         getController().updateSuggestions(video.group);
         focusAndContinueIfNeeded(video.group);
+        appendNextVideoIfNeeded(video.group);
     }
 
     private void markAsQueueIfNeeded(Video item) {
@@ -464,6 +465,29 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             // load more and repeat
             continueGroup(group, this::focusAndContinueIfNeeded);
             mContinuationCount++;
+        }
+    }
+
+    private void appendNextVideoIfNeeded(VideoGroup group) {
+        Video video = getController().getVideo();
+
+        if (group == null || group.isEmpty() || video == null || !video.hasVideo()) {
+            return;
+        }
+
+        List<Video> videos = group.getVideos();
+        boolean found = false;
+
+        for (Video current : videos) {
+            if (found && current.hasVideo() && !current.isUpcoming) {
+                Playlist.instance().add(current);
+                getController().setNextTitle(getNextTitle());
+                break;
+            }
+
+            if (current.equals(video)) {
+                found = true;
+            }
         }
     }
 

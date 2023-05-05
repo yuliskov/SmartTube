@@ -19,7 +19,8 @@ public class Playlist {
             @Override
             public boolean add(Video video) {
                 // Memory leak fix. Creating lightweight copy of origin.
-                return super.add(video.group != null ? video.copy() : video);
+                //return super.add(video.group != null ? video.copy() : video);
+                return super.add(video);
             }
         };
         mCurrentIndex = -1;
