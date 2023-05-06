@@ -33,8 +33,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
     private VideoGroup mLastScrollGroup;
-    private VideoGroup mGroupSection; // keep from garbage collected
-    private int mContinuationCount = -1;
+    private VideoGroup mCurrentGroup; // keep from garbage collected
+    private VideoGroup mNextGroup; // keep from garbage collected
+    private int mFocusCount;
+    private int mNextCount;
 
     public interface MetadataListener {
         void onMetadata(MediaItemMetadata metadata);
@@ -54,6 +56,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         // Remote control fix. Slow network fix. Suggestions may still be loading.
         // This could lead to changing current video info (title, id etc) to wrong one.
         disposeActions();
+        mCurrentGroup = item.getGroup(); // keep from garbage collected
+        mNextGroup = null; // enable garbage collected
     }
 
     @Override
@@ -349,7 +353,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         List<Video> queue = Playlist.instance().getAllAfterCurrent();
 
-        if (queue.size() == 1 && mGroupSection != null) { // skip regular sequential playback of the section
+        if (queue.size() == 1 && mNextGroup != null) { // skip regular sequential playback of the section
             return;
         }
 
@@ -364,14 +368,12 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
     private void appendSectionContentIfNeeded(Video video) {
         if (video.playlistId != null || video.remotePlaylistId != null) {
-            mGroupSection = null;
             return;
         }
 
         getController().updateSuggestions(video.getGroup());
         focusAndContinueIfNeeded(video.getGroup());
         appendNextVideoIfNeeded(video.getGroup());
-        mGroupSection = video.getGroup(); // keep from garbage collected
     }
 
     private void markAsQueueIfNeeded(Video item) {
@@ -463,15 +465,14 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             if (!found.isMix()) {
                 getController().focusSuggestedItem(found);
             }
-            // Stop the continuation loop
-            mContinuationCount = 0;
-        } else if (mContinuationCount > 5 || !video.hasPlaylist()) {
+            mFocusCount = 0; // Stop the continuation loop
+        } else if (mFocusCount > 5 || !video.hasPlaylist()) {
             // Stop the continuation loop. Maybe the video isn't there.
-            mContinuationCount = 0;
+            mFocusCount = 0;
         } else {
             // load more and repeat
             continueGroup(group, this::focusAndContinueIfNeeded);
-            mContinuationCount++;
+            mFocusCount++;
         }
     }
 
@@ -486,15 +487,24 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         boolean found = false;
 
         for (Video current : videos) {
-            if (found && current.hasVideo() && !current.isUpcoming) {
+            if ((found || mNextCount > 0) && current.hasVideo() && !current.isUpcoming) {
                 Playlist.instance().add(current);
                 getController().setNextTitle(getNextTitle());
-                break;
+                mNextCount = 0;
+                mNextGroup = group;
+                return;
             }
 
             if (current.equals(video)) {
                 found = true;
             }
+        }
+
+        if (mNextCount > 0) {
+            mNextCount = 0;
+        } else {
+            continueGroup(group, this::appendNextVideoIfNeeded);
+            mNextCount++;
         }
     }
 
