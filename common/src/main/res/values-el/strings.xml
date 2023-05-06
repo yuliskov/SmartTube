@@ -528,4 +528,17 @@
   <string name="okhttp_desc">Αυτή η στοίβα δικτύου είναι η πιο αργή αλλά, παρέχει σταθερότητα.</string>
   <string name="select_channel_section">Άνοιγμα σχετικού τμήματος όταν η εφαρμογή ανοίγει από τα Κανάλια ATV</string>
   <string name="enable_voice_search_desc">Η επίσημη εφαρμογή θα αντικατασταθεί από τη λεγόμενη γέφυρα. Μια γέφυρα βοηθάει στη μεταφορά καθολικών αποτελεσμάτων αναζήτησης στην εφαρμογή μας.</string>
+  <string name="enable_master_password">Ενεργοποίηση κύριου κωδικού πρόσβασης</string>
+  <string name="enter_master_password">Εισαγάγετε τον κύριο κωδικό πρόσβασης</string>
+  <string name="disable_stream_buffer">Απενεργοποίηση buffer στις ροές</string>
+  <string name="disable_stream_buffer_desc">Διόρθωση για καταστάσεις στις οποίες η ροή είναι αρκετά πίσω. Σημείωση: η ροή μπορεί να αρχίσει να καθυστερεί.</string>
+  <string name="sony_frame_drop_fix">Διόρθωση μείωσης καρέ #1</string>
+  <string name="sony_frame_drop_fix_desc">Διορθώστε καθυστερήσεις στην τηλεόραση Sony και σε ορισμένες άλλες συσκευές. Σημείωση: πιθανά προβλήματα με το συγχρονισμό ήχου.</string>
+  <string name="audio_language">Γλώσσα ήχου</string>
+  <string name="old_home_look">Η παλιά εμφάνιση της ενότητας Αρχική</string>
+  <string name="hide_shorts_everywhere">Κρύψτε τα shorts από παντού</string>
+  <string name="update_found">Ενημέρωση</string>
+  <string name="volume_boost_warning">Τυχόν ρυθμίσεις πάνω από το όριο μπορεί να βλάψουν τα ηχεία</string>
+  <string name="play_video_incognito">Παίξτε σε κατάσταση ανώνυμης περιήγησης</string>
+  <string name="header_kids_home">Παιδικά</string>
 </resources>
