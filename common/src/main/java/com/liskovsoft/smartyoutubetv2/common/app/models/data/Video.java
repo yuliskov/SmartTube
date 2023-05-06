@@ -367,7 +367,7 @@ public final class Video {
      * NOTE: Channels section uses <em>playlistParams</em> instead of <em>playlistId</em>
      */
     public boolean hasPlaylist() {
-        return playlistId != null || belongsToChannelUploads();
+        return playlistId != null;
     }
 
     //public boolean hasPlaylist() {

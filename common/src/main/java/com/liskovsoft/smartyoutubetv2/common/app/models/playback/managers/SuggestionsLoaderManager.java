@@ -367,7 +367,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void appendSectionContentIfNeeded(Video video) {
-        if (video.playlistId != null || video.remotePlaylistId != null) {
+        if (video.getGroup() == null || video.playlistId != null || video.remotePlaylistId != null) {
             return;
         }
 
@@ -459,7 +459,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         int index = group.getVideos().indexOf(video);
 
-        if (index >= 0) {
+        if (index == 0) {
+            // NOP. Default position already at start.
+            mFocusCount = 0;
+        } else if (index > 0) {
             Log.d(TAG, "Found current video index: %s", index);
             Video found = group.getVideos().get(index);
             if (!found.isMix()) {
