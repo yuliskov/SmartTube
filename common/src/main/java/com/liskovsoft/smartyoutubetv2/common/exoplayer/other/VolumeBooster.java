@@ -25,9 +25,13 @@ public class VolumeBooster implements AudioListener {
             mBooster.release();
         }
 
-        mBooster = new LoudnessEnhancer(audioSessionId);
-        mBooster.setEnabled(mEnabled);
-        mBooster.setTargetGain((int) (1000 * mVolume));
+        try {
+            mBooster = new LoudnessEnhancer(audioSessionId);
+            mBooster.setEnabled(mEnabled);
+            mBooster.setTargetGain((int) (1000 * mVolume));
+        } catch (RuntimeException e) { // Cannot initialize effect engine
+            e.printStackTrace();
+        }
     }
 
     public void setEnabled(boolean enabled) {

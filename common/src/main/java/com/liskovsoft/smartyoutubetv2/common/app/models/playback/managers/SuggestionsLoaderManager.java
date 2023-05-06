@@ -123,6 +123,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void continueGroup(VideoGroup group, OnVideoGroup callback) {
+        if (group == null) {
+            return;
+        }
+
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         getController().showProgressBar(true);
