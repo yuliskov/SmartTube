@@ -162,11 +162,13 @@ public class VideoLoaderManager extends PlayerEventListenerHelper implements Met
         Video next = mPlaylist.getNext();
         mLastVideo = null; // in case next video is the same as previous
 
-        if (next == null) {
-            openVideoFromNext(getController().getVideo(), true);
-        } else {
+        if (next != null) {
             next.fromQueue = true;
             openVideoInt(next);
+        } else if (mSuggestionsLoader.getNext() != null) {
+            openVideoInt(mSuggestionsLoader.getNext());
+        } else {
+            openVideoFromNext(getController().getVideo(), true);
         }
     }
 

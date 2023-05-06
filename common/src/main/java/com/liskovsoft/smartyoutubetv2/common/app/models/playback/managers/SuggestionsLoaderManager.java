@@ -35,6 +35,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     private VideoGroup mLastScrollGroup;
     private VideoGroup mCurrentGroup; // keep from garbage collected
     private VideoGroup mNextGroup; // keep from garbage collected
+    private Video mNextVideo;
     private int mFocusCount;
     private int mNextCount;
 
@@ -58,6 +59,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         disposeActions();
         mCurrentGroup = item.getGroup(); // keep from garbage collected
         mNextGroup = null; // enable garbage collected
+        mNextVideo = null;
     }
 
     @Override
@@ -222,6 +224,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         mActions.add(metadataAction);
     }
 
+    public Video getNext() {
+        return mNextVideo;
+    }
+
     private void clearSuggestionsIfNeeded(Video video) {
         if (video == null || getController() == null) {
             return;
@@ -352,10 +358,6 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         }
 
         List<Video> queue = Playlist.instance().getAllAfterCurrent();
-
-        if (queue.size() == 1 && mNextGroup != null) { // skip regular sequential playback of the section
-            return;
-        }
 
         VideoGroup videoGroup = VideoGroup.from(queue);
         videoGroup.setTitle(getActivity().getString(R.string.action_playback_queue));
@@ -491,8 +493,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         for (Video current : videos) {
             if ((found || mNextCount > 0) && current.hasVideo() && !current.isUpcoming) {
-                Playlist.instance().add(current);
-                getController().setNextTitle(getNextTitle());
+                mNextVideo = current;
+                getController().setNextTitle(current.title);
                 mNextCount = 0;
                 mNextGroup = group;
                 return;
