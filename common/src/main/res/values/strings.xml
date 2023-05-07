@@ -550,4 +550,5 @@
     <string name="volume_boost_warning">Any settings over the limit can potentially damage speakers</string>
     <string name="play_video_incognito">Play incognito</string>
     <string name="header_kids_home">Kids</string>
+    <string name="player_section_playlist">Use current section contents as a playlist</string>
 </resources>

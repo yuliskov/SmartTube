@@ -279,7 +279,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         appendUserQueueIfNeeded(video);
 
-        appendSectionContentIfNeeded(video);
+        appendSectionPlaylistIfNeeded(video);
 
         int groupIndex = -1;
         int suggestRows = -1;
@@ -372,8 +372,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         getController().updateSuggestions(videoGroup);
     }
 
-    private void appendSectionContentIfNeeded(Video video) {
-        if (video.getGroup() == null || video.playlistId != null || video.remotePlaylistId != null) {
+    private void appendSectionPlaylistIfNeeded(Video video) {
+        if (video.getGroup() == null || video.playlistId != null || video.remotePlaylistId != null || !mPlayerTweaksData.isSectionPlaylistEnabled()) {
             return;
         }
 
@@ -465,10 +465,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         int index = group.getVideos().indexOf(video);
 
-        if (index == 0) {
-            // NOP. Default position already at start.
-            mFocusCount = 0;
-        } else if (index > 0) {
+        if (index >= 0) { // continuation group starts with zero index
             Log.d(TAG, "Found current video index: %s", index);
             Video found = group.getVideos().get(index);
             if (!found.isMix()) {

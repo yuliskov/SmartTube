@@ -66,6 +66,7 @@ public class PlayerTweaksData {
     private int mPlayerDataSource;
     private boolean mUnlockAllFormats;
     private boolean mIsBufferOnStreamsDisabled;
+    private boolean mIsSectionPlaylistEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -320,22 +321,22 @@ public class PlayerTweaksData {
         persistData();
     }
 
-    public boolean isButtonLongClickEnabled() {
-        return mIsButtonLongClickEnabled;
-    }
-
     public void enableButtonLongClick(boolean enable) {
         mIsButtonLongClickEnabled = enable;
         persistData();
     }
 
-    public boolean isLongSpeedListEnabled() {
-        return mIsLongSpeedListEnabled;
+    public boolean isButtonLongClickEnabled() {
+        return mIsButtonLongClickEnabled;
     }
 
     public void enableLongSpeedList(boolean enable) {
         mIsLongSpeedListEnabled = enable;
         persistData();
+    }
+
+    public boolean isLongSpeedListEnabled() {
+        return mIsLongSpeedListEnabled;
     }
 
     public void unlockAllFormats(boolean unlock) {
@@ -354,6 +355,15 @@ public class PlayerTweaksData {
 
     public boolean isBufferOnStreamsDisabled() {
         return mIsBufferOnStreamsDisabled;
+    }
+
+    public void enableSectionPlaylist(boolean enable) {
+        mIsSectionPlaylistEnabled = enable;
+        persistData();
+    }
+
+    public boolean isSectionPlaylistEnabled() {
+        return mIsSectionPlaylistEnabled;
     }
 
     private void restoreData() {
@@ -393,6 +403,7 @@ public class PlayerTweaksData {
         mIsDashUrlStreamsForced = Helpers.parseBoolean(split, 28, false);
         mIsSonyFrameDropFixEnabled = Helpers.parseBoolean(split, 29, false);
         mIsBufferOnStreamsDisabled = Helpers.parseBoolean(split, 30, false);
+        mIsSectionPlaylistEnabled = Helpers.parseBoolean(split, 31, true);
     }
 
     private void persistData() {
@@ -404,7 +415,7 @@ public class PlayerTweaksData {
                 null, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
                 mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio, mIsQualityInfoBitrateEnabled,
                 mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
-                mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled
+                mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled
         ));
     }
 }

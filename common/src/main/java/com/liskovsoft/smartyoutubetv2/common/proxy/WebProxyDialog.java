@@ -11,6 +11,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
@@ -87,7 +88,7 @@ public class WebProxyDialog {
             appendStatusMessage(R.string.proxy_host_invalid);
         }
         String proxyPortString = ((EditText) mProxyConfigDialog.findViewById(R.id.proxy_port)).getText().toString();
-        int proxyPort = proxyPortString.isEmpty() ? 0 : Integer.parseInt(proxyPortString);
+        int proxyPort = proxyPortString.isEmpty() ? 0 : Helpers.parseInt(proxyPortString);
         if (proxyPort <= 0) {
             isConfigValid = false;
             appendStatusMessage(R.string.proxy_port_invalid);

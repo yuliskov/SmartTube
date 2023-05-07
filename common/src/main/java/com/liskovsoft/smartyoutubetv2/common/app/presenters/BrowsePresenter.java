@@ -366,6 +366,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         VideoGroup group = item.getGroup();
 
+        if (group == null) {
+            Log.e(TAG, "Can't scroll. Video group is null.");
+            return;
+        }
+
         if (mLastScrollGroup == group) {
             Log.d(TAG, "Can't continue group. Another action is running.");
             return;
