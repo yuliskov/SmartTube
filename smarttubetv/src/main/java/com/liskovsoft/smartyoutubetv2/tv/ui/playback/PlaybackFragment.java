@@ -805,7 +805,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         if (mPlayerGlue != null && video != null) {
             // Preserve player formatting
             mPlayerGlue.setTitle(video.getPlayerTitle() != null ? video.getPlayerTitle() : "...");
-            mPlayerGlue.setSubtitle(video.getPlayerSecondTitle() != null ? appendLive(video.getPlayerSecondTitle(), video.isLive) : "...");
+            mPlayerGlue.setSubtitle(video.getPlayerSecondTitle() != null ? createSecondTitle(video) : "...");
             mPlayerGlue.setVideo(video);
         }
     }
@@ -820,11 +820,19 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mBackgroundManager.showBackgroundColor(colorResId);
     }
 
-    private CharSequence appendLive(String title, boolean isLive) {
-        CharSequence result = title;
+    private CharSequence createSecondTitle(Video video) {
+        CharSequence result = video.getPlayerSecondTitle();
 
-        if (getContext() != null && isLive) {
-            result = TextUtils.concat( title, " ", Video.TERTIARY_TEXT_DELIM, " ", Utils.color(getContext().getString(R.string.badge_live), ContextCompat.getColor(getContext(), R.color.red)));
+        if (getContext() != null && video.isLive) {
+            result = TextUtils.concat( result, " ", Video.TERTIARY_TEXT_DELIM, " ", Utils.color(getContext().getString(R.string.badge_live), ContextCompat.getColor(getContext(), R.color.red)));
+        }
+
+        if (getContext() != null && video.likeCount != null) {
+            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.likeCount);
+        }
+
+        if (getContext() != null && video.dislikeCount != null) {
+            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.dislikeCount);
         }
 
         return result;

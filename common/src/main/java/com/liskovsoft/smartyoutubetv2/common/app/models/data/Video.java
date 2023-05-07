@@ -70,6 +70,8 @@ public final class Video {
     public boolean isPending;
     public boolean finishOnEnded;
     public boolean incognito;
+    public String likeCount;
+    public String dislikeCount;
     private int startSegmentNum;
     private WeakReference<VideoGroup> group; // Memory leak fix. Used to get next page when scrolling.
 
@@ -560,6 +562,8 @@ public final class Video {
         nextMediaItem = findNextVideo(metadata);
         playlistInfo = metadata.getPlaylistInfo();
         isSubscribed = metadata.isSubscribed();
+        likeCount = metadata.getLikeCount();
+        dislikeCount = metadata.getDislikeCount();
         isSynced = true;
 
         if (mediaItem != null) {
