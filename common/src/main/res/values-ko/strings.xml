@@ -369,7 +369,7 @@
   <string name="ambilight_ratio_fix">엠비라이트/화면비/스크린샷 수정</string>
   <string name="force_legacy_codecs_desc">저사양 기기의 성능을 크게 향상시킵니다. 최대 해상도는 720p입니다.</string>
   <string name="force_legacy_codecs">강제 레거시 코덱 (720p)</string>
-  <string name="live_stream_fix_desc">저사양 장치에서 라이브 스트림 성능을 크게 향상시킵니다. 최대 해상도는 1080p입니다.</string>
+  <string name="live_stream_fix_desc">저사양 장치에서 생방송 스트림 성능을 크게 향상시킵니다. 최대 해상도는 1080p입니다.</string>
   <string name="live_stream_fix">생방송 스트림 수정 (1080p)</string>
   <string name="playback_notifications_fix_desc">트랙 변경 알림을 숨깁니다. AOSP 기반 펌웨어에서 유용할 수 있습니다.</string>
   <string name="playback_notifications_fix">재생 알림 비활성화</string>
@@ -510,7 +510,7 @@
   <string name="content_type_movie">영화</string>
   <string name="video_features">기능</string>
   <string name="video_feature_any">모두</string>
-  <string name="video_feature_live">라이브</string>
+  <string name="video_feature_live">생방송</string>
   <string name="video_feature_4k">4K</string>
   <string name="video_feature_hdr">HDR</string>
   <string name="search_sorting">정렬 기준</string>
@@ -535,4 +535,15 @@
   <string name="disable_stream_buffer_desc">스트림이 너무 뒤쳐지는 상황을 수정합니다. 참고: 스트림이 지연되기 시작할 수 있습니다.</string>
   <string name="sony_frame_drop_fix">프레임 드랍 수정 #1</string>
   <string name="sony_frame_drop_fix_desc">소니 TV 및 일부 다른 장치의 지연을 수정합니다. 참고: 오디오 동기화에 문제가 있을 수 있습니다.</string>
+  <string name="not_recommend_channel">채널 추천 안 함</string>
+  <string name="you_wont_see_this_channel">이 채널은 추천에 표시되지 않음</string>
+  <string name="live_stream_fix_4k_desc">주의: 이 조정은 스트림 되감기 기능을 비활성화합니다. 생방송 스트림 성능이 크게 향상됩니다. 최대 해상도는 4K입니다.</string>
+  <string name="live_stream_fix_4k">생방송 스트림 수정 (4K)</string>
+  <string name="audio_language">오디오 언어</string>
+  <string name="old_home_look">홈 섹션의 이전 모습</string>
+  <string name="hide_shorts_everywhere">어디서나 쇼츠 숨기기</string>
+  <string name="update_found">업데이트</string>
+  <string name="volume_boost_warning">한도를 초과하여 설정하면 스피커가 손상될 수 있음</string>
+  <string name="play_video_incognito">시크릿 플레이</string>
+  <string name="header_kids_home">아동</string>
 </resources>
