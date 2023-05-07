@@ -546,4 +546,5 @@
   <string name="volume_boost_warning">한도를 초과하여 설정하면 스피커가 손상될 수 있음</string>
   <string name="play_video_incognito">시크릿 플레이</string>
   <string name="header_kids_home">아동</string>
+  <string name="player_section_playlist">현재 섹션 콘텐츠를 재생 목록으로 사용</string>
 </resources>
