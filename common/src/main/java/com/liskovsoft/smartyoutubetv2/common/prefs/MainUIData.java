@@ -14,7 +14,8 @@ public class MainUIData extends DataChangeBase {
     private static final String MAIN_UI_DATA = "main_ui_data2";
     public static final int CHANNEL_SORTING_UPDATE = 0;
     public static final int CHANNEL_SORTING_NAME = 1;
-    public static final int CHANNEL_SORTING_LAST_VIEWED = 2;
+    public static final int CHANNEL_SORTING_DEFAULT = 2;
+    public static final int CHANNEL_SORTING_LAST_VIEWED = 3;
     public static final int PLAYLISTS_STYLE_GRID = 0;
     public static final int PLAYLISTS_STYLE_ROWS = 1;
     public static final int MENU_ITEM_RECENT_PLAYLIST = 0b1;
@@ -300,7 +301,7 @@ public class MainUIData extends DataChangeBase {
         mUIScale = Helpers.parseFloat(split, 2, 1.0f);
         mColorSchemeIndex = Helpers.parseInt(split, 3, 1);
         mIsCardMultilineTitleEnabled = Helpers.parseBoolean(split, 4, true);
-        mChannelCategorySorting = Helpers.parseInt(split, 5, CHANNEL_SORTING_LAST_VIEWED);
+        mChannelCategorySorting = Helpers.parseInt(split, 5, CHANNEL_SORTING_DEFAULT);
         mPlaylistsStyle = Helpers.parseInt(split, 6, PLAYLISTS_STYLE_GRID);
         mCardTitleLinesNum = Helpers.parseInt(split, 7, 1);
         mIsCardTextAutoScrollEnabled = Helpers.parseBoolean(split, 8, true);
