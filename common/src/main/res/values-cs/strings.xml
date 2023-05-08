@@ -550,4 +550,5 @@
     <string name="volume_boost_warning">Další nastavení nad limit může poškodit reproduktory</string>
     <string name="play_video_incognito">Přehrát anonymně</string>
     <string name="header_kids_home">Děti</string>
+    <string name="player_section_playlist">Použít obsah aktuální sekce jako playlist</string>
 </resources>
