@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
@@ -9,7 +9,7 @@ import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
@@ -25,8 +25,8 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
-public class VideoStateManager extends PlayerEventListenerHelper implements MetadataListener {
-    private static final String TAG = VideoStateManager.class.getSimpleName();
+public class VideoStateController extends PlayerEventListenerHelper implements MetadataListener {
+    private static final String TAG = VideoStateController.class.getSimpleName();
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 90_000; // should be greater than the live buffer
     private static final long LIVE_BUFFER_MS = 60_000;
@@ -45,8 +45,8 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     private boolean mIncognito;
     private final Runnable mStreamEndCheck = () -> {
         if (getVideo() != null && getVideo().isLive && mIsBuffering &&
-                getController().getDurationMs() - getController().getPositionMs() < 3 * LIVE_BUFFER_MS) {
-            getController().reloadPlayback();
+                getPlayer().getDurationMs() - getPlayer().getPositionMs() < 3 * LIVE_BUFFER_MS) {
+            getPlayer().reloadPlayback();
         }
     };
 
@@ -65,7 +65,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     @Override
     public void openVideo(Video item) {
         // Ensure that we aren't running on presenter init stage
-        if (getController() != null) {
+        if (getPlayer() != null) {
             if (!item.equals(getVideo())) { // video might be opened twice (when remote connection enabled). Fix for that.
                 // Reset auto-save history timer
                 mTickleLeft = 0;
@@ -89,9 +89,9 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     @Override
     public boolean onPreviousClicked() {
         // Seek to the start on prev
-        if (getController().getPositionMs() > BEGIN_THRESHOLD_MS) {
+        if (getPlayer().getPositionMs() > BEGIN_THRESHOLD_MS) {
             saveState(); // in case the user wants to go to previous video
-            getController().setPositionMs(0);
+            getPlayer().setPositionMs(0);
             return true;
         }
 
@@ -101,9 +101,9 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     @Override
     public boolean onNextClicked() {
         // Seek to the actual live position on next
-        if (getVideo() != null && getVideo().isLive && (getController().getDurationMs() - getController().getPositionMs() > LIVE_THRESHOLD_MS)) {
+        if (getVideo() != null && getVideo().isLive && (getPlayer().getDurationMs() - getPlayer().getPositionMs() > LIVE_THRESHOLD_MS)) {
             long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? 0 : LIVE_BUFFER_MS;
-            getController().setPositionMs(getController().getDurationMs() - buffer);
+            getPlayer().setPositionMs(getPlayer().getDurationMs() - buffer);
             return true;
         }
 
@@ -134,15 +134,15 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
         // Show user info instead of black screen.
         if (!getPlayEnabled()) {
-            getController().showOverlay(true);
+            getPlayer().showOverlay(true);
         }
     }
 
     @Override
     public void onEngineReleased() {
         // Save previous state
-        if (getController().containsMedia()) {
-            setPlayEnabled(getController().getPlayWhenReady());
+        if (getPlayer().containsMedia()) {
+            setPlayEnabled(getPlayer().getPlayWhenReady());
             saveState();
         }
 
@@ -169,7 +169,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     @Override
     public void onEngineError(int type) {
         // Oops. Error happens while playing (network lost etc).
-        if (getController().getPositionMs() > 1_000) {
+        if (getPlayer().getPositionMs() > 1_000) {
             saveState();
         }
     }
@@ -212,7 +212,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     @Override
     public void onTrackSelected(FormatItem track) {
-        if (!getController().isInPIPMode()) {
+        if (!getPlayer().isInPIPMode()) {
             if (track.getType() == FormatItem.TYPE_VIDEO) {
                 if (mPlayerData.getFormat(FormatItem.TYPE_VIDEO).isPreset()) {
                     mTempVideoFormat = track;
@@ -287,7 +287,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
                 mStateService.save(new State(state.videoId, state.positionMs, state.durationMs, enabled ? 1.0f : lastSpeed));
             }
             mPlayerData.setSpeed(enabled ? 1.0f : lastSpeed);
-            getController().setSpeed(enabled ? 1.0f : lastSpeed);
+            getPlayer().setSpeed(enabled ? 1.0f : lastSpeed);
         }
     }
 
@@ -297,7 +297,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
         // suppose live stream if buffering near the end
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
-        AppDialogUtil.appendSpeedDialogItems(getActivity(), settingsPresenter, getController(), mPlayerData);
+        AppDialogUtil.appendSpeedDialogItems(getActivity(), settingsPresenter, getPlayer(), mPlayerData);
 
         settingsPresenter.showDialog(() -> {
             State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
@@ -384,18 +384,18 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
     private void restoreVideoFormat() {
         if (mTempVideoFormat != null) {
-            getController().setFormat(mTempVideoFormat);
+            getPlayer().setFormat(mTempVideoFormat);
         } else {
-            getController().setFormat(mPlayerData.getFormat(FormatItem.TYPE_VIDEO));
+            getPlayer().setFormat(mPlayerData.getFormat(FormatItem.TYPE_VIDEO));
         }
     }
 
     private void restoreAudioFormat() {
-        getController().setFormat(mPlayerData.getFormat(FormatItem.TYPE_AUDIO));
+        getPlayer().setFormat(mPlayerData.getFormat(FormatItem.TYPE_AUDIO));
     }
 
     private void restoreSubtitleFormat() {
-        getController().setFormat(mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE));
+        getPlayer().setFormat(mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE));
     }
 
     private void saveState() {
@@ -407,7 +407,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     private void savePosition() {
         Video video = getVideo();
 
-        if (video == null || getController() == null || !getController().containsMedia()) {
+        if (video == null || getPlayer() == null || !getPlayer().containsMedia()) {
             return;
         }
 
@@ -415,17 +415,17 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         // 1) Track is ended
         // 2) Pause on end enabled
         // 3) Watching live stream in real time
-        long durationMs = getController().getDurationMs();
-        long positionMs = getController().getPositionMs();
+        long durationMs = getPlayer().getDurationMs();
+        long positionMs = getPlayer().getPositionMs();
         long remainsMs = durationMs - positionMs;
         boolean isPositionActual = remainsMs > 1_000;
         if (isPositionActual) { // partially viewed
-            mStateService.save(new State(video.videoId, positionMs, durationMs, getController().getSpeed()));
+            mStateService.save(new State(video.videoId, positionMs, durationMs, getPlayer().getSpeed()));
             // Sync video. You could safely use it later to restore state.
             video.percentWatched = positionMs / (durationMs / 100f);
         } else { // fully viewed
             // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
-            mStateService.save(new State(video.videoId, durationMs, durationMs, getController().getSpeed()));
+            mStateService.save(new State(video.videoId, durationMs, durationMs, getPlayer().getSpeed()));
             video.percentWatched = 100;
         }
 
@@ -440,7 +440,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         boolean stateIsOutdated = state == null || state.timestamp < item.timestamp;
         if (item.getPositionMs() > 0 && stateIsOutdated) {
             // Web state is buggy on short videos (e.g. video clips)
-            boolean isLongVideo = getController().getDurationMs() > MUSIC_VIDEO_MAX_DURATION_MS;
+            boolean isLongVideo = getPlayer().getDurationMs() > MUSIC_VIDEO_MAX_DURATION_MS;
             if (isLongVideo) {
                 state = new State(item.videoId, item.getPositionMs());
             }
@@ -455,7 +455,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         if ((state == null || state.durationMs - state.positionMs < LIVE_THRESHOLD_MS) && item.isLive) {
             // Add buffer. Should I take into account segment offset???
             long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? 0 : LIVE_BUFFER_MS;
-            state = new State(item.videoId, getController().getDurationMs() - buffer);
+            state = new State(item.videoId, getPlayer().getDurationMs() - buffer);
         }
 
         // Do I need to check that item isn't live? (state != null && !item.isLive)
@@ -464,14 +464,14 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         }
 
         if (!mIsPlayBlocked) {
-            getController().setPlayWhenReady(getPlayEnabled());
+            getPlayer().setPlayWhenReady(getPlayEnabled());
         }
     }
 
     private void updateHistory() {
         Video video = getVideo();
 
-        if (video == null || mIncognito || !getController().containsMedia()) {
+        if (video == null || mIncognito || !getPlayer().containsMedia()) {
             return;
         }
 
@@ -483,7 +483,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
 
         Observable<Void> historyObservable;
 
-        long positionSec = video.isLive ? 0 : getController().getPositionMs() / 1_000;
+        long positionSec = video.isLive ? 0 : getPlayer().getPositionMs() / 1_000;
 
         if (video.mediaItem != null) {
             historyObservable = mediaItemManager.updateHistoryPositionObserve(video.mediaItem, positionSec);
@@ -501,7 +501,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         Video item = getVideo();
 
         if (item.pendingPosMs > 0) {
-            getController().setPositionMs(item.pendingPosMs);
+            getPlayer().setPositionMs(item.pendingPosMs);
             item.pendingPosMs = 0;
         }
     }
@@ -510,10 +510,10 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
         Video item = getVideo();
 
         if (isLiveThreshold() || isMusicVideo()) {
-            getController().setSpeed(1.0f);
+            getPlayer().setSpeed(1.0f);
         } else {
             State state = mStateService.getByVideoId(item.videoId);
-            getController().setSpeed(state != null && mPlayerData.isRememberSpeedEachEnabled() ? state.speed : mPlayerData.getSpeed());
+            getPlayer().setSpeed(state != null && mPlayerData.isRememberSpeedEachEnabled() ? state.speed : mPlayerData.getSpeed());
         }
     }
 
@@ -531,7 +531,7 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     }
 
     private void restoreVolume() {
-        getController().setVolume(mPlayerData.getPlayerVolume());
+        getPlayer().setVolume(mPlayerData.getPlayerVolume());
     }
 
     private void restoreFormats() {
@@ -560,12 +560,12 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     }
 
     private boolean isLiveThreshold() {
-        if (getController() == null) {
+        if (getPlayer() == null) {
             return false;
         }
 
         Video item = getVideo();
-        boolean isLiveThreshold = getController().getDurationMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
+        boolean isLiveThreshold = getPlayer().getDurationMs() - getPlayer().getPositionMs() < LIVE_THRESHOLD_MS;
         return item.isLive && isLiveThreshold;
     }
 
@@ -575,9 +575,9 @@ public class VideoStateManager extends PlayerEventListenerHelper implements Meta
     }
 
     private void setPositionMs(long positionMs) {
-        boolean samePositions = Math.abs(positionMs - getController().getPositionMs()) < BEGIN_THRESHOLD_MS;
+        boolean samePositions = Math.abs(positionMs - getPlayer().getPositionMs()) < BEGIN_THRESHOLD_MS;
         if (!samePositions) {
-            getController().setPositionMs(positionMs);
+            getPlayer().setPositionMs(positionMs);
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import androidx.core.content.ContextCompat;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
@@ -27,14 +27,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
-    private static final String TAG = SuggestionsLoaderManager.class.getSimpleName();
+public class SuggestionsController extends PlayerEventListenerHelper {
+    private static final String TAG = SuggestionsController.class.getSimpleName();
     private final Set<MetadataListener> mListeners = new HashSet<>();
     private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
     private VideoGroup mLastScrollGroup;
-    private VideoGroup mCurrentGroup; // keep from garbage collected
-    private VideoGroup mNextGroup; // keep from garbage collected
+    private VideoGroup mCurrentGroup; // disable garbage collected
+    private VideoGroup mNextGroup; // disable garbage collected
     private Video mNextVideo;
     private int mFocusCount;
     private int mNextCount;
@@ -57,7 +57,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         // Remote control fix. Slow network fix. Suggestions may still be loading.
         // This could lead to changing current video info (title, id etc) to wrong one.
         disposeActions();
-        mCurrentGroup = null; // enable garbage collected
+        mCurrentGroup = item.getGroup(); // disable garbage collected
         mNextGroup = null; // enable garbage collected
         mNextVideo = null;
     }
@@ -101,7 +101,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         markAsQueueIfNeeded(item);
 
         // Update UI to response to user clicks
-        getController().resetSuggestedPosition();
+        getPlayer().resetSuggestedPosition();
     }
 
     @Override
@@ -113,7 +113,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
     @Override
     public void onSeekEnd() {
-        if (getController().isControlsShown()) {
+        if (getPlayer().isControlsShown()) {
             focusCurrentChapter();
         }
     }
@@ -129,7 +129,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
-        getController().showProgressBar(true);
+        getPlayer().showProgressBar(true);
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
@@ -138,13 +138,13 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         Disposable continueAction = mediaItemManager.continueGroupObserve(mediaGroup)
                 .subscribe(
                         continueMediaGroup -> {
-                            getController().showProgressBar(false);
+                            getPlayer().showProgressBar(false);
                             VideoGroup videoGroup = VideoGroup.from(continueMediaGroup, group.getSection());
-                            getController().updateSuggestions(videoGroup);
+                            getPlayer().updateSuggestions(videoGroup);
 
                             // Merge remote queue with player's queue
-                            Video video = getController().getVideo();
-                            if (video != null && video.isRemote && getController().getSuggestionsIndex(videoGroup) == 0) {
+                            Video video = getPlayer().getVideo();
+                            if (video != null && video.isRemote && getPlayer().getSuggestionsIndex(videoGroup) == 0) {
                                 Playlist.instance().addAll(videoGroup.getVideos());
                                 Playlist.instance().setCurrent(video);
                             }
@@ -157,13 +157,13 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                         },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
-                            if (getController() != null) {
-                                getController().showProgressBar(false);
+                            if (getPlayer() != null) {
+                                getPlayer().showProgressBar(false);
                             }
                         },
                         () -> {
-                            if (getController() != null) {
-                                getController().showProgressBar(false);
+                            if (getPlayer() != null) {
+                                getPlayer().showProgressBar(false);
                             }
                         }
                 );
@@ -172,20 +172,20 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata, Video video) {
-        if (getController().containsMedia()) {
+        if (getPlayer().containsMedia()) {
             video.isUpcoming = false; // live stream started
         }
         video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isAbsoluteDateEnabled());
-        getController().setVideo(video);
+        getPlayer().setVideo(video);
 
-        getController().setNextTitle(getNextTitle());
+        getPlayer().setNextTitle(getNextTitle());
     }
 
     private String getNextTitle() {
         String title = null;
 
         Video nextVideo = Playlist.instance().getNext();
-        Video video = getController().getVideo();
+        Video video = getPlayer().getVideo();
 
         if (nextVideo != null) {
             title = nextVideo.title;
@@ -233,13 +233,13 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void clearSuggestionsIfNeeded(Video video) {
-        if (video == null || getController() == null) {
+        if (video == null || getPlayer() == null) {
             return;
         }
 
         // Frees a lot of memory
-        if (video.isRemote || !getController().isSuggestionsShown()) {
-            getController().clearSuggestions();
+        if (video.isRemote || !getPlayer().isSuggestionsShown()) {
+            getPlayer().clearSuggestions();
         }
     }
 
@@ -268,12 +268,12 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             return;
         }
 
-        if (!video.isRemote && getController().isSuggestionsShown()) {
+        if (!video.isRemote && getPlayer().isSuggestionsShown()) {
             Log.d(TAG, "Suggestions is opened. Seems that user want to stay here.");
             return;
         }
 
-        getController().clearSuggestions(); // clear previous videos
+        getPlayer().clearSuggestions(); // clear previous videos
 
         appendChaptersIfNeeded(mediaItemMetadata);
 
@@ -302,7 +302,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                     mergeRemoteAndUserQueueIfNeeded(video, videoGroup);
                 }
 
-                getController().updateSuggestions(videoGroup);
+                getPlayer().updateSuggestions(videoGroup);
 
                 if (groupIndex == 0) {
                     focusAndContinueIfNeeded(videoGroup);
@@ -340,7 +340,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             return;
         }
 
-        getController().setSeekBarSegments(toSeekBarSegments(chapters));
+        getPlayer().setSeekBarSegments(toSeekBarSegments(chapters));
     }
 
     private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
@@ -352,7 +352,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         VideoGroup videoGroup = VideoGroup.fromChapters(chapters, getActivity().getString(R.string.chapters));
 
-        getController().updateSuggestions(videoGroup);
+        getPlayer().updateSuggestions(videoGroup);
     }
 
     private void appendUserQueueIfNeeded(Video video) {
@@ -369,7 +369,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         for (Video item : queue) {
             item.setGroup(videoGroup);
         }
-        getController().updateSuggestions(videoGroup);
+        getPlayer().updateSuggestions(videoGroup);
     }
 
     private void appendSectionPlaylistIfNeeded(Video video) {
@@ -377,9 +377,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             return;
         }
 
-        mCurrentGroup = video.getGroup(); // keep object from garbage collected
-
-        getController().updateSuggestions(video.getGroup());
+        getPlayer().updateSuggestions(video.getGroup());
         focusAndContinueIfNeeded(video.getGroup());
         appendNextVideoIfNeeded(video.getGroup());
     }
@@ -393,7 +391,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void focusCurrentChapter() {
-        VideoGroup group = getController().getSuggestionsByIndex(0);
+        VideoGroup group = getPlayer().getSuggestionsByIndex(0);
 
         if (group == null || group.getVideos() == null) {
             return;
@@ -403,8 +401,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         if (index != -1) {
             String title = group.getVideos().get(index).title;
-            getController().focusSuggestedItem(index);
-            getController().setSeekPreviewTitle(title);
+            getPlayer().focusSuggestedItem(index);
+            getPlayer().setSeekPreviewTitle(title);
             //getController().setTitle(title);
         }
     }
@@ -415,7 +413,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         }
 
         int currentChapter = -1;
-        long positionMs = getController().getPositionMs();
+        long positionMs = getPlayer().getPositionMs();
         for (Video chapter : videos) {
             if (chapter.startTimeMs > positionMs) {
                 break;
@@ -432,7 +430,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         }
 
         List<SeekBarSegment> result = new ArrayList<>();
-        long markLengthMs = getController().getDurationMs() / 10000;
+        long markLengthMs = getPlayer().getDurationMs() / 10000;
 
         for (ChapterItem chapter : chapters) {
             if (chapter.getStartTimeMs() == 0) {
@@ -440,8 +438,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             }
 
             SeekBarSegment seekBarSegment = new SeekBarSegment();
-            float startRatio = (float) chapter.getStartTimeMs() / getController().getDurationMs(); // Range: [0, 1]
-            float endRatio = (float) (chapter.getStartTimeMs() + markLengthMs) / getController().getDurationMs(); // Range: [0, 1]
+            float startRatio = (float) chapter.getStartTimeMs() / getPlayer().getDurationMs(); // Range: [0, 1]
+            float endRatio = (float) (chapter.getStartTimeMs() + markLengthMs) / getPlayer().getDurationMs(); // Range: [0, 1]
             seekBarSegment.startProgress = startRatio;
             seekBarSegment.endProgress = endRatio;
             seekBarSegment.color = ContextCompat.getColor(getActivity(), R.color.black);
@@ -459,7 +457,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     public void focusAndContinueIfNeeded(VideoGroup group) {
-        Video video = getController().getVideo();
+        Video video = getPlayer().getVideo();
 
         if (group == null || group.isEmpty() || video == null || !video.hasVideo()) {
             return;
@@ -471,7 +469,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             Log.d(TAG, "Found current video index: %s", index);
             Video found = group.getVideos().get(index);
             if (!found.isMix()) {
-                getController().focusSuggestedItem(found);
+                getPlayer().focusSuggestedItem(found);
             }
             mFocusCount = 0; // Stop the continuation loop
         } else if (mFocusCount > 5 || !video.hasPlaylist()) {
@@ -485,7 +483,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void appendNextVideoIfNeeded(VideoGroup group) {
-        Video video = getController().getVideo();
+        Video video = getPlayer().getVideo();
 
         if (group == null || group.isEmpty() || video == null || !video.hasVideo()) {
             return;
@@ -496,7 +494,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         for (Video current : videos) {
             if ((found || mNextCount > 0) && current.hasVideo() && !current.isUpcoming) {
-                getController().setNextTitle(current.title);
+                getPlayer().setNextTitle(current.title);
                 mNextCount = 0;
                 mNextGroup = group;
                 mNextVideo = current;

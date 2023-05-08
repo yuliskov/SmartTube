@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -7,7 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver
 
 import java.util.List;
 
-public interface PlaybackUI {
+public interface PlayerUI {
     int REPEAT_MODE_PAUSE = 0;
     int REPEAT_MODE_CLOSE = 1;
     int REPEAT_MODE_ALL = 2;

@@ -5,58 +5,58 @@ import android.app.Activity;
 import android.content.Context;
 import androidx.fragment.app.Fragment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerUiEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.ViewEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.CommentsManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.LiveChatManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.RemoteControlManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoLoaderManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoStateManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.AutoFrameRateController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.CommentsController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.ContentBlockController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.HQDialogController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.LiveChatController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.PlayerUIController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.RemoteController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoLoaderController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoStateController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class MainPlayerEventBridge implements PlayerEventListener {
-    private static final String TAG = MainPlayerEventBridge.class.getSimpleName();
+public class MainPlayerController implements PlayerEventListener {
+    private static final String TAG = MainPlayerController.class.getSimpleName();
     private final ArrayList<PlayerEventListener> mEventListeners = new ArrayList<PlayerEventListener>() {
         @Override
         public boolean add(PlayerEventListener listener) {
-            ((PlayerEventListenerHelper) listener).setBridge(MainPlayerEventBridge.this);
+            ((PlayerEventListenerHelper) listener).setMainController(MainPlayerController.this);
 
             return super.add(listener);
         }
     };
     @SuppressLint("StaticFieldLeak")
-    private static MainPlayerEventBridge sInstance;
-    private WeakReference<PlaybackController> mController = new WeakReference<>(null);
+    private static MainPlayerController sInstance;
+    private WeakReference<PlayerManager> mPlayer = new WeakReference<>(null);
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private Video mPendingVideo;
 
-    public MainPlayerEventBridge(Context context) {
+    public MainPlayerController(Context context) {
         if (context instanceof Activity) {
             mActivity = new WeakReference<>((Activity) context);
         }
 
-        SuggestionsLoaderManager suggestionsLoader = new SuggestionsLoaderManager();
-        VideoLoaderManager videoLoader = new VideoLoaderManager(suggestionsLoader);
-        PlayerUIManager uiManager = new PlayerUIManager(videoLoader);
-        VideoStateManager stateUpdater = new VideoStateManager();
-        ContentBlockManager contentBlockManager = new ContentBlockManager();
-        LiveChatManager liveChatManager = new LiveChatManager();
-        CommentsManager commentsManager = new CommentsManager();
+        SuggestionsController suggestionsLoader = new SuggestionsController();
+        VideoLoaderController videoLoader = new VideoLoaderController(suggestionsLoader);
+        PlayerUIController uiManager = new PlayerUIController(videoLoader);
+        VideoStateController stateUpdater = new VideoStateController();
+        ContentBlockController contentBlockManager = new ContentBlockController();
+        LiveChatController liveChatManager = new LiveChatController();
+        CommentsController commentsManager = new CommentsController();
 
-        RemoteControlManager commandManager = new RemoteControlManager(context, suggestionsLoader, videoLoader);
-        HQDialogManager hqDialogManager = new HQDialogManager(stateUpdater);
-        AutoFrameRateManager autoFrameRateManager = new AutoFrameRateManager(hqDialogManager, stateUpdater);
+        RemoteController commandManager = new RemoteController(context, suggestionsLoader, videoLoader);
+        HQDialogController hqDialogManager = new HQDialogController(stateUpdater);
+        AutoFrameRateController autoFrameRateManager = new AutoFrameRateController(hqDialogManager, stateUpdater);
 
         suggestionsLoader.addMetadataListener(uiManager);
         suggestionsLoader.addMetadataListener(videoLoader);
@@ -78,19 +78,19 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         mEventListeners.add(commentsManager);
     }
 
-    public static MainPlayerEventBridge instance(Context context) {
+    public static MainPlayerController instance(Context context) {
         if (sInstance == null) {
-            sInstance = new MainPlayerEventBridge(context);
+            sInstance = new MainPlayerController(context);
         }
 
         return sInstance;
     }
     
-    public void setController(PlaybackController controller) {
-        if (controller != null) {
-            if (mController.get() != controller) { // Be ready to re-init after app exit
-                mController = new WeakReference<>(controller);
-                mActivity = new WeakReference<>(((Fragment) controller).getActivity());
+    public void setPlayer(PlayerManager player) {
+        if (player != null) {
+            if (mPlayer.get() != player) { // Be ready to re-init after app exit
+                mPlayer = new WeakReference<>(player);
+                mActivity = new WeakReference<>(((Fragment) player).getActivity());
                 process(PlayerEventListener::onInitDone);
             }
 
@@ -101,8 +101,8 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         }
     }
 
-    public PlaybackController getController() {
-        return mController.get();
+    public PlayerManager getPlayer() {
+        return mPlayer.get();
     }
 
     public Activity getActivity() {
@@ -113,7 +113,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
 
     @Override
     public void openVideo(Video video) {
-        if (mController.get() == null) {
+        if (mPlayer.get() == null) {
             mPendingVideo = video;
             return;
         }

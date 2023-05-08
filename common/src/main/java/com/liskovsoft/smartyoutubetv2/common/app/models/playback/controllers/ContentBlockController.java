@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import androidx.core.content.ContextCompat;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
@@ -11,8 +11,8 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class ContentBlockManager extends PlayerEventListenerHelper implements MetadataListener {
-    private static final String TAG = ContentBlockManager.class.getSimpleName();
+public class ContentBlockController extends PlayerEventListenerHelper implements MetadataListener {
+    private static final String TAG = ContentBlockController.class.getSimpleName();
     private static final long POLL_INTERVAL_MS = 1_000;
     private MediaItemService mMediaItemManager;
     private ContentBlockData mContentBlockData;
@@ -88,7 +88,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     public void onVideoLoaded(Video item) {
         disposeActions();
 
-        getController().setButtonState(R.id.action_content_block, mContentBlockData.isSponsorBlockEnabled() ? PlaybackUI.BUTTON_ON : PlaybackUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_content_block, mContentBlockData.isSponsorBlockEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
 
         if (mContentBlockData.isSponsorBlockEnabled() && checkVideo(item)) {
             updateSponsorSegmentsAndWatch(item);
@@ -99,7 +99,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     public void onMetadata(MediaItemMetadata metadata) {
         // Disable sponsor for the live streams.
         // Fix when using remote control.
-        if (!mContentBlockData.isSponsorBlockEnabled() || !checkVideo(getController().getVideo())) {
+        if (!mContentBlockData.isSponsorBlockEnabled() || !checkVideo(getPlayer().getVideo())) {
             disposeActions();
         }
     }
@@ -112,16 +112,16 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     @Override
     public void onButtonClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_content_block) {
-            boolean enabled = buttonState == PlaybackUI.BUTTON_ON;
+            boolean enabled = buttonState == PlayerUI.BUTTON_ON;
             mContentBlockData.enableSponsorBlock(!enabled);
-            onVideoLoaded(getController().getVideo());
+            onVideoLoaded(getPlayer().getVideo());
         }
     }
 
     @Override
     public void onButtonLongClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_content_block) {
-            ContentBlockSettingsPresenter.instance(getActivity()).show(() -> onVideoLoaded(getController().getVideo()));
+            ContentBlockSettingsPresenter.instance(getActivity()).show(() -> onVideoLoaded(getPlayer().getVideo()));
         }
     }
 
@@ -163,10 +163,10 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
         mActiveSegments = new ArrayList<>(mOriginalSegments);
 
-        getController().setSeekBarSegments(null); // reset colors
+        getPlayer().setSeekBarSegments(null); // reset colors
 
         if (mContentBlockData.isColorMarkersEnabled()) {
-            getController().setSeekBarSegments(toSeekBarSegments(mOriginalSegments));
+            getPlayer().setSeekBarSegments(toSeekBarSegments(mOriginalSegments));
         }
         if (mContentBlockData.isActionsEnabled()) {
             startPlaybackWatcher();
@@ -194,17 +194,17 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private void skipSegment(long interval) {
-        if (mActiveSegments == null || mActiveSegments.isEmpty() || !Video.equals(mVideo, getController().getVideo())) {
+        if (mActiveSegments == null || mActiveSegments.isEmpty() || !Video.equals(mVideo, getPlayer().getVideo())) {
             disposeActions();
             return;
         }
 
         // Fix looping messages at the end of the video (playback mode: pause at the end of the video)
-        if (!getController().isPlaying()) {
+        if (!getPlayer().isPlaying()) {
             return;
         }
 
-        long positionMs = getController().getPositionMs();
+        long positionMs = getPlayer().getPositionMs();
 
         List<SponsorSegment> foundSegment = findMatchedSegments(positionMs);
 
@@ -250,12 +250,12 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
-        if (dialogPresenter.isDialogShown() || getController().isSuggestionsShown()) {
+        if (dialogPresenter.isDialogShown() || getPlayer().isSuggestionsShown()) {
             // Another dialog is opened. Don't distract a user.
             return;
         }
 
-        getController().showControls(false);
+        getPlayer().showControls(false);
 
         OptionItem acceptOption = UiOptionItem.from(
                 getActivity().getString(R.string.confirm_segment_skip, category),
@@ -267,7 +267,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         );
 
         dialogPresenter.appendSingleButton(acceptOption);
-        dialogPresenter.setCloseTimeoutMs(skipPosMs - getController().getPositionMs());
+        dialogPresenter.setCloseTimeoutMs(skipPosMs - getPlayer().getPositionMs());
 
         dialogPresenter.enableTransparent(true);
         dialogPresenter.enableExpandable(false);
@@ -287,8 +287,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             }
 
             SeekBarSegment seekBarSegment = new SeekBarSegment();
-            float startRatio = (float) sponsorSegment.getStartMs() / getController().getDurationMs(); // Range: [0, 1]
-            float endRatio = (float) sponsorSegment.getEndMs() / getController().getDurationMs(); // Range: [0, 1]
+            float startRatio = (float) sponsorSegment.getStartMs() / getPlayer().getDurationMs(); // Range: [0, 1]
+            float endRatio = (float) sponsorSegment.getEndMs() / getPlayer().getDurationMs(); // Range: [0, 1]
             seekBarSegment.startProgress = startRatio;
             seekBarSegment.endProgress = endRatio;
             seekBarSegment.color = ContextCompat.getColor(getActivity(), mContentBlockData.getColorRes(sponsorSegment.getCategory()));
@@ -302,10 +302,10 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
      * Sponsor block fix. Position may exceed real media length.
      */
     private void setPositionMs(long positionMs) {
-        long durationMs = getController().getDurationMs();
+        long durationMs = getPlayer().getDurationMs();
 
         // Sponsor block fix. Position may exceed real media length.
-        getController().setPositionMs(Math.min(positionMs, durationMs));
+        getPlayer().setPositionMs(Math.min(positionMs, durationMs));
     }
 
     private List<SponsorSegment> findMatchedSegments(long positionMs) {
@@ -351,7 +351,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
             long skipPosMs = lastSegment.getEndMs();
 
-            if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode() || isScreenOff()) {
+            if (type == ContentBlockData.ACTION_SKIP_ONLY || getPlayer().isInPIPMode() || isScreenOff()) {
                 simpleSkip(skipPosMs);
             } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
                 messageSkip(skipPosMs, localizedCategory);

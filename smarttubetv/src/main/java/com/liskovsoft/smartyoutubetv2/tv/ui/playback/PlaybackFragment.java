@@ -40,8 +40,8 @@ import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
@@ -87,7 +87,7 @@ import java.util.Map;
  * Plays selected video, loads playlist and related videos, and delegates playback to
  * {@link VideoPlayerGlue}.
  */
-public class PlaybackFragment extends SeekModePlaybackFragment implements PlaybackView, PlaybackController {
+public class PlaybackFragment extends SeekModePlaybackFragment implements PlaybackView, PlayerManager {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
     private static final int UPDATE_DELAY_MS = 100;
     private static final int SUGGESTIONS_START_INDEX = 1;
@@ -106,7 +106,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private UriBackgroundManager mBackgroundManager;
     private RowsSupportFragment mRowsSupportFragment;
     private final boolean mIsAnimationEnabled = false;
-    private int mPlaybackMode = PlaybackEngine.BACKGROUND_MODE_DEFAULT;
+    private int mPlaybackMode = PlayerEngine.BACKGROUND_MODE_DEFAULT;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
     private long mResumeTimeMs;
@@ -236,7 +236,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void onFinish() {
         // Fix background play when playing trailers from NUM
         // On API > 23 onStop not immediately occurred after onPause
-        if (getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_DEFAULT) {
+        if (getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_DEFAULT) {
             if (Util.SDK_INT > 23) {
                 maybeReleasePlayer();
             }
@@ -332,7 +332,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         //}
 
         // Ensure to continue playback in audio mode (activity should be blocked)
-        if (getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_SOUND &&
+        if (getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_SOUND &&
                 ViewManager.instance(getContext()).getBlockedTop() == PlaybackActivity.class &&
                 !isInPIPMode()) {
             Log.d(TAG, "releasePlayer: Playback activity is blocked. Exiting...");
@@ -1075,7 +1075,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public PlaybackController getController() {
+    public PlayerManager getController() {
         return this;
     }
 

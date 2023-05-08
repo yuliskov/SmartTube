@@ -20,7 +20,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.UUID;
@@ -97,23 +97,23 @@ public class ExoPlayerInitializer {
         int bufferForPlaybackAfterRebufferMs = 5_000;
 
         switch (mPlayerData.getVideoBufferType()) {
-            case PlaybackEngine.BUFFER_HIGH:
+            case PlayerEngine.BUFFER_HIGH:
                 minBufferMs = 50_000;
                 maxBufferMs = 36_000_000; // technical infinity, recommended here a very high number, the max will be based on setTargetBufferBytes() value
                 baseBuilder
                         .setTargetBufferBytes(mDeviceRam);
                 //baseBuilder.setBackBuffer(maxBufferMs, true);
                 break;
-            case PlaybackEngine.BUFFER_MEDIUM:
+            case PlayerEngine.BUFFER_MEDIUM:
                 minBufferMs = 50_000;
                 maxBufferMs = 50_000;
                 //baseBuilder.setBackBuffer(maxBufferMs, true);
                 break;
-            case PlaybackEngine.BUFFER_LOW:
+            case PlayerEngine.BUFFER_LOW:
                 minBufferMs = 30_000;
                 maxBufferMs = 30_000;
                 break;
-            case PlaybackEngine.BUFFER_NONE:
+            case PlayerEngine.BUFFER_NONE:
                 minBufferMs = 1_000;
                 maxBufferMs = 1_000;
                 bufferForPlaybackMs = 1_000;

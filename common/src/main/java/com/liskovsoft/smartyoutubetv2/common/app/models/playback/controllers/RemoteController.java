@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import android.content.Context;
 import android.os.Handler;
@@ -14,7 +14,7 @@ import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -25,12 +25,12 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.disposables.Disposable;
 
-public class RemoteControlManager extends PlayerEventListenerHelper implements OnDataChange {
-    private static final String TAG = RemoteControlManager.class.getSimpleName();
+public class RemoteController extends PlayerEventListenerHelper implements OnDataChange {
+    private static final String TAG = RemoteController.class.getSimpleName();
     private final RemoteControlService mRemoteControlService;
     private final RemoteControlData mRemoteControlData;
-    private final SuggestionsLoaderManager mSuggestionsLoader;
-    private final VideoLoaderManager mVideoLoader;
+    private final SuggestionsController mSuggestionsLoader;
+    private final VideoLoaderController mVideoLoader;
     private Disposable mListeningAction;
     private Disposable mPostStartPlayAction;
     private Disposable mPostStateAction;
@@ -42,7 +42,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
     private Disposable mActionDown;
     private Disposable mActionUp;
 
-    public RemoteControlManager(Context context, SuggestionsLoaderManager suggestionsLoader, VideoLoaderManager videoLoader) {
+    public RemoteController(Context context, SuggestionsController suggestionsLoader, VideoLoaderController videoLoader) {
         MediaService mediaService = YouTubeMediaService.instance();
         mSuggestionsLoader = suggestionsLoader;
         mVideoLoader = videoLoader;
@@ -78,11 +78,11 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
     @Override
     public void onVideoLoaded(Video item) {
         if (mNewVideoPositionMs > 0) {
-            getController().setPositionMs(mNewVideoPositionMs);
+            getPlayer().setPositionMs(mNewVideoPositionMs);
             mNewVideoPositionMs = 0;
         }
 
-        postStartPlaying(item, getController().getPlayWhenReady());
+        postStartPlaying(item, getPlayer().getPlayWhenReady());
         mVideo = item;
     }
 
@@ -99,13 +99,13 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
     @Override
     public void onPlayEnd() {
         switch (PlayerData.instance(getActivity()).getRepeatMode()) {
-            case PlaybackUI.REPEAT_MODE_CLOSE:
-            case PlaybackUI.REPEAT_MODE_PAUSE:
-            case PlaybackUI.REPEAT_MODE_ALL:
+            case PlayerUI.REPEAT_MODE_CLOSE:
+            case PlayerUI.REPEAT_MODE_PAUSE:
+            case PlayerUI.REPEAT_MODE_ALL:
                 postPlay(false);
                 break;
-            case PlaybackUI.REPEAT_MODE_ONE:
-                postStartPlaying(getController().getVideo(), true);
+            case PlayerUI.REPEAT_MODE_ONE:
+                postStartPlaying(getPlayer().getVideo(), true);
                 break;
         }
     }
@@ -133,10 +133,10 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
         long positionMs = -1;
         long durationMs = -1;
 
-        if (item != null && getController() != null) {
+        if (item != null && getPlayer() != null) {
             videoId = item.videoId;
-            positionMs = getController().getPositionMs();
-            durationMs = getController().getDurationMs();
+            positionMs = getPlayer().getPositionMs();
+            durationMs = getPlayer().getDurationMs();
         }
 
         postStartPlaying(videoId, positionMs, durationMs, isPlaying);
@@ -167,11 +167,11 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
     }
 
     private void postPlay(boolean isPlaying) {
-        postState(getController().getPositionMs(), getController().getDurationMs(), isPlaying);
+        postState(getPlayer().getPositionMs(), getPlayer().getDurationMs(), isPlaying);
     }
 
     private void postSeek(long positionMs) {
-        postState(positionMs, getController().getDurationMs(), getController().isPlaying());
+        postState(positionMs, getPlayer().getDurationMs(), getPlayer().isPlaying());
     }
 
     private void postIdle() {
@@ -242,8 +242,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
 
         switch (command.getType()) {
             case Command.TYPE_OPEN_VIDEO:
-                if (getController() != null) {
-                    getController().showOverlay(false);
+                if (getPlayer() != null) {
+                    getPlayer().showOverlay(false);
                 }
                 movePlayerToForeground();
                 Video newVideo = Video.from(command.getVideoId());
@@ -254,8 +254,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
                 openNewVideo(newVideo);
                 break;
             case Command.TYPE_UPDATE_PLAYLIST:
-                if (getController() != null && mConnected) {
-                    Video video = getController().getVideo();
+                if (getPlayer() != null && mConnected) {
+                    Video video = getPlayer().getVideo();
                     if (video != null) {
                         video.remotePlaylistId = command.getPlaylistId();
                         video.playlistParams = null;
@@ -265,19 +265,19 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
                 }
                 break;
             case Command.TYPE_SEEK:
-                if (getController() != null) {
-                    getController().showOverlay(false);
+                if (getPlayer() != null) {
+                    getPlayer().showOverlay(false);
                     movePlayerToForeground();
-                    getController().setPositionMs(command.getCurrentTimeMs());
+                    getPlayer().setPositionMs(command.getCurrentTimeMs());
                     postSeek(command.getCurrentTimeMs());
                 } else {
                     openNewVideo(mVideo);
                 }
                 break;
             case Command.TYPE_PLAY:
-                if (getController() != null) {
+                if (getPlayer() != null) {
                     movePlayerToForeground();
-                    getController().setPlayWhenReady(true);
+                    getPlayer().setPlayWhenReady(true);
                     //postStartPlaying(getController().getVideo(), true);
                     postPlay(true);
                 } else {
@@ -285,9 +285,9 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
                 }
                 break;
             case Command.TYPE_PAUSE:
-                if (getController() != null) {
+                if (getPlayer() != null) {
                     movePlayerToForeground();
-                    getController().setPlayWhenReady(false);
+                    getPlayer().setPlayWhenReady(false);
                     //postStartPlaying(getController().getVideo(), false);
                     postPlay(false);
                 } else {
@@ -295,7 +295,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
                 }
                 break;
             case Command.TYPE_NEXT:
-                if (getBridge() != null) {
+                if (getMainController() != null) {
                     movePlayerToForeground();
                     mVideoLoader.loadNext();
                 } else {
@@ -303,7 +303,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
                 }
                 break;
             case Command.TYPE_PREVIOUS:
-                if (getBridge() != null && getController() != null) {
+                if (getMainController() != null && getPlayer() != null) {
                     movePlayerToForeground();
                     // Switch immediately. Skip position reset logic.
                     mVideoLoader.loadPrevious();
@@ -312,9 +312,9 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
                 }
                 break;
             case Command.TYPE_GET_STATE:
-                if (getController() != null) {
+                if (getPlayer() != null) {
                     ViewManager.instance(getActivity()).moveAppToForeground();
-                    postStartPlaying(getController().getVideo(), getController().isPlaying());
+                    postStartPlaying(getPlayer().getVideo(), getPlayer().isPlaying());
                 } else {
                     postStartPlaying(null, false);
                 }
@@ -328,8 +328,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
                 break;
             case Command.TYPE_STOP:
                 // Close player
-                if (getController() != null) {
-                    getController().finish();
+                if (getPlayer() != null) {
+                    getPlayer().finish();
                 }
                 //// Finish the app
                 //if (getActivity() != null) {
@@ -417,10 +417,10 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
             mVideo.playlistIndex = newVideo.playlistIndex;
             mVideo.playlistParams = newVideo.playlistParams;
             if (mNewVideoPositionMs > 0) {
-                getController().setPositionMs(mNewVideoPositionMs);
+                getPlayer().setPositionMs(mNewVideoPositionMs);
                 mNewVideoPositionMs = 0;
             }
-            postStartPlaying(mVideo, getController().isPlaying());
+            postStartPlaying(mVideo, getPlayer().isPlaying());
         } else if (newVideo != null) {
             newVideo.isRemote = true;
             PlaybackPresenter.instance(getActivity()).openVideo(newVideo);
@@ -453,7 +453,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper implements O
     private void movePlayerToForeground() {
         ViewManager.instance(getActivity()).movePlayerToForeground();
         // Device wake fix when player isn't started yet or been closed
-        if (getController() == null || !Utils.checkActivity(getActivity())) {
+        if (getPlayer() == null || !Utils.checkActivity(getActivity())) {
             new Handler(Looper.myLooper()).postDelayed(() -> ViewManager.instance(getActivity()).movePlayerToForeground(), 5_000);
         }
     }

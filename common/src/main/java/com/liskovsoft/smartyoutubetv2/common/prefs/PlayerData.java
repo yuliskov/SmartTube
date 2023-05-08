@@ -8,8 +8,8 @@ import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
@@ -604,14 +604,14 @@ public class PlayerData extends DataChangeBase {
         mIsSeekConfirmPauseEnabled = Helpers.parseBoolean(split, 4, false);
         mIsClockEnabled = Helpers.parseBoolean(split, 5, true);
         mIsRemainingTimeEnabled = Helpers.parseBoolean(split, 6, true);
-        mBackgroundMode = Helpers.parseInt(split, 7, PlaybackEngine.BACKGROUND_MODE_DEFAULT);
+        mBackgroundMode = Helpers.parseInt(split, 7, PlayerEngine.BACKGROUND_MODE_DEFAULT);
         // afrData was there
         mVideoFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 9)), getDefaultVideoFormat());
         mAudioFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 10)), getDefaultAudioFormat());
         mSubtitleFormat = ExoFormatItem.from(Helpers.parseStr(split, 11));
-        mVideoBufferType = Helpers.parseInt(split, 12, PlaybackEngine.BUFFER_LOW);
+        mVideoBufferType = Helpers.parseInt(split, 12, PlayerEngine.BUFFER_LOW);
         mSubtitleStyleIndex = Helpers.parseInt(split, 13, 1);
-        mVideoZoomMode = Helpers.parseInt(split, 14, PlaybackEngine.ZOOM_MODE_DEFAULT);
+        mVideoZoomMode = Helpers.parseInt(split, 14, PlayerEngine.ZOOM_MODE_DEFAULT);
         mSpeed = Helpers.parseFloat(split, 15, 1.0f);
         mIsAfrEnabled = Helpers.parseBoolean(split, 16, false);
         mIsAfrFpsCorrectionEnabled = Helpers.parseBoolean(split, 17, true);
@@ -626,7 +626,7 @@ public class PlayerData extends DataChangeBase {
         // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
         mIsRememberSpeedEachEnabled = Helpers.parseBoolean(split, 29, false);
-        mVideoAspectRatio = Helpers.parseFloat(split, 30, PlaybackEngine.ASPECT_RATIO_DEFAULT);
+        mVideoAspectRatio = Helpers.parseFloat(split, 30, PlayerEngine.ASPECT_RATIO_DEFAULT);
         mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, false);
         mIsTimeCorrectionEnabled = Helpers.parseBoolean(split, 32, true);
         mIsGlobalEndingTimeEnabled = Helpers.parseBoolean(split, 33, false);
@@ -647,7 +647,7 @@ public class PlayerData extends DataChangeBase {
         mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
         mVideoRotation = Helpers.parseInt(split, 49, 0);
         mVideoZoom = Helpers.parseInt(split, 50, -1);
-        mRepeatMode = Helpers.parseInt(split, 51, PlaybackUI.REPEAT_MODE_ALL);
+        mRepeatMode = Helpers.parseInt(split, 51, PlayerUI.REPEAT_MODE_ALL);
         mAudioLanguage = Helpers.parseStr(split, 52, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
         mSubtitleLanguage = Helpers.parseStr(split, 53, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
 

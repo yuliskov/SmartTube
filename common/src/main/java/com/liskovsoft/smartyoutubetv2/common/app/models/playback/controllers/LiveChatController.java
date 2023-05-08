@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import com.liskovsoft.mediaserviceinterfaces.LiveChatService;
 import com.liskovsoft.mediaserviceinterfaces.data.ChatItem;
@@ -7,7 +7,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiverImpl;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -21,8 +21,8 @@ import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LiveChatManager extends PlayerEventListenerHelper implements MetadataListener {
-    private static final String TAG = LiveChatManager.class.getSimpleName();
+public class LiveChatController extends PlayerEventListenerHelper implements MetadataListener {
+    private static final String TAG = LiveChatController.class.getSimpleName();
     /**
      * NOTE: Don't remove duplicates! They contain different chars.
      */
@@ -45,7 +45,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         mLiveChatKey = metadata != null && metadata.getLiveChatKey() != null ? metadata.getLiveChatKey() : null;
 
         if (mLiveChatKey != null) {
-            getController().setChatButtonState(mPlayerData.isLiveChatEnabled());
+            getPlayer().setChatButtonState(mPlayerData.isLiveChatEnabled());
         }
 
         if (mPlayerData.isLiveChatEnabled()) {
@@ -61,7 +61,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         }
 
         ChatReceiver chatReceiver = new ChatReceiverImpl();
-        getController().setChatReceiver(chatReceiver);
+        getPlayer().setChatReceiver(chatReceiver);
 
         mChatAction = mChatService.openLiveChatObserve(mLiveChatKey)
                 .subscribe(
@@ -135,7 +135,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
     private void disposeActions() {
         if (RxHelper.isAnyActionRunning(mChatAction)) {
             RxHelper.disposeActions(mChatAction);
-            getController().setChatReceiver(null);
+            getPlayer().setChatReceiver(null);
         }
     }
 
@@ -164,7 +164,7 @@ public class LiveChatManager extends PlayerEventListenerHelper implements Metada
         mPlayerData.enableLiveChat(enabled);
 
         if (mLiveChatKey != null) {
-            getController().setChatButtonState(enabled);
+            getPlayer().setChatButtonState(enabled);
         }
     }
 }

@@ -1,11 +1,11 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import com.liskovsoft.mediaserviceinterfaces.CommentsService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiverImpl;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -13,8 +13,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.disposables.Disposable;
 
-public class CommentsManager extends PlayerEventListenerHelper implements MetadataListener {
-    private static final String TAG = CommentsManager.class.getSimpleName();
+public class CommentsController extends PlayerEventListenerHelper implements MetadataListener {
+    private static final String TAG = CommentsController.class.getSimpleName();
     private CommentsService mCommentsService;
     private Disposable mCommentsAction;
     private String mLiveChatKey;
@@ -38,9 +38,9 @@ public class CommentsManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
-        getController().showControls(false);
+        getPlayer().showControls(false);
 
-        String title = getController().getVideo().getTitle();
+        String title = getPlayer().getVideo().getTitle();
 
         CommentsReceiver commentsReceiver = new CommentsReceiverImpl(getActivity()) {
             @Override

@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.AutoFrameRateController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -31,17 +31,17 @@ public class AutoFrameRateSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendAutoFrameRateCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AutoFrameRateManager.createAutoFrameRateCategory(getContext(), mPlayerData);
+        OptionCategory category = AutoFrameRateController.createAutoFrameRateCategory(getContext(), mPlayerData);
         settingsPresenter.appendCheckedCategory(category.title, category.options);
     }
 
     private void appendAutoFrameRatePauseCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AutoFrameRateManager.createAutoFrameRatePauseCategory(getContext(), mPlayerData);
+        OptionCategory category = AutoFrameRateController.createAutoFrameRatePauseCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendAutoFrameRateModesCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AutoFrameRateManager.createAutoFrameRateModesCategory(getContext());
+        OptionCategory category = AutoFrameRateController.createAutoFrameRateModesCategory(getContext());
         settingsPresenter.appendLongTextCategory(category.title, category.option);
     }
 }

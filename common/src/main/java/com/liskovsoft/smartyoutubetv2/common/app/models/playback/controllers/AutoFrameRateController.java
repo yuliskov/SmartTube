@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -24,13 +24,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AutoFrameRateManager extends PlayerEventListenerHelper implements AutoFrameRateListener {
-    private static final String TAG = AutoFrameRateManager.class.getSimpleName();
+public class AutoFrameRateController extends PlayerEventListenerHelper implements AutoFrameRateListener {
+    private static final String TAG = AutoFrameRateController.class.getSimpleName();
     private static final int AUTO_FRAME_RATE_ID = 21;
     private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
     private static final int AUTO_FRAME_RATE_MODES_ID = 23;
-    private final HQDialogManager mUiManager;
-    private final VideoStateManager mStateUpdater;
+    private final HQDialogController mUiManager;
+    private final VideoStateController mStateUpdater;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
     private final ModeSyncManager mModeSyncManager;
     private final Runnable mApplyAfr = this::applyAfr;
@@ -38,12 +38,12 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private PlayerData mPlayerData;
     private boolean mIsPlay;
     private final Runnable mPlaybackResumeHandler = () -> {
-        if (getController() != null) {
+        if (getPlayer() != null) {
             restorePlayback();
         }
     };
 
-    public AutoFrameRateManager(HQDialogManager uiManager, VideoStateManager stateUpdater) {
+    public AutoFrameRateController(HQDialogController uiManager, VideoStateController stateUpdater) {
         mUiManager = uiManager;
         mStateUpdater = stateUpdater;
         mAutoFrameRateHelper = AutoFrameRateHelper.instance(null);
@@ -163,8 +163,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     private void applyAfr() {
-        if (getController() != null && mPlayerData.isAfrEnabled()) {
-            FormatItem videoFormat = getController().getVideoFormat();
+        if (getPlayer() != null && mPlayerData.isAfrEnabled()) {
+            FormatItem videoFormat = getPlayer().getVideoFormat();
             applyAfr(videoFormat, false);
             // Send data to AFR daemon via tvQuickActions app
             TvQuickActions.sendStartAFR(getActivity(), videoFormat);
@@ -195,14 +195,14 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     private void maybePausePlayback() {
-        if (getController() == null) {
+        if (getPlayer() == null) {
             return;
         }
 
         int delayMs = 5_000;
 
         if (mPlayerData.getAfrPauseMs() > 0) {
-            getController().setPlayWhenReady(false);
+            getPlayer().setPlayWhenReady(false);
             delayMs = mPlayerData.getAfrPauseMs();
         }
 
@@ -220,7 +220,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private void restorePlayback() {
         if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseMs() > 0) {
             mStateUpdater.blockPlay(false);
-            getController().setPlayWhenReady(mIsPlay);
+            getPlayer().setPlayWhenReady(mIsPlay);
         }
     }
 

@@ -2,27 +2,27 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import android.app.Activity;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 
 public abstract class PlayerEventListenerHelper implements PlayerEventListener {
-    private MainPlayerEventBridge mEventBridge;
+    private MainPlayerController mMainController;
 
-    public void setBridge(MainPlayerEventBridge eventBridge) {
-        mEventBridge = eventBridge;
+    public void setMainController(MainPlayerController mainController) {
+        mMainController = mainController;
     }
 
-    public MainPlayerEventBridge getBridge() {
-        return mEventBridge;
+    public MainPlayerController getMainController() {
+        return mMainController;
     }
 
-    public PlaybackController getController() {
-        return mEventBridge.getController();
+    public PlayerManager getPlayer() {
+        return mMainController.getPlayer();
     }
 
     public Activity getActivity() {
-        return mEventBridge.getActivity();
+        return mMainController.getActivity();
     }
     
     @Override

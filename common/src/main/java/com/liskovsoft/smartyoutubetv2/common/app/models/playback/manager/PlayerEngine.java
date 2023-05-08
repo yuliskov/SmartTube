@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager;
 
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
@@ -6,7 +6,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import java.io.InputStream;
 import java.util.List;
 
-public interface PlaybackEngine {
+public interface PlayerEngine {
     int BACKGROUND_MODE_DEFAULT = 0;
     int BACKGROUND_MODE_SOUND = 1;
     int BACKGROUND_MODE_PIP = 2;

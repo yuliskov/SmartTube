@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -19,19 +19,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class HQDialogManager extends PlayerEventListenerHelper {
-    private static final String TAG = HQDialogManager.class.getSimpleName();
+public class HQDialogController extends PlayerEventListenerHelper {
+    private static final String TAG = HQDialogController.class.getSimpleName();
     private static final int VIDEO_FORMATS_ID = 132;
     private static final int AUDIO_FORMATS_ID = 133;
     // NOTE: using map, because same item could be changed time to time
     private final Map<Integer, OptionCategory> mCategories = new LinkedHashMap<>();
     private final Map<Integer, OptionCategory> mCategoriesInt = new LinkedHashMap<>();
     private final Set<Runnable> mHideListeners = new HashSet<>();
-    private final VideoStateManager mStateUpdater;
+    private final VideoStateController mStateUpdater;
     private PlayerData mPlayerData;
     private AppDialogPresenter mAppDialogPresenter;;
 
-    public HQDialogManager(VideoStateManager stateUpdater) {
+    public HQDialogController(VideoStateController stateUpdater) {
         mStateUpdater = stateUpdater;
     }
 
@@ -61,10 +61,10 @@ public class HQDialogManager extends PlayerEventListenerHelper {
     }
 
     private void addQualityCategories() {
-        List<FormatItem> videoFormats = getController().getVideoFormats();
+        List<FormatItem> videoFormats = getPlayer().getVideoFormats();
         String videoFormatsTitle = getActivity().getString(R.string.title_video_formats);
 
-        List<FormatItem> audioFormats = getController().getAudioFormats();
+        List<FormatItem> audioFormats = getPlayer().getAudioFormats();
         String audioFormatsTitle = getActivity().getString(R.string.title_audio_formats);
 
         addCategoryInt(OptionCategory.from(
@@ -81,31 +81,31 @@ public class HQDialogManager extends PlayerEventListenerHelper {
 
     private void selectFormatOption(OptionItem option) {
         FormatItem formatItem = UiOptionItem.toFormat(option);
-        getController().setFormat(formatItem);
+        getPlayer().setFormat(formatItem);
 
         if (mPlayerData.getFormat(formatItem.getType()).isPreset()) {
             // Preset currently active. Show warning about format reset.
             MessageHelpers.showMessage(getActivity(), R.string.video_preset_enabled);
         }
 
-        if (!getController().containsMedia()) {
-            getController().reloadPlayback();
+        if (!getPlayer().containsMedia()) {
+            getPlayer().reloadPlayback();
         }
 
         // Make result easily be spotted by the user
         if (formatItem.getType() == FormatItem.TYPE_VIDEO) {
-            getController().showOverlay(false);
+            getPlayer().showOverlay(false);
         }
     }
 
     private void addVideoBufferCategory() {
         addCategoryInt(AppDialogUtil.createVideoBufferCategory(getActivity(), mPlayerData,
-                () -> getController().restartEngine()));
+                () -> getPlayer().restartEngine()));
     }
 
     private void addAudioDelayCategory() {
         addCategoryInt(AppDialogUtil.createAudioShiftCategory(getActivity(), mPlayerData,
-                () -> getController().restartEngine()));
+                () -> getPlayer().restartEngine()));
     }
 
     private void onDialogHide() {
@@ -119,8 +119,8 @@ public class HQDialogManager extends PlayerEventListenerHelper {
     private void updateBackgroundPlayback() {
         ViewManager.instance(getActivity()).blockTop(null);
 
-        if (getController() != null) {
-            getController().setBackgroundMode(mPlayerData.getBackgroundMode());
+        if (getPlayer() != null) {
+            getPlayer().setBackgroundMode(mPlayerData.getBackgroundMode());
         }
     }
 
@@ -134,19 +134,19 @@ public class HQDialogManager extends PlayerEventListenerHelper {
     private void addPresetsCategory() {
         addCategoryInt(AppDialogUtil.createVideoPresetsCategory(
                 getActivity(), () -> {
-                    if (getController() == null) {
+                    if (getPlayer() == null) {
                         return;
                     }
 
                     FormatItem format = mPlayerData.getFormat(FormatItem.TYPE_VIDEO);
-                    getController().setFormat(format);
+                    getPlayer().setFormat(format);
 
-                    if (!getController().containsMedia()) {
-                        getController().reloadPlayback();
+                    if (!getPlayer().containsMedia()) {
+                        getPlayer().reloadPlayback();
                     }
 
                     // Make result easily be spotted by the user
-                    getController().showOverlay(false);
+                    getPlayer().showOverlay(false);
                 }
         ));
     }
