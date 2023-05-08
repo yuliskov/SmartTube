@@ -548,5 +548,8 @@
     <string name="hide_shorts_everywhere">Shortsları her yerde gizle</string>
     <string name="update_found">Güncelleme</string>
     <string name="volume_boost_warning">Sınırın üzerindeki herhangi bir ayar hoparlörlere zarar verebilir</string>
-    <string name="play_video_incognito">Gizli oynat</string>    
+    <string name="play_video_incognito">Gizli oynat</string>
+    <string name="header_kids_home">Kids</string>
+    <string name="player_section_playlist">Geçerli bölüm içeriklerini oynatma listesi olarak kullan</string>
+    <string name="header_trending">Trendler</string>
 </resources>
