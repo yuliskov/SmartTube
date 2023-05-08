@@ -529,4 +529,6 @@
     <string name="volume_boost_warning">Pengaturan apa pun yang melebihi batas dapat berpotensi merusak speaker</string>
     <string name="play_video_incognito">Mainkan di penyamaran</string>
     <string name="header_kids_home">Anak-anak</string>
+    <string name="player_section_playlist">Menggunakan konten bagian saat ini sebagai daftar putar</string>
+    <string name="header_trending">Sedang tren</string>
 </resources>
