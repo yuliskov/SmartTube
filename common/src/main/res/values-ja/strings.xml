@@ -507,4 +507,6 @@
   <string name="volume_boost_warning">上限を超える設定はスピーカーを破損する恐れがあります</string>
   <string name="play_video_incognito">シークレットモードで再生</string>
   <string name="header_kids_home">Kids</string>
+  <string name="player_section_playlist">現在のセクションを再生リストとして扱う</string>
+  <string name="header_trending">急上昇</string>
 </resources>
