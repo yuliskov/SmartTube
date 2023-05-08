@@ -57,7 +57,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         // Remote control fix. Slow network fix. Suggestions may still be loading.
         // This could lead to changing current video info (title, id etc) to wrong one.
         disposeActions();
-        mCurrentGroup = item.getGroup(); // keep from garbage collected
+        mCurrentGroup = null; // enable garbage collected
         mNextGroup = null; // enable garbage collected
         mNextVideo = null;
     }
@@ -377,6 +377,8 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
             return;
         }
 
+        mCurrentGroup = video.getGroup(); // keep object from garbage collected
+
         getController().updateSuggestions(video.getGroup());
         focusAndContinueIfNeeded(video.getGroup());
         appendNextVideoIfNeeded(video.getGroup());
@@ -494,10 +496,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
         for (Video current : videos) {
             if ((found || mNextCount > 0) && current.hasVideo() && !current.isUpcoming) {
-                mNextVideo = current;
                 getController().setNextTitle(current.title);
                 mNextCount = 0;
                 mNextGroup = group;
+                mNextVideo = current;
                 return;
             }
 
