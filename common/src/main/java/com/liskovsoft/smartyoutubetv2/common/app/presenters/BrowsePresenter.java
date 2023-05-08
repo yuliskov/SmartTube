@@ -139,6 +139,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         int uploadsType = mMainUIData.isUploadsOldLookEnabled() ? BrowseSection.TYPE_GRID : BrowseSection.TYPE_MULTI_GRID;
 
         mSectionsMapping.put(MediaGroup.TYPE_HOME, new BrowseSection(MediaGroup.TYPE_HOME, getContext().getString(R.string.header_home), BrowseSection.TYPE_ROW, R.drawable.icon_home));
+        mSectionsMapping.put(MediaGroup.TYPE_TRENDING, new BrowseSection(MediaGroup.TYPE_TRENDING, getContext().getString(R.string.header_trending), BrowseSection.TYPE_ROW, R.drawable.icon_trending));
         mSectionsMapping.put(MediaGroup.TYPE_KIDS_HOME, new BrowseSection(MediaGroup.TYPE_KIDS_HOME, getContext().getString(R.string.header_kids_home), BrowseSection.TYPE_ROW, R.drawable.icon_kids_home));
         mSectionsMapping.put(MediaGroup.TYPE_GAMING, new BrowseSection(MediaGroup.TYPE_GAMING, getContext().getString(R.string.header_gaming), BrowseSection.TYPE_ROW, R.drawable.icon_gaming));
         if (!Helpers.equalsAny(country, "RU", "BY")) {
@@ -157,6 +158,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private void initSectionCallbacks() {
         mRowMapping.put(MediaGroup.TYPE_HOME, mGeneralData.isOldHomeLookEnabled() ? mGroupManager.getHomeV1Observe() : mGroupManager.getHomeObserve());
+        mRowMapping.put(MediaGroup.TYPE_TRENDING, mGroupManager.getTrendingObserve());
         mRowMapping.put(MediaGroup.TYPE_KIDS_HOME, mGroupManager.getKidsHomeObserve());
         mRowMapping.put(MediaGroup.TYPE_NEWS, mGroupManager.getNewsObserve());
         mRowMapping.put(MediaGroup.TYPE_MUSIC, mGroupManager.getMusicObserve());

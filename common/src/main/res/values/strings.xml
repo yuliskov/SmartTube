@@ -551,4 +551,5 @@
     <string name="play_video_incognito">Play incognito</string>
     <string name="header_kids_home">Kids</string>
     <string name="player_section_playlist">Use current section contents as a playlist</string>
+    <string name="header_trending">Trending</string>
 </resources>

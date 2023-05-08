@@ -542,4 +542,5 @@
     <string name="play_video_incognito">Воспроизвести анонимно</string>
     <string name="header_kids_home">Детям</string>
     <string name="player_section_playlist">Использовать содержимое текущего раздела в качестве плейлиста</string>
+    <string name="header_trending">В тренде</string>
 </resources>

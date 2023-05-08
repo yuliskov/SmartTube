@@ -106,7 +106,7 @@
   <string name="next_video_info_is_not_loaded_yet">Következő videó még nem töltődött be</string>
   <string name="card_multiline_title">Többsoros címek</string>
   <string name="cards_style">Megjelenés</string>
-  <string name="repeat_mode_all">Összes videó lejátszása egymás után</string>
+  <string name="repeat_mode_all">Lejátszás egymás után</string>
   <string name="repeat_mode_one">Aktuális videó ismétlése</string>
   <string name="repeat_mode_pause">Szüneteltesse a lejátszást minden videó után</string>
   <string name="repeat_mode_pause_alt">Folyamatosan csak a videólistáról játsszon videókat</string>
@@ -130,7 +130,7 @@
   <string name="open_channel_uploads">Csatorna feltöltések megnyitása</string>
   <string name="app_exit_shortcut">Kilépés módjának beállítása</string>
   <string name="app_exit_none">Ne lépjen ki</string>
-  <string name="app_double_back_exit">Vissza gomb duplán nyomva</string>
+  <string name="app_double_back_exit">Vissza gomb kétszer nyomva</string>
   <string name="app_single_back_exit">Vissza gomb egyszer nyomva</string>
   <string name="action_video_zoom">Videó zoom</string>
   <string name="video_zoom">Videó zoom</string>
@@ -192,7 +192,7 @@
   <string name="msg_mode_switch_error">Nem lehet átállítani a megjelenítési módot \"%s\"</string>
   <string name="msg_player_error">Lejátszási hiba történt %s. A lejátszás újraindítása..</string>
   <string name="open_playlist">Videólista megnyitása</string>
-  <string name="playback_queue_category_title">Videólista sorrendje</string>
+  <string name="playback_queue_category_title">Videólista</string>
   <string name="video_buffer_size_none">Nincs megadva</string>
   <string name="subtitle_white_transparent">Fehér, átlátszó háttérrel</string>
   <string name="player_show_ending_time">Videó hosszának kijelzése</string>
@@ -211,8 +211,8 @@
   <string name="video_aspect">Képarány</string>
   <string name="player_tweaks">Fejlesztői beállítások</string>
   <string name="header_uploads">Feltöltések</string>
-  <string name="player_show_global_clock">Az óra mindig látható a képernyőn</string>
-  <string name="player_show_global_ending_time">A hátralévő idő mindig látható a képernyőn</string>
+  <string name="player_show_global_clock">Egy óra a jobb felső sarokban</string>
+  <string name="player_show_global_ending_time">A hátralévő idő</string>
   <string name="uploads_old_look">A Feltöltések szakasz régi megjelenésének visszaállítása</string>
   <string name="background_playback_activation">Lejátszás a háttérben (aktiválás)</string>
   <string name="channels_old_look">A Feliratkozások régi megjelenésének visszaállítása</string>
@@ -246,7 +246,7 @@
   <string name="covid_news_row_name">COVID-19 hírek</string>
   <string name="enable_voice_search">Hangalapú keresés engedélyezése</string>
   <string name="subscribe_unsubscribe_from_channel">Feliratkozás/Leiratkozás a csatornáról</string>
-  <string name="app_backup_restore">Biztonsági mentés visszaállítása</string>
+  <string name="app_backup_restore">Biztonsági mentés</string>
   <string name="app_backup">Adatok biztonsági mentése</string>
   <string name="app_restore">Adatok visszaállítása biztonsági másolatból</string>
   <string name="skip_each_segment_once">Az egyes szegmenseket csak egyszer hagyja ki</string>
@@ -254,7 +254,7 @@
   <string name="player_time_correction">Az idő megjelenítése a sebesség függvényében</string>
   <string name="option_disabled">Letiltva</string>
   <string name="sponsor_color_markers">Színes jelölők a folyamatjelző sávon</string>
-  <string name="refresh_section">szakasz frissítése</string>
+  <string name="refresh_section">Videólista frissítése</string>
   <string name="live_now_row_name">Élő adás</string>
   <string name="run_in_background">Lejátszás a háttérben</string>
   <string name="settings_remote_control">Távirányító</string>
@@ -286,8 +286,8 @@
   <string name="ui_hide_timeout_sec">%s mp</string>
   <string name="screen_dimming_timeout_min">%s perc</string>
   <string name="mark_all_channels_watched">Az összes csatorna megjelölése nézettként</string>
-  <string name="move_section_up">A szakasz mozgatása felfelé</string>
-  <string name="move_section_down">A szakasz mozgatása lefelé</string>
+  <string name="move_section_up">Bejegyzés mozgatása felfelé</string>
+  <string name="move_section_down">Bejegyzés mozgatása lefelé</string>
   <string name="player_buttons">A lejátszóban látható gombok</string>
   <string name="action_playlist_add">Videólistához adni</string>
   <string name="action_video_stats">Videó statisztika</string>
@@ -389,8 +389,8 @@
   <string name="pressing_home_back">a HOME vagy a BACK gomb megnyomásával</string>
   <string name="player_number_key_seek">Keresés a számbillentyűkkel</string>
   <string name="save_remove_playlist">Lista mentése/törlése a videólisták részből</string>
-  <string name="remove_playlist">Videó törlése</string>
-  <string name="removed_from_playlists">Törölve a videólistából</string>
+  <string name="remove_playlist">Videó eltávolítása</string>
+  <string name="removed_from_playlists">Eltávolítva a videólistából</string>
   <string name="saved_to_playlists">Mentés a videólistákhoz</string>
   <string name="create_playlist">Videólista létrehozása</string>
   <string name="add_video_to_new_playlist">Hozzáadás új videólistához</string>
@@ -530,4 +530,18 @@
   <string name="okhttp_desc">Stabil, de lassú hálózati verem.</string>
   <string name="select_channel_section">Nyissa meg a megfelelő kategóriát, amikor az alkalmazás az ATV csatornákon keresztül indul el.</string>
   <string name="enable_voice_search_desc">A hivatalos alkalmazást egy úgynevezett híd váltja fel. A híd segít a globális keresési kérelmek átvitelében az alkalmazásunkba.</string>
+  <string name="enable_master_password">Mester jelszó engedélyezése</string>
+  <string name="enter_master_password">Adja meg a Mester jelszót</string>
+  <string name="disable_stream_buffer">Puffer letiltása az adatfolyamokon</string>
+  <string name="disable_stream_buffer_desc">Javítás azokra a helyzetekre, amikor az adatfolyam nagyon késik.</string>
+  <string name="sony_frame_drop_fix">Képkocka eldobása #1</string>
+  <string name="sony_frame_drop_fix_desc">Javítja a késleltetést / késést a Sony TV-n és néhány más eszközön.</string>
+  <string name="audio_language">Hang nyelve</string>
+  <string name="old_home_look">A Kezdőlap rész régi megjelenése</string>
+  <string name="hide_shorts_everywhere">Rövid klipek elrejtése mindenhol</string>
+  <string name="update_found">Frissítés elérhető</string>
+  <string name="volume_boost_warning">A határértéket meghaladó beállítások károsíthatják a hangszórókat</string>
+  <string name="play_video_incognito">Lejátszás inkognitó módban</string>
+  <string name="header_kids_home">Gyermekvideók</string>
+  <string name="player_section_playlist">Az aktuális szakasz tartalmának használata lejátszási listaként</string>
 </resources>
