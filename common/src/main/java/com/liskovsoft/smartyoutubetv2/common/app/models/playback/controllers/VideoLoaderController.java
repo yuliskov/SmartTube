@@ -82,6 +82,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             return;
         }
 
+        boolean isVideoChanged = !item.equals(mLastVideo);
+        mLastVideo = item; // save for later
+
         if (!item.fromQueue) {
             mPlaylist.add(item);
         } else {
@@ -89,13 +92,11 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         }
 
         if (getPlayer() != null && getPlayer().isEngineInitialized()) { // player is initialized
-            if (!item.equals(mLastVideo)) {
+            if (isVideoChanged) {
                 loadVideo(item); // force play immediately
             } else {
                 loadSuggestions(item); // update suggestions only
             }
-        } else {
-            mLastVideo = item; // save for later
         }
     }
 
@@ -225,7 +226,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private void loadVideo(Video item) {
         if (item != null) {
             mPlaylist.setCurrent(item);
-            mLastVideo = item;
             getPlayer().setVideo(item);
             getPlayer().resetPlayerState();
             loadFormatInfo(item);
@@ -238,7 +238,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private void loadSuggestions(Video item) {
         if (item != null) {
             mPlaylist.setCurrent(item);
-            mLastVideo = item;
             getPlayer().setVideo(item);
             mSuggestionsLoader.loadSuggestions(item);
         }
