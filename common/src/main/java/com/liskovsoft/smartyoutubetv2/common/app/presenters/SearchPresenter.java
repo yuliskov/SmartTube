@@ -230,6 +230,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
+        if (item.getGroup() == null) {
+            Log.e(TAG, "Can't scroll. Video group is null.");
+            return;
+        }
+
         VideoGroup group = item.getGroup();
 
         Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());
