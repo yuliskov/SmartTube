@@ -349,7 +349,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             // NOTE: Next clicked: instant playback even a mix
             // NOTE: Bypass PIP fullscreen on next caused by startView
             getMainController().openVideo(item);
-            getPlayer().showOverlay(true);
+            //getPlayer().showOverlay(true);
         } else {
             VideoActionPresenter.instance(getActivity()).apply(item);
         }
