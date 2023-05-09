@@ -112,7 +112,7 @@
     <string name="card_multiline_title">Titoli multiriga</string>
     <string name="cards_style">Stile cartoline</string>
     <string name="repeat_mode_all">Riproduci i video continuamente</string>
-    <string name="repeat_mode_one">Ripeti video corrente</string>
+    <string name="repeat_mode_one">Ripeti video attuale</string>
     <string name="repeat_mode_pause">Metti in pausa la riproduzione dopo ogni video</string>
     <string name="repeat_mode_pause_alt">Riproduci solo i video della playlist continuamente</string>
     <string name="repeat_mode_none">Interrompi la riproduzione dopo un video</string>
@@ -550,4 +550,6 @@
     <string name="volume_boost_warning">Qualsiasi impostazione oltre il limite può potenzialmente danneggiare gli altoparlanti</string>
     <string name="play_video_incognito">Riproduci in incognito</string>
     <string name="header_kids_home">Ragazzi</string>
+    <string name="player_section_playlist">Utilizza i contenuti della sezione attuale come una playlist</string>
+    <string name="header_trending">Tendenze</string>
 </resources>
