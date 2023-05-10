@@ -34,7 +34,7 @@ public class PlayerTweaksData {
     public static final int PLAYER_BUTTON_CONTENT_BLOCK = 0b1000000000000000000000;
     public static final int PLAYER_BUTTON_CHAT = 0b10000000000000000000000;
     public static final int PLAYER_BUTTON_VIDEO_ROTATE = 0b100000000000000000000000;
-    public static final int PLAYER_BUTTON_SCREEN_TIMEOUT = 0b1000000000000000000000000;
+    public static final int PLAYER_BUTTON_SCREEN_OFF_TIMEOUT = 0b1000000000000000000000000;
     public static final int PLAYER_BUTTON_DEFAULT = PLAYER_BUTTON_SEARCH | PLAYER_BUTTON_PIP | PLAYER_BUTTON_SCREEN_OFF | PLAYER_BUTTON_VIDEO_SPEED |
             PLAYER_BUTTON_VIDEO_STATS | PLAYER_BUTTON_OPEN_CHANNEL | PLAYER_BUTTON_SUBTITLES | PLAYER_BUTTON_SUBSCRIBE |
             PLAYER_BUTTON_LIKE | PLAYER_BUTTON_DISLIKE | PLAYER_BUTTON_ADD_TO_PLAYLIST | PLAYER_BUTTON_PLAY_PAUSE |
@@ -74,8 +74,8 @@ public class PlayerTweaksData {
     private boolean mUnlockAllFormats;
     private boolean mIsBufferOnStreamsDisabled;
     private boolean mIsSectionPlaylistEnabled;
-    private boolean mIsScreenTimeoutEnabled;
-    private int mScreenTimeoutSec;
+    private boolean mIsScreenOffTimeoutEnabled;
+    private int mScreenOffTimeoutSec;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -375,22 +375,22 @@ public class PlayerTweaksData {
         return mIsSectionPlaylistEnabled;
     }
 
-    public void enableScreenTimeout(boolean enable) {
-        mIsScreenTimeoutEnabled = enable;
+    public void enableScreenOffTimeout(boolean enable) {
+        mIsScreenOffTimeoutEnabled = enable;
         persistData();
     }
 
-    public boolean isScreenTimeoutEnabled() {
-        return mIsScreenTimeoutEnabled;
+    public boolean isScreenOffTimeoutEnabled() {
+        return mIsScreenOffTimeoutEnabled;
     }
 
-    public void setScreenTimeoutSec(int timeoutSec) {
-        mScreenTimeoutSec = timeoutSec;
+    public void setScreenOffTimeoutSec(int timeoutSec) {
+        mScreenOffTimeoutSec = timeoutSec;
         persistData();
     }
 
-    public int getScreenTimeoutSec() {
-        return mScreenTimeoutSec;
+    public int getScreenOffTimeoutSec() {
+        return mScreenOffTimeoutSec;
     }
 
     private void restoreData() {
@@ -432,8 +432,8 @@ public class PlayerTweaksData {
         mIsBufferOnStreamsDisabled = Helpers.parseBoolean(split, 30, false);
         // Cause severe garbage collector stuttering
         mIsSectionPlaylistEnabled = Helpers.parseBoolean(split, 31, Build.VERSION.SDK_INT > 21);
-        mIsScreenTimeoutEnabled = Helpers.parseBoolean(split, 32, false);
-        mScreenTimeoutSec = Helpers.parseInt(split, 33, 5);
+        mIsScreenOffTimeoutEnabled = Helpers.parseBoolean(split, 32, false);
+        mScreenOffTimeoutSec = Helpers.parseInt(split, 33, 5);
 
         updateDefaultValues();
     }
@@ -447,8 +447,7 @@ public class PlayerTweaksData {
                 null, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
                 mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio, mIsQualityInfoBitrateEnabled,
                 mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
-                mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
-                mIsScreenTimeoutEnabled, mScreenTimeoutSec
+                mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled, mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec
         ));
     }
 

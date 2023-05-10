@@ -223,7 +223,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             getPlayer().setDebugButtonState(mDebugViewEnabled);
         }
 
-        getPlayer().setButtonState(R.id.action_screen_timeout, mPlayerTweaksData.isScreenTimeoutEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_screen_off_timeout, mPlayerTweaksData.isScreenOffTimeoutEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
     @Override
@@ -503,8 +503,8 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             getPlayer().setVideoRotation(rotation);
             getPlayer().setButtonState(buttonId, rotation == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
             mPlayerData.setVideoRotation(rotation);
-        } else if (buttonId == R.id.action_screen_timeout) {
-            mPlayerTweaksData.enableScreenTimeout(buttonState == PlayerUI.BUTTON_OFF);
+        } else if (buttonId == R.id.action_screen_off_timeout) {
+            mPlayerTweaksData.enableScreenOffTimeout(buttonState == PlayerUI.BUTTON_OFF);
             getPlayer().setButtonState(buttonId, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
             ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
             manager.disable();
@@ -513,9 +513,9 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
     @Override
     public void onButtonLongClicked(int buttonId, int buttonState) {
-        if (buttonId == R.id.action_screen_timeout) {
+        if (buttonId == R.id.action_screen_off_timeout) {
             AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
-            OptionCategory category = AppDialogUtil.createPlayerScreenTimeoutCategory(getActivity(), mPlayerTweaksData);
+            OptionCategory category = AppDialogUtil.createPlayerScreenOffTimeoutCategory(getActivity(), mPlayerTweaksData);
             settingsPresenter.appendRadioCategory(category.title, category.options);
             settingsPresenter.showDialog();
         }

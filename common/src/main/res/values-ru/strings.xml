@@ -544,5 +544,5 @@
     <string name="player_section_playlist">Использовать содержимое текущего раздела в качестве плейлиста</string>
     <string name="header_trending">В тренде</string>
     <string name="screensaver">Заставка</string>
-    <string name="player_screen_timeout">Тайм-аут экрана</string>
+    <string name="player_screen_off_timeout">Тайм-аут выключения экрана</string>
 </resources>

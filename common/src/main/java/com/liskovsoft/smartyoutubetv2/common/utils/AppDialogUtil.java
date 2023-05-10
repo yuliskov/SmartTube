@@ -488,16 +488,16 @@ public class AppDialogUtil {
         return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, videoRotateTitle, options);
     }
 
-    public static OptionCategory createPlayerScreenTimeoutCategory(Context context, PlayerTweaksData data) {
+    public static OptionCategory createPlayerScreenOffTimeoutCategory(Context context, PlayerTweaksData data) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int timoutSec : Helpers.range(1, 10, 1)) {
             options.add(UiOptionItem.from(String.format("%s sec", timoutSec),
-                    optionItem -> data.setScreenTimeoutSec(timoutSec),
-                    data.getScreenTimeoutSec() == timoutSec));
+                    optionItem -> data.setScreenOffTimeoutSec(timoutSec),
+                    data.getScreenOffTimeoutSec() == timoutSec));
         }
 
-        String title = context.getString(R.string.player_screen_timeout);
+        String title = context.getString(R.string.player_screen_off_timeout);
 
         return OptionCategory.from(PLAYER_SCREEN_TIMEOUT_ID, OptionCategory.TYPE_RADIO, title, options);
     }

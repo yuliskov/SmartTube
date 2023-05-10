@@ -35,7 +35,7 @@ public class ScreensaverManager {
     private boolean mIsScreenOff;
     private final Runnable mTimeoutHandler = () -> {
         // Playing the video and dialog overlay isn't shown
-        if (ViewManager.instance(mActivity.get()).getTopView() != PlaybackView.class || !mTweaksData.isScreenTimeoutEnabled()) {
+        if (ViewManager.instance(mActivity.get()).getTopView() != PlaybackView.class || !mTweaksData.isScreenOffTimeoutEnabled()) {
             return;
         }
 
@@ -134,14 +134,14 @@ public class ScreensaverManager {
 
     private void enableTimeout() {
         // Playing the video and dialog overlay isn't shown
-        if (ViewManager.instance(mActivity.get()).getTopView() != PlaybackView.class || !mTweaksData.isScreenTimeoutEnabled()) {
+        if (ViewManager.instance(mActivity.get()).getTopView() != PlaybackView.class || !mTweaksData.isScreenOffTimeoutEnabled()) {
             disableTimeout();
             return;
         }
 
         Log.d(TAG, "Starting auto hide ui timer...");
         disableTimeout();
-        Utils.postDelayed(mTimeoutHandler, mTweaksData.getScreenTimeoutSec() * 1_000);
+        Utils.postDelayed(mTimeoutHandler, mTweaksData.getScreenOffTimeoutSec() * 1_000);
     }
 
     private void disableTimeout() {

@@ -193,8 +193,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_remember_speed), options);
     }
 
-    private void appendScreenTimeoutCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AppDialogUtil.createPlayerScreenTimeoutCategory(getContext(), mPlayerTweaksData);
+    private void appendScreenOffTimeoutCategory(AppDialogPresenter settingsPresenter) {
+        OptionCategory category = AppDialogUtil.createPlayerScreenOffTimeoutCategory(getContext(), mPlayerTweaksData);
 
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
@@ -203,7 +203,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
-                {R.string.player_screen_timeout, PlayerTweaksData.PLAYER_BUTTON_SCREEN_TIMEOUT},
+                {R.string.player_screen_off_timeout, PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF_TIMEOUT},
                 {R.string.video_rotate, PlayerTweaksData.PLAYER_BUTTON_VIDEO_ROTATE},
                 {R.string.open_chat, PlayerTweaksData.PLAYER_BUTTON_CHAT},
                 {R.string.content_block_provider, PlayerTweaksData.PLAYER_BUTTON_CONTENT_BLOCK},

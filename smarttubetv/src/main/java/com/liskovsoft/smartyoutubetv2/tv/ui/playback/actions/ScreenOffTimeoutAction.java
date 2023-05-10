@@ -6,11 +6,11 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 /**
  * An action for enable/disable sponsored content.
  */
-public class ScreenTimeoutAction extends TwoStateAction {
-    public ScreenTimeoutAction(Context context) {
-        super(context, R.id.action_screen_timeout, R.drawable.action_screen_timeout_on);
+public class ScreenOffTimeoutAction extends TwoStateAction {
+    public ScreenOffTimeoutAction(Context context) {
+        super(context, R.id.action_screen_off_timeout, R.drawable.action_screen_timeout_on);
 
-        String label = context.getString(R.string.player_screen_timeout);
+        String label = context.getString(R.string.player_screen_off_timeout);
         String[] labels = new String[2];
         // Note, labels denote the action taken when clicked
         labels[INDEX_OFF] = label;

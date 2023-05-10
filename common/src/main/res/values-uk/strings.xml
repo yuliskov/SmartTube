@@ -544,5 +544,5 @@
     <string name="player_section_playlist">Використовувати вміст поточного розділу як список відтворення</string>
     <string name="header_trending">Популярне</string>
     <string name="screensaver">Заставка</string>
-    <string name="player_screen_timeout">Тайм-аут екрана</string>
+    <string name="player_screen_off_timeout">Тайм-аут вимкнення екрана</string>
 </resources>
