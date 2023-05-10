@@ -353,7 +353,7 @@ public class MainUIData extends DataChangeBase {
     private void updateDefaultValues() {
         // Enable only certain items (not all, like it was)
         if (mMenuItems >>> 30 == 0b1) { // check leftmost bit (old format)
-            mMenuItems = mMenuItems >>> (31 - 27); // remove auto enabled bits
+            mMenuItems = mMenuItems << (32 - 27) >>> (32 - 27); // remove auto enabled bits
         }
     }
 }
