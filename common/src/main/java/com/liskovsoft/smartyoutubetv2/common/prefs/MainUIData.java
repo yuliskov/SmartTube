@@ -49,8 +49,12 @@ public class MainUIData extends DataChangeBase {
     public static final int TOP_BUTTON_CHANGE_LANGUAGE = 0b10;
     public static final int TOP_BUTTON_SEARCH = 0b100;
     public static final int TOP_BUTTON_DEFAULT = Integer.MAX_VALUE & ~(TOP_BUTTON_CHANGE_LANGUAGE); // all except this items
-    public static final int MENU_ITEM_DEFAULT = Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_NEW_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT |
-            MENU_ITEM_PLAY_VIDEO | MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_SHARE_EMBED_LINK); // all except these items
+    public static final int MENU_ITEM_DEFAULT = MENU_ITEM_PIN_TO_SIDEBAR | MENU_ITEM_NOT_INTERESTED | MENU_ITEM_REMOVE_FROM_HISTORY |
+            MENU_ITEM_MOVE_SECTION_UP | MENU_ITEM_MOVE_SECTION_DOWN | MENU_ITEM_RENAME_SECTION | MENU_ITEM_SAVE_PLAYLIST |
+            MENU_ITEM_ADD_TO_PLAYLIST | MENU_ITEM_SUBSCRIBE | MENU_ITEM_CREATE_PLAYLIST | MENU_ITEM_STREAM_REMINDER |
+            MENU_ITEM_PLAYLIST_ORDER | MENU_ITEM_CLEAR_HISTORY | MENU_ITEM_OPEN_CHANNEL | MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS;
+    //public static final int MENU_ITEM_DEFAULT = Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_NEW_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT |
+    //        MENU_ITEM_PLAY_VIDEO | MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_SHARE_EMBED_LINK); // all except these items
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
@@ -313,6 +317,8 @@ public class MainUIData extends DataChangeBase {
         // 14
         mThumbQuality = Helpers.parseInt(split, 15, ClickbaitRemover.THUMB_QUALITY_DEFAULT);
         mIsCardMultilineSubtitleEnabled = Helpers.parseBoolean(split, 16, true);
+
+        updateDefaultValues();
     }
 
     @Override
@@ -341,6 +347,13 @@ public class MainUIData extends DataChangeBase {
             this.playerThemeResId = Helpers.getResourceId(playerTheme, "style", context);
             this.browseThemeResId = Helpers.getResourceId(browseTheme, "style", context);
             this.settingsThemeResId = Helpers.getResourceId(settingsTheme, "style", context);
+        }
+    }
+
+    private void updateDefaultValues() {
+        // Enable only certain items (not all, like it was)
+        if (mMenuItems >>> 30 == 0b1) { // check leftmost bit (old format)
+            mMenuItems = mMenuItems >>> (31 - 27); // remove auto enabled bits
         }
     }
 }

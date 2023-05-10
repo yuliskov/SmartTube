@@ -34,7 +34,12 @@ public class PlayerTweaksData {
     public static final int PLAYER_BUTTON_CONTENT_BLOCK = 0b1000000000000000000000;
     public static final int PLAYER_BUTTON_CHAT = 0b10000000000000000000000;
     public static final int PLAYER_BUTTON_VIDEO_ROTATE = 0b100000000000000000000000;
-    public static final int PLAYER_BUTTON_DEFAULT = Integer.MAX_VALUE & ~(PLAYER_BUTTON_SEEK_INTERVAL | PLAYER_BUTTON_CONTENT_BLOCK | PLAYER_BUTTON_VIDEO_ROTATE); // all buttons, except these
+    public static final int PLAYER_BUTTON_DEFAULT = PLAYER_BUTTON_SEARCH | PLAYER_BUTTON_PIP | PLAYER_BUTTON_SCREEN_OFF | PLAYER_BUTTON_VIDEO_SPEED |
+            PLAYER_BUTTON_VIDEO_STATS | PLAYER_BUTTON_OPEN_CHANNEL | PLAYER_BUTTON_SUBTITLES | PLAYER_BUTTON_SUBSCRIBE |
+            PLAYER_BUTTON_LIKE | PLAYER_BUTTON_DISLIKE | PLAYER_BUTTON_ADD_TO_PLAYLIST | PLAYER_BUTTON_PLAY_PAUSE |
+            PLAYER_BUTTON_REPEAT_MODE | PLAYER_BUTTON_NEXT | PLAYER_BUTTON_PREVIOUS | PLAYER_BUTTON_HIGH_QUALITY |
+            PLAYER_BUTTON_VIDEO_INFO | PLAYER_BUTTON_CHAT;
+    //public static final int PLAYER_BUTTON_DEFAULT = Integer.MAX_VALUE & ~(PLAYER_BUTTON_SEEK_INTERVAL | PLAYER_BUTTON_CONTENT_BLOCK | PLAYER_BUTTON_VIDEO_ROTATE); // all buttons, except these
     @SuppressLint("StaticFieldLeak")
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;
@@ -406,6 +411,8 @@ public class PlayerTweaksData {
         mIsBufferOnStreamsDisabled = Helpers.parseBoolean(split, 30, false);
         // Cause severe garbage collector stuttering
         mIsSectionPlaylistEnabled = Helpers.parseBoolean(split, 31, Build.VERSION.SDK_INT > 21);
+
+        updateDefaultValues();
     }
 
     private void persistData() {
@@ -419,5 +426,12 @@ public class PlayerTweaksData {
                 mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled
         ));
+    }
+
+    private void updateDefaultValues() {
+        // Enable only certain buttons (not all, like it was)
+        if (mPlayerButtons >>> 30 == 0b1) { // check leftmost bit (old format)
+            mPlayerButtons = mPlayerButtons >>> (31 - 24); // remove auto enabled bits
+        }
     }
 }
