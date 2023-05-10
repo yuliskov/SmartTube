@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class PlayerTweaksData {
@@ -403,7 +404,8 @@ public class PlayerTweaksData {
         mIsDashUrlStreamsForced = Helpers.parseBoolean(split, 28, false);
         mIsSonyFrameDropFixEnabled = Helpers.parseBoolean(split, 29, false);
         mIsBufferOnStreamsDisabled = Helpers.parseBoolean(split, 30, false);
-        mIsSectionPlaylistEnabled = Helpers.parseBoolean(split, 31, true);
+        // Cause severe garbage collector stuttering
+        mIsSectionPlaylistEnabled = Helpers.parseBoolean(split, 31, Build.VERSION.SDK_INT > 21);
     }
 
     private void persistData() {
