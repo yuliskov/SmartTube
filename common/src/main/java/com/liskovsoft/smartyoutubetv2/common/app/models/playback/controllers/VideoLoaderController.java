@@ -410,7 +410,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             case PlayerUI.REPEAT_MODE_ALL:
             case PlayerUI.REPEAT_MODE_SHUFFLE:
                 loadNext();
-                getPlayer().showOverlay(true);
+                //getPlayer().showOverlay(true);
                 break;
             case PlayerUI.REPEAT_MODE_ONE:
                 getPlayer().setPositionMs(0);
