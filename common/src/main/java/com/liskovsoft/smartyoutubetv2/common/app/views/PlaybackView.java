@@ -6,6 +6,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.Player
 public interface PlaybackView {
     void setEventListener(PlayerEventListener stateBridge);
     PlayerEventListener getEventListener();
-    PlayerManager getController();
+    PlayerManager getPlayer();
     void showProgressBar(boolean show);
 }

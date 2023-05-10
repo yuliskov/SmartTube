@@ -17,9 +17,9 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
@@ -30,6 +30,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMe
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
+import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
@@ -76,7 +77,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     }
 
     @Override
-    public void onInitDone() {
+    public void onInit() {
         mPlayerData = PlayerData.instance(getActivity());
         mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
 
@@ -221,6 +222,8 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             getPlayer().showDebugInfo(mDebugViewEnabled);
             getPlayer().setDebugButtonState(mDebugViewEnabled);
         }
+
+        getPlayer().setButtonState(R.id.action_screen_timeout, mPlayerTweaksData.isScreenTimeoutEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
     @Override
@@ -500,6 +503,21 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             getPlayer().setVideoRotation(rotation);
             getPlayer().setButtonState(buttonId, rotation == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
             mPlayerData.setVideoRotation(rotation);
+        } else if (buttonId == R.id.action_screen_timeout) {
+            mPlayerTweaksData.enableScreenTimeout(buttonState == PlayerUI.BUTTON_OFF);
+            getPlayer().setButtonState(buttonId, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+            ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
+            manager.disable();
+        }
+    }
+
+    @Override
+    public void onButtonLongClicked(int buttonId, int buttonState) {
+        if (buttonId == R.id.action_screen_timeout) {
+            AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
+            OptionCategory category = AppDialogUtil.createPlayerScreenTimeoutCategory(getActivity(), mPlayerTweaksData);
+            settingsPresenter.appendRadioCategory(category.title, category.options);
+            settingsPresenter.showDialog();
         }
     }
 

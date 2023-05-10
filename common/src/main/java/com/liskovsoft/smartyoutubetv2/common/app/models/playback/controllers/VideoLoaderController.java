@@ -68,7 +68,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     }
 
     @Override
-    public void onInitDone() {
+    public void onInit() {
         mPlayerData = PlayerData.instance(getActivity());
         mPlayerData.setOnChange(this);
         mPlayerTweaksData = PlayerTweaksData.instance(getActivity());

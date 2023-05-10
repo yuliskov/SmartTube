@@ -78,7 +78,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
     }
 
     @Override
-    public void onInitDone() {
+    public void onInit() {
         MediaService mediaService = YouTubeMediaService.instance();
         mMediaItemManager = mediaService.getMediaItemService();
         mContentBlockData = ContentBlockData.instance(getActivity());

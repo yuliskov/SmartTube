@@ -53,7 +53,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
     }
 
     @Override
-    public void onInitDone() {
+    public void onInit() {
         mPlayerData = PlayerData.instance(getActivity());
         mAutoFrameRateHelper.saveOriginalState(getActivity());
     }

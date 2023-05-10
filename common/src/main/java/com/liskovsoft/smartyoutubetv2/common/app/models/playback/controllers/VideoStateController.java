@@ -51,7 +51,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     };
 
     @Override
-    public void onInitDone() { // called each time a video opened from the browser
+    public void onInit() { // called each time a video opened from the browser
         mPlayerData = PlayerData.instance(getActivity());
         mGeneralData = GeneralData.instance(getActivity());
         mPlayerTweaksData = PlayerTweaksData.instance(getActivity());

@@ -26,7 +26,7 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
     
     @Override
-    public void onInitDone() {
+    public void onInit() {
         // NOP
     }
 

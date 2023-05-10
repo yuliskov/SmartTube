@@ -48,7 +48,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onInitDone() {
+    public void onInit() {
         mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
     }
 

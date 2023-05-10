@@ -8,10 +8,13 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AddDevicePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.lang.ref.WeakReference;
@@ -20,20 +23,35 @@ public class ScreensaverManager {
     private static final String TAG = ScreensaverManager.class.getSimpleName();
     private static final int MODE_DIMMING = 0;
     private static final int MODE_SCREEN_OFF = 1;
-    private final WeakReference<Activity> mActivity;
+    private WeakReference<Activity> mActivity;
     private final WeakReference<View> mDimContainer;
     private final Runnable mDimScreen = this::dimScreen;
     private final Runnable mUndimScreen = this::undimScreen;
     private final GeneralData mGeneralData;
+    private PlayerTweaksData mTweaksData;
     private int mMode = MODE_DIMMING;
     private final int mDimColorResId = R.color.dimming;
     private final int mScreenOffColorResId = R.color.black;
     private boolean mIsScreenOff;
+    private final Runnable mTimeoutHandler = () -> {
+        // Playing the video and dialog overlay isn't shown
+        if (ViewManager.instance(mActivity.get()).getTopView() != PlaybackView.class || !mTweaksData.isScreenTimeoutEnabled()) {
+            return;
+        }
+
+        if (!AppDialogPresenter.instance(mActivity.get()).isDialogShown()) {
+            doScreenOff();
+        } else {
+            // showing dialog... or recheck...
+            enableTimeout();
+        }
+    };
 
     public ScreensaverManager(Activity activity) {
         mActivity = new WeakReference<>(activity);
         mDimContainer = new WeakReference<>(createDimContainer(activity));
         mGeneralData = GeneralData.instance(activity);
+        mTweaksData = PlayerTweaksData.instance(activity);
         enable();
     }
 
@@ -101,6 +119,10 @@ public class ScreensaverManager {
     }
 
     public void doScreenOff() {
+        if (mIsScreenOff) {
+            return;
+        }
+
         disable();
         mMode = MODE_SCREEN_OFF;
         Utils.postDelayed(mDimScreen, 0);
@@ -108,6 +130,23 @@ public class ScreensaverManager {
 
     public boolean isScreenOff() {
         return mIsScreenOff;
+    }
+
+    private void enableTimeout() {
+        // Playing the video and dialog overlay isn't shown
+        if (ViewManager.instance(mActivity.get()).getTopView() != PlaybackView.class || !mTweaksData.isScreenTimeoutEnabled()) {
+            disableTimeout();
+            return;
+        }
+
+        Log.d(TAG, "Starting auto hide ui timer...");
+        disableTimeout();
+        Utils.postDelayed(mTimeoutHandler, mTweaksData.getScreenTimeoutSec() * 1_000);
+    }
+
+    private void disableTimeout() {
+        Log.d(TAG, "Stopping auto hide ui timer...");
+        Utils.removeCallbacks(mTimeoutHandler);
     }
 
     private void dimScreen() {
@@ -129,6 +168,10 @@ public class ScreensaverManager {
 
         if (activity == null || dimContainer == null) {
             return;
+        }
+
+        if (!show) {
+            enableTimeout();
         }
 
         // Disable dimming on certain circumstances
@@ -181,7 +224,7 @@ public class ScreensaverManager {
         }
 
         PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
-        return playbackView != null && playbackView.getController().isPlaying();
+        return playbackView != null && playbackView.getPlayer().isPlaying();
     }
 
     private boolean isSigning() {
@@ -204,7 +247,7 @@ public class ScreensaverManager {
         PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
 
         if (playbackView != null) {
-            playbackView.getController().showOverlay(false);
+            playbackView.getPlayer().showOverlay(false);
         }
     }
 }

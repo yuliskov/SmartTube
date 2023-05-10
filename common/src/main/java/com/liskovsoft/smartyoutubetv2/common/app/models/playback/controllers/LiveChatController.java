@@ -34,7 +34,7 @@ public class LiveChatController extends PlayerEventListenerHelper implements Met
     private String mLiveChatKey;
 
     @Override
-    public void onInitDone() {
+    public void onInit() {
         mChatService = YouTubeMediaService.instance().getLiveChatService();
         mPlayerData = PlayerData.instance(getActivity());
         mPlayerTweaksData = PlayerTweaksData.instance(getActivity());

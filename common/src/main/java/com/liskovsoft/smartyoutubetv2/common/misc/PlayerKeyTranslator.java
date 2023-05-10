@@ -72,8 +72,8 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             PlaybackView playbackView = getPlaybackView();
             if (playbackView != null && playbackView.getEventListener() != null) {
                 playbackView.getEventListener().onLikeClicked(true);
-                playbackView.getController().setLikeButtonState(true);
-                playbackView.getController().setDislikeButtonState(false);
+                playbackView.getPlayer().setLikeButtonState(true);
+                playbackView.getPlayer().setDislikeButtonState(false);
                 MessageHelpers.showMessage(mContext, R.string.action_like);
             }
         };
@@ -81,8 +81,8 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             PlaybackView playbackView = getPlaybackView();
             if (playbackView != null && playbackView.getEventListener() != null) {
                 playbackView.getEventListener().onDislikeClicked(true);
-                playbackView.getController().setLikeButtonState(false);
-                playbackView.getController().setDislikeButtonState(true);
+                playbackView.getPlayer().setLikeButtonState(false);
+                playbackView.getPlayer().setDislikeButtonState(true);
                 MessageHelpers.showMessage(mContext, R.string.action_dislike);
             }
         };
@@ -128,8 +128,8 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
 
         PlaybackView playbackView = getPlaybackView();
 
-        if (playbackView != null && playbackView.getController() != null) {
-            float currentSpeed = playbackView.getController().getSpeed();
+        if (playbackView != null && playbackView.getPlayer() != null) {
+            float currentSpeed = playbackView.getPlayer().getSpeed();
             int currentIndex = Arrays.binarySearch(speedSteps, currentSpeed);
 
             if (currentIndex < 0) {
@@ -141,7 +141,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             float speed = newIndex >= 0 && newIndex < speedSteps.length ? speedSteps[newIndex] : speedSteps[currentIndex];
 
             PlayerData.instance(mContext).setSpeed(speed);
-            playbackView.getController().setSpeed(speed);
+            playbackView.getPlayer().setSpeed(speed);
             MessageHelpers.showMessage(mContext, String.format("%sx", speed));
         }
     }

@@ -42,7 +42,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     public void onViewInitialized() {
         super.onViewInitialized();
 
-        mMainPlayerEventBridge.setPlayer(getView().getController());
+        mMainPlayerEventBridge.setPlayer(getView().getPlayer());
         getView().setEventListener(mMainPlayerEventBridge);
     }
 
@@ -79,23 +79,23 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     }
 
     public Video getVideo() {
-        if (getView() == null || getView().getController() == null) {
+        if (getView() == null || getView().getPlayer() == null) {
             return null;
         }
 
-        return getView().getController().getVideo();
+        return getView().getPlayer().getVideo();
     }
 
     public boolean isRunningInBackground() {
         return getView() != null &&
-                getView().getController().getBackgroundMode() != PlayerEngine.BACKGROUND_MODE_DEFAULT &&
-                getView().getController().isEngineInitialized() &&
+                getView().getPlayer().getBackgroundMode() != PlayerEngine.BACKGROUND_MODE_DEFAULT &&
+                getView().getPlayer().isEngineInitialized() &&
                 !ViewManager.instance(getContext()).isPlayerInForeground() &&
                 getContext() instanceof Activity && Utils.checkActivity((Activity) getContext()); // Check that activity is not in Finishing state
     }
 
     public boolean isInPipMode() {
-        return getView() != null && getView().getController().isInPIPMode();
+        return getView() != null && getView().getPlayer().isInPIPMode();
     }
 
     private boolean isPreferBackground() {
@@ -106,7 +106,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
 
     public void forceFinish() {
         if (getView() != null) {
-            getView().getController().finishReally();
+            getView().getPlayer().finishReally();
         }
     }
 
@@ -118,9 +118,9 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
         // Check that the user isn't open context menu on suggestion item
         // if (Utils.isPlayerInForeground(getContext()) && getView() != null && !getView().getController().isSuggestionsShown()) {
         if (ViewManager.instance(getContext()).isPlayerInForeground() && getView() != null) {
-            getView().getController().setPositionMs(positionMs);
-            getView().getController().setPlayWhenReady(true);
-            getView().getController().showOverlay(false);
+            getView().getPlayer().setPositionMs(positionMs);
+            getView().getPlayer().setPlayWhenReady(true);
+            getView().getPlayer().showOverlay(false);
         } else {
             Video video = VideoMenuPresenter.sVideoHolder.get();
             if (video != null) {

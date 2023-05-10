@@ -91,7 +91,7 @@ public class MainPlayerController implements PlayerEventListener {
             if (mPlayer.get() != player) { // Be ready to re-init after app exit
                 mPlayer = new WeakReference<>(player);
                 mActivity = new WeakReference<>(((Fragment) player).getActivity());
-                process(PlayerEventListener::onInitDone);
+                process(PlayerEventListener::onInit);
             }
 
             if (mPendingVideo != null) {
@@ -127,7 +127,7 @@ public class MainPlayerController implements PlayerEventListener {
     }
 
     @Override
-    public void onInitDone() {
+    public void onInit() {
         // NOP. Internal event.
     }
 

@@ -32,6 +32,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAct
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ContentBlockAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.RotateAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ScreenTimeoutAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SeekIntervalAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ShareAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoInfoAction;
@@ -144,6 +145,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
 
         putAction(new RotateAction(context));
         putAction(new ContentBlockAction(context));
+        putAction(new ScreenTimeoutAction(context));
     }
 
     @Override
@@ -175,6 +177,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF)) {
             adapter.add(mScreenOffAction);
+        }
+        if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SCREEN_TIMEOUT)) {
+            adapter.add(mActions.get(R.id.action_screen_timeout));
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_CHAT)) {
             adapter.add(mChatAction);

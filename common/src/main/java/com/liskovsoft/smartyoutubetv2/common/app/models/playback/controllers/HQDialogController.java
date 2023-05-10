@@ -36,7 +36,7 @@ public class HQDialogController extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onInitDone() {
+    public void onInit() {
         mPlayerData = PlayerData.instance(getActivity());
         mAppDialogPresenter = AppDialogPresenter.instance(getActivity());
     }

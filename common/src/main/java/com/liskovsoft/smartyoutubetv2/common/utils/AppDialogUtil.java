@@ -48,6 +48,7 @@ public class AppDialogUtil {
     private static final int VIDEO_PRESETS_ID = 136;
     private static final int AUDIO_DELAY_ID = 137;
     private static final int AUDIO_LANGUAGE_ID = 138;
+    private static final int PLAYER_SCREEN_TIMEOUT_ID = 139;
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
@@ -485,6 +486,20 @@ public class AppDialogUtil {
         String videoRotateTitle = context.getString(R.string.video_rotate);
 
         return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, videoRotateTitle, options);
+    }
+
+    public static OptionCategory createPlayerScreenTimeoutCategory(Context context, PlayerTweaksData data) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int timoutSec : Helpers.range(1, 10, 1)) {
+            options.add(UiOptionItem.from(String.format("%s sec", timoutSec),
+                    optionItem -> data.setScreenTimeoutSec(timoutSec),
+                    data.getScreenTimeoutSec() == timoutSec));
+        }
+
+        String title = context.getString(R.string.player_screen_timeout);
+
+        return OptionCategory.from(PLAYER_SCREEN_TIMEOUT_ID, OptionCategory.TYPE_RADIO, title, options);
     }
 
     public static void showConfirmationDialog(Context context, String title, Runnable onConfirm) {

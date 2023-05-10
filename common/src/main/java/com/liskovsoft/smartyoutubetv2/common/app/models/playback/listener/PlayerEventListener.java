@@ -9,6 +9,6 @@ public interface PlayerEventListener extends PlayerUiEventListener, PlayerEngine
     /**
      * Called after creation of {@link PlayerManager}
      */
-    void onInitDone();
+    void onInit();
     void onFinish();
 }

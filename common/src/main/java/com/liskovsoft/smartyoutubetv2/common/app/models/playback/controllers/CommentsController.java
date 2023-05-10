@@ -21,7 +21,7 @@ public class CommentsController extends PlayerEventListenerHelper implements Met
     private String mCommentsKey;
 
     @Override
-    public void onInitDone() {
+    public void onInit() {
         mCommentsService = YouTubeMediaService.instance().getCommentsService();
     }
 

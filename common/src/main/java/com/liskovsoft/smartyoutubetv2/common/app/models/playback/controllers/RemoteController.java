@@ -66,7 +66,7 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
     }
 
     @Override
-    public void onInitDone() {
+    public void onInit() {
         tryListening();
     }
 

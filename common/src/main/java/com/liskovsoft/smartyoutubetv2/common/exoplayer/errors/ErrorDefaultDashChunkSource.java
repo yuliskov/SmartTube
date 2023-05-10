@@ -17,7 +17,7 @@ import java.util.List;
 public class ErrorDefaultDashChunkSource extends DefaultDashChunkSource {
     // Value greater than 1 increase video start time.
     // However, there's a possibility that bigger values could eliminate buffering problems.
-    public static final int MAX_SEGMENTS_PER_LOAD = 1;
+    public static final int MAX_SEGMENTS_PER_LOAD = 3;
     private final TrackErrorFixer mTrackErrorFixer;
 
     public static final class Factory implements DashChunkSource.Factory {
