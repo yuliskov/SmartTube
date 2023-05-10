@@ -431,7 +431,8 @@ public class PlayerTweaksData {
     private void updateDefaultValues() {
         // Enable only certain buttons (not all, like it was)
         if (mPlayerButtons >>> 30 == 0b1) { // check leftmost bit (old format)
-            mPlayerButtons = mPlayerButtons << (32 - 24) >>> (32 - 24); // remove auto enabled bits
+            int bits = 32 - 24;
+            mPlayerButtons = mPlayerButtons << bits >>> bits; // remove auto enabled bits
         }
     }
 }
