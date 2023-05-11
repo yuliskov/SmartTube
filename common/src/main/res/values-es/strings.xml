@@ -546,8 +546,8 @@
   <string name="volume_boost_warning">Cualquier ajuste por encima del límite puede dañar los altavoces</string>
   <string name="play_video_incognito">Reproducción de incógnito</string>
   <string name="header_kids_home">Kids</string>
-  <string name="player_section_playlist">Utilizar el contenido de la sección actual como lista de reproducción</string>
-  <string name="header_trending">Tendencias</string>
-  <string name="screensaver">Salvapantallas</string>
   <string name="player_screen_off_timeout">Tiempo de espera de apagado de pantalla</string>
+  <string name="screensaver">Salvapantallas</string>
+  <string name="header_trending">Tendencias</string>
+  <string name="player_section_playlist">Utilizar el contenido de la sección actual como lista de reproducción</string>
 </resources>
