@@ -507,7 +507,7 @@
     <string name="sort_by_rating">Peringkat</string>
     <string name="clear_search_history">Hapus riwayat pencarian</string>
     <string name="remove_from_subscriptions">Sembunyi</string>
-    <string name="player_long_speed_list">Daftar kecepatan panjang</string>
+    <string name="player_long_speed_list">Daftar kecepatan</string>
     <string name="alt_app_icon">Ikon alternatif aplikasi (perlu reboot)</string>
     <string name="network_stack">Lebih suka %s tumpukan jaringan</string>
     <string name="cronet_desc">Cronet adalah tumpukan jaringan Chromium. Cronet dapat mengurangi latensi dan meningkatkan kinerja jaringan, yang dapat membantu mengatasi masalah buffering.</string>
@@ -531,4 +531,5 @@
     <string name="header_kids_home">Anak-anak</string>
     <string name="player_section_playlist">Menggunakan konten bagian saat ini sebagai daftar putar</string>
     <string name="header_trending">Sedang tren</string>
+    <string name="player_screen_off_timeout">Batas waktu layar mati</string>
 </resources>
