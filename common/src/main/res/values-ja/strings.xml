@@ -504,9 +504,11 @@
   <string name="old_home_look">ホームセクションを古い外観に戻す</string>
   <string name="hide_shorts_everywhere">ショートを完全に隠す</string>
   <string name="update_found">アップデート</string>
-  <string name="volume_boost_warning">上限を超える設定はスピーカーを破損する恐れがあります</string>
+  <string name="volume_boost_warning">上限を超える設定はスピーカーが故障するおそれがあります</string>
   <string name="play_video_incognito">シークレットモードで再生</string>
   <string name="header_kids_home">Kids</string>
   <string name="player_section_playlist">現在のセクションを再生リストとして扱う</string>
   <string name="header_trending">急上昇</string>
+  <string name="screensaver">スクリーンセーバー</string>
+  <string name="player_screen_off_timeout">タイムアウト画面オフ</string>
 </resources>
