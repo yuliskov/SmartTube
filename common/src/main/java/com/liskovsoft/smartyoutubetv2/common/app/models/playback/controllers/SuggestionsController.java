@@ -246,8 +246,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private void updateSuggestions(MediaItemMetadata mediaItemMetadata, Video video) {
         syncCurrentVideo(mediaItemMetadata, video);
 
-        addChapterMarkersIfNeeded(mediaItemMetadata);
-
         appendSuggestions(video, mediaItemMetadata);
 
         // After video suggestions
@@ -343,7 +341,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         getPlayer().setSeekBarSegments(toSeekBarSegments(chapters));
     }
 
-    private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
+    private void appendChapterSuggestionsIfNeeded(MediaItemMetadata mediaItemMetadata) {
         List<ChapterItem> chapters = mediaItemMetadata.getChapters();
 
         if (chapters == null) {
@@ -353,6 +351,15 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         VideoGroup videoGroup = VideoGroup.fromChapters(chapters, getActivity().getString(R.string.chapters));
 
         getPlayer().updateSuggestions(videoGroup);
+    }
+
+    private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
+        addChapterMarkersIfNeeded(mediaItemMetadata);
+        appendChapterSuggestionsIfNeeded(mediaItemMetadata);
+
+        if (mediaItemMetadata.getChapters() != null) {
+            getPlayer().setSeekPreviewTitle("nop"); // fix controls animation on the first run
+        }
     }
 
     private void appendUserQueueIfNeeded(Video video) {
