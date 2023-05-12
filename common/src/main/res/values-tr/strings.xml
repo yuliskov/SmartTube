@@ -552,4 +552,6 @@
     <string name="header_kids_home">Kids</string>
     <string name="player_section_playlist">Geçerli bölüm içeriklerini oynatma listesi olarak kullan</string>
     <string name="header_trending">Trendler</string>
+    <string name="screensaver">Ekran koruyucusu</string>
+    <string name="player_screen_off_timeout">Ekran kapatma zaman aşımı</string>
 </resources>
