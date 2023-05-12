@@ -13,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -63,6 +64,8 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
     public void onUpdateFound(String versionName, List<String> changelog, String apkPath) {
         if (mIsForceCheck) {
             LoadingManager.showLoading(getContext(), false);
+            showUpdateDialog(versionName, changelog, apkPath);
+        } else if (GeneralData.instance(getContext()).isOldUpdateNotificationsEnabled()) {
             showUpdateDialog(versionName, changelog, apkPath);
         } else {
             pinUpdateSection(versionName, changelog, apkPath);

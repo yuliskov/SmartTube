@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.ATVBridgePre
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AmazonBridgePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
@@ -45,6 +46,8 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
 
         appendAutoUpdateSwitch(settingsPresenter);
 
+        appendOldUpdateNotificationSwitch(settingsPresenter);
+
         appendUpdateCheckButton(settingsPresenter);
 
         appendUpdateSource(settingsPresenter);
@@ -66,6 +69,13 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.check_updates_auto), optionItem -> {
             mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
         }, mUpdateChecker.isUpdateCheckEnabled()));
+    }
+
+    private void appendOldUpdateNotificationSwitch(AppDialogPresenter settingsPresenter) {
+        GeneralData generalData = GeneralData.instance(getContext());
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.old_update_notifications), optionItem -> {
+            generalData.enableOldUpdateNotifications(optionItem.isSelected());
+        }, generalData.isOldUpdateNotificationsEnabled()));
     }
 
     private void appendUpdateCheckButton(AppDialogPresenter settingsPresenter) {

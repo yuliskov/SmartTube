@@ -73,6 +73,7 @@ public class GeneralData {
     private int mVersionCode;
     private boolean mIsSelectChannelSectionEnabled;
     private boolean mIsOldHomeLookEnabled;
+    private boolean mIsOldUpdateNotificationsEnabled;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new ArrayList<>();
@@ -675,6 +676,15 @@ public class GeneralData {
         return mIsOldHomeLookEnabled;
     }
 
+    public void enableOldUpdateNotifications(boolean enable) {
+        mIsOldUpdateNotificationsEnabled = enable;
+        persistState();
+    }
+
+    public boolean isOldUpdateNotificationsEnabled() {
+        return mIsOldUpdateNotificationsEnabled;
+    }
+
     private void initSections() {
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mDefaultSections.put(R.string.header_trending, MediaGroup.TYPE_TRENDING);
@@ -748,6 +758,7 @@ public class GeneralData {
         mIsSelectChannelSectionEnabled = Helpers.parseBoolean(split, 40, true);
         mMasterPassword = Helpers.parseStr(split, 41);
         mIsOldHomeLookEnabled = Helpers.parseBoolean(split, 42, false);
+        mIsOldUpdateNotificationsEnabled = Helpers.parseBoolean(split, 43, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -809,6 +820,6 @@ public class GeneralData {
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
                 playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
                 mScreenDimmingTimeoutMs, mScreenDimmingMode, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
-                mIsOldHomeLookEnabled));
+                mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled));
     }
 }

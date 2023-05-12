@@ -545,4 +545,5 @@
     <string name="header_trending">В тренде</string>
     <string name="screensaver">Заставка</string>
     <string name="player_screen_off_timeout">Тайм-аут выключения экрана</string>
+    <string name="old_update_notifications">Старый вид уведомлений о доступном обновлении</string>
 </resources>

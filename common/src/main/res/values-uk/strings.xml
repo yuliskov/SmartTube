@@ -545,4 +545,5 @@
     <string name="header_trending">Популярне</string>
     <string name="screensaver">Заставка</string>
     <string name="player_screen_off_timeout">Тайм-аут вимкнення екрана</string>
+    <string name="old_update_notifications">Старі сповіщення про оновлення</string>
 </resources>

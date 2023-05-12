@@ -554,4 +554,5 @@
     <string name="header_trending">Trending</string>
     <string name="screensaver">Screensaver</string>
     <string name="player_screen_off_timeout">Screen off timeout</string>
+    <string name="old_update_notifications">The old update notifications</string>
 </resources>
