@@ -551,4 +551,7 @@
     <string name="play_video_incognito">Přehrát anonymně</string>
     <string name="header_kids_home">Děti</string>
     <string name="player_section_playlist">Použít obsah aktuální sekce jako playlist</string>
+    <string name="header_trending">Trendy</string>
+    <string name="screensaver">Spořič obrazovky</string>
+    <string name="player_screen_off_timeout">Časový limit vypnutí obrazovky</string>
 </resources>
