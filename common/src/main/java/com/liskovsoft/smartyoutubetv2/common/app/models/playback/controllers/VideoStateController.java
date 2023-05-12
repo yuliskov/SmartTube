@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoSt
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -34,7 +35,6 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     private boolean mIsPlayEnabled;
     private Video mVideo = new Video();
     private FormatItem mTempVideoFormat;
-    private Disposable mHistoryAction;
     private PlayerData mPlayerData;
     private GeneralData mGeneralData;
     private PlayerTweaksData mPlayerTweaksData;
@@ -475,23 +475,9 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
             return;
         }
 
-        // Is this really safe? Could I lost history because of this?
-        //RxUtils.disposeActions(mHistoryAction);
+        long positionMs = video.isLive ? 0 : getPlayer().getPositionMs();
 
-        MediaService service = YouTubeMediaService.instance();
-        MediaItemService mediaItemManager = service.getMediaItemService();
-
-        Observable<Void> historyObservable;
-
-        long positionSec = video.isLive ? 0 : getPlayer().getPositionMs() / 1_000;
-
-        if (video.mediaItem != null) {
-            historyObservable = mediaItemManager.updateHistoryPositionObserve(video.mediaItem, positionSec);
-        } else { // video launched form ATV channels
-            historyObservable = mediaItemManager.updateHistoryPositionObserve(video.videoId, positionSec);
-        }
-
-        mHistoryAction = RxHelper.execute(historyObservable);
+        MediaServiceManager.instance().updateHistory(video, positionMs);
     }
 
     /**

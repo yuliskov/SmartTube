@@ -546,4 +546,5 @@
     <string name="screensaver">Заставка</string>
     <string name="player_screen_off_timeout">Тайм-аут выключения экрана</string>
     <string name="old_update_notifications">Старый вид уведомлений о доступном обновлении</string>
+    <string name="mark_as_watched">Отметить как просмотренное</string>
 </resources>

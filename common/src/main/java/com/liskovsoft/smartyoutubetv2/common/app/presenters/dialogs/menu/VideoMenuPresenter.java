@@ -65,6 +65,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsPlayVideoIncognitoButtonEnabled;
     private boolean mIsPlaylistOrderButtonEnabled;
     private boolean mIsStreamReminderButtonEnabled;
+    private boolean mIsMarkAsWatchedButtonEnabled;
     private VideoMenuCallback mCallback;
     private List<PlaylistInfo> mPlaylistInfos;
 
@@ -159,6 +160,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendNotInterestedButton();
         appendNotRecommendChannelButton();
         appendRemoveFromSubscriptionsButton();
+        appendMarkAsWatchedButton();
         appendRenamePlaylistButton();
         appendPlaylistOrderButton();
         appendAddToPlaybackQueueButton();
@@ -438,6 +440,20 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                                         }
                                     }
                             );
+                    mDialogPresenter.closeDialog();
+                }));
+    }
+
+    private void appendMarkAsWatchedButton() {
+        if (mVideo == null || !mIsMarkAsWatchedButtonEnabled) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.mark_as_watched), optionItem -> {
+                    MediaServiceManager.instance().updateHistory(mVideo, 0);
+                    mVideo.percentWatched = 0;
+                    Playlist.instance().sync(mVideo);
                     mDialogPresenter.closeDialog();
                 }));
     }
@@ -735,29 +751,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     protected void updateEnabledMenuItems() {
         super.updateEnabledMenuItems();
 
-        mIsAddToPlaylistButtonEnabled = true;
-        mIsAddToRecentPlaylistButtonEnabled = true;
-        mIsAddToPlaybackQueueButtonEnabled = true;
-        mIsShowPlaybackQueueButtonEnabled = true;
-        mIsOpenChannelButtonEnabled = true;
-        mIsOpenChannelUploadsButtonEnabled = true;
-        mIsOpenPlaylistButtonEnabled = true;
-        mIsSubscribeButtonEnabled = true;
-        mIsNotInterestedButtonEnabled = true;
-        mIsNotRecommendChannelEnabled = true;
-        mIsRemoveFromHistoryButtonEnabled = true;
-        mIsRemoveFromSubscriptionsButtonEnabled = true;
-        mIsShareLinkButtonEnabled = true;
-        mIsShareEmbedLinkButtonEnabled = true;
-        mIsReturnToBackgroundVideoEnabled = true;
-        mIsOpenDescriptionButtonEnabled = true;
-        mIsPlayVideoButtonEnabled = true;
-        mIsPlayVideoIncognitoButtonEnabled = true;
-        mIsPlaylistOrderButtonEnabled = true;
-        mIsStreamReminderButtonEnabled = true;
-
         MainUIData mainUIData = MainUIData.instance(getContext());
 
+        mIsOpenChannelUploadsButtonEnabled = true;
+        mIsOpenPlaylistButtonEnabled = true;
+        mIsReturnToBackgroundVideoEnabled = true;
         mIsOpenChannelButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_CHANNEL);
         mIsAddToRecentPlaylistButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_RECENT_PLAYLIST);
         mIsAddToPlaybackQueueButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_QUEUE);
@@ -775,5 +773,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsStreamReminderButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_STREAM_REMINDER);
         mIsShowPlaybackQueueButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHOW_QUEUE);
         mIsPlaylistOrderButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAYLIST_ORDER);
+        mIsMarkAsWatchedButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_MARK_AS_WATCHED);
     }
 }

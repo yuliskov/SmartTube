@@ -344,4 +344,20 @@ public class MediaServiceManager {
     public void clearSearchHistory() {
         RxHelper.runAsyncUser(mGroupManager::clearSearchHistory);
     }
+
+    public void updateHistory(Video video, long positionMs) {
+        if (video == null) {
+            return;
+        }
+
+        Observable<Void> historyObservable;
+
+        if (video.mediaItem != null) {
+            historyObservable = mItemManager.updateHistoryPositionObserve(video.mediaItem, positionMs / 1_000f);
+        } else { // video launched form ATV channels
+            historyObservable = mItemManager.updateHistoryPositionObserve(video.videoId, positionMs / 1_000f);
+        }
+
+        RxHelper.execute(historyObservable);
+    }
 }

@@ -45,6 +45,7 @@ public class MainUIData extends DataChangeBase {
     public static final int MENU_ITEM_OPEN_CHANNEL = 0b1000000000000000000000000;
     public static final int MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS = 0b10000000000000000000000000;
     public static final int MENU_ITEM_PLAY_VIDEO_INCOGNITO = 0b100000000000000000000000000;
+    public static final int MENU_ITEM_MARK_AS_WATCHED = 0b1000000000000000000000000000;
     public static final int TOP_BUTTON_BROWSE_ACCOUNTS = 0b1;
     public static final int TOP_BUTTON_CHANGE_LANGUAGE = 0b10;
     public static final int TOP_BUTTON_SEARCH = 0b100;
