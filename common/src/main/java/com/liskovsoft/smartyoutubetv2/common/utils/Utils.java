@@ -30,6 +30,7 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
@@ -592,5 +593,17 @@ public class Utils {
         }
 
         return true;
+    }
+
+    public static int getThemeColor(Context context, int attrId) {
+        return ContextCompat.getColor(context, getThemeResId(context, attrId));
+    }
+
+    public static int getThemeResId(Context context, int attrId) {
+        TypedValue outValue = new TypedValue();
+        if (context.getTheme().resolveAttribute(attrId, outValue, true)) {
+            return outValue.resourceId;
+        }
+        return R.color.red;
     }
 }
