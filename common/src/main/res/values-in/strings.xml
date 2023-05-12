@@ -532,4 +532,5 @@
     <string name="player_section_playlist">Menggunakan konten bagian saat ini sebagai daftar putar</string>
     <string name="header_trending">Sedang tren</string>
     <string name="player_screen_off_timeout">Batas waktu layar mati</string>
+    <string name="old_update_notifications">Tampilan lama dari notifikasi pembaruan</string>
 </resources>
