@@ -551,4 +551,7 @@
     <string name="play_video_incognito">Inkognito abspielen</string>
     <string name="header_kids_home">Kinder</string>
     <string name="player_section_playlist">Inhalt der aktuellen Kategorie als Wiedergabeliste verwenden</string>
+    <string name="header_trending">Trends</string>
+    <string name="screensaver">Bildschirmschoner</string>
+    <string name="player_screen_off_timeout">Bildschirm ausschalten nach Inaktivität</string>
 </resources>
