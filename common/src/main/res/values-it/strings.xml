@@ -526,7 +526,7 @@
     <string name="sort_by_rating">Valutazione</string>
     <string name="clear_search_history">Cancella la cronologia delle ricerche</string>
     <string name="remove_from_subscriptions">Nascondi</string>
-    <string name="player_long_speed_list">Elenco lungo velocità</string>
+    <string name="player_long_speed_list">Più velocità nell\'elenco delle velocità</string>
     <string name="alt_app_icon">Icona alternativa dell\'app (è necessario riavviare)</string>
     <string name="network_stack">Preferisci stack di rete %s</string>
     <string name="cronet_desc">Cronet è lo stack di rete di Chromium. Cronet può ridurre la latenza e aumentare le prestazioni di rete, il che può aiutare con problemi di buffering.</string>
@@ -552,4 +552,6 @@
     <string name="header_kids_home">Ragazzi</string>
     <string name="player_section_playlist">Utilizza i contenuti della sezione attuale come una playlist</string>
     <string name="header_trending">Tendenze</string>
+    <string name="screensaver">Salvaschermo</string>
+    <string name="player_screen_off_timeout">Timeout di spegnimento dello schermo</string>
 </resources>
