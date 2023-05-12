@@ -595,8 +595,9 @@ public class Utils {
         return true;
     }
 
-    public static int getThemeColor(Context context, int attrId) {
-        return ContextCompat.getColor(context, getThemeResId(context, attrId));
+    public static int getThemeColor(Context context, int attrId, int defaultColorResId) {
+        int themeResId = getThemeResId(context, attrId);
+        return ContextCompat.getColor(context, themeResId != -1 ? themeResId : defaultColorResId);
     }
 
     public static int getThemeResId(Context context, int attrId) {
@@ -604,6 +605,6 @@ public class Utils {
         if (context.getTheme().resolveAttribute(attrId, outValue, true)) {
             return outValue.resourceId;
         }
-        return R.color.red;
+        return -1;
     }
 }
