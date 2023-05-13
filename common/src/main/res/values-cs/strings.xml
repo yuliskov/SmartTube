@@ -486,7 +486,7 @@
     <string name="thumb_quality_end">Na konci videa</string>
     <string name="content_block_status">Zkontrolovat stav SponsorBlocku</string>
     <string name="player_show_quality_info_bitrate">Přidej bitrate do informací o kvalitě</string>
-    <string name="player_speed_button_old_behavior">Vrátit staré chování tlačítka rychlosti</string>
+    <string name="player_speed_button_old_behavior">Vrátit původní chování tlačítka rychlosti</string>
     <string name="protect_settings_with_password">Chránit všechna nastavení heslem</string>
     <string name="enter_settings_password">Zadejte heslo</string>
     <string name="child_mode">Dětský režim</string>
@@ -544,7 +544,7 @@
     <string name="sony_frame_drop_fix_desc">Opravuje záseky na televizích Sony a jiných zařízeních. Pozor: mohou nastat problémy se synchronizací audia
     </string>
     <string name="audio_language">Jazyk zvuku</string>
-    <string name="old_home_look">Starý vzhled sekce Domů</string>
+    <string name="old_home_look">Původní vzhled sekce Domů</string>
     <string name="hide_shorts_everywhere">Skrýt krátké klipy ze všech sekcí</string>
     <string name="update_found">Aktualizace</string>
     <string name="volume_boost_warning">Další nastavení nad limit může poškodit reproduktory</string>
@@ -554,4 +554,8 @@
     <string name="header_trending">Trendy</string>
     <string name="screensaver">Spořič obrazovky</string>
     <string name="player_screen_off_timeout">Časový limit vypnutí obrazovky</string>
+    <string name="old_update_notifications">Původní vzhled upozornění na aktualizace</string>
+    <string name="mark_as_watched">Označit jako zhlédnuté</string>
+    <string name="player_ui_animations">Povolit UI animace</string>
+    <string name="player_likes_count">Zobrazit počet Líbí/Nelíbí</string>
 </resources>
