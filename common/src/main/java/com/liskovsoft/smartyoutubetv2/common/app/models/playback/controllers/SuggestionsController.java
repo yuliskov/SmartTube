@@ -358,7 +358,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         appendChapterSuggestionsIfNeeded(mediaItemMetadata);
 
         if (mediaItemMetadata.getChapters() != null) {
-            getPlayer().setSeekPreviewTitle("nop"); // fix controls animation on the first run
+            getPlayer().setSeekPreviewTitle("..."); // fix control panel animation on the first run
         }
     }
 
