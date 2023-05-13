@@ -1516,6 +1516,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         mMediaGroupAdapters.clear();
+        mPendingFocus = null;
     }
 
     @Override
