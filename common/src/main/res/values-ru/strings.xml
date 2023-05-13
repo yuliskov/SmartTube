@@ -547,6 +547,6 @@
     <string name="player_screen_off_timeout">Тайм-аут выключения экрана</string>
     <string name="old_update_notifications">Старый вид уведомлений о доступном обновлении</string>
     <string name="mark_as_watched">Отметить как просмотренное</string>
-    <string name="player_ui_animations">Включить анимации интерфейса</string>
+    <string name="player_ui_animations">Включить анимацию панели управления</string>
     <string name="player_likes_count">Отображать количество лайков/дислайков</string>
 </resources>
