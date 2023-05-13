@@ -35,7 +35,6 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     private Runnable mOnDone;
     private static boolean sRunOnce;
     private long mUpdateCheckMs;
-    private static boolean mNeedSync;
 
     public BasePresenter(Context context) {
         setContext(context);
@@ -116,9 +115,11 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void onViewResumed() {
-        if (mNeedSync && canViewBeSynced()) {
+        if (canViewBeSynced()) {
             // NOTE: don't place cleanup in the onViewResumed!!! This could cause errors when view is resumed.
-            syncItem(Playlist.instance().getChangedItems());
+            if (syncItem(Playlist.instance().getChangedItems())) {
+                Playlist.instance().onNewSession();
+            }
         }
 
         showBootDialogs();
@@ -169,22 +170,20 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         updateView(removedGroup, view);
     }
 
-    public void syncItem(Video item) {
-        syncItem(Collections.singletonList(item));
+    public boolean syncItem(Video item) {
+        return syncItem(Collections.singletonList(item));
     }
 
-    public void syncItem(List<Video> items) {
+    public boolean syncItem(List<Video> items) {
         if (items.size() == 0) {
-            return;
+            return false;
         }
 
         VideoGroup syncGroup = VideoGroup.from(items);
         syncGroup.setAction(VideoGroup.ACTION_SYNC);
         T view = getView();
 
-        if (updateView(syncGroup, view)) {
-            mNeedSync = false;
-        }
+        return updateView(syncGroup, view);
     }
 
     private boolean canViewBeSynced() {
@@ -213,7 +212,6 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     private void enableSync() {
         if (this instanceof PlaybackPresenter) {
-            mNeedSync = true;
             Playlist.instance().onNewSession();
         }
     }

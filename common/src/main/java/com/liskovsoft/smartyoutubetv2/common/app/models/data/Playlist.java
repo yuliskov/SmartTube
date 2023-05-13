@@ -10,12 +10,13 @@ import java.util.List;
 public class Playlist {
     private static final int PLAYLIST_MAX_SIZE = 50;
     private final List<Video> mPlaylist;
+    private final List<Video> mSyncedItems;
     private int mCurrentIndex;
     private static Playlist sInstance;
-    private int mNewSessionIndex;
 
     private Playlist() {
         mPlaylist = new ArrayList<>();
+        mSyncedItems = new ArrayList<>();
         mCurrentIndex = -1;
     }
 
@@ -63,7 +64,6 @@ public class Playlist {
         // And replace to correct position sync in fragments
         if (video.equals(current)) {
             replace(current, video);
-            mNewSessionIndex--;
             return;
         }
 
@@ -105,7 +105,6 @@ public class Playlist {
             // Give a chance to replace current element.
             if (index < mCurrentIndex) {
                 mCurrentIndex--;
-                mNewSessionIndex--;
             }
 
             // Index out of bounds as the result of previous operation.
@@ -210,13 +209,7 @@ public class Playlist {
     }
 
     public List<Video> getChangedItems() {
-        int size = mPlaylist.size();
-
-        if (mNewSessionIndex < 0 || mNewSessionIndex >= size) {
-            return getAll();
-        }
-
-        return Collections.unmodifiableList(mPlaylist.subList(mNewSessionIndex, size));
+        return Collections.unmodifiableList(mSyncedItems);
     }
 
     public boolean hasNext() {
@@ -294,21 +287,8 @@ public class Playlist {
     }
 
     public void onNewSession() {
-        // To avoid excessive sync we need to find changed items only
-        mNewSessionIndex = mCurrentIndex + 1;
+        mSyncedItems.clear();
     }
-
-    /**
-     * Video usually contains multiple internal objects.<br/>
-     * To avoid excessive memory consumptions we need to do cleanup sometimes.
-     */
-    //public void cleanup() {
-    //    for (Video video : mPlaylist) {
-    //        video.mediaItem = null;
-    //        video.nextMediaItem = null;
-    //        video.group = null;
-    //    }
-    //}
 
     /**
      * Since all items are clones (saves memory) we need to sync sometimes.
@@ -318,11 +298,16 @@ public class Playlist {
             return;
         }
 
+        // Sync to maintain order. Item may be cloned.
         for (Video video : mPlaylist) {
             if (video.equals(origin)) {
                 video.sync(origin);
                 break;
             }
         }
+
+        // Replace if exists. Item may be cloned.
+        mSyncedItems.remove(origin);
+        mSyncedItems.add(origin);
     }
 }

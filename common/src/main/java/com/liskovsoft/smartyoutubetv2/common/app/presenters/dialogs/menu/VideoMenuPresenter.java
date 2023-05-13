@@ -452,7 +452,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.mark_as_watched), optionItem -> {
                     MediaServiceManager.instance().updateHistory(mVideo, 0);
-                    mVideo.percentWatched = 0;
+                    mVideo.percentWatched = 100;
                     Playlist.instance().sync(mVideo);
                     mDialogPresenter.closeDialog();
                 }));
