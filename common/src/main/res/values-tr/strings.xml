@@ -554,4 +554,6 @@
     <string name="header_trending">Trendler</string>
     <string name="screensaver">Ekran koruyucusu</string>
     <string name="player_screen_off_timeout">Ekran kapatma zaman aşımı</string>
+    <string name="old_update_notifications">Güncelleme bildirimlerinin eski görünümü</string>
+    <string name="mark_as_watched">İzlendi olarak işaretle</string>
 </resources>
