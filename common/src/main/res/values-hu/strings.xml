@@ -98,7 +98,7 @@
   <string name="player_full_date">Pontos dátum a leírásban</string>
   <string name="open_channel">Csatorna megnyitása</string>
   <string name="not_interested">Nem érdekel</string>
-  <string name="you_wont_see_this_video">A videót eltávolítottuk az ajánlottból</string>
+  <string name="you_wont_see_this_video">A videó eltávolítása került az ajánlottból</string>
   <string name="settings_search">Keresés</string>
   <string name="dialog_search">Keresés</string>
   <string name="instant_voice_search">Hangalapú keresés</string>
@@ -195,7 +195,7 @@
   <string name="playback_queue_category_title">Videólista</string>
   <string name="video_buffer_size_none">Nincs megadva</string>
   <string name="subtitle_white_transparent">Fehér, átlátszó háttérrel</string>
-  <string name="player_show_ending_time">Videó hosszának kijelzése</string>
+  <string name="player_show_ending_time">Videó hossza</string>
   <string name="cancel_segment_skip">Szegmens kihagyásának megszakítása</string>
   <string name="video_preset_disabled">Nincs megadva</string>
   <string name="video_preset_enabled">A következő videó formátuma az előre beállított értékek szerint lesz beállítva</string>
@@ -211,12 +211,12 @@
   <string name="video_aspect">Képarány</string>
   <string name="player_tweaks">Fejlesztői beállítások</string>
   <string name="header_uploads">Feltöltések</string>
-  <string name="player_show_global_clock">Egy óra a jobb felső sarokban</string>
+  <string name="player_show_global_clock">Az aktuális idő mindig látható a jobb felső sarokban</string>
   <string name="player_show_global_ending_time">A hátralévő idő</string>
   <string name="uploads_old_look">A Feltöltések szakasz régi megjelenésének visszaállítása</string>
   <string name="background_playback_activation">Lejátszás a háttérben (aktiválás)</string>
-  <string name="channels_old_look">A Feliratkozások régi megjelenésének visszaállítása</string>
-  <string name="channels_auto_load">A Feliratkozások tartalmának automatikus betöltése</string>
+  <string name="channels_old_look">A csatornák régi megjelenésének visszaállítása</string>
+  <string name="channels_auto_load">A csatornák tartalmának automatikus betöltése</string>
   <string name="return_to_background_video">Visszatérés a háttérben futó videóhoz</string>
   <string name="pin_unpin_from_sidebar">Rögzítés/feloldás az oldalsávról</string>
   <string name="pin_unpin_playlist">Videólista rögzítése/feloldása az oldalsávról</string>
@@ -279,7 +279,7 @@
   <string name="focus_on_search_results">Autofókusz a keresési eredményekre</string>
   <string name="context_menu">Helyi menü</string>
   <string name="add_remove_from_recent_playlist">Hozzáadás/eltávolítás a legutóbbi videólistáról</string>
-  <string name="hide_settings_section">Beállítások szakasz elrejtése (veszélyes!)</string>
+  <string name="hide_settings_section">Beállítások menü elrejtése (veszélyes!)</string>
   <string name="volume">Hangerő %s%%</string>
   <string name="auto_frame_rate_sec">%s mp</string>
   <string name="audio_shift_sec">%s mp</string>
@@ -324,7 +324,7 @@
   <string name="player_seek_confirmation_pause">Megerősítéssel (szünet tekerés közben)</string>
   <string name="player_seek_confirmation_play">Megerősítéssel (lejátszás tekerés közben)</string>
   <string name="hide_shorts_from_home">Rövid klipek elrejtése a kezdőlapon</string>
-  <string name="finish_on_disconnect">A telefon/táblagép leválasztása után zárja be az alkalmazást</string>
+  <string name="finish_on_disconnect">A telefon/táblagép leválasztása után az alkalmazás bezárása</string>
   <string name="update_error">Frissítési hiba!</string>
   <string name="hide_shorts_from_history">Rövid klipek elrejtése az előzményekből</string>
   <string name="disable_screensaver">Képernyővédő tiltása</string>
@@ -355,7 +355,7 @@
   <string name="openvpn_test_aborted">A teszt megszakadt, először javítsa ki az OpenVPN beállításait.</string>
   <string name="openvpn_address_invalid">Az OpenVPN konfigurációs címe nincs beállítva.</string>
   <string name="internet_censorship">Proxy beállítása</string>
-  <string name="rename_section">Szakasz átnevezése</string>
+  <string name="rename_section">Bejegyzés átnevezése</string>
   <string name="simple_edit_value_hint">Új érték</string>
   <string name="seek_interval">Gyorstekerési intervallum</string>
   <string name="seek_interval_sec">%s mp</string>
@@ -371,7 +371,7 @@
   <string name="live_stream_fix">Élő közvetítés javítása (1080p)</string>
   <string name="playback_notifications_fix_desc">Elrejti a track módosítási értesítéseket. Hasznos lehet AOSP-alapú firmware-eknél.</string>
   <string name="playback_notifications_fix">Lejátszási értesítések letiltása</string>
-  <string name="amlogic_fix_desc">Frame drop javítás Amlogic-alapú eszközökön.</string>
+  <string name="amlogic_fix_desc">Képkocka eldobás javítás Amlogic-alapú eszközökön.</string>
   <string name="amlogic_fix">Amlogic 1080p\@60fps javítás</string>
   <string name="tunneled_video_playback_desc">MEGJEGYZÉS: előfordulhat, hogy a szünet nem működik megfelelően! Az alagútban történő videolejátszás olyan előnyökkel kecsegtet, mint a jobb hang/videó szinkronizálás és simább lejátszás. Android 5+ szükséges</string>
   <string name="tunneled_video_playback">Alagútban történő videólejátszás (Android 5+)</string>
@@ -397,7 +397,7 @@
   <string name="cant_delete_empty_playlist">Üres videólista nem törölhető</string>
   <string name="playlist">Videólista</string>
   <string name="rename_playlist">Videólista átnevezése</string>
-  <string name="cant_rename_empty_playlist">Üres Videólista nem nevezhető át</string>
+  <string name="cant_rename_empty_playlist">Üres videólista nem nevezhető át</string>
   <string name="cant_rename_foreign_playlist">Egy idegen videólista nem nevezhető át</string>
   <string name="cant_save_playlist">Ez a videólista nem menthető</string>
   <string name="enter_value">Adjon meg bármilyen nem üres értéket</string>
@@ -442,7 +442,7 @@
   <string name="playback_controls_repeat_pause">Szünet ismétlése</string>
   <string name="playback_controls_repeat_list">Ismétlési lista</string>
   <string name="action_subscribe_off">Feliratkozás kikapcsolva</string>
-  <string name="action_subscribe_on">Iratkozzon fel</string>
+  <string name="action_subscribe_on">Feliratkozás bekapcsolva</string>
   <string name="skip_24_rate">24 képkocka/mp-es formátumok kihagyása (javítás az igazi mozi módban\?)</string>
   <string name="player_disable_suggestions">Javaslatok letiltása</string>
   <string name="feedback">Visszajelzés</string>
@@ -510,7 +510,7 @@
   <string name="video_feature_live">Élő</string>
   <string name="video_feature_4k">4K</string>
   <string name="video_feature_hdr">HDR</string>
-  <string name="pressing_back">a BACK megnyomásával</string>
+  <string name="pressing_back">A BACK megnyomásával</string>
   <string name="search_sorting">Rendezési elv</string>
   <string name="sort_by_relevance">Fontosság szerint</string>
   <string name="sort_by_views">Megtekintés száma szerint</string>
@@ -528,7 +528,7 @@
   <string name="unlock_all_formats">Minden videó formátum feloldása</string>
   <string name="unlock_all_formats_desc">Egyes eszközökön a firmware tévesen azt jelenti, hogy bizonyos formátumok nem támogatottak, még akkor is, ha támogatottak.\n (pl. az 1080p okostévék általában nem támogatottként jelzik a 4k-t).</string>
   <string name="okhttp_desc">Stabil, de lassú hálózati verem.</string>
-  <string name="select_channel_section">Nyissa meg a megfelelő kategóriát, amikor az alkalmazás az ATV csatornákon keresztül indul el.</string>
+  <string name="select_channel_section">Nyissa meg a megfelelő részt, miután elindította az alkalmazást az Android TV-csatornákról.</string>
   <string name="enable_voice_search_desc">A hivatalos alkalmazást egy úgynevezett híd váltja fel. A híd segít a globális keresési kérelmek átvitelében az alkalmazásunkba.</string>
   <string name="enable_master_password">Mester jelszó engedélyezése</string>
   <string name="enter_master_password">Adja meg a Mester jelszót</string>
@@ -539,9 +539,20 @@
   <string name="audio_language">Hang nyelve</string>
   <string name="old_home_look">A Kezdőlap rész régi megjelenése</string>
   <string name="hide_shorts_everywhere">Rövid klipek elrejtése mindenhol</string>
-  <string name="update_found">Frissítés elérhető</string>
+  <string name="update_found">Frissítés</string>
   <string name="volume_boost_warning">A határértéket meghaladó beállítások károsíthatják a hangszórókat</string>
   <string name="play_video_incognito">Lejátszás inkognitó módban</string>
   <string name="header_kids_home">Gyermekvideók</string>
   <string name="player_section_playlist">Az aktuális szakasz tartalmának használata lejátszási listaként</string>
+  <string name="not_recommend_channel">Nem ajánlom a csatornát</string>
+  <string name="you_wont_see_this_channel">Ez a csatorna nem jelenik meg az ajánlások között</string>
+  <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
+  <string name="header_trending">Felkapott</string>
+  <string name="screensaver">Képernyővédő</string>
+  <string name="player_screen_off_timeout">Képernyő kikapcsolása</string>
+  <string name="old_update_notifications">A frissítési értesítések régi megjelenése</string>
+  <string name="mark_as_watched">Megjelölés nézettként</string>
+  <string name="player_ui_animations">UI animációk engedélyezése</string>
+  <string name="player_likes_count">A Tetszik/Nem tetszik számának megjelenítése</string>
+  
 </resources>
