@@ -105,7 +105,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private DebugInfoManager mDebugInfoManager;
     private UriBackgroundManager mBackgroundManager;
     private RowsSupportFragment mRowsSupportFragment;
-    private final boolean mIsAnimationEnabled = false;
+    private boolean mIsUIAnimationsEnabled = false;
+    private boolean mIsLikesCounterEnabled = true;
     private int mPlaybackMode = PlayerEngine.BACKGROUND_MODE_DEFAULT;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
@@ -430,6 +431,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
         StoryboardSeekDataProvider.setSeekProvider(mPlayerGlue);
         hideControlsOverlay(true); // fix player ui not synced correctly
+
+        mIsUIAnimationsEnabled = PlayerTweaksData.instance(getContext()).isUIAnimationsEnabled();
+        mIsLikesCounterEnabled = PlayerTweaksData.instance(getContext()).isLikesCounterEnabled();
 
         mExoPlayerController.setPlayerView(mPlayerGlue);
     }
@@ -827,11 +831,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             result = TextUtils.concat( result, " ", Video.TERTIARY_TEXT_DELIM, " ", Utils.color(getContext().getString(R.string.badge_live), ContextCompat.getColor(getContext(), R.color.red)));
         }
 
-        if (getContext() != null && video.likeCount != null) {
+        if (getContext() != null && video.likeCount != null && mIsLikesCounterEnabled) {
             result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.likeCount);
         }
 
-        if (getContext() != null && video.dislikeCount != null) {
+        if (getContext() != null && video.dislikeCount != null && mIsLikesCounterEnabled) {
             result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.dislikeCount);
         }
 
@@ -1143,7 +1147,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void showControlsOverlay(boolean runAnimation) {
-        super.showControlsOverlay(mIsAnimationEnabled);
+        super.showControlsOverlay(mIsUIAnimationsEnabled);
 
         // Do throttle. Called so many times. Rely on boxing because initial state is unknown.
         if (mIsControlsShownPreviously != null && mIsControlsShownPreviously) {
@@ -1165,7 +1169,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void hideControlsOverlay(boolean runAnimation) {
-        super.hideControlsOverlay(mIsAnimationEnabled);
+        super.hideControlsOverlay(mIsUIAnimationsEnabled);
 
         // Do throttle. Called so many times. Rely on boxing because initial state is unknown.
         if (mIsControlsShownPreviously != null && !mIsControlsShownPreviously) {

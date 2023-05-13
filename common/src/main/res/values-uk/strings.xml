@@ -547,4 +547,6 @@
     <string name="player_screen_off_timeout">Тайм-аут вимкнення екрана</string>
     <string name="old_update_notifications">Старий вигляд сповіщень про оновлення</string>
     <string name="mark_as_watched">Відмітити як переглянуте</string>
+    <string name="player_ui_animations">Увімкнути анімації інтерфейсу</string>
+    <string name="player_likes_count">Відображати кількість лайків/діслайків</string>
 </resources>

@@ -76,6 +76,8 @@ public class PlayerTweaksData {
     private boolean mIsSectionPlaylistEnabled;
     private boolean mIsScreenOffTimeoutEnabled;
     private int mScreenOffTimeoutSec;
+    private boolean mIsUIAnimationsEnabled;
+    private boolean mIsLikesCounterEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -393,6 +395,24 @@ public class PlayerTweaksData {
         return mScreenOffTimeoutSec;
     }
 
+    public void enableUIAnimations(boolean enable) {
+        mIsUIAnimationsEnabled = enable;
+        persistData();
+    }
+
+    public boolean isUIAnimationsEnabled() {
+        return mIsUIAnimationsEnabled;
+    }
+
+    public void enableLikesCounter(boolean enable) {
+        mIsLikesCounterEnabled = enable;
+        persistData();
+    }
+
+    public boolean isLikesCounterEnabled() {
+        return mIsLikesCounterEnabled;
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -434,6 +454,8 @@ public class PlayerTweaksData {
         mIsSectionPlaylistEnabled = Helpers.parseBoolean(split, 31, Build.VERSION.SDK_INT > 21);
         mIsScreenOffTimeoutEnabled = Helpers.parseBoolean(split, 32, false);
         mScreenOffTimeoutSec = Helpers.parseInt(split, 33, 5);
+        mIsUIAnimationsEnabled = Helpers.parseBoolean(split, 34, false);
+        mIsLikesCounterEnabled = Helpers.parseBoolean(split, 35, true);
 
         updateDefaultValues();
     }
@@ -447,7 +469,8 @@ public class PlayerTweaksData {
                 null, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
                 mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio, mIsQualityInfoBitrateEnabled,
                 mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
-                mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled, mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec
+                mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
+                mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled
         ));
     }
 
