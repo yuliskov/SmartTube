@@ -193,7 +193,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void setupUi() {
-        setTitle(getString(R.string.browse_title)); // Badge, when set, takes precedent over title
         setHeadersState(HEADERS_ENABLED);
         setHeadersTransitionOnBackEnabled(true);
 
@@ -202,7 +201,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         int appLogoRes = Helpers.getThemeAttr(getActivity(), R.attr.appLogo);
 
         // Top right corner logo
-        setBadgeDrawable(ContextCompat.getDrawable(getActivity(), appLogoRes));
+        setBadgeDrawable(appLogoRes > 0 ? ContextCompat.getDrawable(getActivity(), appLogoRes) : null);
+
+        // This title replaces badge in case one is null
+        //setTitle(getString(R.string.browse_title));
 
         // Set fastLane (or headers) background color
         setBrandColor(ContextCompat.getColor(getActivity(), brandColorRes));

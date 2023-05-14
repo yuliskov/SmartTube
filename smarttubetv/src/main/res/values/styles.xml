@@ -159,7 +159,7 @@
     <style name="App.Theme.DarkGrey.OLED.Browse" parent="App.Theme.DarkGrey.Browse">
         <item name="brandAccentColor">@color/semi_transparent</item>
         <item name="cardSelectedBackground">@color/card_selected_background_white_grey</item>
-        <item name="appLogo">@mipmap/app_logo_semi_grey</item>
+        <item name="appLogo">@null</item>
     </style>
     <style name="App.Theme.DarkGrey.OLED.Player" parent="App.Theme.DarkGrey.Player">
         <item name="cardSelectedBackground">@color/card_selected_background_white_grey</item>
@@ -169,6 +169,7 @@
     <!--  Color scheme: Teal (OLED)  -->
     <style name="App.Theme.Leanback.OLED.Browse" parent="App.Theme.Leanback.Browse">
         <item name="shelfBackground">@color/scheme_grey_shelf_background_dark</item>
+        <item name="appLogo">@null</item>
     </style>
     <style name="App.Theme.Leanback.OLED.Player" parent="App.Theme.Leanback.Player">
         <item name="shelfBackground">@color/scheme_grey_shelf_background_dark</item>
