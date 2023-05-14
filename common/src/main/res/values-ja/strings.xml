@@ -511,4 +511,8 @@
   <string name="header_trending">急上昇</string>
   <string name="screensaver">スクリーンセーバー</string>
   <string name="player_screen_off_timeout">タイムアウト画面オフ</string>
+  <string name="mark_as_watched">視聴済みとしてマーク</string>
+  <string name="old_update_notifications">アップデート通知を旧仕様に戻す</string>
+  <string name="player_ui_animations">コンパネのアニメーション</string>
+  <string name="player_likes_count">高評価/低評価数を表示する</string>
 </resources>
