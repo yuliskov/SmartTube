@@ -556,6 +556,6 @@
     <string name="player_screen_off_timeout">Časový limit vypnutí obrazovky</string>
     <string name="old_update_notifications">Původní vzhled upozornění na aktualizace</string>
     <string name="mark_as_watched">Označit jako zhlédnuté</string>
-    <string name="player_ui_animations">Povolit UI animace</string>
+    <string name="player_ui_animations">Povolit animace ovládacího panelu</string>
     <string name="player_likes_count">Zobrazit počet Líbí/Nelíbí</string>
 </resources>
