@@ -557,5 +557,5 @@
     <string name="old_update_notifications">Altes Aussehen der Update-Benachrichtigungen</string>
     <string name="mark_as_watched">Als gesehen markieren</string>
     <string name="player_ui_animations">Bedienfeld-Animationen aktivieren</string>
-    <string name="player_likes_count">Anzahl der Gefällt mir/Gefällt mir nicht anzeigen</string>
+    <string name="player_likes_count">Anzahl der Mag ich/Mag ich nicht anzeigen</string>
 </resources>
