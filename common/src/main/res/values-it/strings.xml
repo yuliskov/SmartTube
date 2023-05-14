@@ -163,7 +163,7 @@
     <string name="auto_frame_rate_applying">Applica frequenza automatica fotogrammi %sx%s@%s</string>
     <string name="audio_shift">Modifica audio</string>
     <string name="player_remember_speed">Ricorda velocità</string>
-    <string name="mark_channel_as_watched">Segna come già visto</string>
+    <string name="mark_channel_as_watched">Contrassegna come già visto</string>
     <string name="channel_marked_as_watched">Il canale è stato contrassegnato come già visto</string>
     <string name="dialog_add_device">Aggiungi dispositivo</string>
     <string name="dialog_remove_all_devices">Rimuovi tutti i dispositivi</string>
@@ -288,7 +288,7 @@
     <string name="audio_shift_sec">%s sec</string>
     <string name="ui_hide_timeout_sec">%s sec</string>
     <string name="screen_dimming_timeout_min">%s min</string>
-    <string name="mark_all_channels_watched">Contrassegna tutti i canali come guardati</string>
+    <string name="mark_all_channels_watched">Contrassegna tutti i canali come già visti</string>
     <string name="move_section_up">Sposta la sezione in alto</string>
     <string name="move_section_down">Sposta la sezione in basso</string>
     <string name="player_buttons">Imposta i pulsanti del lettore</string>
@@ -554,4 +554,8 @@
     <string name="header_trending">Tendenze</string>
     <string name="screensaver">Salvaschermo</string>
     <string name="player_screen_off_timeout">Timeout di spegnimento dello schermo</string>
+    <string name="old_update_notifications">Il vecchio aspetto delle notifiche di aggiornamento</string>
+    <string name="mark_as_watched">Segna come già visto</string>
+    <string name="player_ui_animations">Abilita le animazioni del pannello di controllo</string>
+    <string name="player_likes_count">Mostra il conteggio dei Mi piace/Non mi piace</string>
 </resources>
