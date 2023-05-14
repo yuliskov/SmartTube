@@ -29,6 +29,7 @@ public class IntentExtractor {
     private static final String HISTORY_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEmy_youtube"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String RECOMMENDED_URL = "https://www.youtube.com/tv#/zylon-surface?c=default"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String PLAYLIST_KEY = "list";
+    private static final String VND_SCHEME = "vnd.youtube"; // vnd.youtube://8kKDjRmHp0g
     private static final Pattern timePattern = Pattern.compile("^(\\d+)([A-Za-z]{0,2})$");
     private static final Pattern voiceQueryPattern = Pattern.compile(":\\{\"query\":\"([^\"]*)\"");
 
@@ -37,12 +38,14 @@ public class IntentExtractor {
             return null;
         }
 
-        if (extractVoiceQuery(extractUri(intent)) != null) {
+        Uri uri = extractUri(intent);
+
+        if (extractVoiceQuery(uri) != null) {
             return null;
         }
 
         // Don't Uri directly or you might get UnsupportedOperationException on some urls.
-        UrlQueryString parser = UrlQueryStringFactory.parse(extractUri(intent));
+        UrlQueryString parser = UrlQueryStringFactory.parse(uri);
         String videoId = parser.get(VIDEO_ID_KEY);
 
         if (videoId == null) {
@@ -52,9 +55,11 @@ public class IntentExtractor {
             if (idList != null) {
                 // temp solution: use one video from the list
                 videoId = idList.split(",")[0];
+            } else if (VND_SCHEME.equals(uri.getScheme())) {
+                videoId = uri.getHost();
             } else {
                 // Suppose that link type is https://youtu.be/lBeMDqcWTG8
-                videoId = extractUri(intent).getLastPathSegment();
+                videoId = uri.getLastPathSegment();
             }
         }
 
