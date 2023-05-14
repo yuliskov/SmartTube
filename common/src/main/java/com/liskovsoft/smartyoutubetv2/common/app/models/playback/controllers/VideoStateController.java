@@ -31,6 +31,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 90_000; // should be greater than the live buffer
     private static final long LIVE_BUFFER_MS = 60_000;
+    private static final long SHORT_LIVE_BUFFER_MS = 10_000;
     private static final long BEGIN_THRESHOLD_MS = 10_000;
     private boolean mIsPlayEnabled;
     private Video mVideo = new Video();
@@ -102,7 +103,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     public boolean onNextClicked() {
         // Seek to the actual live position on next
         if (getVideo() != null && getVideo().isLive && (getPlayer().getDurationMs() - getPlayer().getPositionMs() > LIVE_THRESHOLD_MS)) {
-            long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? 0 : LIVE_BUFFER_MS;
+            long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? SHORT_LIVE_BUFFER_MS : LIVE_BUFFER_MS;
             getPlayer().setPositionMs(getPlayer().getDurationMs() - buffer);
             return true;
         }
@@ -454,7 +455,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         // Set actual position for live videos with uncommon length
         if ((state == null || state.durationMs - state.positionMs < LIVE_THRESHOLD_MS) && item.isLive) {
             // Add buffer. Should I take into account segment offset???
-            long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? 0 : LIVE_BUFFER_MS;
+            long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? SHORT_LIVE_BUFFER_MS : LIVE_BUFFER_MS;
             state = new State(item.videoId, getPlayer().getDurationMs() - buffer);
         }
 
