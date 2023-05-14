@@ -554,4 +554,8 @@
     <string name="header_trending">Trends</string>
     <string name="screensaver">Bildschirmschoner</string>
     <string name="player_screen_off_timeout">Bildschirm ausschalten nach Inaktivität</string>
+    <string name="old_update_notifications">Altes Aussehen der Update-Benachrichtigungen</string>
+    <string name="mark_as_watched">Als gesehen markieren</string>
+    <string name="player_ui_animations">Bedienfeld-Animationen aktivieren</string>
+    <string name="player_likes_count">Anzahl der Mag ich/Mag ich nicht anzeigen</string>
 </resources>
