@@ -43,13 +43,13 @@
 
     <FrameLayout android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
-                 android:layout_gravity="center_vertical"
-                 android:layout_marginStart="@dimen/search_bar_right_items_margin">
+                 android:layout_gravity="center_vertical">
         <ImageView
             android:id="@+id/title_badge"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/lb_browse_title_icon_height"
             android:maxWidth="@dimen/lb_browse_title_icon_max_width"
+            android:layout_marginStart="@dimen/search_bar_right_items_margin"
             android:adjustViewBounds="true"
             android:src="@null"
             android:visibility="gone"
