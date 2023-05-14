@@ -179,6 +179,7 @@
     <style name="App.Theme.DarkGrey2.OLED.Browse" parent="App.Theme.DarkGrey.OLED.Browse">
         <item name="android:windowBackground">@color/scheme_red_shelf_background_dark</item>
         <item name="shelfBackground">@color/scheme_red_shelf_background_dark</item>
+        <item name="appLogo">@mipmap/app_logo_semi_grey</item>
     </style>
     <!--  End Color scheme: Dark Grey (monochrome)  -->
 </resources>
