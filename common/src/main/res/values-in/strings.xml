@@ -533,4 +533,7 @@
     <string name="header_trending">Sedang tren</string>
     <string name="player_screen_off_timeout">Batas waktu layar mati</string>
     <string name="old_update_notifications">Tampilan lama dari notifikasi pembaruan</string>
+    <string name="mark_as_watched">Tandai sebagai telah ditonton</string>
+    <string name="player_ui_animations">Aktifkan animasi panel kontrol</string>
+    <string name="player_likes_count">Tampilkan jumlah suka/tidak suka</string>
 </resources>
