@@ -30,6 +30,7 @@ public class ContentBlockData {
     private boolean mIsSponsorBlockEnabled;
     private final Set<String> mColorCategories = new LinkedHashSet<>();
     private final Set<SegmentAction> mActions = new LinkedHashSet<>();
+    private final Set<String> mExcludedChannels = new LinkedHashSet<>();
     private boolean mIsDontSkipSegmentAgainEnabled;
     private Map<String, Integer> mSegmentLocalizedMapping;
     private Map<String, Integer> mSegmentColorMapping;
@@ -134,6 +135,20 @@ public class ContentBlockData {
         return !mColorCategories.isEmpty();
     }
 
+    public void excludeChannel(String channelId) {
+        mExcludedChannels.add(channelId);
+        persistData();
+    }
+
+    public void unexcludeChannel(String channelId) {
+        mExcludedChannels.remove(channelId);
+        persistData();
+    }
+
+    public boolean isExcludedChannel(String channelId) {
+        return mExcludedChannels.contains(channelId);
+    }
+
     public Set<SegmentAction> getActions() {
         return Collections.unmodifiableSet(mActions);
     }
@@ -200,6 +215,7 @@ public class ContentBlockData {
         String actions = Helpers.parseStr(split, 6);
         String colorCategories = Helpers.parseStr(split, 7);
         mIsDontSkipSegmentAgainEnabled = Helpers.parseBoolean(split, 8, true);
+        String excludedChannels = Helpers.parseStr(split, 9);
 
         if (colorCategories != null) {
             String[] categoriesArr = Helpers.splitArray(colorCategories);
@@ -211,6 +227,16 @@ public class ContentBlockData {
             mColorCategories.clear();
 
             mColorCategories.addAll(mAllCategories);
+        }
+
+        if (excludedChannels != null) {
+            String[] channelsArr = Helpers.splitArray(excludedChannels);
+
+            mExcludedChannels.clear();
+
+            mExcludedChannels.addAll(Arrays.asList(channelsArr));
+        } else {
+            mExcludedChannels.clear();
         }
 
         if (actions != null) {
@@ -240,10 +266,12 @@ public class ContentBlockData {
     private void persistData() {
         String colorCategories = Helpers.mergeArray(mColorCategories.toArray());
         String actions = Helpers.mergeArray(mActions.toArray());
+        String excludedChannels = Helpers.mergeArray(mExcludedChannels.toArray());
 
         mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeObject(
                 mIsSponsorBlockEnabled, null, null, null,
-                null, null, actions, colorCategories, mIsDontSkipSegmentAgainEnabled
+                null, null, actions, colorCategories, mIsDontSkipSegmentAgainEnabled,
+                excludedChannels
         ));
     }
 }

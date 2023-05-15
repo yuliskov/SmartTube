@@ -90,7 +90,8 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
 
         getPlayer().setButtonState(R.id.action_content_block, mContentBlockData.isSponsorBlockEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
 
-        if (mContentBlockData.isSponsorBlockEnabled() && checkVideo(item)) {
+        if (mContentBlockData.isSponsorBlockEnabled() && checkVideo(item) &&
+            !mContentBlockData.isExcludedChannel(item.channelId)) {
             updateSponsorSegmentsAndWatch(item);
         }
     }

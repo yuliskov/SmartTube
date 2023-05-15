@@ -192,6 +192,8 @@
     <string name="content_block_notify_none">Without notification</string>
     <string name="content_block_notify_toast">Toast</string>
     <string name="content_block_notify_dialog">Confirmation dialog</string>
+    <string name="content_block_exclude_channel">Exclude this channel from SponsorBlock</string>
+    <string name="content_block_unexclude_channel">Stop excluding this channel from SponsorBlock</string>
     <string name="return_to_launcher">Return to the launcher from ATV channels/search</string>
     <string name="intent_force_close">Force exit if video has been opened from external source</string>
     <string name="btn_confirm">Confirm</string>

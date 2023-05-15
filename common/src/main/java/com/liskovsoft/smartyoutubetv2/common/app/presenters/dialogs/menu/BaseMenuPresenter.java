@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelec
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -30,6 +31,7 @@ import java.util.List;
 
 public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private final MediaServiceManager mServiceManager;
+    private final ContentBlockData mContentBlockData;
     private boolean mIsPinToSidebarEnabled;
     private boolean mIsSavePlaylistEnabled;
     private boolean mIsCreatePlaylistEnabled;
@@ -38,10 +40,12 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private boolean mIsToggleHistoryEnabled;
     private boolean mIsClearHistoryEnabled;
     private boolean mIsUpdateCheckEnabled;
+    private boolean mIsExcludeFromContentBlockEnabled;
 
     protected BaseMenuPresenter(Context context) {
         super(context);
         mServiceManager = MediaServiceManager.instance();
+        mContentBlockData = ContentBlockData.instance(context);
         updateEnabledMenuItems();
     }
 
@@ -57,9 +61,10 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         MessageHelpers.cancelToasts();
     }
 
-    protected void appendTogglePinVideoToSidebarButton() {
+    protected void appendSharedChannelVideoButtons() {
         appendTogglePinPlaylistButton();
         appendTogglePinChannelButton();
+        appendToggleExcludeFromContentBlockButton();
     }
 
     private void appendTogglePinPlaylistButton() {
@@ -106,6 +111,29 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                 );
                             } else {
                                 togglePinToSidebar(createPinnedChannel(original));
+                            }
+                        }));
+    }
+
+    private void appendToggleExcludeFromContentBlockButton() {
+        if (!mIsExcludeFromContentBlockEnabled) {
+            return;
+        }
+
+        Video original = getVideo();
+
+        if (original == null || !original.hasChannel()) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(mContentBlockData.isExcludedChannel(original.channelId) ? R.string.content_block_unexclude_channel : R.string.content_block_exclude_channel),
+                        optionItem -> {
+                            if (mContentBlockData.isExcludedChannel(original.channelId)) {
+                                mContentBlockData.unexcludeChannel(original.channelId);
+                            } else {
+                                mContentBlockData.excludeChannel(original.channelId);
                             }
                         }));
     }
@@ -536,5 +564,6 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         mIsToggleHistoryEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_TOGGLE_HISTORY);
         mIsClearHistoryEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_CLEAR_HISTORY);
         mIsUpdateCheckEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_UPDATE_CHECK);
+        mIsExcludeFromContentBlockEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK);
     }
 }
