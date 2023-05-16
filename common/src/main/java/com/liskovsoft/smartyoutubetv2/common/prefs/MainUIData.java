@@ -16,6 +16,7 @@ public class MainUIData extends DataChangeBase {
     public static final int CHANNEL_SORTING_NAME = 1;
     public static final int CHANNEL_SORTING_DEFAULT = 2;
     public static final int CHANNEL_SORTING_LAST_VIEWED = 3;
+    public static final int CHANNEL_SORTING_NAME2 = 4;
     public static final int PLAYLISTS_STYLE_GRID = 0;
     public static final int PLAYLISTS_STYLE_ROWS = 1;
     public static final int MENU_ITEM_RECENT_PLAYLIST = 0b1;
