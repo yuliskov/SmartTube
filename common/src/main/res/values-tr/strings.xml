@@ -558,4 +558,6 @@
     <string name="mark_as_watched">İzlendi olarak işaretle</string>
     <string name="player_ui_animations">Kullanıcı arayüzü animasyonlarını etkinleştir</string>
     <string name="player_likes_count">Beğenme/Beğenmeme sayısını göster</string>
+    <string name="sorting_alphabetically2">Alfabetik (hızlı)</string>
+    <string name="sorting_default">Varsayılan (hızlı)</string>
 </resources>
