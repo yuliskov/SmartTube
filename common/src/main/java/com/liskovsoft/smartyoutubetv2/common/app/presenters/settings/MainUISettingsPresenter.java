@@ -115,7 +115,8 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
-                {R.string.default_lang, MainUIData.CHANNEL_SORTING_DEFAULT},
+                {R.string.sorting_default, MainUIData.CHANNEL_SORTING_DEFAULT},
+                {R.string.sorting_alphabetically2, MainUIData.CHANNEL_SORTING_NAME2},
                 {R.string.sorting_alphabetically, MainUIData.CHANNEL_SORTING_NAME},
                 {R.string.sorting_by_new_content, MainUIData.CHANNEL_SORTING_UPDATE},
                 {R.string.sorting_last_viewed, MainUIData.CHANNEL_SORTING_LAST_VIEWED}}) {

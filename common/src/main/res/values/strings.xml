@@ -558,4 +558,6 @@
     <string name="mark_as_watched">Mark as watched</string>
     <string name="player_ui_animations">Enable control panel animations</string>
     <string name="player_likes_count">Show likes/dislikes count</string>
+    <string name="sorting_alphabetically2">Alphabetically (fast)</string>
+    <string name="sorting_default">Default (fast)</string>
 </resources>

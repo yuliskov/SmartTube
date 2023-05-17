@@ -244,6 +244,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             case MainUIData.CHANNEL_SORTING_DEFAULT:
                 mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsObserve());
                 break;
+            case MainUIData.CHANNEL_SORTING_NAME2:
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsByName2Observe());
+                break;
             case MainUIData.CHANNEL_SORTING_NAME:
                 mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsByNameObserve());
                 break;

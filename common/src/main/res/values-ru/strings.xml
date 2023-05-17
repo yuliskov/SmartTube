@@ -549,4 +549,6 @@
     <string name="mark_as_watched">Отметить как просмотренное</string>
     <string name="player_ui_animations">Включить анимацию панели управления</string>
     <string name="player_likes_count">Отображать количество лайков/дислайков</string>
+    <string name="sorting_alphabetically2">По алфавиту (быстро)</string>
+    <string name="sorting_default">По умолчанию (быстро)</string>
 </resources>

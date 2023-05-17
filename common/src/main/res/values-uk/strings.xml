@@ -549,4 +549,6 @@
     <string name="mark_as_watched">Відмітити як переглянуте</string>
     <string name="player_ui_animations">Увімкнути анімацію панелі керування</string>
     <string name="player_likes_count">Відображати кількість лайків/діслайків</string>
+    <string name="sorting_alphabetically2">За абеткою (швидко)</string>
+    <string name="sorting_default">За замовчуванням (швидко)</string>
 </resources>
