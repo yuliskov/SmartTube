@@ -558,4 +558,6 @@
     <string name="mark_as_watched">Segna come già visto</string>
     <string name="player_ui_animations">Abilita le animazioni del pannello di controllo</string>
     <string name="player_likes_count">Mostra il conteggio dei Mi piace/Non mi piace</string>
+    <string name="sorting_alphabetically2">In ordine alfabetico (veloce)</string>
+    <string name="sorting_default">Predefinito (veloce)</string>
 </resources>
