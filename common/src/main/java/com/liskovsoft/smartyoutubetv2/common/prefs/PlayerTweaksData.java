@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
+import android.os.Build.VERSION;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class PlayerTweaksData {
@@ -445,13 +445,14 @@ public class PlayerTweaksData {
         mIsSpeedButtonOldBehaviorEnabled = Helpers.parseBoolean(split, 23, false);
         mIsButtonLongClickEnabled = Helpers.parseBoolean(split, 24, true);
         mIsLongSpeedListEnabled = Helpers.parseBoolean(split, 25, true);
-        mPlayerDataSource = Helpers.parseInt(split, 26, PLAYER_DATA_SOURCE_CRONET);
+        // Android 6 and below may crash running Cronet???
+        mPlayerDataSource = Helpers.parseInt(split, 26, VERSION.SDK_INT <= 19 ? PLAYER_DATA_SOURCE_DEFAULT : PLAYER_DATA_SOURCE_CRONET);
         mUnlockAllFormats = Helpers.parseBoolean(split, 27, false);
         mIsDashUrlStreamsForced = Helpers.parseBoolean(split, 28, false);
         mIsSonyFrameDropFixEnabled = Helpers.parseBoolean(split, 29, false);
         mIsBufferOnStreamsDisabled = Helpers.parseBoolean(split, 30, false);
         // Cause severe garbage collector stuttering
-        mIsSectionPlaylistEnabled = Helpers.parseBoolean(split, 31, Build.VERSION.SDK_INT > 21);
+        mIsSectionPlaylistEnabled = Helpers.parseBoolean(split, 31, VERSION.SDK_INT > 21);
         mIsScreenOffTimeoutEnabled = Helpers.parseBoolean(split, 32, false);
         mScreenOffTimeoutSec = Helpers.parseInt(split, 33, 5);
         mIsUIAnimationsEnabled = Helpers.parseBoolean(split, 34, false);
