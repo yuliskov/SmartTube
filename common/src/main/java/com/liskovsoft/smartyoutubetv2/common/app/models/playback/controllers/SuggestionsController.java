@@ -47,6 +47,10 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         void onVideoGroup(VideoGroup group);
     }
 
+    private interface OnSuggestions {
+        void onSuggestions(MediaItemMetadata metadata);
+    }
+
     @Override
     public void onInit() {
         mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
@@ -116,6 +120,27 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         if (getPlayer().isControlsShown()) {
             focusCurrentChapter();
         }
+    }
+
+    @Override
+    public void onTickle() {
+        updateLiveMetadata();
+    }
+
+    private void updateLiveMetadata() {
+        Video video = getPlayer().getVideo();
+
+        if (video == null || !video.isLive || RxHelper.isAnyActionRunning(mActions)) {
+            return;
+        }
+
+        loadSuggestions(video, metadata -> {
+            syncCurrentVideo(metadata, video);
+
+            if (!video.isLive) {
+                onPlayEnd();
+            }
+        });
     }
 
     private void continueGroup(VideoGroup group) {
@@ -197,6 +222,10 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     public void loadSuggestions(Video video) {
+        loadSuggestions(video, metadata -> updateSuggestions(metadata, video));
+    }
+
+    private void loadSuggestions(Video video, OnSuggestions callback) {
         disposeActions();
 
         if (video == null) {
@@ -217,7 +246,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         Disposable metadataAction = observable
                 .subscribe(
-                        metadata -> updateSuggestions(metadata, video),
+                        callback::onSuggestions,
                         error -> {
                             Log.e(TAG, "loadSuggestions error: %s", error.getMessage());
                             error.printStackTrace();
