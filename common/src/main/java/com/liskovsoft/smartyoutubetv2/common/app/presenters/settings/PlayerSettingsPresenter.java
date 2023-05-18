@@ -58,7 +58,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendSeekingPreviewCategory(settingsPresenter);
         AppDialogUtil.appendSeekIntervalDialogItems(getContext(), settingsPresenter, mPlayerData, false);
         appendRememberSpeedCategory(settingsPresenter);
-        //appendScreenTimeoutCategory(settingsPresenter);
+        appendScreenOffTimeoutCategory(settingsPresenter);
         appendEndingTimeCategory(settingsPresenter);
         appendPixelRatioCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);

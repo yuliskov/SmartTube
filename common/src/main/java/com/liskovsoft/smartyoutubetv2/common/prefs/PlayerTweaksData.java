@@ -35,7 +35,7 @@ public class PlayerTweaksData {
     public static final int PLAYER_BUTTON_CHAT = 0b10000000000000000000000;
     public static final int PLAYER_BUTTON_VIDEO_ROTATE = 0b100000000000000000000000;
     public static final int PLAYER_BUTTON_SCREEN_OFF_TIMEOUT = 0b1000000000000000000000000;
-    public static final int PLAYER_BUTTON_DEFAULT = PLAYER_BUTTON_SEARCH | PLAYER_BUTTON_PIP | PLAYER_BUTTON_SCREEN_OFF | PLAYER_BUTTON_VIDEO_SPEED |
+    public static final int PLAYER_BUTTON_DEFAULT = PLAYER_BUTTON_SEARCH | PLAYER_BUTTON_PIP | PLAYER_BUTTON_SCREEN_OFF_TIMEOUT | PLAYER_BUTTON_VIDEO_SPEED |
             PLAYER_BUTTON_VIDEO_STATS | PLAYER_BUTTON_OPEN_CHANNEL | PLAYER_BUTTON_SUBTITLES | PLAYER_BUTTON_SUBSCRIBE |
             PLAYER_BUTTON_LIKE | PLAYER_BUTTON_DISLIKE | PLAYER_BUTTON_ADD_TO_PLAYLIST | PLAYER_BUTTON_PLAY_PAUSE |
             PLAYER_BUTTON_REPEAT_MODE | PLAYER_BUTTON_NEXT | PLAYER_BUTTON_PREVIOUS | PLAYER_BUTTON_HIGH_QUALITY |
@@ -388,6 +388,7 @@ public class PlayerTweaksData {
 
     public void setScreenOffTimeoutSec(int timeoutSec) {
         mScreenOffTimeoutSec = timeoutSec;
+        mIsScreenOffTimeoutEnabled = mIsScreenOffTimeoutEnabled && timeoutSec > 0;
         persistData();
     }
 
@@ -454,7 +455,7 @@ public class PlayerTweaksData {
         // Cause severe garbage collector stuttering
         mIsSectionPlaylistEnabled = Helpers.parseBoolean(split, 31, VERSION.SDK_INT > 21);
         mIsScreenOffTimeoutEnabled = Helpers.parseBoolean(split, 32, false);
-        mScreenOffTimeoutSec = Helpers.parseInt(split, 33, 5);
+        mScreenOffTimeoutSec = Helpers.parseInt(split, 33, 0);
         mIsUIAnimationsEnabled = Helpers.parseBoolean(split, 34, false);
         mIsLikesCounterEnabled = Helpers.parseBoolean(split, 35, true);
 

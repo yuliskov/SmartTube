@@ -134,8 +134,7 @@ public class ScreensaverManager {
 
     private void enableTimeout() {
         // Playing the video and dialog overlay isn't shown
-        if (ViewManager.instance(mActivity.get()).getTopView() != PlaybackView.class
-                || !mTweaksData.isScreenOffTimeoutEnabled() || mTweaksData.getScreenOffTimeoutSec() == 0) {
+        if (ViewManager.instance(mActivity.get()).getTopView() != PlaybackView.class || !mTweaksData.isScreenOffTimeoutEnabled()) {
             disableTimeout();
             return;
         }
