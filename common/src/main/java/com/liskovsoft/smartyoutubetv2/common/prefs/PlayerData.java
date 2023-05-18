@@ -541,9 +541,9 @@ public class PlayerData extends DataChangeBase {
     }
 
     public FormatItem getDefaultAudioFormat() {
-        // Android 4 doesn't support opus (ac3 will be reverted to opus)
+        // Android 4 (probably some others) doesn't support opus (ac3 will be reverted to opus)
         // Note, 5.1 mp4a doesn't work in 5.1 mode
-        return VERSION.SDK_INT <= 19 ? FormatItem.AUDIO_HQ_MP4A : FormatItem.AUDIO_51_AC3;
+        return FormatItem.AUDIO_HQ_MP4A;
     }
 
     public FormatItem getDefaultVideoFormat() {
