@@ -169,6 +169,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         //appendOpenChannelUploadsButton();
         appendOpenPlaylistButton();
         appendSubscribeButton();
+        appendToggleExcludeFromContentBlockButton();
         appendTogglePinVideoToSidebarButton();
         appendSaveRemovePlaylistButton();
         appendOpenDescriptionButton();
@@ -197,6 +198,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendShowPlaybackQueueButton();
         appendOpenChannelButton();
         appendOpenPlaylistButton();
+        appendToggleExcludeFromContentBlockButton();
         appendTogglePinVideoToSidebarButton();
         appendOpenDescriptionButton();
         appendShareLinkButton();

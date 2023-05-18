@@ -212,7 +212,7 @@
   <string name="player_tweaks">Fejlesztői beállítások</string>
   <string name="header_uploads">Feltöltések</string>
   <string name="player_show_global_clock">Az aktuális idő mindig látható a jobb felső sarokban</string>
-  <string name="player_show_global_ending_time">A hátralévő idő</string>
+  <string name="player_show_global_ending_time">A videó végének ideje mindig látható a jobb felső sarokban</string>
   <string name="uploads_old_look">A Feltöltések szakasz régi megjelenésének visszaállítása</string>
   <string name="background_playback_activation">Lejátszás a háttérben (aktiválás)</string>
   <string name="channels_old_look">A csatornák régi megjelenésének visszaállítása</string>
@@ -379,7 +379,7 @@
   <string name="volume_limit">Hangerő korlát</string>
   <string name="play_video">Lejátszás</string>
   <string name="remember_position_of_short_videos">Emlékezzen a rövid videók helyzetére (5 percnél rövidebb)</string>
-  <string name="player_show_tooltips">Eszköztippek a gomboknál</string>
+  <string name="player_show_tooltips">Buboréksúgó a gomboknál</string>
   <string name="action_like_unset">A \"Tetszik\" nincs beállítva</string>
   <string name="action_dislike_unset">A \"Nem tetszik\" nincs beállítva</string>
   <string name="various_buttons">Gombok a főablak tetején</string>
@@ -388,7 +388,7 @@
   <string name="pressing_home">a HOME gomb megnyomásával</string>
   <string name="pressing_home_back">a HOME vagy a BACK gomb megnyomásával</string>
   <string name="player_number_key_seek">Keresés a számbillentyűkkel</string>
-  <string name="save_remove_playlist">Lista mentése/törlése a videólisták részből</string>
+  <string name="save_remove_playlist">Lista mentése/eltávolítása a videólisták részből</string>
   <string name="remove_playlist">Videó eltávolítása</string>
   <string name="removed_from_playlists">Eltávolítva a videólistából</string>
   <string name="saved_to_playlists">Mentés a videólistákhoz</string>
@@ -449,8 +449,8 @@
   <string name="sources">Program forrása (QR)</string>
   <string name="releases">Programverziók (QR)</string>
   <string name="prefer_avc_over_vp9">Kodek kiválasztása: Az avc előnyben részesítése a vp9 helyett</string>
-  <string name="open_chat">Csevegés</string>
-  <string name="place_chat_left">Csevegés balra helyezése</string>
+  <string name="open_chat">Hozzászólások</string>
+  <string name="place_chat_left">Hozzászólások balra helyezése</string>
   <string name="use_alt_speech_recognizer">Alternatív beszédfelismerő</string>
   <string name="time_format">Idő formátum</string>
   <string name="time_format_24">24 órás</string>
@@ -460,7 +460,7 @@
   <string name="speech_recognizer_system">Rendszer (javasolt)</string>
   <string name="speech_recognizer_external_1">Külső 1 (komolyan hibás, a működéshez le kell tiltani a mikrofonhoz való hozzáférést)</string>
   <string name="speech_recognizer_external_2">Külső 2 (komolyan hibás)</string>
-  <string name="real_channel_icon">Ikon megjelenítése a Feliratkozás gombon</string>
+  <string name="real_channel_icon">Logo megjelenítése a csatorna megnyitása gombon</string>
   <string name="subtitle_yellow_semi_transparent">Sárga, félig átlátszó háttérrel</string>
   <string name="subtitle_yellow_black">Sárga, fekete háttérel</string>
   <string name="player_pixel_ratio">Képernyőfelbontás</string>
@@ -543,7 +543,7 @@
   <string name="volume_boost_warning">A határértéket meghaladó beállítások károsíthatják a hangszórókat</string>
   <string name="play_video_incognito">Lejátszás inkognitó módban</string>
   <string name="header_kids_home">Gyermekvideók</string>
-  <string name="player_section_playlist">Az aktuális szakasz tartalmának használata lejátszási listaként</string>
+  <string name="player_section_playlist">Az aktuális kategória tartalmának használata lejátszási listaként</string>
   <string name="not_recommend_channel">Nem ajánlom a csatornát</string>
   <string name="you_wont_see_this_channel">Ez a csatorna nem jelenik meg az ajánlások között</string>
   <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
@@ -554,5 +554,6 @@
   <string name="mark_as_watched">Megjelölés nézettként</string>
   <string name="player_ui_animations">UI animációk engedélyezése</string>
   <string name="player_likes_count">A Tetszik/Nem tetszik számának megjelenítése</string>
-  
+  <string name="sorting_alphabetically2">Rendezés ABC szerint</string>
+  <string name="sorting_default">Alapértelmezett rendezés</string>
 </resources>

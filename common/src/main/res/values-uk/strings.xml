@@ -551,4 +551,6 @@
     <string name="player_likes_count">Відображати кількість лайків/діслайків</string>
     <string name="sorting_alphabetically2">За абеткою (швидко)</string>
     <string name="sorting_default">За замовчуванням (швидко)</string>
+    <string name="content_block_exclude_channel">Виключити канал із SponsorBlock</string>
+    <string name="content_block_stop_excluding_channel">Припинити виключати канал із SponsorBlock</string>
 </resources>

@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelec
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -38,6 +39,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private boolean mIsToggleHistoryEnabled;
     private boolean mIsClearHistoryEnabled;
     private boolean mIsUpdateCheckEnabled;
+    private boolean mIsExcludeFromContentBlockEnabled;
 
     protected BaseMenuPresenter(Context context) {
         super(context);
@@ -525,6 +527,42 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 option -> AppUpdatePresenter.instance(getContext()).start(true)));
     }
 
+    protected void appendToggleExcludeFromContentBlockButton() {
+        if (!mIsExcludeFromContentBlockEnabled) {
+            return;
+        }
+
+        Video original = getVideo();
+
+        if (original == null || !(original.hasChannel() || original.hasVideo())) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(
+                                ContentBlockData.instance(getContext()).isChannelExcluded(original.channelId) ?
+                                        R.string.content_block_stop_excluding_channel :
+                                        R.string.content_block_exclude_channel),
+                        optionItem -> {
+                            if (original.hasChannel()) {
+                                ContentBlockData.instance(getContext()).toggleExcludeChannel(original.channelId);
+                                closeDialog();
+                            } else {
+                                MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+
+                                mServiceManager.loadMetadata(
+                                        original,
+                                        metadata -> {
+                                            original.sync(metadata);
+                                            ContentBlockData.instance(getContext()).excludeChannel(original.channelId);
+                                            closeDialog();
+                                        }
+                                );
+                            }
+                        }));
+    }
+
     protected void updateEnabledMenuItems() {
         MainUIData mainUIData = MainUIData.instance(getContext());
         
@@ -536,5 +574,6 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         mIsToggleHistoryEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_TOGGLE_HISTORY);
         mIsClearHistoryEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_CLEAR_HISTORY);
         mIsUpdateCheckEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_UPDATE_CHECK);
+        mIsExcludeFromContentBlockEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK);
     }
 }

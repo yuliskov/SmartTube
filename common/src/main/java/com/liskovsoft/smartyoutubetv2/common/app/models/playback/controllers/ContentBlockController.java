@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
@@ -71,6 +72,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
             return blockedSegment;
         }
 
+        @NonNull
         @Override
         public String toString() {
             return String.format("%s,%s", segmentCategory, actionType);
@@ -88,9 +90,10 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
     public void onVideoLoaded(Video item) {
         disposeActions();
 
-        getPlayer().setButtonState(R.id.action_content_block, mContentBlockData.isSponsorBlockEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        boolean enabled = mContentBlockData.isSponsorBlockEnabled() && !mContentBlockData.isChannelExcluded(item.channelId);
+        getPlayer().setButtonState(R.id.action_content_block, enabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
 
-        if (mContentBlockData.isSponsorBlockEnabled() && checkVideo(item)) {
+        if (enabled && checkVideo(item)) {
             updateSponsorSegmentsAndWatch(item);
         }
     }
@@ -99,7 +102,8 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
     public void onMetadata(MediaItemMetadata metadata) {
         // Disable sponsor for the live streams.
         // Fix when using remote control.
-        if (!mContentBlockData.isSponsorBlockEnabled() || !checkVideo(getPlayer().getVideo())) {
+        if (!mContentBlockData.isSponsorBlockEnabled() || !checkVideo(getPlayer().getVideo()) ||
+                mContentBlockData.isChannelExcluded(metadata.getChannelId())) { // got channel id. check the exclusions
             disposeActions();
         }
     }
@@ -113,6 +117,13 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
     public void onButtonClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_content_block) {
             boolean enabled = buttonState == PlayerUI.BUTTON_ON;
+
+            if (!enabled) {
+                mContentBlockData.stopExcludingChannel(getPlayer().getVideo().channelId);
+            } else {
+                mContentBlockData.excludeChannel(getPlayer().getVideo().channelId);
+            }
+
             mContentBlockData.enableSponsorBlock(!enabled);
             onVideoLoaded(getPlayer().getVideo());
         }
@@ -188,6 +199,8 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
 
     private void disposeActions() {
         RxHelper.disposeActions(mProgressAction, mSegmentsAction);
+
+        getPlayer().setSeekBarSegments(null); // reset colors
 
         // Reset previously found segment (fix no dialog popup)
         mLastSkipPosMs = 0;
