@@ -491,7 +491,7 @@ public class AppDialogUtil {
     public static OptionCategory createPlayerScreenOffTimeoutCategory(Context context, PlayerTweaksData data) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (int timoutSec : Helpers.range(1, 10, 1)) {
+        for (int timoutSec : Helpers.range(0, 10, 1)) {
             options.add(UiOptionItem.from(String.format("%s sec", timoutSec),
                     optionItem -> data.setScreenOffTimeoutSec(timoutSec),
                     data.getScreenOffTimeoutSec() == timoutSec));

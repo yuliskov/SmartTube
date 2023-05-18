@@ -504,10 +504,15 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             getPlayer().setButtonState(buttonId, rotation == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
             mPlayerData.setVideoRotation(rotation);
         } else if (buttonId == R.id.action_screen_off_timeout) {
-            mPlayerTweaksData.enableScreenOffTimeout(buttonState == PlayerUI.BUTTON_OFF);
-            getPlayer().setButtonState(buttonId, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
             ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
-            manager.disable();
+
+            if (mPlayerTweaksData.getScreenOffTimeoutSec() == 0) {
+                manager.doScreenOff();
+            } else {
+                mPlayerTweaksData.enableScreenOffTimeout(buttonState == PlayerUI.BUTTON_OFF);
+                getPlayer().setButtonState(buttonId, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+                manager.disable();
+            }
         }
     }
 
@@ -517,7 +522,12 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
             OptionCategory category = AppDialogUtil.createPlayerScreenOffTimeoutCategory(getActivity(), mPlayerTweaksData);
             settingsPresenter.appendRadioCategory(category.title, category.options);
-            settingsPresenter.showDialog();
+            settingsPresenter.showDialog(() -> {
+                if (mPlayerTweaksData.getScreenOffTimeoutSec() == 0) {
+                    mPlayerTweaksData.enableScreenOffTimeout(false);
+                    getPlayer().setButtonState(buttonId, PlayerUI.BUTTON_OFF);
+                }
+            });
         }
     }
 
