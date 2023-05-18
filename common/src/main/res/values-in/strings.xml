@@ -536,4 +536,6 @@
     <string name="mark_as_watched">Tandai sebagai telah ditonton</string>
     <string name="player_ui_animations">Aktifkan animasi panel kontrol</string>
     <string name="player_likes_count">Tampilkan jumlah suka/tidak suka</string>
+    <string name="sorting_alphabetically2">Menurut abjad (cepat)</string>
+    <string name="sorting_default">Standar (cepat)</string>
 </resources>
