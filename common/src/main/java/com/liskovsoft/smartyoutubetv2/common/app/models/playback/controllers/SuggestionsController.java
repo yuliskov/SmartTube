@@ -47,8 +47,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         void onVideoGroup(VideoGroup group);
     }
 
-    private interface OnSuggestions {
-        void onSuggestions(MediaItemMetadata metadata);
+    private interface OnMetadata {
+        void onMetadata(MediaItemMetadata metadata);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             return;
         }
 
-        loadSuggestions(video, metadata -> {
+        loadMetadata(video, metadata -> {
             syncCurrentVideo(metadata, video);
 
             if (!video.isLive) {
@@ -222,10 +222,11 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     public void loadSuggestions(Video video) {
-        loadSuggestions(video, metadata -> updateSuggestions(metadata, video));
+        clearSuggestionsIfNeeded(video);
+        loadMetadata(video, metadata -> updateSuggestions(metadata, video));
     }
 
-    private void loadSuggestions(Video video, OnSuggestions callback) {
+    private void loadMetadata(Video video, OnMetadata callback) {
         disposeActions();
 
         if (video == null) {
@@ -242,11 +243,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         // Video might be loaded from Channels section (has playlistParams)
         observable = mediaItemManager.getMetadataObserve(video.videoId, video.getPlaylistId(), video.playlistIndex, video.playlistParams);
 
-        clearSuggestionsIfNeeded(video);
-
         Disposable metadataAction = observable
                 .subscribe(
-                        callback::onSuggestions,
+                        callback::onMetadata,
                         error -> {
                             Log.e(TAG, "loadSuggestions error: %s", error.getMessage());
                             error.printStackTrace();
