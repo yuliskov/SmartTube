@@ -554,8 +554,10 @@
   <string name="screensaver">Salvapantallas</string>
   <string name="header_trending">Tendencias</string>
   <string name="player_section_playlist">Utilizar el contenido de la sección actual como lista de reproducción</string>
-  <string name="old_update_notifications">El antiguo aspecto de las notificaciones de actualización</string>
+  <string name="old_update_notifications">Antiguo aspecto de las notificaciones de actualización</string>
   <string name="mark_as_watched">Marcar como visto</string>
   <string name="player_ui_animations">Activar animaciones del panel de control</string>
   <string name="player_likes_count">Mostrar contador de me gusta/no me gusta</string>
+  <string name="sorting_alphabetically2">Alfabéticamente (rápido)</string>
+  <string name="sorting_default">Por defecto (rápido)</string>
 </resources>
