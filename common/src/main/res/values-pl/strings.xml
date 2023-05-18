@@ -546,4 +546,14 @@
   <string name="sony_frame_drop_fix">Poprawka dla gubienia klatek #1</string>
   <string name="sony_frame_drop_fix_desc">Poprawka dla opóźnień na telewizorach marki Sony i kilku innych urządzeniach. Uwaga: możliwy problem z synchronizacją audio</string>
   <string name="disable_stream_buffer_desc">Poprawka dla sytuacji gdy transmisja zaczęła się opóźniać. Uwaga może zacząć przerywać transmisję</string>
+  <string name="player_section_playlist">Użyj bieżącej zawartości jako listy odtwarzania</string>
+  <string name="header_trending">Na Czasie</string>
+  <string name="screensaver">Wygaszacz ekranu</string>
+  <string name="old_update_notifications">Stary wygląd powiadomienia o aktualizacji</string>
+  <string name="mark_as_watched">Oznacz jako obejrzane</string>
+  <string name="player_ui_animations">Odblokuj panel sterowania animacjami</string>
+  <string name="player_likes_count">Pokaż licznik polubień</string>
+  <string name="sorting_alphabetically2">Sortuj alfabetycznie (szybkie)</string>
+  <string name="sorting_default">Sortuj domyślnie (szybkie)</string>
+  <string name="player_screen_off_timeout">Limit czasu wyłączenia ekranu</string>
 </resources>
