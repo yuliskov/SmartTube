@@ -560,4 +560,6 @@
     <string name="player_likes_count">Beğenme/Beğenmeme sayısını göster</string>
     <string name="sorting_alphabetically2">Alfabetik (hızlı)</string>
     <string name="sorting_default">Varsayılan (hızlı)</string>
+    <string name="content_block_exclude_channel">Bu kanalı SponsorBlock\'tan hariç tut</string>
+    <string name="content_block_stop_excluding_channel">Bu kanalı SponsorBlock\'tan hariç tutmayı durdur</string>
 </resources>
