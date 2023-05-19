@@ -540,4 +540,23 @@
   <string name="disable_stream_buffer_desc">Corrige les situations où la diffusion est en retard. Avertissement : cette option peut provoquer des ralentissements du flux vidéo.</string>
   <string name="sony_frame_drop_fix">Correction de pertes d\'images n°1</string>
   <string name="sony_frame_drop_fix_desc">Corrige les ralentissements sur les téléviseurs Sony et certains autres appareils. Avertissement : cette option peut entraîner des problèmes de synchronisation audio.</string>
+  <string name="audio_language">Langue de la piste audio</string>
+  <string name="old_home_look">Utiliser l\'ancienne apparence pour la section Accueil</string>
+  <string name="hide_shorts_everywhere">Masquer les shorts partout</string>
+  <string name="update_found">Mise à jour</string>
+  <string name="volume_boost_warning">Les réglages dépassant la limite peuvent potentiellement endommager les haut-parleurs</string>
+  <string name="play_video_incognito">Lire en mode navigation privée</string>
+  <string name="header_kids_home">Enfants</string>
+  <string name="player_section_playlist">Utiliser le contenu de la section actuelle comme liste de lecture</string>
+  <string name="header_trending">Tendances</string>
+  <string name="screensaver">Économiseur d\'écran</string>
+  <string name="player_screen_off_timeout">Délai avant extinction de l\écran'</string>
+  <string name="old_update_notifications">Utiliser l\'ancienne apparence pour les notifications de mise à jour</string>
+  <string name="mark_as_watched">Marquer comme vue</string>
+  <string name="player_ui_animations">Activer l'animation de la barre de contrôles</string>
+  <string name="player_likes_count">Afficher le nombre de \"J\'aime\" et \"Je n\'aime pas\"</string>
+  <string name="sorting_alphabetically2">Ordre alphabétique (rapide)</string>
+  <string name="sorting_default">Par défaut (rapide)</string>
+  <string name="content_block_exclude_channel">Exclure cette chaîne de SponsorBlock</string>
+  <string name="content_block_stop_excluding_channel">Ne plus exclure cette chaîne de SponsorBlock</string>
 </resources>
