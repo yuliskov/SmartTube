@@ -100,7 +100,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
         boolean enabled = mContentBlockData.isSponsorBlockEnabled() && !isChannelExcluded(item.channelId);
         getPlayer().setButtonState(R.id.action_content_block, enabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
 
-        if (mContentBlockData.isSponsorBlockEnabled() && checkVideo(item)) {
+        if (enabled && checkVideo(item)) {
             updateSponsorSegmentsAndWatch(item);
         }
     }
@@ -180,7 +180,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
         if (mContentBlockData.isColorMarkersEnabled()) {
             getPlayer().setSeekBarSegments(toSeekBarSegments(mOriginalSegments));
         }
-        if (mContentBlockData.isActionsEnabled() && !isChannelExcluded(mVideo.channelId)) {
+        if (mContentBlockData.isActionsEnabled()) {
             startPlaybackWatcher();
         }
     }
