@@ -550,7 +550,7 @@
   <string name="player_section_playlist">Utiliser le contenu de la section actuelle comme liste de lecture</string>
   <string name="header_trending">Tendances</string>
   <string name="screensaver">Économiseur d\'écran</string>
-  <string name="player_screen_off_timeout">Délai avant extinction de l\écran'</string>
+  <string name="player_screen_off_timeout">Délai avant extinction de l\'écran</string>
   <string name="old_update_notifications">Utiliser l\'ancienne apparence pour les notifications de mise à jour</string>
   <string name="mark_as_watched">Marquer comme vue</string>
   <string name="player_ui_animations">Activer l\'animation de la barre de contrôles</string>
