@@ -42,6 +42,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
     private Disposable mProgressAction;
     private Disposable mSegmentsAction;
     private long mLastSkipPosMs;
+    private boolean mSkipExclude;
 
     public static class SegmentAction {
         public String segmentCategory;
@@ -87,10 +88,15 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
     }
 
     @Override
+    public void openVideo(Video item) {
+        mSkipExclude = false;
+    }
+
+    @Override
     public void onVideoLoaded(Video item) {
         disposeActions();
 
-        boolean enabled = mContentBlockData.isSponsorBlockEnabled() && !mContentBlockData.isChannelExcluded(item.channelId);
+        boolean enabled = mContentBlockData.isSponsorBlockEnabled() && !isChannelExcluded(item.channelId);
         getPlayer().setButtonState(R.id.action_content_block, enabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
 
         if (enabled && checkVideo(item)) {
@@ -103,7 +109,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
         // Disable sponsor for the live streams.
         // Fix when using remote control.
         if (!mContentBlockData.isSponsorBlockEnabled() || !checkVideo(getPlayer().getVideo()) ||
-                mContentBlockData.isChannelExcluded(metadata.getChannelId())) { // got channel id. check the exclusions
+                isChannelExcluded(metadata.getChannelId())) { // got channel id. check the exclusions
             disposeActions();
         }
     }
@@ -118,11 +124,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
         if (buttonId == R.id.action_content_block) {
             boolean enabled = buttonState == PlayerUI.BUTTON_ON;
 
-            if (!enabled) {
-                mContentBlockData.stopExcludingChannel(getPlayer().getVideo().channelId);
-            } else {
-                mContentBlockData.excludeChannel(getPlayer().getVideo().channelId);
-            }
+            mSkipExclude = !enabled;
 
             mContentBlockData.enableSponsorBlock(!enabled);
             onVideoLoaded(getPlayer().getVideo());
@@ -200,7 +202,8 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
     private void disposeActions() {
         RxHelper.disposeActions(mProgressAction, mSegmentsAction);
 
-        getPlayer().setSeekBarSegments(null); // reset colors
+        // Note, removes all segments at once
+        //getPlayer().setSeekBarSegments(null); // reset colors
 
         // Reset previously found segment (fix no dialog popup)
         mLastSkipPosMs = 0;
@@ -388,5 +391,9 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
         if (dialogPresenter.isDialogShown() && dialogPresenter.isTransparent()) {
             dialogPresenter.closeDialog();
         }
+    }
+
+    private boolean isChannelExcluded(String channelId) {
+        return !mSkipExclude && mContentBlockData.isChannelExcluded(channelId);
     }
 }
