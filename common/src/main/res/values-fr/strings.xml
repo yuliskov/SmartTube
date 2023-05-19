@@ -553,7 +553,7 @@
   <string name="player_screen_off_timeout">Délai avant extinction de l\écran'</string>
   <string name="old_update_notifications">Utiliser l\'ancienne apparence pour les notifications de mise à jour</string>
   <string name="mark_as_watched">Marquer comme vue</string>
-  <string name="player_ui_animations">Activer l'animation de la barre de contrôles</string>
+  <string name="player_ui_animations">Activer l\'animation de la barre de contrôles</string>
   <string name="player_likes_count">Afficher le nombre de \"J\'aime\" et \"Je n\'aime pas\"</string>
   <string name="sorting_alphabetically2">Ordre alphabétique (rapide)</string>
   <string name="sorting_default">Par défaut (rapide)</string>
