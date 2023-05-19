@@ -70,10 +70,13 @@ android {
 
         // https://stackoverflow.com/questions/37382057/android-apk-how-to-exclude-a-so-file-from-a-3rd-party-dependency-using-gradle
         // armeabi-v7a backward compatible with arm64-v8a, x86 -> x86_64 etc
-        ndk {
-            abiFilters "armeabi-v7a"
-            //abiFilters "armeabi-v7a", "x86"
-            //abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a' //select ABIs to build APKs for
+            universalApk false //generate an additional APK that contains all the ABIs
+        }
         }
     }
     buildTypes {
@@ -140,8 +143,9 @@ android {
             def flavor = variant.productFlavors[-1].name
             def buildType = variant.buildType.name.take(1)
             def version = variant.versionName
+            def arch = output.getFilter(com.android.build.OutputFile.ABI)
 
-            def newApkName = sprintf("%s_%s_v%s_%s.apk", [project, flavor, version, buildType])
+            def newApkName = sprintf("%s_%s_v%s_%s_%s.apk", [project, flavor, version, buildType, arch])
 
             // gradle 4.6 migration
             output.outputFileName = new File(newApkName)
