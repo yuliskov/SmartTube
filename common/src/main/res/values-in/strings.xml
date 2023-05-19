@@ -538,4 +538,6 @@
     <string name="player_likes_count">Tampilkan jumlah suka/tidak suka</string>
     <string name="sorting_alphabetically2">Menurut abjad (cepat)</string>
     <string name="sorting_default">Standar (cepat)</string>
+    <string name="content_block_exclude_channel">Kecualikan saluran ini dari SponsorBlock</string>
+    <string name="content_block_stop_excluding_channel">Berhenti mengecualikan saluran ini dari SponsorBlock</string>
 </resources>
