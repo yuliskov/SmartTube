@@ -90,6 +90,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
     @Override
     public void openVideo(Video item) {
         mSkipExclude = false;
+        getPlayer().setSeekBarSegments(null); // reset colors
     }
 
     @Override
@@ -175,8 +176,6 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
         }
 
         mActiveSegments = new ArrayList<>(mOriginalSegments);
-
-        getPlayer().setSeekBarSegments(null); // reset colors
 
         if (mContentBlockData.isColorMarkersEnabled()) {
             getPlayer().setSeekBarSegments(toSeekBarSegments(mOriginalSegments));
