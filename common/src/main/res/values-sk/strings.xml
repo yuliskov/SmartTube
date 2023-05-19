@@ -526,7 +526,7 @@
     <string name="sort_by_rating">Hodnotenie</string>
     <string name="clear_search_history">Zmazať históriu vyhľadávania</string>
     <string name="remove_from_subscriptions">Skryť</string>
-    <string name="player_long_speed_list">Možnosti rýchlosti videa</string>
+    <string name="player_long_speed_list">Viac možností rýchlosti videa</string>
     <string name="alt_app_icon">Alternatívna ikonka aplikácie (potrebný reštart)</string>
     <string name="network_stack">Preferovať sieťový zásobník %s</string>
     <string name="cronet_desc">Cronet je Chromium sieťový zásobník. Môže znížiť oneskorenie a zvýšiť výkon siete, čo môže pomôcť pri problémoch s ukladaním do medzipamäte.</string>
@@ -549,4 +549,16 @@
     <string name="volume_boost_warning">Akékoľvek nastavenie nad limit môže poškodiť reproduktory</string>
     <string name="play_video_incognito">Prehrať anonymne</string>
     <string name="header_kids_home">Deti</string>
+    <string name="player_section_playlist">Použiť aktuálny obsah sekcie ako playlist</string>
+    <string name="header_trending">Trendy</string>
+    <string name="screensaver">Šetrič obrazovky</string>
+    <string name="player_screen_off_timeout">Časový limit vypnutia obrazovky</string>
+    <string name="old_update_notifications">Starý vzhľad oznámení o aktualizáciách</string>
+    <string name="mark_as_watched">Označiť ako videné</string>
+    <string name="player_ui_animations">Povoliť animácie ovládacieho panela</string>
+    <string name="player_likes_count">Zobraziť počet Páči sa/Nepáči sa</string>
+    <string name="sorting_alphabetically2">Abecedne (rýchlo)</string>
+    <string name="sorting_default">Predvolené (rýchle)</string>
+    <string name="content_block_exclude_channel">Neaplikovať SponsorBlock na tento kanál</string>
+    <string name="content_block_stop_excluding_channel">Znovu aplikovať SponsorBlock na tento kanál</string>
 </resources>
