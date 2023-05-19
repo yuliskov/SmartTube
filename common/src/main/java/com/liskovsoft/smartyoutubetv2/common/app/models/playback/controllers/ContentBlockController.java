@@ -109,8 +109,10 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
     public void onMetadata(MediaItemMetadata metadata) {
         // Disable sponsor for the live streams.
         // Fix when using remote control.
-        if (!mContentBlockData.isSponsorBlockEnabled() || !checkVideo(getPlayer().getVideo()) ||
-                isChannelExcluded(metadata.getChannelId())) { // got channel id. check the exclusions
+        if (!mContentBlockData.isSponsorBlockEnabled() || !checkVideo(getPlayer().getVideo())) {
+            disposeActions();
+        } else if (isChannelExcluded(metadata.getChannelId())) { // got channel id. check the exclusions
+            getPlayer().setButtonState(R.id.action_content_block, PlayerUI.BUTTON_OFF);
             disposeActions();
         }
     }
