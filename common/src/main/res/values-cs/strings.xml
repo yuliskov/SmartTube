@@ -558,4 +558,8 @@
     <string name="mark_as_watched">Označit jako zhlédnuté</string>
     <string name="player_ui_animations">Povolit animace ovládacího panelu</string>
     <string name="player_likes_count">Zobrazit počet Líbí/Nelíbí</string>
+    <string name="sorting_alphabetically2">Abecedně (rychle)</string>
+    <string name="sorting_default">Výchozí (rychle)</string>
+    <string name="content_block_exclude_channel">Vyloučit tento kanál ze SponsorBlocku</string>
+    <string name="content_block_stop_excluding_channel">Přestat vylučovat tento kanál ze SponsorBlocku</string>
 </resources>
