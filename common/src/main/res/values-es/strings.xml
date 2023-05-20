@@ -560,4 +560,6 @@
   <string name="player_likes_count">Mostrar contador de me gusta/no me gusta</string>
   <string name="sorting_alphabetically2">Alfabéticamente (rápido)</string>
   <string name="sorting_default">Por defecto (rápido)</string>
+  <string name="content_block_exclude_channel">Excluir este canal de SponsorBlock</string>
+  <string name="content_block_stop_excluding_channel">Dejar de excluir este canal de SponsorBlock</string>
 </resources>
