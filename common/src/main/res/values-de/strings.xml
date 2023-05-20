@@ -560,4 +560,6 @@
     <string name="player_likes_count">Anzahl der Mag ich/Mag ich nicht anzeigen</string>
     <string name="sorting_alphabetically2">Alphabetisch (schnell)</string>
     <string name="sorting_default">Standard (schnell)</string>
+    <string name="content_block_exclude_channel">Diesen Kanal von SponsorBlock ausschließen</string>
+    <string name="content_block_stop_excluding_channel">Diesen Kanal nicht mehr von SponsorBlock ausschließen</string>
 </resources>
