@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -104,8 +105,10 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     public void onSuggestionItemClicked(Video item) {
         markAsQueueIfNeeded(item);
 
+        getPlayer().showOverlay(false);
+
         // Update UI to response to user clicks
-        getPlayer().resetSuggestedPosition();
+        //getPlayer().resetSuggestedPosition();
     }
 
     @Override
@@ -247,6 +250,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
                 .subscribe(
                         callback::onMetadata,
                         error -> {
+                            MessageHelpers.showLongMessage(getActivity(), "loadSuggestions error: %s", error.getMessage());
                             Log.e(TAG, "loadSuggestions error: %s", error.getMessage());
                             error.printStackTrace();
                             // Errors are usual here (something with title parsing)
