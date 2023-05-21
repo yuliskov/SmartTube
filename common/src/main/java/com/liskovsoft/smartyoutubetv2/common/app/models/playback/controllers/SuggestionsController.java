@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -39,6 +40,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private Video mNextVideo;
     private int mFocusCount;
     private int mNextCount;
+    private String mChapterTitle;
 
     public interface MetadataListener {
         void onMetadata(MediaItemMetadata metadata);
@@ -65,6 +67,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         mCurrentGroup = item.getGroup(); // disable garbage collected
         mNextGroup = null; // enable garbage collected
         mNextVideo = null;
+        mChapterTitle = null;
     }
 
     @Override
@@ -128,6 +131,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     @Override
     public void onTickle() {
         updateLiveMetadata();
+        showChapterNotification();
     }
 
     private void updateLiveMetadata() {
@@ -442,7 +446,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             String title = group.getVideos().get(index).title;
             getPlayer().focusSuggestedItem(index);
             getPlayer().setSeekPreviewTitle(title);
-            //getController().setTitle(title);
+            mChapterTitle = title;
         }
     }
 
@@ -461,6 +465,20 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         }
 
         return currentChapter;
+    }
+
+    private void showChapterNotification() {
+        if (getPlayer().isControlsShown()) {
+            return;
+        }
+
+        String previousTitle = mChapterTitle;
+
+        focusCurrentChapter();
+
+        if (!Helpers.equals(previousTitle, mChapterTitle)) {
+            MessageHelpers.showLongMessage(getActivity(), mChapterTitle);
+        }
     }
 
     private List<SeekBarSegment> toSeekBarSegments(List<ChapterItem> chapters) {
