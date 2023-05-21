@@ -133,10 +133,19 @@ public class GeneralData {
 
     public void enableSection(int sectionId, boolean enabled) {
         if (enabled) {
+            if (sectionId == MediaGroup.TYPE_SETTINGS) {
+                mIsSettingsSectionEnabled = true; // prevent Settings lock
+            }
+
             int index = getDefaultSectionIndex(sectionId);
 
             Video item = new Video();
             item.extra = sectionId;
+
+            if (mPinnedItems.contains(item)) { // don't reorder if item already exists
+                persistState();
+                return;
+            }
 
             if (index == -1) {
                 mPinnedItems.add(item);

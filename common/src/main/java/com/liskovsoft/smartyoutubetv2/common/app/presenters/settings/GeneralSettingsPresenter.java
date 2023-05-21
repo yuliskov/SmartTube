@@ -347,7 +347,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> {
                     AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_backup), () -> {
                         mGeneralData.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
-                        mGeneralData.enableSettingsSection(true); // prevent Settings lock
                         backupManager.checkPermAndBackup();
                         MessageHelpers.showMessage(getContext(), R.string.msg_done);
                     });
