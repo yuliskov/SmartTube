@@ -515,4 +515,8 @@
   <string name="old_update_notifications">アップデート通知を旧仕様に戻す</string>
   <string name="player_ui_animations">コンパネのアニメーション</string>
   <string name="player_likes_count">高評価/低評価数を表示する</string>
+  <string name="sorting_alphabetically2">アルファベット順 (高速)</string>
+  <string name="sorting_default">デフォルト (高速)</string>
+  <string name="content_block_exclude_channel">チャンネルにSponsorBlockを適用しない</string>
+  <string name="content_block_stop_excluding_channel">チャンネルにSponsorBlockを適用する</string>
 </resources>
