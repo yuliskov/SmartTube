@@ -410,7 +410,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             case PlayerUI.REPEAT_MODE_ALL:
             case PlayerUI.REPEAT_MODE_SHUFFLE:
                 loadNext();
-                //getPlayer().showOverlay(true);
                 break;
             case PlayerUI.REPEAT_MODE_ONE:
                 getPlayer().setPositionMs(0);
@@ -442,7 +441,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 Video video = getPlayer().getVideo();
                 if ((video != null && video.hasNextPlaylist()) || mPlaylist.getNext() != null) {
                     loadNext();
-                    getPlayer().showOverlay(true);
                 } else {
                     getPlayer().setPositionMs(getPlayer().getDurationMs());
                     getPlayer().setPlayWhenReady(false);
