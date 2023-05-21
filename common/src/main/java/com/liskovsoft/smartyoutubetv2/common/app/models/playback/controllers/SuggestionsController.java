@@ -131,7 +131,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     @Override
     public void onTickle() {
         updateLiveMetadata();
-        showChapterNotification();
+        // Bad idea. This should work in realtime.
+        //showChapterNotification();
     }
 
     private void updateLiveMetadata() {
