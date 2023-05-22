@@ -6,7 +6,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -15,11 +14,15 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -40,6 +43,14 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private Video mNextVideo;
     private int mFocusCount;
     private int mNextCount;
+    private List<ChapterItem> mChapters;
+    private ChapterItem mNextChapter;
+    private final Runnable mNextChapterHandler = () -> {
+        if (mNextChapter != null) {
+            showChapterDialog();
+            //startChapterNotificationServiceIfNeeded();
+        }
+    };
 
     public interface MetadataListener {
         void onMetadata(MediaItemMetadata metadata);
@@ -123,6 +134,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     public void onSeekEnd() {
         if (getPlayer().isControlsShown()) {
             focusCurrentChapter();
+            //startChapterNotificationServiceIfNeeded();
         }
     }
 
@@ -364,33 +376,49 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         }
     }
 
-    private void addChapterMarkersIfNeeded(MediaItemMetadata mediaItemMetadata) {
-        List<ChapterItem> chapters = mediaItemMetadata.getChapters();
-
-        if (chapters == null) {
+    private void addChapterMarkersIfNeeded() {
+        if (mChapters == null) {
             return;
         }
 
-        getPlayer().setSeekBarSegments(toSeekBarSegments(chapters));
+        getPlayer().setSeekBarSegments(toSeekBarSegments(mChapters));
     }
 
-    private void appendChapterSuggestionsIfNeeded(MediaItemMetadata mediaItemMetadata) {
-        List<ChapterItem> chapters = mediaItemMetadata.getChapters();
-
-        if (chapters == null) {
+    private void appendChapterSuggestionsIfNeeded() {
+        if (mChapters == null) {
             return;
         }
 
-        VideoGroup videoGroup = VideoGroup.fromChapters(chapters, getActivity().getString(R.string.chapters));
+        VideoGroup videoGroup = VideoGroup.fromChapters(mChapters, getActivity().getString(R.string.chapters));
 
         getPlayer().updateSuggestions(videoGroup);
     }
 
-    private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
-        addChapterMarkersIfNeeded(mediaItemMetadata);
-        appendChapterSuggestionsIfNeeded(mediaItemMetadata);
+    private void startChapterNotificationServiceIfNeeded() {
+        Utils.removeCallbacks(mNextChapterHandler);
 
-        if (mediaItemMetadata.getChapters() != null) {
+        if (mChapters == null) {
+            return;
+        }
+
+        long positionMs = getPlayer().getPositionMs();
+        for (ChapterItem chapter : mChapters) {
+            if (chapter.getStartTimeMs() > positionMs) {
+                mNextChapter = chapter;
+                Utils.postDelayed(mNextChapterHandler, (long) ((chapter.getStartTimeMs() - positionMs) * getPlayer().getSpeed()));
+                break;
+            }
+        }
+    }
+
+    private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
+        mChapters = mediaItemMetadata.getChapters();
+
+        addChapterMarkersIfNeeded();
+        appendChapterSuggestionsIfNeeded();
+        //startChapterNotificationServiceIfNeeded();
+
+        if (mChapters != null) {
             getPlayer().setSeekPreviewTitle("..."); // fix control panel animation on the first run
         }
     }
@@ -553,6 +581,29 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         }
     }
 
+    private void showChapterDialog() {
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+
+        if ((dialogPresenter.isDialogShown() && !dialogPresenter.isTransparent()) || getPlayer().isOverlayShown()) {
+            // Another dialog is opened. Don't distract a user.
+            return;
+        }
+
+        OptionItem acceptOption = UiOptionItem.from(
+                mNextChapter.getTitle(),
+                option -> {
+                    // return to previous dialog or close if no other dialogs in stack
+                    dialogPresenter.closeDialog();
+                }
+        );
+
+        dialogPresenter.appendSingleButton(acceptOption);
+
+        dialogPresenter.enableTransparent(true);
+        dialogPresenter.enableExpandable(false);
+        dialogPresenter.showDialog();
+    }
+
     public void addMetadataListener(MetadataListener listener) {
         mListeners.add(listener);
     }
@@ -568,5 +619,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private void disposeActions() {
         RxHelper.disposeActions(mActions);
         mLastScrollGroup = null;
+        mChapters = null;
+        mNextChapter = null;
     }
 }

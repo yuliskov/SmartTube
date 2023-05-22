@@ -284,7 +284,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
         );
 
         dialogPresenter.appendSingleButton(acceptOption);
-        dialogPresenter.setCloseTimeoutMs(skipPosMs - getPlayer().getPositionMs());
+        dialogPresenter.setCloseTimeoutMs((long) ((skipPosMs - getPlayer().getPositionMs()) * getPlayer().getSpeed()));
 
         dialogPresenter.enableTransparent(true);
         dialogPresenter.enableExpandable(false);

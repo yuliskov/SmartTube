@@ -327,7 +327,7 @@ public class Utils {
         customTabsIntent.launchUrl(context, Uri.parse(url));
     }
 
-    public static void postDelayed(Runnable callback, int delayMs) {
+    public static void postDelayed(Runnable callback, long delayMs) {
         sHandler.removeCallbacks(callback);
         sHandler.postDelayed(callback, delayMs);
     }
