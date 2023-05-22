@@ -111,6 +111,10 @@ public abstract class MediaTrack {
         return format != null && format.codecs != null && format.codecs.contains("av01");
     }
 
+    public boolean isMP4ACodec() {
+        return format != null && format.codecs != null && format.codecs.contains("mp4a");
+    }
+
     public int getWidth() {
         return format != null ? format.width : -1;
     }

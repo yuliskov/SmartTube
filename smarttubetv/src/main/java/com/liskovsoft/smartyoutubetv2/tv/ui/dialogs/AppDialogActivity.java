@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
@@ -44,6 +46,15 @@ public class AppDialogActivity extends MotherActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (KeyHelpers.isMenuKey(keyCode)) { // toggle dialog with menu key
             finish();
+        }
+
+        // Notification dialog type. Imitate notification behavior.
+        if (mFragment.isTransparent() && KeyHelpers.isNavigationKey(keyCode)) {
+            finish();
+            PlaybackView view = PlaybackPresenter.instance(this).getView();
+            if (view != null) {
+                view.getPlayer().showOverlay(true);
+            }
         }
 
         return super.onKeyDown(keyCode, event);
