@@ -44,11 +44,11 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private int mFocusCount;
     private int mNextCount;
     private List<ChapterItem> mChapters;
-    private ChapterItem mNextChapter;
-    private final Runnable mNextChapterHandler = () -> {
-        if (mNextChapter != null) {
-            showChapterDialog();
-            //startChapterNotificationServiceIfNeeded();
+    private final Runnable mChapterHandler = () -> {
+        ChapterItem chapter = getCurrentChapter();
+        if (chapter != null) {
+            showChapterDialog(chapter);
+            startChapterNotificationServiceIfNeeded();
         }
     };
 
@@ -127,6 +127,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     public void onControlsShown(boolean shown) {
         if (shown) {
             focusCurrentChapter();
+        } else {
+            startChapterNotificationServiceIfNeeded();
         }
     }
 
@@ -134,8 +136,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     public void onSeekEnd() {
         if (getPlayer().isControlsShown()) {
             focusCurrentChapter();
-            //startChapterNotificationServiceIfNeeded();
         }
+
+        startChapterNotificationServiceIfNeeded();
     }
 
     @Override
@@ -395,19 +398,19 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void startChapterNotificationServiceIfNeeded() {
-        Utils.removeCallbacks(mNextChapterHandler);
+        Utils.removeCallbacks(mChapterHandler);
 
         if (mChapters == null) {
             return;
         }
 
         long positionMs = getPlayer().getPositionMs();
-        for (ChapterItem chapter : mChapters) {
-            if (chapter.getStartTimeMs() > positionMs) {
-                mNextChapter = chapter;
-                Utils.postDelayed(mNextChapterHandler, (long) ((chapter.getStartTimeMs() - positionMs) * getPlayer().getSpeed()));
-                break;
-            }
+
+        ChapterItem chapter = getNextChapter();
+
+        if (chapter != null) {
+            Utils.postDelayed(mChapterHandler, (long) ((chapter.getStartTimeMs() - positionMs) * getPlayer().getSpeed()));
+            showChapterDialog(getCurrentChapter());
         }
     }
 
@@ -416,7 +419,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         addChapterMarkersIfNeeded();
         appendChapterSuggestionsIfNeeded();
-        //startChapterNotificationServiceIfNeeded();
+        startChapterNotificationServiceIfNeeded();
 
         if (mChapters != null) {
             getPlayer().setSeekPreviewTitle("..."); // fix control panel animation on the first run
@@ -581,7 +584,11 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         }
     }
 
-    private void showChapterDialog() {
+    private void showChapterDialog(ChapterItem chapter) {
+        if (chapter == null) {
+            return;
+        }
+
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
         if ((dialogPresenter.isDialogShown() && !dialogPresenter.isTransparent()) || getPlayer().isOverlayShown()) {
@@ -590,10 +597,15 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         }
 
         OptionItem acceptOption = UiOptionItem.from(
-                mNextChapter.getTitle(),
+                chapter.getTitle(),
                 option -> {
                     // return to previous dialog or close if no other dialogs in stack
                     dialogPresenter.closeDialog();
+                    ChapterItem nextChapter = getNextChapter();
+                    if (nextChapter != null) {
+                        getPlayer().setPositionMs(nextChapter.getStartTimeMs());
+                        showChapterDialog(getCurrentChapter());
+                    }
                 }
         );
 
@@ -602,6 +614,39 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         dialogPresenter.enableTransparent(true);
         dialogPresenter.enableExpandable(false);
         dialogPresenter.showDialog();
+    }
+
+    private ChapterItem getNextChapter() {
+        if (mChapters == null) {
+            return null;
+        }
+
+        long positionMs = getPlayer().getPositionMs();
+        for (ChapterItem chapter : mChapters) {
+            if (chapter.getStartTimeMs() > (positionMs + 3_000)) {
+                return chapter;
+            }
+        }
+
+        return null;
+    }
+
+    private ChapterItem getCurrentChapter() {
+        if (mChapters == null) {
+            return null;
+        }
+
+        long positionMs = getPlayer().getPositionMs();
+        ChapterItem currentChapter = null;
+
+        for (ChapterItem chapter : mChapters) {
+            if (chapter.getStartTimeMs() > (positionMs + 3_000)) {
+                break;
+            }
+            currentChapter = chapter;
+        }
+
+        return currentChapter;
     }
 
     public void addMetadataListener(MetadataListener listener) {
@@ -620,6 +665,5 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         RxHelper.disposeActions(mActions);
         mLastScrollGroup = null;
         mChapters = null;
-        mNextChapter = null;
     }
 }

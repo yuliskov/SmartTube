@@ -53,7 +53,16 @@ public class AppDialogActivity extends MotherActivity {
             finish();
             PlaybackView view = PlaybackPresenter.instance(this).getView();
             if (view != null) {
-                view.getPlayer().showOverlay(true);
+                view.getPlayer().showControls(true);
+            }
+        }
+
+        // Notification dialog type. Imitate notification behavior.
+        if (mFragment.isTransparent() && KeyHelpers.isBackKey(keyCode)) {
+            finish();
+            PlaybackView view = PlaybackPresenter.instance(this).getView();
+            if (view != null) {
+                view.getPlayer().finish();
             }
         }
 
