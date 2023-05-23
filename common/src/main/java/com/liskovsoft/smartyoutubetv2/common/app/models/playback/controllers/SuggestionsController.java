@@ -116,11 +116,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     @Override
     public void onSuggestionItemClicked(Video item) {
         markAsQueueIfNeeded(item);
-
-        getPlayer().showOverlay(false);
-
-        // Update UI to response to user clicks
-        //getPlayer().resetSuggestedPosition();
     }
 
     @Override

@@ -44,7 +44,7 @@ public class AppDialogActivity extends MotherActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (KeyHelpers.isMenuKey(keyCode)) { // toggle dialog with menu key
+        if (!mFragment.isTransparent() && KeyHelpers.isMenuKey(keyCode)) { // toggle dialog with menu key
             finish();
         }
 

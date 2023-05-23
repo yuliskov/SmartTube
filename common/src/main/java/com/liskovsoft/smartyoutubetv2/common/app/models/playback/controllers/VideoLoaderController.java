@@ -188,6 +188,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     @Override
     public void onSuggestionItemClicked(Video item) {
         openVideoInt(item);
+
+        getPlayer().showControls(false);
     }
 
     @Override

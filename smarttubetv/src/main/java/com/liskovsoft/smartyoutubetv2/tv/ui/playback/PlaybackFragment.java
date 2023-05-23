@@ -1227,9 +1227,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         showOverlay(show);
 
-        if (show) {
-            setPlayerRowIndex(0);
-        }
+        setPlayerRowIndex(0);
     }
 
     @Override
