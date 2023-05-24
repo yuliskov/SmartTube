@@ -245,8 +245,8 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
             return;
         }
 
-        setPositionMs(skipPosMs);
         closeTransparentDialog();
+        setPositionMs(skipPosMs);
     }
 
     private void messageSkip(long skipPosMs, String category) {
@@ -256,8 +256,8 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
 
         MessageHelpers.showMessage(getActivity(),
                 String.format("%s: %s", getActivity().getString(R.string.content_block_provider), getActivity().getString(R.string.msg_skipping_segment, category)));
-        setPositionMs(skipPosMs);
         closeTransparentDialog();
+        setPositionMs(skipPosMs);
     }
 
     private void confirmSkip(long skipPosMs, String category) {
