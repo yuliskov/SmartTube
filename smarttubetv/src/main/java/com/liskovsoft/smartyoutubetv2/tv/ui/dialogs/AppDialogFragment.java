@@ -48,16 +48,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-
-        // Workaround to stop background playback
-        if (mIsTransparent) {
-            finish();
-        }
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
