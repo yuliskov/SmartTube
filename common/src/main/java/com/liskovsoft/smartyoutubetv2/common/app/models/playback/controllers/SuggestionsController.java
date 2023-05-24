@@ -122,8 +122,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     public void onControlsShown(boolean shown) {
         if (shown) {
             focusCurrentChapter();
-        } else {
-            startChapterNotificationServiceIfNeeded();
         }
     }
 
@@ -405,8 +403,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         if (chapter != null) {
             Utils.postDelayed(mChapterHandler, (long) ((chapter.getStartTimeMs() - positionMs) * getPlayer().getSpeed()));
-            showChapterDialog(getCurrentChapter());
         }
+
+        showChapterDialog(getCurrentChapter());
     }
 
     private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
