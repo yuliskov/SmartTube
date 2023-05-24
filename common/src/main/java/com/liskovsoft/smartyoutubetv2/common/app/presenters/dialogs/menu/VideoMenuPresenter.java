@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
@@ -456,6 +457,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 UiOptionItem.from(getContext().getString(R.string.mark_as_watched), optionItem -> {
                     MediaServiceManager.instance().updateHistory(mVideo, 0);
                     mVideo.percentWatched = 100;
+                    VideoStateService.instance(getContext()).save(new State(mVideo.videoId, mVideo.getDurationMs()));
                     Playlist.instance().sync(mVideo);
                     mDialogPresenter.closeDialog();
                 }));

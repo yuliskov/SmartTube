@@ -106,10 +106,7 @@ public class VideoGroup {
             video.setGroup(videoGroup);
             if (stateService != null && video.percentWatched == -1) {
                 State state = stateService.getByVideoId(video.videoId);
-                // Sync video.
-                if (state != null) {
-                    video.percentWatched = state.positionMs / (state.durationMs / 100f);
-                }
+                video.sync(state);
             }
             videoGroup.mVideos.add(video);
         }

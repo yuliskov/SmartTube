@@ -415,9 +415,10 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         long remainsMs = durationMs - positionMs;
         boolean isPositionActual = remainsMs > 1_000;
         if (isPositionActual) { // partially viewed
-            mStateService.save(new State(video.videoId, positionMs, durationMs, getPlayer().getSpeed()));
+            State state = new State(video.videoId, positionMs, durationMs, getPlayer().getSpeed());
+            mStateService.save(state);
             // Sync video. You could safely use it later to restore state.
-            video.percentWatched = positionMs / (durationMs / 100f);
+            video.sync(state);
         } else { // fully viewed
             // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
             mStateService.save(new State(video.videoId, durationMs, durationMs, getPlayer().getSpeed()));
@@ -433,7 +434,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         State state = mStateService.getByVideoId(item.videoId);
 
         boolean stateIsOutdated = state == null || state.timestamp < item.timestamp;
-        if (item.getPositionMs() > 0 && stateIsOutdated) {
+        if (item.getPositionMs() > 0 && stateIsOutdated) { // check that the user logged in
             // Web state is buggy on short videos (e.g. video clips)
             boolean isLongVideo = getPlayer().getDurationMs() > MUSIC_VIDEO_MAX_DURATION_MS;
             if (isLongVideo) {

@@ -9,6 +9,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
@@ -665,6 +666,10 @@ public final class Video {
         return liveDurationMs > 0 ? liveDurationMs : 0;
     }
 
+    public long getDurationMs() {
+        return mediaItem != null ? mediaItem.getDurationMs() : -1;
+    }
+
     public long getPositionMs() {
         // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
         if (mediaItem == null || percentWatched <= RESTORE_POSITION_PERCENTS || percentWatched >= 100) {
@@ -677,5 +682,11 @@ public final class Video {
 
     public MediaItem toMediaItem() {
         return SampleMediaItem.from(this);
+    }
+
+    public void sync(VideoStateService.State state) {
+        if (state != null) {
+            percentWatched = state.positionMs / (state.durationMs / 100f);
+        }
     }
 }
