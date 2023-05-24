@@ -47,7 +47,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private final Runnable mChapterHandler = () -> {
         ChapterItem chapter = getCurrentChapter();
         if (chapter != null) {
-            showChapterDialog(chapter);
             startChapterNotificationServiceIfNeeded();
         }
     };
@@ -393,6 +392,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private void startChapterNotificationServiceIfNeeded() {
         Utils.removeCallbacks(mChapterHandler);
 
+        showChapterDialog(getCurrentChapter());
+
         if (mChapters == null) {
             return;
         }
@@ -404,8 +405,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         if (chapter != null) {
             Utils.postDelayed(mChapterHandler, (long) ((chapter.getStartTimeMs() - positionMs) * getPlayer().getSpeed()));
         }
-
-        showChapterDialog(getCurrentChapter());
     }
 
     private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
@@ -579,14 +578,16 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void showChapterDialog(ChapterItem chapter) {
-        if (chapter == null) {
-            return;
-        }
-
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
         if ((dialogPresenter.isDialogShown() && !dialogPresenter.isTransparent()) || getPlayer().isOverlayShown()) {
             // Another dialog is opened. Don't distract a user.
+            return;
+        }
+
+        dialogPresenter.closeDialog(); // remove previous dialog
+
+        if (chapter == null) {
             return;
         }
 
