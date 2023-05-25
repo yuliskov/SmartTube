@@ -91,7 +91,7 @@
   <string name="color_scheme_default">Por defecto</string>
   <string name="color_scheme_red_grey">Rojo-gris</string>
   <string name="color_scheme_red">Rojo</string>
-  <string name="color_scheme_dark_grey">Oscuro</string>
+  <string name="color_scheme_dark_grey">Gris oscuro</string>
   <string name="disable_update_check">Desactivar comprobación de actualizaciones</string>
   <string name="show_again">Mostrar de nuevo</string>
   <string name="check_updates_auto">Notificar sobre la nueva versión</string>
