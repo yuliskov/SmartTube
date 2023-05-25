@@ -488,7 +488,7 @@
     <string name="pause_history">Поставити історію на паузу</string>
     <string name="resume_history">Відновити історію</string>
     <string name="clear_history">Очистити історію</string>
-    <string name="chapters">Розділи</string>
+    <string name="chapters">Епізоди</string>
     <string name="card_multiline_subtitle">Декілька рядків у підзаголовках</string>
     <string name="auto_frame_rate_modes">Підтримувані режими</string>
     <string name="loading">Завантаження…</string>
@@ -553,4 +553,5 @@
     <string name="sorting_default">За замовчуванням (швидко)</string>
     <string name="content_block_exclude_channel">Виключити канал із SponsorBlock</string>
     <string name="content_block_stop_excluding_channel">Припинити виключати канал із SponsorBlock</string>
+    <string name="player_chapter_notification">Показувати сповіщення для швидкого переходу між епізодами</string>
 </resources>

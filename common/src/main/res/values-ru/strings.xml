@@ -553,4 +553,5 @@
     <string name="sorting_default">По умолчанию (быстро)</string>
     <string name="content_block_exclude_channel">Исключить канал из SponsorBlock</string>
     <string name="content_block_stop_excluding_channel">Перестать исключать канал из SponsorBlock</string>
+    <string name="player_chapter_notification">Показывать уведомление для быстрого перехода по эпизодам</string>
 </resources>

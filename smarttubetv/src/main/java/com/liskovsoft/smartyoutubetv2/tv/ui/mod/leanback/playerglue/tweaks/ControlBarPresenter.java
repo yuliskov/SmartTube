@@ -23,6 +23,7 @@ import androidx.leanback.R;
 import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.Presenter;
+import androidx.leanback.widget.Presenter.ViewHolder;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.ControlButtonPresenterSelector;
 
 /**
@@ -105,9 +106,9 @@ class ControlBarPresenter extends Presenter {
                         return;
                     }
                     for (int position = 0; position < mViewHolders.size(); position++) {
-                        if (mViewHolders.get(position).view == child) {
-                            mOnControlSelectedListener.onControlSelected(
-                                    mViewHolders.get(position),
+                        Presenter.ViewHolder vh = mViewHolders.get(position);
+                        if (vh != null && vh.view == child) {
+                            mOnControlSelectedListener.onControlSelected(vh,
                                     getDisplayedAdapter().get(position), mData);
                             break;
                         }

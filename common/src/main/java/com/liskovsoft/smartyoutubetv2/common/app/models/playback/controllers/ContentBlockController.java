@@ -34,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 public class ContentBlockController extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = ContentBlockController.class.getSimpleName();
     private static final long POLL_INTERVAL_MS = 1_000;
+    private static final int CONTENT_BLOCK_ID = 144;
     private MediaItemService mMediaItemManager;
     private ContentBlockData mContentBlockData;
     private Video mVideo;
@@ -288,6 +289,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
 
         dialogPresenter.enableTransparent(true);
         dialogPresenter.enableExpandable(false);
+        dialogPresenter.setId(CONTENT_BLOCK_ID);
         dialogPresenter.showDialog(getActivity().getString(R.string.content_block_provider));
     }
 
@@ -389,7 +391,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
     private void closeTransparentDialog() {
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
-        if (dialogPresenter.isDialogShown() && dialogPresenter.isTransparent()) {
+        if (dialogPresenter.isDialogShown() && dialogPresenter.getId() == CONTENT_BLOCK_ID) {
             dialogPresenter.closeDialog();
         }
     }

@@ -713,6 +713,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
+        if (mediaGroup == null) {
+            Log.e(TAG, "Can't continue group. MediaGroup is null.");
+            return;
+        }
+
         Observable<MediaGroup> continuation;
 
         if (mediaGroup.getType() == MediaGroup.TYPE_SUGGESTIONS) { // Pinned playlist

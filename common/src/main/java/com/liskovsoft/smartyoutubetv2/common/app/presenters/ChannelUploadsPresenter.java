@@ -108,6 +108,11 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         VideoGroup group = item.getGroup();
 
+        if (group == null) {
+            Log.e(TAG, "Can't scroll. VideoGroup is null.");
+            return;
+        }
+
         Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());
 
         boolean scrollInProgress = mScrollAction != null && !mScrollAction.isDisposed();

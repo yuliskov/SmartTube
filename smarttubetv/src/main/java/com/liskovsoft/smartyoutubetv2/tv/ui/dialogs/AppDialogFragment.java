@@ -37,6 +37,8 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     private AppDialogPresenter mPresenter;
     private AppPreferenceManager mManager;
     private boolean mIsTransparent;
+    private boolean mIsPaused;
+    private int mId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +47,22 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
         mPresenter = AppDialogPresenter.instance(getActivity());
         mPresenter.setView(this);
         mManager = new AppPreferenceManager(getActivity());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
+        // Workaround for dialog that are destroyed with the delay (e.g. transparent dialogs)
+        mIsPaused = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume");
+        // Workaround for dialog that are destroyed with the delay (e.g. transparent dialogs)
+        mIsPaused = false;
     }
 
     @Override
@@ -96,10 +114,11 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     }
 
     @Override
-    public void show(List<OptionCategory> categories, String title, boolean isExpandable, boolean isTransparent) {
+    public void show(List<OptionCategory> categories, String title, boolean isExpandable, boolean isTransparent, int id) {
         // Only root fragment could make other fragments in the stack transparent
         boolean stackIsEmpty = getChildFragmentManager() != null && getChildFragmentManager().getBackStackEntryCount() == 0;
         mIsTransparent = stackIsEmpty ? isTransparent : mIsTransparent;
+        mId = id;
 
         AppPreferenceFragment fragment = buildPreferenceFragment(categories, title);
 
@@ -207,6 +226,16 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     @Override
     public boolean isTransparent() {
         return mIsTransparent;
+    }
+
+    @Override
+    public boolean isPaused() {
+        return mIsPaused;
+    }
+
+    @Override
+    public int getViewId() {
+        return mId;
     }
 
     public void onFinish() {

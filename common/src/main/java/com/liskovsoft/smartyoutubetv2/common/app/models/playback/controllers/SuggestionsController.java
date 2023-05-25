@@ -44,12 +44,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private int mFocusCount;
     private int mNextCount;
     private List<ChapterItem> mChapters;
-    private final Runnable mChapterHandler = () -> {
-        ChapterItem chapter = getCurrentChapter();
-        if (chapter != null) {
-            startChapterNotificationServiceIfNeeded();
-        }
-    };
+    private final Runnable mChapterHandler = this::startChapterNotificationServiceIfNeededInt;
+    private static final int CHAPTER_NOTIFICATION_Id = 565;
 
     public interface MetadataListener {
         void onMetadata(MediaItemMetadata metadata);
@@ -121,7 +117,14 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     public void onControlsShown(boolean shown) {
         if (shown) {
             focusCurrentChapter();
+        } else {
+            startChapterNotificationServiceIfNeeded();
         }
+    }
+
+    @Override
+    public void onViewResumed() {
+        startChapterNotificationServiceIfNeeded();
     }
 
     @Override
@@ -390,6 +393,12 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void startChapterNotificationServiceIfNeeded() {
+        if (mPlayerTweaksData.isChapterNotificationEnabled()) {
+            Utils.postDelayed(mChapterHandler, 1_000); // small delay to give a chance to complete dialog transitions
+        }
+    }
+
+    private void startChapterNotificationServiceIfNeededInt() {
         Utils.removeCallbacks(mChapterHandler);
 
         showChapterDialog(getCurrentChapter());
@@ -580,7 +589,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private void showChapterDialog(ChapterItem chapter) {
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
-        if ((dialogPresenter.isDialogShown() && !dialogPresenter.isTransparent()) || getPlayer().isOverlayShown()) {
+        if ((dialogPresenter.isDialogShown() && dialogPresenter.getId() != CHAPTER_NOTIFICATION_Id) ||
+                getPlayer().isOverlayShown() || getPlayer().isInPIPMode()) {
             // Another dialog is opened. Don't distract a user.
             return;
         }
@@ -599,7 +609,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
                     ChapterItem nextChapter = getNextChapter();
                     if (nextChapter != null) {
                         getPlayer().setPositionMs(nextChapter.getStartTimeMs());
-                        showChapterDialog(getCurrentChapter());
                     }
                 }
         );
@@ -608,6 +617,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         dialogPresenter.enableTransparent(true);
         dialogPresenter.enableExpandable(false);
+        dialogPresenter.setId(CHAPTER_NOTIFICATION_Id);
         dialogPresenter.showDialog();
     }
 

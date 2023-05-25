@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
@@ -766,7 +767,8 @@ public class GeneralData {
         mVersionCode = Helpers.parseInt(split, 39, -1);
         mIsSelectChannelSectionEnabled = Helpers.parseBoolean(split, 40, true);
         mMasterPassword = Helpers.parseStr(split, 41);
-        mIsOldHomeLookEnabled = Helpers.parseBoolean(split, 42, false);
+        // StackOverflow on old devices?
+        mIsOldHomeLookEnabled = Helpers.parseBoolean(split, 42, Build.VERSION.SDK_INT <= 19);
         mIsOldUpdateNotificationsEnabled = Helpers.parseBoolean(split, 43, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
