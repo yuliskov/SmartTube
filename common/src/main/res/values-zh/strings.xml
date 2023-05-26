@@ -332,8 +332,8 @@
   <string name="action_playback_queue">播放队列</string>
   <string name="action_video_speed">视频速度</string>
   <string name="action_subtitles">字幕</string>
-  <string name="action_like">喜欢</string>
-  <string name="action_dislike">取消喜欢</string>
+  <string name="action_like">顶一下</string>
+  <string name="action_dislike">踩一下</string>
   <string name="action_play_pause">播放/暂停</string>
   <string name="action_repeat_mode">播放模式</string>
   <string name="action_next">下一个视频</string>
@@ -540,4 +540,16 @@
   <string name="volume_boost_warning">任何超过极限的设置都有可能损坏扬声器</string>
   <string name="play_video_incognito">隐私模式播放</string>
   <string name="header_kids_home">儿童</string>
+  <string name="player_section_playlist">使用当前部分内容作为播放列表</string>
+  <string name="header_trending">趋势</string>
+  <string name="screensaver">屏保</string>
+  <string name="player_screen_off_timeout">关闭屏幕时间</string>
+  <string name="old_update_notifications">旧外观的更新通知</string>
+  <string name="mark_as_watched">标记为已观看</string>
+  <string name="player_ui_animations">启用控制面板动画</string>
+  <string name="player_likes_count">显示顶一下和踩一下的数量</string>
+  <string name="sorting_alphabetically2">按字母顺序(更快)</string>
+  <string name="sorting_default">默认(更快)</string>
+  <string name="content_block_exclude_channel">从 SponsorBlock 中排除该频道</string>
+  <string name="content_block_stop_excluding_channel">停止从 SponsorBlock 中排除该频道</string>
   </resources>
