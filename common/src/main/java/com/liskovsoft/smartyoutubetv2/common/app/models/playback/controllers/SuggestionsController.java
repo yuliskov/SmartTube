@@ -613,9 +613,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
                     // return to previous dialog or close if no other dialogs in stack
                     dialogPresenter.closeDialog();
                     ChapterItem nextChapter = getNextChapter();
-                    if (nextChapter != null) {
-                        getPlayer().setPositionMs(nextChapter.getStartTimeMs());
-                    }
+                    getPlayer().setPositionMs(nextChapter != null ? nextChapter.getStartTimeMs() : getPlayer().getDurationMs());
                 }
         );
 
