@@ -468,7 +468,7 @@ public class PlayerTweaksData {
         mScreenOffTimeoutSec = Helpers.parseInt(split, 33, 0);
         mIsUIAnimationsEnabled = Helpers.parseBoolean(split, 34, false);
         mIsLikesCounterEnabled = Helpers.parseBoolean(split, 35, true);
-        mIsChapterNotificationEnabled = Helpers.parseBoolean(split, 36, true);
+        mIsChapterNotificationEnabled = Helpers.parseBoolean(split, 36, false);
 
         updateDefaultValues();
     }
