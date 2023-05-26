@@ -593,10 +593,11 @@ public class Utils {
             return false;
         }
 
+        // There's a bug. The player hangs at the black screen.
         // opus and others audio codecs require hardware acceleration
-        if (mediaTrack instanceof AudioTrack && !mediaTrack.isMP4ACodec() && !Helpers.isVP9Supported()) {
-            return false;
-        }
+        //if (mediaTrack instanceof AudioTrack && !mediaTrack.isMP4ACodec() && !Helpers.isVP9Supported()) {
+        //    return false;
+        //}
 
         return true;
     }

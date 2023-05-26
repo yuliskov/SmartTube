@@ -46,7 +46,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private List<ChapterItem> mChapters;
     private final Runnable mChapterHandler = this::startChapterNotificationServiceIfNeededInt;
     private static final int CHAPTER_NOTIFICATION_Id = 565;
-    private boolean mShowNextTime;
 
     public interface MetadataListener {
         void onMetadata(MediaItemMetadata metadata);
@@ -124,14 +123,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onViewResumed() {
-        startChapterNotificationServiceIfNeeded();
-    }
-
-    @Override
     public void onSeekEnd() {
-        mShowNextTime = true;
-
         if (getPlayer().isControlsShown()) {
             focusCurrentChapter();
         } else {
@@ -396,11 +388,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void startChapterNotificationServiceIfNeeded() {
-        if (mPlayerTweaksData.isChapterNotificationEnabled() && mShowNextTime) {
+        if (mPlayerTweaksData.isChapterNotificationEnabled()) {
             Utils.postDelayed(mChapterHandler, 1_000); // small delay to give a chance to complete dialog transitions
         }
-
-        mShowNextTime = false;
     }
 
     private void startChapterNotificationServiceIfNeededInt() {
@@ -426,7 +416,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         addChapterMarkersIfNeeded();
         appendChapterSuggestionsIfNeeded();
-        mShowNextTime = true;
         startChapterNotificationServiceIfNeeded();
 
         if (mChapters != null) {
