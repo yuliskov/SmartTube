@@ -58,13 +58,13 @@ public class AppDialogActivity extends MotherActivity {
         }
 
         // Notification dialog type. Imitate notification behavior.
-        if (mFragment.isTransparent() && KeyHelpers.isBackKey(keyCode)) {
-            finish();
-            PlaybackView view = PlaybackPresenter.instance(this).getView();
-            if (view != null) {
-                view.getPlayer().finish();
-            }
-        }
+        //if (mFragment.isTransparent() && KeyHelpers.isBackKey(keyCode)) {
+        //    finish();
+        //    PlaybackView view = PlaybackPresenter.instance(this).getView();
+        //    if (view != null) {
+        //        view.getPlayer().finish();
+        //    }
+        //}
 
         return super.onKeyDown(keyCode, event);
     }
