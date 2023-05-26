@@ -622,6 +622,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         dialogPresenter.enableTransparent(true);
         dialogPresenter.enableExpandable(false);
         dialogPresenter.setId(CHAPTER_NOTIFICATION_Id);
+        dialogPresenter.setCloseTimeoutMs(5_000);
         dialogPresenter.showDialog();
     }
 
