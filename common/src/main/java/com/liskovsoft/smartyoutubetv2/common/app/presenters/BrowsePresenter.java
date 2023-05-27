@@ -479,7 +479,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     public void pinItem(String title, int resId, ErrorFragmentData data) {
         BrowseSection section = new BrowseSection(title.hashCode(), title, BrowseSection.TYPE_ERROR, resId, false, data);
-        mSections.add(section);
+        mSections.add(0, section);
         mSectionsMapping.put(title.hashCode(), section);
 
         if (getView() != null) {

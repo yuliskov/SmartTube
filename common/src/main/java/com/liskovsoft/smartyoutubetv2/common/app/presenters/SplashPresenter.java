@@ -244,6 +244,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
                 if (sectionId != -1) {
                     BrowsePresenter.instance(getContext()).selectSection(sectionId);
+
                     return true;
                 }
 

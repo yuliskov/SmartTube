@@ -133,10 +133,10 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
     @Override
     public void onTickle() {
-        updateLiveMetadata();
+        updateLiveDescription();
     }
 
-    private void updateLiveMetadata() {
+    private void updateLiveDescription() {
         Video video = getPlayer().getVideo();
 
         if (video == null || !video.isLive || RxHelper.isAnyActionRunning(mActions)) {
@@ -146,9 +146,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         loadMetadata(video, metadata -> {
             syncCurrentVideo(metadata, video);
 
-            if (!video.isLive) {
-                getMainController().onPlayEnd(); // broadcast call
-            }
+            //if (!video.isLive) {
+            //    getMainController().onPlayEnd(); // broadcast call
+            //}
         });
     }
 
