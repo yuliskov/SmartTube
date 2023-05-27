@@ -146,9 +146,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         loadMetadata(video, metadata -> {
             syncCurrentVideo(metadata, video);
 
-            //if (!video.isLive) {
-            //    getMainController().onPlayEnd(); // broadcast call
-            //}
+            if (!video.isLive && getPlayer().getPlayWhenReady() && !getPlayer().isPlaying()) {
+                getMainController().onPlayEnd(); // broadcast call
+            }
         });
     }
 
