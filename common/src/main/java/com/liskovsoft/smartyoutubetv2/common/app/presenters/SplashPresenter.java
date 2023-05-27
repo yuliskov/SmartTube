@@ -242,9 +242,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                     sectionId = MediaGroup.TYPE_HOME;
                 }
 
-                if (sectionId != -1) {
+                if (sectionId != -1 && GeneralData.instance(getContext()).isSectionEnabled(sectionId)) {
                     BrowsePresenter.instance(getContext()).selectSection(sectionId);
-                    return true;
+                    //return true;  // should launching ViewManager after that
                 }
 
                 return false;

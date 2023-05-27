@@ -483,7 +483,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mSectionsMapping.put(title.hashCode(), section);
 
         if (getView() != null) {
-            getView().addSection(0, section); // add first
+            getView().addSection(-1, section); // add to the end to prevent index mismatch
         }
     }
 
