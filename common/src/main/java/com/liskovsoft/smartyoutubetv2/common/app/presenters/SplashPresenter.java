@@ -229,29 +229,31 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         });
 
         // NOTE: doesn't work very well. E.g. there's problems with focus or conflicts with 'boot to' section option.
-        if (GeneralData.instance(getContext()).isSelectChannelSectionEnabled()) {
-            mIntentChain.add(intent -> {
-                int sectionId = -1;
-
-                // ATV channel icon clicked
-                if (IntentExtractor.isSubscriptionsUrl(intent)) {
-                    sectionId = MediaGroup.TYPE_SUBSCRIPTIONS;
-                } else if (IntentExtractor.isHistoryUrl(intent)) {
-                    sectionId = MediaGroup.TYPE_HISTORY;
-                } else if (IntentExtractor.isRecommendedUrl(intent)) {
-                    sectionId = MediaGroup.TYPE_HOME;
-                }
-
-                if (sectionId != -1) {
-                    ViewManager.instance(getContext()).startDefaultView(); // Nvidia Shield fix
-                    BrowsePresenter.instance(getContext()).selectSection(sectionId);
-
-                    return true;
-                }
-
+        mIntentChain.add(intent -> {
+            if (!GeneralData.instance(getContext()).isSelectChannelSectionEnabled()) {
                 return false;
-            });
-        }
+            }
+
+            int sectionId = -1;
+
+            // ATV channel icon clicked
+            if (IntentExtractor.isSubscriptionsUrl(intent)) {
+                sectionId = MediaGroup.TYPE_SUBSCRIPTIONS;
+            } else if (IntentExtractor.isHistoryUrl(intent)) {
+                sectionId = MediaGroup.TYPE_HISTORY;
+            } else if (IntentExtractor.isRecommendedUrl(intent)) {
+                sectionId = MediaGroup.TYPE_HOME;
+            }
+
+            if (sectionId != -1) {
+                ViewManager.instance(getContext()).startDefaultView(); // Nvidia Shield fix
+                BrowsePresenter.instance(getContext()).selectSection(sectionId);
+
+                return true;
+            }
+
+            return false;
+        });
 
         // Should come last
         mIntentChain.add(intent -> {
