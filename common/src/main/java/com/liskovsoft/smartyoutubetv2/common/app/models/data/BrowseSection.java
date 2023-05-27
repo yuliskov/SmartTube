@@ -15,7 +15,7 @@ public class BrowseSection {
     private final String mIconUrl;
     private final boolean mIsAuthOnly;
     private final Object mData;
-    private boolean mEnabled;
+    private boolean mEnabled = true;
     private int mType;
 
     public BrowseSection(int id, String title, int type, int resId) {
