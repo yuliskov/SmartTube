@@ -540,4 +540,5 @@
     <string name="sorting_default">Standar (cepat)</string>
     <string name="content_block_exclude_channel">Kecualikan saluran ini dari SponsorBlock</string>
     <string name="content_block_stop_excluding_channel">Berhenti mengecualikan saluran ini dari SponsorBlock</string>
+    <string name="player_chapter_notification">Menampilkan pemberitahuan untuk maju dengan cepat melalui chapters</string>
 </resources>
