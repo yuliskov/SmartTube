@@ -434,9 +434,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         VideoGroup videoGroup = VideoGroup.from(queue);
         videoGroup.setTitle(getActivity().getString(R.string.action_playback_queue));
         videoGroup.setId(videoGroup.getTitle().hashCode());
-        for (Video item : queue) {
-            item.setGroup(videoGroup);
-        }
         getPlayer().updateSuggestions(videoGroup);
     }
 
