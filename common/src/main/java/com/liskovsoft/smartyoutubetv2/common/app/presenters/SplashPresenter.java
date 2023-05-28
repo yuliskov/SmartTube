@@ -230,10 +230,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
         // NOTE: doesn't work very well. E.g. there's problems with focus or conflicts with 'boot to' section option.
         mIntentChain.add(intent -> {
-            if (!GeneralData.instance(getContext()).isSelectChannelSectionEnabled()) {
-                return false;
-            }
-
             int sectionId = -1;
 
             // ATV channel icon clicked
@@ -243,6 +239,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 sectionId = MediaGroup.TYPE_HISTORY;
             } else if (IntentExtractor.isRecommendedUrl(intent)) {
                 sectionId = MediaGroup.TYPE_HOME;
+            }
+
+            if (!GeneralData.instance(getContext()).isSectionEnabled(sectionId)) {
+                return false;
             }
 
             if (sectionId != -1) {
