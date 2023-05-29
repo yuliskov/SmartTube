@@ -145,11 +145,13 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         loadMetadata(video, metadata -> {
             syncCurrentVideo(metadata, video);
-            video.isLive = true; // required to find start of the buffering
 
-            if (!metadata.isLive() && getPlayer().getPlayWhenReady() && !getPlayer().isPlaying()) {
-                getMainController().onPlayEnd(); // broadcast call
-            }
+            // Isn't working. Usually stream ends with the 'source error'
+            //video.isLive = true; // required to find start of the buffering
+            //
+            //if (!metadata.isLive() && getPlayer().getPlayWhenReady() && !getPlayer().isPlaying()) {
+            //    getMainController().onPlayEnd(); // broadcast call
+            //}
         });
     }
 
