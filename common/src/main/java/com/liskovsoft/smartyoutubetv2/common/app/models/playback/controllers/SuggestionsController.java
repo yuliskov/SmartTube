@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEngineEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -136,6 +137,16 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         updateLiveDescription();
     }
 
+    @Override
+    public void onEngineError(int type) {
+        Video video = getPlayer().getVideo();
+
+        // Usually stream ends with the 'source error'
+        if (video != null && video.isLive && type == PlayerEngineEventListener.ERROR_TYPE_SOURCE) {
+            getMainController().onPlayEnd(); // broadcast call
+        }
+    }
+
     private void updateLiveDescription() {
         Video video = getPlayer().getVideo();
 
@@ -145,13 +156,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         loadMetadata(video, metadata -> {
             syncCurrentVideo(metadata, video);
-
-            // Isn't working. Usually stream ends with the 'source error'
-            //video.isLive = true; // required to find start of the buffering
-            //
-            //if (!metadata.isLive() && getPlayer().getPlayWhenReady() && !getPlayer().isPlaying()) {
-            //    getMainController().onPlayEnd(); // broadcast call
-            //}
+            video.isLive = true; // required to detect live stream ending
         });
     }
 
