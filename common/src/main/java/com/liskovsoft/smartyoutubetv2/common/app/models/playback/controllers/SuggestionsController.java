@@ -137,16 +137,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         updateLiveDescription();
     }
 
-    @Override
-    public void onEngineError(int type) {
-        Video video = getPlayer().getVideo();
-
-        // Usually stream ends with the 'source error'
-        if (video != null && video.isLive && type == PlayerEngineEventListener.ERROR_TYPE_SOURCE) {
-            getMainController().onPlayEnd(); // broadcast call
-        }
-    }
-
     private void updateLiveDescription() {
         Video video = getPlayer().getVideo();
 
@@ -156,7 +146,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         loadMetadata(video, metadata -> {
             syncCurrentVideo(metadata, video);
-            video.isLive = true; // required to detect live stream ending
         });
     }
 
