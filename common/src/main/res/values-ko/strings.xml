@@ -229,7 +229,7 @@
   <string name="share_embed_link">임베드 링크 공유</string>
   <string name="card_text_scroll_factor">카드 텍스트 스크롤 속도</string>
   <string name="preferred_update_source">업데이트 소스 선택</string>
-  <string name="hide_shorts">구독한 채널에서 쇼츠(Shorts) 숨기기</string>
+  <string name="hide_shorts">구독한 채널에서 쇼츠 숨기기</string>
   <string name="key_remapping">키 다시 매핑</string>
   <string name="screen_dimming">화면 디밍</string>
   <string name="removed_from_playback_queue">재생 대기열에서 제거됨</string>
@@ -490,7 +490,7 @@
   <string name="pause_history">일시중지 내역</string>
   <string name="resume_history">기록 다시 시작</string>
   <string name="clear_history">기록 지우기</string>
-  <string name="chapters">장</string>
+  <string name="chapters">챕터</string>
   <string name="card_multiline_subtitle">여러 줄 자막</string>
   <string name="auto_frame_rate_modes">지원되는 모드</string>
   <string name="loading">불러오기 중...</string>
@@ -554,4 +554,9 @@
   <string name="mark_as_watched">시청한 것으로 표시</string>
   <string name="player_ui_animations">제어판 애니메이션 활성화</string>
   <string name="player_likes_count">좋아요/싫어요 수 표시</string>
+  <string name="sorting_alphabetically2">알파벳순 (빠름)</string>
+  <string name="sorting_default">기본값 (빠름)</string>
+  <string name="content_block_exclude_channel">스폰서블록에서 이 채널 제외</string>
+  <string name="content_block_stop_excluding_channel">스폰서블록에서 이 채널 제외 중지</string>
+  <string name="player_chapter_notification">챕터를 빠르게 진행할 수 있는 알림 표시</string>
 </resources>
