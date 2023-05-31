@@ -57,6 +57,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final MainUIData mMainUIData;
     private final GeneralData mGeneralData;
     private final List<BrowseSection> mSections;
+    private final List<BrowseSection> mErrorSections;
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
     private final Map<Integer, Callable<List<SettingsItem>>> mSettingsGridMapping;
@@ -78,6 +79,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         super(context);
         mDataSourcePresenter = AppDataSourceManager.instance();
         mSections = new ArrayList<>();
+        mErrorSections = new ArrayList<>();
         mGridMapping = new HashMap<>();
         mRowMapping = new HashMap<>();
         mSettingsGridMapping = new HashMap<>();
@@ -129,7 +131,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         initSectionMapping();
 
         initSectionCallbacks();
-        initPinnedCallbacks();
 
         initSettingsSubCategories();
     }
@@ -211,10 +212,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         initPinnedSections();
+        initPinnedCallbacks();
 
         int index = 0;
 
         sortSections();
+
+        for (BrowseSection section : mErrorSections) {
+            getView().addSection(index++, section);
+        }
 
         for (BrowseSection section : mSections) { // contains sections and pinned items!
             section.setEnabled(section.getId() == MediaGroup.TYPE_SETTINGS || mGeneralData.isSectionEnabled(section.getId()));
@@ -418,7 +424,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         // Move current focus
         if (getView() != null) {
-            getView().selectSection(mGeneralData.getSectionIndex(section.getId()), false);
+            getView().selectSection(findSectionIndex(section.getId()), false);
         }
     }
 
@@ -468,27 +474,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void pinItem(Video item) {
         mGeneralData.addPinnedItem(item);
 
-        BrowseSection section = new BrowseSection(item.hashCode(), item.title, BrowseSection.TYPE_GRID, item.cardImageUrl, false, item);
-        mSections.add(section);
-        mGridMapping.put(item.hashCode(), createPinnedAction(item));
-
-        if (getView() != null) {
-            getView().addSection(-1, section); // add last
-        }
+        updateSections();
     }
 
     public void pinItem(String title, int resId, ErrorFragmentData data) {
-        pinItem(title, resId, data, true);
-    }
+        mErrorSections.add(new BrowseSection(title.hashCode(), title, BrowseSection.TYPE_ERROR, resId, false, data));
 
-    public void pinItem(String title, int resId, ErrorFragmentData data, boolean first) {
-        BrowseSection section = new BrowseSection(title.hashCode(), title, BrowseSection.TYPE_ERROR, resId, false, data);
-        mSections.add(first ? 0 : -1, section);
-        mSectionsMapping.put(title.hashCode(), section);
-
-        if (getView() != null) {
-            getView().addSection(first ? 0 : -1, section);
-        }
+        updateSections();
     }
 
     public void unpinItem(Video item) {
@@ -809,9 +801,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private BrowseSection findSectionById(int sectionId) {
-        for (BrowseSection category : mSections) {
-            if (category.getId() == sectionId) {
-                return category;
+        for (BrowseSection section : mErrorSections) {
+            if (section.getId() == sectionId) {
+                return section;
+            }
+        }
+
+        for (BrowseSection section : mSections) {
+            if (section.getId() == sectionId) {
+                return section;
             }
         }
 
@@ -824,6 +822,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         int sectionIndex = -1;
+
+        for (BrowseSection section : mErrorSections) {
+            if (section.isEnabled()) {
+                sectionIndex++;
+                if (section.getId() == sectionId) {
+                    return sectionIndex;
+                }
+            }
+        }
 
         for (BrowseSection section : mSections) {
             if (section.isEnabled()) {
