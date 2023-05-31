@@ -70,7 +70,7 @@ Xiaomi's **Chinese firmware** might block the installation **of the beta version
 
 ### Updating
 
-The app has a built-in updater. You only need to follow the installation procedure **once**. A few seconds after launching SmartTubeNext, it will notify you if there is any update and also show a changelog. You can disable disable automatic update checks or manually update in the settings under "about".
+The app has a built-in updater. You only need to follow the installation procedure **once**. A few seconds after launching SmartTubeNext, it will notify you if there is any update and also show a changelog. You can disable automatic update checks or manually update in the settings under "about".
 
 If the installation fails, either your **disk space is full** or the update didn't download correctly; clear up space and try updating again (_Settings > About > Check for updates_).
 
