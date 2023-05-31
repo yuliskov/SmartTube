@@ -436,6 +436,7 @@
   <string name="playback_starts_shortly">La lecture démarrera automatiquement lorsque la diffusion commencera</string>
   <string name="starting_stream">Démarrage de la diffusion…</string>
   <string name="action_playlist_remove">Supprimer de la playlist</string>
+  <!-- BEGIN Moved strings -->
   <string name="signin_view_title">Le code est en cours de chargement…</string>
   <string name="signin_view_description">Pour vous connecter, entrez ce code sur la page %s. Fonctionne uniquement sur les navigateurs Firefox ou Chrome.</string>
   <string name="signin_view_action_text">Terminé</string>
@@ -450,6 +451,7 @@
   <string name="playback_controls_repeat_list">Répéter la liste</string>
   <string name="action_subscribe_off">Se désabonner</string>
   <string name="action_subscribe_on">S\'abonner</string>
+  <!-- END Moved strings -->
   <string name="skip_24_rate">Sauter les formats 24 FPS (correction du mode cinéma \?)</string>
   <string name="player_disable_suggestions">Désactiver les suggestions</string>
   <string name="feedback">Envoyer un feedback</string>
@@ -540,6 +542,7 @@
   <string name="disable_stream_buffer_desc">Corrige les situations où la diffusion est en retard. Avertissement : cette option peut provoquer des ralentissements du flux vidéo.</string>
   <string name="sony_frame_drop_fix">Correction de pertes d\'images n°1</string>
   <string name="sony_frame_drop_fix_desc">Corrige les ralentissements sur les téléviseurs Sony et certains autres appareils. Avertissement : cette option peut entraîner des problèmes de synchronisation audio.</string>
+  </string>
   <string name="audio_language">Langue de la piste audio</string>
   <string name="old_home_look">Utiliser l\'ancienne apparence pour la section Accueil</string>
   <string name="hide_shorts_everywhere">Masquer les shorts partout</string>
@@ -559,4 +562,5 @@
   <string name="sorting_default">Par défaut (rapide)</string>
   <string name="content_block_exclude_channel">Exclure cette chaîne de SponsorBlock</string>
   <string name="content_block_stop_excluding_channel">Ne plus exclure cette chaîne de SponsorBlock</string>
+  <string name="player_chapter_notification">Afficher une notification pour avancer rapidement dans les chapitres</string>
 </resources>
