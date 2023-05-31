@@ -108,7 +108,7 @@
   <string name="cards_style">Korttien tyyli</string>
   <string name="repeat_mode_all">Toista kaikki videot yksi kerrallaan</string>
   <string name="repeat_mode_one">Toista tämä video uudelleen</string>
-  <string name="repeat_mode_pause">Pysäytä toista videon jälkeen</string>
+  <string name="repeat_mode_pause">Pysäytä toisto videon jälkeen</string>
   <string name="repeat_mode_pause_alt">Pysäytä toisto jokaisen videon jälkeen</string>
   <string name="repeat_mode_none">Pysäytä toisto jokaisen videon jälkeen</string>
   <string name="subscribed_to_channel">Kanava tilattu</string>
@@ -545,4 +545,17 @@
   <string name="disable_ok_long_press_desc">Tarkoitettu bugisille ohjaimille, joissa OK-painike ei toimi kunnolla.</string>
   <string name="you_wont_see_this_channel">Et näe tätä kanavaa suosituksissa</string>
   <string name="not_recommend_channel">Älä suosittele tätä kanavaa</string>
+  <string name="player_section_playlist">Käytä nykyisen osion sisältöä soittolistana</string>
+  <string name="header_trending">Suosittua nyt</string>
+  <string name="screensaver">Näytönsäästäjä</string>
+  <string name="player_screen_off_timeout">Näytön sammuttamisen aikakatkaisu</string>
+  <string name="old_update_notifications">Päivitysilmoitusten vanha ulkoasu</string>
+  <string name="mark_as_watched">Merkitse katselluksi</string>
+  <string name="player_ui_animations">Ota ohjauspaneelin animaatiot käyttöön</string>
+  <string name="player_likes_count">Näytä tykkäysten/alapeukkujen määrä</string>
+  <string name="sorting_alphabetically2">Aakkosjärjestyksessä (nopea)</string>
+  <string name="sorting_default">Oletusarvo (nopea)</string>
+  <string name="content_block_exclude_channel">Jätä tämä kanava pois SponsorBlockista</string>
+  <string name="content_block_stop_excluding_channel">Lopeta tämän kanavan poissulkeminen SponsorBlockista</string>
+  <string name="player_chapter_notification">Näytä ilmoitus edetäksesi nopeasti videon osioiden läpi</string>
 </resources>

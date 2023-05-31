@@ -108,9 +108,10 @@
   <string name="cards_style">Megjelenés</string>
   <string name="repeat_mode_all">Lejátszás egymás után</string>
   <string name="repeat_mode_one">Aktuális videó ismétlése</string>
-  <string name="repeat_mode_pause">Szüneteltesse a lejátszást minden videó után</string>
-  <string name="repeat_mode_pause_alt">Folyamatosan csak a videólistáról játsszon videókat</string>
-  <string name="repeat_mode_none">Szünet minden videó után</string>
+  <string name="repeat_mode_pause">Szünet minden videó után</string>
+  <string name="repeat_mode_pause_alt">Csak a videólistáról játsszon videókat</string>
+  <string name="repeat_mode_none">Lejátszás végén stop</string>
+  <string name="repeat_mode_shuffle">Véletlenszerű lejátszás</string>  
   <string name="subscribed_to_channel">Feliratkozva</string>
   <string name="unsubscribed_from_channel">Leliratkozva</string>
   <string name="subtitle_yellow_transparent">Sárga</string>
@@ -172,7 +173,7 @@
   <string name="settings_video">Videó</string>
   <string name="content_block_confirm_skip">Megerősítés ugráskor</string>
   <string name="content_block_categories">Kategóriák</string>
-  <string name="content_block_sponsor">Szponzor</string>
+  <string name="content_block_sponsor">Sponsor</string>
   <string name="content_block_intro">Szünet / intro animáció</string>
   <string name="content_block_outro">Endcards/credits</string>
   <string name="content_block_interaction">Interakció emlékeztető (feliratkozás)</string>
@@ -365,10 +366,10 @@
   <string name="audio_sync_fix">Hangszinkron javítás</string>
   <string name="ambilight_ratio_fix_desc">Javítja a hiányzó torzítású világítást. Javítja a helytelen képarányt. Javítja az üres képernyőképeket. Befolyásolja a teljesítményt!</string>
   <string name="ambilight_ratio_fix">Ambilight/Képarány/Képernyőképek javítása</string>
-  <string name="force_legacy_codecs_desc">Jelentősen javítja a teljesítményt az alsó kategóriás eszközökön. A maximális felbontás 720p.</string>
+  <string name="force_legacy_codecs_desc">Jelentősen javítja a teljesítményt gyenge hardveren. A maximális felbontás 720p.</string>
   <string name="force_legacy_codecs">Legacy kodekek kényszerítése (720p)</string>
-  <string name="live_stream_fix_desc">Jelentősen javítja az élő közvetítések teljesítményét alacsony kategóriás eszközökön. A maximális felbontás 1080p.</string>
-  <string name="live_stream_fix">Élő közvetítés javítása (1080p)</string>
+  <string name="live_stream_fix_desc">Jelentősen javítja az élő adások teljesítményét gyenge hardveren. Letiltja a visszatekerést. A maximális felbontás 1080p.</string>
+  <string name="live_stream_fix">Élő adás javítása (1080p)</string>
   <string name="playback_notifications_fix_desc">Elrejti a track módosítási értesítéseket. Hasznos lehet AOSP-alapú firmware-eknél.</string>
   <string name="playback_notifications_fix">Lejátszási értesítések letiltása</string>
   <string name="amlogic_fix_desc">Képkocka eldobás javítás Amlogic-alapú eszközökön.</string>
@@ -402,8 +403,8 @@
   <string name="cant_save_playlist">Ez a videólista nem menthető</string>
   <string name="enter_value">Adjon meg bármilyen nem üres értéket</string>
   <string name="dialog_add_remove_from">Hozzáadás/eltávolítás innen: %s</string>
-  <string name="lb_playback_controls_skip_next">Ugrás a következőre</string>
-  <string name="lb_playback_controls_skip_previous">Előző ugrás/visszatekerés a kiindulási pozícióba</string>
+  <string name="lb_playback_controls_skip_next">Következő</string>
+  <string name="lb_playback_controls_skip_previous">Előző/visszatekerés</string>
   <string name="alt_presets_behavior">Az Alt előre beállítja a viselkedést (korlátozza a sávszélességet)</string>
   <string name="alt_presets_behavior_desc">Az alkalmazás megpróbálja fenntartani a sávszélességet a kiválasztott előre beállított értéknek megfelelően a felbontás, az fps és a kodek közötti egyeztetés helyett.</string>
   <string name="sleep_timer">Elalváskapcsoló</string>
@@ -466,7 +467,6 @@
   <string name="player_pixel_ratio">Képernyőfelbontás</string>
   <string name="color_scheme_dark_grey_monochrome">Sötétszürke (monokróm)</string>
   <string name="disable_mic_permission">Kérjük, tiltsa le az alkalmazás mikrofonhoz való hozzáférését, hogy ez a felismerő megfelelően működjön.</string>
-  <string name="repeat_mode_shuffle">Bármely videólista véletlenszerű lejátszása</string>
   <string name="chat_left">Bal</string>
   <string name="chat_right">Jobb</string>
   <string name="card_real_thumbnails">Indexképek cseréje a videó képére</string>
@@ -475,7 +475,7 @@
   <string name="thumb_quality_start">A videó elejéről</string>
   <string name="thumb_quality_middle">A videó közepéről</string>
   <string name="thumb_quality_end">A videó végéről</string>
-  <string name="content_block_status">Szponzorblokk állapotának ellenőrzése</string>
+  <string name="content_block_status">SponsorBlock állapotának ellenőrzése</string>
   <string name="player_show_quality_info_bitrate">Bitráta megjelenítése</string>
   <string name="player_speed_button_old_behavior">A sebesség gomb régi viselkedésének visszaállítása</string>
   <string name="protect_settings_with_password">Beállítások védelme jelszóval</string>
@@ -492,7 +492,7 @@
   <string name="auto_frame_rate_modes">Támogatott módok</string>
   <string name="video_rotate">Forgatás</string>
   <string name="loading">Betöltés...</string>
-  <string name="hide_streams">Stream elrejtése a Feliratkozásokból</string>
+  <string name="hide_streams">Élő adás elrejtése a Feliratkozásokból</string>
   <string name="trending_searches">Felkapott keresések</string>
   <string name="video_duration_any">Bármi</string>
   <string name="video_duration">Időtartam</string>
@@ -528,7 +528,7 @@
   <string name="unlock_all_formats">Minden videó formátum feloldása</string>
   <string name="unlock_all_formats_desc">Egyes eszközökön a firmware tévesen azt jelenti, hogy bizonyos formátumok nem támogatottak, még akkor is, ha támogatottak.\n (pl. az 1080p okostévék általában nem támogatottként jelzik a 4k-t).</string>
   <string name="okhttp_desc">Stabil, de lassú hálózati verem.</string>
-  <string name="select_channel_section">Nyissa meg a megfelelő részt, miután elindította az alkalmazást az Android TV-csatornákról.</string>
+  <string name="select_channel_section">Nyissa meg a megfelelő kategóriát, ha az alkalmazást az Android TV csatornákon keresztül indítja el.</string>
   <string name="enable_voice_search_desc">A hivatalos alkalmazást egy úgynevezett híd váltja fel. A híd segít a globális keresési kérelmek átvitelében az alkalmazásunkba.</string>
   <string name="enable_master_password">Mester jelszó engedélyezése</string>
   <string name="enter_master_password">Adja meg a Mester jelszót</string>
@@ -537,7 +537,7 @@
   <string name="sony_frame_drop_fix">Képkocka eldobása #1</string>
   <string name="sony_frame_drop_fix_desc">Javítja a késleltetést / késést a Sony TV-n és néhány más eszközön.</string>
   <string name="audio_language">Hang nyelve</string>
-  <string name="old_home_look">A Kezdőlap rész régi megjelenése</string>
+  <string name="old_home_look">A Kezdőlap régi megjelenése</string>
   <string name="hide_shorts_everywhere">Rövid klipek elrejtése mindenhol</string>
   <string name="update_found">Frissítés</string>
   <string name="volume_boost_warning">A határértéket meghaladó beállítások károsíthatják a hangszórókat</string>
@@ -556,4 +556,7 @@
   <string name="player_likes_count">A Tetszik/Nem tetszik számának megjelenítése</string>
   <string name="sorting_alphabetically2">Rendezés ABC szerint</string>
   <string name="sorting_default">Alapértelmezett rendezés</string>
+  <string name="content_block_exclude_channel">Csatorna kizárása a SponsorBlock-ból</string>
+  <string name="content_block_stop_excluding_channel">Hagyja abba a csatorna kizárását a SponsorBlock-ból</string>
+  <string name="player_chapter_notification">Értesítés megjelenítése a fejezetek ugrásához</string>
 </resources>
