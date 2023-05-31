@@ -542,7 +542,6 @@
   <string name="disable_stream_buffer_desc">Corrige les situations où la diffusion est en retard. Avertissement : cette option peut provoquer des ralentissements du flux vidéo.</string>
   <string name="sony_frame_drop_fix">Correction de pertes d\'images n°1</string>
   <string name="sony_frame_drop_fix_desc">Corrige les ralentissements sur les téléviseurs Sony et certains autres appareils. Avertissement : cette option peut entraîner des problèmes de synchronisation audio.</string>
-  </string>
   <string name="audio_language">Langue de la piste audio</string>
   <string name="old_home_look">Utiliser l\'ancienne apparence pour la section Accueil</string>
   <string name="hide_shorts_everywhere">Masquer les shorts partout</string>
