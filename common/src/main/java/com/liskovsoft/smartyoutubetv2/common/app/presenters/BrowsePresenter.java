@@ -478,7 +478,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void pinItem(String title, int resId, ErrorFragmentData data) {
-        mErrorSections.add(new BrowseSection(title.hashCode(), title, BrowseSection.TYPE_ERROR, resId, false, data));
+        int id = title.hashCode();
+        Helpers.removeIf(mErrorSections, section -> section.getId() == id);
+        mErrorSections.add(new BrowseSection(id, title, BrowseSection.TYPE_ERROR, resId, false, data));
 
         updateSections();
     }

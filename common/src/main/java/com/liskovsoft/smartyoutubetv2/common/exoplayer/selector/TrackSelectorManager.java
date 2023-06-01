@@ -561,13 +561,13 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 MediaTrack mediaTrack = trackGroup[0];
 
                 if (mediaTrack.format != null) {
-                    if (Helpers.equals(mediaTrack.format.language, resultLanguage)) {
+                    if (Helpers.startsWith(mediaTrack.format.language, resultLanguage)) { // format language: en-us
                         if (resultTracks == null) {
                             resultTracks = new ArrayList<>();
                         }
 
                         resultTracks.add(trackGroup);
-                    } else if (Helpers.equals(mediaTrack.format.language, DEFAULT_LANGUAGE)) {
+                    } else if (Helpers.startsWith(mediaTrack.format.language, DEFAULT_LANGUAGE)) { // format language: en-us
                         if (resultTracksFallback == null) {
                             resultTracksFallback = new ArrayList<>();
                         }
