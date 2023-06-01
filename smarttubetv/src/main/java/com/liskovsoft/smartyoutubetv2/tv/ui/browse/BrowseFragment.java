@@ -161,18 +161,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         getMainFragmentRegistry().registerFragment(PageRow.class, mSectionFragmentFactory);
     }
 
-    //private int indexOf(long headerId) {
-    //    int index = 0;
-    //    for (Integer id : mSections.keySet()) {
-    //        if (id == headerId) {
-    //            return index;
-    //        }
-    //        index++;
-    //    }
-    //
-    //    return 0;
-    //}
-
     private int indexOf(long headerId) {
         for (int i = 0; i < mSectionRowAdapter.size(); i++) {
             PageRow row = (PageRow) mSectionRowAdapter.get(i);
@@ -291,22 +279,24 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             return;
         }
 
-        removeSection(section);
-
-        if (mSections.get(section.getId()) == null) {
-            mSections.put(section.getId(), section);
-            createHeader(index, section);
-        }
-    }
-
-    @Override
-    public void removeSection(BrowseSection category) {
-        if (category == null) {
+        if (mSections.get(section.getId()) != null && indexOf(section.getId()) == index) {
             return;
         }
 
-        mSections.remove(category.getId());
-        removeHeader(category);
+        removeSection(section);
+
+        mSections.put(section.getId(), section);
+        createHeader(index, section);
+    }
+
+    @Override
+    public void removeSection(BrowseSection section) {
+        if (section == null) {
+            return;
+        }
+
+        mSections.remove(section.getId());
+        removeHeader(section);
     }
 
     @Override
