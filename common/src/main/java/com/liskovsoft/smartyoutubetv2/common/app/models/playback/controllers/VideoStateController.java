@@ -159,6 +159,10 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
         updateHistory();
+
+        if (!isSubtitleEnabled()) {
+            getPlayer().setFormat(FormatItem.SUBTITLE_NONE);
+        }
     }
 
     @Override
@@ -390,7 +394,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     }
 
     private void restoreSubtitleFormat() {
-        getPlayer().setFormat(mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE));
+        getPlayer().setFormat(mPlayerData.isSubtitlesForChannelEnabled() ? mPlayerData.getLastSubtitleFormat() : mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE));
     }
 
     private void saveState() {
@@ -561,5 +565,9 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         if (!samePositions) {
             getPlayer().setPositionMs(positionMs);
         }
+    }
+
+    private boolean isSubtitleEnabled() {
+        return !mPlayerData.isSubtitlesForChannelEnabled() || mPlayerData.isSubtitlesForChannelEnabled(getPlayer().getVideo().channelId);
     }
 }

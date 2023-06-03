@@ -15,9 +15,12 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.Sub
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class PlayerData extends DataChangeBase {
     private static final String VIDEO_PLAYER_DATA = "video_player_data";
@@ -81,6 +84,8 @@ public class PlayerData extends DataChangeBase {
     private boolean mIsSkip24RateEnabled;
     private boolean mIsLiveChatEnabled;
     private FormatItem mLastSubtitleFormat;
+    private final Set<String> mEnabledSubtitlesForChannel = new LinkedHashSet<>();
+    private boolean mEnableSubtitlesForChannel;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -366,6 +371,29 @@ public class PlayerData extends DataChangeBase {
         }
     }
 
+    public void enableSubtitlesForChannel(String channelId) {
+        mEnabledSubtitlesForChannel.add(channelId);
+        persistState();
+    }
+
+    public void disableSubtitlesForChannel(String channelId) {
+        mEnabledSubtitlesForChannel.remove(channelId);
+        persistState();
+    }
+
+    public boolean isSubtitlesForChannelEnabled(String channelId) {
+        return mEnabledSubtitlesForChannel.contains(channelId);
+    }
+
+    public void enableSubtitlesForChannel(boolean enable) {
+        mEnableSubtitlesForChannel = enable;
+        persistState();
+    }
+
+    public boolean isSubtitlesForChannelEnabled() {
+        return mEnableSubtitlesForChannel;
+    }
+
     public void setVideoBufferType(int type) {
         mVideoBufferType = type;
         persistState();
@@ -611,7 +639,7 @@ public class PlayerData extends DataChangeBase {
         // afrData was there
         mVideoFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 9)), getDefaultVideoFormat());
         mAudioFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 10)), getDefaultAudioFormat());
-        mSubtitleFormat = ExoFormatItem.from(Helpers.parseStr(split, 11));
+        mSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 11)), FormatItem.SUBTITLE_NONE);
         mVideoBufferType = Helpers.parseInt(split, 12, PlayerEngine.BUFFER_LOW);
         mSubtitleStyleIndex = Helpers.parseInt(split, 13, 1);
         mVideoZoomMode = Helpers.parseInt(split, 14, PlayerEngine.ZOOM_MODE_DEFAULT);
@@ -646,13 +674,25 @@ public class PlayerData extends DataChangeBase {
         mIsSkip24RateEnabled = Helpers.parseBoolean(split, 44, false);
         mAfrPauseMs = Helpers.parseInt(split, 45, 0);
         mIsLiveChatEnabled = Helpers.parseBoolean(split, 46, false);
-        mLastSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 47)), FormatItem.SUBTITLE_DEFAULT);
+        mLastSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 47)), FormatItem.SUBTITLE_NONE);
         mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
         mVideoRotation = Helpers.parseInt(split, 49, 0);
         mVideoZoom = Helpers.parseInt(split, 50, -1);
         mRepeatMode = Helpers.parseInt(split, 51, PlayerUI.REPEAT_MODE_ALL);
         mAudioLanguage = Helpers.parseStr(split, 52, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
         mSubtitleLanguage = Helpers.parseStr(split, 53, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
+        String enabledSubtitles = Helpers.parseStr(split, 54);
+        mEnableSubtitlesForChannel = Helpers.parseBoolean(split, 55, false);
+
+        if (enabledSubtitles != null) {
+            String[] channelsArr = Helpers.splitArray(enabledSubtitles);
+
+            mEnabledSubtitlesForChannel.clear();
+
+            mEnabledSubtitlesForChannel.addAll(Arrays.asList(channelsArr));
+        } else {
+            mEnabledSubtitlesForChannel.clear();
+        }
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -661,6 +701,8 @@ public class PlayerData extends DataChangeBase {
 
     @Override
     protected void persistState() {
+        String enabledSubtitles = Helpers.mergeArray(mEnabledSubtitlesForChannel.toArray());
+
         mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsAbsoluteDateEnabled,
                 mSeekPreviewMode, mIsSeekConfirmPauseEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
@@ -673,7 +715,8 @@ public class PlayerData extends DataChangeBase {
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
                 mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, Helpers.toString(mLastSubtitleFormat), mLastSpeed, mVideoRotation,
-                mVideoZoom, mRepeatMode, mAudioLanguage, mSubtitleLanguage));
+                mVideoZoom, mRepeatMode, mAudioLanguage, mSubtitleLanguage, enabledSubtitles, mEnableSubtitlesForChannel
+        ));
 
         super.persistState();
     }

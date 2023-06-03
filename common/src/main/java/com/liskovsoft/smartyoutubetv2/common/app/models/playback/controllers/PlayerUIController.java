@@ -134,7 +134,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     @Override
     public void onSubtitleClicked(boolean enabled) {
         // First run
-        if (FormatItem.SUBTITLE_DEFAULT.equals(mPlayerData.getLastSubtitleFormat())) {
+        if (FormatItem.SUBTITLE_NONE.equals(mPlayerData.getLastSubtitleFormat())) {
             onSubtitleLongClicked(enabled);
             return;
         }
@@ -146,8 +146,9 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
         // Match found
         if (getPlayer().getSubtitleFormats().contains(mPlayerData.getLastSubtitleFormat())) {
-            getPlayer().setFormat(enabled ? FormatItem.SUBTITLE_DEFAULT : mPlayerData.getLastSubtitleFormat());
-            getPlayer().setSubtitleButtonState(!FormatItem.SUBTITLE_DEFAULT.equals(mPlayerData.getLastSubtitleFormat()) && !enabled);
+            getPlayer().setFormat(enabled ? FormatItem.SUBTITLE_NONE : mPlayerData.getLastSubtitleFormat());
+            getPlayer().setSubtitleButtonState(!FormatItem.SUBTITLE_NONE.equals(mPlayerData.getLastSubtitleFormat()) && !enabled);
+            enableSubtitleForChannel(!enabled);
         } else {
             // Match not found
             onSubtitleLongClicked(enabled);
@@ -183,6 +184,8 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             settingsPresenter.showDialog();
         }));
 
+        settingsPresenter.appendSingleSwitch(AppDialogUtil.createSubtitleChannelOption(getActivity(), mPlayerData));
+
         OptionCategory stylesCategory = AppDialogUtil.createSubtitleStylesCategory(getActivity(), mPlayerData);
         settingsPresenter.appendRadioCategory(stylesCategory.title, stylesCategory.options);
 
@@ -192,7 +195,10 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         OptionCategory positionCategory = AppDialogUtil.createSubtitlePositionCategory(getActivity(), mPlayerData);
         settingsPresenter.appendRadioCategory(positionCategory.title, positionCategory.options);
 
-        settingsPresenter.showDialog(subtitlesOrigCategoryTitle, this::setSubtitleButtonState);
+        settingsPresenter.showDialog(subtitlesOrigCategoryTitle, () -> {
+            enableSubtitleForChannel(true);
+            setSubtitleButtonState();
+        });
     }
 
     @Override
@@ -689,10 +695,22 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             return;
         }
 
+        getPlayer().setSubtitleButtonState(isSubtitleEnabled() && isSubtitleSelected());
+    }
+
+    private void startTempBackgroundMode(Class<?> clazz) {
+        SearchData searchData = SearchData.instance(getActivity());
+        if (searchData.isTempBackgroundModeEnabled()) {
+            searchData.setTempBackgroundModeClass(clazz);
+            onPipClicked();
+        }
+    }
+
+    private boolean isSubtitleSelected() {
         List<FormatItem> subtitleFormats = getPlayer().getSubtitleFormats();
 
         if (subtitleFormats == null) {
-            return;
+            return false;
         }
 
         boolean isSelected = false;
@@ -704,14 +722,23 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             }
         }
 
-        getPlayer().setSubtitleButtonState(isSelected);
+        return isSelected;
     }
 
-    private void startTempBackgroundMode(Class<?> clazz) {
-        SearchData searchData = SearchData.instance(getActivity());
-        if (searchData.isTempBackgroundModeEnabled()) {
-            searchData.setTempBackgroundModeClass(clazz);
-            onPipClicked();
+    private boolean isSubtitleEnabled() {
+        return !mPlayerData.isSubtitlesForChannelEnabled() || mPlayerData.isSubtitlesForChannelEnabled(getPlayer().getVideo().channelId);
+    }
+
+    private void enableSubtitleForChannel(boolean enable) {
+        if (getPlayer() == null || !mPlayerData.isSubtitlesForChannelEnabled()) {
+            return;
+        }
+
+        String channelId = getPlayer().getVideo().channelId;
+        if (enable) {
+            mPlayerData.enableSubtitlesForChannel(channelId);
+        } else {
+            mPlayerData.disableSubtitlesForChannel(channelId);
         }
     }
 }

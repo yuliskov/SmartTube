@@ -357,6 +357,13 @@ public class AppDialogUtil {
         return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, subtitleStyleTitle, fromSubtitleStyles(context, playerData, subtitleStyles));
     }
 
+    public static OptionItem createSubtitleChannelOption(Context context, PlayerData playerData) {
+        return UiOptionItem.from(context.getString(R.string.subtitle_channel),
+                optionItem -> playerData.enableSubtitlesForChannel(optionItem.isSelected()),
+                playerData.isSubtitlesForChannelEnabled()
+        );
+    }
+
     private static List<OptionItem> fromSubtitleStyles(Context context, PlayerData playerData, List<SubtitleStyle> subtitleStyles) {
         List<OptionItem> styleOptions = new ArrayList<>();
 
