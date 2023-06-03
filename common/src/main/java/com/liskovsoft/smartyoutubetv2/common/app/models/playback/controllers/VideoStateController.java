@@ -160,8 +160,9 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     public void onMetadata(MediaItemMetadata metadata) {
         updateHistory();
 
-        if (!isSubtitleEnabled()) {
-            getPlayer().setFormat(FormatItem.SUBTITLE_NONE);
+        // Channel info is loaded
+        if (isSubtitleEnabled()) {
+            restoreSubtitleFormat();
         }
     }
 
@@ -190,7 +191,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         restorePendingPosition();
         restoreSpeed();
         // Player thinks that subs not enabled if I enable it too early (e.g. on source change event).
-        restoreSubtitleFormat();
+        //restoreSubtitleFormat();
 
         restoreVolume();
     }
@@ -265,6 +266,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
 
     @Override
     public void onSourceChanged(Video item) {
+        // At this stage video isn't loaded yet. So format switch isn't take any resources.
         restoreFormats();
     }
 
@@ -394,7 +396,9 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     }
 
     private void restoreSubtitleFormat() {
-        getPlayer().setFormat(mPlayerData.isSubtitlesForChannelEnabled() ? mPlayerData.getLastSubtitleFormat() : mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE));
+        getPlayer().setFormat(
+                mPlayerData.isSubtitlesForChannelEnabled() ? mPlayerData.getLastSubtitleFormat() : mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE)
+        );
     }
 
     private void saveState() {
@@ -523,7 +527,10 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     private void restoreFormats() {
         restoreVideoFormat();
         restoreAudioFormat();
-        restoreSubtitleFormat();
+        //restoreSubtitleFormat();
+        // We don't know yet do we really need a subs.
+        // NOTE: Some subs can hang the app.
+        getPlayer().setFormat(FormatItem.SUBTITLE_NONE);
     }
 
     private void showHideScreensaver(boolean show) {

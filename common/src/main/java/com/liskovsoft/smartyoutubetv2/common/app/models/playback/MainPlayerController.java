@@ -58,9 +58,9 @@ public class MainPlayerController implements PlayerEventListener {
         HQDialogController hqDialogManager = new HQDialogController(stateUpdater);
         AutoFrameRateController autoFrameRateManager = new AutoFrameRateController(hqDialogManager, stateUpdater);
 
+        suggestionsLoader.addMetadataListener(stateUpdater);
         suggestionsLoader.addMetadataListener(uiManager);
         suggestionsLoader.addMetadataListener(videoLoader);
-        suggestionsLoader.addMetadataListener(stateUpdater);
         suggestionsLoader.addMetadataListener(contentBlockManager);
         suggestionsLoader.addMetadataListener(liveChatManager);
         suggestionsLoader.addMetadataListener(commentsManager);
