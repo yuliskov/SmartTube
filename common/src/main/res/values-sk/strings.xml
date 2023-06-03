@@ -561,4 +561,5 @@
     <string name="sorting_default">Predvolené (rýchle)</string>
     <string name="content_block_exclude_channel">Neaplikovať SponsorBlock na tento kanál</string>
     <string name="content_block_stop_excluding_channel">Znovu aplikovať SponsorBlock na tento kanál</string>
+    <string name="player_chapter_notification">Zobraziť notifikáciu pre rýchlejší posun cez kapitoly</string>
 </resources>
