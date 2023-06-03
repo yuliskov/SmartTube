@@ -358,7 +358,7 @@ public class AppDialogUtil {
     }
 
     public static OptionItem createSubtitleChannelOption(Context context, PlayerData playerData) {
-        return UiOptionItem.from(context.getString(R.string.subtitle_channel),
+        return UiOptionItem.from(context.getString(R.string.subtitle_remember),
                 optionItem -> playerData.enableSubtitlesForChannel(optionItem.isSelected()),
                 playerData.isSubtitlesForChannelEnabled()
         );

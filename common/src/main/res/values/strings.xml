@@ -563,5 +563,5 @@
     <string name="content_block_exclude_channel">Exclude this channel from SponsorBlock</string>
     <string name="content_block_stop_excluding_channel">Stop excluding this channel from SponsorBlock</string>
     <string name="player_chapter_notification">Show notification to quickly advance through the chapters</string>
-    <string name="subtitle_channel">Enable subtitles for the current channel only</string>
+    <string name="subtitle_remember">Remember enabled subtitles per each channel</string>
 </resources>

@@ -554,5 +554,5 @@
     <string name="content_block_exclude_channel">Исключить канал из SponsorBlock</string>
     <string name="content_block_stop_excluding_channel">Перестать исключать канал из SponsorBlock</string>
     <string name="player_chapter_notification">Показывать уведомление для быстрого перехода по эпизодам</string>
-    <string name="subtitle_channel">Включить субтитры только для текущего канала</string>
+    <string name="subtitle_remember">Запомнить включенные субтитры для каждого канала</string>
 </resources>
