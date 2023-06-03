@@ -563,4 +563,5 @@
     <string name="content_block_exclude_channel">Bu kanalı SponsorBlock\'tan hariç tut</string>
     <string name="content_block_stop_excluding_channel">Bu kanalı SponsorBlock\'tan hariç tutmayı durdur</string>
     <string name="player_chapter_notification">Bölümler arasında hızla ilerlemek için bildirim göster</string>
+    <string name="subtitle_remember">Her kanal için etkinleştirilmiş altyazıları hatırla</string>
 </resources>
