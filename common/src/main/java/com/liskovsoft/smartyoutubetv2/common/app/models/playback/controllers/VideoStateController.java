@@ -160,10 +160,8 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     public void onMetadata(MediaItemMetadata metadata) {
         updateHistory();
 
-        // Channel info is loaded
-        if (isSubtitleEnabled()) {
-            restoreSubtitleFormat();
-        }
+        // Channel info should be loaded at this point
+        restoreSubtitleFormat();
     }
 
     @Override
@@ -396,9 +394,13 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     }
 
     private void restoreSubtitleFormat() {
-        getPlayer().setFormat(
-                mPlayerData.isSubtitlesForChannelEnabled() ? mPlayerData.getLastSubtitleFormat() : mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE)
-        );
+        FormatItem result = mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE);
+
+        if (mPlayerData.isSubtitlesForChannelEnabled()) {
+            result = mPlayerData.isSubtitlesForChannelEnabled(getPlayer().getVideo().channelId) ? mPlayerData.getLastSubtitleFormat() : FormatItem.SUBTITLE_NONE;
+        }
+
+        getPlayer().setFormat(result);
     }
 
     private void saveState() {
@@ -527,10 +529,9 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     private void restoreFormats() {
         restoreVideoFormat();
         restoreAudioFormat();
-        //restoreSubtitleFormat();
         // We don't know yet do we really need a subs.
         // NOTE: Some subs can hang the app.
-        getPlayer().setFormat(FormatItem.SUBTITLE_NONE);
+        restoreSubtitleFormat();
     }
 
     private void showHideScreensaver(boolean show) {
@@ -572,9 +573,5 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         if (!samePositions) {
             getPlayer().setPositionMs(positionMs);
         }
-    }
-
-    private boolean isSubtitleEnabled() {
-        return !mPlayerData.isSubtitlesForChannelEnabled() || mPlayerData.isSubtitlesForChannelEnabled(getPlayer().getVideo().channelId);
     }
 }
