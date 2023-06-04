@@ -486,8 +486,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        mMediaSessionConnector.setMediaMetadataProvider(disableNotifications ? null : player -> {
-            if (getVideo() == null) {
+        mMediaSessionConnector.setMediaMetadataProvider(player -> {
+            if (getVideo() == null || getVideo().getTitle() == null) {
                 return null;
             }
 
@@ -501,7 +501,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, getDurationMs());
 
             return metadataBuilder.build();
-        });
+        }, disableNotifications);
 
         mMediaSessionConnector.setQueueNavigator(new BackboneQueueNavigator() {
             @Override

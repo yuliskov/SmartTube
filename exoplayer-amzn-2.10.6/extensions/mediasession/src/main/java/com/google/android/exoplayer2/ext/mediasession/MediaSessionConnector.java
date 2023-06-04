@@ -424,6 +424,7 @@ public final class MediaSessionConnector {
   private long enabledPlaybackActions;
   private int rewindMs;
   private int fastForwardMs;
+  private boolean showNotification;
 
   /**
    * Creates an instance.
@@ -660,7 +661,9 @@ public final class MediaSessionConnector {
    * @param mediaMetadataProvider The provider of metadata to publish, or {@code null} if no
    *     metadata should be published.
    */
-  public void setMediaMetadataProvider(@Nullable MediaMetadataProvider mediaMetadataProvider) {
+  public void setMediaMetadataProvider(@Nullable MediaMetadataProvider mediaMetadataProvider,
+                                       Boolean isNotificationDisabled) {
+    showNotification = !isNotificationDisabled;
     if (this.mediaMetadataProvider != mediaMetadataProvider) {
       this.mediaMetadataProvider = mediaMetadataProvider;
       invalidateMediaSessionMetadata();
@@ -683,10 +686,11 @@ public final class MediaSessionConnector {
     }
 
     MediaMetadataCompat metadata =
-        mediaMetadataProvider != null && player != null
+        player != null
             ? mediaMetadataProvider.getMetadata(player)
             : METADATA_EMPTY;
-    mediaSession.setMetadata(metadata != null ? metadata : METADATA_EMPTY);
+    if (metadata != METADATA_EMPTY && showNotification)
+      mediaSession.setMetadata(metadata);
   }
 
   /**
@@ -1025,24 +1029,27 @@ public final class MediaSessionConnector {
 
     @Override
     public void onTimelineChanged(
-        Timeline timeline, @Nullable Object manifest, @Player.TimelineChangeReason int reason) {
+            Timeline timeline, @Nullable Object manifest, @Player.TimelineChangeReason int reason) {
       int windowCount = player.getCurrentTimeline().getWindowCount();
       int windowIndex = player.getCurrentWindowIndex();
       if (queueNavigator != null) {
         queueNavigator.onTimelineChanged(player);
-        invalidateMediaSessionPlaybackState();
+        //invalidateMediaSessionPlaybackState();  //prevent permanent notification update in live
       } else if (currentWindowCount != windowCount || currentWindowIndex != windowIndex) {
         // active queue item and queue navigation actions may need to be updated
         invalidateMediaSessionPlaybackState();
+        invalidateMediaSessionMetadata();
       }
       currentWindowCount = windowCount;
       currentWindowIndex = windowIndex;
-      invalidateMediaSessionMetadata();
+      //invalidateMediaSessionMetadata();
     }
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
       invalidateMediaSessionPlaybackState();
+      if (playWhenReady)
+        invalidateMediaSessionMetadata();
     }
 
     @Override
