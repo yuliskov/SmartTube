@@ -195,10 +195,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         OptionCategory positionCategory = AppDialogUtil.createSubtitlePositionCategory(getActivity(), mPlayerData);
         settingsPresenter.appendRadioCategory(positionCategory.title, positionCategory.options);
 
-        settingsPresenter.showDialog(subtitlesOrigCategoryTitle, () -> {
-            enableSubtitleForChannel(true);
-            setSubtitleButtonState();
-        });
+        settingsPresenter.showDialog(subtitlesOrigCategoryTitle, this::setSubtitleButtonState);
     }
 
     @Override
