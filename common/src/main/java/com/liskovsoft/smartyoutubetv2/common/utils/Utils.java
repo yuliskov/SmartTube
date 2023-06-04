@@ -56,8 +56,10 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.Video
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.AudioTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
+import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 
 import java.util.LinkedHashMap;
@@ -613,5 +615,16 @@ public class Utils {
             return outValue.resourceId;
         }
         return -1;
+    }
+
+    public static void enableScreensaver(Context activity, boolean enable) {
+        if (activity instanceof MotherActivity) {
+            ScreensaverManager screensaver = ((MotherActivity) activity).getScreensaverManager();
+            if (enable) {
+                screensaver.enable();
+            } else {
+                screensaver.disable();
+            }
+        }
     }
 }

@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,7 @@ import androidx.leanback.widget.VerticalGridView;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
 import net.gotev.speech.Speech;
 
@@ -336,15 +339,6 @@ public class SearchSupportFragment extends Fragment {
         mSearchTextEditor.setOnFocusChangeListener((v, focused) -> {
             Log.d(TAG, "on search field focused");
 
-            //if (mIsKeyboardAutoShowEnabled && focused &&
-            //        mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
-            //    mRowsSupportFragment.getVerticalGridView().clearFocus();
-            //
-            //    if (getContext() != null) {
-            //        Helpers.showKeyboard(getContext(), v);
-            //    }
-            //}
-
             // User clicked on tag and tries to edit search query
             if (focused && !TextUtils.isEmpty(getSearchBarText())) {
                 SearchPresenter.instance(v.getContext()).disposeActions();
@@ -352,6 +346,22 @@ public class SearchSupportFragment extends Fragment {
 
             if (mIsKeyboardAutoShowEnabled && focused) {
                 Helpers.showKeyboard(v.getContext());
+            }
+        });
+        mSearchTextEditor.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // NOP
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // NOP
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Utils.enableScreensaver(getActivity(), true);
             }
         });
         KeyHelpers.fixEnterKey(mSearchTextEditor);
