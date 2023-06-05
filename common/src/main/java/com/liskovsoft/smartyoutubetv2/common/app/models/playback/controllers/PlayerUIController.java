@@ -723,7 +723,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     }
 
     private boolean isSubtitleEnabled() {
-        return !mPlayerData.isSubtitlesForChannelEnabled() || mPlayerData.isSubtitlesForChannelEnabled(getPlayer().getVideo().channelId);
+        return !mPlayerData.isSubtitlesForChannelEnabled() || mPlayerData.isSubtitlesForChannelEnabled(getChannelId());
     }
 
     private void enableSubtitleForChannel(boolean enable) {
@@ -731,11 +731,15 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             return;
         }
 
-        String channelId = getPlayer().getVideo().channelId;
+        String channelId = getChannelId();
         if (enable) {
             mPlayerData.enableSubtitlesForChannel(channelId);
         } else {
             mPlayerData.disableSubtitlesForChannel(channelId);
         }
+    }
+
+    private String getChannelId() {
+        return getPlayer().getVideo() != null ? getPlayer().getVideo().channelId : null;
     }
 }
