@@ -541,8 +541,9 @@
     <string name="disable_stream_buffer">Disable buffer on streams</string>
     <string name="disable_stream_buffer_desc">Fix for situations when the stream so far behind. Note: the stream may start to lag.</string>
     <string name="sony_frame_drop_fix">Frame drop fix #1</string>
-    <string name="sony_frame_drop_fix_desc">Fix lags on Sony TV and some other devices. Note: possible problems with audio synchronization.
-    </string>
+    <string name="sony_frame_drop_fix_desc">Fix lags on Sony TV and some other devices. Note: possible problems with audio synchronization.</string>
+    <string name="amazon_frame_drop_fix">Frame drop fix #2</string>
+    <string name="amazon_frame_drop_fix_desc">Intended for Amazon Stick devices. May work on other devices too.</string>
     <string name="audio_language">Audio language</string>
     <string name="old_home_look">The old look of the Home section</string>
     <string name="hide_shorts_everywhere">Hide shorts everywhere</string>
