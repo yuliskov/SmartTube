@@ -360,8 +360,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableSonyFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isSonyFrameDropFixEnabled()));
 
-        options.add(UiOptionItem.from("Frame drop fix #2",
-                "Intended for Amazon Stick devices. May work on other devices too.",
+        options.add(UiOptionItem.from(getContext().getString(R.string.amazon_frame_drop_fix),
+                getContext().getString(R.string.amazon_frame_drop_fix_desc),
                 option -> mPlayerTweaksData.enableAmazonFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isAmazonFrameDropFixEnabled()));
 
