@@ -564,4 +564,6 @@
     <string name="content_block_stop_excluding_channel">Přestat vylučovat tento kanál ze SponsorBlocku</string>
     <string name="player_chapter_notification">Zobrazit oznámení pro rychlé procházení kapitolami</string>
     <string name="subtitle_remember">Pamatovat si povolené titulky pro každý kanál</string>
+    <string name="amazon_frame_drop_fix">Oprava poklesu snímků #2</string>
+    <string name="amazon_frame_drop_fix_desc">Určeno pro zařízení Amazon Stick. Může fungovat i na jiných zařízeních.</string>
 </resources>
