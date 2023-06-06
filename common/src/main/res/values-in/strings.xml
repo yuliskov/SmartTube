@@ -522,6 +522,8 @@
     <string name="disable_stream_buffer_desc">Memperbaiki situasi ketika streaming tertinggal jauh di belakang. Catatan: streaming mungkin mulai lag.</string>
     <string name="sony_frame_drop_fix">Perbaikan Frame drop #1</string>
     <string name="sony_frame_drop_fix_desc">Memperbaiki lag pada TV Sony dan beberapa perangkat lain. Catatan: kemungkinan masalah dengan sinkronisasi suara.</string>
+    <string name="amazon_frame_drop_fix">Perbaika Frame drop #2</string>
+    <string name="amazon_frame_drop_fix_desc">Diperuntukkan untuk perangkat Amazon Stick. Dapat berfungsi pada perangkat lain juga.</string>
     <string name="audio_language">Bahasa suara</string>
     <string name="old_home_look">Tampilan lama bagian Beranda</string>
     <string name="hide_shorts_everywhere">Sembunyikan vidio pendek di mana saja</string>
