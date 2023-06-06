@@ -564,4 +564,6 @@
     <string name="content_block_stop_excluding_channel">Stop excluding this channel from SponsorBlock</string>
     <string name="player_chapter_notification">Show notification to quickly advance through the chapters</string>
     <string name="subtitle_remember">Remember enabled subtitles per each channel</string>
+    <string name="amazon_frame_drop_fix">Frame drop fix #2</string>
+    <string name="amazon_frame_drop_fix_desc">Intended for Amazon Stick devices. May work on other devices too.</string>
 </resources>
