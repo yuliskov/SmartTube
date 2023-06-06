@@ -563,4 +563,5 @@
     <string name="content_block_exclude_channel">Vyloučit tento kanál ze SponsorBlocku</string>
     <string name="content_block_stop_excluding_channel">Přestat vylučovat tento kanál ze SponsorBlocku</string>
     <string name="player_chapter_notification">Zobrazit oznámení pro rychlé procházení kapitolami</string>
+    <string name="subtitle_remember">Pamatovat si povolené titulky pro každý kanál</string>
 </resources>
