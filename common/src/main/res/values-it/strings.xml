@@ -562,4 +562,6 @@
     <string name="sorting_default">Predefinito (veloce)</string>
     <string name="content_block_exclude_channel">Escludi questo canale da SponsorBlock</string>
     <string name="content_block_stop_excluding_channel">Non escludere più questo canale da SponsorBlock</string>
+    <string name="player_chapter_notification">Mostra notifica per avanzare rapidamente tra i capitoli</string>
+    <string name="subtitle_remember">Ricorda i sottotitoli abilitati per ogni canale</string>
 </resources>
