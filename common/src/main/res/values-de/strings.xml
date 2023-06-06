@@ -563,4 +563,5 @@
     <string name="content_block_exclude_channel">Diesen Kanal von SponsorBlock ausschließen</string>
     <string name="content_block_stop_excluding_channel">Diesen Kanal nicht mehr von SponsorBlock ausschließen</string>
     <string name="player_chapter_notification">Benachrichtigung anzeigen, um schnell durch die Kapitel zu springen</string>
+    <string name="subtitle_remember">Aktivierte Untertitel für jeden Kanal merken</string>
 </resources>
