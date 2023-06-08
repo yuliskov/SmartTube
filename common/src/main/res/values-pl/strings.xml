@@ -28,7 +28,7 @@
   <string name="category_background_playback">Odtwarzanie w tle</string>
   <string name="not_implemented">Nie zaimplementowano</string>
   <string name="option_background_playback_off">Wyłączone</string>
-  <string name="option_background_playback_pip">Obrazek w obrazku (PiP)</string>
+  <string name="option_background_playback_pip">Obraz w obrazie (PiP)</string>
   <string name="option_background_playback_only_audio">Tylko dźwięk</string>
   <string name="playback_settings">Ustawienia jakości odtwarzania</string>
   <string name="video_speed">Prędkość wideo</string>
@@ -158,7 +158,7 @@
   <string name="auto_frame_rate_pause">Automatyczna liczba klatek na sekundę (Wstrzymaj podczas przełączania)</string>
   <string name="auto_frame_rate_applying">Stosowanie automatycznej liczby klatek na sekundę %sx%s\@%s</string>
   <string name="audio_shift">Przesunięcie dźwięku</string>
-  <string name="player_remember_speed">Zapamiętaj prędkość</string>
+  <string name="player_remember_speed">Zapamiętuj prędkość</string>
   <string name="mark_channel_as_watched">Oznacz jako obejrzane</string>
   <string name="channel_marked_as_watched">Kanał został oznaczony jako obserwowany</string>
   <string name="dialog_add_device">Dodaj urządzenie</string>
@@ -199,10 +199,10 @@
   <string name="video_preset_enabled">Format następnego wideo zostanie ustawiony zgodnie z ustawieniami wstępnymi</string>
   <string name="player_sleep_timer">Wyłącznik czasowy</string>
   <string name="player_show_quality_info">Pokaż informacje o jakości wideo</string>
-  <string name="player_remember_each_speed">Zapamiętaj każdą prędkość wideo</string>
-  <string name="player_remember_speed_none">Brak</string>
-  <string name="player_remember_speed_all">To samo we wszystkich wideo</string>
-  <string name="player_remember_speed_each">Dla każdego wideo</string>
+  <string name="player_remember_each_speed">Zapamiętuj prędkość każdego wideo</string>
+  <string name="player_remember_speed_none">Nie zapamiętuj</string>
+  <string name="player_remember_speed_all">Dla wszystkich wideo ta sama</string>
+  <string name="player_remember_speed_each">Dla każdego wideo oddzielnie</string>
   <string name="msg_player_error_source">Nie można pobrać wideo</string>
   <string name="msg_player_error_renderer">Wybrany format wideo nie jest obsługiwany. Spróbuj zresetować urządzenie.</string>
   <string name="msg_player_error_unexpected">Nieznany błąd dekodera wideo</string>
@@ -551,12 +551,15 @@
   <string name="screensaver">Wygaszacz ekranu</string>
   <string name="old_update_notifications">Stary wygląd powiadomienia o aktualizacji</string>
   <string name="mark_as_watched">Oznacz jako obejrzane</string>
-  <string name="player_ui_animations">Odblokuj panel sterowania animacjami</string>
+  <string name="player_ui_animations">Uruchom animacje panelu sterowania</string>
   <string name="player_likes_count">Pokaż licznik polubień</string>
   <string name="sorting_alphabetically2">Alfabetycznie (szybkie)</string>
   <string name="sorting_default">Domyślnie (szybkie)</string>
-  <string name="player_screen_off_timeout">Limit czasu wyłączenia ekranu</string>
+  <string name="player_screen_off_timeout">Automatyczne wyłączanie ekranu</string>
   <string name="player_chapter_notification">Pokaż powiadomienie, aby szybko przejść do kolejnego rozdziału</string>
   <string name="content_block_stop_excluding_channel">Przestań wykluczać ten kanał z SponsorBlock</string>
   <string name="content_block_exclude_channel">Wyklucz ten kanał z SponsorBlock</string>
+  <string name="subtitle_remember">Zapamiętuj włączenie napisów dla każdego kanału</string>
+  <string name="amazon_frame_drop_fix">Poprawka dla gubienia klatek #2</string>
+  <string name="amazon_frame_drop_fix_desc">Dla urządzeń Amazon Stick. Może zadziałać też na innych urządzeniach.</string>
 </resources>
