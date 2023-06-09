@@ -537,7 +537,7 @@
   <string name="enter_master_password">أدخل كلمة المرور الرئيسية</string>
   <string name="disable_stream_buffer">تعطيل التخزين المؤقت في البث المباشر</string>
   <string name="disable_stream_buffer_desc">إصلاح للمواقف التي يكون فيها البث المباشر بعيدًا جدًا.  ملاحظة: قد يبدأ البث المباشر في التأخر.</string>
-  <string name="sony_frame_drop_fix">إصلاح سقوط الإطار رقم 1</string>
+  <string name="sony_frame_drop_fix">إصلاح هبوط الإطار رقم 1</string>
   <string name="sony_frame_drop_fix_desc">إصلاح التأخيرات على تلفزيون سوني وبعض الأجهزة الأخرى. ملاحظة: مشاكل المحتملة مع مزامنة الصوت.</string>
   <string name="audio_language">لغة الصوت</string>
   <string name="old_home_look">المظهر القديم لقسم الصفحة الرئيسية</string>
@@ -556,4 +556,10 @@
   <string name="sorting_alphabetically2">أبجديا (سريع)</string>
   <string name="sorting_default">افتراضي (سريع)</string>
   <string name="player_ui_animations">تمكين حركة لوحة التحكم</string>
+  <string name="content_block_exclude_channel">استبعاد هذه القناة من SponsorBlock</string>
+  <string name="content_block_stop_excluding_channel">توقف عن استبعاد هذه القناة من SponsorBlock</string>
+  <string name="player_chapter_notification">عرض اشعار للتقدم بسرعة خلال الفصول</string>
+  <string name="subtitle_remember">تذكر الترجمات الممكّنة لكل قناة</string>
+  <string name="amazon_frame_drop_fix">إصلاح هبوط الإطار #2</string>
+  <string name="amazon_frame_drop_fix_desc">مخصص لأجهزة Amazon Stick.  قد تعمل على أجهزة أخرى أيضًا.</string>
 </resources>
