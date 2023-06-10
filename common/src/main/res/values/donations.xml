@@ -2,14 +2,12 @@
 <resources>
     <string-array name="donations">
         <item>Patreon (Visa, Mastercard, PayPal)|https://www.patreon.com/smarttube</item>
-        <!-- <item>BountySource (Visa, Mastercard, PayPal)|https://salt.bountysource.com/checkout/amount?team=smarttube</item> -->
+        <!--<item>BountySource (Visa, Mastercard, PayPal)|https://salt.bountysource.com/checkout/amount?team=smarttube</item>-->
         <item>PayPal (email)|firsthash@gmail.com</item>
-        <!-- Still doesn't work (20.06.2022) -->
+        <item>Buy me a coffee|https://www.buymeacoffee.com/stube</item>
+        <!-- Direct PayPal still doesn't work -->
         <!--<item>PayPal (link)|https://www.paypal.com/donate/?business=2WLCM95RRVWZ6</item>-->
-        <!--<item>QIWI (RU, Visa)|https://qiwi.com/n/GUESS025</item>-->
-        <!-- <item>Donation Alerts (VISA, PayPal)|https://www.donationalerts.com/r/firsthash</item> -->
-        <!--<item>DonatePay (RU, PayPal, Visa)|https://new.donatepay.ru/@459197</item>-->
-        <!-- <item>PrivatBank (UA)|https://privatbank.ua/ru/sendmoney?payment=9e46a6ef78</item> -->
+        <!--<item>PrivatBank (UA)|https://privatbank.ua/ru/sendmoney?payment=9e46a6ef78</item> -->
         <item>BTC|1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx</item>
         <item>LTC|ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw</item>
         <item>ETH|0xe455E21a085ae195a097cd4F456051A9916A5064</item>

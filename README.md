@@ -158,6 +158,7 @@ If you want to support my developments you are welcome to buy me a cup of coffee
 
 > [**Patreon (Visa, Mastercard, PayPal)**](https://www.patreon.com/smarttube)  
 > **PayPal**: firsthash@gmail.com  
+> [**Buy me a coffee**](https://www.buymeacoffee.com/stube)  
 > **BTC**: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx  
 > **LTC**: ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw  
 > **ETH**: 0xe455E21a085ae195a097cd4F456051A9916A5064  
