@@ -157,7 +157,7 @@ To enable global voice search, an additional app must be installed alongside Sma
 If you want to support my developments you are welcome to buy me a cup of coffee :)
 
 > [**Patreon (Visa, Mastercard, PayPal)**](https://www.patreon.com/smarttube)  
-> **PayPal**: firsthash@gmail.com  
+> **PayPal**: firsth<!-- abc@def -->ash@gmai<!-- @abc.com -->l.com  
 > [**Buy me a coffee**](https://www.buymeacoffee.com/stube)  
 > **BTC**: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx  
 > **LTC**: ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw  
