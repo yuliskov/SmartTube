@@ -15,8 +15,11 @@ import com.google.android.exoplayer2.upstream.TransferListener;
 import java.util.List;
 
 public class ErrorDefaultDashChunkSource extends DefaultDashChunkSource {
-    // Value greater than 1 increase video start time.
-    // However, there's a possibility that bigger values could eliminate buffering problems.
+    // Value greater than 1 increase video start time and slowdown seeking.
+    // However, there's a possibility that bigger values are able to eliminate the 'source error' problem.
+    // NOTE: don't set it to Integer.MAX_VALUE because you'll get massive stutters.
+    // Value of 1 equals to 10 seconds. 1 - best loading speed and seeking, 2 or more has the same speed slowdowns.
+    //public static final int MAX_SEGMENTS_PER_LOAD = 100;
     public static final int MAX_SEGMENTS_PER_LOAD = 1;
     private final TrackErrorFixer mTrackErrorFixer;
 

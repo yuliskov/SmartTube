@@ -59,8 +59,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 1008
-        versionName "18.18"
+        versionCode 1013
+        versionName "18.23"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -141,7 +141,7 @@ android {
     // https://stackoverflow.com/questions/18332474/how-to-set-versionname-in-apk-filename-using-gradle
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            def project = "STubeNext"
+            def project = "STube"
             def flavor = variant.productFlavors[-1].name
             def buildType = variant.buildType.name.take(1)
             def version = variant.versionName

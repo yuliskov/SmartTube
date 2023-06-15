@@ -511,7 +511,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
     private void continueGroupIfNeeded(VideoGroup group) {
-        MediaServiceManager.instance().shouldContinueTheGroup(getActivity(), group, () -> continueGroup(group));
+        MediaServiceManager.instance().shouldContinueTheGroup(getActivity(), group, () -> continueGroup(group), getPlayer().isSuggestionsShown());
     }
 
     public void focusAndContinueIfNeeded(VideoGroup group) {
