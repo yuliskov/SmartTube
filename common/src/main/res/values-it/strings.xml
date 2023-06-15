@@ -564,4 +564,6 @@
     <string name="content_block_stop_excluding_channel">Non escludere più questo canale da SponsorBlock</string>
     <string name="player_chapter_notification">Mostra notifica per avanzare rapidamente tra i capitoli</string>
     <string name="subtitle_remember">Ricorda i sottotitoli abilitati per ogni canale</string>
+    <string name="amazon_frame_drop_fix">Correggi salto fotogrammi #2</string>
+    <string name="amazon_frame_drop_fix_desc">Destinato ai dispositivi Amazon Stick. Può funzionare anche su altri dispositivi.</string>
 </resources>
