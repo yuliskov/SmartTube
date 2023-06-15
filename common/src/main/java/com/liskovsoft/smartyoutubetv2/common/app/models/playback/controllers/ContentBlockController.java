@@ -23,6 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -370,7 +371,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
 
             long skipPosMs = lastSegment.getEndMs();
 
-            if (type == ContentBlockData.ACTION_SKIP_ONLY || getPlayer().isInPIPMode() || isScreenOff()) {
+            if (type == ContentBlockData.ACTION_SKIP_ONLY || getPlayer().isInPIPMode() || Utils.isScreenOff(getActivity())) {
                 simpleSkip(skipPosMs);
             } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
                 messageSkip(skipPosMs, localizedCategory);
@@ -380,12 +381,6 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
         }
 
         mLastSkipPosMs = foundSegment != null ? foundSegment.get(foundSegment.size() - 1).getEndMs() : 0;
-    }
-
-    private boolean isScreenOff() {
-        ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
-
-        return manager != null && manager.isScreenOff();
     }
 
     private void closeTransparentDialog() {

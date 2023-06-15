@@ -627,4 +627,14 @@ public class Utils {
             }
         }
     }
+
+    public static boolean isScreenOff(Context activity) {
+        if (activity instanceof MotherActivity) {
+            ScreensaverManager manager = ((MotherActivity) activity).getScreensaverManager();
+
+            return manager != null && manager.isScreenOff();
+        }
+
+        return false;
+    }
 }

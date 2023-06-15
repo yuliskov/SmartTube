@@ -576,8 +576,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
         if ((dialogPresenter.isDialogShown() && dialogPresenter.getId() != CHAPTER_NOTIFICATION_Id) ||
-                getPlayer() == null || getPlayer().isOverlayShown() || getPlayer().isInPIPMode()) {
-            // Another dialog is opened. Don't distract a user.
+                getPlayer() == null || getPlayer().isOverlayShown() || getPlayer().isInPIPMode() ||
+                Utils.isScreenOff(getActivity())) {
+            // Another window is opened. Don't distract a user.
             return;
         }
 
