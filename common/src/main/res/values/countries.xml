@@ -61,5 +61,21 @@
         <item>Indonesia|ID</item>
         <item>Korea|KR</item>
         <item>Pakistan|PK</item>
+        <item>Bolivia|BO</item>
+        <item>Chile|CL</item>
+        <item>Colombia|CO</item>
+        <item>Costa Rica|CR</item>
+        <item>Ecuador|EC</item>
+        <item>El Salvador|SV</item>
+        <item>Guatemala|GT</item>
+        <item>Honduras|HN</item>
+        <item>Nicaragua|NI</item>
+        <item>Panamá|PA</item>
+        <item>Puerto Rico|PR</item>
+        <item>Paraguay|PY</item>
+        <item>Perú|PE</item>
+        <item>República Dominicana|DO</item>
+        <item>Uruguay|UY</item>
+        <item>Venezuela|VE</item>
     </string-array>
 </resources>
