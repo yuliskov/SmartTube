@@ -529,6 +529,7 @@
     <string name="player_long_speed_list">More speeds in the speed list</string>
     <string name="alt_app_icon">Alternative app icon (needs reboot)</string>
     <string name="network_stack">Prefer %s network stack</string>
+    <string name="player_network_stack">Network stack</string>
     <string name="cronet_desc">Cronet is the Chromium network stack. Cronet can reduce the latency and increase networking performance, which can help with buffering issues.</string>
     <string name="unlock_all_formats">Unlock all video formats</string>
     <string name="unlock_all_formats_desc">On some devices the firmware incorrectly reports some formats as unsupported, even if they are.\n
@@ -566,4 +567,5 @@
     <string name="subtitle_remember">Remember enabled subtitles per each channel</string>
     <string name="amazon_frame_drop_fix">Frame drop fix #2</string>
     <string name="amazon_frame_drop_fix_desc">Intended for Amazon Stick devices. May work on other devices too.</string>
+    <string name="default_stack_desc">Built-in network stack. This stack may have better stability in certain situations.</string>
 </resources>

@@ -61,6 +61,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendScreenOffTimeoutCategory(settingsPresenter);
         appendEndingTimeCategory(settingsPresenter);
         appendPixelRatioCategory(settingsPresenter);
+        appendNetworkEngineCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
         appendTweaksCategory(settingsPresenter);
 
@@ -243,24 +244,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
     private void appendTweaksCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.network_stack, "Cronet"),
-                getContext().getString(R.string.cronet_desc),
-                option -> {
-                    mPlayerTweaksData.setPlayerDataSource(option.isSelected() ? PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET :
-                            PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
-                    ExoMediaSourceFactory.unhold();
-                },
-                mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.network_stack, "OkHttp"),
-                getContext().getString(R.string.okhttp_desc),
-                option -> {
-                    mPlayerTweaksData.setPlayerDataSource(option.isSelected() ? PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP :
-                            PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
-                    ExoMediaSourceFactory.unhold();
-                },
-                mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP));
 
         // Disable long press on buggy controllers.
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
@@ -508,6 +491,36 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.action_repeat_mode), options);
+    }
+
+    private void appendNetworkEngineCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.default_lang),
+                getContext().getString(R.string.default_stack_desc),
+                option -> {
+                    mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
+                    ExoMediaSourceFactory.unhold();
+                },
+                mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT));
+
+        options.add(UiOptionItem.from("Cronet",
+                getContext().getString(R.string.cronet_desc),
+                option -> {
+                    mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
+                    ExoMediaSourceFactory.unhold();
+                },
+                mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET));
+
+        options.add(UiOptionItem.from("OkHttp",
+                getContext().getString(R.string.okhttp_desc),
+                option -> {
+                    mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
+                    ExoMediaSourceFactory.unhold();
+                },
+                mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP));
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_network_stack), options);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {

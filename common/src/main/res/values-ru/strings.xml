@@ -521,6 +521,7 @@
     <string name="player_long_speed_list">Длинный список скоростей</string>
     <string name="alt_app_icon">Альтернативный значок приложения (требуется перезагрузка)</string>
     <string name="network_stack">Предпочитать сетевой стек %s</string>
+    <string name="player_network_stack">Сетевой стек</string>
     <string name="cronet_desc">Cronet — это сетевой стек Chromium. Обычно быстрее других. Это может помочь с проблемами буферизации.</string>
     <string name="unlock_all_formats">Разблокировать все видео форматы</string>
     <string name="unlock_all_formats_desc">Разблокировать форматы, которые, вероятно, не поддерживаются вашим устройством.</string>
@@ -557,4 +558,5 @@
     <string name="subtitle_remember">Запомнить включенные субтитры для каждого канала</string>
     <string name="amazon_frame_drop_fix">Исправление выпадения кадров #2</string>
     <string name="amazon_frame_drop_fix_desc">Исправляет лаги на Amazon Stick и некоторых других устройствах.</string>
+    <string name="default_stack_desc">Встроенный сетевой стек. Этот стек может иметь лучшую стабильность в определенных ситуациях.</string>
 </resources>
