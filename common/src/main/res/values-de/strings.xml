@@ -529,6 +529,7 @@
     <string name="player_long_speed_list">Mehr Optionen für Video-Geschwindigkeit</string>
     <string name="alt_app_icon">Alternatives App-Symbol (Neustart erforderlich)</string>
     <string name="network_stack">Netzwerkstack %s bevorzugen</string>
+    <string name="player_network_stack">Netzwerkstack</string>
     <string name="cronet_desc">Cronet ist der Chromium-Netzwerkstack. Cronet kann die Latenz verringern und die Netzwerkleistung erhöhen, was bei Pufferproblemen helfen kann.</string>
     <string name="unlock_all_formats">Alle Video-Formate freischalten</string>
     <string name="unlock_all_formats_desc">Bei einigen Geräten meldet die Firmware fälschlicherweise, dass einige Formate nicht unterstützt werden, auch wenn sie es sind.\n
@@ -566,4 +567,5 @@
     <string name="subtitle_remember">Aktivierte Untertitel für jeden Kanal merken</string>
     <string name="amazon_frame_drop_fix">Frame-Drop-Fix #2</string>
     <string name="amazon_frame_drop_fix_desc">Gedacht für Amazon Stick-Geräte. Kann auch auf anderen Geräten funktionieren.</string>
+    <string name="default_stack_desc">Eingebauter Netzwerkstack. Dieser Stack könnte in bestimmten Situationen eine bessere Stabilität haben.</string>
 </resources>
