@@ -552,7 +552,7 @@
   <string name="network_stack">%s のネットワークスタックを優先</string>
   <string name="okhttp_desc">このネットワークスタックは最も遅いですが、安定性は良好です。</string>
   <string name="sony_frame_drop_fix">フレームドロップ修正 #1</string>
-  <string name="sony_frame_drop_fix_desc">Sony TVや他のいくつかの端末での遅延を修正。注: 音声の同期に問題がある可能性があります。</string>
+  <string name="sony_frame_drop_fix_desc">Sony TVやその他端末での遅延を修正。注: 音声の同期に問題がある可能性があります。</string>
   <string name="disable_stream_buffer">配信のバッファを無効化</string>
   <string name="disable_stream_buffer_desc">配信が大きく遅れている際の修正。注: 配信でラグが起きる可能性があります。</string>
   <string name="disable_ok_long_press">OKボタンの長押しを無効化</string>
@@ -560,4 +560,8 @@
   <string name="hide_settings_section">設定セクションを隠す (危険です!) </string>
   <string name="player_chapter_notification">チャプター間の迅速な移動を補助する通知を表示</string>
   <string name="subtitle_remember">チャンネルごとに字幕オンを記憶</string>
+  <string name="amazon_frame_drop_fix">フレームドロップ修正 #2</string>
+  <string name="amazon_frame_drop_fix_desc">Amazon Stick端末向け。他の端末でも効果がある場合があります。</string>
+  <string name="default_stack_desc">内蔵のネットワークスタック。特定の状況下では優れた安定性を有します。</string>
+  <string name="player_network_stack">ネットワークスタック</string>
 </resources>
