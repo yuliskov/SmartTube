@@ -566,4 +566,5 @@
   <string name="subtitle_remember">Recordar subtítulos activados por cada canal</string>
   <string name="amazon_frame_drop_fix_desc">Diseñado para dispositivos Amazon Stick. También puede funcionar en otros dispositivos.</string>
   <string name="amazon_frame_drop_fix">Corrección de caída de fotogramas #2</string>
+  <string name="default_stack_desc">Pila de red integrada. Esta pila puede tener mejor estabilidad en determinadas situaciones.</string>
 </resources>
