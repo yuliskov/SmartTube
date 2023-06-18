@@ -682,7 +682,7 @@ public class PlayerData extends DataChangeBase {
         mAudioLanguage = Helpers.parseStr(split, 52, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
         mSubtitleLanguage = Helpers.parseStr(split, 53, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
         String enabledSubtitles = Helpers.parseStr(split, 54);
-        mEnableSubtitlesForChannel = Helpers.parseBoolean(split, 55, false);
+        mEnableSubtitlesForChannel = Helpers.parseBoolean(split, 55, true);
 
         if (enabledSubtitles != null) {
             String[] channelsArr = Helpers.splitArray(enabledSubtitles);
