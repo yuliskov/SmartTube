@@ -510,6 +510,7 @@
     <string name="player_long_speed_list">Lebih banyak kecepatan di daftar</string>
     <string name="alt_app_icon">Ikon alternatif aplikasi (perlu reboot)</string>
     <string name="network_stack">Lebih suka %s tumpukan jaringan</string>
+    <string name="player_network_stack">Tumpukan jaringan</string>
     <string name="cronet_desc">Cronet adalah tumpukan jaringan Chromium. Cronet dapat mengurangi latensi dan meningkatkan kinerja jaringan, yang dapat membantu mengatasi masalah buffering.</string>
     <string name="unlock_all_formats">Membuka semua format vidio</string>
     <string name="unlock_all_formats_desc">Pada beberapa perangkat, firmware salah melaporkan beberapa format sebagai format yang tidak didukung, meskipun sebenarnya format tersebut didukung. (misalnya, smart TV 1080p cenderung melaporkan 4k sebagai tidak didukung).</string>
@@ -544,4 +545,5 @@
     <string name="content_block_stop_excluding_channel">Berhenti mengecualikan saluran ini dari SponsorBlock</string>
     <string name="player_chapter_notification">Menampilkan pemberitahuan untuk maju dengan cepat melalui chapters</string>
     <string name="subtitle_remember">Ingat subtitle yang diaktifkan untuk setiap saluran</string>
+    <string name="default_stack_desc">Tumpukan jaringan bawaan. Tumpukan ini mungkin memiliki stabilitas yang lebih baik dalam situasi tertentu.</string>
 </resources>
