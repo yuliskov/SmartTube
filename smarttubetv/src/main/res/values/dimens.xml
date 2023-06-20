@@ -64,6 +64,10 @@
     <dimen name="lb_preference_decor_title_margin_bottom">10dp</dimen>
     <dimen name="lb_preference_decor_title_margin_end">24dp</dimen>
 
+    <!-- Make in-app logo smaller -->
+    <dimen name="lb_browse_title_icon_height">50dp</dimen>
+    <dimen name="lb_browse_title_height">50dp</dimen>
+
     <!--
     Making my card's corner rounded. More info:
     https://stackoverflow.com/questions/42623677/android-tv-verticalgridfragment-shadow-dimension-and-color
