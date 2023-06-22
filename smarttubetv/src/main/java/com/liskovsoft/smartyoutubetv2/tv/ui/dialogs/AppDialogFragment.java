@@ -115,6 +115,10 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
 
     @Override
     public void show(List<OptionCategory> categories, String title, boolean isExpandable, boolean isTransparent, int id) {
+        if (!Utils.checkActivity(getActivity())) {
+            return;
+        }
+
         // Only root fragment could make other fragments in the stack transparent
         boolean stackIsEmpty = getChildFragmentManager() != null && getChildFragmentManager().getBackStackEntryCount() == 0;
         mIsTransparent = stackIsEmpty ? isTransparent : mIsTransparent;
