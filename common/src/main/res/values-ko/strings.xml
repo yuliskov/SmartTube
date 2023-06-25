@@ -562,4 +562,6 @@
   <string name="subtitle_remember">각 채널별로 활성화된 자막 기억</string>
   <string name="amazon_frame_drop_fix">프레임 드랍 수정 #2</string>
   <string name="amazon_frame_drop_fix_desc">아마존 스틱 장치용입니다. 다른 장치에서도 작동할 수 있습니다.</string>
+  <string name="player_network_stack">네트워크 스택</string>
+  <string name="default_stack_desc">내장 네트워크 스택입니다. 이 스택은 특정 상황에서 더 나은 안정성을 제공할 수 있습니다.</string>
 </resources>
