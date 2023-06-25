@@ -529,6 +529,7 @@
     <string name="player_long_speed_list">Più velocità nell\'elenco delle velocità</string>
     <string name="alt_app_icon">Icona alternativa dell\'app (è necessario riavviare)</string>
     <string name="network_stack">Preferisci stack di rete %s</string>
+    <string name="player_network_stack">Stack di rete</string>															  
     <string name="cronet_desc">Cronet è lo stack di rete di Chromium. Cronet può ridurre la latenza e aumentare le prestazioni di rete, il che può aiutare con problemi di buffering.</string>
     <string name="unlock_all_formats">Sblocca tutti i formati video</string>
     <string name="unlock_all_formats_desc">Su alcuni dispositivi il firmware riporta erroneamente alcuni formati come non supportati, anche se lo sono.\n
@@ -566,4 +567,5 @@
     <string name="subtitle_remember">Ricorda i sottotitoli abilitati per ogni canale</string>
     <string name="amazon_frame_drop_fix">Correggi salto fotogrammi #2</string>
     <string name="amazon_frame_drop_fix_desc">Destinato ai dispositivi Amazon Stick. Può funzionare anche su altri dispositivi.</string>
+    <string name="default_stack_desc">Stack di rete integrato. Questo stack può avere una migliore stabilità in determinate situazioni.</string>
 </resources>
