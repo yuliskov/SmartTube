@@ -32,7 +32,9 @@ class ControlBar extends LinearLayout {
     private int mChildMarginFromCenter;
     private OnChildFocusedListener mOnChildFocusedListener;
     // Can't set to static. Because we have two control bars.
-    int mLastFocusIndex = -1;
+    //int mLastFocusIndex = -1;
+    // MOD: Seamless navigation across two button bars.
+    private static int mLastFocusIndex = -1;
     boolean mDefaultFocusToMiddle = true;
     boolean mFocusRecovery = true;
 
