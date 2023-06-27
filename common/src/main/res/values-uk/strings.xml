@@ -559,5 +559,5 @@
     <string name="amazon_frame_drop_fix">Виправлення випадіння кадрів #2</string>
     <string name="amazon_frame_drop_fix_desc">Виправляє лагання на Amazon Stick та деяких інших пристроях.</string>
     <string name="default_stack_desc">Вбудований мережевий стек. Цей стек може мати кращу стабільність у певних ситуаціях.</string>
-    <string name="menu_item_postion">Позиція пункту меню</string>
+    <string name="item_postion">Позиція</string>
 </resources>

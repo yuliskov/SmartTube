@@ -255,6 +255,9 @@ public class MainUIData extends DataChangeBase {
     }
 
     public void setMenuItemIndex(int index, Integer menuItem) {
+        int currentIndex = getMenuItemIndex(menuItem);
+        index = index != 0 && currentIndex > index ? index + 1 : index;
+
         mMenuItemsOrdered.remove(menuItem);
 
         if (index <= mMenuItemsOrdered.size()) {

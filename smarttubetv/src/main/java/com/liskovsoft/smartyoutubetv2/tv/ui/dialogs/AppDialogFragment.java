@@ -223,6 +223,12 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     }
 
     @Override
+    public void clearBackstack() {
+        // this manager holds entire back stack
+        Helpers.setField(this, "mChildFragmentManager", null);
+    }
+
+    @Override
     public boolean isShown() {
         return isVisible() && getUserVisibleHint();
     }

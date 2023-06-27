@@ -8,6 +8,7 @@ public interface AppDialogView {
     void show(List<OptionCategory> categories, String title, boolean isExpandable, boolean isTransparent, int id);
     void finish();
     void goBack();
+    void clearBackstack();
     boolean isShown();
     boolean isTransparent();
     boolean isPaused();

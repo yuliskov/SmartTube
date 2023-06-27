@@ -100,39 +100,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendContextMenuItemsCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Map<Integer, Integer> menuNames = new HashMap<>();
-        menuNames.put(MainUIData.MENU_ITEM_EXIT_FROM_PIP, R.string.return_to_background_video);
-        menuNames.put(MainUIData.MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK, R.string.content_block_exclude_channel);
-        menuNames.put(MainUIData.MENU_ITEM_MARK_AS_WATCHED, R.string.mark_as_watched);
-        menuNames.put(MainUIData.MENU_ITEM_OPEN_CHANNEL, R.string.open_channel);
-        menuNames.put(MainUIData.MENU_ITEM_UPDATE_CHECK, R.string.check_for_updates);
-        menuNames.put(MainUIData.MENU_ITEM_CLEAR_HISTORY, R.string.clear_history);
-        menuNames.put(MainUIData.MENU_ITEM_TOGGLE_HISTORY, R.string.pause_history);
-        menuNames.put(MainUIData.MENU_ITEM_PLAYLIST_ORDER, R.string.playlist_order);
-        menuNames.put(MainUIData.MENU_ITEM_ADD_TO_QUEUE, R.string.add_remove_from_playback_queue);
-        menuNames.put(MainUIData.MENU_ITEM_SHOW_QUEUE, R.string.action_playback_queue);
-        menuNames.put(MainUIData.MENU_ITEM_STREAM_REMINDER, R.string.set_stream_reminder);
-        menuNames.put(MainUIData.MENU_ITEM_SUBSCRIBE, R.string.subscribe_unsubscribe_from_channel);
-        menuNames.put(MainUIData.MENU_ITEM_SAVE_PLAYLIST, R.string.save_remove_playlist);
-        menuNames.put(MainUIData.MENU_ITEM_CREATE_PLAYLIST, R.string.create_playlist);
-        menuNames.put(MainUIData.MENU_ITEM_ADD_TO_NEW_PLAYLIST, R.string.add_video_to_new_playlist);
-        menuNames.put(MainUIData.MENU_ITEM_ADD_TO_PLAYLIST, R.string.dialog_add_to_playlist);
-        menuNames.put(MainUIData.MENU_ITEM_RECENT_PLAYLIST, R.string.add_remove_from_recent_playlist);
-        menuNames.put(MainUIData.MENU_ITEM_PLAY_VIDEO, R.string.play_video);
-        menuNames.put(MainUIData.MENU_ITEM_PLAY_VIDEO_INCOGNITO, R.string.play_video_incognito);
-        menuNames.put(MainUIData.MENU_ITEM_NOT_INTERESTED, R.string.not_interested);
-        menuNames.put(MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY, R.string.remove_from_history);
-        menuNames.put(MainUIData.MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS, R.string.remove_from_subscriptions);
-        menuNames.put(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR, R.string.pin_unpin_from_sidebar);
-        menuNames.put(MainUIData.MENU_ITEM_SHARE_LINK, R.string.share_link);
-        menuNames.put(MainUIData.MENU_ITEM_SHARE_EMBED_LINK, R.string.share_embed_link);
-        menuNames.put(MainUIData.MENU_ITEM_SELECT_ACCOUNT, R.string.dialog_account_list);
-        menuNames.put(MainUIData.MENU_ITEM_MOVE_SECTION_UP, R.string.move_section_up);
-        menuNames.put(MainUIData.MENU_ITEM_MOVE_SECTION_DOWN, R.string.move_section_down);
-        menuNames.put(MainUIData.MENU_ITEM_RENAME_SECTION, R.string.rename_section);
-        menuNames.put(MainUIData.MENU_ITEM_OPEN_DESCRIPTION, R.string.action_video_info);
-        menuNames.put(MainUIData.MENU_ITEM_OPEN_PLAYLIST, R.string.open_playlist);
-
+        Map<Integer, Integer> menuNames = getMenuNames();
 
         for (Integer menuItem : mMainUIData.getMenuItemsOrdered()) {
             Integer nameResId = menuNames.get(menuItem);
@@ -159,73 +127,43 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         List<OptionItem> options = new ArrayList<>();
 
-        int size = mMainUIData.getMenuItemsOrdered().size();
+        Map<Integer, Integer> menuNames = getMenuNames();
+
+        Integer currentNameResId = menuNames.get(menuItem);
+
+        if (currentNameResId == null) {
+            return;
+        }
+
+        List<Integer> menuItemsOrdered = mMainUIData.getMenuItemsOrdered();
+        int size = menuItemsOrdered.size();
+        int currentIndex = mMainUIData.getMenuItemIndex(menuItem);
 
         for (int i = 0; i < size; i++) {
+            Integer nameResId = menuNames.get(menuItemsOrdered.get(i));
+
+            if (nameResId == null) {
+                continue;
+            }
+
             final int index = i;
-            options.add(UiOptionItem.from(String.valueOf(i + 1), optionItem -> {
+            options.add(UiOptionItem.from((i + 1) + " " + getContext().getString(nameResId), optionItem -> {
                 if (optionItem.isSelected()) {
                     mMainUIData.setMenuItemIndex(index, menuItem);
-                    // Exit to root
-                    dialog.goBack();
-                    dialog.goBack();
 
                     AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+                    settingsPresenter.clearBackstack();
                     appendContextMenuItemsCategory(settingsPresenter);
                     settingsPresenter.showDialog();
                 }
-            }, mMainUIData.getMenuItemIndex(menuItem) == i));
+            }, currentIndex == i));
         }
 
-        dialog.appendRadioCategory(getContext().getString(R.string.menu_item_postion), options);
+        String itemName = getContext().getString(currentNameResId);
+        dialog.appendRadioCategory(getContext().getString(R.string.item_postion) + " " + itemName, options);
 
         dialog.showDialog();
     }
-
-    //private void appendContextMenuItemsCategory(AppDialogPresenter settingsPresenter) {
-    //    List<OptionItem> options = new ArrayList<>();
-    //
-    //    for (int[] pair : new int[][] {
-    //            {R.string.content_block_exclude_channel, MainUIData.MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK},
-    //            {R.string.mark_as_watched, MainUIData.MENU_ITEM_MARK_AS_WATCHED},
-    //            {R.string.open_channel, MainUIData.MENU_ITEM_OPEN_CHANNEL},
-    //            {R.string.check_for_updates, MainUIData.MENU_ITEM_UPDATE_CHECK},
-    //            {R.string.clear_history, MainUIData.MENU_ITEM_CLEAR_HISTORY},
-    //            {R.string.pause_history, MainUIData.MENU_ITEM_TOGGLE_HISTORY},
-    //            {R.string.playlist_order, MainUIData.MENU_ITEM_PLAYLIST_ORDER},
-    //            {R.string.add_remove_from_playback_queue, MainUIData.MENU_ITEM_ADD_TO_QUEUE},
-    //            {R.string.action_playback_queue, MainUIData.MENU_ITEM_SHOW_QUEUE},
-    //            {R.string.set_stream_reminder, MainUIData.MENU_ITEM_STREAM_REMINDER},
-    //            {R.string.subscribe_unsubscribe_from_channel, MainUIData.MENU_ITEM_SUBSCRIBE},
-    //            {R.string.save_remove_playlist, MainUIData.MENU_ITEM_SAVE_PLAYLIST},
-    //            {R.string.create_playlist, MainUIData.MENU_ITEM_CREATE_PLAYLIST},
-    //            {R.string.add_video_to_new_playlist, MainUIData.MENU_ITEM_ADD_TO_NEW_PLAYLIST},
-    //            {R.string.dialog_add_to_playlist, MainUIData.MENU_ITEM_ADD_TO_PLAYLIST},
-    //            {R.string.add_remove_from_recent_playlist, MainUIData.MENU_ITEM_RECENT_PLAYLIST},
-    //            {R.string.play_video, MainUIData.MENU_ITEM_PLAY_VIDEO},
-    //            {R.string.play_video_incognito, MainUIData.MENU_ITEM_PLAY_VIDEO_INCOGNITO},
-    //            {R.string.not_interested, MainUIData.MENU_ITEM_NOT_INTERESTED},
-    //            {R.string.remove_from_history, MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY},
-    //            {R.string.remove_from_subscriptions, MainUIData.MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS},
-    //            {R.string.pin_unpin_from_sidebar, MainUIData.MENU_ITEM_PIN_TO_SIDEBAR},
-    //            {R.string.share_link, MainUIData.MENU_ITEM_SHARE_LINK},
-    //            {R.string.share_embed_link, MainUIData.MENU_ITEM_SHARE_EMBED_LINK},
-    //            {R.string.dialog_account_list, MainUIData.MENU_ITEM_SELECT_ACCOUNT},
-    //            {R.string.move_section_up, MainUIData.MENU_ITEM_MOVE_SECTION_UP},
-    //            {R.string.move_section_down, MainUIData.MENU_ITEM_MOVE_SECTION_DOWN},
-    //            {R.string.rename_section, MainUIData.MENU_ITEM_RENAME_SECTION},
-    //            {R.string.action_video_info, MainUIData.MENU_ITEM_OPEN_DESCRIPTION}}) {
-    //        options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
-    //            if (optionItem.isSelected()) {
-    //                mMainUIData.enableMenuItem(pair[1]);
-    //            } else {
-    //                mMainUIData.disableMenuItem(pair[1]);
-    //            }
-    //        }, mMainUIData.isMenuItemEnabled(pair[1])));
-    //    }
-    //
-    //    settingsPresenter.appendCheckedCategory(getContext().getString(R.string.context_menu), options);
-    //}
 
     private void appendVariousButtonsCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
@@ -297,20 +235,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         OptionCategory category = AppDialogUtil.createBackgroundPlaybackCategory(getContext(), mPlayerData, mGeneralData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
-
-    //private void appendBackgroundPlaybackActivationCategory(AppDialogPresenter settingsPresenter) {
-    //    List<OptionItem> options = new ArrayList<>();
-    //
-    //    options.add(UiOptionItem.from("HOME",
-    //            option -> mGeneralData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME),
-    //            mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME));
-    //
-    //    options.add(UiOptionItem.from("HOME/BACK",
-    //            option -> mGeneralData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK),
-    //            mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK));
-    //
-    //    settingsPresenter.appendRadioCategory(getContext().getString(R.string.background_playback_activation), options);
-    //}
 
     private void appendKeyRemappingCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
@@ -666,23 +590,39 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         );
     }
 
-    //private void appendOpenVPNManager(AppDialogPresenter settingsPresenter, List<OptionItem> options) {
-    //    OpenVPNDialog openVPNDialog = new OpenVPNDialog(getContext());
-    //
-    //    if (getContext() instanceof MotherActivity) {
-    //        ((MotherActivity) getContext()).addOnPermissions(openVPNDialog);
-    //    }
-    //
-    //    if (openVPNDialog.isOpenVPNSupported()) {
-    //        options.add(UiOptionItem.from(getContext().getString(R.string.enable_openvpn),
-    //                option -> {
-    //                    mGeneralData.enableVPN(option.isSelected());
-    //                    openVPNDialog.enable(option.isSelected());
-    //                    if (option.isSelected()) {
-    //                        settingsPresenter.closeDialog();
-    //                    }
-    //                },
-    //                mGeneralData.isVPNEnabled()));
-    //    }
-    //}
+    private Map<Integer, Integer> getMenuNames() {
+        Map<Integer, Integer> menuNames = new HashMap<>();
+        menuNames.put(MainUIData.MENU_ITEM_EXIT_FROM_PIP, R.string.return_to_background_video);
+        menuNames.put(MainUIData.MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK, R.string.content_block_exclude_channel);
+        menuNames.put(MainUIData.MENU_ITEM_MARK_AS_WATCHED, R.string.mark_as_watched);
+        menuNames.put(MainUIData.MENU_ITEM_OPEN_CHANNEL, R.string.open_channel);
+        menuNames.put(MainUIData.MENU_ITEM_UPDATE_CHECK, R.string.check_for_updates);
+        menuNames.put(MainUIData.MENU_ITEM_CLEAR_HISTORY, R.string.clear_history);
+        menuNames.put(MainUIData.MENU_ITEM_TOGGLE_HISTORY, R.string.pause_history);
+        menuNames.put(MainUIData.MENU_ITEM_PLAYLIST_ORDER, R.string.playlist_order);
+        menuNames.put(MainUIData.MENU_ITEM_ADD_TO_QUEUE, R.string.add_remove_from_playback_queue);
+        menuNames.put(MainUIData.MENU_ITEM_SHOW_QUEUE, R.string.action_playback_queue);
+        menuNames.put(MainUIData.MENU_ITEM_STREAM_REMINDER, R.string.set_stream_reminder);
+        menuNames.put(MainUIData.MENU_ITEM_SUBSCRIBE, R.string.subscribe_unsubscribe_from_channel);
+        menuNames.put(MainUIData.MENU_ITEM_SAVE_PLAYLIST, R.string.save_remove_playlist);
+        menuNames.put(MainUIData.MENU_ITEM_CREATE_PLAYLIST, R.string.create_playlist);
+        menuNames.put(MainUIData.MENU_ITEM_ADD_TO_NEW_PLAYLIST, R.string.add_video_to_new_playlist);
+        menuNames.put(MainUIData.MENU_ITEM_ADD_TO_PLAYLIST, R.string.dialog_add_to_playlist);
+        menuNames.put(MainUIData.MENU_ITEM_RECENT_PLAYLIST, R.string.add_remove_from_recent_playlist);
+        menuNames.put(MainUIData.MENU_ITEM_PLAY_VIDEO, R.string.play_video);
+        menuNames.put(MainUIData.MENU_ITEM_PLAY_VIDEO_INCOGNITO, R.string.play_video_incognito);
+        menuNames.put(MainUIData.MENU_ITEM_NOT_INTERESTED, R.string.not_interested);
+        menuNames.put(MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY, R.string.remove_from_history);
+        menuNames.put(MainUIData.MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS, R.string.remove_from_subscriptions);
+        menuNames.put(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR, R.string.pin_unpin_from_sidebar);
+        menuNames.put(MainUIData.MENU_ITEM_SHARE_LINK, R.string.share_link);
+        menuNames.put(MainUIData.MENU_ITEM_SHARE_EMBED_LINK, R.string.share_embed_link);
+        menuNames.put(MainUIData.MENU_ITEM_SELECT_ACCOUNT, R.string.dialog_account_list);
+        menuNames.put(MainUIData.MENU_ITEM_MOVE_SECTION_UP, R.string.move_section_up);
+        menuNames.put(MainUIData.MENU_ITEM_MOVE_SECTION_DOWN, R.string.move_section_down);
+        menuNames.put(MainUIData.MENU_ITEM_RENAME_SECTION, R.string.rename_section);
+        menuNames.put(MainUIData.MENU_ITEM_OPEN_DESCRIPTION, R.string.action_video_info);
+        menuNames.put(MainUIData.MENU_ITEM_OPEN_PLAYLIST, R.string.open_playlist);
+        return menuNames;
+    }
 }
