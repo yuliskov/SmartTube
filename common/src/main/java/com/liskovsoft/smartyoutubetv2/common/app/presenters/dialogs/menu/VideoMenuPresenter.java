@@ -33,7 +33,9 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VideoMenuPresenter extends BaseMenuPresenter {
     private static final String TAG = VideoMenuPresenter.class.getSimpleName();
@@ -69,6 +71,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsMarkAsWatchedButtonEnabled;
     private VideoMenuCallback mCallback;
     private List<PlaylistInfo> mPlaylistInfos;
+    private final Map<Integer, MenuAction> mMenuMapping = new HashMap<>();
 
     public interface VideoMenuCallback {
         int ACTION_UNDEFINED = 0;
@@ -80,12 +83,32 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         void onItemAction(Video videoItem, int action);
     }
 
+    private static class MenuAction {
+        private final Runnable mAction;
+        private final boolean mIsAuth;
+
+        public MenuAction(Runnable action, boolean isAuth) {
+            this.mAction = action;
+            this.mIsAuth = isAuth;
+        }
+
+        public void run() {
+            mAction.run();
+        }
+
+        public boolean isAuth() {
+            return mIsAuth;
+        }
+    }
+
     private VideoMenuPresenter(Context context) {
         super(context);
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemService();
         mServiceManager = MediaServiceManager.instance();
         mDialogPresenter = AppDialogPresenter.instance(context);
+
+        initMenuMapping();
     }
 
     public static VideoMenuPresenter instance(Context context) {
@@ -148,37 +171,46 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         appendReturnToBackgroundVideoButton();
-        appendPlayVideoButton();
-        appendPlayVideoIncognitoButton();
+
+        for (Integer menuItem : MainUIData.instance(getContext()).getMenuItemsOrdered()) {
+            MenuAction menuAction = mMenuMapping.get(menuItem);
+            if (menuAction != null) {
+                menuAction.run();
+            }
+        }
+
+        //appendReturnToBackgroundVideoButton();
+        //appendPlayVideoButton();
+        //appendPlayVideoIncognitoButton();
+        ////appendNotInterestedButton();
+        ////appendRemoveFromSubscriptionsButton();
+        //appendRemoveFromHistoryButton();
+        //appendStreamReminderButton();
+        //appendAddToRecentPlaylistButton();
+        //appendAddToPlaylistButton();
+        //appendCreatePlaylistButton();
+        //appendAddToNewPlaylistButton();
         //appendNotInterestedButton();
+        //appendNotRecommendChannelButton();
         //appendRemoveFromSubscriptionsButton();
-        appendRemoveFromHistoryButton();
-        appendStreamReminderButton();
-        appendAddToRecentPlaylistButton();
-        appendAddToPlaylistButton();
-        appendCreatePlaylistButton();
-        appendAddToNewPlaylistButton();
-        appendNotInterestedButton();
-        appendNotRecommendChannelButton();
-        appendRemoveFromSubscriptionsButton();
-        appendMarkAsWatchedButton();
-        appendRenamePlaylistButton();
-        appendPlaylistOrderButton();
-        appendAddToPlaybackQueueButton();
-        appendShowPlaybackQueueButton();
-        appendOpenChannelButton();
-        //appendOpenChannelUploadsButton();
-        appendOpenPlaylistButton();
-        appendSubscribeButton();
-        appendToggleExcludeFromContentBlockButton();
-        appendTogglePinVideoToSidebarButton();
-        appendSaveRemovePlaylistButton();
-        appendOpenDescriptionButton();
-        appendShareLinkButton();
-        appendShareEmbedLinkButton();
-        appendAccountSelectionButton();
-        appendToggleHistoryButton();
-        appendClearHistoryButton();
+        //appendMarkAsWatchedButton();
+        //appendRenamePlaylistButton();
+        //appendPlaylistOrderButton();
+        //appendAddToPlaybackQueueButton();
+        //appendShowPlaybackQueueButton();
+        //appendOpenChannelButton();
+        ////appendOpenChannelUploadsButton();
+        //appendOpenPlaylistButton();
+        //appendSubscribeButton();
+        //appendToggleExcludeFromContentBlockButton();
+        //appendTogglePinVideoToSidebarButton();
+        //appendSaveRemovePlaylistButton();
+        //appendOpenDescriptionButton();
+        //appendShareLinkButton();
+        //appendShareEmbedLinkButton();
+        //appendAccountSelectionButton();
+        //appendToggleHistoryButton();
+        //appendClearHistoryButton();
 
         if (!mDialogPresenter.isEmpty()) {
             String title = mVideo != null ? mVideo.title : null;
@@ -193,19 +225,28 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         appendReturnToBackgroundVideoButton();
-        appendPlayVideoButton();
-        appendPlayVideoIncognitoButton();
-        appendMarkAsWatchedButton();
-        appendAddToPlaybackQueueButton();
-        appendShowPlaybackQueueButton();
-        appendOpenChannelButton();
-        appendOpenPlaylistButton();
-        appendToggleExcludeFromContentBlockButton();
-        appendTogglePinVideoToSidebarButton();
-        appendOpenDescriptionButton();
-        appendShareLinkButton();
-        appendShareEmbedLinkButton();
-        appendAccountSelectionButton();
+
+        for (Integer menuItem : MainUIData.instance(getContext()).getMenuItemsOrdered()) {
+            MenuAction menuAction = mMenuMapping.get(menuItem);
+            if (menuAction != null && !menuAction.isAuth()) {
+                menuAction.run();
+            }
+        }
+
+        //appendReturnToBackgroundVideoButton();
+        //appendPlayVideoButton();
+        //appendPlayVideoIncognitoButton();
+        //appendMarkAsWatchedButton();
+        //appendAddToPlaybackQueueButton();
+        //appendShowPlaybackQueueButton();
+        //appendOpenChannelButton();
+        //appendOpenPlaylistButton();
+        //appendToggleExcludeFromContentBlockButton();
+        //appendTogglePinVideoToSidebarButton();
+        //appendOpenDescriptionButton();
+        //appendShareLinkButton();
+        //appendShareEmbedLinkButton();
+        //appendAccountSelectionButton();
 
         if (mDialogPresenter.isEmpty()) {
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
@@ -779,5 +820,37 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsShowPlaybackQueueButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHOW_QUEUE);
         mIsPlaylistOrderButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAYLIST_ORDER);
         mIsMarkAsWatchedButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_MARK_AS_WATCHED);
+    }
+
+    private void initMenuMapping() {
+        mMenuMapping.clear();
+
+        mMenuMapping.put(MainUIData.MENU_ITEM_PLAY_VIDEO, new MenuAction(this::appendPlayVideoButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_PLAY_VIDEO_INCOGNITO, new MenuAction(this::appendPlayVideoIncognitoButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY, new MenuAction(this::appendRemoveFromHistoryButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_STREAM_REMINDER, new MenuAction(this::appendStreamReminderButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_RECENT_PLAYLIST, new MenuAction(this::appendAddToRecentPlaylistButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_ADD_TO_PLAYLIST, new MenuAction(this::appendAddToPlaylistButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_CREATE_PLAYLIST, new MenuAction(this::appendCreatePlaylistButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_ADD_TO_NEW_PLAYLIST, new MenuAction(this::appendAddToNewPlaylistButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_NOT_INTERESTED,
+                new MenuAction(() -> {appendNotInterestedButton(); appendNotRecommendChannelButton();}, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS, new MenuAction(this::appendRemoveFromSubscriptionsButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_MARK_AS_WATCHED, new MenuAction(this::appendMarkAsWatchedButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_PLAYLIST_ORDER, new MenuAction(this::appendPlaylistOrderButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_ADD_TO_QUEUE, new MenuAction(this::appendAddToPlaybackQueueButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_SHOW_QUEUE, new MenuAction(this::appendShowPlaybackQueueButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_CHANNEL, new MenuAction(this::appendOpenChannelButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_PLAYLIST, new MenuAction(this::appendOpenPlaylistButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_SUBSCRIBE, new MenuAction(this::appendSubscribeButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK, new MenuAction(this::appendToggleExcludeFromContentBlockButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR, new MenuAction(this::appendTogglePinVideoToSidebarButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_SAVE_PLAYLIST, new MenuAction(this::appendSaveRemovePlaylistButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_DESCRIPTION, new MenuAction(this::appendOpenDescriptionButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_SHARE_LINK, new MenuAction(this::appendShareLinkButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_SHARE_EMBED_LINK, new MenuAction(this::appendShareEmbedLinkButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_SELECT_ACCOUNT, new MenuAction(this::appendAccountSelectionButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_TOGGLE_HISTORY, new MenuAction(this::appendToggleHistoryButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_CLEAR_HISTORY, new MenuAction(this::appendClearHistoryButton, true));
     }
 }

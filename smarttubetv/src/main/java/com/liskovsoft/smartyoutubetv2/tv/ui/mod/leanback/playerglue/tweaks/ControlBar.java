@@ -33,17 +33,19 @@ class ControlBar extends LinearLayout {
     private OnChildFocusedListener mOnChildFocusedListener;
     // Can't set to static. Because we have two control bars.
     //int mLastFocusIndex = -1;
-    // MOD: Seamless navigation across two button bars.
-    private static int mLastFocusIndex = -1;
+    // MOD: Maintain global focus index to seamless navigation between control rows.
+    static int mLastFocusIndex = -1;
     boolean mDefaultFocusToMiddle = true;
     boolean mFocusRecovery = true;
 
     public ControlBar(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mLastFocusIndex = -1; // MOD: reset global focus index
     }
 
     public ControlBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        mLastFocusIndex = -1; // MOD: reset global focus index
     }
 
     void setDefaultFocusToMiddle(boolean defaultFocusToMiddle) {

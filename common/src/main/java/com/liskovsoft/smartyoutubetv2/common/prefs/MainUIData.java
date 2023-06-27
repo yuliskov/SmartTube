@@ -8,6 +8,8 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class MainUIData extends DataChangeBase {
@@ -48,6 +50,8 @@ public class MainUIData extends DataChangeBase {
     public static final int MENU_ITEM_PLAY_VIDEO_INCOGNITO = 0b100000000000000000000000000;
     public static final int MENU_ITEM_MARK_AS_WATCHED = 0b1000000000000000000000000000;
     public static final int MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK = 0b10000000000000000000000000000;
+    public static final int MENU_ITEM_OPEN_PLAYLIST = 0b100000000000000000000000000000;
+    public static final int MENU_ITEM_EXIT_FROM_PIP = 0b1000000000000000000000000000000; // Not saved! Exceeds int limit
     public static final int TOP_BUTTON_BROWSE_ACCOUNTS = 0b1;
     public static final int TOP_BUTTON_CHANGE_LANGUAGE = 0b10;
     public static final int TOP_BUTTON_SEARCH = 0b100;
@@ -55,9 +59,13 @@ public class MainUIData extends DataChangeBase {
     public static final int MENU_ITEM_DEFAULT = MENU_ITEM_PIN_TO_SIDEBAR | MENU_ITEM_NOT_INTERESTED | MENU_ITEM_REMOVE_FROM_HISTORY |
             MENU_ITEM_MOVE_SECTION_UP | MENU_ITEM_MOVE_SECTION_DOWN | MENU_ITEM_RENAME_SECTION | MENU_ITEM_SAVE_PLAYLIST |
             MENU_ITEM_ADD_TO_PLAYLIST | MENU_ITEM_SUBSCRIBE | MENU_ITEM_CREATE_PLAYLIST | MENU_ITEM_STREAM_REMINDER |
-            MENU_ITEM_PLAYLIST_ORDER | MENU_ITEM_CLEAR_HISTORY | MENU_ITEM_OPEN_CHANNEL | MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS;
-    //public static final int MENU_ITEM_DEFAULT = Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_NEW_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT |
-    //        MENU_ITEM_PLAY_VIDEO | MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_SHARE_EMBED_LINK); // all except these items
+            MENU_ITEM_PLAYLIST_ORDER | MENU_ITEM_CLEAR_HISTORY | MENU_ITEM_OPEN_CHANNEL | MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS | MENU_ITEM_OPEN_PLAYLIST;
+    private static final Integer[] MENU_ITEM_DEFAULT_ORDER = { MENU_ITEM_PLAY_VIDEO, MENU_ITEM_PLAY_VIDEO_INCOGNITO, MENU_ITEM_REMOVE_FROM_HISTORY, MENU_ITEM_STREAM_REMINDER, MENU_ITEM_RECENT_PLAYLIST,
+            MENU_ITEM_ADD_TO_PLAYLIST, MENU_ITEM_CREATE_PLAYLIST, MENU_ITEM_ADD_TO_NEW_PLAYLIST, MENU_ITEM_NOT_INTERESTED, MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS,
+            MENU_ITEM_MARK_AS_WATCHED, MENU_ITEM_PLAYLIST_ORDER, MENU_ITEM_ADD_TO_QUEUE, MENU_ITEM_SHOW_QUEUE, MENU_ITEM_OPEN_CHANNEL, MENU_ITEM_OPEN_PLAYLIST,
+            MENU_ITEM_SUBSCRIBE, MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK, MENU_ITEM_PIN_TO_SIDEBAR, MENU_ITEM_SAVE_PLAYLIST, MENU_ITEM_OPEN_DESCRIPTION,
+            MENU_ITEM_SHARE_LINK, MENU_ITEM_SHARE_EMBED_LINK, MENU_ITEM_SELECT_ACCOUNT, MENU_ITEM_TOGGLE_HISTORY, MENU_ITEM_CLEAR_HISTORY
+    };
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
@@ -79,6 +87,7 @@ public class MainUIData extends DataChangeBase {
     private int mMenuItems;
     private int mTopButtons;
     private int mThumbQuality;
+    private List<Integer> mMenuItemsOrdered;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -245,6 +254,26 @@ public class MainUIData extends DataChangeBase {
         return (mMenuItems & menuItems) == menuItems;
     }
 
+    public void setMenuItemIndex(int index, Integer menuItem) {
+        mMenuItemsOrdered.remove(menuItem);
+
+        if (index <= mMenuItemsOrdered.size()) {
+            mMenuItemsOrdered.add(index, menuItem);
+        } else {
+            mMenuItemsOrdered.add(menuItem);
+        }
+
+        persistState();
+    }
+
+    public int getMenuItemIndex(int menuItem) {
+        return mMenuItemsOrdered.indexOf(menuItem);
+    }
+
+    public List<Integer> getMenuItemsOrdered() {
+        return Collections.unmodifiableList(mMenuItemsOrdered);
+    }
+
     public void enableTopButton(int button) {
         mTopButtons |= button;
         persistState();
@@ -320,7 +349,15 @@ public class MainUIData extends DataChangeBase {
         // 14
         mThumbQuality = Helpers.parseInt(split, 15, ClickbaitRemover.THUMB_QUALITY_DEFAULT);
         mIsCardMultilineSubtitleEnabled = Helpers.parseBoolean(split, 16, true);
+        mMenuItemsOrdered = Helpers.parseIntList(split, 17);
 
+        for (Integer menuItem : MENU_ITEM_DEFAULT_ORDER) {
+            if (!mMenuItemsOrdered.contains(menuItem)) {
+                mMenuItemsOrdered.add(menuItem);
+            }
+        }
+
+        cleanupItems();
         updateDefaultValues();
     }
 
@@ -330,7 +367,7 @@ public class MainUIData extends DataChangeBase {
                 mVideoGridScale, mUIScale, mColorSchemeIndex, mIsCardMultilineTitleEnabled,
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
                 mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,
-                null, mThumbQuality, mIsCardMultilineSubtitleEnabled));
+                null, mThumbQuality, mIsCardMultilineSubtitleEnabled, Helpers.mergeList(mMenuItemsOrdered)));
 
         super.persistState();
     }
@@ -359,5 +396,10 @@ public class MainUIData extends DataChangeBase {
             int bits = 32 - 27;
             mMenuItems = mMenuItems << bits >>> bits; // remove auto enabled bits
         }
+    }
+
+    private void cleanupItems() {
+        List<Integer> defaultOrder = Arrays.asList(MENU_ITEM_DEFAULT_ORDER);
+        Helpers.removeIf(mMenuItemsOrdered, item -> !defaultOrder.contains(item));
     }
 }

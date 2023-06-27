@@ -568,4 +568,5 @@
     <string name="amazon_frame_drop_fix">Frame drop fix #2</string>
     <string name="amazon_frame_drop_fix_desc">Intended for Amazon Stick devices. May work on other devices too.</string>
     <string name="default_stack_desc">Built-in network stack. This stack may have better stability in certain situations.</string>
+    <string name="menu_item_postion">Menu item position</string>
 </resources>
