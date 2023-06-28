@@ -564,4 +564,5 @@
   <string name="amazon_frame_drop_fix_desc">Amazon Stick端末向け。他の端末でも効果がある場合があります。</string>
   <string name="default_stack_desc">内蔵のネットワークスタック。特定の状況下では優れた安定性を有します。</string>
   <string name="player_network_stack">ネットワークスタック</string>
+  <string name="item_postion">位置の設定: </string>
 </resources>
