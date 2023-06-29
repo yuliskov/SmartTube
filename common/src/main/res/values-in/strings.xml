@@ -547,4 +547,5 @@
     <string name="subtitle_remember">Ingat subtitle yang diaktifkan untuk setiap saluran</string>
     <string name="default_stack_desc">Tumpukan jaringan bawaan. Tumpukan ini mungkin memiliki stabilitas yang lebih baik dalam situasi tertentu.</string>
     <string name="item_postion">Posisi</string>
+    <string name="player_screen_off_dimming">Jumlah peredupan</string>
 </resources>
