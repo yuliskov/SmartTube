@@ -76,6 +76,7 @@ public class PlayerTweaksData {
     private boolean mIsSectionPlaylistEnabled;
     private boolean mIsScreenOffTimeoutEnabled;
     private int mScreenOffTimeoutSec;
+    private int mScreenOffDimmingPercents;
     private boolean mIsUIAnimationsEnabled;
     private boolean mIsLikesCounterEnabled;
     private boolean mIsChapterNotificationEnabled;
@@ -397,6 +398,15 @@ public class PlayerTweaksData {
         return mScreenOffTimeoutSec;
     }
 
+    public void setScreenOffDimmingPercents(int percents) {
+        mScreenOffDimmingPercents = percents;
+        persistData();
+    }
+
+    public int getScreenOffDimmingPercents() {
+        return mScreenOffDimmingPercents;
+    }
+
     public void enableUIAnimations(boolean enable) {
         mIsUIAnimationsEnabled = enable;
         persistData();
@@ -469,6 +479,7 @@ public class PlayerTweaksData {
         mIsUIAnimationsEnabled = Helpers.parseBoolean(split, 34, false);
         mIsLikesCounterEnabled = Helpers.parseBoolean(split, 35, true);
         mIsChapterNotificationEnabled = Helpers.parseBoolean(split, 36, false);
+        mScreenOffDimmingPercents = Helpers.parseInt(split, 37, 100);
 
         updateDefaultValues();
     }
@@ -483,7 +494,8 @@ public class PlayerTweaksData {
                 mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio, mIsQualityInfoBitrateEnabled,
                 mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
-                mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled
+                mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
+                mScreenOffDimmingPercents
         ));
     }
 

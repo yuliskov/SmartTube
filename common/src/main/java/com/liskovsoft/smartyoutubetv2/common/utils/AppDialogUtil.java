@@ -49,6 +49,7 @@ public class AppDialogUtil {
     private static final int AUDIO_DELAY_ID = 137;
     private static final int AUDIO_LANGUAGE_ID = 138;
     private static final int PLAYER_SCREEN_TIMEOUT_ID = 139;
+    private static final int PLAYER_SCREEN_DIMMING_ID = 140;
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
@@ -493,6 +494,22 @@ public class AppDialogUtil {
         String videoRotateTitle = context.getString(R.string.video_rotate);
 
         return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, videoRotateTitle, options);
+    }
+
+    public static OptionCategory createPlayerScreenOffDimmingCategory(Context context, PlayerTweaksData data) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from("50%",
+                optionItem -> data.setScreenOffDimmingPercents(50),
+                data.getScreenOffDimmingPercents() == 50));
+
+        options.add(UiOptionItem.from("100%",
+                optionItem -> data.setScreenOffDimmingPercents(100),
+                data.getScreenOffDimmingPercents() == 100));
+
+        String title = context.getString(R.string.player_screen_off_dimming);
+
+        return OptionCategory.from(PLAYER_SCREEN_DIMMING_ID, OptionCategory.TYPE_RADIO, title, options);
     }
 
     public static OptionCategory createPlayerScreenOffTimeoutCategory(Context context, PlayerTweaksData data) {

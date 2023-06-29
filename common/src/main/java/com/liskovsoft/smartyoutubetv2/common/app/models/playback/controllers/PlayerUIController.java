@@ -523,7 +523,9 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     public void onButtonLongClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_screen_off_timeout) {
             AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
+            OptionCategory dimmingCategory = AppDialogUtil.createPlayerScreenOffDimmingCategory(getActivity(), mPlayerTweaksData);
             OptionCategory category = AppDialogUtil.createPlayerScreenOffTimeoutCategory(getActivity(), mPlayerTweaksData);
+            settingsPresenter.appendRadioCategory(dimmingCategory.title, dimmingCategory.options);
             settingsPresenter.appendRadioCategory(category.title, category.options);
             settingsPresenter.showDialog(() -> {
                 getPlayer().setButtonState(buttonId, mPlayerTweaksData.isScreenOffTimeoutEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
