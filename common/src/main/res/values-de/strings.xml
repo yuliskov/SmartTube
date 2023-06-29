@@ -569,5 +569,7 @@
     <string name="amazon_frame_drop_fix_desc">Gedacht für Amazon Stick-Geräte. Kann auch auf anderen Geräten funktionieren.</string>
     <string name="default_stack_desc">Eingebauter Netzwerkstack. Dieser Stack könnte in bestimmten Situationen eine bessere Stabilität haben.</string>
     <string name="item_postion">Position von</string>
-    <string name="player_screen_off_dimming">Bildschirm-Dimmwert</string>
+    <string name="player_screen_off_dimming">Dimmwert für Bildschirm aus</string>
+    <string name="screensaver_timout">Bildschirmschoner-Timeout</string>
+    <string name="screensaver_dimming">Dimmwert für Bildschirmschoner</string>
 </resources>
