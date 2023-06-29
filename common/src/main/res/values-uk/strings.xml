@@ -561,4 +561,6 @@
     <string name="default_stack_desc">Вбудований мережевий стек. Цей стек може мати кращу стабільність у певних ситуаціях.</string>
     <string name="item_postion">Позиція</string>
     <string name="player_screen_off_dimming">Величина затемнення екрану</string>
+    <string name="screensaver_timout">Тайм-аут увімкнення заставки</string>
+    <string name="screensaver_dimming">Величина затемнення заставки</string>
 </resources>

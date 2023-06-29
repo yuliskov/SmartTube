@@ -21,9 +21,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class GeneralData {
-    public static final int SCREEN_DIMMING_NEVER = 0;
-    public static final int SCREEN_DIMMING_MODE_NORMAL = 0;
-    public static final int SCREEN_DIMMING_MODE_SCREEN_OFF = 1;
+    public static final int SCREENSAVER_TIMEOUT_NEVER = 0;
+    public static final int SCREENSAVER_MODE_NORMAL = 0;
+    public static final int SCREENSAVER_MODE_SCREEN_OFF = 1;
     private static final String GENERAL_DATA = "general_data";
     public static final int EXIT_NONE = 0;
     public static final int EXIT_DOUBLE_BACK = 1;
@@ -45,8 +45,8 @@ public class GeneralData {
     private boolean mIsHideShortsFromSubscriptionsEnabled;
     private boolean mIsHideUpcomingEnabled;
     private boolean mIsRemapFastForwardToNextEnabled;
-    private int mScreenDimmingTimeoutMs;
-    private int mScreenDimmingMode;
+    private int mScreensaverTimeoutMs;
+    private int mScreensaverMode;
     private int mTimeFormat;
     private boolean mIsProxyEnabled;
     private boolean mIsBridgeCheckEnabled;
@@ -473,22 +473,22 @@ public class GeneralData {
         return mIsRemapChannelUpToSearchEnabled;
     }
 
-    public void setScreenDimmingTimeoutMs(int timeoutMs) {
-        mScreenDimmingTimeoutMs = timeoutMs;
+    public void setScreensaverTimeoutMs(int timeoutMs) {
+        mScreensaverTimeoutMs = timeoutMs;
         persistState();
     }
 
-    public int getScreenDimmingTimeoutMs() {
-        return mScreenDimmingTimeoutMs;
+    public int getScreensaverTimeoutMs() {
+        return mScreensaverTimeoutMs;
     }
 
-    public void setScreenDimmingMode(int mode) {
-        mScreenDimmingMode = mode;
+    public void setScreensaverMode(int mode) {
+        mScreensaverMode = mode;
         persistState();
     }
 
-    public int getScreenDimmingMode() {
-        return mScreenDimmingMode;
+    public int getScreensaverMode() {
+        return mScreensaverMode;
     }
 
     public void setTimeFormat(int format) {
@@ -761,8 +761,8 @@ public class GeneralData {
         mSettingsPassword = Helpers.parseStr(split, 33);
         mIsChildModeEnabled = Helpers.parseBoolean(split, 34, false);
         mIsHistoryEnabled = Helpers.parseBoolean(split, 35, true);
-        mScreenDimmingTimeoutMs = Helpers.parseInt(split, 36, 60 * 1_000);
-        mScreenDimmingMode = Helpers.parseInt(split, 37, SCREEN_DIMMING_MODE_NORMAL);
+        mScreensaverTimeoutMs = Helpers.parseInt(split, 36, 60 * 1_000);
+        mScreensaverMode = Helpers.parseInt(split, 37, SCREENSAVER_MODE_NORMAL);
         mIsAltAppIconEnabled = Helpers.parseBoolean(split, 38, false);
         mVersionCode = Helpers.parseInt(split, 39, -1);
         mIsSelectChannelSectionEnabled = Helpers.parseBoolean(split, 40, true);
@@ -829,8 +829,7 @@ public class GeneralData {
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
-                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
-                mScreenDimmingTimeoutMs, mScreenDimmingMode, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
+                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled, mScreensaverTimeoutMs, mScreensaverMode, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
                 mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled));
     }
 }

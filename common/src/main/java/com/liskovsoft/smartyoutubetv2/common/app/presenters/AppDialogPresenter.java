@@ -151,8 +151,8 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         showDialog(dialogTitle, null);
     }
 
-    public void showDialog(Runnable onClose) {
-        showDialog(null, onClose);
+    public void showDialog(Runnable onFinish) {
+        showDialog(null, onFinish);
     }
 
     public void showDialog(String dialogTitle, Runnable onFinish) {

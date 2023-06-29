@@ -21,7 +21,7 @@ import java.lang.ref.WeakReference;
 
 public class ScreensaverManager {
     private static final String TAG = ScreensaverManager.class.getSimpleName();
-    private static final int MODE_DIMMING = 0;
+    private static final int MODE_SCREENSAVER = 0;
     private static final int MODE_SCREEN_OFF = 1;
     private WeakReference<Activity> mActivity;
     private final WeakReference<View> mDimContainer;
@@ -29,9 +29,11 @@ public class ScreensaverManager {
     private final Runnable mUndimScreen = this::undimScreen;
     private final GeneralData mGeneralData;
     private PlayerTweaksData mTweaksData;
-    private int mMode = MODE_DIMMING;
-    private final int mDimColorResId = R.color.dimming;
-    private final int mScreenOffColorResId = R.color.black;
+    private int mMode = MODE_SCREENSAVER;
+    private static final int DIM_50 = R.color.dimming;
+    private static final int DIM_100 = R.color.black;
+    private int mScreensaverColorResId = DIM_50;
+    private int mScreenOffColorResId = DIM_100;
     private boolean mIsScreenOff;
     private final Runnable mTimeoutHandler = () -> {
         // Playing the video and dialog overlay isn't shown
@@ -105,15 +107,15 @@ public class ScreensaverManager {
         Log.d(TAG, "Enable screensaver");
 
         disable();
-        int delayMs = mGeneralData.getScreenDimmingTimeoutMs() == GeneralData.SCREEN_DIMMING_NEVER ?
+        int delayMs = mGeneralData.getScreensaverTimeoutMs() == GeneralData.SCREENSAVER_TIMEOUT_NEVER ?
                 10_000 :
-                mGeneralData.getScreenDimmingTimeoutMs();
+                mGeneralData.getScreensaverTimeoutMs();
         Utils.postDelayed(mDimScreen, delayMs);
     }
 
     public void disable() {
         Log.d(TAG, "Disable screensaver");
-        mMode = MODE_DIMMING;
+        mMode = MODE_SCREENSAVER;
         Utils.removeCallbacks(mDimScreen);
         Utils.postDelayed(mUndimScreen, 0);
     }
@@ -141,7 +143,7 @@ public class ScreensaverManager {
 
         Log.d(TAG, "Starting auto hide ui timer...");
         disableTimeout();
-        Utils.postDelayed(mTimeoutHandler, mTweaksData.getScreenOffTimeoutSec() * 1_000);
+        Utils.postDelayed(mTimeoutHandler, mTweaksData.getScreenOffTimeoutSec() * 1_000L);
     }
 
     private void disableTimeout() {
@@ -175,17 +177,19 @@ public class ScreensaverManager {
         }
 
         // Disable dimming on certain circumstances
-        if (show && mMode == MODE_DIMMING &&
+        if (show && mMode == MODE_SCREENSAVER &&
                 (       isPlaying() ||
                         isSigning() ||
-                        mGeneralData.getScreenDimmingTimeoutMs() == GeneralData.SCREEN_DIMMING_NEVER
+                        mGeneralData.getScreensaverTimeoutMs() == GeneralData.SCREENSAVER_TIMEOUT_NEVER
                 )
         ) {
             return;
         }
 
-        dimContainer.setBackgroundResource((mMode == MODE_DIMMING && mGeneralData.getScreenDimmingMode() == GeneralData.SCREEN_DIMMING_MODE_NORMAL) ?
-                mDimColorResId : mScreenOffColorResId);
+        mScreenOffColorResId = mTweaksData.getScreenOffDimmingPercents() == 50 ? DIM_50 : DIM_100;
+        mScreensaverColorResId = mGeneralData.getScreensaverMode() == GeneralData.SCREENSAVER_MODE_NORMAL ? DIM_50 : DIM_100;
+
+        dimContainer.setBackgroundResource(mMode == MODE_SCREENSAVER ? mScreensaverColorResId : mScreenOffColorResId);
         dimContainer.setVisibility(show ? View.VISIBLE : View.GONE);
 
         mIsScreenOff = mMode == MODE_SCREEN_OFF && show;

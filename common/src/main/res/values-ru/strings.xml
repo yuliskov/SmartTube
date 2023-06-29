@@ -561,4 +561,6 @@
     <string name="default_stack_desc">Встроенный сетевой стек. Этот стек может иметь лучшую стабильность в определенных ситуациях.</string>
     <string name="item_postion">Позиция</string>
     <string name="player_screen_off_dimming">Величина затемнения экрана</string>
+    <string name="screensaver_timout">Тайм-аут включения заставки</string>
+    <string name="screensaver_dimming">Величина затемнения заставки</string>
 </resources>

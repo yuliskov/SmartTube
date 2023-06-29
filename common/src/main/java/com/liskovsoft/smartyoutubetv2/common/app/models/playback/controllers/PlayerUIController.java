@@ -527,7 +527,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             OptionCategory category = AppDialogUtil.createPlayerScreenOffTimeoutCategory(getActivity(), mPlayerTweaksData);
             settingsPresenter.appendRadioCategory(dimmingCategory.title, dimmingCategory.options);
             settingsPresenter.appendRadioCategory(category.title, category.options);
-            settingsPresenter.showDialog(() -> {
+            settingsPresenter.showDialog(getActivity().getString(R.string.action_screen_off), () -> {
                 getPlayer().setButtonState(buttonId, mPlayerTweaksData.isScreenOffTimeoutEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
             });
         }
