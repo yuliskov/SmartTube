@@ -326,7 +326,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange {
         }, 100);
     }
 
-    private static void loadIcon(SearchOrbView view, String url) {
+    private void loadIcon(SearchOrbView view, String url) {
         // The view with GONE visibility has zero width and height
         if (view == null || view.getWidth() <= 0 || view.getHeight() <= 0) {
             return;
@@ -338,12 +338,15 @@ public class NavigateTitleView extends TitleView implements OnDataChange {
             return;
         }
 
+        // Size of the view might increase after icon change. So, we need to use another view as a template.
+        View mainView = mSearchOrbView != null ? mSearchOrbView : mExitPip;
+
         Glide.with(context)
                 .load(url)
                 .apply(ViewUtil.glideOptions())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .circleCrop() // resize image
-                .into(new SimpleTarget<Drawable>(view.getWidth(), view.getHeight()) {
+                .into(new SimpleTarget<Drawable>(mainView.getWidth(), mainView.getHeight()) {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                         Colors orbColors = view.getOrbColors();

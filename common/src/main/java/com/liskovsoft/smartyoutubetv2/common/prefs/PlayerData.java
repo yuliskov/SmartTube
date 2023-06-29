@@ -641,7 +641,7 @@ public class PlayerData extends DataChangeBase {
         mAudioFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 10)), getDefaultAudioFormat());
         mSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 11)), FormatItem.SUBTITLE_NONE);
         mVideoBufferType = Helpers.parseInt(split, 12, PlayerEngine.BUFFER_LOW);
-        mSubtitleStyleIndex = Helpers.parseInt(split, 13, 1);
+        mSubtitleStyleIndex = Helpers.parseInt(split, 13, 4); // yellow on semi bg
         mVideoZoomMode = Helpers.parseInt(split, 14, PlayerEngine.ZOOM_MODE_DEFAULT);
         mSpeed = Helpers.parseFloat(split, 15, 1.0f);
         mIsAfrEnabled = Helpers.parseBoolean(split, 16, false);

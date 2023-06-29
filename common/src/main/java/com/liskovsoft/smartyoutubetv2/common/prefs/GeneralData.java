@@ -497,7 +497,7 @@ public class GeneralData {
     }
 
     public int getTimeFormat() {
-        return mTimeFormat;
+        return mTimeFormat != -1 ? mTimeFormat : LocaleUtility.is24HourLocale(mContext) ? TIME_FORMAT_24 : TIME_FORMAT_12;
     }
 
     public void enableProxy(boolean enable) {
@@ -757,7 +757,7 @@ public class GeneralData {
         String playlistOrder = Helpers.parseStr(split, 29);
         String pendingStreams = Helpers.parseStr(split, 30);
         mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, true);
-        mTimeFormat = Helpers.parseInt(split, 32, LocaleUtility.is24HourLocale(mContext) ? TIME_FORMAT_24 : TIME_FORMAT_12);
+        mTimeFormat = Helpers.parseInt(split, 32, -1);
         mSettingsPassword = Helpers.parseStr(split, 33);
         mIsChildModeEnabled = Helpers.parseBoolean(split, 34, false);
         mIsHistoryEnabled = Helpers.parseBoolean(split, 35, true);

@@ -307,7 +307,9 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         fixInvisibleSearchOrb();
 
-        updateTitleView();
+        if (group.getAction() == VideoGroup.ACTION_REPLACE) { // minimize call frequency
+            updateTitleView();
+        }
     }
 
     @Override
