@@ -340,7 +340,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange {
             return;
         }
 
-        // Size of the view might increase after icon change (bug on some firmwares). So, it's better to cache these values.
+        // Size of the view might increase after icon change (bug on some firmwares). So, it's better to cache initial values.
         if (mIconWidth == 0 || mIconHeight == 0) {
             mIconWidth = view.getWidth();
             mIconHeight = view.getHeight();
