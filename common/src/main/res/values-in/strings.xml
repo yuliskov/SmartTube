@@ -548,4 +548,6 @@
     <string name="default_stack_desc">Tumpukan jaringan bawaan. Tumpukan ini mungkin memiliki stabilitas yang lebih baik dalam situasi tertentu.</string>
     <string name="item_postion">Posisi</string>
     <string name="player_screen_off_dimming">Jumlah peredupan</string>
+    <string name="screensaver_timout">Batas waktu screensaver</string>
+    <string name="screensaver_dimming">Jumlah peredupan screensaver</string>
 </resources>
