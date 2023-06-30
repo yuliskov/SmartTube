@@ -63,6 +63,8 @@ public class NavigateTitleView extends TitleView implements OnDataChange {
     private SearchOrbView mSearchOrbView;
     private boolean mInitDone;
     private int mFlags = FULL_VIEW_VISIBLE;
+    private int mIconWidth;
+    private int mIconHeight;
 
     public NavigateTitleView(Context context) {
         super(context);
@@ -338,15 +340,18 @@ public class NavigateTitleView extends TitleView implements OnDataChange {
             return;
         }
 
-        // Size of the view might increase after icon change. So, we need to use another view as a template.
-        View mainView = mSearchOrbView != null ? mSearchOrbView : mExitPip;
+        // Size of the view might increase after icon change (bug on some firmwares). So, it's better to cache these values.
+        if (mIconWidth == 0 || mIconHeight == 0) {
+            mIconWidth = view.getWidth();
+            mIconHeight = view.getHeight();
+        }
 
         Glide.with(context)
                 .load(url)
                 .apply(ViewUtil.glideOptions())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .circleCrop() // resize image
-                .into(new SimpleTarget<Drawable>(mainView.getWidth(), mainView.getHeight()) {
+                .into(new SimpleTarget<Drawable>(mIconWidth, mIconHeight) {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                         Colors orbColors = view.getOrbColors();
