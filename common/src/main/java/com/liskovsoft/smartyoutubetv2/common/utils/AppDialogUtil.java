@@ -516,7 +516,7 @@ public class AppDialogUtil {
         List<OptionItem> options = new ArrayList<>();
 
         for (int timoutSec : Helpers.range(0, 10, 1)) {
-            options.add(UiOptionItem.from(String.format("%s sec", timoutSec),
+            options.add(UiOptionItem.from(timoutSec == 0 ? context.getString(R.string.option_never) : String.format("%s sec", timoutSec),
                     optionItem -> data.setScreenOffTimeoutSec(timoutSec),
                     data.getScreenOffTimeoutSec() == timoutSec));
         }
