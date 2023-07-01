@@ -515,10 +515,18 @@ public class AppDialogUtil {
     public static OptionCategory createPlayerScreenOffTimeoutCategory(Context context, PlayerTweaksData data) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (int timoutSec : Helpers.range(0, 10, 1)) {
-            options.add(UiOptionItem.from(timoutSec == 0 ? context.getString(R.string.option_never) : String.format("%s sec", timoutSec),
-                    optionItem -> data.setScreenOffTimeoutSec(timoutSec),
-                    data.getScreenOffTimeoutSec() == timoutSec));
+        for (int timeoutSec : Helpers.range(0, 10, 1)) {
+            options.add(UiOptionItem.from(timeoutSec == 0 ? context.getString(R.string.option_never) : context.getString(R.string.ui_hide_timeout_sec, timeoutSec),
+                    optionItem -> data.setScreenOffTimeoutSec(timeoutSec),
+                    data.getScreenOffTimeoutSec() == timeoutSec));
+        }
+
+        for (int min : Helpers.range(30, 180, 30)) {
+            int timeoutSec = min * 60;
+            options.add(UiOptionItem.from(
+                    context.getString(R.string.screen_dimming_timeout_min, min),
+                    option -> data.setScreenOffTimeoutSec(timeoutSec),
+                    data.getScreenOffTimeoutSec() == timeoutSec));
         }
 
         String title = context.getString(R.string.player_screen_off_timeout);
