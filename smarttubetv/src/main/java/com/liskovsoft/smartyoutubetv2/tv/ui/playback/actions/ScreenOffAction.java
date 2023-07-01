@@ -9,13 +9,15 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 /**
  * An action for displaying a PIP icon.
  */
-public class ScreenOffAction extends Action {
+public class ScreenOffAction extends TwoStateAction {
     public ScreenOffAction(Context context) {
-        super(R.id.action_screen_off);
-        Drawable uncoloredDrawable = ContextCompat.getDrawable(context, R.drawable.action_screen_off);
+        super(context, R.id.action_screen_off, R.drawable.action_screen_off);
 
-        setIcon(uncoloredDrawable);
-        setLabel1(context.getString(
-                R.string.action_screen_off));
+        String label = context.getString(R.string.action_screen_off);
+        String[] labels = new String[2];
+        // Note, labels denote the action taken when clicked
+        labels[INDEX_OFF] = label;
+        labels[INDEX_ON] = label;
+        setLabels(labels);
     }
 }

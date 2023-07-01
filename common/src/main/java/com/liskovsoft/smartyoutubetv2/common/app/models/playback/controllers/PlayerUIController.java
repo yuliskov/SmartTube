@@ -227,6 +227,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         }
 
         getPlayer().setButtonState(R.id.action_screen_off_timeout, mPlayerTweaksData.isScreenOffTimeoutEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_screen_off, mPlayerTweaksData.isScreenOffTimeoutEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
     @Override
