@@ -763,11 +763,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onScreenOff() {
-            mEventListener.onScreenOffClicked();
-        }
-
-        @Override
         public void onPlaybackQueue() {
             mEventListener.onPlaybackQueueClicked();
         }

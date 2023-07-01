@@ -486,13 +486,6 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     }
 
     @Override
-    public void onScreenOffClicked() {
-        if (getActivity() instanceof MotherActivity) {
-            ((MotherActivity) getActivity()).getScreensaverManager().doScreenOff();
-        }
-    }
-
-    @Override
     public void onRepeatModeClicked(int modeIndex) {
         mPlayerData.setRepeatMode(modeIndex);
         //Utils.showRepeatInfo(getActivity(), modeIndex);
@@ -506,7 +499,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             getPlayer().setVideoRotation(rotation);
             getPlayer().setButtonState(buttonId, rotation == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
             mPlayerData.setVideoRotation(rotation);
-        } else if (buttonId == R.id.action_screen_off_timeout) {
+        } else if (buttonId == R.id.action_screen_off || buttonId == R.id.action_screen_off_timeout) {
             ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
 
             if (mPlayerTweaksData.getScreenOffTimeoutSec() == 0) {
@@ -521,7 +514,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
     @Override
     public void onButtonLongClicked(int buttonId, int buttonState) {
-        if (buttonId == R.id.action_screen_off_timeout) {
+        if (buttonId == R.id.action_screen_off || buttonId == R.id.action_screen_off_timeout) {
             AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
             OptionCategory dimmingCategory = AppDialogUtil.createPlayerScreenOffDimmingCategory(getActivity(), mPlayerTweaksData);
             OptionCategory category = AppDialogUtil.createPlayerScreenOffTimeoutCategory(getActivity(), mPlayerTweaksData);

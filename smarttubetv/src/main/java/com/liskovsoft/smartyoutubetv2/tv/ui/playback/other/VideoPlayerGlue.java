@@ -145,6 +145,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
 
         putAction(new RotateAction(context));
         putAction(new ContentBlockAction(context));
+        putAction(new ScreenOffAction(context));
         putAction(new ScreenOffTimeoutAction(context));
     }
 
@@ -176,7 +177,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
             adapter.add(mPipAction);
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF)) {
-            adapter.add(mScreenOffAction);
+            adapter.add(mActions.get(R.id.action_screen_off));
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF_TIMEOUT)) {
             adapter.add(mActions.get(R.id.action_screen_off_timeout));
@@ -483,9 +484,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         } else if (action == mPipAction) {
             mActionListener.onPip();
             handled = true;
-        } else if (action == mScreenOffAction) {
-            mActionListener.onScreenOff();
-            handled = true;
         } else if (action == mPlaybackQueueAction) {
             mActionListener.onPlaybackQueue();
             handled = true;
@@ -733,8 +731,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         void onVideoZoom();
 
         void onPip();
-
-        void onScreenOff();
 
         void onPlaybackQueue();
 

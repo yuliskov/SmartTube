@@ -31,7 +31,6 @@ public interface PlayerUiEventListener {
     void onSearchClicked();
     void onVideoZoomClicked();
     void onPipClicked();
-    void onScreenOffClicked();
     void onPlaybackQueueClicked();
     void onButtonClicked(int buttonId, int buttonState);
     void onButtonLongClicked(int buttonId, int buttonState);

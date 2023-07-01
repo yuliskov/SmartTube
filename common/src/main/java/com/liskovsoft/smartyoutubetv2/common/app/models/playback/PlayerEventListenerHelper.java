@@ -269,11 +269,6 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onScreenOffClicked() {
-        // NOP
-    }
-
-    @Override
     public void onPlaybackQueueClicked() {
         // NOP
     }

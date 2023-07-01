@@ -204,7 +204,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
-                {R.string.player_screen_off_timeout, PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF_TIMEOUT},
                 {R.string.video_rotate, PlayerTweaksData.PLAYER_BUTTON_VIDEO_ROTATE},
                 {R.string.open_chat, PlayerTweaksData.PLAYER_BUTTON_CHAT},
                 {R.string.content_block_provider, PlayerTweaksData.PLAYER_BUTTON_CONTENT_BLOCK},
@@ -214,6 +213,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 {R.string.action_video_stats, PlayerTweaksData.PLAYER_BUTTON_VIDEO_STATS},
                 {R.string.action_playback_queue, PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE},
                 {R.string.action_screen_off, PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF},
+                {R.string.player_screen_off_timeout, PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF_TIMEOUT},
                 {R.string.action_video_zoom, PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM},
                 {R.string.action_channel, PlayerTweaksData.PLAYER_BUTTON_OPEN_CHANNEL},
                 {R.string.action_search, PlayerTweaksData.PLAYER_BUTTON_SEARCH},

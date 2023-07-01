@@ -40,7 +40,7 @@ public class AccountsData {
 
         String[] split = Helpers.splitObjectLegacy(data);
 
-        mIsSelectAccountOnBootEnabled = Helpers.parseBoolean(split, 0, true);
+        mIsSelectAccountOnBootEnabled = Helpers.parseBoolean(split, 0, false);
     }
 
     private void persistState() {

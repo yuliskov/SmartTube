@@ -410,11 +410,6 @@ public class MainPlayerController implements PlayerEventListener {
     }
 
     @Override
-    public void onScreenOffClicked() {
-        process(PlayerUiEventListener::onScreenOffClicked);
-    }
-
-    @Override
     public void onPlaybackQueueClicked() {
         process(PlayerUiEventListener::onPlaybackQueueClicked);
     }
