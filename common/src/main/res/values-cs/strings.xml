@@ -529,6 +529,7 @@
     <string name="player_long_speed_list">Více možností rychlosti videa</string>
     <string name="alt_app_icon">Alternativní ikona aplikace (vyžaduje restart)</string>
     <string name="network_stack">Preferovat síťový zásobník %s</string>
+    <string name="player_network_stack">Síťový zásobník</string>
     <string name="cronet_desc">Cronet je Chromium síťový zásobník. Může snížit latenci a zvýšit výkon sítě, což může pomoci s problémy s vyrovnávací pamětí.</string>
     <string name="unlock_all_formats">Odblokovat všechny formáty videa</string>
     <string name="unlock_all_formats_desc">Na některých zařízeních firmware nesprávně hlásí určité formáty jako nepodporované i když podporované jsou.\n
@@ -566,4 +567,9 @@
     <string name="subtitle_remember">Pamatovat si povolené titulky pro každý kanál</string>
     <string name="amazon_frame_drop_fix">Oprava poklesu snímků #2</string>
     <string name="amazon_frame_drop_fix_desc">Určeno pro zařízení Amazon Stick. Může fungovat i na jiných zařízeních.</string>
+    <string name="default_stack_desc">Vestavěný síťový zásobník. Tento zásobník může mít v určitých situacích lepší stabilitu.</string>
+    <string name="item_postion">Pozice</string>
+    <string name="player_screen_off_dimming">Míra ztmavení obrazovky</string>
+    <string name="screensaver_timout">Časový limit spořiče</string>
+    <string name="screensaver_dimming">Míra ztmavení spořiče</string>
 </resources>
