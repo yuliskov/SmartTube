@@ -141,13 +141,13 @@ android {
     // https://stackoverflow.com/questions/18332474/how-to-set-versionname-in-apk-filename-using-gradle
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            def project = "STube"
-            def flavor = variant.productFlavors[-1].name
+            def project = "SmartTube"
+            def flavor = variant.productFlavors[-1].name.substring(2) // remove st prefix
             def buildType = variant.buildType.name.take(1)
             def version = variant.versionName
             def arch = output.getFilter(com.android.build.OutputFile.ABI)
 
-            def newApkName = sprintf("%s_%s_v%s_%s_%s.apk", [project, flavor, version, buildType, arch])
+            def newApkName = sprintf("%s_%s_%s_%s_%s.apk", [project, flavor, version, buildType, arch])
 
             // gradle 4.6 migration
             output.outputFileName = new File(newApkName)
