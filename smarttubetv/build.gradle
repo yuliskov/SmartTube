@@ -147,7 +147,7 @@ android {
             def version = variant.versionName
             def arch = output.getFilter(com.android.build.OutputFile.ABI)
 
-            def newApkName = sprintf("%s_%s_%s_%s_%s.apk", [project, flavor, version, buildType, arch])
+            def newApkName = sprintf("%s_%s_%s_%s.apk", [project, flavor, version, arch])
 
             // gradle 4.6 migration
             output.outputFileName = new File(newApkName)
