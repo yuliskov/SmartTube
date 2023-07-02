@@ -496,28 +496,36 @@ public class AppDialogUtil {
         return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, videoRotateTitle, options);
     }
 
-    public static OptionCategory createPlayerScreenOffDimmingCategory(Context context, PlayerTweaksData data) {
+    public static OptionCategory createPlayerScreenOffDimmingCategory(Context context, PlayerTweaksData data, Runnable onApply) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from("50%",
-                optionItem -> data.setScreenOffDimmingPercents(50),
-                data.getScreenOffDimmingPercents() == 50));
-
-        options.add(UiOptionItem.from("100%",
-                optionItem -> data.setScreenOffDimmingPercents(100),
-                data.getScreenOffDimmingPercents() == 100));
+        for (int dimPercents : Helpers.range(50, 100, 10)) {
+            options.add(UiOptionItem.from(dimPercents + "%",
+                    optionItem -> {
+                        data.setScreenOffDimmingPercents(dimPercents);
+                        if (onApply != null) {
+                            onApply.run();
+                        }
+                    },
+                    data.getScreenOffDimmingPercents() == dimPercents));
+        }
 
         String title = context.getString(R.string.player_screen_off_dimming);
 
         return OptionCategory.from(PLAYER_SCREEN_DIMMING_ID, OptionCategory.TYPE_RADIO, title, options);
     }
 
-    public static OptionCategory createPlayerScreenOffTimeoutCategory(Context context, PlayerTweaksData data) {
+    public static OptionCategory createPlayerScreenOffTimeoutCategory(Context context, PlayerTweaksData data, Runnable onApply) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int timeoutSec : Helpers.range(0, 10, 1)) {
             options.add(UiOptionItem.from(timeoutSec == 0 ? context.getString(R.string.option_never) : context.getString(R.string.ui_hide_timeout_sec, timeoutSec),
-                    optionItem -> data.setScreenOffTimeoutSec(timeoutSec),
+                    optionItem -> {
+                        data.setScreenOffTimeoutSec(timeoutSec);
+                        if (onApply != null) {
+                            onApply.run();
+                        }
+                    },
                     data.getScreenOffTimeoutSec() == timeoutSec));
         }
 
@@ -525,7 +533,12 @@ public class AppDialogUtil {
             int timeoutSec = min * 60;
             options.add(UiOptionItem.from(
                     context.getString(R.string.screen_dimming_timeout_min, min),
-                    option -> data.setScreenOffTimeoutSec(timeoutSec),
+                    option -> {
+                        data.setScreenOffTimeoutSec(timeoutSec);
+                        if (onApply != null) {
+                            onApply.run();
+                        }
+                    },
                     data.getScreenOffTimeoutSec() == timeoutSec));
         }
 

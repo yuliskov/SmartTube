@@ -22,8 +22,6 @@ import java.util.Map.Entry;
 
 public class GeneralData {
     public static final int SCREENSAVER_TIMEOUT_NEVER = 0;
-    public static final int SCREENSAVER_MODE_NORMAL = 0;
-    public static final int SCREENSAVER_MODE_SCREEN_OFF = 1;
     private static final String GENERAL_DATA = "general_data";
     public static final int EXIT_NONE = 0;
     public static final int EXIT_DOUBLE_BACK = 1;
@@ -46,7 +44,7 @@ public class GeneralData {
     private boolean mIsHideUpcomingEnabled;
     private boolean mIsRemapFastForwardToNextEnabled;
     private int mScreensaverTimeoutMs;
-    private int mScreensaverMode;
+    private int mScreensaverDimmingPercents;
     private int mTimeFormat;
     private boolean mIsProxyEnabled;
     private boolean mIsBridgeCheckEnabled;
@@ -482,13 +480,13 @@ public class GeneralData {
         return mScreensaverTimeoutMs;
     }
 
-    public void setScreensaverMode(int mode) {
-        mScreensaverMode = mode;
+    public void setScreensaverDimmingPercents(int percents) {
+        mScreensaverDimmingPercents = percents;
         persistState();
     }
 
-    public int getScreensaverMode() {
-        return mScreensaverMode;
+    public int getScreensaverDimmingPercents() {
+        return mScreensaverDimmingPercents;
     }
 
     public void setTimeFormat(int format) {
@@ -762,7 +760,7 @@ public class GeneralData {
         mIsChildModeEnabled = Helpers.parseBoolean(split, 34, false);
         mIsHistoryEnabled = Helpers.parseBoolean(split, 35, true);
         mScreensaverTimeoutMs = Helpers.parseInt(split, 36, 60 * 1_000);
-        mScreensaverMode = Helpers.parseInt(split, 37, SCREENSAVER_MODE_NORMAL);
+        // ScreensaverMode was here
         mIsAltAppIconEnabled = Helpers.parseBoolean(split, 38, false);
         mVersionCode = Helpers.parseInt(split, 39, -1);
         mIsSelectChannelSectionEnabled = Helpers.parseBoolean(split, 40, true);
@@ -770,6 +768,7 @@ public class GeneralData {
         // StackOverflow on old devices?
         mIsOldHomeLookEnabled = Helpers.parseBoolean(split, 42, Build.VERSION.SDK_INT <= 19);
         mIsOldUpdateNotificationsEnabled = Helpers.parseBoolean(split, 43, false);
+        mScreensaverDimmingPercents = Helpers.parseInt(split, 44, 80);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -829,7 +828,8 @@ public class GeneralData {
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
-                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled, mScreensaverTimeoutMs, mScreensaverMode, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
-                mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled));
+                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
+                mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
+                mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents));
     }
 }

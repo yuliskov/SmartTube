@@ -30,11 +30,8 @@ public class ScreensaverManager {
     private final GeneralData mGeneralData;
     private PlayerTweaksData mTweaksData;
     private int mMode = MODE_SCREENSAVER;
-    private static final int DIM_50 = R.color.dimming;
-    private static final int DIM_100 = R.color.black;
-    private int mScreensaverColorResId = DIM_50;
-    private int mScreenOffColorResId = DIM_100;
     private boolean mIsScreenOff;
+    private boolean mIsBlocked;
     private final Runnable mTimeoutHandler = () -> {
         // Playing the video and dialog overlay isn't shown
         if (ViewManager.instance(mActivity.get()).getTopView() != PlaybackView.class || !mTweaksData.isScreenOffTimeoutEnabled()) {
@@ -104,6 +101,11 @@ public class ScreensaverManager {
     }
 
     public void enable() {
+        if (mIsBlocked) {
+            Log.d(TAG, "Screensaver blocked!");
+            return;
+        }
+
         Log.d(TAG, "Enable screensaver");
 
         disable();
@@ -114,6 +116,11 @@ public class ScreensaverManager {
     }
 
     public void disable() {
+        if (mIsBlocked) {
+            Log.d(TAG, "Screensaver blocked!");
+            return;
+        }
+
         Log.d(TAG, "Disable screensaver");
         mMode = MODE_SCREENSAVER;
         Utils.removeCallbacks(mDimScreen);
@@ -121,9 +128,9 @@ public class ScreensaverManager {
     }
 
     public void doScreenOff() {
-        if (mIsScreenOff) {
-            return;
-        }
+        //if (mIsScreenOff) {
+        //    return;
+        //}
 
         disable();
         mMode = MODE_SCREEN_OFF;
@@ -132,6 +139,10 @@ public class ScreensaverManager {
 
     public boolean isScreenOff() {
         return mIsScreenOff;
+    }
+
+    public void setBlocked(boolean blocked) {
+        mIsBlocked = blocked;
     }
 
     private void enableTimeout() {
@@ -186,13 +197,16 @@ public class ScreensaverManager {
             return;
         }
 
-        mScreenOffColorResId = mTweaksData.getScreenOffDimmingPercents() == 50 ? DIM_50 : DIM_100;
-        mScreensaverColorResId = mGeneralData.getScreensaverMode() == GeneralData.SCREENSAVER_MODE_NORMAL ? DIM_50 : DIM_100;
+        int screenOffColor = Utils.getColor(activity, R.color.black, mTweaksData.getScreenOffDimmingPercents());
+        //int screenOffColorResId = mTweaksData.getScreenOffDimmingPercents() == 50 ? DIM_50 : DIM_100;
+        int screensaverColor = Utils.getColor(activity, R.color.black, mGeneralData.getScreensaverDimmingPercents());
+        //int screensaverColorResId = mGeneralData.getScreensaverMode() == GeneralData.SCREENSAVER_MODE_NORMAL ? DIM_50 : DIM_100;
 
-        dimContainer.setBackgroundResource(mMode == MODE_SCREENSAVER ? mScreensaverColorResId : mScreenOffColorResId);
+        dimContainer.setBackgroundColor(mMode == MODE_SCREENSAVER ? screensaverColor : screenOffColor);
+        //dimContainer.setBackgroundResource(mMode == MODE_SCREENSAVER ? screensaverColorResId : screenOffColorResId);
         dimContainer.setVisibility(show ? View.VISIBLE : View.GONE);
 
-        mIsScreenOff = mMode == MODE_SCREEN_OFF && show;
+        mIsScreenOff = mMode == MODE_SCREEN_OFF && mTweaksData.getScreenOffDimmingPercents() == 100 && show;
 
         if (mIsScreenOff) {
             hidePlayerOverlay();

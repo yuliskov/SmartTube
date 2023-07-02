@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -281,17 +282,14 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendScreensaverModeCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        int activeMode = mGeneralData.getScreensaverMode();
+        int activeMode = mGeneralData.getScreensaverDimmingPercents();
 
-        options.add(UiOptionItem.from(
-                "50%",
-                option -> mGeneralData.setScreensaverMode(GeneralData.SCREENSAVER_MODE_NORMAL),
-                activeMode == GeneralData.SCREENSAVER_MODE_NORMAL));
-
-        options.add(UiOptionItem.from(
-                "100%",
-                option -> mGeneralData.setScreensaverMode(GeneralData.SCREENSAVER_MODE_SCREEN_OFF),
-                activeMode == GeneralData.SCREENSAVER_MODE_SCREEN_OFF));
+        for (int dimPercents : Helpers.range(50, 100, 10)) {
+            options.add(UiOptionItem.from(
+                    dimPercents + "%",
+                    option -> mGeneralData.setScreensaverDimmingPercents(dimPercents),
+                    activeMode == dimPercents));
+        }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.screensaver_dimming), options);
     }

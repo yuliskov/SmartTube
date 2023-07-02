@@ -195,7 +195,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendScreenOffTimeoutCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AppDialogUtil.createPlayerScreenOffTimeoutCategory(getContext(), mPlayerTweaksData);
+        OptionCategory category = AppDialogUtil.createPlayerScreenOffTimeoutCategory(getContext(), mPlayerTweaksData, null);
 
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }

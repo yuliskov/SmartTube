@@ -16,6 +16,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -37,6 +38,7 @@ import android.view.WindowManager;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -52,6 +54,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresen
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.WebBrowserPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.AudioTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
@@ -62,6 +66,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 
+import java.lang.ref.WeakReference;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -134,6 +139,21 @@ public class Utils {
     public static void displayShareChannelDialog(Context context, String channelId) {
         Uri channelUrl = convertToFullChannelUrl(channelId);
         showMultiChooser(context, channelUrl);
+    }
+
+    @TargetApi(17)
+    public static void openUrlInternally(Context context, Uri url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(url);
+        intent.setPackage(context.getPackageName());
+        //intent.setClass(context, ViewManager.instance(context).getActivity(SplashView.class));
+        PackageManager packageManager = context.getPackageManager();
+        if (intent.resolveActivity(packageManager) != null) {
+            context.startActivity(intent);
+        } else {
+            // Fallback to the chooser dialog
+            showMultiChooser(context, url);
+        }
     }
 
     @TargetApi(17)
@@ -636,5 +656,12 @@ public class Utils {
         }
 
         return false;
+    }
+
+    public static int getColor(Context context, int colorResId, int dimPercents) {
+        int color = ContextCompat.getColor(context, colorResId);
+        color = ColorUtils.setAlphaComponent(color, (int)(255f / 100 * dimPercents));
+
+        return color;
     }
 }
