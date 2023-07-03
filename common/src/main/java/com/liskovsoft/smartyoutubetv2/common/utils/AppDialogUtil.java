@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCatego
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.BaseMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
@@ -25,6 +26,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -545,6 +547,36 @@ public class AppDialogUtil {
         String title = context.getString(R.string.player_screen_off_timeout);
 
         return OptionCategory.from(PLAYER_SCREEN_TIMEOUT_ID, OptionCategory.TYPE_RADIO, title, options);
+    }
+
+    public static OptionItem createExcludeFromContentBlockButton(
+            Context context,  Video original, MediaServiceManager serviceManager, Runnable onClose) {
+        return UiOptionItem.from(
+                context.getString(
+                        ContentBlockData.instance(context).isChannelExcluded(original.channelId) ?
+                                R.string.content_block_stop_excluding_channel :
+                                R.string.content_block_exclude_channel),
+                optionItem -> {
+                    if (original.hasChannel()) {
+                        ContentBlockData.instance(context).toggleExcludeChannel(original.channelId);
+                        if (onClose != null) {
+                            onClose.run();
+                        }
+                    } else {
+                        MessageHelpers.showMessage(context, R.string.wait_data_loading);
+
+                        serviceManager.loadMetadata(
+                                original,
+                                metadata -> {
+                                    original.sync(metadata);
+                                    ContentBlockData.instance(context).excludeChannel(original.channelId);
+                                    if (onClose != null) {
+                                        onClose.run();
+                                    }
+                                }
+                        );
+                    }
+                });
     }
 
     public static void showConfirmationDialog(Context context, String title, Runnable onConfirm) {

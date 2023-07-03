@@ -19,7 +19,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelec
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
-import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -538,29 +537,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        getDialogPresenter().appendSingleButton(
-                UiOptionItem.from(
-                        getContext().getString(
-                                ContentBlockData.instance(getContext()).isChannelExcluded(original.channelId) ?
-                                        R.string.content_block_stop_excluding_channel :
-                                        R.string.content_block_exclude_channel),
-                        optionItem -> {
-                            if (original.hasChannel()) {
-                                ContentBlockData.instance(getContext()).toggleExcludeChannel(original.channelId);
-                                closeDialog();
-                            } else {
-                                MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
-
-                                mServiceManager.loadMetadata(
-                                        original,
-                                        metadata -> {
-                                            original.sync(metadata);
-                                            ContentBlockData.instance(getContext()).excludeChannel(original.channelId);
-                                            closeDialog();
-                                        }
-                                );
-                            }
-                        }));
+        getDialogPresenter().appendSingleButton(AppDialogUtil.createExcludeFromContentBlockButton(getContext(), original, mServiceManager, this::closeDialog));
     }
 
     protected void updateEnabledMenuItems() {

@@ -501,6 +501,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             getPlayer().setButtonState(buttonId, rotation == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
             mPlayerData.setVideoRotation(rotation);
         } else if (buttonId == R.id.action_screen_off || buttonId == R.id.action_screen_off_timeout) {
+            prepareScreenOff();
             applyScreenOff(buttonState);
             applyScreenOffTimeout(buttonState);
         }
@@ -511,9 +512,15 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         if (buttonId == R.id.action_screen_off || buttonId == R.id.action_screen_off_timeout) {
             AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
             OptionCategory dimmingCategory =
-                    AppDialogUtil.createPlayerScreenOffDimmingCategory(getActivity(), mPlayerTweaksData, () -> applyScreenOff(PlayerUI.BUTTON_OFF));
+                    AppDialogUtil.createPlayerScreenOffDimmingCategory(getActivity(), mPlayerTweaksData, () -> {
+                        prepareScreenOff();
+                        applyScreenOff(PlayerUI.BUTTON_OFF);
+                    });
             OptionCategory category =
-                    AppDialogUtil.createPlayerScreenOffTimeoutCategory(getActivity(), mPlayerTweaksData, () -> applyScreenOffTimeout(PlayerUI.BUTTON_OFF));
+                    AppDialogUtil.createPlayerScreenOffTimeoutCategory(getActivity(), mPlayerTweaksData, () -> {
+                        prepareScreenOff();
+                        applyScreenOffTimeout(PlayerUI.BUTTON_OFF);
+                    });
             settingsPresenter.appendRadioCategory(dimmingCategory.title, dimmingCategory.options);
             settingsPresenter.appendRadioCategory(category.title, category.options);
             settingsPresenter.showDialog(getActivity().getString(R.string.action_screen_off));
@@ -733,8 +740,6 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     }
 
     private void applyScreenOff(int buttonState) {
-        prepareScreenOff(buttonState);
-
         if (mPlayerTweaksData.getScreenOffTimeoutSec() == 0) {
             if (buttonState == PlayerUI.BUTTON_OFF) {
                 ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
@@ -747,19 +752,19 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     }
 
     private void applyScreenOffTimeout(int buttonState) {
-        prepareScreenOff(buttonState);
-
         if (mPlayerTweaksData.getScreenOffTimeoutSec() > 0) {
             mPlayerTweaksData.enableScreenOffTimeout(buttonState == PlayerUI.BUTTON_OFF);
+            getPlayer().setButtonState(R.id.action_screen_off, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+            getPlayer().setButtonState(R.id.action_screen_off_timeout, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
     }
 
-    private void prepareScreenOff(int buttonState) {
+    private void prepareScreenOff() {
         ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
 
         manager.setBlocked(false);
         manager.disable();
-        getPlayer().setButtonState(R.id.action_screen_off, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-        getPlayer().setButtonState(R.id.action_screen_off_timeout, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_screen_off, PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_screen_off_timeout, PlayerUI.BUTTON_OFF);
     }
 }

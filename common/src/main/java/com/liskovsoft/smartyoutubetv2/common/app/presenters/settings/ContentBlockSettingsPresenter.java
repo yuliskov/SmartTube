@@ -4,12 +4,18 @@ import android.content.Context;
 import android.text.TextUtils;
 import androidx.core.content.ContextCompat;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.ContentBlockController.SegmentAction;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
@@ -30,8 +36,9 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
 
     public void show(Runnable onFinish) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        
+
         appendSponsorBlockSwitch(settingsPresenter);
+        appendExcludeChannelButton(settingsPresenter);
         appendActionsSection(settingsPresenter);
         appendColorMarkersSection(settingsPresenter);
         appendStatusCheckSection(settingsPresenter);
@@ -156,6 +163,16 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
                 mContentBlockData.isAltServerEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
+    }
+
+    private void appendExcludeChannelButton(AppDialogPresenter settingsPresenter) {
+        Video video = PlaybackPresenter.instance(getContext()).getVideo();
+
+        if (video == null || ViewManager.instance(getContext()).getTopView() != PlaybackView.class) {
+            return;
+        }
+
+        settingsPresenter.appendSingleButton(AppDialogUtil.createExcludeFromContentBlockButton(getContext(), video, MediaServiceManager.instance(), settingsPresenter::closeDialog));
     }
 
     private CharSequence getColoredString(int strResId, int colorResId) {
