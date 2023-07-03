@@ -568,4 +568,7 @@
   <string name="amazon_frame_drop_fix">Corrección de caída de fotogramas #2</string>
   <string name="default_stack_desc">Pila de red integrada. Esta pila puede tener mejor estabilidad en determinadas situaciones.</string>
   <string name="item_postion">Posición</string>
+  <string name="player_screen_off_dimming">Cantidad de atenuación de la pantalla apagada</string>
+  <string name="screensaver_timout">Tiempo de espera del salvapantallas</string>
+  <string name="screensaver_dimming">Cantidad de atenuación del salvapantallas</string>
 </resources>
