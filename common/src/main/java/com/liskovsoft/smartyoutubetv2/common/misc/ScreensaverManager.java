@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -66,12 +67,12 @@ public class ScreensaverManager {
                 // Add negative margin to fix un-proper viewport positioning on some devices
                 // NOTE: below code is not working!!!
                 // NOTE: comment out code below if you don't want this
-                //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                //        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                //params.setMargins(-200, -200, -200, -200);
-                //((ViewGroup) rootView).addView(dimContainer, params);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                params.setMargins(-30, -30, -30, -30);
+                ((ViewGroup) rootView).addView(dimContainer, params);
 
-                ((ViewGroup) rootView).addView(dimContainer);
+                //((ViewGroup) rootView).addView(dimContainer);
             }
         }
 

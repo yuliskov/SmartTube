@@ -225,9 +225,12 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             getPlayer().showDebugInfo(mDebugViewEnabled);
             getPlayer().setDebugButtonState(mDebugViewEnabled);
         }
-
-        getPlayer().setButtonState(R.id.action_screen_off_timeout, mPlayerTweaksData.isScreenOffTimeoutEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-        getPlayer().setButtonState(R.id.action_screen_off, mPlayerTweaksData.isScreenOffTimeoutEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        
+        if (mPlayerTweaksData.isScreenOffTimeoutEnabled() || mPlayerTweaksData.isScreenOffEnabled()) {
+            prepareScreenOff();
+            applyScreenOff(PlayerUI.BUTTON_OFF);
+            applyScreenOffTimeout(PlayerUI.BUTTON_OFF);
+        }
     }
 
     @Override
@@ -741,6 +744,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
     private void applyScreenOff(int buttonState) {
         if (mPlayerTweaksData.getScreenOffTimeoutSec() == 0) {
+            mPlayerTweaksData.enableScreenOff(buttonState == PlayerUI.BUTTON_OFF);
             if (buttonState == PlayerUI.BUTTON_OFF) {
                 ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
                 manager.doScreenOff();

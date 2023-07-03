@@ -75,6 +75,7 @@ public class PlayerTweaksData {
     private boolean mIsBufferOnStreamsDisabled;
     private boolean mIsSectionPlaylistEnabled;
     private boolean mIsScreenOffTimeoutEnabled;
+    private boolean mIsScreenOffEnabled;
     private int mScreenOffTimeoutSec;
     private int mScreenOffDimmingPercents;
     private boolean mIsUIAnimationsEnabled;
@@ -407,6 +408,15 @@ public class PlayerTweaksData {
         return mScreenOffDimmingPercents;
     }
 
+    public void enableScreenOff(boolean enable) {
+        mIsScreenOffEnabled = enable;
+        persistData();
+    }
+
+    public boolean isScreenOffEnabled() {
+        return mIsScreenOffEnabled && !isScreenOffTimeoutEnabled();
+    }
+
     public void enableUIAnimations(boolean enable) {
         mIsUIAnimationsEnabled = enable;
         persistData();
@@ -480,6 +490,7 @@ public class PlayerTweaksData {
         mIsLikesCounterEnabled = Helpers.parseBoolean(split, 35, true);
         mIsChapterNotificationEnabled = Helpers.parseBoolean(split, 36, false);
         mScreenOffDimmingPercents = Helpers.parseInt(split, 37, 100);
+        mIsScreenOffEnabled = Helpers.parseBoolean(split, 38, false);
 
         updateDefaultValues();
     }
@@ -495,7 +506,7 @@ public class PlayerTweaksData {
                 mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
-                mScreenOffDimmingPercents
+                mScreenOffDimmingPercents, mIsScreenOffEnabled
         ));
     }
 
