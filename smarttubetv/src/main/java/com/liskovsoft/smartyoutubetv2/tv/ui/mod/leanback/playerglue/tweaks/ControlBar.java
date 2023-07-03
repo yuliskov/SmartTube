@@ -70,6 +70,11 @@ class ControlBar extends LinearLayout {
     @Override
     protected boolean onRequestFocusInDescendants(int direction, Rect previouslyFocusedRect) {
         if (getChildCount() > 0) {
+            // MOD: fix situation when rows have different length
+            if (mLastFocusIndex >= getChildCount()) {
+                mLastFocusIndex = getChildCount() - 1;
+            }
+
             int index = mLastFocusIndex >= 0 && mLastFocusIndex < getChildCount()
                     ? mLastFocusIndex : getDefaultFocusIndex();
 
