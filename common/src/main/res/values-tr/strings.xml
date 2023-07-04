@@ -553,7 +553,7 @@
     <string name="header_kids_home">Kids</string>
     <string name="player_section_playlist">Geçerli bölüm içeriklerini oynatma listesi olarak kullan</string>
     <string name="header_trending">Trendler</string>
-    <string name="screensaver">Ekran koruyucusu</string>
+    <string name="screensaver">Ekran koruyucu</string>
     <string name="player_screen_off_timeout">Ekran kapatma zaman aşımı</string>
     <string name="old_update_notifications">Güncelleme bildirimlerinin eski görünümü</string>
     <string name="mark_as_watched">İzlendi olarak işaretle</string>
@@ -568,4 +568,8 @@
     <string name="amazon_frame_drop_fix">Kare bırakma düzeltmesi #2</string>
     <string name="amazon_frame_drop_fix_desc">Amazon Stick cihazları için tasarlanmıştır. Diğer cihazlarda da çalışabilir.</string>
     <string name="default_stack_desc">Dahili ağ yığını. Bu yığın belirli durumlarda daha iyi kararlılığa sahip olabilir.</string>
+    <string name="item_postion">Konum:</string>
+    <string name="player_screen_off_dimming">Ekran kapatma karartma miktarı</string>
+    <string name="screensaver_timout">Ekran koruyucu zaman aşımı</string>
+    <string name="screensaver_dimming">Ekran koruyucu karartma miktarı</string>
 </resources>
