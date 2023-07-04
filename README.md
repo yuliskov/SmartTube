@@ -1,8 +1,8 @@
-# SmartTube
+# SmartTube (old name SmartTubeNext)
   
 <img width="100" src="https://github.com/yuliskov/SmartTubeNext/blob/master/smarttubetv/src/ststable/res/mipmap-nodpi/app_icon.png" alt="logo"/>
 
-**SmartTube** (previously SmartTubeNext) is an advanced YouTube app for **Android TVs** and **TV boxes**, free & open source. It is not a live TV client and does not support ["YouTube TV"](https://tv.youtube.com/).
+**SmartTube** is an advanced YouTube app for **Android TVs** and **TV boxes**, free & open source. It is not a live TV client and does not support ["YouTube TV"](https://tv.youtube.com/).
 
 :white_check_mark: **Features**: no ads ‧ SponsorBlock ‧ adjustable playback speed ‧ 8k support ‧ 60fps ‧ HDR ‧ read live chat ‧ customizable buttons ‧ no Google Services ‧ helpful international community
 
