@@ -1,14 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.common.misc;
 
-import android.os.Handler;
-import android.os.Looper;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.common.utils.WeakHashSet;
 
 public class TickleManager {
     private static final String TAG = TickleManager.class.getSimpleName();
     private static TickleManager sInstance;
-    private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final Runnable mUpdateHandler = this::updateTickle;
     // Usually listener is a view. So use weak refs to not hold it forever.
     private final WeakHashSet<TickleListener> mListeners = new WeakHashSet<>();
@@ -58,12 +56,12 @@ public class TickleManager {
     }
 
     public void runTask(Runnable task, long delayMs) {
-        mHandler.removeCallbacks(task);
-        mHandler.postDelayed(task, delayMs);
+        Utils.removeCallbacks(task);
+        Utils.postDelayed(task, delayMs);
     }
 
     private void updateTickle() {
-        mHandler.removeCallbacks(mUpdateHandler);
+        Utils.removeCallbacks(mUpdateHandler);
 
         if (isEnabled() && !mListeners.isEmpty()) {
             mListeners.forEach(TickleListener::onTickle);
@@ -72,7 +70,7 @@ public class TickleManager {
             long timeMillis = System.currentTimeMillis();
             long delayMs = 60_000 - timeMillis % 60_000;
             Log.d(TAG, "Updating tickle in %s ms...", delayMs);
-            mHandler.postDelayed(mUpdateHandler, delayMs);
+            Utils.postDelayed(mUpdateHandler, delayMs);
         }
     }
 }
