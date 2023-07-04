@@ -510,7 +510,7 @@
   <string name="player_section_playlist">現在のセクションを再生リストとして扱う</string>
   <string name="header_trending">急上昇</string>
   <string name="screensaver">スクリーンセーバー</string>
-  <string name="player_screen_off_timeout">タイムアウト画面オフ</string>
+  <string name="player_screen_off_timeout">一定時間後に画面オフ</string>
   <string name="mark_as_watched">視聴済みにする</string>
   <string name="old_update_notifications">アップデート通知を旧仕様に戻す</string>
   <string name="player_ui_animations">コンパネのアニメーション</string>
@@ -565,4 +565,7 @@
   <string name="default_stack_desc">内蔵のネットワークスタック。特定の状況下では優れた安定性を有します。</string>
   <string name="player_network_stack">ネットワークスタック</string>
   <string name="item_postion">位置の設定: </string>
+  <string name="player_screen_off_dimming">画面オフ時の減光量</string>
+  <string name="screensaver_timout">一定時間後にスクリーンセーバーを起動</string>
+  <string name="screensaver_dimming">スクリーンセーバーの減光量</string>
 </resources>
