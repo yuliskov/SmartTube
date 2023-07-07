@@ -501,7 +501,7 @@ public class AppDialogUtil {
     public static OptionCategory createPlayerScreenOffDimmingCategory(Context context, PlayerTweaksData data, Runnable onApply) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (int dimPercents : Helpers.range(50, 100, 10)) {
+        for (int dimPercents : Helpers.range(10, 100, 10)) {
             options.add(UiOptionItem.from(dimPercents + "%",
                     optionItem -> {
                         data.setScreenOffDimmingPercents(dimPercents);

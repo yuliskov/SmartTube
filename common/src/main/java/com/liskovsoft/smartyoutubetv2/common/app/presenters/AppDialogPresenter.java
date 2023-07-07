@@ -22,6 +22,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     private String mTitle;
     private long mTimeoutMs;
     private boolean mIsTransparent;
+    private List<OptionCategory> mBackupCategories;
     private List<OptionCategory> mCategories;
     private boolean mIsExpandable = true;
     private int mId;
@@ -123,6 +124,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
     private void resetData() {
         mCategories = new ArrayList<>();
+        mBackupCategories = null;
         mIsExpandable = true;
         mIsTransparent = false;
         mId = 0;
@@ -130,7 +132,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
     @Override
     public void onViewInitialized() {
-        getView().show(mCategories, mTitle, mIsExpandable, mIsTransparent, mId);
+        getView().show(mBackupCategories, mTitle, mIsExpandable, mIsTransparent, mId);
         resetData();
     }
 
@@ -158,6 +160,10 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     public void showDialog(String dialogTitle, Runnable onFinish) {
         mTitle = dialogTitle;
         mOnFinish.add(onFinish);
+
+        // Doubled items fix?
+        mBackupCategories = mCategories;
+        mCategories = new ArrayList<>();
 
         if (getView() != null) {
             onViewInitialized();
