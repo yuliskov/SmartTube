@@ -73,6 +73,7 @@ public final class Video {
     public boolean incognito;
     public String likeCount;
     public String dislikeCount;
+    public float volume = 1.0f;
     private int startSegmentNum;
     private WeakReference<VideoGroup> group; // Memory leak fix. Used to get next page when scrolling.
 
@@ -588,6 +589,8 @@ public final class Video {
             startTimeMs = formatInfo.getStartTimeMs() > 0 ? formatInfo.getStartTimeMs() : DateHelper.toUnixTimeMs(formatInfo.getStartTimestamp());
             startSegmentNum = formatInfo.getStartSegmentNum();
         }
+
+        volume = formatInfo.getVolumeLevel();
     }
 
     /**

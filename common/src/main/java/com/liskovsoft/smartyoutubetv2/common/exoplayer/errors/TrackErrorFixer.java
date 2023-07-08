@@ -1,5 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.errors;
 
+import androidx.annotation.Nullable;
+import com.google.android.exoplayer2.source.DefaultMediaSourceEventListener;
+import com.google.android.exoplayer2.source.MediaSource.MediaPeriodId;
 import com.google.android.exoplayer2.source.chunk.Chunk;
 import com.google.android.exoplayer2.source.chunk.ContainerMediaChunk;
 import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException;
@@ -8,12 +11,13 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public class TrackErrorFixer {
+public class TrackErrorFixer extends DefaultMediaSourceEventListener {
     private static final int BLACKLIST_CHECK_MS = 1_000;
     private static final int BLACKLIST_CLEAR_MS = 10_000;
     private static final String TAG = TrackErrorFixer.class.getSimpleName();
@@ -146,5 +150,11 @@ public class TrackErrorFixer {
                 }
             }
         }
+    }
+
+    @Override
+    public void onLoadError(int windowIndex, @Nullable MediaPeriodId mediaPeriodId, LoadEventInfo loadEventInfo,
+                            MediaLoadData mediaLoadData, IOException error, boolean wasCanceled) {
+        fixError(error);
     }
 }

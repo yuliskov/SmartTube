@@ -523,7 +523,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     }
 
     private void restoreVolume() {
-        getPlayer().setVolume(mPlayerData.getPlayerVolume());
+        getPlayer().setVolume(mPlayerData.getPlayerVolume() * getVideo().volume);
     }
 
     private void restoreFormats() {
