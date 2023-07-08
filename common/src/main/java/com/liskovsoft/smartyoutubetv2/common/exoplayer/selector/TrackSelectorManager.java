@@ -453,10 +453,13 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         Log.d(TAG, "findBestMatch: Found exact match by size and fps in list: " + mediaTrack.format);
 
                         // Get ready for group with multiple codecs: avc, av01
-                        if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
+                        if (MediaTrack.codecEquals(mediaTrack, originTrack) && MediaTrack.bitrateEquals(mediaTrack, originTrack)) {
+                            result = mediaTrack;
+                            break outerloop;
+                        } else if (MediaTrack.codecEquals(mediaTrack, originTrack) && MediaTrack.preferByBitrate(mediaTrack, result)) {
                             result = mediaTrack;
                             // Don't do break for VideoTrack because we don't know whether there 30/60 fps.
-                            if (!(originTrack instanceof VideoTrack) || MediaTrack.bitrateEquals(result, originTrack)) {
+                            if (!(originTrack instanceof VideoTrack)) {
                                 break outerloop;
                             }
                         } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
@@ -472,7 +475,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         if (higherQuality) { // || preferByCodec
                             // Get ready for group with multiple codecs: avc, av01
                             // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
-                            if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
+                            if (MediaTrack.codecEquals(mediaTrack, originTrack) && MediaTrack.preferByBitrate(mediaTrack, result)) {
                                 result = mediaTrack;
                             } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
                                 result = mediaTrack;

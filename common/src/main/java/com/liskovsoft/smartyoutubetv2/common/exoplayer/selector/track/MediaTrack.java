@@ -78,6 +78,22 @@ public abstract class MediaTrack {
         return format1.bitrate == format2.bitrate;
     }
 
+    private static boolean preferByBitrate(Format format1, Format format2) {
+        if (format1 == null) {
+            return false;
+        }
+
+        if (format2 == null) {
+            return true;
+        }
+
+        if (!codecEquals(format1, format2)) {
+            return true;
+        }
+
+        return format1.bitrate > format2.bitrate;
+    }
+
     public static boolean codecEquals(MediaTrack track1, MediaTrack track2) {
         if (track1 == null || track2 == null) {
             return false;
@@ -92,6 +108,14 @@ public abstract class MediaTrack {
         }
 
         return bitrateEquals(track1.format, track2.format);
+    }
+
+    public static boolean preferByBitrate(MediaTrack track1, MediaTrack track2) {
+        if (track1 == null || track2 == null) {
+            return false;
+        }
+
+        return preferByBitrate(track1.format, track2.format);
     }
 
     public static int getCodecWeight(MediaTrack track) {
