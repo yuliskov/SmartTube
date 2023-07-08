@@ -37,7 +37,6 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.okhttp.OkHttpCommons;
 import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErrorHandlingPolicy;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.ErrorDefaultDashChunkSource;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -54,6 +53,7 @@ public class ExoMediaSourceFactory {
     private static ExoMediaSourceFactory sInstance;
     @SuppressLint("StaticFieldLeak")
     @SuppressWarnings("deprecation")
+    private static final int MAX_SEGMENTS_PER_LOAD = 1;
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private final Factory mMediaDataSourceFactory;
     private final Context mContext;
@@ -299,8 +299,7 @@ public class ExoMediaSourceFactory {
 
     @NonNull
     private DashChunkSource.Factory getDashChunkSourceFactory() {
-        //return new ErrorDefaultDashChunkSource.Factory(mMediaDataSourceFactory, mTrackErrorFixer);
-        return new DefaultDashChunkSource.Factory(mMediaDataSourceFactory, ErrorDefaultDashChunkSource.MAX_SEGMENTS_PER_LOAD);
+        return new DefaultDashChunkSource.Factory(mMediaDataSourceFactory, MAX_SEGMENTS_PER_LOAD);
     }
 
     // EXO: 2.10 - 2.12
