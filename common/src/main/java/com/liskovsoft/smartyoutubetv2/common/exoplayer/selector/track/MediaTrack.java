@@ -70,12 +70,28 @@ public abstract class MediaTrack {
         return codecEquals(format1.codecs, format2.codecs);
     }
 
+    private static boolean bitrateEquals(Format format1, Format format2) {
+        if (format1 == null || format2 == null) {
+            return false;
+        }
+
+        return format1.bitrate == format2.bitrate;
+    }
+
     public static boolean codecEquals(MediaTrack track1, MediaTrack track2) {
         if (track1 == null || track2 == null) {
             return false;
         }
 
         return codecEquals(track1.format, track2.format);
+    }
+
+    public static boolean bitrateEquals(MediaTrack track1, MediaTrack track2) {
+        if (track1 == null || track2 == null) {
+            return false;
+        }
+
+        return bitrateEquals(track1.format, track2.format);
     }
 
     public static int getCodecWeight(MediaTrack track) {

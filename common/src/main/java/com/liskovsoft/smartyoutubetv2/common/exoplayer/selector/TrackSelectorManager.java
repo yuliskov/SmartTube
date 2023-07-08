@@ -456,7 +456,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
                             result = mediaTrack;
                             // Don't do break for VideoTrack because we don't know whether there 30/60 fps.
-                            if (!(originTrack instanceof VideoTrack)) {
+                            if (!(originTrack instanceof VideoTrack) || MediaTrack.bitrateEquals(result, originTrack)) {
                                 break outerloop;
                             }
                         } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {

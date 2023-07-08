@@ -1107,6 +1107,7 @@ public final class Format implements Parcelable {
       int bitrate,
       int width,
       int height,
+      float frameRate, // MOD: add fps to hls format info
       int channelCount,
       @C.SelectionFlags int selectionFlags,
       @Nullable String language) {

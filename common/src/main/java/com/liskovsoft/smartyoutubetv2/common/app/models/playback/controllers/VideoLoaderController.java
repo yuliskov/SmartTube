@@ -285,7 +285,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
         mLastVideo.sync(formatInfo);
 
-        if (formatInfo.isUnplayable()) {
+        if (formatInfo.hasExtendedHlsFormats()) {
+            Log.d(TAG, "Found a video with restricted hls formats. Loading...");
+            getPlayer().openHlsUrl(formatInfo.getHlsManifestUrl());
+        } else if (formatInfo.isUnplayable()) {
             getPlayer().setTitle(formatInfo.getPlayabilityStatus());
             getPlayer().showOverlay(true);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
