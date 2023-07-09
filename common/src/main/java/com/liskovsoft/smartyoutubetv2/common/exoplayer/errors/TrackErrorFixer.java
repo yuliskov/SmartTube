@@ -54,7 +54,55 @@ public class TrackErrorFixer extends DefaultMediaSourceEventListener {
 
         mLastEx = ex;
 
-        return selectNextTrack();
+        return selectDifferentCodec();
+    }
+
+    private boolean selectDifferentCodec() {
+        if (mLastEx == null) {
+            return false;
+        }
+
+        if (System.currentTimeMillis() - mSelectionTimeMs < BLACKLIST_CLEAR_MS) {
+            return false;
+        }
+
+        Set<MediaTrack> tracks = isAudio(mLastEx) ? mTrackSelectorManager.getAudioTracks() : mTrackSelectorManager.getVideoTracks();
+
+        if (tracks == null) {
+            return false;
+        }
+
+        MediaTrack currentTrack = null;
+
+        for (MediaTrack track : tracks) {
+            if (track.isSelected) {
+                currentTrack = track;
+                break;
+            }
+        }
+
+        if (currentTrack == null || currentTrack.format == null || currentTrack.format.codecs == null) {
+            return false;
+        }
+
+        String currentCodec = currentTrack.format.codecs;
+
+        MediaTrack nextTrack = null;
+
+        for (MediaTrack track : tracks) {
+            if (!currentCodec.equals(track.format.codecs)) {
+                nextTrack = track;
+                break;
+            }
+        }
+
+        if (nextTrack != null) {
+            mTrackSelectorManager.selectTrack(nextTrack);
+            mSelectionTimeMs = System.currentTimeMillis();
+            return true;
+        }
+
+        return false;
     }
 
     private boolean selectNextTrack() {
