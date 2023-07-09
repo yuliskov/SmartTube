@@ -183,7 +183,7 @@ The international group is in **English only**. But don't worry if your English 
 
 ## Team
 
-SmartTube is developed single-handedly by Yurii; there is no larger team or company behind this. This is an open source, hobby project. Several others have helped with translations, some of which can be seen on [Github](https://github.com/yuliskov/SmartTubeNext/graphs/contributors), some have sent their translations directly to Yurii. There are also helpful people in the support chat.
+SmartTube is developed single-handedly; there is no larger team or company behind this. This is an open source, hobby project. Several others have helped with translations, some of which can be seen on [Github](https://github.com/yuliskov/SmartTubeNext/graphs/contributors), some have sent their translations directly to Yurii. There are also helpful people in the support chat.
 
 
 ## Build
@@ -241,6 +241,27 @@ HDR works only **if your hardware supports it**. It's a complicated mess.
  
 If HDR videos look looked dim or washed out, then check [this article](https://www.wired.com/story/hdr-too-dark-how-to-fix-it/). **If HDR is not working**, it's probably not this app's fault. You might need to search on the web for "HDR" and your device name for any help.
 
+## Liability
+
+We take no responsibility for the use of our tool, or external instances
+provided by third parties. We strongly recommend you abide by the valid
+official regulations in your country. Furthermore, we refuse liability
+for any inappropriate use of Invidious, such as illegal downloading.
+This tool is provided to you in the spirit of free, open software.
+
+You may view the LICENSE in which this software is provided to you [here](./LICENSE.md).
+
+>   16. Limitation of Liability.
+>
+> IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS
+THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY
+GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE
+USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF
+DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD
+PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),
+EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGES.
 
 ## FAQ
 
