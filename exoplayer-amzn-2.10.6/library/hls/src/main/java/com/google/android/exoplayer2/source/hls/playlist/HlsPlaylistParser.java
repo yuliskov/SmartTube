@@ -397,7 +397,9 @@ public final class HlsPlaylistParser implements ParsingLoadable.Parser<HlsPlayli
       String language = parseOptionalStringAttr(line, REGEX_LANGUAGE, variableDefinitions);
       @C.SelectionFlags int selectionFlags = parseSelectionFlags(line);
       @C.RoleFlags int roleFlags = parseRoleFlags(line, variableDefinitions);
-      String formatId = groupId + ":" + name;
+      // MOD: Don't add 'Default' to format id
+      String formatId = groupId;
+      //String formatId = groupId + ":" + name;
       Format format;
       Metadata metadata =
           new Metadata(new HlsTrackMetadataEntry(groupId, name, Collections.emptyList()));

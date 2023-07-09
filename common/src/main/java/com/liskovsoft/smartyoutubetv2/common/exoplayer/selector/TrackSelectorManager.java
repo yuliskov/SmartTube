@@ -676,7 +676,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
             int delta = leftVal - rightVal;
             if (delta == 0) {
-                return format2.bitrate - format1.bitrate;
+                int delta2 = format2.bitrate - format1.bitrate;
+                return delta2 == 0 ? 1 : delta2; // NOTE: don't return 0 or track will be removed
             }
 
             return leftVal - rightVal;

@@ -44,7 +44,7 @@ public class TrackErrorFixer extends DefaultMediaSourceEventListener {
 
         InvalidResponseCodeException ex = (InvalidResponseCodeException) e;
 
-        if (ex.responseCode != 404 && ex.responseCode != 503) {
+        if (ex.responseCode != 404 && ex.responseCode != 503 && ex.responseCode != 500) {
             return false;
         }
 
