@@ -541,4 +541,25 @@
   <string name="volume_boost_warning">Τυχόν ρυθμίσεις πάνω από το όριο μπορεί να βλάψουν τα ηχεία</string>
   <string name="play_video_incognito">Παίξτε σε κατάσταση ανώνυμης περιήγησης</string>
   <string name="header_kids_home">Παιδικά</string>
+  <string name="player_section_playlist">Χρήση περιεχομένου τρέχοντος τμήματος ως λίστα αναπαραγωγής</string>
+  <string name="header_trending">Τάσεις</string>
+  <string name="screensaver">Προφύλαξη οθόνης</string>
+  <string name="player_screen_off_timeout">Λήξη χρονικού ορίου οθόνης</string>
+  <string name="old_update_notifications">Η παλιά εμφάνιση ειδοποίησης ενημέρωσης</string>
+  <string name="mark_as_watched">Επισήμανση ως προβληθέν</string>
+  <string name="player_ui_animations">Ενεργοποίηση εφέ κίνησης πίνακα ελέγχου</string>
+  <string name="player_likes_count">Εμφάνιση αριθμού μου αρέσει/δεν μου αρέσει</string>
+  <string name="sorting_alphabetically2">Αλφαβητικά (γρήγορο)</string>
+  <string name="sorting_default">Προεπιλογή (γρήγορο)</string>
+  <string name="content_block_exclude_channel">Εξαίρεση καναλιού από το SponsorBlock</string>
+  <string name="content_block_stop_excluding_channel">Όχι εξαίρεση καναλιού από το SponsorBlock</string>
+  <string name="player_chapter_notification">Εμφάνιση ειδοποίησης για γρήγορη μετακίνηση μεταξύ των κεφαλαίων</string>
+  <string name="subtitle_remember">Απομνημόνευση ενεργών υποτίτλων ανά κανάλι</string>
+  <string name="amazon_frame_drop_fix">Επιδιόρθωση απώλειας καρέ #2</string>
+  <string name="amazon_frame_drop_fix_desc">Προορίζεται για συσκευές Amazon Stick. Ίσως δουλεύει και σε άλλες.</string>
+  <string name="default_stack_desc">Ενσωματωμένη στοίβα δικτύου. Αυτή η στοίβα ίσως είναι πιο σταθερή σε κάποιες περιπτώσεις. </string>
+  <string name="item_postion">Θέση του</string>
+  <string name="player_screen_off_dimming">Ποσότητα σκοτεινιάσματος οθόνης</string>
+  <string name="screensaver_timout">Λήξη χρονικού ορίου προφύλαξης οθόνης </string>
+  <string name="screensaver_dimming">Ποσότητα σκοτεινιάσματος προφύλαξης οθόνης</string>
 </resources>
