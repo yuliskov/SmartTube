@@ -189,6 +189,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 renderer.sortedTracks.add(mediaTrack);
             }
         }
+
+        mBlacklist.clear();
     }
 
     /**
@@ -673,7 +675,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     return result;
                 }
             }
-            
+
             int leftVal = format2.width + (int) format2.frameRate + MediaTrack.getCodecWeight(format2.codecs);
             int rightVal = format1.width + (int) format1.frameRate + MediaTrack.getCodecWeight(format1.codecs);
 
