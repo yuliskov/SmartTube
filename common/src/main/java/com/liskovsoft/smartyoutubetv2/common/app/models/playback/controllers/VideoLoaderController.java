@@ -285,10 +285,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
         mLastVideo.sync(formatInfo);
 
-        if (formatInfo.hasExtendedHlsFormats()) {
-            Log.d(TAG, "Found a video with restricted hls formats. Loading...");
-            getPlayer().openHlsUrl(formatInfo.getHlsManifestUrl());
-        } else if (formatInfo.isUnplayable()) {
+        if (formatInfo.isUnplayable()) {
             getPlayer().setTitle(formatInfo.getPlayabilityStatus());
             getPlayer().showOverlay(true);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
@@ -299,7 +296,13 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
                     .subscribe(
-                            dashManifest -> getPlayer().openDash(dashManifest),
+                            dashManifest -> {
+                                if (formatInfo.hasExtendedHlsFormats()) {
+                                    getPlayer().openMerged(dashManifest, formatInfo.getHlsManifestUrl());
+                                } else {
+                                    getPlayer().openDash(dashManifest);
+                                }
+                            },
                             error -> Log.e(TAG, "createMpdStream error: %s", error.getMessage())
                     );
         } else if (formatInfo.isLive() && formatInfo.containsDashUrl() && acceptDashUrl(formatInfo)) {

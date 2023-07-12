@@ -880,30 +880,27 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void openDash(InputStream dashManifest) {
-        //resetPlayerState();
-
         mExoPlayerController.openDash(dashManifest);
     }
 
     @Override
     public void openDashUrl(String dashManifestUrl) {
-        //resetPlayerState();
-
         mExoPlayerController.openDashUrl(dashManifestUrl);
     }
 
     @Override
     public void openHlsUrl(String hlsPlaylistUrl) {
-        //resetPlayerState();
-
         mExoPlayerController.openHlsUrl(hlsPlaylistUrl);
     }
 
     @Override
     public void openUrlList(List<String> urlList) {
-        //resetPlayerState();
-
         mExoPlayerController.openUrlList(urlList);
+    }
+
+    @Override
+    public void openMerged(InputStream dashManifest, String hlsPlaylistUrl) {
+        mExoPlayerController.openMerged(dashManifest, hlsPlaylistUrl);
     }
 
     @Override

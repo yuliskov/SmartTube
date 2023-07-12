@@ -131,7 +131,9 @@ public abstract class MediaTrack {
             return 0;
         }
 
-        return codec.contains("vp9") ? sVP9Weight : codec.contains("avc") ? sAVCWeight : codec.contains("av01") ? sAV1Weight : 0;
+        codec = codec.toLowerCase();
+
+        return Helpers.containsAny(codec, "vp9", "vp09") ? sVP9Weight : codec.contains("avc") ? sAVCWeight : codec.contains("av01") ? sAV1Weight : 0;
     }
 
     public static boolean preferByCodec(MediaTrack prevTrack, MediaTrack nextTrack) {

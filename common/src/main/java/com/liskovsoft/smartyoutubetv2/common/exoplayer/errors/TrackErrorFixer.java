@@ -111,6 +111,45 @@ public class TrackErrorFixer extends DefaultMediaSourceEventListener {
             return false;
         }
 
+        if (System.currentTimeMillis() - mSelectionTimeMs < BLACKLIST_CLEAR_MS) {
+            return false;
+        }
+
+        Set<MediaTrack> tracks = isAudio(mLastEx) ? mTrackSelectorManager.getAudioTracks() : mTrackSelectorManager.getVideoTracks();
+
+        if (tracks == null) {
+            return false;
+        }
+
+        MediaTrack nextTrack = null;
+        boolean afterSelected = false;
+
+        for (MediaTrack track : tracks) {
+            if (track.isSelected) {
+                afterSelected = true;
+                continue;
+            }
+
+            if (afterSelected) {
+                nextTrack = track;
+                break;
+            }
+        }
+
+        if (nextTrack != null) {
+            mTrackSelectorManager.selectTrack(nextTrack);
+            return true;
+        }
+
+        mSelectionTimeMs = System.currentTimeMillis();
+        return false;
+    }
+
+    private boolean selectNextTrackOld() {
+        if (mLastEx == null) {
+            return false;
+        }
+
         if (System.currentTimeMillis() - mSelectionTimeMs > BLACKLIST_CLEAR_MS) {
             mBlacklistedTracks.clear();
         }

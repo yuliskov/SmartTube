@@ -10,6 +10,7 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.MergingMediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -75,21 +76,18 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     @Override
     public void openDash(InputStream dashManifest) {
-        //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
         MediaSource mediaSource = mMediaSourceFactory.fromDashManifest(dashManifest);
         openMediaSource(mediaSource);
     }
 
     @Override
     public void openDashUrl(String dashManifestUrl) {
-        //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
         MediaSource mediaSource = mMediaSourceFactory.fromDashManifestUrl(dashManifestUrl);
         openMediaSource(mediaSource);
     }
 
     @Override
     public void openHlsUrl(String hlsPlaylistUrl) {
-        //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
         MediaSource mediaSource = mMediaSourceFactory.fromHlsPlaylist(hlsPlaylistUrl);
         openMediaSource(mediaSource);
     }
@@ -98,6 +96,13 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void openUrlList(List<String> urlList) {
         MediaSource mediaSource = mMediaSourceFactory.fromUrlList(urlList);
         openMediaSource(mediaSource);
+    }
+
+    @Override
+    public void openMerged(InputStream dashManifest, String hlsPlaylistUrl) {
+        MediaSource dashMediaSource = mMediaSourceFactory.fromDashManifest(dashManifest);
+        MediaSource hlsMediaSource = mMediaSourceFactory.fromHlsPlaylist(hlsPlaylistUrl);
+        openMediaSource(new MergingMediaSource(dashMediaSource, hlsMediaSource));
     }
 
     private void openMediaSource(MediaSource mediaSource) {

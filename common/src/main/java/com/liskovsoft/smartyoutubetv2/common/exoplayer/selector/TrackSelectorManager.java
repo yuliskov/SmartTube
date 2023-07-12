@@ -24,7 +24,9 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -37,6 +39,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     private static final String DEFAULT_LANGUAGE = "en";
     private final String mLanguage;
     private final boolean mIsAllFormatsUnlocked;
+    private final Map<String, Integer> mBlacklist = new HashMap<>();
 
     private DefaultTrackSelector mTrackSelector;
 
@@ -176,7 +179,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 mediaTrack.groupIndex = groupIndex;
                 mediaTrack.trackIndex = trackIndex;
 
-                if (!mIsAllFormatsUnlocked && !Utils.isTrackSupported(mediaTrack)) {
+                if (!mIsAllFormatsUnlocked && (!Utils.isTrackSupported(mediaTrack) || !isTrackUnique(mediaTrack))) {
                     continue;
                 }
 
@@ -563,7 +566,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             if (trackGroup != null && trackGroup.length >= 1) {
                 MediaTrack mediaTrack = trackGroup[0];
 
-                if (mediaTrack.format != null) {
+                if (mediaTrack != null && mediaTrack.format != null) {
                     if (Helpers.startsWith(mediaTrack.format.language, resultLanguage)) { // format language: en-us
                         if (resultTracks == null) {
                             resultTracks = new ArrayList<>();
@@ -670,7 +673,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     return result;
                 }
             }
-
+            
             int leftVal = format2.width + (int) format2.frameRate + MediaTrack.getCodecWeight(format2.codecs);
             int rightVal = format1.width + (int) format1.frameRate + MediaTrack.getCodecWeight(format1.codecs);
 
@@ -680,7 +683,27 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 return delta2 == 0 ? 1 : delta2; // NOTE: don't return 0 or track will be removed
             }
 
-            return leftVal - rightVal;
+            return delta;
         }
+    }
+
+    private boolean isTrackUnique(MediaTrack mediaTrack) {
+        Format format = mediaTrack.format;
+        String formatId = format.width + format.height + format.frameRate + format.sampleMimeType + format.language;
+
+        boolean isVideo = mediaTrack instanceof VideoTrack;
+        boolean isAudio = mediaTrack instanceof AudioTrack;
+        if ((isVideo || isAudio) && format.bitrate <= 0) {
+            return false;
+        }
+
+        Integer bitrate = mBlacklist.get(formatId);
+
+        if (bitrate == null || (bitrate < format.bitrate || isAudio)) {
+          mBlacklist.put(formatId, format.bitrate + 500_000);
+          return true;
+        }
+
+        return false;
     }
 }
