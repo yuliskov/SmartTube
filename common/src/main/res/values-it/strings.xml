@@ -330,7 +330,7 @@
     <string name="finish_on_disconnect">Termina l\'app dopo aver scollegato il telefono/tablet</string>
     <string name="update_error">Errore di aggiornamento</string>
     <string name="hide_shorts_from_history">Nascondi i video brevi dalla Cronologia</string>
-    <string name="disable_screensaver">Disabilita il salvaschermo</string>
+    <string name="disable_screensaver">Disabilita lo screensaver</string>
     <string name="description_not_found">Descrizione non trovata</string>
     <string name="proxy_port_hint">Porta proxy</string>
     <string name="proxy_host_hint">Proxy hostname o IP</string>
@@ -553,7 +553,7 @@
     <string name="header_kids_home">Ragazzi</string>
     <string name="player_section_playlist">Utilizza i contenuti della sezione attuale come una playlist</string>
     <string name="header_trending">Tendenze</string>
-    <string name="screensaver">Salvaschermo</string>
+    <string name="screensaver">Screensaver</string>
     <string name="player_screen_off_timeout">Timeout di spegnimento dello schermo</string>
     <string name="old_update_notifications">Il vecchio aspetto delle notifiche di aggiornamento</string>
     <string name="mark_as_watched">Segna come già visto</string>
@@ -568,4 +568,8 @@
     <string name="amazon_frame_drop_fix">Correggi salto fotogrammi #2</string>
     <string name="amazon_frame_drop_fix_desc">Destinato ai dispositivi Amazon Stick. Può funzionare anche su altri dispositivi.</string>
     <string name="default_stack_desc">Stack di rete integrato. Questo stack può avere una migliore stabilità in determinate situazioni.</string>
+    <string name="item_postion">Posizione di</string>
+    <string name="player_screen_off_dimming">Livello di oscuramento a schermo spento</string>
+    <string name="screensaver_timout">Timeout screensaver</string>
+    <string name="screensaver_dimming">Livello di oscuramento dello screensaver</string>
 </resources>
