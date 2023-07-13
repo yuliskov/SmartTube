@@ -691,17 +691,17 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
     private boolean isTrackUnique(MediaTrack mediaTrack) {
         Format format = mediaTrack.format;
-        String formatId = format.width + format.height + format.frameRate + format.sampleMimeType + format.language;
 
-        boolean isVideo = mediaTrack instanceof VideoTrack;
-        boolean isAudio = mediaTrack instanceof AudioTrack;
-        if ((isVideo || isAudio) && format.bitrate <= 0) {
+        // Remove hls un-complete formats altogether
+        if (format.codecs == null || format.codecs.isEmpty() || format.bitrate <= 0) {
             return false;
         }
 
+        String formatId = format.width + format.height + format.frameRate + format.sampleMimeType + format.language;
+
         Integer bitrate = mBlacklist.get(formatId);
 
-        if (bitrate == null || (bitrate < format.bitrate || isAudio)) {
+        if (bitrate == null || (bitrate < format.bitrate || mediaTrack instanceof AudioTrack)) {
           mBlacklist.put(formatId, format.bitrate + 500_000);
           return true;
         }
