@@ -83,7 +83,7 @@ public class SubtitleTrack extends MediaTrack {
         }
 
         return trimMarker(language)
-                .replaceAll(" \\(.*", ""); // english (us) bla -> english
+                .replaceAll(" \\(.*\\)$", ""); // english (us) bla -> english
     }
 
     /**
