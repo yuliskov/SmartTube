@@ -552,4 +552,13 @@
   <string name="sorting_default">默认(更快)</string>
   <string name="content_block_exclude_channel">从 SponsorBlock 中排除该频道</string>
   <string name="content_block_stop_excluding_channel">停止从 SponsorBlock 中排除该频道</string>
+   <string name="player_chapter_notification">快进浏览章节时显示通知</string>
+  <string name="subtitle_remember">分别记录每个频道已启用字幕</string>
+  <string name="amazon_frame_drop_fix">掉帧修复 #2</string>
+  <string name="amazon_frame_drop_fix_desc">适用于亚马逊Stick设备。也可以在其他设备上工作。</string>
+  <string name="default_stack_desc">内置网络堆栈。在某些情况下，此堆栈可能具有更好的稳定性。</string>
+  <string name="item_postion">所在位置</string>
+  <string name="player_screen_off_dimming">屏幕关闭时的亮度</string>
+  <string name="screensaver_timout">屏幕保护程序超时</string>
+  <string name="screensaver_dimming">屏幕保护运行时亮度</string>
   </resources>
