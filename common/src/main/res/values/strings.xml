@@ -572,4 +572,5 @@
     <string name="player_screen_off_dimming">Screen off dimming amount</string>
     <string name="screensaver_timout">Screensaver timeout</string>
     <string name="screensaver_dimming">Screensaver dimming amount</string>
+    <string name="player_ui_on_next">Show player ui when switching to the next video</string>
 </resources>

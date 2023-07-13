@@ -61,7 +61,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         //appendBackgroundPlaybackActivationCategory(settingsPresenter);
-        appendScreensaverModeCategory(settingsPresenter);
+        appendScreensaverDimmingCategory(settingsPresenter);
         appendScreensaverTimoutCategory(settingsPresenter);
         appendTimeFormatCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
@@ -279,12 +279,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.key_remapping), options);
     }
 
-    private void appendScreensaverModeCategory(AppDialogPresenter settingsPresenter) {
+    private void appendScreensaverDimmingCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         int activeMode = mGeneralData.getScreensaverDimmingPercents();
 
-        for (int dimPercents : Helpers.range(50, 100, 10)) {
+        for (int dimPercents : Helpers.range(10, 100, 10)) {
             options.add(UiOptionItem.from(
                     dimPercents + "%",
                     option -> mGeneralData.setScreensaverDimmingPercents(dimPercents),

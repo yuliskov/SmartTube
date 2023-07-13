@@ -171,6 +171,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         } else {
             openVideoFromNext(getPlayer().getVideo(), true);
         }
+
+        if (mPlayerTweaksData.isPlayerUiOnNextEnabled()) {
+            getPlayer().showControls(true);
+        }
     }
 
     @Override

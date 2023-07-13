@@ -563,4 +563,5 @@
     <string name="player_screen_off_dimming">Величина затемнення екрану</string>
     <string name="screensaver_timout">Тайм-аут увімкнення заставки</string>
     <string name="screensaver_dimming">Величина затемнення заставки</string>
+    <string name="player_ui_on_next">Показувати інтерфейс під час переходу на наступне відео</string>
 </resources>

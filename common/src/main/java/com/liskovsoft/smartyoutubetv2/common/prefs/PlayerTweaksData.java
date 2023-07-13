@@ -81,6 +81,7 @@ public class PlayerTweaksData {
     private boolean mIsUIAnimationsEnabled;
     private boolean mIsLikesCounterEnabled;
     private boolean mIsChapterNotificationEnabled;
+    private boolean mIsPlayerUiOnNextEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -444,6 +445,15 @@ public class PlayerTweaksData {
         return mIsChapterNotificationEnabled;
     }
 
+    public void enablePlayerUiOnNext(boolean enable) {
+        mIsPlayerUiOnNextEnabled = enable;
+        persistData();
+    }
+
+    public boolean isPlayerUiOnNextEnabled() {
+        return mIsPlayerUiOnNextEnabled;
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -491,6 +501,7 @@ public class PlayerTweaksData {
         mIsChapterNotificationEnabled = Helpers.parseBoolean(split, 36, false);
         mScreenOffDimmingPercents = Helpers.parseInt(split, 37, 100);
         mIsScreenOffEnabled = Helpers.parseBoolean(split, 38, false);
+        mIsPlayerUiOnNextEnabled = Helpers.parseBoolean(split, 39, false);
 
         updateDefaultValues();
     }
@@ -506,7 +517,7 @@ public class PlayerTweaksData {
                 mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
-                mScreenOffDimmingPercents, mIsScreenOffEnabled
+                mScreenOffDimmingPercents, mIsScreenOffEnabled, mIsPlayerUiOnNextEnabled
         ));
     }
 

@@ -526,6 +526,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_ui_on_next),
+                option -> mPlayerTweaksData.enablePlayerUiOnNext(option.isSelected()),
+                mPlayerTweaksData.isPlayerUiOnNextEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_chapter_notification),
                 option -> mPlayerTweaksData.enableChapterNotification(option.isSelected()),
                 mPlayerTweaksData.isChapterNotificationEnabled()));
