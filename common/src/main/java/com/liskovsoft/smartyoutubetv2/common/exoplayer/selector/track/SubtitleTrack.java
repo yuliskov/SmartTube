@@ -62,7 +62,7 @@ public class SubtitleTrack extends MediaTrack {
             return false;
         }
 
-        return language.contains("(") && language.contains(")");
+        return language.contains("(") && language.endsWith(")");
     }
 
     /**
