@@ -54,6 +54,8 @@ public class TrackSelectorUtil {
         } else if (MimeTypes.isAudio(format.sampleMimeType)) {
             trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(buildLanguageString(format),
                     buildAudioPropertyString(format)), buildBitrateString(format)), extractCodec(format)), buildChannels(format));
+        } else if (MimeTypes.isText(format.sampleMimeType)) {
+            trackName = buildLanguageString(format);
         } else {
             trackName = joinWithSeparator(joinWithSeparator(buildLanguageString(format), buildBitrateString(format)), extractCodec(format));
         }
