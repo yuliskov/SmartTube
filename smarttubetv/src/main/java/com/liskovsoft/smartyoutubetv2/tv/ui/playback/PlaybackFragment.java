@@ -864,14 +864,18 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void updateEndingTime() {
-        EndingTimeView endingTime = getActivity().findViewById(R.id.global_ending_time);
-        endingTime.update();
+        if (getActivity() != null) {
+            EndingTimeView endingTime = getActivity().findViewById(R.id.global_ending_time);
+            endingTime.update();
+        }
     }
 
     @Override
     public void setChatReceiver(ChatReceiver chatReceiver) {
-        LiveChatView liveChat = getActivity().findViewById(R.id.live_chat);
-        liveChat.setChatReceiver(chatReceiver);
+        if (getActivity() != null) {
+            LiveChatView liveChat = getActivity().findViewById(R.id.live_chat);
+            liveChat.setChatReceiver(chatReceiver);
+        }
     }
 
     // End Ui events
