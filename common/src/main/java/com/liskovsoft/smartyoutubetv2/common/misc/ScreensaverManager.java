@@ -64,15 +64,16 @@ public class ScreensaverManager {
             LayoutInflater layoutInflater = activity.getLayoutInflater();
             dimContainer = layoutInflater.inflate(R.layout.dim_container, null);
             if (rootView instanceof ViewGroup) {
+                // NOTE: zoom will be bugged! Frames on top and bottom.
                 // Add negative margin to fix un-proper viewport positioning on some devices
                 // NOTE: below code is not working!!!
                 // NOTE: comment out code below if you don't want this
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                params.setMargins(-30, -30, -30, -30);
-                ((ViewGroup) rootView).addView(dimContainer, params);
+                //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                //        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                //params.setMargins(-30, -30, -30, -30);
+                //((ViewGroup) rootView).addView(dimContainer, params);
 
-                //((ViewGroup) rootView).addView(dimContainer);
+                ((ViewGroup) rootView).addView(dimContainer);
             }
         }
 
