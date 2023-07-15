@@ -526,6 +526,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_auto_volume),
+                option -> mPlayerTweaksData.enablePlayerAutoVolume(option.isSelected()),
+                mPlayerTweaksData.isPlayerAutoVolumeEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_ui_on_next),
                 option -> mPlayerTweaksData.enablePlayerUiOnNext(option.isSelected()),
                 mPlayerTweaksData.isPlayerUiOnNextEnabled()));
