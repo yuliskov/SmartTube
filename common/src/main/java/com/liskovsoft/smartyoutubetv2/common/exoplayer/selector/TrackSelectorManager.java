@@ -492,9 +492,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 // Don't let change the codec beside needed one.
                 // Handle situation where same codecs in different groups (e.g. subtitles).
                 if (MediaTrack.codecEquals(result, originTrack)) {
-                    if (originTrack.compare(result) == 0) { // Exact match found
-                        break;
-                    }
+                    // NOTE: compare doen't take into the account bitrate difference
+                    //if (originTrack.compare(result) == 0) { // Exact match found
+                    //    break;
+                    //}
 
                     if (MediaTrack.codecEquals(prevResult, originTrack) && prevResult.compare(result) > 0) {
                         result = prevResult;

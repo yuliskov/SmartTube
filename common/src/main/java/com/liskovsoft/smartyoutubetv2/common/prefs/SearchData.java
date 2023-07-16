@@ -117,7 +117,7 @@ public class SearchData {
         mSearchOptions = Helpers.parseInt(split, 1, 0);
         mIsFocusOnResultsEnabled = Helpers.parseBoolean(split, 2, true);
         mIsKeyboardAutoShowEnabled = Helpers.parseBoolean(split, 3, false);
-        mIsTempBackgroundModeEnabled = Helpers.parseBoolean(split, 4, true);
+        mIsTempBackgroundModeEnabled = Helpers.parseBoolean(split, 4, false);
         //mIsAltSpeechRecognizerEnabled
         mSpeechRecognizerType = Helpers.parseInt(split, 6, SPEECH_RECOGNIZER_SYSTEM);
         mIsTrendingSearchesEnabled = Helpers.parseBoolean(split, 7, true);

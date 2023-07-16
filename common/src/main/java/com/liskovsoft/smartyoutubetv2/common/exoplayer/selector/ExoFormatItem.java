@@ -141,7 +141,8 @@ public class ExoFormatItem implements FormatItem {
                         return mType == formatItem.mType &&
                                 Helpers.equals(mFormatId, formatItem.mFormatId); // instead of compare by bitrate
                     }
-                    return mType == formatItem.mType &&
+                    return mIsPreset == formatItem.mIsPreset &&
+                            mType == formatItem.mType &&
                             mFrameRate == formatItem.mFrameRate &&
                             mWidth == formatItem.mWidth &&
                             mHeight == formatItem.mHeight &&

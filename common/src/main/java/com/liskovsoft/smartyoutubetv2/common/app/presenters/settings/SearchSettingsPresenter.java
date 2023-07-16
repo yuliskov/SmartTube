@@ -50,6 +50,10 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.search_background_playback),
+                option -> mSearchData.enableTempBackgroundMode(option.isSelected()),
+                mSearchData.isTempBackgroundModeEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.instant_voice_search),
                 option -> mSearchData.enableInstantVoiceSearch(option.isSelected()),
                 mSearchData.isInstantVoiceSearchEnabled()));
