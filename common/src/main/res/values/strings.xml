@@ -318,7 +318,7 @@
     <string name="content_block_filler">Off-topic (filler)</string>
     <string name="keyboard_auto_show">Show keyboard automatically</string>
     <string name="cancel_dialog">Cancel</string>
-    <string name="msg_player_error_source2">Video source isn\'t working or incorrect time.\nUsually, it\'s the app issue.</string>
+    <string name="msg_player_error_source2">Video source isn\'t working or incorrect device time.\nUsually, it\'s the app issue.</string>
     <string name="hide_upcoming">Hide upcoming from Subscriptions</string>
     <string name="search_background_playback">Enter PIP on search/open channel</string>
     <string name="trending_row_name">Trending</string>
