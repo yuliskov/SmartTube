@@ -314,7 +314,7 @@
     <string name="content_block_filler">Відхід від теми (офтопік)</string>
     <string name="keyboard_auto_show">Показувати клавіатуру автоматично</string>
     <string name="cancel_dialog">Скасувати</string>
-    <string name="msg_player_error_source2">Джерело відео не працює або невірний час.\nСкоріш за все проблема у застосунку. Зв\`яжіться с групою підтримки.</string>
+    <string name="msg_player_error_source2">Джерело відео не працює або невірний час.\nСкоріш за все проблема у застосунку. Зв\'яжіться с групою підтримки.</string>
     <string name="hide_upcoming">Приховувати анонси з Підписок</string>
     <string name="search_background_playback">Переходити у режим Картинка в картинці при пошуку/відкритті каналу</string>
     <string name="trending_row_name">Популярне</string>
