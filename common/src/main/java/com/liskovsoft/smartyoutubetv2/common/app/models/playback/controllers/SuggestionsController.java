@@ -575,16 +575,15 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private void showChapterDialog(ChapterItem chapter) {
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
-        if ((dialogPresenter.isDialogShown() && dialogPresenter.getId() != CHAPTER_NOTIFICATION_Id) ||
-                getPlayer() == null || getPlayer().isOverlayShown() || getPlayer().isInPIPMode() ||
-                Utils.isScreenOff(getActivity())) {
-            // Another window is opened. Don't distract a user.
+        if (dialogPresenter.isDialogShown() && dialogPresenter.getId() != CHAPTER_NOTIFICATION_Id) {
+            // Another dialog is opened. Don't distract a user.
             return;
         }
 
         dialogPresenter.closeDialog(); // remove previous dialog
 
-        if (chapter == null) {
+        if (chapter == null || getPlayer() == null || getPlayer().isOverlayShown() || getPlayer().isInPIPMode() ||
+                Utils.isScreenOff(getActivity())) {
             return;
         }
 
