@@ -208,7 +208,7 @@
     <string name="player_remember_speed_all">Gleiche Geschwindigkeit für alle Videos</string>
     <string name="player_remember_speed_each">Spezifische Geschwindigkeit pro Video</string>
     <string name="msg_player_error_source">Video kann nicht geladen werden</string>
-    <string name="msg_player_error_renderer">Das ausgewählte Videoformat wird nicht unterstützt\nVielleicht ein Fehler in der Firmware. Versuchen Sie, das Gerät neu zu starten.</string>
+    <string name="msg_player_error_renderer">Das ausgewählte Videoformat wird nicht unterstützt\nNormalerweise handelt es sich um einen Fehler in der Firmware. Versuchen Sie, das Gerät neu zu starten.</string>
     <string name="msg_player_error_unexpected">Unbekannter Video-Decoder-Fehler</string>
     <string name="video_aspect">Seitenverhältnis</string>
     <string name="player_tweaks">Entwickleroptionen</string>
@@ -318,7 +318,7 @@
     <string name="content_block_filler">Füller/Witze</string>
     <string name="keyboard_auto_show">Tastatur automatisch anzeigen</string>
     <string name="cancel_dialog">Abbrechen</string>
-    <string name="msg_player_error_source2">Video-Quelle funktioniert nicht oder falsche Uhrzeit</string>
+    <string name="msg_player_error_source2">Video-Quelle funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise handelt es sich um ein Problem der App.</string>
     <string name="hide_upcoming">Anstehende Videos in Abos ausblenden</string>
     <string name="search_background_playback">Bild-in-Bild öffnen bei Suche/Kanal öffnen</string>
     <string name="trending_row_name">Trends</string>
