@@ -237,7 +237,7 @@ public class ExoMediaSourceFactory {
      * Use OkHttp for networking
      */
     private HttpDataSource.Factory buildOkHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpManager.instance().getClient(), DefaultHeaders.APP_USER_AGENT,
+        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpManager.instance().getClient(), DefaultHeaders.USER_AGENT_WEB,
                 bandwidthMeter);
         addCommonHeaders(dataSourceFactory);
         return dataSourceFactory;
@@ -246,7 +246,14 @@ public class ExoMediaSourceFactory {
     private HttpDataSource.Factory buildCronetDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         CronetDataSourceFactory dataSourceFactory =
                 new CronetDataSourceFactory(
-                        new CronetEngineWrapper(CronetManager.getEngine(mContext)), Executors.newSingleThreadExecutor(), null, bandwidthMeter, DefaultHeaders.APP_USER_AGENT);
+                        new CronetEngineWrapper(CronetManager.getEngine(mContext)),
+                        Executors.newSingleThreadExecutor(),
+                        null,
+                        bandwidthMeter,
+                        (int) OkHttpCommons.CONNECT_TIMEOUT_MS,
+                        (int) OkHttpCommons.READ_TIMEOUT_MS,
+                        true,
+                        buildDefaultHttpDataSourceFactory(bandwidthMeter));
         addCommonHeaders(dataSourceFactory);
         return dataSourceFactory;
     }
@@ -256,7 +263,7 @@ public class ExoMediaSourceFactory {
      */
     private HttpDataSource.Factory buildDefaultHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
-                DefaultHeaders.APP_USER_AGENT, bandwidthMeter, (int) OkHttpCommons.CONNECT_TIMEOUT_MS,
+                DefaultHeaders.USER_AGENT_WEB, bandwidthMeter, (int) OkHttpCommons.CONNECT_TIMEOUT_MS,
                 (int) OkHttpCommons.READ_TIMEOUT_MS, true); // allowCrossProtocolRedirects = true
 
         addCommonHeaders(dataSourceFactory); // cause troubles for some users
