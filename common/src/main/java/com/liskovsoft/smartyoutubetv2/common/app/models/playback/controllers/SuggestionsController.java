@@ -411,10 +411,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         addChapterMarkersIfNeeded();
         appendChapterSuggestionsIfNeeded();
         startChapterNotificationServiceIfNeeded();
-
-        if (mChapters != null) {
-            getPlayer().setSeekPreviewTitle("..."); // fix control panel animation on the first run
-        }
+        focusCurrentChapter();
     }
 
     private void appendUserQueueIfNeeded(Video video) {
@@ -450,6 +447,13 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void focusCurrentChapter() {
+        // Reset chapter title
+        getPlayer().setSeekPreviewTitle(mChapters != null ? "..." : null); // add placeholder to fix control panel animation on the first run
+
+        if (!getPlayer().isControlsShown()) {
+            return;
+        }
+
         VideoGroup group = getPlayer().getSuggestionsByIndex(0);
 
         if (group == null || group.getVideos() == null) {
