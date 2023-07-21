@@ -92,6 +92,11 @@ public final class SampleMediaItem implements MediaItem {
     }
 
     @Override
+    public boolean isShorts() {
+        return false;
+    }
+
+    @Override
     public boolean isMovie() {
         return mIsMovie;
     }

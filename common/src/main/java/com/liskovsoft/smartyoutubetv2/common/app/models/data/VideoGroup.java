@@ -168,6 +168,14 @@ public class VideoGroup {
         return mVideos == null || mVideos.isEmpty();
     }
 
+    public boolean isShorts() {
+        if (isEmpty()) {
+            return false;
+        }
+
+        return mVideos.get(0).isShorts;
+    }
+
     /**
      * Group position in multi-grid fragments<br/>
      * It isn't used on other types of fragments.

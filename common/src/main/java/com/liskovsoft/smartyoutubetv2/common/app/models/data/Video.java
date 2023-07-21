@@ -56,6 +56,7 @@ public final class Video {
     public boolean hasNewContent;
     public boolean isLive;
     public boolean isUpcoming;
+    public boolean isShorts;
     public boolean isChapter;
     public boolean isMovie;
     public boolean isSubscribed;
@@ -126,6 +127,7 @@ public final class Video {
         video.reloadPageKey = item.getReloadPageKey();
         video.isLive = item.isLive();
         video.isUpcoming = item.isUpcoming();
+        video.isShorts = item.isShorts();
         video.isMovie = item.isMovie();
         video.clickTrackingParams = item.getClickTrackingParams();
         video.mediaItem = item;
