@@ -51,9 +51,9 @@ public class ExoMediaSourceFactory {
     private static final String TAG = ExoMediaSourceFactory.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static ExoMediaSourceFactory sInstance;
-    @SuppressLint("StaticFieldLeak")
-    @SuppressWarnings("deprecation")
     private static final int MAX_SEGMENTS_PER_LOAD = 1;
+    private static final String USER_AGENT = DefaultHeaders.USER_AGENT_WEB;
+    @SuppressLint("StaticFieldLeak")
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private final Factory mMediaDataSourceFactory;
     private final Context mContext;
@@ -237,7 +237,7 @@ public class ExoMediaSourceFactory {
      * Use OkHttp for networking
      */
     private HttpDataSource.Factory buildOkHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpManager.instance().getClient(), DefaultHeaders.USER_AGENT_WEB,
+        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpManager.instance().getClient(), USER_AGENT,
                 bandwidthMeter);
         addCommonHeaders(dataSourceFactory);
         return dataSourceFactory;
@@ -263,7 +263,7 @@ public class ExoMediaSourceFactory {
      */
     private HttpDataSource.Factory buildDefaultHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
-                DefaultHeaders.USER_AGENT_WEB, bandwidthMeter, (int) OkHttpCommons.CONNECT_TIMEOUT_MS,
+                USER_AGENT, bandwidthMeter, (int) OkHttpCommons.CONNECT_TIMEOUT_MS,
                 (int) OkHttpCommons.READ_TIMEOUT_MS, true); // allowCrossProtocolRedirects = true
 
         addCommonHeaders(dataSourceFactory); // cause troubles for some users

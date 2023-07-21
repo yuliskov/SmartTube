@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventList
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
@@ -173,7 +174,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         }
 
         if (mPlayerTweaksData.isPlayerUiOnNextEnabled()) {
-            getPlayer().showControls(true);
+            getPlayer().showOverlay(true);
         }
     }
 
@@ -431,8 +432,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 // Except when playing from queue
                 if (mPlaylist.getNext() != null) {
                     loadNext();
-                    getPlayer().showOverlay(true);
-                } else if (!getPlayer().isSuggestionsShown()) {
+                } else if (!getPlayer().isSuggestionsShown() && !AppDialogPresenter.instance(getActivity()).isDialogShown()) {
                     getPlayer().finishReally();
                 }
                 break;
@@ -441,7 +441,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 // Except when playing from queue
                 if (mPlaylist.getNext() != null) {
                     loadNext();
-                    getPlayer().showOverlay(true);
                 } else {
                     getPlayer().setPositionMs(getPlayer().getDurationMs());
                     getPlayer().setPlayWhenReady(false);

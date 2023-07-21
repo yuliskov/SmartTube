@@ -6,6 +6,9 @@
     <dimen name="card_width">200dp</dimen>
     <dimen name="card_height">110dp</dimen>
 
+    <dimen name="shorts_card_width">100dp</dimen>
+    <dimen name="shorts_card_height">200dp</dimen>
+
     <dimen name="tiny_card_width">150dp</dimen>
     <dimen name="tiny_card_height">25dp</dimen>
 
