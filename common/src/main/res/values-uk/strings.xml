@@ -379,6 +379,7 @@
     <string name="tunneled_video_playback">Тунельне відтворення (Android 5+)</string>
     <string name="master_volume">Основна гучність</string>
     <string name="volume_limit">Обмеження гучності</string>
+    <string name="player_volume">Гучність</string>
     <string name="play_video">Відтворити</string>
     <string name="remember_position_of_short_videos">Запам\'ятовувати позицію коротких відео (меньше 5 хв)</string>
     <string name="player_show_tooltips">Показати підказки для кнопок</string>

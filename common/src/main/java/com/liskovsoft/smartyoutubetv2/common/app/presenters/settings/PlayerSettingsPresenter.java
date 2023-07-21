@@ -154,7 +154,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                     Helpers.floatEquals(scale, mPlayerData.getPlayerVolume())));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.volume_limit), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_volume), options);
     }
 
     private void appendSeekingPreviewCategory(AppDialogPresenter settingsPresenter) {
