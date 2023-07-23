@@ -114,7 +114,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
         boolean isHandled = handleBackKey(keyCode) || handleMenuKey(keyCode) ||
                 handleConfirmKey(keyCode) || handleStopKey(keyCode) || handleNumKeys(keyCode) ||
-                handlePlayPauseKey(keyCode);
+                handlePlayPauseKey(keyCode) || handleShortsNavigation(keyCode);
 
         if (isHandled) {
             return true; // don't show UI
@@ -646,6 +646,24 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
             getPlayer().setPlayWhenReady(!getPlayer().getPlayWhenReady());
             enableUiAutoHideTimeout(); // TODO: move out somehow
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean handleShortsNavigation(int keyCode) {
+        if (getPlayer().isOverlayShown() || !getPlayer().getVideo().isShorts) {
+            return false;
+        }
+
+        if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+            getMainController().onNextClicked();
+            return true;
+        }
+
+        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+            getMainController().onPreviousClicked();
             return true;
         }
 

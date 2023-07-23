@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsCategoryFr
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.settings.SettingsGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultiVideoGridFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.ShortsGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoRowsFragment;
 
@@ -61,6 +62,9 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
                 break;
             case BrowseSection.TYPE_GRID:
                 fragment = new VideoGridFragment();
+                break;
+            case BrowseSection.TYPE_SHORTS_GRID:
+                fragment = new ShortsGridFragment();
                 break;
             case BrowseSection.TYPE_SETTINGS_GRID:
                 fragment = new SettingsGridFragment();

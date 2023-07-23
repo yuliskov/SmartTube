@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.ShortsCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
@@ -44,7 +45,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         super.onCreate(savedInstanceState);
 
         mMainPresenter = getMainPresenter();
-        mCardPresenter = new VideoCardPresenter();
+        mCardPresenter = isShorts() ? new ShortsCardPresenter() : new VideoCardPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
         mVideoGridScale = MainUIData.instance(getActivity()).getVideoGridScale();
 
@@ -80,7 +81,9 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
     private void setupAdapter() {
         VerticalGridPresenter presenter = new CustomVerticalGridPresenter();
-        presenter.setNumberOfColumns(GridFragmentHelper.getMaxColsNum(getContext(), R.dimen.card_width, mVideoGridScale));
+        presenter.setNumberOfColumns(
+                GridFragmentHelper.getMaxColsNum(getContext(), isShorts() ? R.dimen.shorts_card_width : R.dimen.card_width, mVideoGridScale)
+        );
         setGridPresenter(presenter);
 
         if (mGridAdapter == null) {
@@ -182,6 +185,10 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         return mGridAdapter.size() == 0;
     }
 
+    protected boolean isShorts() {
+        return false;
+    }
+
     private final class ItemViewLongPressedListener implements OnItemLongPressedListener {
         @Override
         public void onItemLongPressed(Presenter.ViewHolder itemViewHolder, Object item) {
@@ -221,7 +228,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
             int size = mGridAdapter.size();
             int index = mGridAdapter.indexOf(item);
 
-            if (index > (size - ViewUtil.GRID_SCROLL_CONTINUE_NUM)) {
+            if (index > (size - (isShorts() ? ViewUtil.GRID_SCROLL_CONTINUE_NUM * 2 : ViewUtil.GRID_SCROLL_CONTINUE_NUM))) {
                 mMainPresenter.onScrollEnd((Video) mGridAdapter.get(size - 1));
             }
         }

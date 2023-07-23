@@ -492,27 +492,35 @@ public final class Video {
     }
 
     public boolean belongsToHome() {
-        return getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getType() == MediaGroup.TYPE_HOME;
+        return belongsToGroup(MediaGroup.TYPE_HOME);
     }
 
     public boolean belongsToChannel() {
-        return getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getType() == MediaGroup.TYPE_CHANNEL;
+        return belongsToGroup(MediaGroup.TYPE_CHANNEL);
     }
 
     public boolean belongsToChannelUploads() {
-        return getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getType() == MediaGroup.TYPE_CHANNEL_UPLOADS;
+        return belongsToGroup(MediaGroup.TYPE_CHANNEL_UPLOADS);
     }
 
     public boolean belongsToSubscriptions() {
-        return getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getType() == MediaGroup.TYPE_SUBSCRIPTIONS;
+        return belongsToGroup(MediaGroup.TYPE_SUBSCRIPTIONS);
     }
 
     public boolean belongsToHistory() {
-        return getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getType() == MediaGroup.TYPE_HISTORY;
+        return belongsToGroup(MediaGroup.TYPE_HISTORY);
     }
 
     public boolean belongsToMusic() {
-        return getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getType() == MediaGroup.TYPE_MUSIC;
+        return belongsToGroup(MediaGroup.TYPE_MUSIC);
+    }
+
+    public boolean belongsToShorts() {
+        return belongsToGroup(MediaGroup.TYPE_SHORTS);
+    }
+
+    private boolean belongsToGroup(int groupId) {
+        return getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getType() == groupId;
     }
 
     public boolean belongsToSection() {

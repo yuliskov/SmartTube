@@ -63,6 +63,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.ShortsCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -97,6 +98,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private ArrayObjectAdapter mRowsAdapter;
     private ListRowPresenter mRowPresenter;
     private VideoCardPresenter mCardPresenter;
+    private ShortsCardPresenter mShortsPresenter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private PlayerEventListener mEventListener;
     private PlayerController mExoPlayerController;
@@ -581,12 +583,14 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         };
 
         mCardPresenter = new VideoCardPresenter();
+        mShortsPresenter = new ShortsCardPresenter();
     }
 
     private void setupEventListeners() {
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
         mCardPresenter.setOnItemViewLongPressedListener(new ItemViewLongPressedListener());
+        mShortsPresenter.setOnItemViewLongPressedListener(new ItemViewLongPressedListener());
     }
 
     private final class ItemViewLongPressedListener implements OnItemLongPressedListener {
@@ -1355,7 +1359,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mediaGroupId);
 
         if (existingAdapter == null) {
-            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group, mCardPresenter);
+            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group, group.isShorts() ? mShortsPresenter : mCardPresenter);
 
             mMediaGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
 
