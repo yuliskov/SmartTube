@@ -131,8 +131,19 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
 
             mSkipExclude = !enabled;
 
-            mContentBlockData.enableSponsorBlock(!enabled);
-            onVideoLoaded(getPlayer().getVideo());
+            Video video = getPlayer().getVideo();
+
+            if (video != null && video.hasChannel()) {
+                if (enabled) {
+                    mContentBlockData.excludeChannel(video.channelId);
+                } else {
+                    mContentBlockData.stopExcludingChannel(video.channelId);
+                }
+            } else {
+                mContentBlockData.enableSponsorBlock(!enabled);
+            }
+
+            onVideoLoaded(video);
         }
     }
 
