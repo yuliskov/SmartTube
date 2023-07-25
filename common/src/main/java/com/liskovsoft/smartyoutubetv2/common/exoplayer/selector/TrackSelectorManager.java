@@ -145,6 +145,54 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         renderer.isDisabled = parameters.getRendererDisabled(rendererIndex);
     }
 
+    //private void initMediaTracks(int rendererIndex) {
+    //    if (mRenderers[rendererIndex] == null) {
+    //        return;
+    //    }
+    //
+    //    Renderer renderer = mRenderers[rendererIndex];
+    //    renderer.mediaTracks = new MediaTrack[renderer.trackGroups.length][];
+    //    // Fix for java.util.ConcurrentModificationException inside of:
+    //    // com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem.from (ExoFormatItem.java:44)
+    //    // Won't help: renderer.sortedTracks = Collections.synchronizedSortedSet(new TreeSet<>(new MediaTrackFormatComparator()));
+    //    renderer.sortedTracks = new TreeSet<>(new MediaTrackFormatComparator());
+    //
+    //    if (rendererIndex == RENDERER_INDEX_SUBTITLE) {
+    //        // AUTO OPTION: add disable subs option
+    //        MediaTrack noSubsTrack = MediaTrack.forRendererIndex(rendererIndex);
+    //        // Temporal selection.
+    //        // Real selection will be override later on setSelection() routine.
+    //        noSubsTrack.isSelected = true;
+    //        renderer.sortedTracks.add(noSubsTrack);
+    //        renderer.selectedTrack = noSubsTrack;
+    //    }
+    //
+    //    for (int groupIndex = 0; groupIndex < renderer.trackGroups.length; groupIndex++) {
+    //        TrackGroup group = renderer.trackGroups.get(groupIndex);
+    //        renderer.mediaTracks[groupIndex] = new MediaTrack[group.length];
+    //
+    //        for (int trackIndex = 0; trackIndex < group.length; trackIndex++) {
+    //            Format format = group.getFormat(trackIndex);
+    //
+    //            MediaTrack mediaTrack = MediaTrack.forRendererIndex(rendererIndex);
+    //            mediaTrack.format = format;
+    //            mediaTrack.groupIndex = groupIndex;
+    //            mediaTrack.trackIndex = trackIndex;
+    //
+    //            if (!mIsAllFormatsUnlocked && (!Utils.isTrackSupported(mediaTrack) || !isTrackUnique(mediaTrack))) {
+    //                continue;
+    //            }
+    //
+    //            // Selected track or not will be decided later in setSelection() routine
+    //
+    //            renderer.mediaTracks[groupIndex][trackIndex] = mediaTrack;
+    //            renderer.sortedTracks.add(mediaTrack);
+    //        }
+    //    }
+    //
+    //    mBlacklist.clear();
+    //}
+
     private void initMediaTracks(int rendererIndex) {
         if (mRenderers[rendererIndex] == null) {
             return;
@@ -154,9 +202,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         renderer.mediaTracks = new MediaTrack[renderer.trackGroups.length][];
         // Fix for java.util.ConcurrentModificationException inside of:
         // com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem.from (ExoFormatItem.java:44)
-        // Won't help:
-        // renderer.sortedTracks = Collections.synchronizedSortedSet(new TreeSet<>(new MediaTrackFormatComparator()));
-        renderer.sortedTracks = new TreeSet<>(new MediaTrackFormatComparator());
+        // Won't help: renderer.sortedTracks = Collections.synchronizedSortedSet(new TreeSet<>(new MediaTrackFormatComparator()));
+        SortedSet<MediaTrack> sortedTracks = new TreeSet<>(new MediaTrackFormatComparator());
 
         if (rendererIndex == RENDERER_INDEX_SUBTITLE) {
             // AUTO OPTION: add disable subs option
@@ -164,7 +211,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             // Temporal selection.
             // Real selection will be override later on setSelection() routine.
             noSubsTrack.isSelected = true;
-            renderer.sortedTracks.add(noSubsTrack);
+            sortedTracks.add(noSubsTrack);
             renderer.selectedTrack = noSubsTrack;
         }
 
@@ -187,9 +234,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 // Selected track or not will be decided later in setSelection() routine
 
                 renderer.mediaTracks[groupIndex][trackIndex] = mediaTrack;
-                renderer.sortedTracks.add(mediaTrack);
+                sortedTracks.add(mediaTrack);
             }
         }
+
+        // Late assign to fix ConcurrentModificationException
+        renderer.sortedTracks = sortedTracks;
 
         mBlacklist.clear();
     }
