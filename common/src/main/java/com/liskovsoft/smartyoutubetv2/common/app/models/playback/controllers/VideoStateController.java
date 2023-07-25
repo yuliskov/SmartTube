@@ -477,7 +477,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     private void updateHistory() {
         Video video = getVideo();
 
-        if (video == null || mIncognito || !getPlayer().containsMedia()) {
+        if (video == null || video.isShorts || mIncognito || !getPlayer().containsMedia()) {
             return;
         }
 

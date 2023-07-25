@@ -82,8 +82,14 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         if (group != null && group.getVideos() != null) {
             int begin = mVideoItems.size();
 
-            mVideoItems.addAll(group.getVideos());
-            mVideoGroups.add(group);
+            //mVideoItems.addAll(group.getVideos());
+            //mVideoGroups.add(group);
+
+            // The group now is expandable
+            mVideoItems.addAll(group.getVideos().subList(begin, group.getVideos().size()));
+            if (!mVideoGroups.contains(group)) {
+                mVideoGroups.add(group);
+            }
 
             // Fix double item blinking by specifying exact range
             notifyItemRangeInserted(begin, mVideoItems.size() - begin);

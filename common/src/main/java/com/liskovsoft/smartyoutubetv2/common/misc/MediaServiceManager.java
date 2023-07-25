@@ -291,13 +291,19 @@ public class MediaServiceManager {
         shouldContinueTheGroup(context, group, onNeedContinue, true);
     }
 
+    public void shouldContinueTheGroup(Context context, VideoGroup group, Runnable onNeedContinue, boolean showLoading) {
+        shouldContinueTheGroup(context, group, onNeedContinue, showLoading, false);
+    }
+
     /**
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
-    public void shouldContinueTheGroup(Context context, VideoGroup group, Runnable onNeedContinue, boolean showLoading) {
-        if (group == null) {
+    public void shouldContinueTheGroup(Context context, VideoGroup group, Runnable onNeedContinue, boolean showLoading, boolean isGrid) {
+        if (group == null || group.getMediaGroup() == null) {
             return;
         }
+
+        MediaGroup mediaGroup = group.getMediaGroup();
 
         Pair<Integer, Long> sizeTimestamp = mContinuations.get(group.getId());
 
@@ -307,13 +313,12 @@ public class MediaServiceManager {
         }
 
         int prevSize = sizeTimestamp != null ? sizeTimestamp.first : 0;
-        int newSize = group.getVideos() != null ? group.getVideos().size() : 0;
+        int newSize = mediaGroup.getMediaItems() != null ? mediaGroup.getMediaItems().size() : 0;
         int totalSize = prevSize + newSize;
 
         MainUIData mainUIData = MainUIData.instance(context);
 
         boolean isScaledUIEnabled = mainUIData.getUIScale() < 0.8f || mainUIData.getVideoGridScale() < 0.8f;
-        boolean isGrid = newSize >= MIN_GRID_GROUP_SIZE;
         int minScaledSize = isGrid ? MIN_SCALED_GRID_GROUP_SIZE : MIN_SCALED_ROW_GROUP_SIZE;
         int minSize = isGrid ? MIN_GRID_GROUP_SIZE : MIN_ROW_GROUP_SIZE;
         boolean groupTooSmall = isScaledUIEnabled ? totalSize < minScaledSize : totalSize < minSize;

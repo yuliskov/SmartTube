@@ -35,14 +35,14 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private final List<MetadataListener> mListeners = new ArrayList<>();
     private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
-    private VideoGroup mLastScrollGroup;
-    private VideoGroup mCurrentGroup; // disable garbage collected
-    private VideoGroup mNextGroup; // disable garbage collected
+    private MediaGroup mLastScrollGroup;
+    //private VideoGroup mCurrentGroup; // disable garbage collected
     private Video mNextVideo;
     private int mFocusCount;
-    private int mNextCount;
+    private int mNextRetryCount;
     private List<ChapterItem> mChapters;
     private final Runnable mChapterHandler = this::startChapterNotificationServiceIfNeededInt;
+    private static final int MAX_PLAYLIST_CONTINUATIONS = 20;
     private static final int CHAPTER_NOTIFICATION_Id = 565;
 
     public interface MetadataListener {
@@ -67,8 +67,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         // Remote control fix. Slow network fix. Suggestions may still be loading.
         // This could lead to changing current video info (title, id etc) to wrong one.
         disposeActions();
-        mCurrentGroup = item.getGroup(); // disable garbage collected
-        mNextGroup = null; // enable garbage collected
+        //mCurrentGroup = item.getGroup(); // disable garbage collected
         mNextVideo = null;
     }
 
@@ -96,12 +95,12 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         VideoGroup group = item.getGroup();
 
-        if (mLastScrollGroup == group) {
+        if (group == null || mLastScrollGroup == group.getMediaGroup()) {
             Log.d(TAG, "Can't continue group. Another action is running.");
             return;
         }
 
-        mLastScrollGroup = group;
+        mLastScrollGroup = group.getMediaGroup();
 
         continueGroup(group);
     }
@@ -167,7 +166,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
                 .subscribe(
                         continueMediaGroup -> {
                             getPlayer().showProgressBar(false);
-                            VideoGroup videoGroup = VideoGroup.from(continueMediaGroup, group.getSection());
+                            //VideoGroup videoGroup = VideoGroup.from(continueMediaGroup, group.getSection());
+                            VideoGroup videoGroup = VideoGroup.from(continueMediaGroup, group);
                             getPlayer().updateSuggestions(videoGroup);
 
                             // Merge remote queue with player's queue
@@ -534,7 +534,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
                 getPlayer().focusSuggestedItem(found);
             }
             mFocusCount = 0; // Stop the continuation loop
-        } else if (mFocusCount > 5 || !video.hasPlaylist()) {
+        } else if (mFocusCount > MAX_PLAYLIST_CONTINUATIONS || !video.hasPlaylist()) {
             // Stop the continuation loop. Maybe the video isn't there.
             mFocusCount = 0;
         } else {
@@ -555,10 +555,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         boolean found = false;
 
         for (Video current : videos) {
-            if ((found || mNextCount > 0) && current.hasVideo() && !current.isUpcoming) {
+            if (found && current.hasVideo() && !current.isUpcoming) {
                 getPlayer().setNextTitle(current.title);
-                mNextCount = 0;
-                mNextGroup = group;
+                mNextRetryCount = 0;
                 mNextVideo = current;
                 return;
             }
@@ -568,11 +567,11 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             }
         }
 
-        if (mNextCount > 0) {
-            mNextCount = 0;
+        if (mNextRetryCount > 0) {
+            mNextRetryCount = 0;
         } else {
             continueGroup(group, this::appendNextVideoIfNeeded);
-            mNextCount++;
+            mNextRetryCount++;
         }
     }
 

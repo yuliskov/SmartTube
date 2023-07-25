@@ -212,7 +212,8 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribe(
-                        continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup)),
+                        //continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup)),
+                        continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup, group)),
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             if (getView() != null) {

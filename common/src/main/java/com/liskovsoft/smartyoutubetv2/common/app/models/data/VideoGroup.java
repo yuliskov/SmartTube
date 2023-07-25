@@ -31,7 +31,7 @@ public class VideoGroup {
     }
 
     public static VideoGroup from(MediaGroup mediaGroup) {
-        return from(mediaGroup, null);
+        return from(mediaGroup, (BrowseSection) null);
     }
 
     public static VideoGroup from(BrowseSection category, int groupPosition) {
@@ -112,6 +112,40 @@ public class VideoGroup {
         }
 
         return videoGroup;
+    }
+
+    public static VideoGroup from(MediaGroup mediaGroup, VideoGroup baseGroup) {
+        baseGroup.mMediaGroup = mediaGroup;
+
+        if (mediaGroup == null) {
+            return baseGroup;
+        }
+
+        if (mediaGroup.isEmpty()) {
+            Log.e(TAG, "MediaGroup doesn't contain media items. Title: " + mediaGroup.getTitle());
+            return baseGroup;
+        }
+
+        VideoStateService stateService = VideoStateService.instance(null);
+
+        for (MediaItem item : mediaGroup.getMediaItems()) {
+            Video video = Video.from(item);
+
+            if (video.isEmpty()) {
+                continue;
+            }
+
+            // Group position in multi-grid fragments
+            video.groupPosition = baseGroup.mPosition;
+            video.setGroup(baseGroup);
+            if (stateService != null && video.percentWatched == -1) {
+                State state = stateService.getByVideoId(video.videoId);
+                video.sync(state);
+            }
+            baseGroup.mVideos.add(video);
+        }
+
+        return baseGroup;
     }
 
     public static VideoGroup fromChapters(List<ChapterItem> chapters, String title) {

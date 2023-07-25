@@ -73,7 +73,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private long mLastUpdateTimeMs;
     private int mBootSectionIndex;
     private int mSelectedSectionId = -1;
-    private VideoGroup mLastScrollGroup;
+    private MediaGroup mLastScrollGroup;
 
     private BrowsePresenter(Context context) {
         super(context);
@@ -382,17 +382,17 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         VideoGroup group = item.getGroup();
 
-        if (group == null) {
+        if (group == null || group.getMediaGroup() == null) {
             Log.e(TAG, "Can't scroll. Video group is null.");
             return;
         }
 
-        if (mLastScrollGroup == group) {
+        if (mLastScrollGroup == group.getMediaGroup()) {
             Log.d(TAG, "Can't continue group. Another action is running.");
             return;
         }
 
-        mLastScrollGroup = group;
+        mLastScrollGroup = group.getMediaGroup();
 
         Log.d(TAG, "onScrollEnd. Group title: " + group.getTitle());
 
@@ -732,7 +732,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         Disposable continueAction = continuation
                 .subscribe(
                         continueGroup -> {
-                            VideoGroup videoGroup = VideoGroup.from(continueGroup, group.getSection(), group.getPosition());
+                            //VideoGroup videoGroup = VideoGroup.from(continueGroup, group.getSection(), group.getPosition());
+                            VideoGroup videoGroup = VideoGroup.from(continueGroup, group);
                             getView().updateSection(videoGroup);
 
                             continueGroupIfNeeded(videoGroup);
@@ -779,7 +780,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
      */
     private void continueGroupIfNeeded(VideoGroup group) {
         MediaServiceManager.instance().shouldContinueTheGroup(
-                getContext(), group, () -> continueGroup(group), ViewManager.instance(getContext()).getTopView() == BrowseView.class
+                getContext(), group, () -> continueGroup(group), ViewManager.instance(getContext()).getTopView() == BrowseView.class,
+                isGridSection()
         );
     }
 
@@ -943,5 +945,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     public boolean inForeground() {
         return ViewManager.instance(getContext()).getTopView() == BrowseView.class;
+    }
+
+    private boolean isGridSection() {
+        return mCurrentSection != null && mCurrentSection.getType() != BrowseSection.TYPE_ROW;
     }
 }
