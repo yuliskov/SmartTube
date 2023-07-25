@@ -154,7 +154,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         renderer.mediaTracks = new MediaTrack[renderer.trackGroups.length][];
         // Fix for java.util.ConcurrentModificationException inside of:
         // com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem.from (ExoFormatItem.java:44)
-        // Won't help: renderer.sortedTracks = Collections.synchronizedSortedSet(new TreeSet<>(new MediaTrackFormatComparator()));
+        // Won't help:
+        // renderer.sortedTracks = Collections.synchronizedSortedSet(new TreeSet<>(new MediaTrackFormatComparator()));
         renderer.sortedTracks = new TreeSet<>(new MediaTrackFormatComparator());
 
         if (rendererIndex == RENDERER_INDEX_SUBTITLE) {
