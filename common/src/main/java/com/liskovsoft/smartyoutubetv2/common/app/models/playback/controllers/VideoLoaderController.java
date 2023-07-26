@@ -211,6 +211,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             getPlayer().setVideo(mLastVideo);
         }
 
+        Utils.removeCallbacks(mPendingRestartEngine);
+
         return false;
     }
 
@@ -381,15 +383,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private void initErrorActions() {
         // Some ciphered data could be outdated.
         // Might happen when the app wasn't used quite a long time.
-        mErrorActions.put(PlayerEventListener.ERROR_TYPE_SOURCE, () -> {
-            MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_source2);
-            Utils.postDelayed(mPendingRestartEngine, 3_000);
-        });
+        mErrorActions.put(PlayerEventListener.ERROR_TYPE_SOURCE, () -> MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_source2));
 
-        mErrorActions.put(PlayerEventListener.ERROR_TYPE_RENDERER, () -> MessageHelpers.showLongMessage(getActivity(), R.string.msg_player_error_renderer));
+        mErrorActions.put(PlayerEventListener.ERROR_TYPE_RENDERER, () -> MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_renderer));
 
         // Hide unknown error on all devices
-        mErrorActions.put(PlayerEventListener.ERROR_TYPE_UNEXPECTED, () -> Utils.postDelayed(mPendingRestartEngine, 3_000));
+        mErrorActions.put(PlayerEventListener.ERROR_TYPE_UNEXPECTED, () -> {});
     }
 
     private void startErrorAction(int error) {
@@ -399,9 +398,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             action.run();
         } else {
             MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_player_error, error));
-            // Delay to fix frequent requests
-            Utils.postDelayed(mPendingRestartEngine, 3_000);
         }
+
+        // Delay to fix frequent requests
+        Utils.postDelayed(mPendingRestartEngine, 3_000);
     }
 
     private List<String> applyFix(List<String> urlList) {
