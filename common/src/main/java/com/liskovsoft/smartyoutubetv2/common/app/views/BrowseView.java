@@ -17,4 +17,5 @@ public interface BrowseView {
     void showProgressBar(boolean show);
     boolean isProgressBarShowing();
     void focusOnContent();
+    boolean isEmpty();
 }

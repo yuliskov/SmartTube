@@ -252,7 +252,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void showErrorIfEmpty(ErrorFragmentData data) {
-        if (mSectionFragmentFactory.isEmpty()) {
+        if (isEmpty()) {
             replaceMainFragment(new ErrorDialogFragment(data));
             updateTitleView();
         }
@@ -471,6 +471,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public boolean isProgressBarShowing() {
         return mProgressBarManager.isShowing();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return mSectionFragmentFactory == null || mSectionFragmentFactory.isEmpty();
     }
 
     private void updateTitleView() {
