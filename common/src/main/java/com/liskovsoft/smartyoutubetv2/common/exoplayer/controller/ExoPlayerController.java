@@ -42,6 +42,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private final ExoMediaSourceFactory mMediaSourceFactory;
     private final TrackSelectorManager mTrackSelectorManager;
     private final TrackInfoFormatter2 mTrackFormatter;
+    private final TrackErrorFixer mTrackErrorFixer;
     private boolean mOnSourceChanged;
     private Video mVideo;
     private PlayerEventListener mEventListener;
@@ -55,11 +56,12 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
         mContext = context.getApplicationContext();
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
-        mTrackSelectorManager = new TrackSelectorManager(PlayerData.instance(context).getAudioLanguage(), playerTweaksData.isAllFormatsUnlocked());
+        mTrackSelectorManager = new TrackSelectorManager(context);
         mTrackFormatter = new TrackInfoFormatter2();
         mTrackFormatter.enableBitrate(PlayerTweaksData.instance(context).isQualityInfoBitrateEnabled());
+        mTrackErrorFixer = new TrackErrorFixer(mTrackSelectorManager);
 
-        mMediaSourceFactory.setTrackErrorFixer(new TrackErrorFixer(mTrackSelectorManager));
+        mMediaSourceFactory.setTrackErrorFixer(mTrackErrorFixer);
 
         // Shield 720p fix???
         initFormats();

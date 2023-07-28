@@ -39,6 +39,8 @@ android {
 }
 
 dependencies {
+    // MODIFIED: add subs bg padding
+    implementation project(':sharedutils')
     implementation project(modulePrefix + 'library-core')
     implementation 'androidx.media:media:1.0.1'
     implementation 'androidx.annotation:annotation:1.1.0'

@@ -1,11 +1,14 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.errors;
 
 import androidx.annotation.Nullable;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer.DecoderInitializationException;
 import com.google.android.exoplayer2.source.DefaultMediaSourceEventListener;
 import com.google.android.exoplayer2.source.MediaSource.MediaPeriodId;
 import com.google.android.exoplayer2.source.chunk.Chunk;
 import com.google.android.exoplayer2.source.chunk.ContainerMediaChunk;
 import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException;
+import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
@@ -54,19 +57,23 @@ public class TrackErrorFixer extends DefaultMediaSourceEventListener {
 
         mLastEx = ex;
 
-        return selectDifferentCodec();
+        return selectDifferentCodec(isAudio(mLastEx));
     }
 
-    private boolean selectDifferentCodec() {
-        if (mLastEx == null) {
-            return false;
-        }
+    //public boolean fixError(ExoPlaybackException error) {
+    //    if (error != null && error.getCause() instanceof DecoderInitializationException) {
+    //        return selectDifferentCodec(MimeTypes.isAudio(((DecoderInitializationException) error.getCause()).mimeType));
+    //    }
+    //
+    //    return false;
+    //}
 
+    private boolean selectDifferentCodec(boolean isAudio) {
         if (System.currentTimeMillis() - mSelectionTimeMs < BLACKLIST_CLEAR_MS) {
             return false;
         }
 
-        Set<MediaTrack> tracks = isAudio(mLastEx) ? mTrackSelectorManager.getAudioTracks() : mTrackSelectorManager.getVideoTracks();
+        Set<MediaTrack> tracks = isAudio ? mTrackSelectorManager.getAudioTracks() : mTrackSelectorManager.getVideoTracks();
 
         if (tracks == null) {
             return false;

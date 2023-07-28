@@ -606,7 +606,7 @@ public class Utils {
         return true;
     }
 
-    public static boolean isTrackSupported(MediaTrack mediaTrack) {
+    public static boolean isFormatSupported(MediaTrack mediaTrack) {
         if (mediaTrack.isVP9Codec() && !Helpers.isVP9ResolutionSupported(mediaTrack.getHeight())) {
             return false;
         }

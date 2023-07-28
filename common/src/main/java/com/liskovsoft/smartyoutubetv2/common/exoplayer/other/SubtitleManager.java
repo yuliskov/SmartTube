@@ -101,11 +101,10 @@ public class SubtitleManager implements TextOutput, OnDataChange {
             if (cue.text.toString().endsWith("\n")) {
                 subsBuffer = cue.text;
             } else {
-                result.add(new Cue(subsBuffer != null ? cue.text.toString().replace(subsBuffer, "") : cue.text)); // sub centered by default
+                CharSequence text = subsBuffer != null ? cue.text.toString().replace(subsBuffer, "") : cue.text;
+                result.add(new Cue(text)); // sub centered by default
                 subsBuffer = null;
             }
-
-            //result.add(new Cue(cue.text)); // sub centered by default
         }
 
         return result;

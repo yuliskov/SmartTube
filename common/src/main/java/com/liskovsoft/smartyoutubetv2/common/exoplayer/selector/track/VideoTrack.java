@@ -142,30 +142,32 @@ public class VideoTrack extends MediaTrack {
         float frameRate2 = track2.format.frameRate < LOW_FPS_THRESHOLD ? 30 : track2.format.frameRate;
         String codecs1 = format.codecs;
         String codecs2 = track2.format.codecs;
+        int bitrate1 = format.bitrate;
+        int bitrate2 = track2.format.bitrate;
 
         int result;
 
         if (type == COMPARE_TYPE_IN_BOUNDS) {
-            result = inBounds(id1, id2, size1, size2, frameRate1, frameRate2, codecs1, codecs2);
+            result = inBounds(id1, id2, size1, size2, frameRate1, frameRate2, codecs1, codecs2, bitrate1, bitrate2);
         } else if (type == COMPARE_TYPE_IN_BOUNDS_NO_FPS) {
-            result = inBounds(id1, id2, size1, size2, -1, -1, codecs1, codecs2);
+            result = inBounds(id1, id2, size1, size2, -1, -1, codecs1, codecs2, bitrate1, bitrate2);
         } else if (type == COMPARE_TYPE_IN_BOUNDS_PRESET) {
             result = inBoundsPreset(id1, id2, size1, size2, frameRate1, frameRate2, codecs1, codecs2);
         } else if (type == COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS) {
             result = inBoundsPreset(id1, id2, size1, size2, -1, -1, codecs1, codecs2);
         } else {
-            result = compare(id1, id2, size1, size2, frameRate1, frameRate2, codecs1, codecs2);
+            result = compare(id1, id2, size1, size2, frameRate1, frameRate2, codecs1, codecs2, bitrate1, bitrate2);
         }
 
         return result;
     }
 
-    private int inBounds(String id1, String id2, int size1, int size2, float frameRate1, float frameRate2, String codecs1, String codecs2) {
+    private int inBounds(String id1, String id2, int size1, int size2, float frameRate1, float frameRate2, String codecs1, String codecs2, int bitrate1, int bitrate2) {
         int result = -1;
 
         if (Helpers.equals(id1, id2)) {
             result = 0;
-        } else if (sizeLessOrEquals(size2, size1) && fpsLessOrEquals(frameRate2, frameRate1)) {
+        } else if (sizeLessOrEquals(size2, size1) && fpsLessOrEquals(frameRate2, frameRate1) && bitrateLessOrEquals(bitrate2, bitrate1)) {
             if (TrackSelectorUtil.isHdrCodec(codecs1) == TrackSelectorUtil.isHdrCodec(codecs2)) {
                 result = 1;
             } else if (TrackSelectorUtil.isHdrCodec(codecs1)) {
@@ -226,7 +228,7 @@ public class VideoTrack extends MediaTrack {
     //    return result;
     //}
 
-    private int compare(String id1, String id2, int size1, int size2, float frameRate1, float frameRate2, String codecs1, String codecs2) {
+    private int compare(String id1, String id2, int size1, int size2, float frameRate1, float frameRate2, String codecs1, String codecs2, int bitrate1, int bitrate2) {
         if (Helpers.equals(id1, id2)) {
             return 0;
         }
@@ -252,7 +254,8 @@ public class VideoTrack extends MediaTrack {
             leftScore += 1;
         }
 
-        return leftScore - rightScore;
+        int result = leftScore - rightScore;
+        return result == 0 && TrackSelectorUtil.codecNameShort(codecs1).equals(TrackSelectorUtil.codecNameShort(codecs2)) ? bitrate1 - bitrate2 : result;
     }
 
     //private int compare(String id1, String id2, int size1, int size2, float frameRate1, float frameRate2, String codecs1, String codecs2) {

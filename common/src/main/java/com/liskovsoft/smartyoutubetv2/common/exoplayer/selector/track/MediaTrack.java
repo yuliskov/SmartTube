@@ -54,6 +54,14 @@ public abstract class MediaTrack {
         return null;
     }
 
+    protected static boolean bitrateLessOrEquals(int bitrate1, int bitrate2) {
+        if (bitrate1 == -1 || bitrate2 == -1) {
+            return true;
+        }
+
+        return bitrate1 <= bitrate2;
+    }
+
     private static boolean codecEquals(String codecs1, String codecs2) {
         if (codecs1 == null || codecs2 == null) {
             return false;

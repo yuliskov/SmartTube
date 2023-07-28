@@ -305,6 +305,10 @@ public class AppDialogUtil {
     }
 
     public static OptionCategory createAudioLanguageCategory(Context context, PlayerData playerData) {
+        return createAudioLanguageCategory(context, playerData, () -> {});
+    }
+
+    public static OptionCategory createAudioLanguageCategory(Context context, PlayerData playerData, Runnable onSetCallback) {
         String title = context.getString(R.string.audio_language);
 
         List<OptionItem> options = new ArrayList<>();
@@ -319,7 +323,10 @@ public class AppDialogUtil {
             }
 
             options.add(UiOptionItem.from(locale.getDisplayLanguage(),
-                    optionItem -> playerData.setAudioLanguage(languageCode),
+                    optionItem -> {
+                        playerData.setAudioLanguage(languageCode);
+                        onSetCallback.run();
+                    },
                     languageCode.equals(playerData.getAudioLanguage())));
             addedCodes.add(languageCode);
         }
@@ -327,6 +334,13 @@ public class AppDialogUtil {
         // NOTE: Comparator.comparing API >= 24
         // Alphabetical order
         Collections.sort(options, (o1, o2) -> ((String) o1.getTitle()).compareTo((String) o2.getTitle()));
+
+        options.add(0, UiOptionItem.from(context.getString(R.string.dialog_account_none),
+                optionItem -> {
+                    playerData.setAudioLanguage("");
+                    onSetCallback.run();
+                },
+                "".equals(playerData.getAudioLanguage())));
 
         return OptionCategory.from(AUDIO_LANGUAGE_ID, OptionCategory.TYPE_RADIO, title, options);
     }

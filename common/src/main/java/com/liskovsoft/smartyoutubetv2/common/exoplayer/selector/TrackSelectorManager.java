@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
-import android.text.TextUtils;
+import android.content.Context;
 import android.util.Pair;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.TrackGroup;
@@ -15,10 +15,10 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.AudioTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector.TrackSelectorCallback;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
@@ -32,13 +32,12 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class TrackSelectorManager implements TrackSelectorCallback {
+    private final Context mContext;
     public static final int RENDERER_INDEX_VIDEO = 0;
     public static final int RENDERER_INDEX_AUDIO = 1;
     public static final int RENDERER_INDEX_SUBTITLE = 2;
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
     private static final String DEFAULT_LANGUAGE = "en";
-    private final String mLanguage;
-    private final boolean mIsAllFormatsUnlocked;
     private final Map<String, Integer> mBlacklist = new HashMap<>();
 
     private DefaultTrackSelector mTrackSelector;
@@ -46,9 +45,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
 
-    public TrackSelectorManager(String language, boolean isAllFormatsUnlocked) {
-        mLanguage = language;
-        mIsAllFormatsUnlocked = isAllFormatsUnlocked;
+    public TrackSelectorManager(Context context) {
+        mContext = context.getApplicationContext();
     }
 
     public void invalidate() {
@@ -227,7 +225,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 mediaTrack.groupIndex = groupIndex;
                 mediaTrack.trackIndex = trackIndex;
 
-                if (!mIsAllFormatsUnlocked && (!Utils.isTrackSupported(mediaTrack) || !isTrackUnique(mediaTrack))) {
+                if (!isTrackUnique(mediaTrack)) {
+                    continue;
+                }
+
+                if (!PlayerTweaksData.instance(mContext).isAllFormatsUnlocked() && !Utils.isFormatSupported(mediaTrack)) {
                     continue;
                 }
 
@@ -474,6 +476,98 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         invalidate();
     }
 
+    //private MediaTrack findBestMatch(MediaTrack originTrack) {
+    //    Log.d(TAG, "findBestMatch: Starting: " + originTrack.format);
+    //
+    //    Renderer renderer = mRenderers[originTrack.rendererIndex];
+    //
+    //    MediaTrack result = createAutoSelection(originTrack.rendererIndex);
+    //
+    //    if (originTrack.format != null) { // not auto selection
+    //        MediaTrack prevResult;
+    //
+    //        MediaTrack[][] mediaTracks = filterByLanguage(renderer.mediaTracks, originTrack);
+    //
+    //        outerloop:
+    //        for (int groupIndex = 0; groupIndex < mediaTracks.length; groupIndex++) {
+    //            prevResult = result;
+    //
+    //            // Very rare NPE fix
+    //            MediaTrack[] trackGroup = mediaTracks[groupIndex];
+    //
+    //            if (trackGroup == null) {
+    //                Log.e(TAG, "Track selection error. Media track group %s is empty.", groupIndex);
+    //                continue;
+    //            }
+    //
+    //            for (MediaTrack mediaTrack : trackGroup) {
+    //                if (mediaTrack == null) {
+    //                    continue;
+    //                }
+    //
+    //                int compare = originTrack.inBounds(mediaTrack);
+    //
+    //                if (compare == 0) {
+    //                    Log.d(TAG, "findBestMatch: Found exact match by size and fps in list: " + mediaTrack.format);
+    //
+    //                    // Get ready for group with multiple codecs: avc, av01
+    //                    if (MediaTrack.codecEquals(mediaTrack, originTrack) && MediaTrack.bitrateEquals(mediaTrack, originTrack)) {
+    //                        result = mediaTrack;
+    //                        break outerloop;
+    //                    } else if (MediaTrack.codecEquals(mediaTrack, originTrack) && MediaTrack.preferByBitrate(mediaTrack, result)) {
+    //                        result = mediaTrack;
+    //                        // Don't do break for VideoTrack because we don't know whether there 30/60 fps.
+    //                        if (!(originTrack instanceof VideoTrack)) {
+    //                            break outerloop;
+    //                        }
+    //                    } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
+    //                        result = mediaTrack;
+    //                        if (originTrack instanceof SubtitleTrack) {
+    //                            break outerloop;
+    //                        }
+    //                    }
+    //                } else if (compare > 0) {
+    //                    // Select track with higher possible quality or by preferred codec
+    //                    boolean sameOrBetter = mediaTrack.compare(result) >= 0;
+    //                    //boolean preferByCodec = MediaTrack.preferByCodec(mediaTrack, result);
+    //                    if (sameOrBetter) { // || preferByCodec
+    //                        // Get ready for group with multiple codecs: avc, av01
+    //                        // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
+    //                        if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
+    //                            result = mediaTrack;
+    //                        } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
+    //                            result = mediaTrack;
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //
+    //            // Don't let change the codec beside needed one.
+    //            // Handle situation where same codecs in different groups (e.g. subtitles).
+    //            if (MediaTrack.codecEquals(result, originTrack)) {
+    //                // NOTE: compare doen't take into the account bitrate difference
+    //                //if (originTrack.compare(result) == 0) { // Exact match found
+    //                //    break;
+    //                //}
+    //
+    //                if (MediaTrack.codecEquals(prevResult, originTrack) && prevResult.compare(result) > 0) {
+    //                    result = prevResult;
+    //                }
+    //            } else if (MediaTrack.codecEquals(prevResult, originTrack)) {
+    //                result = prevResult;
+    //            } else if (prevResult.compare(result) == 0) { // Formats are the same except the codecs
+    //                if (MediaTrack.preferByCodec(prevResult, result)) {
+    //                    result = prevResult;
+    //                }
+    //            }
+    //        }
+    //    }
+    //
+    //    Log.d(TAG, "findBestMatch: Found: " + result.format);
+    //
+    //    return result;
+    //}
+
     private MediaTrack findBestMatch(MediaTrack originTrack) {
         Log.d(TAG, "findBestMatch: Starting: " + originTrack.format);
 
@@ -486,7 +580,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
             MediaTrack[][] mediaTracks = filterByLanguage(renderer.mediaTracks, originTrack);
 
-            outerloop:
             for (int groupIndex = 0; groupIndex < mediaTracks.length; groupIndex++) {
                 prevResult = result;
 
@@ -505,33 +598,14 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
                     int compare = originTrack.inBounds(mediaTrack);
 
-                    if (compare == 0) {
-                        Log.d(TAG, "findBestMatch: Found exact match by size and fps in list: " + mediaTrack.format);
-
-                        // Get ready for group with multiple codecs: avc, av01
-                        if (MediaTrack.codecEquals(mediaTrack, originTrack) && MediaTrack.bitrateEquals(mediaTrack, originTrack)) {
-                            result = mediaTrack;
-                            break outerloop;
-                        } else if (MediaTrack.codecEquals(mediaTrack, originTrack) && MediaTrack.preferByBitrate(mediaTrack, result)) {
-                            result = mediaTrack;
-                            // Don't do break for VideoTrack because we don't know whether there 30/60 fps.
-                            if (!(originTrack instanceof VideoTrack)) {
-                                break outerloop;
-                            }
-                        } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
-                            result = mediaTrack;
-                            if (originTrack instanceof SubtitleTrack) {
-                                break outerloop;
-                            }
-                        }
-                    } else if (compare > 0) {
+                    if (compare >= 0) {
                         // Select track with higher possible quality or by preferred codec
-                        boolean higherQuality = mediaTrack.compare(result) >= 0;
+                        boolean sameOrBetter = mediaTrack.compare(result) >= 0;
                         //boolean preferByCodec = MediaTrack.preferByCodec(mediaTrack, result);
-                        if (higherQuality) { // || preferByCodec
+                        if (sameOrBetter) { // || preferByCodec
                             // Get ready for group with multiple codecs: avc, av01
                             // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
-                            if (MediaTrack.codecEquals(mediaTrack, originTrack) && MediaTrack.preferByBitrate(mediaTrack, result)) {
+                            if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
                                 result = mediaTrack;
                             } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
                                 result = mediaTrack;
@@ -543,11 +617,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 // Don't let change the codec beside needed one.
                 // Handle situation where same codecs in different groups (e.g. subtitles).
                 if (MediaTrack.codecEquals(result, originTrack)) {
-                    // NOTE: compare doen't take into the account bitrate difference
-                    //if (originTrack.compare(result) == 0) { // Exact match found
-                    //    break;
-                    //}
-
                     if (MediaTrack.codecEquals(prevResult, originTrack) && prevResult.compare(result) > 0) {
                         result = prevResult;
                     }
@@ -601,16 +670,22 @@ public class TrackSelectorManager implements TrackSelectorCallback {
      * Trying to filter languages preferred by the user
      */
     private MediaTrack[][] filterByLanguage(MediaTrack[][] trackGroupList, MediaTrack originTrack) {
-        if (!(originTrack instanceof AudioTrack) || mLanguage == null || trackGroupList.length <= 1) {
+        if (!(originTrack instanceof AudioTrack) || trackGroupList.length <= 1) {
             return trackGroupList;
         }
 
-        String resultLanguage = mLanguage;
+        String audioLanguage = PlayerData.instance(mContext).getAudioLanguage();
 
-        // Override default language with one from recently selected track
-        if (originTrack.format != null && !TextUtils.isEmpty(originTrack.format.language)) {
-            resultLanguage = originTrack.format.language;
+        if (audioLanguage == null || audioLanguage.isEmpty()) {
+            return trackGroupList;
         }
+
+        String resultLanguage = audioLanguage;
+
+        //// Override default language with one from recently selected track
+        //if (originTrack.format != null && !TextUtils.isEmpty(originTrack.format.language)) {
+        //    resultLanguage = originTrack.format.language;
+        //}
 
         List<MediaTrack[]> resultTracks = null;
         List<MediaTrack[]> resultTracksFallback = null;

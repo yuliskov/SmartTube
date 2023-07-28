@@ -208,7 +208,7 @@
     <string name="player_remember_speed_all">Одинаковая скорость на всех видео</string>
     <string name="player_remember_speed_each">На каждом видео своя скорость</string>
     <string name="msg_player_error_source">Не получается загрузить видео</string>
-    <string name="msg_player_error_renderer">Выбранный видеоформат не поддерживается.\nВозможно, баг в прошивке. Попробуйте перезагрузить устройство или выбрать другой формат.</string>
+    <string name="msg_player_error_renderer">Выбранный формат не поддерживается.\nПопробуйте выбрать другой формат.\nЕсли это не поможет, то перезагрузите устройство.</string>
     <string name="msg_player_error_unexpected">Неизвестная ошибка в видеодекодере</string>
     <string name="video_aspect">Соотношение сторон</string>
     <string name="player_tweaks">Для разработчиков</string>

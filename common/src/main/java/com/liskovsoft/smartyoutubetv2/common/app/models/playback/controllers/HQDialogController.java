@@ -51,6 +51,7 @@ public class HQDialogController extends PlayerEventListenerHelper {
         addQualityCategories();
         addVideoBufferCategory();
         addPresetsCategory();
+        addAudioLanguage();
         addAudioDelayCategory();
         //addBackgroundPlaybackCategory();
 
@@ -105,6 +106,11 @@ public class HQDialogController extends PlayerEventListenerHelper {
 
     private void addAudioDelayCategory() {
         addCategoryInt(AppDialogUtil.createAudioShiftCategory(getActivity(), mPlayerData,
+                () -> getPlayer().restartEngine()));
+    }
+
+    private void addAudioLanguage() {
+        addCategoryInt(AppDialogUtil.createAudioLanguageCategory(getActivity(), mPlayerData,
                 () -> getPlayer().restartEngine()));
     }
 
