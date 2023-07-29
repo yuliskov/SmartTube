@@ -41,7 +41,9 @@ public class AudioTrack extends MediaTrack {
 
         if (Helpers.equals(id1, id2) && sameLanguage(language1, language2)) {
             result = 0;
-        } else if (bitrateLessOrEquals(bitrate2, bitrate1) && sameLanguage(language1, language2)) {
+        } else if (bitrate1 != -1 && bitrateLessOrEquals(bitrate2, bitrate1) && sameLanguage(language1, language2)) {
+            result = 1;
+        } else if (bitrate1 == -1 && (TrackSelectorUtil.is51Audio(format) || !TrackSelectorUtil.is51Audio(track2.format)) && sameLanguage(language1, language2)) {
             result = 1;
         }
 

@@ -77,14 +77,16 @@ public class VideoGroup {
             return videoGroup;
         }
 
-        // Weak point. Title is used to obtain the group id.
-        if (mediaGroup.getTitle() == null && section != null) {
-            mediaGroup.setTitle(section.getTitle());
+        String sectionTitle = null;
+
+        // Set the title for the current section playlist
+        if (section != null) {
+            sectionTitle = section.getTitle();
         }
 
         videoGroup.mMediaGroup = mediaGroup;
-        videoGroup.mTitle = mediaGroup.getTitle();
-        videoGroup.mId = mediaGroup.getId();
+        videoGroup.mTitle = mediaGroup.getTitle() != null ? mediaGroup.getTitle() : sectionTitle;
+        videoGroup.mId = videoGroup.hashCode();
         videoGroup.mVideos = new ArrayList<>();
 
         if (mediaGroup.getMediaItems() == null) {
@@ -175,11 +177,6 @@ public class VideoGroup {
      */
     public void setTitle(String title) {
         mTitle = title;
-
-        // Important part. The title is converted to unique row id.
-        if (mMediaGroup != null) {
-            mMediaGroup.setTitle(title);
-        }
     }
 
     public int getId() {

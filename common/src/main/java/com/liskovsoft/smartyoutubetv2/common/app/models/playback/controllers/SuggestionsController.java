@@ -63,12 +63,12 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void openVideo(Video item) {
+    public void openVideo(Video video) {
         // Remote control fix. Slow network fix. Suggestions may still be loading.
         // This could lead to changing current video info (title, id etc) to wrong one.
         disposeActions();
-        //mCurrentGroup = item.getGroup(); // disable garbage collected
-        mNextVideo = null;
+        //mCurrentGroup = video.getGroup(); // disable garbage collected
+        appendNextSectionVideoIfNeeded(video);
     }
 
     @Override
@@ -166,7 +166,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
                 .subscribe(
                         continueMediaGroup -> {
                             getPlayer().showProgressBar(false);
-                            //VideoGroup videoGroup = VideoGroup.from(continueMediaGroup, group.getSection());
                             VideoGroup videoGroup = VideoGroup.from(continueMediaGroup, group);
                             getPlayer().updateSuggestions(videoGroup);
 
@@ -212,7 +211,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private String getNextTitle() {
         String title = null;
 
-        Video nextVideo = Playlist.instance().getNext();
+        Video nextVideo = getNext() != null ? getNext() : Playlist.instance().getNext();
         Video video = getPlayer().getVideo();
 
         if (nextVideo != null) {
@@ -435,7 +434,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         getPlayer().updateSuggestions(video.getGroup());
         focusAndContinueIfNeeded(video.getGroup());
-        appendNextVideoIfNeeded(video.getGroup());
     }
 
     private void markAsQueueIfNeeded(Video item) {
@@ -544,10 +542,16 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         }
     }
 
-    private void appendNextVideoIfNeeded(VideoGroup group) {
-        Video video = getPlayer().getVideo();
+    private void appendNextSectionVideoIfNeeded(Video video) {
+        mNextVideo = null;
 
-        if (group == null || group.isEmpty() || video == null || !video.hasVideo()) {
+        if (video == null || video.getGroup() == null || video.playlistId != null || video.remotePlaylistId != null || !mPlayerTweaksData.isSectionPlaylistEnabled()) {
+            return;
+        }
+
+        VideoGroup group = video.getGroup();
+
+        if (group == null || group.isEmpty()) {
             return;
         }
 
@@ -556,7 +560,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         for (Video current : videos) {
             if (found && current.hasVideo() && !current.isUpcoming) {
-                getPlayer().setNextTitle(current.title);
                 mNextRetryCount = 0;
                 mNextVideo = current;
                 return;
@@ -570,7 +573,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         if (mNextRetryCount > 0) {
             mNextRetryCount = 0;
         } else {
-            continueGroup(group, this::appendNextVideoIfNeeded);
+            continueGroup(group, continuation -> appendNextSectionVideoIfNeeded(video));
             mNextRetryCount++;
         }
     }

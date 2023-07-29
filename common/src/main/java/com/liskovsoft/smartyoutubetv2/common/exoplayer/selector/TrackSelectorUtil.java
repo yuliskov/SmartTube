@@ -162,11 +162,15 @@ public class TrackSelectorUtil {
     }
 
     public static String buildChannels(Format format) {
+        return is51Audio(format) ? "5.1" : "";
+    }
+
+    public static boolean is51Audio(Format format) {
         if (format == null) {
-            return "";
+            return false;
         }
 
-        return format.bitrate > 300000 ? "5.1" : "";
+        return format.bitrate > 300000;
     }
 
     public static boolean isVideo(Format format) {
