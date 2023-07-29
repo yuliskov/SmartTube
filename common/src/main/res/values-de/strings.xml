@@ -208,7 +208,7 @@
     <string name="player_remember_speed_all">Gleiche Geschwindigkeit für alle Videos</string>
     <string name="player_remember_speed_each">Spezifische Geschwindigkeit pro Video</string>
     <string name="msg_player_error_source">Video kann nicht geladen werden</string>
-    <string name="msg_player_error_renderer">Das ausgewählte Videoformat wird nicht unterstützt\nNormalerweise handelt es sich um einen Fehler in der Firmware. Versuchen Sie, das Gerät neu zu starten oder ein anderes Format auszuwählen.</string>
+    <string name="msg_player_error_renderer">Das ausgewählte Format wird nicht unterstützt.\nVersuchen Sie, ein anderes Format auszuwählen.\nWenn dies nicht hilft, versuchen Sie, das Gerät neu zu starten.</string>
     <string name="msg_player_error_unexpected">Unbekannter Video-Decoder-Fehler</string>
     <string name="video_aspect">Seitenverhältnis</string>
     <string name="player_tweaks">Entwickleroptionen</string>
