@@ -82,12 +82,10 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         if (group != null && group.getVideos() != null) {
             int begin = mVideoItems.size();
 
-            //mVideoItems.addAll(group.getVideos());
-            //mVideoGroups.add(group);
-
-            // The group now is expandable
-            mVideoItems.addAll(group.getVideos().subList(begin, group.getVideos().size()));
-            if (!mVideoGroups.contains(group)) {
+            if (mVideoGroups.contains(group)) {
+                mVideoItems.addAll(group.getVideos().subList(begin, group.getVideos().size()));
+            } else {
+                mVideoItems.addAll(group.getVideos());
                 mVideoGroups.add(group);
             }
 
