@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -67,6 +68,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
         runRefreshCachePeriodicTask();
         showAccountSelection();
+        forceEnableHistory();
 
         if (getView() != null) {
             checkMasterPassword(() -> applyNewIntent(getView().getNewIntent()));
@@ -135,6 +137,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
 
         mRefreshCachePeriodicAction = RxHelper.startInterval(YouTubeMediaService.instance()::refreshCacheIfNeeded, 30 * 60);
+    }
+
+    private void forceEnableHistory() {
+        // Account history might be turned off (common issue).
+        MediaServiceManager.instance().enableHistory(GeneralData.instance(getContext()).isHistoryEnabled());
     }
 
     private void checkTouchSupport() {
