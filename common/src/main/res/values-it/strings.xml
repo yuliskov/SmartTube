@@ -318,7 +318,7 @@
     <string name="content_block_filler">Fuori tema (riempitivo)</string>
     <string name="keyboard_auto_show">Mostra automaticamente la tastiera</string>
     <string name="cancel_dialog">Annulla</string>
-    <string name="msg_player_error_source2">La sorgente video non funziona o l\'ora del dispositivo non è corretta.\nIn genere, è un problema con l'app.</string>
+    <string name="msg_player_error_source2">La sorgente video non funziona o l\'ora del dispositivo non è corretta.\nIn genere, è un problema con l\'app.</string>
     <string name="hide_upcoming">Nascondi in arrivo dalle Iscrizioni</string>
     <string name="search_background_playback">Entra in PiP quando cerchi/apri il canale</string>
     <string name="trending_row_name">Tendenze</string>

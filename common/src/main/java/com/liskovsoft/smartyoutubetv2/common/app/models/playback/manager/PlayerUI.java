@@ -16,6 +16,7 @@ public interface PlayerUI {
     int REPEAT_MODE_LIST = 5;
     int BUTTON_OFF = 0;
     int BUTTON_ON = 1;
+    int BUTTON_DISABLED = -1;
     void updateSuggestions(VideoGroup group);
     void removeSuggestions(VideoGroup group);
     int getSuggestionsIndex(VideoGroup group);

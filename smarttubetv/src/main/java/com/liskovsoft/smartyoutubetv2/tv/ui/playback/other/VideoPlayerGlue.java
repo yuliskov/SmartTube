@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback.other;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.widget.OnActionLongClickedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ActionHelpers;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChatAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
@@ -341,8 +343,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         invalidateUi(mChatAction);
     }
 
-    public void setActionIndex(int actionId, int actionIndex) {
-        setActionIndex(mActions.get(actionId), actionIndex);
+    public void setButtonState(int buttonId, int buttonState) {
+        setActionIndex(mActions.get(buttonId), buttonState);
     }
 
     public void setSpeedButtonState(boolean selected) {
@@ -642,10 +644,18 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     }
 
     private void setActionIndex(Action action, int actionIndex) {
-        if (action instanceof MultiAction) {
+        if (actionIndex == -1) { // button disabled
+            disableAction(action);
+        } else if (action instanceof MultiAction) {
             ((MultiAction) action).setIndex(actionIndex);
             invalidateUi(action);
         }
+    }
+
+    private void disableAction(Action action) {
+        Drawable icon = action.getIcon();
+        action.setIcon(ActionHelpers.createDrawable(getContext(), (BitmapDrawable) icon, ActionHelpers.getIconGrayedOutColor(getContext())));
+        invalidateUi(action);
     }
 
     /**
