@@ -596,21 +596,34 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         continue;
                     }
 
-                    int compare = originTrack.inBounds(mediaTrack);
+                    int bounds = originTrack.inBounds(mediaTrack);
 
-                    if (compare >= 0) {
-                        boolean firstExactMatch = MediaTrack.codecEquals(mediaTrack, originTrack) && !MediaTrack.codecEquals(result, originTrack);
-                        // Select track with higher possible quality or by preferred codec
-                        boolean sameOrBetter = mediaTrack.compare(result) >= 0;
-                        if (sameOrBetter || firstExactMatch) {
-                            // Get ready for group with multiple codecs: avc, av01
-                            // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
+                    if (bounds >= 0) {
+                        int compare = mediaTrack.compare(result);
+
+                        if (compare == 0) {
                             if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
                                 result = mediaTrack;
-                            } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
+                            }
+                        } else if (compare > 0) {
+                            if (!MediaTrack.preferByCodec(result, mediaTrack)) {
                                 result = mediaTrack;
                             }
                         }
+
+
+                        //boolean firstExactMatch = MediaTrack.codecEquals(mediaTrack, originTrack) && !MediaTrack.codecEquals(result, originTrack);
+                        //// Select track with higher possible quality or by preferred codec
+                        //boolean sameOrBetter = mediaTrack.compare(result) >= 0;
+                        //if (sameOrBetter || firstExactMatch) {
+                        //    // Get ready for group with multiple codecs: avc, av01
+                        //    // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
+                        //    if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
+                        //        result = mediaTrack;
+                        //    } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
+                        //        result = mediaTrack;
+                        //    }
+                        //}
                     }
                 }
 

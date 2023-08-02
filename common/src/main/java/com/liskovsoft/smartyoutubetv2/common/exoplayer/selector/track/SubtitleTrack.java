@@ -47,9 +47,9 @@ public class SubtitleTrack extends MediaTrack {
         if (Helpers.startsWith(track2.format.language, trim(format.language))) { // partial match
             if (!isAuto(format.language)) {
                 // Prefer original subs
-                result = 0;
-            } else if (isAuto(format.language) && isAuto(track2.format.language)) {
                 result = 1;
+            } else if (isAuto(format.language) && isAuto(track2.format.language)) {
+                result = 0;
             }
         }
 
@@ -75,8 +75,7 @@ public class SubtitleTrack extends MediaTrack {
             return null;
         }
 
-        return trimAuto(language)
-                .replaceAll(" - .*", ""); // english - us bla -> english
+        return trimAuto(language.replaceAll(" - .*", "")); // english - us bla -> english
     }
 
     public static String trimAuto(String language) {
