@@ -58,6 +58,7 @@ public class GeneralData {
     private boolean mIsRemapPageUpToSpeedEnabled;
     private boolean mIsRemapChannelUpToSpeedEnabled;
     private boolean mIsRemapFastForwardToSpeedEnabled;
+    private boolean mIsRemapNextPrevToSpeedEnabled;
     private boolean mIsRemapChannelUpToSearchEnabled;
     private boolean mIsHideShortsFromHomeEnabled;
     private boolean mIsHideShortsFromHistoryEnabled;
@@ -388,6 +389,15 @@ public class GeneralData {
 
     public boolean isRemapFastForwardToSpeedEnabled() {
         return mIsRemapFastForwardToSpeedEnabled;
+    }
+
+    public void remapNextPrevToSpeed(boolean enable) {
+        mIsRemapNextPrevToSpeedEnabled = enable;
+        persistState();
+    }
+
+    public boolean isRemapNextPrevToSpeedEnabled() {
+        return mIsRemapNextPrevToSpeedEnabled;
     }
 
     public void remapPageUpToNext(boolean enable) {
@@ -770,6 +780,7 @@ public class GeneralData {
         mIsOldHomeLookEnabled = Helpers.parseBoolean(split, 42, Build.VERSION.SDK_INT <= 19);
         mIsOldUpdateNotificationsEnabled = Helpers.parseBoolean(split, 43, false);
         mScreensaverDimmingPercents = Helpers.parseInt(split, 44, 80);
+        mIsRemapNextPrevToSpeedEnabled = Helpers.parseBoolean(split, 81, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -831,6 +842,6 @@ public class GeneralData {
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
                 playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
-                mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents));
+                mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextPrevToSpeedEnabled));
     }
 }

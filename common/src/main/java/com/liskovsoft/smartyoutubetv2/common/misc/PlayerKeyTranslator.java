@@ -100,7 +100,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
 
     private void addSpeedAction(Map<Integer, Runnable> actionMapping) {
         if (!mGeneralData.isRemapPageUpToSpeedEnabled() && !mGeneralData.isRemapChannelUpToSpeedEnabled()
-            && !mGeneralData.isRemapFastForwardToSpeedEnabled()) {
+            && !mGeneralData.isRemapFastForwardToSpeedEnabled() && !mGeneralData.isRemapNextPrevToSpeedEnabled()) {
             return;
         }
 
@@ -120,6 +120,11 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
         if (mGeneralData.isRemapFastForwardToSpeedEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, speedDownAction);
+        }
+
+        if (mGeneralData.isRemapNextPrevToSpeedEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_MEDIA_NEXT, speedUpAction);
+            actionMapping.put(KeyEvent.KEYCODE_MEDIA_PREVIOUS, speedDownAction);
         }
     }
 

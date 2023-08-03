@@ -240,6 +240,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendKeyRemappingCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from("Next/Previous -> Speed Up/Down",
+                option -> mGeneralData.remapNextPrevToSpeed(option.isSelected()),
+                mGeneralData.isRemapNextPrevToSpeedEnabled()));
+
         options.add(UiOptionItem.from("Fast Forward/Rewind -> Next/Previous",
                 option -> mGeneralData.remapFastForwardToNext(option.isSelected()),
                 mGeneralData.isRemapFastForwardToNextEnabled()));
@@ -364,13 +368,34 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupPathCheck != null ? backupPathCheck : ""),
                 option -> {
-                    AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
-                        backupManager.checkPermAndRestore();
-                        MessageHelpers.showMessage(getContext(), R.string.msg_done);
-                    });
+                    List<String> backups = backupManager.getBackupNames();
+
+                    if (backups != null && !backups.isEmpty()) {
+                        showRestoreSelectorDialog(backups, backupManager);
+                    } else {
+                        AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
+                            backupManager.checkPermAndRestore();
+                            MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                        });
+                    }
                 }));
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.app_backup_restore), options);
+    }
+
+    private void showRestoreSelectorDialog(List<String> backups, BackupAndRestoreManager backupManager) {
+        AppDialogPresenter dialog = AppDialogPresenter.instance(getContext());
+        List<OptionItem> options = new ArrayList<>();
+
+        for (String name : backups) {
+            options.add(UiOptionItem.from(name, optionItem -> {
+                backupManager.checkPermAndRestore(name);
+                MessageHelpers.showMessage(getContext(), R.string.msg_done);
+            }));
+        }
+
+        dialog.appendStringsCategory(getContext().getString(R.string.app_restore), options);
+        dialog.showDialog();
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
