@@ -385,7 +385,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         // Might happen when the app wasn't used quite a long time.
         mErrorActions.put(PlayerEventListener.ERROR_TYPE_SOURCE, () -> MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_source2));
 
-        mErrorActions.put(PlayerEventListener.ERROR_TYPE_RENDERER, () -> MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_renderer));
+        mErrorActions.put(PlayerEventListener.ERROR_TYPE_RENDERER, () -> {
+            MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_renderer);
+            mPlayerData.setFormat(mPlayerData.getDefaultAudioFormat());
+        });
 
         // Hide unknown error on all devices
         mErrorActions.put(PlayerEventListener.ERROR_TYPE_UNEXPECTED, () -> {});
