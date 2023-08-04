@@ -29,7 +29,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
     private static final int AUTO_FRAME_RATE_ID = 21;
     private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
     private static final int AUTO_FRAME_RATE_MODES_ID = 23;
-    private static final long MIN_DURATION_MS = 2 * 60 * 1_000;
+    private static final long SHORTS_DURATION_MS = 2 * 60 * 1_000;
     private final HQDialogController mUiManager;
     private final VideoStateController mStateUpdater;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
@@ -164,7 +164,8 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
     }
 
     private void applyAfr() {
-        if (getPlayer() != null && getPlayer().getDurationMs() > MIN_DURATION_MS && mPlayerData.isAfrEnabled()) {
+        if (mPlayerData.isAfrEnabled() &&
+                getPlayer() != null && getPlayer().getDurationMs() > SHORTS_DURATION_MS) {
             FormatItem videoFormat = getPlayer().getVideoFormat();
             applyAfr(videoFormat, false);
             // Send data to AFR daemon via tvQuickActions app
@@ -211,7 +212,8 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
     }
 
     private void savePlayback() {
-        if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseMs() > 0) {
+        if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseMs() > 0 &&
+                getPlayer() != null && getPlayer().getDurationMs() > SHORTS_DURATION_MS) {
             mStateUpdater.blockPlay(true);
         }
 
