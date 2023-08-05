@@ -8,6 +8,7 @@ import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.GlobalKeyTranslator;
 import com.liskovsoft.smartyoutubetv2.common.misc.PlayerKeyTranslator;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -89,6 +90,16 @@ public class AppDialogActivity extends MotherActivity {
         Log.d(TAG, "Dialog finish");
         if (mFragment != null) { // fragment isn't created yet (expandable = true)
             mFragment.onFinish();
+        }
+    }
+
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+
+        // Respect PIP mode
+        if (ViewManager.instance(this).getTopView() == PlaybackView.class) {
+            ((PlaybackActivity) PlaybackPresenter.instance(this).getContext()).onUserLeaveHint();
         }
     }
 }
