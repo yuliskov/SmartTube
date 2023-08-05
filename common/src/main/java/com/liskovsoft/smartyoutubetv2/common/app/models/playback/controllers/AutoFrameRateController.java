@@ -55,7 +55,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
 
     @Override
     public void onInit() {
-        mPlayerData = PlayerData.instance(getActivity());
+        mPlayerData = PlayerData.instance(getContext());
         mAutoFrameRateHelper.saveOriginalState(getActivity());
     }
 
@@ -80,12 +80,12 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
 
     @Override
     public void onModeStart(Mode newMode) {
-        if (getActivity() == null) {
+        if (getContext() == null) {
             return;
         }
 
         // Ugoos already displays this message on each mode switch
-        String message = getActivity().getString(
+        String message = getContext().getString(
                 R.string.auto_frame_rate_applying,
                 newMode.getPhysicalWidth(),
                 newMode.getPhysicalHeight(),
@@ -97,12 +97,12 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
 
     @Override
     public void onModeError(Mode newMode) {
-        if (getActivity() == null) {
+        if (getContext() == null) {
             return;
         }
 
         if (newMode != null) {
-            String msg = getActivity().getString(R.string.msg_mode_switch_error, UhdHelper.toResolution(newMode));
+            String msg = getContext().getString(R.string.msg_mode_switch_error, UhdHelper.toResolution(newMode));
             Log.e(TAG, msg);
 
             restorePlayback();
@@ -134,7 +134,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
 
     private void applyAfrStop() {
         // Send data to AFR daemon via tvQuickActions app
-        TvQuickActions.sendStopAFR(getActivity());
+        TvQuickActions.sendStopAFR(getContext());
     }
 
     private void onFpsCorrectionClick() {
@@ -155,7 +155,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
 
     private void applyAfrWrapper() {
         if (mPlayerData.isAfrEnabled()) {
-            AppDialogPresenter.instance(getActivity()).showDialogMessage("Applying AFR...", this::applyAfr, 1_000);
+            AppDialogPresenter.instance(getContext()).showDialogMessage("Applying AFR...", this::applyAfr, 1_000);
         }
     }
 
@@ -169,7 +169,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
             FormatItem videoFormat = getPlayer().getVideoFormat();
             applyAfr(videoFormat, false);
             // Send data to AFR daemon via tvQuickActions app
-            TvQuickActions.sendStartAFR(getActivity(), videoFormat);
+            TvQuickActions.sendStartAFR(getContext(), videoFormat);
         } else {
             restoreAfr();
         }
@@ -188,7 +188,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
                     videoFormat.getFrameRate(),
                     videoFormat.getWidth(),
                     videoFormat.getHeight(),
-                    getActivity().getClass().getSimpleName()
+                    getContext().getClass().getSimpleName()
             );
             Log.d(TAG, msg);
 
@@ -250,34 +250,34 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
     private void addUiOptions() {
         if (mAutoFrameRateHelper.isSupported()) {
             OptionCategory afrCategory = createAutoFrameRateCategory(
-                    getActivity(), PlayerData.instance(getActivity()),
+                    getContext(), PlayerData.instance(getContext()),
                     () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick, this::onDoubleRefreshRateClick, this::onSkip24RateClick);
 
             OptionCategory afrPauseCategory = createAutoFrameRatePauseCategory(
-                    getActivity(), PlayerData.instance(getActivity()));
+                    getContext(), PlayerData.instance(getContext()));
 
-            OptionCategory modesCategory = createAutoFrameRateModesCategory(getActivity());
+            OptionCategory modesCategory = createAutoFrameRateModesCategory(getContext());
 
             // Create nested dialogs
 
             List<OptionItem> options = new ArrayList<>();
             options.add(UiOptionItem.from(afrCategory.title, optionItem -> {
-                AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+                AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
                 dialogPresenter.appendCheckedCategory(afrCategory.title, afrCategory.options);
                 dialogPresenter.showDialog(afrCategory.title);
             }));
             options.add(UiOptionItem.from(afrPauseCategory.title, optionItem -> {
-                AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+                AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
                 dialogPresenter.appendRadioCategory(afrPauseCategory.title, afrPauseCategory.options);
                 dialogPresenter.showDialog(afrPauseCategory.title);
             }));
             options.add(UiOptionItem.from(modesCategory.title, optionItem -> {
-                AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+                AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
                 dialogPresenter.appendLongTextCategory(modesCategory.title, modesCategory.option);
                 dialogPresenter.showDialog(modesCategory.title);
             }));
 
-            mUiManager.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING, getActivity().getString(R.string.auto_frame_rate), options));
+            mUiManager.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING, getContext().getString(R.string.auto_frame_rate), options));
             mUiManager.addOnDialogHide(mApplyAfr); // Apply NEW Settings on dialog close
         } else {
             mUiManager.removeCategory(AUTO_FRAME_RATE_ID);

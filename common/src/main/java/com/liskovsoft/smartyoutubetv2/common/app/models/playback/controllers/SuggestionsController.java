@@ -59,7 +59,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
     @Override
     public void onInit() {
-        mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
+        mPlayerTweaksData = PlayerTweaksData.instance(getContext());
     }
 
     @Override
@@ -202,7 +202,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         if (getPlayer().containsMedia()) {
             video.isUpcoming = false; // live stream started
         }
-        video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isAbsoluteDateEnabled());
+        video.sync(mediaItemMetadata, PlayerData.instance(getContext()).isAbsoluteDateEnabled());
         getPlayer().setVideo(video);
 
         getPlayer().setNextTitle(getNextTitle());
@@ -249,7 +249,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
                 .subscribe(
                         callback::onMetadata,
                         error -> {
-                            MessageHelpers.showLongMessage(getActivity(), "loadSuggestions error: %s", error.getMessage());
+                            MessageHelpers.showLongMessage(getContext(), "loadSuggestions error: %s", error.getMessage());
                             Log.e(TAG, "loadSuggestions error: %s", error.getMessage());
                             error.printStackTrace();
                             // Errors are usual here (something with title parsing)
@@ -313,7 +313,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         int groupIndex = -1;
         int suggestRows = -1;
 
-        if (GeneralData.instance(getActivity()).isChildModeEnabled()) {
+        if (GeneralData.instance(getContext()).isChildModeEnabled()) {
             suggestRows = video.hasPlaylist() ? 1 : 0;
         }
 
@@ -353,7 +353,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             // Double queue bugfix. Remove remote playlist id from the videos.
             videoGroup.stripPlaylistInfo();
 
-            videoGroup.setTitle(getActivity().getString(R.string.action_playback_queue));
+            videoGroup.setTitle(getContext().getString(R.string.action_playback_queue));
             videoGroup.setId(videoGroup.getTitle().hashCode());
 
             Playlist.instance().removeAllAfterCurrent();
@@ -375,7 +375,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             return;
         }
 
-        VideoGroup videoGroup = VideoGroup.fromChapters(mChapters, getActivity().getString(R.string.chapters));
+        VideoGroup videoGroup = VideoGroup.fromChapters(mChapters, getContext().getString(R.string.chapters));
 
         getPlayer().updateSuggestions(videoGroup);
     }
@@ -422,7 +422,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         List<Video> queue = Playlist.instance().getAllAfterCurrent();
 
         VideoGroup videoGroup = VideoGroup.from(queue);
-        videoGroup.setTitle(getActivity().getString(R.string.action_playback_queue));
+        videoGroup.setTitle(getContext().getString(R.string.action_playback_queue));
         videoGroup.setId(videoGroup.getTitle().hashCode());
         getPlayer().updateSuggestions(videoGroup);
     }
@@ -502,7 +502,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             float endRatio = (float) (chapter.getStartTimeMs() + markLengthMs) / getPlayer().getDurationMs(); // Range: [0, 1]
             seekBarSegment.startProgress = startRatio;
             seekBarSegment.endProgress = endRatio;
-            seekBarSegment.color = ContextCompat.getColor(getActivity(), R.color.black);
+            seekBarSegment.color = ContextCompat.getColor(getContext(), R.color.black);
             result.add(seekBarSegment);
         }
 
@@ -513,7 +513,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
     private void continueGroupIfNeeded(VideoGroup group) {
-        MediaServiceManager.instance().shouldContinueTheGroup(getActivity(), group, () -> continueGroup(group), getPlayer().isSuggestionsShown());
+        MediaServiceManager.instance().shouldContinueTheGroup(getContext(), group, () -> continueGroup(group), getPlayer().isSuggestionsShown());
     }
 
     public void focusAndContinueIfNeeded(VideoGroup group) {
@@ -579,7 +579,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void showChapterDialog(ChapterItem chapter) {
-        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
 
         if (dialogPresenter.isDialogShown() && dialogPresenter.getId() != CHAPTER_NOTIFICATION_Id) {
             // Another dialog is opened. Don't distract a user.
@@ -589,7 +589,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         dialogPresenter.closeDialog(); // remove previous dialog
 
         if (chapter == null || getPlayer() == null || getPlayer().isOverlayShown() || getPlayer().isInPIPMode() ||
-                Utils.isScreenOff(getActivity())) {
+                Utils.isScreenOff(getContext())) {
             return;
         }
 

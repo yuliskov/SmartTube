@@ -70,9 +70,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
     @Override
     public void onInit() {
-        mPlayerData = PlayerData.instance(getActivity());
+        mPlayerData = PlayerData.instance(getContext());
         mPlayerData.setOnChange(this);
-        mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
+        mPlayerTweaksData = PlayerTweaksData.instance(getContext());
         mSleepTimerStartMs = System.currentTimeMillis();
         initErrorActions();
     }
@@ -137,7 +137,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
     @Override
     public boolean onNextClicked() {
-        if (GeneralData.instance(getActivity()).isChildModeEnabled()) {
+        if (GeneralData.instance(getContext()).isChildModeEnabled()) {
             onPlayEnd();
         } else {
             loadNext();
@@ -199,7 +199,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
     @Override
     public void onPlaybackQueueClicked() {
-        AppDialogUtil.showPlaybackQueueDialog(getActivity(), this::openVideoInt);
+        AppDialogUtil.showPlaybackQueueDialog(getContext(), this::openVideoInt);
     }
 
     @Override
@@ -224,7 +224,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private void checkSleepTimer() {
         if (mPlayerData.isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
             getPlayer().setPlayWhenReady(false);
-            getPlayer().setTitle(getActivity().getString(R.string.sleep_timer));
+            getPlayer().setTitle(getContext().getString(R.string.sleep_timer));
             getPlayer().showOverlay(true);
         }
     }
@@ -263,7 +263,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         } else if (!current.isSynced) { // Maybe there's nothing left. E.g. when casting from phone
             // Wait in a loop while suggestions have been loaded...
             if (showLoadingMsg) {
-                MessageHelpers.showMessageThrottled(getActivity(), R.string.wait_data_loading);
+                MessageHelpers.showMessageThrottled(getContext(), R.string.wait_data_loading);
             }
             // Short videos next fix (suggestions aren't loaded yet)
             boolean isEnded = getPlayer() != null && Math.abs(getPlayer().getDurationMs() - getPlayer().getPositionMs()) < 100;
@@ -366,7 +366,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             getMainController().openVideo(item);
             //getPlayer().showOverlay(true);
         } else {
-            VideoActionPresenter.instance(getActivity()).apply(item);
+            VideoActionPresenter.instance(getContext()).apply(item);
         }
     }
 
@@ -383,10 +383,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private void initErrorActions() {
         // Some ciphered data could be outdated.
         // Might happen when the app wasn't used quite a long time.
-        mErrorActions.put(PlayerEventListener.ERROR_TYPE_SOURCE, () -> MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_source2));
+        mErrorActions.put(PlayerEventListener.ERROR_TYPE_SOURCE, () -> MessageHelpers.showMessage(getContext(), R.string.msg_player_error_source2));
 
         mErrorActions.put(PlayerEventListener.ERROR_TYPE_RENDERER, () -> {
-            MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_renderer);
+            MessageHelpers.showMessage(getContext(), R.string.msg_player_error_renderer);
             mPlayerData.setFormat(mPlayerData.getDefaultAudioFormat());
         });
 
@@ -400,7 +400,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         if (action != null) {
             action.run();
         } else {
-            MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_player_error, error));
+            MessageHelpers.showMessage(getContext(), getContext().getString(R.string.msg_player_error, error));
         }
 
         // Delay to fix frequent requests
@@ -435,7 +435,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 // Except when playing from queue
                 if (mPlaylist.getNext() != null) {
                     loadNext();
-                } else if (!getPlayer().isSuggestionsShown() && !AppDialogPresenter.instance(getActivity()).isDialogShown()) {
+                } else if (!getPlayer().isSuggestionsShown() && !AppDialogPresenter.instance(getContext()).isDialogShown()) {
                     getPlayer().finishReally();
                 }
                 break;

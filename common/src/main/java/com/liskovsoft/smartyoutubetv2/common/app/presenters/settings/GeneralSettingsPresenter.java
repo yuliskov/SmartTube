@@ -101,9 +101,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendContextMenuItemsCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Map<Integer, Integer> menuNames = getMenuNames();
+        Map<Long, Integer> menuNames = getMenuNames();
 
-        for (Integer menuItem : mMainUIData.getMenuItemsOrdered()) {
+        for (Long menuItem : mMainUIData.getMenuItemsOrdered()) {
             Integer nameResId = menuNames.get(menuItem);
 
             if (nameResId == null) {
@@ -123,12 +123,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.context_menu), options);
     }
 
-    private void showMenuItemOrderDialog(Integer menuItem) {
+    private void showMenuItemOrderDialog(Long menuItem) {
         AppDialogPresenter dialog = AppDialogPresenter.instance(getContext());
 
         List<OptionItem> options = new ArrayList<>();
 
-        Map<Integer, Integer> menuNames = getMenuNames();
+        Map<Long, Integer> menuNames = getMenuNames();
 
         Integer currentNameResId = menuNames.get(menuItem);
 
@@ -136,7 +136,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             return;
         }
 
-        List<Integer> menuItemsOrdered = mMainUIData.getMenuItemsOrdered();
+        List<Long> menuItemsOrdered = mMainUIData.getMenuItemsOrdered();
         int size = menuItemsOrdered.size();
         int currentIndex = mMainUIData.getMenuItemIndex(menuItem);
 
@@ -370,7 +370,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> {
                     List<String> backups = backupManager.getBackupNames();
 
-                    if (backups != null && !backups.isEmpty()) {
+                    if (backups != null && backups.size() > 0) {
                         showRestoreSelectorDialog(backups, backupManager);
                     } else {
                         AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
@@ -535,7 +535,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     PlayerTweaksData.PLAYER_BUTTON_SEEK_INTERVAL | PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE | PlayerTweaksData.PLAYER_BUTTON_OPEN_CHANNEL |
                     PlayerTweaksData.PLAYER_BUTTON_PIP | PlayerTweaksData.PLAYER_BUTTON_VIDEO_SPEED | PlayerTweaksData.PLAYER_BUTTON_SUBTITLES |
                     PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM | PlayerTweaksData.PLAYER_BUTTON_ADD_TO_PLAYLIST;
-        int menuItems = MainUIData.MENU_ITEM_SHOW_QUEUE | MainUIData.MENU_ITEM_ADD_TO_QUEUE | MainUIData.MENU_ITEM_SELECT_ACCOUNT |
+        long menuItems = MainUIData.MENU_ITEM_SHOW_QUEUE | MainUIData.MENU_ITEM_ADD_TO_QUEUE | MainUIData.MENU_ITEM_SELECT_ACCOUNT |
                     MainUIData.MENU_ITEM_STREAM_REMINDER | MainUIData.MENU_ITEM_SAVE_PLAYLIST;
 
         PlayerTweaksData tweaksData = PlayerTweaksData.instance(getContext());
@@ -613,8 +613,8 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         );
     }
 
-    private Map<Integer, Integer> getMenuNames() {
-        Map<Integer, Integer> menuNames = new HashMap<>();
+    private Map<Long, Integer> getMenuNames() {
+        Map<Long, Integer> menuNames = new HashMap<>();
         menuNames.put(MainUIData.MENU_ITEM_EXIT_FROM_PIP, R.string.return_to_background_video);
         menuNames.put(MainUIData.MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK, R.string.content_block_exclude_channel);
         menuNames.put(MainUIData.MENU_ITEM_MARK_AS_WATCHED, R.string.mark_as_watched);
@@ -645,6 +645,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         menuNames.put(MainUIData.MENU_ITEM_MOVE_SECTION_DOWN, R.string.move_section_down);
         menuNames.put(MainUIData.MENU_ITEM_RENAME_SECTION, R.string.rename_section);
         menuNames.put(MainUIData.MENU_ITEM_OPEN_DESCRIPTION, R.string.action_video_info);
+        menuNames.put(MainUIData.MENU_ITEM_OPEN_COMMENTS, R.string.open_comments);
         menuNames.put(MainUIData.MENU_ITEM_OPEN_PLAYLIST, R.string.open_playlist);
         return menuNames;
     }

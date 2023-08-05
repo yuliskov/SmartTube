@@ -36,8 +36,8 @@ public class LiveChatController extends PlayerEventListenerHelper implements Met
     @Override
     public void onInit() {
         mChatService = YouTubeMediaService.instance().getLiveChatService();
-        mPlayerData = PlayerData.instance(getActivity());
-        mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
+        mPlayerData = PlayerData.instance(getContext());
+        mPlayerTweaksData = PlayerTweaksData.instance(getContext());
     }
 
     @Override
@@ -88,20 +88,20 @@ public class LiveChatController extends PlayerEventListenerHelper implements Met
 
     @Override
     public void onChatLongClicked(boolean enabled) {
-        String chatCategoryTitle = getActivity().getString(R.string.open_chat);
+        String chatCategoryTitle = getContext().getString(R.string.open_chat);
 
-        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(getActivity().getString(R.string.option_disabled),
+        options.add(UiOptionItem.from(getContext().getString(R.string.option_disabled),
                 optionItem -> {
                     enableLiveChat(false);
                     settingsPresenter.closeDialog();
                 },
                 !mPlayerData.isLiveChatEnabled()));
 
-        options.add(UiOptionItem.from(getActivity().getString(R.string.chat_left),
+        options.add(UiOptionItem.from(getContext().getString(R.string.chat_left),
                 optionItem -> {
                     mPlayerTweaksData.placeChatLeft(true);
                     enableLiveChat(true);
@@ -109,7 +109,7 @@ public class LiveChatController extends PlayerEventListenerHelper implements Met
                 },
                 mPlayerData.isLiveChatEnabled() && mPlayerTweaksData.isChatPlacedLeft()));
 
-        options.add(UiOptionItem.from(getActivity().getString(R.string.chat_right),
+        options.add(UiOptionItem.from(getContext().getString(R.string.chat_right),
                 optionItem -> {
                     mPlayerTweaksData.placeChatLeft(false);
                     enableLiveChat(true);

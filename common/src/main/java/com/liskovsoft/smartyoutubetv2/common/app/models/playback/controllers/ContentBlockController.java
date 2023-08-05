@@ -19,8 +19,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegme
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.ContentBlockSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
-import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -86,7 +84,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
     public void onInit() {
         MediaService mediaService = YouTubeMediaService.instance();
         mMediaItemManager = mediaService.getMediaItemService();
-        mContentBlockData = ContentBlockData.instance(getActivity());
+        mContentBlockData = ContentBlockData.instance(getContext());
     }
 
     @Override
@@ -150,7 +148,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
     @Override
     public void onButtonLongClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_content_block) {
-            ContentBlockSettingsPresenter.instance(getActivity()).show(() -> onVideoLoaded(getPlayer().getVideo()));
+            ContentBlockSettingsPresenter.instance(getContext()).show(() -> onVideoLoaded(getPlayer().getVideo()));
         }
     }
 
@@ -267,8 +265,8 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
             return;
         }
 
-        MessageHelpers.showMessage(getActivity(),
-                String.format("%s: %s", getActivity().getString(R.string.content_block_provider), getActivity().getString(R.string.msg_skipping_segment, category)));
+        MessageHelpers.showMessage(getContext(),
+                String.format("%s: %s", getContext().getString(R.string.content_block_provider), getContext().getString(R.string.msg_skipping_segment, category)));
         setPositionMs(skipPosMs);
         closeTransparentDialog();
     }
@@ -278,7 +276,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
             return;
         }
 
-        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
 
         if (dialogPresenter.isDialogShown() || getPlayer().isSuggestionsShown()) {
             // Another dialog is opened. Don't distract a user.
@@ -288,7 +286,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
         getPlayer().showControls(false);
 
         OptionItem acceptOption = UiOptionItem.from(
-                getActivity().getString(R.string.confirm_segment_skip, category),
+                getContext().getString(R.string.confirm_segment_skip, category),
                 option -> {
                     // return to previous dialog or close if no other dialogs in stack
                     dialogPresenter.goBack();
@@ -302,7 +300,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
         dialogPresenter.enableTransparent(true);
         dialogPresenter.enableExpandable(false);
         dialogPresenter.setId(CONTENT_BLOCK_ID);
-        dialogPresenter.showDialog(getActivity().getString(R.string.content_block_provider));
+        dialogPresenter.showDialog(getContext().getString(R.string.content_block_provider));
     }
 
     private List<SeekBarSegment> toSeekBarSegments(List<SponsorSegment> segments) {
@@ -322,7 +320,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
             float endRatio = (float) sponsorSegment.getEndMs() / getPlayer().getDurationMs(); // Range: [0, 1]
             seekBarSegment.startProgress = startRatio;
             seekBarSegment.endProgress = endRatio;
-            seekBarSegment.color = ContextCompat.getColor(getActivity(), mContentBlockData.getColorRes(sponsorSegment.getCategory()));
+            seekBarSegment.color = ContextCompat.getColor(getContext(), mContentBlockData.getColorRes(sponsorSegment.getCategory()));
             result.add(seekBarSegment);
         }
 
@@ -376,13 +374,13 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
             SponsorSegment lastSegment = foundSegment.get(foundSegment.size() - 1);
 
             Integer resId = mContentBlockData.getLocalizedRes(lastSegment.getCategory());
-            String localizedCategory = resId != null ? getActivity().getString(resId) : lastSegment.getCategory();
+            String localizedCategory = resId != null ? getContext().getString(resId) : lastSegment.getCategory();
 
             int type = mContentBlockData.getAction(lastSegment.getCategory());
 
             long skipPosMs = lastSegment.getEndMs();
 
-            if (type == ContentBlockData.ACTION_SKIP_ONLY || getPlayer().isInPIPMode() || Utils.isScreenOff(getActivity())) {
+            if (type == ContentBlockData.ACTION_SKIP_ONLY || getPlayer().isInPIPMode() || Utils.isScreenOff(getContext())) {
                 simpleSkip(skipPosMs);
             } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
                 messageSkip(skipPosMs, localizedCategory);
@@ -395,7 +393,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
     }
 
     private void closeTransparentDialog() {
-        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
 
         if (dialogPresenter.isDialogShown() && dialogPresenter.getId() == CONTENT_BLOCK_ID) {
             dialogPresenter.closeDialog();

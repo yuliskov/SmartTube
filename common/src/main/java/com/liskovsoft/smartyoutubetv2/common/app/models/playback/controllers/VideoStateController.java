@@ -47,10 +47,10 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
 
     @Override
     public void onInit() { // called each time a video opened from the browser
-        mPlayerData = PlayerData.instance(getActivity());
-        mGeneralData = GeneralData.instance(getActivity());
-        mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
-        mStateService = VideoStateService.instance(getActivity());
+        mPlayerData = PlayerData.instance(getContext());
+        mGeneralData = GeneralData.instance(getContext());
+        mPlayerTweaksData = PlayerTweaksData.instance(getContext());
+        mStateService = VideoStateService.instance(getContext());
     }
 
     /**
@@ -292,11 +292,11 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
 
     @Override
     public void onVideoSpeedLongClicked(boolean enabled) {
-        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
         // suppose live stream if buffering near the end
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
-        AppDialogUtil.appendSpeedDialogItems(getActivity(), settingsPresenter, getPlayer(), mPlayerData);
+        AppDialogUtil.appendSpeedDialogItems(getContext(), settingsPresenter, getPlayer(), mPlayerData);
 
         settingsPresenter.showDialog(() -> {
             State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
@@ -374,7 +374,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     }
 
     private void persistState() {
-        if (AppDialogPresenter.instance(getActivity()).isDialogShown()) {
+        if (AppDialogPresenter.instance(getContext()).isDialogShown()) {
             return;
         }
 
@@ -540,8 +540,8 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     }
 
     private void showHideScreensaver(boolean show) {
-        if (getActivity() instanceof MotherActivity) {
-            ScreensaverManager screensaverManager = ((MotherActivity) getActivity()).getScreensaverManager();
+        if (getContext() instanceof MotherActivity) {
+            ScreensaverManager screensaverManager = ((MotherActivity) getContext()).getScreensaverManager();
 
             if (show) {
                 screensaverManager.enableChecked();

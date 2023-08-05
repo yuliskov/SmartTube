@@ -11,6 +11,7 @@ import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.CommentsController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -64,6 +65,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsAddToPlaybackQueueButtonEnabled;
     private boolean mIsShowPlaybackQueueButtonEnabled;
     private boolean mIsOpenDescriptionButtonEnabled;
+    private boolean mIsOpenCommentsButtonEnabled;
     private boolean mIsPlayVideoButtonEnabled;
     private boolean mIsPlayVideoIncognitoButtonEnabled;
     private boolean mIsPlaylistOrderButtonEnabled;
@@ -71,7 +73,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsMarkAsWatchedButtonEnabled;
     private VideoMenuCallback mCallback;
     private List<PlaylistInfo> mPlaylistInfos;
-    private final Map<Integer, MenuAction> mMenuMapping = new HashMap<>();
+    private final Map<Long, MenuAction> mMenuMapping = new HashMap<>();
 
     public interface VideoMenuCallback {
         int ACTION_UNDEFINED = 0;
@@ -172,7 +174,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         appendReturnToBackgroundVideoButton();
 
-        for (Integer menuItem : MainUIData.instance(getContext()).getMenuItemsOrdered()) {
+        for (Long menuItem : MainUIData.instance(getContext()).getMenuItemsOrdered()) {
             MenuAction menuAction = mMenuMapping.get(menuItem);
             if (menuAction != null) {
                 menuAction.run();
@@ -226,7 +228,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         appendReturnToBackgroundVideoButton();
 
-        for (Integer menuItem : MainUIData.instance(getContext()).getMenuItemsOrdered()) {
+        for (Long menuItem : MainUIData.instance(getContext()).getMenuItemsOrdered()) {
             MenuAction menuAction = mMenuMapping.get(menuItem);
             if (menuAction != null && !menuAction.isAuth()) {
                 menuAction.run();
@@ -552,6 +554,27 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 ));
     }
 
+    private void appendOpenCommentsButton() {
+        if (!mIsOpenCommentsButtonEnabled || mVideo == null) {
+            return;
+        }
+
+        if (mVideo.videoId == null || mVideo.isLive || mVideo.isUpcoming) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.open_comments),
+                        optionItem -> {
+                            MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+                            mServiceManager.loadMetadata(mVideo, metadata -> {
+                                CommentsController controller = new CommentsController(getContext(), metadata);
+                                controller.onChatClicked(true);
+                            });
+                        }
+                ));
+    }
+
     private void appendPlayVideoButton() {
         if (!mIsPlayVideoButtonEnabled || mVideo == null || mVideo.videoId == null) {
             return;
@@ -820,6 +843,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsShowPlaybackQueueButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHOW_QUEUE);
         mIsPlaylistOrderButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAYLIST_ORDER);
         mIsMarkAsWatchedButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_MARK_AS_WATCHED);
+        mIsOpenCommentsButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_COMMENTS);
     }
 
     private void initMenuMapping() {
@@ -852,5 +876,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.put(MainUIData.MENU_ITEM_SELECT_ACCOUNT, new MenuAction(this::appendAccountSelectionButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_TOGGLE_HISTORY, new MenuAction(this::appendToggleHistoryButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_CLEAR_HISTORY, new MenuAction(this::appendClearHistoryButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_COMMENTS, new MenuAction(this::appendOpenCommentsButton, false));
     }
 }
