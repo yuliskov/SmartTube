@@ -540,8 +540,8 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     }
 
     private void showHideScreensaver(boolean show) {
-        if (getContext() instanceof MotherActivity) {
-            ScreensaverManager screensaverManager = ((MotherActivity) getContext()).getScreensaverManager();
+        if (getActivity() instanceof MotherActivity) {
+            ScreensaverManager screensaverManager = ((MotherActivity) getActivity()).getScreensaverManager();
 
             if (show) {
                 screensaverManager.enableChecked();
