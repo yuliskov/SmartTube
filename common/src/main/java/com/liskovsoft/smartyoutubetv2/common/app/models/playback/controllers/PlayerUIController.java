@@ -226,7 +226,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             getPlayer().setDebugButtonState(mDebugViewEnabled);
         }
         
-        if (mPlayerTweaksData.isScreenOffTimeoutEnabled() || mPlayerTweaksData.isScreenOffEnabled()) {
+        if (mPlayerTweaksData.isScreenOffTimeoutEnabled() || mPlayerTweaksData.isBootScreenOffEnabled()) {
             prepareScreenOff();
             applyScreenOff(PlayerUI.BUTTON_OFF);
             applyScreenOffTimeout(PlayerUI.BUTTON_OFF);
@@ -762,13 +762,14 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
     private void applyScreenOff(int buttonState) {
         if (mPlayerTweaksData.getScreenOffTimeoutSec() == 0) {
-            mPlayerTweaksData.enableScreenOff(buttonState == PlayerUI.BUTTON_OFF);
+            boolean isPartialDimming = mPlayerTweaksData.getScreenOffDimmingPercents() < 100;
+            mPlayerTweaksData.enableBootScreenOff(buttonState == PlayerUI.BUTTON_OFF && isPartialDimming);
             if (buttonState == PlayerUI.BUTTON_OFF) {
                 ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
                 manager.doScreenOff();
-                manager.setBlocked(mPlayerTweaksData.getScreenOffDimmingPercents() < 100);
-                getPlayer().setButtonState(R.id.action_screen_off, mPlayerTweaksData.getScreenOffDimmingPercents() < 100 ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-                getPlayer().setButtonState(R.id.action_screen_off_timeout, mPlayerTweaksData.getScreenOffDimmingPercents() < 100 ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+                manager.setBlocked(isPartialDimming);
+                getPlayer().setButtonState(R.id.action_screen_off, isPartialDimming ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+                getPlayer().setButtonState(R.id.action_screen_off_timeout, isPartialDimming ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
             }
         }
     }
