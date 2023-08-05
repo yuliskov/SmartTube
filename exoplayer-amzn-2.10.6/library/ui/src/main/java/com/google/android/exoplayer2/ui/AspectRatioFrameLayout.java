@@ -201,7 +201,11 @@ public final class AspectRatioFrameLayout extends FrameLayout {
       return;
     }
 
-    switch (resizeMode) {
+    // MOD: don't stretch vertical videos
+    int tempResizeMode = resizeMode == RESIZE_MODE_FILL && videoAspectRatio > 0 && videoAspectRatio < 1 ? RESIZE_MODE_FIT : resizeMode;
+
+    //switch (resizeMode) {
+    switch (tempResizeMode) {
       case RESIZE_MODE_FIXED_WIDTH:
         height = (int) (width / videoAspectRatio);
         break;

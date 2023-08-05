@@ -240,6 +240,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendKeyRemappingCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from("Play/Pause -> OK",
+                option -> mGeneralData.remapPlayPauseToOK(option.isSelected()),
+                mGeneralData.isRemapPlayPauseToOKEnabled()));
+
         options.add(UiOptionItem.from("Next/Previous -> Speed Up/Down",
                 option -> mGeneralData.remapNextPrevToSpeed(option.isSelected()),
                 mGeneralData.isRemapNextPrevToSpeedEnabled()));

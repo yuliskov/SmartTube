@@ -59,6 +59,7 @@ public class GeneralData {
     private boolean mIsRemapChannelUpToSpeedEnabled;
     private boolean mIsRemapFastForwardToSpeedEnabled;
     private boolean mIsRemapNextPrevToSpeedEnabled;
+    private boolean mIsRemapPlayPauseToOKEnabled;
     private boolean mIsRemapChannelUpToSearchEnabled;
     private boolean mIsHideShortsFromHomeEnabled;
     private boolean mIsHideShortsFromHistoryEnabled;
@@ -398,6 +399,15 @@ public class GeneralData {
 
     public boolean isRemapNextPrevToSpeedEnabled() {
         return mIsRemapNextPrevToSpeedEnabled;
+    }
+
+    public void remapPlayPauseToOK(boolean enable) {
+        mIsRemapPlayPauseToOKEnabled = enable;
+        persistState();
+    }
+
+    public boolean isRemapPlayPauseToOKEnabled() {
+        return mIsRemapPlayPauseToOKEnabled;
     }
 
     public void remapPageUpToNext(boolean enable) {
@@ -781,6 +791,7 @@ public class GeneralData {
         mIsOldUpdateNotificationsEnabled = Helpers.parseBoolean(split, 43, false);
         mScreensaverDimmingPercents = Helpers.parseInt(split, 44, 80);
         mIsRemapNextPrevToSpeedEnabled = Helpers.parseBoolean(split, 81, false);
+        mIsRemapPlayPauseToOKEnabled = Helpers.parseBoolean(split, 82, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -842,6 +853,7 @@ public class GeneralData {
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
                 playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
-                mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextPrevToSpeedEnabled));
+                mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextPrevToSpeedEnabled,
+                mIsRemapPlayPauseToOKEnabled));
     }
 }
