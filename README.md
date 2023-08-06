@@ -11,7 +11,7 @@ stability, voice search and casting support **might** be worse than in the offic
 
 **Do you have any question?** Ctrl+F or ⌘F this readme first!
 
-[**Installation**](#Installation) | [**Donation**](#Donation) | [**FAQ**](#FAQ) | [Support / Chat](#Support) | [Build](#Build) | [Translate the app](https://jtbrinkmann.de/tools/android-strings.xml-translator.html) | [Changelog](https://t.me/s/SmartTubeNewsEN) | [Source Code](https://github.com/yuliskov/SmartTubeNext) | [Liability](#Liability)
+[**Installation**](#installation) | [**Donation**](#donation) | [**FAQ**](#faq) | [Support / Chat](#support) | [Build](#build) | [Translate the app](https://jtbrinkmann.de/tools/android-strings.xml-translator.html) | [Changelog](https://t.me/s/SmartTubeNewsEN) | [Source Code](https://github.com/yuliskov/SmartTubeNext) | [Liability](#liability)
 
 
 ## Device support
