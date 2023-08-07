@@ -573,4 +573,5 @@
   <string name="player_auto_volume">音量の自動調整</string>
   <string name="header_shorts">ショート</string>
   <string name="player_volume">音量</string>
+  <string name="open_comments">コメント欄を開く</string>
 </resources>
