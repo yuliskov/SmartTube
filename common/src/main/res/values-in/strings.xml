@@ -446,6 +446,7 @@
     <string name="releases">Rilis</string>
     <string name="prefer_avc_over_vp9">Pilihan codec: lebih utama avc daripada vp9</string>
     <string name="open_chat">Obrolan</string>
+    <string name="open_comments">Buka Obrolan</string>
     <string name="place_chat_left">Tempatkan obrolan ke kiri</string>
     <string name="use_alt_speech_recognizer">Pengenal ucapan alternatif</string>
     <string name="time_format">Mode waktu</string>
