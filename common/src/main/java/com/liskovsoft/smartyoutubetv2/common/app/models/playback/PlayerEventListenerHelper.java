@@ -118,7 +118,7 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onEngineError(int type) {
+    public void onEngineError(int type, String message) {
         // NOP
     }
 

@@ -13,9 +13,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.SampleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
@@ -30,9 +30,7 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.disposables.Disposable;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class VideoLoaderController extends PlayerEventListenerHelper implements MetadataListener, OnDataChange {
     private static final String TAG = VideoLoaderController.class.getSimpleName();
@@ -47,7 +45,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private long mSleepTimerStartMs;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
-    private final Map<Integer, Runnable> mErrorActions = new HashMap<>();
     private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
     private final Runnable mPendingNext = () -> {
         if (getPlayer() != null) {
@@ -74,7 +71,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         mPlayerData.setOnChange(this);
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
         mSleepTimerStartMs = System.currentTimeMillis();
-        initErrorActions();
     }
 
     @Override
@@ -114,12 +110,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     }
 
     @Override
-    public void onEngineError(int error) {
+    public void onEngineError(int error, String message) {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", error);
 
         mLastError = error;
 
-        startErrorAction(error);
+        runErrorAction(error, message);
     }
 
     @Override
@@ -380,27 +376,24 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         Utils.removeCallbacks(mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
     }
 
-    private void initErrorActions() {
-        // Some ciphered data could be outdated.
-        // Might happen when the app wasn't used quite a long time.
-        mErrorActions.put(PlayerEventListener.ERROR_TYPE_SOURCE, () -> MessageHelpers.showMessage(getContext(), R.string.msg_player_error_source2));
-
-        mErrorActions.put(PlayerEventListener.ERROR_TYPE_RENDERER, () -> {
-            MessageHelpers.showMessage(getContext(), R.string.msg_player_error_renderer);
-            mPlayerData.setFormat(mPlayerData.getDefaultAudioFormat());
-        });
-
-        // Hide unknown error on all devices
-        mErrorActions.put(PlayerEventListener.ERROR_TYPE_UNEXPECTED, () -> {});
-    }
-
-    private void startErrorAction(int error) {
-        Runnable action = mErrorActions.get(error);
-
-        if (action != null) {
-            action.run();
-        } else {
-            MessageHelpers.showMessage(getContext(), getContext().getString(R.string.msg_player_error, error));
+    private void runErrorAction(int error, String message) {
+        switch (error) {
+            // Some ciphered data could be outdated.
+            // Might happen when the app wasn't used quite a long time.
+            case PlayerEventListener.ERROR_TYPE_SOURCE:
+                MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.msg_player_error_source2) + "\n" + message);
+                break;
+            case PlayerEventListener.ERROR_TYPE_RENDERER:
+                MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.msg_player_error_renderer) + "\n" + message);
+                mPlayerData.setFormat(mPlayerData.getDefaultAudioFormat());
+                break;
+            // Hide unknown error on all devices
+            case PlayerEventListener.ERROR_TYPE_UNEXPECTED:
+                // NOP
+                break;
+            default:
+                MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.msg_player_error, error) + "\n" + message);
+                break;
         }
 
         // Delay to fix frequent requests

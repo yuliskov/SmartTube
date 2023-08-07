@@ -314,7 +314,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         // NOTE: Player is released at this point. So, there is no sense to restore the playback here.
 
-        mEventListener.onEngineError(error.type);
+        Throwable nested = error.getCause() != null ? error.getCause() : error;
+
+        mEventListener.onEngineError(error.type, nested.getMessage());
     }
 
     @Override
