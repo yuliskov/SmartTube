@@ -790,8 +790,8 @@ public class GeneralData {
         mIsOldHomeLookEnabled = Helpers.parseBoolean(split, 42, Build.VERSION.SDK_INT <= 19);
         mIsOldUpdateNotificationsEnabled = Helpers.parseBoolean(split, 43, false);
         mScreensaverDimmingPercents = Helpers.parseInt(split, 44, 80);
-        mIsRemapNextPrevToSpeedEnabled = Helpers.parseBoolean(split, 81, false);
-        mIsRemapPlayPauseToOKEnabled = Helpers.parseBoolean(split, 82, false);
+        mIsRemapNextPrevToSpeedEnabled = Helpers.parseBoolean(split, 45, false);
+        mIsRemapPlayPauseToOKEnabled = Helpers.parseBoolean(split, 46, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
