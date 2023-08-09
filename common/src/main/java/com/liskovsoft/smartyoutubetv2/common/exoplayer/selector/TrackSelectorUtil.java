@@ -173,6 +173,14 @@ public class TrackSelectorUtil {
         return format.bitrate > 300000;
     }
 
+    public static boolean is48KAudio(Format format) {
+        if (format == null) {
+            return false;
+        }
+
+        return format.sampleRate >= 48000;
+    }
+
     public static boolean isVideo(Format format) {
         return MimeTypes.isVideo(format.sampleMimeType);
     }
