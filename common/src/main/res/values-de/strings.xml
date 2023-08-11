@@ -324,7 +324,7 @@
     <string name="msg_player_error_source2">Video-Quelle funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise handelt es sich um ein Problem der App.</string>
     <string name="msg_player_error_video_source">VIDEO URL funktioniert nicht oder falsche Gerät-Uhrzeit.\nNormalerweise handelt es sich um ein Problem der App.</string>
     <string name="msg_player_error_audio_source">AUDIO URL funktioniert nicht oder falsche Gerät-Uhrzeit.\nNormalerweise handelt es sich um ein Problem der App.</string>
-    <string name="msg_player_error_subtitle_source">SUBTITLE URL funktioniert nicht oder falsche Gerät-Uhrzeit.\Normalerweise handelt es sich um ein Problem der App.</string>
+    <string name="msg_player_error_subtitle_source">UNTERTITEL URL funktioniert nicht oder falsche Gerät-Uhrzeit.\Normalerweise handelt es sich um ein Problem der App.</string>
     <string name="hide_upcoming">Anstehende Videos in Abos ausblenden</string>
     <string name="search_background_playback">Bild-in-Bild öffnen bei Suche/Kanal öffnen</string>
     <string name="trending_row_name">Trends</string>
