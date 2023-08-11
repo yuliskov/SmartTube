@@ -209,8 +209,8 @@
     <string name="player_remember_speed_each">Per each video</string>
     <string name="msg_player_error_source">Can\'t download the video</string>
     <string name="msg_player_error_renderer">Selected format isn\'t supported.\nTry to select another one.\nIf this won\'t help try to reboot the device.</string>
-    <string name="msg_player_error_video_renderer">Selected VIDEO format isn\'t supported.\nTry to select another by pressing HQ button in the player.\nIf this won\'t help try to reboot the device.</string>
-    <string name="msg_player_error_audio_renderer">Selected AUDIO format isn\'t supported.\nTry to select another by pressing HQ button in the player.\nIf this won\'t help try to reboot the device.</string>
+    <string name="msg_player_error_video_renderer">Selected VIDEO format isn\'t supported.\nTry to select another one by pressing HQ button in the player.\nIf this won\'t help try to reboot the device.</string>
+    <string name="msg_player_error_audio_renderer">Selected AUDIO format isn\'t supported.\nTry to select another one by pressing HQ button in the player.\nIf this won\'t help try to reboot the device.</string>
     <string name="msg_player_error_subtitle_renderer">Selected SUBTITLE format isn\'t supported.\nTry to select another one by long pressing CC button in the player.\nIf this won\'t help try to reboot the device.</string>
     <string name="msg_player_error_unexpected">Unknown video decoder error</string>
     <string name="video_aspect">Aspect ratio</string>
