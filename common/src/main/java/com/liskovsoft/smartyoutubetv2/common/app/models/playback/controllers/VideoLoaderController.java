@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.Player
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -110,12 +111,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     }
 
     @Override
-    public void onEngineError(int error, String message) {
+    public void onEngineError(int error, int rendererIndex, String message) {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", error);
 
         mLastError = error;
 
-        runErrorAction(error, message);
+        runErrorAction(error, rendererIndex, message);
     }
 
     @Override
@@ -376,16 +377,16 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         Utils.removeCallbacks(mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
     }
 
-    private void runErrorAction(int error, String message) {
+    private void runErrorAction(int error, int rendererIndex, String message) {
         switch (error) {
             // Some ciphered data could be outdated.
             // Might happen when the app wasn't used quite a long time.
             case PlayerEventListener.ERROR_TYPE_SOURCE:
-                MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.msg_player_error_source2) + "\n" + message);
+                MessageHelpers.showLongMessage(getContext(), getContext().getString(getSourceErrorResId(rendererIndex)) + "\n" + message);
                 break;
             case PlayerEventListener.ERROR_TYPE_RENDERER:
-                MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.msg_player_error_renderer) + "\n" + message);
-                mPlayerData.setFormat(mPlayerData.getDefaultAudioFormat());
+                MessageHelpers.showLongMessage(getContext(), getContext().getString(getRendererErrorResId(rendererIndex)) + "\n" + message);
+                applyRendererErrorAction(rendererIndex);
                 break;
             // Hide unknown error on all devices
             case PlayerEventListener.ERROR_TYPE_UNEXPECTED:
@@ -398,6 +399,49 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
         // Delay to fix frequent requests
         Utils.postDelayed(mPendingRestartEngine, 3_000);
+    }
+
+    private void applyRendererErrorAction(int rendererIndex) {
+        switch (rendererIndex) {
+            case PlayerEventListener.RENDERER_INDEX_VIDEO:
+                FormatItem videoFormat = mPlayerData.getFormat(FormatItem.TYPE_VIDEO);
+                if (!videoFormat.isPreset()) {
+                    mPlayerData.setFormat(mPlayerData.getDefaultVideoFormat());
+                }
+                break;
+            case PlayerEventListener.RENDERER_INDEX_AUDIO:
+                mPlayerData.setFormat(mPlayerData.getDefaultAudioFormat());
+                break;
+            case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
+                mPlayerData.setFormat(FormatItem.SUBTITLE_NONE);
+                break;
+        }
+    }
+
+    private int getSourceErrorResId(int rendererIndex) {
+        switch (rendererIndex) {
+            case PlayerEventListener.RENDERER_INDEX_VIDEO:
+                return R.string.msg_player_error_video_source;
+            case PlayerEventListener.RENDERER_INDEX_AUDIO:
+                return R.string.msg_player_error_audio_source;
+            case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
+                return R.string.msg_player_error_subtitle_source;
+            default:
+                return R.string.video_buffer_size_none;
+        }
+    }
+
+    private int getRendererErrorResId(int rendererIndex) {
+        switch (rendererIndex) {
+            case PlayerEventListener.RENDERER_INDEX_VIDEO:
+                return R.string.msg_player_error_video_renderer;
+            case PlayerEventListener.RENDERER_INDEX_AUDIO:
+                return R.string.msg_player_error_audio_renderer;
+            case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
+                return R.string.msg_player_error_subtitle_renderer;
+            default:
+                return R.string.video_buffer_size_none;
+        }
     }
 
     private List<String> applyFix(List<String> urlList) {

@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 
 public interface PlayerEngineEventListener {
     /**
@@ -25,6 +26,9 @@ public interface PlayerEngineEventListener {
      * The error was an {@link OutOfMemoryError}.
      */
     int ERROR_TYPE_OUT_OF_MEMORY = ExoPlaybackException.TYPE_OUT_OF_MEMORY;
+    int RENDERER_INDEX_VIDEO = TrackSelectorManager.RENDERER_INDEX_VIDEO;
+    int RENDERER_INDEX_AUDIO = TrackSelectorManager.RENDERER_INDEX_AUDIO;
+    int RENDERER_INDEX_SUBTITLE = TrackSelectorManager.RENDERER_INDEX_SUBTITLE;
     void onPlay();
     void onPause();
     void onPlayEnd();
@@ -34,7 +38,7 @@ public interface PlayerEngineEventListener {
     void onVideoLoaded(Video item);
     void onEngineInitialized();
     void onEngineReleased();
-    void onEngineError(int type, String message);
+    void onEngineError(int type, int rendererIndex, String message);
     void onTrackChanged(FormatItem track);
     void onTrackSelected(FormatItem track);
 }

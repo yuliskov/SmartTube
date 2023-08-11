@@ -211,8 +211,8 @@ public class MainPlayerController implements PlayerEventListener {
     }
 
     @Override
-    public void onEngineError(int type, String message) {
-        process(listener -> listener.onEngineError(type, message));
+    public void onEngineError(int type, int rendererIndex, String message) {
+        process(listener -> listener.onEngineError(type, rendererIndex, message));
     }
 
     @Override

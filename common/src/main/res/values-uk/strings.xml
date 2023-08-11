@@ -209,6 +209,9 @@
     <string name="player_remember_speed_each">На кожному відео своя швидкість</string>
     <string name="msg_player_error_source">Не вдається завантажити відео</string>
     <string name="msg_player_error_renderer">Обраний формат не підтримуєтся.\nСпробуйте обрати інший формат.\nЯкщо це не допоможе, то спробуйте перезавантажити пристрій.</string>
+    <string name="msg_player_error_video_renderer">Обраний ВІДЕОФОРМАТ не підтримуєтся.\nСпробуйте обрати інший формат, натиснувши кнопку HQ у плеєрі.\nЯкщо це не допоможе, то спробуйте перезавантажити пристрій.</string>
+    <string name="msg_player_error_audio_renderer">Обраний АУДІОФОРМАТ не підтримуєтся.\nСпробуйте обрати інший формат, натиснувши кнопку HQ у плеєрі.\nЯкщо це не допоможе, то спробуйте перезавантажити пристрій.</string>
+    <string name="msg_player_error_subtitle_renderer">Обраний формат СУБТИТРІВ не підтримуєтся.\nСпробуйте обрати інший формат, утримуючи кнопку CC у плеєрі.\nЯкщо це не допоможе, то спробуйте перезавантажити пристрій.</string>
     <string name="msg_player_error_unexpected">Невідома помилка у відеодекодері</string>
     <string name="video_aspect">Співвідношення сторін</string>
     <string name="player_tweaks">Для розробників</string>
@@ -315,6 +318,9 @@
     <string name="keyboard_auto_show">Показувати клавіатуру автоматично</string>
     <string name="cancel_dialog">Скасувати</string>
     <string name="msg_player_error_source2">Джерело відео не працює або невірний час на пристрої.\nСкоріш за все проблема у застосунку.</string>
+    <string name="msg_player_error_video_source">Посилання на ВІДЕОПОТІК не працює або невірний час на пристрої.\nСкоріш за все проблема у застосунку.</string>
+    <string name="msg_player_error_audio_source">Посилання на АУДІОПОТІК не працює або невірний час на пристрої.\nСкоріш за все проблема у застосунку.</string>
+    <string name="msg_player_error_subtitle_source">Посилання на СУБТИТРИ не працює або невірний час на пристрої.\nСкоріш за все проблема у застосунку.</string>
     <string name="hide_upcoming">Приховувати анонси з Підписок</string>
     <string name="search_background_playback">Переходити у режим Картинка в картинці при пошуку/відкритті каналу</string>
     <string name="trending_row_name">Популярне</string>

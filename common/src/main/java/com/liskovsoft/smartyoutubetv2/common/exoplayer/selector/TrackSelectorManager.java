@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Pair;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.TrackGroup;
@@ -224,6 +225,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 mediaTrack.format = format;
                 mediaTrack.groupIndex = groupIndex;
                 mediaTrack.trackIndex = trackIndex;
+
+                if (isErrorInAudio(mediaTrack)) {
+                    continue;
+                }
 
                 if (!isTrackUnique(mediaTrack)) {
                     continue;
@@ -846,6 +851,23 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         if (bitrate == null || (bitrate < format.bitrate || mediaTrack instanceof AudioTrack)) {
           mBlacklist.put(formatId, format.bitrate + 500_000);
           return true;
+        }
+
+        return false;
+    }
+
+    /**
+     *  Trying to fix error 'AudioSink.InitializationException: AudioTrack init failed'<br/>
+     *  By removing mp4a tracks with high bitrate.
+     */
+    private boolean isErrorInAudio(MediaTrack mediaTrack) {
+        if (mediaTrack == null || mediaTrack.format == null) {
+            return false;
+        }
+
+        switch (Build.MODEL) {
+            case "Smart TV Pro": // Smart TV Pro (G03_4K_GB) - TCL
+                return mediaTrack.isMP4ACodec() && mediaTrack.format.bitrate >= 195_000;
         }
 
         return false;

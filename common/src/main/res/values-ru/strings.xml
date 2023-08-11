@@ -209,6 +209,9 @@
     <string name="player_remember_speed_each">На каждом видео своя скорость</string>
     <string name="msg_player_error_source">Не получается загрузить видео</string>
     <string name="msg_player_error_renderer">Выбранный формат не поддерживается.\nПопробуйте выбрать другой формат.\nЕсли это не поможет, то перезагрузите устройство.</string>
+    <string name="msg_player_error_video_renderer">Выбранный ВИДЕОФОРМАТ не поддерживается.\nПопробуйте выбрать другой формат, нажав на кнопку HQ в плеере.\nЕсли это не поможет, то перезагрузите устройство.</string>
+    <string name="msg_player_error_audio_renderer">Выбранный АУДИОФОРМАТ не поддерживается.\nПопробуйте выбрать другой формат, нажав на кнопку HQ в плеере.\nЕсли это не поможет, то перезагрузите устройство.</string>
+    <string name="msg_player_error_subtitle_renderer">Выбранный формат СУБТИТРОВ не поддерживается.\nПопробуйте выбрать другой формат, удерживая кнопку CC в плеере.\nЕсли это не поможет, то перезагрузите устройство.</string>
     <string name="msg_player_error_unexpected">Неизвестная ошибка в видеодекодере</string>
     <string name="video_aspect">Соотношение сторон</string>
     <string name="player_tweaks">Для разработчиков</string>
@@ -315,6 +318,9 @@
     <string name="keyboard_auto_show">Показывать клавиатуру автоматически</string>
     <string name="cancel_dialog">Отменить</string>
     <string name="msg_player_error_source2">Источник видео не работает или неправильное время на устройстве.\nСкорее всего проблема в приложении.</string>
+    <string name="msg_player_error_video_source">Ссылка на ВИДЕОПОТОК не работает или неправильное время на устройстве.\nСкорее всего проблема в приложении.</string>
+    <string name="msg_player_error_audio_source">Ссылка на АУДИОПОТОК не работает или неправильное время на устройстве.\nСкорее всего проблема в приложении.</string>
+    <string name="msg_player_error_subtitle_source">Ссылка на СУБТИТРЫ не работает или неправильное время на устройстве.\nСкорее всего проблема в приложении.</string>
     <string name="hide_upcoming">Скрывать анонсы из Подписок</string>
     <string name="search_background_playback">Переходить в режим Картинка в картинке при поиске/открытии канала</string>
     <string name="trending_row_name">В тренде</string>

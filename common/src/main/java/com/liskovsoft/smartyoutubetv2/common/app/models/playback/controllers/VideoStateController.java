@@ -165,7 +165,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     }
 
     @Override
-    public void onEngineError(int type, String message) {
+    public void onEngineError(int type, int rendererIndex, String message) {
         // Oops. Error happens while playing (network lost etc).
         if (getPlayer().getPositionMs() > 1_000) {
             saveState();

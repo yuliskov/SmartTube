@@ -432,7 +432,7 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
      */
     private int getVolume() {
         if (getContext() != null) {
-            return Utils.getGlobalVolume(getContext());
+            return Utils.isGlobalVolumeFixed() ? (int)(getPlayer().getVolume() * 100) : Utils.getGlobalVolume(getContext());
         }
 
         return 100;
@@ -443,10 +443,14 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
      */
     private void setVolume(int volume) {
         if (getContext() != null) {
-            Utils.setGlobalVolume(getContext(), volume);
+            if (Utils.isGlobalVolumeFixed()) {
+                getPlayer().setVolume(volume / 100f);
+            } else {
+                Utils.setGlobalVolume(getContext(), volume);
+            }
             // Check that volume is set.
             // Because global value may not be supported (see FireTV Stick).
-            MessageHelpers.showMessageThrottled(getContext(), getContext().getString(R.string.volume, Utils.getGlobalVolume(getContext())));
+            MessageHelpers.showMessage(getContext(), getContext().getString(R.string.volume, getVolume()));
         }
     }
 

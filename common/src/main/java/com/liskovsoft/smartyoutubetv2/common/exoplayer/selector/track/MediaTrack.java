@@ -135,13 +135,7 @@ public abstract class MediaTrack {
     }
 
     public static int getCodecWeight(String codec) {
-        if (codec == null) {
-            return 0;
-        }
-
-        codec = codec.toLowerCase();
-
-        return Helpers.containsAny(codec, "vp9", "vp09") ? sVP9Weight : codec.contains("avc") ? sAVCWeight : codec.contains("av01") ? sAV1Weight : 0;
+        return isVP9Codec(codec) ? sVP9Weight : isAVCCodec(codec) ? sAVCWeight : isAV1Codec(codec) ? sAV1Weight : 0;
     }
 
     public static boolean preferByCodec(MediaTrack prevTrack, MediaTrack nextTrack) {
@@ -154,15 +148,15 @@ public abstract class MediaTrack {
     }
 
     public boolean isVP9Codec() {
-        return format != null && format.codecs != null && format.codecs.contains("vp9");
+        return format != null && isVP9Codec(format.codecs);
     }
 
     public boolean isAV1Codec() {
-        return format != null && format.codecs != null && format.codecs.contains("av01");
+        return format != null && isAV1Codec(format.codecs);
     }
 
     public boolean isMP4ACodec() {
-        return format != null && format.codecs != null && format.codecs.contains("mp4a");
+        return format != null && isMP4ACodec(format.codecs);
     }
 
     public int getWidth() {
@@ -173,23 +167,43 @@ public abstract class MediaTrack {
         return format != null ? format.height : -1;
     }
 
-    //public static int compareCodecs(String codec1, String codec2) {
-    //    if (codecEquals(codec1, codec2)) {
-    //        return 0;
-    //    }
-    //
-    //    if (codec1 == null || codec2 == null) {
-    //        return -1;
-    //    }
-    //
-    //    return getCodecWeight(codec1) - getCodecWeight(codec2);
-    //}
-    //
-    //private static int getCodecWeight(String codec) {
-    //    if (codec == null) {
-    //        return 0;
-    //    }
-    //
-    //    return codec.contains("avc") ? 31 : codec.contains("vp9") ? 28 : 0;
-    //}
+    private static boolean isVP9Codec(String codec) {
+        if (codec == null) {
+            return false;
+        }
+
+        codec = codec.toLowerCase();
+
+        return Helpers.containsAny(codec, "vp9", "vp09");
+    }
+
+    private static boolean isAVCCodec(String codec) {
+        if (codec == null) {
+            return false;
+        }
+
+        codec = codec.toLowerCase();
+
+        return codec.contains("avc");
+    }
+
+    private static boolean isAV1Codec(String codec) {
+        if (codec == null) {
+            return false;
+        }
+
+        codec = codec.toLowerCase();
+
+        return codec.contains("av01");
+    }
+
+    private static boolean isMP4ACodec(String codec) {
+        if (codec == null) {
+            return false;
+        }
+
+        codec = codec.toLowerCase();
+
+        return codec.contains("mp4a");
+    }
 }

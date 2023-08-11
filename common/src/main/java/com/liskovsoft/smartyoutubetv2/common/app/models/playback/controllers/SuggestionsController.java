@@ -428,7 +428,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void appendSectionPlaylistIfNeeded(Video video) {
-        if (video.getGroup() == null || video.playlistId != null || video.remotePlaylistId != null || !mPlayerTweaksData.isSectionPlaylistEnabled()) {
+        if (video.getGroup() == null || video.playlistId != null || (video.isRemote && video.remotePlaylistId != null) || !mPlayerTweaksData.isSectionPlaylistEnabled()) {
             return;
         }
 
@@ -545,7 +545,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private void appendNextSectionVideoIfNeeded(Video video) {
         mNextVideo = null;
 
-        if (video == null || video.getGroup() == null || video.playlistId != null || video.remotePlaylistId != null || !mPlayerTweaksData.isSectionPlaylistEnabled()) {
+        if (video == null || video.getGroup() == null || video.playlistId != null || (video.isRemote && video.remotePlaylistId != null) || !mPlayerTweaksData.isSectionPlaylistEnabled()) {
             return;
         }
 
