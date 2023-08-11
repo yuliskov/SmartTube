@@ -2,7 +2,7 @@
   
 <img width="100" src="https://github.com/yuliskov/SmartTubeNext/blob/master/smarttubetv/src/ststable/res/mipmap-nodpi/app_icon.png" alt="logo"/>
 
-**SmartTube** is an advanced player app for **Android TVs** and **TV boxes**, free & open source.
+**SmartTube** is an advanced player app for **Android TVs** and **TV boxes**, free & open source. You can play content from different public sources.
 
 :white_check_mark: **Features**: no ads ‧ SponsorBlock ‧ adjustable playback speed ‧ 8k support ‧ 60fps ‧ HDR ‧ read live chat ‧ customizable buttons ‧ no Google Services ‧ helpful international community
 
