@@ -6,8 +6,8 @@
 
 :white_check_mark: **Features**: no ads ‧ SponsorBlock ‧ adjustable playback speed ‧ 8k support ‧ 60fps ‧ HDR ‧ read live chat ‧ customizable buttons ‧ no Google Services ‧ helpful international community
 
-:x: **Disadvantages**: no comments
-stability, voice search and casting support **might** be worse than in the official YouTube, depending on your device; give it a try!
+:x: **Disadvantages**: no support for phones and tablets, no comments
+stability, voice search and casting support **might** be worse than in the official apps, depending on your device; give it a try!
 
 **Do you have any question?** Ctrl+F or ⌘F this readme first!
 
