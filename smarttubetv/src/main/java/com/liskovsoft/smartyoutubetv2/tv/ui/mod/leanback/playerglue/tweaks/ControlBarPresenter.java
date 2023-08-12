@@ -17,13 +17,11 @@ import android.content.Context;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import androidx.leanback.R;
 import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.Presenter;
-import androidx.leanback.widget.Presenter.ViewHolder;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.ControlButtonPresenterSelector;
 
 /**
@@ -99,6 +97,7 @@ class ControlBarPresenter extends Presenter {
             }
             mControlBar.setDefaultFocusToMiddle(mDefaultFocusToMiddle);
             mControlBar.setFocusRecovery(mFocusRecovery);
+            mControlBar.setGlobalFocus(mGlobalFocus);
             mControlBar.setOnChildFocusedListener(new ControlBar.OnChildFocusedListener() {
                 @Override
                 public void onChildFocusedListener(View child, View focused) {
@@ -222,6 +221,7 @@ class ControlBarPresenter extends Presenter {
     private static int sControlIconWidth;
     boolean mDefaultFocusToMiddle = true;
     boolean mFocusRecovery = true;
+    boolean mGlobalFocus = true;
 
     /**
      * Constructor for a ControlBarPresenter.
@@ -338,5 +338,12 @@ class ControlBarPresenter extends Presenter {
      */
     void setFocusRecovery(boolean focusRecovery) {
         mFocusRecovery = focusRecovery;
+    }
+
+    /**
+     * MOD: global navigation
+     */
+    void setGlobalFocus(boolean globalFocus) {
+        mGlobalFocus = globalFocus;
     }
 }

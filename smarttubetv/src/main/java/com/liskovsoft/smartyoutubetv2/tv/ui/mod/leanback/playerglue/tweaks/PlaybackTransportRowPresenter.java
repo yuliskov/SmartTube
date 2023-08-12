@@ -40,6 +40,7 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.ControlButtonPresenterSelector;
@@ -424,6 +425,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         public ViewHolder(View rootView, Presenter descriptionPresenter) {
             super(rootView);
             mPlayerData = PlayerData.instance(rootView.getContext());
+            // MOD: switch between navigation modes
+            PlayerTweaksData tweaksData = PlayerTweaksData.instance(rootView.getContext());
+            PlaybackTransportRowPresenter.this.mPlaybackControlsPresenter.setGlobalFocus(tweaksData.isPlayerGlobalFocusEnabled());
+            PlaybackTransportRowPresenter.this.mSecondaryControlsPresenter.setGlobalFocus(tweaksData.isPlayerGlobalFocusEnabled());
             mImageView = (ImageView) rootView.findViewById(R.id.image);
             mDescriptionDock = (ViewGroup) rootView.findViewById(R.id.description_dock);
             mCurrentTime = (TextView) rootView.findViewById(R.id.current_time);
@@ -854,8 +859,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
     boolean mProgressColorSet;
     boolean mSecondaryProgressColorSet;
     Presenter mDescriptionPresenter;
-    ControlBarPresenter mPlaybackControlsPresenter;
-    ControlBarPresenter mSecondaryControlsPresenter;
+    final ControlBarPresenter mPlaybackControlsPresenter;
+    final ControlBarPresenter mSecondaryControlsPresenter;
     OnActionClickedListener mOnActionClickedListener;
     OnActionLongClickedListener mOnActionLongClickedListener;
 
