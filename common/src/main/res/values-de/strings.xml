@@ -209,6 +209,9 @@
     <string name="player_remember_speed_each">Spezifische Geschwindigkeit pro Video</string>
     <string name="msg_player_error_source">Video kann nicht geladen werden</string>
     <string name="msg_player_error_renderer">Das ausgewählte Format wird nicht unterstützt.\nVersuchen Sie, ein anderes Format auszuwählen.\nWenn dies nicht hilft, versuchen Sie, das Gerät neu zu starten.</string>
+    <string name="msg_player_error_video_renderer">Das ausgewählte VIDEO-Format wird nicht unterstützt.\nVersuchen Sie, ein anderes Format auszuwählen, indem Sie die HQ-Taste im Player drücken.\nWenn dies nicht hilft, versuchen Sie, das Gerät neu zu starten.</string>
+    <string name="msg_player_error_audio_renderer">Das ausgewählte AUDIO-Format wird nicht unterstützt.\nVersuchen Sie, ein anderes Format auszuwählen, indem Sie die HQ-Taste im Player drücken.\nWenn dies nicht hilft, versuchen Sie, das Gerät neu zu starten.</string>
+    <string name="msg_player_error_subtitle_renderer">Das ausgewählte UNTERTITEL-Format wird nicht unterstützt.\nVersuchen Sie, ein anderes Format auszuwählen, indem Sie die CC-Taste im Player lange drücken.\nWenn dies nicht hilft, versuchen Sie, das Gerät neu zu starten.</string>
     <string name="msg_player_error_unexpected">Unbekannter Video-Decoder-Fehler</string>
     <string name="video_aspect">Seitenverhältnis</string>
     <string name="player_tweaks">Entwickleroptionen</string>
@@ -319,6 +322,9 @@
     <string name="keyboard_auto_show">Tastatur automatisch anzeigen</string>
     <string name="cancel_dialog">Abbrechen</string>
     <string name="msg_player_error_source2">Video-Quelle funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise handelt es sich um ein Problem der App.</string>
+    <string name="msg_player_error_video_source">VIDEO URL funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise handelt es sich um ein Problem der App.</string>
+    <string name="msg_player_error_audio_source">AUDIO URL funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise handelt es sich um ein Problem der App.</string>
+    <string name="msg_player_error_subtitle_source">UNTERTITEL URL funktioniert nicht oder falsche Geräte-Uhrzeit.\Normalerweise handelt es sich um ein Problem der App.</string>
     <string name="hide_upcoming">Anstehende Videos in Abos ausblenden</string>
     <string name="search_background_playback">Bild-in-Bild öffnen bei Suche/Kanal öffnen</string>
     <string name="trending_row_name">Trends</string>
