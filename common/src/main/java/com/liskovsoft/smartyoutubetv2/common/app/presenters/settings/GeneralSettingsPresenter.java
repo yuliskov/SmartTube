@@ -441,7 +441,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.getMasterPassword() != null));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.resume_history),
+        options.add(UiOptionItem.from(getContext().getString(R.string.enable_history),
                 option -> {
                     mGeneralData.enableHistory(option.isSelected());
                     MediaServiceManager.instance().enableHistory(option.isSelected());

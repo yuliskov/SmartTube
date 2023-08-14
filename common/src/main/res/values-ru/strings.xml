@@ -496,6 +496,8 @@
     <string name="pause_history">Поставить историю на паузу</string>
     <string name="resume_history">Возобновить историю</string>
     <string name="clear_history">Очистить историю</string>
+    <string name="disable_history">Отключить историю</string>
+    <string name="enable_history">Включить историю</string>
     <string name="chapters">Эпизоды</string>
     <string name="card_multiline_subtitle">Несколько строк в подзаголовках</string>
     <string name="auto_frame_rate_modes">Поддерживаемые режимы</string>

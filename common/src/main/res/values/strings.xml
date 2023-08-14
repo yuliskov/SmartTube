@@ -503,6 +503,8 @@
     <string name="player_button_long_click">A short click on the button to quick action and a long to settings dialog</string>
     <string name="pause_history">Pause history</string>
     <string name="resume_history">Resume history</string>
+    <string name="disable_history">Disable history</string>
+    <string name="enable_history">Enable history</string>
     <string name="clear_history">Clear history</string>
     <string name="chapters">Chapters</string>
     <string name="card_multiline_subtitle">Multiline subtitles</string>
