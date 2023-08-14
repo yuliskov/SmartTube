@@ -375,7 +375,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> {
                     List<String> backups = backupManager.getBackupNames();
 
-                    if (backups != null && backups.size() > 0) {
+                    if (backups != null && backups.size() > 1) {
                         showRestoreSelectorDialog(backups, backupManager);
                     } else {
                         AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
