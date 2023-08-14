@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
+import android.os.Build;
 import androidx.multidex.MultiDexApplication;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AddDeviceView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
@@ -47,7 +48,11 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         //}
 
         setupViewManager();
-        Speech.init(this);
+
+        // Fix for java.lang.VerifyError on Android 4.4.4
+        if (Build.VERSION.SDK_INT > 19) {
+            Speech.init(this);
+        }
     }
 
     private void setupViewManager() {
