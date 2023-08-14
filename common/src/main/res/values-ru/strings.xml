@@ -317,7 +317,7 @@
     <string name="content_block_filler">Отход от темы (оффтопик)</string>
     <string name="keyboard_auto_show">Показывать клавиатуру автоматически</string>
     <string name="cancel_dialog">Отменить</string>
-    <string name="msg_player_error_source2">Источник видео не работает или неправильное время на устройстве.\nСкорее всего проблема в приложении.</string>
+    <string name="msg_player_error_source2">Ссылка не работает или неправильное время на устройстве.\nСкорее всего проблема в приложении.</string>
     <string name="msg_player_error_video_source">Ссылка на ВИДЕОПОТОК не работает или неправильное время на устройстве.\nСкорее всего проблема в приложении.</string>
     <string name="msg_player_error_audio_source">Ссылка на АУДИОПОТОК не работает или неправильное время на устройстве.\nСкорее всего проблема в приложении.</string>
     <string name="msg_player_error_subtitle_source">Ссылка на СУБТИТРЫ не работает или неправильное время на устройстве.\nСкорее всего проблема в приложении.</string>

@@ -321,7 +321,7 @@
     <string name="content_block_filler">Off-topic (filler)</string>
     <string name="keyboard_auto_show">Show keyboard automatically</string>
     <string name="cancel_dialog">Cancel</string>
-    <string name="msg_player_error_source2">Video source isn\'t working or incorrect device time.\nUsually, it\'s the app issue.</string>
+    <string name="msg_player_error_source2">URL isn\'t working or incorrect device time.\nUsually, it\'s the app issue.</string>
     <string name="msg_player_error_video_source">VIDEO URL isn\'t working or incorrect device time.\nUsually, it\'s the app issue.</string>
     <string name="msg_player_error_audio_source">AUDIO URL isn\'t working or incorrect device time.\nUsually, it\'s the app issue.</string>
     <string name="msg_player_error_subtitle_source">SUBTITLE URL isn\'t working or incorrect device time.\nUsually, it\'s the app issue.</string>

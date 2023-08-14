@@ -427,7 +427,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
                 return R.string.msg_player_error_subtitle_source;
             default:
-                return R.string.video_buffer_size_none;
+                return R.string.msg_player_error_source2;
         }
     }
 
