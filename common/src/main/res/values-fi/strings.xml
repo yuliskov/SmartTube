@@ -307,7 +307,7 @@
   <string name="keyboard_auto_show">Näytä näppäimistö automaattisesti</string>
   <string name="cancel_dialog">Peruuta</string>
   <string name="msg_player_error_source2">Videolähde ei toimi tai kellon aika on väärä</string>
-  <string name="hide_upcoming">Piilota tulevat tilauksista</string>
+  <string name="hide_upcoming">Piilota tulevat videot tilauksista</string>
   <string name="search_background_playback">Käytä kuva-kuvassa (PIP) kun haet soittimesta</string>
   <string name="trending_row_name">Trendaavat</string>
   <string name="player_seek_type">Hakutapa</string>
@@ -571,4 +571,13 @@
   <string name="player_auto_volume">Automaattinen äänenvoimakkuuden säätö</string>
   <string name="header_shorts">Short-videot</string>
   <string name="amazon_frame_drop_fix">Frame drop korjaus #2</string>
+  <string name="player_global_focus">Saumaton navigointi soittimen painikerivien välillä</string>
+  <string name="dialog_notification">Ilmoita päivityksestä ponnahdusikkunassa</string>
+  <string name="open_comments">Näytä kommentit</string>
+  <string name="msg_player_error_video_source">Videon URL-osoite ei toimi tai laitteen aika on väärä.\nYleensä sovellusongelma.</string>
+  <string name="msg_player_error_audio_source">Ääniraidan URL-osoite ei toimi tai laitteen aika on väärä.\nYleensä sovellusongelma.</string>
+  <string name="msg_player_error_subtitle_source">Tekstitysten URL-osoite ei toimi tai laitteen aika on väärä.\nYleensä sovellusongelma.</string>
+  <string name="msg_player_error_video_renderer">Valittua videomuotoa ei tueta.\nYritä valita toinen painamalla soittimen HQ-painiketta.\nJos tämä ei auta, käynnistä laite uudelleen.</string>
+  <string name="msg_player_error_audio_renderer">Valittua ääniraitaa ei tueta.\nYritä valita toinen painamalla soittimen HQ-painiketta.\nJos tämä ei auta, käynnistä laite uudelleen.</string>
+  <string name="msg_player_error_subtitle_renderer">Valittua tekstitysten muotoa ei tueta.\nYritä valita toinen painamalla pitkään soittimen CC-painiketta.\nJos tämä ei auta, käynnistä laite uudelleen.</string>
 </resources>
