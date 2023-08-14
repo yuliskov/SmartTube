@@ -488,6 +488,8 @@
     <string name="player_button_long_click">Klik singkat pada tombol untuk tindakan cepat dan klik lama untuk dialog pengaturan</string>
     <string name="pause_history">Jeda riwayat</string>
     <string name="resume_history">Lanjutkan riwayat</string>
+    <string name="disable_history">Nonaktifkan riwayat</string>
+    <string name="enable_history">Aktifkan riwayat</string>
     <string name="clear_history">Hapus riwayat</string>    
     <string name="card_multiline_subtitle">Subtitel multiline</string>
     <string name="auto_frame_rate_modes">Mode yang didukung</string>
