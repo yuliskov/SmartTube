@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -439,6 +440,13 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     }
                 },
                 mGeneralData.getMasterPassword() != null));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.resume_history),
+                option -> {
+                    mGeneralData.enableHistory(option.isSelected());
+                    MediaServiceManager.instance().enableHistory(option.isSelected());
+                },
+                mGeneralData.isHistoryEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_global_clock),
                 option -> {
