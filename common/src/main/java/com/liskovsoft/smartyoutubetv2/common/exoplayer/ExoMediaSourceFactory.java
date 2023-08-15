@@ -56,7 +56,7 @@ public class ExoMediaSourceFactory {
     private static final String USER_AGENT = DefaultHeaders.APP_USER_AGENT;
     @SuppressLint("StaticFieldLeak")
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-    private final Factory mMediaDataSourceFactory;
+    //private final Factory mMediaDataSourceFactory;
     private final Context mContext;
     private static final Uri DASH_MANIFEST_URI = Uri.parse("https://example.com/test.mpd");
     private static final String DASH_MANIFEST_EXTENSION = "mpd";
@@ -66,7 +66,7 @@ public class ExoMediaSourceFactory {
 
     private ExoMediaSourceFactory(Context context) {
         mContext = context;
-        mMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER);
+        //mMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER);
     }
 
     public static ExoMediaSourceFactory instance(Context context) {
@@ -139,8 +139,8 @@ public class ExoMediaSourceFactory {
             case C.TYPE_SS:
                 SsMediaSource ssSource =
                         new SsMediaSource.Factory(
-                                new DefaultSsChunkSource.Factory(mMediaDataSourceFactory),
-                                buildDataSourceFactory(USE_BANDWIDTH_METER)
+                                getSsChunkSourceFactory(),
+                                null
                         )
                                 .createMediaSource(uri);
                 if (mTrackErrorFixer != null) {
@@ -151,7 +151,7 @@ public class ExoMediaSourceFactory {
                 DashMediaSource dashSource =
                         new DashMediaSource.Factory(
                                 getDashChunkSourceFactory(),
-                                buildDataSourceFactory(USE_BANDWIDTH_METER)
+                                null
                         )
                                 .setManifestParser(new LiveDashManifestParser()) // Don't make static! Need state reset for each live source.
                                 .setLoadErrorHandlingPolicy(new DashDefaultLoadErrorHandlingPolicy())
@@ -161,13 +161,13 @@ public class ExoMediaSourceFactory {
                 }
                 return dashSource;
             case C.TYPE_HLS:
-                HlsMediaSource hlsSource = new HlsMediaSource.Factory(mMediaDataSourceFactory).createMediaSource(uri);
+                HlsMediaSource hlsSource = new HlsMediaSource.Factory(getMediaDataSourceFactory()).createMediaSource(uri);
                 if (mTrackErrorFixer != null) {
                     hlsSource.addEventListener(Utils.sHandler, mTrackErrorFixer);
                 }
                 return hlsSource;
             case C.TYPE_OTHER:
-                ExtractorMediaSource extractorSource = new ExtractorMediaSource.Factory(mMediaDataSourceFactory)
+                ExtractorMediaSource extractorSource = new ExtractorMediaSource.Factory(getMediaDataSourceFactory())
                         .setExtractorsFactory(new DefaultExtractorsFactory())
                         .createMediaSource(uri);
                 if (mTrackErrorFixer != null) {
@@ -202,7 +202,7 @@ public class ExoMediaSourceFactory {
 
         // Are you using FrameworkSampleSource or ExtractorSampleSource when you build your player?
         DashMediaSource dashSource = new DashMediaSource.Factory(
-                new DefaultDashChunkSource.Factory(mMediaDataSourceFactory),
+                new DefaultDashChunkSource.Factory(getMediaDataSourceFactory()),
                 null
         )
                 .createMediaSource(getManifest(uri, mpdContent));
@@ -313,8 +313,18 @@ public class ExoMediaSourceFactory {
     }
 
     @NonNull
+    private DefaultSsChunkSource.Factory getSsChunkSourceFactory() {
+        return new DefaultSsChunkSource.Factory(getMediaDataSourceFactory());
+    }
+
+    @NonNull
     private DashChunkSource.Factory getDashChunkSourceFactory() {
-        return new DefaultDashChunkSource.Factory(mMediaDataSourceFactory, MAX_SEGMENTS_PER_LOAD);
+        return new DefaultDashChunkSource.Factory(getMediaDataSourceFactory(), MAX_SEGMENTS_PER_LOAD);
+    }
+
+    private Factory getMediaDataSourceFactory() {
+        //return mMediaDataSourceFactory;
+        return buildDataSourceFactory(USE_BANDWIDTH_METER);
     }
 
     // EXO: 2.10 - 2.12
