@@ -77,7 +77,7 @@
     <string name="player_only_ui">Pouze ovládání</string>
     <string name="player_ui_and_pause">Ovládání a pozastavení</string>
     <string name="player_only_pause">Pouze pozastavení</string>
-    <string name="check_for_updates">Zkontroluj aktualizace</string>
+    <string name="check_for_updates">Zkontrolovat aktualizace</string>
     <string name="update_not_found">Používáte poslední verzi</string>
     <string name="update_in_progress">Čekejte…</string>
     <string name="player_ui_hide_behavior">Automatické skrytí ovládání</string>
@@ -94,7 +94,7 @@
     <string name="color_scheme_dark_grey">Tmavé</string>
     <string name="disable_update_check">Zakázat kontrolu aktualizací</string>
     <string name="show_again">Ukaž znovu</string>
-    <string name="check_updates_auto">Automatická aktualizace</string>
+    <string name="check_updates_auto">Upozorňovat na aktualizace</string>
     <string name="select_account_on_boot">Vyberte účet při spuštění</string>
     <string name="player_other">Různé</string>
     <string name="player_full_date">Přesné datum v popisku</string>
@@ -209,6 +209,9 @@
     <string name="player_remember_speed_each">Každé video má svou vlastní rychlost</string>
     <string name="msg_player_error_source">Nelze načíst video</string>
     <string name="msg_player_error_renderer">Vybraný formát není podporován.\nZkuste vybrat jiný.\nPokud to nepomůže, zkuste restart zařízení.</string>
+    <string name="msg_player_error_video_renderer">Vybraný VIDEO formát není podporován.\nZkuste vybrat jiný kliknutím na tlačítko HQ v přehrávači.\nPokud to nepomůže, restartujte zařízení.</string>
+    <string name="msg_player_error_audio_renderer">Vybraný AUDIO formát není podporován.\nZkuste vybrat jiný kliknutím na tlačítko HQ v přehrávači.\nPokud to nepomůže, restartujte zařízení.</string>
+    <string name="msg_player_error_subtitle_renderer">Vybraný formát TITULKŮ není podporován.\nZkuste vybrat jiné kliknutím na tlačítko CC v přehrávači.\nPokud to nepomůže, restartujte zařízení.</string>
     <string name="msg_player_error_unexpected">Neznámá chyba video dekodéru</string>
     <string name="video_aspect">Poměr stran</string>
     <string name="player_tweaks">Vývojářské možnosti</string>
@@ -318,7 +321,10 @@
     <string name="content_block_filler">Mimo téma (výplň)</string>
     <string name="keyboard_auto_show">Zobraz klávesnici automaticky</string>
     <string name="cancel_dialog">Zrušit</string>
-    <string name="msg_player_error_source2">Zdroj videa nefunguje nebo je na zařízení nesprávný čas.\nNejspíše je na vině aplikace.</string>
+    <string name="msg_player_error_source2">URL nefunguje nebo je na zařízení nesprávný čas.\nNejspíše je na vině aplikace.</string>
+    <string name="msg_player_error_video_source">VIDEO URL nefunguje nebo je na zařízení nesprávný čas.\nNejspíše je na vině aplikace.</string>
+    <string name="msg_player_error_audio_source">AUDIO URL nefunguje nebo je na zařízení nesprávný čas.\nNejspíše je na vině aplikace.</string>
+    <string name="msg_player_error_subtitle_source">SUBTITLE URL nefunguje nebo je na zařízení nesprávný čas.\nNejspíše je na vině aplikace.</string>
     <string name="hide_upcoming">Skrýt nadcházející videa v Odběrech</string>
     <string name="search_background_playback">Zapni Obraz v obraze při vyhledávání/otevření kanálu</string>
     <string name="trending_row_name">Trendy</string>
@@ -460,6 +466,7 @@
     <string name="releases">Vydané verze</string>
     <string name="prefer_avc_over_vp9">Výběr kodeku: preferování AVC nad VP9</string>
     <string name="open_chat">Chat/Komentáře</string>
+    <string name="open_comments">Otevřít komentáře</string>
     <string name="place_chat_left">Umístit chat na levou stranu</string>
     <string name="use_alt_speech_recognizer">Alternativní rozpoznávač řeči</string>
     <string name="time_format">Časový režim</string>
@@ -496,6 +503,8 @@
     <string name="player_button_long_click">Krátké kliknutí na tlačítko pro rychlou akci a dlouhé pro dialog nastavení</string>
     <string name="pause_history">Pozastavit historii</string>
     <string name="resume_history">Obnovit historii</string>
+    <string name="disable_history">Zakázat historii</string>
+    <string name="enable_history">Povolit historii</string>
     <string name="clear_history">Smazat historii</string>
     <string name="chapters">Kapitoly</string>
     <string name="card_multiline_subtitle">Víceřádkové titulky</string>
@@ -557,6 +566,7 @@
     <string name="screensaver">Spořič obrazovky</string>
     <string name="player_screen_off_timeout">Časový limit vypnutí obrazovky</string>
     <string name="old_update_notifications">Původní vzhled upozornění na aktualizace</string>
+    <string name="dialog_notification">Upozornit na aktualizaci pomocí vyskakovacího dialogu</string>
     <string name="mark_as_watched">Označit jako zhlédnuté</string>
     <string name="player_ui_animations">Povolit animace ovládacího panelu</string>
     <string name="player_likes_count">Zobrazit počet Líbí/Nelíbí</string>
@@ -577,4 +587,5 @@
     <string name="autogenerated">Automaticky generované</string>
     <string name="player_auto_volume">Automatické nastavení hlasitosti</string>
     <string name="header_shorts">Shorts</string>
+    <string name="player_global_focus">Souvislá navigace mezi řadami tlačítek přehrávače</string>
 </resources>
