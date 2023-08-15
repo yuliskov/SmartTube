@@ -56,7 +56,7 @@ public class ExoMediaSourceFactory {
     private static final String USER_AGENT = DefaultHeaders.APP_USER_AGENT;
     @SuppressLint("StaticFieldLeak")
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-    //private final Factory mMediaDataSourceFactory;
+    private final Factory mMediaDataSourceFactory;
     private final Context mContext;
     private static final Uri DASH_MANIFEST_URI = Uri.parse("https://example.com/test.mpd");
     private static final String DASH_MANIFEST_EXTENSION = "mpd";
@@ -66,7 +66,7 @@ public class ExoMediaSourceFactory {
 
     private ExoMediaSourceFactory(Context context) {
         mContext = context;
-        //mMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER);
+        mMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER);
     }
 
     public static ExoMediaSourceFactory instance(Context context) {
@@ -140,7 +140,7 @@ public class ExoMediaSourceFactory {
                 SsMediaSource ssSource =
                         new SsMediaSource.Factory(
                                 getSsChunkSourceFactory(),
-                                null
+                                getMediaDataSourceFactory()
                         )
                                 .createMediaSource(uri);
                 if (mTrackErrorFixer != null) {
@@ -151,7 +151,7 @@ public class ExoMediaSourceFactory {
                 DashMediaSource dashSource =
                         new DashMediaSource.Factory(
                                 getDashChunkSourceFactory(),
-                                null
+                                getMediaDataSourceFactory()
                         )
                                 .setManifestParser(new LiveDashManifestParser()) // Don't make static! Need state reset for each live source.
                                 .setLoadErrorHandlingPolicy(new DashDefaultLoadErrorHandlingPolicy())
@@ -323,8 +323,8 @@ public class ExoMediaSourceFactory {
     }
 
     private Factory getMediaDataSourceFactory() {
-        //return mMediaDataSourceFactory;
-        return buildDataSourceFactory(USE_BANDWIDTH_METER);
+        return mMediaDataSourceFactory;
+        //return buildDataSourceFactory(USE_BANDWIDTH_METER);
     }
 
     // EXO: 2.10 - 2.12
