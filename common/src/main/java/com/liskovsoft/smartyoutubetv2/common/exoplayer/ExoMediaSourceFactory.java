@@ -41,6 +41,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.common.helpers.DefaultHeaders;
+import com.liskovsoft.youtubeapi.common.helpers.RetrofitOkHttpHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -271,6 +272,13 @@ public class ExoMediaSourceFactory {
     }
 
     private static void addCommonHeaders(BaseFactory dataSourceFactory) {
+        // Trying to fix 429 error (too many requests)
+        String authorization = RetrofitOkHttpHelper.getAuthHeaders().get("Authorization");
+
+        if (authorization != null) {
+            dataSourceFactory.getDefaultRequestProperties().set("Authorization", authorization);
+        }
+
         //HeaderManager headerManager = new HeaderManager(context);
         //HashMap<String, String> headers = headerManager.getHeaders();
 
