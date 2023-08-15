@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
-import android.os.Build;
 import androidx.multidex.MultiDexApplication;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AddDeviceView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
@@ -22,7 +21,6 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.webbrowser.WebBrowserActivity;
-import net.gotev.speech.Speech;
 
 public class MainApplication extends MultiDexApplication { // fix: Didn't find class "com.google.firebase.provider.FirebaseInitProvider"
     static {
@@ -48,11 +46,6 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         //}
 
         setupViewManager();
-
-        // Fix for java.lang.VerifyError on Android 4.4.4
-        if (Build.VERSION.SDK_INT > 19) {
-            Speech.init(this);
-        }
     }
 
     private void setupViewManager() {

@@ -40,7 +40,6 @@ import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
-import net.gotev.speech.Speech;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -921,12 +920,8 @@ public class SearchSupportFragment extends Fragment {
         mSearchBar.setSearchQuery(query);
     }
 
-    private void stopSpeechService() {
-        try {
-            Speech.getInstance().stopListening();
-        } catch (IllegalArgumentException | NoSuchMethodError e) { // Speech service not registered/Android 4 (no such method)
-            e.printStackTrace();
-        }
+    protected void stopSpeechService() {
+        // NOP
     }
 
     static class ExternalQuery {

@@ -6,8 +6,8 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class SearchData {
     public static final int SPEECH_RECOGNIZER_SYSTEM = 0;
-    public static final int SPEECH_RECOGNIZER_EXTERNAL_1 = 1;
-    public static final int SPEECH_RECOGNIZER_EXTERNAL_2 = 2;
+    public static final int SPEECH_RECOGNIZER_DEFAULT = 1;
+    public static final int SPEECH_RECOGNIZER_GOTEV = 2;
     private static final String SEARCH_DATA = "search_data";
     @SuppressLint("StaticFieldLeak")
     private static SearchData sInstance;
