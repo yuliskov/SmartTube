@@ -272,12 +272,13 @@ public class ExoMediaSourceFactory {
     }
 
     private static void addCommonHeaders(BaseFactory dataSourceFactory) {
+        // Doesn't work
         // Trying to fix 429 error (too many requests)
-        String authorization = RetrofitOkHttpHelper.getAuthHeaders().get("Authorization");
-
-        if (authorization != null) {
-            dataSourceFactory.getDefaultRequestProperties().set("Authorization", authorization);
-        }
+        //String authorization = RetrofitOkHttpHelper.getAuthHeaders().get("Authorization");
+        //
+        //if (authorization != null) {
+        //    dataSourceFactory.getDefaultRequestProperties().set("Authorization", authorization);
+        //}
 
         //HeaderManager headerManager = new HeaderManager(context);
         //HashMap<String, String> headers = headerManager.getHeaders();
