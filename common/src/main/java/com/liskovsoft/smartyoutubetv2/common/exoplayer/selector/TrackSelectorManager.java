@@ -486,98 +486,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         mIsMergedSource = mergedSource;
     }
 
-    //private MediaTrack findBestMatch(MediaTrack originTrack) {
-    //    Log.d(TAG, "findBestMatch: Starting: " + originTrack.format);
-    //
-    //    Renderer renderer = mRenderers[originTrack.rendererIndex];
-    //
-    //    MediaTrack result = createAutoSelection(originTrack.rendererIndex);
-    //
-    //    if (originTrack.format != null) { // not auto selection
-    //        MediaTrack prevResult;
-    //
-    //        MediaTrack[][] mediaTracks = filterByLanguage(renderer.mediaTracks, originTrack);
-    //
-    //        outerloop:
-    //        for (int groupIndex = 0; groupIndex < mediaTracks.length; groupIndex++) {
-    //            prevResult = result;
-    //
-    //            // Very rare NPE fix
-    //            MediaTrack[] trackGroup = mediaTracks[groupIndex];
-    //
-    //            if (trackGroup == null) {
-    //                Log.e(TAG, "Track selection error. Media track group %s is empty.", groupIndex);
-    //                continue;
-    //            }
-    //
-    //            for (MediaTrack mediaTrack : trackGroup) {
-    //                if (mediaTrack == null) {
-    //                    continue;
-    //                }
-    //
-    //                int compare = originTrack.inBounds(mediaTrack);
-    //
-    //                if (compare == 0) {
-    //                    Log.d(TAG, "findBestMatch: Found exact match by size and fps in list: " + mediaTrack.format);
-    //
-    //                    // Get ready for group with multiple codecs: avc, av01
-    //                    if (MediaTrack.codecEquals(mediaTrack, originTrack) && MediaTrack.bitrateEquals(mediaTrack, originTrack)) {
-    //                        result = mediaTrack;
-    //                        break outerloop;
-    //                    } else if (MediaTrack.codecEquals(mediaTrack, originTrack) && MediaTrack.preferByBitrate(mediaTrack, result)) {
-    //                        result = mediaTrack;
-    //                        // Don't do break for VideoTrack because we don't know whether there 30/60 fps.
-    //                        if (!(originTrack instanceof VideoTrack)) {
-    //                            break outerloop;
-    //                        }
-    //                    } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
-    //                        result = mediaTrack;
-    //                        if (originTrack instanceof SubtitleTrack) {
-    //                            break outerloop;
-    //                        }
-    //                    }
-    //                } else if (compare > 0) {
-    //                    // Select track with higher possible quality or by preferred codec
-    //                    boolean sameOrBetter = mediaTrack.compare(result) >= 0;
-    //                    //boolean preferByCodec = MediaTrack.preferByCodec(mediaTrack, result);
-    //                    if (sameOrBetter) { // || preferByCodec
-    //                        // Get ready for group with multiple codecs: avc, av01
-    //                        // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
-    //                        if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
-    //                            result = mediaTrack;
-    //                        } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
-    //                            result = mediaTrack;
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //
-    //            // Don't let change the codec beside needed one.
-    //            // Handle situation where same codecs in different groups (e.g. subtitles).
-    //            if (MediaTrack.codecEquals(result, originTrack)) {
-    //                // NOTE: compare doen't take into the account bitrate difference
-    //                //if (originTrack.compare(result) == 0) { // Exact match found
-    //                //    break;
-    //                //}
-    //
-    //                if (MediaTrack.codecEquals(prevResult, originTrack) && prevResult.compare(result) > 0) {
-    //                    result = prevResult;
-    //                }
-    //            } else if (MediaTrack.codecEquals(prevResult, originTrack)) {
-    //                result = prevResult;
-    //            } else if (prevResult.compare(result) == 0) { // Formats are the same except the codecs
-    //                if (MediaTrack.preferByCodec(prevResult, result)) {
-    //                    result = prevResult;
-    //                }
-    //            }
-    //        }
-    //    }
-    //
-    //    Log.d(TAG, "findBestMatch: Found: " + result.format);
-    //
-    //    return result;
-    //}
-
     private MediaTrack findBestMatch(MediaTrack originTrack) {
         Log.d(TAG, "findBestMatch: Starting: " + originTrack.format);
 
@@ -611,26 +519,28 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     if (bounds >= 0) {
                         int compare = mediaTrack.compare(result);
 
-                        if (compare >= 0) {
-                            if (MediaTrack.codecEquals(mediaTrack, originTrack) ||
-                                    !MediaTrack.preferByCodec(result, mediaTrack)) {
-                                result = mediaTrack;
-                            }
-                        }
-
-
-                        //boolean firstExactMatch = MediaTrack.codecEquals(mediaTrack, originTrack) && !MediaTrack.codecEquals(result, originTrack);
-                        //// Select track with higher possible quality or by preferred codec
-                        //boolean sameOrBetter = mediaTrack.compare(result) >= 0;
-                        //if (sameOrBetter || firstExactMatch) {
-                        //    // Get ready for group with multiple codecs: avc, av01
-                        //    // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
+                        //if (compare == 0) {
                         //    if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
                         //        result = mediaTrack;
-                        //    } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
+                        //    }
+                        //} else if (compare > 0) {
+                        //    if (!MediaTrack.preferByCodec(result, mediaTrack)) {
                         //        result = mediaTrack;
                         //    }
                         //}
+
+                        if (compare == 0) {
+                            if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
+                                result = mediaTrack;
+                            } else if (!MediaTrack.codecEquals(result, originTrack) &&
+                                    !MediaTrack.preferByCodec(result, mediaTrack)) {
+                                result = mediaTrack;
+                            }
+                        } else if (compare > 0) {
+                            if (!MediaTrack.preferByCodec(result, mediaTrack)) {
+                                result = mediaTrack;
+                            }
+                        }
                     }
                 }
 
