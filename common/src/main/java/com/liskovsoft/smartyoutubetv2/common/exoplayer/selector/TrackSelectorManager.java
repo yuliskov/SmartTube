@@ -45,6 +45,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
+    private boolean mIsMergedSource;
 
     public TrackSelectorManager(Context context) {
         mContext = context.getApplicationContext();
@@ -481,6 +482,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         invalidate();
     }
 
+    public void setMergedSource(boolean mergedSource) {
+        mIsMergedSource = mergedSource;
+    }
+
     //private MediaTrack findBestMatch(MediaTrack originTrack) {
     //    Log.d(TAG, "findBestMatch: Starting: " + originTrack.format);
     //
@@ -835,6 +840,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     private boolean isTrackUnique(MediaTrack mediaTrack) {
+        if (!mIsMergedSource) {
+            return true;
+        }
+
         Format format = mediaTrack.format;
 
         // Remove hls un-complete formats altogether
