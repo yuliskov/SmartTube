@@ -211,8 +211,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private String getNextTitle() {
         String title = null;
 
-        Video nextVideo = getNext() != null ? getNext() : Playlist.instance().getNext();
         Video video = getPlayer().getVideo();
+        Video nextVideo = getNext() != null && isSectionPlaylistEnabled(video) ? getNext() : Playlist.instance().getNext();
 
         if (nextVideo != null) {
             title = nextVideo.title;
@@ -428,7 +428,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void appendSectionPlaylistIfNeeded(Video video) {
-        if (video.getGroup() == null || video.playlistId != null || (video.isRemote && video.remotePlaylistId != null) || !mPlayerTweaksData.isSectionPlaylistEnabled()) {
+        if (!isSectionPlaylistEnabled(video)) {
+            mNextVideo = null;
             return;
         }
 
@@ -545,7 +546,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private void appendNextSectionVideoIfNeeded(Video video) {
         mNextVideo = null;
 
-        if (video == null || video.getGroup() == null || video.playlistId != null || (video.isRemote && video.remotePlaylistId != null) || !mPlayerTweaksData.isSectionPlaylistEnabled()) {
+        if (!isSectionPlaylistEnabled(video)) {
             return;
         }
 
@@ -662,5 +663,10 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         RxHelper.disposeActions(mActions);
         mLastScrollGroup = null;
         mChapters = null;
+    }
+
+    private boolean isSectionPlaylistEnabled(Video video) {
+        return mPlayerTweaksData.isSectionPlaylistEnabled() && video != null && video.getGroup() != null &&
+                (video.playlistId == null || video.nextMediaItem == null) && (!video.isRemote || video.remotePlaylistId == null);
     }
 }
