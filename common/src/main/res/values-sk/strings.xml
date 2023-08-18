@@ -94,7 +94,7 @@
     <string name="color_scheme_dark_grey">Tmavo-šedá</string>
     <string name="disable_update_check">Vypnúť kontrolu aktualizácií</string>
     <string name="show_again">Zobraziť znova</string>
-    <string name="check_updates_auto">Automatická aktualizácia</string>
+    <string name="check_updates_auto">Upozorniť na aktualizáciu</string>
     <string name="select_account_on_boot">Vyberte účet pri spustení</string>
     <string name="player_other">Rôzne</string>
     <string name="player_full_date">Presný dátum v popisku</string>
@@ -208,7 +208,10 @@
     <string name="player_remember_speed_all">Rovnaká rýchlosť pre všetky videá</string>
     <string name="player_remember_speed_each">Každé video má svoju vlastnú rýchlosť</string>
     <string name="msg_player_error_source">Nemožno načítať video</string>
-    <string name="msg_player_error_renderer">Vybraný formát videa nie je podporovaný</string>
+    <string name="msg_player_error_renderer">Vybraný formát nie je podporovaný.\nSkúste vybrať iný.\nAk to nepomôže, skúste reštartovať zariadenie.</string>
+    <string name="msg_player_error_video_renderer">Vybraný VIDEO formát nie je podporovaný.\nSkúste vybrať iný stlačením tlačidla HQ v prehrávači.\nAk to nepomôže, skúste reštartovať zariadenie.</string>
+    <string name="msg_player_error_audio_renderer">Vybraný AUDIO formát nie je podporovaný.\nSkúste vybrať iný stlačením tlačidla HQ v prehrávači.\nAk to nepomôže, skúste reštartovať zariadenie.</string>
+    <string name="msg_player_error_subtitle_renderer">Vybraný formát TITULKOV nie je podporovaný.\nSkúste vybrať iný stlačením tlačidla HQ v prehrávači.\nAk to nepomôže, skúste reštartovať zariadenie.</string>
     <string name="msg_player_error_unexpected">Neznáma chyba video dekodéra</string>
     <string name="video_aspect">Pomer strán</string>
     <string name="player_tweaks">Vývojárske možnosti</string>
@@ -318,7 +321,10 @@
     <string name="content_block_filler">Mimo témy (výplň)</string>
     <string name="keyboard_auto_show">Zobraziť klávesnicu automaticky</string>
     <string name="cancel_dialog">Zrušiť</string>
-    <string name="msg_player_error_source2">Zdroj videa nefunguje</string>
+    <string name="msg_player_error_source2">URL nefunguje alebo je na zariadení nesprávny čas.\nZvyčajne je to chyba aplikácie.</string>
+    <string name="msg_player_error_video_source">VIDEO URL nefunguje alebo je na zariadení nesprávny čas.\nZvyčajne je to chyba aplikácie.</string>
+    <string name="msg_player_error_audio_source">AUDIO URL nefunguje alebo je na zariadení nesprávny čas.\nZvyčajne je to chyba aplikácie.</string>
+    <string name="msg_player_error_subtitle_source">TITULKOVÁ URL nefunguje alebo je na zariadení nesprávny čas.\nZvyčajne je to chyba aplikácie.</string>
     <string name="hide_upcoming">Skryť nadchádzajúce z Odberov</string>
     <string name="search_background_playback">Zapnúť PIP pri vyhľadávaní/otvorení kanála z prehrávania</string>
     <string name="trending_row_name">Trendy</string>
@@ -383,6 +389,7 @@
     <string name="tunneled_video_playback">Tunelové video prehrávanie (Android 5+)</string>
     <string name="master_volume">Hlavná hlasitosť</string>
     <string name="volume_limit">Obmedzenie hlasitosti</string>
+    <string name="player_volume">Hlasitosť</string>
     <string name="play_video">Prehrať</string>
     <string name="remember_position_of_short_videos">Zapamätať pozíciu v krátkych videách (menej ako 5 min)</string>
     <string name="player_show_tooltips">Zobraziť popis tlačítok</string>
@@ -458,6 +465,7 @@
     <string name="sources">Zdroje</string>
     <string name="releases">Vydané verzie</string>
     <string name="prefer_avc_over_vp9">Výber kodeku: preferovať AVC pred VP9</string>
+    <string name="open_comments">Otvoriť komentáre</string>
     <string name="open_chat">Chat</string>
     <string name="place_chat_left">Zobraziť chat na ľavej strane</string>
     <string name="use_alt_speech_recognizer">Alternatívne rozpoznávanie jazyka</string>
@@ -495,6 +503,8 @@
     <string name="player_button_long_click">Krátke kliknutie na tlačidlo pre rýchlu akciu a dlhé pre dialóg nastavení</string>
     <string name="pause_history">Pozastaviť históriu</string>
     <string name="resume_history">Obnoviť históriu</string>
+    <string name="disable_history">Vypnúť históriu</string>
+    <string name="enable_history">Povoliť históriu</string>
     <string name="clear_history">Zmazať históriu</string>
     <string name="chapters">Kapitoly</string>
     <string name="card_multiline_subtitle">Viacriadkové titulky</string>
@@ -547,6 +557,7 @@
     <string name="audio_language">Jazyk zvuku</string>
     <string name="old_home_look">Starý vzhľad sekcie Domov</string>
     <string name="hide_shorts_everywhere">Skryť Shorts všade</string>
+    <string name="update_found">Aktualizácia</string>
     <string name="volume_boost_warning">Akékoľvek nastavenie nad limit môže poškodiť reproduktory</string>
     <string name="play_video_incognito">Prehrať anonymne</string>
     <string name="header_kids_home">Deti</string>
@@ -555,6 +566,7 @@
     <string name="screensaver">Šetrič obrazovky</string>
     <string name="player_screen_off_timeout">Časový limit vypnutia obrazovky</string>
     <string name="old_update_notifications">Starý vzhľad oznámení o aktualizáciách</string>
+    <string name="dialog_notification">Upozorniť na aktualizáciu pomocou vyskakovacieho okna</string>
     <string name="mark_as_watched">Označiť ako videné</string>
     <string name="player_ui_animations">Povoliť animácie ovládacieho panela</string>
     <string name="player_likes_count">Zobraziť počet Páči sa/Nepáči sa</string>
@@ -571,4 +583,9 @@
     <string name="player_screen_off_dimming">Intenzita stmievania obrazovky</string>
     <string name="screensaver_timout">Časový limit šetriča obrazovky</string>
     <string name="screensaver_dimming">Intenzita stmievania šetriča obrazovky</string>
+    <string name="player_ui_on_next">Zobraziť rozhranie prehrávača pri prepnutí na ďalšie video</string>
+    <string name="autogenerated">Automaticky generované</string>
+    <string name="player_auto_volume">Automatické nastavenie hlasitosti</string>
+    <string name="header_shorts">Shorts</string>
+    <string name="player_global_focus">Plynulá navigácia medzi radmi tlačidiel prehrávača</string>
 </resources>
