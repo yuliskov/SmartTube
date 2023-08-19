@@ -168,7 +168,10 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
                     value -> value.isDefault() || !SubtitleTrack.isAuto(value.getLanguage()));
             settingsPresenter.appendRadioCategory(subtitlesOrigCategoryTitle,
                     UiOptionItem.from(subtitleOrigFormats,
-                            option -> getPlayer().setFormat(UiOptionItem.toFormat(option)),
+                            option -> {
+                                enableSubtitleForChannel(true);
+                                getPlayer().setFormat(UiOptionItem.toFormat(option));
+                            },
                             getContext().getString(R.string.subtitles_disabled)));
             settingsPresenter.showDialog();
         }));
@@ -179,7 +182,10 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
                     value -> value.isDefault() || SubtitleTrack.isAuto(value.getLanguage()));
             settingsPresenter.appendRadioCategory(subtitlesAutoCategoryTitle,
                     UiOptionItem.from(subtitleAutoFormats,
-                            option -> getPlayer().setFormat(UiOptionItem.toFormat(option)),
+                            option -> {
+                                enableSubtitleForChannel(true);
+                                getPlayer().setFormat(UiOptionItem.toFormat(option));
+                            },
                             getContext().getString(R.string.subtitles_disabled)));
             settingsPresenter.showDialog();
         }));

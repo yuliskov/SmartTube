@@ -71,10 +71,19 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         appendNextSectionVideoIfNeeded(video);
     }
 
+    /**
+     * Improve video load time by running a fetch after load event
+     */
     @Override
-    public void onSourceChanged(Video item) {
+    public void onVideoLoaded(Video item) {
         loadSuggestions(item);
     }
+
+    // Could make negative impact on the video load time.
+    //@Override
+    //public void onSourceChanged(Video item) {
+    //    loadSuggestions(item);
+    //}
 
     @Override
     public void onEngineReleased() {

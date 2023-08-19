@@ -146,6 +146,10 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
 
     @Override
     public void onTickle() {
+        if (getPlayer() == null || !getPlayer().isEngineInitialized()) {
+            return;
+        }
+
         // Sync history every five minutes
         if (++mTickleLeft > 5) {
             mTickleLeft = 0;
