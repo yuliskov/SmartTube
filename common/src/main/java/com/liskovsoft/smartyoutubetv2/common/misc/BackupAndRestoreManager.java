@@ -141,7 +141,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         for (File backupDir : mBackupDirs) {
             // FileHelpers.isEmpty(backupDir) needs access device storage permission
             if (mBackupName != null && !mBackupName.isEmpty()) {
-                backupDir = new File(backupDir.getParentFile(), BACKUP_DIR_NAME + "_" + mBackupName);
+                backupDir = new File(backupDir.getParentFile(), mBackupName);
             }
 
             if (backupDir.exists()) {
@@ -201,7 +201,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
             for (String dirName : list) {
                 if (dirName.startsWith(BACKUP_DIR_NAME)) {
-                    result.add(dirName.replace(BACKUP_DIR_NAME + "_", ""));
+                    result.add(dirName);
                 }
             }
 
