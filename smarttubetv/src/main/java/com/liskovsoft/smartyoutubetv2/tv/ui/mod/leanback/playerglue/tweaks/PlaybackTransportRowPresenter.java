@@ -93,6 +93,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final TextView mQualityInfo;
         final TextView mDateTime;
         final ViewGroup mAdditionalInfo;
+        final ViewGroup mTimelInfo;
         final ViewGroup mTopEdge;
         final SeekBar mProgressBar;
         final ThumbsBar mThumbsBar;
@@ -439,6 +440,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             mEndingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.player_ending_time);
             mRemainingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.player_remaining_time);
             mAdditionalInfo = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.additional_info);
+            mTimelInfo = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.time_info);
             mTopEdge = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.top_edge);
             mTopEdge.setOnFocusChangeListener((v, hasFocus) -> {
                 if (hasFocus) {
@@ -628,6 +630,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     mSecondaryControlsVh.view.setVisibility(View.VISIBLE);
                     mDescriptionViewHolder.view.setVisibility(View.VISIBLE);
                     mAdditionalInfo.setVisibility(View.VISIBLE);
+                    mTimelInfo.setVisibility(View.VISIBLE);
                     // Don't set to GONE or carousel will crash (can't properly calculate length)
                     mThumbsBarWrapper.setVisibility(View.INVISIBLE);
                     break;
@@ -637,6 +640,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     mSecondaryControlsVh.view.setVisibility(View.GONE);
                     mDescriptionViewHolder.view.setVisibility(View.GONE);
                     mAdditionalInfo.setVisibility(View.GONE);
+                    mTimelInfo.setVisibility(View.GONE);
                     mThumbsBarWrapper.setVisibility(View.VISIBLE);
                     break;
             }
