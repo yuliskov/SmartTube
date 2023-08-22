@@ -18,6 +18,7 @@ import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -351,6 +352,7 @@ public class ViewManager {
             // NOTE: Don't rely on MotherActivity.onDestroy() because activity can be killed silently.
             RxHelper.runAsync(() -> {
                 clearCaches();
+                SplashPresenter.unhold();
                 BrowsePresenter.unhold();
                 MotherActivity.invalidate();
                 mIsMoveToBackEnabled = false;

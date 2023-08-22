@@ -19,7 +19,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
-import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
@@ -36,6 +35,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     @SuppressLint("StaticFieldLeak")
     private static SplashPresenter sInstance;
     private static boolean sRunOnce;
+    private boolean mRunPerInstance;
     private final List<IntentProcessor> mIntentChain = new ArrayList<>();
     private Disposable mRefreshCachePeriodicAction;
 
@@ -59,39 +59,39 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     public static void unhold() {
         sInstance = null;
-        sRunOnce = false;
     }
 
     @Override
     public void onViewInitialized() {
+        applyRunPerInstanceTasks();
         applyRunOnceTasks();
 
-        runRefreshCachePeriodicTask();
+        //runRefreshCachePeriodicTask();
         showAccountSelection();
-        forceEnableHistory();
 
         if (getView() != null) {
             checkMasterPassword(() -> applyNewIntent(getView().getNewIntent()));
         }
     }
 
+    private void applyRunPerInstanceTasks() {
+        if (!mRunPerInstance) {
+            mRunPerInstance = true;
+            //clearCache();
+            enableHistoryIfNeeded();
+            updateChannels();
+            initIntentChain();
+            // Fake service to prevent the app destroying?
+            //runRemoteControlFakeTask();
+        }
+    }
+
     private void applyRunOnceTasks() {
         if (!sRunOnce) {
-            //checkTouchSupport(); // Not working?
-            // Need to be the first line and executed on earliest stage once.
-            // Inits service language and context.
-            //Utils.initGlobalData(getContext()); // Init already done in BasePresenter
-            clearCache();
+            sRunOnce = true;
             RxHelper.setupGlobalErrorHandler();
-            initIntentChain();
-            updateChannels();
-            runRemoteControlTasks();
-            //setupKeepAlive();
-            //configureProxy();
-            //configureOpenVPN();
             initVideoStateService();
             initStreamReminderService();
-            sRunOnce = true;
         }
     }
 
@@ -99,7 +99,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         AccountSelectionPresenter.instance(getContext()).show();
     }
 
-    private void runRemoteControlTasks() {
+    private void runRemoteControlFakeTask() {
         // Fake service to prevent the app from destroying
         if (getContext() != null) {
             //Utils.startRemoteControlService(getContext());
@@ -125,7 +125,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             if (GeneralData.instance(getContext()).getVersionCode() != versionCode) {
                 GeneralData.instance(getContext()).setVersionCode(versionCode);
 
-                FileHelpers.deleteCache(getContext());
+                //FileHelpers.deleteCache(getContext());
                 ViewManager.instance(getContext()).clearCaches();
             }
         }
@@ -139,7 +139,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         mRefreshCachePeriodicAction = RxHelper.startInterval(YouTubeMediaService.instance()::refreshCacheIfNeeded, 30 * 60);
     }
 
-    private void forceEnableHistory() {
+    private void enableHistoryIfNeeded() {
         // Account history might be turned off (common issue).
         MediaServiceManager.instance().enableHistory(GeneralData.instance(getContext()).isHistoryEnabled());
     }
