@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
@@ -17,18 +19,24 @@ public class SplashActivity extends MotherActivity implements SplashView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mNewIntent = getIntent();
+        super.onCreate(savedInstanceState);
+
         final String prefixPrefName = mNewIntent.getStringExtra("prefix_pref_name");
-        if (!Objects.equals(SharedPreferencesBase.getPrefixPrefName(getApplicationContext()), prefixPrefName)) {
+        if (!Objects.equals(SharedPreferencesBase.getPrefixPrefName(getApplicationContext()), prefixPrefName)
+                && prefixPrefName != null) {
+            Log.d(TAG, "onCreate: apply preferences and restart app");
             SharedPreferencesBase.setSharedPrefPrefixName(getApplicationContext(), prefixPrefName);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             startActivity(Intent.makeRestartActivityTask(getPackageManager()
-                    .getLaunchIntentForPackage(getPackageName())
-                    .getComponent())
+                            .getLaunchIntentForPackage(getPackageName())
+                            .getComponent())
                     .putExtra("prefix_pref_name", prefixPrefName));
             Runtime.getRuntime().exit(0);
         }
-
-        super.onCreate(savedInstanceState);
-
         mPresenter = SplashPresenter.instance(this);
         mPresenter.setView(this);
         mPresenter.onViewInitialized();
@@ -48,7 +56,9 @@ public class SplashActivity extends MotherActivity implements SplashView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPresenter.onViewDestroyed();
+        if (mPresenter != null) {
+            mPresenter.onViewDestroyed();
+        }
     }
 
     @Override
