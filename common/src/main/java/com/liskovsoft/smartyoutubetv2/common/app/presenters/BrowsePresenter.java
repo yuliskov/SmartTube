@@ -589,10 +589,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateVideoGrid(section, group, -1, authCheck);
     }
 
-    private void updateVideoGrid(BrowseSection category, Observable<MediaGroup> group, int position, boolean authCheck) {
-        Log.d(TAG, "loadMultiGridHeader: Start loading category: " + category.getTitle());
+    private void updateVideoGrid(BrowseSection section, Observable<MediaGroup> group, int position, boolean authCheck) {
+        Log.d(TAG, "loadMultiGridHeader: Start loading section: " + section.getTitle());
 
-        authCheck(authCheck, () -> updateVideoGrid(category, group, position));
+        authCheck(authCheck, () -> updateVideoGrid(section, group, position));
     }
 
     private void updateVideoRows(BrowseSection section, Observable<List<MediaGroup>> groups) {
@@ -881,22 +881,26 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return Helpers.equalsAny(mediaGroup.getTitle(), getContext().getString(R.string.trending_row_name)) ? 0 : -1;
     }
 
+    //private Observable<MediaGroup> createPinnedAction(Video item) {
+    //    return (item.hasPlaylist() || item.hasReloadPageKey()) ?
+    //            ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item) :
+    //            mGroupManager.getChannelObserve(item.channelId).map(list -> {
+    //                MediaGroup group = null;
+    //
+    //                // Default row is Uploads
+    //                for (MediaGroup mediaGroup : list) {
+    //                    if (mediaGroup != null && Helpers.equals(mediaGroup.getTitle(), getContext().getString(R.string.uploads_row_name))) {
+    //                        group = mediaGroup;
+    //                        break;
+    //                    }
+    //                }
+    //
+    //                return group != null ? group : list.get(0);
+    //            });
+    //}
+
     private Observable<MediaGroup> createPinnedAction(Video item) {
-        return (item.hasPlaylist() || item.hasReloadPageKey()) ?
-                ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item) :
-                mGroupManager.getChannelObserve(item.channelId).map(list -> {
-                    MediaGroup group = null;
-
-                    // Default row is Uploads
-                    for (MediaGroup mediaGroup : list) {
-                        if (mediaGroup != null && Helpers.equals(mediaGroup.getTitle(), getContext().getString(R.string.uploads_row_name))) {
-                            group = mediaGroup;
-                            break;
-                        }
-                    }
-
-                    return group != null ? group : list.get(0);
-                });
+        return ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item);
     }
 
     /**

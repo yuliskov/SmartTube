@@ -12,6 +12,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.SampleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -156,9 +157,13 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
             return null;
         }
 
+        if (item.mediaItem == null) {
+            item.mediaItem = SampleMediaItem.from(item);
+        }
+
         disposeActions();
 
-        return item.hasNestedItems() ?
+        return item.hasNestedItems() || item.hasChannel() ?
                mGroupManager.getGroupObserve(item.mediaItem) :
                item.hasReloadPageKey() ?
                mGroupManager.getGroupObserve(item.getReloadPageKey()) :
