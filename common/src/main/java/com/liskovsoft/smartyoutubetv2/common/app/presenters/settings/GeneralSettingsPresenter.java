@@ -413,6 +413,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 {R.string.disable_history, GeneralData.HISTORY_DISABLED}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 mGeneralData.setHistoryState(pair[1]);
+                MediaServiceManager.instance().enableHistory(pair[1] == GeneralData.HISTORY_AUTO || pair[1] == GeneralData.HISTORY_ENABLED);
             }, mGeneralData.getHistoryState() == pair[1]));
         }
 
