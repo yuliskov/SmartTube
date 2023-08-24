@@ -141,7 +141,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private void enableHistoryIfNeeded() {
         // Account history might be turned off (common issue).
-        MediaServiceManager.instance().enableHistory(GeneralData.instance(getContext()).isHistoryEnabled());
+        GeneralData generalData = GeneralData.instance(getContext());
+        if (generalData.getHistoryState() != GeneralData.HISTORY_AUTO) {
+            MediaServiceManager.instance().enableHistory(generalData.isHistoryEnabled());
+        }
     }
 
     private void checkTouchSupport() {

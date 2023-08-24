@@ -68,6 +68,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendKeyRemappingCategory(settingsPresenter);
         appendAppBackupCategory(settingsPresenter);
         appendInternetCensorship(settingsPresenter);
+        appendHistoryCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_general), () -> {
@@ -403,6 +404,21 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         dialog.showDialog();
     }
 
+    private void appendHistoryCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.auto_history, GeneralData.HISTORY_AUTO},
+                {R.string.enable_history, GeneralData.HISTORY_ENABLED},
+                {R.string.disable_history, GeneralData.HISTORY_DISABLED}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
+                mGeneralData.setHistoryState(pair[1]);
+            }, mGeneralData.getHistoryState() == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.header_history), options);
+    }
+
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
@@ -440,13 +456,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     }
                 },
                 mGeneralData.getMasterPassword() != null));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.enable_history),
-                option -> {
-                    mGeneralData.enableHistory(option.isSelected());
-                    MediaServiceManager.instance().enableHistory(option.isSelected());
-                },
-                mGeneralData.isHistoryEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_global_clock),
                 option -> {

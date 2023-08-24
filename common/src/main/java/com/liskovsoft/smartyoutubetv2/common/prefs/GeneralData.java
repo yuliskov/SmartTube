@@ -31,6 +31,9 @@ public class GeneralData {
     public static final int BACKGROUND_PLAYBACK_SHORTCUT_BACK = 2;
     public static final int TIME_FORMAT_24 = 0;
     public static final int TIME_FORMAT_12 = 1;
+    public static final int HISTORY_AUTO = 0;
+    public static final int HISTORY_ENABLED = 1;
+    public static final int HISTORY_DISABLED = 2;
     @SuppressLint("StaticFieldLeak")
     private static GeneralData sInstance;
     private final Context mContext;
@@ -70,6 +73,7 @@ public class GeneralData {
     private String mMasterPassword;
     private boolean mIsChildModeEnabled;
     private boolean mIsHistoryEnabled;
+    private int mHistoryState;
     private boolean mIsAltAppIconEnabled;
     private int mVersionCode;
     private boolean mIsSelectChannelSectionEnabled;
@@ -656,13 +660,21 @@ public class GeneralData {
     }
 
     public boolean isHistoryEnabled() {
-        return mIsHistoryEnabled;
+        return mHistoryState == HISTORY_ENABLED;
     }
 
     public void enableHistory(boolean enabled) {
-        mIsHistoryEnabled = enabled;
+        setHistoryState(enabled ? HISTORY_ENABLED : HISTORY_AUTO);
+    }
+
+    public void setHistoryState(int historyState) {
+        mHistoryState = historyState;
 
         persistState();
+    }
+
+    public int getHistoryState() {
+        return mHistoryState;
     }
 
     public void enableAltAppIcon(boolean enable) {
@@ -792,6 +804,7 @@ public class GeneralData {
         mScreensaverDimmingPercents = Helpers.parseInt(split, 44, 80);
         mIsRemapNextPrevToSpeedEnabled = Helpers.parseBoolean(split, 45, false);
         mIsRemapPlayPauseToOKEnabled = Helpers.parseBoolean(split, 46, false);
+        mHistoryState = Helpers.parseInt(split, 47, HISTORY_ENABLED);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -854,6 +867,6 @@ public class GeneralData {
                 playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
                 mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextPrevToSpeedEnabled,
-                mIsRemapPlayPauseToOKEnabled));
+                mIsRemapPlayPauseToOKEnabled, mHistoryState));
     }
 }
