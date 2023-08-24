@@ -565,4 +565,5 @@
     <string name="player_auto_volume">Penyesuaian volume otomatis</string>
     <string name="header_shorts">Vidio Pendek</string>
     <string name="player_global_focus">Navigasi yang mulus di antara deretan tombol pemutar</string>
+    <string name="auto_history">Otomatis (gunakan pengaturan akun)</string>
 </resources>
