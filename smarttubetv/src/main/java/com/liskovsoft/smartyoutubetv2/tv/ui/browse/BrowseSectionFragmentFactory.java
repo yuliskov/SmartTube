@@ -10,9 +10,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.CategoryFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsCategoryFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.Section;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsSection;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoSection;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.settings.SettingsGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultiVideoGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.ShortsGridFragment;
@@ -103,8 +103,8 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
             return;
         }
 
-        if (mCurrentFragment instanceof SettingsCategoryFragment) {
-            ((SettingsCategoryFragment) mCurrentFragment).update(group);
+        if (mCurrentFragment instanceof SettingsSection) {
+            ((SettingsSection) mCurrentFragment).update(group);
         } else {
             Log.e(TAG, "updateFragment: Page group fragment has incompatible type: " + mCurrentFragment.getClass().getSimpleName());
         }
@@ -130,8 +130,8 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
     }
 
     public boolean isEmpty() {
-        if (mCurrentFragment instanceof CategoryFragment) {
-            return ((CategoryFragment) mCurrentFragment).isEmpty();
+        if (mCurrentFragment instanceof Section) {
+            return ((Section) mCurrentFragment).isEmpty();
         }
 
         return false;
@@ -142,16 +142,16 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
     }
 
     public int getCurrentFragmentItemIndex() {
-        if (mCurrentFragment instanceof VideoCategoryFragment) {
-            return ((VideoCategoryFragment) mCurrentFragment).getPosition();
+        if (mCurrentFragment instanceof VideoSection) {
+            return ((VideoSection) mCurrentFragment).getPosition();
         }
 
         return -1;
     }
 
     public void setCurrentFragmentItemIndex(int index) {
-        if (mCurrentFragment instanceof VideoCategoryFragment) {
-            ((VideoCategoryFragment) mCurrentFragment).setPosition(index);
+        if (mCurrentFragment instanceof VideoSection) {
+            ((VideoSection) mCurrentFragment).setPosition(index);
             mSelectedItemIndex = -1;
         } else {
             mSelectedItemIndex = index;
@@ -159,16 +159,16 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
     }
 
     private void updateVideoFragment(Fragment fragment, VideoGroup group) {
-        if (fragment instanceof VideoCategoryFragment) {
-            ((VideoCategoryFragment) fragment).update(group);
+        if (fragment instanceof VideoSection) {
+            ((VideoSection) fragment).update(group);
         } else {
             Log.e(TAG, "updateFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
         }
     }
 
     private void clearFragment(Fragment fragment) {
-        if (fragment instanceof CategoryFragment) {
-            ((CategoryFragment) fragment).clear();
+        if (fragment instanceof Section) {
+            ((Section) fragment).clear();
         } else {
             Log.e(TAG, "clearFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
         }

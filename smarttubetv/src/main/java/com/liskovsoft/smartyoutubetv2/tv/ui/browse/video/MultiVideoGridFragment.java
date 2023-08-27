@@ -24,7 +24,7 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoSection;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.fragments.MultiGridFragment;
@@ -33,7 +33,7 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiVideoGridFragment extends MultiGridFragment implements VideoCategoryFragment {
+public class MultiVideoGridFragment extends MultiGridFragment implements VideoSection {
     private static final String TAG = MultiVideoGridFragment.class.getSimpleName();
     private VideoGroupObjectAdapter mGridAdapter1;
     private VideoGroupObjectAdapter mGridAdapter2;
