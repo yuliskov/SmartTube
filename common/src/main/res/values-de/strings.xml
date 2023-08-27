@@ -588,4 +588,5 @@
     <string name="player_auto_volume">Automatische Lautstärkeanpassung</string>
     <string name="header_shorts">Shorts</string>
     <string name="player_global_focus">Nahtlose Navigation zwischen Player-Schaltflächenreihen</string>
+    <string name="auto_history">Automatisch (Kontoeinstellungen verwenden)</string>
 </resources>
