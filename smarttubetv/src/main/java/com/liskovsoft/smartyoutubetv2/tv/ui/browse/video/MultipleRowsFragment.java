@@ -198,6 +198,11 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         }
     }
 
+    @Override
+    public void selectItem(Video item) {
+        // NOP
+    }
+
     /**
      * Disable scrolling on partially updated rows. This prevent cards from misbehaving.
      */

@@ -79,6 +79,7 @@ public class GeneralData {
     private boolean mIsSelectChannelSectionEnabled;
     private boolean mIsOldHomeLookEnabled;
     private boolean mIsOldUpdateNotificationsEnabled;
+    private boolean mRememberSubscriptionsPosition;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new ArrayList<>();
@@ -329,6 +330,15 @@ public class GeneralData {
 
     public void hideStreamsFromSubscriptions(boolean enable) {
         GlobalPreferences.sInstance.hideStreamsFromSubscriptions(enable);
+    }
+
+    public void rememberSubscriptionsPosition(boolean remember) {
+        mRememberSubscriptionsPosition = remember;
+        persistState();
+    }
+
+    public boolean isRememberSubscriptionsPositionEnabled() {
+        return mRememberSubscriptionsPosition;
     }
 
     public void hideShortsEverywhere(boolean enable) {
@@ -805,6 +815,7 @@ public class GeneralData {
         mIsRemapNextPrevToSpeedEnabled = Helpers.parseBoolean(split, 45, false);
         mIsRemapPlayPauseToOKEnabled = Helpers.parseBoolean(split, 46, false);
         mHistoryState = Helpers.parseInt(split, 47, HISTORY_ENABLED);
+        mRememberSubscriptionsPosition = Helpers.parseBoolean(split, 48, true);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -867,6 +878,6 @@ public class GeneralData {
                 playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
                 mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextPrevToSpeedEnabled,
-                mIsRemapPlayPauseToOKEnabled, mHistoryState));
+                mIsRemapPlayPauseToOKEnabled, mHistoryState, mRememberSubscriptionsPosition));
     }
 }

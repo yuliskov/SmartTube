@@ -7,6 +7,7 @@ import androidx.leanback.widget.Row;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
@@ -25,6 +26,7 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
     private Fragment mCurrentFragment;
     private int mFragmentType = BrowseSection.TYPE_GRID;
     private int mSelectedItemIndex = -1;
+    private Video mSelectedItem;
 
     public interface OnSectionSelectedListener {
         void onSectionSelected(Row row);
@@ -86,6 +88,7 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
             }
             
             setCurrentFragmentItemIndex(mSelectedItemIndex);
+            selectCurrentFragmentItem(mSelectedItem);
 
             return fragment;
         }
@@ -150,11 +153,30 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
     }
 
     public void setCurrentFragmentItemIndex(int index) {
+        if (index < 0) {
+            return;
+        }
+
+        mSelectedItemIndex = index;
+        mSelectedItem = null;
+
         if (mCurrentFragment instanceof VideoSection) {
             ((VideoSection) mCurrentFragment).setPosition(index);
             mSelectedItemIndex = -1;
-        } else {
-            mSelectedItemIndex = index;
+        }
+    }
+
+    public void selectCurrentFragmentItem(Video item) {
+        if (item == null) {
+            return;
+        }
+
+        mSelectedItem = item;
+        mSelectedItemIndex = -1;
+
+        if (mCurrentFragment instanceof VideoSection) {
+            ((VideoSection) mCurrentFragment).selectItem(item);
+            mSelectedItem = null;
         }
     }
 

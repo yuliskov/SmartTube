@@ -96,6 +96,11 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
     }
 
     @Override
+    public void selectItem(Video item) {
+        // NOP
+    }
+
+    @Override
     public void update(VideoGroup group) {
         if (group.getPosition() == 0) {
             updateGroup1(group);

@@ -37,6 +37,7 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
     private VideoGroupPresenter mMainPresenter;
     private VideoCardPresenter mCardPresenter;
     private int mSelectedItemIndex = -1;
+    private Video mSelectedItem;
     private float mVideoGridScale;
     private final Runnable mRestoreTask = this::restorePosition;
 
@@ -103,11 +104,31 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
             return;
         }
 
+        mSelectedItemIndex = index;
+        mSelectedItem = null;
+
         if (mGridAdapter != null && index < mGridAdapter.size()) {
             setSelectedPosition(index);
             mSelectedItemIndex = -1;
-        } else {
-            mSelectedItemIndex = index;
+        }
+    }
+
+    @Override
+    public void selectItem(Video item) {
+        if (item == null) {
+            return;
+        }
+
+        mSelectedItem = item;
+        mSelectedItemIndex = -1;
+
+        if (mGridAdapter != null) {
+            int index = mGridAdapter.indexOfAlt(item);
+
+            if (index != -1) {
+                setSelectedPosition(index);
+                mSelectedItem = null;
+            }
         }
     }
 
@@ -148,9 +169,10 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
 
     private void restorePosition() {
         setPosition(mSelectedItemIndex);
+        selectItem(mSelectedItem);
 
         // Item not found? Lookup item in next group.
-        if (mSelectedItemIndex != -1) {
+        if (mSelectedItemIndex != -1 || mSelectedItem != null) {
             if (mMainPresenter.hasPendingActions()) {
                 TickleManager.instance().runTask(mRestoreTask, 500);
             } else {
@@ -219,6 +241,8 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Video) {
                 mBackgroundManager.setBackgroundFrom((Video) item);
+
+                mMainPresenter.onVideoItemSelected((Video) item);
 
                 checkScrollEnd((Video) item);
             }

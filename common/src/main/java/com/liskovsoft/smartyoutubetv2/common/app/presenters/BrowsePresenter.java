@@ -70,6 +70,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final Runnable mRefreshSection = this::refresh;
     private BrowseSection mCurrentSection;
     private Video mCurrentVideo;
+    private Video mSelectedVideo;
     private long mLastUpdateTimeMs;
     private int mBootSectionIndex;
     private int mSelectedSectionId = -1;
@@ -324,6 +325,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         mCurrentVideo = item;
+
+        if (isSubscriptionsSection()) {
+            mSelectedVideo = item;
+        }
     }
 
     @Override
@@ -537,14 +542,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         mCurrentSection = findSectionById(sectionId);
 
-        if (getView() == null) {
+        if (getView() == null || mCurrentSection == null) {
             return;
         }
 
-        if (mCurrentSection != null) {
-            Log.d(TAG, "Update section %s", mCurrentSection.getTitle());
-            updateSection(mCurrentSection);
-        }
+        Log.d(TAG, "Update section %s", mCurrentSection.getTitle());
+        updateSection(mCurrentSection);
     }
 
     private void updateSection(BrowseSection section) {
@@ -666,6 +669,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             // No group. Maybe just clear.
             getView().showProgressBar(false);
             return;
+        }
+
+        if (isSubscriptionsSection() && mGeneralData.isRememberSubscriptionsPositionEnabled()) {
+            getView().selectSectionItem(mSelectedVideo);
         }
 
         Disposable updateAction = group

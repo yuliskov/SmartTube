@@ -21,6 +21,7 @@ import androidx.leanback.widget.TitleHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
@@ -359,6 +360,13 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void selectSectionItem(int index) {
         if (index >= 0) {
             mSectionFragmentFactory.setCurrentFragmentItemIndex(index);
+        }
+    }
+
+    @Override
+    public void selectSectionItem(Video item) {
+        if (item != null) {
+            mSectionFragmentFactory.selectCurrentFragmentItem(item);
         }
     }
 

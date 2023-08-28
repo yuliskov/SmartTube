@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.views;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -13,6 +14,7 @@ public interface BrowseView {
     void updateSection(SettingsGroup group);
     void clearSection(BrowseSection category);
     void selectSectionItem(int index);
+    void selectSectionItem(Video item);
     void showError(ErrorFragmentData data);
     void showProgressBar(boolean show);
     boolean isProgressBarShowing();
