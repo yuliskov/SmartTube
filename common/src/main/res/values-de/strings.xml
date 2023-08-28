@@ -589,4 +589,5 @@
     <string name="header_shorts">Shorts</string>
     <string name="player_global_focus">Nahtlose Navigation zwischen Player-Schaltflächenreihen</string>
     <string name="auto_history">Automatisch (Kontoeinstellungen verwenden)</string>
+    <string name="remember_position_subscriptions">Letzte Position in Abos merken</string>
 </resources>
