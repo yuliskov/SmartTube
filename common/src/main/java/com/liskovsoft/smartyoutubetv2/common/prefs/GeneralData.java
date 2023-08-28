@@ -815,7 +815,7 @@ public class GeneralData {
         mIsRemapNextPrevToSpeedEnabled = Helpers.parseBoolean(split, 45, false);
         mIsRemapPlayPauseToOKEnabled = Helpers.parseBoolean(split, 46, false);
         mHistoryState = Helpers.parseInt(split, 47, HISTORY_ENABLED);
-        mRememberSubscriptionsPosition = Helpers.parseBoolean(split, 48, true);
+        mRememberSubscriptionsPosition = Helpers.parseBoolean(split, 48, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);

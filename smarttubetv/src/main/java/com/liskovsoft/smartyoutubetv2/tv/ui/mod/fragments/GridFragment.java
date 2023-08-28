@@ -206,7 +206,6 @@ public class GridFragment extends Fragment implements BrowseSupportFragment.Main
     public void setSelectedPosition(int position) {
         mSelectedPosition = position;
         if (mGridViewHolder != null && mGridViewHolder.getGridView().getAdapter() != null) {
-            // Use Smooth scroll to fix crash (Invalid item position -1(-1). Item count:84 androidx.leanback.widget.VerticalGridView)
             mGridViewHolder.getGridView().setSelectedPosition(position);
         }
     }

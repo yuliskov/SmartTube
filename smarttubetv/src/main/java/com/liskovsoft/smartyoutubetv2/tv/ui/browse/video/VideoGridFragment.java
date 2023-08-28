@@ -194,6 +194,9 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
     @Override
     public void clear() {
         if (mGridAdapter != null) {
+            // Fix: Invalid item position -1(-1). Item count:84 androidx.leanback.widget.VerticalGridView
+            freeze(true);
+
             mGridAdapter.clear();
         }
     }
