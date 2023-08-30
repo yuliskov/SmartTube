@@ -566,4 +566,5 @@
     <string name="header_shorts">Vidio Pendek</string>
     <string name="player_global_focus">Navigasi yang mulus di antara deretan tombol pemutar</string>
     <string name="auto_history">Otomatis (gunakan pengaturan akun)</string>
+    <string name="remember_position_subscriptions">Ingat posisi terakhir yang dilihat di Langganan</string>
 </resources>
