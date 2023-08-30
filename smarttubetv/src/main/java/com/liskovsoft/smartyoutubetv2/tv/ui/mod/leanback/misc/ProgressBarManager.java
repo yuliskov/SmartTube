@@ -30,7 +30,7 @@ public final class ProgressBarManager {
     boolean mIsShowing;
     private int mPosition = Gravity.CENTER;
 
-    private Runnable runnable = new Runnable() {
+    private final Runnable showRunnable = new Runnable() {
         @Override
         public void run() {
             if (!mEnableProgressBar || (!mUserProvidedProgressBar && rootView == null)) {
@@ -43,6 +43,18 @@ public final class ProgressBarManager {
                 } else if (mUserProvidedProgressBar) {
                     mProgressBarView.setVisibility(View.VISIBLE);
                 }
+            }
+        }
+    };
+
+    private final Runnable hideRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mUserProvidedProgressBar) {
+                mProgressBarView.setVisibility(View.INVISIBLE);
+            } else if (mProgressBarView != null) {
+                rootView.removeView(mProgressBarView);
+                mProgressBarView = null;
             }
         }
     };
@@ -80,7 +92,8 @@ public final class ProgressBarManager {
     public void show() {
         if (mEnableProgressBar) {
             mIsShowing = true;
-            mHandler.postDelayed(runnable, mInitialDelay);
+            mHandler.removeCallbacks(hideRunnable);
+            mHandler.postDelayed(showRunnable, mInitialDelay);
         }
     }
 
@@ -89,14 +102,8 @@ public final class ProgressBarManager {
      */
     public void hide() {
         mIsShowing = false;
-        if (mUserProvidedProgressBar) {
-            mProgressBarView.setVisibility(View.INVISIBLE);
-        } else if (mProgressBarView != null) {
-            rootView.removeView(mProgressBarView);
-            mProgressBarView = null;
-        }
-
-        mHandler.removeCallbacks(runnable);
+        mHandler.removeCallbacks(showRunnable);
+        mHandler.postDelayed(hideRunnable, mInitialDelay);
     }
 
     public boolean isShowing() {

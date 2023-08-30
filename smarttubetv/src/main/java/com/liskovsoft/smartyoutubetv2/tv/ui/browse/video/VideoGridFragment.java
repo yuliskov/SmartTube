@@ -171,13 +171,15 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
         setPosition(mSelectedItemIndex);
         selectItem(mSelectedItem);
 
+        if ((mSelectedItemIndex == -1 && mSelectedItem == null) || mGridAdapter == null || mGridAdapter.size() > 500) {
+            return;
+        }
+
         // Item not found? Lookup item in next group.
-        if (mSelectedItemIndex != -1 || mSelectedItem != null) {
-            if (mMainPresenter.hasPendingActions()) {
-                TickleManager.instance().runTask(mRestoreTask, 500);
-            } else {
-                mMainPresenter.onScrollEnd((Video) mGridAdapter.get(mGridAdapter.size() - 1));
-            }
+        if (mMainPresenter.hasPendingActions()) {
+            TickleManager.instance().runTask(mRestoreTask, 500);
+        } else {
+            mMainPresenter.onScrollEnd((Video) mGridAdapter.get(mGridAdapter.size() - 1));
         }
     }
 

@@ -126,6 +126,22 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         int selectedSectionIndex = findSectionIndex(mSelectedSectionId);
         mSelectedSectionId = -1;
         getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, true);
+        restoreSelectedItems();
+    }
+
+    @Override
+    public void onViewPaused() {
+        super.onViewPaused();
+
+        saveSelectedItems();
+    }
+
+    private void saveSelectedItems() {
+        mGeneralData.setSelectedSubscriptionsItem(mSelectedVideo);
+    }
+
+    private void restoreSelectedItems() {
+        mSelectedVideo = mGeneralData.getSelectedSubscriptionsItem();
     }
 
     private void initSections() {
@@ -135,7 +151,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         initSettingsSubCategories();
     }
-    
+
     private void initSectionMapping() {
         String country = LocaleUtility.getCurrentLocale(getContext()).getCountry();
         int uploadsType = mMainUIData.isUploadsOldLookEnabled() ? BrowseSection.TYPE_GRID : BrowseSection.TYPE_MULTI_GRID;
@@ -308,6 +324,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void onViewDestroyed() {
         super.onViewDestroyed();
         disposeActions();
+        saveSelectedItems();
     }
 
     @Override
@@ -643,6 +660,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 getView().showError(new CategoryEmptyError(getContext()));
                                 Utils.postDelayed(mRefreshSection, 30_000);
                             }
+                        },
+                        () -> {
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
                         });
 
         mActions.add(updateAction);
@@ -687,10 +709,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, position);
                             getView().updateSection(videoGroup);
 
-                            // Hide loading as long as first group received
-                            if (mediaGroup.getMediaItems() != null) {
-                                getView().showProgressBar(false);
-                            }
+                            //// Hide loading as long as first group received
+                            //if (mediaGroup.getMediaItems() != null) {
+                            //    getView().showProgressBar(false);
+                            //}
 
                             continueGroupIfNeeded(videoGroup);
 
@@ -705,6 +727,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             }
 
                             // Can't determine whether the history paused or not. Remember, it's paused not cleared.
+                        },
+                        () -> {
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
                         });
 
         mActions.add(updateAction);
@@ -719,7 +746,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         // Small amount of items == small load time. Loading bar are useless?
-        //getView().showProgressBar(true);
+        getView().showProgressBar(true);
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
@@ -747,6 +774,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
+                        },
+                        () -> {
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                             }
@@ -787,7 +819,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
      */
     private void continueGroupIfNeeded(VideoGroup group) {
         MediaServiceManager.instance().shouldContinueTheGroup(
-                getContext(), group, () -> continueGroup(group), ViewManager.instance(getContext()).getTopView() == BrowseView.class,
+                getContext(), group, () -> continueGroup(group), false,
                 isGridSection()
         );
     }

@@ -80,6 +80,7 @@ public class GeneralData {
     private boolean mIsOldHomeLookEnabled;
     private boolean mIsOldUpdateNotificationsEnabled;
     private boolean mRememberSubscriptionsPosition;
+    private Video mSelectedSubscriptionsItem;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new ArrayList<>();
@@ -735,6 +736,15 @@ public class GeneralData {
         return mIsOldUpdateNotificationsEnabled;
     }
 
+    public void setSelectedSubscriptionsItem(Video item) {
+        mSelectedSubscriptionsItem = item;
+        persistState();
+    }
+
+    public Video getSelectedSubscriptionsItem() {
+        return mSelectedSubscriptionsItem;
+    }
+
     private void initSections() {
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mDefaultSections.put(R.string.header_shorts, MediaGroup.TYPE_SHORTS);
@@ -816,6 +826,7 @@ public class GeneralData {
         mIsRemapPlayPauseToOKEnabled = Helpers.parseBoolean(split, 46, false);
         mHistoryState = Helpers.parseInt(split, 47, HISTORY_ENABLED);
         mRememberSubscriptionsPosition = Helpers.parseBoolean(split, 48, false);
+        mSelectedSubscriptionsItem = Video.fromString(Helpers.parseStr(split, 49));
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -878,6 +889,6 @@ public class GeneralData {
                 playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
                 mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextPrevToSpeedEnabled,
-                mIsRemapPlayPauseToOKEnabled, mHistoryState, mRememberSubscriptionsPosition));
+                mIsRemapPlayPauseToOKEnabled, mHistoryState, mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem)));
     }
 }
