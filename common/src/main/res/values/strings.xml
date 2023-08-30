@@ -589,5 +589,5 @@
     <string name="header_shorts">Shorts</string>
     <string name="player_global_focus">Seamless navigation between player button rows</string>
     <string name="auto_history">Auto (use account settings)</string>
-    <string name="remember_position_subscriptions">Remember last Subscriptions position</string>
+    <string name="remember_position_subscriptions">Remember last viewed position in Subscriptions</string>
 </resources>
