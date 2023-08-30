@@ -588,4 +588,5 @@
     <string name="player_auto_volume">Automatické nastavení hlasitosti</string>
     <string name="header_shorts">Shorts</string>
     <string name="player_global_focus">Souvislá navigace mezi řadami tlačítek přehrávače</string>
+    <string name="auto_history">Automaticky (použije nastavení účtu)</string>
 </resources>
