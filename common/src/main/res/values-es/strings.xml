@@ -103,7 +103,7 @@
   <string name="not_interested">No me interesa</string>
   <string name="not_recommend_channel">No recomendar canal</string>
   <string name="you_wont_see_this_video">Vídeo eliminado de recomendaciones</string>
-  <string name="you_wont_see_this_channel">No verás este canal en las recomendaciones.</string>  
+  <string name="you_wont_see_this_channel">No verás este canal en las recomendaciones.</string>
   <string name="settings_search">Buscar</string>
   <string name="dialog_search">Buscar</string>
   <string name="instant_voice_search">Búsqueda instantánea de voz</string>
@@ -436,7 +436,6 @@
   <string name="playback_starts_shortly">La reproducción se iniciará automáticamente cuando el stream esté listo</string>
   <string name="starting_stream">Iniciando el stream…</string>
   <string name="action_playlist_remove">Eliminar de lista</string>
-  <!-- BEGIN Moved strings -->
   <string name="signin_view_title">El código de usuario se está cargando...</string>
   <string name="signin_view_description">Para iniciar sesión introduzca este código en la página %s\nNOTA. Sólo funciona con los navegadores Firefox o Chrome.</string>
   <string name="signin_view_action_text">Hecho</string>
@@ -451,14 +450,13 @@
   <string name="playback_controls_repeat_list">Repetir Lista</string>
   <string name="action_subscribe_off">Desuscribirse</string>
   <string name="action_subscribe_on">Suscribirse</string>
-  <!-- END Moved strings -->
   <string name="skip_24_rate">Omitir los formatos de 24fps (¿Solución del modo de cine real\?)</string>
   <string name="player_disable_suggestions">Deshabilitar sugerencias</string>
   <string name="feedback">Feedback</string>
   <string name="sources">Fuentes</string>
   <string name="releases">Publicaciones</string>
   <string name="prefer_avc_over_vp9">Selección de códecs: prefiero avc a vp9</string>
-  <string name="open_chat">Chat</string>
+  <string name="open_chat">Chat/Comentarios</string>
   <string name="place_chat_left">Colocar chat en la izquierda</string>
   <string name="use_alt_speech_recognizer">Reconocimiento de voz alternativo</string>
   <string name="time_format">Modo tiempo</string>
@@ -531,8 +529,7 @@
   <string name="network_stack">Preferir pila de red %s</string>
   <string name="cronet_desc">Cronet es la pila de red Chromium. Cronet puede reducir la latencia y aumentar el rendimiento de la red, lo que puede ayudar con los problemas de almacenamiento en búfer.</string>
   <string name="unlock_all_formats">Desbloquear todos los formatos de video</string>
-  <string name="unlock_all_formats_desc">En algunos dispositivos, el firmware informa incorrectamente que algunos formatos no son compatibles, incluso si lo son.\n
-   (por ejemplo, los televisores inteligentes de 1080p tienden a informar que 4k no es compatible).</string>
+  <string name="unlock_all_formats_desc">En algunos dispositivos, el firmware informa incorrectamente que algunos formatos no son compatibles, incluso si lo son.\nundefined   (por ejemplo, los televisores inteligentes de 1080p tienden a informar que 4k no es compatible).</string>
   <string name="okhttp_desc">Esta pila de red es la más lenta pero tiene buena estabilidad.</string>
   <string name="select_channel_section">Abrir la sección correspondiente cuando la aplicación se inicie desde ATV Channels</string>
   <string name="enable_voice_search_desc">La aplicación oficial será reemplazada por el llamado puente. Un puente ayuda a transferir solicitudes de búsqueda global a nuestra aplicación.</string>
@@ -541,14 +538,13 @@
   <string name="disable_stream_buffer">Deshabilitar el búfer en las transmisiones</string>
   <string name="disable_stream_buffer_desc">Arreglo para situaciones en las que la transmisión está muy atrasada. Nota: la transmisión puede comenzar a retrasarse.</string>
   <string name="sony_frame_drop_fix">Corrección de caída de fotogramas #1</string>
-  <string name="sony_frame_drop_fix_desc">Soluciona los retrasos en Sony TV y algunos otros dispositivos. Nota: posibles problemas con la sincronización de audio.
-  </string>
+  <string name="sony_frame_drop_fix_desc">Soluciona los retrasos en Sony TV y algunos otros dispositivos. Nota: posibles problemas con la sincronización de audio.undefined  </string>
   <string name="audio_language">Idioma de audio</string>
   <string name="old_home_look">El aspecto antiguo de la sección Inicio</string>
   <string name="hide_shorts_everywhere">Ocultar cortos en todas partes</string>
   <string name="update_found">Actualizar</string>
   <string name="volume_boost_warning">Cualquier ajuste por encima del límite puede dañar los altavoces</string>
-  <string name="play_video_incognito">Reproducción de incógnito</string>  
+  <string name="play_video_incognito">Reproducción de incógnito</string>
   <string name="header_kids_home">Kids</string>
   <string name="player_screen_off_timeout">Tiempo de espera de apagado de pantalla</string>
   <string name="screensaver">Salvapantallas</string>
@@ -575,4 +571,19 @@
   <string name="player_ui_on_next">Mostrar la interfaz de usuario del reproductor al pasar al siguiente vídeo</string>
   <string name="player_auto_volume">Ajuste automático del volumen</string>
   <string name="header_shorts">Shorts</string>
+  <string name="msg_player_error_video_renderer">El formato de VIDEO seleccionado no es compatible.\nIntente seleccionar otro pulsando el botón HQ en el reproductor.\nSi esto no ayuda intente reiniciar el dispositivo.</string>
+  <string name="msg_player_error_audio_renderer">El formato de AUDIO seleccionado no es compatible.\nIntente seleccionar otro pulsando el botón HQ en el reproductor.\nSi esto no ayuda intente reiniciar el dispositivo.</string>
+  <string name="msg_player_error_subtitle_renderer">El formato de SUBTÍTULOS seleccionado no es compatible.\nIntente seleccionar otro pulsando el botón CC en el reproductor.\nSi esto no ayuda intente reiniciar el dispositivo.</string>
+  <string name="msg_player_error_video_source">La URL del VIDEO no funciona o la hora del dispositivo es incorrecta.\nPor lo general, es un problema de la aplicación.</string>
+  <string name="msg_player_error_audio_source">La URL del AUDIO no funciona o la hora del dispositivo es incorrecta.\nPor lo general, es un problema de la aplicación.</string>
+  <string name="msg_player_error_subtitle_source">La URL de los SUBTÍTULOS no funcionan o la hora del dispositivo es incorrecta.\nPor lo general, es un problema de la aplicación.</string>
+  <string name="open_comments">Abrir comentarios</string>
+  <string name="disable_history">Desactivar historial</string>
+  <string name="enable_history">Activar historial</string>
+  <string name="player_network_stack">Pila de red</string>
+  <string name="dialog_notification">Notificación de la actualización mediante un cuadro de diálogo emergente</string>
+  <string name="auto_history">Auto (usar configuración de cuenta)</string>
+  <string name="remember_position_subscriptions">Recordar la última posición vista en Suscripciones</string>
+  <string name="msg_player_unknown_error">Error desconocido</string>
+  <string name="player_global_focus">Navegación fluida entre las filas de botones del reproductor</string>
 </resources>
