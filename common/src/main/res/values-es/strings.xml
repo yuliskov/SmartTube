@@ -529,7 +529,7 @@
   <string name="network_stack">Preferir pila de red %s</string>
   <string name="cronet_desc">Cronet es la pila de red Chromium. Cronet puede reducir la latencia y aumentar el rendimiento de la red, lo que puede ayudar con los problemas de almacenamiento en búfer.</string>
   <string name="unlock_all_formats">Desbloquear todos los formatos de video</string>
-  <string name="unlock_all_formats_desc">En algunos dispositivos, el firmware informa incorrectamente que algunos formatos no son compatibles, incluso si lo son.\nundefined   (por ejemplo, los televisores inteligentes de 1080p tienden a informar que 4k no es compatible).</string>
+  <string name="unlock_all_formats_desc">En algunos dispositivos, el firmware informa incorrectamente que algunos formatos no son compatibles, incluso si lo son.\n(por ejemplo, los televisores inteligentes de 1080p tienden a informar que 4k no es compatible).</string>
   <string name="okhttp_desc">Esta pila de red es la más lenta pero tiene buena estabilidad.</string>
   <string name="select_channel_section">Abrir la sección correspondiente cuando la aplicación se inicie desde ATV Channels</string>
   <string name="enable_voice_search_desc">La aplicación oficial será reemplazada por el llamado puente. Un puente ayuda a transferir solicitudes de búsqueda global a nuestra aplicación.</string>
@@ -538,7 +538,7 @@
   <string name="disable_stream_buffer">Deshabilitar el búfer en las transmisiones</string>
   <string name="disable_stream_buffer_desc">Arreglo para situaciones en las que la transmisión está muy atrasada. Nota: la transmisión puede comenzar a retrasarse.</string>
   <string name="sony_frame_drop_fix">Corrección de caída de fotogramas #1</string>
-  <string name="sony_frame_drop_fix_desc">Soluciona los retrasos en Sony TV y algunos otros dispositivos. Nota: posibles problemas con la sincronización de audio.undefined  </string>
+  <string name="sony_frame_drop_fix_desc">Soluciona los retrasos en Sony TV y algunos otros dispositivos. Nota: posibles problemas con la sincronización de audio.</string>
   <string name="audio_language">Idioma de audio</string>
   <string name="old_home_look">El aspecto antiguo de la sección Inicio</string>
   <string name="hide_shorts_everywhere">Ocultar cortos en todas partes</string>
@@ -586,4 +586,5 @@
   <string name="remember_position_subscriptions">Recordar la última posición vista en Suscripciones</string>
   <string name="msg_player_unknown_error">Error desconocido</string>
   <string name="player_global_focus">Navegación fluida entre las filas de botones del reproductor</string>
+  <string name="player_volume">Volumen</string>
 </resources>
