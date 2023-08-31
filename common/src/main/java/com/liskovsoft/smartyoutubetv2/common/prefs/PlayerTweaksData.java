@@ -84,6 +84,7 @@ public class PlayerTweaksData {
     private boolean mIsPlayerUiOnNextEnabled;
     private boolean mIsPlayerAutoVolumeEnabled;
     private boolean mIsPlayerGlobalFocusEnabled;
+    private boolean mIsUnsafeAudioFormatsEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -232,6 +233,15 @@ public class PlayerTweaksData {
     public void enableTunneledPlayback(boolean enable) {
         mIsTunneledPlaybackEnabled = enable;
         persistData();
+    }
+
+    public void enableUnsafeAudioFormats(boolean enable) {
+        mIsUnsafeAudioFormatsEnabled = enable;
+        persistData();
+    }
+
+    public boolean isUnsafeAudioFormatsEnabled() {
+        return mIsUnsafeAudioFormatsEnabled;
     }
 
     public void enablePlayerButton(int playerButtons) {
@@ -524,6 +534,7 @@ public class PlayerTweaksData {
         mIsPlayerUiOnNextEnabled = Helpers.parseBoolean(split, 39, false);
         mIsPlayerAutoVolumeEnabled = Helpers.parseBoolean(split, 40, true);
         mIsPlayerGlobalFocusEnabled = Helpers.parseBoolean(split, 41, true);
+        mIsUnsafeAudioFormatsEnabled = Helpers.parseBoolean(split, 42, false);
 
         updateDefaultValues();
     }
@@ -539,7 +550,8 @@ public class PlayerTweaksData {
                 mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
-                mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled
+                mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
+                mIsUnsafeAudioFormatsEnabled
         ));
     }
 

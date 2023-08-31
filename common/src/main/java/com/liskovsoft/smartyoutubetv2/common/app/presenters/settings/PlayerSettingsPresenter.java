@@ -323,6 +323,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isTunneledPlaybackEnabled()));
 
+        options.add(UiOptionItem.from("Unsafe audio formats",
+                option -> mPlayerTweaksData.enableUnsafeAudioFormats(option.isSelected()),
+                mPlayerTweaksData.isUnsafeAudioFormatsEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_vsync),
                 getContext().getString(R.string.disable_vsync_desc),
                 option -> mPlayerTweaksData.disableSnapToVsync(option.isSelected()),
