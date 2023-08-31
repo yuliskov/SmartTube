@@ -209,6 +209,9 @@
     <string name="player_remember_speed_each">Per ogni video</string>
     <string name="msg_player_error_source">Impossibile scaricare il video</string>
     <string name="msg_player_error_renderer">Il formato selezionato non è supportato.\nProva a selezionarne un altro.\nSe non risolvi, prova a riavviare il dispositivo.</string>
+    <string name="msg_player_error_video_renderer">Il formato VIDEO selezionato non è supportato.\nProva a selezionarne un altro premendo il pulsante HQ nel lettore.\nSe il problema persiste, prova a riavviare il dispositivo.</string>
+    <string name="msg_player_error_audio_renderer">Il formato AUDIO selezionato non è supportato.\nProva a selezionarne un altro premendo il pulsante HQ nel lettore.\nSe il problema persiste, prova a riavviare il dispositivo.</string>
+    <string name="msg_player_error_subtitle_renderer">Il formato SOTTOTITOLI selezionato non è supportato.\nProva a selezionarne un altro premendo a lungo il pulsante CC nel lettore.\nSe il problema persiste, prova a riavviare il dispositivo.</string>
     <string name="msg_player_error_unexpected">Errore sconosciuto di decodifica video</string>
     <string name="video_aspect">Proporzioni</string>
     <string name="player_tweaks">Opzioni per sviluppatori</string>
@@ -585,5 +588,6 @@
     <string name="player_auto_volume">Regolazione automatica del volume</string>
     <string name="header_shorts">Video brevi</string>
     <string name="player_global_focus">Navigazione senza interruzioni tra le righe dei pulsanti del lettore</string>
-    <string name="auto_history">Automatico (utilizza impostazioni dell\'account)</string>
+    <string name="auto_history">Automatico (utilizza impostazioni dell'account)</string>
+    <string name="remember_position_subscriptions">Ricorda l'ultima posizione visualizzata nelle Iscrizioni</string>
 </resources>
