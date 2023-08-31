@@ -588,6 +588,6 @@
     <string name="player_auto_volume">Regolazione automatica del volume</string>
     <string name="header_shorts">Video brevi</string>
     <string name="player_global_focus">Navigazione senza interruzioni tra le righe dei pulsanti del lettore</string>
-    <string name="auto_history">Automatico (utilizza impostazioni dell'account)</string>
-    <string name="remember_position_subscriptions">Ricorda l'ultima posizione visualizzata nelle Iscrizioni</string>
+    <string name="auto_history">Automatico (utilizza impostazioni dell\'account)</string>
+    <string name="remember_position_subscriptions">Ricorda l\'ultima posizione visualizzata nelle Iscrizioni</string>
 </resources>
