@@ -781,17 +781,19 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             return false;
         }
 
-        boolean skipTrack = mediaTrack.isMP4ACodec() && mediaTrack.format.bitrate >= 195_000;
-
         if (!PlayerTweaksData.instance(mContext).isUnsafeAudioFormatsEnabled()) {
-            return skipTrack;
+            return isUnsafeFormat(mediaTrack);
         }
 
         switch (Build.MODEL) {
             case "Smart TV Pro": // Smart TV Pro (G03_4K_GB) - TCL
-                return skipTrack;
+                return isUnsafeFormat(mediaTrack);
         }
 
         return false;
+    }
+
+    private boolean isUnsafeFormat(MediaTrack mediaTrack) {
+        return mediaTrack.isMP4ACodec() && mediaTrack.format.bitrate >= 195_000;
     }
 }
