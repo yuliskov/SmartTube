@@ -626,8 +626,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         firstGroup.setAction(VideoGroup.ACTION_REPLACE);
         getView().updateSection(firstGroup);
 
-        final AtomicInteger emissionIndex = new AtomicInteger(-1);
-
         Disposable updateAction = groups
                 .subscribe(
                         mediaGroups -> {
@@ -649,14 +647,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             }
 
                             // Hide loading as long as first group received
-                            if (!mediaGroups.isEmpty() && emissionIndex.incrementAndGet() == 0) {
+                            if (!mediaGroups.isEmpty()) {
                                 getView().showProgressBar(false);
                             }
                         },
                         error -> {
                             Log.e(TAG, "updateRowsHeader error: %s", error.getMessage());
-                            if (getView() != null && getView().isEmpty()) {
+                            if (getView() != null) {
                                 getView().showProgressBar(false);
+                            }
+                            if (getView() != null && getView().isEmpty()) {
                                 getView().showError(new CategoryEmptyError(getContext()));
                                 Utils.postDelayed(mRefreshSection, 30_000);
                             }
@@ -715,18 +715,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             //}
 
                             continueGroupIfNeeded(videoGroup);
-
-                            // Can't determine whether the history paused or not. Remember, it's paused not cleared.
                         },
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
-                            if (getView() != null && getView().isEmpty()) {
+                            if (getView() != null) {
                                 getView().showProgressBar(false);
+                            }
+                            if (getView() != null && getView().isEmpty()) {
                                 getView().showError(new CategoryEmptyError(getContext()));
                                 Utils.postDelayed(mRefreshSection, 30_000);
                             }
-
-                            // Can't determine whether the history paused or not. Remember, it's paused not cleared.
                         },
                         () -> {
                             if (getView() != null) {
