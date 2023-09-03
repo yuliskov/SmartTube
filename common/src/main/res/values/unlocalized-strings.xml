@@ -2,7 +2,7 @@
 <resources>
     <string name="releases_url" translatable="false">https://t.me/SmartTubeNewsEN</string>
     <string name="sources_url" translatable="false">https://github.com/yuliskov/SmartTubeNext</string>
-    <string name="web_site_url" translatable="false">https://smarttubenext.github.io</string>
+    <string name="web_site_url" translatable="false">https://smarttubeapp.github.io</string>
     <string name="content_block_provider" translatable="false">SponsorBlock</string>
     <string name="content_block_provider_url" translatable="false">https://sponsor.ajay.app</string>
     <string name="content_block_status_url" translatable="false">https://status.sponsor.ajay.app</string>
