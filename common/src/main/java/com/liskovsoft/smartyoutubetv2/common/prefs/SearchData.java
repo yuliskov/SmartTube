@@ -20,6 +20,7 @@ public class SearchData {
     private int mSpeechRecognizerType;
     private Class<?> mTempBackgroundModeClass;
     private boolean mIsTrendingSearchesEnabled;
+    private boolean mIsRememberHistoryEnabled;
 
     private SearchData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
@@ -84,6 +85,16 @@ public class SearchData {
         persistData();
     }
 
+    public boolean isRememberHistoryEnabled() {
+        return mIsRememberHistoryEnabled;
+    }
+
+    public void enableRememberHistoryEnabled(boolean enabled)
+    {
+        mIsRememberHistoryEnabled = enabled;
+        persistData();
+    }
+
     public boolean isTempBackgroundModeEnabled() {
         return mIsTempBackgroundModeEnabled;
     }
@@ -121,11 +132,13 @@ public class SearchData {
         //mIsAltSpeechRecognizerEnabled
         mSpeechRecognizerType = Helpers.parseInt(split, 6, SPEECH_RECOGNIZER_SYSTEM);
         mIsTrendingSearchesEnabled = Helpers.parseBoolean(split, 7, true);
+        mIsRememberHistoryEnabled = Helpers.parseBoolean(split, 8, true);
     }
 
     private void persistData() {
         mAppPrefs.setData(SEARCH_DATA,
-                Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
-                        mIsKeyboardAutoShowEnabled, mIsTempBackgroundModeEnabled, null, mSpeechRecognizerType, mIsTrendingSearchesEnabled));
+          Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
+            mIsKeyboardAutoShowEnabled, mIsTempBackgroundModeEnabled, null, mSpeechRecognizerType,
+            mIsTrendingSearchesEnabled, mIsRememberHistoryEnabled));
     }
 }

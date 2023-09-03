@@ -189,7 +189,12 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                                 getView().showProgressBar(false);
                             }
                         },
-                        () -> getView().showProgressBar(false)
+                        () -> {
+                            getView().showProgressBar(false);
+                            if (!mSearchData.isRememberHistoryEnabled()) {
+                                MediaServiceManager.instance().clearSearchHistory();
+                            }
+                        }
                 );
     }
     

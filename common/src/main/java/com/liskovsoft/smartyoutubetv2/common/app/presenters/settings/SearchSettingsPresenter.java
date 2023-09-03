@@ -6,6 +6,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 
 import java.util.ArrayList;
@@ -29,7 +30,12 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
         appendSpeechRecognizerCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.dialog_search));
+        settingsPresenter.showDialog(getContext().getString(R.string.dialog_search),
+          () -> {
+              if (!mSearchData.isRememberHistoryEnabled()) {
+                  MediaServiceManager.instance().clearSearchHistory();
+              }
+          });
     }
 
     private void appendSpeechRecognizerCategory(AppDialogPresenter settingsPresenter) {
@@ -65,6 +71,10 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.keyboard_auto_show),
                 option -> mSearchData.enableKeyboardAutoShow(option.isSelected()),
                 mSearchData.isKeyboardAutoShowEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.remember_history),
+                option -> mSearchData.enableRememberHistoryEnabled(option.isSelected()),
+                mSearchData.isRememberHistoryEnabled()));
 
         //options.add(UiOptionItem.from(getContext().getString(R.string.trending_searches),
         //        option -> mSearchData.enableTrendingSearches(option.isSelected()),
