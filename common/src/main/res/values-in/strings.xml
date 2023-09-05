@@ -568,4 +568,5 @@
     <string name="auto_history">Otomatis (gunakan pengaturan akun)</string>
     <string name="remember_position_subscriptions">Ingat posisi terakhir yang dilihat di Langganan</string>
     <string name="msg_player_unknown_error">Kesalahan tidak diketahui</string>
+    <string name="header_notifications">Notifikasi</string>
 </resources>
