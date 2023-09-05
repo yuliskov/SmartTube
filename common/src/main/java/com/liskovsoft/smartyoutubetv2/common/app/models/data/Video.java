@@ -227,6 +227,10 @@ public final class Video {
         return video == null || video.videoId == null;
     }
 
+    public int getId() {
+        return extra == -1 ? hashCode() : extra;
+    }
+
     public String getTitle() {
         return title != null ? title : metadataTitle;
     }

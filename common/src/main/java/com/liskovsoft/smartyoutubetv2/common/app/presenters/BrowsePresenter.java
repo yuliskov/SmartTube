@@ -239,7 +239,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         int index = 0;
 
-        sortSections();
+        //sortSections();
 
         for (BrowseSection section : mErrorSections) {
             getView().addSection(index++, section);

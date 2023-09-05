@@ -197,7 +197,7 @@ public class GeneralData {
      * Contains sections and pinned items!
      */
     public boolean isSectionEnabled(int sectionId) {
-        Video section = Helpers.findFirst(mPinnedItems, item -> (item.extra == -1 && item.hashCode() == sectionId) || item.extra == sectionId);
+        Video section = Helpers.findFirst(mPinnedItems, item -> item.getId() == sectionId);
         return section != null; // by default enable all pinned items
     }
 
@@ -266,7 +266,7 @@ public class GeneralData {
 
         for (Video item : mPinnedItems) {
             // Distinguish pinned items by hashCode or extra field (default section)!
-            if (item.hashCode() == sectionId || item.extra == sectionId) {
+            if (item.getId() == sectionId) {
                 index = mPinnedItems.indexOf(item);
                 break;
             }
