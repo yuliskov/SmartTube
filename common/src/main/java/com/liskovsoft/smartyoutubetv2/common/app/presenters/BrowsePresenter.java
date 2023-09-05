@@ -967,6 +967,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SUBSCRIPTIONS && inForeground();
     }
 
+    private boolean isSection(int sectionId) {
+        return mCurrentSection != null && mCurrentSection.getId() == sectionId && inForeground();
+    }
+
     public void selectSection(int sectionId) {
         ViewManager.instance(getContext()).startView(BrowseView.class); // focus view
 

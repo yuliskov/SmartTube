@@ -6,6 +6,7 @@ import com.liskovsoft.appupdatechecker2.other.SettingsManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.NotificationsService;
 import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
@@ -30,9 +31,10 @@ import java.util.Map;
 public class MediaServiceManager {
     private static final String TAG = SettingsManager.class.getSimpleName();
     private static MediaServiceManager sInstance;
-    private final MediaItemService mItemManager;
-    private final MediaGroupService mGroupManager;
-    private final SignInService mSingInManager;
+    private final MediaItemService mItemService;
+    private final MediaGroupService mGroupService;
+    private final SignInService mSingInService;
+    private final NotificationsService mNotificationsService;
     private Disposable mMetadataAction;
     private Disposable mUploadsAction;
     private Disposable mSignCheckAction;
@@ -74,9 +76,10 @@ public class MediaServiceManager {
 
     public MediaServiceManager() {
         MediaService service = YouTubeMediaService.instance();
-        mItemManager = service.getMediaItemService();
-        mGroupManager = service.getMediaGroupService();
-        mSingInManager = service.getSignInService();
+        mItemService = service.getMediaItemService();
+        mGroupService = service.getMediaGroupService();
+        mSingInService = service.getSignInService();
+        mNotificationsService = service.getNotificationsService();
     }
 
     public static MediaServiceManager instance() {
@@ -87,8 +90,8 @@ public class MediaServiceManager {
         return sInstance;
     }
 
-    public SignInService getSingInManager() {
-        return mSingInManager;
+    public SignInService getSingInService() {
+        return mSingInService;
     }
 
     public void loadMetadata(Video video, OnMetadata onMetadata) {
@@ -104,10 +107,10 @@ public class MediaServiceManager {
         // Video might be loaded from Channels section (has playlistParams)
         if (video.mediaItem != null) {
             // Use additional data like playlist id
-            observable = mItemManager.getMetadataObserve(video.mediaItem);
+            observable = mItemService.getMetadataObserve(video.mediaItem);
         } else {
             // Simply load
-            observable = mItemManager.getMetadataObserve(video.videoId, video.getPlaylistId(), video.playlistIndex, video.playlistParams);
+            observable = mItemService.getMetadataObserve(video.videoId, video.getPlaylistId(), video.playlistIndex, video.playlistParams);
         }
 
         mMetadataAction = observable
@@ -129,7 +132,7 @@ public class MediaServiceManager {
 
         Observable<MediaItemMetadata> observable;
 
-        observable = mItemManager.getMetadataObserve(mediaItem);
+        observable = mItemService.getMetadataObserve(mediaItem);
 
         mMetadataAction = observable
                 .subscribe(
@@ -153,7 +156,7 @@ public class MediaServiceManager {
 
         RxHelper.disposeActions(mUploadsAction);
 
-        Observable<MediaGroup> observable = mGroupManager.getGroupObserve(item);
+        Observable<MediaGroup> observable = mGroupService.getGroupObserve(item);
 
         mUploadsAction = observable
                 .subscribe(
@@ -168,7 +171,7 @@ public class MediaServiceManager {
     public void loadSubscribedChannels(OnMediaGroup onMediaGroup) {
         RxHelper.disposeActions(mSubscribedChannelsAction);
 
-        Observable<MediaGroup> observable = mGroupManager.getSubscribedChannelsByUpdateObserve();
+        Observable<MediaGroup> observable = mGroupService.getSubscribedChannelsByUpdateObserve();
 
         mSubscribedChannelsAction = observable
                 .subscribe(
@@ -185,7 +188,7 @@ public class MediaServiceManager {
         RxHelper.disposeActions(mRowsAction);
 
         Observable<List<MediaGroup>> observable = item.mediaItem != null ?
-                mGroupManager.getChannelObserve(item.mediaItem) : mGroupManager.getChannelObserve(item.channelId);
+                mGroupService.getChannelObserve(item.mediaItem) : mGroupService.getChannelObserve(item.channelId);
 
         mRowsAction = observable
                 .subscribe(
@@ -208,7 +211,7 @@ public class MediaServiceManager {
 
         RxHelper.disposeActions(mFormatInfoAction);
 
-        Observable<MediaItemFormatInfo> observable = mItemManager.getFormatInfoObserve(item.videoId);
+        Observable<MediaItemFormatInfo> observable = mItemService.getFormatInfoObserve(item.videoId);
 
         mFormatInfoAction = observable
                 .subscribe(
@@ -224,7 +227,7 @@ public class MediaServiceManager {
 
         RxHelper.disposeActions(mPlaylistGroupAction);
 
-        Observable<MediaGroup> observable = mGroupManager.getEmptyPlaylistsObserve();
+        Observable<MediaGroup> observable = mGroupService.getEmptyPlaylistsObserve();
 
         mPlaylistGroupAction = observable
                 .subscribe(
@@ -236,7 +239,7 @@ public class MediaServiceManager {
     public void getPlaylistInfos(OnPlaylistInfos onPlaylistInfos) {
         RxHelper.disposeActions(mPlaylistInfosAction);
 
-        Observable<List<PlaylistInfo>> observable = mItemManager.getPlaylistsInfoObserve(null);
+        Observable<List<PlaylistInfo>> observable = mItemService.getPlaylistsInfoObserve(null);
 
         mPlaylistInfosAction = observable
                 .subscribe(
@@ -248,7 +251,7 @@ public class MediaServiceManager {
     public void loadAccounts(OnAccountList onAccountList) {
         RxHelper.disposeActions(mAccountListAction);
 
-        mAccountListAction = mSingInManager.getAccountsObserve()
+        mAccountListAction = mSingInService.getAccountsObserve()
                 .subscribe(
                         onAccountList::onAccountList,
                         error -> Log.e(TAG, "Get signed accounts error: %s", error.getMessage())
@@ -262,7 +265,7 @@ public class MediaServiceManager {
 
         RxHelper.disposeActions(mSignCheckAction);
 
-        mSignCheckAction = mSingInManager.isSignedObserve()
+        mSignCheckAction = mSingInService.isSignedObserve()
                 .subscribe(
                         isSigned -> {
                             if (isSigned) {
@@ -339,15 +342,15 @@ public class MediaServiceManager {
     }
 
     public void enableHistory(boolean enable) {
-        RxHelper.runAsyncUser(() -> mGroupManager.enableHistory(enable));
+        RxHelper.runAsyncUser(() -> mGroupService.enableHistory(enable));
     }
 
     public void clearHistory() {
-        RxHelper.runAsyncUser(mGroupManager::clearHistory);
+        RxHelper.runAsyncUser(mGroupService::clearHistory);
     }
 
     public void clearSearchHistory() {
-        RxHelper.runAsyncUser(mGroupManager::clearSearchHistory);
+        RxHelper.runAsyncUser(mGroupService::clearSearchHistory);
     }
 
     public void updateHistory(Video video, long positionMs) {
@@ -358,11 +361,17 @@ public class MediaServiceManager {
         Observable<Void> historyObservable;
 
         if (video.mediaItem != null) {
-            historyObservable = mItemManager.updateHistoryPositionObserve(video.mediaItem, positionMs / 1_000f);
+            historyObservable = mItemService.updateHistoryPositionObserve(video.mediaItem, positionMs / 1_000f);
         } else { // video launched form ATV channels
-            historyObservable = mItemManager.updateHistoryPositionObserve(video.videoId, positionMs / 1_000f);
+            historyObservable = mItemService.updateHistoryPositionObserve(video.videoId, positionMs / 1_000f);
         }
 
         RxHelper.execute(historyObservable);
+    }
+
+    public void hideNotification(Video item) {
+        if (item != null && item.belongsToNotifications()) {
+            RxHelper.execute(mNotificationsService.hideNotificationObserve(item.mediaItem));
+        }
     }
 }

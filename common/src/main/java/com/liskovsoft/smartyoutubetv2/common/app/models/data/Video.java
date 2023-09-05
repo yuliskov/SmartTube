@@ -519,6 +519,10 @@ public final class Video {
         return belongsToGroup(MediaGroup.TYPE_SHORTS);
     }
 
+    public boolean belongsToNotifications() {
+        return belongsToGroup(MediaGroup.TYPE_NOTIFICATIONS);
+    }
+
     private boolean belongsToGroup(int groupId) {
         return getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getType() == groupId;
     }

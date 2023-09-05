@@ -69,6 +69,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         disposeActions();
         //mCurrentGroup = video.getGroup(); // disable garbage collected
         appendNextSectionVideoIfNeeded(video);
+        MediaServiceManager.instance().hideNotification(video);
     }
 
     /**

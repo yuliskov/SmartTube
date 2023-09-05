@@ -19,13 +19,13 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     @SuppressLint("StaticFieldLeak")
     private static PlaybackPresenter sInstance;
     private final ViewManager mViewManager;
-    private final MainPlayerController mMainPlayerEventBridge;
+    private final MainPlayerController mMainPlayerController;
 
     private PlaybackPresenter(Context context) {
         super(context);
 
         mViewManager = ViewManager.instance(context);
-        mMainPlayerEventBridge = MainPlayerController.instance(context);
+        mMainPlayerController = MainPlayerController.instance(context);
     }
 
     public static PlaybackPresenter instance(Context context) {
@@ -42,8 +42,8 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     public void onViewInitialized() {
         super.onViewInitialized();
 
-        mMainPlayerEventBridge.setPlayer(getView().getPlayer());
-        getView().setEventListener(mMainPlayerEventBridge);
+        mMainPlayerController.setPlayer(getView().getPlayer());
+        getView().setEventListener(mMainPlayerController);
     }
 
     /**
@@ -69,7 +69,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
             return;
         }
 
-        mMainPlayerEventBridge.openVideo(item);
+        mMainPlayerController.openVideo(item);
 
         mViewManager.startView(PlaybackView.class);
     }
