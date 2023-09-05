@@ -197,7 +197,7 @@ public class GeneralData {
      * Contains sections and pinned items!
      */
     public boolean isSectionEnabled(int sectionId) {
-        Video section = Helpers.findFirst(mPinnedItems, item -> item.getId() == sectionId);
+        Video section = Helpers.findFirst(mPinnedItems, item -> getSectionId(item) == sectionId);
         return section != null; // by default enable all pinned items
     }
 
@@ -266,7 +266,7 @@ public class GeneralData {
 
         for (Video item : mPinnedItems) {
             // Distinguish pinned items by hashCode or extra field (default section)!
-            if (item.getId() == sectionId) {
+            if (getSectionId(item) == sectionId) {
                 index = mPinnedItems.indexOf(item);
                 break;
             }
@@ -892,5 +892,13 @@ public class GeneralData {
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
                 mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextPrevToSpeedEnabled,
                 mIsRemapPlayPauseToOKEnabled, mHistoryState, mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem)));
+    }
+
+    private int getSectionId(Video item) {
+        if (item == null) {
+            return -1;
+        }
+
+        return item.extra == -1 ? item.hashCode() : item.extra;
     }
 }
