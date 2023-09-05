@@ -197,7 +197,8 @@ public class GeneralData {
      * Contains sections and pinned items!
      */
     public boolean isSectionEnabled(int sectionId) {
-        return Helpers.findFirst(mPinnedItems, item -> item.hashCode() == sectionId || item.extra == sectionId) != null; // by default enable all pinned items
+        Video section = Helpers.findFirst(mPinnedItems, item -> (item.extra == -1 && item.hashCode() == sectionId) || item.extra == sectionId);
+        return section != null; // by default enable all pinned items
     }
 
     //public void setSectionIndex(int sectionId, int index) {
@@ -746,6 +747,7 @@ public class GeneralData {
     }
 
     private void initSections() {
+        mDefaultSections.put(R.string.header_notifications, MediaGroup.TYPE_NOTIFICATIONS);
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mDefaultSections.put(R.string.header_shorts, MediaGroup.TYPE_SHORTS);
         mDefaultSections.put(R.string.header_trending, MediaGroup.TYPE_TRENDING);

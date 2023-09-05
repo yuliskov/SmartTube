@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.NotificationsService;
 import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -47,7 +48,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class BrowsePresenter extends BasePresenter<BrowseView> implements SectionPresenter, VideoGroupPresenter {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
@@ -63,9 +63,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final Map<Integer, Callable<List<SettingsItem>>> mSettingsGridMapping;
     private final Map<Integer, BrowseSection> mSectionsMapping;
     private final AppDataSourceManager mDataSourcePresenter;
-    private final MediaGroupService mGroupManager;
-    private final MediaItemService mItemManager;
-    private final SignInService mSignInManager;
+    private final MediaGroupService mGroupService;
+    private final MediaItemService mItemService;
+    private final SignInService mSignInService;
+    private final NotificationsService mNotificationsService;
     private final List<Disposable> mActions;
     private final Runnable mRefreshSection = this::refresh;
     private BrowseSection mCurrentSection;
@@ -90,9 +91,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         ScreenHelper.updateScreenInfo(context);
 
         MediaService mediaService = YouTubeMediaService.instance();
-        mGroupManager = mediaService.getMediaGroupService();
-        mItemManager = mediaService.getMediaItemService();
-        mSignInManager = mediaService.getSignInService();
+        mGroupService = mediaService.getMediaGroupService();
+        mItemService = mediaService.getMediaItemService();
+        mSignInService = mediaService.getSignInService();
+        mNotificationsService = mediaService.getNotificationsService();
         mActions = new ArrayList<>();
 
         initSections();
@@ -169,6 +171,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mSectionsMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, new BrowseSection(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), BrowseSection.TYPE_GRID, R.drawable.icon_subscriptions, true));
         mSectionsMapping.put(MediaGroup.TYPE_HISTORY, new BrowseSection(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), BrowseSection.TYPE_GRID, R.drawable.icon_history, true));
         mSectionsMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, new BrowseSection(MediaGroup.TYPE_USER_PLAYLISTS, getContext().getString(R.string.header_playlists), BrowseSection.TYPE_ROW, R.drawable.icon_playlist, true));
+        mSectionsMapping.put(MediaGroup.TYPE_NOTIFICATIONS, new BrowseSection(MediaGroup.TYPE_NOTIFICATIONS, getContext().getString(R.string.header_notifications), BrowseSection.TYPE_GRID, R.drawable.icon_notification, true));
 
         if (mGeneralData.isSettingsSectionEnabled()) {
             mSectionsMapping.put(MediaGroup.TYPE_SETTINGS, new BrowseSection(MediaGroup.TYPE_SETTINGS, getContext().getString(R.string.header_settings), BrowseSection.TYPE_SETTINGS_GRID, R.drawable.icon_settings));
@@ -176,18 +179,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void initSectionCallbacks() {
-        mRowMapping.put(MediaGroup.TYPE_HOME, mGeneralData.isOldHomeLookEnabled() ? mGroupManager.getHomeV1Observe() : mGroupManager.getHomeObserve());
-        mRowMapping.put(MediaGroup.TYPE_TRENDING, mGroupManager.getTrendingObserve());
-        mRowMapping.put(MediaGroup.TYPE_KIDS_HOME, mGroupManager.getKidsHomeObserve());
-        mRowMapping.put(MediaGroup.TYPE_NEWS, mGroupManager.getNewsObserve());
-        mRowMapping.put(MediaGroup.TYPE_MUSIC, mGroupManager.getMusicObserve());
-        mRowMapping.put(MediaGroup.TYPE_GAMING, mGroupManager.getGamingObserve());
-        mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mGroupManager.getPlaylistsObserve());
+        mRowMapping.put(MediaGroup.TYPE_HOME, mGeneralData.isOldHomeLookEnabled() ? mGroupService.getHomeV1Observe() : mGroupService.getHomeObserve());
+        mRowMapping.put(MediaGroup.TYPE_TRENDING, mGroupService.getTrendingObserve());
+        mRowMapping.put(MediaGroup.TYPE_KIDS_HOME, mGroupService.getKidsHomeObserve());
+        mRowMapping.put(MediaGroup.TYPE_NEWS, mGroupService.getNewsObserve());
+        mRowMapping.put(MediaGroup.TYPE_MUSIC, mGroupService.getMusicObserve());
+        mRowMapping.put(MediaGroup.TYPE_GAMING, mGroupService.getGamingObserve());
+        mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mGroupService.getPlaylistsObserve());
 
-        mGridMapping.put(MediaGroup.TYPE_SHORTS, mGroupManager.getShortsObserve());
-        mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mGroupManager.getSubscriptionsObserve());
-        mGridMapping.put(MediaGroup.TYPE_HISTORY, mGroupManager.getHistoryObserve());
-        mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsByUpdateObserve());
+        mGridMapping.put(MediaGroup.TYPE_SHORTS, mGroupService.getShortsObserve());
+        mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mGroupService.getSubscriptionsObserve());
+        mGridMapping.put(MediaGroup.TYPE_HISTORY, mGroupService.getHistoryObserve());
+        mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupService.getSubscribedChannelsByUpdateObserve());
+        mGridMapping.put(MediaGroup.TYPE_NOTIFICATIONS, mNotificationsService.getNotificationItemsObserve());
     }
 
     private void initPinnedSections() {
@@ -215,7 +219,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         Collection<Video> pinnedItems = mGeneralData.getPinnedItems();
 
         for (Video item : pinnedItems) {
-            if (item != null) {
+            if (item != null && item.extra == -1) {
                 mGridMapping.put(item.hashCode(), createPinnedAction(item));
             }
         }
@@ -267,19 +271,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         switch (sortingType) {
             case MainUIData.CHANNEL_SORTING_DEFAULT:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupService.getSubscribedChannelsObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_NAME2:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsByName2Observe());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupService.getSubscribedChannelsByName2Observe());
                 break;
             case MainUIData.CHANNEL_SORTING_NAME:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsByNameObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupService.getSubscribedChannelsByNameObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_NEW_CONTENT:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsByUpdateObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupService.getSubscribedChannelsByUpdateObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_LAST_VIEWED:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsByViewedObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupService.getSubscribedChannelsByViewedObserve());
                 break;
         }
     }
@@ -290,12 +294,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         switch (playlistsStyle) {
             case MainUIData.PLAYLISTS_STYLE_GRID:
                 mRowMapping.remove(MediaGroup.TYPE_USER_PLAYLISTS);
-                mGridMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mGroupManager.getEmptyPlaylistsObserve());
+                mGridMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mGroupService.getEmptyPlaylistsObserve());
                 updateCategoryType(MediaGroup.TYPE_USER_PLAYLISTS, BrowseSection.TYPE_GRID);
                 break;
             case MainUIData.PLAYLISTS_STYLE_ROWS:
                 mGridMapping.remove(MediaGroup.TYPE_USER_PLAYLISTS);
-                mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mGroupManager.getPlaylistsObserve());
+                mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mGroupService.getPlaylistsObserve());
                 updateCategoryType(MediaGroup.TYPE_USER_PLAYLISTS, BrowseSection.TYPE_ROW);
                 break;
         }
@@ -756,9 +760,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         Observable<MediaGroup> continuation;
 
         if (mediaGroup.getType() == MediaGroup.TYPE_SUGGESTIONS) { // Pinned playlist
-            continuation = mItemManager.continueGroupObserve(mediaGroup);
+            continuation = mItemService.continueGroupObserve(mediaGroup);
         } else {
-            continuation = mGroupManager.continueGroupObserve(mediaGroup);
+            continuation = mGroupService.continueGroupObserve(mediaGroup);
         }
 
         Disposable continueAction = continuation
@@ -794,7 +798,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         getView().showProgressBar(true);
 
-        Disposable signCheckAction = mSignInManager.isSignedObserve()
+        Disposable signCheckAction = mSignInService.isSignedObserve()
                 .subscribe(
                         isSigned -> {
                             if (isSigned) {
