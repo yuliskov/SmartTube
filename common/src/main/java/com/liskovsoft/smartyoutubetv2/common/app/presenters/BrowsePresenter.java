@@ -640,14 +640,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                     Log.e(TAG, "loadRowsHeader: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
                                     continue;
                                 }
-                                
-                                // Move to top isn't working properly (too slow)
-                                //VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, moveToTopIfNeeded(mediaGroup));
+
                                 VideoGroup videoGroup = VideoGroup.from(mediaGroup, section);
 
                                 getView().updateSection(videoGroup);
 
-                                continueGroupIfNeeded(videoGroup);
+                                continueGroupIfNeeded(videoGroup, false);
                             }
 
                             // Hide loading as long as first group received
@@ -740,6 +738,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void continueGroup(VideoGroup group) {
+        continueGroup(group, true);
+    }
+
+    private void continueGroup(VideoGroup group, boolean showLoading) {
         if (getView() == null) {
             Log.e(TAG, "Can't continue group. The view is null.");
             return;
@@ -748,7 +750,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         // Small amount of items == small load time. Loading bar are useless?
-        getView().showProgressBar(true);
+        if (showLoading) {
+            getView().showProgressBar(true);
+        }
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
@@ -768,11 +772,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         Disposable continueAction = continuation
                 .subscribe(
                         continueGroup -> {
-                            //VideoGroup videoGroup = VideoGroup.from(continueGroup, group.getSection(), group.getPosition());
                             VideoGroup videoGroup = VideoGroup.from(continueGroup, group);
                             getView().updateSection(videoGroup);
 
-                            continueGroupIfNeeded(videoGroup);
+                            continueGroupIfNeeded(videoGroup, showLoading);
                         },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
@@ -820,9 +823,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
     private void continueGroupIfNeeded(VideoGroup group) {
+        continueGroupIfNeeded(group, true);
+    }
+
+    /**
+     * Most tiny ui has 8 cards in a row or 24 in grid.
+     */
+    private void continueGroupIfNeeded(VideoGroup group, boolean showLoading) {
         MediaServiceManager.instance().shouldContinueTheGroup(
-                getContext(), group, () -> continueGroup(group), false,
-                isGridSection()
+                getContext(), group, () -> continueGroup(group, showLoading), isGridSection()
         );
     }
 

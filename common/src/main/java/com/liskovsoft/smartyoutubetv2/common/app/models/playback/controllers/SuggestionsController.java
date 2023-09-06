@@ -156,17 +156,23 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void continueGroup(VideoGroup group) {
-        continueGroup(group, null);
+        continueGroup(group, null, true);
     }
 
-    private void continueGroup(VideoGroup group, OnVideoGroup callback) {
+    private void continueGroup(VideoGroup group, boolean showLoading) {
+        continueGroup(group, null, showLoading);
+    }
+
+    private void continueGroup(VideoGroup group, OnVideoGroup callback, boolean showLoading) {
         if (group == null) {
             return;
         }
 
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
-        getPlayer().showProgressBar(true);
+        if (showLoading) {
+            getPlayer().showProgressBar(true);
+        }
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
@@ -175,7 +181,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         Disposable continueAction = mediaItemManager.continueGroupObserve(mediaGroup)
                 .subscribe(
                         continueMediaGroup -> {
-                            getPlayer().showProgressBar(false);
                             VideoGroup videoGroup = VideoGroup.from(continueMediaGroup, group);
                             getPlayer().updateSuggestions(videoGroup);
 
@@ -524,7 +529,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
     private void continueGroupIfNeeded(VideoGroup group) {
-        MediaServiceManager.instance().shouldContinueTheGroup(getContext(), group, () -> continueGroup(group), getPlayer().isSuggestionsShown());
+        MediaServiceManager.instance().shouldContinueRowGroup(getContext(), group, () -> continueGroup(group, getPlayer().isSuggestionsShown()));
     }
 
     public void focusAndContinueIfNeeded(VideoGroup group) {
@@ -548,7 +553,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             mFocusCount = 0;
         } else {
             // load more and repeat
-            continueGroup(group, this::focusAndContinueIfNeeded);
+            continueGroup(group, this::focusAndContinueIfNeeded, getPlayer().isSuggestionsShown());
             mFocusCount++;
         }
     }
@@ -584,7 +589,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         if (mNextRetryCount > 0) {
             mNextRetryCount = 0;
         } else {
-            continueGroup(group, continuation -> appendNextSectionVideoIfNeeded(video));
+            continueGroup(group, continuation -> appendNextSectionVideoIfNeeded(video), getPlayer().isSuggestionsShown());
             mNextRetryCount++;
         }
     }

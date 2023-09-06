@@ -19,7 +19,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
-import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -290,18 +289,18 @@ public class MediaServiceManager {
     /**
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
-    public void shouldContinueTheGroup(Context context, VideoGroup group, Runnable onNeedContinue) {
+    public void shouldContinueGridGroup(Context context, VideoGroup group, Runnable onNeedContinue) {
         shouldContinueTheGroup(context, group, onNeedContinue, true);
     }
 
-    public void shouldContinueTheGroup(Context context, VideoGroup group, Runnable onNeedContinue, boolean showLoading) {
-        shouldContinueTheGroup(context, group, onNeedContinue, showLoading, false);
+    public void shouldContinueRowGroup(Context context, VideoGroup group, Runnable onNeedContinue) {
+        shouldContinueTheGroup(context, group, onNeedContinue, false);
     }
 
     /**
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
-    public void shouldContinueTheGroup(Context context, VideoGroup group, Runnable onNeedContinue, boolean showLoading, boolean isGrid) {
+    public void shouldContinueTheGroup(Context context, VideoGroup group, Runnable onNeedContinue, boolean isGrid) {
         if (group == null || group.getMediaGroup() == null) {
             return;
         }
@@ -333,11 +332,7 @@ public class MediaServiceManager {
         } else {
             totalSize = 0;
         }
-
-        if (showLoading) {
-            // Show loading on subscriptions if almost all videos are hidden
-            LoadingManager.showLoading(context, groupTooSmall);
-        }
+        
         mContinuations.put(group.getId(), new Pair<>(totalSize, currentTimeMillis));
     }
 
