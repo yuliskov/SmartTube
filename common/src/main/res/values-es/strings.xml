@@ -587,4 +587,5 @@
   <string name="msg_player_unknown_error">Error desconocido</string>
   <string name="player_global_focus">Navegación fluida entre las filas de botones del reproductor</string>
   <string name="player_volume">Volumen</string>
+  <string name="header_notifications">Notificaciones</string>
 </resources>
