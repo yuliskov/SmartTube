@@ -298,9 +298,9 @@ A: No, this only works on **Android** devices. If you look at an Android TV's pr
 
 A: **Big No**. This app is **not** for smartphones, we offer **zero support** for that.
 
-You **can cast** videos **from** your smartphone to a TV / TV box running SmartTube, though. Just use the official YouTube app or [Vanced](https://vancedapp.com/), see [the casting section](#casting) for more information.
+You **can cast** videos **from** your smartphone to a TV / TV box running SmartTube, though. Just use the official YouTube app or [ReVanced](https://github.com/ReVanced), see [the casting section](#casting) for more information.
 
-**There will not be a phone version.** You can use [Vanced](https://vancedapp.com/), [Pure Tuber](https://play.google.com/store/apps/details?id=free.tube.premium.advanced.tuber), [NewPipe](https://newpipe.schabi.org), or [NewPipe x SponsorBlock](https://github.com/polymorphicshade/NewPipe#newpipe-x-sponsorblock) instead. Please go to their respective support chats for help.
+**There will not be a phone version.** You can use [ReVanced](https://github.com/ReVanced), [Pure Tuber](https://play.google.com/store/apps/details?id=free.tube.premium.advanced.tuber), [NewPipe](https://newpipe.schabi.org), or [NewPipe x SponsorBlock](https://github.com/polymorphicshade/NewPipe#newpipe-x-sponsorblock) instead. Please go to their respective support chats for help.
 
 
 ### Q: Can I install this on a tablet / car screen / smartphone with docking station?
