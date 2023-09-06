@@ -6,6 +6,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 
 import java.util.ArrayList;
@@ -29,7 +30,11 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
         appendSpeechRecognizerCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.dialog_search));
+        settingsPresenter.showDialog(getContext().getString(R.string.dialog_search), () -> {
+            if (mSearchData.isSearchHistoryDisabled()) {
+                MediaServiceManager.instance().clearSearchHistory();
+            }
+        });
     }
 
     private void appendSpeechRecognizerCategory(AppDialogPresenter settingsPresenter) {

@@ -193,9 +193,6 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                             }
-                            if (mSearchData.isSearchHistoryDisabled()) {
-                                MediaServiceManager.instance().clearSearchHistory();
-                            }
                         }
                 );
     }
@@ -227,7 +224,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                                 getView().showProgressBar(false);
                             }
                         },
-                        () -> getView().showProgressBar(false)
+                        () -> {
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
+                        }
                 );
     }
 
@@ -290,6 +291,9 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         RxHelper.disposeActions(mLoadAction, mScrollAction);
         if (getView() != null) {
             getView().showProgressBar(false);
+        }
+        if (mSearchData.isSearchHistoryDisabled()) {
+            MediaServiceManager.instance().clearSearchHistory();
         }
     }
 
