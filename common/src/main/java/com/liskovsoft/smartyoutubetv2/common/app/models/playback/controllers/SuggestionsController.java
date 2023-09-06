@@ -302,10 +302,10 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             return;
         }
 
-        if (mPlayerTweaksData.isSuggestionsDisabled()) {
-            Log.d(TAG, "loadSuggestions: suggestions disabled by the user");
-            return;
-        }
+        //if (mPlayerTweaksData.isSuggestionsDisabled()) {
+        //    Log.d(TAG, "loadSuggestions: suggestions disabled by the user");
+        //    return;
+        //}
 
         if (!video.isRemote && getPlayer().isSuggestionsShown()) {
             Log.d(TAG, "Suggestions is opened. Seems that user want to stay here.");
@@ -323,7 +323,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         int groupIndex = -1;
         int suggestRows = -1;
 
-        if (GeneralData.instance(getContext()).isChildModeEnabled()) {
+        if (GeneralData.instance(getContext()).isChildModeEnabled() || mPlayerTweaksData.isSuggestionsDisabled()) {
             suggestRows = video.hasPlaylist() ? 1 : 0;
         }
 
