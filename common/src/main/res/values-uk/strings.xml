@@ -583,4 +583,5 @@
     <string name="remember_position_subscriptions">Запам\'ятовувати останню переглянуту позицію у Підписках</string>
     <string name="msg_player_unknown_error">Невідома помилка</string>
     <string name="header_notifications">Повідомлення</string>
+    <string name="disable_search_history">Вимкнути історію пошуку</string>
 </resources>
