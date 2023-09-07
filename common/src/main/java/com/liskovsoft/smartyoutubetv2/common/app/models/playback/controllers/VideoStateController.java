@@ -527,12 +527,17 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     }
 
     private void restoreVolume() {
-        //if (!mPlayerTweaksData.isPlayerAutoVolumeEnabled() && mPlayerData.getPlayerVolume() == 1.0f) {
-        //    // Let global auto volume work
-        //    return;
-        //}
+        float newVolume = mPlayerData.getPlayerVolume();
 
-        getPlayer().setVolume(mPlayerTweaksData.isPlayerAutoVolumeEnabled() ? mPlayerData.getPlayerVolume() * getVideo().volume : mPlayerData.getPlayerVolume());
+        if (mPlayerTweaksData.isPlayerAutoVolumeEnabled()) {
+            newVolume *= getVideo().volume;
+
+            if (getVideo().isShorts || getVideo().getDurationMs() <= 60_000) {
+                newVolume /= 2;
+            }
+        }
+
+        getPlayer().setVolume(newVolume);
     }
 
     private void restoreFormats() {
