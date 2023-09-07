@@ -569,4 +569,5 @@
     <string name="remember_position_subscriptions">Ingat posisi terakhir yang dilihat di Langganan</string>
     <string name="msg_player_unknown_error">Kesalahan tidak diketahui</string>
     <string name="header_notifications">Notifikasi</string>
+    <string name="disable_search_history">Nonaktifkan riwayat pencarian</string>
 </resources>
