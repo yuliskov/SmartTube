@@ -408,20 +408,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         VideoGroup group = item.getGroup();
 
-        if (group == null || group.getMediaGroup() == null) {
-            Log.e(TAG, "Can't scroll. Video group is null.");
-            return;
-        }
-
-        if (mLastScrollGroup == group.getMediaGroup()) {
-            Log.d(TAG, "Can't continue group. Another action is running.");
-            return;
-        }
-
-        mLastScrollGroup = group.getMediaGroup();
-
-        Log.d(TAG, "onScrollEnd. Group title: " + group.getTitle());
-
         continueGroup(group);
     }
 
@@ -746,6 +732,18 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             Log.e(TAG, "Can't continue group. The view is null.");
             return;
         }
+
+        if (group == null) {
+            Log.e(TAG, "Can't continue group. The group is null.");
+            return;
+        }
+
+        if (mLastScrollGroup == group.getMediaGroup()) {
+            Log.d(TAG, "Can't continue group. Another action is running.");
+            return;
+        }
+
+        mLastScrollGroup = group.getMediaGroup();
 
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 

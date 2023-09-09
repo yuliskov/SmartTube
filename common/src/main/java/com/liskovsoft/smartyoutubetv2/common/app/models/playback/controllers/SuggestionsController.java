@@ -105,13 +105,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         VideoGroup group = item.getGroup();
 
-        if (group == null || mLastScrollGroup == group.getMediaGroup()) {
-            Log.d(TAG, "Can't continue group. Another action is running.");
-            return;
-        }
-
-        mLastScrollGroup = group.getMediaGroup();
-
         continueGroup(group);
     }
 
@@ -165,8 +158,16 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
     private void continueGroup(VideoGroup group, OnVideoGroup callback, boolean showLoading) {
         if (group == null) {
+            Log.e(TAG, "Can't continue group. The group is null.");
             return;
         }
+
+        if (mLastScrollGroup == group.getMediaGroup()) {
+            Log.d(TAG, "Can't continue group. Another action is running.");
+            return;
+        }
+
+        mLastScrollGroup = group.getMediaGroup();
 
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 

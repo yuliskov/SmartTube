@@ -93,7 +93,8 @@ public final class ProgressBarManager {
         if (mEnableProgressBar) {
             mIsShowing = true;
             mHandler.removeCallbacks(hideRunnable);
-            mHandler.postDelayed(showRunnable, mInitialDelay);
+            //mHandler.postDelayed(showRunnable, mInitialDelay);
+            mHandler.post(showRunnable);
         }
     }
 
