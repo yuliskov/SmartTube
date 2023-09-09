@@ -585,4 +585,8 @@
   <string name="dialog_notification">팝업 대화 상자로 업데이트에 대해 알림</string>
   <string name="player_global_focus">플레이어 버튼 행 사이의 원활한 탐색</string>
   <string name="auto_history">자동 (계정 설정 사용)</string>
+  <string name="remember_position_subscriptions">구독에서 마지막으로 본 위치 기억하기</string>
+  <string name="msg_player_unknown_error">알 수 없는 오류</string>
+  <string name="header_notifications">알림</string>
+  <string name="disable_search_history">검색 기록 비활성화</string>
 </resources>
