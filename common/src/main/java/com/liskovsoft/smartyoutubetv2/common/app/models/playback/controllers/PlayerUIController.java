@@ -7,6 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.data.NotificationState;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
@@ -21,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.Sug
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
@@ -29,6 +31,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMe
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -41,6 +44,7 @@ import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerUIController extends PlayerEventListenerHelper implements MetadataListener {
@@ -281,12 +285,12 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     private void resetButtonStates() {
         getPlayer().setLikeButtonState(false);
         getPlayer().setDislikeButtonState(false);
-        getPlayer().setSubscribeButtonState(false);
         getPlayer().setChannelIcon(null);
         getPlayer().setPlaylistAddButtonState(false);
         getPlayer().setSubtitleButtonState(false);
         getPlayer().setSpeedButtonState(false);
         getPlayer().setChatButtonState(false);
+        getPlayer().setButtonState(R.id.action_subscribe, PlayerUI.BUTTON_OFF);
     }
 
     @Override
@@ -305,13 +309,13 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         }
         getPlayer().setLikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE);
         getPlayer().setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
-        getPlayer().setSubscribeButtonState(metadata.isSubscribed());
         if (mPlayerTweaksData.isRealChannelIconEnabled()) {
             getPlayer().setChannelIcon(metadata.getAuthorImageUrl());
         }
         setPlaylistAddButtonStateCached();
         setSubtitleButtonState();
         getPlayer().setButtonState(R.id.action_rotate, mPlayerData.getVideoRotation() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
+        getPlayer().setButtonState(R.id.action_subscribe, metadata.isSubscribed() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
     @Override
@@ -334,27 +338,6 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
                 getPlayer().updateSuggestions(group);
             }
         });
-    }
-
-    @Override
-    public void onSubscribeClicked(boolean subscribed) {
-        if (!mIsMetadataLoaded) {
-            MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
-            getPlayer().setSubscribeButtonState(!subscribed);
-            return;
-        }
-
-        if (!YouTubeSignInService.instance().isSigned()) {
-            getPlayer().setSubscribeButtonState(false);
-            MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
-            return;
-        }
-
-        if (subscribed) {
-            callMediaItemObservable(mMediaItemManager::subscribeObserve);
-        } else {
-            callMediaItemObservable(mMediaItemManager::unsubscribeObserve);
-        }
     }
 
     @Override
@@ -513,6 +496,24 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             prepareScreenOff();
             applyScreenOff(buttonState);
             applyScreenOffTimeout(buttonState);
+        } else if (buttonId == R.id.action_subscribe) {
+            if (!mIsMetadataLoaded) {
+                MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+                return;
+            }
+
+            if (!YouTubeSignInService.instance().isSigned()) {
+                MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
+                return;
+            }
+
+            if (buttonState == PlayerUI.BUTTON_OFF) {
+                callMediaItemObservable(mMediaItemManager::subscribeObserve);
+            } else {
+                callMediaItemObservable(mMediaItemManager::unsubscribeObserve);
+            }
+
+            getPlayer().setButtonState(buttonId, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON: PlayerUI.BUTTON_OFF);
         }
     }
 
@@ -533,6 +534,25 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             settingsPresenter.appendRadioCategory(dimmingCategory.title, dimmingCategory.options);
             settingsPresenter.appendRadioCategory(category.title, category.options);
             settingsPresenter.showDialog(getContext().getString(R.string.action_screen_off));
+        } else if (buttonId == R.id.action_subscribe) {
+            if (getPlayer().getVideo() == null || getPlayer().getVideo().notificationStates == null) {
+                return;
+            }
+
+            AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+
+            List<OptionItem> items = new ArrayList<>();
+
+            for (NotificationState item : getPlayer().getVideo().notificationStates) {
+                 items.add(UiOptionItem.from(item.getTitle(), optionItem -> {
+                     if (optionItem.isSelected()) {
+                         MediaServiceManager.instance().setNotificationState(item);
+                     }
+                 }, item.isSelected()));
+            }
+
+            settingsPresenter.appendRadioCategory(getContext().getString(R.string.header_notifications), items);
+            settingsPresenter.showDialog(getContext().getString(R.string.header_notifications));
         }
     }
 

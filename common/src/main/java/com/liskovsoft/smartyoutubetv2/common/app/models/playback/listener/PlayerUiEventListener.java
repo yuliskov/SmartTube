@@ -13,7 +13,6 @@ public interface PlayerUiEventListener {
     boolean onKeyDown(int keyCode);
     void onRepeatModeClicked(int modeIndex);
     void onHighQualityClicked();
-    void onSubscribeClicked(boolean subscribed);
     void onDislikeClicked(boolean dislike);
     void onLikeClicked(boolean like);
     void onChannelClicked();

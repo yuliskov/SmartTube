@@ -677,11 +677,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onSubscribe(boolean subscribed) {
-            mEventListener.onSubscribeClicked(subscribed);
-        }
-
-        @Override
         public void onThumbsDown(boolean thumbsDown) {
             mEventListener.onDislikeClicked(thumbsDown);
         }
@@ -1249,13 +1244,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void setDislikeButtonState(boolean dislike) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setThumbsDownActionState(dislike);
-        }
-    }
-
-    @Override
-    public void setSubscribeButtonState(boolean subscribe) {
-        if (mPlayerGlue != null) {
-            mPlayerGlue.setSubscribeActionState(subscribe);
         }
     }
 

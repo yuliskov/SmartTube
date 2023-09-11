@@ -179,11 +179,6 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onSubscribeClicked(boolean subscribed) {
-        // NOP
-    }
-
-    @Override
     public void onDislikeClicked(boolean dislike) {
         // NOP
     }

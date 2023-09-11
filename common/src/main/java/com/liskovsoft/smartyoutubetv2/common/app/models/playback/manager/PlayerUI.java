@@ -35,7 +35,6 @@ public interface PlayerUI {
     void setRepeatButtonState(int modeIndex);
     void setLikeButtonState(boolean like);
     void setDislikeButtonState(boolean dislike);
-    void setSubscribeButtonState(boolean subscribe);
     void setPlaylistAddButtonState(boolean selected);
     void setSubtitleButtonState(boolean selected);
     void setSpeedButtonState(boolean selected);

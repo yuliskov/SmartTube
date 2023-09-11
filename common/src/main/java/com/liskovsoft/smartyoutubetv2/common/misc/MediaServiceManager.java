@@ -13,6 +13,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.data.NotificationState;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -368,5 +369,9 @@ public class MediaServiceManager {
         if (item != null && item.belongsToNotifications()) {
             RxHelper.execute(mNotificationsService.hideNotificationObserve(item.mediaItem));
         }
+    }
+
+    public void setNotificationState(NotificationState state) {
+        RxHelper.execute(mNotificationsService.setNotificationStateObserve(state));
     }
 }

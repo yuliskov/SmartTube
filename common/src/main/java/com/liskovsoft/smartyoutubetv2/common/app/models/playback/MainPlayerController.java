@@ -305,11 +305,6 @@ public class MainPlayerController implements PlayerEventListener {
     }
 
     @Override
-    public void onSubscribeClicked(boolean subscribed) {
-        process(listener -> listener.onSubscribeClicked(subscribed));
-    }
-
-    @Override
     public void onDislikeClicked(boolean dislike) {
         process(listener -> listener.onDislikeClicked(dislike));
     }

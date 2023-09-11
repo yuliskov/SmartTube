@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.data.NotificationState;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -77,6 +78,7 @@ public final class Video {
     public float volume = 1.0f;
     private int startSegmentNum;
     private WeakReference<VideoGroup> group; // Memory leak fix. Used to get next page when scrolling.
+    public List<NotificationState> notificationStates;
 
     public Video() {
        // NOP
@@ -580,6 +582,7 @@ public final class Video {
         isSubscribed = metadata.isSubscribed();
         likeCount = metadata.getLikeCount();
         dislikeCount = metadata.getDislikeCount();
+        notificationStates = metadata.getNotificationStates();
         isSynced = true;
 
         if (mediaItem != null) {
