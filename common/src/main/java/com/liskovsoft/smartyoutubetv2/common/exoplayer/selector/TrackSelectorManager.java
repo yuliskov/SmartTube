@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
 import android.content.Context;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Pair;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.TrackGroup;
@@ -606,16 +607,17 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         String audioLanguage = PlayerData.instance(mContext).getAudioLanguage();
 
-        if (audioLanguage == null || audioLanguage.isEmpty()) {
-            return trackGroupList;
+        String resultLanguage = null;
+
+        if (!TextUtils.isEmpty(audioLanguage)) {
+            resultLanguage = audioLanguage;
+        } else if (originTrack.format != null && !TextUtils.isEmpty(originTrack.format.language)) {
+            resultLanguage = originTrack.format.language;
         }
 
-        String resultLanguage = audioLanguage;
-
-        //// Override default language with one from recently selected track
-        //if (originTrack.format != null && !TextUtils.isEmpty(originTrack.format.language)) {
-        //    resultLanguage = originTrack.format.language;
-        //}
+        if (resultLanguage == null) {
+            return trackGroupList;
+        }
 
         List<MediaTrack[]> resultTracks = null;
         List<MediaTrack[]> resultTracksFallback = null;
