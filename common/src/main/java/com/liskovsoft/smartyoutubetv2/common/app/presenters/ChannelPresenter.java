@@ -36,6 +36,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private List<MediaGroup> mMediaGroups;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
+    private MediaGroup mLastScrollGroup;
 
     private interface OnChannelId {
         void onChannelId(String channelId);
@@ -222,6 +223,18 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             Log.e(TAG, "Can't continue group. The view is null.");
             return;
         }
+
+        if (group == null) {
+            Log.e(TAG, "Can't continue group. The group is null.");
+            return;
+        }
+
+        if (mLastScrollGroup == group.getMediaGroup()) {
+            Log.d(TAG, "Can't continue group. Another action is running.");
+            return;
+        }
+
+        mLastScrollGroup = group.getMediaGroup();
 
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
