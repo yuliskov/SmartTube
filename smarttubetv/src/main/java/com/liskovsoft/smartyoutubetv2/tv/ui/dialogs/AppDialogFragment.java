@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.CommentsPreference;
@@ -39,6 +42,9 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     private boolean mIsTransparent;
     private boolean mIsPaused;
     private int mId;
+
+    private static final String PREFERENCE_FRAGMENT_TAG =
+            "androidx.leanback.preference.LeanbackSettingsFragment.PREFERENCE_FRAGMENT";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -204,6 +210,28 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
 
         //return super.onPreferenceDisplayDialog(caller, pref);
         return true;
+    }
+
+    /**
+     * Fix possible state loss!!!
+     */
+    @Override
+    public void startPreferenceFragment(@NonNull Fragment fragment) {
+        final FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        final Fragment prevFragment =
+                getChildFragmentManager().findFragmentByTag(PREFERENCE_FRAGMENT_TAG);
+        if (prevFragment != null) {
+            transaction
+                    .addToBackStack(null)
+                    .replace(R.id.settings_preference_fragment_container, fragment,
+                            PREFERENCE_FRAGMENT_TAG);
+        } else {
+            transaction
+                    .add(R.id.settings_preference_fragment_container, fragment,
+                            PREFERENCE_FRAGMENT_TAG);
+        }
+        // Fix possible state loss!!!
+        transaction.commitAllowingStateLoss();
     }
 
     @Override
