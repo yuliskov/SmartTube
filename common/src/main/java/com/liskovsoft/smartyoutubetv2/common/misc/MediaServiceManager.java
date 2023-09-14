@@ -302,8 +302,28 @@ public class MediaServiceManager {
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
     public void shouldContinueTheGroup(Context context, VideoGroup group, Runnable onNeedContinue, boolean isGrid) {
+        if (shouldContinueTheGroup(context, group, isGrid) && onNeedContinue != null) {
+            onNeedContinue.run();
+        }
+    }
+
+    /**
+     * Most tiny ui has 8 cards in a row or 24 in grid.
+     */
+    public boolean shouldContinueGridGroup(Context context, VideoGroup group) {
+        return shouldContinueTheGroup(context, group, true);
+    }
+
+    public boolean shouldContinueRowGroup(Context context, VideoGroup group) {
+        return shouldContinueTheGroup(context, group,false);
+    }
+
+    /**
+     * Most tiny ui has 8 cards in a row or 24 in grid.
+     */
+    public boolean shouldContinueTheGroup(Context context, VideoGroup group, boolean isGrid) {
         if (group == null || group.getMediaGroup() == null) {
-            return;
+            return false;
         }
 
         MediaGroup mediaGroup = group.getMediaGroup();
@@ -326,15 +346,9 @@ public class MediaServiceManager {
         int minSize = isGrid ? MIN_GRID_GROUP_SIZE : MIN_ROW_GROUP_SIZE;
         boolean groupTooSmall = isScaledUIEnabled ? totalSize < minScaledSize : totalSize < minSize;
 
-        if (groupTooSmall) {
-            if (onNeedContinue != null) {
-                onNeedContinue.run();
-            }
-        } else {
-            totalSize = 0;
-        }
-        
-        mContinuations.put(group.getId(), new Pair<>(totalSize, currentTimeMillis));
+        mContinuations.put(group.getId(), new Pair<>(groupTooSmall ? totalSize : 0, currentTimeMillis));
+
+        return groupTooSmall;
     }
 
     public void enableHistory(boolean enable) {

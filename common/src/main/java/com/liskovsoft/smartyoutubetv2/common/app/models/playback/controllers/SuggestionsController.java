@@ -182,6 +182,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         Disposable continueAction = mediaItemManager.continueGroupObserve(mediaGroup)
                 .subscribe(
                         continueMediaGroup -> {
+                            getPlayer().showProgressBar(false);
+
                             VideoGroup videoGroup = VideoGroup.from(continueMediaGroup, group);
                             getPlayer().updateSuggestions(videoGroup);
 
@@ -200,11 +202,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
                         },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
-                            if (getPlayer() != null) {
-                                getPlayer().showProgressBar(false);
-                            }
-                        },
-                        () -> {
                             if (getPlayer() != null) {
                                 getPlayer().showProgressBar(false);
                             }
@@ -307,11 +304,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             Log.e(TAG, msg);
             return;
         }
-
-        //if (mPlayerTweaksData.isSuggestionsDisabled()) {
-        //    Log.d(TAG, "loadSuggestions: suggestions disabled by the user");
-        //    return;
-        //}
 
         if (!video.isRemote && getPlayer().isSuggestionsShown()) {
             Log.d(TAG, "Suggestions is opened. Seems that user want to stay here.");
@@ -530,7 +522,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
     private void continueGroupIfNeeded(VideoGroup group) {
-        MediaServiceManager.instance().shouldContinueRowGroup(getContext(), group, () -> continueGroup(group, getPlayer().isSuggestionsShown()));
+        if (MediaServiceManager.instance().shouldContinueRowGroup(getContext(), group)) {
+            continueGroup(group, getPlayer().isSuggestionsShown());
+        }
     }
 
     public void focusAndContinueIfNeeded(VideoGroup group) {

@@ -619,6 +619,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         Disposable updateAction = groups
                 .subscribe(
                         mediaGroups -> {
+                            getView().showProgressBar(false);
+
                             filterIfNeeded(mediaGroups);
 
                             for (MediaGroup mediaGroup : mediaGroups) {
@@ -633,11 +635,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
                                 continueGroupIfNeeded(videoGroup, false);
                             }
-
-                            // Hide loading as long as first group received
-                            if (!mediaGroups.isEmpty()) {
-                                getView().showProgressBar(false);
-                            }
                         },
                         error -> {
                             Log.e(TAG, "updateRowsHeader error: %s", error.getMessage());
@@ -647,11 +644,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             if (getView() != null && getView().isEmpty()) {
                                 getView().showError(new CategoryEmptyError(getContext()));
                                 Utils.postDelayed(mRefreshSection, 30_000);
-                            }
-                        },
-                        () -> {
-                            if (getView() != null) {
-                                getView().showProgressBar(false);
                             }
                         });
 
@@ -688,6 +680,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         Disposable updateAction = group
                 .subscribe(
                         mediaGroup -> {
+                            getView().showProgressBar(false);
+
                             if (getView() == null) {
                                 Log.e(TAG, "Browse view has been unloaded from the memory. Low RAM?");
                                 ViewManager.instance(getContext()).startView(BrowseView.class);
@@ -696,11 +690,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
                             VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, position);
                             getView().updateSection(videoGroup);
-
-                            //// Hide loading as long as first group received
-                            //if (mediaGroup.getMediaItems() != null) {
-                            //    getView().showProgressBar(false);
-                            //}
 
                             continueGroupIfNeeded(videoGroup);
                         },
@@ -712,11 +701,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             if (getView() != null && getView().isEmpty()) {
                                 getView().showError(new CategoryEmptyError(getContext()));
                                 Utils.postDelayed(mRefreshSection, 30_000);
-                            }
-                        },
-                        () -> {
-                            if (getView() != null) {
-                                getView().showProgressBar(false);
                             }
                         });
 
@@ -765,6 +749,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         Disposable continueAction = continuation
                 .subscribe(
                         continueGroup -> {
+                            getView().showProgressBar(false);
+
                             VideoGroup videoGroup = VideoGroup.from(continueGroup, group);
                             getView().updateSection(videoGroup);
 
@@ -772,11 +758,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
-                            if (getView() != null) {
-                                getView().showProgressBar(false);
-                            }
-                        },
-                        () -> {
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                             }
@@ -823,9 +804,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
     private void continueGroupIfNeeded(VideoGroup group, boolean showLoading) {
-        MediaServiceManager.instance().shouldContinueTheGroup(
-                getContext(), group, () -> continueGroup(group, showLoading), isGridSection()
-        );
+        if (MediaServiceManager.instance().shouldContinueTheGroup(getContext(), group, isGridSection())) {
+            continueGroup(group, showLoading);
+        }
     }
 
     private void disposeActions() {

@@ -487,33 +487,13 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     @Override
     public void onButtonClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_rotate) {
-            int oldRotation = mPlayerData.getVideoRotation();
-            int rotation = oldRotation == 0 ? 90 : oldRotation == 90 ? 180 : oldRotation == 180 ? 270 : 0;
-            getPlayer().setVideoRotation(rotation);
-            getPlayer().setButtonState(buttonId, rotation == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
-            mPlayerData.setVideoRotation(rotation);
+            onRotate();
         } else if (buttonId == R.id.action_screen_off || buttonId == R.id.action_screen_off_timeout) {
             prepareScreenOff();
             applyScreenOff(buttonState);
             applyScreenOffTimeout(buttonState);
         } else if (buttonId == R.id.action_subscribe) {
-            if (!mIsMetadataLoaded) {
-                MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
-                return;
-            }
-
-            if (!YouTubeSignInService.instance().isSigned()) {
-                MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
-                return;
-            }
-
-            if (buttonState == PlayerUI.BUTTON_OFF) {
-                callMediaItemObservable(mMediaItemManager::subscribeObserve);
-            } else {
-                callMediaItemObservable(mMediaItemManager::unsubscribeObserve);
-            }
-
-            getPlayer().setButtonState(buttonId, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON: PlayerUI.BUTTON_OFF);
+            onSubscribe(buttonState);
         }
     }
 
@@ -536,6 +516,12 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             settingsPresenter.showDialog(getContext().getString(R.string.action_screen_off));
         } else if (buttonId == R.id.action_subscribe) {
             if (getPlayer().getVideo() == null || getPlayer().getVideo().notificationStates == null) {
+                return;
+            }
+
+            // Can't change notification state while unsubscribed
+            if (buttonState == PlayerUI.BUTTON_OFF) {
+                onSubscribe(buttonState);
                 return;
             }
 
@@ -815,5 +801,33 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         manager.disable();
         getPlayer().setButtonState(R.id.action_screen_off, PlayerUI.BUTTON_OFF);
         getPlayer().setButtonState(R.id.action_screen_off_timeout, PlayerUI.BUTTON_OFF);
+    }
+
+    private void onRotate() {
+        int oldRotation = mPlayerData.getVideoRotation();
+        int rotation = oldRotation == 0 ? 90 : oldRotation == 90 ? 180 : oldRotation == 180 ? 270 : 0;
+        getPlayer().setVideoRotation(rotation);
+        getPlayer().setButtonState(R.id.action_rotate, rotation == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
+        mPlayerData.setVideoRotation(rotation);
+    }
+
+    private void onSubscribe(int buttonState) {
+        if (!mIsMetadataLoaded) {
+            MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+            return;
+        }
+
+        if (!YouTubeSignInService.instance().isSigned()) {
+            MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
+            return;
+        }
+
+        if (buttonState == PlayerUI.BUTTON_OFF) {
+            callMediaItemObservable(mMediaItemManager::subscribeObserve);
+        } else {
+            callMediaItemObservable(mMediaItemManager::unsubscribeObserve);
+        }
+
+        getPlayer().setButtonState(R.id.action_subscribe, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON: PlayerUI.BUTTON_OFF);
     }
 }

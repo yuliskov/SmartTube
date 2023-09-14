@@ -41,7 +41,6 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.common.helpers.DefaultHeaders;
-import com.liskovsoft.youtubeapi.common.helpers.RetrofitOkHttpHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,7 +52,7 @@ public class ExoMediaSourceFactory {
     @SuppressLint("StaticFieldLeak")
     private static ExoMediaSourceFactory sInstance;
     private static final int MAX_SEGMENTS_PER_LOAD = 1;
-    private static final String USER_AGENT = DefaultHeaders.APP_USER_AGENT;
+    private static final String USER_AGENT = DefaultHeaders.USER_AGENT_WEB;
     @SuppressLint("StaticFieldLeak")
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private final Factory mMediaDataSourceFactory;
