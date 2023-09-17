@@ -589,4 +589,8 @@
     <string name="header_shorts">Shorts</string>
     <string name="player_global_focus">Souvislá navigace mezi řadami tlačítek přehrávače</string>
     <string name="auto_history">Automaticky (použije nastavení účtu)</string>
+    <string name="remember_position_subscriptions">Pamatovat si poslední zhlédnutou pozici v Odběrech</string>
+    <string name="msg_player_unknown_error">Neznámá chyba</string>
+    <string name="header_notifications">Oznámení</string>
+    <string name="disable_search_history">Zakázat historii vyhledávání</string>
 </resources>
