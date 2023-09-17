@@ -59,12 +59,14 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
     private boolean mIsMetadataLoaded;
+    private long mOverlayHideTimeMs;
     private final Runnable mSuggestionsResetHandler = () -> getPlayer().resetSuggestedPosition();
     private final Runnable mUiAutoHideHandler = () -> {
         // Playing the video and dialog overlay isn't shown
         if (getPlayer().isPlaying() && !AppDialogPresenter.instance(getContext()).isDialogShown()) {
             if (!getPlayer().isSuggestionsShown()) { // don't hide when suggestions is shown
                 getPlayer().showOverlay(false);
+                mOverlayHideTimeMs = System.currentTimeMillis();
             }
         } else {
             // in seeking state? doing recheck...
@@ -593,6 +595,11 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             // Close future stream with single back click
             if (!getPlayer().containsMedia()) {
                 getPlayer().finish();
+            }
+
+            // Back key cooling
+            if (System.currentTimeMillis() - mOverlayHideTimeMs < 1_000) {
+                return true;
             }
         }
 
