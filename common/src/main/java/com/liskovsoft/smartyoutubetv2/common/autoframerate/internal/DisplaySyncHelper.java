@@ -123,12 +123,16 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
         for (Mode mode : allModes) {
             int width = mode.getPhysicalWidth();
-            //if (width >= (videoWidth - 100)) {
-            //    newModes.add(mode);
-            //}
-            if (Math.abs(width - videoWidth) < 100) {
+
+            // Use with caution. Non strict match. E.g. 1440p will match 1440p and up
+            if (width >= (videoWidth - 100)) {
                 newModes.add(mode);
             }
+
+            // Strict match
+            //if (Math.abs(width - videoWidth) < 100) {
+            //    newModes.add(mode);
+            //}
         }
 
         if (newModes.isEmpty()) {
@@ -377,25 +381,6 @@ public class DisplaySyncHelper implements UhdHelperListener {
             if (mIsResolutionSwitchEnabled) {
                 resultModes = filterModesByWidth(modes, Math.max(videoWidth, HD));
             }
-
-            //int minHeight = -1;
-            //int maxHeight = -1;
-
-            //if (mSwitchToUHD) { // switch not only framerate but resolution too
-            //    if (videoWidth > 1920) {
-            //        minHeight = 2160;
-            //        maxHeight = 5000;
-            //    }
-            //}
-            //
-            //if (mSwitchToFHD) { // switch not only framerate but resolution too
-            //    if (videoWidth <= 1920) {
-            //        minHeight = 1080;
-            //        maxHeight = 1080;
-            //    }
-            //}
-
-            //resultModes = filterModes(modes, minHeight, maxHeight);
 
             if (!resultModes.isEmpty()) {
                 needResolutionSwitch = true;
