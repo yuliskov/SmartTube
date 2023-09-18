@@ -188,8 +188,8 @@
     <string name="confirm_segment_skip">Preskočiť segment \"%s\"?</string>
     <string name="cancel_segment_skip">Zrušiť preskočenie segmentu</string>
     <string name="msg_skipping_segment">Preskakujem segment \"%s\"…</string>
-    <string name="content_block_notification_type">Typ oznámenia</string>
-    <string name="content_block_notify_none">Bez oznámenia</string>
+    <string name="content_block_notification_type">Typ notifikácie</string>
+    <string name="content_block_notify_none">Bez notifikácie</string>
     <string name="content_block_notify_toast">Toast dialóg</string>
     <string name="content_block_notify_dialog">Potvrdzovací dialóg</string>
     <string name="return_to_launcher">Vrátiť sa do launchera z ATV kanála/hľadania</string>
@@ -565,7 +565,7 @@
     <string name="header_trending">Trendy</string>
     <string name="screensaver">Šetrič obrazovky</string>
     <string name="player_screen_off_timeout">Časový limit vypnutia obrazovky</string>
-    <string name="old_update_notifications">Starý vzhľad oznámení o aktualizáciách</string>
+    <string name="old_update_notifications">Starý vzhľad notifikácií o aktualizáciách</string>
     <string name="dialog_notification">Upozorniť na aktualizáciu pomocou vyskakovacieho okna</string>
     <string name="mark_as_watched">Označiť ako videné</string>
     <string name="player_ui_animations">Povoliť animácie ovládacieho panela</string>
@@ -588,4 +588,10 @@
     <string name="player_auto_volume">Automatické nastavenie hlasitosti</string>
     <string name="header_shorts">Shorts</string>
     <string name="player_global_focus">Plynulá navigácia medzi radmi tlačidiel prehrávača</string>
+    <string name="auto_history">Automaticky (použiť nastavenie účtu)</string>
+    <string name="remember_position_subscriptions">Zapamätať poslednú zobrazenú pozíciu v Odberoch</string>
+    <string name="msg_player_unknown_error">Neznáma chyba</string>
+    <string name="header_notifications">Notifikácie</string>
+    <string name="disable_search_history">Zakázať históriu vyhľadávania</string>
+    <string name="unlock_high_bitrate_formats">Odomknúť formáty 1080p VP9 s vysokým dátovým tokom</string>
 </resources>
