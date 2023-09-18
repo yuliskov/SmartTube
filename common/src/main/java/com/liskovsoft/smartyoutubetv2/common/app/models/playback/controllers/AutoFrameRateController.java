@@ -339,7 +339,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
 
         List<OptionItem> options = new ArrayList<>();
 
-        for (int pauseMs : Helpers.range(0, 7_000, 500)) {
+        for (int pauseMs : Helpers.range(0, 7_000, 250)) {
             String optionTitle = pauseMs == 0 ? context.getString(R.string.option_never) : context.getString(R.string.auto_frame_rate_sec, pauseMs / 1_000f);
             options.add(UiOptionItem.from(optionTitle,
                     optionItem -> {
