@@ -570,4 +570,5 @@
     <string name="msg_player_unknown_error">Kesalahan tidak diketahui</string>
     <string name="header_notifications">Notifikasi</string>
     <string name="disable_search_history">Nonaktifkan riwayat pencarian</string>
+    <string name="unlock_high_bitrate_formats">Membuka format 1080p VP9 kecepatan bit tinggi</string>
 </resources>
