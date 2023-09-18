@@ -584,4 +584,5 @@
     <string name="msg_player_unknown_error">Невідома помилка</string>
     <string name="header_notifications">Повідомлення</string>
     <string name="disable_search_history">Вимкнути історію пошуку</string>
+    <string name="unlock_high_bitrate_formats">Разблокувати високий бітрейт на 1080p VP9 форматах</string>
 </resources>

@@ -593,4 +593,5 @@
     <string name="msg_player_unknown_error">Unknown error</string>
     <string name="header_notifications">Notifications</string>
     <string name="disable_search_history">Disable search history</string>
+    <string name="unlock_high_bitrate_formats">Unlock high bitrate on 1080p VP9 formats</string>
 </resources>

@@ -267,6 +267,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isTextureViewEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.unlock_high_bitrate_formats),
+                option -> mPlayerTweaksData.unlockHighBitrateFormats(option.isSelected()),
+                mPlayerTweaksData.isHighBitrateFormatsUnlocked()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.force_legacy_codecs),
                 getContext().getString(R.string.force_legacy_codecs_desc),
                 option -> mPlayerData.forceLegacyCodecs(option.isSelected()),

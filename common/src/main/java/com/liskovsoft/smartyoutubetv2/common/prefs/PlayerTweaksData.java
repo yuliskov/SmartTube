@@ -85,6 +85,7 @@ public class PlayerTweaksData {
     private boolean mIsPlayerAutoVolumeEnabled;
     private boolean mIsPlayerGlobalFocusEnabled;
     private boolean mIsUnsafeAudioFormatsEnabled;
+    private boolean mIsHighBitrateFormatsUnlocked;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -484,6 +485,15 @@ public class PlayerTweaksData {
         return mIsPlayerGlobalFocusEnabled;
     }
 
+    public void unlockHighBitrateFormats(boolean enable) {
+        mIsHighBitrateFormatsUnlocked = enable;
+        persistData();
+    }
+
+    public boolean isHighBitrateFormatsUnlocked() {
+        return mIsHighBitrateFormatsUnlocked;
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -535,6 +545,7 @@ public class PlayerTweaksData {
         mIsPlayerAutoVolumeEnabled = Helpers.parseBoolean(split, 40, true);
         mIsPlayerGlobalFocusEnabled = Helpers.parseBoolean(split, 41, true);
         mIsUnsafeAudioFormatsEnabled = Helpers.parseBoolean(split, 42, false);
+        mIsHighBitrateFormatsUnlocked = Helpers.parseBoolean(split, 43, false);
 
         updateDefaultValues();
     }
@@ -551,7 +562,7 @@ public class PlayerTweaksData {
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
-                mIsUnsafeAudioFormatsEnabled
+                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked
         ));
     }
 
