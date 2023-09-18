@@ -4,7 +4,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
 public class AudioTrack extends MediaTrack {
-    private static final int BITRATE_DIFF_PERCENTS = 20;
+    private static final int BITRATE_DIFF_PERCENTS = 5;
 
     public AudioTrack(int rendererIndex) {
         super(rendererIndex);
