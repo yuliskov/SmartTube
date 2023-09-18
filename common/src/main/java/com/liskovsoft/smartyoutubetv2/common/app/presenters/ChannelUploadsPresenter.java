@@ -238,7 +238,10 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         mUpdateAction = group
                 .subscribe(
                         this::updateGrid,
-                        error -> Log.e(TAG, "updateGridHeader error: %s", error.getMessage()),
+                        error -> {
+                            Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
+                            getView().showProgressBar(false);
+                        },
                         () -> getView().showProgressBar(false)
                 );
     }
