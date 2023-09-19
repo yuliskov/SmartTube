@@ -71,7 +71,7 @@ public class AudioTrack extends MediaTrack {
             result = 0;
         } else if (Helpers.equals(format.id, track2.format.id)) {
             result = 1;
-        } else if (format.bitrate >= track2.format.bitrate ||
+        } else if (!codecEquals(this, track2) || format.bitrate >= track2.format.bitrate ||
                 Math.abs(format.bitrate - track2.format.bitrate) < (format.bitrate / 100 * BITRATE_DIFF_PERCENTS)) {
             result = 0;
         }
