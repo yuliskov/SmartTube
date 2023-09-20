@@ -64,7 +64,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     private final Runnable mUiAutoHideHandler = () -> {
         // Playing the video and dialog overlay isn't shown
         if (getPlayer().isPlaying() && !AppDialogPresenter.instance(getContext()).isDialogShown()) {
-            if (!getPlayer().isSuggestionsShown()) { // don't hide when suggestions is shown
+            if (getPlayer().isControlsShown()) { // don't hide when suggestions is shown
                 getPlayer().showOverlay(false);
                 mOverlayHideTimeMs = System.currentTimeMillis();
             }
