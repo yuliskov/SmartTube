@@ -589,4 +589,6 @@
   <string name="msg_player_unknown_error">알 수 없는 오류</string>
   <string name="header_notifications">알림</string>
   <string name="disable_search_history">검색 기록 비활성화</string>
+  <string name="unlock_high_bitrate_formats">높은 비트 전송율 1080p vp9 포맷 잠금 해제</string>
+  <string name="unlock_high_bitrate_audio_formats">높은 비트 전송율 MP4A 포맷 잠금 해제</string>
 </resources>
