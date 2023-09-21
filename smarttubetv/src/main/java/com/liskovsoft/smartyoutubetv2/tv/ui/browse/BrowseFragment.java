@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -26,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
@@ -189,8 +191,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         int brandAccentColorRes = Helpers.getThemeAttr(getActivity(), R.attr.brandAccentColor);
         int appLogoRes = Helpers.getThemeAttr(getActivity(), R.attr.appLogo);
 
+        Drawable bridgeIcon = Utils.getDrawable(getActivity(), SplashPresenter.instance(getActivity()).getBridgePackageName(), "app_icon");
+
         // Top right corner logo
-        setBadgeDrawable(appLogoRes > 0 ? ContextCompat.getDrawable(getActivity(), appLogoRes) : null);
+        setBadgeDrawable(bridgeIcon != null ? bridgeIcon : appLogoRes > 0 ? ContextCompat.getDrawable(getActivity(), appLogoRes) : null);
 
         // This title replaces badge in case one is null
         //setTitle(getString(R.string.browse_title));

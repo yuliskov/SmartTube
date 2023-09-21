@@ -17,6 +17,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -39,6 +41,7 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
+import androidx.fragment.app.FragmentActivity;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -659,5 +662,29 @@ public class Utils {
         color = ColorUtils.setAlphaComponent(color, (int)(255f / 100 * dimPercents));
 
         return color;
+    }
+
+    public static Drawable getDrawable(Context context, String packageName, String drawableName) {
+        if (context == null || packageName == null || drawableName == null) {
+            return null;
+        }
+
+        Drawable result = null;
+
+        try {
+            PackageManager manager = context.getPackageManager();
+            Resources resources = manager.getResourcesForApplication(packageName);
+            int drawableResId = resources.getIdentifier(drawableName, "drawable", packageName);
+
+            if (drawableResId == 0) {
+                drawableResId = resources.getIdentifier(drawableName, "mipmap", packageName);
+            }
+
+            result = resources.getDrawable(drawableResId);
+        } catch (NameNotFoundException | Resources.NotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

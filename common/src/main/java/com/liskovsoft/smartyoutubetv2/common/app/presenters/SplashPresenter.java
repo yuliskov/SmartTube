@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
-import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -38,6 +37,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private boolean mRunPerInstance;
     private final List<IntentProcessor> mIntentChain = new ArrayList<>();
     private Disposable mRefreshCachePeriodicAction;
+    private String mBridgePackageName;
 
     private interface IntentProcessor {
         boolean process(Intent intent);
@@ -178,6 +178,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
     }
 
+    public String getBridgePackageName() {
+        return mBridgePackageName;
+    }
+
     private void initIntentChain() {
         mIntentChain.add(intent -> {
             String searchText = IntentExtractor.extractSearchText(intent);
@@ -280,6 +284,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     private void applyNewIntent(Intent intent) {
+        if (intent != null) {
+            mBridgePackageName = intent.getStringExtra("bridge_package_name");
+        }
+
         for (IntentProcessor processor : mIntentChain) {
             if (processor.process(intent)) {
                 break;
