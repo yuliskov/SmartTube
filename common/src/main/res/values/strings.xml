@@ -595,4 +595,5 @@
     <string name="disable_search_history">Disable search history</string>
     <string name="unlock_high_bitrate_formats">Unlock high bitrate 1080p vp9 formats</string>
     <string name="unlock_high_bitrate_audio_formats">Unlock high bitrate mp4a formats</string>
+    <string name="color_scheme_blue">Blue</string>
 </resources>

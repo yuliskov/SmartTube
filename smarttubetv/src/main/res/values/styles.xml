@@ -183,4 +183,21 @@
         <item name="appLogo">@mipmap/app_logo_semi_grey</item>
     </style>
     <!--  End Color scheme: Dark Grey (monochrome)  -->
+
+    <!--  Color scheme: Teal (Blue)  -->
+    <style name="App.Theme.Leanback.Blue.Browse" parent="App.Theme.Leanback.Browse">
+        <item name="brandColor">@color/scheme_blue_background_dark</item>
+        <item name="brandAccentColor">@color/scheme_blue_background</item>
+        <item name="cardDefaultBackground">@color/scheme_blue_background_dark</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/scheme_blue_background</item>
+    </style>
+    <style name="App.Theme.Leanback.Blue.Player" parent="App.Theme.Leanback.Player">
+        <item name="cardDefaultBackground">@color/scheme_blue_background_dark</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/scheme_blue_background</item>
+    </style>
+    <style name="App.Theme.Leanback.Blue.Preferences" parent="App.Theme.Leanback.Preferences">
+        <item name="android:colorAccent" tools:targetApi="21">@color/scheme_blue_background</item>
+        <item name="android:colorPrimary" tools:targetApi="21">@color/scheme_blue_background_dark</item>
+    </style>
+    <!--  End Color scheme: Teal (Blue)  -->
 </resources>

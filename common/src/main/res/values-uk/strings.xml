@@ -586,4 +586,5 @@
     <string name="disable_search_history">Вимкнути історію пошуку</string>
     <string name="unlock_high_bitrate_formats">Розблокувати 1080p vp9 формати з високим бітрейтом</string>
     <string name="unlock_high_bitrate_audio_formats">Розблокувати mp4a формати з високим бітрейтом</string>
+    <string name="color_scheme_blue">Блакитна</string>
 </resources>
