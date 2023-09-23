@@ -197,10 +197,10 @@ public class MediaServiceManager {
                 );
     }
 
-    public void loadChannelPlaylist(Video item, OnMediaGroup group) {
+    public void loadChannelPlaylist(Video item, OnMediaGroup callback) {
         loadChannelRows(
                 item,
-                mediaGroupList -> group.onMediaGroup(mediaGroupList.get(0))
+                mediaGroupList -> callback.onMediaGroup(mediaGroupList.get(0))
         );
     }
 
