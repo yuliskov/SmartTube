@@ -660,6 +660,9 @@ public class Utils {
         return color;
     }
 
+    /**
+     * https://stackoverflow.com/questions/11288147/get-resources-from-another-apk
+     */
     public static Drawable getDrawable(Context context, String packageName, String drawableName) {
         if (context == null || packageName == null || drawableName == null) {
             return null;
