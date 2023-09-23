@@ -123,8 +123,12 @@ public class VideoCardPresenter extends LongClickPresenter {
         cardView.setContentText(video.secondTitle);
         // Count progress that very close to zero. E.g. when user closed video immediately.
         cardView.setProgress(video.percentWatched > 0 && video.percentWatched < 1 ? 1 : Math.round(video.percentWatched));
-        cardView.setBadgeText(video.hasNewContent ?
-                context.getString(R.string.badge_new_content) : video.isLive ? context.getString(R.string.badge_live) : video.badge);
+        cardView.setBadgeText(
+                video.hasNewContent ? context.getString(R.string.badge_new_content) :
+                video.isLive ? context.getString(R.string.badge_live) :
+                video.isShorts ? context.getString(R.string.header_shorts).toUpperCase() :
+                video.badge
+        );
         cardView.setBadgeColor(video.hasNewContent || video.isLive || video.isUpcoming ?
                 ContextCompat.getColor(context, R.color.dark_red) : ContextCompat.getColor(context, R.color.black));
 
