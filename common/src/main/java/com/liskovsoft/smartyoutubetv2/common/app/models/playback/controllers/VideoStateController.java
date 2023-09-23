@@ -531,10 +531,14 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
 
         if (mPlayerTweaksData.isPlayerAutoVolumeEnabled()) {
             newVolume *= getVideo().volume;
+        }
 
-            if (getVideo().isShorts || getVideo().getDurationMs() <= 60_000) {
-                newVolume /= 2;
-            }
+        //if (getVideo().isShorts || getVideo().getDurationMs() <= 60_000) {
+        //    newVolume /= 2;
+        //}
+
+        if (getVideo().isShorts) {
+            newVolume /= 2;
         }
 
         getPlayer().setVolume(newVolume);
