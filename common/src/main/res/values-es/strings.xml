@@ -588,4 +588,8 @@
   <string name="player_global_focus">Navegación fluida entre las filas de botones del reproductor</string>
   <string name="player_volume">Volumen</string>
   <string name="header_notifications">Notificaciones</string>
+  <string name="disable_search_history">Desactivar historial de búsqueda</string>
+  <string name="unlock_high_bitrate_formats">Desbloquear formatos vp9 1080p de alta tasa de bits</string>
+  <string name="unlock_high_bitrate_audio_formats">Desbloquear formatos mp4a de alta tasa de bits</string>
+  <string name="color_scheme_blue">Azul</string>
 </resources>
