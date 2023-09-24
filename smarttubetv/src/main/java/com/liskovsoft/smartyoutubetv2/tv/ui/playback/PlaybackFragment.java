@@ -254,7 +254,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     public void onPIPChanged(boolean isInPIP) {
-        // NOP
+        if (!isInPIP) {
+            // Fix partially disappeared buttons after exit from PIP???
+            notifyPlaybackRowChanged();
+        }
     }
 
     public void skipToNext() {
