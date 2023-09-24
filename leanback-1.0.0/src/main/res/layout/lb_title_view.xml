@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2014 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <ImageView
+        android:id="@+id/title_badge"
+        android:layout_width="wrap_content"
+        android:maxWidth="@dimen/lb_browse_title_icon_max_width"
+        android:adjustViewBounds="true"
+        android:layout_height="@dimen/lb_browse_title_icon_height"
+        android:layout_gravity="center_vertical|end"
+        android:src="@null"
+        android:visibility="gone"
+        style="?attr/browseTitleIconStyle"/>
+
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/lb_browse_title_height"
+        android:layout_gravity="center_vertical|end"
+        style="?attr/browseTitleTextStyle"/>
+
+    <androidx.leanback.widget.SearchOrbView
+        android:id="@+id/title_orb"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:transitionGroup="true"
+        android:layout_gravity="center_vertical|start"
+        android:visibility="invisible" />
+
+</merge>

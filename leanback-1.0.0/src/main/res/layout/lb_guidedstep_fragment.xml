@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2015 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<!-- Layout for the frame of a 2 pane actions fragment. -->
+<androidx.leanback.app.GuidedStepRootLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/guidedstep_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="bottom"
+    android:weightSum="2">
+
+    <FrameLayout
+        android:id="@+id/guidedstep_background_view_root"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="?attr/guidedStepHeightWeight">
+
+        <LinearLayout
+            android:id="@+id/content_frame"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.leanback.widget.NonOverlappingFrameLayout
+                android:id="@+id/content_fragment"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <androidx.leanback.widget.NonOverlappingFrameLayout
+                android:id="@+id/action_fragment_root"
+                android:transitionName="action_fragment_root"
+                android:transitionGroup="false"
+                android:orientation="horizontal"
+                android:clipToPadding="false"
+                android:clipChildren="false"
+                android:paddingStart="@dimen/lb_guidedactions_section_shadow_width"
+                android:layout_width="0dp"
+                android:layout_weight="?attr/guidedActionContentWidthWeight"
+                android:layout_height="match_parent" >
+
+                <androidx.leanback.widget.NonOverlappingView
+                    android:id="@+id/action_fragment_background"
+                    android:transitionName="action_fragment_background"
+                    android:orientation="horizontal"
+                    android:outlineProvider="paddedBounds"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/guidedActionsBackground"
+                    android:elevation="?attr/guidedActionsElevation" />
+
+                <androidx.leanback.widget.NonOverlappingLinearLayout
+                    android:id="@+id/action_fragment"
+                    android:focusable="true"
+                    android:descendantFocusability="afterDescendants"
+                    android:transitionName="action_fragment"
+                    android:transitionGroup="false"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:elevation="?attr/guidedActionsElevation" />
+            </androidx.leanback.widget.NonOverlappingFrameLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</androidx.leanback.app.GuidedStepRootLayout>

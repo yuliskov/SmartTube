@@ -1,0 +1,23 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.liskovsoft.leanbackassistant">
+
+    <application android:allowBackup="true"
+                 android:label="@string/app_name"
+                 android:supportsRtl="true"
+                 android:theme="@style/AppTheme">
+
+        <!--    SEARCH    -->
+
+        <provider android:name=".search.VideoContentProvider"
+                  android:authorities="com.liskovsoft.leanbackassistant.storig"
+                  android:exported="true"
+                  android:initOrder="1999999999"
+                  tools:ignore="ExportedContentProvider"
+                  tools:node="replace" />
+
+        <!--  END  SEARCH    -->
+
+    </application>
+
+</manifest>
