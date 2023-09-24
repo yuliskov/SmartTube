@@ -593,4 +593,7 @@
     <string name="msg_player_unknown_error">Unbekannter Fehler</string>
     <string name="header_notifications">Benachrichtigungen</string>
     <string name="disable_search_history">Suchverlauf deaktivieren</string>
+    <string name="unlock_high_bitrate_formats">1080p vp9-Formate mit hoher Bitrate freischalten</string>
+    <string name="unlock_high_bitrate_audio_formats">mp4a-Formate mit hoher Bitrate freischalten</string>
+    <string name="color_scheme_blue">Blau</string>
 </resources>
