@@ -171,7 +171,7 @@
   <string name="settings_general">Yleiset</string>
   <string name="settings_video">Video</string>
   <string name="content_block_confirm_skip">Varmista skipatessa</string>
-  <string name="content_block_categories">Kategoriat</string>
+  <string name="content_block_categories">Ohita osiot</string>
   <string name="content_block_sponsor">Sponsorit</string>
   <string name="content_block_intro">Intron alkaessa</string>
   <string name="content_block_outro">Lopputekstit</string>
@@ -580,4 +580,14 @@
   <string name="msg_player_error_video_renderer">Valittua videomuotoa ei tueta.\nYritä valita toinen painamalla soittimen HQ-painiketta.\nJos tämä ei auta, käynnistä laite uudelleen.</string>
   <string name="msg_player_error_audio_renderer">Valittua ääniraitaa ei tueta.\nYritä valita toinen painamalla soittimen HQ-painiketta.\nJos tämä ei auta, käynnistä laite uudelleen.</string>
   <string name="msg_player_error_subtitle_renderer">Valittua tekstitysten muotoa ei tueta.\nYritä valita toinen painamalla pitkään soittimen CC-painiketta.\nJos tämä ei auta, käynnistä laite uudelleen.</string>
+  <string name="auto_history">Automaattinen (käytä tiliasetuksia)</string>
+  <string name="remember_position_subscriptions">Muista viimeksi katsottu sijainti tilauksissa</string>
+  <string name="msg_player_unknown_error">Tuntematon virhe</string>
+  <string name="header_notifications">Ilmoitukset</string>
+  <string name="disable_search_history">Poista hakuhistoria käytöstä</string>
+  <string name="unlock_high_bitrate_formats">Avaa korkean bittinopeuden 1080p vp9-formaatit</string>
+  <string name="unlock_high_bitrate_audio_formats">Avaa korkean bittinopeuden mp4a-formaatit</string>
+  <string name="color_scheme_blue">Sininen</string>
+  <string name="disable_history">Poista historia käytöstä</string>
+  <string name="enable_history">Ota historia käyttöön</string>
 </resources>
