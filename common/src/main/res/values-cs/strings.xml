@@ -596,5 +596,5 @@
     <string name="unlock_high_bitrate_formats">Odemknout vyšší datový tok pro 1080p vp9 formáty</string>
     <string name="unlock_high_bitrate_audio_formats">Odemknout vyšší datový tok pro mp4a formáty</string>
     <string name="color_scheme_blue">Modré</string>
-    <string name="color_scheme_dark_blue">Tmavé modré</string>
+    <string name="color_scheme_dark_blue">Tmavě modré</string>
 </resources>
