@@ -330,7 +330,7 @@ public class MainUIData extends DataChangeBase {
                 "App.Theme.DarkGrey.Preferences",
                 mContext));
         mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_blue,
+                R.string.color_scheme_dark_blue,
                 "App.Theme.Leanback.Blue.Player",
                 "App.Theme.Leanback.Blue.Browse",
                 "App.Theme.Leanback.Blue.Preferences",

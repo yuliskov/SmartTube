@@ -587,4 +587,5 @@
     <string name="unlock_high_bitrate_formats">Разблокировать 1080p vp9 форматы с высоким битрейтом</string>
     <string name="unlock_high_bitrate_audio_formats">Разблокировать mp4a форматы с высоким битрейтом</string>
     <string name="color_scheme_blue">Синяя</string>
+    <string name="color_scheme_dark_blue">Тёмно-голубая</string>
 </resources>
