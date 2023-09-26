@@ -593,4 +593,8 @@
     <string name="msg_player_unknown_error">Neznámá chyba</string>
     <string name="header_notifications">Oznámení</string>
     <string name="disable_search_history">Zakázat historii vyhledávání</string>
+    <string name="unlock_high_bitrate_formats">Odemknout vyšší datový tok pro 1080p vp9 formáty</string>
+    <string name="unlock_high_bitrate_audio_formats">Odemknout vyšší datový tok pro mp4a formáty</string>
+    <string name="color_scheme_blue">Modré</string>
+    <string name="color_scheme_dark_blue">Tmavé modré</string>
 </resources>
