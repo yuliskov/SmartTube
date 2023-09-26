@@ -1603,6 +1603,11 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
 
         @Override
         public int getCount() {
+            // MOD: Fix npe in touch mode
+            if (mState == null) {
+                return mPositionDeltaInPreLayout;
+            }
+
             return mState.getItemCount() + mPositionDeltaInPreLayout;
         }
 

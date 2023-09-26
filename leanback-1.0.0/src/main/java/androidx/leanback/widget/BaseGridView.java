@@ -1009,6 +1009,9 @@ public abstract class BaseGridView extends RecyclerView {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
+        // MOD: Force enable keyboard mode (FOCUS_SCROLL_ALIGNED)
+        mLayoutManager.setFocusScrollStrategy(BaseGridView.FOCUS_SCROLL_ALIGNED);
+
         if (mOnKeyInterceptListener != null && mOnKeyInterceptListener.onInterceptKeyEvent(event)) {
             return true;
         }
@@ -1018,8 +1021,16 @@ public abstract class BaseGridView extends RecyclerView {
         return mOnUnhandledKeyListener != null && mOnUnhandledKeyListener.onUnhandledKey(event);
     }
 
+    private int mPrevAction;
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
+        // MOD: Force enable touch mode (FOCUS_SCROLL_PAGE)
+        // NOTE: Exclude clicks to avoid bugs (FOCUS_SCROLL_ALIGNED)
+        boolean isClick = event.getAction() == MotionEvent.ACTION_UP && mPrevAction == MotionEvent.ACTION_DOWN;
+        mLayoutManager.setFocusScrollStrategy(isClick ? BaseGridView.FOCUS_SCROLL_ALIGNED : BaseGridView.FOCUS_SCROLL_PAGE);
+        mPrevAction = event.getAction();
+
         if (mOnTouchInterceptListener != null) {
             if (mOnTouchInterceptListener.onInterceptTouchEvent(event)) {
                 return true;
