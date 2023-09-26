@@ -584,4 +584,12 @@
   <string name="player_auto_volume">Ajustement automatique du volume</string>
   <string name="header_shorts">Shorts</string>
   <string name="player_global_focus">Navigation continue entre les rangées de boutons du lecteur</string>
+  <string name="auto_history">Auto (utiliser les paramètres du compte)</string>
+  <string name="remember_position_subscriptions">Mémoriser la dernière position consultée dans les abonnements</string>
+  <string name="msg_player_unknown_error">Erreur inconnue</string>
+  <string name="header_notifications">Notifications</string>
+  <string name="disable_search_history">Désactiver l\'historique de recherche</string>
+  <string name="unlock_high_bitrate_formats">Débloquez les formats vp9 1080p à haut débit</string>
+  <string name="unlock_high_bitrate_audio_formats">Débloquez les formats mp4a à haut débit</string>
+  <string name="color_scheme_blue">Bleu</string>
 </resources>
