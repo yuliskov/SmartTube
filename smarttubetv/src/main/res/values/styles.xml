@@ -198,7 +198,8 @@
     <style name="App.Theme.Leanback.Blue.Player" parent="App.Theme.Leanback.Player">
         <item name="shelfBackground">@color/scheme_grey_shelf_background_dark</item>
         <!--<item name="cardDefaultBackground">@color/scheme_grey_card_background_dark</item>-->
-        <item name="cardDefaultBackground">@color/scheme_blue_background_dark</item>
+        <!--<item name="cardDefaultBackground">@color/scheme_blue_background_dark</item>-->
+        <item name="cardDefaultBackground">@color/scheme_grey_card_background_dark</item>
         <item name="android:colorAccent" tools:targetApi="21">@color/scheme_blue_background</item>
     </style>
     <style name="App.Theme.Leanback.Blue.Preferences" parent="App.Theme.Leanback.Preferences">
