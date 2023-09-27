@@ -202,6 +202,19 @@ public class ViewUtil {
         }
     }
 
+    public static void enableLeftDialog(Context context, View rootView) {
+        if (context == null || rootView == null || VERSION.SDK_INT <= 19) {
+            return;
+        }
+
+        // Usually null. Present only on parent fragment.
+        View mainContainer = rootView.findViewById(R.id.settings_preference_fragment_container);
+
+        if (mainContainer instanceof FrameLayout) {
+            ((FrameLayout.LayoutParams) mainContainer.getLayoutParams()).gravity = Gravity.START;
+        }
+    }
+
     public static void makeMonochrome(ImageView iconView) {
         ColorMatrix colorMatrix = new ColorMatrix();
         colorMatrix.setSaturation(0);

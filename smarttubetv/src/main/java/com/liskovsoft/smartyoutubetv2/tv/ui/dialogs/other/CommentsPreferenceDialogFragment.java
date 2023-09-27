@@ -11,6 +11,7 @@ import androidx.preference.DialogPreference;
 import com.bumptech.glide.Glide;
 import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiver;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.preference.LeanbackPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.ChatItemMessage;
@@ -119,6 +120,10 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
 
         if (mIsTransparent) {
             ViewUtil.enableTransparentDialog(getActivity(), view);
+        }
+
+        if (PlayerTweaksData.instance(getActivity()).isChatPlacedLeft()) {
+            ViewUtil.enableLeftDialog(getActivity(), container);
         }
 
         return view;

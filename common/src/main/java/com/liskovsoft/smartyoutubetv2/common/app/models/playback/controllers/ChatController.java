@@ -21,8 +21,8 @@ import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LiveChatController extends PlayerEventListenerHelper implements MetadataListener {
-    private static final String TAG = LiveChatController.class.getSimpleName();
+public class ChatController extends PlayerEventListenerHelper implements MetadataListener {
+    private static final String TAG = ChatController.class.getSimpleName();
     /**
      * NOTE: Don't remove duplicates! They contain different chars.
      */
