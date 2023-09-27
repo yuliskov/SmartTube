@@ -28,7 +28,8 @@ public class GridFragmentHelper {
         Resources res = context.getResources();
 
         DisplayMetrics displayMetrics = res.getDisplayMetrics();
-        int displayWidthPx = displayMetrics.widthPixels;
+        // Take into the account screen orientation (e.g. when running on phone)
+        int displayWidthPx = Math.max(displayMetrics.widthPixels, displayMetrics.heightPixels);
         float cardWidthPx = res.getDimensionPixelSize(cardWidthResId) * cardScale;
         float cardSpacingPx = res.getDimensionPixelSize(R.dimen.grid_item_horizontal_spacing);
 

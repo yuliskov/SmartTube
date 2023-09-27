@@ -171,27 +171,11 @@ public class MotherActivity extends FragmentActivity {
         getResources().getDisplayMetrics().setTo(getDisplayMetrics());
     }
 
-    //private DisplayMetrics getDisplayMetrics() {
-    //    DisplayMetrics displayMetrics = new DisplayMetrics();
-    //    getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-    //
-    //    // To adapt to resolution change (e.g. on AFR) check old width.
-    //    if (sCachedDisplayMetrics == null || sCachedDisplayMetrics.widthPixels != displayMetrics.widthPixels) {
-    //        float uiScale = MainUIData.instance(this).getUIScale();
-    //        float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
-    //        float density = DEFAULT_DENSITY / widthRatio * uiScale;
-    //        displayMetrics.density = density;
-    //        displayMetrics.scaledDensity = density;
-    //        sCachedDisplayMetrics = displayMetrics;
-    //    }
-    //
-    //    return sCachedDisplayMetrics;
-    //}
-
     private DisplayMetrics getDisplayMetrics() {
         // BUG: adapt to resolution change (e.g. on AFR)
         // Don't disable caching or you will experience weird sizes on cards in video suggestions (e.g. after exit from PIP)!
         if (sCachedDisplayMetrics == null) {
+            // NOTE: Don't replace with getResources().getDisplayMetrics(). Shows wrong metrics here!
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             float uiScale = MainUIData.instance(this).getUIScale();

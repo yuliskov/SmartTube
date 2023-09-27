@@ -465,7 +465,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 loadNext();
                 break;
             case PlayerUI.REPEAT_MODE_ONE:
-                getPlayer().setPositionMs(0);
+                getPlayer().setPositionMs(100); // fix frozen image on Android 4?
                 break;
             case PlayerUI.REPEAT_MODE_CLOSE:
                 // Close player if suggestions not shown

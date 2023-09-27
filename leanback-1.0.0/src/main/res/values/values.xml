@@ -1631,7 +1631,9 @@
     </style>
     <style name="Widget.Leanback.PlaybackControlsButtonStyle">
         <item name="android:focusable">true</item>
-        <item name="android:focusableInTouchMode">true</item>
+        <!-- MOD: Enable single click touch mode -->
+        <item name="android:focusableInTouchMode">false</item>
+        <!--<item name="android:focusableInTouchMode">true</item>-->
     </style>
     <style name="Widget.Leanback.PlaybackControlsTimeStyle">
         <item name="android:textAlignment">viewStart</item>
