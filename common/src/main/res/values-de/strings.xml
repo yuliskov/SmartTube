@@ -596,4 +596,5 @@
     <string name="unlock_high_bitrate_formats">1080p vp9-Formate mit hoher Bitrate freischalten</string>
     <string name="unlock_high_bitrate_audio_formats">mp4a-Formate mit hoher Bitrate freischalten</string>
     <string name="color_scheme_blue">Blau</string>
+    <string name="color_scheme_dark_blue">Dunkelblau</string>
 </resources>
