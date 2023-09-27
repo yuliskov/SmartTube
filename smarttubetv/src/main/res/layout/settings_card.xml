@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- MOD: Enable single click touch mode -->
+<!-- MOD: Enable single click touch mode (focusableInTouchMode=false) -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:focusableInTouchMode="false"
