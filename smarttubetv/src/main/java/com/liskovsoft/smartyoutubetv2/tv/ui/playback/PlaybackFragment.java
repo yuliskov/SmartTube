@@ -225,15 +225,19 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     public void onDispatchTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            tickle(); // show Player UI
-        }
+        applyTickle(event);
     }
 
     public void onDispatchGenericMotionEvent(MotionEvent event) {
+        applyTickle(event);
+    }
+
+    private void applyTickle(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             tickle(); // show Player UI
         }
+
+        mEventListener.onKeyDown(-1); // reset ui timer
     }
 
     public void onFinish() {
