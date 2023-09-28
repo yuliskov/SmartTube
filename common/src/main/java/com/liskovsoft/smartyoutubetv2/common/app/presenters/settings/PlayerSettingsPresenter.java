@@ -566,6 +566,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableLongSpeedList(option.isSelected()),
                 mPlayerTweaksData.isLongSpeedListEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_speed_per_channel),
+                option -> mPlayerTweaksData.enableSpeedPerChannel(option.isSelected()),
+                mPlayerTweaksData.isSpeedPerChannelEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_button_long_click),
                 option -> mPlayerTweaksData.enableButtonLongClick(option.isSelected()),
                 mPlayerTweaksData.isButtonLongClickEnabled()));

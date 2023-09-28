@@ -597,4 +597,5 @@
     <string name="unlock_high_bitrate_audio_formats">Unlock high bitrate mp4a formats</string>
     <string name="color_scheme_blue">Blue</string>
     <string name="color_scheme_dark_blue">Dark Blue</string>
+    <string name="player_speed_per_channel">Remember selected speed per each channel</string>
 </resources>
