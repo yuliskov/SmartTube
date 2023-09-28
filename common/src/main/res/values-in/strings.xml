@@ -571,4 +571,6 @@
     <string name="header_notifications">Notifikasi</string>
     <string name="disable_search_history">Nonaktifkan riwayat pencarian</string>
     <string name="unlock_high_bitrate_formats">Membuka format 1080p VP9 kecepatan bit tinggi</string>
+    <string name="color_scheme_blue">Biru</string>
+    <string name="color_scheme_dark_blue">Biru Tua</string>
 </resources>
