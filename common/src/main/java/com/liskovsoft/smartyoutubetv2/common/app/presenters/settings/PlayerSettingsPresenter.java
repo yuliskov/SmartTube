@@ -376,16 +376,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 !mGeneralData.isSettingsSectionEnabled()));
 
-        //options.add(UiOptionItem.from(getContext().getString(R.string.alt_app_icon),
-        //        option -> {
-        //            mGeneralData.enableAltAppIcon(option.isSelected());
-        //            Helpers.enableActivity(getContext(), option.isSelected() ?
-        //                    "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity" : "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivityAlt", false);
-        //            Helpers.enableActivity(getContext(), option.isSelected() ?
-        //                    "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivityAlt" : "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity", true);
-        //        },
-        //        mGeneralData.isAltAppIconEnabled()));
-
         // Disabled inside RetrofitHelper
         //options.add(UiOptionItem.from("Prefer IPv4 DNS",
         //        option -> GlobalPreferences.instance(getContext()).preferIPv4Dns(option.isSelected()),
@@ -630,18 +620,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_speed_button_old_behavior),
                 option -> mPlayerTweaksData.enableSpeedButtonOldBehavior(option.isSelected()),
                 mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()));
-
-        //OptionItem remainingTime = UiOptionItem.from(getContext().getString(R.string.player_show_remaining_time),
-        //        option -> mPlayerData.enableRemainingTime(option.isSelected()), mPlayerData.isRemainingTimeEnabled());
-        //
-        //OptionItem endingTime = UiOptionItem.from(getContext().getString(R.string.player_show_ending_time),
-        //        option -> mPlayerData.enableEndingTime(option.isSelected()), mPlayerData.isEndingTimeEnabled());
-        //
-        //remainingTime.setRadio(endingTime);
-        //endingTime.setRadio(remainingTime);
-        //
-        //options.add(remainingTime);
-        //options.add(endingTime);
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
