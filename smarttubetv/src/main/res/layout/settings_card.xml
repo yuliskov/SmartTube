@@ -2,7 +2,7 @@
 <!-- MOD: Enable single click touch mode (focusableInTouchMode=false) -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
-              android:focusableInTouchMode="false"
+              android:focusableInTouchMode="true"
               android:focusable="true"
               android:orientation="vertical"
               android:layout_width="wrap_content"
