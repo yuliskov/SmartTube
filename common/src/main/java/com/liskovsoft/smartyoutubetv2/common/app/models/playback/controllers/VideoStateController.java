@@ -305,9 +305,10 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
 
         // suppose live stream if buffering near the end
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
-        AppDialogUtil.appendSpeedDialogItems(getContext(), settingsPresenter, getPlayer(), mPlayerData);
+        settingsPresenter.appendCategory(AppDialogUtil.createSpeedListCategory(getContext(), getPlayer(), mPlayerData));
 
         settingsPresenter.appendCategory(AppDialogUtil.createRememberSpeedCategory(getContext(), mPlayerData));
+        settingsPresenter.appendCategory(AppDialogUtil.createSpeedMiscCategory(getContext(), mPlayerTweaksData));
 
         settingsPresenter.showDialog(getContext().getString(R.string.video_speed), () -> {
             State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);

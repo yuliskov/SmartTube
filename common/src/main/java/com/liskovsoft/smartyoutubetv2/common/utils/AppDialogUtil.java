@@ -51,7 +51,9 @@ public class AppDialogUtil {
     private static final int AUDIO_LANGUAGE_ID = 138;
     private static final int PLAYER_SCREEN_TIMEOUT_ID = 139;
     private static final int PLAYER_SCREEN_DIMMING_ID = 140;
-    private static final int PLAYER_REMEMBER_SPEED_ID = 141;
+    private static final int PLAYER_SPEED_LIST_ID = 141;
+    private static final int PLAYER_REMEMBER_SPEED_ID = 142;
+    private static final int PLAYER_SPEED_MISC_ID = 143;
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
@@ -601,6 +603,22 @@ public class AppDialogUtil {
                 });
     }
 
+    public static OptionCategory createSpeedListCategory(Context context, PlayerManager playbackController, PlayerData playerData) {
+        List<OptionItem> items = new ArrayList<>();
+
+        for (float speed : PlayerTweaksData.instance(context).isLongSpeedListEnabled() ? Utils.SPEED_LIST_LONG : Utils.SPEED_LIST_SHORT) {
+            items.add(UiOptionItem.from(
+                    String.valueOf(speed),
+                    optionItem -> {
+                        playerData.setSpeed(playbackController.getVideo().channelId, speed);
+                        playbackController.setSpeed(speed);
+                    },
+                    playbackController.getSpeed() == speed));
+        }
+
+        return OptionCategory.from(PLAYER_SPEED_LIST_ID, OptionCategory.TYPE_RADIO_LIST, context.getString(R.string.video_speed), items);
+    }
+
     public static OptionCategory createRememberSpeedCategory(Context context, PlayerData playerData) {
         List<OptionItem> options = new ArrayList<>();
 
@@ -627,6 +645,18 @@ public class AppDialogUtil {
         String title = context.getString(R.string.player_remember_speed);
 
         return OptionCategory.from(PLAYER_REMEMBER_SPEED_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
+    }
+
+    public static OptionCategory createSpeedMiscCategory(Context context, PlayerTweaksData playerTweaksData) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(context.getString(R.string.player_long_speed_list),
+                option -> playerTweaksData.enableLongSpeedList(option.isSelected()),
+                playerTweaksData.isLongSpeedListEnabled()));
+
+        String title = context.getString(R.string.player_other);
+
+        return OptionCategory.from(PLAYER_SPEED_MISC_ID, OptionCategory.TYPE_CHECKBOX_LIST, title, options);
     }
 
     public static void showConfirmationDialog(Context context, String title, Runnable onConfirm) {
@@ -673,21 +703,6 @@ public class AppDialogUtil {
         }
 
         dialogPresenter.appendRadioCategory(context.getString(R.string.seek_interval), options);
-    }
-
-    public static void appendSpeedDialogItems(Context context, AppDialogPresenter settingsPresenter, PlayerManager playbackController, PlayerData playerData) {
-        List<OptionItem> items = new ArrayList<>();
-
-        for (float speed : PlayerTweaksData.instance(context).isLongSpeedListEnabled() ? Utils.SPEED_LIST_LONG : Utils.SPEED_LIST_SHORT) {
-            items.add(UiOptionItem.from(
-                    String.valueOf(speed),
-                    optionItem -> {
-                        playerData.setSpeed(playbackController.getVideo().channelId, speed);
-                        playbackController.setSpeed(speed);
-                    },
-                    playbackController.getSpeed() == speed));
-        }
-        settingsPresenter.appendRadioCategory(context.getString(R.string.video_speed), items);
     }
 
     public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback) {
