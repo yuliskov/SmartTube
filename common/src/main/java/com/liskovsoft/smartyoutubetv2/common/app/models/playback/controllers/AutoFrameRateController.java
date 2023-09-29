@@ -227,25 +227,6 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
         }
     }
 
-    //private void addUiOptions() {
-    //    if (mAutoFrameRateHelper.isSupported()) {
-    //        OptionCategory afrCategory = createAutoFrameRateCategory(
-    //                getActivity(), PlayerData.instance(getActivity()),
-    //                () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick, this::onDoubleRefreshRateClick);
-    //
-    //        OptionCategory afrDelayCategory = createAutoFrameRatePauseCategory(
-    //                getActivity(), PlayerData.instance(getActivity()));
-    //
-    //        mUiManager.addCategory(afrCategory);
-    //        mUiManager.addCategory(afrDelayCategory);
-    //        mUiManager.addOnDialogHide(mApplyAfr);
-    //    } else {
-    //        mUiManager.removeCategory(AUTO_FRAME_RATE_ID);
-    //        mUiManager.removeCategory(AUTO_FRAME_RATE_DELAY_ID);
-    //        mUiManager.removeOnDialogHide(mApplyAfr);
-    //    }
-    //}
-
     // Avoid nested dialogs. They have problems with timings. So player controls may hide without user interaction.
     private void addUiOptions() {
         if (mAutoFrameRateHelper.isSupported()) {
@@ -263,21 +244,21 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
             List<OptionItem> options = new ArrayList<>();
             options.add(UiOptionItem.from(afrCategory.title, optionItem -> {
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
-                dialogPresenter.appendCheckedCategory(afrCategory.title, afrCategory.options);
+                dialogPresenter.appendCategory(afrCategory);
                 dialogPresenter.showDialog(afrCategory.title);
             }));
             options.add(UiOptionItem.from(afrPauseCategory.title, optionItem -> {
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
-                dialogPresenter.appendRadioCategory(afrPauseCategory.title, afrPauseCategory.options);
+                dialogPresenter.appendCategory(afrPauseCategory);
                 dialogPresenter.showDialog(afrPauseCategory.title);
             }));
             options.add(UiOptionItem.from(modesCategory.title, optionItem -> {
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
-                dialogPresenter.appendLongTextCategory(modesCategory.title, modesCategory.option);
+                dialogPresenter.appendCategory(modesCategory);
                 dialogPresenter.showDialog(modesCategory.title);
             }));
 
-            mUiManager.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING, getContext().getString(R.string.auto_frame_rate), options));
+            mUiManager.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING_LIST, getContext().getString(R.string.auto_frame_rate), options));
             mUiManager.addOnDialogHide(mApplyAfr); // Apply NEW Settings on dialog close
         } else {
             mUiManager.removeCategory(AUTO_FRAME_RATE_ID);
@@ -331,7 +312,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
         options.add(doubleRefreshRateOption);
         options.add(skip24RateOption);
 
-        return OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_CHECKED, title, options);
+        return OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_CHECKBOX_LIST, title, options);
     }
 
     public static OptionCategory createAutoFrameRatePauseCategory(Context context, PlayerData playerData) {
@@ -349,7 +330,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
                     pauseMs == playerData.getAfrPauseMs()));
         }
 
-        return OptionCategory.from(AUTO_FRAME_RATE_DELAY_ID, OptionCategory.TYPE_RADIO, title, options);
+        return OptionCategory.from(AUTO_FRAME_RATE_DELAY_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
     public static OptionCategory createAutoFrameRateModesCategory(Context context) {

@@ -115,27 +115,27 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
     private void appendVideoBufferCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = AppDialogUtil.createVideoBufferCategory(getContext(), mPlayerData);
-        settingsPresenter.appendRadioCategory(category.title, category.options);
+        settingsPresenter.appendCategory(category);
     }
 
     private void appendVideoPresetsCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = AppDialogUtil.createVideoPresetsCategory(getContext());
-        settingsPresenter.appendRadioCategory(category.title, category.options);
+        settingsPresenter.appendCategory(category);
     }
 
     private void appendVideoZoomCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = AppDialogUtil.createVideoZoomCategory(getContext(), mPlayerData);
-        settingsPresenter.appendRadioCategory(category.title, category.options);
+        settingsPresenter.appendCategory(category);
     }
 
     private void appendAudioLanguageCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = AppDialogUtil.createAudioLanguageCategory(getContext(), mPlayerData);
-        settingsPresenter.appendRadioCategory(category.title, category.options);
+        settingsPresenter.appendCategory(category);
     }
 
     private void appendAudioShiftCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = AppDialogUtil.createAudioShiftCategory(getContext(), mPlayerData);
-        settingsPresenter.appendRadioCategory(category.title, category.options);
+        settingsPresenter.appendCategory(category);
     }
 
     private void appendMasterVolumeCategory(AppDialogPresenter settingsPresenter) {

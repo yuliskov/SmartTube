@@ -18,8 +18,8 @@ import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceScreen;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
@@ -134,7 +134,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
 
         if (isExpandable && categories != null && categories.size() == 1) {
             OptionCategory category = categories.get(0);
-            if (category.items != null) {
+            if (category.options != null) {
                 onPreferenceDisplayDialog(fragment, mManager.createPreference(category));
             }
         } else {
@@ -326,7 +326,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
         private void addPreferences(PreferenceScreen screen) {
             if (mCategories != null) {
                 for (OptionCategory category : mCategories) {
-                    if (category.items != null) {
+                    if (category.options != null) {
                         screen.addPreference(mManager.createPreference(category));
                     }
                 }

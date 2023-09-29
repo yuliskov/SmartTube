@@ -70,12 +70,12 @@ public class HQDialogController extends PlayerEventListenerHelper {
 
         addCategoryInt(OptionCategory.from(
                 VIDEO_FORMATS_ID,
-                OptionCategory.TYPE_RADIO,
+                OptionCategory.TYPE_RADIO_LIST,
                 videoFormatsTitle,
                 UiOptionItem.from(videoFormats, this::selectFormatOption)));
         addCategoryInt(OptionCategory.from(
                 AUDIO_FORMATS_ID,
-                OptionCategory.TYPE_RADIO,
+                OptionCategory.TYPE_RADIO_LIST,
                 audioFormatsTitle,
                 UiOptionItem.from(audioFormats, this::selectFormatOption)));
     }

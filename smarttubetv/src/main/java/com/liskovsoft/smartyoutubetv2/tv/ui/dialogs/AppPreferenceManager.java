@@ -8,8 +8,8 @@ import androidx.preference.MultiSelectListPreference;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreference;
@@ -81,7 +81,7 @@ public class AppPreferenceManager {
     private Preference createLongTextPreference(OptionCategory category) {
         MultiSelectListPreference pref = new StringListPreference(mContext);
 
-        pref.setDialogMessage(category.items.get(0).getTitle());
+        pref.setDialogMessage(category.options.get(0).getTitle());
 
         initMultiSelectListPreference(category, pref);
 
@@ -91,7 +91,7 @@ public class AppPreferenceManager {
     private Preference createChatPreference(OptionCategory category) {
         ChatPreference pref = new ChatPreference(mContext);
 
-        OptionItem optionItem = category.items.get(0);
+        OptionItem optionItem = category.options.get(0);
         pref.setChatReceiver(optionItem.getChatReceiver());
 
         initDialogPreference(category, pref);
@@ -102,7 +102,7 @@ public class AppPreferenceManager {
     private Preference createCommentsPreference(OptionCategory category) {
         CommentsPreference pref = new CommentsPreference(mContext);
 
-        OptionItem optionItem = category.items.get(0);
+        OptionItem optionItem = category.options.get(0);
         pref.setCommentsReceiver(optionItem.getCommentsReceiver());
 
         initDialogPreference(category, pref);
@@ -113,8 +113,8 @@ public class AppPreferenceManager {
     public Preference createButtonPreference(OptionCategory category) {
         Preference result = null;
 
-        if (category.items.size() == 1) {
-            OptionItem item = category.items.get(0);
+        if (category.options.size() == 1) {
+            OptionItem item = category.options.get(0);
             Preference preference = new Preference(mContext);
             preference.setPersistent(false);
             preference.setTitle(item.getTitle());
@@ -132,8 +132,8 @@ public class AppPreferenceManager {
     public Preference createSwitchPreference(OptionCategory category) {
         Preference result = null;
 
-        if (category.items.size() == 1) {
-            OptionItem item = category.items.get(0);
+        if (category.options.size() == 1) {
+            OptionItem item = category.options.get(0);
             Preference preference = new SwitchPreference(mContext);
             preference.setPersistent(false);
             preference.setTitle(item.getTitle());
@@ -168,14 +168,14 @@ public class AppPreferenceManager {
     private void initSingleSelectListPreference(OptionCategory category, ListPreference pref) {
         initDialogPreference(category, pref);
 
-        ListPreferenceData prefData = createListPreferenceData(category.items);
+        ListPreferenceData prefData = createListPreferenceData(category.options);
 
         pref.setEntries(prefData.entries);
         pref.setEntryValues(prefData.values);
         pref.setValue(prefData.defaultValue);
 
         pref.setOnPreferenceChangeListener((preference, newValue) -> {
-            for (OptionItem optionItem : category.items) {
+            for (OptionItem optionItem : category.options) {
                 if (newValue.equals(optionItem.toString())) {
                     optionItem.onSelect(true);
                     break;
@@ -189,7 +189,7 @@ public class AppPreferenceManager {
     private void initMultiSelectListPreference(OptionCategory category, MultiSelectListPreference pref) {
         initDialogPreference(category, pref);
 
-        ListPreferenceData prefData = createListPreferenceData(category.items);
+        ListPreferenceData prefData = createListPreferenceData(category.options);
 
         pref.setEntries(prefData.entries);
         pref.setEntryValues(prefData.values);
@@ -198,7 +198,7 @@ public class AppPreferenceManager {
         pref.setOnPreferenceChangeListener((preference, newValue) -> {
             if (newValue instanceof Set) {
                 Set<?> values = ((Set<?>) newValue); // All checked items. That don't means that this items is pressed recently.
-                for (OptionItem item : category.items) {
+                for (OptionItem item : category.options) {
                     boolean isSelected = false;
                     for (Object value : values) {
                         isSelected = value.equals(item.toString());

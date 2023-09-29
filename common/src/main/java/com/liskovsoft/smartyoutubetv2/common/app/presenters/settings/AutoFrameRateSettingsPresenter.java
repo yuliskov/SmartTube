@@ -32,16 +32,16 @@ public class AutoFrameRateSettingsPresenter extends BasePresenter<Void> {
 
     private void appendAutoFrameRateCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = AutoFrameRateController.createAutoFrameRateCategory(getContext(), mPlayerData);
-        settingsPresenter.appendCheckedCategory(category.title, category.options);
+        settingsPresenter.appendCategory(category);
     }
 
     private void appendAutoFrameRatePauseCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = AutoFrameRateController.createAutoFrameRatePauseCategory(getContext(), mPlayerData);
-        settingsPresenter.appendRadioCategory(category.title, category.options);
+        settingsPresenter.appendCategory(category);
     }
 
     private void appendAutoFrameRateModesCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = AutoFrameRateController.createAutoFrameRateModesCategory(getContext());
-        settingsPresenter.appendLongTextCategory(category.title, category.option);
+        settingsPresenter.appendCategory(category);
     }
 }
