@@ -233,8 +233,9 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
     }
 
     private void showOrHideTitle1() {
-        if (mGridViewHolder1.getGridView().findViewHolderForAdapterPosition(mSelectedPosition1)
-                == null || mMainFragmentAdapter.getFragmentHost() == null) {
+        if (mGridViewHolder1 == null
+                || mGridViewHolder1.getGridView().findViewHolderForAdapterPosition(mSelectedPosition1) == null
+                || mMainFragmentAdapter.getFragmentHost() == null) {
             return;
         }
         if (!mGridViewHolder1.getGridView().hasPreviousViewInSameRow(mSelectedPosition1)) {

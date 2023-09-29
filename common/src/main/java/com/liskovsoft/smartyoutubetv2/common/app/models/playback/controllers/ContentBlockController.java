@@ -90,7 +90,9 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
     @Override
     public void openVideo(Video item) {
         mSkipExclude = false;
-        getPlayer().setSeekBarSegments(null); // reset colors
+        if (getPlayer() != null) {
+            getPlayer().setSeekBarSegments(null); // reset colors
+        }
     }
 
     @Override
