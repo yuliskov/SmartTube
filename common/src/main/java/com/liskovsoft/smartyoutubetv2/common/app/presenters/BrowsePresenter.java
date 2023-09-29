@@ -882,19 +882,22 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        Helpers.removeIf(mediaGroups, value -> Helpers.containsAny(
+        Helpers.removeIf(mediaGroups, value -> isFreeMoviesGroup(value) || isNewsGroup(value));
+    }
+
+    private boolean isFreeMoviesGroup(MediaGroup value) {
+        return Helpers.containsAny(
                 value.getTitle(),
                 "Primetime" // Free movies and shows row
-        ));
-        
-        //Helpers.removeIf(mediaGroups, value -> Helpers.equalsAny(
-        //        value.getTitle(),
-        //        getContext().getString(R.string.breaking_news_row_name),
-        //        getContext().getString(R.string.covid_news_row_name),
-        //        getContext().getString(R.string.primetime_shows_row_name),
-        //        getContext().getString(R.string.primetime_movies_row_name),
-        //        getContext().getString(R.string.primetime_personal_row_name)
-        //));
+        );
+    }
+
+    private boolean isNewsGroup(MediaGroup value) {
+        return Helpers.equalsAny(
+                value.getTitle(),
+                getContext().getString(R.string.breaking_news_row_name),
+                getContext().getString(R.string.covid_news_row_name)
+        );
     }
 
     private int moveToTopIfNeeded(MediaGroup mediaGroup) {
