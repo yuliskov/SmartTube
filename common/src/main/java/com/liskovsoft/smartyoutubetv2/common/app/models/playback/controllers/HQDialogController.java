@@ -183,23 +183,7 @@ public class HQDialogController extends PlayerEventListenerHelper {
 
     private void appendOptions(Map<Integer, OptionCategory> categories) {
         for (OptionCategory category : categories.values()) {
-            switch (category.type) {
-                case OptionCategory.TYPE_RADIO:
-                    mAppDialogPresenter.appendRadioCategory(category.title, category.options);
-                    break;
-                case OptionCategory.TYPE_CHECKED:
-                    mAppDialogPresenter.appendCheckedCategory(category.title, category.options);
-                    break;
-                case OptionCategory.TYPE_STRING:
-                    mAppDialogPresenter.appendStringsCategory(category.title, category.options);
-                    break;
-                case OptionCategory.TYPE_LONG_TEXT:
-                    mAppDialogPresenter.appendLongTextCategory(category.title, category.option);
-                    break;
-                case OptionCategory.TYPE_SINGLE:
-                    mAppDialogPresenter.appendSingleSwitch(category.option);
-                    break;
-            }
+            mAppDialogPresenter.appendCategory(category);
         }
     }
 }

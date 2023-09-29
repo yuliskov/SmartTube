@@ -588,5 +588,5 @@
     <string name="unlock_high_bitrate_audio_formats">Розблокувати mp4a формати з високим бітрейтом</string>
     <string name="color_scheme_blue">Блакитна</string>
     <string name="color_scheme_dark_blue">Темно-блакитна</string>
-    <string name="player_speed_per_channel">Запам\'ятати обрану швидкість для кожного каналу</string>
+    <string name="player_speed_per_channel">Для кожного каналу</string>
 </resources>

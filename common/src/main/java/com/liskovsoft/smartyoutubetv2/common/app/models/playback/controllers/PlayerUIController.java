@@ -759,19 +759,19 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     }
 
     private boolean isSubtitleEnabled() {
-        return !mPlayerData.isSubtitlesForChannelEnabled() || mPlayerData.isSubtitlesForChannelEnabled(getChannelId());
+        return !mPlayerData.isSubtitlesPerChannelEnabled() || mPlayerData.isSubtitlesPerChannelEnabled(getChannelId());
     }
 
     private void enableSubtitleForChannel(boolean enable) {
-        if (getPlayer() == null || !mPlayerData.isSubtitlesForChannelEnabled()) {
+        if (getPlayer() == null || !mPlayerData.isSubtitlesPerChannelEnabled()) {
             return;
         }
 
         String channelId = getChannelId();
         if (enable) {
-            mPlayerData.enableSubtitlesForChannel(channelId);
+            mPlayerData.enableSubtitlesPerChannel(channelId);
         } else {
-            mPlayerData.disableSubtitlesForChannel(channelId);
+            mPlayerData.disableSubtitlesPerChannel(channelId);
         }
     }
 

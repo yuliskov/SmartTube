@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
@@ -198,6 +199,26 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         // Also check that we aren't started the same view (nested dialog).
         return (ViewManager.isVisible(getView()) && getView() != null && !getView().isPaused()) ||
                 ViewManager.instance(getContext()).isViewPending(AppDialogView.class);
+    }
+
+    public void appendCategory(com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory category) {
+        switch (category.type) {
+            case com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory.TYPE_RADIO:
+                appendRadioCategory(category.title, category.options);
+                break;
+            case com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory.TYPE_CHECKED:
+                appendCheckedCategory(category.title, category.options);
+                break;
+            case com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory.TYPE_STRING:
+                appendStringsCategory(category.title, category.options);
+                break;
+            case com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory.TYPE_LONG_TEXT:
+                appendLongTextCategory(category.title, category.option);
+                break;
+            case com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory.TYPE_SINGLE:
+                appendSingleSwitch(category.option);
+                break;
+        }
     }
 
     public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {

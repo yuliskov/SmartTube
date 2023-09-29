@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
@@ -24,6 +25,7 @@ import java.util.List;
 public final class Video {
     public static final String TERTIARY_TEXT_DELIM = "•";
     public static final long MAX_DURATION_MS = 24 * 60 * 60 * 1_000;
+    private static final String OBJ_DELIM = "&vi;";
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     private static final String[] sNotPlaylistParams = new String[] {"EAIYAQ%3D%3D"};
     private static final String BLACK_PLACEHOLDER_URL = "https://via.placeholder.com/1280x720/000000/000000";
@@ -295,7 +297,7 @@ public final class Video {
             return null;
         }
 
-        String[] split = spec.split("&vi;");
+        String[] split = Helpers.split(OBJ_DELIM, spec);
 
         // 'playlistParams' backward compatibility
         if (split.length == 10) {
@@ -341,9 +343,10 @@ public final class Video {
         return result;
     }
 
+    @NonNull
     @Override
     public String toString() {
-        return String.format("%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s",
+        return Helpers.merge(OBJ_DELIM,
                 id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl,
                 YouTubeMediaService.serialize(mediaItem), playlistParams, extra, getReloadPageKey(), itemType);
     }

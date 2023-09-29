@@ -18,7 +18,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCatego
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.BaseMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
@@ -52,6 +51,7 @@ public class AppDialogUtil {
     private static final int AUDIO_LANGUAGE_ID = 138;
     private static final int PLAYER_SCREEN_TIMEOUT_ID = 139;
     private static final int PLAYER_SCREEN_DIMMING_ID = 140;
+    private static final int PLAYER_REMEMBER_SPEED_ID = 141;
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
@@ -376,8 +376,8 @@ public class AppDialogUtil {
 
     public static OptionItem createSubtitleChannelOption(Context context, PlayerData playerData) {
         return UiOptionItem.from(context.getString(R.string.subtitle_remember),
-                optionItem -> playerData.enableSubtitlesForChannel(optionItem.isSelected()),
-                playerData.isSubtitlesForChannelEnabled()
+                optionItem -> playerData.enableSubtitlesPerChannel(optionItem.isSelected()),
+                playerData.isSubtitlesPerChannelEnabled()
         );
     }
 
@@ -601,6 +601,34 @@ public class AppDialogUtil {
                 });
     }
 
+    public static OptionCategory createRememberSpeedCategory(Context context, PlayerData playerData) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(context.getString(R.string.player_remember_speed_none),
+                optionItem -> {
+                    playerData.enableAllSpeed(false);
+                    playerData.enableSpeedPerVideo(false);
+                    playerData.enableSpeedPerChannel(false);
+                },
+                !playerData.isAllSpeedEnabled() && !playerData.isSpeedPerVideoEnabled()));
+
+        options.add(UiOptionItem.from(context.getString(R.string.player_remember_speed_all),
+                optionItem -> playerData.enableAllSpeed(true),
+                playerData.isAllSpeedEnabled()));
+
+        options.add(UiOptionItem.from(context.getString(R.string.player_remember_speed_each),
+                optionItem -> playerData.enableSpeedPerVideo(true),
+                playerData.isSpeedPerVideoEnabled()));
+
+        options.add(UiOptionItem.from(context.getString(R.string.player_speed_per_channel),
+                option -> playerData.enableSpeedPerChannel(option.isSelected()),
+                playerData.isSpeedPerChannelEnabled()));
+
+        String title = context.getString(R.string.player_remember_speed);
+
+        return OptionCategory.from(PLAYER_REMEMBER_SPEED_ID, OptionCategory.TYPE_RADIO, title, options);
+    }
+
     public static void showConfirmationDialog(Context context, String title, Runnable onConfirm) {
         showConfirmationDialog(context, title, onConfirm, () -> {});
     }
@@ -654,7 +682,7 @@ public class AppDialogUtil {
             items.add(UiOptionItem.from(
                     String.valueOf(speed),
                     optionItem -> {
-                        playerData.setSpeed(speed);
+                        playerData.setSpeed(playbackController.getVideo().channelId, speed);
                         playbackController.setSpeed(speed);
                     },
                     playbackController.getSpeed() == speed));

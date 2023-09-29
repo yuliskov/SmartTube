@@ -174,24 +174,9 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendRememberSpeedCategory(AppDialogPresenter settingsPresenter) {
-        List<OptionItem> options = new ArrayList<>();
+        OptionCategory category = AppDialogUtil.createRememberSpeedCategory(getContext(), mPlayerData);
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_remember_speed_none),
-                optionItem -> {
-                    mPlayerData.enableRememberSpeed(false);
-                    mPlayerData.enableRememberSpeedEach(false);
-                },
-                !mPlayerData.isRememberSpeedEnabled() && !mPlayerData.isRememberSpeedEachEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_remember_speed_all),
-                optionItem -> mPlayerData.enableRememberSpeed(true),
-                mPlayerData.isRememberSpeedEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_remember_speed_each),
-                optionItem -> mPlayerData.enableRememberSpeedEach(true),
-                mPlayerData.isRememberSpeedEachEnabled()));
-
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_remember_speed), options);
+        settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendScreenOffTimeoutCategory(AppDialogPresenter settingsPresenter) {
@@ -555,10 +540,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_long_speed_list),
                 option -> mPlayerTweaksData.enableLongSpeedList(option.isSelected()),
                 mPlayerTweaksData.isLongSpeedListEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_speed_per_channel),
-                option -> mPlayerTweaksData.enableSpeedPerChannel(option.isSelected()),
-                mPlayerTweaksData.isSpeedPerChannelEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_button_long_click),
                 option -> mPlayerTweaksData.enableButtonLongClick(option.isSelected()),

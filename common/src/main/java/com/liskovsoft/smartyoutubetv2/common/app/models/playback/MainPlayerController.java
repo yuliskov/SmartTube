@@ -355,13 +355,13 @@ public class MainPlayerController implements PlayerEventListener {
     }
 
     @Override
-    public void onVideoSpeedClicked(boolean enabled) {
-        process(listener -> listener.onVideoSpeedClicked(enabled));
+    public void onSpeedClicked(boolean enabled) {
+        process(listener -> listener.onSpeedClicked(enabled));
     }
 
     @Override
-    public void onVideoSpeedLongClicked(boolean enabled) {
-        process(listener -> listener.onVideoSpeedLongClicked(enabled));
+    public void onSpeedLongClicked(boolean enabled) {
+        process(listener -> listener.onSpeedLongClicked(enabled));
     }
 
     @Override

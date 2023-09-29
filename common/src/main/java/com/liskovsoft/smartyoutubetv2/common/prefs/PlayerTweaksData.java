@@ -86,7 +86,6 @@ public class PlayerTweaksData {
     private boolean mIsPlayerGlobalFocusEnabled;
     private boolean mIsUnsafeAudioFormatsEnabled;
     private boolean mIsHighBitrateFormatsUnlocked;
-    private boolean mIsSpeedPerChannelEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -368,15 +367,6 @@ public class PlayerTweaksData {
         return mIsLongSpeedListEnabled;
     }
 
-    public void enableSpeedPerChannel(boolean enable) {
-        mIsSpeedPerChannelEnabled = enable;
-        persistData();
-    }
-
-    public boolean isSpeedPerChannelEnabled() {
-        return mIsSpeedPerChannelEnabled;
-    }
-
     public void unlockAllFormats(boolean unlock) {
         mUnlockAllFormats = unlock;
         persistData();
@@ -556,7 +546,6 @@ public class PlayerTweaksData {
         mIsPlayerGlobalFocusEnabled = Helpers.parseBoolean(split, 41, true);
         mIsUnsafeAudioFormatsEnabled = Helpers.parseBoolean(split, 42, false);
         mIsHighBitrateFormatsUnlocked = Helpers.parseBoolean(split, 43, false);
-        mIsSpeedPerChannelEnabled = Helpers.parseBoolean(split, 44, false);
 
         updateDefaultValues();
     }
@@ -573,8 +562,8 @@ public class PlayerTweaksData {
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
-                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked, mIsSpeedPerChannelEnabled
-        ));
+                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked
+                ));
     }
 
     private void updateDefaultValues() {

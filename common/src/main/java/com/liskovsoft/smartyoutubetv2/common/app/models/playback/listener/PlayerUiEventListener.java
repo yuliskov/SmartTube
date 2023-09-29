@@ -20,8 +20,8 @@ public interface PlayerUiEventListener {
     void onSubtitleLongClicked(boolean enabled);
     void onPlaylistAddClicked();
     void onDebugInfoClicked(boolean enabled);
-    void onVideoSpeedClicked(boolean enabled);
-    void onVideoSpeedLongClicked(boolean enabled);
+    void onSpeedClicked(boolean enabled);
+    void onSpeedLongClicked(boolean enabled);
     void onSeekIntervalClicked();
     void onChatClicked(boolean enabled);
     void onChatLongClicked(boolean enabled);
