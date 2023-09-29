@@ -544,7 +544,11 @@ public class PlayerData extends DataChangeBase {
             speed = mSpeeds.get(channelId);
         }
 
-        return speed != null ? speed.speed : mSpeed;
+        if (speed != null) {
+            mSpeed = speed.speed;
+        }
+
+        return mSpeed;
     }
 
     public void setLastSpeed(float speed) {

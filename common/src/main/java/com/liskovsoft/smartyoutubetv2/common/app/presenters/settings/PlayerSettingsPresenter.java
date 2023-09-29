@@ -48,6 +48,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendVideoPresetsCategory(settingsPresenter);
         appendVideoBufferCategory(settingsPresenter);
         appendVideoZoomCategory(settingsPresenter);
+        appendVideoSpeedCategory(settingsPresenter);
         appendAudioLanguageCategory(settingsPresenter);
         appendAudioShiftCategory(settingsPresenter);
         appendMasterVolumeCategory(settingsPresenter);
@@ -57,7 +58,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendSeekTypeCategory(settingsPresenter);
         appendSeekingPreviewCategory(settingsPresenter);
         AppDialogUtil.appendSeekIntervalDialogItems(getContext(), settingsPresenter, mPlayerData, false);
-        appendRememberSpeedCategory(settingsPresenter);
+        //appendRememberSpeedCategory(settingsPresenter);
         appendScreenOffTimeoutCategory(settingsPresenter);
         appendEndingTimeCategory(settingsPresenter);
         appendPixelRatioCategory(settingsPresenter);
@@ -177,6 +178,16 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         OptionCategory category = AppDialogUtil.createRememberSpeedCategory(getContext(), mPlayerData);
 
         settingsPresenter.appendRadioCategory(category.title, category.options);
+    }
+
+    private void appendVideoSpeedCategory(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.video_speed), optionItem -> {
+            AppDialogPresenter settingsPresenter2 = AppDialogPresenter.instance(getContext());
+            settingsPresenter2.appendCategory(AppDialogUtil.createSpeedListCategory(getContext(), null, mPlayerData));
+            settingsPresenter2.appendCategory(AppDialogUtil.createRememberSpeedCategory(getContext(), mPlayerData));
+            settingsPresenter2.appendCategory(AppDialogUtil.createSpeedMiscCategory(getContext(), mPlayerTweaksData));
+            settingsPresenter2.showDialog(getContext().getString(R.string.video_speed));
+        }));
     }
 
     private void appendScreenOffTimeoutCategory(AppDialogPresenter settingsPresenter) {
@@ -537,9 +548,9 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableSectionPlaylist(option.isSelected()),
                 mPlayerTweaksData.isSectionPlaylistEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_long_speed_list),
-                option -> mPlayerTweaksData.enableLongSpeedList(option.isSelected()),
-                mPlayerTweaksData.isLongSpeedListEnabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.player_long_speed_list),
+        //        option -> mPlayerTweaksData.enableLongSpeedList(option.isSelected()),
+        //        mPlayerTweaksData.isLongSpeedListEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_button_long_click),
                 option -> mPlayerTweaksData.enableButtonLongClick(option.isSelected()),

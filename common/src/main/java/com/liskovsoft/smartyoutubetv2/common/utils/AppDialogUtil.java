@@ -610,10 +610,14 @@ public class AppDialogUtil {
             items.add(UiOptionItem.from(
                     String.valueOf(speed),
                     optionItem -> {
-                        playerData.setSpeed(playbackController.getVideo().channelId, speed);
-                        playbackController.setSpeed(speed);
+                        if (playbackController != null) {
+                            playerData.setSpeed(playbackController.getVideo().channelId, speed);
+                            playbackController.setSpeed(speed);
+                        } else {
+                            playerData.setSpeed(speed);
+                        }
                     },
-                    playbackController.getSpeed() == speed));
+                    (playbackController != null ? playbackController.getSpeed() : playerData.getSpeed()) == speed));
         }
 
         return OptionCategory.from(PLAYER_SPEED_LIST_ID, OptionCategory.TYPE_RADIO_LIST, context.getString(R.string.video_speed), items);
