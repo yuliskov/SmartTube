@@ -27,9 +27,11 @@ import android.widget.TextView.OnEditorActionListener;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
+import androidx.leanback.R;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -306,6 +308,9 @@ public class GuidedActionAdapter extends RecyclerView.Adapter {
         v.setOnKeyListener(mActionOnKeyListener);
         v.setOnClickListener(mOnClickListener);
         v.setOnFocusChangeListener(mActionOnFocusListener);
+
+        // MOD: VoiceView fix
+        Helpers.describedBy(v, R.id.guidance_title);
 
         setupListeners(vh.getEditableTitleView());
         setupListeners(vh.getEditableDescriptionView());

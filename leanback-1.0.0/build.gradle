@@ -39,4 +39,6 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.fragment:fragment:1.1.0'
     implementation 'androidx.media:media:1.2.0'
+
+    implementation project(':sharedutils')
 }
