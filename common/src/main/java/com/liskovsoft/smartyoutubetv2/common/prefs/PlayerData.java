@@ -542,6 +542,7 @@ public class PlayerData extends DataChangeBase {
 
         if (isSpeedPerChannelEnabled() && channelId != null) {
             speed = mSpeeds.get(channelId);
+            mSpeed = 1.0f; // reset speed if the channel not found
         }
 
         if (speed != null) {

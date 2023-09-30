@@ -159,7 +159,9 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         }
 
         // Restore speed on LIVE end
-        restoreSpeed();
+        if (isLiveThreshold()) {
+            restoreSpeed();
+        }
     }
 
     @Override
@@ -249,26 +251,11 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         showHideScreensaver(true);
 
         // Restore speed on LIVE end or after seek
-        restoreSpeed();
+        if (isLiveThreshold()) {
+            restoreSpeed();
+        }
 
         Utils.postDelayed(mStreamEndCheck, 10_000);
-    }
-
-    @Override
-    public void onSeekEnd() {
-        // Scenario: user opens ui and does some seeking
-        // NOTE: dangerous: there's possibility of simultaneous seeks (e.g. when sponsor block is enabled)
-        //saveState();
-    }
-
-    @Override
-    public void onControlsShown(boolean shown) {
-        // NOTE: bug: current position saving to wrong video id. Explanation below.
-        // Bug in casting: current video doesn't match currently loaded one into engine.
-        //if (shown) {
-        //    // Scenario: user clicked on channel button
-        //    saveState();
-        //}
     }
 
     @Override

@@ -311,6 +311,8 @@ public class GuidedActionAdapter extends RecyclerView.Adapter {
 
         // MOD: VoiceView fix
         Helpers.describedBy(v, R.id.guidance_title);
+        // Or should I add description instead?
+        //v.setContentDescription(theCode);
 
         setupListeners(vh.getEditableTitleView());
         setupListeners(vh.getEditableDescriptionView());

@@ -15,6 +15,7 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -370,7 +371,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     @Override
     public void setSpeed(float speed) {
-        if (mPlayer != null && speed > 0) {
+        if (mPlayer != null && speed > 0 && !Helpers.floatEquals(speed, getSpeed())) {
             mPlayer.setPlaybackParameters(new PlaybackParameters(speed, mPlayer.getPlaybackParameters().pitch));
             mCurrentSpeed = speed; // NOTE: backup speed in case params not applied (playback is paused)
 
