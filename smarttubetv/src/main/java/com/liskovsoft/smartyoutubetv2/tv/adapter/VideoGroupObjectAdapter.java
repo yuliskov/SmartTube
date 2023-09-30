@@ -18,22 +18,22 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
 
     public VideoGroupObjectAdapter(VideoGroup videoGroup, Presenter presenter) {
         super(presenter);
-        mVideoItems = new ArrayList<>();
-        //mVideoItems = new ArrayList<Video>() {
-        //    @Override
-        //    public boolean addAll(@NonNull Collection<? extends Video> c) {
-        //        // TODO: remove the hack someday.
-        //        // Dirty hack for avoiding group duplication.
-        //        // Duplicated items suddenly appeared in Home and Subscriptions.
-        //
-        //        // Another alt method.
-        //        if (size() > 0 && size() < 30) {
-        //            Helpers.removeIf(c, this::contains);
-        //        }
-        //
-        //        return super.addAll(c);
-        //    }
-        //};
+        //mVideoItems = new ArrayList<>();
+        mVideoItems = new ArrayList<Video>() {
+            @Override
+            public boolean addAll(@NonNull Collection<? extends Video> c) {
+                // TODO: remove the hack someday.
+                // Dirty hack for avoiding group duplication.
+                // Duplicated items suddenly appeared in Home, Subscriptions and History.
+
+                // Another alt method.
+                if (size() > 0 && size() < 30) {
+                    Helpers.removeIf(c, this::contains);
+                }
+
+                return super.addAll(c);
+            }
+        };
 
         if (videoGroup != null) {
             append(videoGroup);
