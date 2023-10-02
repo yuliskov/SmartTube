@@ -2,10 +2,13 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
 import com.liskovsoft.smartyoutubetv2.common.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AppPrefs extends SharedPreferencesBase {
@@ -17,12 +20,14 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
     private static final String WEB_PROXY_URI = "web_proxy_uri";
     private static final String WEB_PROXY_ENABLED = "web_proxy_enabled";
-    private static final String OPENVPN_CONFIG_URI = "openvpn_config_uri";
-    private static final String OPENVPN_ENABLED = "openvpn_enabled";
-    private static final String ANTIZAPRET_PROFILE = "https://antizapret.prostovpn.org/antizapret-tcp.ovpn";
-    private static final String ZABORONA_PROFILE = "https://zaborona.help/openvpn-client-config/zaborona-help_maxroutes.ovpn";
     private String mBootResolution;
     private final Map<String, Integer> mDataHashes = new HashMap<>();
+    private final List<ProfileChangeListener> mListeners = new ArrayList<>();
+    private String mProfileName;
+
+    public interface ProfileChangeListener {
+        void onProfileChanged();
+    }
 
     private AppPrefs(Context context) {
         super(context, R.xml.app_prefs);
@@ -60,6 +65,17 @@ public class AppPrefs extends SharedPreferencesBase {
         putString(STATE_UPDATER_DATA, data);
     }
 
+    public void setProfileData(String key, String data) {
+        setData(getProfileKey(key), data);
+    }
+
+    public String getProfileData(String key) {
+        String data = getData(getProfileKey(key));
+
+        // Fallback to non-profile settings
+        return data != null ? data : getData(key);
+    }
+
     public void setData(String key, String data) {
         if (checkData(key, data)) {
             putString(key, data);
@@ -87,20 +103,22 @@ public class AppPrefs extends SharedPreferencesBase {
         putBoolean(WEB_PROXY_ENABLED, enabled);
     }
 
-    public String getOpenVPNConfigUri() {
-        return getString(OPENVPN_CONFIG_URI, ANTIZAPRET_PROFILE);
+    public void changeProfile(String profileName) {
+        mProfileName = profileName;
+
+        for (ProfileChangeListener listener : mListeners) {
+            listener.onProfileChanged();
+        }
     }
 
-    public void setOpenVPNConfigUri(String uri) {
-        putString(OPENVPN_CONFIG_URI, uri);
+    public void addListener(ProfileChangeListener listener) {
+        if (!mListeners.contains(listener)) {
+            mListeners.add(listener);
+        }
     }
 
-    public boolean isOpenVPNEnabled() {
-        return getBoolean(OPENVPN_ENABLED, false);
-    }
-
-    public void setOpenVPNEnabled(boolean enabled) {
-        putBoolean(OPENVPN_ENABLED, enabled);
+    public void removeListener(ProfileChangeListener listener) {
+        mListeners.remove(listener);
     }
 
     /**
@@ -117,5 +135,13 @@ public class AppPrefs extends SharedPreferencesBase {
         mDataHashes.put(key, newHashCode);
 
         return true;
+    }
+
+    private String getProfileKey(String key) {
+        if (!TextUtils.isEmpty(mProfileName)) {
+            key = mProfileName + "_" + key;
+        }
+
+        return key;
     }
 }
