@@ -241,6 +241,11 @@ public class MainPlayerController implements PlayerEventListener {
     }
 
     @Override
+    public void onSpeedChanged(float speed) {
+        process(listener -> listener.onSpeedChanged(speed));
+    }
+
+    @Override
     public void onPlayEnd() {
         process(PlayerEventListener::onPlayEnd);
     }

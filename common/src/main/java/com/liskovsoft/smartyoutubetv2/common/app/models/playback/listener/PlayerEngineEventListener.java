@@ -34,6 +34,7 @@ public interface PlayerEngineEventListener {
     void onPlayEnd();
     void onBuffering();
     void onSeekEnd();
+    void onSpeedChanged(float speed);
     void onSourceChanged(Video item);
     void onVideoLoaded(Video item);
     void onEngineInitialized();

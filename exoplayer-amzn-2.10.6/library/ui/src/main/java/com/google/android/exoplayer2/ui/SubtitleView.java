@@ -87,6 +87,12 @@ public final class SubtitleView extends View implements TextOutput {
    * @param cues The cues to display, or null to clear the cues.
    */
   public void setCues(@Nullable List<Cue> cues) {
+    // MOD: fix overlapped subs
+    // All cues are rendered simultaneously, so remain only one of them
+    if (cues != null && cues.size() > 1) {
+      cues = cues.subList(cues.size() - 1, cues.size());
+    }
+
     if (this.cues == cues) {
       return;
     }

@@ -153,6 +153,11 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
+    public void onSpeedChanged(float speed) {
+        // NOP
+    }
+
+    @Override
     public void onPlayEnd() {
         // NOP
     }

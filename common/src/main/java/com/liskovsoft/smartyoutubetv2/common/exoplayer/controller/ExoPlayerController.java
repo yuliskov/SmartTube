@@ -377,6 +377,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
             mTrackFormatter.setSpeed(speed);
             setQualityInfo(mTrackFormatter.getQualityLabel());
+            mEventListener.onSpeedChanged(speed);
         }
     }
 

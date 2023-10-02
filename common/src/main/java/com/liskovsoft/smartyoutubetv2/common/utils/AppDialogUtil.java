@@ -611,7 +611,7 @@ public class AppDialogUtil {
                     String.valueOf(speed),
                     optionItem -> {
                         if (playbackController != null) {
-                            playerData.setSpeed(playbackController.getVideo().channelId, speed);
+                            //playerData.setSpeed(playbackController.getVideo().channelId, speed);
                             playbackController.setSpeed(speed);
                         } else {
                             playerData.setSpeed(speed);

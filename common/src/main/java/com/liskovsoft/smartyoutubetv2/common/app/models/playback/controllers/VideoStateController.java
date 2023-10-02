@@ -159,9 +159,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         }
 
         // Restore speed on LIVE end
-        if (isLiveThreshold()) {
-            restoreSpeed();
-        }
+        restoreSpeed();
     }
 
     @Override
@@ -251,9 +249,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         showHideScreensaver(true);
 
         // Restore speed on LIVE end or after seek
-        if (isLiveThreshold()) {
-            restoreSpeed();
-        }
+        restoreSpeed();
 
         Utils.postDelayed(mStreamEndCheck, 10_000);
     }
@@ -267,6 +263,11 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     @Override
     public void onViewPaused() {
         persistState();
+    }
+
+    @Override
+    public void onSpeedChanged(float speed) {
+        mPlayerData.setSpeed(getVideo().channelId, speed);
     }
 
     @Override
@@ -294,8 +295,8 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
         settingsPresenter.appendCategory(AppDialogUtil.createSpeedListCategory(getContext(), getPlayer(), mPlayerData));
 
-        settingsPresenter.appendCategory(AppDialogUtil.createRememberSpeedCategory(getContext(), mPlayerData));
-        settingsPresenter.appendCategory(AppDialogUtil.createSpeedMiscCategory(getContext(), mPlayerTweaksData));
+        //settingsPresenter.appendCategory(AppDialogUtil.createRememberSpeedCategory(getContext(), mPlayerData));
+        //settingsPresenter.appendCategory(AppDialogUtil.createSpeedMiscCategory(getContext(), mPlayerTweaksData));
 
         settingsPresenter.showDialog(getContext().getString(R.string.video_speed), () -> {
             State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
@@ -504,7 +505,10 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
             getPlayer().setSpeed(1.0f);
         } else {
             State state = mStateService.getByVideoId(item.videoId);
-            getPlayer().setSpeed(state != null && mPlayerData.isSpeedPerVideoEnabled() ? state.speed : mPlayerData.getSpeed(item.channelId));
+            getPlayer().setSpeed(
+                    state != null && mPlayerData.isSpeedPerVideoEnabled() ? state.speed :
+                            item.channelId != null ? mPlayerData.getSpeed(item.channelId) : 1.0f
+            );
         }
     }
 
