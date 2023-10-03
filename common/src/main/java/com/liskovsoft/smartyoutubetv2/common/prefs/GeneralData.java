@@ -9,6 +9,7 @@ import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.utils.HashList;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class GeneralData {
+public class GeneralData implements ProfileChangeListener {
     public static final int SCREENSAVER_TIMEOUT_NEVER = 0;
     private static final String GENERAL_DATA = "general_data";
     public static final int EXIT_NONE = 0;
@@ -108,6 +109,7 @@ public class GeneralData {
     private GeneralData(Context context) {
         mContext = context;
         mPrefs = AppPrefs.instance(context);
+        mPrefs.addListener(this);
         initSections();
         restoreState();
     }
@@ -774,7 +776,7 @@ public class GeneralData {
     }
 
     private void restoreState() {
-        String data = mPrefs.getData(GENERAL_DATA);
+        String data = mPrefs.getProfileData(GENERAL_DATA);
 
         String[] split = Helpers.splitObjectLegacy(data);
 
@@ -880,7 +882,7 @@ public class GeneralData {
         }
         String playlistOrder = Helpers.mergeArray(playlistOrderPairs.toArray());
         // Zero index is skipped. Selected sections were there.
-        mPrefs.setData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
+        mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
                 mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems, mIsHideShortsFromSubscriptionsEnabled,
                 mIsRemapFastForwardToNextEnabled, null,
                 mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
@@ -900,5 +902,10 @@ public class GeneralData {
         }
 
         return item.extra == -1 ? item.hashCode() : item.extra;
+    }
+
+    @Override
+    public void onProfileChanged() {
+        restoreState();
     }
 }

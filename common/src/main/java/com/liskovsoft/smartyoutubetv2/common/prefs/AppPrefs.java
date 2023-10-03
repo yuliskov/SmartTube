@@ -113,7 +113,11 @@ public class AppPrefs extends SharedPreferencesBase {
 
     public void addListener(ProfileChangeListener listener) {
         if (!mListeners.contains(listener)) {
-            mListeners.add(listener);
+            if (listener instanceof GeneralData) {
+                mListeners.add(0, listener);
+            } else {
+                mListeners.add(listener);
+            }
         }
     }
 
