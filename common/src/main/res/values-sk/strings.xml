@@ -597,4 +597,5 @@
     <string name="unlock_high_bitrate_audio_formats">Odomknúť formáty mp4a s vysokým dátovým tokom</string>
     <string name="color_scheme_blue">Modrá</string>
     <string name="color_scheme_dark_blue">Tmavo-modrá</string>
+    <string name="player_speed_per_channel">Pre každý kanál</string>
 </resources>
