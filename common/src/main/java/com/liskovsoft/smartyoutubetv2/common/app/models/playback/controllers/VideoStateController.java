@@ -505,9 +505,10 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
             getPlayer().setSpeed(1.0f);
         } else {
             State state = mStateService.getByVideoId(item.videoId);
+            float speed = mPlayerData.getSpeed(item.channelId);
             getPlayer().setSpeed(
                     state != null && mPlayerData.isSpeedPerVideoEnabled() ? state.speed :
-                            item.channelId != null ? mPlayerData.getSpeed(item.channelId) : 1.0f
+                            mPlayerData.isAllSpeedEnabled() || item.channelId != null ? speed : 1.0f
             );
         }
     }

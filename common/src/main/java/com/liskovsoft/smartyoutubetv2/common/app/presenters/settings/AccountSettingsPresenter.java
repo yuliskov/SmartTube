@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
 import java.util.ArrayList;
@@ -168,8 +169,10 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void selectAccount(Account account) {
+        AppPrefs.instance(getContext()).selectAccount(account);
         mMediaServiceManager.getSingInService().selectAccount(account);
         ExoMediaSourceFactory.unhold();
+        //BrowsePresenter.instance(getContext()).onViewInitialized(); // reset state
         BrowsePresenter.instance(getContext()).refresh(false);
     }
 

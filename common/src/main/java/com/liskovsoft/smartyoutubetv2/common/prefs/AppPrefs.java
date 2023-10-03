@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
+import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
 import com.liskovsoft.smartyoutubetv2.common.R;
 
@@ -103,7 +104,11 @@ public class AppPrefs extends SharedPreferencesBase {
         putBoolean(WEB_PROXY_ENABLED, enabled);
     }
 
-    public void changeProfile(String profileName) {
+    public void selectAccount(Account account) {
+        selectProfile(account != null && account.getName() != null ? account.getName().replace(" ", "_") : null);
+    }
+
+    private void selectProfile(String profileName) {
         mProfileName = profileName;
 
         for (ProfileChangeListener listener : mListeners) {
@@ -114,7 +119,7 @@ public class AppPrefs extends SharedPreferencesBase {
     public void addListener(ProfileChangeListener listener) {
         if (!mListeners.contains(listener)) {
             if (listener instanceof GeneralData) {
-                mListeners.add(0, listener);
+                mListeners.add(0, listener); // data classes should be called before regular listeners
             } else {
                 mListeners.add(listener);
             }
