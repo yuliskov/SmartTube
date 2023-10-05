@@ -44,7 +44,7 @@
     <string name="dialog_add_to_playlist">Aggiungi/Rimuovi dalla playlist</string>
     <string name="msg_signed_users_only">Solo utenti registrati</string>
     <string name="msg_cant_load_content">Impossibile caricare i contenuti.\n1) Controlla la data e l\'ora sul dispositivo.\n2) Controlla la connessione di rete.\n3) Controlla le impostazioni del proxy.\n4) Prova ad accedere al tuo account.\n5) Forse non c\'è niente qui dentro.</string>
-    <string name="title_video_presets">Preimpostazioni video</string>
+    <string name="title_video_presets">Preset video</string>
     <string name="settings_accounts">Account</string>
     <string name="settings_left_panel">Modifica categorie</string>
     <string name="settings_themes">Temi</string>
@@ -418,7 +418,7 @@
     <string name="dialog_add_remove_from">Aggiungi/Rimuovi da %s</string>
     <string name="lb_playback_controls_skip_next">Salta al prossimo</string>
     <string name="lb_playback_controls_skip_previous">Salta al precedente o ritorna alla posizione di partenza</string>
-    <string name="alt_presets_behavior">Comportamento preimpostazioni alternative (limita la larghezza di banda))</string>
+    <string name="alt_presets_behavior">Comportamento preset alternativi (limita la larghezza di banda)</string>
     <string name="alt_presets_behavior_desc">L\'app cercherà di mantenere la larghezza di banda corrispondente al preset selezionato invece di corrispondere tra risoluzione, fps e codec.</string>
     <string name="sleep_timer">Timer di spegnimento (se il telecomando non viene utilizzato per un\'ora)</string>
     <string name="sleep_timer_desc">Metti in pausa la riproduzione se l\'utente non ha utilizzato il telecomando per un\'ora</string>
@@ -593,4 +593,9 @@
     <string name="msg_player_unknown_error">Errore sconosciuto</string>
     <string name="header_notifications">Notifiche</string>
     <string name="disable_search_history">Disabilita la Cronologia delle ricerche</string>
+    <string name="unlock_high_bitrate_formats">Sblocca formati vp9 1080p ad alto bitrate</string>
+    <string name="unlock_high_bitrate_audio_formats">Sblocca formati mp4a 1080p ad alto bitrate</string>
+    <string name="color_scheme_blue">Blu</string>
+    <string name="color_scheme_dark_blue">Blu scuro</string>
+    <string name="player_speed_per_channel">Per ciascun canale</string>
 </resources>
