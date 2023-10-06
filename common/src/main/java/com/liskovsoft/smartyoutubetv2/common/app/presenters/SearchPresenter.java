@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.MediaServiceSearchTagProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
@@ -65,6 +66,10 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     @Override
     public void onViewInitialized() {
+        if (getView() != null) {
+            getView().setTagsProvider(new MediaServiceSearchTagProvider(!mSearchData.isPopularSearchesDisabled()));
+        }
+
         startSearchInt();
     }
 

@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,14 @@ public class AppPrefs extends SharedPreferencesBase {
 
     private AppPrefs(Context context) {
         super(context, R.xml.app_prefs);
+
+        //initProfiles();
+    }
+
+    private void initProfiles() {
+        YouTubeSignInService.instance().setOnChange(
+                () -> selectAccount(YouTubeSignInService.instance().getSelectedAccount())
+        );
     }
 
     public static AppPrefs instance(Context context) {
@@ -104,7 +113,7 @@ public class AppPrefs extends SharedPreferencesBase {
         putBoolean(WEB_PROXY_ENABLED, enabled);
     }
 
-    public void selectAccount(Account account) {
+    private void selectAccount(Account account) {
         selectProfile(account != null && account.getName() != null ? account.getName().replace(" ", "_") : null);
     }
 

@@ -121,10 +121,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     
     protected abstract void onItemViewClicked(Object item);
 
-    //protected void setItemResultsAdapter(ObjectAdapter adapter) {
-    //    mItemResultsAdapter = adapter;
-    //}
-
     protected void setSearchTagsProvider(SearchTagsProvider provider) {
         mSearchTagsProvider = provider;
     }
@@ -200,6 +196,10 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     }
 
     private void performTagSearch(TagAdapter adapter) {
+        if (mSearchTagsProvider == null) {
+            return;
+        }
+
         String query = adapter.getAdapterOptions().get(PaginationAdapter.KEY_TAG);
         mSearchTagsProvider.search(query, results -> {
             adapter.addAllItems(results);

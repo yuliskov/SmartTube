@@ -21,6 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.proxy.WebProxyDialog;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -565,12 +566,14 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     MainUIData.MENU_ITEM_STREAM_REMINDER | MainUIData.MENU_ITEM_SAVE_PLAYLIST;
 
         PlayerTweaksData tweaksData = PlayerTweaksData.instance(getContext());
+        SearchData searchData = SearchData.instance(getContext());
 
         // Remove all
         mMainUIData.disableTopButton(Integer.MAX_VALUE);
         tweaksData.disablePlayerButton(Integer.MAX_VALUE);
         mMainUIData.disableMenuItem(Integer.MAX_VALUE);
         BrowsePresenter.instance(getContext()).enableAllSections(false);
+        searchData.disablePopularSearches(true);
 
         if (enable) {
             // apply child tweaks
@@ -590,6 +593,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             BrowsePresenter.instance(getContext()).enableAllSections(true);
             tweaksData.disableSuggestions(false);
             mPlayerData.setRepeatMode(PlayerUI.REPEAT_MODE_ALL);
+            searchData.disablePopularSearches(false);
         }
     }
 

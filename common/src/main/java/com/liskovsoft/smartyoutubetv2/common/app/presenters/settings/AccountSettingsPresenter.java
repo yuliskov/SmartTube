@@ -169,11 +169,10 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void selectAccount(Account account) {
-        AppPrefs.instance(getContext()).selectAccount(account);
         mMediaServiceManager.getSingInService().selectAccount(account);
         ExoMediaSourceFactory.unhold();
-        //BrowsePresenter.instance(getContext()).onViewInitialized(); // reset state
         BrowsePresenter.instance(getContext()).refresh(false);
+        //BrowsePresenter.instance(getContext()).onViewInitialized(); // reset state
     }
 
     private void removeAccount(Account account) {

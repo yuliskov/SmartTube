@@ -55,6 +55,10 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_popular_searches),
+                option -> mSearchData.disablePopularSearches(option.isSelected()),
+                mSearchData.isPopularSearchesDisabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_search_history),
                 option -> mSearchData.disableSearchHistory(option.isSelected()),
                 mSearchData.isSearchHistoryDisabled()));

@@ -21,6 +21,7 @@ public class SearchData {
     private Class<?> mTempBackgroundModeClass;
     private boolean mIsTrendingSearchesEnabled;
     private boolean mIsSearchHistoryDisabled;
+    private boolean mIsPopularSearchesDisabled;
 
     private SearchData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
@@ -115,6 +116,15 @@ public class SearchData {
         return mIsSearchHistoryDisabled;
     }
 
+    public void disablePopularSearches(boolean enabled) {
+        mIsPopularSearchesDisabled = enabled;
+        persistData();
+    }
+
+    public boolean isPopularSearchesDisabled() {
+        return mIsPopularSearchesDisabled;
+    }
+
     private void restoreData() {
         String data = mAppPrefs.getData(SEARCH_DATA);
 
@@ -132,12 +142,13 @@ public class SearchData {
         mSpeechRecognizerType = Helpers.parseInt(split, 6, SPEECH_RECOGNIZER_SYSTEM);
         mIsTrendingSearchesEnabled = Helpers.parseBoolean(split, 7, true);
         mIsSearchHistoryDisabled = Helpers.parseBoolean(split, 8, false);
+        mIsPopularSearchesDisabled = Helpers.parseBoolean(split, 9, false);
     }
 
     private void persistData() {
         mAppPrefs.setData(SEARCH_DATA,
                 Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
                         mIsKeyboardAutoShowEnabled, mIsTempBackgroundModeEnabled, null, mSpeechRecognizerType,
-                        mIsTrendingSearchesEnabled, mIsSearchHistoryDisabled));
+                        mIsTrendingSearchesEnabled, mIsSearchHistoryDisabled, mIsPopularSearchesDisabled));
     }
 }
