@@ -142,7 +142,7 @@ public class SearchData {
         mSpeechRecognizerType = Helpers.parseInt(split, 6, SPEECH_RECOGNIZER_SYSTEM);
         mIsTrendingSearchesEnabled = Helpers.parseBoolean(split, 7, true);
         mIsSearchHistoryDisabled = Helpers.parseBoolean(split, 8, false);
-        mIsPopularSearchesDisabled = Helpers.parseBoolean(split, 9, false);
+        mIsPopularSearchesDisabled = Helpers.parseBoolean(split, 9, true);
     }
 
     private void persistData() {
