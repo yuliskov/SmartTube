@@ -597,4 +597,7 @@
     <string name="unlock_high_bitrate_audio_formats">Odemknout vyšší datový tok pro mp4a formáty</string>
     <string name="color_scheme_blue">Modré</string>
     <string name="color_scheme_dark_blue">Tmavě modré</string>
+    <string name="player_speed_per_channel">Pro každý kanál</string>
+    <string name="disable_popular_searches">Nezobrazovat oblíbené vyhledávání</string>
+    <string name="multi_profiles">Použít samostatná nastavení pro každý účet</string>
 </resources>
