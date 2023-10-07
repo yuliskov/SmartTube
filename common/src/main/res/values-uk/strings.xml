@@ -590,4 +590,5 @@
     <string name="color_scheme_dark_blue">Темно-блакитна</string>
     <string name="player_speed_per_channel">Для кожного каналу</string>
     <string name="disable_popular_searches">Не показувати популяні пошукові запити</string>
+    <string name="multi_profiles">Використовувати окремі налаштування для кожного облікового запису</string>
 </resources>

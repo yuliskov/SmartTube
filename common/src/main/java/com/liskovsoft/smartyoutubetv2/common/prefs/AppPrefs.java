@@ -17,7 +17,7 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String TAG = AppPrefs.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static AppPrefs sInstance;
-    private static final String COMPLETED_ONBOARDING = "completed_onboarding";
+    private static final String MULTI_PROFILES = "multi_profiles";
     private static final String STATE_UPDATER_DATA = "state_updater_data";
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
     private static final String WEB_PROXY_URI = "web_proxy_uri";
@@ -34,12 +34,16 @@ public class AppPrefs extends SharedPreferencesBase {
     private AppPrefs(Context context) {
         super(context, R.xml.app_prefs);
 
-        //initProfiles();
+        initProfiles();
     }
 
     private void initProfiles() {
         YouTubeSignInService.instance().setOnChange(
-                () -> selectAccount(YouTubeSignInService.instance().getSelectedAccount())
+                () -> {
+                    if (isMultiProfilesEnabled()) {
+                        selectAccount(YouTubeSignInService.instance().getSelectedAccount());
+                    }
+                }
         );
     }
 
@@ -51,12 +55,13 @@ public class AppPrefs extends SharedPreferencesBase {
         return sInstance;
     }
 
-    public void setCompletedOnboarding(boolean completed) {
-        putBoolean(COMPLETED_ONBOARDING, completed);
+    public void enableMultiProfiles(boolean enabled) {
+        selectAccount(enabled ? YouTubeSignInService.instance().getSelectedAccount() : null);
+        putBoolean(MULTI_PROFILES, enabled);
     }
 
-    public boolean getCompletedOnboarding() {
-        return getBoolean(COMPLETED_ONBOARDING, false);
+    public boolean isMultiProfilesEnabled() {
+        return getBoolean(MULTI_PROFILES, false);
     }
 
     public void setBootResolution(String resolution) {
