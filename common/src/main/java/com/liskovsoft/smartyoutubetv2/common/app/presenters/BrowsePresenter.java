@@ -990,6 +990,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public void onProfileChanged() {
-        
+        Log.d(TAG, "On profile changed");
     }
 }
