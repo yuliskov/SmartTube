@@ -585,4 +585,15 @@
   <string name="auto_history">自动 (使用该账户的设置)	</string>
   <string name="dialog_notification">如有更新使用弹窗提醒</string>
   <string name="player_network_stack">网络堆栈</string>
+  <string name="remember_position_subscriptions">在订阅中记住上次查看的位置</string>
+  <string name="msg_player_unknown_error">未知错误</string>
+  <string name="header_notifications">通知</string>
+  <string name="disable_search_history">禁用搜索历史记录</string>
+  <string name="unlock_high_bitrate_formats">解锁高码率 1080p vp9 格式</string>
+  <string name="unlock_high_bitrate_audio_formats">解锁高码率 mp4a 格式</string>
+  <string name="color_scheme_blue">蓝色</string>
+  <string name="color_scheme_dark_blue">深蓝色</string>
+  <string name="player_speed_per_channel">每个通道</string>
+  <string name="disable_popular_searches">禁用流行搜索查询</string>
+  <string name="multi_profiles">为每个帐户使用单独的设置</string>
 </resources>
