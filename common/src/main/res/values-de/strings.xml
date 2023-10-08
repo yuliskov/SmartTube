@@ -598,4 +598,6 @@
     <string name="color_scheme_blue">Blau</string>
     <string name="color_scheme_dark_blue">Dunkelblau</string>
     <string name="player_speed_per_channel">Für jeden Kanal</string>
+    <string name="disable_popular_searches">Beliebte Suchanfragen deaktivieren</string>
+    <string name="multi_profiles">Separate Einstellungen für jedes Konto verwenden</string>
 </resources>
