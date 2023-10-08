@@ -549,12 +549,12 @@
     <string name="mark_as_watched">Tandai sebagai telah ditonton</string>
     <string name="player_ui_animations">Aktifkan animasi panel kontrol</string>
     <string name="player_likes_count">Tampilkan jumlah suka/tidak suka</string>
-    <string name="sorting_alphabetically2">Menurut abjad (cepat)</string>
+    <string name="sorting_alphabetically2">Berdasarkan abjad (cepat)</string>
     <string name="sorting_default">Standar (cepat)</string>
-    <string name="content_block_exclude_channel">Kecualikan saluran ini dari SponsorBlock</string>
-    <string name="content_block_stop_excluding_channel">Berhenti mengecualikan saluran ini dari SponsorBlock</string>
+    <string name="content_block_exclude_channel">Kecualikan channel ini dari SponsorBlock</string>
+    <string name="content_block_stop_excluding_channel">Berhenti mengecualikan channel ini dari SponsorBlock</string>
     <string name="player_chapter_notification">Menampilkan pemberitahuan untuk maju dengan cepat melalui chapters</string>
-    <string name="subtitle_remember">Ingat subtitle yang diaktifkan untuk setiap saluran</string>
+    <string name="subtitle_remember">Ingat subtitle yang diaktifkan untuk setiap channel</string>
     <string name="default_stack_desc">Tumpukan jaringan bawaan. Tumpukan ini mungkin memiliki stabilitas yang lebih baik dalam situasi tertentu.</string>
     <string name="item_postion">Posisi</string>
     <string name="player_screen_off_dimming">Jumlah peredupan</string>
@@ -573,4 +573,7 @@
     <string name="unlock_high_bitrate_formats">Membuka format 1080p VP9 kecepatan bit tinggi</string>
     <string name="color_scheme_blue">Biru</string>
     <string name="color_scheme_dark_blue">Biru Tua</string>
+    <string name="player_speed_per_channel">Per setiap channel</string>
+    <string name="disable_popular_searches">Nonaktifkan kueri penelusuran populer</string>
+    <string name="multi_profiles">Gunakan pengaturan terpisah untuk tiap akun</string>
 </resources>
