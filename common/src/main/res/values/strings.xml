@@ -600,4 +600,5 @@
     <string name="player_speed_per_channel">Per each channel</string>
     <string name="disable_popular_searches">Disable popular search queries</string>
     <string name="multi_profiles">Use separate settings per each account</string>
+    <string name="protect_account_with_password">Protect this account with password</string>
 </resources>

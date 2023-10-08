@@ -14,7 +14,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
 import java.util.ArrayList;
@@ -60,6 +59,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         appendAddAccountButton(settingsPresenter);
         appendRemoveAccountSection(accounts, settingsPresenter);
         appendSelectAccountOnBoot(settingsPresenter);
+        appendProtectAccountWithPassword(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_accounts), this::unhold);
     }
@@ -127,6 +127,12 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.select_account_on_boot), optionItem -> {
             AccountsData.instance(getContext()).selectAccountOnBoot(optionItem.isSelected());
         }, AccountsData.instance(getContext()).isSelectAccountOnBootEnabled()));
+    }
+
+    private void appendProtectAccountWithPassword(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.protect_account_with_password), optionItem -> {
+            AccountsData.instance(getContext()).protectAccountWithPassword(optionItem.isSelected());
+        }, AccountsData.instance(getContext()).isAccountProtectedWithPassword()));
     }
 
     private void nextAccountOrDialog(List<Account> accounts) {
