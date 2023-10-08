@@ -297,14 +297,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void appendSuggestions(Video video, MediaItemMetadata mediaItemMetadata) {
-        List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
-
-        if (suggestions == null) {
-            String msg = "loadSuggestions: Can't obtain suggestions for video: " + video.title;
-            Log.e(TAG, msg);
-            return;
-        }
-
         if (!video.isRemote && getPlayer().isSuggestionsShown()) {
             Log.d(TAG, "Suggestions is opened. Seems that user want to stay here.");
             return;
@@ -317,6 +309,14 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         appendUserQueueIfNeeded(video);
 
         appendSectionPlaylistIfNeeded(video);
+
+        List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
+
+        if (suggestions == null) {
+            String msg = "loadSuggestions: Can't obtain suggestions for video: " + video.title;
+            Log.e(TAG, msg);
+            return;
+        }
 
         int groupIndex = -1;
         int suggestRows = -1;

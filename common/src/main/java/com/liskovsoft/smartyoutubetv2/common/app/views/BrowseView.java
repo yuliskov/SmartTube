@@ -7,12 +7,13 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 
 public interface BrowseView {
-    void addSection(int index, BrowseSection category);
+    void addSection(int index, BrowseSection section);
     void removeSection(BrowseSection category);
+    void removeAllSections();
     void selectSection(int index, boolean focusOnContent);
     void updateSection(VideoGroup group);
     void updateSection(SettingsGroup group);
-    void clearSection(BrowseSection category);
+    void clearSection(BrowseSection section);
     void selectSectionItem(int index);
     void selectSectionItem(Video item);
     void showError(ErrorFragmentData data);

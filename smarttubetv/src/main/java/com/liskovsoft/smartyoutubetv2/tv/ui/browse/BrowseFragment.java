@@ -305,6 +305,12 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     @Override
+    public void removeAllSections() {
+        mSections.clear();
+        mSectionRowAdapter.clear();
+    }
+
+    @Override
     public void updateSection(VideoGroup group) {
         restoreMainFragment();
 
@@ -425,7 +431,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     @Override
-    public void clearSection(BrowseSection category) {
+    public void clearSection(BrowseSection section) {
         mSectionFragmentFactory.clearCurrentFragment();
     }
 

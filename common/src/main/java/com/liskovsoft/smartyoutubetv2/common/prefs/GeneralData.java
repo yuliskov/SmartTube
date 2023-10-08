@@ -906,6 +906,11 @@ public class GeneralData implements ProfileChangeListener {
 
     @Override
     public void onProfileChanged() {
+        // reset on profile change
+        mPinnedItems.clear();
+        mPendingStreams.clear();
+        mPlaylistOrder.clear();
+
         restoreState();
     }
 }
