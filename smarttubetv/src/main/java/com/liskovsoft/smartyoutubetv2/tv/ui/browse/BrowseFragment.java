@@ -47,7 +47,6 @@ import java.util.Map;
 public class BrowseFragment extends BrowseSupportFragment implements BrowseView {
     private static final String TAG = BrowseFragment.class.getSimpleName();
     private static final String SELECTED_HEADER_INDEX = "SelectedHeaderIndex";
-    private static final String SELECTED_ITEM_INDEX = "SelectedItemIndex";
     private ArrayObjectAdapter mSectionRowAdapter;
     private BrowsePresenter mBrowsePresenter;
     private Map<Integer, BrowseSection> mSections;
@@ -57,7 +56,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private NavigateTitleView mTitleView;
     private boolean mIsFragmentCreated;
     private int mRestoredHeaderIndex = -1;
-    private int mRestoredItemIndex = -1;
     private boolean mFocusOnContent;
 
     @Override
@@ -65,7 +63,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         super.onCreate(null);
 
         mRestoredHeaderIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_HEADER_INDEX, -1) : -1;
-        mRestoredItemIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_ITEM_INDEX, -1) : -1;
         mIsFragmentCreated = true;
 
         mSections = new HashMap<>();
@@ -87,8 +84,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         // Store position in case activity is crashed
         outState.putInt(SELECTED_HEADER_INDEX, getSelectedPosition());
-        // Not robust. Because tab content often changed after reloading.
-        outState.putInt(SELECTED_ITEM_INDEX, mSectionFragmentFactory.getCurrentFragmentItemIndex());
     }
 
     @Override
@@ -116,8 +111,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mRestoredHeaderIndex = -1;
 
         // Restore state after crash
-        selectSectionItem(mRestoredItemIndex);
-        mRestoredItemIndex = -1;
+        selectSectionItem(mBrowsePresenter.getCurrentVideo());
     }
 
     @Override

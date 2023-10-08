@@ -19,9 +19,9 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
  */
 public final class ProgressBarManager {
     // Default delay for progress bar widget.
-    private static final long DEFAULT_PROGRESS_BAR_DELAY = 500;
-
-    private long mInitialDelay = DEFAULT_PROGRESS_BAR_DELAY;
+    private static final long SHOW_DELAY_MS = 500;
+    private static final long HIDE_DELAY_MS = 700;
+    
     ViewGroup rootView;
     View mProgressBarView;
     private Handler mHandler = new Handler();
@@ -93,7 +93,7 @@ public final class ProgressBarManager {
         if (mEnableProgressBar) {
             mIsShowing = true;
             mHandler.removeCallbacks(hideRunnable);
-            mHandler.postDelayed(showRunnable, mInitialDelay);
+            mHandler.postDelayed(showRunnable, SHOW_DELAY_MS);
         }
     }
 
@@ -103,7 +103,7 @@ public final class ProgressBarManager {
     public void hide() {
         mIsShowing = false;
         mHandler.removeCallbacks(showRunnable);
-        mHandler.postDelayed(hideRunnable, mInitialDelay);
+        mHandler.postDelayed(hideRunnable, HIDE_DELAY_MS);
     }
 
     public boolean isShowing() {
@@ -124,22 +124,6 @@ public final class ProgressBarManager {
         this.mProgressBarView = progressBarView;
         this.mProgressBarView.setVisibility(View.INVISIBLE);
         mUserProvidedProgressBar = true;
-    }
-
-    /**
-     * Returns the initial delay.
-     */
-    public long getInitialDelay() {
-        return mInitialDelay;
-    }
-
-    /**
-     * Sets the initial delay. Progress bar will be shown after this delay has elapsed.
-     *
-     * @param initialDelay millisecond representing the initial delay.
-     */
-    public void setInitialDelay(long initialDelay) {
-        this.mInitialDelay = initialDelay;
     }
 
     /**

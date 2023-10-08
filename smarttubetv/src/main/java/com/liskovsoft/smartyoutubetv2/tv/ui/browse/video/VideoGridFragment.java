@@ -31,6 +31,7 @@ import java.util.List;
 
 public class VideoGridFragment extends GridFragment implements VideoSection {
     private static final String TAG = VideoGridFragment.class.getSimpleName();
+    private static final int RESTORE_MAX_SIZE = 5_000;
     private VideoGroupObjectAdapter mGridAdapter;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
@@ -171,7 +172,7 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
         setPosition(mSelectedItemIndex);
         selectItem(mSelectedItem);
 
-        if ((mSelectedItemIndex == -1 && mSelectedItem == null) || mGridAdapter == null || mGridAdapter.size() > 500) {
+        if ((mSelectedItemIndex == -1 && mSelectedItem == null) || mGridAdapter == null || mGridAdapter.size() > RESTORE_MAX_SIZE) {
             return;
         }
 

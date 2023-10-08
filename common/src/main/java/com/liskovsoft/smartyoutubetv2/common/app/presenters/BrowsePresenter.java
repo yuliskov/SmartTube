@@ -1004,4 +1004,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             getView().selectSection(findSectionIndex(mCurrentSection.getId()), false);
         }
     }
+
+    public Video getCurrentVideo() {
+        return mCurrentVideo;
+    }
 }
