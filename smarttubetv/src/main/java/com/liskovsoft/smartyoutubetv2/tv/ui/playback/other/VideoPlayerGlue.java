@@ -177,12 +177,12 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_PIP)) {
             adapter.add(mPipAction);
         }
-        if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF)) {
-            adapter.add(mActions.get(R.id.action_screen_off));
-        }
-        //if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF_TIMEOUT)) {
-        //    adapter.add(mActions.get(R.id.action_screen_off_timeout));
+        //if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF)) {
+        //    adapter.add(mActions.get(R.id.action_screen_off));
         //}
+        if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF_TIMEOUT)) {
+            adapter.add(mActions.get(R.id.action_screen_off_timeout));
+        }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_CHAT)) {
             adapter.add(mChatAction);
         }
