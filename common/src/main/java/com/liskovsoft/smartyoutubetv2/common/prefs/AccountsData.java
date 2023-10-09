@@ -12,6 +12,7 @@ public class AccountsData {
     private final AppPrefs mAppPrefs;
     private boolean mIsSelectAccountOnBootEnabled;
     private boolean mIsAccountProtectedWithPassword;
+    private String mAccountPassword;
 
     private AccountsData(Context context) {
         mContext = context;
@@ -45,6 +46,16 @@ public class AccountsData {
         return mIsAccountProtectedWithPassword;
     }
 
+    public void setAccountPassword(String password) {
+        mAccountPassword = password;
+
+        persistState();
+    }
+
+    public String getAccountPassword() {
+        return mAccountPassword;
+    }
+
     private void restoreState() {
         String data = mAppPrefs.getData(ACCOUNTS_DATA);
 
@@ -52,9 +63,10 @@ public class AccountsData {
 
         mIsSelectAccountOnBootEnabled = Helpers.parseBoolean(split, 0, false);
         mIsAccountProtectedWithPassword = Helpers.parseBoolean(split, 1, false);
+        mAccountPassword = Helpers.parseStr(split, 2);
     }
 
     private void persistState() {
-        mAppPrefs.setData(ACCOUNTS_DATA, Helpers.mergeObject(mIsSelectAccountOnBootEnabled, mIsAccountProtectedWithPassword));
+        mAppPrefs.setData(ACCOUNTS_DATA, Helpers.mergeObject(mIsSelectAccountOnBootEnabled, mIsAccountProtectedWithPassword, mAccountPassword));
     }
 }

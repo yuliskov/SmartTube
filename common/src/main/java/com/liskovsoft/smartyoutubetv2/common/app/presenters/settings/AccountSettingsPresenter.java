@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,7 +132,15 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
     private void appendProtectAccountWithPassword(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.protect_account_with_password), optionItem -> {
-            AccountsData.instance(getContext()).protectAccountWithPassword(optionItem.isSelected());
+            if (optionItem.isSelected()) {
+                showEnterPasswordDialog(settingsPresenter, () -> {
+                    AccountsData.instance(getContext()).protectAccountWithPassword(optionItem.isSelected());
+                });
+            } else {
+                showCheckPasswordDialog(settingsPresenter, () -> {
+                    AccountsData.instance(getContext()).protectAccountWithPassword(optionItem.isSelected());
+                });
+            }
         }, AccountsData.instance(getContext()).isAccountProtectedWithPassword()));
     }
 
@@ -185,5 +194,41 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         mMediaServiceManager.getSingInService().removeAccount(account);
         ExoMediaSourceFactory.unhold();
         BrowsePresenter.instance(getContext()).refresh(false);
+    }
+
+    private void showEnterPasswordDialog(AppDialogPresenter settingsPresenter, Runnable onSuccess) {
+        settingsPresenter.closeDialog();
+        SimpleEditDialog.show(
+                getContext(),
+                "", newValue -> {
+                    AccountsData.instance(getContext()).setAccountPassword(newValue);
+                    onSuccess.run();
+                    return true;
+                },
+                getContext().getString(R.string.protect_account_with_password),
+                true
+        );
+    }
+
+    private void showCheckPasswordDialog(AppDialogPresenter settingsPresenter, Runnable onSuccess) {
+        String password = AccountsData.instance(getContext()).getAccountPassword();
+
+        if (password == null) {
+            return;
+        }
+
+        settingsPresenter.closeDialog();
+        SimpleEditDialog.show(
+                getContext(),
+                "", newValue -> {
+                    if (password.equals(newValue)) {
+                        onSuccess.run();
+                        return true;
+                    }
+                    return false;
+                },
+                getContext().getString(R.string.protect_account_with_password),
+                true
+        );
     }
 }
