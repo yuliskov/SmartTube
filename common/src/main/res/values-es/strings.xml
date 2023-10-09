@@ -595,4 +595,6 @@
   <string name="color_scheme_dark_blue">Azul oscuro</string>
   <string name="player_speed_per_channel">Por cada canal</string>
   <string name="disable_popular_searches">Desactivar las búsquedas populares</string>
+  <string name="multi_profiles">Usar distintos ajustes para cada cuenta</string>
+  <string name="protect_account_with_password">Proteger este cuenta con contraseña</string>
 </resources>
