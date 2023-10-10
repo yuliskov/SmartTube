@@ -598,4 +598,7 @@
     <string name="color_scheme_blue">Blu</string>
     <string name="color_scheme_dark_blue">Blu scuro</string>
     <string name="player_speed_per_channel">Per ciascun canale</string>
+    <string name="disable_popular_searches">Disabilita le query di ricerca più popolari</string>
+    <string name="multi_profiles">Usa impostazioni separate per ciascun account</string>
+    <string name="protect_account_with_password">Proteggi questo account con una password</string>
 </resources>
