@@ -592,4 +592,5 @@
     <string name="disable_popular_searches">Не показувати популяні пошукові запити</string>
     <string name="multi_profiles">Використовувати окремі налаштування для кожного облікового запису</string>
     <string name="protect_account_with_password">Захистити цей обліковий запис паролем</string>
+    <string name="enter_account_password">Введіть пароль від облікового запису</string>
 </resources>

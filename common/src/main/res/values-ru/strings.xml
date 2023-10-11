@@ -592,4 +592,5 @@
     <string name="disable_popular_searches">Не показывать популярные поисковые запросы</string>
     <string name="multi_profiles">Использовать раздельные настройки для каждого аккаунта</string>
     <string name="protect_account_with_password">Защитить этот аккаунт паролем</string>
+    <string name="enter_account_password">Введите пароль от аккаунта</string>
 </resources>

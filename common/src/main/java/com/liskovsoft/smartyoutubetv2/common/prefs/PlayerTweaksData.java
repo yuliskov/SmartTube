@@ -4,8 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build.VERSION;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 
-public class PlayerTweaksData {
+public class PlayerTweaksData implements ProfileChangeListener {
     private static final String VIDEO_PLAYER_TWEAKS_DATA = "video_player_tweaks_data";
     public static final int PLAYER_DATA_SOURCE_DEFAULT = 0;
     public static final int PLAYER_DATA_SOURCE_OKHTTP = 1;
@@ -89,6 +90,7 @@ public class PlayerTweaksData {
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
+        mPrefs.addListener(this);
         restoreData();
     }
 
@@ -495,7 +497,7 @@ public class PlayerTweaksData {
     }
 
     private void restoreData() {
-        String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
+        String data = mPrefs.getProfileData(VIDEO_PLAYER_TWEAKS_DATA);
 
         String[] split = Helpers.splitObjectLegacy(data);
 
@@ -551,7 +553,7 @@ public class PlayerTweaksData {
     }
 
     private void persistData() {
-        mPrefs.setData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
+        mPrefs.setProfileData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
                 mIsAmlogicFixEnabled, mIsAmazonFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled, mIsHlsStreamsForced,
@@ -572,5 +574,15 @@ public class PlayerTweaksData {
             int bits = 32 - 24;
             mPlayerButtons = mPlayerButtons << bits >>> bits; // remove auto enabled bits
         }
+
+        // Replace old button with new one
+        if (isPlayerButtonEnabled(PLAYER_BUTTON_SCREEN_OFF)) {
+            enablePlayerButton(PLAYER_BUTTON_SCREEN_OFF_TIMEOUT);
+        }
+    }
+
+    @Override
+    public void onProfileChanged() {
+        restoreData();
     }
 }

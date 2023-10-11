@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerU
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class PlayerData extends DataChangeBase {
+public class PlayerData extends DataChangeBase implements ProfileChangeListener {
     private static final String VIDEO_PLAYER_DATA = "video_player_data";
     public static final int ONLY_UI = 0;
     public static final int UI_AND_PAUSE = 1;
@@ -694,7 +695,7 @@ public class PlayerData extends DataChangeBase {
     }
 
     private void restoreState() {
-        String data = mPrefs.getData(VIDEO_PLAYER_DATA);
+        String data = mPrefs.getProfileData(VIDEO_PLAYER_DATA);
 
         String[] split = Helpers.splitObjectLegacy(data);
 
@@ -782,7 +783,7 @@ public class PlayerData extends DataChangeBase {
     protected void persistState() {
         String enabledSubtitles = Helpers.mergeArray(mEnabledSubtitlesPerChannel.toArray());
 
-        mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsAbsoluteDateEnabled,
+        mPrefs.setProfileData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsAbsoluteDateEnabled,
                 mSeekPreviewMode, mIsSeekConfirmPauseEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
@@ -798,5 +799,14 @@ public class PlayerData extends DataChangeBase {
         ));
 
         super.persistState();
+    }
+
+    @Override
+    public void onProfileChanged() {
+        // reset on profile change
+        mSpeeds.clear();
+        mEnabledSubtitlesPerChannel.clear();
+
+        restoreState();
     }
 }

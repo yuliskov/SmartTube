@@ -6,17 +6,19 @@ import android.text.TextUtils;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AppPrefs extends SharedPreferencesBase {
+public class AppPrefs extends SharedPreferencesBase implements AccountChangeListener {
     private static final String TAG = AppPrefs.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static AppPrefs sInstance;
+    private static final String ANONYMOUS_PROFILE_NAME = "anonymous";
     private static final String MULTI_PROFILES = "multi_profiles";
     private static final String STATE_UPDATER_DATA = "state_updater_data";
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
@@ -38,13 +40,14 @@ public class AppPrefs extends SharedPreferencesBase {
     }
 
     private void initProfiles() {
-        YouTubeSignInService.instance().setOnChange(
-                () -> {
-                    if (isMultiProfilesEnabled()) {
-                        selectAccount(YouTubeSignInService.instance().getSelectedAccount());
-                    }
-                }
-        );
+        MediaServiceManager.instance().addAccountListener(this);
+    }
+
+    @Override
+    public void onAccountChanged(Account account) {
+        if (isMultiProfilesEnabled()) {
+            selectAccount(account);
+        }
     }
 
     public static AppPrefs instance(Context context) {
@@ -56,8 +59,8 @@ public class AppPrefs extends SharedPreferencesBase {
     }
 
     public void enableMultiProfiles(boolean enabled) {
-        selectAccount(enabled ? YouTubeSignInService.instance().getSelectedAccount() : null);
         putBoolean(MULTI_PROFILES, enabled);
+        selectAccount(enabled ? MediaServiceManager.instance().getSelectedAccount() : null);
     }
 
     public boolean isMultiProfilesEnabled() {
@@ -123,8 +126,16 @@ public class AppPrefs extends SharedPreferencesBase {
     }
 
     private void selectProfile(String profileName) {
+        if (isMultiProfilesEnabled() && profileName == null) {
+            profileName = ANONYMOUS_PROFILE_NAME;
+        }
+
         mProfileName = profileName;
 
+        onProfileChanged();
+    }
+
+    private void onProfileChanged() {
         for (ProfileChangeListener listener : mListeners) {
             listener.onProfileChanged();
         }

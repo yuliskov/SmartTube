@@ -20,6 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
+import com.liskovsoft.smartyoutubetv2.common.app.models.errors.PasswordError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
@@ -33,6 +34,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -555,8 +557,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        Log.d(TAG, "Update section %s", mCurrentSection.getTitle());
-        updateSection(mCurrentSection);
+        if (passwordCheck()) {
+            Log.d(TAG, "Update section %s", mCurrentSection.getTitle());
+            updateSection(mCurrentSection);
+        }
     }
 
     private void updateSection(BrowseSection section) {
@@ -1007,5 +1011,20 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     public Video getCurrentVideo() {
         return mCurrentVideo;
+    }
+
+    private boolean passwordCheck() {
+        AccountsData accountsData = AccountsData.instance(getContext());
+        if (accountsData.getAccountPassword() == null || accountsData.isPasswordAccepted()) {
+            return true;
+        }
+
+        // Fix empty fragment (previous fragment is still loading)
+        Utils.postDelayed(() -> {
+            getView().showProgressBar(false);
+            getView().showError(new PasswordError(getContext()));
+        }, 500);
+
+        return false;
     }
 }

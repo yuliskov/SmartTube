@@ -16,14 +16,18 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.NotificationState;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +53,7 @@ public class MediaServiceManager {
     private static final int MIN_SCALED_GRID_GROUP_SIZE = 35;
     private static final int MIN_SCALED_ROW_GROUP_SIZE = 10;
     private final Map<Integer, Pair<Integer, Long>> mContinuations = new HashMap<>();
+    private final List<AccountChangeListener> mAccountListeners = new ArrayList<>();
 
     public interface OnMetadata {
         void onMetadata(MediaItemMetadata metadata);
@@ -74,12 +79,20 @@ public class MediaServiceManager {
         void onPlaylistInfos(List<PlaylistInfo> playlistInfos);
     }
 
+    public interface AccountChangeListener {
+        void onAccountChanged(Account account);
+    }
+
     public MediaServiceManager() {
         MediaService service = YouTubeMediaService.instance();
         mItemService = service.getMediaItemService();
         mGroupService = service.getMediaGroupService();
         mSingInService = service.getSignInService();
         mNotificationsService = service.getNotificationsService();
+
+        mSingInService.setOnChange(
+                () -> onAccountChanged(YouTubeSignInService.instance().getSelectedAccount())
+        );
     }
 
     public static MediaServiceManager instance() {
@@ -387,5 +400,30 @@ public class MediaServiceManager {
 
     public void setNotificationState(NotificationState state) {
         RxHelper.execute(mNotificationsService.setNotificationStateObserve(state));
+    }
+
+    public void addAccountListener(AccountChangeListener listener) {
+        if (!mAccountListeners.contains(listener)) {
+            if (listener instanceof AccountsData ||
+                listener instanceof AppPrefs) {
+                mAccountListeners.add(0, listener); // data classes should be called before regular listeners
+            } else {
+                mAccountListeners.add(listener);
+            }
+        }
+    }
+
+    public void removeAccountListener(AccountChangeListener listener) {
+        mAccountListeners.remove(listener);
+    }
+
+    public Account getSelectedAccount() {
+        return YouTubeSignInService.instance().getSelectedAccount();
+    }
+
+    private void onAccountChanged(Account account) {
+        for (AccountChangeListener listener : mAccountListeners) {
+            listener.onAccountChanged(account);
+        }
     }
 }

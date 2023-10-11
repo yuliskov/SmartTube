@@ -133,15 +133,11 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     private void appendProtectAccountWithPassword(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.protect_account_with_password), optionItem -> {
             if (optionItem.isSelected()) {
-                showEnterPasswordDialog(settingsPresenter, () -> {
-                    AccountsData.instance(getContext()).protectAccountWithPassword(optionItem.isSelected());
-                });
+                showAddPasswordDialog(settingsPresenter);
             } else {
-                showCheckPasswordDialog(settingsPresenter, () -> {
-                    AccountsData.instance(getContext()).protectAccountWithPassword(optionItem.isSelected());
-                });
+                showRemovePasswordDialog(settingsPresenter);
             }
-        }, AccountsData.instance(getContext()).isAccountProtectedWithPassword()));
+        }, AccountsData.instance(getContext()).getAccountPassword() != null));
     }
 
     private void nextAccountOrDialog(List<Account> accounts) {
@@ -196,21 +192,22 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         BrowsePresenter.instance(getContext()).refresh(false);
     }
 
-    private void showEnterPasswordDialog(AppDialogPresenter settingsPresenter, Runnable onSuccess) {
+    private void showAddPasswordDialog(AppDialogPresenter settingsPresenter) {
         settingsPresenter.closeDialog();
         SimpleEditDialog.show(
                 getContext(),
                 "", newValue -> {
                     AccountsData.instance(getContext()).setAccountPassword(newValue);
-                    onSuccess.run();
+                    BrowsePresenter.instance(getContext()).refresh(true);
+                    //onSuccess.run();
                     return true;
                 },
-                getContext().getString(R.string.protect_account_with_password),
+                getContext().getString(R.string.enter_account_password),
                 true
         );
     }
 
-    private void showCheckPasswordDialog(AppDialogPresenter settingsPresenter, Runnable onSuccess) {
+    private void showRemovePasswordDialog(AppDialogPresenter settingsPresenter) {
         String password = AccountsData.instance(getContext()).getAccountPassword();
 
         if (password == null) {
@@ -222,12 +219,37 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                 getContext(),
                 "", newValue -> {
                     if (password.equals(newValue)) {
-                        onSuccess.run();
+                        AccountsData.instance(getContext()).setAccountPassword(null);
+                        BrowsePresenter.instance(getContext()).refresh(true);
+                        //onSuccess.run();
                         return true;
                     }
                     return false;
                 },
-                getContext().getString(R.string.protect_account_with_password),
+                getContext().getString(R.string.enter_account_password),
+                true
+        );
+    }
+
+    public void showCheckPasswordDialog() {
+        String password = AccountsData.instance(getContext()).getAccountPassword();
+
+        if (password == null) {
+            return;
+        }
+
+        SimpleEditDialog.show(
+                getContext(),
+                "", newValue -> {
+                    if (password.equals(newValue)) {
+                        AccountsData.instance(getContext()).setPasswordAccepted(true);
+                        BrowsePresenter.instance(getContext()).refresh(true);
+                        //onSuccess.run();
+                        return true;
+                    }
+                    return false;
+                },
+                getContext().getString(R.string.enter_account_password),
                 true
         );
     }
