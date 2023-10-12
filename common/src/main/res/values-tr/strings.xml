@@ -600,4 +600,6 @@
     <string name="player_speed_per_channel">Her kanal için</string>
     <string name="disable_popular_searches">Popüler arama sorgularını devre dışı bırak</string>
     <string name="multi_profiles">Her hesap için ayrı ayarlar kullan</string>
+    <string name="protect_account_with_password">Bu hesabı şifre ile koru</string>
+    <string name="enter_account_password">Hesap şifresini girin</string>
 </resources>
