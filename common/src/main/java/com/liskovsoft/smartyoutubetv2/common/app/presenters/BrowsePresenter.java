@@ -203,7 +203,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private void initPinnedSections() {
         mSections.clear();
-        mBootSectionIndex = 0;
 
         Collection<Video> pinnedItems = mGeneralData.getPinnedItems();
 

@@ -320,8 +320,9 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void selectSection(int index, boolean focusOnContent) {
-        if (index >= 0 && index < mSectionRowAdapter.size()) {
-            setSelectedPosition(index);
+        if (index >= 0 && mSectionRowAdapter.size() > 0) {
+            // Fallback to the last section if index above size
+            setSelectedPosition(index < mSectionRowAdapter.size() ? index : mSectionRowAdapter.size() - 1);
             mFocusOnContent = focusOnContent; // focus after header transition
         }
     }
