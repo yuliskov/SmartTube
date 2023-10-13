@@ -96,7 +96,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
             options.add(UiOptionItem.from(getContext().getString(sectionResId), optionItem -> {
                 BrowsePresenter.instance(getContext()).enableSection(sectionId, optionItem.isSelected());
-            }, mGeneralData.isSectionEnabled(sectionId)));
+            }, mGeneralData.isSectionPinned(sectionId)));
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.side_panel_sections), options);

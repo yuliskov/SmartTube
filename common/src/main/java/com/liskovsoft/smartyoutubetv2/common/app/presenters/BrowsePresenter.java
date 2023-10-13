@@ -7,6 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.NotificationsService;
 import com.liskovsoft.mediaserviceinterfaces.SignInService;
+import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
@@ -34,8 +35,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.sharedutils.helpers.ScreenHelper;
@@ -52,7 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-public class BrowsePresenter extends BasePresenter<BrowseView> implements SectionPresenter, VideoGroupPresenter, AppPrefs.ProfileChangeListener {
+public class BrowsePresenter extends BasePresenter<BrowseView> implements SectionPresenter, VideoGroupPresenter, AccountChangeListener {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
     private static final long HEADER_REFRESH_PERIOD_MS = 120 * 60 * 1_000;
     @SuppressLint("StaticFieldLeak")
@@ -77,7 +78,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private Video mSelectedVideo;
     private long mLastUpdateTimeMs;
     private int mBootSectionIndex;
-    private int mSelectedSectionId = -1;
+    private int mBootstrapSectionId = -1;
     private MediaGroup mLastScrollGroup;
 
     private BrowsePresenter(Context context) {
@@ -91,7 +92,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mSectionsMapping = new HashMap<>();
         mMainUIData = MainUIData.instance(context);
         mGeneralData = GeneralData.instance(context);
-        AppPrefs.instance(context).addListener(this);
+        MediaServiceManager.instance().addAccountListener(this);
         ScreenHelper.updateScreenInfo(context);
 
         MediaService mediaService = YouTubeMediaService.instance();
@@ -129,10 +130,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateChannelSorting();
         updatePlaylistsStyle();
         updateSections();
-        int selectedSectionIndex = findSectionIndex(mSelectedSectionId);
-        mSelectedSectionId = -1;
-        getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, true);
         restoreSelectedItems();
+
+        // Move default focus
+        int selectedSectionIndex = findSectionIndex(mBootstrapSectionId);
+        mBootstrapSectionId = -1;
+        getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, true);
     }
 
     @Override
@@ -200,6 +203,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private void initPinnedSections() {
         mSections.clear();
+        mBootSectionIndex = 0;
 
         Collection<Video> pinnedItems = mGeneralData.getPinnedItems();
 
@@ -233,24 +237,29 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mSettingsGridMapping.put(MediaGroup.TYPE_SETTINGS, () -> mDataSourcePresenter.getSettingItems(getContext()));
     }
 
-    private void updateSections() {
+    public void updateSections() {
         if (getView() == null) {
             return;
         }
 
+        // clean up (profile changed etc)
+        getView().removeAllSections();
+
         initPinnedSections();
         initPinnedCallbacks();
+        initPasswordSection();
 
         int index = 0;
-
-        //sortSections();
 
         for (BrowseSection section : mErrorSections) {
             getView().addSection(index++, section);
         }
 
         for (BrowseSection section : mSections) { // contains sections and pinned items!
-            section.setEnabled(section.getId() == MediaGroup.TYPE_SETTINGS || mGeneralData.isSectionEnabled(section.getId()));
+            if (section.getId() == MediaGroup.TYPE_SETTINGS) {
+                section.setEnabled(true);
+            }
+            //section.setEnabled(section.getId() == MediaGroup.TYPE_SETTINGS || mGeneralData.isSectionPinned(section.getId()));
 
             if (section.isEnabled()) {
                 if (section.getId() == mGeneralData.getBootSectionId()) {
@@ -261,6 +270,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 getView().removeSection(section);
             }
         }
+
+        // Move current focus (also updates title view)
+        int selectedSectionIndex = findSectionIndex(mCurrentSection != null ? mCurrentSection.getId() : -1);
+        getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, false);
     }
 
     private void sortSections() {
@@ -498,11 +511,21 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void pinItem(String title, int resId, ErrorFragmentData data) {
+        appendToErrors(title, resId, data);
+
+        updateSections();
+    }
+
+    private void appendToErrors(String title, int resId, ErrorFragmentData data) {
         int id = title.hashCode();
         Helpers.removeIf(mErrorSections, section -> section.getId() == id);
         mErrorSections.add(new BrowseSection(id, title, BrowseSection.TYPE_ERROR, resId, false, data));
+    }
 
-        updateSections();
+    private void appendToSections(String title, int resId, ErrorFragmentData data) {
+        int id = title.hashCode();
+        Helpers.removeIf(mSections, section -> section.getId() == id);
+        mSections.add(new BrowseSection(id, title, BrowseSection.TYPE_ERROR, resId, false, data));
     }
 
     public void unpinItem(Video item) {
@@ -557,10 +580,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (passwordCheck()) {
-            Log.d(TAG, "Update section %s", mCurrentSection.getTitle());
-            updateSection(mCurrentSection);
-        }
+        Log.d(TAG, "Update section %s", mCurrentSection.getTitle());
+        updateSection(mCurrentSection);
     }
 
     private void updateSection(BrowseSection section) {
@@ -967,7 +988,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         ViewManager.instance(getContext()).startView(BrowseView.class); // focus view
 
         if (getView() == null) {
-            mSelectedSectionId = sectionId;
+            mBootstrapSectionId = sectionId;
             return;
         }
 
@@ -993,38 +1014,34 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     @Override
-    public void onProfileChanged() {
-        Log.d(TAG, "On profile changed");
+    public void onAccountChanged(Account account) {
+        Log.d(TAG, "On account changed");
 
         if (getView() == null) {
             return;
         }
 
-        getView().removeAllSections();
         updateSections();
-
-        // Move current focus
-        if (mCurrentSection != null) {
-            getView().selectSection(findSectionIndex(mCurrentSection.getId()), false);
-        }
     }
 
     public Video getCurrentVideo() {
         return mCurrentVideo;
     }
 
-    private boolean passwordCheck() {
+    private void initPasswordSection() {
         AccountsData accountsData = AccountsData.instance(getContext());
         if (accountsData.getAccountPassword() == null || accountsData.isPasswordAccepted()) {
-            return true;
+            return;
         }
 
-        // Fix empty fragment (previous fragment is still loading)
-        Utils.postDelayed(() -> {
-            getView().showProgressBar(false);
-            getView().showError(new PasswordError(getContext()));
-        }, 500);
+        //mErrorSections.clear();
+        mSections.clear();
+        appendToSections(getContext().getString(R.string.header_notifications), R.drawable.icon_notification, new PasswordError(getContext()));
 
-        return false;
+        //// Fix empty fragment (previous fragment is still loading)
+        //Utils.postDelayed(() -> {
+        //    getView().showProgressBar(false);
+        //    getView().showError(new PasswordError(getContext()));
+        //}, 500);
     }
 }

@@ -247,13 +247,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public void showError(ErrorFragmentData data) {
         replaceMainFragment(new ErrorDialogFragment(data));
-        updateTitleView();
     }
 
     private void showErrorIfEmpty(ErrorFragmentData data) {
         if (isEmpty()) {
             replaceMainFragment(new ErrorDialogFragment(data));
-            updateTitleView();
         }
     }
 
@@ -311,10 +309,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mSectionFragmentFactory.updateCurrentFragment(group);
 
         fixInvisibleSearchOrb();
-
-        if (group.getAction() == VideoGroup.ACTION_REPLACE) { // minimize call frequency
-            updateTitleView();
-        }
     }
 
     @Override
@@ -322,8 +316,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         restoreMainFragment();
 
         mSectionFragmentFactory.updateCurrentFragment(group);
-
-        updateTitleView();
     }
 
     @Override
@@ -488,11 +480,5 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public boolean isEmpty() {
         return mSectionFragmentFactory == null || mSectionFragmentFactory.isEmpty();
-    }
-
-    private void updateTitleView() {
-        if (mTitleView != null) {
-            mTitleView.update();
-        }
     }
 }

@@ -198,7 +198,7 @@ public class GeneralData implements ProfileChangeListener {
     /**
      * Contains sections and pinned items!
      */
-    public boolean isSectionEnabled(int sectionId) {
+    public boolean isSectionPinned(int sectionId) {
         Video section = Helpers.findFirst(mPinnedItems, item -> getSectionId(item) == sectionId);
         return section != null; // by default enable all pinned items
     }
@@ -860,7 +860,7 @@ public class GeneralData implements ProfileChangeListener {
         }
 
         // Backward compatibility
-        if (!isSectionEnabled(MediaGroup.TYPE_SETTINGS)) {
+        if (!isSectionPinned(MediaGroup.TYPE_SETTINGS)) {
             initPinnedItems();
         }
 
