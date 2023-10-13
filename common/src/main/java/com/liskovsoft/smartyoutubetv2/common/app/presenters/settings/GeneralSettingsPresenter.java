@@ -426,7 +426,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.multi_profiles),
-                option -> AppPrefs.instance(getContext()).enableMultiProfiles(option.isSelected()),
+                option -> {
+                    AppPrefs.instance(getContext()).enableMultiProfiles(option.isSelected());
+                    BrowsePresenter.instance(getContext()).updateSections();
+                },
                 AppPrefs.instance(getContext()).isMultiProfilesEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.child_mode),

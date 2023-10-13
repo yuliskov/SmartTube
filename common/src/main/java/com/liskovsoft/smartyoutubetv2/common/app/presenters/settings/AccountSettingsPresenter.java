@@ -145,7 +145,10 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
     private void appendSeparateSettings(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.multi_profiles),
-                option -> AppPrefs.instance(getContext()).enableMultiProfiles(option.isSelected()),
+                option -> {
+                    AppPrefs.instance(getContext()).enableMultiProfiles(option.isSelected());
+                    BrowsePresenter.instance(getContext()).updateSections();
+                },
                 AppPrefs.instance(getContext()).isMultiProfilesEnabled()));
     }
 
