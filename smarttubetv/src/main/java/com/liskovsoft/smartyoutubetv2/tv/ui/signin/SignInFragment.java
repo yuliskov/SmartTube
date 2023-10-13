@@ -56,7 +56,7 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
         getGuidanceStylist().getTitleView().setText(userCode);
 
         Glide.with(getContext())
-                .load(Utils.toQrCodeLink(SIGN_IN_URL + "?user_code=" + userCode))
+                .load(Utils.toQrCodeLink(SIGN_IN_URL + "?user_code=" + userCode.replace(" ", "-")))
                 .apply(ViewUtil.glideOptions())
                 .into(getGuidanceStylist().getIconView());
     }

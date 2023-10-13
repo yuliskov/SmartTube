@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 
@@ -61,6 +62,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         appendRemoveAccountSection(accounts, settingsPresenter);
         appendSelectAccountOnBoot(settingsPresenter);
         appendProtectAccountWithPassword(settingsPresenter);
+        appendSeparateSettings(settingsPresenter);
 
         Account account = MediaServiceManager.instance().getSelectedAccount();
         settingsPresenter.showDialog(account != null ? account.getName() : getContext().getString(R.string.settings_accounts), this::unhold);
@@ -139,6 +141,12 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                 showRemovePasswordDialog(settingsPresenter);
             }
         }, AccountsData.instance(getContext()).getAccountPassword() != null));
+    }
+
+    private void appendSeparateSettings(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.multi_profiles),
+                option -> AppPrefs.instance(getContext()).enableMultiProfiles(option.isSelected()),
+                AppPrefs.instance(getContext()).isMultiProfilesEnabled()));
     }
 
     private void nextAccountOrDialog(List<Account> accounts) {
