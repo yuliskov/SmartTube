@@ -593,4 +593,5 @@
     <string name="multi_profiles">Використовувати окремі налаштування для кожного облікового запису</string>
     <string name="protect_account_with_password">Захистити цей обліковий запис паролем</string>
     <string name="enter_account_password">Введіть пароль від облікового запису</string>
+    <string name="show_connect_messages">Сповіщення про підключені пристрої</string>
 </resources>

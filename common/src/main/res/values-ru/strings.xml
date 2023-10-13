@@ -593,4 +593,5 @@
     <string name="multi_profiles">Использовать раздельные настройки для каждого аккаунта</string>
     <string name="protect_account_with_password">Защитить этот аккаунт паролем</string>
     <string name="enter_account_password">Введите пароль от аккаунта</string>
+    <string name="show_connect_messages">Сообщения о подключенных устройствах</string>
 </resources>
