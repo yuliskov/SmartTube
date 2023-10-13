@@ -95,7 +95,7 @@
     <string name="disable_update_check">Disable update check</string>
     <string name="show_again">Show again</string>
     <string name="check_updates_auto">Notify about the update</string>
-    <string name="select_account_on_boot">Select on boot</string>
+    <string name="select_account_on_boot">Show account selection on boot</string>
     <string name="player_other">Misc</string>
     <string name="player_full_date">Precise date in description</string>
     <string name="open_channel">Open channel</string>

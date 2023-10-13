@@ -95,7 +95,7 @@
     <string name="disable_update_check">Не перевіряти оновлення</string>
     <string name="show_again">Нагадувати постійно</string>
     <string name="check_updates_auto">Повідомляти про оновлення</string>
-    <string name="select_account_on_boot">Обирати на старті</string>
+    <string name="select_account_on_boot">Показувати діалог вибору облікового запису на старті застосунку</string>
     <string name="player_other">Різне</string>
     <string name="player_full_date">Точна дата в описі</string>
     <string name="open_channel">Перейти до каналу</string>

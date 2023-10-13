@@ -95,7 +95,7 @@
     <string name="disable_update_check">Не проверять обновления</string>
     <string name="show_again">Напоминать постоянно</string>
     <string name="check_updates_auto">Сообщать о наличии обновлений</string>
-    <string name="select_account_on_boot">Выбирать на старте</string>
+    <string name="select_account_on_boot">Показывать диалог выбора аккаунта на старте приложения</string>
     <string name="player_other">Разное</string>
     <string name="player_full_date">Точная дата в описании</string>
     <string name="open_channel">Перейти на канал</string>
