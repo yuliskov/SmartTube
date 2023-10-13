@@ -60,8 +60,8 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         appendSelectAccountSection(accounts, settingsPresenter);
         appendAddAccountButton(settingsPresenter);
         appendRemoveAccountSection(accounts, settingsPresenter);
-        appendSelectAccountOnBoot(settingsPresenter);
         appendProtectAccountWithPassword(settingsPresenter);
+        appendSelectAccountOnBoot(settingsPresenter);
         appendSeparateSettings(settingsPresenter);
 
         Account account = MediaServiceManager.instance().getSelectedAccount();
