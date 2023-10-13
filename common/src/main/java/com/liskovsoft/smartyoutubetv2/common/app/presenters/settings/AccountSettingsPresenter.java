@@ -61,8 +61,8 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         appendAddAccountButton(settingsPresenter);
         appendRemoveAccountSection(accounts, settingsPresenter);
         appendProtectAccountWithPassword(settingsPresenter);
-        appendSelectAccountOnBoot(settingsPresenter);
         appendSeparateSettings(settingsPresenter);
+        appendSelectAccountOnBoot(settingsPresenter);
 
         Account account = MediaServiceManager.instance().getSelectedAccount();
         settingsPresenter.showDialog(account != null ? account.getName() : getContext().getString(R.string.settings_accounts), this::unhold);
