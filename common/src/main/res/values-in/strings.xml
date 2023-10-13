@@ -576,4 +576,6 @@
     <string name="player_speed_per_channel">Per setiap channel</string>
     <string name="disable_popular_searches">Nonaktifkan kueri penelusuran populer</string>
     <string name="multi_profiles">Gunakan pengaturan terpisah untuk tiap akun</string>
+    <string name="protect_account_with_password">Lindungi akun ini dengan kata sandi</string>
+    <string name="enter_account_password">Masukkan kata sandi akun</string>
 </resources>
