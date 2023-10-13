@@ -600,4 +600,6 @@
     <string name="player_speed_per_channel">Für jeden Kanal</string>
     <string name="disable_popular_searches">Beliebte Suchanfragen deaktivieren</string>
     <string name="multi_profiles">Separate Einstellungen für jedes Konto verwenden</string>
+    <string name="protect_account_with_password">Dieses Konto mit einem Passwort schützen</string>
+    <string name="enter_account_password">Konto-Passwort eingeben</string>
 </resources>
