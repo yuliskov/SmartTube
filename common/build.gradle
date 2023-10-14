@@ -54,6 +54,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:' + testXSupportLibraryVersion
     
     implementation project(':sharedutils')
+    implementation project(':fragment-1.1.0')
     implementation project(':mediaserviceinterfaces')
     implementation project(':youtubeapi')
 

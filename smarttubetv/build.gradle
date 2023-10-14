@@ -206,6 +206,7 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:' + testXSupportLibraryVersion
     androidTestImplementation 'androidx.test.espresso:espresso-core:' + espressoVersion
 
+    implementation project(':fragment-1.1.0')
     implementation project(':leanback-1.0.0')
     implementation project(':common')
     implementation project(':sharedutils')

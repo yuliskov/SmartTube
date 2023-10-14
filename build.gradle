@@ -54,6 +54,8 @@ allprojects {
 
         // Replace with modded library (leanback-1.0.0)
         exclude group: 'androidx.leanback', module: 'leanback'
+        // Replace with modded library (fragment-1.1.0)
+        exclude group: 'androidx.fragment', module: 'fragment'
 
         // Don't work! Replace with modded library (leanback-1.0.0)
         // resolutionStrategy.dependencySubstitution {

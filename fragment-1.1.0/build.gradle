@@ -33,13 +33,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    api 'androidx.activity:activity:' + leanbackXLibraryVersion // used inside other app modules
     implementation 'androidx.annotation:annotation:' + annotationXLibraryVersion
     implementation 'androidx.core:core:' + kotlinCoreVersion
-    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXLibraryVersion
-    implementation 'androidx.fragment:fragment:' + annotationXLibraryVersion
-    implementation 'androidx.media:media:' + mediaXLibraryVersion
-    implementation 'androidx.interpolator:interpolator:' + leanbackXLibraryVersion
-
-    implementation project(':fragment-1.1.0')
-    implementation project(':sharedutils')
+    implementation 'androidx.viewpager:viewpager:' + leanbackXLibraryVersion
+    implementation 'androidx.loader:loader:' + leanbackXLibraryVersion
 }
