@@ -63,6 +63,7 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsRemapChannelUpToSpeedEnabled;
     private boolean mIsRemapFastForwardToSpeedEnabled;
     private boolean mIsRemapNextPrevToSpeedEnabled;
+    private boolean mIsRemapNumbersToSpeedEnabled;
     private boolean mIsRemapPlayPauseToOKEnabled;
     private boolean mIsRemapChannelUpToSearchEnabled;
     private boolean mIsHideShortsFromHomeEnabled;
@@ -417,6 +418,15 @@ public class GeneralData implements ProfileChangeListener {
 
     public boolean isRemapNextPrevToSpeedEnabled() {
         return mIsRemapNextPrevToSpeedEnabled;
+    }
+
+    public void remapNumbersToSpeed(boolean enable) {
+        mIsRemapNumbersToSpeedEnabled = enable;
+        persistState();
+    }
+
+    public boolean isRemapNumbersToSpeedEnabled() {
+        return mIsRemapNumbersToSpeedEnabled;
     }
 
     public void remapPlayPauseToOK(boolean enable) {
@@ -831,6 +841,7 @@ public class GeneralData implements ProfileChangeListener {
         mHistoryState = Helpers.parseInt(split, 47, HISTORY_ENABLED);
         mRememberSubscriptionsPosition = Helpers.parseBoolean(split, 48, false);
         mSelectedSubscriptionsItem = Video.fromString(Helpers.parseStr(split, 49));
+        mIsRemapNumbersToSpeedEnabled = Helpers.parseBoolean(split, 50, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -893,7 +904,8 @@ public class GeneralData implements ProfileChangeListener {
                 playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
                 mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextPrevToSpeedEnabled,
-                mIsRemapPlayPauseToOKEnabled, mHistoryState, mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem)));
+                mIsRemapPlayPauseToOKEnabled, mHistoryState, mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem),
+                mIsRemapNumbersToSpeedEnabled));
     }
 
     private int getSectionId(Video item) {

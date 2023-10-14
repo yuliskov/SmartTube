@@ -248,6 +248,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.remapPlayPauseToOK(option.isSelected()),
                 mGeneralData.isRemapPlayPauseToOKEnabled()));
 
+        options.add(UiOptionItem.from("Numbers 3/1 -> Speed Up/Down",
+                option -> mGeneralData.remapNumbersToSpeed(option.isSelected()),
+                mGeneralData.isRemapNumbersToSpeedEnabled()));
+
         options.add(UiOptionItem.from("Next/Previous -> Speed Up/Down",
                 option -> mGeneralData.remapNextPrevToSpeed(option.isSelected()),
                 mGeneralData.isRemapNextPrevToSpeedEnabled()));

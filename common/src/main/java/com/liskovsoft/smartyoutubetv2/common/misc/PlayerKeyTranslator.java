@@ -17,6 +17,26 @@ import java.util.Map;
 public class PlayerKeyTranslator extends GlobalKeyTranslator {
     private final GeneralData mGeneralData;
     private final Context mContext;
+    private final Runnable likeAction = () -> {
+        PlaybackView playbackView = getPlaybackView();
+        if (playbackView != null && playbackView.getEventListener() != null) {
+            playbackView.getEventListener().onLikeClicked(true);
+            playbackView.getPlayer().setLikeButtonState(true);
+            playbackView.getPlayer().setDislikeButtonState(false);
+            MessageHelpers.showMessage(getContext(), R.string.action_like);
+        }
+    };
+    private final Runnable dislikeAction = () -> {
+        PlaybackView playbackView = getPlaybackView();
+        if (playbackView != null && playbackView.getEventListener() != null) {
+            playbackView.getEventListener().onDislikeClicked(true);
+            playbackView.getPlayer().setLikeButtonState(false);
+            playbackView.getPlayer().setDislikeButtonState(true);
+            MessageHelpers.showMessage(getContext(), R.string.action_dislike);
+        }
+    };
+    private final Runnable speedUpAction = () -> speedUp(true);
+    private final Runnable speedDownAction = () -> speedUp(false);
 
     public PlayerKeyTranslator(Context context) {
         super(context);
@@ -74,29 +94,6 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
     }
 
     private void addLikeAction(Map<Integer, Runnable> actionMapping) {
-        if (!mGeneralData.isRemapPageUpToLikeEnabled() && !mGeneralData.isRemapChannelUpToLikeEnabled()) {
-            return;
-        }
-
-        Runnable likeAction = () -> {
-            PlaybackView playbackView = getPlaybackView();
-            if (playbackView != null && playbackView.getEventListener() != null) {
-                playbackView.getEventListener().onLikeClicked(true);
-                playbackView.getPlayer().setLikeButtonState(true);
-                playbackView.getPlayer().setDislikeButtonState(false);
-                MessageHelpers.showMessage(mContext, R.string.action_like);
-            }
-        };
-        Runnable dislikeAction = () -> {
-            PlaybackView playbackView = getPlaybackView();
-            if (playbackView != null && playbackView.getEventListener() != null) {
-                playbackView.getEventListener().onDislikeClicked(true);
-                playbackView.getPlayer().setLikeButtonState(false);
-                playbackView.getPlayer().setDislikeButtonState(true);
-                MessageHelpers.showMessage(mContext, R.string.action_dislike);
-            }
-        };
-
         if (mGeneralData.isRemapPageUpToLikeEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, likeAction);
             actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, dislikeAction);
@@ -109,14 +106,6 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
     }
 
     private void addSpeedAction(Map<Integer, Runnable> actionMapping) {
-        if (!mGeneralData.isRemapPageUpToSpeedEnabled() && !mGeneralData.isRemapChannelUpToSpeedEnabled()
-            && !mGeneralData.isRemapFastForwardToSpeedEnabled() && !mGeneralData.isRemapNextPrevToSpeedEnabled()) {
-            return;
-        }
-
-        Runnable speedUpAction = () -> speedUp(true);
-        Runnable speedDownAction = () -> speedUp(false);
-
         if (mGeneralData.isRemapPageUpToSpeedEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, speedDownAction);
@@ -135,6 +124,11 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
         if (mGeneralData.isRemapNextPrevToSpeedEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_NEXT, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_PREVIOUS, speedDownAction);
+        }
+
+        if (mGeneralData.isRemapNumbersToSpeedEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_3, speedUpAction);
+            actionMapping.put(KeyEvent.KEYCODE_1, speedDownAction);
         }
     }
 
@@ -163,5 +157,9 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
 
     private PlaybackView getPlaybackView() {
         return PlaybackPresenter.instance(mContext).getView();
+    }
+
+    private Context getContext() {
+        return mContext;
     }
 }
