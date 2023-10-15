@@ -10,11 +10,6 @@ public class WebBrowserActivity extends LeanbackActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try {
-            setContentView(R.layout.fragment_webbrowser);
-        } catch (IllegalStateException e) {
-            // Fragment com.liskovsoft.smartyoutubetv2.tv.ui.webbrowser.WebBrowserFragment did not create a view.
-            e.printStackTrace();
-        }
+        setContentView(R.layout.fragment_webbrowser);
     }
 }

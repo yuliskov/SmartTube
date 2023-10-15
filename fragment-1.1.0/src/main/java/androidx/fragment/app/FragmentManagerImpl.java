@@ -3232,8 +3232,10 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
         }
 
         if (fragment.mView == null) {
-            throw new IllegalStateException("Fragment " + fname
-                    + " did not create a view.");
+            // MOD: Fragment didn't create a view fix
+            return null;
+            //throw new IllegalStateException("Fragment " + fname
+            //        + " did not create a view.");
         }
         if (id != 0) {
             fragment.mView.setId(id);
