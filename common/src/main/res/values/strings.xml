@@ -157,6 +157,7 @@
     <string name="card_title_lines_num">Card title lines num</string>
     <string name="card_auto_scrolled_title">Auto-scroll cropped title</string>
     <string name="share_link">Share link</string>
+    <string name="share_qr_link">Share link (QR code)</string>
     <string name="subscribe_to_channel">Subscribe to channel</string>
     <string name="wait_data_loading">Please wait while data is loading…</string>
     <string name="auto_frame_rate_pause">Auto Frame Rate (pause when switching)</string>

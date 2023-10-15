@@ -135,7 +135,7 @@ public class AppDialogUtil {
         }
 
         dialogPresenter.appendSingleButton(
-                UiOptionItem.from(context.getString(R.string.share_link) + " (QR)", optionItem -> {
+                UiOptionItem.from(context.getString(R.string.share_qr_link), optionItem -> {
                     dialogPresenter.closeDialog(); // pause bg video
                     if (video.videoId != null) {
                         Utils.openLink(context, Utils.toQrCodeLink(

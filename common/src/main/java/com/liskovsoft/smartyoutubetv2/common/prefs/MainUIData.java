@@ -21,51 +21,53 @@ public class MainUIData extends DataChangeBase {
     public static final int CHANNEL_SORTING_NAME2 = 4;
     public static final int PLAYLISTS_STYLE_GRID = 0;
     public static final int PLAYLISTS_STYLE_ROWS = 1;
-    public static final long MENU_ITEM_RECENT_PLAYLIST = 0b1;
-    public static final long MENU_ITEM_ADD_TO_QUEUE = 0b10;
-    public static final long MENU_ITEM_PIN_TO_SIDEBAR = 0b100;
-    public static final long MENU_ITEM_SHARE_LINK = 0b1000;
-    public static final long MENU_ITEM_SELECT_ACCOUNT = 0b10000;
-    public static final long MENU_ITEM_NOT_INTERESTED = 0b100000;
-    public static final long MENU_ITEM_REMOVE_FROM_HISTORY = 0b1000000;
-    public static final long MENU_ITEM_MOVE_SECTION_UP = 0b10000000;
-    public static final long MENU_ITEM_MOVE_SECTION_DOWN = 0b100000000;
-    public static final long MENU_ITEM_OPEN_DESCRIPTION = 0b1000000000;
-    public static final long MENU_ITEM_RENAME_SECTION = 0b10000000000;
-    public static final long MENU_ITEM_PLAY_VIDEO = 0b100000000000;
-    public static final long MENU_ITEM_SAVE_PLAYLIST = 0b1000000000000;
-    public static final long MENU_ITEM_ADD_TO_PLAYLIST = 0b10000000000000;
-    public static final long MENU_ITEM_SUBSCRIBE = 0b100000000000000;
-    public static final long MENU_ITEM_CREATE_PLAYLIST = 0b1000000000000000;
-    public static final long MENU_ITEM_STREAM_REMINDER = 0b10000000000000000;
-    public static final long MENU_ITEM_ADD_TO_NEW_PLAYLIST = 0b100000000000000000;
-    public static final long MENU_ITEM_SHARE_EMBED_LINK = 0b1000000000000000000;
-    public static final long MENU_ITEM_SHOW_QUEUE = 0b10000000000000000000;
-    public static final long MENU_ITEM_PLAYLIST_ORDER = 0b100000000000000000000;
-    public static final long MENU_ITEM_TOGGLE_HISTORY = 0b1000000000000000000000;
-    public static final long MENU_ITEM_CLEAR_HISTORY = 0b10000000000000000000000;
-    public static final long MENU_ITEM_UPDATE_CHECK = 0b100000000000000000000000;
-    public static final long MENU_ITEM_OPEN_CHANNEL = 0b1000000000000000000000000;
-    public static final long MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS = 0b10000000000000000000000000;
-    public static final long MENU_ITEM_PLAY_VIDEO_INCOGNITO = 0b100000000000000000000000000;
-    public static final long MENU_ITEM_MARK_AS_WATCHED = 0b1000000000000000000000000000;
-    public static final long MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK = 0b10000000000000000000000000000;
-    public static final long MENU_ITEM_OPEN_PLAYLIST = 0b100000000000000000000000000000;
-    public static final long MENU_ITEM_EXIT_FROM_PIP = 0b1000000000000000000000000000000;
-    public static final long MENU_ITEM_OPEN_COMMENTS = 0b10000000000000000000000000000000;
-    public static final int TOP_BUTTON_BROWSE_ACCOUNTS = 0b1;
-    public static final int TOP_BUTTON_CHANGE_LANGUAGE = 0b10;
-    public static final int TOP_BUTTON_SEARCH = 0b100;
+    public static final long MENU_ITEM_RECENT_PLAYLIST = 1;
+    public static final long MENU_ITEM_ADD_TO_QUEUE = 1 << 1;
+    public static final long MENU_ITEM_PIN_TO_SIDEBAR = 1 << 2;
+    public static final long MENU_ITEM_SHARE_LINK = 1 << 3;
+    public static final long MENU_ITEM_SELECT_ACCOUNT = 1 << 4;
+    public static final long MENU_ITEM_NOT_INTERESTED = 1 << 5;
+    public static final long MENU_ITEM_REMOVE_FROM_HISTORY = 1 << 6;
+    public static final long MENU_ITEM_MOVE_SECTION_UP = 1 << 7;
+    public static final long MENU_ITEM_MOVE_SECTION_DOWN = 1 << 8;
+    public static final long MENU_ITEM_OPEN_DESCRIPTION = 1 << 9;
+    public static final long MENU_ITEM_RENAME_SECTION = 1 << 10;
+    public static final long MENU_ITEM_PLAY_VIDEO = 1 << 11;
+    public static final long MENU_ITEM_SAVE_PLAYLIST = 1 << 12;
+    public static final long MENU_ITEM_ADD_TO_PLAYLIST = 1 << 13;
+    public static final long MENU_ITEM_SUBSCRIBE = 1 << 14;
+    public static final long MENU_ITEM_CREATE_PLAYLIST = 1 << 15;
+    public static final long MENU_ITEM_STREAM_REMINDER = 1 << 16;
+    public static final long MENU_ITEM_ADD_TO_NEW_PLAYLIST = 1 << 17;
+    public static final long MENU_ITEM_SHARE_EMBED_LINK = 1 << 18;
+    public static final long MENU_ITEM_SHOW_QUEUE = 1 << 19;
+    public static final long MENU_ITEM_PLAYLIST_ORDER = 1 << 20;
+    public static final long MENU_ITEM_TOGGLE_HISTORY = 1 << 21;
+    public static final long MENU_ITEM_CLEAR_HISTORY = 1 << 22;
+    public static final long MENU_ITEM_UPDATE_CHECK = 1 << 23;
+    public static final long MENU_ITEM_OPEN_CHANNEL = 1 << 24;
+    public static final long MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS = 1 << 25;
+    public static final long MENU_ITEM_PLAY_VIDEO_INCOGNITO = 1 << 26;
+    public static final long MENU_ITEM_MARK_AS_WATCHED = 1 << 27;
+    public static final long MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK = 1 << 28;
+    public static final long MENU_ITEM_OPEN_PLAYLIST = 1 << 29;
+    public static final long MENU_ITEM_EXIT_FROM_PIP = 1 << 30;
+    public static final long MENU_ITEM_OPEN_COMMENTS = 1L << 31;
+    public static final long MENU_ITEM_SHARE_QR_LINK = 1L << 32;
+    public static final int TOP_BUTTON_BROWSE_ACCOUNTS = 1;
+    public static final int TOP_BUTTON_CHANGE_LANGUAGE = 1 << 1;
+    public static final int TOP_BUTTON_SEARCH = 1 << 2;
     public static final int TOP_BUTTON_DEFAULT = TOP_BUTTON_SEARCH | TOP_BUTTON_BROWSE_ACCOUNTS;
     public static final long MENU_ITEM_DEFAULT = MENU_ITEM_PIN_TO_SIDEBAR | MENU_ITEM_NOT_INTERESTED | MENU_ITEM_REMOVE_FROM_HISTORY |
             MENU_ITEM_MOVE_SECTION_UP | MENU_ITEM_MOVE_SECTION_DOWN | MENU_ITEM_RENAME_SECTION | MENU_ITEM_SAVE_PLAYLIST |
             MENU_ITEM_ADD_TO_PLAYLIST | MENU_ITEM_SUBSCRIBE | MENU_ITEM_CREATE_PLAYLIST | MENU_ITEM_STREAM_REMINDER | MENU_ITEM_TOGGLE_HISTORY |
-            MENU_ITEM_PLAYLIST_ORDER | MENU_ITEM_CLEAR_HISTORY | MENU_ITEM_OPEN_CHANNEL | MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS | MENU_ITEM_OPEN_PLAYLIST;
+            MENU_ITEM_PLAYLIST_ORDER | MENU_ITEM_CLEAR_HISTORY | MENU_ITEM_OPEN_CHANNEL | MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS | MENU_ITEM_OPEN_PLAYLIST |
+            MENU_ITEM_SHARE_QR_LINK;
     private static final Long[] MENU_ITEM_DEFAULT_ORDER = { MENU_ITEM_PLAY_VIDEO, MENU_ITEM_PLAY_VIDEO_INCOGNITO, MENU_ITEM_REMOVE_FROM_HISTORY, MENU_ITEM_STREAM_REMINDER, MENU_ITEM_RECENT_PLAYLIST,
             MENU_ITEM_ADD_TO_PLAYLIST, MENU_ITEM_CREATE_PLAYLIST, MENU_ITEM_ADD_TO_NEW_PLAYLIST, MENU_ITEM_NOT_INTERESTED, MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS,
             MENU_ITEM_MARK_AS_WATCHED, MENU_ITEM_PLAYLIST_ORDER, MENU_ITEM_ADD_TO_QUEUE, MENU_ITEM_SHOW_QUEUE, MENU_ITEM_OPEN_CHANNEL, MENU_ITEM_OPEN_PLAYLIST,
             MENU_ITEM_SUBSCRIBE, MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK, MENU_ITEM_PIN_TO_SIDEBAR, MENU_ITEM_SAVE_PLAYLIST, MENU_ITEM_OPEN_DESCRIPTION, MENU_ITEM_OPEN_COMMENTS,
-            MENU_ITEM_SHARE_LINK, MENU_ITEM_SHARE_EMBED_LINK, MENU_ITEM_SELECT_ACCOUNT, MENU_ITEM_TOGGLE_HISTORY, MENU_ITEM_CLEAR_HISTORY
+            MENU_ITEM_SHARE_LINK, MENU_ITEM_SHARE_EMBED_LINK, MENU_ITEM_SHARE_QR_LINK, MENU_ITEM_SELECT_ACCOUNT, MENU_ITEM_TOGGLE_HISTORY, MENU_ITEM_CLEAR_HISTORY
     };
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;

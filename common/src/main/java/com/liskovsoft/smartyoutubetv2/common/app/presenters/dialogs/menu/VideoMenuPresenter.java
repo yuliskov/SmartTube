@@ -57,6 +57,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsOpenChannelUploadsButtonEnabled;
     private boolean mIsSubscribeButtonEnabled;
     private boolean mIsShareLinkButtonEnabled;
+    private boolean mIsShareQRLinkButtonEnabled;
     private boolean mIsShareEmbedLinkButtonEnabled;
     private boolean mIsAddToPlaylistButtonEnabled;
     private boolean mIsAddToRecentPlaylistButtonEnabled;
@@ -514,6 +515,14 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         AppDialogUtil.appendShareLinkDialogItem(getContext(), mDialogPresenter, mVideo);
     }
 
+    private void appendShareQRLinkButton() {
+        if (!mIsShareQRLinkButtonEnabled) {
+            return;
+        }
+
+        AppDialogUtil.appendShareQRLinkDialogItem(getContext(), mDialogPresenter, mVideo);
+    }
+
     private void appendShareEmbedLinkButton() {
         if (!mIsShareEmbedLinkButtonEnabled) {
             return;
@@ -830,6 +839,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsAddToPlaybackQueueButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_QUEUE);
         mIsAddToPlaylistButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_PLAYLIST);
         mIsShareLinkButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_LINK);
+        mIsShareQRLinkButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_QR_LINK);
         mIsShareEmbedLinkButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_EMBED_LINK);
         mIsNotInterestedButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_NOT_INTERESTED);
         mIsNotRecommendChannelEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_NOT_INTERESTED);
@@ -872,6 +882,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.put(MainUIData.MENU_ITEM_SAVE_PLAYLIST, new MenuAction(this::appendSaveRemovePlaylistButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_DESCRIPTION, new MenuAction(this::appendOpenDescriptionButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_SHARE_LINK, new MenuAction(this::appendShareLinkButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_SHARE_QR_LINK, new MenuAction(this::appendShareQRLinkButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_SHARE_EMBED_LINK, new MenuAction(this::appendShareEmbedLinkButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_SELECT_ACCOUNT, new MenuAction(this::appendAccountSelectionButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_TOGGLE_HISTORY, new MenuAction(this::appendToggleHistoryButton, true));

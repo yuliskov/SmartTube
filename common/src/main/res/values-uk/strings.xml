@@ -157,6 +157,7 @@
     <string name="card_title_lines_num">Кількість рядків у картках</string>
     <string name="card_auto_scrolled_title">Прокручувати обрізаний заголовок</string>
     <string name="share_link">Поділитися посиланням</string>
+    <string name="share_qr_link">Поділитися посиланням (QR код)</string>
     <string name="subscribe_to_channel">Підписатися на канал</string>
     <string name="wait_data_loading">Зачекайте поки дані завантажуються…</string>
     <string name="auto_frame_rate_pause">Auto Frame Rate (пауза при перемиканні)</string>
