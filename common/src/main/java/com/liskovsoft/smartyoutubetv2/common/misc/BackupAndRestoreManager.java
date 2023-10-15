@@ -109,11 +109,29 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
             if (sourceBackupDir.exists() && !FileHelpers.isEmpty(sourceBackupDir)) {
                 FileHelpers.copy(sourceBackupDir, dataDir);
+                fixFileNames(dataDir);
             }
         }
 
         // To apply settings we need to kill the app
         new Handler(mContext.getMainLooper()).postDelayed(() -> ViewManager.instance(mContext).forceFinishTheApp(), 1_000);
+    }
+
+    /**
+     * Fix file names from other app versions
+     */
+    private void fixFileNames(File dataDir) {
+        Collection<File> files = FileHelpers.listFileTree(dataDir);
+
+        String suffix = "_preferences.xml";
+        String targetName = mContext.getPackageName() + suffix;
+
+        for (File file : files) {
+            if (file.getName().endsWith(suffix) && !file.getName().endsWith(targetName)) {
+                FileHelpers.copy(file, new File(file.getParentFile(), targetName));
+                FileHelpers.delete(file);
+            }
+        }
     }
 
     private void verifyStoragePermissionsAndReturn() {
