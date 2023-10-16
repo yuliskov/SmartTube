@@ -121,6 +121,7 @@ public class PlayerData extends DataChangeBase implements ProfileChangeListener 
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
+        mPrefs.addListener(this);
         initSubtitleStyles();
         initDefaultFormats();
         restoreState();
