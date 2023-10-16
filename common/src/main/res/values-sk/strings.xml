@@ -95,7 +95,7 @@
     <string name="disable_update_check">Vypnúť kontrolu aktualizácií</string>
     <string name="show_again">Zobraziť znova</string>
     <string name="check_updates_auto">Upozorniť na aktualizáciu</string>
-    <string name="select_account_on_boot">Vyberte účet pri spustení</string>
+    <string name="select_account_on_boot">Zobraziť vyberanie účtu pri spustení</string>
     <string name="player_other">Rôzne</string>
     <string name="player_full_date">Presný dátum v popisku</string>
     <string name="open_channel">Otvoriť kanál</string>
@@ -156,7 +156,8 @@
     <string name="unsubscribe_from_channel">Zrušiť odber kanála</string>
     <string name="card_title_lines_num">Počet riadkov v názve videa</string>
     <string name="card_auto_scrolled_title">Auto-posúvanie orezaného názvu videa</string>
-    <string name="share_link">Zdieľanie</string>
+    <string name="share_link">Zdieľať link</string>
+    <string name="share_qr_link">Zdieľať link (QR kód)</string>
     <string name="subscribe_to_channel">Odoberať</string>
     <string name="wait_data_loading">Prosím počkajte, kým sa načítajú dáta…</string>
     <string name="auto_frame_rate_pause">Pozastavenie prepínača automatickej snímkovej frekvencie</string>
@@ -598,4 +599,9 @@
     <string name="color_scheme_blue">Modrá</string>
     <string name="color_scheme_dark_blue">Tmavo-modrá</string>
     <string name="player_speed_per_channel">Pre každý kanál</string>
+    <string name="disable_popular_searches">Nezobrazovať obľúbené vyhľadávanie</string>
+    <string name="multi_profiles">Použiť samostatné nastavenia pre každý účet</string>
+    <string name="protect_account_with_password">Chrániť toto konto heslom</string>
+    <string name="enter_account_password">Zadajte heslo účtu</string>
+    <string name="show_connect_messages">Zobrazovať správy o pripojení</string>
 </resources>
