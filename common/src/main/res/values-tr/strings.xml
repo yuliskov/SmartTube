@@ -95,7 +95,7 @@
     <string name="disable_update_check">Güncelleme kontrolünü devre dışı bırak</string>
     <string name="show_again">Tekrar göster</string>
     <string name="check_updates_auto">Güncelleme hakkında bilgi ver</string>
-    <string name="select_account_on_boot">Açılışta hesap seç</string>
+    <string name="select_account_on_boot">Açılışta hesap seçimini göster</string>
     <string name="player_other">Çeşitli</string>
     <string name="player_full_date">Açıklamada tam tarih</string>
     <string name="open_channel">Kanalı aç</string>
@@ -157,6 +157,7 @@
     <string name="card_title_lines_num">Kart başlık satır sayısı</string>
     <string name="card_auto_scrolled_title">Otomatik kaydırılan kırpılmış başlık</string>
     <string name="share_link">Bağlantıyı paylaş</string>
+    <string name="share_qr_link">Bağlantıyı paylaş (QR kod)</string>
     <string name="subscribe_to_channel">Kanala abone ol</string>
     <string name="wait_data_loading">Lütfen veriler yüklenirken bekleyin…</string>
     <string name="auto_frame_rate_pause">Otomatik kare hızı değişim duraklaması</string>
@@ -602,4 +603,5 @@
     <string name="multi_profiles">Her hesap için ayrı ayarlar kullan</string>
     <string name="protect_account_with_password">Bu hesabı şifre ile koru</string>
     <string name="enter_account_password">Hesap şifresini girin</string>
+    <string name="show_connect_messages">Bağlantı mesajlarını göster</string>
 </resources>
