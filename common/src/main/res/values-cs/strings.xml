@@ -95,7 +95,7 @@
     <string name="disable_update_check">Zakázat kontrolu aktualizací</string>
     <string name="show_again">Ukaž znovu</string>
     <string name="check_updates_auto">Upozorňovat na aktualizace</string>
-    <string name="select_account_on_boot">Vyberte účet při spuštění</string>
+    <string name="select_account_on_boot">Zobrazit dialog pro výběr účtu při spuštění aplikace</string>
     <string name="player_other">Různé</string>
     <string name="player_full_date">Přesné datum v popisku</string>
     <string name="open_channel">Otevřít kanál</string>
@@ -157,6 +157,7 @@
     <string name="card_title_lines_num">Počet řádků v názvu videa</string>
     <string name="card_auto_scrolled_title">Auto-posouvání uříznutého názvu videa</string>
     <string name="share_link">Sdílet odkaz</string>
+    <string name="share_qr_link">Sdílet odkaz (QR kód)</string>
     <string name="subscribe_to_channel">Přihlásit se k odběru kanálu</string>
     <string name="wait_data_loading">Prosím počkejte, než se načtou data…</string>
     <string name="auto_frame_rate_pause">Automatická snímková frekvence (pozastav při přepnutí)</string>
@@ -600,4 +601,7 @@
     <string name="player_speed_per_channel">Pro každý kanál</string>
     <string name="disable_popular_searches">Nezobrazovat oblíbené vyhledávání</string>
     <string name="multi_profiles">Použít samostatná nastavení pro každý účet</string>
+    <string name="protect_account_with_password">Chránit tento účet heslem</string>
+    <string name="enter_account_password">Zadejte heslo účtu</string>
+    <string name="show_connect_messages">Upozornění na připojená zařízení</string>
 </resources>
