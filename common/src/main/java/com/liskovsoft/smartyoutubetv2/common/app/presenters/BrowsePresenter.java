@@ -246,7 +246,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         initPinnedSections();
         initPinnedCallbacks();
-        initPasswordSection();
+        boolean hasPassword = initPasswordSection();
 
         int index = 0;
 
@@ -270,9 +270,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             }
         }
 
-        // Move current focus (also updates title view)
-        int selectedSectionIndex = findSectionIndex(mCurrentSection != null ? mCurrentSection.getId() : -1);
-        getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, false);
+        if (hasPassword) {
+            // Move current focus
+            int selectedSectionIndex = findSectionIndex(mCurrentSection != null ? mCurrentSection.getId() : -1);
+            getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, false);
+        }
     }
 
     private void sortSections() {
@@ -1027,20 +1029,14 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return mCurrentVideo;
     }
 
-    private void initPasswordSection() {
+    private boolean initPasswordSection() {
         AccountsData accountsData = AccountsData.instance(getContext());
         if (accountsData.getAccountPassword() == null || accountsData.isPasswordAccepted()) {
-            return;
+            return false;
         }
 
-        //mErrorSections.clear();
         mSections.clear();
         appendToSections(getContext().getString(R.string.header_notifications), R.drawable.icon_notification, new PasswordError(getContext()));
-
-        //// Fix empty fragment (previous fragment is still loading)
-        //Utils.postDelayed(() -> {
-        //    getView().showProgressBar(false);
-        //    getView().showError(new PasswordError(getContext()));
-        //}, 500);
+        return true;
     }
 }
