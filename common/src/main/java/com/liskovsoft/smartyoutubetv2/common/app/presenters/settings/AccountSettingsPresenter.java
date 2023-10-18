@@ -147,7 +147,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.multi_profiles),
                 option -> {
                     AppPrefs.instance(getContext()).enableMultiProfiles(option.isSelected());
-                    BrowsePresenter.instance(getContext()).updateSections();
+                    BrowsePresenter.instance(getContext()).updateSections(true);
                 },
                 AppPrefs.instance(getContext()).isMultiProfilesEnabled()));
     }
@@ -210,7 +210,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                 getContext(),
                 "", newValue -> {
                     AccountsData.instance(getContext()).setAccountPassword(newValue);
-                    BrowsePresenter.instance(getContext()).updateSections();
+                    BrowsePresenter.instance(getContext()).updateSections(true);
                     //onSuccess.run();
                     return true;
                 },
@@ -232,7 +232,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                 "", newValue -> {
                     if (password.equals(newValue)) {
                         AccountsData.instance(getContext()).setAccountPassword(null);
-                        BrowsePresenter.instance(getContext()).updateSections();
+                        BrowsePresenter.instance(getContext()).updateSections(true);
                         //onSuccess.run();
                         return true;
                     }
@@ -255,7 +255,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                 "", newValue -> {
                     if (password.equals(newValue)) {
                         AccountsData.instance(getContext()).setPasswordAccepted(true);
-                        BrowsePresenter.instance(getContext()).updateSections();
+                        BrowsePresenter.instance(getContext()).updateSections(true);
                         //onSuccess.run();
                         return true;
                     }

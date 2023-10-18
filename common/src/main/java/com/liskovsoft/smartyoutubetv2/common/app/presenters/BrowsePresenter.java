@@ -240,7 +240,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateSections(false);
     }
 
-    private void updateSections(boolean refresh) {
+    public void updateSections(boolean refresh) {
         if (getView() == null) {
             return;
         }
