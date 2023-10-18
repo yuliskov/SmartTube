@@ -237,6 +237,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void updateSections() {
+        updateSections(false);
+    }
+
+    private void updateSections(boolean refresh) {
         if (getView() == null) {
             return;
         }
@@ -246,7 +250,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         initPinnedSections();
         initPinnedCallbacks();
-        boolean hasPassword = initPasswordSection();
+        initPasswordSection();
 
         int index = 0;
 
@@ -270,7 +274,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             }
         }
 
-        if (hasPassword) {
+        if (refresh) {
             // Move current focus
             int selectedSectionIndex = findSectionIndex(mCurrentSection != null ? mCurrentSection.getId() : -1);
             getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, false);
@@ -1022,21 +1026,20 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        updateSections();
+        updateSections(true);
     }
 
     public Video getCurrentVideo() {
         return mCurrentVideo;
     }
 
-    private boolean initPasswordSection() {
+    private void initPasswordSection() {
         AccountsData accountsData = AccountsData.instance(getContext());
         if (accountsData.getAccountPassword() == null || accountsData.isPasswordAccepted()) {
-            return false;
+            return;
         }
 
         mSections.clear();
         appendToSections(getContext().getString(R.string.header_notifications), R.drawable.icon_notification, new PasswordError(getContext()));
-        return true;
     }
 }
