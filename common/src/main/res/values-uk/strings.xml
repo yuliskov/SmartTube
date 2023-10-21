@@ -595,4 +595,5 @@
     <string name="protect_account_with_password">Захистити цей обліковий запис паролем</string>
     <string name="enter_account_password">Введіть пароль від облікового запису</string>
     <string name="show_connect_messages">Сповіщення про підключені пристрої</string>
+    <string name="prefer_avc_over_vp9_desc">ПОПЕРЕДЖЕННЯ: 1080p максімум</string>
 </resources>

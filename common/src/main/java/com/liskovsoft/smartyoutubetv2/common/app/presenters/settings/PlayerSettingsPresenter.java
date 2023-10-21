@@ -308,6 +308,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 mPlayerTweaksData.isNoFpsPresetsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.prefer_avc_over_vp9),
+                getContext().getString(R.string.prefer_avc_over_vp9_desc),
                 option -> mPlayerTweaksData.preferAvcOverVp9(option.isSelected()),
                 mPlayerTweaksData.isAvcOverVp9Preferred()));
 
