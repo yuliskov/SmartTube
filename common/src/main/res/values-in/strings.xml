@@ -93,7 +93,7 @@
     <string name="disable_update_check">Nonaktifkan pemeriksaan pembaruan</string>
     <string name="show_again">Tunjukkan lagi</string>
     <string name="check_updates_auto">Beritahukan tentang pembaruan</string>
-    <string name="select_account_on_boot">Pilih saat boot</string>
+    <string name="select_account_on_boot">Tampilkan pilihan akun saat boot</string>
     <string name="player_other">Lainnya</string>
     <string name="player_full_date">Tanggal yang tepat dalam deskripsi</string>
     <string name="open_channel">Buka channel</string>
@@ -155,6 +155,7 @@
     <string name="card_title_lines_num">Nomor baris judul kartu</string>
     <string name="card_auto_scrolled_title">Gulir otomatis judul yang dipangkas</string>
     <string name="share_link">Membagikan tautan</string>
+    <string name="share_qr_link">Membagikan tautan (QR code)</string>
     <string name="subscribe_to_channel">Berlangganan channel</string>
     <string name="wait_data_loading">Harap tunggu sementara data sedang dimuat…</string>
     <string name="auto_frame_rate_pause">Jeda kecepatan bingkai otomatis</string>
@@ -578,4 +579,5 @@
     <string name="multi_profiles">Gunakan pengaturan terpisah untuk tiap akun</string>
     <string name="protect_account_with_password">Lindungi akun ini dengan kata sandi</string>
     <string name="enter_account_password">Masukkan kata sandi akun</string>
+    <string name="show_connect_messages">Menampilkan pesan sambungan</string>
 </resources>
