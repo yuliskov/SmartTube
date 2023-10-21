@@ -95,7 +95,7 @@
     <string name="disable_update_check">Update-Prüfung deaktivieren</string>
     <string name="show_again">Erneut anzeigen</string>
     <string name="check_updates_auto">Über Update benachrichtigen</string>
-    <string name="select_account_on_boot">Konto beim Start auswählen</string>
+    <string name="select_account_on_boot">Kontoauswahl beim Start anzeigen</string>
     <string name="player_other">Sonstige</string>
     <string name="player_full_date">Genaues Datum in der Beschreibung</string>
     <string name="open_channel">Kanal öffnen</string>
@@ -157,6 +157,7 @@
     <string name="card_title_lines_num">Zeilenanzahl in Titeln</string>
     <string name="card_auto_scrolled_title">Auto-Scrollen in Titeln</string>
     <string name="share_link">Link teilen</string>
+    <string name="share_qr_link">Link teilen (QR-Code)</string>
     <string name="subscribe_to_channel">Kanal abonnieren</string>
     <string name="wait_data_loading">Bitte warten, während die Daten geladen werden…</string>
     <string name="auto_frame_rate_pause">Automatische Bildrate (Pause beim Umschalten)</string>
@@ -602,4 +603,5 @@
     <string name="multi_profiles">Separate Einstellungen für jedes Konto verwenden</string>
     <string name="protect_account_with_password">Dieses Konto mit einem Passwort schützen</string>
     <string name="enter_account_password">Konto-Passwort eingeben</string>
+    <string name="show_connect_messages">Verbindungsnachrichten anzeigen</string>
 </resources>
