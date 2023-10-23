@@ -288,7 +288,7 @@
   <string name="live_stream_fix">Cố định chất lượng phát trực tiếp (1080p)</string>
   <string name="audio_sync_fix">Sửa đồng bộ âm thanh</string>
   <string name="force_legacy_codecs_desc">Cải thiện đáng kể hiệu suất trên các thiết bị cấp thấp. Độ phân giải tối đa là 720p.</string>
-  <string name="live_stream_fix_desc">Vô hiệu hoá việc tua lùi video. Cải thiện đáng kể hiệu suất trên các thiết bị cấp thấp. Độ phân giải tối đa là 1080p.</string>
+  <string name="live_stream_fix_desc">Vô hiệu hoá việc tua lùi video phát trực tiếp. Cải thiện đáng kể hiệu suất trên các thiết bị cấp thấp. Độ phân giải tối đa là 1080p.</string>
   <string name="simple_edit_value_hint">Giá trị mới</string>
   <string name="rename_section">Đổi tên mục</string>
   <string name="internet_censorship">Cơ Quan Kiểm Duyệt Mạng</string>
@@ -531,11 +531,9 @@
   <string name="player_chapter_notification">Hiển thị thông báo để nhanh chóng chuyển qua các phân cảnh</string>
   <string name="player_auto_volume">Tự động điều chỉnh âm lượng</string>
   <string name="player_ui_on_next">Hiển thị trình phát khi chuyển qua video tiếp theo</string>
-  <string name="auto_history"></string>
   <string name="msg_player_unknown_error">Lỗi không xác định</string>
   <string name="header_notifications">Thông báo</string>
   <string name="disable_search_history">Tắt lịch sử tìm kiếm</string>
-  <string name="unlock_high_bitrate_formats"></string>
   <string name="color_scheme_blue">Xanh biển</string>
   <string name="color_scheme_dark_blue">Xanh biển tối</string>
   <string name="enter_account_password">Nhập mật khẩu</string>
@@ -546,7 +544,6 @@
   <string name="play_video_incognito">Phát ở chế độ ẩn danh</string>
   <string name="dialog_notification">Thông báo về bản cập nhật với hộp thoại</string>
   <string name="audio_language">Ngôn ngữ âm thanh</string>
-  <string name="old_home_look"></string>
   <string name="player_ui_animations">Bật hoạt ảnh của bảng điều khiển</string>
   <string name="trending_searches">Tìm kiếm nổi bật</string>
   <string name="video_feature_any">Bất kì</string>
@@ -555,10 +552,10 @@
   <string name="protect_settings_with_password">Bảo vệ cài đặt bằng mật khẩu</string>
   <string name="enter_settings_password">Nhập mật khẩu cài đặt</string>
   <string name="child_mode">Chế độ trẻ em</string>
-  <string name="child_mode_desc">Trong chế độ này, người dùng không thể tìm hoặc xem nội dung đề xuất. Cài đặt nằm bên dưới mật khẩu</string>
-  <string name="player_button_long_click">Bấm nút để hành động nanh và giữ để mở bảng cài đặt</string>
+  <string name="child_mode_desc">Trong chế độ này, người dùng không thể tìm hoặc xem nội dung đề xuất. Cài đặt nằm bên dưới mật khẩu.</string>
+  <string name="player_button_long_click">Bấm nút để hành động nhanh và giữ nút để mở bảng cài đặt</string>
   <string name="video_rotate">Quay</string>
-  <string name="live_stream_fix_4k_desc">Vô hiệu hoá việc tua lùi video. Cải thiện đáng kể hiệu suất. Độ phân giải tối đa là 4K.</string>
+  <string name="live_stream_fix_4k_desc">Vô hiệu hoá việc tua lùi video phát trực tiếp. Cải thiện đáng kể hiệu suất. Độ phân giải tối đa là 4K.</string>
   <string name="live_stream_fix_4k">Cố định chất lượng phát trực tiếp (4K)</string>
   <string name="player_speed_per_channel">Cho mỗi kênh</string>
   <string name="disable_popular_searches">Tắt tìm kiếm phổ biến</string>
