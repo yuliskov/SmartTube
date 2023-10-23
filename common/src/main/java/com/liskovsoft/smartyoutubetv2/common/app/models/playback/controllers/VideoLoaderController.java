@@ -332,7 +332,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             }
             if (formatInfo.isAgeRestricted()) {
                 SignInPresenter.instance(getActivity()).start();
-                getController().finish();
+                getActivity().finish();
             }
         } else if (formatInfo.containsDashVideoInfo() && acceptDashVideoInfo(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
