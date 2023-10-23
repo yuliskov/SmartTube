@@ -1,30 +1,31 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
-import android.media.MediaDescription;
-import android.os.Parcel;
-import android.os.Parcelable;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.data.NotificationState;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Video is an object that holds the various metadata associated with a single video.
  */
-public final class Video implements Parcelable {
+public final class Video {
     public static final String TERTIARY_TEXT_DELIM = "•";
     public static final long MAX_DURATION_MS = 24 * 60 * 60 * 1_000;
+    private static final String OBJ_DELIM = "&vi;";
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     private static final String[] sNotPlaylistParams = new String[] {"EAIYAQ%3D%3D"};
     private static final String BLACK_PLACEHOLDER_URL = "https://via.placeholder.com/1280x720/000000/000000";
@@ -55,10 +56,10 @@ public final class Video implements Parcelable {
     public MediaItem nextMediaItem;
     public MediaItem nextMediaItemBackup;
     public PlaylistInfo playlistInfo;
-    public VideoGroup group; // Memory leak. Used to get next page when scrolling.
     public boolean hasNewContent;
     public boolean isLive;
     public boolean isUpcoming;
+    public boolean isShorts;
     public boolean isChapter;
     public boolean isMovie;
     public boolean isSubscribed;
@@ -73,7 +74,13 @@ public final class Video implements Parcelable {
     public boolean fromQueue;
     public boolean isPending;
     public boolean finishOnEnded;
+    public boolean incognito;
+    public String likeCount;
+    public String dislikeCount;
+    public float volume = 1.0f;
     private int startSegmentNum;
+    private WeakReference<VideoGroup> group; // Memory leak fix. Used to get next page when scrolling.
+    public List<NotificationState> notificationStates;
 
     public Video() {
        // NOP
@@ -100,18 +107,6 @@ public final class Video implements Parcelable {
         this.author = author;
     }
 
-    protected Video(Parcel in) {
-        id = in.readLong();
-        category = in.readString();
-        title = in.readString();
-        secondTitle = in.readString();
-        bgImageUrl = in.readString();
-        cardImageUrl = in.readString();
-        videoId = in.readString();
-        videoUrl = in.readString();
-        author = in.readString();
-    }
-
     public static Video from(MediaItem item) {
         Video video = new Video();
 
@@ -136,6 +131,7 @@ public final class Video implements Parcelable {
         video.reloadPageKey = item.getReloadPageKey();
         video.isLive = item.isLive();
         video.isUpcoming = item.isUpcoming();
+        video.isShorts = item.isShorts();
         video.isMovie = item.isMovie();
         video.clickTrackingParams = item.getClickTrackingParams();
         video.mediaItem = item;
@@ -188,18 +184,6 @@ public final class Video implements Parcelable {
         video.badge = ServiceHelper.millisToTimeText(chapter.getStartTimeMs());
         return video;
     }
-
-    public static final Creator<Video> CREATOR = new Creator<Video>() {
-        @Override
-        public Video createFromParcel(Parcel in) {
-            return new Video(in);
-        }
-
-        @Override
-        public Video[] newArray(int size) {
-            return new Video[size];
-        }
-    };
 
     ///**
     // * Don't change the logic from equality by reference!<br/>
@@ -263,6 +247,14 @@ public final class Video implements Parcelable {
         return extractAuthor(secondTitle != null ? secondTitle : metadataSecondTitle);
     }
 
+    public VideoGroup getGroup() {
+        return group != null ? group.get() : null;
+    }
+
+    public void setGroup(VideoGroup group) {
+        this.group = new WeakReference<>(group);
+    }
+
     private static String extractAuthor(String secondTitle) {
         String result = null;
 
@@ -300,25 +292,12 @@ public final class Video implements Parcelable {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(category);
-        dest.writeString(title);
-        dest.writeString(secondTitle);
-        dest.writeString(bgImageUrl);
-        dest.writeString(cardImageUrl);
-        dest.writeString(videoId);
-        dest.writeString(videoUrl);
-        dest.writeString(author);
-    }
-
     public static Video fromString(String spec) {
         if (spec == null) {
             return null;
         }
 
-        String[] split = spec.split("&vi;");
+        String[] split = Helpers.split(OBJ_DELIM, spec);
 
         // 'playlistParams' backward compatibility
         if (split.length == 10) {
@@ -364,9 +343,10 @@ public final class Video implements Parcelable {
         return result;
     }
 
+    @NonNull
     @Override
     public String toString() {
-        return String.format("%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s",
+        return Helpers.merge(OBJ_DELIM,
                 id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl,
                 YouTubeMediaService.serialize(mediaItem), playlistParams, extra, getReloadPageKey(), itemType);
     }
@@ -398,7 +378,7 @@ public final class Video implements Parcelable {
      * NOTE: Channels section uses <em>playlistParams</em> instead of <em>playlistId</em>
      */
     public boolean hasPlaylist() {
-        return playlistId != null || belongsToChannelUploads();
+        return playlistId != null;
     }
 
     //public boolean hasPlaylist() {
@@ -448,7 +428,7 @@ public final class Video implements Parcelable {
     }
 
     public boolean isMix() {
-        return mediaItem != null && mediaItem.getDurationMs() <= 0 && (hasPlaylist() || hasChannel() || hasNestedItems());
+        return !isLive && badge != null && mediaItem != null && mediaItem.getDurationMs() <= 0 && (hasPlaylist() || hasChannel() || hasNestedItems());
     }
 
     public boolean isEmpty() {
@@ -457,11 +437,11 @@ public final class Video implements Parcelable {
     }
 
     public boolean belongsToUserPlaylists() {
-        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_USER_PLAYLISTS;
+        return getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getType() == MediaGroup.TYPE_USER_PLAYLISTS;
     }
 
     public String getGroupTitle() {
-        return group != null ? group.getTitle() : null;
+        return getGroup() != null ? getGroup().getTitle() : null;
     }
 
     /**
@@ -469,11 +449,11 @@ public final class Video implements Parcelable {
      */
     public String getReloadPageKey() {
         return reloadPageKey != null ? reloadPageKey :
-                (group != null && group.getMediaGroup() != null && group.getMediaGroup().getReloadPageKey() != null) ? group.getMediaGroup().getReloadPageKey() : null;
+                (getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getReloadPageKey() != null) ? getGroup().getMediaGroup().getReloadPageKey() : null;
     }
 
     public String getNextPageKey() {
-        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getNextPageKey() != null ? group.getMediaGroup().getNextPageKey() : null;
+        return getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getNextPageKey() != null ? getGroup().getMediaGroup().getNextPageKey() : null;
     }
 
     public String getBackgroundUrl() {
@@ -481,7 +461,7 @@ public final class Video implements Parcelable {
     }
 
     public boolean belongsToUndefined() {
-        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_UNDEFINED;
+        return getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getType() == MediaGroup.TYPE_UNDEFINED;
     }
 
     public boolean belongsToSameAuthorGroup() {
@@ -489,7 +469,7 @@ public final class Video implements Parcelable {
             return false;
         }
 
-        List<MediaItem> mediaItems = group.getMediaGroup().getMediaItems();
+        List<MediaItem> mediaItems = getGroup().getMediaGroup().getMediaItems();
 
         MediaItem first = mediaItems.get(0);
         MediaItem last = mediaItems.get(mediaItems.size() - 1);
@@ -505,7 +485,7 @@ public final class Video implements Parcelable {
             return false;
         }
 
-        List<MediaItem> mediaItems = group.getMediaGroup().getMediaItems();
+        List<MediaItem> mediaItems = getGroup().getMediaGroup().getMediaItems();
 
         MediaItem first = mediaItems.get(0);
         MediaItem second = mediaItems.get(1);
@@ -517,31 +497,43 @@ public final class Video implements Parcelable {
     }
 
     public boolean belongsToHome() {
-        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_HOME;
+        return belongsToGroup(MediaGroup.TYPE_HOME);
     }
 
     public boolean belongsToChannel() {
-        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_CHANNEL;
+        return belongsToGroup(MediaGroup.TYPE_CHANNEL);
     }
 
     public boolean belongsToChannelUploads() {
-        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_CHANNEL_UPLOADS;
+        return belongsToGroup(MediaGroup.TYPE_CHANNEL_UPLOADS);
     }
 
     public boolean belongsToSubscriptions() {
-        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_SUBSCRIPTIONS;
+        return belongsToGroup(MediaGroup.TYPE_SUBSCRIPTIONS);
     }
 
     public boolean belongsToHistory() {
-        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_HISTORY;
+        return belongsToGroup(MediaGroup.TYPE_HISTORY);
     }
 
     public boolean belongsToMusic() {
-        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_MUSIC;
+        return belongsToGroup(MediaGroup.TYPE_MUSIC);
+    }
+
+    public boolean belongsToShorts() {
+        return belongsToGroup(MediaGroup.TYPE_SHORTS);
+    }
+
+    public boolean belongsToNotifications() {
+        return belongsToGroup(MediaGroup.TYPE_NOTIFICATIONS);
+    }
+
+    private boolean belongsToGroup(int groupId) {
+        return getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getType() == groupId;
     }
 
     public boolean belongsToSection() {
-        return group != null && group.getSection() != null;
+        return getGroup() != null && getGroup().getSection() != null;
     }
 
     public void sync(Video video) {
@@ -591,6 +583,9 @@ public final class Video implements Parcelable {
         nextMediaItem = findNextVideo(metadata);
         playlistInfo = metadata.getPlaylistInfo();
         isSubscribed = metadata.isSubscribed();
+        likeCount = metadata.getLikeCount();
+        dislikeCount = metadata.getDislikeCount();
+        notificationStates = metadata.getNotificationStates();
         isSynced = true;
 
         if (mediaItem != null) {
@@ -614,6 +609,8 @@ public final class Video implements Parcelable {
             startTimeMs = formatInfo.getStartTimeMs() > 0 ? formatInfo.getStartTimeMs() : DateHelper.toUnixTimeMs(formatInfo.getStartTimestamp());
             startSegmentNum = formatInfo.getStartSegmentNum();
         }
+
+        volume = formatInfo.getVolumeLevel();
     }
 
     /**
@@ -637,8 +634,8 @@ public final class Video implements Parcelable {
         video.isUpcoming = isUpcoming;
         video.nextMediaItem = nextMediaItem;
 
-        if (group != null) {
-            video.group = group.copy(); // Needed for proper multi row fragments sync (row id == group id)
+        if (getGroup() != null) {
+            video.setGroup(getGroup().copy()); // Needed for proper multi row fragments sync (row id == group id)
         }
 
         return video;
@@ -658,8 +655,8 @@ public final class Video implements Parcelable {
     }
 
     private boolean checkMediaItems() {
-        return group != null && group.getMediaGroup() != null
-                && group.getMediaGroup().getMediaItems() != null && group.getMediaGroup().getMediaItems().size() >= 2;
+        return getGroup() != null && getGroup().getMediaGroup() != null
+                && getGroup().getMediaGroup().getMediaItems() != null && getGroup().getMediaGroup().getMediaItems().size() >= 2;
     }
 
     private MediaItem findNextVideo(MediaItemMetadata metadata) {
@@ -692,6 +689,10 @@ public final class Video implements Parcelable {
         return liveDurationMs > 0 ? liveDurationMs : 0;
     }
 
+    public long getDurationMs() {
+        return mediaItem != null ? mediaItem.getDurationMs() : -1;
+    }
+
     public long getPositionMs() {
         // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
         if (mediaItem == null || percentWatched <= RESTORE_POSITION_PERCENTS || percentWatched >= 100) {
@@ -706,92 +707,9 @@ public final class Video implements Parcelable {
         return SampleMediaItem.from(this);
     }
 
-    // Builder for Video object.
-    public static class VideoBuilder {
-        private long id;
-        private String category;
-        private String title;
-        private String desc;
-        private String bgImageUrl;
-        private String cardImageUrl;
-        private String videoId;
-        private String videoUrl;
-        private String studio;
-        private MediaItem mediaItem;
-        private MediaItemMetadata mediaItemMetadata;
-
-        public VideoBuilder id(long id) {
-            this.id = id;
-            return this;
-        }
-
-        public VideoBuilder category(String category) {
-            this.category = category;
-            return this;
-        }
-
-        public VideoBuilder title(String title) {
-            this.title = title;
-            return this;
-        }
-
-        public VideoBuilder description(String desc) {
-            this.desc = desc;
-            return this;
-        }
-
-        public VideoBuilder videoId(String videoId) {
-            this.videoId = videoId;
-            return this;
-        }
-
-        public VideoBuilder videoUrl(String videoUrl) {
-            this.videoUrl = videoUrl;
-            return this;
-        }
-
-        public VideoBuilder bgImageUrl(String bgImageUrl) {
-            this.bgImageUrl = bgImageUrl;
-            return this;
-        }
-
-        public VideoBuilder cardImageUrl(String cardImageUrl) {
-            this.cardImageUrl = cardImageUrl;
-            return this;
-        }
-
-        public VideoBuilder studio(String studio) {
-            this.studio = studio;
-            return this;
-        }
-
-        @RequiresApi(21)
-        public Video buildFromMediaDesc(MediaDescription desc) {
-            return new Video(
-                    Long.parseLong(desc.getMediaId()),
-                    "", // Category - not provided by MediaDescription.
-                    String.valueOf(desc.getTitle()),
-                    String.valueOf(desc.getDescription()),
-                    "", // Media ID - not provided by MediaDescription.
-                    "", // Media URI - not provided by MediaDescription.
-                    "", // Background Image URI - not provided by MediaDescription.
-                    String.valueOf(desc.getIconUri()),
-                    String.valueOf(desc.getSubtitle())
-            );
-        }
-
-        public Video build() {
-            return new Video(
-                    id,
-                    category,
-                    title,
-                    desc,
-                    videoId,
-                    videoUrl,
-                    bgImageUrl,
-                    cardImageUrl,
-                    studio
-            );
+    public void sync(VideoStateService.State state) {
+        if (state != null) {
+            percentWatched = state.positionMs / (state.durationMs / 100f);
         }
     }
 }

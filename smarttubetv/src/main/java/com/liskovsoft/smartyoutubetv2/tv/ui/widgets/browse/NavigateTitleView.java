@@ -29,6 +29,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSet
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -51,7 +52,7 @@ import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
  * https://stackoverflow.com/questions/38169378/use-multiple-orb-buttons-or-other-buttons-in-the-leanbacks-title-view<br/>
  * https://stackoverflow.com/questions/40802470/add-button-to-browsefragment
  */
-public class NavigateTitleView extends TitleView implements OnDataChange {
+public class NavigateTitleView extends TitleView implements OnDataChange, AccountChangeListener {
     private LongClickSearchOrbView mAccountView;
     private SearchOrbView mLanguageView;
     private SearchOrbView mExitPip;
@@ -63,6 +64,8 @@ public class NavigateTitleView extends TitleView implements OnDataChange {
     private SearchOrbView mSearchOrbView;
     private boolean mInitDone;
     private int mFlags = FULL_VIEW_VISIBLE;
+    private int mIconWidth;
+    private int mIconHeight;
 
     public NavigateTitleView(Context context) {
         super(context);
@@ -173,6 +176,8 @@ public class NavigateTitleView extends TitleView implements OnDataChange {
             return;
         }
 
+        MediaServiceManager.instance().addAccountListener(this);
+
         setupButtons();
 
         MainUIData mainUIData = MainUIData.instance(getContext());
@@ -270,7 +275,8 @@ public class NavigateTitleView extends TitleView implements OnDataChange {
         }
     }
 
-    public void update() {
+    @Override
+    public void onAccountChanged(Account account) {
         updateAccountIcon();
     }
 
@@ -292,25 +298,17 @@ public class NavigateTitleView extends TitleView implements OnDataChange {
             return;
         }
 
-        MediaServiceManager.instance().loadAccounts(accountList -> {
-            Account current = null;
-            for (Account account : accountList) {
-                if (account.isSelected()) {
-                    current = account;
-                    break;
-                }
-            }
+        Account current = MediaServiceManager.instance().getSelectedAccount();
 
-            if (current != null && current.getAvatarImageUrl() != null) {
-                loadIcon(mAccountView, current.getAvatarImageUrl());
-                TooltipCompatHandler.setTooltipText(mAccountView, current.getName() != null ? current.getName() : current.getEmail());
-            } else {
-                Colors orbColors = mAccountView.getOrbColors();
-                mAccountView.setOrbColors(new Colors(orbColors.color, orbColors.brightColor, ContextCompat.getColor(getContext(), R.color.orb_icon_color)));
-                mAccountView.setOrbIcon(ContextCompat.getDrawable(getContext(), R.drawable.browse_title_account));
-                TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.dialog_account_none));
-            }
-        });
+        if (current != null && current.getAvatarImageUrl() != null) {
+            loadIcon(mAccountView, current.getAvatarImageUrl());
+            TooltipCompatHandler.setTooltipText(mAccountView, current.getName() != null ? current.getName() : current.getEmail());
+        } else {
+            Colors orbColors = mAccountView.getOrbColors();
+            mAccountView.setOrbColors(new Colors(orbColors.color, orbColors.brightColor, ContextCompat.getColor(getContext(), R.color.orb_icon_color)));
+            mAccountView.setOrbIcon(ContextCompat.getDrawable(getContext(), R.drawable.browse_title_account));
+            TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.dialog_account_none));
+        }
     }
 
     private void updateLanguageIcon() {
@@ -326,9 +324,14 @@ public class NavigateTitleView extends TitleView implements OnDataChange {
         }, 100);
     }
 
-    private static void loadIcon(SearchOrbView view, String url) {
+    private void loadIcon(SearchOrbView view, String url) {
+        if (view == null) {
+            return;
+        }
+
         // The view with GONE visibility has zero width and height
-        if (view == null || view.getWidth() <= 0 || view.getHeight() <= 0) {
+        if (view.getWidth() <= 0 || view.getHeight() <= 0) {
+            Utils.postDelayed(() -> loadIcon(view, url), 500);
             return;
         }
 
@@ -338,12 +341,18 @@ public class NavigateTitleView extends TitleView implements OnDataChange {
             return;
         }
 
+        // Size of the view might increase after icon change (bug on some firmwares). So, it's better to cache initial values.
+        if (mIconWidth == 0 || mIconHeight == 0) {
+            mIconWidth = view.getWidth();
+            mIconHeight = view.getHeight();
+        }
+
         Glide.with(context)
                 .load(url)
                 .apply(ViewUtil.glideOptions())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .circleCrop() // resize image
-                .into(new SimpleTarget<Drawable>(view.getWidth(), view.getHeight()) {
+                .into(new SimpleTarget<Drawable>(mIconWidth, mIconHeight) {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                         Colors orbColors = view.getOrbColors();

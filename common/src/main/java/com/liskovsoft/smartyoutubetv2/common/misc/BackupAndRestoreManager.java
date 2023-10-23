@@ -11,15 +11,19 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private static final String TAG = BackupAndRestoreManager.class.getSimpleName();
+    private static final String BACKUP_DIR_NAME = "Backup";
     private final Context mContext;
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
     private final List<File> mDataDirs;
     private final List<File> mBackupDirs;
     private Runnable mPendingHandler;
+    private String mBackupName;
 
     public BackupAndRestoreManager(Context context) {
         mContext = context;
@@ -27,15 +31,21 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         mDataDirs.add(new File(mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR));
 
         mBackupDirs = new ArrayList<>();
-        mBackupDirs.add(new File(FileHelpers.getBackupDir(mContext), "Backup"));
-        mBackupDirs.add(new File(FileHelpers.getExternalFilesDir(mContext), "Backup")); // isn't used at a moment
+        mBackupDirs.add(new File(FileHelpers.getBackupDir(mContext), BACKUP_DIR_NAME));
+        mBackupDirs.add(new File(FileHelpers.getExternalFilesDir(mContext), BACKUP_DIR_NAME)); // isn't used at a moment
         // Fallback dir: Stable (in case app installed from scratch)
-        mBackupDirs.add(new File(new File(Environment.getExternalStorageDirectory(), "data/com.teamsmart.videomanager.tv"), "Backup"));
+        mBackupDirs.add(new File(new File(Environment.getExternalStorageDirectory(), "data/com.teamsmart.videomanager.tv"), BACKUP_DIR_NAME));
         // Fallback dir: Beta (in case app installed from scratch)
-        mBackupDirs.add(new File(new File(Environment.getExternalStorageDirectory(), "data/com.liskovsoft.smarttubetv.beta"), "Backup"));
+        mBackupDirs.add(new File(new File(Environment.getExternalStorageDirectory(), "data/com.liskovsoft.smarttubetv.beta"), BACKUP_DIR_NAME));
     }
 
     public void checkPermAndRestore() {
+        checkPermAndRestore(null);
+    }
+
+    public void checkPermAndRestore(String name) {
+        mBackupName = name;
+
         if (FileHelpers.isExternalStorageReadable()) {
             if (PermissionHelpers.hasStoragePermissions(mContext)) {
                 restoreData();
@@ -99,11 +109,29 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
             if (sourceBackupDir.exists() && !FileHelpers.isEmpty(sourceBackupDir)) {
                 FileHelpers.copy(sourceBackupDir, dataDir);
+                fixFileNames(dataDir);
             }
         }
 
         // To apply settings we need to kill the app
         new Handler(mContext.getMainLooper()).postDelayed(() -> ViewManager.instance(mContext).forceFinishTheApp(), 1_000);
+    }
+
+    /**
+     * Fix file names from other app versions
+     */
+    private void fixFileNames(File dataDir) {
+        Collection<File> files = FileHelpers.listFileTree(dataDir);
+
+        String suffix = "_preferences.xml";
+        String targetName = mContext.getPackageName() + suffix;
+
+        for (File file : files) {
+            if (file.getName().endsWith(suffix) && !file.getName().endsWith(targetName)) {
+                FileHelpers.copy(file, new File(file.getParentFile(), targetName));
+                FileHelpers.delete(file);
+            }
+        }
     }
 
     private void verifyStoragePermissionsAndReturn() {
@@ -130,6 +158,10 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         for (File backupDir : mBackupDirs) {
             // FileHelpers.isEmpty(backupDir) needs access device storage permission
+            if (mBackupName != null && !mBackupName.isEmpty()) {
+                backupDir = new File(backupDir.getParentFile(), mBackupName);
+            }
+
             if (backupDir.exists()) {
                 currentBackup = backupDir;
                 break;
@@ -163,6 +195,38 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         File currentBackup = getBackupCheck();
 
         return currentBackup != null ? currentBackup.toString() : null;
+    }
+
+    public List<String> getBackupNames() {
+        File current = getBackup();
+
+        if (current != null) {
+            File parentFile = current.getParentFile();
+
+            if (parentFile == null) {
+                return null;
+            }
+
+            String[] list = parentFile.list();
+
+            if (list == null) {
+                return null;
+            }
+
+            List<String> result = new ArrayList<>();
+
+            Arrays.sort(list);
+
+            for (String dirName : list) {
+                if (dirName.startsWith(BACKUP_DIR_NAME)) {
+                    result.add(dirName);
+                }
+            }
+
+            return result;
+        }
+
+        return null;
     }
 
     public boolean hasBackup() {

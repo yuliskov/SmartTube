@@ -121,10 +121,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     
     protected abstract void onItemViewClicked(Object item);
 
-    //protected void setItemResultsAdapter(ObjectAdapter adapter) {
-    //    mItemResultsAdapter = adapter;
-    //}
-
     protected void setSearchTagsProvider(SearchTagsProvider provider) {
         mSearchTagsProvider = provider;
     }
@@ -164,12 +160,27 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                 //    setSpeechRecognitionCallback(mDefaultCallback);
                 //}
                 break;
-            case SearchData.SPEECH_RECOGNIZER_EXTERNAL_1:
+            case SearchData.SPEECH_RECOGNIZER_DEFAULT:
                 setSpeechRecognitionCallback(mDefaultCallback);
                 break;
-            case SearchData.SPEECH_RECOGNIZER_EXTERNAL_2:
+            case SearchData.SPEECH_RECOGNIZER_GOTEV:
+                Speech.init(getContext());
                 setSpeechRecognitionCallback(mGotevCallback);
                 break;
+        }
+    }
+
+    protected void stopSpeechService() {
+        // Note: Other services don't need to be stopped
+
+        if (SearchData.instance(getContext()).getSpeechRecognizerType() != SearchData.SPEECH_RECOGNIZER_GOTEV) {
+            return;
+        }
+
+        try {
+            Speech.getInstance().stopListening();
+        } catch (IllegalArgumentException | NoSuchMethodError e) { // Speech service not registered/Android 4 (no such method)
+            e.printStackTrace();
         }
     }
 
@@ -183,6 +194,10 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     }
 
     private void performTagSearch(TagAdapter adapter) {
+        if (mSearchTagsProvider == null) {
+            return;
+        }
+
         String query = adapter.getAdapterOptions().get(PaginationAdapter.KEY_TAG);
         mSearchTagsProvider.search(query, results -> {
             mResultsAdapter.clear();

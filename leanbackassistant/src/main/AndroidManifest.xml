@@ -1,0 +1,80 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.liskovsoft.leanbackassistant">
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.QUICKBOOT_POWERON" />
+    <uses-permission android:name="com.android.providers.tv.permission.READ_EPG_DATA" />
+    <uses-permission android:name="com.android.providers.tv.permission.WRITE_EPG_DATA" />
+
+    <uses-sdk tools:overrideLibrary="
+        org.xwalk.core,
+        com.algolia.instantsearch.voice,
+        androidx.leanback,
+        androidx.tvprovider,
+        com.github.rubensousa.previewseekbar,
+        com.github.rubensousa.previewseekbar.exoplayer,
+        androidx.recommendation"/>
+
+    <application android:allowBackup="true"
+                 android:label="@string/app_name"
+                 android:supportsRtl="true"
+                 android:theme="@style/AppTheme">
+
+        <!--    SEARCH    -->
+
+        <activity
+            android:name=".search.SearchableActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+        <provider android:name=".search.VideoContentProvider"
+                  android:authorities="com.liskovsoft.leanbackassistant"
+                  android:exported="true"
+                  android:initOrder="1999999999"
+                  tools:ignore="ExportedContentProvider" />
+
+        <!--  END  SEARCH    -->
+
+
+        <!--    CHANNELS    -->
+
+        <service
+            android:name=".channels.SynchronizeDatabaseJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:enabled="true"
+            android:exported="true"/>
+
+        <receiver
+            android:name=".channels.RunOnInstallReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <!-- For HTC devices -->
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+                <!-- Fix: Permission Denial: not allowed to send broadcast android.intent.action.BOOT_COMPLETED -->
+                <action android:name="android.intent.action.ACTION_BOOT_COMPLETED" />
+                <!-- Called one time after app is installed -->
+                <!-- <action android:name="android.media.tv.action.INITIALIZE_PROGRAMS" />-->
+            </intent-filter>
+        </receiver>
+
+        <!--    END CHANNELS    -->
+
+    </application>
+
+</manifest>

@@ -14,6 +14,13 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
 public class LoadingManager {
+    public static void showLoading(Context context, boolean show, Class<?> view) {
+        Class<?> topView = ViewManager.instance(context).getTopView();
+        if (topView == view) {
+            showLoading(context, show);
+        }
+    }
+
     public static void showLoading(Context context, boolean show) {
         Class<?> topView = ViewManager.instance(context).getTopView();
 

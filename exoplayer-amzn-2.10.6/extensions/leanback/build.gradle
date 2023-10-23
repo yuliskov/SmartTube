@@ -31,6 +31,8 @@ android {
 }
 
 dependencies {
+    // MOD: add custom lib
+    implementation project(':leanback-1.0.0')
     implementation project(modulePrefix + 'library-core')
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.leanback:leanback:1.0.0'

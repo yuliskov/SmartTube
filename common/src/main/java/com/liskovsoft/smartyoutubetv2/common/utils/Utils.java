@@ -16,6 +16,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
+import android.content.res.Resources.NotFoundException;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -30,12 +34,14 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -44,20 +50,20 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUI;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.WebBrowserPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
+import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 
 import java.util.LinkedHashMap;
@@ -72,11 +78,12 @@ public class Utils {
     private static final String QR_CODE_URL_TEMPLATE = "https://api.qrserver.com/v1/create-qr-code/?data=%s";
     private static final int GLOBAL_VOLUME_TYPE = AudioManager.STREAM_MUSIC;
     private static final String GLOBAL_VOLUME_SERVICE = Context.AUDIO_SERVICE;
-    private static final Handler sHandler = new Handler(Looper.getMainLooper());
+    public static final Handler sHandler = new Handler(Looper.getMainLooper());
     public static final float[] SPEED_LIST_LONG =
             new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f, 3.25f, 3.5f, 3.75f, 4.0f};
     public static final float[] SPEED_LIST_SHORT =
             new float[] {0.25f, 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 2.25f, 2.5f, 2.75f, 3.0f, 3.25f, 3.5f, 3.75f, 4.0f};
+    private static boolean sIsGlobalVolumeFixed;
 
     /**
      * Limit the maximum size of a Map by removing oldest entries when limit reached
@@ -132,6 +139,21 @@ public class Utils {
     public static void displayShareChannelDialog(Context context, String channelId) {
         Uri channelUrl = convertToFullChannelUrl(channelId);
         showMultiChooser(context, channelUrl);
+    }
+
+    @TargetApi(17)
+    public static void openUrlInternally(Context context, Uri url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(url);
+        intent.setPackage(context.getPackageName());
+        //intent.setClass(context, ViewManager.instance(context).getActivity(SplashView.class));
+        PackageManager packageManager = context.getPackageManager();
+        if (intent.resolveActivity(packageManager) != null) {
+            context.startActivity(intent);
+        } else {
+            // Fallback to the chooser dialog
+            showMultiChooser(context, url);
+        }
     }
 
     @TargetApi(17)
@@ -237,10 +259,12 @@ public class Utils {
         if (context != null) {
             AudioManager audioManager = (AudioManager) context.getSystemService(GLOBAL_VOLUME_SERVICE);
             if (audioManager != null) {
-                int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE);
+                int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE) / 2; // max volume is too loud
                 audioManager.setStreamVolume(GLOBAL_VOLUME_TYPE, (int) Math.ceil(streamMaxVolume / 100f * volume), 0);
             }
         }
+
+        sIsGlobalVolumeFixed = getGlobalVolume(context) != volume;
     }
 
     /**
@@ -250,7 +274,7 @@ public class Utils {
         if (context != null) {
             AudioManager audioManager = (AudioManager) context.getSystemService(GLOBAL_VOLUME_SERVICE);
             if (audioManager != null) {
-                int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE);
+                int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE) / 2; // max volume is too loud
                 int streamVolume = audioManager.getStreamVolume(GLOBAL_VOLUME_TYPE);
 
                 return (int) Math.ceil(streamVolume / (streamMaxVolume / 100f));
@@ -260,15 +284,8 @@ public class Utils {
         return 100;
     }
 
-    public static boolean isGlobalVolumeEnabled(Context context) {
-        if (context != null) {
-            AudioManager audioManager = (AudioManager) context.getSystemService(GLOBAL_VOLUME_SERVICE);
-            if (audioManager != null) {
-                return audioManager.isVolumeFixed();
-            }
-        }
-
-        return false;
+    public static boolean isGlobalVolumeFixed() {
+        return sIsGlobalVolumeFixed;
     }
 
     /**
@@ -328,7 +345,7 @@ public class Utils {
         customTabsIntent.launchUrl(context, Uri.parse(url));
     }
 
-    public static void postDelayed(Runnable callback, int delayMs) {
+    public static void postDelayed(Runnable callback, long delayMs) {
         sHandler.removeCallbacks(callback);
         sHandler.postDelayed(callback, delayMs);
     }
@@ -467,19 +484,19 @@ public class Utils {
 
     public static void showRepeatInfo(Context context, int modeIndex) {
         switch (modeIndex) {
-            case PlaybackUI.REPEAT_MODE_ALL:
+            case PlayerUI.REPEAT_MODE_ALL:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_all);
                 break;
-            case PlaybackUI.REPEAT_MODE_ONE:
+            case PlayerUI.REPEAT_MODE_ONE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_one);
                 break;
-            case PlaybackUI.REPEAT_MODE_PAUSE:
+            case PlayerUI.REPEAT_MODE_PAUSE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_pause);
                 break;
-            case PlaybackUI.REPEAT_MODE_LIST:
+            case PlayerUI.REPEAT_MODE_LIST:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_pause_alt);
                 break;
-            case PlaybackUI.REPEAT_MODE_CLOSE:
+            case PlayerUI.REPEAT_MODE_CLOSE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_none);
                 break;
         }
@@ -558,7 +575,7 @@ public class Utils {
     public static void showPlayerControls(Context context, boolean show) {
         PlaybackView view = PlaybackPresenter.instance(context).getView();
         if (view != null) {
-            view.getController().showOverlay(show);
+            view.getPlayer().showOverlay(show);
         }
     }
 
@@ -584,7 +601,7 @@ public class Utils {
         return true;
     }
 
-    public static boolean isTrackSupported(MediaTrack mediaTrack) {
+    public static boolean isFormatSupported(MediaTrack mediaTrack) {
         if (mediaTrack.isVP9Codec() && !Helpers.isVP9ResolutionSupported(mediaTrack.getHeight())) {
             return false;
         }
@@ -593,6 +610,80 @@ public class Utils {
             return false;
         }
 
+        // There's a bug. The player hangs at the black screen.
+        // opus and others audio codecs require hardware acceleration
+        //if (mediaTrack instanceof AudioTrack && !mediaTrack.isMP4ACodec() && !Helpers.isVP9Supported()) {
+        //    return false;
+        //}
+
         return true;
+    }
+
+    public static int getThemeColor(Context context, int attrId, int defaultColorResId) {
+        int themeResId = getThemeResId(context, attrId);
+        return ContextCompat.getColor(context, themeResId != -1 ? themeResId : defaultColorResId);
+    }
+
+    public static int getThemeResId(Context context, int attrId) {
+        TypedValue outValue = new TypedValue();
+        if (context.getTheme().resolveAttribute(attrId, outValue, true)) {
+            return outValue.resourceId;
+        }
+        return -1;
+    }
+
+    public static void enableScreensaver(Context activity, boolean enable) {
+        if (activity instanceof MotherActivity) {
+            ScreensaverManager screensaver = ((MotherActivity) activity).getScreensaverManager();
+            if (enable) {
+                screensaver.enable();
+            } else {
+                screensaver.disable();
+            }
+        }
+    }
+
+    public static boolean isScreenOff(Context activity) {
+        if (activity instanceof MotherActivity) {
+            ScreensaverManager manager = ((MotherActivity) activity).getScreensaverManager();
+
+            return manager != null && manager.isScreenOff();
+        }
+
+        return false;
+    }
+
+    public static int getColor(Context context, int colorResId, int dimPercents) {
+        int color = ContextCompat.getColor(context, colorResId);
+        color = ColorUtils.setAlphaComponent(color, (int)(255f / 100 * dimPercents));
+
+        return color;
+    }
+
+    /**
+     * https://stackoverflow.com/questions/11288147/get-resources-from-another-apk
+     */
+    public static Drawable getDrawable(Context context, String packageName, String drawableName) {
+        if (context == null || packageName == null || drawableName == null) {
+            return null;
+        }
+
+        Drawable result = null;
+
+        try {
+            PackageManager manager = context.getPackageManager();
+            Resources resources = manager.getResourcesForApplication(packageName);
+            int drawableResId = resources.getIdentifier(drawableName, "drawable", packageName);
+
+            if (drawableResId == 0) {
+                drawableResId = resources.getIdentifier(drawableName, "mipmap", packageName);
+            }
+
+            result = resources.getDrawable(drawableResId);
+        } catch (NameNotFoundException | NotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

@@ -25,7 +25,6 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.webbrowser.WebBrowserActivity;
-import net.gotev.speech.Speech;
 
 import org.conscrypt.Conscrypt;
 
@@ -35,7 +34,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     static {
         // fix youtube bandwidth throttling (best - false)???
         // false is better for streams (less buffering)
-        //System.setProperty("http.keepAlive", "false");
+        System.setProperty("http.keepAlive", "false");
         // fix ipv6 infinite video buffering???
         // Better to remove this fix at all. Users complain about infinite loading.
         //System.setProperty("java.net.preferIPv6Addresses", "true");
@@ -55,7 +54,6 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
 
         Analytics.init(getApplicationContext());
         setupViewManager();
-        Speech.init(this);
     }
 
     private void setupViewManager() {

@@ -7,7 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager.SegmentAction;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.ContentBlockController.SegmentAction;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,6 +30,7 @@ public class ContentBlockData {
     private boolean mIsSponsorBlockEnabled;
     private final Set<String> mColorCategories = new LinkedHashSet<>();
     private final Set<SegmentAction> mActions = new LinkedHashSet<>();
+    private final Set<String> mExcludedChannels = new LinkedHashSet<>();
     private boolean mIsDontSkipSegmentAgainEnabled;
     private Map<String, Integer> mSegmentLocalizedMapping;
     private Map<String, Integer> mSegmentColorMapping;
@@ -73,7 +74,7 @@ public class ContentBlockData {
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_INTERACTION, R.color.magenta);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, R.color.orange_peel);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_PREVIEW_RECAP, R.color.light_blue);
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_POI_HIGHLIGHT, R.color.white);
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_POI_HIGHLIGHT, R.color.light_pink);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_FILLER, R.color.electric_violet);
     }
 
@@ -132,6 +133,32 @@ public class ContentBlockData {
 
     public boolean isColorMarkersEnabled() {
         return !mColorCategories.isEmpty();
+    }
+
+    public void excludeChannel(String channelId) {
+        mExcludedChannels.add(channelId);
+        persistData();
+    }
+
+    public void stopExcludingChannel(String channelId) {
+        mExcludedChannels.remove(channelId);
+        persistData();
+    }
+
+    public boolean isChannelExcluded(String channelId) {
+        return mExcludedChannels.contains(channelId);
+    }
+
+    public void toggleExcludeChannel(String channelId) {
+        if (channelId == null) {
+            return;
+        }
+
+        if (isChannelExcluded(channelId)) {
+            stopExcludingChannel(channelId);
+        } else {
+            excludeChannel(channelId);
+        }
     }
 
     public Set<SegmentAction> getActions() {
@@ -200,6 +227,7 @@ public class ContentBlockData {
         String actions = Helpers.parseStr(split, 6);
         String colorCategories = Helpers.parseStr(split, 7);
         mIsDontSkipSegmentAgainEnabled = Helpers.parseBoolean(split, 8, true);
+        String excludedChannels = Helpers.parseStr(split, 9);
 
         if (colorCategories != null) {
             String[] categoriesArr = Helpers.splitArray(colorCategories);
@@ -211,6 +239,16 @@ public class ContentBlockData {
             mColorCategories.clear();
 
             mColorCategories.addAll(mAllCategories);
+        }
+
+        if (excludedChannels != null) {
+            String[] channelsArr = Helpers.splitArray(excludedChannels);
+
+            mExcludedChannels.clear();
+
+            mExcludedChannels.addAll(Arrays.asList(channelsArr));
+        } else {
+            mExcludedChannels.clear();
         }
 
         if (actions != null) {
@@ -240,10 +278,12 @@ public class ContentBlockData {
     private void persistData() {
         String colorCategories = Helpers.mergeArray(mColorCategories.toArray());
         String actions = Helpers.mergeArray(mActions.toArray());
+        String excludedChannels = Helpers.mergeArray(mExcludedChannels.toArray());
 
         mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeObject(
                 mIsSponsorBlockEnabled, null, null, null,
-                null, null, actions, colorCategories, mIsDontSkipSegmentAgainEnabled
+                null, null, actions, colorCategories, mIsDontSkipSegmentAgainEnabled,
+                excludedChannels
         ));
     }
 }

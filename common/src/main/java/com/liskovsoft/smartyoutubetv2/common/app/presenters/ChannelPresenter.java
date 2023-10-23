@@ -36,6 +36,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private List<MediaGroup> mMediaGroups;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
+    private MediaGroup mLastScrollGroup;
 
     private interface OnChannelId {
         void onChannelId(String channelId);
@@ -112,12 +113,12 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             return;
         }
 
-        if (item.group == null) {
+        if (item.getGroup() == null) {
             Log.e(TAG, "Can't scroll. Video group is null.");
             return;
         }
 
-        VideoGroup group = item.group;
+        VideoGroup group = item.getGroup();
 
         Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());
 
@@ -223,6 +224,18 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             return;
         }
 
+        if (group == null) {
+            Log.e(TAG, "Can't continue group. The group is null.");
+            return;
+        }
+
+        if (mLastScrollGroup == group.getMediaGroup()) {
+            Log.d(TAG, "Can't continue group. Another action is running.");
+            return;
+        }
+
+        mLastScrollGroup = group.getMediaGroup();
+
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         getView().showProgressBar(true);
@@ -233,7 +246,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribe(
-                        continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
+                        //continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
+                        continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup, group)),
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             if (getView() != null) {

@@ -199,7 +199,7 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
                     //    Utils.showMultiChooser(context, Uri.parse(link));
                     //}
 
-                    Utils.showMultiChooser(context, Uri.parse(link));
+                    Utils.openUrlInternally(context, Uri.parse(link));
                 }
 
                 @Override

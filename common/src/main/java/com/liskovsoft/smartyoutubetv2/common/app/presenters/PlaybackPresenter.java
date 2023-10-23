@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEventBridge;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -19,13 +19,13 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     @SuppressLint("StaticFieldLeak")
     private static PlaybackPresenter sInstance;
     private final ViewManager mViewManager;
-    private final MainPlayerEventBridge mMainPlayerEventBridge;
+    private final MainPlayerController mMainPlayerController;
 
     private PlaybackPresenter(Context context) {
         super(context);
 
         mViewManager = ViewManager.instance(context);
-        mMainPlayerEventBridge = MainPlayerEventBridge.instance(context);
+        mMainPlayerController = MainPlayerController.instance(context);
     }
 
     public static PlaybackPresenter instance(Context context) {
@@ -42,8 +42,8 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     public void onViewInitialized() {
         super.onViewInitialized();
 
-        mMainPlayerEventBridge.setController(getView().getController());
-        getView().setEventListener(mMainPlayerEventBridge);
+        mMainPlayerController.setPlayer(getView().getPlayer());
+        getView().setEventListener(mMainPlayerController);
     }
 
     /**
@@ -69,44 +69,40 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
             return;
         }
 
-        mMainPlayerEventBridge.openVideo(item);
+        mMainPlayerController.openVideo(item);
 
         mViewManager.startView(PlaybackView.class);
-
-        if (getView() != null) {
-            getView().getController().showControls(true);
-        }
     }
 
     public Video getVideo() {
-        if (getView() == null || getView().getController() == null) {
+        if (getView() == null || getView().getPlayer() == null) {
             return null;
         }
 
-        return getView().getController().getVideo();
+        return getView().getPlayer().getVideo();
     }
 
     public boolean isRunningInBackground() {
         return getView() != null &&
-                getView().getController().getBackgroundMode() != PlaybackEngine.BACKGROUND_MODE_DEFAULT &&
-                getView().getController().isEngineInitialized() &&
+                getView().getPlayer().getBackgroundMode() != PlayerEngine.BACKGROUND_MODE_DEFAULT &&
+                getView().getPlayer().isEngineInitialized() &&
                 !ViewManager.instance(getContext()).isPlayerInForeground() &&
                 getContext() instanceof Activity && Utils.checkActivity((Activity) getContext()); // Check that activity is not in Finishing state
     }
 
     public boolean isInPipMode() {
-        return getView() != null && getView().getController().isInPIPMode();
+        return getView() != null && getView().getPlayer().isInPIPMode();
     }
 
     private boolean isPreferBackground() {
         int mode = PlayerData.instance(getContext()).getBackgroundMode();
 
-        return mode != PlaybackEngine.BACKGROUND_MODE_DEFAULT;
+        return mode != PlayerEngine.BACKGROUND_MODE_DEFAULT;
     }
 
     public void forceFinish() {
         if (getView() != null) {
-            getView().getController().finishReally();
+            getView().getPlayer().finishReally();
         }
     }
 
@@ -118,9 +114,9 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
         // Check that the user isn't open context menu on suggestion item
         // if (Utils.isPlayerInForeground(getContext()) && getView() != null && !getView().getController().isSuggestionsShown()) {
         if (ViewManager.instance(getContext()).isPlayerInForeground() && getView() != null) {
-            getView().getController().setPositionMs(positionMs);
-            getView().getController().setPlayWhenReady(true);
-            getView().getController().showOverlay(false);
+            getView().getPlayer().setPositionMs(positionMs);
+            getView().getPlayer().setPlayWhenReady(true);
+            getView().getPlayer().showOverlay(false);
         } else {
             Video video = VideoMenuPresenter.sVideoHolder.get();
             if (video != null) {

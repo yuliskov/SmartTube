@@ -4,22 +4,26 @@ import androidx.leanback.widget.HeaderItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 
 public class SectionHeaderItem extends HeaderItem {
-    private final BrowseSection mHeader;
+    private final BrowseSection mSection;
 
-    public SectionHeaderItem(BrowseSection header) {
-        super(header.getId(), header.getTitle());
-        mHeader = header;
+    public SectionHeaderItem(BrowseSection section) {
+        super(section.getId(), section.getTitle());
+        mSection = section;
     }
 
     public int getType() {
-        return mHeader.getType();
+        return mSection.getType();
     }
 
     public int getResId() {
-        return mHeader.getResId();
+        return mSection.getResId();
     }
 
     public String getIconUrl() {
-        return mHeader.getIconUrl();
+        return mSection.getIconUrl();
+    }
+
+    public BrowseSection getSection() {
+        return mSection;
     }
 }

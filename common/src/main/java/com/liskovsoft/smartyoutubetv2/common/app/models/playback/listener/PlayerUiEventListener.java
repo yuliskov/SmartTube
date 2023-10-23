@@ -13,7 +13,6 @@ public interface PlayerUiEventListener {
     boolean onKeyDown(int keyCode);
     void onRepeatModeClicked(int modeIndex);
     void onHighQualityClicked();
-    void onSubscribeClicked(boolean subscribed);
     void onDislikeClicked(boolean dislike);
     void onLikeClicked(boolean like);
     void onChannelClicked();
@@ -21,8 +20,8 @@ public interface PlayerUiEventListener {
     void onSubtitleLongClicked(boolean enabled);
     void onPlaylistAddClicked();
     void onDebugInfoClicked(boolean enabled);
-    void onVideoSpeedClicked(boolean enabled);
-    void onVideoSpeedLongClicked(boolean enabled);
+    void onSpeedClicked(boolean enabled);
+    void onSpeedLongClicked(boolean enabled);
     void onSeekIntervalClicked();
     void onChatClicked(boolean enabled);
     void onChatLongClicked(boolean enabled);
@@ -31,7 +30,6 @@ public interface PlayerUiEventListener {
     void onSearchClicked();
     void onVideoZoomClicked();
     void onPipClicked();
-    void onScreenOffClicked();
     void onPlaybackQueueClicked();
     void onButtonClicked(int buttonId, int buttonState);
     void onButtonLongClicked(int buttonId, int buttonState);

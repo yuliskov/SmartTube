@@ -2,9 +2,11 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build.VERSION;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 
-public class PlayerTweaksData {
+public class PlayerTweaksData implements ProfileChangeListener {
     private static final String VIDEO_PLAYER_TWEAKS_DATA = "video_player_tweaks_data";
     public static final int PLAYER_DATA_SOURCE_DEFAULT = 0;
     public static final int PLAYER_DATA_SOURCE_OKHTTP = 1;
@@ -33,7 +35,13 @@ public class PlayerTweaksData {
     public static final int PLAYER_BUTTON_CONTENT_BLOCK = 0b1000000000000000000000;
     public static final int PLAYER_BUTTON_CHAT = 0b10000000000000000000000;
     public static final int PLAYER_BUTTON_VIDEO_ROTATE = 0b100000000000000000000000;
-    public static final int PLAYER_BUTTON_DEFAULT = Integer.MAX_VALUE & ~(PLAYER_BUTTON_SEEK_INTERVAL | PLAYER_BUTTON_CONTENT_BLOCK | PLAYER_BUTTON_VIDEO_ROTATE); // all buttons, except these
+    public static final int PLAYER_BUTTON_SCREEN_OFF_TIMEOUT = 0b1000000000000000000000000;
+    public static final int PLAYER_BUTTON_DEFAULT = PLAYER_BUTTON_SEARCH | PLAYER_BUTTON_PIP | PLAYER_BUTTON_SCREEN_OFF_TIMEOUT | PLAYER_BUTTON_VIDEO_SPEED |
+            PLAYER_BUTTON_VIDEO_STATS | PLAYER_BUTTON_OPEN_CHANNEL | PLAYER_BUTTON_SUBTITLES | PLAYER_BUTTON_SUBSCRIBE |
+            PLAYER_BUTTON_LIKE | PLAYER_BUTTON_DISLIKE | PLAYER_BUTTON_ADD_TO_PLAYLIST | PLAYER_BUTTON_PLAY_PAUSE |
+            PLAYER_BUTTON_REPEAT_MODE | PLAYER_BUTTON_NEXT | PLAYER_BUTTON_PREVIOUS | PLAYER_BUTTON_HIGH_QUALITY |
+            PLAYER_BUTTON_VIDEO_INFO | PLAYER_BUTTON_CHAT;
+    //public static final int PLAYER_BUTTON_DEFAULT = Integer.MAX_VALUE & ~(PLAYER_BUTTON_SEEK_INTERVAL | PLAYER_BUTTON_CONTENT_BLOCK | PLAYER_BUTTON_VIDEO_ROTATE); // all buttons, except these
     @SuppressLint("StaticFieldLeak")
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;
@@ -66,9 +74,23 @@ public class PlayerTweaksData {
     private int mPlayerDataSource;
     private boolean mUnlockAllFormats;
     private boolean mIsBufferOnStreamsDisabled;
+    private boolean mIsSectionPlaylistEnabled;
+    private boolean mIsScreenOffTimeoutEnabled;
+    private boolean mIsBootScreenOffEnabled;
+    private int mScreenOffTimeoutSec;
+    private int mScreenOffDimmingPercents;
+    private boolean mIsUIAnimationsEnabled;
+    private boolean mIsLikesCounterEnabled;
+    private boolean mIsChapterNotificationEnabled;
+    private boolean mIsPlayerUiOnNextEnabled;
+    private boolean mIsPlayerAutoVolumeEnabled;
+    private boolean mIsPlayerGlobalFocusEnabled;
+    private boolean mIsUnsafeAudioFormatsEnabled;
+    private boolean mIsHighBitrateFormatsUnlocked;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
+        mPrefs.addListener(this);
         restoreData();
     }
 
@@ -216,6 +238,15 @@ public class PlayerTweaksData {
         persistData();
     }
 
+    public void enableUnsafeAudioFormats(boolean enable) {
+        mIsUnsafeAudioFormatsEnabled = enable;
+        persistData();
+    }
+
+    public boolean isUnsafeAudioFormatsEnabled() {
+        return mIsUnsafeAudioFormatsEnabled;
+    }
+
     public void enablePlayerButton(int playerButtons) {
         mPlayerButtons |= playerButtons;
         persistData();
@@ -320,22 +351,22 @@ public class PlayerTweaksData {
         persistData();
     }
 
-    public boolean isButtonLongClickEnabled() {
-        return mIsButtonLongClickEnabled;
-    }
-
     public void enableButtonLongClick(boolean enable) {
         mIsButtonLongClickEnabled = enable;
         persistData();
     }
 
-    public boolean isLongSpeedListEnabled() {
-        return mIsLongSpeedListEnabled;
+    public boolean isButtonLongClickEnabled() {
+        return mIsButtonLongClickEnabled;
     }
 
     public void enableLongSpeedList(boolean enable) {
         mIsLongSpeedListEnabled = enable;
         persistData();
+    }
+
+    public boolean isLongSpeedListEnabled() {
+        return mIsLongSpeedListEnabled;
     }
 
     public void unlockAllFormats(boolean unlock) {
@@ -356,8 +387,117 @@ public class PlayerTweaksData {
         return mIsBufferOnStreamsDisabled;
     }
 
+    public void enableSectionPlaylist(boolean enable) {
+        mIsSectionPlaylistEnabled = enable;
+        persistData();
+    }
+
+    public boolean isSectionPlaylistEnabled() {
+        return mIsSectionPlaylistEnabled;
+    }
+
+    public void enableScreenOffTimeout(boolean enable) {
+        mIsScreenOffTimeoutEnabled = enable;
+        persistData();
+    }
+
+    public boolean isScreenOffTimeoutEnabled() {
+        return mIsScreenOffTimeoutEnabled;
+    }
+
+    public void setScreenOffTimeoutSec(int timeoutSec) {
+        mScreenOffTimeoutSec = timeoutSec;
+        mIsScreenOffTimeoutEnabled = mIsScreenOffTimeoutEnabled && timeoutSec > 0;
+        persistData();
+    }
+
+    public int getScreenOffTimeoutSec() {
+        return mScreenOffTimeoutSec;
+    }
+
+    public void setScreenOffDimmingPercents(int percents) {
+        mScreenOffDimmingPercents = percents;
+        persistData();
+    }
+
+    public int getScreenOffDimmingPercents() {
+        return mScreenOffDimmingPercents;
+    }
+
+    public void enableBootScreenOff(boolean enable) {
+        mIsBootScreenOffEnabled = enable;
+        persistData();
+    }
+
+    public boolean isBootScreenOffEnabled() {
+        return mIsBootScreenOffEnabled && !isScreenOffTimeoutEnabled();
+    }
+
+    public void enableUIAnimations(boolean enable) {
+        mIsUIAnimationsEnabled = enable;
+        persistData();
+    }
+
+    public boolean isUIAnimationsEnabled() {
+        return mIsUIAnimationsEnabled;
+    }
+
+    public void enableLikesCounter(boolean enable) {
+        mIsLikesCounterEnabled = enable;
+        persistData();
+    }
+
+    public boolean isLikesCounterEnabled() {
+        return mIsLikesCounterEnabled;
+    }
+
+    public void enableChapterNotification(boolean enable) {
+        mIsChapterNotificationEnabled = enable;
+        persistData();
+    }
+
+    public boolean isChapterNotificationEnabled() {
+        return mIsChapterNotificationEnabled;
+    }
+
+    public void enablePlayerUiOnNext(boolean enable) {
+        mIsPlayerUiOnNextEnabled = enable;
+        persistData();
+    }
+
+    public boolean isPlayerUiOnNextEnabled() {
+        return mIsPlayerUiOnNextEnabled;
+    }
+
+    public void enablePlayerAutoVolume(boolean enable) {
+        mIsPlayerAutoVolumeEnabled = enable;
+        persistData();
+    }
+
+    public boolean isPlayerAutoVolumeEnabled() {
+        return mIsPlayerAutoVolumeEnabled;
+    }
+
+    public void enablePlayerGlobalFocus(boolean enable) {
+        mIsPlayerGlobalFocusEnabled = enable;
+        persistData();
+    }
+
+    public boolean isPlayerGlobalFocusEnabled() {
+        return mIsPlayerGlobalFocusEnabled;
+    }
+
+    public void unlockHighBitrateFormats(boolean enable) {
+        mIsHighBitrateFormatsUnlocked = enable;
+        persistData();
+    }
+
+    public boolean isHighBitrateFormatsUnlocked() {
+        return mIsHighBitrateFormatsUnlocked;
+    }
+
     private void restoreData() {
-        String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
+        String data = mPrefs.getProfileData(VIDEO_PLAYER_TWEAKS_DATA);
 
         String[] split = Helpers.splitObjectLegacy(data);
 
@@ -387,16 +527,33 @@ public class PlayerTweaksData {
         mIsQualityInfoBitrateEnabled = Helpers.parseBoolean(split, 22, false);
         mIsSpeedButtonOldBehaviorEnabled = Helpers.parseBoolean(split, 23, false);
         mIsButtonLongClickEnabled = Helpers.parseBoolean(split, 24, true);
-        mIsLongSpeedListEnabled = Helpers.parseBoolean(split, 25, false);
-        mPlayerDataSource = Helpers.parseInt(split, 26, PLAYER_DATA_SOURCE_CRONET);
+        mIsLongSpeedListEnabled = Helpers.parseBoolean(split, 25, true);
+        // Android 6 and below may crash running Cronet???
+        mPlayerDataSource = Helpers.parseInt(split, 26, VERSION.SDK_INT > 23 ? PLAYER_DATA_SOURCE_CRONET : PLAYER_DATA_SOURCE_DEFAULT);
         mUnlockAllFormats = Helpers.parseBoolean(split, 27, false);
         mIsDashUrlStreamsForced = Helpers.parseBoolean(split, 28, false);
         mIsSonyFrameDropFixEnabled = Helpers.parseBoolean(split, 29, false);
         mIsBufferOnStreamsDisabled = Helpers.parseBoolean(split, 30, false);
+        // Cause severe garbage collector stuttering
+        mIsSectionPlaylistEnabled = Helpers.parseBoolean(split, 31, VERSION.SDK_INT > 21);
+        mIsScreenOffTimeoutEnabled = Helpers.parseBoolean(split, 32, false);
+        mScreenOffTimeoutSec = Helpers.parseInt(split, 33, 0);
+        mIsUIAnimationsEnabled = Helpers.parseBoolean(split, 34, false);
+        mIsLikesCounterEnabled = Helpers.parseBoolean(split, 35, true);
+        mIsChapterNotificationEnabled = Helpers.parseBoolean(split, 36, false);
+        mScreenOffDimmingPercents = Helpers.parseInt(split, 37, 100);
+        mIsBootScreenOffEnabled = Helpers.parseBoolean(split, 38, false);
+        mIsPlayerUiOnNextEnabled = Helpers.parseBoolean(split, 39, false);
+        mIsPlayerAutoVolumeEnabled = Helpers.parseBoolean(split, 40, true);
+        mIsPlayerGlobalFocusEnabled = Helpers.parseBoolean(split, 41, true);
+        mIsUnsafeAudioFormatsEnabled = Helpers.parseBoolean(split, 42, false);
+        mIsHighBitrateFormatsUnlocked = Helpers.parseBoolean(split, 43, false);
+
+        updateDefaultValues();
     }
 
     private void persistData() {
-        mPrefs.setData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
+        mPrefs.setProfileData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
                 mIsAmlogicFixEnabled, mIsAmazonFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled, mIsHlsStreamsForced,
@@ -404,7 +561,28 @@ public class PlayerTweaksData {
                 null, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
                 mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio, mIsQualityInfoBitrateEnabled,
                 mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
-                mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled
-        ));
+                mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
+                mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
+                mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
+                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked
+                ));
+    }
+
+    private void updateDefaultValues() {
+        // Enable only certain buttons (not all, like it was)
+        if (mPlayerButtons >>> 30 == 0b1) { // check leftmost bit (old format)
+            int bits = 32 - 24;
+            mPlayerButtons = mPlayerButtons << bits >>> bits; // remove auto enabled bits
+        }
+
+        // Replace old button with new one
+        if (isPlayerButtonEnabled(PLAYER_BUTTON_SCREEN_OFF)) {
+            enablePlayerButton(PLAYER_BUTTON_SCREEN_OFF_TIMEOUT);
+        }
+    }
+
+    @Override
+    public void onProfileChanged() {
+        restoreData();
     }
 }

@@ -17,6 +17,26 @@ import java.util.Map;
 public class PlayerKeyTranslator extends GlobalKeyTranslator {
     private final GeneralData mGeneralData;
     private final Context mContext;
+    private final Runnable likeAction = () -> {
+        PlaybackView playbackView = getPlaybackView();
+        if (playbackView != null && playbackView.getEventListener() != null) {
+            playbackView.getEventListener().onLikeClicked(true);
+            playbackView.getPlayer().setLikeButtonState(true);
+            playbackView.getPlayer().setDislikeButtonState(false);
+            MessageHelpers.showMessage(getContext(), R.string.action_like);
+        }
+    };
+    private final Runnable dislikeAction = () -> {
+        PlaybackView playbackView = getPlaybackView();
+        if (playbackView != null && playbackView.getEventListener() != null) {
+            playbackView.getEventListener().onDislikeClicked(true);
+            playbackView.getPlayer().setLikeButtonState(false);
+            playbackView.getPlayer().setDislikeButtonState(true);
+            MessageHelpers.showMessage(getContext(), R.string.action_dislike);
+        }
+    };
+    private final Runnable speedUpAction = () -> speedUp(true);
+    private final Runnable speedDownAction = () -> speedUp(false);
 
     public PlayerKeyTranslator(Context context) {
         super(context);
@@ -49,8 +69,18 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             globalKeyMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, KeyEvent.KEYCODE_MEDIA_NEXT);
             globalKeyMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
         }
+        
+        if (!PlaybackPresenter.instance(mContext).isInPipMode() && mGeneralData.isRemapPlayPauseToOKEnabled()) {
+            globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_DPAD_CENTER);
+        } else {
+            globalKeyMapping.remove(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        }
 
         globalKeyMapping.put(KeyEvent.KEYCODE_DEL, KeyEvent.KEYCODE_0); // reset position of the video (if enabled number key handling in the settings)
+
+        // Toggle playback on PLAY/PAUSE. NOTE: cause troubles with IoT handlers!!!
+        //globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        //globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
     }
 
     @Override
@@ -64,29 +94,6 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
     }
 
     private void addLikeAction(Map<Integer, Runnable> actionMapping) {
-        if (!mGeneralData.isRemapPageUpToLikeEnabled() && !mGeneralData.isRemapChannelUpToLikeEnabled()) {
-            return;
-        }
-
-        Runnable likeAction = () -> {
-            PlaybackView playbackView = getPlaybackView();
-            if (playbackView != null && playbackView.getEventListener() != null) {
-                playbackView.getEventListener().onLikeClicked(true);
-                playbackView.getController().setLikeButtonState(true);
-                playbackView.getController().setDislikeButtonState(false);
-                MessageHelpers.showMessage(mContext, R.string.action_like);
-            }
-        };
-        Runnable dislikeAction = () -> {
-            PlaybackView playbackView = getPlaybackView();
-            if (playbackView != null && playbackView.getEventListener() != null) {
-                playbackView.getEventListener().onDislikeClicked(true);
-                playbackView.getController().setLikeButtonState(false);
-                playbackView.getController().setDislikeButtonState(true);
-                MessageHelpers.showMessage(mContext, R.string.action_dislike);
-            }
-        };
-
         if (mGeneralData.isRemapPageUpToLikeEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, likeAction);
             actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, dislikeAction);
@@ -99,14 +106,6 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
     }
 
     private void addSpeedAction(Map<Integer, Runnable> actionMapping) {
-        if (!mGeneralData.isRemapPageUpToSpeedEnabled() && !mGeneralData.isRemapChannelUpToSpeedEnabled()
-            && !mGeneralData.isRemapFastForwardToSpeedEnabled()) {
-            return;
-        }
-
-        Runnable speedUpAction = () -> speedUp(true);
-        Runnable speedDownAction = () -> speedUp(false);
-
         if (mGeneralData.isRemapPageUpToSpeedEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, speedDownAction);
@@ -121,6 +120,16 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, speedDownAction);
         }
+
+        if (mGeneralData.isRemapNextPrevToSpeedEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_MEDIA_NEXT, speedUpAction);
+            actionMapping.put(KeyEvent.KEYCODE_MEDIA_PREVIOUS, speedDownAction);
+        }
+
+        if (mGeneralData.isRemapNumbersToSpeedEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_3, speedUpAction);
+            actionMapping.put(KeyEvent.KEYCODE_1, speedDownAction);
+        }
     }
 
     private void speedUp(boolean up) {
@@ -128,8 +137,8 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
 
         PlaybackView playbackView = getPlaybackView();
 
-        if (playbackView != null && playbackView.getController() != null) {
-            float currentSpeed = playbackView.getController().getSpeed();
+        if (playbackView != null && playbackView.getPlayer() != null) {
+            float currentSpeed = playbackView.getPlayer().getSpeed();
             int currentIndex = Arrays.binarySearch(speedSteps, currentSpeed);
 
             if (currentIndex < 0) {
@@ -141,12 +150,16 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             float speed = newIndex >= 0 && newIndex < speedSteps.length ? speedSteps[newIndex] : speedSteps[currentIndex];
 
             PlayerData.instance(mContext).setSpeed(speed);
-            playbackView.getController().setSpeed(speed);
+            playbackView.getPlayer().setSpeed(speed);
             MessageHelpers.showMessage(mContext, String.format("%sx", speed));
         }
     }
 
     private PlaybackView getPlaybackView() {
         return PlaybackPresenter.instance(mContext).getView();
+    }
+
+    private Context getContext() {
+        return mContext;
     }
 }

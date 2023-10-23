@@ -17,7 +17,6 @@ import android.content.Context;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import androidx.leanback.R;
 import androidx.leanback.widget.Action;
@@ -98,6 +97,7 @@ class ControlBarPresenter extends Presenter {
             }
             mControlBar.setDefaultFocusToMiddle(mDefaultFocusToMiddle);
             mControlBar.setFocusRecovery(mFocusRecovery);
+            mControlBar.setGlobalFocus(mGlobalFocus);
             mControlBar.setOnChildFocusedListener(new ControlBar.OnChildFocusedListener() {
                 @Override
                 public void onChildFocusedListener(View child, View focused) {
@@ -105,9 +105,9 @@ class ControlBarPresenter extends Presenter {
                         return;
                     }
                     for (int position = 0; position < mViewHolders.size(); position++) {
-                        if (mViewHolders.get(position).view == child) {
-                            mOnControlSelectedListener.onControlSelected(
-                                    mViewHolders.get(position),
+                        Presenter.ViewHolder vh = mViewHolders.get(position);
+                        if (vh != null && vh.view == child) {
+                            mOnControlSelectedListener.onControlSelected(vh,
                                     getDisplayedAdapter().get(position), mData);
                             break;
                         }
@@ -221,6 +221,7 @@ class ControlBarPresenter extends Presenter {
     private static int sControlIconWidth;
     boolean mDefaultFocusToMiddle = true;
     boolean mFocusRecovery = true;
+    boolean mGlobalFocus = true;
 
     /**
      * Constructor for a ControlBarPresenter.
@@ -337,5 +338,12 @@ class ControlBarPresenter extends Presenter {
      */
     void setFocusRecovery(boolean focusRecovery) {
         mFocusRecovery = focusRecovery;
+    }
+
+    /**
+     * MOD: global navigation
+     */
+    void setGlobalFocus(boolean globalFocus) {
+        mGlobalFocus = globalFocus;
     }
 }

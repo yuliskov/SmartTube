@@ -39,6 +39,8 @@ import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.google.android.exoplayer2.text.Cue;
 import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.Util;
+import com.liskovsoft.sharedutils.misc.PaddingBackgroundColorSpan;
+import com.liskovsoft.sharedutils.misc.RoundedBackgroundSpan;
 
 /**
  * Paints subtitle {@link Cue}s.
@@ -281,8 +283,13 @@ import com.google.android.exoplayer2.util.Util;
 
     if (Color.alpha(backgroundColor) > 0) {
       SpannableStringBuilder newCueText = new SpannableStringBuilder(cueText);
+      // MOD: add subs bg padding
+      //newCueText.setSpan(
+      //    new BackgroundColorSpan(backgroundColor), 0, newCueText.length(), Spanned.SPAN_PRIORITY);
       newCueText.setSpan(
-          new BackgroundColorSpan(backgroundColor), 0, newCueText.length(), Spanned.SPAN_PRIORITY);
+              new PaddingBackgroundColorSpan(backgroundColor), 0, newCueText.length(), Spanned.SPAN_PRIORITY);
+      //newCueText.setSpan(
+      //        new RoundedBackgroundSpan(backgroundColor), 0, newCueText.length(), Spanned.SPAN_PRIORITY);
       cueText = newCueText;
     }
 

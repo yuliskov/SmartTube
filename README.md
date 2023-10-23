@@ -1,15 +1,17 @@
-# SmartTubeNext (STN)
+# SmartTube (old name SmartTubeNext)
+  
+<img width="100" src="https://github.com/yuliskov/SmartTubeNext/blob/master/smarttubetv/src/ststable/res/mipmap-nodpi/app_icon.png" alt="logo"/>
 
-SmartTubeNext is an advanced YouTube app for **Android TVs** and **TV boxes**, free & open source. It is not a live TV client and does not support ["YouTube TV"](https://tv.youtube.com/).
+**SmartTube** is an advanced player for **Android TVs** and **TV boxes**, free & open source. You can play content from different public sources.
 
 :white_check_mark: **Features**: no ads ‧ SponsorBlock ‧ adjustable playback speed ‧ 8k support ‧ 60fps ‧ HDR ‧ read live chat ‧ customizable buttons ‧ no Google Services ‧ helpful international community
 
-:x: **Disadvantages**: no comments
-stability, voice search and casting support **might** be worse than in the official YouTube, depending on your device; give it a try!
+:x: **Disadvantages**: no support for phones and tablets, no comments
+stability, voice search and casting support **might** be worse than in the official apps, depending on your device; give it a try!
 
 **Do you have any question?** Ctrl+F or ⌘F this readme first!
 
-[**Installation**](#Installation) | [**Donation**](#Donation) | [**FAQ**](#FAQ) | [Support / Chat](#Support) | [Build](#Build) | [Translate the app](https://jtbrinkmann.de/tools/android-strings.xml-translator.html) | [Changelog](https://t.me/s/SmartTubeNextNewsEN) | [Source Code](https://github.com/yuliskov/SmartTubeNext)
+[**Installation**](#installation) | [**Official Site**](https://smarttubeapp.github.io) | [**Donation**](#donation) | [**FAQ**](#faq) | [Support / Chat](#support) | [Build](#build) | [Translate the app](https://jtbrinkmann.de/tools/android-strings.xml-translator.html) | [Changelog](https://t.me/s/SmartTubeNewsEN) | [Source Code](https://github.com/yuliskov/SmartTubeNext) | [Liability](#liability)
 
 
 ## Device support
@@ -22,7 +24,7 @@ stability, voice search and casting support **might** be worse than in the offic
 
 > [video of the installation](images/new/zPV0imF.mp4) (note: download url changed to `kutt.it/stn_beta` or `kutt.it/stn_stable`)
 
-**Do not** download SmartTubeNext from any **app store**, APK websites or blogs; these were uploaded by other people and may contain malware or ads. SmartTubeNext is not officially published on any app store. Sadly, the Google PlayStore does not allow ad-free Youtube apps using unofficial APIs.
+**Do not** download SmartTube from any **app store**, APK websites or blogs; these were uploaded by other people and may contain malware or ads. SmartTube is not officially published on any app store. Sadly, the Google PlayStore does not allow ad-free Youtube apps using unofficial APIs.
 
 There is a **beta release** (recommended) and a **stable release**. Beta gets new features and bugfixes faster than the stable release.
 
@@ -35,7 +37,7 @@ You can use either of the following methods to install the app:
 
 **Troubleshooting:** See device specific notes below. If installation fails, either your **disk space is full** or the APK file didn't download correctly; clear up space and try downloading again. If the app installed, but crashes when opening, make sure to install it to internal memory, not to an SD card / external storage.
 
-**The app has a built-in updater** with changelog. You can also find all releases and the **changelog** on the [Telegram channel @SmartTubeNextNewsEN](https://t.me/s/SmartTubeNextNewsEN) (readable without account) or on [Github](https://github.com/yuliskov/SmartTubeNext/releases/).
+**The app has a built-in updater** with changelog. You can also find all releases and the **changelog** on the [Telegram channel @SmartTubeNewsEN](https://t.me/s/SmartTubeNewsEN) (readable without account) or on [Github](https://github.com/yuliskov/SmartTubeNext/releases/).
 
 > latest [**beta download**](https://github.com/yuliskov/SmartTubeNext/releases/download/latest/smarttube_beta.apk)
 >
@@ -63,21 +65,21 @@ After this, you can follow the [general installation guide](#installation) above
 ### Installation (Xiaomi devices with Chinese firmware)
 
 Xiaomi's **Chinese firmware** might block the installation **of the beta version**. The international firmware is not affected. Solutions:
-1. use SmartTubeNext's **stable version** instead (**recommended**)
+1. use SmartTube's **stable version** instead (**recommended**)
 2. use the international firmware for your device
-3. (if your device is from 2020 or before) You can do a factory reset and then install SmartTubeNext beta before doing any system updates. You can then safely update your system, SmartTubeNext should continue working.
+3. (if your device is from 2020 or before) You can do a factory reset and then install SmartTube beta before doing any system updates. You can then safely update your system, SmartTube should continue working.
 
 
 ### Updating
 
-The app has a built-in updater. You only need to follow the installation procedure **once**. A few seconds after launching SmartTubeNext, it will notify you if there is any update and also show a changelog. You can disable disable automatic update checks or manually update in the settings under "about".
+The app has a built-in updater. You only need to follow the installation procedure **once**. A few seconds after launching SmartTube, it will notify you if there is any update and also show a changelog. You can disable automatic update checks or manually update in the settings under "about".
 
 If the installation fails, either your **disk space is full** or the update didn't download correctly; clear up space and try updating again (_Settings > About > Check for updates_).
 
 
 ## Compatibility
 
-SmartTubeNext requires Android 4.3 or above. It does not work on non-Android devices (incl. LG or Samsung TVs). On unsupported TVs, you can use a TV stick or TV box. Though this app technically runs on smartphones and tablets, it is not optimized for such and offers no official support!
+SmartTube requires Android 4.3 or above. It does not work on non-Android devices (incl. LG or Samsung TVs). On unsupported TVs, you can use a TV stick or TV box. Though this app technically runs on smartphones and tablets, it is not optimized for such and offers no official support!
 
 It has been successfully tested on TVs, TV boxes and TV sticks that are based on Android, including:
 
@@ -93,35 +95,35 @@ It has been successfully tested on TVs, TV boxes and TV sticks that are based on
 
 ### Adblocking
 
-SmartTubeNext does not show any ad banners, preroll ads or ad intermissions. It not just tries to prevent them, it is literally programmed to be completely **unable** to display any ads, so YouTube cannot slip anything in. This also means you cannot allow ads or whitelist channels. Some YouTube channels include sponsored messages in their videos, these can also be skipped, see [SponsorBlock](#SponsorBlock) below.
+SmartTube does not show any ad banners, preroll ads or ad intermissions. It not just tries to prevent them, it is literally programmed to be completely **unable** to display any ads, so YouTube cannot slip anything in. This also means you cannot allow ads or whitelist channels. Some YouTube channels include sponsored messages in their videos, these can also be skipped, see [SponsorBlock](#SponsorBlock) below.
 
 
 ### SponsorBlock
 
-SmartTubeNext includes a SponsorBlock integration. From the [SponsorBlock website](https://sponsor.ajay.app/):
+SmartTube includes a SponsorBlock integration. From the [SponsorBlock website](https://sponsor.ajay.app/):
 
 > SponsorBlock is an open-source crowdsourced browser extension and open API for **skipping sponsor segments** in YouTube videos. [...] the extension automatically skips sponsors **it knows about** using a privacy preserving query system. It also supports skipping **other categories**, such as intros, outros and reminders to subscribe [and non-music parts in music videos].
 
-You can select which categories you want to skip in the settings. Unlike the browser addon, in SmartTubeNext you cannot submit new segments (TVs and TV remotes aren't great devices for such precise operations). Note that SponsorBlock is a free and voluntary project based on user submissions, so don't expect it to 100% work every time. Sometimes, sponsor segments are not yet submitted to the database, sometimes the SponsorBlock servers are offline/overloaded.
+You can select which categories you want to skip in the settings. Unlike the browser addon, in SmartTube you cannot submit new segments (TVs and TV remotes aren't great devices for such precise operations). Note that SponsorBlock is a free and voluntary project based on user submissions, so don't expect it to 100% work every time. Sometimes, sponsor segments are not yet submitted to the database, sometimes the SponsorBlock servers are offline/overloaded.
 
 
 ### Casting
 
-To cast videos from your phone (or other devices), you must link that device to your TV. Unlike the original YouTube app, SmartTubeNext does not automatically show up when you are in the same wifi network. How to link your smartphone and TV:
+To cast videos from your phone (or other devices), you must link that device to your TV. Unlike the original YouTube app, SmartTube does not automatically show up when you are in the same wifi network. How to link your smartphone and TV:
 
-1. open SmartTubeNext and go to settings
+1. open SmartTube and go to settings
 2. go to "Remote control" (2nd option)
 3. open your YouTube app on your phone, go to settings > General > watch on TV
 4. click on _connect using TV-code_ and enter the code from your TV
 
-[**Screenshot guide**](https://t.me/SmartTubeNext_en/8514)
+[**Screenshot guide**](https://t.me/SmartTubeEN/8514)
 
-Due to technical limitations, you need to open the app on the TV before casting; SmartTubeNext cannot automatically wake up the TV.
+Due to technical limitations, you need to open the app on the TV before casting; SmartTube cannot automatically wake up the TV.
 
 
 ### Picture-in-Picture (PiP)
 
-SmartTubeNext supports playing videos in PiP mode. This needs to be enabled under _Settings > General > Background playback > Picture in picture_. The video will go into PiP mode when you press home while playing a video, and also when you press _back_ if enabled in _Settings > General > Background playback (activation)_.
+SmartTube supports playing videos in PiP mode. This needs to be enabled under _Settings > General > Background playback > Picture in picture_. The video will go into PiP mode when you press home while playing a video, and also when you press _back_ if enabled in _Settings > General > Background playback (activation)_.
 
 
 ### Adjust Speed
@@ -131,25 +133,25 @@ You can adjust the playback speed pressing the speed-indicator icon (gauge) in t
 
 ### Voice Search
 
-To enable global voice search, an additional app must be installed alongside SmartTubeNext. This _bridge app_ can intercept the System's attempts to open the original YouTube app and open SmartTubeNext instead. For this to work, you must uninstall the original YouTube app. We know this sucks, but you can always reinstall it if you change your mind. The _bridge app_ will not show up in your launcher and you do cannot to launch it directly; it is only used internally by the system's voice search. On some devices, you need to explicitly say "Youtube" when searching (e.g. say "youtube cute cats" instead of just "cute cats").
+To enable global voice search, an additional app must be installed alongside SmartTube. This _bridge app_ can intercept the System's attempts to open the original YouTube app and open SmartTube instead. For this to work, you must uninstall the original YouTube app. We know this sucks, but you can always reinstall it if you change your mind. The _bridge app_ will not show up in your launcher and you cannot launch it directly; it is only used internally by the system's voice search. On some devices, you need to explicitly say "Youtube" when searching (e.g. say "youtube cute cats" instead of just "cute cats").
 
 **On Amazon Fire TV**: 
 
 1. uninstall the original YouTube app (no root required)
-2. download and install the Amazon Bridge SmartTubeNext app: https://kutt.it/stn_bridge_amazon (e.g. via _Downloader by AFTVnews_)
+2. download and install the Amazon Bridge SmartTube app: https://kutt.it/stn_bridge_amazon (e.g. via _Downloader by AFTVnews_)
 
 
 **On Google Chromecast with Google TV**: 
 
 1. uninstall the original YouTube app (no root required)
-3. download and install the ATV Bridge SmartTubeNext app: https://kutt.it/stn_bridge_atv (e.g. via _Downloader by AFTVnews_)
+3. download and install the ATV Bridge SmartTube app: https://kutt.it/stn_bridge_atv (e.g. via _Downloader by AFTVnews_)
 
 
 **On all other Android devices**, sadly root is required to enable this:
 
 1. root your device (search for a guide for your specific device)
 2. uninstall the official YouTube app using root (`adb shell pm uninstall com.google.android.youtube.tv`)
-3. download and install the ATV Bridge SmartTubeNext app: https://kutt.it/stn_bridge_atv (e.g. via _Downloader by AFTVnews_)
+3. download and install the ATV Bridge SmartTube app: https://kutt.it/stn_bridge_atv (e.g. via _Downloader by AFTVnews_)
 
 
 ## Donation
@@ -157,12 +159,14 @@ To enable global voice search, an additional app must be installed alongside Sma
 If you want to support my developments you are welcome to buy me a cup of coffee :)
 
 > [**Patreon (Visa, Mastercard, PayPal)**](https://www.patreon.com/smarttube)  
-> **PayPal**: firsthash@gmail.com  
+> **PayPal**: firsth<!-- abc@def -->ash@gmai<!-- @abc.com -->l.com  
+<!-- > [**Buy me a coffee**](https://www.buymeacoffee.com/stube) -->  
 > **BTC**: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx  
 > **LTC**: ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw  
 > **ETH**: 0xe455E21a085ae195a097cd4F456051A9916A5064  
 > **ETC**: 0x209eCd33Fa61fA92167595eB3Aea92EE1905c815  
-> **XMR**: 48QsMjqfkeW54vkgKyRnjodtYxdmLk6HXfTWPSZoaFPEDpoHDwFUciGCe1QC9VAeGrgGw4PKNAksX9RW7myFqYJQDN5cHGT  
+> **XMR**: 48QsMjqfkeW54vkgKyRnjodtYxdmLk6HXfTWPSZoaFPEDpoHDwFUciGCe1QC9VAeGrgGw4PKNAksX9RW7myFqYJQDN5cHGT    
+> **USDT (ERC20)**: 0xe455e21a085ae195a097cd4f456051a9916a5064  
 
 
 ## Support
@@ -171,8 +175,8 @@ If you want to support my developments you are welcome to buy me a cup of coffee
 
 You can report in our Telegram group or via [issue tracker on Github](https://github.com/yuliskov/SmartTubeNext/issues) (account required).
 
-> **Telegram group (international)**: [@SmartTubeNext_en](http://t.me/SmartTubeNext_en)  
-> **Telegram group (RU/UA/BY)**: [@SmartTubeNext](http://t.me/SmartTubeNext)  
+> **Telegram group (international)**: [@SmartTubeEN](http://t.me/SmartTubeEN)  
+> **Telegram group (RU/UA)**: [@SmartTubeUA](http://t.me/SmartTubeUA)  
 > **Email**: first.hash at gmail dot com
 
 The international group is in **English only**. But don't worry if your English is not perfect, we have a friendly international community.
@@ -180,7 +184,7 @@ The international group is in **English only**. But don't worry if your English 
 
 ## Team
 
-SmartTubeNext is developed single-handedly by Yurii; there is no larger team or company behind this. This is an open source, hobby project. Several others have helped with translations, some of which can be seen on [Github](https://github.com/yuliskov/SmartTubeNext/graphs/contributors), some have sent their translations directly to Yurii. There are also helpful people in the support chat.
+SmartTube is developed single-handedly; there is no larger team or company behind this. This is an open source, hobby project. Several others have helped with translations, some of which can be seen on [Github](https://github.com/yuliskov/SmartTubeNext/graphs/contributors), some have sent their translations directly to Yurii. There are also helpful people in the support chat.
 
 
 ## Build
@@ -238,6 +242,27 @@ HDR works only **if your hardware supports it**. It's a complicated mess.
  
 If HDR videos look looked dim or washed out, then check [this article](https://www.wired.com/story/hdr-too-dark-how-to-fix-it/). **If HDR is not working**, it's probably not this app's fault. You might need to search on the web for "HDR" and your device name for any help.
 
+## Liability
+
+We take no responsibility for the use of our tool, or external instances
+provided by third parties. We strongly recommend you abide by the valid
+official regulations in your country. Furthermore, we refuse liability
+for any inappropriate use of Invidious, such as illegal downloading.
+This tool is provided to you in the spirit of free, open software.
+
+You may view the LICENSE in which this software is provided to you [here](./LICENSE.md).
+
+>   16. Limitation of Liability.
+>
+> IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS
+THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY
+GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE
+USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF
+DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD
+PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),
+EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGES.
 
 ## FAQ
 
@@ -248,30 +273,34 @@ A: They're some reports that the latest update for "Google app for Android TV" c
 
 ### Q: AV01 does not play / Why is VP9 slow on my device?
 
-Because AV01 is very new, **most** TVs and TV boxes **not not** offer hardware support and **cannot** play AV01 **at all**.
+A: Because AV01 is very new, **most** TVs and TV boxes **not not** offer hardware support and **cannot** play AV01 **at all**.
 
 If your device has hardware support for a codec, videos using that codec should play smoothly. High resolutions might also be slow in VP9 on cheap TV boxes that don't officially support 4k. Your device probably can play VP9 videos even without hardware support, however this requires a powerful CPU to run smoothly. Fixing AV01 without hardware support is technically possible, but currently not planned and probably not efficient enough.
 
 
-### Q: Can you make SmartTubeNext look like the original app? / Can the search page be improved?
+### Q: Can you make SmartTube look like the original app?
 
-A: We try, but it takes a lot of effort and time, so please be patient. You definitely are not the first to suggest this.
+A: Compared to SmartTube's UI, Stock Youtube and YT Kids are far ahead. However, we'd need someone who's skilled and willing to dedicate enough time and energy into making it. And into maintaining it longterm (incl. new features, bug fixes). All of this for free. If you are / got someone like that, please help.
+Not to mention that SmartTube follows Google's official template & recommendations for Android TV apps. It's Google's fault that the template is somewhat ugly. 😂
 
-SmartTubeNext is following Google's officially recommended design/template for TV apps and is using the official, preinstalled Android TV keyboard. Sadly, Google did a really bad job regarding the search page and keyboard. Maybe a future SmartTubeNext update can add an embedded keyboard, similar to the original YouTube or other major Android TV apps. Maybe it can improve the looks to be as good or better than in the official YouTube app. But for now, it is the way it is due to lack of time and due to Google's official recommendations being bad.
+
+### Q: Can the search page be improved?
+
+A: It can be, but it takes someone to do it, similar to the above FAQ-entry. SmartTube is following Google's officially recommended design/template for TV apps and is using the official, preinstalled Android TV keyboard. Sadly, Google did a really bad job regarding the search page and keyboard. Maybe a future SmartTube update can add an embedded keyboard, similar to the original YouTube or other major Android TV apps. Maybe it can improve the looks to be as good or better than in the official YouTube app. But for now, it is the way it is due to lack of time and due to Google's official recommendations being bad.
 
 
-### Q: Can I install this on a Samsung Tizen TV / LG webOS TV / iOS / toaster?
+### Q: Can I install this on a Samsung Tizen TV / LG webOS TV / Roku / iOS / toaster?
 
-A: No, this only works on **Android** devices. The app cannot easily be ported over and we have no plans to even. **Please do not ask**. You can use a separate TV stick or TV box instead.
+A: No, this only works on **Android** devices. If you look at an Android TV's product page, it usually says clearly that it's based on Android. The app **cannot** easily be ported over to other plattforms and we have no plans to even try. **Please do not ask**. Instead, you can connect a separate TV stick or TV box to your TV.
 
 
 ### Q: Can I install this on a smartphone? / Can you add portrait mode? / Scrolling doesn't work.
 
 A: **Big No**. This app is **not** for smartphones, we offer **zero support** for that.
 
-You **can cast** videos **from** your smartphone to a TV / TV box running SmartTubeNext, though. Just use the official YouTube app or [Vanced](https://vancedapp.com/), see [the casting section](#casting) for more information.
+You **can cast** videos **from** your smartphone to a TV / TV box running SmartTube, though. Just use the official YouTube app or [ReVanced](https://github.com/ReVanced), see [the casting section](#casting) for more information.
 
-**There will not be a phone version.** You can use [Vanced](https://vancedapp.com/), [Pure Tuber](https://play.google.com/store/apps/details?id=free.tube.premium.advanced.tuber), [NewPipe](https://newpipe.schabi.org), or [NewPipe x SponsorBlock](https://github.com/polymorphicshade/NewPipe#newpipe-x-sponsorblock) instead. Please go to their respective support chats for help.
+**There will not be a phone version.** You can use [ReVanced](https://github.com/ReVanced), [Pure Tuber](https://play.google.com/store/apps/details?id=free.tube.premium.advanced.tuber), [NewPipe](https://newpipe.schabi.org), or [NewPipe x SponsorBlock](https://github.com/polymorphicshade/NewPipe#newpipe-x-sponsorblock) instead. Please go to their respective support chats for help.
 
 
 ### Q: Can I install this on a tablet / car screen / smartphone with docking station?
@@ -281,9 +310,9 @@ Yes... maybe.. Requirements:
 - it is an Android device
 - it has a large screen
 - it has a TV remote, controller, or keyboard
-  **Touch input and is not supported.** Mouse/touchpad scrolling neither. You cannot properly use SmartTubeNext with only touch or mouse input.
+  **Touch input and is not supported.** Mouse/touchpad scrolling neither. You cannot properly use SmartTube with only touch or mouse input.
 
-Some users reported great success (incl. on a [car entertainment system](https://t.me/SmartTubeNext_en/6060)). **Please share your success stories with us.**
+Some users reported great success (incl. on a [car entertainment system](https://t.me/SmartTubeEN/6060)). **Please share your success stories with us.**
 
 
 ### Q: I get "unknown codec" / "can't download video" errors
@@ -308,7 +337,7 @@ A: Please read the [Casting](#casting) section.
 
 ### Q: The video is buffering a lot
 
-A: The issue might not be specific to SmartTubeNext, as other unofficial YouTube apps also report this issue. It seems uncommon nowadays, but was very present in the 2nd quarter of 2021. Some users or devices seem to be more affected then others. The official YouTube app & website are apparently only rarely affected. The root cause of the issue is currently unclear, but it appears to be a server-side thing on YouTube's end. Possibly, YouTube is discriminating 3rd party apps.
+A: The issue might not be specific to SmartTube, as other unofficial YouTube apps also report this issue. It seems uncommon nowadays, but was very present in the 2nd quarter of 2021. Some users or devices seem to be more affected then others. The official YouTube app & website are apparently only rarely affected. The root cause of the issue is currently unclear, but it appears to be a server-side thing on YouTube's end. Possibly, YouTube is discriminating 3rd party apps.
 
 For now, try to see if it helps to:
 
@@ -320,7 +349,7 @@ For now, try to see if it helps to:
 
 ### Q: The debug information says my display is 1080p, but I have a 4k/UHD display!
 
-A: Do not worry, **the debug information is incorrect.** SmartTubeNext works fine even above 1080p and you should be able to see that, when you play a video in 4k or UHD.
+A: Do not worry, **the debug information is incorrect.** SmartTube works fine even above 1080p and you should be able to see that, when you play a video in 4k or UHD.
 Also do not worry if it says "720p" and you have a 1080p display.
 
 
@@ -333,7 +362,7 @@ A: **It does** (by default). If you set a _video profile_ under settings, that a
 
 ### Q: Can I set a (maximum) resolution by default?
 
-A: SmartTubeNext automatically select the highest available quality for your video, up to a maximum resolution that you can set in the settings under "video profile". If available, SmartTubeNext will pick the selected video profile, or otherwise the next best one available will be used. You can still always change the video profile while watching videos.
+A: SmartTube automatically select the highest available quality for your video, up to a maximum resolution that you can set in the settings under "video profile". If available, SmartTube will pick the selected video profile, or otherwise the next best one available will be used. You can still always change the video profile while watching videos.
 
 
 ### Q: Can it set the resolution to "auto", depending on my available bandwidth?
@@ -343,14 +372,14 @@ A: This is planned, but not available yet (sorry 🙇‍♀️). However, you ca
 
 ### Q: Why does it skip video segments?
 
-A: SmartTubeNext has a feature called **SponsorBlock**. You can select categories should be skipped, if any. See the [SponsorBlock section](#sponsorblock) for more details.
+A: SmartTube has a feature called **SponsorBlock**. You can select categories should be skipped, if any. See the [SponsorBlock section](#sponsorblock) for more details.
 
 
 ### Q: How to start the next video automatically / stop after every video?
 
 A: You can switch between different autoplay-modes using the loop-button 🔁
 
-[![screenshot showing the loop-button](images/new/V3GHGvWprmdE1w.jpg)](https://t.me/SmartTubeNext_en/24953)
+[![screenshot showing the loop-button](images/new/V3GHGvWprmdE1w.jpg)](https://t.me/SmartTubeEN/24953)
 
 
 ### Q: How to remove recommended videos (e.g. news) that are unrelated to me?
@@ -389,7 +418,7 @@ A: The higher your buffer, the more of a video will be preloaded ahead of your c
 
 ### Q: Can I retain the buffer when seeking back?
 
-A: No, when you seek back (e.g. jump back 5 seconds), SmartTubeNext will have to rebuffer. This might be improved in a future update.
+A: No, when you seek back (e.g. jump back 5 seconds), SmartTube will have to rebuffer. This might be improved in a future update.
 
 
 ### Q: My device freezes when watching YouTube
@@ -404,15 +433,15 @@ A: not yet
 
 ### Q: Can I download videos?
 
-A: not with SmartTubeNext
+A: not with SmartTube
 
 
 ### Q: Can updates be installed automatically?
 
-A: no, this is technically not possible. Only the preinstalled app manager (usually Google PlayStore, Amazon AppStore, etc) has the required permission. All other apps, incl. SmartTubeNext can only show open installation prompt. A workaround using root would be possible, but hasn't been implemented yet.
+A: no, this is technically not possible. Only the preinstalled app manager (usually Google PlayStore, Amazon AppStore, etc) has the required permission. All other apps, incl. SmartTube can only show open installation prompt. A workaround using root would be possible, but hasn't been implemented yet.
 
 
 ### Q: Can I whitelist ads on some channels?
 
-A: no, this is not possible. SmartTubeNext does not have any code to display ads. Adding this functionality would actually take time and effort, which is instead spent on adding useful features and fixing bugs.
+A: no, this is not possible. SmartTube does not have any code to display ads. Adding this functionality would actually take time and effort, which is instead spent on adding useful features and fixing bugs.
 

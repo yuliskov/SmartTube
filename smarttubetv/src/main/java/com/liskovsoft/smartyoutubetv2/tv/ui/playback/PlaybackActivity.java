@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 import androidx.fragment.app.Fragment;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -151,7 +151,7 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     private boolean wannaEnterToPip() {
-        return mPlaybackFragment != null && mPlaybackFragment.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
+        return mPlaybackFragment != null && mPlaybackFragment.getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
     }
 
     /**
@@ -210,7 +210,7 @@ public class PlaybackActivity extends LeanbackActivity {
 
     private boolean doNotDestroy() {
         sIsInPipMode = isInPipMode();
-        return sIsInPipMode || mPlaybackFragment.getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_SOUND;
+        return sIsInPipMode || mPlaybackFragment.getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_SOUND;
     }
 
     @SuppressWarnings("deprecation")
@@ -263,17 +263,17 @@ public class PlaybackActivity extends LeanbackActivity {
     public void onUserLeaveHint() {
         // Check that user not open dialog/search activity instead of really leaving the activity
         // Activity may be overlapped by the dialog, back is pressed or new view started
-        if (AppDialogPresenter.instance(this).isDialogShown() || skipPip() || mViewManager.isNewViewPending() ||
+        if (skipPip() || mViewManager.isNewViewPending() ||
                 mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_BACK) {
             return;
         }
 
         switch (mPlaybackFragment.getBackgroundMode()) {
-            case PlaybackEngine.BACKGROUND_MODE_PLAY_BEHIND:
+            case PlayerEngine.BACKGROUND_MODE_PLAY_BEHIND:
                 enterBackgroundPlayMode();
                 // Do we need to do something additional when running Play Behind?
                 break;
-            case PlaybackEngine.BACKGROUND_MODE_PIP:
+            case PlayerEngine.BACKGROUND_MODE_PIP:
                 enterPipMode();
                 if (doNotDestroy()) {
                     // Ensure to opening this activity when the user is returning to the app
@@ -284,7 +284,7 @@ public class PlaybackActivity extends LeanbackActivity {
                     mViewManager.enableMoveToBack(true);
                 }
                 break;
-            case PlaybackEngine.BACKGROUND_MODE_SOUND:
+            case PlayerEngine.BACKGROUND_MODE_SOUND:
                 if (doNotDestroy()) {
                     // Ensure to continue a playback
                     mViewManager.blockTop(this);

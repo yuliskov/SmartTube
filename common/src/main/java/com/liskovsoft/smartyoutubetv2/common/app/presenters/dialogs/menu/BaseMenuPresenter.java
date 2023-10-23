@@ -38,6 +38,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private boolean mIsToggleHistoryEnabled;
     private boolean mIsClearHistoryEnabled;
     private boolean mIsUpdateCheckEnabled;
+    private boolean mIsExcludeFromContentBlockEnabled;
 
     protected BaseMenuPresenter(Context context) {
         super(context);
@@ -121,7 +122,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         } else {
             presenter.pinItem(section);
         }
-        MessageHelpers.showMessage(getContext(), section.title + ": " + getContext().getString(isItemPinned ? R.string.unpinned_from_sidebar : R.string.pinned_to_sidebar));
+        MessageHelpers.showMessage(getContext(), getContext().getString(isItemPinned ? R.string.unpinned_from_sidebar : R.string.pinned_to_sidebar) + "\n" + section.title);
     }
 
     private Video createPinnedPlaylist(Video video) {
@@ -279,7 +280,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         // Need correct playlist title to further comparison (decide whether save or remove)
         if (original.belongsToSamePlaylistGroup()) {
-            video.title = original.group.getTitle();
+            video.title = original.getGroup().getTitle();
         }
 
         if (!original.hasPlaylist() && playlistId != null) {
@@ -525,6 +526,20 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 //                option -> AppUpdatePresenter.instance(getContext()).start(true)));
     }
 
+    protected void appendToggleExcludeFromContentBlockButton() {
+        if (!mIsExcludeFromContentBlockEnabled) {
+            return;
+        }
+
+        Video original = getVideo();
+
+        if (original == null || !(original.hasChannel() || original.hasVideo())) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(AppDialogUtil.createExcludeFromContentBlockButton(getContext(), original, mServiceManager, this::closeDialog));
+    }
+
     protected void updateEnabledMenuItems() {
         MainUIData mainUIData = MainUIData.instance(getContext());
         
@@ -536,5 +551,6 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         mIsToggleHistoryEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_TOGGLE_HISTORY);
         mIsClearHistoryEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_CLEAR_HISTORY);
         mIsUpdateCheckEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_UPDATE_CHECK);
+        mIsExcludeFromContentBlockEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK);
     }
 }

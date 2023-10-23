@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Title Logo with embedded clock -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical|end"
+              android:orientation="horizontal">
+    <!-- Global clock -->
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center_vertical"
+                  android:gravity="center_horizontal"
+                  android:orientation="vertical">
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
+            android:id="@+id/global_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/pip_title_size"
+            android:textColor="@color/white"
+            android:shadowColor="@color/black"
+            android:shadowDx="1.5"
+            android:shadowDy="1.3"
+            android:shadowRadius="1.6"
+            android:textStyle="bold"
+            style="?attr/browseTitleTextStyle"
+            android:visibility="gone" />
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
+            android:id="@+id/global_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/pip_title_date_size"
+            android:textColor="@color/white"
+            android:shadowColor="@color/black"
+            android:shadowDx="1.5"
+            android:shadowDy="1.3"
+            android:shadowRadius="1.6"
+            android:textStyle="bold"
+            style="?attr/browseTitleTextStyle"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <FrameLayout android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center_vertical">
+        <ImageView
+            android:id="@+id/title_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/lb_browse_title_icon_height"
+            android:maxWidth="@dimen/lb_browse_title_icon_max_width"
+            android:layout_marginStart="@dimen/search_bar_right_items_margin"
+            android:adjustViewBounds="true"
+            android:src="@null"
+            android:visibility="gone"
+            style="?attr/browseTitleIconStyle"/>
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/lb_browse_title_height"
+            style="?attr/browseTitleTextStyle"/>
+    </FrameLayout>
+</LinearLayout>

@@ -54,6 +54,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:' + testXSupportLibraryVersion
     
     implementation project(':sharedutils')
+    implementation project(':fragment-1.1.0')
     implementation project(':mediaserviceinterfaces')
     implementation project(':youtubeapi')
 
@@ -87,16 +88,17 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:' + kotlinCoreVersion
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + kotlinCoreVersion
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + kotlinxVersion
 
-    stbetaImplementation project(path: ':leanbackassistant')
-    stbetaImplementation project(path: ':appupdatechecker2')
-    ststableImplementation project(path: ':leanbackassistant')
-    stbolshoetvImplementation project(path: ':leanbackassistant')
-    ststableImplementation project(path: ':appupdatechecker2')
-    storigImplementation project(path: ':leanbackassistant')
-    storigImplementation project(path: ':appupdatechecker2')
-    strtarmeniaImplementation project(path: ':appupdatechecker2')
-    stredboxtvImplementation project(path: ':appupdatechecker2')
-    stsibsetruImplementation project(path: ':appupdatechecker2')
+    stbetaImplementation project(':leanbackassistant')
+    ststableImplementation project(':leanbackassistant')
+    storigImplementation project(':leanbackassistant')
+    stbolshoetvImplementation project(':leanbackassistant')
+
+    stbetaImplementation project(':appupdatechecker2')
+    ststableImplementation project(':appupdatechecker2')
+    storigImplementation project(':appupdatechecker2')
+    strtarmeniaImplementation project(':appupdatechecker2')
+    stredboxtvImplementation project(':appupdatechecker2')
+    stsibsetruImplementation project(':appupdatechecker2')
 }

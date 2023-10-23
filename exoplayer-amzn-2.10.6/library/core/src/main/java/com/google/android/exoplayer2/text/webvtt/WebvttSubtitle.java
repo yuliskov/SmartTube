@@ -47,7 +47,9 @@ import java.util.List;
       WebvttCue cue = cues.get(cueIndex);
       int arrayIndex = cueIndex * 2;
       cueTimesUs[arrayIndex] = cue.startTime;
-      cueTimesUs[arrayIndex + 1] = cue.endTime;
+      // MOD: fix long lasting subs
+      //cueTimesUs[arrayIndex + 1] = cue.endTime;
+      cueTimesUs[arrayIndex + 1] = cue.endTime - cue.startTime <= 5_000_000 ? cue.endTime : cue.startTime + 5_000_000;
     }
     sortedCueTimesUs = Arrays.copyOf(cueTimesUs, cueTimesUs.length);
     Arrays.sort(sortedCueTimesUs);

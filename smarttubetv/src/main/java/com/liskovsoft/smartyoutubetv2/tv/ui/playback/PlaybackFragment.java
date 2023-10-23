@@ -41,8 +41,8 @@ import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngine;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
@@ -64,6 +64,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.ShortsCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -88,7 +89,7 @@ import java.util.Map;
  * Plays selected video, loads playlist and related videos, and delegates playback to
  * {@link VideoPlayerGlue}.
  */
-public class PlaybackFragment extends SeekModePlaybackFragment implements PlaybackView, PlaybackController {
+public class PlaybackFragment extends SeekModePlaybackFragment implements PlaybackView, PlayerManager {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
     private static final int UPDATE_DELAY_MS = 100;
     private static final int SUGGESTIONS_START_INDEX = 1;
@@ -98,6 +99,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private ArrayObjectAdapter mRowsAdapter;
     private ListRowPresenter mRowPresenter;
     private VideoCardPresenter mCardPresenter;
+    private ShortsCardPresenter mShortsPresenter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private PlayerEventListener mEventListener;
     private PlayerController mExoPlayerController;
@@ -106,8 +108,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private DebugInfoManager mDebugInfoManager;
     private UriBackgroundManager mBackgroundManager;
     private RowsSupportFragment mRowsSupportFragment;
-    private final boolean mIsAnimationEnabled = true;
-    private int mPlaybackMode = PlaybackEngine.BACKGROUND_MODE_DEFAULT;
+    private boolean mIsUIAnimationsEnabled = false;
+    private boolean mIsLikesCounterEnabled = true;
+    private int mPlaybackMode = PlayerEngine.BACKGROUND_MODE_DEFAULT;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
     private long mResumeTimeMs;
@@ -169,7 +172,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         // Fix controls pop-up on Activity start/resume.
         // Should be called on earlier stage.
-        hideControlsOverlay(mIsAnimationEnabled);
+        hideControlsOverlay(true);
 
         if (Util.SDK_INT > 23) {
             initializePlayer();
@@ -223,21 +226,25 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     public void onDispatchTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            tickle(); // show Player UI
-        }
+        applyTickle(event);
     }
 
     public void onDispatchGenericMotionEvent(MotionEvent event) {
+        applyTickle(event);
+    }
+
+    private void applyTickle(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             tickle(); // show Player UI
         }
+
+        mEventListener.onKeyDown(-1); // reset ui timer
     }
 
     public void onFinish() {
         // Fix background play when playing trailers from NUM
         // On API > 23 onStop not immediately occurred after onPause
-        if (getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_DEFAULT) {
+        if (getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_DEFAULT) {
             if (Util.SDK_INT > 23) {
                 maybeReleasePlayer();
             }
@@ -252,7 +259,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     public void onPIPChanged(boolean isInPIP) {
-        // NOP
+        if (!isInPIP) {
+            // Fix partially disappeared buttons after exit from PIP???
+            notifyPlaybackRowChanged();
+        }
     }
 
     public void skipToNext() {
@@ -333,7 +343,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         //}
 
         // Ensure to continue playback in audio mode (activity should be blocked)
-        if (getBackgroundMode() == PlaybackEngine.BACKGROUND_MODE_SOUND &&
+        if (getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_SOUND &&
                 ViewManager.instance(getContext()).getBlockedTop() == PlaybackActivity.class &&
                 !isInPIPMode()) {
             Log.d(TAG, "releasePlayer: Playback activity is blocked. Exiting...");
@@ -430,7 +440,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
         StoryboardSeekDataProvider.setSeekProvider(mPlayerGlue);
-        hideControlsOverlay(mIsAnimationEnabled); // fix player ui not synced correctly
+        hideControlsOverlay(true); // fix player ui not synced correctly
+
+        mIsUIAnimationsEnabled = PlayerTweaksData.instance(getContext()).isUIAnimationsEnabled();
+        mIsLikesCounterEnabled = PlayerTweaksData.instance(getContext()).isLikesCounterEnabled();
 
         mExoPlayerController.setPlayerView(mPlayerGlue);
     }
@@ -464,7 +477,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void createMediaSession() {
-        if (VERSION.SDK_INT <= 19 || PlayerTweaksData.instance(getContext()).isPlaybackNotificationsDisabled()) {
+        if (VERSION.SDK_INT <= 19 || getContext() == null) {
             // Fix Android 4.4 bug: java.lang.IllegalArgumentException: MediaButtonReceiver component may not be null
             return;
         }
@@ -472,6 +485,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mMediaSession = new MediaSessionCompat(getContext(), getContext().getPackageName());
         mMediaSession.setActive(true);
         mMediaSessionConnector = new MediaSessionConnector(mMediaSession);
+        boolean disableNotifications = PlayerTweaksData.instance(getContext()).isPlaybackNotificationsDisabled();
 
         try {
             mMediaSessionConnector.setPlayer(mPlayer);
@@ -482,7 +496,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        mMediaSessionConnector.setMediaMetadataProvider(player -> {
+        mMediaSessionConnector.setMediaMetadataProvider(disableNotifications ? null : player -> {
             if (getVideo() == null) {
                 return null;
             }
@@ -565,33 +579,26 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private void initPresenters() {
         mRowPresenter = new CustomListRowPresenter() {
             @Override
-            protected void onBindRowViewHolder(RowPresenter.ViewHolder holder, Object item) {
-                super.onBindRowViewHolder(holder, item);
-
-                if (mRowsSupportFragment == null) {
-                    return;
-                }
-
-                int previousPos = mRowsSupportFragment.getVerticalGridView().getSelectedPosition();
-
-                focusPendingSuggestedItem(holder, previousPos + 1);
-            }
-
-            @Override
             protected void onRowViewSelected(RowPresenter.ViewHolder holder, boolean selected) {
                 super.onRowViewSelected(holder, selected);
 
                 updatePlayerBackground();
+
+                if (selected) {
+                    focusPendingSuggestedItem();
+                }
             }
         };
 
         mCardPresenter = new VideoCardPresenter();
+        mShortsPresenter = new ShortsCardPresenter();
     }
 
     private void setupEventListeners() {
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
         mCardPresenter.setOnItemViewLongPressedListener(new ItemViewLongPressedListener());
+        mShortsPresenter.setOnItemViewLongPressedListener(new ItemViewLongPressedListener());
     }
 
     private final class ItemViewLongPressedListener implements OnItemLongPressedListener {
@@ -678,11 +685,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onSubscribe(boolean subscribed) {
-            mEventListener.onSubscribeClicked(subscribed);
-        }
-
-        @Override
         public void onThumbsDown(boolean thumbsDown) {
             mEventListener.onDislikeClicked(thumbsDown);
         }
@@ -719,12 +721,12 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         @Override
         public void onVideoSpeed(boolean enabled) {
-            mEventListener.onVideoSpeedClicked(enabled);
+            mEventListener.onSpeedClicked(enabled);
         }
 
         @Override
         public void onVideoSpeedLongPress(boolean enabled) {
-            mEventListener.onVideoSpeedLongClicked(enabled);
+            mEventListener.onSpeedLongClicked(enabled);
         }
 
         @Override
@@ -768,11 +770,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onScreenOff() {
-            mEventListener.onScreenOffClicked();
-        }
-
-        @Override
         public void onPlaybackQueue() {
             mEventListener.onPlaybackQueueClicked();
         }
@@ -807,7 +804,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         if (mPlayerGlue != null && video != null) {
             // Preserve player formatting
             mPlayerGlue.setTitle(video.getPlayerTitle() != null ? video.getPlayerTitle() : "...");
-            mPlayerGlue.setSubtitle(video.getPlayerSecondTitle() != null ? appendLive(video.getPlayerSecondTitle(), video.isLive) : "...");
+            mPlayerGlue.setSubtitle(video.getPlayerSecondTitle() != null ? createSecondTitle(video) : "...");
             mPlayerGlue.setVideo(video);
         }
     }
@@ -822,11 +819,19 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mBackgroundManager.showBackgroundColor(colorResId);
     }
 
-    private CharSequence appendLive(String title, boolean isLive) {
-        CharSequence result = title;
+    private CharSequence createSecondTitle(Video video) {
+        CharSequence result = video.getPlayerSecondTitle();
 
-        if (getContext() != null && isLive) {
-            result = TextUtils.concat( title, " ", Video.TERTIARY_TEXT_DELIM, " ", Utils.color(getContext().getString(R.string.badge_live), ContextCompat.getColor(getContext(), R.color.red)));
+        if (getContext() != null && video.isLive) {
+            result = TextUtils.concat( result, " ", Video.TERTIARY_TEXT_DELIM, " ", Utils.color(getContext().getString(R.string.badge_live), ContextCompat.getColor(getContext(), R.color.red)));
+        }
+
+        if (getContext() != null && video.likeCount != null && mIsLikesCounterEnabled) {
+            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.likeCount);
+        }
+
+        if (getContext() != null && video.dislikeCount != null && mIsLikesCounterEnabled) {
+            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.dislikeCount);
         }
 
         return result;
@@ -866,14 +871,18 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void updateEndingTime() {
-        EndingTimeView endingTime = getActivity().findViewById(R.id.global_ending_time);
-        endingTime.update();
+        if (getActivity() != null) {
+            EndingTimeView endingTime = getActivity().findViewById(R.id.global_ending_time);
+            endingTime.update();
+        }
     }
 
     @Override
     public void setChatReceiver(ChatReceiver chatReceiver) {
-        LiveChatView liveChat = getActivity().findViewById(R.id.live_chat);
-        liveChat.setChatReceiver(chatReceiver);
+        if (getActivity() != null) {
+            LiveChatView liveChat = getActivity().findViewById(R.id.live_chat);
+            liveChat.setChatReceiver(chatReceiver);
+        }
     }
 
     // End Ui events
@@ -882,30 +891,27 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void openDash(InputStream dashManifest) {
-        //resetPlayerState();
-
         mExoPlayerController.openDash(dashManifest);
     }
 
     @Override
     public void openDashUrl(String dashManifestUrl) {
-        //resetPlayerState();
-
         mExoPlayerController.openDashUrl(dashManifestUrl);
     }
 
     @Override
     public void openHlsUrl(String hlsPlaylistUrl) {
-        //resetPlayerState();
-
         mExoPlayerController.openHlsUrl(hlsPlaylistUrl);
     }
 
     @Override
     public void openUrlList(List<String> urlList) {
-        //resetPlayerState();
-
         mExoPlayerController.openUrlList(urlList);
+    }
+
+    @Override
+    public void openMerged(InputStream dashManifest, String hlsPlaylistUrl) {
+        mExoPlayerController.openMerged(dashManifest, hlsPlaylistUrl);
     }
 
     @Override
@@ -922,7 +928,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public long getDurationMs() {
         long durationMs = mExoPlayerController.getDurationMs();
 
-        if (durationMs > Video.MAX_DURATION_MS) {
+        if (durationMs > Video.MAX_DURATION_MS && getVideo() != null) {
             durationMs = getVideo().getLiveDurationMs();
         }
 
@@ -1069,7 +1075,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public PlaybackController getController() {
+    public PlayerManager getPlayer() {
         return this;
     }
 
@@ -1137,7 +1143,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void showControlsOverlay(boolean runAnimation) {
-        super.showControlsOverlay(runAnimation);
+        super.showControlsOverlay(mIsUIAnimationsEnabled);
 
         // Do throttle. Called so many times. Rely on boxing because initial state is unknown.
         if (mIsControlsShownPreviously != null && mIsControlsShownPreviously) {
@@ -1159,7 +1165,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void hideControlsOverlay(boolean runAnimation) {
-        super.hideControlsOverlay(runAnimation);
+        super.hideControlsOverlay(mIsUIAnimationsEnabled);
 
         // Do throttle. Called so many times. Rely on boxing because initial state is unknown.
         if (mIsControlsShownPreviously != null && !mIsControlsShownPreviously) {
@@ -1187,9 +1193,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         if (show) {
-            showControlsOverlay(mIsAnimationEnabled);
+            showControlsOverlay(true);
         } else {
-            hideControlsOverlay(mIsAnimationEnabled);
+            hideControlsOverlay(true);
         }
     }
 
@@ -1217,9 +1223,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         showOverlay(show);
 
-        if (show) {
-            setPlayerRowIndex(0);
-        }
+        setPlayerRowIndex(0);
     }
 
     @Override
@@ -1248,13 +1252,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void setDislikeButtonState(boolean dislike) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setThumbsDownActionState(dislike);
-        }
-    }
-
-    @Override
-    public void setSubscribeButtonState(boolean subscribe) {
-        if (mPlayerGlue != null) {
-            mPlayerGlue.setSubscribeActionState(subscribe);
         }
     }
 
@@ -1289,7 +1286,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void setButtonState(int buttonId, int buttonState) {
         if (mPlayerGlue != null) {
-            mPlayerGlue.setActionIndex(buttonId, buttonState);
+            mPlayerGlue.setButtonState(buttonId, buttonState);
         }
     }
 
@@ -1358,16 +1355,17 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mediaGroupId);
 
         if (existingAdapter == null) {
-            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group, mCardPresenter);
+            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group, group.isShorts() ? mShortsPresenter : mCardPresenter);
 
             mMediaGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
 
             ListRow row = new ListRow(rowHeader, mediaGroupAdapter);
 
-            if (group.getPosition() == -1) {
+            int newPosition = group.getPosition() + SUGGESTIONS_START_INDEX;
+            if (group.getPosition() == -1 || newPosition > mRowsAdapter.size()) {
                 mRowsAdapter.add(row);
             } else {
-                mRowsAdapter.add(group.getPosition() + SUGGESTIONS_START_INDEX, row);
+                mRowsAdapter.add(newPosition, row);
             }
         } else {
             freeze(true);
@@ -1465,48 +1463,35 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void focusSuggestedItem(Video video) {
-        if (video == null || video.group == null) {
+        if (video == null || video.getGroup() == null || mPendingFocus != null) {
             return;
         }
 
         mPendingFocus = video;
 
-        if (mRowsSupportFragment != null) {
-            VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(video.group.getId());
-
-            if (existingAdapter == null) {
-                return;
-            }
-
-            int rowIndex = getRowAdapterIndex(existingAdapter);
-
-            ViewHolder vh = mRowsSupportFragment.getRowViewHolder(rowIndex);
-
-            focusPendingSuggestedItem(vh, rowIndex);
-        }
+        focusPendingSuggestedItem();
     }
 
-    public void focusPendingSuggestedItem(ViewHolder rowViewHolder, int rowIndex) {
-        if (mPendingFocus == null || mPendingFocus.group == null || rowViewHolder == null) {
+    public void focusPendingSuggestedItem() {
+        if (mPendingFocus == null || mPendingFocus.getGroup() == null || mRowsSupportFragment == null) {
             return;
         }
 
-        VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mPendingFocus.group.getId());
+        VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mPendingFocus.getGroup().getId());
 
         if (existingAdapter == null) {
             return;
         }
 
-        if (getRowAdapterIndex(existingAdapter) != rowIndex) {
-            return;
-        }
+        int rowIndex = getRowAdapterIndex(existingAdapter);
 
-        int index = existingAdapter.indexOf(mPendingFocus);
+        ViewHolder rowViewHolder = mRowsSupportFragment.getRowViewHolder(rowIndex);
 
         // Skip PlaybackRowPresenter.ViewHolder
         if (rowViewHolder instanceof ListRowPresenter.ViewHolder) {
-            mPendingFocus = null;
+            int index = existingAdapter.indexOf(mPendingFocus);
             ((ListRowPresenter.ViewHolder) rowViewHolder).getGridView().setSelectedPosition(index);
+            mPendingFocus = null;
         }
     }
 
@@ -1522,6 +1507,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         mMediaGroupAdapters.clear();
+        mPendingFocus = null;
     }
 
     @Override

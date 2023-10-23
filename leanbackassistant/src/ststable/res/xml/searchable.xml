@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The attributes below configure the Android search box appearance
+     and the search suggestions settings.
+     See the Developer Guide for more information
+     http://developer.android.com/guide/topics/search/
+
+     The Assistant's priority order for intent actions are as follows:
+         1) Intent specified in cursor(SUGGEST_COLUMN_INTENT_ACTION)
+         2) Intent specific in this file (searchSuggestIntentAction)
+         3) ACTION_SEARCH(default)
+
+    It is recommended to set it to ACTION_VIEW in searchable.xml and only override in code if you
+    want to handle certain pieces of content differently.
+ -->
+<searchable xmlns:android="http://schemas.android.com/apk/res/android"
+    android:hint="@string/search_hint"
+    android:includeInGlobalSearch="true"
+    android:label="@string/search_label"
+    android:icon="@drawable/lb_ic_in_app_search"
+    android:searchSettingsDescription="@string/settings_description"
+    android:searchSuggestAuthority="com.liskovsoft.leanbackassistant.ststable"
+    android:searchSuggestIntentAction="android.intent.action.VIEW"
+    android:searchSuggestIntentData="content://com.liskovsoft.leanbackassistant.ststable/video"
+    android:queryAfterZeroResults="true"
+    android:searchSuggestPath="search"
+    android:searchSuggestThreshold="0" />

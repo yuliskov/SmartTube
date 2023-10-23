@@ -44,12 +44,9 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         mSearchPresenter.setView(this);
         mCardPresenter = new VideoCardPresenter();
         mSearchGroupAdapters = new HashMap<>();
-        //mItemResultsAdapter = new VideoGroupObjectAdapter(mCardPresenter);
         mSearchData = SearchData.instance(getContext());
 
         setupEventListeners();
-        //setItemResultsAdapter(mItemResultsAdapter);
-        setSearchTagsProvider(new MediaServiceSearchTagProvider());
         enableKeyboardAutoShow(mSearchData.isKeyboardAutoShowEnabled());
     }
 
@@ -124,6 +121,11 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     @Override
     public void clearSearchTags() {
         clearTags();
+    }
+
+    @Override
+    public void setTagsProvider(MediaServiceSearchTagProvider provider) {
+        setSearchTagsProvider(provider);
     }
 
     @Override

@@ -11,16 +11,17 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTr
 import java.util.HashMap;
 
 public class TrackSelectorUtil {
-    public static final String CODEC_SHORT_AV1 = "av01";
-    private static final String CODEC_SHORT_AV1_FIXED = "av1";
-    private static final String CODEC_SHORT_AVC = "avc";
-    public static final String CODEC_SHORT_VP9 = "vp9";
-    private static final String CODEC_SHORT_VP9_HDR = "vp9.2";
-    private static final String CODEC_SHORT_AV1_HDR_ENDING = "10.0.110.09.18.09.0";
-    private static final String CODEC_SHORT_AV1_HDR_ENDING2 = "10.0.110.09.16.09.0";
+    public static final String CODEC_PREFIX_AV1 = "av01";
+    private static final String CODEC_PREFIX_AVC = "avc";
+    private static final String CODEC_PREFIX_VP9 = "vp9";
+    private static final String CODEC_PREFIX_VP09 = "vp09";
+    private static final String CODEC_PREFIX_MP4A = "mp4a";
+    public static final String CODEC_PREFIX_VORBIS = "vorbis";
+    private static final String CODEC_PREFIX_VP9_HDR = "vp9.2";
+    private static final String CODEC_SUFFIX_AV1_HDR = "10.0.110.09.18.09.0";
+    private static final String CODEC_SUFFIX_AV1_HDR2 = "10.0.110.09.16.09.0";
+    private static final String CODEC_SHORT_AV1 = "av1";
     private static final String HDR_PROFILE_ENDING = "hdr";
-    private static final String CODEC_SHORT_MP4A = "mp4a";
-    private static final String CODEC_SHORT_VORBIS = "vorbis";
     private static final String SEPARATOR = ", ";
     private static final HashMap<Integer, Integer> mResolutionMap = new HashMap<>();
 
@@ -53,6 +54,8 @@ public class TrackSelectorUtil {
         } else if (MimeTypes.isAudio(format.sampleMimeType)) {
             trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(buildLanguageString(format),
                     buildAudioPropertyString(format)), buildBitrateString(format)), extractCodec(format)), buildChannels(format));
+        } else if (MimeTypes.isText(format.sampleMimeType)) {
+            trackName = buildLanguageString(format);
         } else {
             trackName = joinWithSeparator(joinWithSeparator(buildLanguageString(format), buildBitrateString(format)), extractCodec(format));
         }
@@ -85,7 +88,7 @@ public class TrackSelectorUtil {
     }
 
     private static String buildLanguageString(Format format) {
-        return TextUtils.isEmpty(format.language) || "und".equals(format.language) ? "" : SubtitleTrack.trimAuto(format.language);
+        return TextUtils.isEmpty(format.language) || "und".equals(format.language) ? "" : SubtitleTrack.trimIfAuto(format.language);
     }
 
     private static String buildBitrateString(Format format) {
@@ -109,7 +112,7 @@ public class TrackSelectorUtil {
             return false;
         }
 
-        return codec.equals(CODEC_SHORT_VP9_HDR) || Helpers.endsWith(codec, CODEC_SHORT_AV1_HDR_ENDING, CODEC_SHORT_AV1_HDR_ENDING2, HDR_PROFILE_ENDING);
+        return codec.equals(CODEC_PREFIX_VP9_HDR) || Helpers.endsWith(codec, CODEC_SUFFIX_AV1_HDR, CODEC_SUFFIX_AV1_HDR2, HDR_PROFILE_ENDING);
     }
 
     public static String extractCodec(Format format) {
@@ -132,7 +135,7 @@ public class TrackSelectorUtil {
 
         String codec = codecNameFull.toLowerCase();
 
-        String[] codecNames = {CODEC_SHORT_AV1, CODEC_SHORT_AVC, CODEC_SHORT_VP9, CODEC_SHORT_MP4A, CODEC_SHORT_VORBIS};
+        String[] codecNames = {CODEC_PREFIX_AV1, CODEC_PREFIX_AVC, CODEC_PREFIX_VP9, CODEC_PREFIX_VP09, CODEC_PREFIX_MP4A, CODEC_PREFIX_VORBIS};
 
         for (String codecName : codecNames) {
             if (codec.contains(codecName)) {
@@ -149,19 +152,33 @@ public class TrackSelectorUtil {
         }
 
         switch (shortCodecName) {
-            case CODEC_SHORT_AV1:
-                return CODEC_SHORT_AV1_FIXED;
+            case CODEC_PREFIX_AV1:
+                return CODEC_SHORT_AV1;
+            case CODEC_PREFIX_VP09:
+                return CODEC_PREFIX_VP9;
         }
 
         return shortCodecName;
     }
 
     public static String buildChannels(Format format) {
+        return is51Audio(format) ? "5.1" : "";
+    }
+
+    public static boolean is51Audio(Format format) {
         if (format == null) {
-            return "";
+            return false;
         }
 
-        return format.bitrate > 300000 ? "5.1" : "";
+        return format.bitrate > 300000;
+    }
+
+    public static boolean is48KAudio(Format format) {
+        if (format == null) {
+            return false;
+        }
+
+        return format.sampleRate >= 48000;
     }
 
     public static boolean isVideo(Format format) {

@@ -17,7 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.SettingsCardPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsCategoryFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsSection;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
@@ -27,7 +27,7 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsGridFragment extends GridFragment implements SettingsCategoryFragment {
+public class SettingsGridFragment extends GridFragment implements SettingsSection {
     private static final String TAG = SettingsGridFragment.class.getSimpleName();
     private ArrayObjectAdapter mSettingsAdapter;
     private BrowsePresenter mMainPresenter;

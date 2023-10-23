@@ -29,7 +29,13 @@ public class WebBrowserFragment extends Fragment implements WebBrowserView {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.webbrowser, null);
+        try {
+            return inflater.inflate(R.layout.webbrowser, null);
+        } catch (Exception e) { // Failed to load WebView provider: No WebView installed
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     @Override

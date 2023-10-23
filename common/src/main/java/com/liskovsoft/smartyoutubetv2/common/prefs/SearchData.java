@@ -6,8 +6,8 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class SearchData {
     public static final int SPEECH_RECOGNIZER_SYSTEM = 0;
-    public static final int SPEECH_RECOGNIZER_EXTERNAL_1 = 1;
-    public static final int SPEECH_RECOGNIZER_EXTERNAL_2 = 2;
+    public static final int SPEECH_RECOGNIZER_DEFAULT = 1;
+    public static final int SPEECH_RECOGNIZER_GOTEV = 2;
     private static final String SEARCH_DATA = "search_data";
     @SuppressLint("StaticFieldLeak")
     private static SearchData sInstance;
@@ -20,6 +20,8 @@ public class SearchData {
     private int mSpeechRecognizerType;
     private Class<?> mTempBackgroundModeClass;
     private boolean mIsTrendingSearchesEnabled;
+    private boolean mIsSearchHistoryDisabled;
+    private boolean mIsPopularSearchesDisabled;
 
     private SearchData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
@@ -105,6 +107,24 @@ public class SearchData {
         return mSpeechRecognizerType;
     }
 
+    public void disableSearchHistory(boolean enabled) {
+        mIsSearchHistoryDisabled = enabled;
+        persistData();
+    }
+
+    public boolean isSearchHistoryDisabled() {
+        return mIsSearchHistoryDisabled;
+    }
+
+    public void disablePopularSearches(boolean enabled) {
+        mIsPopularSearchesDisabled = enabled;
+        persistData();
+    }
+
+    public boolean isPopularSearchesDisabled() {
+        return mIsPopularSearchesDisabled;
+    }
+
     private void restoreData() {
         String data = mAppPrefs.getData(SEARCH_DATA);
 
@@ -121,11 +141,14 @@ public class SearchData {
         //mIsAltSpeechRecognizerEnabled
         mSpeechRecognizerType = Helpers.parseInt(split, 6, SPEECH_RECOGNIZER_SYSTEM);
         mIsTrendingSearchesEnabled = Helpers.parseBoolean(split, 7, true);
+        mIsSearchHistoryDisabled = Helpers.parseBoolean(split, 8, false);
+        mIsPopularSearchesDisabled = Helpers.parseBoolean(split, 9, true);
     }
 
     private void persistData() {
         mAppPrefs.setData(SEARCH_DATA,
                 Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
-                        mIsKeyboardAutoShowEnabled, mIsTempBackgroundModeEnabled, null, mSpeechRecognizerType, mIsTrendingSearchesEnabled));
+                        mIsKeyboardAutoShowEnabled, mIsTempBackgroundModeEnabled, null, mSpeechRecognizerType,
+                        mIsTrendingSearchesEnabled, mIsSearchHistoryDisabled, mIsPopularSearchesDisabled));
     }
 }

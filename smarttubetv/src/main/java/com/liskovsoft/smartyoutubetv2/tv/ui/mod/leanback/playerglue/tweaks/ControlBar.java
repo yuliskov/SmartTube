@@ -32,16 +32,21 @@ class ControlBar extends LinearLayout {
     private int mChildMarginFromCenter;
     private OnChildFocusedListener mOnChildFocusedListener;
     // Can't set to static. Because we have two control bars.
-    int mLastFocusIndex = -1;
-    boolean mDefaultFocusToMiddle = true;
-    boolean mFocusRecovery = true;
+    private int mLastFocusIndex = -1;
+    // MOD: Maintain global focus index to seamless navigation between control rows.
+    private static int mGlobalFocusIndex = -1;
+    private boolean mDefaultFocusToMiddle = true;
+    private boolean mFocusRecovery = true;
+    private boolean mGlobalFocus = true;
 
     public ControlBar(Context context, AttributeSet attrs) {
         super(context, attrs);
+        resetFocus(); // MOD: reset global focus index
     }
 
     public ControlBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        resetFocus(); // MOD: reset global focus index
     }
 
     void setDefaultFocusToMiddle(boolean defaultFocusToMiddle) {
@@ -55,8 +60,15 @@ class ControlBar extends LinearLayout {
         mFocusRecovery = focusRecovery;
     }
 
+    /**
+     * MOD: global navigation
+     */
+    void setGlobalFocus(boolean globalFocus) {
+        mGlobalFocus = globalFocus;
+    }
+
     void resetFocus() {
-        mLastFocusIndex = -1;
+        setFocusIndex(-1);
     }
 
     int getDefaultFocusIndex() {
@@ -66,8 +78,13 @@ class ControlBar extends LinearLayout {
     @Override
     protected boolean onRequestFocusInDescendants(int direction, Rect previouslyFocusedRect) {
         if (getChildCount() > 0) {
-            int index = mLastFocusIndex >= 0 && mLastFocusIndex < getChildCount()
-                    ? mLastFocusIndex : getDefaultFocusIndex();
+            // MOD: fix situation when rows have different length
+            if (getFocusIndex() >= getChildCount()) {
+                setFocusIndex(getChildCount() - 1);
+            }
+
+            int index = getFocusIndex() >= 0 && getFocusIndex() < getChildCount()
+                    ? getFocusIndex() : getDefaultFocusIndex();
 
             if (getChildAt(index).requestFocus(direction, previouslyFocusedRect)) {
                 return true;
@@ -79,8 +96,8 @@ class ControlBar extends LinearLayout {
     @Override
     public void addFocusables(ArrayList<View> views, int direction, int focusableMode) {
         if ((direction == ViewGroup.FOCUS_UP || direction == ViewGroup.FOCUS_DOWN)) {
-            if (mLastFocusIndex >= 0 && mLastFocusIndex < getChildCount()) {
-                views.add(getChildAt(mLastFocusIndex));
+            if (getFocusIndex() >= 0 && getFocusIndex() < getChildCount()) {
+                views.add(getChildAt(getFocusIndex()));
             } else if (getChildCount() > 0) {
                 views.add(getChildAt(getDefaultFocusIndex()));
             }
@@ -101,7 +118,7 @@ class ControlBar extends LinearLayout {
     public void requestChildFocus(View child, View focused) {
         super.requestChildFocus(child, focused);
         if (mFocusRecovery) {
-            mLastFocusIndex = indexOfChild(child);
+            setFocusIndex(indexOfChild(child));
         }
         if (mOnChildFocusedListener != null) {
             mOnChildFocusedListener.onChildFocusedListener(child, focused);
@@ -128,5 +145,14 @@ class ControlBar extends LinearLayout {
             totalExtraMargin += extraMargin;
         }
         setMeasuredDimension(getMeasuredWidth() + totalExtraMargin, getMeasuredHeight());
+    }
+
+    private void setFocusIndex(int index) {
+        mLastFocusIndex = index;
+        mGlobalFocusIndex = index;
+    }
+
+    private int getFocusIndex() {
+        return mGlobalFocus ? mGlobalFocusIndex : mLastFocusIndex;
     }
 }

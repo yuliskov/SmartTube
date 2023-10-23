@@ -14,6 +14,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+<!-- MOD: Enable single click touch mode (focusableInTouchMode=false) -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.leanback.widget.SpeechOrbView
@@ -23,7 +24,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/lb_search_bar_speech_orb_margin_start"
             android:focusable="true"
-            android:focusableInTouchMode="true"
+            android:focusableInTouchMode="false"
             >
         <!-- Should be commented out? Fix voice search activation after fragment restore? -->
         <requestFocus/>
@@ -86,7 +87,7 @@
         android:layout_marginEnd="@dimen/search_bar_right_items_margin"
         android:layout_toStartOf="@+id/lb_search_bar_search_orb"
         android:focusable="true"
-        android:focusableInTouchMode="true"
+        android:focusableInTouchMode="false"
         app:searchOrbIcon="@drawable/search_bar_settings_orb"
         app:searchOrbColor="@color/orb_color"
         app:searchOrbBrightColor="@color/orb_bright_color"
@@ -101,7 +102,7 @@
         android:layout_marginEnd="@dimen/search_bar_right_items_margin"
         android:layout_alignParentEnd="true"
         android:focusable="true"
-        android:focusableInTouchMode="true"
+        android:focusableInTouchMode="false"
         app:searchOrbColor="@color/orb_color"
         app:searchOrbBrightColor="@color/orb_bright_color"
         app:searchOrbIconColor="@color/orb_icon_color" />

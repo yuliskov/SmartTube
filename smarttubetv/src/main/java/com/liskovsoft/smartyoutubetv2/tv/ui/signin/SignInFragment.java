@@ -1,15 +1,19 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.signin;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.GuidedStepSupportFragment;
 import androidx.leanback.widget.GuidanceStylist;
 import androidx.leanback.widget.GuidedAction;
+import com.bumptech.glide.Glide;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.List;
 
@@ -45,7 +49,16 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
     }
 
     private void setTitle(String userCode) {
+        if (TextUtils.isEmpty(userCode)) {
+            return;
+        }
+
         getGuidanceStylist().getTitleView().setText(userCode);
+
+        Glide.with(getContext())
+                .load(Utils.toQrCodeLink(SIGN_IN_URL + "?user_code=" + userCode.replace(" ", "-")))
+                .apply(ViewUtil.glideOptions())
+                .into(getGuidanceStylist().getIconView());
     }
 
     @Override

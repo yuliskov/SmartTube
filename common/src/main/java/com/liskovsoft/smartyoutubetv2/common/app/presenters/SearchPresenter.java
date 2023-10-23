@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.MediaServiceSearchTagProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
@@ -65,6 +66,10 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     @Override
     public void onViewInitialized() {
+        if (getView() != null) {
+            getView().setTagsProvider(new MediaServiceSearchTagProvider(!mSearchData.isPopularSearchesDisabled()));
+        }
+
         startSearchInt();
     }
 
@@ -189,7 +194,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                                 getView().showProgressBar(false);
                             }
                         },
-                        () -> getView().showProgressBar(false)
+                        () -> {
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
+                        }
                 );
     }
     
@@ -212,14 +221,19 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribe(
-                        continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup)),
+                        //continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup)),
+                        continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup, group)),
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                             }
                         },
-                        () -> getView().showProgressBar(false)
+                        () -> {
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
+                        }
                 );
     }
 
@@ -230,7 +244,12 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
-        VideoGroup group = item.group;
+        if (item.getGroup() == null) {
+            Log.e(TAG, "Can't scroll. Video group is null.");
+            return;
+        }
+
+        VideoGroup group = item.getGroup();
 
         Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());
 
@@ -277,6 +296,9 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         RxHelper.disposeActions(mLoadAction, mScrollAction);
         if (getView() != null) {
             getView().showProgressBar(false);
+        }
+        if (mSearchData.isSearchHistoryDisabled()) {
+            MediaServiceManager.instance().clearSearchHistory();
         }
     }
 

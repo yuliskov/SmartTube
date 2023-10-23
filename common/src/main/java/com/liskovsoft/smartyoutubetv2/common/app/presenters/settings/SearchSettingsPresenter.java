@@ -6,6 +6,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 
 import java.util.ArrayList;
@@ -29,7 +30,11 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
         appendSpeechRecognizerCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.dialog_search));
+        settingsPresenter.showDialog(getContext().getString(R.string.dialog_search), () -> {
+            if (mSearchData.isSearchHistoryDisabled()) {
+                MediaServiceManager.instance().clearSearchHistory();
+            }
+        });
     }
 
     private void appendSpeechRecognizerCategory(AppDialogPresenter settingsPresenter) {
@@ -37,8 +42,8 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
 
         for (int[] pair : new int[][] {
                 {R.string.speech_recognizer_system, SearchData.SPEECH_RECOGNIZER_SYSTEM},
-                {R.string.speech_recognizer_external_1, SearchData.SPEECH_RECOGNIZER_EXTERNAL_1},
-                {R.string.speech_recognizer_external_2, SearchData.SPEECH_RECOGNIZER_EXTERNAL_2}}) {
+                {R.string.speech_recognizer_external_1, SearchData.SPEECH_RECOGNIZER_DEFAULT},
+                {R.string.speech_recognizer_external_2, SearchData.SPEECH_RECOGNIZER_GOTEV}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]),
                     optionItem -> mSearchData.setSpeechRecognizerType(pair[1]),
                     mSearchData.getSpeechRecognizerType() == pair[1]));
@@ -49,6 +54,18 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_popular_searches),
+                option -> mSearchData.disablePopularSearches(option.isSelected()),
+                mSearchData.isPopularSearchesDisabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_search_history),
+                option -> mSearchData.disableSearchHistory(option.isSelected()),
+                mSearchData.isSearchHistoryDisabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.search_background_playback),
+                option -> mSearchData.enableTempBackgroundMode(option.isSelected()),
+                mSearchData.isTempBackgroundModeEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.instant_voice_search),
                 option -> mSearchData.enableInstantVoiceSearch(option.isSelected()),
@@ -62,9 +79,9 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
                 option -> mSearchData.enableKeyboardAutoShow(option.isSelected()),
                 mSearchData.isKeyboardAutoShowEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.trending_searches),
-                option -> mSearchData.enableTrendingSearches(option.isSelected()),
-                mSearchData.isTrendingSearchesEnabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.trending_searches),
+        //        option -> mSearchData.enableTrendingSearches(option.isSelected()),
+        //        mSearchData.isTrendingSearchesEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }

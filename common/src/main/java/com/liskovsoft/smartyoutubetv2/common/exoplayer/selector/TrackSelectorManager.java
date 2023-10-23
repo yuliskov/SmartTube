@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
+import android.content.Context;
+import android.os.Build;
 import android.text.TextUtils;
 import android.os.Build;
 import android.util.Pair;
@@ -16,21 +18,24 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.AudioTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector.TrackSelectorCallback;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class TrackSelectorManager implements TrackSelectorCallback {
+    private final Context mContext;
     public static final int RENDERER_INDEX_VIDEO = 0;
     public static final int RENDERER_INDEX_AUDIO = 1;
     public static final int RENDERER_INDEX_SUBTITLE = 2;
@@ -39,17 +44,17 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
     private final static float MAX_FRAME_RATE =
             Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1 ? 30f : 60f;
-    private final String mLanguage;
-    private final boolean mIsAllFormatsUnlocked;
+    private static final String DEFAULT_LANGUAGE = "en";
+    private final Map<String, Integer> mBlacklist = new HashMap<>();
 
     private DefaultTrackSelector mTrackSelector;
 
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
+    private boolean mIsMergedSource;
 
-    public TrackSelectorManager(String language, boolean isAllFormatsUnlocked) {
-        mLanguage = language;
-        mIsAllFormatsUnlocked = isAllFormatsUnlocked;
+    public TrackSelectorManager(Context context) {
+        mContext = context.getApplicationContext();
     }
 
     public void invalidate() {
@@ -146,6 +151,54 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         renderer.isDisabled = parameters.getRendererDisabled(rendererIndex);
     }
 
+    //private void initMediaTracks(int rendererIndex) {
+    //    if (mRenderers[rendererIndex] == null) {
+    //        return;
+    //    }
+    //
+    //    Renderer renderer = mRenderers[rendererIndex];
+    //    renderer.mediaTracks = new MediaTrack[renderer.trackGroups.length][];
+    //    // Fix for java.util.ConcurrentModificationException inside of:
+    //    // com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem.from (ExoFormatItem.java:44)
+    //    // Won't help: renderer.sortedTracks = Collections.synchronizedSortedSet(new TreeSet<>(new MediaTrackFormatComparator()));
+    //    renderer.sortedTracks = new TreeSet<>(new MediaTrackFormatComparator());
+    //
+    //    if (rendererIndex == RENDERER_INDEX_SUBTITLE) {
+    //        // AUTO OPTION: add disable subs option
+    //        MediaTrack noSubsTrack = MediaTrack.forRendererIndex(rendererIndex);
+    //        // Temporal selection.
+    //        // Real selection will be override later on setSelection() routine.
+    //        noSubsTrack.isSelected = true;
+    //        renderer.sortedTracks.add(noSubsTrack);
+    //        renderer.selectedTrack = noSubsTrack;
+    //    }
+    //
+    //    for (int groupIndex = 0; groupIndex < renderer.trackGroups.length; groupIndex++) {
+    //        TrackGroup group = renderer.trackGroups.get(groupIndex);
+    //        renderer.mediaTracks[groupIndex] = new MediaTrack[group.length];
+    //
+    //        for (int trackIndex = 0; trackIndex < group.length; trackIndex++) {
+    //            Format format = group.getFormat(trackIndex);
+    //
+    //            MediaTrack mediaTrack = MediaTrack.forRendererIndex(rendererIndex);
+    //            mediaTrack.format = format;
+    //            mediaTrack.groupIndex = groupIndex;
+    //            mediaTrack.trackIndex = trackIndex;
+    //
+    //            if (!mIsAllFormatsUnlocked && (!Utils.isTrackSupported(mediaTrack) || !isTrackUnique(mediaTrack))) {
+    //                continue;
+    //            }
+    //
+    //            // Selected track or not will be decided later in setSelection() routine
+    //
+    //            renderer.mediaTracks[groupIndex][trackIndex] = mediaTrack;
+    //            renderer.sortedTracks.add(mediaTrack);
+    //        }
+    //    }
+    //
+    //    mBlacklist.clear();
+    //}
+
     private void initMediaTracks(int rendererIndex) {
         if (mRenderers[rendererIndex] == null) {
             return;
@@ -156,7 +209,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         // Fix for java.util.ConcurrentModificationException inside of:
         // com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem.from (ExoFormatItem.java:44)
         // Won't help: renderer.sortedTracks = Collections.synchronizedSortedSet(new TreeSet<>(new MediaTrackFormatComparator()));
-        renderer.sortedTracks = new TreeSet<>(new MediaTrackFormatComparator());
+        SortedSet<MediaTrack> sortedTracks = new TreeSet<>(new MediaTrackFormatComparator());
 
         if (rendererIndex == RENDERER_INDEX_SUBTITLE) {
             // AUTO OPTION: add disable subs option
@@ -164,7 +217,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             // Temporal selection.
             // Real selection will be override later on setSelection() routine.
             noSubsTrack.isSelected = true;
-            renderer.sortedTracks.add(noSubsTrack);
+            sortedTracks.add(noSubsTrack);
             renderer.selectedTrack = noSubsTrack;
         }
 
@@ -180,16 +233,29 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 mediaTrack.groupIndex = groupIndex;
                 mediaTrack.trackIndex = trackIndex;
 
-                if (!mIsAllFormatsUnlocked && !Utils.isTrackSupported(mediaTrack)) {
+                if (isErrorInAudio(mediaTrack)) {
+                    continue;
+                }
+
+                if (!isTrackUnique(mediaTrack)) {
+                    continue;
+                }
+
+                if (!PlayerTweaksData.instance(mContext).isAllFormatsUnlocked() && !Utils.isFormatSupported(mediaTrack)) {
                     continue;
                 }
 
                 // Selected track or not will be decided later in setSelection() routine
 
                 renderer.mediaTracks[groupIndex][trackIndex] = mediaTrack;
-                renderer.sortedTracks.add(mediaTrack);
+                sortedTracks.add(mediaTrack);
             }
         }
+
+        // Late assign to fix ConcurrentModificationException
+        renderer.sortedTracks = sortedTracks;
+
+        mBlacklist.clear();
     }
 
     /**
@@ -422,6 +488,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         invalidate();
     }
 
+    public void setMergedSource(boolean mergedSource) {
+        mIsMergedSource = mergedSource;
+    }
+
     private MediaTrack findBestMatch(MediaTrack originTrack) {
         Log.d(TAG, "findBestMatch: Starting: " + originTrack.format);
 
@@ -434,7 +504,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
             MediaTrack[][] mediaTracks = filterByLanguage(renderer.mediaTracks, originTrack);
 
-            outerloop:
             for (int groupIndex = 0; groupIndex < mediaTracks.length; groupIndex++) {
                 prevResult = result;
 
@@ -473,34 +542,30 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         continue;
                     }
 
-                    int compare = originTrack.inBounds(mediaTrack);
+                    int bounds = originTrack.inBounds(mediaTrack);
 
-                    if (compare == 0) {
-                        Log.d(TAG, "findBestMatch: Found exact match by size and fps in list: " + mediaTrack.format);
+                    if (bounds >= 0) {
+                        int compare = mediaTrack.compare(result);
 
-                        // Get ready for group with multiple codecs: avc, av01
-                        if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
-                            result = mediaTrack;
-                            // Don't do break for VideoTrack because we don't know whether there 30/60 fps.
-                            if (!(originTrack instanceof VideoTrack)) {
-                                break outerloop;
-                            }
-                        } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
-                            result = mediaTrack;
-                            if (originTrack instanceof SubtitleTrack) {
-                                break outerloop;
-                            }
-                        }
-                    } else if (compare > 0) {
-                        // Select track with higher possible quality or by preferred codec
-                        boolean higherQuality = mediaTrack.compare(result) >= 0;
-                        //boolean preferByCodec = MediaTrack.preferByCodec(mediaTrack, result);
-                        if (higherQuality) { // || preferByCodec
-                            // Get ready for group with multiple codecs: avc, av01
-                            // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
+                        //if (compare == 0) {
+                        //    if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
+                        //        result = mediaTrack;
+                        //    }
+                        //} else if (compare > 0) {
+                        //    if (!MediaTrack.preferByCodec(result, mediaTrack)) {
+                        //        result = mediaTrack;
+                        //    }
+                        //}
+
+                        if (compare == 0) {
                             if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
                                 result = mediaTrack;
-                            } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
+                            } else if (!MediaTrack.codecEquals(result, originTrack) &&
+                                    !MediaTrack.preferByCodec(result, mediaTrack)) {
+                                result = mediaTrack;
+                            }
+                        } else if (compare > 0) {
+                            if (!MediaTrack.preferByCodec(result, mediaTrack)) {
                                 result = mediaTrack;
                             }
                         }
@@ -510,10 +575,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 // Don't let change the codec beside needed one.
                 // Handle situation where same codecs in different groups (e.g. subtitles).
                 if (MediaTrack.codecEquals(result, originTrack)) {
-                    if (originTrack.compare(result) == 0) { // Exact match found
-                        break;
-                    }
-
                     if (MediaTrack.codecEquals(prevResult, originTrack) && prevResult.compare(result) > 0) {
                         result = prevResult;
                     }
@@ -567,15 +628,22 @@ public class TrackSelectorManager implements TrackSelectorCallback {
      * Trying to filter languages preferred by the user
      */
     private MediaTrack[][] filterByLanguage(MediaTrack[][] trackGroupList, MediaTrack originTrack) {
-        if (!(originTrack instanceof AudioTrack) || mLanguage == null || trackGroupList.length <= 1) {
+        if (!(originTrack instanceof AudioTrack) || trackGroupList.length <= 1) {
             return trackGroupList;
         }
 
-        String resultLanguage = mLanguage;
+        String audioLanguage = PlayerData.instance(mContext).getAudioLanguage();
 
-        // Override default language with one from recently selected track
-        if (originTrack.format != null && !TextUtils.isEmpty(originTrack.format.language)) {
+        String resultLanguage = null;
+
+        if (!TextUtils.isEmpty(audioLanguage)) {
+            resultLanguage = audioLanguage;
+        } else if (originTrack.format != null && !TextUtils.isEmpty(originTrack.format.language)) {
             resultLanguage = originTrack.format.language;
+        }
+
+        if (resultLanguage == null) {
+            return trackGroupList;
         }
 
         List<MediaTrack[]> resultTracks = null;
@@ -586,14 +654,14 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             if (trackGroup != null && trackGroup.length >= 1) {
                 MediaTrack mediaTrack = trackGroup[0];
 
-                if (mediaTrack.format != null) {
-                    if (Helpers.equals(mediaTrack.format.language, resultLanguage)) {
+                if (mediaTrack != null && mediaTrack.format != null) {
+                    if (Helpers.startsWith(mediaTrack.format.language, resultLanguage)) { // format language: en-us
                         if (resultTracks == null) {
                             resultTracks = new ArrayList<>();
                         }
 
                         resultTracks.add(trackGroup);
-                    } else if (Helpers.equals(mediaTrack.format.language, "en")) {
+                    } else if (Helpers.startsWith(mediaTrack.format.language, DEFAULT_LANGUAGE)) { // format language: en-us
                         if (resultTracksFallback == null) {
                             resultTracksFallback = new ArrayList<>();
                         }
@@ -699,10 +767,62 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
             int delta = leftVal - rightVal;
             if (delta == 0) {
-                return format2.bitrate - format1.bitrate;
+                int delta2 = format2.bitrate - format1.bitrate;
+                return delta2 == 0 ? 1 : delta2; // NOTE: don't return 0 or track will be removed
             }
 
-            return leftVal - rightVal;
+            return delta;
         }
+    }
+
+    private boolean isTrackUnique(MediaTrack mediaTrack) {
+        if (!mIsMergedSource) {
+            return true;
+        }
+
+        Format format = mediaTrack.format;
+
+        // Remove hls un-complete formats altogether
+        if (format.codecs == null || format.codecs.isEmpty() || format.bitrate <= 0) {
+            return false;
+        }
+
+        String hdrTag = TrackSelectorUtil.isHdrCodec(format.codecs) ? "hdr" : "";
+
+        String formatId = format.width + format.height + format.frameRate + format.sampleMimeType + hdrTag + format.language;
+
+        Integer bitrate = mBlacklist.get(formatId);
+
+        if (bitrate == null || (bitrate < format.bitrate || mediaTrack instanceof AudioTrack)) {
+          mBlacklist.put(formatId, format.bitrate + 500_000);
+          return true;
+        }
+
+        return false;
+    }
+
+    /**
+     *  Trying to fix error 'AudioSink.InitializationException: AudioTrack init failed'<br/>
+     *  By removing mp4a tracks with high bitrate.
+     */
+    private boolean isErrorInAudio(MediaTrack mediaTrack) {
+        if (mediaTrack == null || mediaTrack.format == null) {
+            return false;
+        }
+
+        if (!PlayerTweaksData.instance(mContext).isUnsafeAudioFormatsEnabled()) {
+            return isUnsafeFormat(mediaTrack);
+        }
+
+        switch (Build.MODEL) {
+            case "Smart TV Pro": // Smart TV Pro (G03_4K_GB) - TCL
+                return isUnsafeFormat(mediaTrack);
+        }
+
+        return false;
+    }
+
+    private boolean isUnsafeFormat(MediaTrack mediaTrack) {
+        return mediaTrack.isMP4ACodec() && mediaTrack.format.bitrate >= 195_000;
     }
 }

@@ -1171,6 +1171,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
         bitrate,
         playlistFormat.width,
         playlistFormat.height,
+        playlistFormat.frameRate, // MOD: add fps to hls format info
         channelCount,
         playlistFormat.selectionFlags,
         playlistFormat.language);

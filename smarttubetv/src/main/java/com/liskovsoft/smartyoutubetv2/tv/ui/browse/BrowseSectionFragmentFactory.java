@@ -7,12 +7,16 @@ import androidx.leanback.widget.Row;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.CategoryFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsCategoryFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
+import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.Section;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsSection;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoSection;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.settings.SettingsGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultiVideoGridFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.ShortsGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoRowsFragment;
 
@@ -22,6 +26,7 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
     private Fragment mCurrentFragment;
     private int mFragmentType = BrowseSection.TYPE_GRID;
     private int mSelectedItemIndex = -1;
+    private Video mSelectedItem;
 
     public interface OnSectionSelectedListener {
         void onSectionSelected(Row row);
@@ -60,11 +65,17 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
             case BrowseSection.TYPE_GRID:
                 fragment = new VideoGridFragment();
                 break;
+            case BrowseSection.TYPE_SHORTS_GRID:
+                fragment = new ShortsGridFragment();
+                break;
             case BrowseSection.TYPE_SETTINGS_GRID:
                 fragment = new SettingsGridFragment();
                 break;
             case BrowseSection.TYPE_MULTI_GRID:
                 fragment = new MultiVideoGridFragment();
+                break;
+            case BrowseSection.TYPE_ERROR:
+                fragment = new ErrorDialogFragment((ErrorFragmentData) ((SectionHeaderItem) header).getSection().getData());
                 break;
         }
 
@@ -77,6 +88,7 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
             }
             
             setCurrentFragmentItemIndex(mSelectedItemIndex);
+            selectCurrentFragmentItem(mSelectedItem);
 
             return fragment;
         }
@@ -94,8 +106,8 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
             return;
         }
 
-        if (mCurrentFragment instanceof SettingsCategoryFragment) {
-            ((SettingsCategoryFragment) mCurrentFragment).update(group);
+        if (mCurrentFragment instanceof SettingsSection) {
+            ((SettingsSection) mCurrentFragment).update(group);
         } else {
             Log.e(TAG, "updateFragment: Page group fragment has incompatible type: " + mCurrentFragment.getClass().getSimpleName());
         }
@@ -121,8 +133,8 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
     }
 
     public boolean isEmpty() {
-        if (mCurrentFragment instanceof CategoryFragment) {
-            return ((CategoryFragment) mCurrentFragment).isEmpty();
+        if (mCurrentFragment instanceof Section) {
+            return ((Section) mCurrentFragment).isEmpty();
         }
 
         return false;
@@ -133,33 +145,52 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
     }
 
     public int getCurrentFragmentItemIndex() {
-        if (mCurrentFragment instanceof VideoCategoryFragment) {
-            return ((VideoCategoryFragment) mCurrentFragment).getPosition();
+        if (mCurrentFragment instanceof VideoSection) {
+            return ((VideoSection) mCurrentFragment).getPosition();
         }
 
         return -1;
     }
 
     public void setCurrentFragmentItemIndex(int index) {
-        if (mCurrentFragment instanceof VideoCategoryFragment) {
-            ((VideoCategoryFragment) mCurrentFragment).setPosition(index);
+        if (index < 0) {
+            return;
+        }
+
+        mSelectedItemIndex = index;
+        mSelectedItem = null;
+
+        if (mCurrentFragment instanceof VideoSection) {
+            ((VideoSection) mCurrentFragment).setPosition(index);
             mSelectedItemIndex = -1;
-        } else {
-            mSelectedItemIndex = index;
+        }
+    }
+
+    public void selectCurrentFragmentItem(Video item) {
+        if (item == null) {
+            return;
+        }
+
+        mSelectedItem = item;
+        mSelectedItemIndex = -1;
+
+        if (mCurrentFragment instanceof VideoSection) {
+            ((VideoSection) mCurrentFragment).selectItem(item);
+            mSelectedItem = null;
         }
     }
 
     private void updateVideoFragment(Fragment fragment, VideoGroup group) {
-        if (fragment instanceof VideoCategoryFragment) {
-            ((VideoCategoryFragment) fragment).update(group);
+        if (fragment instanceof VideoSection) {
+            ((VideoSection) fragment).update(group);
         } else {
             Log.e(TAG, "updateFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
         }
     }
 
     private void clearFragment(Fragment fragment) {
-        if (fragment instanceof CategoryFragment) {
-            ((CategoryFragment) fragment).clear();
+        if (fragment instanceof Section) {
+            ((Section) fragment).clear();
         } else {
             Log.e(TAG, "clearFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
         }

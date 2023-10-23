@@ -43,6 +43,10 @@
     <color name="scheme_red_shelf_background_dark">#131313</color>
     <color name="scheme_red_card_background_dark">#36474f</color>
 
+    <!-- Blue color scheme -->
+    <color name="scheme_blue_background">#33B5E5</color>
+    <color name="scheme_blue_background_dark">#207EA1</color>
+
     <!-- Vineyard -->
     <color name="black_87pc">#77000000</color>
     <color name="primary_dark">#00796B</color>

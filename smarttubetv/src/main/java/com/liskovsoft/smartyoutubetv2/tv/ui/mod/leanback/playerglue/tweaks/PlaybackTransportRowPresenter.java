@@ -40,6 +40,7 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.ControlButtonPresenterSelector;
@@ -92,6 +93,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final TextView mQualityInfo;
         final TextView mDateTime;
         final ViewGroup mAdditionalInfo;
+        final ViewGroup mTimeInfo;
         final ViewGroup mTopEdge;
         final SeekBar mProgressBar;
         final ThumbsBar mThumbsBar;
@@ -424,6 +426,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         public ViewHolder(View rootView, Presenter descriptionPresenter) {
             super(rootView);
             mPlayerData = PlayerData.instance(rootView.getContext());
+            // MOD: switch between navigation modes
+            PlayerTweaksData tweaksData = PlayerTweaksData.instance(rootView.getContext());
+            PlaybackTransportRowPresenter.this.mPlaybackControlsPresenter.setGlobalFocus(tweaksData.isPlayerGlobalFocusEnabled());
+            PlaybackTransportRowPresenter.this.mSecondaryControlsPresenter.setGlobalFocus(tweaksData.isPlayerGlobalFocusEnabled());
             mImageView = (ImageView) rootView.findViewById(R.id.image);
             mDescriptionDock = (ViewGroup) rootView.findViewById(R.id.description_dock);
             mCurrentTime = (TextView) rootView.findViewById(R.id.current_time);
@@ -434,6 +440,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             mEndingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.player_ending_time);
             mRemainingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.player_remaining_time);
             mAdditionalInfo = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.additional_info);
+            mTimeInfo = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.time_info);
             mTopEdge = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.top_edge);
             mTopEdge.setOnFocusChangeListener((v, hasFocus) -> {
                 if (hasFocus) {
@@ -623,6 +630,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     mSecondaryControlsVh.view.setVisibility(View.VISIBLE);
                     mDescriptionViewHolder.view.setVisibility(View.VISIBLE);
                     mAdditionalInfo.setVisibility(View.VISIBLE);
+                    //mTimeInfo.setVisibility(View.VISIBLE);
                     // Don't set to GONE or carousel will crash (can't properly calculate length)
                     mThumbsBarWrapper.setVisibility(View.INVISIBLE);
                     break;
@@ -632,6 +640,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     mSecondaryControlsVh.view.setVisibility(View.GONE);
                     mDescriptionViewHolder.view.setVisibility(View.GONE);
                     mAdditionalInfo.setVisibility(View.GONE);
+                    //mTimeInfo.setVisibility(View.GONE);
                     mThumbsBarWrapper.setVisibility(View.VISIBLE);
                     break;
             }
@@ -854,8 +863,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
     boolean mProgressColorSet;
     boolean mSecondaryProgressColorSet;
     Presenter mDescriptionPresenter;
-    ControlBarPresenter mPlaybackControlsPresenter;
-    ControlBarPresenter mSecondaryControlsPresenter;
+    final ControlBarPresenter mPlaybackControlsPresenter;
+    final ControlBarPresenter mSecondaryControlsPresenter;
     OnActionClickedListener mOnActionClickedListener;
     OnActionLongClickedListener mOnActionLongClickedListener;
 

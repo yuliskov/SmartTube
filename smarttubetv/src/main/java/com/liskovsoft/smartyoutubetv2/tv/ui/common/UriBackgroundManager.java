@@ -153,6 +153,8 @@ public class UriBackgroundManager {
             return;
         }
 
-        mBackgroundManager.setColor(ContextCompat.getColor(mActivity, colorResId));
+        if (mBackgroundManager != null) {
+            mBackgroundManager.setColor(ContextCompat.getColor(mActivity, colorResId));
+        }
     }
 }

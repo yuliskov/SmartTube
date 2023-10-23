@@ -1,19 +1,26 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.errors;
 
+import androidx.annotation.Nullable;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer.DecoderInitializationException;
+import com.google.android.exoplayer2.source.DefaultMediaSourceEventListener;
+import com.google.android.exoplayer2.source.MediaSource.MediaPeriodId;
 import com.google.android.exoplayer2.source.chunk.Chunk;
 import com.google.android.exoplayer2.source.chunk.ContainerMediaChunk;
 import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException;
+import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public class TrackErrorFixer {
+public class TrackErrorFixer extends DefaultMediaSourceEventListener {
     private static final int BLACKLIST_CHECK_MS = 1_000;
     private static final int BLACKLIST_CLEAR_MS = 10_000;
     private static final String TAG = TrackErrorFixer.class.getSimpleName();
@@ -40,7 +47,7 @@ public class TrackErrorFixer {
 
         InvalidResponseCodeException ex = (InvalidResponseCodeException) e;
 
-        if (ex.responseCode != 404 && ex.responseCode != 503) {
+        if (ex.responseCode != 404 && ex.responseCode != 503 && ex.responseCode != 500) {
             return false;
         }
 
@@ -50,10 +57,102 @@ public class TrackErrorFixer {
 
         mLastEx = ex;
 
-        return selectNextTrack();
+        return selectDifferentCodec(isAudio(mLastEx));
+    }
+
+    //public boolean fixError(ExoPlaybackException error) {
+    //    if (error != null && error.getCause() instanceof DecoderInitializationException) {
+    //        return selectDifferentCodec(MimeTypes.isAudio(((DecoderInitializationException) error.getCause()).mimeType));
+    //    }
+    //
+    //    return false;
+    //}
+
+    private boolean selectDifferentCodec(boolean isAudio) {
+        if (System.currentTimeMillis() - mSelectionTimeMs < BLACKLIST_CLEAR_MS) {
+            return false;
+        }
+
+        Set<MediaTrack> tracks = isAudio ? mTrackSelectorManager.getAudioTracks() : mTrackSelectorManager.getVideoTracks();
+
+        if (tracks == null) {
+            return false;
+        }
+
+        MediaTrack currentTrack = null;
+
+        for (MediaTrack track : tracks) {
+            if (track.isSelected) {
+                currentTrack = track;
+                break;
+            }
+        }
+
+        if (currentTrack == null || currentTrack.format == null || currentTrack.format.codecs == null) {
+            return false;
+        }
+
+        String currentCodec = currentTrack.format.codecs;
+        int width = currentTrack.format.width;
+
+        MediaTrack nextTrack = null;
+
+        for (MediaTrack track : tracks) {
+            if (!currentCodec.equals(track.format.codecs) && track.format.width <= width) {
+                nextTrack = track;
+                break;
+            }
+        }
+
+        if (nextTrack != null) {
+            mTrackSelectorManager.selectTrack(nextTrack);
+            mSelectionTimeMs = System.currentTimeMillis();
+            return true;
+        }
+
+        return false;
     }
 
     private boolean selectNextTrack() {
+        if (mLastEx == null) {
+            return false;
+        }
+
+        if (System.currentTimeMillis() - mSelectionTimeMs < BLACKLIST_CLEAR_MS) {
+            return false;
+        }
+
+        Set<MediaTrack> tracks = isAudio(mLastEx) ? mTrackSelectorManager.getAudioTracks() : mTrackSelectorManager.getVideoTracks();
+
+        if (tracks == null) {
+            return false;
+        }
+
+        MediaTrack nextTrack = null;
+        boolean afterSelected = false;
+
+        for (MediaTrack track : tracks) {
+            if (track.isSelected) {
+                afterSelected = true;
+                continue;
+            }
+
+            if (afterSelected) {
+                nextTrack = track;
+                break;
+            }
+        }
+
+        if (nextTrack != null) {
+            mTrackSelectorManager.selectTrack(nextTrack);
+            return true;
+        }
+
+        mSelectionTimeMs = System.currentTimeMillis();
+        return false;
+    }
+
+    private boolean selectNextTrackOld() {
         if (mLastEx == null) {
             return false;
         }
@@ -146,5 +245,11 @@ public class TrackErrorFixer {
                 }
             }
         }
+    }
+
+    @Override
+    public void onLoadError(int windowIndex, @Nullable MediaPeriodId mediaPeriodId, LoadEventInfo loadEventInfo,
+                            MediaLoadData mediaLoadData, IOException error, boolean wasCanceled) {
+        fixError(error);
     }
 }

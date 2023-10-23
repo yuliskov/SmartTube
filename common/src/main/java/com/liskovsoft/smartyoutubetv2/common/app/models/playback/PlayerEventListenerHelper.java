@@ -1,32 +1,42 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import android.app.Activity;
+import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 
 public abstract class PlayerEventListenerHelper implements PlayerEventListener {
-    private MainPlayerEventBridge mEventBridge;
+    private MainPlayerController mMainController;
+    private Context mContext;
 
-    public void setBridge(MainPlayerEventBridge eventBridge) {
-        mEventBridge = eventBridge;
+    public void setMainController(MainPlayerController mainController) {
+        mMainController = mainController;
     }
 
-    public MainPlayerEventBridge getBridge() {
-        return mEventBridge;
+    public void setAltContext(Context context) {
+        mContext = context;
     }
 
-    public PlaybackController getController() {
-        return mEventBridge.getController();
+    public MainPlayerController getMainController() {
+        return mMainController;
+    }
+
+    public PlayerManager getPlayer() {
+        return mMainController != null ? mMainController.getPlayer() : null;
+    }
+
+    public Context getContext() {
+        return mMainController != null ? mMainController.getActivity() : mContext;
     }
 
     public Activity getActivity() {
-        return mEventBridge.getActivity();
+        return mMainController != null ? mMainController.getActivity() : null;
     }
     
     @Override
-    public void onInitDone() {
+    public void onInit() {
         // NOP
     }
 
@@ -108,7 +118,7 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onEngineError(int type) {
+    public void onEngineError(int type, int rendererIndex, String message) {
         // NOP
     }
 
@@ -143,6 +153,11 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
+    public void onSpeedChanged(float speed) {
+        // NOP
+    }
+
+    @Override
     public void onPlayEnd() {
         // NOP
     }
@@ -165,11 +180,6 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
 
     @Override
     public void onHighQualityClicked() {
-        // NOP
-    }
-
-    @Override
-    public void onSubscribeClicked(boolean subscribed) {
         // NOP
     }
 
@@ -219,12 +229,12 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onVideoSpeedClicked(boolean enabled) {
+    public void onSpeedClicked(boolean enabled) {
         // NOP
     }
 
     @Override
-    public void onVideoSpeedLongClicked(boolean enabled) {
+    public void onSpeedLongClicked(boolean enabled) {
         // NOP
     }
 
@@ -265,11 +275,6 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
 
     @Override
     public void onPipClicked() {
-        // NOP
-    }
-
-    @Override
-    public void onScreenOffClicked() {
         // NOP
     }
 

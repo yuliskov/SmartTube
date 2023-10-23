@@ -27,9 +27,10 @@ public class SimpleEditDialog {
         LayoutInflater inflater = LayoutInflater.from(context);
         View contentView = inflater.inflate(R.layout.simple_edit_dialog, null);
 
-        KeyHelpers.fixEnterKey(contentView.findViewById(R.id.simple_edit_value));
+        EditText editField = contentView.findViewById(R.id.simple_edit_value);
+        KeyHelpers.fixEnterKey(editField);
 
-        ((EditText) contentView.findViewById(R.id.simple_edit_value)).setText(defaultValue);
+        editField.setText(defaultValue);
 
         // keep empty, will override below.
         // https://stackoverflow.com/a/15619098/5379584
@@ -46,7 +47,7 @@ public class SimpleEditDialog {
         configDialog.show();
 
         configDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((view) -> {
-            String newValue = ((EditText) contentView.findViewById(R.id.simple_edit_value)).getText().toString();
+            String newValue = editField.getText().toString();
 
             if (emptyValueCheck && newValue.isEmpty()) {
                 MessageHelpers.showMessage(context, R.string.enter_value);

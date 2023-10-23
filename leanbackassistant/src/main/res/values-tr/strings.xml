@@ -1,0 +1,5 @@
+<resources>
+    <string name="subscriptions_playlist_name">Abonelikler</string>
+    <string name="history_playlist_name">History</string>
+    <string name="recommended_playlist_name">Recommended</string>
+</resources>

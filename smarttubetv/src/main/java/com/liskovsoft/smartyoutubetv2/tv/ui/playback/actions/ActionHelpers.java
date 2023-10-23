@@ -23,6 +23,10 @@ public class ActionHelpers {
         return ContextCompat.getColor(context, R.color.lb_playback_icon_highlight_no_theme);
     }
 
+    public static int getIconGrayedOutColor(Context context) {
+        return ContextCompat.getColor(context, R.color.gray);
+    }
+
     public static BitmapDrawable createDrawable(Context context, BitmapDrawable bitmapDrawable, int bitmapColor) {
         return bitmapDrawable == null ? null
                 : new BitmapDrawable(context.getResources(),

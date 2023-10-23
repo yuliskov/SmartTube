@@ -31,7 +31,7 @@ public class VideoGroup {
     }
 
     public static VideoGroup from(MediaGroup mediaGroup) {
-        return from(mediaGroup, null);
+        return from(mediaGroup, (BrowseSection) null);
     }
 
     public static VideoGroup from(BrowseSection category, int groupPosition) {
@@ -58,9 +58,9 @@ public class VideoGroup {
         VideoGroup videoGroup = new VideoGroup();
         // Getting topmost element. Could help when syncing multi rows fragments.
         Video topItem = findTopmostItemWithGroup(items);
-        if (topItem.group != null) {
-            videoGroup.mId = topItem.group.getId();
-            videoGroup.mTitle = topItem.group.getTitle();
+        if (topItem.getGroup() != null) {
+            videoGroup.mId = topItem.getGroup().getId();
+            videoGroup.mTitle = topItem.getGroup().getTitle();
         }
         videoGroup.mVideos = items;
         videoGroup.mPosition = groupPosition;
@@ -77,9 +77,16 @@ public class VideoGroup {
             return videoGroup;
         }
 
+        String sectionTitle = null;
+
+        // Set the title for the current section playlist
+        if (section != null) {
+            sectionTitle = section.getTitle();
+        }
+
         videoGroup.mMediaGroup = mediaGroup;
-        videoGroup.mTitle = mediaGroup.getTitle();
-        videoGroup.mId = mediaGroup.getId();
+        videoGroup.mTitle = mediaGroup.getTitle() != null ? mediaGroup.getTitle() : sectionTitle;
+        videoGroup.mId = videoGroup.hashCode();
         videoGroup.mVideos = new ArrayList<>();
 
         if (mediaGroup.getMediaItems() == null) {
@@ -98,18 +105,49 @@ public class VideoGroup {
 
             // Group position in multi-grid fragments
             video.groupPosition = videoGroup.mPosition;
-            video.group = videoGroup;
+            video.setGroup(videoGroup);
             if (stateService != null && video.percentWatched == -1) {
                 State state = stateService.getByVideoId(video.videoId);
-                // Sync video.
-                if (state != null) {
-                    video.percentWatched = state.positionMs / (state.durationMs / 100f);
-                }
+                video.sync(state);
             }
             videoGroup.mVideos.add(video);
         }
 
         return videoGroup;
+    }
+
+    public static VideoGroup from(MediaGroup mediaGroup, VideoGroup baseGroup) {
+        baseGroup.mMediaGroup = mediaGroup;
+
+        if (mediaGroup == null) {
+            return baseGroup;
+        }
+
+        if (mediaGroup.isEmpty()) {
+            Log.e(TAG, "MediaGroup doesn't contain media items. Title: " + mediaGroup.getTitle());
+            return baseGroup;
+        }
+
+        VideoStateService stateService = VideoStateService.instance(null);
+
+        for (MediaItem item : mediaGroup.getMediaItems()) {
+            Video video = Video.from(item);
+
+            if (video.isEmpty()) {
+                continue;
+            }
+
+            // Group position in multi-grid fragments
+            video.groupPosition = baseGroup.mPosition;
+            video.setGroup(baseGroup);
+            if (stateService != null && video.percentWatched == -1) {
+                State state = stateService.getByVideoId(video.videoId);
+                video.sync(state);
+            }
+            baseGroup.mVideos.add(video);
+        }
+
+        return baseGroup;
     }
 
     public static VideoGroup fromChapters(List<ChapterItem> chapters, String title) {
@@ -119,7 +157,7 @@ public class VideoGroup {
 
         for (ChapterItem chapter : chapters) {
             Video video = Video.from(chapter);
-            video.group = videoGroup;
+            video.setGroup(videoGroup);
             videoGroup.mVideos.add(video);
         }
 
@@ -139,11 +177,6 @@ public class VideoGroup {
      */
     public void setTitle(String title) {
         mTitle = title;
-
-        // Important part. The title is converted to unique row id.
-        if (mMediaGroup != null) {
-            mMediaGroup.setTitle(title);
-        }
     }
 
     public int getId() {
@@ -164,6 +197,14 @@ public class VideoGroup {
 
     public boolean isEmpty() {
         return mVideos == null || mVideos.isEmpty();
+    }
+
+    public boolean isShorts() {
+        if (isEmpty()) {
+            return false;
+        }
+
+        return mVideos.get(0).isShorts;
     }
 
     /**
@@ -200,7 +241,7 @@ public class VideoGroup {
     private static Video findTopmostItemWithGroup(List<Video> items) {
         for (int i = (items.size() - 1); i >= 0; i--) {
             Video video = items.get(i);
-            if (video.group != null) {
+            if (video.getGroup() != null) {
                 return video;
             }
         }

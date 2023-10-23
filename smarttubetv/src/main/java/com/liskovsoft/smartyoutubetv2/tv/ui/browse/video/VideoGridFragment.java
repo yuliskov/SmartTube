@@ -17,9 +17,10 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.ShortsCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoSection;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.fragments.GridFragment;
@@ -28,14 +29,16 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoGridFragment extends GridFragment implements VideoCategoryFragment {
+public class VideoGridFragment extends GridFragment implements VideoSection {
     private static final String TAG = VideoGridFragment.class.getSimpleName();
+    private static final int RESTORE_MAX_SIZE = 5_000;
     private VideoGroupObjectAdapter mGridAdapter;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupPresenter mMainPresenter;
     private VideoCardPresenter mCardPresenter;
     private int mSelectedItemIndex = -1;
+    private Video mSelectedItem;
     private float mVideoGridScale;
     private final Runnable mRestoreTask = this::restorePosition;
 
@@ -44,7 +47,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         super.onCreate(savedInstanceState);
 
         mMainPresenter = getMainPresenter();
-        mCardPresenter = new VideoCardPresenter();
+        mCardPresenter = isShorts() ? new ShortsCardPresenter() : new VideoCardPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
         mVideoGridScale = MainUIData.instance(getActivity()).getVideoGridScale();
 
@@ -80,7 +83,9 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
     private void setupAdapter() {
         VerticalGridPresenter presenter = new CustomVerticalGridPresenter();
-        presenter.setNumberOfColumns(GridFragmentHelper.getMaxColsNum(getContext(), R.dimen.card_width, mVideoGridScale));
+        presenter.setNumberOfColumns(
+                GridFragmentHelper.getMaxColsNum(getContext(), isShorts() ? R.dimen.shorts_card_width : R.dimen.card_width, mVideoGridScale)
+        );
         setGridPresenter(presenter);
 
         if (mGridAdapter == null) {
@@ -100,11 +105,31 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
             return;
         }
 
+        mSelectedItemIndex = index;
+        mSelectedItem = null;
+
         if (mGridAdapter != null && index < mGridAdapter.size()) {
             setSelectedPosition(index);
             mSelectedItemIndex = -1;
-        } else {
-            mSelectedItemIndex = index;
+        }
+    }
+
+    @Override
+    public void selectItem(Video item) {
+        if (item == null) {
+            return;
+        }
+
+        mSelectedItem = item;
+        mSelectedItemIndex = -1;
+
+        if (mGridAdapter != null) {
+            int index = mGridAdapter.indexOfAlt(item);
+
+            if (index != -1) {
+                setSelectedPosition(index);
+                mSelectedItem = null;
+            }
         }
     }
 
@@ -145,14 +170,17 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
     private void restorePosition() {
         setPosition(mSelectedItemIndex);
+        selectItem(mSelectedItem);
+
+        if ((mSelectedItemIndex == -1 && mSelectedItem == null) || mGridAdapter == null || mGridAdapter.size() > RESTORE_MAX_SIZE) {
+            return;
+        }
 
         // Item not found? Lookup item in next group.
-        if (mSelectedItemIndex != -1) {
-            if (mMainPresenter.hasPendingActions()) {
-                TickleManager.instance().runTask(mRestoreTask, 500);
-            } else {
-                mMainPresenter.onScrollEnd((Video) mGridAdapter.get(mGridAdapter.size() - 1));
-            }
+        if (mMainPresenter.hasPendingActions()) {
+            TickleManager.instance().runTask(mRestoreTask, 500);
+        } else {
+            mMainPresenter.onScrollEnd((Video) mGridAdapter.get(mGridAdapter.size() - 1));
         }
     }
 
@@ -169,6 +197,9 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     @Override
     public void clear() {
         if (mGridAdapter != null) {
+            // Fix: Invalid item position -1(-1). Item count:84 androidx.leanback.widget.VerticalGridView
+            freeze(true);
+
             mGridAdapter.clear();
         }
     }
@@ -180,6 +211,10 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         }
 
         return mGridAdapter.size() == 0;
+    }
+
+    protected boolean isShorts() {
+        return false;
     }
 
     private final class ItemViewLongPressedListener implements OnItemLongPressedListener {
@@ -213,6 +248,8 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
             if (item instanceof Video) {
                 mBackgroundManager.setBackgroundFrom((Video) item);
 
+                mMainPresenter.onVideoItemSelected((Video) item);
+
                 checkScrollEnd((Video) item);
             }
         }
@@ -221,7 +258,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
             int size = mGridAdapter.size();
             int index = mGridAdapter.indexOf(item);
 
-            if (index > (size - ViewUtil.GRID_SCROLL_CONTINUE_NUM)) {
+            if (index > (size - (isShorts() ? ViewUtil.GRID_SCROLL_CONTINUE_NUM * 2 : ViewUtil.GRID_SCROLL_CONTINUE_NUM))) {
                 mMainPresenter.onScrollEnd((Video) mGridAdapter.get(size - 1));
             }
         }

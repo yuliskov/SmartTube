@@ -9,47 +9,67 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class MainUIData extends DataChangeBase {
     private static final String MAIN_UI_DATA = "main_ui_data2";
-    public static final int CHANNEL_SORTING_UPDATE = 0;
-    public static final int CHANNEL_SORTING_AZ = 1;
-    public static final int CHANNEL_SORTING_LAST_VIEWED = 2;
+    public static final int CHANNEL_SORTING_NEW_CONTENT = 0;
+    public static final int CHANNEL_SORTING_NAME = 1;
+    public static final int CHANNEL_SORTING_DEFAULT = 2;
+    public static final int CHANNEL_SORTING_LAST_VIEWED = 3;
+    public static final int CHANNEL_SORTING_NAME2 = 4;
     public static final int PLAYLISTS_STYLE_GRID = 0;
     public static final int PLAYLISTS_STYLE_ROWS = 1;
-    public static final int MENU_ITEM_RECENT_PLAYLIST = 0b1;
-    public static final int MENU_ITEM_ADD_TO_QUEUE = 0b10;
-    public static final int MENU_ITEM_PIN_TO_SIDEBAR = 0b100;
-    public static final int MENU_ITEM_SHARE_LINK = 0b1000;
-    public static final int MENU_ITEM_SELECT_ACCOUNT = 0b10000;
-    public static final int MENU_ITEM_NOT_INTERESTED = 0b100000;
-    public static final int MENU_ITEM_REMOVE_FROM_HISTORY = 0b1000000;
-    public static final int MENU_ITEM_MOVE_SECTION_UP = 0b10000000;
-    public static final int MENU_ITEM_MOVE_SECTION_DOWN = 0b100000000;
-    public static final int MENU_ITEM_OPEN_DESCRIPTION = 0b1000000000;
-    public static final int MENU_ITEM_RENAME_SECTION = 0b10000000000;
-    public static final int MENU_ITEM_PLAY_VIDEO = 0b100000000000;
-    public static final int MENU_ITEM_SAVE_PLAYLIST = 0b1000000000000;
-    public static final int MENU_ITEM_ADD_TO_PLAYLIST = 0b10000000000000;
-    public static final int MENU_ITEM_SUBSCRIBE = 0b100000000000000;
-    public static final int MENU_ITEM_CREATE_PLAYLIST = 0b1000000000000000;
-    public static final int MENU_ITEM_STREAM_REMINDER = 0b10000000000000000;
-    public static final int MENU_ITEM_ADD_TO_NEW_PLAYLIST = 0b100000000000000000;
-    public static final int MENU_ITEM_SHARE_EMBED_LINK = 0b1000000000000000000;
-    public static final int MENU_ITEM_SHOW_QUEUE = 0b10000000000000000000;
-    public static final int MENU_ITEM_PLAYLIST_ORDER = 0b100000000000000000000;
-    public static final int MENU_ITEM_TOGGLE_HISTORY = 0b1000000000000000000000;
-    public static final int MENU_ITEM_CLEAR_HISTORY = 0b10000000000000000000000;
-    public static final int MENU_ITEM_UPDATE_CHECK = 0b100000000000000000000000;
-    public static final int MENU_ITEM_OPEN_CHANNEL = 0b1000000000000000000000000;
-    public static final int MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS = 0b10000000000000000000000000;
-    public static final int TOP_BUTTON_BROWSE_ACCOUNTS = 0b1;
-    public static final int TOP_BUTTON_CHANGE_LANGUAGE = 0b10;
-    public static final int TOP_BUTTON_SEARCH = 0b100;
-    public static final int TOP_BUTTON_DEFAULT = Integer.MAX_VALUE & ~(TOP_BUTTON_CHANGE_LANGUAGE); // all except this items
-    public static final int MENU_ITEM_DEFAULT = Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_NEW_PLAYLIST | MENU_ITEM_SELECT_ACCOUNT |
-            MENU_ITEM_PLAY_VIDEO | MENU_ITEM_OPEN_DESCRIPTION | MENU_ITEM_SHARE_EMBED_LINK); // all except these items
+    public static final long MENU_ITEM_RECENT_PLAYLIST = 1;
+    public static final long MENU_ITEM_ADD_TO_QUEUE = 1 << 1;
+    public static final long MENU_ITEM_PIN_TO_SIDEBAR = 1 << 2;
+    public static final long MENU_ITEM_SHARE_LINK = 1 << 3;
+    public static final long MENU_ITEM_SELECT_ACCOUNT = 1 << 4;
+    public static final long MENU_ITEM_NOT_INTERESTED = 1 << 5;
+    public static final long MENU_ITEM_REMOVE_FROM_HISTORY = 1 << 6;
+    public static final long MENU_ITEM_MOVE_SECTION_UP = 1 << 7;
+    public static final long MENU_ITEM_MOVE_SECTION_DOWN = 1 << 8;
+    public static final long MENU_ITEM_OPEN_DESCRIPTION = 1 << 9;
+    public static final long MENU_ITEM_RENAME_SECTION = 1 << 10;
+    public static final long MENU_ITEM_PLAY_VIDEO = 1 << 11;
+    public static final long MENU_ITEM_SAVE_PLAYLIST = 1 << 12;
+    public static final long MENU_ITEM_ADD_TO_PLAYLIST = 1 << 13;
+    public static final long MENU_ITEM_SUBSCRIBE = 1 << 14;
+    public static final long MENU_ITEM_CREATE_PLAYLIST = 1 << 15;
+    public static final long MENU_ITEM_STREAM_REMINDER = 1 << 16;
+    public static final long MENU_ITEM_ADD_TO_NEW_PLAYLIST = 1 << 17;
+    public static final long MENU_ITEM_SHARE_EMBED_LINK = 1 << 18;
+    public static final long MENU_ITEM_SHOW_QUEUE = 1 << 19;
+    public static final long MENU_ITEM_PLAYLIST_ORDER = 1 << 20;
+    public static final long MENU_ITEM_TOGGLE_HISTORY = 1 << 21;
+    public static final long MENU_ITEM_CLEAR_HISTORY = 1 << 22;
+    public static final long MENU_ITEM_UPDATE_CHECK = 1 << 23;
+    public static final long MENU_ITEM_OPEN_CHANNEL = 1 << 24;
+    public static final long MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS = 1 << 25;
+    public static final long MENU_ITEM_PLAY_VIDEO_INCOGNITO = 1 << 26;
+    public static final long MENU_ITEM_MARK_AS_WATCHED = 1 << 27;
+    public static final long MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK = 1 << 28;
+    public static final long MENU_ITEM_OPEN_PLAYLIST = 1 << 29;
+    public static final long MENU_ITEM_EXIT_FROM_PIP = 1 << 30;
+    public static final long MENU_ITEM_OPEN_COMMENTS = 1L << 31;
+    public static final long MENU_ITEM_SHARE_QR_LINK = 1L << 32;
+    public static final int TOP_BUTTON_BROWSE_ACCOUNTS = 1;
+    public static final int TOP_BUTTON_CHANGE_LANGUAGE = 1 << 1;
+    public static final int TOP_BUTTON_SEARCH = 1 << 2;
+    public static final int TOP_BUTTON_DEFAULT = TOP_BUTTON_SEARCH | TOP_BUTTON_BROWSE_ACCOUNTS;
+    public static final long MENU_ITEM_DEFAULT = MENU_ITEM_PIN_TO_SIDEBAR | MENU_ITEM_NOT_INTERESTED | MENU_ITEM_REMOVE_FROM_HISTORY |
+            MENU_ITEM_MOVE_SECTION_UP | MENU_ITEM_MOVE_SECTION_DOWN | MENU_ITEM_RENAME_SECTION | MENU_ITEM_SAVE_PLAYLIST |
+            MENU_ITEM_ADD_TO_PLAYLIST | MENU_ITEM_SUBSCRIBE | MENU_ITEM_CREATE_PLAYLIST | MENU_ITEM_STREAM_REMINDER | MENU_ITEM_TOGGLE_HISTORY |
+            MENU_ITEM_PLAYLIST_ORDER | MENU_ITEM_CLEAR_HISTORY | MENU_ITEM_OPEN_CHANNEL | MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS | MENU_ITEM_OPEN_PLAYLIST |
+            MENU_ITEM_SHARE_QR_LINK;
+    private static final Long[] MENU_ITEM_DEFAULT_ORDER = { MENU_ITEM_PLAY_VIDEO, MENU_ITEM_PLAY_VIDEO_INCOGNITO, MENU_ITEM_REMOVE_FROM_HISTORY, MENU_ITEM_STREAM_REMINDER, MENU_ITEM_RECENT_PLAYLIST,
+            MENU_ITEM_ADD_TO_PLAYLIST, MENU_ITEM_CREATE_PLAYLIST, MENU_ITEM_ADD_TO_NEW_PLAYLIST, MENU_ITEM_NOT_INTERESTED, MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS,
+            MENU_ITEM_MARK_AS_WATCHED, MENU_ITEM_PLAYLIST_ORDER, MENU_ITEM_ADD_TO_QUEUE, MENU_ITEM_SHOW_QUEUE, MENU_ITEM_OPEN_CHANNEL, MENU_ITEM_OPEN_PLAYLIST,
+            MENU_ITEM_SUBSCRIBE, MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK, MENU_ITEM_PIN_TO_SIDEBAR, MENU_ITEM_SAVE_PLAYLIST, MENU_ITEM_OPEN_DESCRIPTION, MENU_ITEM_OPEN_COMMENTS,
+            MENU_ITEM_SHARE_LINK, MENU_ITEM_SHARE_EMBED_LINK, MENU_ITEM_SHARE_QR_LINK, MENU_ITEM_SELECT_ACCOUNT, MENU_ITEM_TOGGLE_HISTORY, MENU_ITEM_CLEAR_HISTORY
+    };
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
@@ -68,9 +88,10 @@ public class MainUIData extends DataChangeBase {
     private boolean mIsUploadsOldLookEnabled;
     private boolean mIsUploadsAutoLoadEnabled;
     private float mCardTextScrollSpeed;
-    private int mMenuItems;
+    private long mMenuItems;
     private int mTopButtons;
     private int mThumbQuality;
+    private List<Long> mMenuItemsOrdered;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -223,18 +244,41 @@ public class MainUIData extends DataChangeBase {
         return mCardTextScrollSpeed;
     }
 
-    public void enableMenuItem(int menuItems) {
+    public void enableMenuItem(long menuItems) {
         mMenuItems |= menuItems;
         persistState();
     }
 
-    public void disableMenuItem(int menuItems) {
+    public void disableMenuItem(long menuItems) {
         mMenuItems &= ~menuItems;
         persistState();
     }
 
-    public boolean isMenuItemEnabled(int menuItems) {
+    public boolean isMenuItemEnabled(long menuItems) {
         return (mMenuItems & menuItems) == menuItems;
+    }
+
+    public void setMenuItemIndex(int index, Long menuItem) {
+        int currentIndex = getMenuItemIndex(menuItem);
+        index = index != 0 && currentIndex > index ? index + 1 : index;
+
+        mMenuItemsOrdered.remove(menuItem);
+
+        if (index <= mMenuItemsOrdered.size()) {
+            mMenuItemsOrdered.add(index, menuItem);
+        } else {
+            mMenuItemsOrdered.add(menuItem);
+        }
+
+        persistState();
+    }
+
+    public int getMenuItemIndex(long menuItem) {
+        return mMenuItemsOrdered.indexOf(menuItem);
+    }
+
+    public List<Long> getMenuItemsOrdered() {
+        return Collections.unmodifiableList(mMenuItemsOrdered);
     }
 
     public void enableTopButton(int button) {
@@ -294,18 +338,28 @@ public class MainUIData extends DataChangeBase {
         mUIScale = Helpers.parseFloat(split, 2, 1.0f);
         mColorSchemeIndex = Helpers.parseInt(split, 3, 2);
         mIsCardMultilineTitleEnabled = Helpers.parseBoolean(split, 4, true);
-        mChannelCategorySorting = Helpers.parseInt(split, 5, CHANNEL_SORTING_LAST_VIEWED);
+        mChannelCategorySorting = Helpers.parseInt(split, 5, CHANNEL_SORTING_NEW_CONTENT);
         mPlaylistsStyle = Helpers.parseInt(split, 6, PLAYLISTS_STYLE_GRID);
         mCardTitleLinesNum = Helpers.parseInt(split, 7, 1);
         mIsCardTextAutoScrollEnabled = Helpers.parseBoolean(split, 8, true);
         mIsUploadsOldLookEnabled = Helpers.parseBoolean(split, 9, false);
         mIsUploadsAutoLoadEnabled = Helpers.parseBoolean(split, 10, true);
         mCardTextScrollSpeed = Helpers.parseFloat(split, 11, 2);
-        mMenuItems = Helpers.parseInt(split, 12, MENU_ITEM_DEFAULT);
+        mMenuItems = Helpers.parseLong(split, 12, MENU_ITEM_DEFAULT);
         mTopButtons = Helpers.parseInt(split, 13, TOP_BUTTON_DEFAULT);
         // 14
         mThumbQuality = Helpers.parseInt(split, 15, ClickbaitRemover.THUMB_QUALITY_DEFAULT);
         mIsCardMultilineSubtitleEnabled = Helpers.parseBoolean(split, 16, true);
+        mMenuItemsOrdered = Helpers.parseLongList(split, 17);
+
+        for (Long menuItem : MENU_ITEM_DEFAULT_ORDER) {
+            if (!mMenuItemsOrdered.contains(menuItem)) {
+                mMenuItemsOrdered.add(menuItem);
+            }
+        }
+
+        cleanupItems();
+        updateDefaultValues();
     }
 
     @Override
@@ -314,7 +368,7 @@ public class MainUIData extends DataChangeBase {
                 mVideoGridScale, mUIScale, mColorSchemeIndex, mIsCardMultilineTitleEnabled,
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
                 mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,
-                null, mThumbQuality, mIsCardMultilineSubtitleEnabled));
+                null, mThumbQuality, mIsCardMultilineSubtitleEnabled, Helpers.mergeList(mMenuItemsOrdered)));
 
         super.persistState();
     }
@@ -335,5 +389,18 @@ public class MainUIData extends DataChangeBase {
             this.browseThemeResId = Helpers.getResourceId(browseTheme, "style", context);
             this.settingsThemeResId = Helpers.getResourceId(settingsTheme, "style", context);
         }
+    }
+
+    private void updateDefaultValues() {
+        // Enable only certain items (not all, like it was)
+        if (mMenuItems >>> 30 == 0b1) { // check leftmost bit (old format)
+            int bits = 32 - 27;
+            mMenuItems = mMenuItems << bits >>> bits; // remove auto enabled bits
+        }
+    }
+
+    private void cleanupItems() {
+        List<Long> defaultOrder = Arrays.asList(MENU_ITEM_DEFAULT_ORDER);
+        Helpers.removeIf(mMenuItemsOrdered, item -> !defaultOrder.contains(item));
     }
 }

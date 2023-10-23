@@ -14,6 +14,7 @@ public interface PlayerController {
     void openHlsUrl(String hlsPlaylistUrl);
     void openDashUrl(String dashManifestUrl);
     void openUrlList(List<String> urlList);
+    void openMerged(InputStream dashManifest, String hlsPlaylistUrl);
     long getPositionMs();
     void setPositionMs(long positionMs);
     long getDurationMs();

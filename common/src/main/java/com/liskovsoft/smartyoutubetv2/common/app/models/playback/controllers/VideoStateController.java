@@ -1,0 +1,595 @@
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
+
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
+import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+
+public class VideoStateController extends PlayerEventListenerHelper implements MetadataListener {
+    private static final String TAG = VideoStateController.class.getSimpleName();
+    private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
+    private static final long LIVE_THRESHOLD_MS = 90_000; // should be greater than the live buffer
+    private static final long LIVE_BUFFER_MS = 60_000;
+    private static final long SHORT_LIVE_BUFFER_MS = 0; // Note, on buffer lower than the 60sec you'll notice segment skip
+    private static final long BEGIN_THRESHOLD_MS = 10_000;
+    private boolean mIsPlayEnabled;
+    private Video mVideo = new Video();
+    private FormatItem mTempVideoFormat;
+    private PlayerData mPlayerData;
+    private GeneralData mGeneralData;
+    private PlayerTweaksData mPlayerTweaksData;
+    private VideoStateService mStateService;
+    private boolean mIsPlayBlocked;
+    private int mTickleLeft;
+    private boolean mIsBuffering;
+    private boolean mIncognito;
+    private final Runnable mStreamEndCheck = () -> {
+        if (getVideo() != null && getVideo().isLive && mIsBuffering &&
+                getPlayer().getDurationMs() - getPlayer().getPositionMs() < 3 * LIVE_BUFFER_MS) {
+            getPlayer().reloadPlayback();
+        }
+    };
+
+    @Override
+    public void onInit() { // called each time a video opened from the browser
+        mPlayerData = PlayerData.instance(getContext());
+        mGeneralData = GeneralData.instance(getContext());
+        mPlayerTweaksData = PlayerTweaksData.instance(getContext());
+        mStateService = VideoStateService.instance(getContext());
+    }
+
+    /**
+     * Fired after user clicked on video in browse activity<br/>
+     * or video is opened from the intent
+     */
+    @Override
+    public void openVideo(Video item) {
+        // Ensure that we aren't running on presenter init stage
+        if (getPlayer() != null) {
+            if (!item.equals(getVideo())) { // video might be opened twice (when remote connection enabled). Fix for that.
+                // Reset auto-save history timer
+                mTickleLeft = 0;
+                // Save state of the previous video.
+                // In case video opened from phone and other stuff.
+                saveState();
+            }
+        }
+
+        setPlayEnabled(true); // video just added
+
+        mTempVideoFormat = null;
+
+        enableIncognitoIfNeeded(item);
+
+        // Don't do reset on videoLoaded state because this will influences minimized music videos.
+        resetPositionIfNeeded(item);
+        resetGlobalSpeedIfNeeded();
+    }
+
+    @Override
+    public boolean onPreviousClicked() {
+        // Seek to the start on prev
+        if (getPlayer().getPositionMs() > BEGIN_THRESHOLD_MS) {
+            saveState(); // in case the user wants to go to previous video
+            getPlayer().setPositionMs(0);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onNextClicked() {
+        // Seek to the actual live position on next
+        if (getVideo() != null && getVideo().isLive && (getPlayer().getDurationMs() - getPlayer().getPositionMs() > LIVE_THRESHOLD_MS)) {
+            long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? SHORT_LIVE_BUFFER_MS : LIVE_BUFFER_MS;
+            getPlayer().setPositionMs(getPlayer().getDurationMs() - buffer);
+            return true;
+        }
+
+        setPlayEnabled(true);
+
+        saveState();
+
+        clearStateOfNextVideo();
+
+        return false;
+    }
+
+    @Override
+    public void onSuggestionItemClicked(Video item) {
+        setPlayEnabled(true); // autoplay video from suggestions
+
+        saveState();
+    }
+
+    @Override
+    public void onEngineInitialized() {
+        // Reset auto-save history timer
+        mTickleLeft = 0;
+
+        // Restore before video loaded.
+        // This way we override auto track selection mechanism.
+        //restoreFormats();
+
+        // Show user info instead of black screen.
+        if (!getPlayEnabled()) {
+            getPlayer().showOverlay(true);
+        }
+    }
+
+    @Override
+    public void onEngineReleased() {
+        // Save previous state
+        if (getPlayer().containsMedia()) {
+            setPlayEnabled(getPlayer().getPlayWhenReady());
+            saveState();
+        }
+
+        Utils.removeCallbacks(mStreamEndCheck);
+    }
+
+    @Override
+    public void onTickle() {
+        if (getPlayer() == null || !getPlayer().isEngineInitialized()) {
+            return;
+        }
+
+        // Sync history every five minutes
+        if (++mTickleLeft > 5) {
+            mTickleLeft = 0;
+            updateHistory();
+        }
+
+        // Restore speed on LIVE end
+        restoreSpeed();
+    }
+
+    @Override
+    public void onMetadata(MediaItemMetadata metadata) {
+        updateHistory();
+
+        // Channel info should be loaded at this point
+        restoreSubtitleFormat();
+
+        // Need to contain channel id
+        restoreSpeed();
+    }
+
+    @Override
+    public void onEngineError(int type, int rendererIndex, String message) {
+        // Oops. Error happens while playing (network lost etc).
+        if (getPlayer().getPositionMs() > 1_000) {
+            saveState();
+        }
+    }
+
+    @Override
+    public void onVideoLoaded(Video item) {
+        mIsBuffering = false;
+        // Actual video that match currently loaded one.
+        mVideo = item;
+
+        // Restore formats again.
+        // Maybe this could help with Shield format problem.
+        // NOTE: produce multi thread exception:
+        // Attempt to read from field 'java.util.TreeMap$TreeMapEntry java.util.TreeMap$TreeMapEntry.left' on a null object reference (TrackSelectorManager.java:181)
+        //restoreFormats();
+
+        // In this state video length is not undefined.
+        restorePosition();
+        restorePendingPosition();
+        //restoreSpeed();
+        // Player thinks that subs not enabled if I enable it too early (e.g. on source change event).
+        //restoreSubtitleFormat();
+
+        restoreVolume();
+    }
+
+    @Override
+    public void onPlay() {
+        mIsBuffering = false;
+        setPlayEnabled(true);
+        showHideScreensaver(false);
+    }
+
+    @Override
+    public void onPause() {
+        setPlayEnabled(false);
+        //saveState();
+        showHideScreensaver(true);
+    }
+
+    @Override
+    public void onTrackSelected(FormatItem track) {
+        if (!getPlayer().isInPIPMode()) {
+            if (track.getType() == FormatItem.TYPE_VIDEO) {
+                if (mPlayerData.getFormat(FormatItem.TYPE_VIDEO).isPreset()) {
+                    mTempVideoFormat = track;
+                } else {
+                    mTempVideoFormat = null;
+                    mPlayerData.setFormat(track);
+                }
+            } else {
+                mPlayerData.setFormat(track);
+            }
+        }
+    }
+
+    @Override
+    public void onPlayEnd() {
+        saveState();
+
+        // Don't enable screensaver here or you'll broke 'screen off' logic.
+        showHideScreensaver(true);
+    }
+
+    @Override
+    public void onBuffering() {
+        mIsBuffering = true;
+
+        // Live stream starts to buffer after the end
+        showHideScreensaver(true);
+
+        // Restore speed on LIVE end or after seek
+        restoreSpeed();
+
+        Utils.postDelayed(mStreamEndCheck, 10_000);
+    }
+
+    @Override
+    public void onSourceChanged(Video item) {
+        // At this stage video isn't loaded yet. So format switch isn't take any resources.
+        restoreFormats();
+    }
+
+    @Override
+    public void onViewPaused() {
+        persistState();
+    }
+
+    @Override
+    public void onSpeedChanged(float speed) {
+        mPlayerData.setSpeed(getVideo().channelId, speed);
+    }
+
+    @Override
+    public void onSpeedClicked(boolean enabled) {
+        if (Helpers.floatEquals(mPlayerData.getLastSpeed(), 1.0f) || mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()) {
+            onSpeedLongClicked(enabled);
+        } else {
+            State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
+            float lastSpeed = mPlayerData.getLastSpeed();
+            if (state != null && mPlayerData.isSpeedPerVideoEnabled()) {
+                lastSpeed = !Helpers.floatEquals(1.0f, state.speed) ? state.speed : lastSpeed;
+                mPlayerData.setLastSpeed(lastSpeed);
+                mStateService.save(new State(state.videoId, state.positionMs, state.durationMs, enabled ? 1.0f : lastSpeed));
+            }
+            mPlayerData.setSpeed(getVideo().channelId, enabled ? 1.0f : lastSpeed);
+            getPlayer().setSpeed(enabled ? 1.0f : lastSpeed);
+        }
+    }
+
+    @Override
+    public void onSpeedLongClicked(boolean enabled) {
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+
+        // suppose live stream if buffering near the end
+        // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
+        settingsPresenter.appendCategory(AppDialogUtil.createSpeedListCategory(getContext(), getPlayer(), mPlayerData));
+
+        //settingsPresenter.appendCategory(AppDialogUtil.createRememberSpeedCategory(getContext(), mPlayerData));
+        //settingsPresenter.appendCategory(AppDialogUtil.createSpeedMiscCategory(getContext(), mPlayerTweaksData));
+
+        settingsPresenter.showDialog(getContext().getString(R.string.video_speed), () -> {
+            State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
+            if (state != null && mPlayerData.isSpeedPerVideoEnabled()) {
+                mStateService.save(new State(state.videoId, state.positionMs, state.durationMs, mPlayerData.getSpeed(getVideo().channelId)));
+            }
+        });
+    }
+
+    @Override
+    public void onFinish() {
+        mIncognito = false;
+    }
+
+    private void clearStateOfNextVideo() {
+        if (getVideo() != null && getVideo().nextMediaItem != null) {
+            resetPosition(getVideo().nextMediaItem.getVideoId());
+        }
+    }
+
+    /**
+     * Reset position of currently opened music and live videos.
+     */
+    private void resetPositionIfNeeded(Video item) {
+        if (mStateService == null || item == null) {
+            return;
+        }
+
+        State state = mStateService.getByVideoId(item.videoId);
+
+        // Reset position of music videos
+        boolean isShort = state != null && state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled();
+        boolean isVideoEnded = state != null && state.durationMs - state.positionMs < 3_000;
+
+        //if (isShort || isVideoEnded || item.isLive || !mGeneralData.isHistoryEnabled()) {
+        if (isShort || isVideoEnded || item.isLive) {
+            resetPosition(item);
+        }
+    }
+
+    private void resetGlobalSpeedIfNeeded() {
+        if (mPlayerData != null && !mPlayerData.isAllSpeedEnabled()) {
+            mPlayerData.setSpeed(1.0f);
+        }
+    }
+
+    private void resetPosition(Video video) {
+        video.percentWatched = 0;
+        resetPosition(video.videoId);
+    }
+
+    private void resetPosition(String videoId) {
+        State state = mStateService.getByVideoId(videoId);
+
+        if (state != null) {
+            if (mPlayerData.isSpeedPerVideoEnabled()) {
+                mStateService.save(new State(videoId, 0, state.durationMs, state.speed));
+            } else {
+                mStateService.removeByVideoId(videoId);
+            }
+        }
+    }
+
+    private void enableIncognitoIfNeeded(Video item) {
+        if (item == null) {
+            return;
+        }
+
+        // Enable incognito per session
+        // Reset to default when player finished
+        if (item.incognito) {
+            mIncognito = true;
+            item.incognito = false;
+        }
+    }
+
+    private void persistState() {
+        if (AppDialogPresenter.instance(getContext()).isDialogShown()) {
+            return;
+        }
+
+        mStateService.persistState();
+    }
+
+    private void restoreVideoFormat() {
+        if (mTempVideoFormat != null) {
+            getPlayer().setFormat(mTempVideoFormat);
+        } else {
+            getPlayer().setFormat(mPlayerData.getFormat(FormatItem.TYPE_VIDEO));
+        }
+    }
+
+    private void restoreAudioFormat() {
+        getPlayer().setFormat(mPlayerData.getFormat(FormatItem.TYPE_AUDIO));
+    }
+
+    private void restoreSubtitleFormat() {
+        FormatItem result = mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE);
+
+        if (mPlayerData.isSubtitlesPerChannelEnabled()) {
+            result = mPlayerData.isSubtitlesPerChannelEnabled(getPlayer().getVideo().channelId) ? mPlayerData.getLastSubtitleFormat() : FormatItem.SUBTITLE_NONE;
+        }
+
+        getPlayer().setFormat(result);
+    }
+
+    private void saveState() {
+        savePosition();
+        updateHistory();
+        //persistState();
+    }
+
+    private void savePosition() {
+        Video video = getVideo();
+
+        if (video == null || getPlayer() == null || !getPlayer().containsMedia()) {
+            return;
+        }
+
+        // Exceptional cases:
+        // 1) Track is ended
+        // 2) Pause on end enabled
+        // 3) Watching live stream in real time
+        long durationMs = getPlayer().getDurationMs();
+        long positionMs = getPlayer().getPositionMs();
+        long remainsMs = durationMs - positionMs;
+        boolean isPositionActual = remainsMs > 1_000;
+        if (isPositionActual) { // partially viewed
+            State state = new State(video.videoId, positionMs, durationMs, getPlayer().getSpeed());
+            mStateService.save(state);
+            // Sync video. You could safely use it later to restore state.
+            video.sync(state);
+        } else { // fully viewed
+            // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
+            mStateService.save(new State(video.videoId, durationMs, durationMs, getPlayer().getSpeed()));
+            video.percentWatched = 100;
+        }
+
+        Playlist.instance().sync(video);
+    }
+
+    private void restorePosition() {
+        Video item = getVideo();
+
+        State state = mStateService.getByVideoId(item.videoId);
+
+        boolean stateIsOutdated = state == null || state.timestamp < item.timestamp;
+        if (item.getPositionMs() > 0 && stateIsOutdated) { // check that the user logged in
+            // Web state is buggy on short videos (e.g. video clips)
+            boolean isLongVideo = getPlayer().getDurationMs() > MUSIC_VIDEO_MAX_DURATION_MS;
+            if (isLongVideo) {
+                state = new State(item.videoId, item.getPositionMs());
+            }
+        }
+
+        // Web live position is broken. Ignore it.
+        if (stateIsOutdated && item.isLive) {
+            state = null;
+        }
+
+        // Set actual position for live videos with uncommon length
+        if ((state == null || state.durationMs - state.positionMs < LIVE_THRESHOLD_MS) && item.isLive) {
+            // Add buffer. Should I take into account segment offset???
+            long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? SHORT_LIVE_BUFFER_MS : LIVE_BUFFER_MS;
+            state = new State(item.videoId, getPlayer().getDurationMs() - buffer);
+        }
+
+        // Do I need to check that item isn't live? (state != null && !item.isLive)
+        if (state != null) {
+            setPositionMs(state.positionMs);
+        }
+
+        if (!mIsPlayBlocked) {
+            getPlayer().setPlayWhenReady(getPlayEnabled());
+        }
+    }
+
+    private void updateHistory() {
+        Video video = getVideo();
+
+        if (video == null || (video.isShorts && mGeneralData.isHideShortsFromHistoryEnabled()) || mIncognito || !getPlayer().containsMedia()) {
+            return;
+        }
+
+        long positionMs = video.isLive ? 0 : getPlayer().getPositionMs();
+
+        MediaServiceManager.instance().updateHistory(video, positionMs);
+    }
+
+    /**
+     * Restore position from description time code
+     */
+    private void restorePendingPosition() {
+        Video item = getVideo();
+
+        if (item.pendingPosMs > 0) {
+            getPlayer().setPositionMs(item.pendingPosMs);
+            item.pendingPosMs = 0;
+        }
+    }
+
+    private void restoreSpeed() {
+        Video item = getVideo();
+
+        if (isLiveThreshold() || isMusicVideo()) {
+            getPlayer().setSpeed(1.0f);
+        } else {
+            State state = mStateService.getByVideoId(item.videoId);
+            float speed = mPlayerData.getSpeed(item.channelId);
+            getPlayer().setSpeed(
+                    state != null && mPlayerData.isSpeedPerVideoEnabled() ? state.speed :
+                            mPlayerData.isAllSpeedEnabled() || item.channelId != null ? speed : 1.0f
+            );
+        }
+    }
+
+    public void blockPlay(boolean block) {
+        mIsPlayBlocked = block;
+    }
+
+    public void setPlayEnabled(boolean isPlayEnabled) {
+        Log.d(TAG, "setPlayEnabled %s", isPlayEnabled);
+        mIsPlayEnabled = isPlayEnabled;
+    }
+
+    public boolean getPlayEnabled() {
+        return mIsPlayEnabled;
+    }
+
+    private void restoreVolume() {
+        float newVolume = mPlayerData.getPlayerVolume();
+
+        if (mPlayerTweaksData.isPlayerAutoVolumeEnabled()) {
+            newVolume *= getVideo().volume;
+        }
+
+        //if (getVideo().isShorts || getVideo().getDurationMs() <= 60_000) {
+        //    newVolume /= 2;
+        //}
+
+        if (getVideo().isShorts) {
+            newVolume /= 2;
+        }
+
+        getPlayer().setVolume(newVolume);
+    }
+
+    private void restoreFormats() {
+        restoreVideoFormat();
+        restoreAudioFormat();
+        // We don't know yet do we really need a subs.
+        // NOTE: Some subs can hang the app.
+        restoreSubtitleFormat();
+    }
+
+    private void showHideScreensaver(boolean show) {
+        if (getActivity() instanceof MotherActivity) {
+            ScreensaverManager screensaverManager = ((MotherActivity) getActivity()).getScreensaverManager();
+
+            if (show) {
+                screensaverManager.enableChecked();
+            } else {
+                screensaverManager.disableChecked();
+            }
+        }
+    }
+
+    /**
+     * Actual video that match currently loaded one.
+     */
+    private Video getVideo() {
+        return mVideo;
+    }
+
+    private boolean isLiveThreshold() {
+        if (getPlayer() == null) {
+            return false;
+        }
+
+        Video item = getVideo();
+        boolean isLiveThreshold = getPlayer().getDurationMs() - getPlayer().getPositionMs() < LIVE_THRESHOLD_MS;
+        return item.isLive && isLiveThreshold;
+    }
+
+    private boolean isMusicVideo() {
+        Video item = getVideo();
+        return item.belongsToMusic();
+    }
+
+    private void setPositionMs(long positionMs) {
+        boolean samePositions = Math.abs(positionMs - getPlayer().getPositionMs()) < BEGIN_THRESHOLD_MS;
+        if (!samePositions) {
+            getPlayer().setPositionMs(positionMs);
+        }
+    }
+}

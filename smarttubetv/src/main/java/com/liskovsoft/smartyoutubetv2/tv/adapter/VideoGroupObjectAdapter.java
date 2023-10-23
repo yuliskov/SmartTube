@@ -14,37 +14,22 @@ import java.util.List;
 public class VideoGroupObjectAdapter extends ObjectAdapter {
     private static final String TAG = VideoGroupObjectAdapter.class.getSimpleName();
     private final List<Video> mVideoItems;
-    
+    private final List<VideoGroup> mVideoGroups = new ArrayList<>(); // keep groups from being garbage collected
+
     public VideoGroupObjectAdapter(VideoGroup videoGroup, Presenter presenter) {
         super(presenter);
+        //mVideoItems = new ArrayList<>();
         mVideoItems = new ArrayList<Video>() {
             @Override
             public boolean addAll(@NonNull Collection<? extends Video> c) {
                 // TODO: remove the hack someday.
                 // Dirty hack for avoiding group duplication.
-                // Duplicated items suddenly appeared in Home and Subscriptions.
-
-                //if (size() >= c.size() && c.contains(get(c.size() - 1))) {
-                //    return false;
-                //}
-
-                // Alt method. Works with Home rows.
-                //if (size() < 30) {
-                //    Video firstItem = Helpers.get(c, 0);
-                //    if (firstItem != null && contains(firstItem)) {
-                //        return false;
-                //    }
-                //}
+                // Duplicated items suddenly appeared in Home, Subscriptions and History.
 
                 // Another alt method.
                 if (size() > 0 && size() < 30) {
                     Helpers.removeIf(c, this::contains);
                 }
-
-                // Latest alt dubs fix method (not works).
-                //Set<Video> uniqueItems = new LinkedHashSet<>(c);
-
-                //return super.addAll(uniqueItems);
 
                 return super.addAll(c);
             }
@@ -81,7 +66,12 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         if (group != null && group.getVideos() != null) {
             int begin = mVideoItems.size();
 
-            mVideoItems.addAll(group.getVideos());
+            if (mVideoGroups.contains(group)) {
+                mVideoItems.addAll(group.getVideos().subList(begin, group.getVideos().size()));
+            } else {
+                mVideoItems.addAll(group.getVideos());
+                mVideoGroups.add(group);
+            }
 
             // Fix double item blinking by specifying exact range
             notifyItemRangeInserted(begin, mVideoItems.size() - begin);
@@ -125,6 +115,7 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     public void clear() {
         int itemCount = mVideoItems.size();
         mVideoItems.clear();
+        mVideoGroups.clear();
         if (itemCount != 0) {
             notifyItemRangeRemoved(0, itemCount);
         }

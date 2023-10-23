@@ -68,7 +68,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         disposeActions();
 
         mSection = section;
-        mVideo = section.getData();
+        mVideo = section.getData() instanceof Video ? (Video) section.getData() : null;
 
         MediaServiceManager.instance().authCheck(this::obtainPlaylistsAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
     }

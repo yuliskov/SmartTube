@@ -104,6 +104,9 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.finish_on_disconnect),
                 option -> mRemoteControlData.enableFinishOnDisconnect(option.isSelected()),
                 mRemoteControlData.isFinishOnDisconnectEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.show_connect_messages),
+                option -> mRemoteControlData.enableConnectMessages(option.isSelected()),
+                mRemoteControlData.isConnectMessagesEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }

@@ -59,8 +59,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 954
-        versionName "17.64"
+        versionCode 1144
+        versionName "19.54"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -70,10 +70,15 @@ android {
 
         // https://stackoverflow.com/questions/37382057/android-apk-how-to-exclude-a-so-file-from-a-3rd-party-dependency-using-gradle
         // armeabi-v7a backward compatible with arm64-v8a, x86 -> x86_64 etc
-        ndk {
-            abiFilters "armeabi-v7a"
-            //abiFilters "armeabi-v7a", "x86"
-            //abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        splits {
+            abi {
+                enable true
+                reset()
+                // Note, Android could soon start warning users when they run 32-bit apps
+                //include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a' //select ABIs to build APKs for
+                include 'armeabi-v7a', 'x86', 'arm64-v8a' // v7a main build, x86 for WSL, v8a for Pixel Tablet (no 32 bit support)
+                universalApk false //generate an additional APK that contains all the ABIs
+            }
         }
     }
     signingConfigs {
@@ -142,12 +147,13 @@ android {
     // https://stackoverflow.com/questions/18332474/how-to-set-versionname-in-apk-filename-using-gradle
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            def project = "STubeNext"
-            def flavor = variant.productFlavors[-1].name
+            def project = "SmartTube"
+            def flavor = variant.productFlavors[-1].name.substring(2) // remove st prefix
             def buildType = variant.buildType.name.take(1)
             def version = variant.versionName
+            def arch = output.getFilter(com.android.build.OutputFile.ABI)
 
-            def newApkName = sprintf("%s_%s_v%s_%s.apk", [project, flavor, version, buildType])
+            def newApkName = sprintf("%s_%s_%s_%s.apk", [project, flavor, version, arch])
 
             // gradle 4.6 migration
             output.outputFileName = new File(newApkName)
@@ -159,6 +165,10 @@ android {
         //exclude 'META-INF/com.android.tools/proguard/coroutines.pro'
         // Not working!
         // exclude '**/SearchOrbView.class'
+    }
+
+    lintOptions {
+        checkReleaseBuilds false // fix for ClassNotFoundException: com.android.tools.lint.client.api.Vendor
     }
 }
 
@@ -202,6 +212,8 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:' + testXSupportLibraryVersion
     androidTestImplementation 'androidx.test.espresso:espresso-core:' + espressoVersion
 
+    implementation project(':fragment-1.1.0')
+    implementation project(':leanback-1.0.0')
     implementation project(':common')
     implementation project(':sharedutils')
     implementation project(':mediaserviceinterfaces')

@@ -1,0 +1,7 @@
+<resources>
+    <string name="search_hint">Пошук відео</string>
+    <string name="cant_play_video">Не вдається відтворити відео</string>
+    <string name="subscriptions_playlist_name">Підписки</string>
+    <string name="history_playlist_name">Історія переглядів</string>
+    <string name="recommended_playlist_name">Рекомендовані відео</string>
+</resources>
