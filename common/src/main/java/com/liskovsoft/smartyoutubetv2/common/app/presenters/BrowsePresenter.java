@@ -914,19 +914,20 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        Helpers.removeIf(mediaGroups, value -> isFreeMoviesGroup(value) || isNewsGroup(value));
+        Helpers.removeIf(mediaGroups, value -> isPartialMatch(value) || isFullMatch(value));
     }
 
-    private boolean isFreeMoviesGroup(MediaGroup value) {
+    private boolean isPartialMatch(MediaGroup value) {
         return Helpers.containsAny(
                 value.getTitle(),
                 "Primetime" // Free movies and shows row
         );
     }
 
-    private boolean isNewsGroup(MediaGroup value) {
+    private boolean isFullMatch(MediaGroup value) {
         return Helpers.equalsAny(
                 value.getTitle(),
+                getContext().getString(R.string.news_row_name),
                 getContext().getString(R.string.breaking_news_row_name),
                 getContext().getString(R.string.covid_news_row_name)
         );

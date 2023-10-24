@@ -248,7 +248,8 @@
     <string name="uploads_row_name">Завантаження</string>
     <string name="playlists_row_name">Створені списки відтворення</string>
     <string name="popular_uploads_row_name">Популярні завантаження</string>
-    <string name="breaking_news_row_name">Важливі новини</string>
+    <string name="news_row_name">Новини</string>
+    <string name="breaking_news_row_name">Термінові новини</string>
     <string name="covid_news_row_name">Новини про коронавірус COVID-19</string>
     <string name="enable_voice_search">Увімкнути глобальний пошук (потрібна підтримка прошивки)</string>
     <string name="subscribe_unsubscribe_from_channel">Підписатися/Відписатися від каналу</string>
