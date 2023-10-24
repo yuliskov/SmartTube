@@ -46,8 +46,8 @@ public class AppDataSourceManager {
 //                context.getString(R.string.settings_remote_control), () -> RemoteControlSettingsPresenter.instance(context).show(), R.drawable.settings_cast));
 //        settingItems.add(new SettingsItem(
 //                context.getString(R.string.settings_language_country), () -> LanguageSettingsPresenter.instance(context).show(), R.drawable.settings_language));
-//        settingItems.add(new SettingsItem(
-//                context.getString(R.string.settings_general), () -> GeneralSettingsPresenter.instance(context).show(), R.drawable.settings_app));
+        settingItems.add(new SettingsItem(
+                context.getString(R.string.settings_general), () -> GeneralSettingsPresenter.instance(context).show(), R.drawable.settings_app));
         settingItems.add(new SettingsItem(
                 context.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(context).show(), R.drawable.settings_main_ui));
 //        settingItems.add(new SettingsItem(
