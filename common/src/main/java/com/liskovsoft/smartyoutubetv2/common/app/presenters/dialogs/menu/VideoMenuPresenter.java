@@ -745,7 +745,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private void addRemoveFromPlaylist(String playlistId, String playlistTitle, boolean add) {
         if (add) {
             Observable<Void> editObserve = mItemManager.addToPlaylistObserve(playlistId, mVideo.videoId);
-            mAddToPlaylistAction = RxHelper.execute(editObserve);
+            // Handle error: Maximum playlist size exceeded (> 5000 items)
+            mAddToPlaylistAction = RxHelper.execute(editObserve, error -> MessageHelpers.showLongMessage(getContext(), error.getMessage()));
             mDialogPresenter.closeDialog();
             MessageHelpers.showMessage(getContext(),
                     getContext().getString(R.string.added_to, playlistTitle));

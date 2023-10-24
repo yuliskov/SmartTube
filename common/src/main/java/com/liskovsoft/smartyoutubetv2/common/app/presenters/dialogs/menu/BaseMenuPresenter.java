@@ -324,7 +324,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         Observable<Void> action = manager.removePlaylistObserve(video.playlistId);
         GeneralData.instance(getContext()).setPlaylistOrder(video.playlistId, -1);
         RxHelper.execute(action,
-                () -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.cant_delete_empty_playlist), video.title)),
+                (error) -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.cant_delete_empty_playlist), video.title)),
                 () -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.removed_from_playlists), video.title))
         );
     }
@@ -333,7 +333,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         MediaItemService manager = YouTubeMediaItemService.instance();
         Observable<Void> action = manager.savePlaylistObserve(video.playlistId);
         RxHelper.execute(action,
-                () -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.cant_save_playlist), video.title)),
+                (error) -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.cant_save_playlist), video.title)),
                 () -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.saved_to_playlists), video.title))
         );
     }
@@ -393,7 +393,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                     Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
                     RxHelper.execute(
                             action,
-                            () -> MessageHelpers.showMessage(getContext(), newValue + ": " + getContext().getString(R.string.cant_save_playlist)),
+                            (error) -> MessageHelpers.showMessage(getContext(), newValue + ": " + getContext().getString(R.string.cant_save_playlist)),
                             () -> {
                                 if (!video.hasVideo()) { // Playlists section
                                     BrowsePresenter.instance(getContext()).refresh();
@@ -453,7 +453,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                 Observable<Void> action = manager.renamePlaylistObserve(firstItem.getPlaylistId(), newValue);
                                 RxHelper.execute(
                                         action,
-                                        () -> MessageHelpers.showMessage(getContext(), R.string.owned_playlist_warning),
+                                        (error) -> MessageHelpers.showMessage(getContext(), R.string.owned_playlist_warning),
                                         () -> {
                                             video.title = newValue;
                                             BrowsePresenter.instance(getContext()).syncItem(video);

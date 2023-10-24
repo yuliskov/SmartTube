@@ -780,7 +780,8 @@ public class AppDialogUtil {
             editObserve = itemManager.removeFromPlaylistObserve(playlistId, video.videoId);
         }
 
-        Disposable addRemoveAction = RxHelper.execute(editObserve); // ignore results (do the work in the background)
+        // Handle error: Maximum playlist size exceeded (> 5000 items)
+        RxHelper.execute(editObserve, error -> MessageHelpers.showLongMessage(context, error.getMessage()));
     }
 
     public static void showPlaylistOrderDialog(Context context, Video video, Runnable onClose) {
@@ -818,7 +819,7 @@ public class AppDialogUtil {
                 if (optionItem.isSelected()) {
                     RxHelper.execute(
                             YouTubeMediaItemService.instance().setPlaylistOrderObserve(playlistId, pair[1]),
-                            () -> MessageHelpers.showMessage(context, R.string.owned_playlist_warning),
+                            (error) -> MessageHelpers.showMessage(context, R.string.owned_playlist_warning),
                             () -> {
                                 generalData.setPlaylistOrder(playlistId, pair[1]);
                                 ViewManager.instance(context).refreshCurrentView();
