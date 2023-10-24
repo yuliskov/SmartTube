@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
@@ -67,7 +68,8 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         applyRunOnceTasks();
 
         //runRefreshCachePeriodicTask();
-        showAccountSelection();
+        showAccountSelectionIfNeeded();
+        showPasswordIfNeeded();
 
         if (getView() != null) {
             checkMasterPassword(() -> applyNewIntent(getView().getNewIntent()));
@@ -95,8 +97,16 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
     }
 
-    private void showAccountSelection() {
+    private void showAccountSelectionIfNeeded() {
         AccountSelectionPresenter.instance(getContext()).show();
+    }
+
+    private void showPasswordIfNeeded() {
+        AccountsData data = AccountsData.instance(getContext());
+        if (data.getAccountPassword() != null) {
+            data.setPasswordAccepted(false);
+            BrowsePresenter.instance(getContext()).updateSections(true);
+        }
     }
 
     private void runRemoteControlFakeTask() {
