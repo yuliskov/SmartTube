@@ -32,7 +32,7 @@ public class ScreensaverManager {
     private PlayerTweaksData mTweaksData;
     private int mMode = MODE_SCREENSAVER;
     private boolean mIsScreenOff;
-    private boolean mIsBlocked;
+    private boolean mIsBlocked = true;
     private final Runnable mTimeoutHandler = () -> {
         // Playing the video and dialog overlay isn't shown
         if (ViewManager.instance(mActivity.get()).getTopView() != PlaybackView.class || !mTweaksData.isScreenOffTimeoutEnabled()) {
@@ -110,11 +110,11 @@ public class ScreensaverManager {
 
         Log.d(TAG, "Enable screensaver");
 
-//        disable();
-//        int delayMs = mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER ?
-//                10_000 :
-//                mGeneralData.getScreenDimmingTimoutMin() * 60 * 1_000;
-        Utils.postDelayed(mDimScreen, 0);
+        disable();
+        int delayMs = mGeneralData.getScreensaverTimeoutMs() == GeneralData.SCREENSAVER_TIMEOUT_NEVER ?
+                10_000 :
+                mGeneralData.getScreensaverTimeoutMs();
+        Utils.postDelayed(mDimScreen, delayMs);
     }
 
     public void disable() {
@@ -144,7 +144,7 @@ public class ScreensaverManager {
     }
 
     public void setBlocked(boolean blocked) {
-        mIsBlocked = blocked;
+//        mIsBlocked = blocked;
     }
 
     private void enableTimeout() {
@@ -173,7 +173,7 @@ public class ScreensaverManager {
     }
 
     private void showHide(boolean show) {
-//        showHideDimming(show);
+        showHideDimming(show);
         showHideScreensaver(show);
     }
 
