@@ -38,6 +38,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private MediaGroup mLastScrollGroup;
     //private VideoGroup mCurrentGroup; // disable garbage collected
     private Video mNextVideo;
+    private Video mPreviousVideo;
     private int mFocusCount;
     private int mNextRetryCount;
     private List<ChapterItem> mChapters;
@@ -69,6 +70,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         disposeActions();
         //mCurrentGroup = video.getGroup(); // disable garbage collected
         appendNextSectionVideoIfNeeded(video);
+        appendPreviousSectionVideoIfNeeded(video);
         MediaServiceManager.instance().hideNotification(video);
     }
 
@@ -276,6 +278,10 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         return mNextVideo;
     }
 
+    public Video getPrevious() {
+        return mPreviousVideo;
+    }
+
     private void clearSuggestionsIfNeeded(Video video) {
         if (video == null || getPlayer() == null) {
             return;
@@ -437,7 +443,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
     private void appendSectionPlaylistIfNeeded(Video video) {
         if (!isSectionPlaylistEnabled(video)) {
-            mNextVideo = null;
+            //mNextVideo = null;
+            //mPreviousVideo = null;
             return;
         }
 
@@ -586,6 +593,35 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         } else {
             continueGroup(group, continuation -> appendNextSectionVideoIfNeeded(video), getPlayer().isSuggestionsShown());
             mNextRetryCount++;
+        }
+    }
+
+    private void appendPreviousSectionVideoIfNeeded(Video video) {
+        mPreviousVideo = null;
+
+        if (!isSectionPlaylistEnabled(video)) {
+            return;
+        }
+
+        VideoGroup group = video.getGroup();
+
+        if (group == null || group.isEmpty()) {
+            return;
+        }
+
+        List<Video> videos = group.getVideos();
+        boolean found = false;
+
+        for (int i = (videos.size() - 1); i >= 0; i--) {
+            Video current = videos.get(i);
+            if (found && current.hasVideo() && !current.isUpcoming) {
+                mPreviousVideo = current;
+                return;
+            }
+
+            if (current.equals(video)) {
+                found = true;
+            }
         }
     }
 

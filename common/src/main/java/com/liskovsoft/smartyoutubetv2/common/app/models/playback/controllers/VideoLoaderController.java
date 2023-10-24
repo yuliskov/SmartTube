@@ -151,7 +151,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     public void loadPrevious() {
         Video previous = mPlaylist.getPrevious();
 
-        if (previous != null) {
+        if (mSuggestionsLoader.getPrevious() != null) {
+            openVideoInt(mSuggestionsLoader.getPrevious());
+        } else if (previous != null) {
             previous.fromQueue = true;
             openVideoInt(previous);
         }

@@ -120,7 +120,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
         boolean isHandled = handleBackKey(keyCode) || handleMenuKey(keyCode) ||
                 handleConfirmKey(keyCode) || handleStopKey(keyCode) || handleNumKeys(keyCode) ||
-                handlePlayPauseKey(keyCode) || handleShortsNavigation(keyCode);
+                handlePlayPauseKey(keyCode) || handleShortsNavigation(keyCode) || handleSeekNavigation(keyCode);
 
         if (isHandled) {
             return true; // don't show UI
@@ -682,6 +682,15 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         }
 
         if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+            getMainController().onPreviousClicked();
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean handleSeekNavigation(int keyCode) {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT && getPlayer().getPositionMs() <= 3_000) {
             getMainController().onPreviousClicked();
             return true;
         }

@@ -92,6 +92,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
             return true;
         }
 
+        // Pass to others handlers
         return false;
     }
 
