@@ -248,7 +248,8 @@
     <string name="uploads_row_name">Yüklemeler</string>
     <string name="playlists_row_name">Oluşturulan oynatma listeleri</string>
     <string name="popular_uploads_row_name">Popüler yüklemeler</string>
-    <string name="breaking_news_row_name">Yeni haberler</string>
+    <string name="news_row_name">Haberler</string>
+    <string name="breaking_news_row_name">Son dakika haberleri</string>
     <string name="covid_news_row_name">COVID-19 haberleri</string>
     <string name="enable_voice_search">Genel aramayı etkinleştir (aygıt yazılımı desteği gerekli)</string>
     <string name="subscribe_unsubscribe_from_channel">Kanala Abone ol/Aboneliği iptal et</string>
@@ -604,4 +605,5 @@
     <string name="protect_account_with_password">Bu hesabı şifre ile koru</string>
     <string name="enter_account_password">Hesap şifresini girin</string>
     <string name="show_connect_messages">Bağlantı mesajlarını göster</string>
+    <string name="prefer_avc_over_vp9_desc">UYARI: Maksimum 1080p</string>
 </resources>
