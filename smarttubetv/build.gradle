@@ -70,16 +70,16 @@ android {
 
         // https://stackoverflow.com/questions/37382057/android-apk-how-to-exclude-a-so-file-from-a-3rd-party-dependency-using-gradle
         // armeabi-v7a backward compatible with arm64-v8a, x86 -> x86_64 etc
-//        splits {
-//            abi {
-//                enable true
-//                reset()
-//                // Note, Android could soon start warning users when they run 32-bit apps
-//                //include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a' //select ABIs to build APKs for
-//                include 'armeabi-v7a' // v7a main build, x86 for WSL, v8a for Pixel Tablet (no 32 bit support)
-//                universalApk false //generate an additional APK that contains all the ABIs
-//            }
-//        }
+        splits {
+            abi {
+                enable true
+                reset()
+                // Note, Android could soon start warning users when they run 32-bit apps
+                //include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a' //select ABIs to build APKs for
+                include 'armeabi-v7a', 'x86', 'arm64-v8a' // v7a main build, x86 for WSL, v8a for Pixel Tablet (no 32 bit support)
+                universalApk false //generate an additional APK that contains all the ABIs
+            }
+        }
     }
     signingConfigs {
         release {
@@ -128,7 +128,6 @@ android {
             // matchingFallbacks = ['lite']
             versionCode 11000 + defaultConfig.versionCode
             applicationId "com.liskovsoft.videomanager"
-            ndk { abiFilters 'armeabi-v7a' }
             resConfigs "ru"
         }
         stredboxtv {
