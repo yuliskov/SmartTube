@@ -50,7 +50,7 @@ public class HQDialogController extends PlayerEventListenerHelper {
     public void onHighQualityClicked() {
         addQualityCategories();
         addVideoBufferCategory();
-        //addPresetsCategory();
+        addPresetsCategory();
         //addAudioLanguage();
         //addAudioDelayCategory();
         //addBackgroundPlaybackCategory();
