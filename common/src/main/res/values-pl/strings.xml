@@ -584,4 +584,20 @@
   <string name="msg_player_error_subtitle_renderer">Wybrany format audio nie jest obsługiwany.\nSpróbuj wybrać inny poprzez naciśnięcie przycisku CC na odtwarzaczu.\nJeśli to nie pomoże, to wyłącz urządzenie.</string>
   <string name="player_network_stack">Protokół sieciowy</string>
   <string name="default_stack_desc">Wbudowany protokół sieciowy. Ten protokół może być stabilniejszy w niektórych sytuacjach.</string>
+  <string name="auto_history">Automatyczne (użyj ustawień konta)</string>
+  <string name="remember_position_subscriptions">Zapamiętaj ostatnio oglądaną pozycję w Subskrypcjach</string>
+  <string name="msg_player_unknown_error">Nieznany błąd</string>
+  <string name="header_notifications">Powiadomienia</string>
+  <string name="disable_search_history">Zablokuj historię wyszukiwania</string>
+  <string name="unlock_high_bitrate_formats">Odblokuj formaty z wysokim bitrate 1080p vp9</string>
+  <string name="unlock_high_bitrate_audio_formats">Odblokuj formaty z wysokim bitrate mp4a</string>
+  <string name="color_scheme_blue">Niebieski</string>
+  <string name="color_scheme_dark_blue">Ciemnoniebieski</string>
+  <string name="player_speed_per_channel">Na każdy kanał</string>
+  <string name="disable_popular_searches">Wyłącz popularne zapytania w wyszukiwaniu</string>
+  <string name="multi_profiles">Użyj oddzielnych ustawień dla każdego konta</string>
+  <string name="protect_account_with_password">Chroń to konto hasłem</string>
+  <string name="enter_account_password">Wprowadź hasło do konta</string>
+  <string name="show_connect_messages">Pokaż wiadomości połączenia</string>
+  <string name="prefer_avc_over_vp9_desc">WARN: 1080p maksymalnie</string>
 </resources>
