@@ -590,4 +590,13 @@
   <string name="color_scheme_blue">Sininen</string>
   <string name="disable_history">Poista historia käytöstä</string>
   <string name="enable_history">Ota historia käyttöön</string>
+  <string name="color_scheme_dark_blue">Tummansininen</string>
+  <string name="player_speed_per_channel">Jokaiselle kanavalle</string>
+  <string name="disable_popular_searches">Älä näytä suosittuja hakuja</string>
+  <string name="multi_profiles">Käytä eri asetuksia eri käyttäjille</string>
+  <string name="protect_account_with_password">Suojaa tämä tili salasanalla</string>
+  <string name="enter_account_password">Syötä tilin salasana</string>
+  <string name="show_connect_messages">Näytä yhteysviestit</string>
+  <string name="prefer_avc_over_vp9_desc">Huom.max 1080P</string>
+  <string name="news_row_name">Uutiset</string>
 </resources>
