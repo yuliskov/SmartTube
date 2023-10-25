@@ -49,8 +49,8 @@ public class TrackSelectorUtil {
     public static CharSequence buildTrackNameShort(Format format) {
         String trackName;
         if (MimeTypes.isVideo(format.sampleMimeType)) {
-            trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(buildResolutionShortString(format),
-                    buildFPSString(format)), buildBitrateString(format)), extractCodec(format)), buildHDRString(format));
+            trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(buildResolutionShortString(format),
+                    buildFPSString(format)), buildBitrateString(format)), extractCodec(format)), buildHDRString(format)), buildHighBitrateMark(format));
         } else if (MimeTypes.isAudio(format.sampleMimeType)) {
             trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(buildLanguageString(format),
                     buildAudioPropertyString(format)), buildBitrateString(format)), extractCodec(format)), buildChannels(format));
@@ -60,6 +60,15 @@ public class TrackSelectorUtil {
             trackName = joinWithSeparator(joinWithSeparator(buildLanguageString(format), buildBitrateString(format)), extractCodec(format));
         }
         return trackName.length() == 0 ? "unknown" : trackName;
+    }
+
+    public static String buildHighBitrateMark(Format format) {
+        if (format == null) {
+            return "";
+        }
+
+        // https://symbl.cc/en/search/?q=mark
+        return format.containerMimeType == null ? "✨" : "";
     }
 
     public static String buildHDRString(Format format) {
