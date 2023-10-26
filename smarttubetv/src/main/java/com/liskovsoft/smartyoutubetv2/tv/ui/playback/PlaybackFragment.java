@@ -536,15 +536,15 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
                 // Fix exoplayer pause after activity is resumed (AFR switching).
                 // It's tied to activity state transitioning because window has different mode.
                 // NOTE: may be a problems with background playback or bluetooth button events
-                //if (System.currentTimeMillis() - mResumeTimeMs < 5_000 ||
-                //        (!isResumed() && !isInPIPMode() && !AppDialogPresenter.instance(getContext()).isDialogShown())
-                //) {
-                //    return false;
-                //}
-
-                if (System.currentTimeMillis() - mResumeTimeMs < 5_000) {
+                if (System.currentTimeMillis() - mResumeTimeMs < 5_000 ||
+                        (!isResumed() && !isInPIPMode() && !AppDialogPresenter.instance(getContext()).isDialogShown())
+                ) {
                     return false;
                 }
+
+                //if (System.currentTimeMillis() - mResumeTimeMs < 5_000) {
+                //    return false;
+                //}
 
                 return super.dispatchSetPlayWhenReady(player, playWhenReady);
             }
