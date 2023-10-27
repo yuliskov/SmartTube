@@ -44,7 +44,8 @@ public class UiOptionItem implements OptionItem {
                 continue;
             }
             // fix crash on amlogic s905x
-            if (isVerticalVideo && format.getHeight() >= 1080) {
+            if (isVerticalVideo && format.getHeight() >= 1080
+                    && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
                 continue;
             }
             final boolean isProperlyAspect = Math.abs(

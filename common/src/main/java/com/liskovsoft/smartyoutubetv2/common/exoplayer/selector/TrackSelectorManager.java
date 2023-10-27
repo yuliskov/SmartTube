@@ -524,7 +524,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         continue;
                     }
                     // fix crash on amlogic s905x
-                    if (isVerticalVideo && mediaTrack.format.height >= 1080) {
+                    if (isVerticalVideo && mediaTrack.format.height >= 1080
+                            && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
                         continue;
                     }
                     final boolean isProperlyAspect = Math.abs(
