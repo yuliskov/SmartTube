@@ -11,7 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTr
 import java.util.HashMap;
 
 public class TrackSelectorUtil {
-    public static final String CODEC_PREFIX_AV1 = "av01";
+    private static final String CODEC_PREFIX_AV1 = "av01";
     private static final String CODEC_PREFIX_AVC = "avc";
     private static final String CODEC_PREFIX_VP9 = "vp9";
     private static final String CODEC_PREFIX_VP09 = "vp09";
