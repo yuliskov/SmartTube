@@ -248,6 +248,7 @@
     <string name="uploads_row_name">Uploads</string>
     <string name="playlists_row_name">Erstellte Wiedergabelisten</string>
     <string name="popular_uploads_row_name">Beliebte Uploads</string>
+    <string name="news_row_name">Nachrichten</string>
     <string name="breaking_news_row_name">Eilmeldungen</string>
     <string name="covid_news_row_name">Nachrichten zu COVID-19</string>
     <string name="enable_voice_search">Globale Sprachsuche aktivieren (Firmware-Unterstützung erforderlich)</string>
@@ -604,4 +605,5 @@
     <string name="protect_account_with_password">Dieses Konto mit einem Passwort schützen</string>
     <string name="enter_account_password">Konto-Passwort eingeben</string>
     <string name="show_connect_messages">Verbindungsnachrichten anzeigen</string>
+    <string name="prefer_avc_over_vp9_desc">ACHTUNG: Maximal 1080p</string>
 </resources>
