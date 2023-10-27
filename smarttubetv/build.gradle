@@ -59,8 +59,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 1148
-        versionName "19.58"
+        versionCode 1149
+        versionName "19.59"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -179,6 +179,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:' + glideVersion
     annotationProcessor 'com.github.bumptech.glide:compiler:' + glideVersion
     implementation 'com.github.zjupure:webpdecoder:' + webpDecoderVersion
+    implementation 'androidx.multidex:multidex:' + multiDexVersion
 
     //////// BEGIN EXOPLAYER /////////
 

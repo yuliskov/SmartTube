@@ -927,7 +927,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private boolean isFullMatch(MediaGroup value) {
         return Helpers.equalsAny(
                 value.getTitle(),
-                getContext().getString(R.string.news_row_name),
+                //getContext().getString(R.string.news_row_name),
                 getContext().getString(R.string.breaking_news_row_name),
                 getContext().getString(R.string.covid_news_row_name)
         );
