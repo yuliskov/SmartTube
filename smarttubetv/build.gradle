@@ -179,6 +179,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:' + glideVersion
     annotationProcessor 'com.github.bumptech.glide:compiler:' + glideVersion
     implementation 'com.github.zjupure:webpdecoder:' + webpDecoderVersion
+    implementation 'androidx.multidex:multidex:' + multiDexVersion
 
     //////// BEGIN EXOPLAYER /////////
 
