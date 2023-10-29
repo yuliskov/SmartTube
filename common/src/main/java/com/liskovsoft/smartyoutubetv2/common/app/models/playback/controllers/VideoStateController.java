@@ -444,7 +444,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
 
         State state = mStateService.getByVideoId(item.videoId);
 
-        boolean stateIsOutdated = state == null || state.timestamp < item.timestamp;
+        boolean stateIsOutdated = isStateOutdated(state, item);
         if (item.getPositionMs() > 0 && stateIsOutdated) { // check that the user logged in
             // Web state is buggy on short videos (e.g. video clips)
             boolean isLongVideo = getPlayer().getDurationMs() > MUSIC_VIDEO_MAX_DURATION_MS;
@@ -592,5 +592,16 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         if (!samePositions) {
             getPlayer().setPositionMs(positionMs);
         }
+    }
+
+    private boolean isStateOutdated(State state, Video item) {
+        if (state == null) {
+            return true;
+        }
+
+        float posPercents1 = state.positionMs * 100f / state.durationMs;
+        float posPercents2 = item.getPositionMs() * 100f / item.getDurationMs();
+
+        return Math.abs(posPercents1 - posPercents2) > 3 && state.timestamp < item.timestamp;
     }
 }
