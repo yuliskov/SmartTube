@@ -122,7 +122,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         } else {
             presenter.pinItem(section);
         }
-        MessageHelpers.showMessage(getContext(), getContext().getString(isItemPinned ? R.string.unpinned_from_sidebar : R.string.pinned_to_sidebar) + "\n" + section.title);
+        MessageHelpers.showMessage(getContext(), section.title + "\n" + getContext().getString(isItemPinned ? R.string.unpinned_from_sidebar : R.string.pinned_to_sidebar));
     }
 
     private Video createPinnedPlaylist(Video video) {
