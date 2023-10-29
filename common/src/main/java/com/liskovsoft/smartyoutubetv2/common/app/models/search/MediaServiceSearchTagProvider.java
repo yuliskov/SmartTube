@@ -12,19 +12,17 @@ public class MediaServiceSearchTagProvider implements SearchTagsProvider {
     private static final String TAG = MediaServiceSearchTagProvider.class.getSimpleName();
     private final MediaGroupService mGroupManager;
     private Disposable mTagsAction;
-    private boolean mPopular;
 
-    public MediaServiceSearchTagProvider(boolean popular) {
+    public MediaServiceSearchTagProvider() {
         MediaService mediaService = YouTubeMediaService.instance();
         mGroupManager = mediaService.getMediaGroupService();
-        mPopular = popular;
     }
 
     @Override
     public void search(String query, ResultsCallback callback) {
         RxHelper.disposeActions(mTagsAction);
 
-        mTagsAction = mGroupManager.getSearchTagsObserve(query, mPopular)
+        mTagsAction = mGroupManager.getSearchTagsObserve(query)
                 .subscribe(
                         tags -> callback.onResults(Tag.from(tags)),
                         error -> Log.e(TAG, "Result is empty. Just ignore it. Error msg: %s", error.getMessage())

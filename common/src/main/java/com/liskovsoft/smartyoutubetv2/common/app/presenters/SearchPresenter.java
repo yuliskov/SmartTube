@@ -67,7 +67,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     @Override
     public void onViewInitialized() {
         if (getView() != null) {
-            getView().setTagsProvider(new MediaServiceSearchTagProvider(!mSearchData.isPopularSearchesDisabled()));
+            getView().setTagsProvider(new MediaServiceSearchTagProvider());
         }
 
         startSearchInt();
