@@ -90,7 +90,7 @@ public class AccountsData implements AccountChangeListener {
     }
 
     public boolean isPasswordAccepted() {
-        return mIsPasswordAccepted;
+        return mIsPasswordAccepted || getAccountPassword() == null;
     }
 
     public void setPasswordAccepted(boolean accepted) {
