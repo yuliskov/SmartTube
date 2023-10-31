@@ -105,7 +105,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         AccountsData data = AccountsData.instance(getContext());
         if (data.getAccountPassword() != null) {
             data.setPasswordAccepted(false);
-            BrowsePresenter.instance(getContext()).updateSections(true);
+            BrowsePresenter.instance(getContext()).updateSections();
         }
     }
 

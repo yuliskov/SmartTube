@@ -150,21 +150,17 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (BrowsePresenter.instance(getContext()).canMoveSectionUp(mSection)) {
-            mDialogPresenter.appendSingleButton(
-                    UiOptionItem.from(getContext().getString(R.string.move_section_up), optionItem -> {
-                        //mDialogPresenter.closeDialog();
-                        BrowsePresenter.instance(getContext()).moveSectionUp(mSection);
-                    }));
-        }
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.move_section_up), optionItem -> {
+                    //mDialogPresenter.closeDialog();
+                    BrowsePresenter.instance(getContext()).moveSectionUp(mSection);
+                }));
 
-        if (BrowsePresenter.instance(getContext()).canMoveSectionDown(mSection)) {
-            mDialogPresenter.appendSingleButton(
-                    UiOptionItem.from(getContext().getString(R.string.move_section_down), optionItem -> {
-                        //mDialogPresenter.closeDialog();
-                        BrowsePresenter.instance(getContext()).moveSectionDown(mSection);
-                    }));
-        }
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.move_section_down), optionItem -> {
+                    //mDialogPresenter.closeDialog();
+                    BrowsePresenter.instance(getContext()).moveSectionDown(mSection);
+                }));
     }
 
     private void appendRenameSectionButton() {

@@ -41,6 +41,8 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
 
     private void initProfiles() {
         MediaServiceManager.instance().addAccountListener(this);
+        // Trigger on current account
+        onAccountChanged(MediaServiceManager.instance().getSelectedAccount());
     }
 
     @Override

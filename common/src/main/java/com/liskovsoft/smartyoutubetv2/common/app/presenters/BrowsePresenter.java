@@ -237,10 +237,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void updateSections() {
-        updateSections(false);
-    }
-
-    public void updateSections(boolean refresh) {
         if (getView() == null) {
             return;
         }
@@ -274,11 +270,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             }
         }
 
-        if (refresh) {
-            // Move current focus
-            int selectedSectionIndex = findSectionIndex(mCurrentSection != null ? mCurrentSection.getId() : -1);
-            getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, false);
-        }
+        // Refresh and restore last focus
+        int selectedSectionIndex = findSectionIndex(mCurrentSection != null ? mCurrentSection.getId() : -1);
+        getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, false);
     }
 
     private void sortSections() {
@@ -455,31 +449,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void moveSectionUp(BrowseSection section) {
+        mCurrentSection = section; // move current focus
         mGeneralData.moveSectionUp(section.getId());
         updateSections();
-
-        // Move current focus
-        if (getView() != null) {
-            getView().selectSection(findSectionIndex(section.getId()), false);
-        }
     }
 
     public void moveSectionDown(BrowseSection section) {
+        mCurrentSection = section; // move current focus
         mGeneralData.moveSectionDown(section.getId());
         updateSections();
-
-        // No need to move focus because section should be already focused.
-    }
-
-    public boolean canMoveSectionUp(BrowseSection section) {
-        return mGeneralData.canMoveSectionUp(section.getId());
-    }
-
-    public boolean canMoveSectionDown(BrowseSection section) {
-        return mGeneralData.canMoveSectionDown(section.getId());
     }
 
     public void renameSection(BrowseSection section) {
+        mCurrentSection = section; // move current focus
         mGeneralData.renameSection(section.getId(), section.getTitle());
         updateSections();
     }
@@ -500,31 +482,24 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void enableSection(int sectionId, boolean enable) {
         mGeneralData.enableSection(sectionId, enable);
 
-        if (enable) {
-            updateSections();
-        } else {
-            if (getView() != null) {
-                getView().removeSection(mSectionsMapping.get(sectionId));
-            }
-        }
+        updateSections();
     }
 
     public void pinItem(Video item) {
         mGeneralData.addPinnedItem(item);
+        mGridMapping.put(item.hashCode(), createPinnedAction(item));
 
-        updateSections();
+        BrowseSection newSection = new BrowseSection(item.hashCode(), item.title, BrowseSection.TYPE_GRID, item.cardImageUrl, false, item);
+        Helpers.removeIf(mSections, section -> section.getId() == newSection.getId());
+        mSections.add(newSection);
+        getView().addSection(-1, newSection);
     }
 
     public void pinItem(String title, int resId, ErrorFragmentData data) {
-        appendToErrors(title, resId, data);
-
-        updateSections();
-    }
-
-    private void appendToErrors(String title, int resId, ErrorFragmentData data) {
-        int id = title.hashCode();
-        Helpers.removeIf(mErrorSections, section -> section.getId() == id);
-        mErrorSections.add(new BrowseSection(id, title, BrowseSection.TYPE_ERROR, resId, false, data));
+        BrowseSection newSection = new BrowseSection(title.hashCode(), title, BrowseSection.TYPE_ERROR, resId, false, data);
+        Helpers.removeIf(mErrorSections, section -> section.getId() == newSection.getId());
+        mErrorSections.add(newSection);
+        getView().addSection(0, newSection);
     }
 
     private void appendToSections(String title, int resId, ErrorFragmentData data) {
@@ -1027,7 +1002,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        updateSections(true);
+        updateSections();
     }
 
     public Video getCurrentVideo() {
