@@ -443,8 +443,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
     private void appendSectionPlaylistIfNeeded(Video video) {
         if (!isSectionPlaylistEnabled(video)) {
-            //mNextVideo = null;
-            //mPreviousVideo = null;
+            // Important fix. Gives priority to playlist or suggestion.
+            mNextVideo = null;
+            mPreviousVideo = null;
             return;
         }
 
