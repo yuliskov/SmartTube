@@ -68,7 +68,8 @@ public class TrackSelectorUtil {
         }
 
         // https://symbl.cc/en/search/?q=mark
-        return format.containerMimeType == null ? "✨" : "";
+        return format.containerMimeType == null ? "*" : "";
+        //return format.containerMimeType == null ? "✨" : "";
     }
 
     public static String buildHDRString(Format format) {
