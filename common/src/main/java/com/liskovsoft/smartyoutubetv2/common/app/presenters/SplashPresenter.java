@@ -69,11 +69,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
         //runRefreshCachePeriodicTask();
         showAccountSelectionIfNeeded();
-        showPasswordIfNeeded();
 
-        if (getView() != null) {
-            checkMasterPassword(() -> applyNewIntent(getView().getNewIntent()));
-        }
+        checkMasterPassword(() -> applyNewIntent(getView().getNewIntent()));
+
+        checkAccountPassword();
     }
 
     private void applyRunPerInstanceTasks() {
@@ -101,10 +100,12 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         AccountSelectionPresenter.instance(getContext()).show();
     }
 
-    private void showPasswordIfNeeded() {
+    private void checkAccountPassword() {
         AccountsData data = AccountsData.instance(getContext());
+        // Block even if the password was accepted before
         if (data.getAccountPassword() != null) {
             data.setPasswordAccepted(false);
+            PlaybackPresenter.instance(getContext()).forceFinish();
             BrowsePresenter.instance(getContext()).updateSections();
         }
     }
