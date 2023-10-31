@@ -94,76 +94,20 @@ public class SynchronizeDatabaseJobService extends JobService {
      * Publish any default channels not already published.
      */
     private class SynchronizeDatabaseTask extends AsyncTask<Void, Void, Exception> {
-        private final GlobalPreferences mPrefs;
-        private final ClipService mService;
-        private Context mContext;
-        private JobParameters mJobParameters;
+        private final JobParameters mJobParameters;
+        private final UpdateChannelsTask mTask;
 
         SynchronizeDatabaseTask(Context context, JobParameters jobParameters) {
-            mContext = context;
             mJobParameters = jobParameters;
-            Log.d(TAG, "Creating GlobalPreferences...");
-            mPrefs = GlobalPreferences.instance(mContext);
-            mService = ClipService.instance(mContext);
+
+            mTask = new UpdateChannelsTask(context);
         }
 
         @Override
         protected Exception doInBackground(Void... params) {
-            updateChannels();
-            updateRecommendations();
+            mTask.run();
 
             return null;
-        }
-
-        private void updateChannels() {
-            if (Helpers.isATVChannelsSupported(mContext)) {
-                try {
-                    updateOrPublishChannel(mService.getSubscriptionsPlaylist());
-                    updateOrPublishChannel(mService.getRecommendedPlaylist());
-                    updateOrPublishChannel(mService.getHistoryPlaylist());
-                } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        private void updateRecommendations() {
-            if (Helpers.isATVRecommendationsSupported(mContext)) {
-                try {
-                    Playlist playlist = null;
-                    switch (mPrefs.getRecommendedPlaylistType()) {
-                        case GlobalPreferences.PLAYLIST_TYPE_RECOMMENDATIONS:
-                            playlist = mService.getRecommendedPlaylist();
-                            break;
-                        case GlobalPreferences.PLAYLIST_TYPE_SUBSCRIPTIONS:
-                            playlist = mService.getSubscriptionsPlaylist();
-                            break;
-                        case GlobalPreferences.PLAYLIST_TYPE_HISTORY:
-                            playlist = mService.getHistoryPlaylist();
-                            break;
-                    }
-
-                    updateOrPublishRecommendations(playlist);
-                } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        private void updateOrPublishRecommendations(Playlist playlist) {
-            if (checkPlaylist(playlist)) {
-                Log.d(TAG, "Syncing recommended: " + playlist.getName() + ", items num: " + playlist.getClips().size());
-                RecommendationsProvider.createOrUpdateRecommendations(mContext, playlist);
-            }
-        }
-
-        private void updateOrPublishChannel(Playlist playlist) {
-            if (checkPlaylist(playlist)) {
-                Log.d(TAG, "Syncing channel: " + playlist.getName() + ", items num: " + playlist.getClips().size());
-                ChannelsProvider.createOrUpdateChannel(mContext, playlist);
-            }
         }
 
         @Override
@@ -179,9 +123,5 @@ public class SynchronizeDatabaseJobService extends JobService {
             jobFinished(mJobParameters, false);
         }
 
-    }
-
-    private boolean checkPlaylist(Playlist playlist) {
-        return playlist != null && playlist.getClips() != null;
     }
 }

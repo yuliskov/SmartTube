@@ -8,10 +8,6 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
-import com.liskovsoft.leanbackassistant.media.ClipService;
-import com.liskovsoft.leanbackassistant.media.Playlist;
-import com.liskovsoft.leanbackassistant.recommendations.RecommendationsProvider;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 
@@ -29,18 +25,12 @@ import java.util.concurrent.TimeUnit;
 public class SynchronizeDatabaseWorker extends Worker {
     private static final String TAG = SynchronizeDatabaseWorker.class.getSimpleName();
     private static final String WORK_NAME = "Update channels";
-    private final Context mContext;
-    private final GlobalPreferences mPrefs;
-    private final ClipService mService;
+    private final UpdateChannelsTask mTask;
 
     public SynchronizeDatabaseWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
 
-        mContext = context;
-
-        Log.d(TAG, "Creating GlobalPreferences...");
-        mPrefs = GlobalPreferences.instance(context);
-        mService = ClipService.instance(context);
+        mTask = new UpdateChannelsTask(context);
     }
 
     public static void schedule(Context context) {
@@ -68,64 +58,8 @@ public class SynchronizeDatabaseWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        updateChannels();
-        updateRecommendations();
+        mTask.run();
 
         return Result.success();
-    }
-
-    private void updateChannels() {
-        if (Helpers.isATVChannelsSupported(mContext)) {
-            try {
-                updateOrPublishChannel(mService.getSubscriptionsPlaylist());
-                updateOrPublishChannel(mService.getRecommendedPlaylist());
-                updateOrPublishChannel(mService.getHistoryPlaylist());
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void updateRecommendations() {
-        if (Helpers.isATVRecommendationsSupported(mContext)) {
-            try {
-                Playlist playlist = null;
-                switch (mPrefs.getRecommendedPlaylistType()) {
-                    case GlobalPreferences.PLAYLIST_TYPE_RECOMMENDATIONS:
-                        playlist = mService.getRecommendedPlaylist();
-                        break;
-                    case GlobalPreferences.PLAYLIST_TYPE_SUBSCRIPTIONS:
-                        playlist = mService.getSubscriptionsPlaylist();
-                        break;
-                    case GlobalPreferences.PLAYLIST_TYPE_HISTORY:
-                        playlist = mService.getHistoryPlaylist();
-                        break;
-                }
-
-                updateOrPublishRecommendations(playlist);
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void updateOrPublishRecommendations(Playlist playlist) {
-        if (checkPlaylist(playlist)) {
-            Log.d(TAG, "Syncing recommended: " + playlist.getName() + ", items num: " + playlist.getClips().size());
-            RecommendationsProvider.createOrUpdateRecommendations(mContext, playlist);
-        }
-    }
-
-    private void updateOrPublishChannel(Playlist playlist) {
-        if (checkPlaylist(playlist)) {
-            Log.d(TAG, "Syncing channel: " + playlist.getName() + ", items num: " + playlist.getClips().size());
-            ChannelsProvider.createOrUpdateChannel(mContext, playlist);
-        }
-    }
-
-    private boolean checkPlaylist(Playlist playlist) {
-        return playlist != null && playlist.getClips() != null;
     }
 }
