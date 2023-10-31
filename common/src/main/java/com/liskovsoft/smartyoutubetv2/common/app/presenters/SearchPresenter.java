@@ -21,6 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -66,9 +67,12 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     @Override
     public void onViewInitialized() {
-        if (getView() != null) {
-            getView().setTagsProvider(new MediaServiceSearchTagProvider());
+        if (!AccountsData.instance(getContext()).isPasswordAccepted()) {
+            getView().finishReally();
+            return;
         }
+
+        getView().setTagsProvider(new MediaServiceSearchTagProvider());
 
         startSearchInt();
     }
