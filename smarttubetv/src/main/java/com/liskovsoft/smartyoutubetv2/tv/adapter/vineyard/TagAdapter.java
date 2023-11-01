@@ -10,11 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TagAdapter extends PaginationAdapter {
-
-    public TagAdapter(Context context, String tag) {
-        super(context, new TagPresenter(), tag);
-    }
-
     public TagAdapter(Context context, Presenter presenter, String tag) {
         super(context, presenter, tag);
     }

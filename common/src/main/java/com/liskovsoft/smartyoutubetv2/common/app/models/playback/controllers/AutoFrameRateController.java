@@ -66,7 +66,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
         mAutoFrameRateHelper.setDoubleRefreshRateEnabled(mPlayerData.isDoubleRefreshRateEnabled());
         mAutoFrameRateHelper.setSkip24RateEnabled(mPlayerData.isSkip24RateEnabled());
 
-        addUiOptions();
+//        addUiOptions();
     }
 
     @Override

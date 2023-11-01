@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
 import android.util.Pair;
-import com.liskovsoft.appupdatechecker2.other.SettingsManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
@@ -33,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MediaServiceManager {
-    private static final String TAG = SettingsManager.class.getSimpleName();
+    private static final String TAG = MediaServiceManager.class.getSimpleName();
     private static MediaServiceManager sInstance;
     private final MediaItemService mItemService;
     private final MediaGroupService mGroupService;

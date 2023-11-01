@@ -44,7 +44,7 @@ import java.util.Map;
 /*
  * Main class to show BrowseFragment with header and rows of videos
  */
-public class BrowseFragment extends BrowseSupportFragment implements BrowseView {
+public class BrowseFragment extends BrowseSupportFragment implements BrowseView, ISearchNewKeyListener {
     private static final String TAG = BrowseFragment.class.getSimpleName();
     private static final String SELECTED_HEADER_INDEX = "SelectedHeaderIndex";
     private ArrayObjectAdapter mSectionRowAdapter;
@@ -481,5 +481,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public boolean isEmpty() {
         return mSectionFragmentFactory == null || mSectionFragmentFactory.isEmpty();
+    }
+
+    @Override
+    public void onSearchKeyUp() {
+        SearchPresenter.instance(getActivity()).startSearch(null);
     }
 }

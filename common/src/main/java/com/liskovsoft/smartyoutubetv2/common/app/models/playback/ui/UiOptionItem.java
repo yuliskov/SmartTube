@@ -1,6 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui;
 
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import android.os.Build;
+
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,11 @@ public class UiOptionItem implements OptionItem {
     private ChatReceiver mChatReceiver;
     private CommentsReceiver mCommentsReceiver;
 
+    private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
+    private final static float MAX_FRAME_RATE =
+            Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1 ? 30f : 60f;
+
     public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback) {
         return from(formats, callback, null);
     }
@@ -30,6 +38,39 @@ public class UiOptionItem implements OptionItem {
         List<OptionItem> options = new ArrayList<>();
 
         for (FormatItem format : formats) {
+            final boolean isVerticalVideo = 1.0 * format.getWidth() / format.getHeight() <= 1.0;
+            if (isVerticalVideo && format.getTitle() != null
+                    && ((String) format.getTitle()).contains(TrackSelectorUtil.CODEC_SHORT_VP9)) {
+                continue;
+            }
+            // fix crash on amlogic s905x
+            if (isVerticalVideo && format.getHeight() >= 1080
+                    && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+                continue;
+            }
+            final boolean isProperlyAspect = Math.abs(
+                    (1.0 * format.getWidth()  / format.getHeight()) - 16 / 9.0) < 0.1;
+            if (!isProperlyAspect && format.getWidth() > 1920) {
+                continue;
+            }
+            if (format.getWidth() > MAX_VIDEO_WIDTH) {
+                continue;
+            }
+            if (format.getFrameRate() > MAX_FRAME_RATE) {
+                continue;
+            }
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT
+                    && format.getTitle() != null
+                    && ((String) format.getTitle()).contains(TrackSelectorUtil.CODEC_SHORT_VP9)) {
+                continue;
+            }
+            if (format.getTitle() != null && ((String) format.getTitle()).contains("HDR")) {
+                continue;
+            }
+            if (format.getTitle() != null
+                    && ((String) format.getTitle()).contains(TrackSelectorUtil.CODEC_SHORT_AV1)) {
+                continue;
+            }
             options.add(from(format, callback, defaultTitle));
         }
 

@@ -159,7 +159,7 @@
     <style name="App.Theme.DarkGrey.OLED.Browse" parent="App.Theme.DarkGrey.Browse">
         <item name="brandAccentColor">@color/semi_transparent</item>
         <item name="cardSelectedBackground">@color/card_selected_background_white_grey</item>
-        <item name="appLogo">@null</item>
+        <item name="appLogo">@mipmap/app_logo_semi_red</item>
     </style>
     <style name="App.Theme.DarkGrey.OLED.Player" parent="App.Theme.DarkGrey.Player">
         <item name="cardSelectedBackground">@color/card_selected_background_white_grey</item>

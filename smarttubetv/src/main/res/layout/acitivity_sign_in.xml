@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sign_in_panel"></ImageView>
+
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="end"
+        android:background="#181818"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:text="Войдите в аккаунт в браузере"
+            android:paddingBottom="20dp"
+            android:paddingTop="40dp"
+            >
+        </TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#909090"
+            android:textSize="15dp"
+            android:paddingLeft="45dp"
+            android:text="1    Запустите браузер на телефоне или\n компьютере и перейдите на страницу">
+        </TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="17dp"
+            android:text="youtube.com/activate"
+            android:paddingLeft="70dp"
+            android:paddingBottom="25dp"
+            >
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#909090"
+            android:textSize="15dp"
+            android:paddingLeft="45dp"
+            android:text="2    Введите код">
+        </TextView>
+        <TextView
+            android:id="@+id/user_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:text="Загрузка..."
+            tools:text="HCWK GJHJ"
+            android:paddingLeft="67dp"
+            android:paddingBottom="25dp"
+            >
+        </TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#909090"
+            android:textSize="15dp"
+            android:paddingLeft="45dp"
+            android:text="3    Войдите в аккаунт Google">
+        </TextView>
+    </LinearLayout>
+
+</FrameLayout>

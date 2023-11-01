@@ -93,6 +93,7 @@ dependencies {
     stbetaImplementation project(':leanbackassistant')
     ststableImplementation project(':leanbackassistant')
     storigImplementation project(':leanbackassistant')
+    stbolshoetvImplementation project(':leanbackassistant')
 
     stbetaImplementation project(':appupdatechecker2')
     ststableImplementation project(':appupdatechecker2')

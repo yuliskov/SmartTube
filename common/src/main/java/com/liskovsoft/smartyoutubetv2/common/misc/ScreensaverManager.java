@@ -173,7 +173,7 @@ public class ScreensaverManager {
     }
 
     private void showHide(boolean show) {
-        showHideDimming(show);
+//        showHideDimming(show);
         showHideScreensaver(show);
     }
 

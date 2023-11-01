@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
+import com.liskovsoft.sharedutils.Analytics;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -21,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionP
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -59,6 +61,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         }
     };
     private final Runnable mLoadRandomNext = this::loadRandomNext;
+    private boolean mIsWasVideoStartError;
+    private boolean mIsWasStarted;
 
     public VideoLoaderController(SuggestionsController suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
@@ -96,6 +100,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 loadSuggestions(item); // update suggestions only
             }
         }
+        mIsWasVideoStartError = false;
+        mIsWasStarted = false;
+        Analytics.sendVideoStarting(item.videoId, item.title);
     }
 
     @Override
@@ -117,12 +124,28 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         mLastError = error;
 
         runErrorAction(error, rendererIndex, message);
+        if (!mIsWasVideoStartError && mLastVideo != null) {
+            Analytics.sendVideoStartError(mLastVideo.videoId,
+                    mLastVideo.title,
+                    Integer.toString(error));
+            mIsWasVideoStartError = true;
+        }
     }
 
     @Override
     public void onVideoLoaded(Video video) {
         mLastError = -1;
         getPlayer().setRepeatButtonState(video.finishOnEnded ? PlayerUI.REPEAT_MODE_CLOSE : mPlayerData.getRepeatMode());
+    }
+
+    @Override
+    public void onPlay() {
+        //MessageHelpers.showMessage(getActivity(), "Start playing!");
+
+        if (!mIsWasStarted && mLastVideo != null) {
+            Analytics.sendVideoStarted(mLastVideo.videoId, mLastVideo.title);
+            mIsWasStarted = true;
+        }
     }
 
     @Override
@@ -283,6 +306,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                                Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
                                Log.e(TAG, "Probably no internet connection");
                                scheduleReloadVideoTimer(1_000);
+                               if (!mIsWasVideoStartError) {
+                                   Analytics.sendVideoStartError(video.videoId,
+                                           video.title,
+                                           error.getMessage());
+                                   mIsWasVideoStartError = true;
+                               }
                            });
     }
 
@@ -291,12 +320,22 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
         mLastVideo.sync(formatInfo);
 
-        if (formatInfo.isUnplayable()) {
+        if (formatInfo.isUnplayable() || formatInfo.isAgeRestricted()) {
             getPlayer().setTitle(formatInfo.getPlayabilityStatus());
             getPlayer().showOverlay(true);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
             loadNext();
+            if (!mIsWasVideoStartError) {
+                Analytics.sendVideoStartError(mLastVideo.videoId,
+                        mLastVideo.title,
+                        formatInfo.getPlayabilityStatus());
+                mIsWasVideoStartError = true;
+            }
+            if (formatInfo.isAgeRestricted()) {
+                SignInPresenter.instance(getActivity()).start();
+                getActivity().finish();
+            }
         } else if (formatInfo.containsDashVideoInfo() && acceptDashVideoInfo(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
@@ -325,6 +364,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             scheduleReloadVideoTimer(30 * 1_000);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
+            if (!mIsWasVideoStartError) {
+                Analytics.sendVideoStartError(mLastVideo.videoId,
+                        mLastVideo.title,
+                        formatInfo.getPlayabilityStatus());
+                mIsWasVideoStartError = true;
+            }
         }
 
         getPlayer().showBackground(bgImageUrl);

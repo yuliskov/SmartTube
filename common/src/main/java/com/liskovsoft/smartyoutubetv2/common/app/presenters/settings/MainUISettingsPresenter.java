@@ -34,20 +34,17 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
         appendColorScheme(settingsPresenter);
-        appendCardStyle(settingsPresenter);
-        appendThumbQuality(settingsPresenter);
+//        appendCardsStyle(settingsPresenter);
         //appendCardTitleLines(settingsPresenter);
-        if (Build.VERSION.SDK_INT > 19) {
-            appendCardTextScrollSpeed(settingsPresenter);
-        }
-        appendChannelSortingCategory(settingsPresenter);
-        appendPlaylistsCategoryStyle(settingsPresenter);
+//        appendCardTextScrollSpeed(settingsPresenter);
+//        appendChannelSortingCategory(settingsPresenter);
+//        appendPlaylistsCategoryStyle(settingsPresenter);
         appendScaleUI(settingsPresenter);
         if (Build.VERSION.SDK_INT > 19) {
             appendVideoGridScale(settingsPresenter);
         }
-        //appendContextMenuItemsCategory(settingsPresenter);
-        appendMiscCategory(settingsPresenter);
+//        appendContextMenuItemsCategory(settingsPresenter);
+//        appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
             if (mRestartApp) {

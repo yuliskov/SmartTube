@@ -157,7 +157,7 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
 
             DebugInfoMediaCodecVideoRenderer videoRenderer =
                     new DebugInfoMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
-                        playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
+                            playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
 
             videoRenderer.enableSetOutputSurfaceWorkaround(true); // Force enable?
 

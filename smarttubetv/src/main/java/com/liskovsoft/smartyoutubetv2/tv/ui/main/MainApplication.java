@@ -1,6 +1,10 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
+import android.os.Build;
+
 import androidx.multidex.MultiDexApplication;
+
+import com.liskovsoft.sharedutils.Analytics;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AddDeviceView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
@@ -22,6 +26,10 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.webbrowser.WebBrowserActivity;
 
+import org.conscrypt.Conscrypt;
+
+import java.security.Security;
+
 public class MainApplication extends MultiDexApplication { // fix: Didn't find class "com.google.firebase.provider.FirebaseInitProvider"
     static {
         // fix youtube bandwidth throttling (best - false)???
@@ -39,12 +47,12 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     public void onCreate() {
         super.onCreate();
 
-        // Android 4 SponsorBlock fix???
-        // https://android-review.googlesource.com/c/platform/external/conscrypt/+/89408/
-        //if (Build.VERSION.SDK_INT == 19) {
-        //    Security.insertProviderAt(Conscrypt.newProvider(), 1);
-        //}
+        // fix for https://android-review.googlesource.com/c/platform/external/conscrypt/+/89408/
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            Security.insertProviderAt(Conscrypt.newProvider(), 1);
+        }
 
+        Analytics.init(getApplicationContext());
         setupViewManager();
     }
 

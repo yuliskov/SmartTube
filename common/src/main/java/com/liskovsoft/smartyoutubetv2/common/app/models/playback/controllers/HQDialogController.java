@@ -51,8 +51,8 @@ public class HQDialogController extends PlayerEventListenerHelper {
         addQualityCategories();
         addVideoBufferCategory();
         addPresetsCategory();
-        addAudioLanguage();
-        addAudioDelayCategory();
+        //addAudioLanguage();
+        //addAudioDelayCategory();
         //addBackgroundPlaybackCategory();
 
         appendOptions(mCategoriesInt);

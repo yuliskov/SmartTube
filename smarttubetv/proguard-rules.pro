@@ -16,8 +16,6 @@
 #   public *;
 #}
 
-# Begin Enable minification
-
 #-ignorewarnings
 -dontobfuscate
 
@@ -27,6 +25,8 @@
 #-keepattributes InnerClasses
 
 -keep public class com.liskovsoft.youtubeapi.** { *; }
+-keep class org.mozilla.** { *; }
+
 #-keep class okhttp3.**{*;}
 #-keep interface okhttp3.** { *; }
 
@@ -34,5 +34,3 @@
 -dontwarn com.jayway.jsonpath.**
 -dontwarn retrofit2.**
 -dontwarn org.slf4j.**
-
-# End Enable minification

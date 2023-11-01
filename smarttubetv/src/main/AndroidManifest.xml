@@ -296,6 +296,12 @@
             android:screenOrientation="landscape"/>
 
         <!-- END Launchers -->
+        <provider
+            android:name=".UrlProvider"
+            android:authorities="com.liskovsoft.smartyoutubetv2.tv.url_provider"
+            android:enabled="true"
+            android:exported="true"
+            />
     </application>
 
 </manifest>

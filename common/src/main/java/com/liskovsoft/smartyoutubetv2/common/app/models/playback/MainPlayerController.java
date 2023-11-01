@@ -50,18 +50,18 @@ public class MainPlayerController implements PlayerEventListener {
         VideoLoaderController videoLoader = new VideoLoaderController(suggestionsLoader);
         PlayerUIController uiManager = new PlayerUIController(videoLoader);
         VideoStateController stateUpdater = new VideoStateController();
-        ContentBlockController contentBlockManager = new ContentBlockController();
+        //ContentBlockController contentBlockManager = new ContentBlockController();
         ChatController liveChatManager = new ChatController();
         CommentsController commentsManager = new CommentsController();
 
-        RemoteController commandManager = new RemoteController(context, suggestionsLoader, videoLoader);
+        //RemoteController commandManager = new RemoteController(context, suggestionsLoader, videoLoader);
         HQDialogController hqDialogManager = new HQDialogController(stateUpdater);
         AutoFrameRateController autoFrameRateManager = new AutoFrameRateController(hqDialogManager, stateUpdater);
 
         suggestionsLoader.addMetadataListener(stateUpdater);
         suggestionsLoader.addMetadataListener(uiManager);
         suggestionsLoader.addMetadataListener(videoLoader);
-        suggestionsLoader.addMetadataListener(contentBlockManager);
+        //suggestionsLoader.addMetadataListener(contentBlockManager);
         suggestionsLoader.addMetadataListener(liveChatManager);
         suggestionsLoader.addMetadataListener(commentsManager);
 
@@ -72,8 +72,8 @@ public class MainPlayerController implements PlayerEventListener {
         mEventListeners.add(stateUpdater);
         mEventListeners.add(suggestionsLoader);
         mEventListeners.add(videoLoader);
-        mEventListeners.add(commandManager);
-        mEventListeners.add(contentBlockManager);
+//        mEventListeners.add(commandManager);
+//        mEventListeners.add(contentBlockManager);
         mEventListeners.add(liveChatManager);
         mEventListeners.add(commentsManager);
     }

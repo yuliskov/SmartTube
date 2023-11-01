@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter.vineyard;
 
+import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.core.content.ContextCompat;
@@ -15,6 +16,7 @@ public class TagPresenter extends LongClickPresenter {
     private static int sDefaultTextColor;
     private static int sSelectedBackgroundColor;
     private static int sSelectedTextColor;
+    private int mNextFocusUpId = 0;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
@@ -38,6 +40,7 @@ public class TagPresenter extends LongClickPresenter {
 
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
+        cardView.setNextFocusUpId(mNextFocusUpId);
         updateCardBackgroundColor(cardView, false);
         updateCardTextColor(cardView, false);
         return new ViewHolder(cardView);
@@ -79,4 +82,7 @@ public class TagPresenter extends LongClickPresenter {
 
     }
 
+    public void setNextFocusUpId(int nextFocusUpId) {
+        mNextFocusUpId = nextFocusUpId;
+    }
 }

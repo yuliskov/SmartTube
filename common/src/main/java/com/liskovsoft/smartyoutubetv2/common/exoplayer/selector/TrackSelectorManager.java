@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
+import android.os.Build;
 import android.util.Pair;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.TrackGroup;
@@ -39,6 +40,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     public static final int RENDERER_INDEX_AUDIO = 1;
     public static final int RENDERER_INDEX_SUBTITLE = 2;
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
+    private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
+    private final static float MAX_FRAME_RATE =
+            Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1 ? 30f : 60f;
     private static final String DEFAULT_LANGUAGE = "en";
     private final Map<String, Integer> mBlacklist = new HashMap<>();
 
@@ -512,6 +517,33 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
                 for (MediaTrack mediaTrack : trackGroup) {
                     if (mediaTrack == null) {
+                        continue;
+                    }
+                    final boolean isVerticalVideo = 1.0 * mediaTrack.format.width / mediaTrack.format.height <= 1.0;
+                    if (isVerticalVideo && mediaTrack.format.codecs != null && mediaTrack.format.codecs.startsWith(TrackSelectorUtil.CODEC_SHORT_VP9)) {
+                        continue;
+                    }
+                    // fix crash on amlogic s905x
+                    if (isVerticalVideo && mediaTrack.format.height >= 1080
+                            && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+                        continue;
+                    }
+                    final boolean isProperlyAspect = Math.abs(
+                            (1.0 * mediaTrack.format.width  / mediaTrack.format.height) - 16 / 9.0) < 0.1;
+                    if (!isProperlyAspect && mediaTrack.format.width > 1920) {
+                        continue;
+                    }
+                    if (mediaTrack.format.width > MAX_VIDEO_WIDTH) {
+                        continue;
+                    }
+                    if (mediaTrack.format.frameRate > MAX_FRAME_RATE) {
+                        continue;
+                    }
+                    if (TrackSelectorUtil.isHdrCodec(mediaTrack.format.codecs)) {
+                        continue;
+                    }
+                    if (mediaTrack.format.codecs != null
+                            && mediaTrack.format.codecs.startsWith(TrackSelectorUtil.CODEC_SHORT_AV1)) {
                         continue;
                     }
 

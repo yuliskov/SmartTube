@@ -57,21 +57,21 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
-        appendBootToSection(settingsPresenter);
+//        appendBootToSection(settingsPresenter);
         appendEnabledSections(settingsPresenter);
-        appendContextMenuItemsCategory(settingsPresenter);
-        appendVariousButtonsCategory(settingsPresenter);
-        appendAppExitCategory(settingsPresenter);
-        appendBackgroundPlaybackCategory(settingsPresenter);
+//        appendContextMenuItemsCategory(settingsPresenter);
+//        appendVariousButtonsCategory(settingsPresenter);
+//        appendAppExitCategory(settingsPresenter);
+//        appendBackgroundPlaybackCategory(settingsPresenter);
         //appendBackgroundPlaybackActivationCategory(settingsPresenter);
-        appendScreensaverDimmingCategory(settingsPresenter);
-        appendScreensaverTimoutCategory(settingsPresenter);
-        appendTimeFormatCategory(settingsPresenter);
-        appendKeyRemappingCategory(settingsPresenter);
-        appendAppBackupCategory(settingsPresenter);
-        appendInternetCensorship(settingsPresenter);
-        appendHistoryCategory(settingsPresenter);
-        appendMiscCategory(settingsPresenter);
+//        appendScreensaverDimmingCategory(settingsPresenter);
+//        appendScreensaverTimoutCategory(settingsPresenter);
+//        appendTimeFormatCategory(settingsPresenter);
+//        appendKeyRemappingCategory(settingsPresenter);
+//        appendAppBackupCategory(settingsPresenter);
+//        appendInternetCensorship(settingsPresenter);
+//        appendHistoryCategory(settingsPresenter);
+//        appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_general), () -> {
             if (mRestartApp) {

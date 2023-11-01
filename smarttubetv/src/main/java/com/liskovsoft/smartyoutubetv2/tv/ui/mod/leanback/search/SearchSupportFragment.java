@@ -1,6 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.search;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -8,6 +11,9 @@ import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.text.Editable;
+import android.text.Editable;
+import android.text.Selection;
+import android.text.TextWatcher;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,7 +23,9 @@ import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.CompletionInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+
 import androidx.fragment.app.Fragment;
 import androidx.leanback.R;
 import androidx.leanback.app.BrowseSupportFragment;
@@ -43,8 +51,6 @@ import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 /**
  * A fragment to handle searches. An application will supply an implementation
@@ -227,6 +233,7 @@ public class SearchSupportFragment extends Fragment {
     private boolean mIsKeyboardAutoShowEnabled;
 
     private SpeechRecognizer mSpeechRecognizer;
+    private boolean mScrollToEndAfterTextChanged;
 
     int mStatus;
     boolean mAutoStartRecognition = false; // MOD: don't start search immediately
@@ -318,6 +325,9 @@ public class SearchSupportFragment extends Fragment {
             public void onSearchQuerySubmit(String query) {
                 if (DEBUG) Log.v(TAG, String.format("onSearchQuerySubmit %s", query));
                 submitQuery(query);
+                mScrollToEndAfterTextChanged = true;
+                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(mSearchBar.getWindowToken(), 0);
             }
 
             @Override
@@ -344,7 +354,7 @@ public class SearchSupportFragment extends Fragment {
             }
 
             if (mIsKeyboardAutoShowEnabled && focused) {
-                Helpers.showKeyboard(v.getContext());
+                Helpers.showKeyboardAlt(v.getContext(), v);
             }
         });
         mSearchTextEditor.addTextChangedListener(new TextWatcher() {
@@ -360,7 +370,10 @@ public class SearchSupportFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Utils.enableScreensaver(getActivity(), true);
+                if (mScrollToEndAfterTextChanged) {
+                    Selection.setSelection(mSearchTextEditor.getText(), mSearchTextEditor.length());
+                    mScrollToEndAfterTextChanged = false;
+                }
             }
         });
         KeyHelpers.fixEnterKey(mSearchTextEditor);
@@ -386,18 +399,21 @@ public class SearchSupportFragment extends Fragment {
         mSearchSettingsOrbView.setOnOrbClickedListener(v -> onSearchSettingsClicked());
 
         mSpeechOrbView = mSearchBar.findViewById(R.id.lb_search_bar_speech_orb);
-        OnFocusChangeListener previousListener = mSpeechOrbView.getOnFocusChangeListener();
-        mSpeechOrbView.setOnFocusChangeListener((v, focused) -> {
-            if (!focused) {
-                stopSpeechService();
-            }
-
-            // Fix: Enable edit field dynamic style: white/grey, listening/non listening
-            if (previousListener != null) {
-                previousListener.onFocusChange(v, focused);
+        mSpeechOrbView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                mSpeechOrbView.showListening();
+                mSpeechOrbView.callOnClick();
+            } else {
+                mSpeechOrbView.showNotListening();
+                if (mSpeechRecognizer != null) {
+                    mSpeechRecognizer.stopListening();
+                }
             }
         });
-
+        mSpeechOrbView.setClickable(false);
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N_MR1) {
+            mSpeechOrbView.setVisibility(View.INVISIBLE);
+        }
         // End MOD
 
         readArguments(getArguments());
@@ -462,8 +478,6 @@ public class SearchSupportFragment extends Fragment {
         // VerticalGridView should not be focusable (see b/26894680 for details).
         list.setFocusable(false);
         list.setFocusableInTouchMode(false);
-        // MOD: disable scroll
-        //list.setFocusScrollStrategy(VerticalGridView.FOCUS_SCROLL_ITEM);
     }
 
     @Override
@@ -481,7 +495,7 @@ public class SearchSupportFragment extends Fragment {
             startRecognitionInt();
         } else {
             // Ensure search bar state consistency when using external recognizer
-            mSearchBar.stopRecognition();
+//            mSearchBar.stopRecognition();
         }
     }
 
@@ -489,6 +503,12 @@ public class SearchSupportFragment extends Fragment {
     public void onPause() {
         releaseRecognizer();
         super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        releaseRecognizer();
+        super.onStop();
     }
 
     @Override
@@ -797,6 +817,12 @@ public class SearchSupportFragment extends Fragment {
         mIsKeyboardAutoShowEnabled = enable;
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.d(TAG, "onHiddenChanged: ");
+    }
+
     protected void showListening() {
         if (mSpeechOrbView != null) {
             mSpeechOrbView.showListening();
@@ -920,6 +946,13 @@ public class SearchSupportFragment extends Fragment {
         mSearchBar.setSearchQuery(query);
     }
 
+    public void pressKeySearch() {
+        if (mSearchBar.hasFocus() && !mSearchBar.isRecognizing()) {
+            mSpeechOrbView.showListening();
+            mSpeechOrbView.callOnClick();
+        }
+    }
+
     protected void stopSpeechService() {
         // NOP
     }
@@ -932,5 +965,9 @@ public class SearchSupportFragment extends Fragment {
             mQuery = query;
             mSubmit = submit;
         }
+    }
+
+    protected int getSearchTextEditorId() {
+        return mSearchTextEditor != null ? mSearchTextEditor.getId() : 0;
     }
 }

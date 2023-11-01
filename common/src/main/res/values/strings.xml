@@ -606,4 +606,5 @@
     <string name="enter_account_password">Enter account password</string>
     <string name="show_connect_messages">Show connect messages</string>
     <string name="prefer_avc_over_vp9_desc">WARN: 1080p maximum</string>
+    <string name="cancel">Cancel</string>
 </resources>
