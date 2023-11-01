@@ -584,4 +584,22 @@
   <string name="msg_player_error_subtitle_renderer">A kiválasztott FELIRAT formátum nem támogatott.\nPróbáljon másikat választani a lejátszó CC gombjának hosszan lenyomásával.\nHa ez nem segít, próbálja meg újraindítani az eszközt.</string>
   <string name="msg_player_error_audio_renderer">A kiválasztott HANGSÁV formátum nem támogatott.\nPróbáljon másikat választani a lejátszó HQ gombjának lenyomásával.\nHa ez nem segít, próbálja meg újraindítani az eszközt.</string>
   <string name="msg_player_error_video_renderer">A kiválasztott VIDEÓ formátum nem támogatott.\nPróbáljon másikat választani a lejátszó HQ gombjának lenyomásával.\nHa ez nem segít, próbálja meg újraindítani az eszközt.</string>
+  <string name="share_qr_link">Megosztás QR kóddal</string>
+  <string name="auto_history">Automatikus (a fiókbeállítások használata)</string>
+  <string name="remember_position_subscriptions">Emlékezzen az csatornák utoljára megtekintett pozíciójára</string>
+  <string name="msg_player_unknown_error">Ismeretlen hiba</string>
+  <string name="header_notifications">Értesítések</string>
+  <string name="disable_search_history">Keresési előzmények tiltása</string>
+  <string name="unlock_high_bitrate_formats">HD 1080p vp9 videó formátumok feloldása</string>
+  <string name="unlock_high_bitrate_audio_formats">HD mp4a audió formátumok feloldása</string>
+  <string name="color_scheme_blue">Kék</string>
+  <string name="color_scheme_dark_blue">Sötétkék</string>
+  <string name="player_speed_per_channel">Minden csatornánként</string>
+  <string name="disable_popular_searches">Népszerű keresési lekérdezések letiltása</string>
+  <string name="protect_account_with_password">Védje ezt a fiókot jelszóval</string>
+  <string name="multi_profiles">Használjon külön beállításokat minden fiókhoz</string>
+  <string name="enter_account_password">Adja meg a fiók jelszavát</string>
+  <string name="show_connect_messages">Csatlakozási üzenetek megjelenítése</string>
+  <string name="prefer_avc_over_vp9_desc">FIgyelem!: Maximum 1080p</string>
+  <string name="news_row_name">Hírek</string>
 </resources>
