@@ -592,4 +592,12 @@
   <string name="unlock_high_bitrate_formats">Débloquez les formats vp9 1080p à haut débit</string>
   <string name="unlock_high_bitrate_audio_formats">Débloquez les formats mp4a à haut débit</string>
   <string name="color_scheme_blue">Bleu</string>
+  <string name="color_scheme_dark_blue">Bleu foncé</string>
+  <string name="player_speed_per_channel">Pour chaque canal</string>
+  <string name="disable_popular_searches">Désactiver les requêtes de recherche populaires</string>
+  <string name="multi_profiles">Utiliser des paramètres distincts pour chaque compte</string>
+  <string name="protect_account_with_password">Protégez ce compte avec un mot de passe</string>
+  <string name="enter_account_password">Entrez le mot de passe du compte</string>
+  <string name="show_connect_messages">Afficher les messages de connexion</string>
+  <string name="prefer_avc_over_vp9_desc">ATT: 1080p maximum</string>
 </resources>
