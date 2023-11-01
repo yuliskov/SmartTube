@@ -95,7 +95,7 @@
     <string name="disable_update_check">Disabilita controllo aggiornamenti</string>
     <string name="show_again">Mostra di nuovo</string>
     <string name="check_updates_auto">Notifica aggiornamento</string>
-    <string name="select_account_on_boot">Seleziona all\'avvio</string>
+    <string name="select_account_on_boot">Mostra la selezione dell\'account all\'avvio</string>
     <string name="player_other">Varie</string>
     <string name="player_full_date">Data precisa nella descrizione</string>
     <string name="open_channel">Apri canale</string>
@@ -157,6 +157,7 @@
     <string name="card_title_lines_num">Numero righe titoli cartoline</string>
     <string name="card_auto_scrolled_title">Scorrimento automatico titoli tagliati</string>
     <string name="share_link">Condividi link</string>
+    <string name="share_qr_link">Condividi link (codice QR)</string>
     <string name="subscribe_to_channel">Iscriviti al canale</string>
     <string name="wait_data_loading">Attendi il caricamento dei dati…</string>
     <string name="auto_frame_rate_pause">Frequenza fotogrammi automatica (pausa durante il passaggio)</string>
@@ -247,7 +248,7 @@
     <string name="uploads_row_name">Caricamenti</string>
     <string name="playlists_row_name">Playlist create</string>
     <string name="popular_uploads_row_name">Caricamenti popolari</string>
-    <string name="breaking_news_row_name">Ultime notizie</string>
+    <string name="breaking_news_row_name">Notizie</string>
     <string name="covid_news_row_name">Notizie su COVID-19</string>
     <string name="enable_voice_search">Abilita ricerca vocale (supporto firmware necessario)</string>
     <string name="subscribe_unsubscribe_from_channel">Iscriviti/Disiscriviti dal canale</string>
@@ -601,4 +602,7 @@
     <string name="disable_popular_searches">Disabilita le query di ricerca più popolari</string>
     <string name="multi_profiles">Usa impostazioni separate per ciascun account</string>
     <string name="protect_account_with_password">Proteggi questo account con una password</string>
+    <string name="enter_account_password">Inserisci la password dell\'account</string>
+    <string name="show_connect_messages">Mostra messaggi di connessione</string>
+    <string name="prefer_avc_over_vp9_desc">ATTENZIONE: massimo 1080p</string>
 </resources>
