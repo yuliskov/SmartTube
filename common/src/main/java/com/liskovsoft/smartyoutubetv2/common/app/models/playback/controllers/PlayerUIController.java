@@ -848,10 +848,14 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
     private void reorderSubtitles(List<FormatItem> subtitleFormats) {
         // Move last format to the top
-        int index = subtitleFormats.indexOf(mPlayerData.getLastSubtitleFormat());
-        if (index != -1) {
-            FormatItem formatItem = subtitleFormats.remove(index);
-            subtitleFormats.add(subtitleFormats.get(0).isDefault() ? 1 : 0, formatItem);
+        int index = 0;
+        int position = subtitleFormats.get(0).isDefault() ? 1 : 0;
+        while (index != -1) {
+            index = subtitleFormats.indexOf(mPlayerData.getLastSubtitleFormat());
+            if (index != -1) {
+                FormatItem formatItem = subtitleFormats.remove(index);
+                subtitleFormats.add(position++, formatItem);
+            }
         }
     }
 }
