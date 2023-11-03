@@ -598,4 +598,5 @@
     <string name="show_connect_messages">Сповіщення про підключені пристрої</string>
     <string name="prefer_avc_over_vp9_desc">ПОПЕРЕДЖЕННЯ: 1080p максімум</string>
     <string name="play_next">Відтворити наступним</string>
+    <string name="hide_watched_from_subscriptions">Приховувати переглянуті відео з Підписок</string>
 </resources>

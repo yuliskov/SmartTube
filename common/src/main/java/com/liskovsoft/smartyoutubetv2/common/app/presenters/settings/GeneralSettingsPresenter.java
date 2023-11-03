@@ -489,6 +489,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.rememberSubscriptionsPosition(option.isSelected()),
                 mGeneralData.isRememberSubscriptionsPositionEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_watched_from_subscriptions),
+                option -> mGeneralData.hideWatchedFromSubscriptions(option.isSelected()),
+                mGeneralData.isHideWatchedFromSubscriptionsEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_everywhere),
                 option -> mGeneralData.hideShortsEverywhere(option.isSelected()),
                 mGeneralData.isHideShortsEverywhereEnabled()));
