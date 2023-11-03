@@ -45,7 +45,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
         return sInstance;
     }
 
-    private void unhold() {
+    public static void unhold() {
         sInstance = null;
     }
 
@@ -103,7 +103,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
         //}, mUpdateChecker.isUpdateCheckEnabled()));
 
         mSettingsPresenter.setOnDone(getOnDone());
-        mSettingsPresenter.showDialog(String.format("%s %s", getContext().getString(R.string.app_name), versionName), this::unhold);
+        mSettingsPresenter.showDialog(String.format("%s %s", getContext().getString(R.string.app_name), versionName), AppUpdatePresenter::unhold);
     }
 
     private void pinUpdateSection(String versionName, List<String> changelog, String apkPath) {
