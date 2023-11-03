@@ -96,7 +96,7 @@
   <string name="show_again">Pokaż ponownie</string>
   <string name="check_updates_auto">Powiadom o nowej wersji</string>
   <string name="select_account_on_boot">Wybierz przy starcie</string>
-  <string name="player_other">Różne</string>
+  <string name="player_other">Pozostałe</string>
   <string name="player_full_date">Dokładna data w opisie</string>
   <string name="open_channel">Otwórz kanał</string>
   <string name="open_playlist">Otwórz listę odtwarzania</string>
@@ -135,7 +135,7 @@
   <string name="player_show_remaining_time">Pokaż pozostały czas</string>
   <string name="player_show_ending_time">Pokaż czas zakończenia</string>
   <string name="open_channel_uploads">Przesyłanie z otwartego kanału</string>
-  <string name="app_exit_shortcut">Wyjdź z aplikacji</string>
+  <string name="app_exit_shortcut">Zamykanie aplikacji</string>
   <string name="app_exit_none">Nie wychodź</string>
   <string name="app_double_back_exit">Dwa razy wstecz</string>
   <string name="app_single_back_exit">Raz wstecz</string>
@@ -469,12 +469,12 @@
   <string name="open_comments">Otwórz komentarze</string>
   <string name="place_chat_left">Umieść czat po lewej stronie</string>
   <string name="use_alt_speech_recognizer">Alt rozpoznawanie mowy</string>
-  <string name="time_format">Tryb czasu</string>
+  <string name="time_format">Format czasu</string>
   <string name="time_format_24">24 godziny</string>
   <string name="time_format_12">12 godzin (AM/PM)</string>
   <string name="use_alt_speech_recognizer_desc">Poważny błąd. Używaj go tylko wtedy, gdy masz problemy z domyślnym aparatem rozpoznawania.</string>
   <string name="speech_recognizer">Rozpoznawanie mowy</string>
-  <string name="speech_recognizer_system">Systemowy (preferowane)</string>
+  <string name="speech_recognizer_system">Systemowe (preferowane)</string>
   <string name="speech_recognizer_external_1">Zewnętrzny 1 (dużo błędów, aby działał potrzebujesz wyłączyć dostęp do mikrofonu)</string>
   <string name="speech_recognizer_external_2">Zewnętrzny 2 (dużo błędów)</string>
   <string name="real_channel_icon">Pokaż prawdziwą ikonę na przycisku kanału</string>
@@ -547,7 +547,7 @@
   <string name="okhttp_desc">Protokół sieciowy jest jednym z wolniejszych, ale jest stabilny</string>
   <string name="select_channel_section">Otwórz odpowiednią sekcję kiedy aplikacja jest uruchamiana z ATV Channels</string>
   <string name="enable_voice_search_desc">Oficjalna aplikacja będzie zastąpiona aplikacją Bridge, to pomoże przenieść wyszukiwane zapytania do naszej aplikacji</string>
-  <string name="enable_master_password">Odblokuj hasło główne</string>
+  <string name="enable_master_password">Włącz hasło główne</string>
   <string name="enter_master_password">Wpisz hasło główne</string>
   <string name="disable_stream_buffer">Zablokuj bufor na transmisjach</string>
   <string name="disable_stream_buffer_desc">Poprawka dla sytuacji gdy transmisja zaczęła się opóźniać. Uwaga może zacząć przerywać transmisję</string>
@@ -599,10 +599,11 @@
   <string name="color_scheme_dark_blue">Ciemnoniebieski</string>
   <string name="player_speed_per_channel">Na każdy kanał</string>
   <string name="disable_popular_searches">Wyłącz popularne zapytania w wyszukiwaniu</string>
-  <string name="multi_profiles">Użyj oddzielnych ustawień dla każdego konta</string>
+  <string name="multi_profiles">Używaj oddzielnych ustawień dla każdego konta</string>
   <string name="protect_account_with_password">Chroń to konto hasłem</string>
   <string name="enter_account_password">Wprowadź hasło do konta</string>
   <string name="show_connect_messages">Pokaż wiadomości połączenia</string>
   <string name="prefer_avc_over_vp9_desc">OSTRZEŻENIE: 1080p maksymalnie</string>
   <string name="play_next">Odtwórz następnie</string>
+  <string name="hide_watched_from_subscriptions">Ukryj obejrzane filmy z Subskrybcji</string>
 </resources>
