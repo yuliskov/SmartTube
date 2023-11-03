@@ -486,6 +486,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void pinItem(Video item) {
+        if (getView() == null) {
+            return;
+        }
+
         mGeneralData.addPinnedItem(item);
         mGridMapping.put(item.hashCode(), createPinnedAction(item));
 
@@ -496,6 +500,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void pinItem(String title, int resId, ErrorFragmentData data) {
+        if (getView() == null) {
+            return;
+        }
+
         BrowseSection newSection = new BrowseSection(title.hashCode(), title, BrowseSection.TYPE_ERROR, resId, false, data);
         Helpers.removeIf(mErrorSections, section -> section.getId() == newSection.getId());
         mErrorSections.add(newSection);

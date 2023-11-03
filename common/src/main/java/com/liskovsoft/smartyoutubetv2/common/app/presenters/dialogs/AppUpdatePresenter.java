@@ -45,7 +45,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
         return sInstance;
     }
 
-    public void unhold() {
+    private void unhold() {
         sInstance = null;
     }
 

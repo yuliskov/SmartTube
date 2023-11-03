@@ -25,9 +25,9 @@ public class BootDialogPresenter extends BasePresenter<Void> {
         return sInstance;
     }
 
-    public void unhold() {
-        sInstance = null;
-    }
+    //public void unhold() {
+    //    sInstance = null;
+    //}
 
     public void start() {
         startUpdatePresenter();
@@ -37,7 +37,7 @@ public class BootDialogPresenter extends BasePresenter<Void> {
         AppUpdatePresenter updatePresenter = AppUpdatePresenter.instance(getContext());
         //updatePresenter.setOnDone(this::startBridgePresenter);
         updatePresenter.start(false);
-        updatePresenter.unhold();
+        //updatePresenter.unhold();
     }
 
     //private void startBackupPresenter() {

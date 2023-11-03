@@ -15,7 +15,6 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -175,6 +174,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             List<FormatItem> subtitleFormats = getPlayer().getSubtitleFormats();
             List<FormatItem> subtitleOrigFormats = Helpers.filter(subtitleFormats,
                     value -> value.isDefault() || !SubtitleTrack.isAuto(value.getLanguage()));
+            reorderSubtitles(subtitleOrigFormats);
             settingsPresenter.appendRadioCategory(subtitlesOrigCategoryTitle,
                     UiOptionItem.from(subtitleOrigFormats,
                             option -> {
@@ -189,6 +189,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             List<FormatItem> subtitleFormats = getPlayer().getSubtitleFormats();
             List<FormatItem> subtitleAutoFormats = Helpers.filter(subtitleFormats,
                     value -> value.isDefault() || SubtitleTrack.isAuto(value.getLanguage()));
+            reorderSubtitles(subtitleAutoFormats);
             settingsPresenter.appendRadioCategory(subtitlesAutoCategoryTitle,
                     UiOptionItem.from(subtitleAutoFormats,
                             option -> {
@@ -843,5 +844,14 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         }
 
         getPlayer().setButtonState(R.id.action_subscribe, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON: PlayerUI.BUTTON_OFF);
+    }
+
+    private void reorderSubtitles(List<FormatItem> subtitleFormats) {
+        // Move last format to the top
+        int index = subtitleFormats.indexOf(mPlayerData.getLastSubtitleFormat());
+        if (index != -1) {
+            FormatItem formatItem = subtitleFormats.remove(index);
+            subtitleFormats.add(subtitleFormats.get(0).isDefault() ? 1 : 0, formatItem);
+        }
     }
 }

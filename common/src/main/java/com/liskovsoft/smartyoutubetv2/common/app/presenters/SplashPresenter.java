@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
@@ -70,9 +71,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         //runRefreshCachePeriodicTask();
         showAccountSelectionIfNeeded();
 
-        checkMasterPassword(() -> applyNewIntent(getView().getNewIntent()));
+        Intent intent = getView().getNewIntent(); // get intent before view will be destroyed
+        checkMasterPassword(() -> applyNewIntent(intent));
 
         checkAccountPassword();
+        showBootDialogs();
     }
 
     private void applyRunPerInstanceTasks() {
@@ -108,6 +111,13 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             PlaybackPresenter.instance(getContext()).forceFinish();
             BrowsePresenter.instance(getContext()).updateSections();
         }
+    }
+
+    private void showBootDialogs() {
+        BootDialogPresenter updatePresenter = BootDialogPresenter.instance(getContext());
+        updatePresenter.start();
+        //updatePresenter.unhold();
+        Utils.updateRemoteControlService(getContext());
     }
 
     private void runRemoteControlFakeTask() {
