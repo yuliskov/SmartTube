@@ -850,12 +850,13 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         // Move last format to the top
         int index = 0;
         int position = subtitleFormats.get(0).isDefault() ? 1 : 0;
+        List<FormatItem> topFormats = new ArrayList<>();
         while (index != -1) {
             index = subtitleFormats.indexOf(mPlayerData.getLastSubtitleFormat());
             if (index != -1) {
-                FormatItem formatItem = subtitleFormats.remove(index);
-                subtitleFormats.add(position++, formatItem);
+                topFormats.add(subtitleFormats.remove(index));
             }
         }
+        subtitleFormats.addAll(position, topFormats);
     }
 }
