@@ -188,7 +188,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         settingsPresenter.appendSingleButton(UiOptionItem.from(subtitlesAutoCategoryTitle, optionItem -> {
             List<FormatItem> subtitleFormats = getPlayer().getSubtitleFormats();
             List<FormatItem> subtitleAutoFormats = Helpers.filter(subtitleFormats,
-                    value -> value.isDefault() || SubtitleTrack.isAuto(value.getLanguage()) || !SubtitleTrack.isAuto(value.getLanguage()));
+                    value -> value.isDefault() || SubtitleTrack.isAuto(value.getLanguage()));
             reorderSubtitles(subtitleAutoFormats);
             settingsPresenter.appendRadioCategory(subtitlesAutoCategoryTitle,
                     UiOptionItem.from(subtitleAutoFormats,
