@@ -331,12 +331,15 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
                 group.setTitle(title);
                 group.setId(id);
                 getPlayer().removeSuggestions(group);
-            } else if (action == VideoMenuCallback.ACTION_ADD_TO_QUEUE) {
+            } else if (action == VideoMenuCallback.ACTION_ADD_TO_QUEUE || action == VideoMenuCallback.ACTION_PLAY_NEXT) {
                 Video newItem = videoItem.copy();
                 VideoGroup group = VideoGroup.from(newItem, 0);
                 group.setTitle(title);
                 group.setId(id);
                 newItem.setGroup(group);
+                if (action == VideoMenuCallback.ACTION_PLAY_NEXT) {
+                    group.setAction(VideoGroup.ACTION_PREPEND);
+                }
                 getPlayer().updateSuggestions(group);
             }
         });

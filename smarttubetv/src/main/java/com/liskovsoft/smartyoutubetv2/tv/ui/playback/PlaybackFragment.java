@@ -1369,7 +1369,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         } else {
             freeze(true);
 
-            existingAdapter.append(group); // continue row
+            if (group.getAction() == VideoGroup.ACTION_PREPEND) {
+                existingAdapter.prepend(group);
+            } else {
+                existingAdapter.append(group); // continue row
+            }
 
             freeze(false);
         }
