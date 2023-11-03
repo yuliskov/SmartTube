@@ -15,6 +15,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -341,6 +342,10 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
                     group.setAction(VideoGroup.ACTION_PREPEND);
                 }
                 getPlayer().updateSuggestions(group);
+                Video next = Playlist.instance().getNext();
+                if (next != null) {
+                    getPlayer().setNextTitle(next.title);
+                }
             }
         });
     }
