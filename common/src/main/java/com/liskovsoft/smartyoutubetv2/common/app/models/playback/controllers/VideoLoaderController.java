@@ -47,9 +47,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
     private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
-    private final Runnable mPendingNext = () -> {
+    private final Runnable mPendingSync = () -> {
         if (getPlayer() != null) {
-            openVideoFromNext(getPlayer().getVideo(), false);
+            waitMetadataSync(getPlayer().getVideo(), false);
         }
     };
     private final Runnable mPendingRestartEngine = () -> {
@@ -161,6 +161,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
     public void loadNext() {
         Video next = mPlaylist.getNext();
+        Video current = getPlayer().getVideo();
         mLastVideo = null; // in case next video is the same as previous
 
         if (next != null) {
@@ -168,8 +169,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             openVideoInt(next);
         } else if (mSuggestionsLoader.getNext() != null) {
             openVideoInt(mSuggestionsLoader.getNext());
+        } else if (current != null && current.nextMediaItem != null) {
+            openVideoInt(Video.from(current.nextMediaItem));
         } else {
-            openVideoFromNext(getPlayer().getVideo(), true);
+            waitMetadataSync(current, true);
         }
 
         if (mPlayerTweaksData.isPlayerUiOnNextEnabled()) {
@@ -251,15 +254,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         }
     }
 
-    private void openVideoFromNext(Video current, boolean showLoadingMsg) {
+    private void waitMetadataSync(Video current, boolean showLoadingMsg) {
         if (current == null) {
             return;
         }
 
-        // Significantly improves next video loading time!
-        if (current.nextMediaItem != null) {
-            openVideoInt(Video.from(current.nextMediaItem));
-        } else if (!current.isSynced) { // Maybe there's nothing left. E.g. when casting from phone
+        if (!current.isSynced) { // Maybe there's nothing left. E.g. when casting from phone
             // Wait in a loop while suggestions have been loaded...
             if (showLoadingMsg) {
                 MessageHelpers.showMessageThrottled(getContext(), R.string.wait_data_loading);
@@ -267,7 +267,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             // Short videos next fix (suggestions aren't loaded yet)
             boolean isEnded = getPlayer() != null && Math.abs(getPlayer().getDurationMs() - getPlayer().getPositionMs()) < 100;
             if (isEnded) {
-                Utils.postDelayed(mPendingNext, 1_000);
+                Utils.postDelayed(mPendingSync, 1_000);
             }
         }
     }
@@ -376,7 +376,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private void disposeActions() {
         MediaServiceManager.instance().disposeActions();
         RxHelper.disposeActions(mFormatInfoAction, mMpdStreamAction);
-        Utils.removeCallbacks(mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
+        Utils.removeCallbacks(mReloadVideoHandler, mPendingRestartEngine, mPendingSync);
     }
 
     private void runErrorAction(int error, int rendererIndex, String message) {
