@@ -54,6 +54,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     private final Handler mHandler;
     private final MediaItemService mMediaItemManager;
     private final VideoLoaderController mVideoLoader;
+    private final SuggestionsController mSuggestionsController;
     private PlayerData mPlayerData;
     private PlayerTweaksData mPlayerTweaksData;
     private List<PlaylistInfo> mPlaylistInfos;
@@ -75,7 +76,8 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         }
     };
 
-    public PlayerUIController(VideoLoaderController videoLoader) {
+    public PlayerUIController(SuggestionsController suggestionsController, VideoLoaderController videoLoader) {
+        mSuggestionsController = suggestionsController;
         mVideoLoader = videoLoader;
         mHandler = new Handler(Looper.getMainLooper());
 
@@ -342,10 +344,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
                     group.setAction(VideoGroup.ACTION_PREPEND);
                 }
                 getPlayer().updateSuggestions(group);
-                Video next = Playlist.instance().getNext();
-                if (next != null) {
-                    getPlayer().setNextTitle(next.title);
-                }
+                getPlayer().setNextTitle(mSuggestionsController.getNext() != null ? mSuggestionsController.getNext().getTitle() : null);
             }
         });
     }

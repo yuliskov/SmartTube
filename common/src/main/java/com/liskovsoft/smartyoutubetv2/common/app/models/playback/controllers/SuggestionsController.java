@@ -220,22 +220,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         video.sync(mediaItemMetadata, PlayerData.instance(getContext()).isAbsoluteDateEnabled());
         getPlayer().setVideo(video);
 
-        getPlayer().setNextTitle(getNextTitle());
-    }
-
-    private String getNextTitle() {
-        String title = null;
-
-        Video video = getPlayer().getVideo();
-        Video nextVideo = getNext() != null && isSectionPlaylistEnabled(video) ? getNext() : Playlist.instance().getNext();
-
-        if (nextVideo != null) {
-            title = nextVideo.title;
-        } else if (video != null && video.nextMediaItem != null) {
-            title = video.nextMediaItem.getTitle();
-        }
-
-        return title;
+        getPlayer().setNextTitle(getNext() != null ? getNext().getTitle() : null);
     }
 
     public void loadSuggestions(Video video) {
@@ -275,7 +260,20 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     public Video getNext() {
-        return mNextVideo;
+        Video result = null;
+        Video next = Playlist.instance().getNext();
+        Video current = getPlayer().getVideo();
+
+        if (next != null) {
+            next.fromQueue = true;
+            result = next;
+        } else if (mNextVideo != null) {
+            result = mNextVideo;
+        } else if (current != null && current.nextMediaItem != null) {
+            result = Video.from(current.nextMediaItem);
+        }
+
+        return result;
     }
 
     public Video getPrevious() {
