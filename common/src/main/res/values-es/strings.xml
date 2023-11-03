@@ -600,4 +600,5 @@
   <string name="enter_account_password">Introduzca la contraseña de la cuenta</string>
   <string name="show_connect_messages">Mostrar mensajes de conexión</string>
   <string name="prefer_avc_over_vp9_desc">AVISO: máximo 1080p</string>
+  <string name="play_next">Reproducir a continuación</string>
 </resources>
