@@ -606,4 +606,6 @@
     <string name="enter_account_password">Hesap şifresini girin</string>
     <string name="show_connect_messages">Bağlantı mesajlarını göster</string>
     <string name="prefer_avc_over_vp9_desc">UYARI: Maksimum 1080p</string>
+    <string name="play_next">Sonrakini oynat</string>
+    <string name="hide_watched_from_subscriptions">İzlenen videoları Abonelikler\'den gizle</string>
 </resources>
