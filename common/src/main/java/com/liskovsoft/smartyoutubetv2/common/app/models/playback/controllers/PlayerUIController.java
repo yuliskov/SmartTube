@@ -847,7 +847,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     }
 
     private void reorderSubtitles(List<FormatItem> subtitleFormats) {
-        if (subtitleFormats == null || subtitleFormats.size() <= 1) {
+        if (subtitleFormats == null || subtitleFormats.isEmpty()) {
             return;
         }
 
@@ -861,6 +861,6 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
                 topSubtitles.add(subtitleFormats.remove(index));
             }
         }
-        subtitleFormats.addAll(begin, topSubtitles);
+        subtitleFormats.addAll(subtitleFormats.size() < begin ? 0 : begin, topSubtitles);
     }
 }

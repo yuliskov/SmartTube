@@ -65,15 +65,13 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     @Override
     public void onViewInitialized() {
-        // Get intent before the view got destroyed
-        Intent intent = getView().getNewIntent();
-
         applyRunPerInstanceTasks();
         applyRunOnceTasks();
 
         //runRefreshCachePeriodicTask();
         showAccountSelectionIfNeeded();
 
+        Intent intent = getView() != null ? getView().getNewIntent() : null;
         checkMasterPassword(() -> applyNewIntent(intent));
 
         checkAccountPassword();
