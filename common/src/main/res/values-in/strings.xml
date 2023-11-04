@@ -580,4 +580,7 @@
     <string name="protect_account_with_password">Lindungi akun ini dengan kata sandi</string>
     <string name="enter_account_password">Masukkan kata sandi akun</string>
     <string name="show_connect_messages">Menampilkan pesan sambungan</string>
+    <string name="prefer_avc_over_vp9_desc">PERINGATAN: Maksimum 1080p</string>
+    <string name="play_next">Putar berikutnya</string>
+    <string name="hide_watched_from_subscriptions">Menyembunyikan video yang ditonton dari Langganan</string>
 </resources>
