@@ -599,4 +599,6 @@
     <string name="prefer_avc_over_vp9_desc">ПРЕДУПРЕЖДЕНИЕ: 1080p максимум</string>
     <string name="play_next">Воспроизвезти следующим</string>
     <string name="hide_watched_from_subscriptions">Скрывать просмотренные видео из Подписок</string>
+    <string name="hide_unwanted_content">Скрывать нежелательное содержимое</string>
+    <string name="hide_watched_from_home">Скрывать просмотренные видео из Домашнего раздела</string>
 </resources>

@@ -61,6 +61,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendEnabledSections(settingsPresenter);
         appendContextMenuItemsCategory(settingsPresenter);
         appendVariousButtonsCategory(settingsPresenter);
+        appendHideUnwantedContent(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         //appendBackgroundPlaybackActivationCategory(settingsPresenter);
@@ -100,6 +101,44 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.side_panel_sections), options);
+    }
+
+    private void appendHideUnwantedContent(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_watched_from_home),
+                option -> mGeneralData.hideWatchedFromHome(option.isSelected()),
+                mGeneralData.isHideWatchedFromHomeEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_watched_from_subscriptions),
+                option -> mGeneralData.hideWatchedFromSubscriptions(option.isSelected()),
+                mGeneralData.isHideWatchedFromSubscriptionsEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_everywhere),
+                option -> mGeneralData.hideShortsEverywhere(option.isSelected()),
+                mGeneralData.isHideShortsEverywhereEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_home),
+                option -> mGeneralData.hideShortsFromHome(option.isSelected()),
+                mGeneralData.isHideShortsFromHomeEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts),
+                option -> mGeneralData.hideShortsFromSubscriptions(option.isSelected()),
+                mGeneralData.isHideShortsFromSubscriptionsEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_streams),
+                option -> mGeneralData.hideStreamsFromSubscriptions(option.isSelected()),
+                mGeneralData.isHideStreamsFromSubscriptionsEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_history),
+                option -> mGeneralData.hideShortsFromHistory(option.isSelected()),
+                mGeneralData.isHideShortsFromHistoryEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_upcoming),
+                option -> mGeneralData.hideUpcoming(option.isSelected()),
+                mGeneralData.isHideUpcomingEnabled()));
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.hide_unwanted_content), options);
     }
 
     private void appendContextMenuItemsCategory(AppDialogPresenter settingsPresenter) {
@@ -488,34 +527,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_subscriptions),
                 option -> mGeneralData.rememberSubscriptionsPosition(option.isSelected()),
                 mGeneralData.isRememberSubscriptionsPositionEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.hide_watched_from_subscriptions),
-                option -> mGeneralData.hideWatchedFromSubscriptions(option.isSelected()),
-                mGeneralData.isHideWatchedFromSubscriptionsEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_everywhere),
-                option -> mGeneralData.hideShortsEverywhere(option.isSelected()),
-                mGeneralData.isHideShortsEverywhereEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_home),
-                option -> mGeneralData.hideShortsFromHome(option.isSelected()),
-                mGeneralData.isHideShortsFromHomeEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts),
-                option -> mGeneralData.hideShortsFromSubscriptions(option.isSelected()),
-                mGeneralData.isHideShortsFromSubscriptionsEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.hide_streams),
-                option -> mGeneralData.hideStreamsFromSubscriptions(option.isSelected()),
-                mGeneralData.isHideStreamsFromSubscriptionsEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_history),
-                option -> mGeneralData.hideShortsFromHistory(option.isSelected()),
-                mGeneralData.isHideShortsFromHistoryEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.hide_upcoming),
-                option -> mGeneralData.hideUpcoming(option.isSelected()),
-                mGeneralData.isHideUpcomingEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_screensaver),
                 option -> mGeneralData.disableScreensaver(option.isSelected()),
