@@ -31,6 +31,7 @@ import com.google.android.exoplayer2.ControlDispatcher;
 import com.google.android.exoplayer2.DefaultControlDispatcher;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
@@ -426,7 +427,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         //mPlayer.setForegroundMode(true);
         // NOTE: Avoid using seekParameters. ContentBlock hangs because of constant skipping to the segment start.
         // ContentBlock hangs on the last segment: https://www.youtube.com/watch?v=pYymRbfjKv8
-        //mPlayer.setSeekParameters(SeekParameters.CLOSEST_SYNC); // live stream (dash) seeking fix
+
+        // Fix seeking on TextureView (some devices only)
+        if (PlayerTweaksData.instance(getContext()).isTextureViewEnabled()) {
+            // Also, live stream (dash) seeking fix
+            mPlayer.setSeekParameters(SeekParameters.CLOSEST_SYNC);
+        }
+
         mExoPlayerController.setPlayer(mPlayer);
     }
 
