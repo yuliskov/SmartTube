@@ -602,4 +602,6 @@
   <string name="prefer_avc_over_vp9_desc">AVISO: máximo 1080p</string>
   <string name="play_next">Reproducir a continuación</string>
   <string name="hide_watched_from_subscriptions">Ocultar vídeos vistos de Suscripciones</string>
+  <string name="hide_unwanted_content">Ocultar contenido no deseado</string>
+  <string name="hide_watched_from_home">Ocultar vídeos vistos de Inicio</string>
 </resources>
