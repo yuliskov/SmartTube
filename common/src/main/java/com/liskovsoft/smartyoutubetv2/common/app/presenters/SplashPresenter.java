@@ -65,14 +65,17 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     @Override
     public void onViewInitialized() {
+        if (getView() == null) {
+            return;
+        }
+
         applyRunPerInstanceTasks();
         applyRunOnceTasks();
 
         //runRefreshCachePeriodicTask();
         showAccountSelectionIfNeeded();
 
-        Intent intent = getView() != null ? getView().getNewIntent() : null;
-        checkMasterPassword(() -> applyNewIntent(intent));
+        checkMasterPassword(() -> applyNewIntent(getView().getNewIntent()));
 
         checkAccountPassword();
         showBootDialogs();
@@ -322,6 +325,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         // No passwd or the app already started
         if (password == null || ViewManager.instance(getContext()).getTopView() != null) {
             onSuccess.run();
+            getView().finishView(); // critical part, fix black screen on app exit
         } else {
             SimpleEditDialog.show(
                     getContext(),
@@ -334,7 +338,8 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                         return false;
                     },
                     getContext().getString(R.string.enter_master_password),
-                    true
+                    true,
+                    () -> getView().finishView() // critical part, fix black screen on app exit
             );
         }
     }
