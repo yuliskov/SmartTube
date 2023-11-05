@@ -322,7 +322,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         // No passwd or the app already started
         if (password == null || ViewManager.instance(getContext()).getTopView() != null) {
             onSuccess.run();
-            getView().finishView();
         } else {
             SimpleEditDialog.show(
                     getContext(),
@@ -335,8 +334,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                         return false;
                     },
                     getContext().getString(R.string.enter_master_password),
-                    true,
-                    () -> getView().finishView()
+                    true
             );
         }
     }
