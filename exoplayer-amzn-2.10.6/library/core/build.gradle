@@ -61,7 +61,7 @@ android {
 dependencies {
     // MODIFIED: add custom dns resolver
     implementation project(':sharedutils')
-    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.annotation:annotation:' + annotationXLibraryVersion
     compileOnly 'org.checkerframework:checker-qual:' + checkerframeworkVersion
     compileOnly 'org.checkerframework:checker-compat-qual:' + checkerframeworkVersion
     androidTestImplementation 'androidx.test:runner:' + androidXTestVersion

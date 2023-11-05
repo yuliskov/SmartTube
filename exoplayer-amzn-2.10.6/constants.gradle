@@ -15,18 +15,25 @@ project.ext {
     // ExoPlayer version and version code.
     releaseVersion = '2.10.6'
     releaseVersionCode = 2010006
-    // fix unmatched minSdk between exo and sharedutils
+    // MOD: fix unmatched minSdk between exo and sharedutils
     // minSdkVersion = 16
-    minSdkVersion = 17
-    targetSdkVersion = 28
-    compileSdkVersion = 28
+    // targetSdkVersion = 28
+    // compileSdkVersion = 28
+    minSdkVersion = project.properties.minSdkVersion
+    targetSdkVersion = project.properties.targetSdkVersion
+    compileSdkVersion = project.properties.compileSdkVersion
     // dexmakerVersion = '2.21.0' // absent in mavenCentral
     dexmakerVersion = '2.28.3'
     mockitoVersion = '2.25.0'
-    robolectricVersion = '4.2'
+    // MOD: use versions from sharedutils
+    // robolectricVersion = '4.2'
+    robolectricVersion = project.properties.robolectricVersion
+    annotationXLibraryVersion = project.properties.annotationXLibraryVersion
     autoValueVersion = '1.6'
     checkerframeworkVersion = '2.5.0'
-    androidXTestVersion = '1.1.0'
+    // MOD: use versions from sharedutils
+    // androidXTestVersion = '1.1.0'
+    androidXTestVersion = project.properties.testXSupportLibraryVersion
     modulePrefix = ':'
     if (gradle.ext.has('exoplayerModulePrefix')) {
         modulePrefix += gradle.ext.exoplayerModulePrefix
