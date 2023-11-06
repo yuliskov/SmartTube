@@ -235,7 +235,7 @@
     <string name="share_embed_link">Yerleştirme video bağlantısını paylaş</string>
     <string name="card_text_scroll_factor">Kart metin kaydırma hızı</string>
     <string name="preferred_update_source">Güncelleme kaynağını seç</string>
-    <string name="hide_shorts">Abonelikler\'de Shortsları gizle</string>
+    <string name="hide_shorts">Shortsları Abonelikler\'de gizle</string>
     <string name="key_remapping">Tuş yeniden atama</string>
     <string name="screen_dimming">Ekran karartma</string>
     <string name="removed_from_playback_queue">Oynatma sırasından kaldırıldı</string>
@@ -327,17 +327,17 @@
     <string name="msg_player_error_video_source">VİDEO URL\'si çalışmıyor ya da yanlış cihaz saati.\nGenellikle bu, uygulama sorunudur.</string>
     <string name="msg_player_error_audio_source">SES URL\'si çalışmıyor ya da yanlış cihaz saati.\nGenellikle bu, uygulama sorunudur.</string>
     <string name="msg_player_error_subtitle_source">ALTYAZI URL\'si çalışmıyor ya da yanlış cihaz saati.\nGenellikle bu, uygulama sorunudur.</string>
-    <string name="hide_upcoming">Abonelikler\'de yaklaşan yayınları gizle</string>
+    <string name="hide_upcoming">Yaklaşan yayınları Abonelikler\'de gizle</string>
     <string name="search_background_playback">Arama yaparken/Kanalı açarken resim içinde resim moduna geç</string>
     <string name="trending_row_name">Trendler</string>
     <string name="player_seek_type">Arama davranışı</string>
     <string name="player_seek_regular">Normal</string>
     <string name="player_seek_confirmation_pause">Onay ile (ararken duraklat)</string>
     <string name="player_seek_confirmation_play">Onay ile (ararken oynat)</string>
-    <string name="hide_shorts_from_home">Ana Sayfa\'da Shortsları gizle</string>
+    <string name="hide_shorts_from_home">Shortsları Ana Sayfa\'da gizle</string>
     <string name="finish_on_disconnect">Telefon bağlantısı kesildiğinde uygulamayı sonlandır</string>
     <string name="update_error">Güncelleme hatası</string>
-    <string name="hide_shorts_from_history">Geçmiş\'te Shortsları gizle</string>
+    <string name="hide_shorts_from_history">Shortsları Geçmiş\'te gizle</string>
     <string name="disable_screensaver">Ekran koruyucuyu devre dışı bırak</string>
     <string name="description_not_found">Açıklama bulunamadı</string>
     <string name="proxy_port_hint">Vekil Sunucu port</string>
@@ -512,7 +512,7 @@
     <string name="card_multiline_subtitle">Çok satırlı altyazılar</string>
     <string name="auto_frame_rate_modes">Desteklenen modlar</string>
     <string name="loading">Yükleniyor…</string>
-    <string name="hide_streams">Abonelikler\'de canlı yayınları gizle</string>
+    <string name="hide_streams">Canlı yayınları Abonelikler\'de gizle</string>
     <string name="video_rotate">Döndür</string>
     <string name="trending_searches">Trend olan aramalar</string>
     <string name="video_duration_any">Herhangi biri</string>
@@ -607,5 +607,7 @@
     <string name="show_connect_messages">Bağlantı mesajlarını göster</string>
     <string name="prefer_avc_over_vp9_desc">UYARI: Maksimum 1080p</string>
     <string name="play_next">Sonrakini oynat</string>
-    <string name="hide_watched_from_subscriptions">İzlenen videoları Abonelikler\'den gizle</string>
+    <string name="hide_watched_from_subscriptions">İzlenen videoları Abonelikler\'de gizle</string>
+    <string name="hide_unwanted_content">İstenmeyen içerik gizleme</string>
+    <string name="hide_watched_from_home">İzlenen videoları Ana Sayfa\'da gizle</string>
 </resources>
