@@ -419,19 +419,21 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupPathCheck != null ? backupPathCheck : ""),
                 option -> {
-                    List<String> backups = backupManager.getBackupNames();
-
-                    if (backups != null && backups.size() > 1) {
-                        showRestoreSelectorDialog(backups, backupManager);
-                    } else {
-                        AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
-                            backupManager.checkPermAndRestore();
-                            MessageHelpers.showMessage(getContext(), R.string.msg_done);
-                        });
-                    }
+                    backupManager.getBackupNames(names -> showRestoreDialog(backupManager, names));
                 }));
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.app_backup_restore), options);
+    }
+
+    private void showRestoreDialog(BackupAndRestoreManager backupManager, List<String> backups) {
+        if (backups != null && backups.size() > 1) {
+            showRestoreSelectorDialog(backups, backupManager);
+        } else {
+            AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
+                backupManager.checkPermAndRestore();
+                MessageHelpers.showMessage(getContext(), R.string.msg_done);
+            });
+        }
     }
 
     private void showRestoreSelectorDialog(List<String> backups, BackupAndRestoreManager backupManager) {

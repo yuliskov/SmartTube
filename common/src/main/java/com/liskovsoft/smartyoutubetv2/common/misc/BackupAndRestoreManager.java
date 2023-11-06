@@ -25,6 +25,10 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private Runnable mPendingHandler;
     private String mBackupName;
 
+    public interface OnBackupNames {
+        void onBackupNames(List<String> backupNames);
+    }
+
     public BackupAndRestoreManager(Context context) {
         mContext = context;
         mDataDirs = new ArrayList<>();
@@ -197,7 +201,18 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         return currentBackup != null ? currentBackup.toString() : null;
     }
 
-    public List<String> getBackupNames() {
+    public void getBackupNames(OnBackupNames callback) {
+        if (FileHelpers.isExternalStorageReadable()) {
+            if (PermissionHelpers.hasStoragePermissions(mContext)) {
+                callback.onBackupNames(getBackupNames());
+            } else {
+                mPendingHandler = () -> callback.onBackupNames(getBackupNames());
+                verifyStoragePermissionsAndReturn();
+            }
+        }
+    }
+
+    private List<String> getBackupNames() {
         File current = getBackup();
 
         if (current != null) {
