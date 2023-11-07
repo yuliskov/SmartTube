@@ -78,7 +78,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         checkMasterPassword(() -> applyNewIntent(getView().getNewIntent()));
 
         checkAccountPassword();
-        showBootDialogs();
+        showUpdateNotification();
     }
 
     private void applyRunPerInstanceTasks() {
@@ -116,11 +116,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
     }
 
-    private void showBootDialogs() {
+    private void showUpdateNotification() {
         BootDialogPresenter updatePresenter = BootDialogPresenter.instance(getContext());
         updatePresenter.start();
         //updatePresenter.unhold();
-        Utils.updateRemoteControlService(getContext());
     }
 
     private void runRemoteControlFakeTask() {

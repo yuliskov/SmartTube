@@ -10,6 +10,7 @@ import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -131,6 +132,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updatePlaylistsStyle();
         updateSections();
         restoreSelectedItems();
+        Utils.updateRemoteControlService(getContext());
 
         // Move default focus
         int selectedSectionIndex = findSectionIndex(mBootstrapSectionId);
