@@ -601,5 +601,5 @@
     <string name="hide_watched_from_subscriptions">Приховати переглянуті відео з Підписок</string>
     <string name="hide_unwanted_content">Приховати небажаний вміст</string>
     <string name="hide_watched_from_home">Приховати переглянуті відео з Головного розділу</string>
-    <string name="remote_control_permission">Дистанційне керування вимогає дозволу на Перекривання інших вікон</string>
+    <string name="remote_control_permission">Для роботи у фоні Дистанційне керування вимагає дозволу на Перекривання інших вікон</string>
 </resources>
