@@ -604,4 +604,5 @@
   <string name="hide_watched_from_subscriptions">Ocultar vídeos vistos de Suscripciones</string>
   <string name="hide_unwanted_content">Ocultar contenido no deseado</string>
   <string name="hide_watched_from_home">Ocultar vídeos vistos de Inicio</string>
+  <string name="remote_control_permission">El control remoto requiere permiso de superposición</string>
 </resources>
