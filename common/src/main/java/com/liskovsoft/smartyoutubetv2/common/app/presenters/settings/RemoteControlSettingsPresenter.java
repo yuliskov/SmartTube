@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.RemoteControlService;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -76,10 +77,12 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
                     mRemoteControlData.enableDeviceLink(true);
                     Utils.updateRemoteControlService(getContext());
 
-                    if (getContext() instanceof MotherActivity) {
+                    if (!PermissionHelpers.hasOverlayPermissions(getContext()) && getContext() instanceof MotherActivity) {
                         ((MotherActivity) getContext()).addOnResult(
                                 (requestCode, resultCode, data) -> AddDevicePresenter.instance(getContext()).start()
                         );
+                    } else {
+                        AddDevicePresenter.instance(getContext()).start();
                     }
                 }));
     }
