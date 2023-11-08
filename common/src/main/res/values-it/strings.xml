@@ -264,7 +264,7 @@
     <string name="option_disabled">Disabilitato</string>
     <string name="live_now_row_name">In onda</string>
     <string name="run_in_background">Riproduzione in background</string>
-    <string name="settings_remote_control">Telecomando</string>
+    <string name="settings_remote_control">Controllo remoto</string>
     <string name="background_service_started">Servizio di background avviato</string>
     <string name="dialog_add_to">Aggiungi a %s</string>
     <string name="dialog_remove_from">Rimuovi da %s</string>
@@ -557,7 +557,7 @@
     </string>
     <string name="audio_language">Lingua audio</string>
     <string name="old_home_look">Il vecchio aspetto della sezione Home</string>
-    <string name="hide_shorts_everywhere">Nascondi video brevi ovunque</string>
+    <string name="hide_shorts_everywhere">Nascondi i video brevi ovunque</string>
     <string name="update_found">Aggiornamento</string>
     <string name="volume_boost_warning">Qualsiasi impostazione oltre il limite può potenzialmente danneggiare gli altoparlanti</string>
     <string name="play_video_incognito">Riproduci in incognito</string>
@@ -605,4 +605,9 @@
     <string name="enter_account_password">Inserisci la password dell\'account</string>
     <string name="show_connect_messages">Mostra messaggi di connessione</string>
     <string name="prefer_avc_over_vp9_desc">ATTENZIONE: massimo 1080p</string>
+    <string name="play_next">Riproduci successivo</string>
+    <string name="hide_watched_from_subscriptions">Nascondi i video già visti dalle Iscrizioni</string>
+    <string name="hide_unwanted_content">Nascondi i contenuti indesiderati</string>
+    <string name="hide_watched_from_home">Nascondi i video già visti dalla Home</string>
+    <string name="remote_control_permission">Il controllo remoto in background richiede l\'autorizzazione alla sovrapposizione</string>
 </resources>
