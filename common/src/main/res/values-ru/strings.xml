@@ -601,5 +601,5 @@
     <string name="hide_watched_from_subscriptions">Скрывать просмотренные видео из Подписок</string>
     <string name="hide_unwanted_content">Скрывать нежелательное содержимое</string>
     <string name="hide_watched_from_home">Скрывать просмотренные видео из Домашнего раздела</string>
-    <string name="remote_control_permission">Для работы в фоне Дистанционное управление требует разрешения Перекрывать другие окна</string>
+    <string name="remote_control_permission">Фоновое Дистанционное управление требует разрешения Перекрывать другие окна</string>
 </resources>
