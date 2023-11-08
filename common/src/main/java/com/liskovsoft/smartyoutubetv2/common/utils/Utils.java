@@ -222,7 +222,9 @@ public class Utils {
                         context, context.getString(R.string.remote_control_permission), () -> {
                             PermissionHelpers.verifyOverlayPermissions(context);
                             // Service that prevents the app from destroying
-                            startService(context, RemoteControlService.class);
+                            if (context instanceof MotherActivity) {
+                                ((MotherActivity) context).addOnResult((request, response, data) -> startService(context, RemoteControlService.class));
+                            }
                         }
                 );
             } else {
