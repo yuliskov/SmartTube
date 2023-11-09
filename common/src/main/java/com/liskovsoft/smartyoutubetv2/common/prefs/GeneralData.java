@@ -20,6 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GeneralData implements ProfileChangeListener {
     public static final int SCREENSAVER_TIMEOUT_NEVER = 0;
@@ -87,13 +88,14 @@ public class GeneralData implements ProfileChangeListener {
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new ArrayList<>();
 
-    private final List<Video> mPinnedItems = new HashList<Video>() {
+    private final List<Video> mPinnedItems = new CopyOnWriteArrayList<Video>() {
         @Override
         public boolean add(Video video) {
             if (video == null) {
                 return false;
             }
 
+            remove(video);
             return super.add(video);
         }
 
@@ -103,6 +105,7 @@ public class GeneralData implements ProfileChangeListener {
                 return;
             }
 
+            remove(video);
             super.add(index, video);
         }
     };
