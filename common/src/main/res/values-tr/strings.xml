@@ -610,4 +610,5 @@
     <string name="hide_watched_from_subscriptions">İzlenen videoları Abonelikler\'de gizle</string>
     <string name="hide_unwanted_content">İstenmeyen içerik gizleme</string>
     <string name="hide_watched_from_home">İzlenen videoları Ana Sayfa\'da gizle</string>
+    <string name="remote_control_permission">Arka plan Uzaktan kontrol, Yer Paylaşımı izni gerektirir</string>
 </resources>
