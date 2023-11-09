@@ -339,6 +339,7 @@ public class GeneralData implements ProfileChangeListener {
 
     public void rememberSubscriptionsPosition(boolean remember) {
         mRememberSubscriptionsPosition = remember;
+        mSelectedSubscriptionsItem = null; // reset on change
         persistState();
     }
 
