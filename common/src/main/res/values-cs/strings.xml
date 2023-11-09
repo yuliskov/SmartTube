@@ -248,6 +248,7 @@
     <string name="uploads_row_name">Nahraná videa</string>
     <string name="playlists_row_name">Vytvořené playlisty</string>
     <string name="popular_uploads_row_name">Populární nahraná videa</string>
+    <string name="news_row_name">Zprávy</string>
     <string name="breaking_news_row_name">Nejnovější zprávy</string>
     <string name="covid_news_row_name">COVID-19 zprávy</string>
     <string name="enable_voice_search">Povolit globální vyhledávání (nutná podpora firmwaru)</string>
@@ -604,4 +605,10 @@
     <string name="protect_account_with_password">Chránit tento účet heslem</string>
     <string name="enter_account_password">Zadejte heslo účtu</string>
     <string name="show_connect_messages">Upozornění na připojená zařízení</string>
+    <string name="prefer_avc_over_vp9_desc">POZOR: Maximálně 1080p</string>
+    <string name="play_next">Přehrát další</string>
+    <string name="hide_watched_from_subscriptions">Skrýt zhlédnutá videa v Odběrech</string>
+    <string name="hide_unwanted_content">Skrýt nežádoucí obsah</string>
+    <string name="hide_watched_from_home">Skrýt zhlédnutá videa ze sekce Domů</string>
+    <string name="remote_control_permission">Dálkové ovládání na pozadí vyžaduje oprávnění pro překrytí přes okna</string>
 </resources>
