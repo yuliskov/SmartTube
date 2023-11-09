@@ -76,7 +76,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final Runnable mRefreshSection = this::refresh;
     private BrowseSection mCurrentSection;
     private Video mCurrentVideo;
-    private Video mSelectedVideo;
     private long mLastUpdateTimeMs;
     private int mBootSectionIndex;
     private int mBootstrapSectionId = -1;
@@ -131,7 +130,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateChannelSorting();
         updatePlaylistsStyle();
         updateSections();
-        restoreSelectedItems();
         Utils.updateRemoteControlService(getContext());
 
         // Move default focus
@@ -148,11 +146,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void saveSelectedItems() {
-        mGeneralData.setSelectedSubscriptionsItem(mSelectedVideo);
-    }
-
-    private void restoreSelectedItems() {
-        mSelectedVideo = mGeneralData.getSelectedSubscriptionsItem();
+        if (isSubscriptionsSection()) {
+            mGeneralData.setSelectedSubscriptionsItem(mCurrentVideo);
+        }
     }
 
     private void initSections() {
@@ -364,10 +360,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         mCurrentVideo = item;
-
-        if (isSubscriptionsSection()) {
-            mSelectedVideo = item;
-        }
     }
 
     @Override
@@ -691,7 +683,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         if (isSubscriptionsSection() && mGeneralData.isRememberSubscriptionsPositionEnabled()) {
-            getView().selectSectionItem(mSelectedVideo);
+            getView().selectSectionItem(mGeneralData.getSelectedSubscriptionsItem());
         }
 
         Disposable updateAction = group
@@ -956,23 +948,23 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public boolean isSettingsSection() {
-        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SETTINGS && inForeground();
+        return isSection(MediaGroup.TYPE_SETTINGS);
     }
 
     public boolean isPlaylistsSection() {
-        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_USER_PLAYLISTS && inForeground();
+        return isSection(MediaGroup.TYPE_USER_PLAYLISTS);
     }
 
     public boolean isHistorySection() {
-        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_HISTORY && inForeground();
+        return isSection(MediaGroup.TYPE_HISTORY);
     }
 
     public boolean isSubscriptionsSection() {
-        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SUBSCRIPTIONS && inForeground();
+        return isSection(MediaGroup.TYPE_SUBSCRIPTIONS);
     }
 
     private boolean isSection(int sectionId) {
-        return mCurrentSection != null && mCurrentSection.getId() == sectionId && inForeground();
+        return mCurrentSection != null && mCurrentSection.getId() == sectionId;
     }
 
     public void selectSection(int sectionId) {

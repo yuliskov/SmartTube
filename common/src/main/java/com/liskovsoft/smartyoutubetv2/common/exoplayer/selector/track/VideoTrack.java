@@ -167,7 +167,8 @@ public class VideoTrack extends MediaTrack {
 
         if (Helpers.equals(id1, id2)) {
             result = 0;
-        } else if (sizeLessOrEquals(size2, size1) && fpsLessOrEquals(frameRate2, frameRate1) && bitrateLessOrEquals(bitrate2, bitrate1)) {
+        //} else if (sizeLessOrEquals(size2, size1) && fpsLessOrEquals(frameRate2, frameRate1) && bitrateLessOrEquals(bitrate2, bitrate1)) {
+        } else if (sizeLessOrEquals(size2, size1) && fpsLessOrEquals(frameRate2, frameRate1)) { // NOTE: Removed bitrate check to fix shorts?
             if (TrackSelectorUtil.isHdrCodec(codecs1) == TrackSelectorUtil.isHdrCodec(codecs2)) {
                 result = 1;
             } else if (TrackSelectorUtil.isHdrCodec(codecs1)) {

@@ -354,7 +354,9 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo() != null ? getVideo() : new Video();
 
-        if (original.hasVideo() || !BrowsePresenter.instance(getContext()).isPlaylistsSection()) {
+        BrowsePresenter presenter = BrowsePresenter.instance(getContext());
+
+        if (original.hasVideo() || !(presenter.isPlaylistsSection() && presenter.inForeground())) {
             return;
         }
 
@@ -416,7 +418,9 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo();
 
-        if (original == null || !BrowsePresenter.instance(getContext()).isPlaylistsSection()) {
+        BrowsePresenter presenter = BrowsePresenter.instance(getContext());
+
+        if (original == null || !(presenter.isPlaylistsSection() && presenter.inForeground())) {
             return;
         }
 
@@ -502,7 +506,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         BrowsePresenter presenter = BrowsePresenter.instance(getContext());
 
-        if (!presenter.isHistorySection()) {
+        if (!(presenter.isHistorySection() && presenter.inForeground())) {
             return;
         }
 
