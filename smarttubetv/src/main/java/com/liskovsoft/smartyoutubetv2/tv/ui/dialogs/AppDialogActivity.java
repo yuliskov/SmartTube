@@ -98,7 +98,7 @@ public class AppDialogActivity extends MotherActivity {
         super.onUserLeaveHint();
 
         // Respect PIP mode
-        if (ViewManager.instance(this).getTopView() == PlaybackView.class) {
+        if (ViewManager.instance(this).getTopView() == PlaybackView.class && PlaybackPresenter.instance(this).getContext() instanceof PlaybackActivity) {
             ((PlaybackActivity) PlaybackPresenter.instance(this).getContext()).onUserLeaveHint();
         }
     }
