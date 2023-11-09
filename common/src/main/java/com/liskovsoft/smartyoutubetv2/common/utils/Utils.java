@@ -47,6 +47,7 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -214,8 +215,22 @@ public class Utils {
         }
 
         if (RemoteControlData.instance(context).isDeviceLinkEnabled()) {
-            // Service that prevents the app from destroying
-            startService(context, RemoteControlService.class);
+            // Background playback on Android 10 and above
+            // Shows overlay dialog if needed (alive activity required)
+            if (!PermissionHelpers.hasOverlayPermissions(context)) {
+                AppDialogUtil.showConfirmationDialog(
+                        context, context.getString(R.string.remote_control_permission), () -> {
+                            PermissionHelpers.verifyOverlayPermissions(context);
+                            // Service that prevents the app from destroying
+                            if (context instanceof MotherActivity) {
+                                ((MotherActivity) context).addOnResult((request, response, data) -> startService(context, RemoteControlService.class));
+                            }
+                        }
+                );
+            } else {
+                // Service that prevents the app from destroying
+                startService(context, RemoteControlService.class);
+            }
         } else {
             stopService(context, RemoteControlService.class);
         }

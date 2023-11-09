@@ -610,4 +610,5 @@
     <string name="hide_watched_from_subscriptions">Hide watched videos from Subscriptions</string>
     <string name="hide_unwanted_content">Hide unwanted content</string>
     <string name="hide_watched_from_home">Hide watched videos from Home</string>
+    <string name="remote_control_permission">Background Remote control requires Overlay permission</string>
 </resources>

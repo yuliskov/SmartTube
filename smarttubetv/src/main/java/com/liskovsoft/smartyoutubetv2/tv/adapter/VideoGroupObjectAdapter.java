@@ -15,6 +15,7 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     private static final String TAG = VideoGroupObjectAdapter.class.getSimpleName();
     private final List<Video> mVideoItems;
     private final List<VideoGroup> mVideoGroups = new ArrayList<>(); // keep groups from being garbage collected
+    private static final int CHECK_MAX_SIZE = 100;
 
     public VideoGroupObjectAdapter(VideoGroup videoGroup, Presenter presenter) {
         super(presenter);
@@ -27,7 +28,7 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
                 // Duplicated items suddenly appeared in Home, Subscriptions and History.
 
                 // Another alt method.
-                if (size() > 0 && size() < 30) {
+                if (size() > 0 && size() < CHECK_MAX_SIZE) {
                     Helpers.removeIf(c, this::contains);
                 }
 

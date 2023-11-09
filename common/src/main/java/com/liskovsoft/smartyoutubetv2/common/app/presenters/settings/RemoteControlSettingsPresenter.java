@@ -5,12 +5,14 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.RemoteControlService;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AddDevicePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -72,10 +74,16 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
     private void appendAddDeviceButton(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(
                 getContext().getString(R.string.dialog_add_device), option -> {
-                    AddDevicePresenter.instance(getContext()).start();
-
                     mRemoteControlData.enableDeviceLink(true);
                     Utils.updateRemoteControlService(getContext());
+
+                    if (!PermissionHelpers.hasOverlayPermissions(getContext()) && getContext() instanceof MotherActivity) {
+                        ((MotherActivity) getContext()).addOnResult(
+                                (requestCode, resultCode, data) -> AddDevicePresenter.instance(getContext()).start()
+                        );
+                    } else {
+                        AddDevicePresenter.instance(getContext()).start();
+                    }
                 }));
     }
 
