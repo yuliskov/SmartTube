@@ -146,7 +146,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void saveSelectedItems() {
-        if (isSubscriptionsSection()) {
+        if (mCurrentVideo != null && mCurrentVideo.belongsToSubscriptions()) {
             mGeneralData.setSelectedSubscriptionsItem(mCurrentVideo);
         }
     }
@@ -423,6 +423,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public void onSectionFocused(int sectionId) {
+        saveSelectedItems();
         updateSection(sectionId);
     }
 
