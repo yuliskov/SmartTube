@@ -87,28 +87,7 @@ public class GeneralData implements ProfileChangeListener {
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new ArrayList<>();
-
-    private final List<Video> mPinnedItems = new CopyOnWriteArrayList<Video>() {
-        @Override
-        public boolean add(Video video) {
-            if (video == null) {
-                return false;
-            }
-
-            remove(video);
-            return super.add(video);
-        }
-
-        @Override
-        public void add(int index, Video video) {
-            if (video == null) {
-                return;
-            }
-
-            remove(video);
-            super.add(index, video);
-        }
-    };
+    private final List<Video> mPinnedItems = new HashList<>();
 
     private GeneralData(Context context) {
         mContext = context;
