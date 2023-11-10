@@ -63,13 +63,13 @@ public class TrackSelectorUtil {
     }
 
     public static String buildHighBitrateMark(Format format) {
-        if (format == null) {
-            return "";
-        }
-
+        //if (format == null) {
+        //    return "";
+        //}
+        //
         // https://symbl.cc/en/search/?q=mark
-        return format.containerMimeType == null ? "*" : "";
-        //return format.containerMimeType == null ? "✨" : "";
+        //return format.containerMimeType == null ? "*" : "";
+        return "";
     }
 
     public static String buildHDRString(Format format) {
