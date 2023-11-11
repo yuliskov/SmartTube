@@ -591,4 +591,20 @@
   <string name="disable_search_history">검색 기록 비활성화</string>
   <string name="unlock_high_bitrate_formats">높은 비트 전송율 1080p vp9 포맷 잠금 해제</string>
   <string name="unlock_high_bitrate_audio_formats">높은 비트 전송율 MP4A 포맷 잠금 해제</string>
+  <string name="share_qr_link">공유 링크 (QR 코드)</string>
+  <string name="news_row_name">뉴스</string>
+  <string name="color_scheme_blue">파란색</string>
+  <string name="color_scheme_dark_blue">진한 파란색</string>
+  <string name="player_speed_per_channel">각 채널당</string>
+  <string name="disable_popular_searches">인기 검색어 비활성화</string>
+  <string name="multi_profiles">계정별로 별도의 설정 사용</string>
+  <string name="protect_account_with_password">이 계정을 비밀번호로 보호</string>
+  <string name="enter_account_password">계정 비밀번호 입력</string>
+  <string name="show_connect_messages">연결 메시지 표시</string>
+  <string name="prefer_avc_over_vp9_desc">경고: 최대 1080p</string>
+  <string name="play_next">다음 재생</string>
+  <string name="hide_watched_from_subscriptions">구독에서 시청한 동영상 숨기기</string>
+  <string name="hide_unwanted_content">원치 않는 콘텐츠 숨기기</string>
+  <string name="hide_watched_from_home">홈에서 시청한 동영상 숨기기</string>
+  <string name="remote_control_permission">백그라운드 원격 제어에는 오버레이 권한이 필요</string>
 </resources>
