@@ -572,8 +572,8 @@
     <string name="mark_as_watched">Mark as watched</string>
     <string name="player_ui_animations">Enable control panel animations</string>
     <string name="player_likes_count">Show likes/dislikes count</string>
-    <string name="sorting_alphabetically2">Alphabetically (fast)</string>
-    <string name="sorting_default">Default (fast)</string>
+    <string name="sorting_alphabetically2">Alphabetically (fast, animated previews)</string>
+    <string name="sorting_default">Default (fast, animated previews)</string>
     <string name="content_block_exclude_channel">Exclude this channel from SponsorBlock</string>
     <string name="content_block_stop_excluding_channel">Stop excluding this channel from SponsorBlock</string>
     <string name="player_chapter_notification">Show notification to quickly advance through the chapters</string>
