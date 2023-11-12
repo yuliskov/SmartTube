@@ -24,10 +24,10 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
     private static final String WEB_PROXY_URI = "web_proxy_uri";
     private static final String WEB_PROXY_ENABLED = "web_proxy_enabled";
+    private static final String LAST_PROFILE_NAME = "last_profile_name";
     private String mBootResolution;
     private final Map<String, Integer> mDataHashes = new HashMap<>();
     private final List<ProfileChangeListener> mListeners = new ArrayList<>();
-    private String mProfileName;
 
     public interface ProfileChangeListener {
         void onProfileChanged();
@@ -41,8 +41,6 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
 
     private void initProfiles() {
         MediaServiceManager.instance().addAccountListener(this);
-        // Trigger on current account
-        onAccountChanged(MediaServiceManager.instance().getSelectedAccount());
     }
 
     @Override
@@ -123,6 +121,14 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         putBoolean(WEB_PROXY_ENABLED, enabled);
     }
 
+    private void setProfileName(String profileName) {
+        putString(LAST_PROFILE_NAME, profileName);
+    }
+
+    private String getProfileName() {
+        return getString(LAST_PROFILE_NAME, null);
+    }
+
     private void selectAccount(Account account) {
         selectProfile(account != null && account.getName() != null ? account.getName().replace(" ", "_") : null);
     }
@@ -132,7 +138,7 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
             profileName = ANONYMOUS_PROFILE_NAME;
         }
 
-        mProfileName = profileName;
+        setProfileName(profileName);
 
         onProfileChanged();
     }
@@ -174,8 +180,9 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
     }
 
     private String getProfileKey(String key) {
-        if (!TextUtils.isEmpty(mProfileName)) {
-            key = mProfileName + "_" + key;
+        String profileName = getProfileName();
+        if (!TextUtils.isEmpty(profileName)) {
+            key = profileName + "_" + key;
         }
 
         return key;
