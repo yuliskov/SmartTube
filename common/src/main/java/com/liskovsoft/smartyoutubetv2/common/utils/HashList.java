@@ -5,7 +5,8 @@ import java.util.ArrayList;
 public class HashList<T> extends ArrayList<T> {
     @Override
     public boolean add(T item) {
-        if (item == null || indexOf(item) == size() - 1) {
+        int index = size() - 1;
+        if (item == null || (index >= 0 && indexOf(item) == index)) {
             return false;
         } else if (contains(item)) {
             remove(item);
@@ -16,7 +17,7 @@ public class HashList<T> extends ArrayList<T> {
 
     @Override
     public void add(int index, T item) {
-        if (item == null || indexOf(item) == index) {
+        if (item == null || (index >= 0 && indexOf(item) == index)) {
             return;
         } else if (contains(item)) {
             remove(item);
