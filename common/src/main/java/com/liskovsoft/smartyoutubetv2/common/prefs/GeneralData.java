@@ -86,7 +86,7 @@ public class GeneralData implements ProfileChangeListener {
     private Video mSelectedSubscriptionsItem;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
-    private final List<Video> mPendingStreams = new ArrayList<>();
+    private final List<Video> mPendingStreams = new CopyOnWriteArrayList<>();
     private final List<Video> mPinnedItems = new HashList<>();
 
     private GeneralData(Context context) {
