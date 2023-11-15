@@ -248,6 +248,7 @@
     <string name="uploads_row_name">Nahraté videá</string>
     <string name="playlists_row_name">Vytvorené zoznamy videí</string>
     <string name="popular_uploads_row_name">Populárne nahraté videá</string>
+    <string name="news_row_name">Novinky</string>
     <string name="breaking_news_row_name">Najnovšie správy</string>
     <string name="covid_news_row_name">COVID-19 správy</string>
     <string name="enable_voice_search">Zapnúť hlasové vyhľadávanie (nutná podpora firmvéru)</string>
@@ -333,7 +334,7 @@
     <string name="player_seek_regular">Bežné</string>
     <string name="player_seek_confirmation_pause">S potvrdením (pozastavenie pri pratáčaní)</string>
     <string name="player_seek_confirmation_play">S potvrdením (prehrávanie pri pratáčaní)</string>
-    <string name="hide_shorts_from_home">Skryť krátke videá z Domovskej sekcie</string>
+    <string name="hide_shorts_from_home">Skryť krátke videá v Domovskej sekcii</string>
     <string name="finish_on_disconnect">Ukončiť aplikáciu po odpojení telefónu/tabletu</string>
     <string name="update_error">Chyba aktualizácie</string>
     <string name="hide_shorts_from_history">Skryť krátke videá z Histórie</string>
@@ -571,8 +572,8 @@
     <string name="mark_as_watched">Označiť ako videné</string>
     <string name="player_ui_animations">Povoliť animácie ovládacieho panela</string>
     <string name="player_likes_count">Zobraziť počet Páči sa/Nepáči sa</string>
-    <string name="sorting_alphabetically2">Abecedne (rýchlo)</string>
-    <string name="sorting_default">Predvolené (rýchle)</string>
+    <string name="sorting_alphabetically2">Abecedne (rýchlo, animované ukážky)</string>
+    <string name="sorting_default">Predvolené (rýchle, animované ukážky)</string>
     <string name="content_block_exclude_channel">Neaplikovať SponsorBlock na tento kanál</string>
     <string name="content_block_stop_excluding_channel">Znovu aplikovať SponsorBlock na tento kanál</string>
     <string name="player_chapter_notification">Zobraziť notifikáciu pre rýchlejší posun cez kapitoly</string>
@@ -604,4 +605,10 @@
     <string name="protect_account_with_password">Chrániť toto konto heslom</string>
     <string name="enter_account_password">Zadajte heslo účtu</string>
     <string name="show_connect_messages">Zobrazovať správy o pripojení</string>
+    <string name="prefer_avc_over_vp9_desc">UPOZORNENIE: Maximálne 1080p</string>
+    <string name="play_next">Prehrať ďalšie</string>
+    <string name="hide_watched_from_subscriptions">Skryť videné videá v Odberoch</string>
+    <string name="hide_unwanted_content">Skryť nežiaduci obsah</string>
+    <string name="hide_watched_from_home">Skryť videné videá v Domovskej sekcii</string>
+    <string name="remote_control_permission">Diaľkové ovládanie na pozadí vyžaduje povolenie na prekrytie cez okná</string>
 </resources>
