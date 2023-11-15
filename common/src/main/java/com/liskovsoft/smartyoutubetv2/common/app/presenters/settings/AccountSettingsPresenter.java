@@ -11,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
@@ -50,10 +51,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         mMediaServiceManager.loadAccounts(this::createAndShowDialog);
     }
 
-    public void nextAccountOrDialog() {
-        mMediaServiceManager.loadAccounts(this::nextAccountOrDialog);
-    }
-
     private void createAndShowDialog(List<Account> accounts) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
@@ -77,7 +74,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
         optionItems.add(UiOptionItem.from(
                 getContext().getString(R.string.dialog_account_none), optionItem -> {
-                    selectAccount(null);
+                    AccountSelectionPresenter.instance(getContext()).selectAccount(null);
                     settingsPresenter.closeDialog();
                 }, true
         ));
@@ -87,7 +84,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         for (Account account : accounts) {
             optionItems.add(UiOptionItem.from(
                     getFullName(account), option -> {
-                        selectAccount(account);
+                        AccountSelectionPresenter.instance(getContext()).selectAccount(account);
                         settingsPresenter.closeDialog();
                     }, account.isSelected()
             ));
@@ -152,29 +149,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                 AppPrefs.instance(getContext()).isMultiProfilesEnabled()));
     }
 
-    private void nextAccountOrDialog(List<Account> accounts) {
-        if (accounts == null || accounts.isEmpty()) {
-            createAndShowDialog(accounts);
-            return;
-        }
-
-        Account current = null;
-
-        for (Account account : accounts) {
-            if (account.isSelected()) {
-                current = account;
-                break;
-            }
-        }
-
-        int index = accounts.indexOf(current);
-
-        int nextIndex = index + 1;
-        // null == 'without account'
-        selectAccount(nextIndex == accounts.size() ? null : accounts.get(nextIndex));
-        //selectAccount(accounts.get(nextIndex == accounts.size() ? 0 : nextIndex));
-    }
-
     private String getFullName(Account account) {
         String format;
 
@@ -189,13 +163,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
     private String getSimpleName(Account account) {
         return account.getName() != null ? account.getName() : account.getEmail();
-    }
-
-    private void selectAccount(Account account) {
-        mMediaServiceManager.getSingInService().selectAccount(account);
-        ExoMediaSourceFactory.unhold();
-        BrowsePresenter.instance(getContext()).refresh(false);
-        //BrowsePresenter.instance(getContext()).onViewInitialized(); // reset state
     }
 
     private void removeAccount(Account account) {
