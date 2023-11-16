@@ -19,7 +19,8 @@ import java.util.List;
 
 public class SignInFragment extends GuidedStepSupportFragment implements SignInView {
     private static final int CONTINUE = 2;
-    private static final String SIGN_IN_URL = "https://yt.be/activate";
+    private static final String SIGN_IN_URL_SHORT = "https://yt.be/activate"; // doesn't support query params
+    private static final String SIGN_IN_URL_FULL = "https://youtube.com/tv/activate"; // support query params
     private SignInPresenter mSignInPresenter;
 
     @Override
@@ -56,7 +57,7 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
         getGuidanceStylist().getTitleView().setText(userCode);
 
         Glide.with(getContext())
-                .load(Utils.toQrCodeLink(SIGN_IN_URL + "?user_code=" + userCode.replace(" ", "-")))
+                .load(Utils.toQrCodeLink(SIGN_IN_URL_FULL + "?user_code=" + userCode.replace(" ", "-")))
                 .apply(ViewUtil.glideOptions())
                 .into(getGuidanceStylist().getIconView());
     }
@@ -70,7 +71,7 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
     @NonNull
     public GuidanceStylist.Guidance onCreateGuidance(@NonNull Bundle savedInstanceState) {
         String title = getString(R.string.signin_view_title);
-        String description = getString(R.string.signin_view_description, SIGN_IN_URL);
+        String description = getString(R.string.signin_view_description, SIGN_IN_URL_SHORT);
         return new GuidanceStylist.Guidance(title, description, "", ContextCompat.getDrawable(getContext(), R.drawable.activate_account_qrcode));
     }
 
