@@ -273,17 +273,19 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
 
     @Override
     public void onSpeedClicked(boolean enabled) {
-        if (Helpers.floatEquals(mPlayerData.getLastSpeed(), 1.0f) || mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()) {
+        float lastSpeed = mPlayerData.getSpeed(getVideo().channelId);
+        if (Helpers.floatEquals(lastSpeed, 1.0f)) {
+            lastSpeed = mPlayerData.getLastSpeed();
+        }
+        State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
+        if (state != null && mPlayerData.isSpeedPerVideoEnabled()) {
+            lastSpeed = !Helpers.floatEquals(1.0f, state.speed) ? state.speed : lastSpeed;
+            mStateService.save(new State(state.videoId, state.positionMs, state.durationMs, enabled ? 1.0f : lastSpeed));
+        }
+
+        if (Helpers.floatEquals(lastSpeed, 1.0f) || mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()) {
             onSpeedLongClicked(enabled);
         } else {
-            State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
-            float lastSpeed = mPlayerData.getLastSpeed();
-            if (state != null && mPlayerData.isSpeedPerVideoEnabled()) {
-                lastSpeed = !Helpers.floatEquals(1.0f, state.speed) ? state.speed : lastSpeed;
-                mPlayerData.setLastSpeed(lastSpeed);
-                mStateService.save(new State(state.videoId, state.positionMs, state.durationMs, enabled ? 1.0f : lastSpeed));
-            }
-            mPlayerData.setSpeed(getVideo().channelId, enabled ? 1.0f : lastSpeed);
             getPlayer().setSpeed(enabled ? 1.0f : lastSpeed);
         }
     }
