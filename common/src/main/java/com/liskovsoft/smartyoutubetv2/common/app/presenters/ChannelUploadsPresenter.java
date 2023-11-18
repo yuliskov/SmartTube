@@ -223,6 +223,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                             }
+                            mLastScrollGroup = null;
                         },
                         () -> getView().showProgressBar(false)
                 );

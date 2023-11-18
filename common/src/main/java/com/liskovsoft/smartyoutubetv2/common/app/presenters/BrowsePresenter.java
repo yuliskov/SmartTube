@@ -771,6 +771,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                             }
+                            mLastScrollGroup = null;
                         }
                 );
 
