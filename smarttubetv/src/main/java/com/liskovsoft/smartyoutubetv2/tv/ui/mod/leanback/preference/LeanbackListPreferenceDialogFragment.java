@@ -354,7 +354,8 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
             final MultiSelectListPreference multiSelectListPreference
                     = (MultiSelectListPreference) getPreference();
             // Pass copies of the set to callChangeListener and setValues to avoid mutations
-            if (multiSelectListPreference.callChangeListener(new HashSet<>(mSelections))) {
+            // MOD: npe fix
+            if (multiSelectListPreference != null && multiSelectListPreference.callChangeListener(new HashSet<>(mSelections))) {
                 multiSelectListPreference.setValues(new HashSet<>(mSelections));
                 mInitialSelections = mSelections;
             } else {
