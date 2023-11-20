@@ -546,7 +546,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsPlayerUiOnNextEnabled = Helpers.parseBoolean(split, 39, false);
         mIsPlayerAutoVolumeEnabled = Helpers.parseBoolean(split, 40, true);
         mIsPlayerGlobalFocusEnabled = Helpers.parseBoolean(split, 41, true);
-        mIsUnsafeAudioFormatsEnabled = Helpers.parseBoolean(split, 42, false);
+        mIsUnsafeAudioFormatsEnabled = Helpers.parseBoolean(split, 42, true);
         mIsHighBitrateFormatsUnlocked = Helpers.parseBoolean(split, 43, false);
 
         updateDefaultValues();
