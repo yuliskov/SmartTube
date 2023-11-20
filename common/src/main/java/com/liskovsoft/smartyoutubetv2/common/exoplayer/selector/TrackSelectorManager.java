@@ -608,18 +608,22 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         String audioLanguage = PlayerData.instance(mContext).getAudioLanguage();
 
         String resultLanguage = null;
+        String originLanguage = null;
 
-        if (!TextUtils.isEmpty(audioLanguage)) {
+        if (!TextUtils.isEmpty(audioLanguage) && originTrack.isSaved) { // skip manual selection
             resultLanguage = audioLanguage;
-        } else if (originTrack.format != null && !TextUtils.isEmpty(originTrack.format.language)) {
-            resultLanguage = originTrack.format.language;
         }
 
-        if (resultLanguage == null) {
+        if (originTrack.format != null && !TextUtils.isEmpty(originTrack.format.language)) {
+            originLanguage = originTrack.format.language;
+        }
+
+        if (resultLanguage == null && originLanguage == null) {
             return trackGroupList;
         }
 
         List<MediaTrack[]> resultTracks = null;
+        List<MediaTrack[]> originTracks = null;
         List<MediaTrack[]> resultTracksFallback = null;
 
         // Tracks are grouped by the language/formats
@@ -634,6 +638,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         }
 
                         resultTracks.add(trackGroup);
+                    } else if (Helpers.startsWith(mediaTrack.format.language, originLanguage)) {
+                        if (originTracks == null) {
+                            originTracks = new ArrayList<>();
+                        }
+
+                        originTracks.add(trackGroup);
                     } else if (Helpers.startsWith(mediaTrack.format.language, DEFAULT_LANGUAGE)) { // format language: en-us
                         if (resultTracksFallback == null) {
                             resultTracksFallback = new ArrayList<>();
@@ -647,6 +657,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         if (resultTracks != null && !resultTracks.isEmpty()) {
             return resultTracks.toArray(new MediaTrack[0][]);
+        }
+
+        if (originTracks != null && !originTracks.isEmpty()) {
+            return originTracks.toArray(new MediaTrack[0][]);
         }
 
         if (resultTracksFallback != null && !resultTracksFallback.isEmpty()) {
