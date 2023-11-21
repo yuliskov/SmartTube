@@ -99,7 +99,9 @@ public class ExoPlayerInitializer {
         switch (mPlayerData.getVideoBufferType()) {
             case PlayerEngine.BUFFER_HIGH:
                 minBufferMs = 50_000;
-                maxBufferMs = 36_000_000; // technical infinity, recommended here a very high number, the max will be based on setTargetBufferBytes() value
+                maxBufferMs = 100_000;
+                // Infinite buffer works awfully on live streams. Constant stuttering.
+                //maxBufferMs = 36_000_000; // technical infinity, recommended here a very high number, the max will be based on setTargetBufferBytes() value
                 baseBuilder
                         .setTargetBufferBytes(mDeviceRam);
                 baseBuilder.setBackBuffer(minBufferMs, true);

@@ -40,7 +40,7 @@
                   android:paddingStart="@dimen/lb_details_description_title_padding_adjust_bottom"
                   android:paddingEnd="@dimen/lb_details_description_title_padding_adjust_bottom"
                   style="@style/TextAppearance.Leanback.ImageCardView.Content" />
-        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.styled.StyledProgressBar
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.styled.CardProgressBar
             android:id="@+id/clip_progress"
             android:visibility="visible"
             android:layout_width="match_parent"
