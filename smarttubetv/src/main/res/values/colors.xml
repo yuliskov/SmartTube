@@ -41,7 +41,7 @@
     <color name="scheme_red_background">#131313</color>
     <color name="scheme_red_background_dark">@color/dark_red</color>
     <color name="scheme_red_shelf_background_dark">#131313</color>
-    <color name="scheme_red_card_background_dark">#36474f</color>
+    <color name="scheme_red_card_background_dark">#b31217</color>
 
     <!-- Blue color scheme -->
     <color name="scheme_blue_background">#33B5E5</color>
