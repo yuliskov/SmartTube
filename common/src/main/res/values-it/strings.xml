@@ -248,7 +248,8 @@
     <string name="uploads_row_name">Caricamenti</string>
     <string name="playlists_row_name">Playlist create</string>
     <string name="popular_uploads_row_name">Caricamenti popolari</string>
-    <string name="breaking_news_row_name">Notizie</string>
+    <string name="news_row_name">Notizie</string>
+    <string name="breaking_news_row_name">Ultime notizie</string>
     <string name="covid_news_row_name">Notizie su COVID-19</string>
     <string name="enable_voice_search">Abilita ricerca vocale (supporto firmware necessario)</string>
     <string name="subscribe_unsubscribe_from_channel">Iscriviti/Disiscriviti dal canale</string>
@@ -571,8 +572,8 @@
     <string name="mark_as_watched">Segna come già visto</string>
     <string name="player_ui_animations">Abilita le animazioni del pannello di controllo</string>
     <string name="player_likes_count">Mostra il conteggio dei Mi piace/Non mi piace</string>
-    <string name="sorting_alphabetically2">In ordine alfabetico (veloce)</string>
-    <string name="sorting_default">Predefinito (veloce)</string>
+    <string name="sorting_alphabetically2">In ordine alfabetico (anteprime veloci e animate)</string>
+    <string name="sorting_default">Predefinito (anteprime veloci e animate)</string>
     <string name="content_block_exclude_channel">Escludi questo canale da SponsorBlock</string>
     <string name="content_block_stop_excluding_channel">Non escludere più questo canale da SponsorBlock</string>
     <string name="player_chapter_notification">Mostra notifica per avanzare rapidamente tra i capitoli</string>
