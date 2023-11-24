@@ -457,6 +457,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             return;
         }
 
+        if (mLastVideo != null && mLastVideo.isShorts) {
+            repeatMode = PlayerUI.REPEAT_MODE_ONE;
+        }
+
         switch (repeatMode) {
             case PlayerUI.REPEAT_MODE_ALL:
             case PlayerUI.REPEAT_MODE_SHUFFLE:
