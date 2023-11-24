@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerU
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 
 import java.util.ArrayList;
@@ -368,6 +369,11 @@ public class PlayerData extends DataChangeBase implements ProfileChangeListener 
             case FormatItem.TYPE_SUBTITLE:
                 format = mSubtitleFormat;
                 break;
+        }
+
+        MediaTrack track = ExoFormatItem.toMediaTrack(format);
+        if (track != null) {
+            track.isSaved = true;
         }
 
         return FormatItem.checkFormat(format, type);

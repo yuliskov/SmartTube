@@ -1,8 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class HashList<T> extends ArrayList<T> {
+public class CopyOnWriteHashList<T> extends CopyOnWriteArrayList<T> {
     @Override
     public boolean add(T item) {
         int index = size() - 1;

@@ -93,6 +93,11 @@ public class Playlist {
 
         int nextIdx = mPlaylist.size() > mCurrentIndex ? mCurrentIndex + 1 : mPlaylist.size() - 1;
 
+        // IndexOutOfBoundsException fix
+        if (nextIdx < 0) {
+            return;
+        }
+
         mPlaylist.add(nextIdx, video);
 
         // Video opened from the browser or suggestions.

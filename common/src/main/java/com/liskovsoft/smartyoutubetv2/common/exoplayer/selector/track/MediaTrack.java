@@ -18,6 +18,7 @@ public abstract class MediaTrack {
     public int groupIndex = -1;
     public int trackIndex = -1;
     public boolean isSelected;
+    public boolean isSaved;
     public boolean isPreset;
     public int rendererIndex;
 

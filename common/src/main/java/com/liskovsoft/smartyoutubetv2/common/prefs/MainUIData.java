@@ -328,7 +328,7 @@ public class MainUIData extends DataChangeBase {
                 mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_dark_grey_monochrome,
-                "App.Theme.DarkGrey.OLED.Player",
+                "App.Theme.DarkGrey2.OLED.Player",
                 "App.Theme.DarkGrey2.OLED.Browse",
                 "App.Theme.DarkGrey.Preferences",
                 mContext));

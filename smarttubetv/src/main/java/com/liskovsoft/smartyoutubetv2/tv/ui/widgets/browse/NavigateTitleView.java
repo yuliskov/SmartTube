@@ -24,6 +24,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -197,7 +198,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
 
         if (mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS)) {
             mAccountView = (LongClickSearchOrbView) findViewById(R.id.account_orb);
-            mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).nextAccountOrDialog());
+            mAccountView.setOnOrbClickedListener(v -> AccountSelectionPresenter.instance(getContext()).nextAccountOrDialog());
             mAccountView.setOnOrbLongClickedListener(v -> {
                 AccountSettingsPresenter.instance(getContext()).show();
                 return true;

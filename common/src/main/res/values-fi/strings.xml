@@ -10,7 +10,7 @@
   <string name="header_playlists">Soittolista</string>
   <string name="header_settings">Asetukset</string>
   <string name="header_channels">Kanavat</string>
-  <string name="subscriptions_signin_title">Katso uusimmat videot tilauksistasi</string>
+  <string name="subscriptions_signin_title">Katso uusimmat videot suosikkikanaviltasi</string>
   <string name="subscriptions_signin_subtitle">Kirjaudu sisään nähdäksesi tilauksesi</string>
   <string name="subscriptions_signin_button_text">Kirjaudu sisään</string>
   <string name="library_signin_to_show_more">Katso videoita joista pidit, tallensit tai tilasit</string>
@@ -597,6 +597,11 @@
   <string name="protect_account_with_password">Suojaa tämä tili salasanalla</string>
   <string name="enter_account_password">Syötä tilin salasana</string>
   <string name="show_connect_messages">Näytä yhteysviestit</string>
-  <string name="prefer_avc_over_vp9_desc">Huom.max 1080P</string>
+  <string name="prefer_avc_over_vp9_desc">Huom. max 1080P</string>
   <string name="news_row_name">Uutiset</string>
+  <string name="play_next">Toista seuraava</string>
+  <string name="hide_watched_from_subscriptions">Piilota katsotut tiöauksista</string>
+  <string name="hide_unwanted_content">Piilota ei-toivottu sisältö</string>
+  <string name="hide_watched_from_home">Piilota katsotut videot pääsivulta</string>
+  <string name="remote_control_permission">Taustakauko-ohjaus vaatii Overlay-luvan</string>
 </resources>

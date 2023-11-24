@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -72,12 +73,15 @@ public class SignInPresenter extends BasePresenter<SignInView> {
                             if (getView() != null) {
                                 getView().close();
                             }
-                            mBrowsePresenter.refresh();
-                            mSplashPresenter.updateChannels();
 
-                            // Account history might be turned off (common issue).
-                            GeneralData.instance(getContext()).enableHistory(true);
-                            MediaServiceManager.instance().enableHistory(true);
+                            AccountSelectionPresenter.instance(getContext()).show(true);
+
+                            //mBrowsePresenter.refresh();
+                            //mSplashPresenter.updateChannels();
+                            //
+                            //// Account history might be turned off (common issue).
+                            //GeneralData.instance(getContext()).enableHistory(true);
+                            //MediaServiceManager.instance().enableHistory(true);
                         }
                  );
     }

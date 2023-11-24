@@ -10,7 +10,7 @@ import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
-import com.liskovsoft.smartyoutubetv2.common.utils.HashList;
+import com.liskovsoft.smartyoutubetv2.common.utils.CopyOnWriteHashList;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -87,7 +87,7 @@ public class GeneralData implements ProfileChangeListener {
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new CopyOnWriteArrayList<>();
-    private final List<Video> mPinnedItems = new HashList<>();
+    private final List<Video> mPinnedItems = new CopyOnWriteHashList<>();
 
     private GeneralData(Context context) {
         mContext = context;

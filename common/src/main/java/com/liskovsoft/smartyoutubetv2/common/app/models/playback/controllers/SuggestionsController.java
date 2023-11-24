@@ -207,6 +207,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
                             if (getPlayer() != null) {
                                 getPlayer().showProgressBar(false);
                             }
+                            mLastScrollGroup = null;
                         }
                 );
 

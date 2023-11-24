@@ -253,6 +253,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                             }
+                            mLastScrollGroup = null;
                         },
                         () -> getView().showProgressBar(false)
                 );

@@ -22,10 +22,15 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     private String mTitle;
     private long mTimeoutMs;
     private boolean mIsTransparent;
-    private List<OptionCategory> mBackupCategories;
     private List<OptionCategory> mCategories;
     private boolean mIsExpandable = true;
     private int mId;
+
+    private String mBackupTitle;
+    private List<OptionCategory> mBackupCategories;
+    private int mBackupId;
+    private boolean mBackupIsTransparent;
+    private boolean mBackupIsExpandable;
 
     public AppDialogPresenter(Context context) {
         super(context);
@@ -66,18 +71,28 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         resetData();
     }
 
+    /**
+     * Doubled items fix / Empty dialog fix (multiple overlapped dialogs)
+     */
+    private void backupData() {
+        mBackupCategories = mCategories;
+        mBackupTitle = mTitle;
+        mBackupId = mId;
+        mBackupIsExpandable = mIsExpandable;
+        mBackupIsTransparent = mIsTransparent;
+    }
+
     private void resetData() {
         mCategories = new ArrayList<>();
-        mBackupCategories = null;
         mIsExpandable = true;
         mIsTransparent = false;
         mId = 0;
+        mTitle = null;
     }
 
     @Override
     public void onViewInitialized() {
-        getView().show(mBackupCategories, mTitle, mIsExpandable, mIsTransparent, mId);
-        resetData();
+        getView().show(mBackupCategories, mBackupTitle, mBackupIsExpandable, mBackupIsTransparent, mBackupId);
     }
 
     /**
@@ -104,10 +119,9 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     public void showDialog(String dialogTitle, Runnable onFinish) {
         mTitle = dialogTitle;
         mOnFinish.add(onFinish);
-
-        // Doubled items fix?
-        mBackupCategories = mCategories;
-        mCategories = new ArrayList<>();
+        
+        backupData(); // overlapped dialog fix
+        resetData(); // prepare to new call
 
         if (getView() != null) {
             onViewInitialized();
