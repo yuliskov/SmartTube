@@ -686,12 +686,12 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
         if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
             getMainController().onNextClicked();
-            return true;
+            return true; // hide ui
         }
 
         if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
             getMainController().onPreviousClicked();
-            return true;
+            return true; // hide ui
         }
 
         return false;

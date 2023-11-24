@@ -86,9 +86,9 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     @Override
     public boolean onPreviousClicked() {
         // Seek to the start on prev
-        if (getPlayer().getPositionMs() > BEGIN_THRESHOLD_MS) {
+        if (getPlayer().getPositionMs() > BEGIN_THRESHOLD_MS && !getVideo().isShorts) {
             saveState(); // in case the user wants to go to previous video
-            getPlayer().setPositionMs(0);
+            getPlayer().setPositionMs(100);
             return true;
         }
 
