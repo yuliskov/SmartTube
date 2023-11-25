@@ -115,6 +115,9 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.show_connect_messages),
                 option -> mRemoteControlData.enableConnectMessages(option.isSelected()),
                 mRemoteControlData.isConnectMessagesEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_remote_history),
+                option -> mRemoteControlData.disableRemoteHistory(option.isSelected()),
+                mRemoteControlData.isRemoteHistoryDisabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
