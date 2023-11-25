@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.signin;
 
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
@@ -26,9 +27,11 @@ import java.util.List;
 public class SignInFragment extends GuidedStepSupportFragment implements SignInView {
     private static final String TAG = SignInFragment.class.getSimpleName();
     private static final int CONTINUE = 2;
+    private static final int OPEN_BROWSER = 3;
     private static final String SIGN_IN_URL_SHORT = "https://yt.be/activate"; // doesn't support query params
     private static final String SIGN_IN_URL_FULL = "https://youtube.com/tv/activate"; // support query params
     private SignInPresenter mSignInPresenter;
+    private String mSignInCodeUrl = SIGN_IN_URL_SHORT;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,8 +66,10 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
 
         getGuidanceStylist().getTitleView().setText(userCode);
 
+        mSignInCodeUrl = SIGN_IN_URL_FULL + "?user_code=" + userCode.replace(" ", "-");
+
         Glide.with(getContext())
-                .load(Utils.toQrCodeLink(SIGN_IN_URL_FULL + "?user_code=" + userCode.replace(" ", "-")))
+                .load(Utils.toQrCodeLink(mSignInCodeUrl))
                 .apply(ViewUtil.glideOptions()).error(ContextCompat.getDrawable(getContext(), R.drawable.activate_account_qrcode))
                 .listener(mErrorListener)
                 .into(getGuidanceStylist().getIconView());
@@ -89,13 +94,20 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
                 .id(CONTINUE)
                 .title(getString(R.string.signin_view_action_text))
                 .build();
+        GuidedAction openBrowser = new GuidedAction.Builder()
+                .id(OPEN_BROWSER)
+                .title(getString(R.string.login_from_browser))
+                .build();
         actions.add(login);
+        actions.add(openBrowser);
     }
 
     @Override
     public void onGuidedActionClicked(GuidedAction action) {
         if (action.getId() == CONTINUE) {
             mSignInPresenter.onActionClicked();
+        } else if (action.getId() == OPEN_BROWSER) {
+            Utils.openLinkExt(getContext(), mSignInCodeUrl);
         }
     }
 
