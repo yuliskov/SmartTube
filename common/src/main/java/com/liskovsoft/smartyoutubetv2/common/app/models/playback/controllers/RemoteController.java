@@ -242,7 +242,7 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
 
         switch (command.getType()) {
             case Command.TYPE_OPEN_VIDEO:
-            case Command.TYPE_SUBTITLES:
+            case Command.TYPE_SUBTITLES: // open same video fix
                 if (getPlayer() != null) {
                     getPlayer().showOverlay(false);
                 }
