@@ -483,7 +483,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         Video video = getVideo();
 
         if (video == null || (video.isShorts && mGeneralData.isHideShortsFromHistoryEnabled()) ||
-                mIncognito || !getPlayer().containsMedia() || mRemoteControlData.isRemoteHistoryDisabled()) {
+                mIncognito || !getPlayer().containsMedia() || (video.isRemote && mRemoteControlData.isRemoteHistoryDisabled())) {
             return;
         }
 
