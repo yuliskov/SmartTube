@@ -570,10 +570,10 @@
     <string name="old_update_notifications">Güncelleme bildirimlerinin eski görünümü</string>
     <string name="dialog_notification">Açılır iletişim kutusuyla güncelleme hakkında bilgi ver</string>
     <string name="mark_as_watched">İzlendi olarak işaretle</string>
-    <string name="player_ui_animations">Kullanıcı arayüzü animasyonlarını etkinleştir</string>
+    <string name="player_ui_animations">Kontrol paneli animasyonlarını etkinleştir</string>
     <string name="player_likes_count">Beğenme/Beğenmeme sayısını göster</string>
-    <string name="sorting_alphabetically2">Alfabetik (hızlı)</string>
-    <string name="sorting_default">Varsayılan (hızlı)</string>
+    <string name="sorting_alphabetically2">Alfabetik (hızlı, hareketli ön izlemeler)</string>
+    <string name="sorting_default">Varsayılan (hızlı, hareketli ön izlemeler)</string>
     <string name="content_block_exclude_channel">Bu kanalı SponsorBlock\'tan hariç tut</string>
     <string name="content_block_stop_excluding_channel">Bu kanalı SponsorBlock\'tan hariç tutmayı durdur</string>
     <string name="player_chapter_notification">Bölümler arasında hızla ilerlemek için bildirim göster</string>
@@ -611,4 +611,6 @@
     <string name="hide_unwanted_content">İstenmeyen içerik gizleme</string>
     <string name="hide_watched_from_home">İzlenen videoları Ana Sayfa\'da gizle</string>
     <string name="remote_control_permission">Arka plan Uzaktan kontrol, Yer Paylaşımı izni gerektirir</string>
+    <string name="login_from_browser">Tarayıcıdan giriş yap</string>
+    <string name="disable_remote_history">Uzaktan kontrol kullanırken geçmişi devre dışı bırak</string>
 </resources>
