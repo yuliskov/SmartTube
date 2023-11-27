@@ -152,7 +152,7 @@ public class WebProxyDialog {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View contentView = inflater.inflate(R.layout.web_proxy_dialog, null);
 
-        KeyHelpers.fixEnterKey(
+        KeyHelpers.fixShowKeyboard(
                 contentView.findViewById(R.id.proxy_host),
                 contentView.findViewById(R.id.proxy_port),
                 contentView.findViewById(R.id.proxy_username),

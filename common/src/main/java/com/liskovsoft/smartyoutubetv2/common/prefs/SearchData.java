@@ -136,13 +136,15 @@ public class SearchData {
         mIsInstantVoiceSearchEnabled = Helpers.parseBoolean(split, 0, false);
         mSearchOptions = Helpers.parseInt(split, 1, 0);
         mIsFocusOnResultsEnabled = Helpers.parseBoolean(split, 2, true);
-        mIsKeyboardAutoShowEnabled = Helpers.parseBoolean(split, 3, false);
+        //mIsKeyboardAutoShowEnabled = Helpers.parseBoolean(split, 3, false);
         mIsTempBackgroundModeEnabled = Helpers.parseBoolean(split, 4, false);
         //mIsAltSpeechRecognizerEnabled
         mSpeechRecognizerType = Helpers.parseInt(split, 6, SPEECH_RECOGNIZER_SYSTEM);
         mIsTrendingSearchesEnabled = Helpers.parseBoolean(split, 7, true);
         mIsSearchHistoryDisabled = Helpers.parseBoolean(split, 8, false);
         mIsPopularSearchesDisabled = Helpers.parseBoolean(split, 9, false);
+        mIsKeyboardAutoShowEnabled = Helpers.parseBoolean(split, 10, true);
+
     }
 
     private void persistData() {

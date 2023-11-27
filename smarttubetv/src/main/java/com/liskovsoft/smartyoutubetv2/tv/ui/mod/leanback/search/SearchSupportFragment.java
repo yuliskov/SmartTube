@@ -344,7 +344,7 @@ public class SearchSupportFragment extends Fragment {
             }
 
             if (mIsKeyboardAutoShowEnabled && focused) {
-                Helpers.showKeyboard(v.getContext());
+                Helpers.showKeyboardAlt(v.getContext(), v);
             }
         });
         mSearchTextEditor.addTextChangedListener(new TextWatcher() {
@@ -363,7 +363,9 @@ public class SearchSupportFragment extends Fragment {
                 Utils.enableScreensaver(getActivity(), true);
             }
         });
-        KeyHelpers.fixEnterKey(mSearchTextEditor);
+        if (!mIsKeyboardAutoShowEnabled) {
+            KeyHelpers.fixEnterKey(mSearchTextEditor);
+        }
         // BUGFIX: focus lost with keyboard???
         //mSearchTextEditor.setOnKeyboardDismissListener(this::focusOnSearchField);
 
