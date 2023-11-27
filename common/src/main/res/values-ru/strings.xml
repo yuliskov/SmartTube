@@ -604,4 +604,5 @@
     <string name="remote_control_permission">Фоновое Дистанционное управление требует разрешения Перекрывать другие окна</string>
     <string name="login_from_browser">Войти через браузер</string>
     <string name="disable_remote_history">Отключить историю во время дистанционного управления</string>
+    <string name="keyboard_fix">Исправить отображение клавиатуры при нажатии клавиши ОК (G20 и другие)</string>
 </resources>
