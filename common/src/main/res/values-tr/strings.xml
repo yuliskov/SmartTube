@@ -613,5 +613,5 @@
     <string name="remote_control_permission">Arka plan Uzaktan kontrol, Yer Paylaşımı izni gerektirir</string>
     <string name="login_from_browser">Tarayıcıdan giriş yap</string>
     <string name="disable_remote_history">Uzaktan kontrol kullanırken geçmişi devre dışı bırak</string>
-    <string name="keyboard_fix">TAMAM tuşuna basarak klavyeyi göstermeyi düzelt (G20'ler ve diğerleri)</string>
+    <string name="keyboard_fix">TAMAM tuşuna basarak klavyeyi göstermeyi düzelt (G20\'ler ve diğerleri)</string>
 </resources>
