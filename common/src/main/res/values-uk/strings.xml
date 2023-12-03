@@ -219,6 +219,9 @@
     <string name="header_uploads">Завантаження</string>
     <string name="player_show_global_clock">Постійно відображати на екрані годинник</string>
     <string name="player_show_global_ending_time">Постійно відображати на екрані час закінчення відео</string>
+    <string name="app_corner_clock">Головна: годинник у верхньому правому куті</string>
+    <string name="player_corner_clock">Плеєр: годинник у верхньому правому куті</string>
+    <string name="player_corner_ending_time">Плеєр: час закінчення у верхньому правому куті</string>
     <string name="uploads_old_look">Повернути старий вигляд розділу Завантаження</string>
     <string name="background_playback_activation">Фонове відтворення (активація)</string>
     <string name="channels_old_look">Повернути старий вигляд розділу Канали</string>

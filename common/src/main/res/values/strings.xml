@@ -219,6 +219,9 @@
     <string name="header_uploads">Uploads</string>
     <string name="player_show_global_clock">Show always-on-screen clock</string>
     <string name="player_show_global_ending_time">Show always-on-screen ending time</string>
+    <string name="app_corner_clock">Home: top right corner clock</string>
+    <string name="player_corner_clock">Player: top right corner clock</string>
+    <string name="player_corner_ending_time">Player: top right corner ending time</string>
     <string name="uploads_old_look">Revert old look of Uploads section</string>
     <string name="background_playback_activation">Background playback (activation)</string>
     <string name="channels_old_look">Revert old look of Channels section</string>

@@ -219,6 +219,9 @@
     <string name="header_uploads">Загрузки</string>
     <string name="player_show_global_clock">Постоянно отображать на экране часы</string>
     <string name="player_show_global_ending_time">Постоянно отображать на экране время окончания видео</string>
+    <string name="app_corner_clock">Главная страница: часы в правом верхнем углу</string>
+    <string name="player_corner_clock">Плеер: часы в правом верхнем углу</string>
+    <string name="player_corner_ending_time">Плеер: время окончания в правом верхнем углу</string>
     <string name="uploads_old_look">Вернуть старый вид раздела Загрузки</string>
     <string name="background_playback_activation">Фоновое воспроизведение (активация)</string>
     <string name="channels_old_look">Вернуть старый вид раздела Каналы</string>
