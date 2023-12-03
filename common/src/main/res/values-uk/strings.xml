@@ -236,6 +236,7 @@
     <string name="card_text_scroll_factor">Швидкість прокрутки тексту картки</string>
     <string name="preferred_update_source">Вибрати джерело оновлень</string>
     <string name="hide_shorts">Приховувати короткі відео з Підписок</string>
+    <string name="hide_shorts_channel">Приховувати короткі відео на Каналі</string>
     <string name="key_remapping">Перевизначення клавіш</string>
     <string name="screen_dimming">Затемнення екрану</string>
     <string name="removed_from_playback_queue">Видалено з черги відтворення</string>
@@ -324,6 +325,8 @@
     <string name="msg_player_error_audio_source">Посилання на АУДІОПОТІК не працює або невірний час на пристрої.\nСкоріш за все проблема у застосунку.</string>
     <string name="msg_player_error_subtitle_source">Посилання на СУБТИТРИ не працює або невірний час на пристрої.\nСкоріш за все проблема у застосунку.</string>
     <string name="hide_upcoming">Приховувати анонси з Підписок</string>
+    <string name="hide_upcoming_channel">Приховувати анонси на Каналі</string>
+    <string name="hide_upcoming_home">Приховувати анонси з Головної</string>
     <string name="search_background_playback">Переходити у режим Картинка в картинці при пошуку/відкритті каналу</string>
     <string name="trending_row_name">Популярне</string>
     <string name="player_seek_type">Поведінка перемотування</string>

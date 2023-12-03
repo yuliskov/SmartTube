@@ -315,6 +315,14 @@ public class GeneralData implements ProfileChangeListener {
         return GlobalPreferences.sInstance.isHideShortsFromSubscriptionsEnabled();
     }
 
+    public void hideShortsFromChannel(boolean enable) {
+        GlobalPreferences.sInstance.hideShortsFromChannel(enable);
+    }
+
+    public boolean isHideShortsFromChannelEnabled() {
+        return GlobalPreferences.sInstance.isHideShortsFromChannelEnabled();
+    }
+
     public void hideStreamsFromSubscriptions(boolean enable) {
         GlobalPreferences.sInstance.hideStreamsFromSubscriptions(enable);
     }
@@ -379,6 +387,30 @@ public class GeneralData implements ProfileChangeListener {
 
     public boolean isHideUpcomingEnabled() {
         return GlobalPreferences.sInstance.isHideUpcomingEnabled();
+    }
+
+    public void hideUpcomingFromSubscriptions(boolean enable) {
+        GlobalPreferences.sInstance.hideUpcomingFromSubscriptions(enable);
+    }
+
+    public boolean isHideUpcomingFromSubscriptionsEnabled() {
+        return GlobalPreferences.sInstance.isHideUpcomingFromSubscriptionsEnabled();
+    }
+
+    public void hideUpcomingFromChannel(boolean enable) {
+        GlobalPreferences.sInstance.hideUpcomingFromChannel(enable);
+    }
+
+    public boolean isHideUpcomingFromChannelEnabled() {
+        return GlobalPreferences.sInstance.isHideUpcomingFromChannelEnabled();
+    }
+
+    public void hideUpcomingFromHome(boolean enable) {
+        GlobalPreferences.sInstance.hideUpcomingFromHome(enable);
+    }
+
+    public boolean isHideUpcomingFromHomeEnabled() {
+        return GlobalPreferences.sInstance.isHideUpcomingFromHomeEnabled();
     }
 
     public void disableScreensaver(boolean enable) {
