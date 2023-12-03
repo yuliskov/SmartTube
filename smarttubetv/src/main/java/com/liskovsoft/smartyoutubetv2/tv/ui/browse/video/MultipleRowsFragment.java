@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelHeaderPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ShortsCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
@@ -84,6 +85,14 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         }
     }
 
+    private void addSearchHeader() {
+        ArrayObjectAdapter adapter = new ArrayObjectAdapter(new ChannelHeaderPresenter());
+        adapter.add(new Object());
+        ListRow row = new ListRow(adapter);
+
+        mRowsAdapter.add(row);
+    }
+
     private void setupEventListeners() {
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
@@ -95,6 +104,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     public void clear() {
         if (mRowsAdapter != null) {
             mRowsAdapter.clear();
+            //addSearchHeader();
         }
 
         if (mVideoGroupAdapters != null) {
