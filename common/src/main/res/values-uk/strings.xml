@@ -340,6 +340,7 @@
     <string name="finish_on_disconnect">Завершувати додаток після відключення телефону/планшету</string>
     <string name="update_error">Помилка оновлення</string>
     <string name="hide_shorts_from_history">Приховувати короткі відео з Історії</string>
+    <string name="hide_shorts_from_trending">Приховувати короткі відео з Трендів</string>
     <string name="disable_screensaver">Вимкнути скрінсейвер</string>
     <string name="description_not_found">Опис не знайдено</string>
     <string name="proxy_port_hint">Порт проксі-сервера</string>

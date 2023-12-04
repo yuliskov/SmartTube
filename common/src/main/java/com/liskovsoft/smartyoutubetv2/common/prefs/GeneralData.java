@@ -381,6 +381,14 @@ public class GeneralData implements ProfileChangeListener {
         return GlobalPreferences.sInstance.isHideShortsFromHistoryEnabled();
     }
 
+    public void hideShortsFromTrending(boolean enable) {
+        GlobalPreferences.sInstance.hideShortsFromTrending(enable);
+    }
+
+    public boolean isHideShortsFromTrendingEnabled() {
+        return GlobalPreferences.sInstance.isHideShortsFromTrendingEnabled();
+    }
+
     public void hideUpcoming(boolean enable) {
         GlobalPreferences.sInstance.hideUpcoming(enable);
     }

@@ -344,6 +344,7 @@
     <string name="finish_on_disconnect">Finish the app after disconnect the phone/tablet</string>
     <string name="update_error">Update error</string>
     <string name="hide_shorts_from_history">Hide shorts from History</string>
+    <string name="hide_shorts_from_trending">Hide shorts from Trending</string>
     <string name="disable_screensaver">Disable screensaver</string>
     <string name="description_not_found">Description not found</string>
     <string name="proxy_port_hint">Proxy port</string>
