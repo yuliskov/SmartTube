@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
+import androidx.leanback.widget.ClassPresenterSelector;
 import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
@@ -18,7 +19,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.adapter.HeaderVideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.SearchBarPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
@@ -35,7 +38,7 @@ import java.util.List;
 
 public class MultiVideoGridFragment extends MultiGridFragment implements VideoSection {
     private static final String TAG = MultiVideoGridFragment.class.getSimpleName();
-    private VideoGroupObjectAdapter mGridAdapter1;
+    private HeaderVideoGroupObjectAdapter mGridAdapter1;
     private VideoGroupObjectAdapter mGridAdapter2;
     private final List<VideoGroup> mPendingUpdates1 = new ArrayList<>();
     private final List<VideoGroup> mPendingUpdates2 = new ArrayList<>();
@@ -182,7 +185,11 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
         setGridPresenter2(presenter2);
 
         if (mGridAdapter1 == null) {
-            mGridAdapter1 = new VideoGroupObjectAdapter(mCardPresenter1);
+            ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
+            presenterSelector.addClassPresenter(Video.class, mCardPresenter1);
+            presenterSelector.addClassPresenter(SearchBarPresenter.Data.class, new SearchBarPresenter());
+
+            mGridAdapter1 = new HeaderVideoGroupObjectAdapter(presenterSelector);
             setAdapter1(mGridAdapter1);
         }
 
@@ -270,22 +277,27 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
         }
     }
 
-    private void clear1() {
-        if (mGridAdapter1 != null) {
-            mGridAdapter1.clear();
-        }
-    }
-
     @Override
     public void clear() {
         clear1();
         clear2();
     }
 
+    private void clear1() {
+        if (mGridAdapter1 != null) {
+            mGridAdapter1.clear();
+            //addSearchHeader();
+        }
+    }
+
     private void clear2() {
         if (mGridAdapter2 != null) {
             mGridAdapter2.clear();
         }
+    }
+
+    private void addSearchHeader() {
+        mGridAdapter1.setHeader(new SearchBarPresenter.Data());
     }
 
     @Override
