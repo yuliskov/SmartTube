@@ -219,6 +219,9 @@
     <string name="header_uploads">Uploads</string>
     <string name="player_show_global_clock">Uhr immer auf dem Bildschirm anzeigen</string>
     <string name="player_show_global_ending_time">Endzeit immer auf dem Bildschirm anzeigen</string>
+    <string name="app_corner_clock">Start: Uhr in der rechten oberen Ecke</string>
+    <string name="player_corner_clock">Player: Uhr in der rechten oberen Ecke</string>
+    <string name="player_corner_ending_time">Player: Endzeit in der rechten oberen Ecke</string>
     <string name="uploads_old_look">Altes Aussehen der Uploads-Kategorie</string>
     <string name="background_playback_activation">Hintergrund-Wiedergabe (Taste)</string>
     <string name="channels_old_look">Altes Aussehen der Kanäle-Kategorie</string>
@@ -236,6 +239,7 @@
     <string name="card_text_scroll_factor">Scrollgeschwindigkeit des Kartentextes</string>
     <string name="preferred_update_source">Update-Quelle auswählen</string>
     <string name="hide_shorts">Shorts in Abos ausblenden</string>
+    <string name="hide_shorts_channel">Shorts in Kanäle ausblenden</string>
     <string name="key_remapping">Tastenbelegung anpassen</string>
     <string name="screen_dimming">Bildschirm dimmen</string>
     <string name="removed_from_playback_queue">Aus Warteschlange entfernt</string>
@@ -328,6 +332,8 @@
     <string name="msg_player_error_audio_source">AUDIO URL funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise handelt es sich um ein Problem der App.</string>
     <string name="msg_player_error_subtitle_source">UNTERTITEL URL funktioniert nicht oder falsche Geräte-Uhrzeit.\Normalerweise handelt es sich um ein Problem der App.</string>
     <string name="hide_upcoming">Anstehende Videos in Abos ausblenden</string>
+    <string name="hide_upcoming_channel">Anstehende Videos in Kanäle ausblenden</string>
+    <string name="hide_upcoming_home">Anstehende Videos in Start ausblenden</string>
     <string name="search_background_playback">Bild-in-Bild öffnen bei Suche/Kanal öffnen</string>
     <string name="trending_row_name">Trends</string>
     <string name="player_seek_type">Verhalten beim Spulen</string>
@@ -338,6 +344,7 @@
     <string name="finish_on_disconnect">App nach dem Trennen des Telefons/Tablets beenden</string>
     <string name="update_error">Update-Fehler</string>
     <string name="hide_shorts_from_history">Shorts in Verlauf ausblenden</string>
+    <string name="hide_shorts_from_trending">Shorts in Trends ausblenden</string>
     <string name="disable_screensaver">Bildschirmschoner deaktivieren</string>
     <string name="description_not_found">Beschreibung nicht gefunden</string>
     <string name="proxy_port_hint">Proxy-Port</string>
