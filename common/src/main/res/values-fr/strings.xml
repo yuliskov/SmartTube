@@ -540,7 +540,7 @@
   <string name="player_network_stack">Pile réseau</string>
   <string name="cronet_desc">Cronet est la pile réseau Chromium. Elle peut réduire la latence et augmenter les performances réseau, ce qui peut aider à résoudre les problèmes de mise en mémoire tampon.</string>
   <string name="unlock_all_formats">Déverrouiller tous les formats vidéo</string>
-  <string name="unlock_all_formats_desc">Sur certains appareils, le micrologiciel signale à tort certains formats comme non pris en charge.\nundefined        (par exemple, les téléviseurs intelligents 1080p ont tendance à signaler le format 4K comme non pris en charge).</string>
+  <string name="unlock_all_formats_desc">Sur certains appareils, le micrologiciel signale à tort certains formats comme non pris en charge.\n        (par exemple, les téléviseurs intelligents 1080p ont tendance à signaler le format 4K comme non pris en charge).</string>
   <string name="okhttp_desc">Cette pile réseau est la plus lente mais apporte une bonne stabilité.</string>
   <string name="select_channel_section">Ouvrir la section correspondante lorsque l\'application est lancée depuis les canaux ATV</string>
   <string name="enable_voice_search_desc">L\'application officielle sera remplacée par une \"passerelle\". Un pont permet de transférer les demandes de recherche globales vers notre application.</string>

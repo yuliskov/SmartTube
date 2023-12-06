@@ -522,7 +522,7 @@
   <string name="disable_ok_long_press_desc">مخصص لأجهزة التحكم التي تحتوى على أخطاء حيث لا يعمل زر موافق بشكل صحيح</string>
   <string name="pressing_back">بالضغط على \"BACK\"</string>
   <string name="alt_app_icon">أيقونة للتطبيق بديلة (يحتاج إلى إعادة التشغيل)</string>
-  <string name="cronet_desc">Cronetundefined عبارة عن مكدس شبكة Chromium.  undefinedعادة أسرع من الآخرين. يمكن أن يساعد في مشاكل التخزين المؤقت.</string>
+  <string name="cronet_desc">Cronet عبارة عن مكدس شبكة Chromium.  عادة أسرع من الآخرين. يمكن أن يساعد في مشاكل التخزين المؤقت.</string>
   <string name="network_stack">يفضل %s مكدس شبكة الاتصال</string>
   <string name="unlock_all_formats">فتح جميع صيغ الفيديو</string>
   <string name="unlock_all_formats_desc">فتح التنسيقات التي ربما لا يدعمها جهازك.</string>
