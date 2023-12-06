@@ -30,7 +30,7 @@ public class StoryboardManager {
     private static final int MAX_PRELOADED_IMAGES = 3;
     private static final int DIRECTION_RIGHT = 0;
     private static final int DIRECTION_LEFT = 1;
-    private final MediaItemService mMediaItemManager;
+    private final MediaItemService mMediaItemService;
     private final Context mContext;
     private long mLengthMs;
     private MediaItemStoryboard mStoryboard;
@@ -47,7 +47,7 @@ public class StoryboardManager {
     public StoryboardManager(Context context) {
         mContext = context;
         HubService hubService = YouTubeHubService.instance();
-        mMediaItemManager = hubService.getMediaItemService();
+        mMediaItemService = hubService.getMediaItemService();
     }
 
     public void init(Video video, long lengthMs) {
@@ -65,9 +65,9 @@ public class StoryboardManager {
         Observable<MediaItemStoryboard> storyboardObserve;
 
         if (video.mediaItem != null) {
-            storyboardObserve = mMediaItemManager.getStoryboardObserve(video.mediaItem);
+            storyboardObserve = mMediaItemService.getStoryboardObserve(video.mediaItem);
         } else {
-            storyboardObserve = mMediaItemManager.getStoryboardObserve(video.videoId);
+            storyboardObserve = mMediaItemService.getStoryboardObserve(video.videoId);
         }
 
         mFormatAction = storyboardObserve
