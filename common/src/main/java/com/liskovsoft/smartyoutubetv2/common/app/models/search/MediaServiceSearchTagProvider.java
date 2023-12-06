@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.search;
 
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
+import com.liskovsoft.mediaserviceinterfaces.HomeService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
@@ -10,12 +10,12 @@ import io.reactivex.disposables.Disposable;
 
 public class MediaServiceSearchTagProvider implements SearchTagsProvider {
     private static final String TAG = MediaServiceSearchTagProvider.class.getSimpleName();
-    private final MediaGroupService mGroupManager;
+    private final HomeService mGroupManager;
     private Disposable mTagsAction;
 
     public MediaServiceSearchTagProvider() {
         MediaService mediaService = YouTubeMediaService.instance();
-        mGroupManager = mediaService.getMediaGroupService();
+        mGroupManager = mediaService.getHomeService();
     }
 
     @Override

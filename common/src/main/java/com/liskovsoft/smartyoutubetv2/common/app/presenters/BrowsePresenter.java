@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
+import com.liskovsoft.mediaserviceinterfaces.HomeService;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.NotificationsService;
@@ -10,7 +10,6 @@ import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -68,7 +67,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final Map<Integer, Callable<List<SettingsItem>>> mSettingsGridMapping;
     private final Map<Integer, BrowseSection> mSectionsMapping;
     private final AppDataSourceManager mDataSourcePresenter;
-    private final MediaGroupService mGroupService;
+    private final HomeService mGroupService;
     private final MediaItemService mItemService;
     private final SignInService mSignInService;
     private final NotificationsService mNotificationsService;
@@ -96,7 +95,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         ScreenHelper.updateScreenInfo(context);
 
         MediaService mediaService = YouTubeMediaService.instance();
-        mGroupService = mediaService.getMediaGroupService();
+        mGroupService = mediaService.getHomeService();
         mItemService = mediaService.getMediaItemService();
         mSignInService = mediaService.getSignInService();
         mNotificationsService = mediaService.getNotificationsService();

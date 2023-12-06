@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
+import com.liskovsoft.mediaserviceinterfaces.HomeService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
@@ -183,7 +183,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         getView().showProgressBar(true);
 
-        Observable<List<MediaGroup>> channelObserve = mMediaService.getMediaGroupService().getChannelObserve(channelId);
+        Observable<List<MediaGroup>> channelObserve = mMediaService.getHomeService().getChannelObserve(channelId);
 
         mUpdateAction = channelObserve
                 .subscribe(
@@ -246,7 +246,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
+        HomeService mediaGroupManager = mMediaService.getHomeService();
 
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribe(
@@ -336,7 +336,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 return;
             }
 
-            callback.onUploadsRow(mMediaService.getMediaGroupService().getChannelObserve(channelId).map(mediaGroups -> {
+            callback.onUploadsRow(mMediaService.getHomeService().getChannelObserve(channelId).map(mediaGroups -> {
                 moveToTop(mediaGroups, R.string.uploads_row_name);
                 return mediaGroups.get(0);
             }));

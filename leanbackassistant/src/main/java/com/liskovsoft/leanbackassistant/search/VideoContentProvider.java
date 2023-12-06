@@ -130,7 +130,7 @@ public class VideoContentProvider extends ContentProvider {
     private Cursor search(String query, int limit) {
         MatrixCursor matrixCursor = new MatrixCursor(queryProjection);
 
-        mSearch = YouTubeMediaService.instance().getMediaGroupService().getSearch(query);
+        mSearch = YouTubeMediaService.instance().getHomeService().getSearch(query);
 
         if (mSearch != null) {
             List<MediaItem> mediaItems = mSearch.getMediaItems();
@@ -149,7 +149,7 @@ public class VideoContentProvider extends ContentProvider {
     }
 
     private void nextSearch(MatrixCursor cursor, int limit) {
-        mSearch = YouTubeMediaService.instance().getMediaGroupService().continueGroup(mSearch);
+        mSearch = YouTubeMediaService.instance().getHomeService().continueGroup(mSearch);
 
         if (mSearch != null) {
             List<MediaItem> mediaItems = mSearch.getMediaItems();

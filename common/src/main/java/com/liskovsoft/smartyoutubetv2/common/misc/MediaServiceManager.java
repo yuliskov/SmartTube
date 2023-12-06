@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 import android.content.Context;
 import android.util.Pair;
 import com.liskovsoft.appupdatechecker2.other.SettingsManager;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
+import com.liskovsoft.mediaserviceinterfaces.HomeService;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.NotificationsService;
@@ -36,7 +36,7 @@ public class MediaServiceManager {
     private static final String TAG = SettingsManager.class.getSimpleName();
     private static MediaServiceManager sInstance;
     private final MediaItemService mItemService;
-    private final MediaGroupService mGroupService;
+    private final HomeService mGroupService;
     private final SignInService mSingInService;
     private final NotificationsService mNotificationsService;
     private Disposable mMetadataAction;
@@ -86,7 +86,7 @@ public class MediaServiceManager {
     public MediaServiceManager() {
         MediaService service = YouTubeMediaService.instance();
         mItemService = service.getMediaItemService();
-        mGroupService = service.getMediaGroupService();
+        mGroupService = service.getHomeService();
         mSingInService = service.getSignInService();
         mNotificationsService = service.getNotificationsService();
 

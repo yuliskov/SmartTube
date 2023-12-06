@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
+import com.liskovsoft.mediaserviceinterfaces.HomeService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.SearchOptions;
@@ -157,7 +157,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         disposeActions();
         getView().showProgressBar(true);
 
-        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
+        HomeService mediaGroupManager = mMediaService.getHomeService();
 
         getView().clearSearch();
 
@@ -179,7 +179,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         disposeActions();
         getView().showProgressBar(true);
 
-        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
+        HomeService mediaGroupManager = mMediaService.getHomeService();
 
         getView().clearSearch();
 
@@ -221,7 +221,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
+        HomeService mediaGroupManager = mMediaService.getHomeService();
 
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribe(
