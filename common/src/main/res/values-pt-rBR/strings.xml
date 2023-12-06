@@ -536,7 +536,7 @@
   <string name="old_home_look">Voltar para a aparência antiga da sessão Início</string>
   <string name="hide_shorts_everywhere">Esconder os Shorts em todos os lugares</string>
   <string name="update_found">Atualização</string>
-  <string name="volume_boost_warning">Qualquer configuração acima do limite pode potencialmente danificar undefinedos alto-falantes</string>
+  <string name="volume_boost_warning">Qualquer configuração acima do limite pode potencialmente danificar os alto-falantes</string>
   <string name="play_video_incognito">Reproduzir de forma anônima</string>
   <string name="header_kids_home">Crianças</string>
   <string name="player_section_playlist">Utilizar os conteúdos da sessão atual como playlist</string>

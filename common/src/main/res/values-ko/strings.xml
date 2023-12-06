@@ -525,7 +525,7 @@
   <string name="network_stack">%s 네트워크 스택 선호</string>
   <string name="cronet_desc">Cronet은 Chromium 네트워크 스택입니다. Cronet은 대기 시간을 줄이고 네트워킹 성능을 향상시켜 버퍼링 문제를 해결할 수 있습니다.</string>
   <string name="unlock_all_formats">모든 비디오 형식 잠금 해제</string>
-  <string name="unlock_all_formats_desc">일부 장치에서 펌웨어는 일부 형식이 지원되지 않더라도 잘못 보고합니다.\nundefined(예: 1080p 스마트 TV는 4k를 지원하지 않는 것으로 보고하는 경향이 있습니다).</string>
+  <string name="unlock_all_formats_desc">일부 장치에서 펌웨어는 일부 형식이 지원되지 않더라도 잘못 보고합니다.\n(예: 1080p 스마트 TV는 4k를 지원하지 않는 것으로 보고하는 경향이 있습니다).</string>
   <string name="okhttp_desc">이 네트워크 스택은 가장 느리지만 안정성이 좋습니다.</string>
   <string name="select_channel_section">앱이 ATV 채널에서 실행될 때 해당 섹션 열기</string>
   <string name="enable_voice_search_desc">공식 앱은 소위 브리지로 대체됩니다. 브리지는 전역 검색 요청을 앱으로 전송하는 데 도움이 됩니다.</string>
