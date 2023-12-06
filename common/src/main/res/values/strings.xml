@@ -219,6 +219,9 @@
     <string name="header_uploads">Uploads</string>
     <string name="player_show_global_clock">Show always-on-screen clock</string>
     <string name="player_show_global_ending_time">Show always-on-screen ending time</string>
+    <string name="app_corner_clock">Home: top right corner clock</string>
+    <string name="player_corner_clock">Player: top right corner clock</string>
+    <string name="player_corner_ending_time">Player: top right corner ending time</string>
     <string name="uploads_old_look">Revert old look of Uploads section</string>
     <string name="background_playback_activation">Background playback (activation)</string>
     <string name="channels_old_look">Revert old look of Channels section</string>
@@ -236,6 +239,7 @@
     <string name="card_text_scroll_factor">Card text scroll speed</string>
     <string name="preferred_update_source">Select update source</string>
     <string name="hide_shorts">Hide shorts from Subscriptions</string>
+    <string name="hide_shorts_channel">Hide shorts from Channel</string>
     <string name="key_remapping">Key remapping</string>
     <string name="screen_dimming">Screen dimming</string>
     <string name="removed_from_playback_queue">Removed from playback queue</string>
@@ -328,6 +332,8 @@
     <string name="msg_player_error_audio_source">AUDIO URL isn\'t working or incorrect device time.\nUsually, it\'s the app issue.</string>
     <string name="msg_player_error_subtitle_source">SUBTITLE URL isn\'t working or incorrect device time.\nUsually, it\'s the app issue.</string>
     <string name="hide_upcoming">Hide upcoming from Subscriptions</string>
+    <string name="hide_upcoming_channel">Hide upcoming from Channel</string>
+    <string name="hide_upcoming_home">Hide upcoming from Home</string>
     <string name="search_background_playback">Enter PIP on search/open channel</string>
     <string name="trending_row_name">Trending</string>
     <string name="player_seek_type">Seek behavior</string>
@@ -338,6 +344,7 @@
     <string name="finish_on_disconnect">Finish the app after disconnect the phone/tablet</string>
     <string name="update_error">Update error</string>
     <string name="hide_shorts_from_history">Hide shorts from History</string>
+    <string name="hide_shorts_from_trending">Hide shorts from Trending</string>
     <string name="disable_screensaver">Disable screensaver</string>
     <string name="description_not_found">Description not found</string>
     <string name="proxy_port_hint">Proxy port</string>
@@ -611,4 +618,7 @@
     <string name="hide_unwanted_content">Hide unwanted content</string>
     <string name="hide_watched_from_home">Hide watched videos from Home</string>
     <string name="remote_control_permission">Background Remote control requires Overlay permission</string>
+    <string name="login_from_browser">Login from browser</string>
+    <string name="disable_remote_history">Disable history when using remote control</string>
+    <string name="keyboard_fix">Fix show keyboard by the OK key press (G20s and others)</string>
 </resources>

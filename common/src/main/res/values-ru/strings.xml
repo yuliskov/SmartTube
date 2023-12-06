@@ -219,6 +219,9 @@
     <string name="header_uploads">Загрузки</string>
     <string name="player_show_global_clock">Постоянно отображать на экране часы</string>
     <string name="player_show_global_ending_time">Постоянно отображать на экране время окончания видео</string>
+    <string name="app_corner_clock">Главная страница: часы в правом верхнем углу</string>
+    <string name="player_corner_clock">Плеер: часы в правом верхнем углу</string>
+    <string name="player_corner_ending_time">Плеер: время окончания в правом верхнем углу</string>
     <string name="uploads_old_look">Вернуть старый вид раздела Загрузки</string>
     <string name="background_playback_activation">Фоновое воспроизведение (активация)</string>
     <string name="channels_old_look">Вернуть старый вид раздела Каналы</string>
@@ -236,6 +239,7 @@
     <string name="card_text_scroll_factor">Скорость прокрутки текста карточки</string>
     <string name="preferred_update_source">Выбрать источник обновлений</string>
     <string name="hide_shorts">Скрывать короткие видео из Подписок</string>
+    <string name="hide_shorts_channel">Скрывать короткие видео на Канале</string>
     <string name="key_remapping">Переопределение клавиш</string>
     <string name="screen_dimming">Затемнение экрана</string>
     <string name="removed_from_playback_queue">Удалено из очереди воспроизведения</string>
@@ -324,6 +328,8 @@
     <string name="msg_player_error_audio_source">Ссылка на АУДИОПОТОК не работает или неправильное время на устройстве.\nСкорее всего проблема в приложении.</string>
     <string name="msg_player_error_subtitle_source">Ссылка на СУБТИТРЫ не работает или неправильное время на устройстве.\nСкорее всего проблема в приложении.</string>
     <string name="hide_upcoming">Скрывать анонсы из Подписок</string>
+    <string name="hide_upcoming_channel">Скрывать анонсы на Канале</string>
+    <string name="hide_upcoming_home">Скрывать анонсы из Главного раздела</string>
     <string name="search_background_playback">Переходить в режим Картинка в картинке при поиске/открытии канала</string>
     <string name="trending_row_name">В тренде</string>
     <string name="player_seek_type">Поведение перемотки</string>
@@ -334,6 +340,7 @@
     <string name="finish_on_disconnect">Завершать приложение после отключения телефона/планшета</string>
     <string name="update_error">Ошибка обновления</string>
     <string name="hide_shorts_from_history">Скрывать короткие видео из Истории</string>
+    <string name="hide_shorts_from_trending">Скрывать короткие видео из Трендов</string>
     <string name="disable_screensaver">Отключить скринсейвер</string>
     <string name="description_not_found">Описание не найдено</string>
     <string name="proxy_port_hint">Порт прокси</string>
@@ -602,4 +609,7 @@
     <string name="hide_unwanted_content">Скрывать нежелательное содержимое</string>
     <string name="hide_watched_from_home">Скрывать просмотренные видео из Домашнего раздела</string>
     <string name="remote_control_permission">Фоновое Дистанционное управление требует разрешения Перекрывать другие окна</string>
+    <string name="login_from_browser">Войти через браузер</string>
+    <string name="disable_remote_history">Отключить историю во время дистанционного управления</string>
+    <string name="keyboard_fix">Исправить отображение клавиатуры при нажатии клавиши ОК (G20 и другие)</string>
 </resources>

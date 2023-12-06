@@ -7,7 +7,7 @@ import com.liskovsoft.leanbackassistant.R;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
+import com.liskovsoft.mediaserviceinterfaces.HomeService;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class ClipService {
                 SUBS_PROGRAMS_IDS,
                 SUBSCRIPTIONS_URL,
                 R.drawable.generic_channels,
-                MediaGroupService::getSubscriptions,
+                HomeService::getSubscriptions,
                 false
         );
     }
@@ -64,7 +64,7 @@ public class ClipService {
                 HISTORY_PROGRAMS_IDS,
                 HISTORY_URL,
                 R.drawable.generic_channels,
-                MediaGroupService::getHistory,
+                HomeService::getHistory,
                 false);
     }
 
@@ -76,7 +76,7 @@ public class ClipService {
                 RECOMMENDED_PROGRAMS_IDS,
                 RECOMMENDED_URL,
                 R.drawable.generic_channels,
-                MediaGroupService::getRecommended,
+                HomeService::getRecommended,
                 true);
     }
 
@@ -93,7 +93,7 @@ public class ClipService {
         playlist.setLogoResId(logoResId);
 
         MediaService service = YouTubeMediaService.instance();
-        MediaGroupService mediaGroupService = service.getMediaGroupService();
+        HomeService mediaGroupService = service.getHomeService();
         MediaGroup selectedGroup = callback.call(mediaGroupService);
 
         if (selectedGroup != null) {
@@ -152,6 +152,6 @@ public class ClipService {
     }
 
     private interface GroupCallback {
-        MediaGroup call(MediaGroupService mediaTabManager);
+        MediaGroup call(HomeService mediaTabManager);
     }
 }

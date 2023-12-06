@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
+import com.liskovsoft.mediaserviceinterfaces.HomeService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
@@ -24,6 +24,7 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChannelPresenter extends BasePresenter<ChannelView> implements VideoGroupPresenter {
@@ -33,7 +34,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private final MediaService mMediaService;
     private final MediaServiceManager mServiceManager;
     private String mChannelId;
-    private List<MediaGroup> mMediaGroups;
+    private final List<List<MediaGroup>> mPendingGroups = new ArrayList<>();
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
     private MediaGroup mLastScrollGroup;
@@ -69,9 +70,12 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         if (mChannelId != null) {
             getView().clear();
             updateRows(mChannelId);
-        } else if (mMediaGroups != null) {
+        } else if (!mPendingGroups.isEmpty()) {
             getView().clear();
-            updateRows(mMediaGroups);
+            for (List<MediaGroup> group : mPendingGroups) {
+                updateRows(group);
+            }
+            mPendingGroups.clear();
         }
     }
 
@@ -88,7 +92,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         // Destroy the cache only (!) when user pressed back (e.g. wants to explicitly kill the activity)
         // Otherwise keep the cache to easily restore in case activity is killed by the system.
         mChannelId = null;
-        mMediaGroups = null;
+        mPendingGroups.clear();
     }
 
     @Override
@@ -179,7 +183,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         getView().showProgressBar(true);
 
-        Observable<List<MediaGroup>> channelObserve = mMediaService.getMediaGroupService().getChannelObserve(channelId);
+        Observable<List<MediaGroup>> channelObserve = mMediaService.getHomeService().getChannelObserve(channelId);
 
         mUpdateAction = channelObserve
                 .subscribe(
@@ -195,7 +199,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         if (getView() == null) { // starting from outside (e.g. MediaServiceManager)
             disposeActions();
             mChannelId = null;
-            mMediaGroups = mediaGroups;
+            mPendingGroups.add(mediaGroups);
             ViewManager.instance(getContext()).startView(ChannelView.class);
             return;
         }
@@ -242,7 +246,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
+        HomeService mediaGroupManager = mMediaService.getHomeService();
 
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribe(
@@ -332,7 +336,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 return;
             }
 
-            callback.onUploadsRow(mMediaService.getMediaGroupService().getChannelObserve(channelId).map(mediaGroups -> {
+            callback.onUploadsRow(mMediaService.getHomeService().getChannelObserve(channelId).map(mediaGroups -> {
                 moveToTop(mediaGroups, R.string.uploads_row_name);
                 return mediaGroups.get(0);
             }));

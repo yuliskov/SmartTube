@@ -106,12 +106,14 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         mBrowsePresenter.onViewInitialized();
 
-        // Restore state after crash
-        selectSection(mRestoredHeaderIndex, true);
-        mRestoredHeaderIndex = -1;
+        if (mRestoredHeaderIndex != -1) {
+            // Restore state after crash
+            selectSection(mRestoredHeaderIndex, true);
+            mRestoredHeaderIndex = -1;
 
-        // Restore state after crash
-        selectSectionItem(mBrowsePresenter.getCurrentVideo());
+            // Restore state after crash
+            selectSectionItem(mBrowsePresenter.getCurrentVideo());
+        }
     }
 
     @Override

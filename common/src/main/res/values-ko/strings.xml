@@ -607,4 +607,7 @@
   <string name="hide_unwanted_content">원치 않는 콘텐츠 숨기기</string>
   <string name="hide_watched_from_home">홈에서 시청한 동영상 숨기기</string>
   <string name="remote_control_permission">백그라운드 원격 제어에는 오버레이 권한이 필요</string>
+  <string name="login_from_browser">브라우저에서 로그인</string>
+  <string name="disable_remote_history">원격 제어 사용 시 기록 비활성화</string>
+  <string name="keyboard_fix">확인 키를 눌러 키보드 표시 수정 (G20 및 기타)</string>
 </resources>

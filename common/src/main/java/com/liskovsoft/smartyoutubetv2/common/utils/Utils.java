@@ -45,6 +45,8 @@ import androidx.core.graphics.ColorUtils;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
@@ -72,6 +74,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Utils {
     private static final String TASK_ID = RemoteControlWorker.class.getSimpleName();
@@ -529,6 +532,8 @@ public class Utils {
 
         LoadingManager.showLoading(context, true);
 
+        AtomicInteger atomicIndex = new AtomicInteger(0);
+
         MediaServiceManager.instance().loadChannelRows(item, group -> {
             LoadingManager.showLoading(context, false);
 
@@ -536,19 +541,20 @@ public class Utils {
                 return;
             }
 
-            if (group.size() == 1) {
-                // Start first video or open full list?
-                //if (group.get(0).getMediaItems() != null) {
-                //    PlaybackPresenter.instance(context).openVideo(Video.from(group.get(0).getMediaItems().get(0)));
-                //}
+            int type = group.get(0).getType();
 
-                // TODO: clear only once, on start
-                ChannelUploadsPresenter.instance(context).clear();
+            if (type == MediaGroup.TYPE_CHANNEL_UPLOADS) {
+                if (atomicIndex.incrementAndGet() == 1) {
+                    ChannelUploadsPresenter.instance(context).clear();
+                }
                 ChannelUploadsPresenter.instance(context).updateGrid(group.get(0));
-            } else {
-                // TODO: clear only once, on start
-                ChannelPresenter.instance(context).clear();
+            } else if (type == MediaGroup.TYPE_CHANNEL) {
+                if (atomicIndex.incrementAndGet() == 1) {
+                    ChannelPresenter.instance(context).clear();
+                }
                 ChannelPresenter.instance(context).updateRows(group);
+            } else {
+                MessageHelpers.showMessage(context, "Unknown type of channel");
             }
         });
     }

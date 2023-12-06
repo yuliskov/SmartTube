@@ -28,7 +28,7 @@ public class SimpleEditDialog {
         View contentView = inflater.inflate(R.layout.simple_edit_dialog, null);
 
         EditText editField = contentView.findViewById(R.id.simple_edit_value);
-        KeyHelpers.fixEnterKey(editField);
+        KeyHelpers.fixShowKeyboard(editField);
 
         editField.setText(defaultValue);
 

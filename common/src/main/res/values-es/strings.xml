@@ -605,4 +605,7 @@
   <string name="hide_unwanted_content">Ocultar contenido no deseado</string>
   <string name="hide_watched_from_home">Ocultar vídeos vistos de Inicio</string>
   <string name="remote_control_permission">El control remoto requiere permiso de superposición</string>
+  <string name="login_from_browser">Iniciar sesión desde el navegador</string>
+  <string name="disable_remote_history">Desactivar el historial al utilizar el control remoto</string>
+  <string name="keyboard_fix">Corregir la visualización del teclado pulsando la tecla OK (G20s y otros)</string>
 </resources>

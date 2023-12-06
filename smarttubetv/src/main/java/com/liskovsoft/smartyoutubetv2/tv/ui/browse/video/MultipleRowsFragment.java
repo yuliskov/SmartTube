@@ -5,6 +5,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
+import androidx.leanback.widget.ClassPresenterSelector;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
@@ -13,11 +14,13 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.RowPresenter.ViewHolder;
+
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelSearchRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ShortsCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
@@ -79,9 +82,17 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         if (mRowsAdapter == null) {
             mRowPresenter = new CustomListRowPresenter();
 
-            mRowsAdapter = new ArrayObjectAdapter(mRowPresenter);
+            ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
+            presenterSelector.addClassPresenter(ListRow.class, mRowPresenter);
+            presenterSelector.addClassPresenter(ChannelSearchRowPresenter.Data.class, new ChannelSearchRowPresenter());
+
+            mRowsAdapter = new ArrayObjectAdapter(presenterSelector);
             setAdapter(mRowsAdapter);
         }
+    }
+
+    private void addSearchHeader() {
+        mRowsAdapter.add(new ChannelSearchRowPresenter.Data());
     }
 
     private void setupEventListeners() {
@@ -95,6 +106,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     public void clear() {
         if (mRowsAdapter != null) {
             mRowsAdapter.clear();
+            //addSearchHeader();
         }
 
         if (mVideoGroupAdapters != null) {

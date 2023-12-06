@@ -205,7 +205,7 @@ public class VideoGroup {
             return false;
         }
 
-        return mVideos.get(0).isShorts;
+        return mVideos.get(mVideos.size() - 1).isShorts;
     }
 
     /**

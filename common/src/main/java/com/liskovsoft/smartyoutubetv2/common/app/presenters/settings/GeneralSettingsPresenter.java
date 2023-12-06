@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -66,7 +67,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBackgroundPlaybackCategory(settingsPresenter);
         //appendBackgroundPlaybackActivationCategory(settingsPresenter);
         appendScreensaverDimmingCategory(settingsPresenter);
-        appendScreensaverTimoutCategory(settingsPresenter);
+        appendScreensaverTimeoutCategory(settingsPresenter);
         appendTimeFormatCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
         appendAppBackupCategory(settingsPresenter);
@@ -114,17 +115,17 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.hideWatchedFromSubscriptions(option.isSelected()),
                 mGeneralData.isHideWatchedFromSubscriptionsEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_everywhere),
-                option -> mGeneralData.hideShortsEverywhere(option.isSelected()),
-                mGeneralData.isHideShortsEverywhereEnabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_everywhere),
+        //        option -> mGeneralData.hideShortsEverywhere(option.isSelected()),
+        //        mGeneralData.isHideShortsEverywhereEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_home),
                 option -> mGeneralData.hideShortsFromHome(option.isSelected()),
                 mGeneralData.isHideShortsFromHomeEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts),
-                option -> mGeneralData.hideShortsFromSubscriptions(option.isSelected()),
-                mGeneralData.isHideShortsFromSubscriptionsEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_channel),
+                option -> mGeneralData.hideShortsFromChannel(option.isSelected()),
+                mGeneralData.isHideShortsFromChannelEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_streams),
                 option -> mGeneralData.hideStreamsFromSubscriptions(option.isSelected()),
@@ -134,9 +135,21 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.hideShortsFromHistory(option.isSelected()),
                 mGeneralData.isHideShortsFromHistoryEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_trending),
+                option -> mGeneralData.hideShortsFromTrending(option.isSelected()),
+                mGeneralData.isHideShortsFromTrendingEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_upcoming),
-                option -> mGeneralData.hideUpcoming(option.isSelected()),
-                mGeneralData.isHideUpcomingEnabled()));
+                option -> mGeneralData.hideUpcomingFromSubscriptions(option.isSelected()),
+                mGeneralData.isHideUpcomingFromSubscriptionsEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_upcoming_home),
+                option -> mGeneralData.hideUpcomingFromHome(option.isSelected()),
+                mGeneralData.isHideUpcomingFromHomeEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_upcoming_channel),
+                option -> mGeneralData.hideUpcomingFromChannel(option.isSelected()),
+                mGeneralData.isHideUpcomingFromChannelEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.hide_unwanted_content), options);
     }
@@ -349,7 +362,8 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.screensaver_dimming), options);
     }
 
-    private void appendScreensaverTimoutCategory(AppDialogPresenter settingsPresenter) {
+    @SuppressLint("StringFormatMatches")
+    private void appendScreensaverTimeoutCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         int screensaverTimeoutMs = mGeneralData.getScreensaverTimeoutMs();
@@ -512,12 +526,20 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.getMasterPassword() != null));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_global_clock),
+        options.add(UiOptionItem.from(getContext().getString(R.string.app_corner_clock),
                 option -> {
                     mGeneralData.enableGlobalClock(option.isSelected());
                     mRestartApp = true;
                 },
                 mGeneralData.isGlobalClockEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_clock),
+                option -> mPlayerData.enableGlobalClock(option.isSelected()),
+                mPlayerData.isGlobalClockEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_ending_time),
+                option -> mPlayerData.enableGlobalEndingTime(option.isSelected()),
+                mPlayerData.isGlobalEndingTimeEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.old_home_look),
                 option -> {

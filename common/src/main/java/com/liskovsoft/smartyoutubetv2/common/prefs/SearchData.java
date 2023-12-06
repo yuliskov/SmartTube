@@ -22,6 +22,7 @@ public class SearchData {
     private boolean mIsTrendingSearchesEnabled;
     private boolean mIsSearchHistoryDisabled;
     private boolean mIsPopularSearchesDisabled;
+    private boolean mIsKeyboardFixEnabled;
 
     private SearchData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
@@ -70,6 +71,15 @@ public class SearchData {
 
     public boolean isKeyboardAutoShowEnabled() {
         return mIsKeyboardAutoShowEnabled;
+    }
+
+    public void enableKeyboardFix(boolean enabled) {
+        mIsKeyboardFixEnabled = enabled;
+        persistData();
+    }
+
+    public boolean isKeyboardFixEnabled() {
+        return mIsKeyboardFixEnabled;
     }
 
     public void enableTrendingSearches(boolean enabled) {
@@ -143,12 +153,13 @@ public class SearchData {
         mIsTrendingSearchesEnabled = Helpers.parseBoolean(split, 7, true);
         mIsSearchHistoryDisabled = Helpers.parseBoolean(split, 8, false);
         mIsPopularSearchesDisabled = Helpers.parseBoolean(split, 9, false);
+        mIsKeyboardFixEnabled = Helpers.parseBoolean(split, 10, false);
     }
 
     private void persistData() {
         mAppPrefs.setData(SEARCH_DATA,
                 Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
                         mIsKeyboardAutoShowEnabled, mIsTempBackgroundModeEnabled, null, mSpeechRecognizerType,
-                        mIsTrendingSearchesEnabled, mIsSearchHistoryDisabled, mIsPopularSearchesDisabled));
+                        mIsTrendingSearchesEnabled, mIsSearchHistoryDisabled, mIsPopularSearchesDisabled, mIsKeyboardFixEnabled));
     }
 }

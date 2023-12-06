@@ -48,6 +48,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
 
         setupEventListeners();
         enableKeyboardAutoShow(mSearchData.isKeyboardAutoShowEnabled());
+        enableKeyboardFix(mSearchData.isKeyboardFixEnabled());
     }
 
     private void setupEventListeners() {

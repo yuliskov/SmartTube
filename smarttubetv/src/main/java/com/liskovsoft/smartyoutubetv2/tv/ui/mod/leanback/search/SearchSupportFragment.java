@@ -225,6 +225,7 @@ public class SearchSupportFragment extends Fragment {
     private Drawable mBadgeDrawable;
     private ExternalQuery mExternalQuery;
     private boolean mIsKeyboardAutoShowEnabled;
+    private boolean mIsKeyboardFixEnabled;
 
     private SpeechRecognizer mSpeechRecognizer;
 
@@ -344,7 +345,7 @@ public class SearchSupportFragment extends Fragment {
             }
 
             if (mIsKeyboardAutoShowEnabled && focused) {
-                Helpers.showKeyboard(v.getContext());
+                Helpers.showKeyboardAlt(v.getContext(), v);
             }
         });
         mSearchTextEditor.addTextChangedListener(new TextWatcher() {
@@ -363,7 +364,9 @@ public class SearchSupportFragment extends Fragment {
                 Utils.enableScreensaver(getActivity(), true);
             }
         });
-        KeyHelpers.fixEnterKey(mSearchTextEditor);
+        if (mIsKeyboardFixEnabled) {
+            KeyHelpers.fixEnterKey(mSearchTextEditor);
+        }
         // BUGFIX: focus lost with keyboard???
         //mSearchTextEditor.setOnKeyboardDismissListener(this::focusOnSearchField);
 
@@ -795,6 +798,10 @@ public class SearchSupportFragment extends Fragment {
             getActivity().getWindow().setSoftInputMode(enable ? WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED : WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
         mIsKeyboardAutoShowEnabled = enable;
+    }
+
+    protected void enableKeyboardFix(boolean enable) {
+        mIsKeyboardFixEnabled = enable;
     }
 
     protected void showListening() {

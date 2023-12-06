@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
+import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
@@ -11,6 +12,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.NotificationState;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -217,6 +219,13 @@ public final class Video {
     public int hashCode() {
         int hashCode = Helpers.hashCodeAny(videoId, playlistId, reloadPageKey, playlistParams, channelId, mediaItem, extra);
         return hashCode != -1 ? hashCode : super.hashCode();
+    }
+
+    public static void printDebugInfo(Context context, Video item) {
+        MessageHelpers.showLongMessage(context,
+                String.format("videoId=%s, playlistId=%s, reloadPageKey=%s, playlistParams=%s, channelId=%s, mediaItem=%s, extra=%s",
+                        item.videoId, item.playlistId, item.reloadPageKey, item.playlistParams, item.channelId, item.mediaItem, item.extra)
+        );
     }
     
     public static boolean equals(Video video1, Video video2) {

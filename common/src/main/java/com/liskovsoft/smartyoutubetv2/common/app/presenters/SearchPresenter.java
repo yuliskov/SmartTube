@@ -2,11 +2,12 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
+import com.liskovsoft.mediaserviceinterfaces.HomeService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.SearchOptions;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -23,7 +24,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
-import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.disposables.Disposable;
@@ -157,7 +157,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         disposeActions();
         getView().showProgressBar(true);
 
-        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
+        HomeService mediaGroupManager = mMediaService.getHomeService();
 
         getView().clearSearch();
 
@@ -179,7 +179,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         disposeActions();
         getView().showProgressBar(true);
 
-        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
+        HomeService mediaGroupManager = mMediaService.getHomeService();
 
         getView().clearSearch();
 
@@ -221,7 +221,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
+        HomeService mediaGroupManager = mMediaService.getHomeService();
 
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribe(

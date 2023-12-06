@@ -10,7 +10,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventList
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
@@ -19,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -35,6 +35,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     private PlayerData mPlayerData;
     private GeneralData mGeneralData;
     private PlayerTweaksData mPlayerTweaksData;
+    private RemoteControlData mRemoteControlData;
     private VideoStateService mStateService;
     private boolean mIsPlayBlocked;
     private int mTickleLeft;
@@ -52,6 +53,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         mPlayerData = PlayerData.instance(getContext());
         mGeneralData = GeneralData.instance(getContext());
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
+        mRemoteControlData = RemoteControlData.instance(getContext());
         mStateService = VideoStateService.instance(getContext());
     }
 
@@ -480,7 +482,8 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     private void updateHistory() {
         Video video = getVideo();
 
-        if (video == null || (video.isShorts && mGeneralData.isHideShortsFromHistoryEnabled()) || mIncognito || !getPlayer().containsMedia()) {
+        if (video == null || (video.isShorts && mGeneralData.isHideShortsFromHistoryEnabled()) ||
+                mIncognito || !getPlayer().containsMedia() || (video.isRemote && mRemoteControlData.isRemoteHistoryDisabled())) {
             return;
         }
 

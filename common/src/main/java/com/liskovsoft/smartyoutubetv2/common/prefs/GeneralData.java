@@ -315,6 +315,14 @@ public class GeneralData implements ProfileChangeListener {
         return GlobalPreferences.sInstance.isHideShortsFromSubscriptionsEnabled();
     }
 
+    public void hideShortsFromChannel(boolean enable) {
+        GlobalPreferences.sInstance.hideShortsFromChannel(enable);
+    }
+
+    public boolean isHideShortsFromChannelEnabled() {
+        return GlobalPreferences.sInstance.isHideShortsFromChannelEnabled();
+    }
+
     public void hideStreamsFromSubscriptions(boolean enable) {
         GlobalPreferences.sInstance.hideStreamsFromSubscriptions(enable);
     }
@@ -373,12 +381,44 @@ public class GeneralData implements ProfileChangeListener {
         return GlobalPreferences.sInstance.isHideShortsFromHistoryEnabled();
     }
 
+    public void hideShortsFromTrending(boolean enable) {
+        GlobalPreferences.sInstance.hideShortsFromTrending(enable);
+    }
+
+    public boolean isHideShortsFromTrendingEnabled() {
+        return GlobalPreferences.sInstance.isHideShortsFromTrendingEnabled();
+    }
+
     public void hideUpcoming(boolean enable) {
         GlobalPreferences.sInstance.hideUpcoming(enable);
     }
 
     public boolean isHideUpcomingEnabled() {
         return GlobalPreferences.sInstance.isHideUpcomingEnabled();
+    }
+
+    public void hideUpcomingFromSubscriptions(boolean enable) {
+        GlobalPreferences.sInstance.hideUpcomingFromSubscriptions(enable);
+    }
+
+    public boolean isHideUpcomingFromSubscriptionsEnabled() {
+        return GlobalPreferences.sInstance.isHideUpcomingFromSubscriptionsEnabled();
+    }
+
+    public void hideUpcomingFromChannel(boolean enable) {
+        GlobalPreferences.sInstance.hideUpcomingFromChannel(enable);
+    }
+
+    public boolean isHideUpcomingFromChannelEnabled() {
+        return GlobalPreferences.sInstance.isHideUpcomingFromChannelEnabled();
+    }
+
+    public void hideUpcomingFromHome(boolean enable) {
+        GlobalPreferences.sInstance.hideUpcomingFromHome(enable);
+    }
+
+    public boolean isHideUpcomingFromHomeEnabled() {
+        return GlobalPreferences.sInstance.isHideUpcomingFromHomeEnabled();
     }
 
     public void disableScreensaver(boolean enable) {
@@ -793,7 +833,7 @@ public class GeneralData implements ProfileChangeListener {
         mBootSectionId = Helpers.parseInt(split, 1, MediaGroup.TYPE_HOME);
         mIsSettingsSectionEnabled = Helpers.parseBoolean(split, 2, true);
         mAppExitShortcut = Helpers.parseInt(split, 3, EXIT_DOUBLE_BACK);
-        mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 4, true);
+        mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 4, false);
         mBackgroundShortcut = Helpers.parseInt(split, 5, BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
         String pinnedItems = Helpers.parseStr(split, 6);
         mIsHideShortsFromSubscriptionsEnabled = Helpers.parseBoolean(split, 7, false);
