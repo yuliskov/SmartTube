@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -27,7 +27,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.UniqueRandom;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 import io.reactivex.disposables.Disposable;
 
 import java.util.Collections;
@@ -54,7 +54,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     };
     private final Runnable mPendingRestartEngine = () -> {
         if (getPlayer() != null) {
-            YouTubeMediaService.instance().invalidateCache();
+            YouTubeHubService.instance().invalidateCache();
             getPlayer().restartEngine(); // properly save position of the current track
         }
     };
@@ -273,7 +273,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private void loadFormatInfo(Video video) {
         disposeActions();
 
-        MediaService service = YouTubeMediaService.instance();
+        HubService service = YouTubeHubService.instance();
         MediaItemService mediaItemManager = service.getMediaItemService();
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribe(this::processFormatInfo,

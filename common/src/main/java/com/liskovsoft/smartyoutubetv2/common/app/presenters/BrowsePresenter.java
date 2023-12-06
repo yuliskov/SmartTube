@@ -2,9 +2,9 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.HomeService;
+import com.liskovsoft.mediaserviceinterfaces.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.NotificationsService;
 import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
@@ -41,7 +41,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.sharedutils.helpers.ScreenHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -67,7 +67,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final Map<Integer, Callable<List<SettingsItem>>> mSettingsGridMapping;
     private final Map<Integer, BrowseSection> mSectionsMapping;
     private final AppDataSourceManager mDataSourcePresenter;
-    private final HomeService mHomeService;
+    private final ContentService mContentService;
     private final MediaItemService mItemService;
     private final SignInService mSignInService;
     private final NotificationsService mNotificationsService;
@@ -94,11 +94,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         MediaServiceManager.instance().addAccountListener(this);
         ScreenHelper.updateScreenInfo(context);
 
-        MediaService mediaService = YouTubeMediaService.instance();
-        mHomeService = mediaService.getHomeService();
-        mItemService = mediaService.getMediaItemService();
-        mSignInService = mediaService.getSignInService();
-        mNotificationsService = mediaService.getNotificationsService();
+        HubService hubService = YouTubeHubService.instance();
+        mContentService = hubService.getContentService();
+        mItemService = hubService.getMediaItemService();
+        mSignInService = hubService.getSignInService();
+        mNotificationsService = hubService.getNotificationsService();
         mActions = new ArrayList<>();
 
         initSections();
@@ -183,18 +183,18 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void initSectionCallbacks() {
-        mRowMapping.put(MediaGroup.TYPE_HOME, mGeneralData.isOldHomeLookEnabled() ? mHomeService.getHomeV1Observe() : mHomeService.getHomeObserve());
-        mRowMapping.put(MediaGroup.TYPE_TRENDING, mHomeService.getTrendingObserve());
-        mRowMapping.put(MediaGroup.TYPE_KIDS_HOME, mHomeService.getKidsHomeObserve());
-        mRowMapping.put(MediaGroup.TYPE_NEWS, mHomeService.getNewsObserve());
-        mRowMapping.put(MediaGroup.TYPE_MUSIC, mHomeService.getMusicObserve());
-        mRowMapping.put(MediaGroup.TYPE_GAMING, mHomeService.getGamingObserve());
-        mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mHomeService.getPlaylistsObserve());
+        mRowMapping.put(MediaGroup.TYPE_HOME, mGeneralData.isOldHomeLookEnabled() ? mContentService.getHomeV1Observe() : mContentService.getHomeObserve());
+        mRowMapping.put(MediaGroup.TYPE_TRENDING, mContentService.getTrendingObserve());
+        mRowMapping.put(MediaGroup.TYPE_KIDS_HOME, mContentService.getKidsHomeObserve());
+        mRowMapping.put(MediaGroup.TYPE_NEWS, mContentService.getNewsObserve());
+        mRowMapping.put(MediaGroup.TYPE_MUSIC, mContentService.getMusicObserve());
+        mRowMapping.put(MediaGroup.TYPE_GAMING, mContentService.getGamingObserve());
+        mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mContentService.getPlaylistsObserve());
 
-        mGridMapping.put(MediaGroup.TYPE_SHORTS, mHomeService.getShortsObserve());
-        mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mHomeService.getSubscriptionsObserve());
-        mGridMapping.put(MediaGroup.TYPE_HISTORY, mHomeService.getHistoryObserve());
-        mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mHomeService.getSubscribedChannelsByUpdateObserve());
+        mGridMapping.put(MediaGroup.TYPE_SHORTS, mContentService.getShortsObserve());
+        mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mContentService.getSubscriptionsObserve());
+        mGridMapping.put(MediaGroup.TYPE_HISTORY, mContentService.getHistoryObserve());
+        mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByUpdateObserve());
         mGridMapping.put(MediaGroup.TYPE_NOTIFICATIONS, mNotificationsService.getNotificationItemsObserve());
     }
 
@@ -284,19 +284,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         switch (sortingType) {
             case MainUIData.CHANNEL_SORTING_DEFAULT:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mHomeService.getSubscribedChannelsObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_NAME2:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mHomeService.getSubscribedChannelsByName2Observe());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByName2Observe());
                 break;
             case MainUIData.CHANNEL_SORTING_NAME:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mHomeService.getSubscribedChannelsByNameObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByNameObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_NEW_CONTENT:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mHomeService.getSubscribedChannelsByUpdateObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByUpdateObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_LAST_VIEWED:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mHomeService.getSubscribedChannelsByViewedObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByViewedObserve());
                 break;
         }
     }
@@ -307,12 +307,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         switch (playlistsStyle) {
             case MainUIData.PLAYLISTS_STYLE_GRID:
                 mRowMapping.remove(MediaGroup.TYPE_USER_PLAYLISTS);
-                mGridMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mHomeService.getEmptyPlaylistsObserve());
+                mGridMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mContentService.getEmptyPlaylistsObserve());
                 updateCategoryType(MediaGroup.TYPE_USER_PLAYLISTS, BrowseSection.TYPE_GRID);
                 break;
             case MainUIData.PLAYLISTS_STYLE_ROWS:
                 mGridMapping.remove(MediaGroup.TYPE_USER_PLAYLISTS);
-                mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mHomeService.getPlaylistsObserve());
+                mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mContentService.getPlaylistsObserve());
                 updateCategoryType(MediaGroup.TYPE_USER_PLAYLISTS, BrowseSection.TYPE_ROW);
                 break;
         }
@@ -754,7 +754,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         if (mediaGroup.getType() == MediaGroup.TYPE_SUGGESTIONS) { // Pinned playlist
             continuation = mItemService.continueGroupObserve(mediaGroup);
         } else {
-            continuation = mHomeService.continueGroupObserve(mediaGroup);
+            continuation = mContentService.continueGroupObserve(mediaGroup);
         }
 
         Disposable continueAction = continuation

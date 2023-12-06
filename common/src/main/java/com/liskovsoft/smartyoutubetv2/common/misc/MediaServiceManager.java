@@ -3,9 +3,9 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 import android.content.Context;
 import android.util.Pair;
 import com.liskovsoft.appupdatechecker2.other.SettingsManager;
-import com.liskovsoft.mediaserviceinterfaces.HomeService;
+import com.liskovsoft.mediaserviceinterfaces.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.NotificationsService;
 import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
@@ -22,7 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -36,7 +36,7 @@ public class MediaServiceManager {
     private static final String TAG = SettingsManager.class.getSimpleName();
     private static MediaServiceManager sInstance;
     private final MediaItemService mItemService;
-    private final HomeService mHomeService;
+    private final ContentService mContentService;
     private final SignInService mSingInService;
     private final NotificationsService mNotificationsService;
     private Disposable mMetadataAction;
@@ -84,9 +84,9 @@ public class MediaServiceManager {
     }
 
     public MediaServiceManager() {
-        MediaService service = YouTubeMediaService.instance();
+        HubService service = YouTubeHubService.instance();
         mItemService = service.getMediaItemService();
-        mHomeService = service.getHomeService();
+        mContentService = service.getContentService();
         mSingInService = service.getSignInService();
         mNotificationsService = service.getNotificationsService();
 
@@ -169,7 +169,7 @@ public class MediaServiceManager {
 
         RxHelper.disposeActions(mUploadsAction);
 
-        Observable<MediaGroup> observable = mHomeService.getGroupObserve(item);
+        Observable<MediaGroup> observable = mContentService.getGroupObserve(item);
 
         mUploadsAction = observable
                 .subscribe(
@@ -184,7 +184,7 @@ public class MediaServiceManager {
     public void loadSubscribedChannels(OnMediaGroup onMediaGroup) {
         RxHelper.disposeActions(mSubscribedChannelsAction);
 
-        Observable<MediaGroup> observable = mHomeService.getSubscribedChannelsByUpdateObserve();
+        Observable<MediaGroup> observable = mContentService.getSubscribedChannelsByUpdateObserve();
 
         mSubscribedChannelsAction = observable
                 .subscribe(
@@ -201,7 +201,7 @@ public class MediaServiceManager {
         RxHelper.disposeActions(mRowsAction);
 
         Observable<List<MediaGroup>> observable = item.mediaItem != null ?
-                mHomeService.getChannelObserve(item.mediaItem) : mHomeService.getChannelObserve(item.channelId);
+                mContentService.getChannelObserve(item.mediaItem) : mContentService.getChannelObserve(item.channelId);
 
         mRowsAction = observable
                 .subscribe(
@@ -240,7 +240,7 @@ public class MediaServiceManager {
 
         RxHelper.disposeActions(mPlaylistGroupAction);
 
-        Observable<MediaGroup> observable = mHomeService.getEmptyPlaylistsObserve();
+        Observable<MediaGroup> observable = mContentService.getEmptyPlaylistsObserve();
 
         mPlaylistGroupAction = observable
                 .subscribe(
@@ -365,15 +365,15 @@ public class MediaServiceManager {
     }
 
     public void enableHistory(boolean enable) {
-        RxHelper.runAsyncUser(() -> mHomeService.enableHistory(enable));
+        RxHelper.runAsyncUser(() -> mContentService.enableHistory(enable));
     }
 
     public void clearHistory() {
-        RxHelper.runAsyncUser(mHomeService::clearHistory);
+        RxHelper.runAsyncUser(mContentService::clearHistory);
     }
 
     public void clearSearchHistory() {
-        RxHelper.runAsyncUser(mHomeService::clearSearchHistory);
+        RxHelper.runAsyncUser(mContentService::clearSearchHistory);
     }
 
     public void updateHistory(Video video, long positionMs) {

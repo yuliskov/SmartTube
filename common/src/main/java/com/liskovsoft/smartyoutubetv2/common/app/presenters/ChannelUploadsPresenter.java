@@ -2,9 +2,9 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.HomeService;
+import com.liskovsoft.mediaserviceinterfaces.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
@@ -22,7 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMe
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -32,7 +32,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     private static final String TAG = ChannelUploadsPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static ChannelUploadsPresenter sInstance;
-    private final HomeService mHomeService;
+    private final ContentService mContentService;
     private final MediaItemService mItemManager;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
@@ -42,9 +42,9 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     public ChannelUploadsPresenter(Context context) {
         super(context);
-        MediaService mediaService = YouTubeMediaService.instance();
-        mHomeService = mediaService.getHomeService();
-        mItemManager = mediaService.getMediaItemService();
+        HubService hubService = YouTubeHubService.instance();
+        mContentService = hubService.getContentService();
+        mItemManager = hubService.getMediaItemService();
     }
 
     public static ChannelUploadsPresenter instance(Context context) {
@@ -165,9 +165,9 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         disposeActions();
 
         return item.hasNestedItems() || item.isChannel() ?
-               mHomeService.getGroupObserve(item.mediaItem) :
+               mContentService.getGroupObserve(item.mediaItem) :
                item.hasReloadPageKey() ?
-               mHomeService.getGroupObserve(item.getReloadPageKey()) :
+               mContentService.getGroupObserve(item.getReloadPageKey()) :
                mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0, item.playlistParams)
                        .flatMap(mediaItemMetadata -> Observable.just(findPlaylistRow(mediaItemMetadata)));
     }
@@ -211,7 +211,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         if (mediaGroup.getType() == MediaGroup.TYPE_SUGGESTIONS) {
             continuation = mItemManager.continueGroupObserve(mediaGroup);
         } else {
-            continuation = mHomeService.continueGroupObserve(mediaGroup);
+            continuation = mContentService.continueGroupObserve(mediaGroup);
         }
 
         mScrollAction = continuation
@@ -273,7 +273,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         disposeActions();
 
-        Observable<MediaGroup> group = mHomeService.getGroupObserve(mediaItem);
+        Observable<MediaGroup> group = mContentService.getGroupObserve(mediaItem);
 
         mUpdateAction = group
                 .subscribe(

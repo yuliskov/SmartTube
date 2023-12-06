@@ -22,7 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -280,7 +280,7 @@ public class ViewManager {
     }
 
     public void clearCaches() {
-        YouTubeMediaService.instance().invalidateCache();
+        YouTubeHubService.instance().invalidateCache();
         // Note, also deletes cached flags (internal cache)
         // Note, deletes cached apks (external cache)
         FileHelpers.deleteCache(mContext);

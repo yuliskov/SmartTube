@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -22,7 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.ContentBloc
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -34,7 +34,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
     private static final String TAG = ContentBlockController.class.getSimpleName();
     private static final long POLL_INTERVAL_MS = 1_000;
     private static final int CONTENT_BLOCK_ID = 144;
-    private MediaItemService mMediaItemManager;
+    private MediaItemService mMediaItemService;
     private ContentBlockData mContentBlockData;
     private Video mVideo;
     private List<SponsorSegment> mOriginalSegments;
@@ -82,8 +82,8 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
 
     @Override
     public void onInit() {
-        MediaService mediaService = YouTubeMediaService.instance();
-        mMediaItemManager = mediaService.getMediaItemService();
+        HubService hubService = YouTubeHubService.instance();
+        mMediaItemService = hubService.getMediaItemService();
         mContentBlockData = ContentBlockData.instance(getContext());
     }
 
@@ -172,7 +172,7 @@ public class ContentBlockController extends PlayerEventListenerHelper implements
 
         // NOTE: SponsorBlock (when happened java.net.SocketTimeoutException) could block whole application with Schedulers.io()
         // Because Schedulers.io() reuses blocked threads in RxJava 2: https://github.com/ReactiveX/RxJava/issues/6542
-        mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getEnabledCategories())
+        mSegmentsAction = mMediaItemService.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getEnabledCategories())
                 .subscribe(
                         segments -> {
                             mVideo = item;

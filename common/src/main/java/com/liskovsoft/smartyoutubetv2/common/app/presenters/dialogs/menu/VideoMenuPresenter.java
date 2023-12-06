@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -29,7 +29,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -108,7 +108,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
     private VideoMenuPresenter(Context context) {
         super(context);
-        MediaService service = YouTubeMediaService.instance();
+        HubService service = YouTubeHubService.instance();
         mItemManager = service.getMediaItemService();
         mServiceManager = MediaServiceManager.instance();
         mDialogPresenter = AppDialogPresenter.instance(context);

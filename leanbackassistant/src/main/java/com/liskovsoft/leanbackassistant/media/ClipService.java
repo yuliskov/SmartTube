@@ -5,10 +5,10 @@ import android.content.Context;
 import androidx.tvprovider.media.tv.TvContractCompat;
 import com.liskovsoft.leanbackassistant.R;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.HomeService;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.mediaserviceinterfaces.ContentService;
+import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,7 @@ public class ClipService {
                 SUBS_PROGRAMS_IDS,
                 SUBSCRIPTIONS_URL,
                 R.drawable.generic_channels,
-                HomeService::getSubscriptions,
+                ContentService::getSubscriptions,
                 false
         );
     }
@@ -64,7 +64,7 @@ public class ClipService {
                 HISTORY_PROGRAMS_IDS,
                 HISTORY_URL,
                 R.drawable.generic_channels,
-                HomeService::getHistory,
+                ContentService::getHistory,
                 false);
     }
 
@@ -76,7 +76,7 @@ public class ClipService {
                 RECOMMENDED_PROGRAMS_IDS,
                 RECOMMENDED_URL,
                 R.drawable.generic_channels,
-                HomeService::getRecommended,
+                ContentService::getRecommended,
                 true);
     }
 
@@ -92,9 +92,9 @@ public class ClipService {
         playlist.setPlaylistUrl(recommendedUrl);
         playlist.setLogoResId(logoResId);
 
-        MediaService service = YouTubeMediaService.instance();
-        HomeService mediaGroupService = service.getHomeService();
-        MediaGroup selectedGroup = callback.call(mediaGroupService);
+        HubService service = YouTubeHubService.instance();
+        ContentService contentService = service.getContentService();
+        MediaGroup selectedGroup = callback.call(contentService);
 
         if (selectedGroup != null) {
             List<MediaItem> mediaItems = selectedGroup.getMediaItems();
@@ -106,7 +106,7 @@ public class ClipService {
                         break;
                     }
 
-                    MediaGroup mediaGroup = mediaGroupService.continueGroup(selectedGroup);
+                    MediaGroup mediaGroup = contentService.continueGroup(selectedGroup);
                     if (mediaGroup == null) {
                         break;
                     }
@@ -152,6 +152,6 @@ public class ClipService {
     }
 
     private interface GroupCallback {
-        MediaGroup call(HomeService mediaTabManager);
+        MediaGroup call(ContentService mediaTabManager);
     }
 }

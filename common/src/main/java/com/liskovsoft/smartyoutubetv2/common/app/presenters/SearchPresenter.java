@@ -2,8 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.HomeService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.ContentService;
+import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.SearchOptions;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -25,7 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 import io.reactivex.disposables.Disposable;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private static final String TAG = SearchPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static SearchPresenter sInstance;
-    private final MediaService mMediaService;
+    private final HubService mHubService;
     private final ViewManager mViewManager;
     private final SearchData mSearchData;
     private Disposable mScrollAction;
@@ -50,7 +50,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     private SearchPresenter(Context context) {
         super(context);
-        mMediaService = YouTubeMediaService.instance();
+        mHubService = YouTubeHubService.instance();
         mViewManager = ViewManager.instance(context);
         mSearchData = SearchData.instance(context);
     }
@@ -157,11 +157,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         disposeActions();
         getView().showProgressBar(true);
 
-        HomeService mediaGroupManager = mMediaService.getHomeService();
+        ContentService contentService = mHubService.getContentService();
 
         getView().clearSearch();
 
-        mLoadAction = mediaGroupManager.getSearchObserve(searchText,
+        mLoadAction = contentService.getSearchObserve(searchText,
                 mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions | mSortingOptions)
                 .subscribe(
                         mediaGroup -> {
@@ -179,11 +179,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         disposeActions();
         getView().showProgressBar(true);
 
-        HomeService mediaGroupManager = mMediaService.getHomeService();
+        ContentService contentService = mHubService.getContentService();
 
         getView().clearSearch();
 
-        mLoadAction = mediaGroupManager.getSearchAltObserve(searchText,
+        mLoadAction = contentService.getSearchAltObserve(searchText,
                 mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions | mSortingOptions)
                 .subscribe(
                         mediaGroups -> {
@@ -221,9 +221,9 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        HomeService mediaGroupManager = mMediaService.getHomeService();
+        ContentService contentService = mHubService.getContentService();
 
-        mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
+        mScrollAction = contentService.continueGroupObserve(mediaGroup)
                 .subscribe(
                         //continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup)),
                         continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup, group)),

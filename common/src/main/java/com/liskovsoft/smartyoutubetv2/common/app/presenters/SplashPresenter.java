@@ -24,7 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 import io.reactivex.disposables.Disposable;
 
 import java.util.ArrayList;
@@ -159,7 +159,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             return;
         }
 
-        mRefreshCachePeriodicAction = RxHelper.startInterval(YouTubeMediaService.instance()::refreshCacheIfNeeded, 30 * 60);
+        mRefreshCachePeriodicAction = RxHelper.startInterval(YouTubeHubService.instance()::refreshCacheIfNeeded, 30 * 60);
     }
 
     private void enableHistoryIfNeeded() {

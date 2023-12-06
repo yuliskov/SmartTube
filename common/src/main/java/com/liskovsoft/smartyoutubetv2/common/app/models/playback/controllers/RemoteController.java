@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
 import androidx.annotation.Nullable;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.RemoteControlService;
 import com.liskovsoft.mediaserviceinterfaces.data.Command;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -22,7 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 import io.reactivex.disposables.Disposable;
 
 public class RemoteController extends PlayerEventListenerHelper implements OnDataChange {
@@ -43,10 +43,10 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
     private Disposable mActionUp;
 
     public RemoteController(Context context, SuggestionsController suggestionsLoader, VideoLoaderController videoLoader) {
-        MediaService mediaService = YouTubeMediaService.instance();
+        HubService hubService = YouTubeHubService.instance();
         mSuggestionsLoader = suggestionsLoader;
         mVideoLoader = videoLoader;
-        mRemoteControlService = mediaService.getRemoteControlService();
+        mRemoteControlService = hubService.getRemoteControlService();
         mRemoteControlData = RemoteControlData.instance(context);
         mRemoteControlData.setOnChange(this);
         tryListening();

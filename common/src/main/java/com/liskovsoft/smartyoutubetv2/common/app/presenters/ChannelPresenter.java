@@ -2,8 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.HomeService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.ContentService;
+import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -20,7 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -31,7 +31,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private static final String TAG = ChannelPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static ChannelPresenter sInstance;
-    private final MediaService mMediaService;
+    private final HubService mHubService;
     private final MediaServiceManager mServiceManager;
     private String mChannelId;
     private final List<List<MediaGroup>> mPendingGroups = new ArrayList<>();
@@ -49,7 +49,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     public ChannelPresenter(Context context) {
         super(context);
-        mMediaService = YouTubeMediaService.instance();
+        mHubService = YouTubeHubService.instance();
         mServiceManager = MediaServiceManager.instance();
     }
 
@@ -183,7 +183,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         getView().showProgressBar(true);
 
-        Observable<List<MediaGroup>> channelObserve = mMediaService.getHomeService().getChannelObserve(channelId);
+        Observable<List<MediaGroup>> channelObserve = mHubService.getContentService().getChannelObserve(channelId);
 
         mUpdateAction = channelObserve
                 .subscribe(
@@ -246,9 +246,9 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        HomeService mediaGroupManager = mMediaService.getHomeService();
+        ContentService contentService = mHubService.getContentService();
 
-        mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
+        mScrollAction = contentService.continueGroupObserve(mediaGroup)
                 .subscribe(
                         //continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
                         continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup, group)),
@@ -336,7 +336,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 return;
             }
 
-            callback.onUploadsRow(mMediaService.getHomeService().getChannelObserve(channelId).map(mediaGroups -> {
+            callback.onUploadsRow(mHubService.getContentService().getChannelObserve(channelId).map(mediaGroups -> {
                 moveToTop(mediaGroups, R.string.uploads_row_name);
                 return mediaGroups.get(0);
             }));

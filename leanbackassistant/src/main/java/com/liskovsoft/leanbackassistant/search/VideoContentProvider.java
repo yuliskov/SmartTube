@@ -16,7 +16,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.AppSchedulerProvider;
 import com.liskovsoft.sharedutils.rx.SchedulerProvider;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 import io.reactivex.disposables.CompositeDisposable;
 
 import java.util.ArrayList;
@@ -130,7 +130,7 @@ public class VideoContentProvider extends ContentProvider {
     private Cursor search(String query, int limit) {
         MatrixCursor matrixCursor = new MatrixCursor(queryProjection);
 
-        mSearch = YouTubeMediaService.instance().getHomeService().getSearch(query);
+        mSearch = YouTubeHubService.instance().getContentService().getSearch(query);
 
         if (mSearch != null) {
             List<MediaItem> mediaItems = mSearch.getMediaItems();
@@ -149,7 +149,7 @@ public class VideoContentProvider extends ContentProvider {
     }
 
     private void nextSearch(MatrixCursor cursor, int limit) {
-        mSearch = YouTubeMediaService.instance().getHomeService().continueGroup(mSearch);
+        mSearch = YouTubeHubService.instance().getContentService().continueGroup(mSearch);
 
         if (mSearch != null) {
             List<MediaItem> mediaItems = mSearch.getMediaItems();

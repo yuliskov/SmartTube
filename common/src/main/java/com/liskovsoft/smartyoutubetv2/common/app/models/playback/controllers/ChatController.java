@@ -15,7 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 import io.reactivex.disposables.Disposable;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class ChatController extends PlayerEventListenerHelper implements Metadat
 
     @Override
     public void onInit() {
-        mChatService = YouTubeMediaService.instance().getLiveChatService();
+        mChatService = YouTubeHubService.instance().getLiveChatService();
         mPlayerData = PlayerData.instance(getContext());
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
     }

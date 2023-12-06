@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import androidx.core.content.ContextCompat;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
@@ -23,7 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -179,9 +179,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaItemService mediaItemManager = YouTubeMediaService.instance().getMediaItemService();
+        MediaItemService mediaItemService = YouTubeHubService.instance().getMediaItemService();
 
-        Disposable continueAction = mediaItemManager.continueGroupObserve(mediaGroup)
+        Disposable continueAction = mediaItemService.continueGroupObserve(mediaGroup)
                 .subscribe(
                         continueMediaGroup -> {
                             getPlayer().showProgressBar(false);
@@ -237,7 +237,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             return;
         }
 
-        MediaService service = YouTubeMediaService.instance();
+        HubService service = YouTubeHubService.instance();
         MediaItemService mediaItemManager = service.getMediaItemService();
 
         Observable<MediaItemMetadata> observable;
