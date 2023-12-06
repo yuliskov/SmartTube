@@ -219,6 +219,9 @@
     <string name="header_uploads">Yüklemeler</string>
     <string name="player_show_global_clock">Saati ekranda sürekli göster</string>
     <string name="player_show_global_ending_time">Video bitiş saatini ekranda sürekli göster</string>
+    <string name="app_corner_clock">Ana Sayfa: Sağ üst köşede saat</string>
+    <string name="player_corner_clock">Oynatıcı: Sağ üst köşede saat</string>
+    <string name="player_corner_ending_time">Oynatıcı: Sağ üst köşede bitiş saati</string>
     <string name="uploads_old_look">Yüklemeler bölümünün eski görünümününe geri dön</string>
     <string name="background_playback_activation">Arka planda oynatma (etkinleştirme)</string>
     <string name="channels_old_look">Kanallar bölümünün eski görünümününe geri dön</string>
@@ -236,6 +239,7 @@
     <string name="card_text_scroll_factor">Kart metin kaydırma hızı</string>
     <string name="preferred_update_source">Güncelleme kaynağını seç</string>
     <string name="hide_shorts">Shortsları Abonelikler\'de gizle</string>
+    <string name="hide_shorts_channel">Shortsları Kanalda gizle</string>
     <string name="key_remapping">Tuş yeniden atama</string>
     <string name="screen_dimming">Ekran karartma</string>
     <string name="removed_from_playback_queue">Oynatma sırasından kaldırıldı</string>
@@ -328,6 +332,8 @@
     <string name="msg_player_error_audio_source">SES URL\'si çalışmıyor ya da yanlış cihaz saati.\nGenellikle bu, uygulama sorunudur.</string>
     <string name="msg_player_error_subtitle_source">ALTYAZI URL\'si çalışmıyor ya da yanlış cihaz saati.\nGenellikle bu, uygulama sorunudur.</string>
     <string name="hide_upcoming">Yaklaşan yayınları Abonelikler\'de gizle</string>
+    <string name="hide_upcoming_channel">Yaklaşan yayınları Kanalda gizle</string>
+    <string name="hide_upcoming_home">Yaklaşan yayınları Ana Sayfa\'da gizle</string>
     <string name="search_background_playback">Arama yaparken/Kanalı açarken resim içinde resim moduna geç</string>
     <string name="trending_row_name">Trendler</string>
     <string name="player_seek_type">Arama davranışı</string>
@@ -338,6 +344,7 @@
     <string name="finish_on_disconnect">Telefon bağlantısı kesildiğinde uygulamayı sonlandır</string>
     <string name="update_error">Güncelleme hatası</string>
     <string name="hide_shorts_from_history">Shortsları Geçmiş\'te gizle</string>
+    <string name="hide_shorts_from_trending">Shortsları Trendler\'de gizle</string>
     <string name="disable_screensaver">Ekran koruyucuyu devre dışı bırak</string>
     <string name="description_not_found">Açıklama bulunamadı</string>
     <string name="proxy_port_hint">Vekil Sunucu port</string>
