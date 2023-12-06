@@ -36,7 +36,7 @@ public class MediaServiceManager {
     private static final String TAG = SettingsManager.class.getSimpleName();
     private static MediaServiceManager sInstance;
     private final MediaItemService mItemService;
-    private final HomeService mGroupService;
+    private final HomeService mHomeService;
     private final SignInService mSingInService;
     private final NotificationsService mNotificationsService;
     private Disposable mMetadataAction;
@@ -86,7 +86,7 @@ public class MediaServiceManager {
     public MediaServiceManager() {
         MediaService service = YouTubeMediaService.instance();
         mItemService = service.getMediaItemService();
-        mGroupService = service.getHomeService();
+        mHomeService = service.getHomeService();
         mSingInService = service.getSignInService();
         mNotificationsService = service.getNotificationsService();
 
@@ -169,7 +169,7 @@ public class MediaServiceManager {
 
         RxHelper.disposeActions(mUploadsAction);
 
-        Observable<MediaGroup> observable = mGroupService.getGroupObserve(item);
+        Observable<MediaGroup> observable = mHomeService.getGroupObserve(item);
 
         mUploadsAction = observable
                 .subscribe(
@@ -184,7 +184,7 @@ public class MediaServiceManager {
     public void loadSubscribedChannels(OnMediaGroup onMediaGroup) {
         RxHelper.disposeActions(mSubscribedChannelsAction);
 
-        Observable<MediaGroup> observable = mGroupService.getSubscribedChannelsByUpdateObserve();
+        Observable<MediaGroup> observable = mHomeService.getSubscribedChannelsByUpdateObserve();
 
         mSubscribedChannelsAction = observable
                 .subscribe(
@@ -201,7 +201,7 @@ public class MediaServiceManager {
         RxHelper.disposeActions(mRowsAction);
 
         Observable<List<MediaGroup>> observable = item.mediaItem != null ?
-                mGroupService.getChannelObserve(item.mediaItem) : mGroupService.getChannelObserve(item.channelId);
+                mHomeService.getChannelObserve(item.mediaItem) : mHomeService.getChannelObserve(item.channelId);
 
         mRowsAction = observable
                 .subscribe(
@@ -240,7 +240,7 @@ public class MediaServiceManager {
 
         RxHelper.disposeActions(mPlaylistGroupAction);
 
-        Observable<MediaGroup> observable = mGroupService.getEmptyPlaylistsObserve();
+        Observable<MediaGroup> observable = mHomeService.getEmptyPlaylistsObserve();
 
         mPlaylistGroupAction = observable
                 .subscribe(
@@ -365,15 +365,15 @@ public class MediaServiceManager {
     }
 
     public void enableHistory(boolean enable) {
-        RxHelper.runAsyncUser(() -> mGroupService.enableHistory(enable));
+        RxHelper.runAsyncUser(() -> mHomeService.enableHistory(enable));
     }
 
     public void clearHistory() {
-        RxHelper.runAsyncUser(mGroupService::clearHistory);
+        RxHelper.runAsyncUser(mHomeService::clearHistory);
     }
 
     public void clearSearchHistory() {
-        RxHelper.runAsyncUser(mGroupService::clearSearchHistory);
+        RxHelper.runAsyncUser(mHomeService::clearSearchHistory);
     }
 
     public void updateHistory(Video video, long positionMs) {

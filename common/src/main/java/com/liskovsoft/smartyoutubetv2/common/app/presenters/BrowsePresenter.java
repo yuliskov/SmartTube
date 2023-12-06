@@ -67,7 +67,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final Map<Integer, Callable<List<SettingsItem>>> mSettingsGridMapping;
     private final Map<Integer, BrowseSection> mSectionsMapping;
     private final AppDataSourceManager mDataSourcePresenter;
-    private final HomeService mGroupService;
+    private final HomeService mHomeService;
     private final MediaItemService mItemService;
     private final SignInService mSignInService;
     private final NotificationsService mNotificationsService;
@@ -95,7 +95,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         ScreenHelper.updateScreenInfo(context);
 
         MediaService mediaService = YouTubeMediaService.instance();
-        mGroupService = mediaService.getHomeService();
+        mHomeService = mediaService.getHomeService();
         mItemService = mediaService.getMediaItemService();
         mSignInService = mediaService.getSignInService();
         mNotificationsService = mediaService.getNotificationsService();
@@ -183,18 +183,18 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void initSectionCallbacks() {
-        mRowMapping.put(MediaGroup.TYPE_HOME, mGeneralData.isOldHomeLookEnabled() ? mGroupService.getHomeV1Observe() : mGroupService.getHomeObserve());
-        mRowMapping.put(MediaGroup.TYPE_TRENDING, mGroupService.getTrendingObserve());
-        mRowMapping.put(MediaGroup.TYPE_KIDS_HOME, mGroupService.getKidsHomeObserve());
-        mRowMapping.put(MediaGroup.TYPE_NEWS, mGroupService.getNewsObserve());
-        mRowMapping.put(MediaGroup.TYPE_MUSIC, mGroupService.getMusicObserve());
-        mRowMapping.put(MediaGroup.TYPE_GAMING, mGroupService.getGamingObserve());
-        mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mGroupService.getPlaylistsObserve());
+        mRowMapping.put(MediaGroup.TYPE_HOME, mGeneralData.isOldHomeLookEnabled() ? mHomeService.getHomeV1Observe() : mHomeService.getHomeObserve());
+        mRowMapping.put(MediaGroup.TYPE_TRENDING, mHomeService.getTrendingObserve());
+        mRowMapping.put(MediaGroup.TYPE_KIDS_HOME, mHomeService.getKidsHomeObserve());
+        mRowMapping.put(MediaGroup.TYPE_NEWS, mHomeService.getNewsObserve());
+        mRowMapping.put(MediaGroup.TYPE_MUSIC, mHomeService.getMusicObserve());
+        mRowMapping.put(MediaGroup.TYPE_GAMING, mHomeService.getGamingObserve());
+        mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mHomeService.getPlaylistsObserve());
 
-        mGridMapping.put(MediaGroup.TYPE_SHORTS, mGroupService.getShortsObserve());
-        mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mGroupService.getSubscriptionsObserve());
-        mGridMapping.put(MediaGroup.TYPE_HISTORY, mGroupService.getHistoryObserve());
-        mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupService.getSubscribedChannelsByUpdateObserve());
+        mGridMapping.put(MediaGroup.TYPE_SHORTS, mHomeService.getShortsObserve());
+        mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mHomeService.getSubscriptionsObserve());
+        mGridMapping.put(MediaGroup.TYPE_HISTORY, mHomeService.getHistoryObserve());
+        mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mHomeService.getSubscribedChannelsByUpdateObserve());
         mGridMapping.put(MediaGroup.TYPE_NOTIFICATIONS, mNotificationsService.getNotificationItemsObserve());
     }
 
@@ -284,19 +284,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         switch (sortingType) {
             case MainUIData.CHANNEL_SORTING_DEFAULT:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupService.getSubscribedChannelsObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mHomeService.getSubscribedChannelsObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_NAME2:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupService.getSubscribedChannelsByName2Observe());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mHomeService.getSubscribedChannelsByName2Observe());
                 break;
             case MainUIData.CHANNEL_SORTING_NAME:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupService.getSubscribedChannelsByNameObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mHomeService.getSubscribedChannelsByNameObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_NEW_CONTENT:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupService.getSubscribedChannelsByUpdateObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mHomeService.getSubscribedChannelsByUpdateObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_LAST_VIEWED:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupService.getSubscribedChannelsByViewedObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mHomeService.getSubscribedChannelsByViewedObserve());
                 break;
         }
     }
@@ -307,12 +307,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         switch (playlistsStyle) {
             case MainUIData.PLAYLISTS_STYLE_GRID:
                 mRowMapping.remove(MediaGroup.TYPE_USER_PLAYLISTS);
-                mGridMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mGroupService.getEmptyPlaylistsObserve());
+                mGridMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mHomeService.getEmptyPlaylistsObserve());
                 updateCategoryType(MediaGroup.TYPE_USER_PLAYLISTS, BrowseSection.TYPE_GRID);
                 break;
             case MainUIData.PLAYLISTS_STYLE_ROWS:
                 mGridMapping.remove(MediaGroup.TYPE_USER_PLAYLISTS);
-                mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mGroupService.getPlaylistsObserve());
+                mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mHomeService.getPlaylistsObserve());
                 updateCategoryType(MediaGroup.TYPE_USER_PLAYLISTS, BrowseSection.TYPE_ROW);
                 break;
         }
@@ -754,7 +754,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         if (mediaGroup.getType() == MediaGroup.TYPE_SUGGESTIONS) { // Pinned playlist
             continuation = mItemService.continueGroupObserve(mediaGroup);
         } else {
-            continuation = mGroupService.continueGroupObserve(mediaGroup);
+            continuation = mHomeService.continueGroupObserve(mediaGroup);
         }
 
         Disposable continueAction = continuation

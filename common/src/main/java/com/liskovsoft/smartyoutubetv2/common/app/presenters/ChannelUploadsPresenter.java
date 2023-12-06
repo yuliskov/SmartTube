@@ -32,7 +32,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     private static final String TAG = ChannelUploadsPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static ChannelUploadsPresenter sInstance;
-    private final HomeService mGroupManager;
+    private final HomeService mHomeService;
     private final MediaItemService mItemManager;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
@@ -43,7 +43,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     public ChannelUploadsPresenter(Context context) {
         super(context);
         MediaService mediaService = YouTubeMediaService.instance();
-        mGroupManager = mediaService.getHomeService();
+        mHomeService = mediaService.getHomeService();
         mItemManager = mediaService.getMediaItemService();
     }
 
@@ -165,9 +165,9 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         disposeActions();
 
         return item.hasNestedItems() || item.isChannel() ?
-               mGroupManager.getGroupObserve(item.mediaItem) :
+               mHomeService.getGroupObserve(item.mediaItem) :
                item.hasReloadPageKey() ?
-               mGroupManager.getGroupObserve(item.getReloadPageKey()) :
+               mHomeService.getGroupObserve(item.getReloadPageKey()) :
                mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0, item.playlistParams)
                        .flatMap(mediaItemMetadata -> Observable.just(findPlaylistRow(mediaItemMetadata)));
     }
@@ -211,7 +211,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         if (mediaGroup.getType() == MediaGroup.TYPE_SUGGESTIONS) {
             continuation = mItemManager.continueGroupObserve(mediaGroup);
         } else {
-            continuation = mGroupManager.continueGroupObserve(mediaGroup);
+            continuation = mHomeService.continueGroupObserve(mediaGroup);
         }
 
         mScrollAction = continuation
@@ -273,7 +273,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         disposeActions();
 
-        Observable<MediaGroup> group = mGroupManager.getGroupObserve(mediaItem);
+        Observable<MediaGroup> group = mHomeService.getGroupObserve(mediaItem);
 
         mUpdateAction = group
                 .subscribe(

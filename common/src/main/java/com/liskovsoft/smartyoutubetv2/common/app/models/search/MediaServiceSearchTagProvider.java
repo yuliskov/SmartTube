@@ -10,19 +10,19 @@ import io.reactivex.disposables.Disposable;
 
 public class MediaServiceSearchTagProvider implements SearchTagsProvider {
     private static final String TAG = MediaServiceSearchTagProvider.class.getSimpleName();
-    private final HomeService mGroupManager;
+    private final HomeService mHomeService;
     private Disposable mTagsAction;
 
     public MediaServiceSearchTagProvider() {
         MediaService mediaService = YouTubeMediaService.instance();
-        mGroupManager = mediaService.getHomeService();
+        mHomeService = mediaService.getHomeService();
     }
 
     @Override
     public void search(String query, ResultsCallback callback) {
         RxHelper.disposeActions(mTagsAction);
 
-        mTagsAction = mGroupManager.getSearchTagsObserve(query)
+        mTagsAction = mHomeService.getSearchTagsObserve(query)
                 .subscribe(
                         tags -> callback.onResults(Tag.from(tags)),
                         error -> Log.e(TAG, "Result is empty. Just ignore it. Error msg: %s", error.getMessage())
