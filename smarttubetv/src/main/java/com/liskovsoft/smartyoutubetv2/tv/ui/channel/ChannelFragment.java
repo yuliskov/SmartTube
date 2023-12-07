@@ -28,6 +28,7 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
         mChannelPresenter.setView(this);
 
         mProgressBarManager = new ProgressBarManager();
+        //enableSearchBar(true);
     }
 
     @Override

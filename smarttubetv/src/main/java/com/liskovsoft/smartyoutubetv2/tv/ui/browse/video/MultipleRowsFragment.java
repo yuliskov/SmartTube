@@ -46,6 +46,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private VideoCardPresenter mCardPresenter;
     private ShortsCardPresenter mShortsPresenter;
     private int mSelectedRowIndex = -1;
+    private boolean mEnableSearchBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +60,10 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         setupAdapter();
         setupEventListeners();
         applyPendingUpdates();
+    }
+
+    public void enableSearchBar(boolean enable) {
+        mEnableSearchBar = enable;
     }
 
     protected abstract VideoGroupPresenter getMainPresenter();
@@ -106,7 +111,9 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     public void clear() {
         if (mRowsAdapter != null) {
             mRowsAdapter.clear();
-            //addSearchHeader();
+            if (mEnableSearchBar) {
+                addSearchHeader();
+            }
         }
 
         if (mVideoGroupAdapters != null) {
