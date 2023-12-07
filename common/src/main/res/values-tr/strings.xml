@@ -441,7 +441,7 @@
     <string name="playlist_order_added_date_newer_first">Eklenme tarihi (önce daha yenisi)</string>
     <string name="playlist_order_added_date_older_first">Eklenme tarihi (önce eski)</string>
     <string name="playlist_order_published_date_newer_first">Yayımlanma tarihi (önce daha yenisi)</string>
-    <string name="playlist_order_published_date_older_first">Yayımlanma tarihi(önce eski)</string>
+    <string name="playlist_order_published_date_older_first">Yayımlanma tarihi (önce eski)</string>
     <string name="playlist_order_popularity">Popülerlik</string>
     <string name="cant_do_this_for_foreign_playlist">Bunu yabancı oynatma listesi için yapamazsınız</string>
     <string name="owned_playlist_warning">Hata. Bu işlem sedece sahip olunan oynatma listeleri için uygulanabilir</string>
