@@ -183,7 +183,7 @@ public class ViewUtil {
         int semiTransparent = ContextCompat.getColor(context, R.color.semi_grey);
 
         // Disable shadow outline on parent fragment
-        if (mainContainer instanceof FrameLayout) {
+        if (mainContainer instanceof FrameLayout && VERSION.SDK_INT >= 21) {
             // ViewOutlineProvider: NoClassDefFoundError on API 19
             mainContainer.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
         }
