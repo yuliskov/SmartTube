@@ -5,8 +5,10 @@ import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.os.Handler;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
 import java.io.File;
@@ -99,7 +101,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         File currentBackup = getBackupCheck();
 
         if (FileHelpers.isEmpty(currentBackup)) {
-            Log.d(TAG, "Oops. Backup not exists.");
+            Log.d(TAG, "Oops. Backup folder is empty.");
+            MessageHelpers.showLongMessage(mContext, "Oops. Backup folder is empty.");
             return;
         }
 
@@ -116,6 +119,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
                 fixFileNames(dataDir);
             }
         }
+
+        MessageHelpers.showMessage(mContext, R.string.msg_done);
 
         // To apply settings we need to kill the app
         new Handler(mContext.getMainLooper()).postDelayed(() -> ViewManager.instance(mContext).forceFinishTheApp(), 1_000);

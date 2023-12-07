@@ -445,7 +445,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         } else {
             AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
                 backupManager.checkPermAndRestore();
-                MessageHelpers.showMessage(getContext(), R.string.msg_done);
             });
         }
     }
@@ -457,7 +456,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         for (String name : backups) {
             options.add(UiOptionItem.from(name, optionItem -> {
                 backupManager.checkPermAndRestore(name);
-                MessageHelpers.showMessage(getContext(), R.string.msg_done);
             }));
         }
 
