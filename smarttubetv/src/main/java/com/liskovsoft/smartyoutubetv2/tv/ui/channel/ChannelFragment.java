@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelSearchRowPresenter.SearchBarCallback;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultipleRowsFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 
@@ -28,7 +29,12 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
         mChannelPresenter.setView(this);
 
         mProgressBarManager = new ProgressBarManager();
-        //enableSearchBar(true);
+        //addSearchBar(new SearchBarCallback() {
+        //    @Override
+        //    public void onSearchSettingsClicked() {
+        //        mChannelPresenter.onSearchSettingsClicked();
+        //    }
+        //});
     }
 
     @Override

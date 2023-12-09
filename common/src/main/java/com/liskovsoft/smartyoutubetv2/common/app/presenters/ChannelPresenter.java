@@ -7,10 +7,13 @@ import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
@@ -341,5 +344,26 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 return mediaGroups.get(0);
             }));
         });
+    }
+
+    public void onSearchSettingsClicked() {
+        if (mChannelId == null) {
+            return;
+        }
+
+        Observable<List<MediaGroup>> channelObserve = mHubService.getContentService().getChannelSortingObserve(mChannelId);
+        Disposable result = channelObserve.subscribe(
+                items -> {
+                    AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
+                    List<OptionItem> options = new ArrayList<>();
+                    int idx = 0;
+                    for (MediaGroup group : items) {
+                        idx++;
+                        options.add(UiOptionItem.from(group.getTitle(), item -> MessageHelpers.showMessage(getContext(), group.toString()), idx == 1));
+                    }
+                    dialogPresenter.appendRadioCategory(getContext().getString(R.string.channels_section_sorting), options);
+                    dialogPresenter.showDialog();
+                }
+        );
     }
 }

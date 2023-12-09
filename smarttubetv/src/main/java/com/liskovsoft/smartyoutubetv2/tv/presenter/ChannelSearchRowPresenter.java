@@ -55,7 +55,7 @@ public class ChannelSearchRowPresenter extends RowPresenter {
         void onSearchSettingsClicked();
     }
 
-    public static class Data extends Row implements SearchResultProvider {
+    public static class SearchBarCallback extends Row implements SearchResultProvider {
         @Override
         public boolean onQueryTextChange(String newQuery) {
             return false;

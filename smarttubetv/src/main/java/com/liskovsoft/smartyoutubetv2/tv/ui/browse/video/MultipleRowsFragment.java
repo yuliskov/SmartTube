@@ -21,6 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelSearchRowPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelSearchRowPresenter.SearchBarCallback;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ShortsCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
@@ -46,7 +47,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private VideoCardPresenter mCardPresenter;
     private ShortsCardPresenter mShortsPresenter;
     private int mSelectedRowIndex = -1;
-    private boolean mEnableSearchBar;
+    private SearchBarCallback mSearchBarCallback;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,8 +63,8 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         applyPendingUpdates();
     }
 
-    public void enableSearchBar(boolean enable) {
-        mEnableSearchBar = enable;
+    protected void addSearchBar(SearchBarCallback callback) {
+        mSearchBarCallback = callback;
     }
 
     protected abstract VideoGroupPresenter getMainPresenter();
@@ -89,15 +90,11 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
 
             ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
             presenterSelector.addClassPresenter(ListRow.class, mRowPresenter);
-            presenterSelector.addClassPresenter(ChannelSearchRowPresenter.Data.class, new ChannelSearchRowPresenter());
+            presenterSelector.addClassPresenter(SearchBarCallback.class, new ChannelSearchRowPresenter());
 
             mRowsAdapter = new ArrayObjectAdapter(presenterSelector);
             setAdapter(mRowsAdapter);
         }
-    }
-
-    private void addSearchHeader() {
-        mRowsAdapter.add(new ChannelSearchRowPresenter.Data());
     }
 
     private void setupEventListeners() {
@@ -111,8 +108,8 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     public void clear() {
         if (mRowsAdapter != null) {
             mRowsAdapter.clear();
-            if (mEnableSearchBar) {
-                addSearchHeader();
+            if (mSearchBarCallback != null) {
+                mRowsAdapter.add(mSearchBarCallback);
             }
         }
 
