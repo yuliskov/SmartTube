@@ -7,7 +7,6 @@ import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -41,6 +40,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
     private MediaGroup mLastScrollGroup;
+    private int mSortIdx;
 
     private interface OnChannelId {
         void onChannelId(String channelId);
@@ -175,6 +175,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private void disposeActions() {
         RxHelper.disposeActions(mUpdateAction, mScrollAction);
         mServiceManager.disposeActions();
+        mSortIdx = 0;
     }
 
     private void updateRows(String channelId) {
@@ -210,8 +211,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         if (ViewManager.instance(getContext()).getTopView() != ChannelView.class) {
             ViewManager.instance(getContext()).startView(ChannelView.class);
         }
-
-        moveToTopIfNeeded(mediaGroups);
 
         for (MediaGroup mediaGroup : mediaGroups) {
             if (mediaGroup.getMediaItems() == null) {
@@ -264,16 +263,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                         },
                         () -> getView().showProgressBar(false)
                 );
-    }
-
-    /**
-     * Sort channel content: move Uploads on top.
-     */
-    private void moveToTopIfNeeded(List<MediaGroup> mediaGroups) {
-        moveToTop(mediaGroups, R.string.playlists_row_name);
-        moveToTop(mediaGroups, R.string.popular_uploads_row_name);
-        moveToTop(mediaGroups, R.string.uploads_row_name);
-        moveToTop(mediaGroups, R.string.live_now_row_name);
     }
 
     private void moveToTop(List<MediaGroup> mediaGroups, int rowNameResId) {
@@ -351,15 +340,25 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             return;
         }
 
-        Observable<List<MediaGroup>> channelObserve = mHubService.getContentService().getChannelSortingObserve(mChannelId);
-        Disposable result = channelObserve.subscribe(
+        Observable<List<MediaGroup>> sorting = mHubService.getContentService().getChannelSortingObserve(mChannelId);
+        Disposable result = sorting.subscribe(
                 items -> {
                     AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
                     List<OptionItem> options = new ArrayList<>();
                     int idx = 0;
                     for (MediaGroup group : items) {
+                        final int tempIdx = idx;
+                        options.add(UiOptionItem.from(group.getTitle(), item -> {
+                            Observable<MediaGroup> continuation = mHubService.getContentService().continueGroupObserve(group);
+                            Disposable result2 = continuation.subscribe(mediaGroup -> {
+                                VideoGroup replace = VideoGroup.from(mediaGroup);
+                                replace.setPosition(0);
+                                replace.setAction(VideoGroup.ACTION_REPLACE);
+                                getView().update(replace);
+                                mSortIdx = tempIdx;
+                            });
+                        }, mSortIdx == idx));
                         idx++;
-                        options.add(UiOptionItem.from(group.getTitle(), item -> MessageHelpers.showMessage(getContext(), group.toString()), idx == 1));
                     }
                     dialogPresenter.appendRadioCategory(getContext().getString(R.string.channels_section_sorting), options);
                     dialogPresenter.showDialog();

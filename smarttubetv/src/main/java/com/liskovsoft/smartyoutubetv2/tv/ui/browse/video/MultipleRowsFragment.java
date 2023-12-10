@@ -9,6 +9,7 @@ import androidx.leanback.widget.ClassPresenterSelector;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
+import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
@@ -121,6 +122,15 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         setPosition(0);
     }
 
+    private void remove(int idx) {
+        if (mRowsAdapter != null && mRowsAdapter.size() > idx) {
+            ListRow row = (ListRow) mRowsAdapter.get(idx);
+            mRowsAdapter.remove(row);
+            VideoGroupObjectAdapter group = (VideoGroupObjectAdapter) row.getAdapter();
+            mVideoGroupAdapters.values().remove(group);
+        }
+    }
+
     @Override
     public boolean isEmpty() {
         if (mRowsAdapter == null) {
@@ -137,10 +147,19 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             return;
         }
 
+        // Correct position depending on the search bar presence
+        if (group.getPosition() != -1 && mSearchBarCallback != null) {
+            group.setPosition(group.getPosition() + 1);
+        }
+
         int action = group.getAction();
 
         if (action == VideoGroup.ACTION_REPLACE) {
-            clear();
+            if (group.getPosition() == -1) {
+                clear();
+            } else {
+                remove(group.getPosition());
+            }
         } else if (action == VideoGroup.ACTION_REMOVE) {
             VideoGroupObjectAdapter adapter = mVideoGroupAdapters.get(group.getId());
             if (adapter != null) {

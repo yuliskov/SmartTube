@@ -216,6 +216,10 @@ public class VideoGroup {
         return mPosition;
     }
 
+    public void setPosition(int position) {
+        mPosition = position;
+    }
+
     public int getAction() {
         return mAction;
     }
