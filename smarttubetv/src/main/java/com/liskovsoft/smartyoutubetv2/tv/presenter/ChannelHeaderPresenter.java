@@ -9,6 +9,8 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 
@@ -37,8 +39,8 @@ import net.gotev.speech.SpeechUtil;
 
 import java.util.List;
 
-public class ChannelSearchRowPresenter extends RowPresenter {
-    private static final String TAG = ChannelSearchRowPresenter.class.getSimpleName();
+public class ChannelHeaderPresenter extends RowPresenter {
+    private static final String TAG = ChannelHeaderPresenter.class.getSimpleName();
     private static final String EXTRA_LEANBACK_BADGE_PRESENT = "LEANBACK_BADGE_PRESENT";
     private static final int REQUEST_SPEECH = 0x00000010;
     private static final int RESULTS_CHANGED = 0x1;
@@ -49,13 +51,13 @@ public class ChannelSearchRowPresenter extends RowPresenter {
     private int mStatus;
     private String mTitle;
 
-    public interface SearchResultProvider {
+    public interface ChannelHeaderProvider {
         boolean onQueryTextChange(String newQuery);
         boolean onQueryTextSubmit(String query);
         void onSearchSettingsClicked();
     }
 
-    public static class SearchBarCallback extends Row implements SearchResultProvider {
+    public static class ChannelHeaderCallback extends Row implements ChannelHeaderProvider {
         @Override
         public boolean onQueryTextChange(String newQuery) {
             return false;
@@ -74,7 +76,8 @@ public class ChannelSearchRowPresenter extends RowPresenter {
 
     @Override
     protected ViewHolder createRowViewHolder(ViewGroup parent) {
-        SearchBar searchBar = new SearchBar(parent.getContext());
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View channelHeader = inflater.inflate(R.layout.channel_header, parent, false);
 
         setSelectEffectEnabled(ViewUtil.ROW_SELECT_EFFECT_ENABLED);
 
@@ -82,22 +85,18 @@ public class ChannelSearchRowPresenter extends RowPresenter {
         mIsKeyboardAutoShowEnabled = searchData.isKeyboardAutoShowEnabled();
         mIsKeyboardFixEnabled = searchData.isKeyboardFixEnabled();
 
-        return new ViewHolder(searchBar);
+        return new ViewHolder(channelHeader);
     }
 
     @Override
     protected void onBindRowViewHolder(ViewHolder vh, Object item) {
         super.onBindRowViewHolder(vh, item);
 
-        //View searchBar = vh.view;
-        //int padding = (int) searchBar.getContext().getResources().getDimension(R.dimen.lb_browse_item_vertical_spacing);
-        //searchBar.setPadding(searchBar.getPaddingLeft(), searchBar.getPaddingTop(), searchBar.getPaddingRight(), padding);
-
-        SearchResultProvider provider = (SearchResultProvider) item;
-        SearchBar searchBar = (SearchBar) vh.view;
-        SearchOrbView searchOrbView = searchBar.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.lb_search_bar_search_orb);
-        SpeechOrbView speechOrbView = searchBar.findViewById(androidx.leanback.R.id.lb_search_bar_speech_orb);
-        SearchEditText searchTextEditor = searchBar.findViewById(androidx.leanback.R.id.lb_search_text_editor);
+        ChannelHeaderProvider provider = (ChannelHeaderProvider) item;
+        SearchBar searchBar = vh.view.findViewById(R.id.lb_search_bar);
+        SearchOrbView searchOrbView = searchBar.findViewById(R.id.lb_search_bar_search_orb);
+        SpeechOrbView speechOrbView = searchBar.findViewById(R.id.lb_search_bar_speech_orb);
+        SearchEditText searchTextEditor = searchBar.findViewById(R.id.lb_search_text_editor);
         searchBar.setOnFocusChangeListener((v, focused) -> {
             Log.d(TAG, "search bar focused");
         });
@@ -242,11 +241,11 @@ public class ChannelSearchRowPresenter extends RowPresenter {
 
     private final class GotevCallback implements SpeechRecognitionCallback {
         private final Context mContext;
-        private final SearchResultProvider mProvider;
+        private final ChannelHeaderProvider mProvider;
         private final SearchBar mSearchBar;
         private final SpeechOrbView mSpeechOrbView;
 
-        public GotevCallback(Context context, SearchResultProvider provider, SearchBar searchBar, SpeechOrbView speechOrbView) {
+        public GotevCallback(Context context, ChannelHeaderProvider provider, SearchBar searchBar, SpeechOrbView speechOrbView) {
             mContext = context;
             mProvider = provider;
             mSearchBar = searchBar;
@@ -329,7 +328,7 @@ public class ChannelSearchRowPresenter extends RowPresenter {
         return recognizerIntent;
     }
 
-    private void submitQuery(SearchResultProvider provider, String query) {
+    private void submitQuery(ChannelHeaderProvider provider, String query) {
         if (query == null) {
             return;
         }
@@ -343,7 +342,7 @@ public class ChannelSearchRowPresenter extends RowPresenter {
         return searchTextEditor.getText().toString();
     }
 
-    private void retrieveResults(SearchResultProvider provider, String searchQuery) {
+    private void retrieveResults(ChannelHeaderProvider provider, String searchQuery) {
         if (BuildConfig.DEBUG) Log.v(TAG, "retrieveResults " + searchQuery);
         if (provider.onQueryTextChange(searchQuery)) {
             mStatus &= ~QUERY_COMPLETE;
@@ -378,7 +377,7 @@ public class ChannelSearchRowPresenter extends RowPresenter {
         }
     }
 
-    private void applyExternalQuery(SearchResultProvider provider, SearchBar mSearchBar, String query, boolean submit) {
+    private void applyExternalQuery(ChannelHeaderProvider provider, SearchBar mSearchBar, String query, boolean submit) {
         if (query == null || mSearchBar == null) {
             return;
         }

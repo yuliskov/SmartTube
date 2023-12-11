@@ -3,14 +3,10 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import androidx.leanback.widget.Presenter;
 
-import com.liskovsoft.sharedutils.helpers.KeyHelpers;
-import com.liskovsoft.smartyoutubetv2.tv.R;
-
-public class SearchBarPresenter extends Presenter {
+public class SearchFieldPresenter extends Presenter {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());

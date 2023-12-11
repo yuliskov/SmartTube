@@ -21,7 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.HeaderVideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.SearchBarPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.SearchFieldPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
@@ -187,7 +187,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
         if (mGridAdapter1 == null) {
             ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
             presenterSelector.addClassPresenter(Video.class, mCardPresenter1);
-            presenterSelector.addClassPresenter(SearchBarPresenter.Data.class, new SearchBarPresenter());
+            presenterSelector.addClassPresenter(SearchFieldPresenter.Data.class, new SearchFieldPresenter());
 
             mGridAdapter1 = new HeaderVideoGroupObjectAdapter(presenterSelector);
             setAdapter1(mGridAdapter1);
@@ -297,7 +297,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
     }
 
     private void addSearchHeader() {
-        mGridAdapter1.setHeader(new SearchBarPresenter.Data());
+        mGridAdapter1.setHeader(new SearchFieldPresenter.Data());
     }
 
     @Override

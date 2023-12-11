@@ -20,8 +20,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelSearchRowPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelSearchRowPresenter.SearchBarCallback;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelHeaderPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelHeaderPresenter.ChannelHeaderCallback;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ShortsCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
@@ -47,7 +47,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private VideoCardPresenter mCardPresenter;
     private ShortsCardPresenter mShortsPresenter;
     private int mSelectedRowIndex = -1;
-    private SearchBarCallback mSearchBarCallback;
+    private ChannelHeaderCallback mChannelHeaderCallback;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,8 +63,8 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         applyPendingUpdates();
     }
 
-    protected void addSearchBar(SearchBarCallback callback) {
-        mSearchBarCallback = callback;
+    protected void addHeader(ChannelHeaderCallback callback) {
+        mChannelHeaderCallback = callback;
     }
 
     protected abstract VideoGroupPresenter getMainPresenter();
@@ -90,7 +90,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
 
             ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
             presenterSelector.addClassPresenter(ListRow.class, mRowPresenter);
-            presenterSelector.addClassPresenter(SearchBarCallback.class, new ChannelSearchRowPresenter());
+            presenterSelector.addClassPresenter(ChannelHeaderCallback.class, new ChannelHeaderPresenter());
 
             mRowsAdapter = new ArrayObjectAdapter(presenterSelector);
             setAdapter(mRowsAdapter);
@@ -108,8 +108,8 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     public void clear() {
         if (mRowsAdapter != null) {
             mRowsAdapter.clear();
-            if (mSearchBarCallback != null) {
-                mRowsAdapter.add(mSearchBarCallback);
+            if (mChannelHeaderCallback != null) {
+                mRowsAdapter.add(mChannelHeaderCallback);
             }
         }
 
@@ -147,7 +147,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         }
 
         // Correct position depending on the search bar presence
-        if (group.getPosition() != -1 && mSearchBarCallback != null) {
+        if (group.getPosition() != -1 && mChannelHeaderCallback != null) {
             group.setPosition(group.getPosition() + 1);
         }
 
