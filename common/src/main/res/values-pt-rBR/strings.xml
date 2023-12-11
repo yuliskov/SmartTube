@@ -152,7 +152,7 @@
   <string name="unsubscribe_from_channel">Cancelar inscrição do canal</string>
   <string name="card_title_lines_num">Número de linhas dos títulos das miniaturas</string>
   <string name="card_auto_scrolled_title">Rolagem automática de títulos</string>
-  <string name="share_link">Compartilhar link</string>
+  <string name="share_link">Link de compartilhamento</string>
   <string name="subscribe_to_channel">Inscrever-se no canal</string>
   <string name="wait_data_loading">Carregando dados...</string>
   <string name="auto_frame_rate_pause">Taxa de quadros automática (pausar ao trocar)</string>
@@ -176,11 +176,11 @@
   <string name="content_block_confirm_skip">Confirmar ao pular</string>
   <string name="content_block_categories">Pular segmentos</string>
   <string name="content_block_sponsor">Patrocinador</string>
-  <string name="content_block_intro">Introdução/animação de intervalo</string>
-  <string name="content_block_outro">Cartões finais/créditos</string>
+  <string name="content_block_intro">Abertura/Intervalo</string>
+  <string name="content_block_outro">Finalização/Créditos</string>
   <string name="content_block_interaction">Lembrete de interação (inscrição)</string>
-  <string name="content_block_self_promo">Não remunerado/Autopromoção</string>
-  <string name="content_block_music_off_topic">Seção do clipe sem música</string>
+  <string name="content_block_self_promo">Não-Pago/Autopromoção</string>
+  <string name="content_block_music_off_topic">Música: trecho sem música</string>
   <string name="confirm_segment_skip">Pular segmento \"%s\"\?</string>
   <string name="cancel_segment_skip">Cancelar pulo de segmento</string>
   <string name="msg_skipping_segment">Pulando segmento \"%s\"…</string>
@@ -262,7 +262,7 @@
   <string name="removed_from">Removido de %s</string>
   <string name="video_preset_adaptive">Adaptativo</string>
   <string name="content_block_preview_recap">Pré-visualização ou recapitulação do vídeo</string>
-  <string name="content_block_highlight">Ponto de destaque</string>
+  <string name="content_block_highlight">Destaques (Nem sempre isso funciona, mesmo assim o marcador aparecerá na barra de carregamento)</string>
   <string name="removed_from_history">O vídeo foi removido do histórico</string>
   <string name="remove_from_history">Remover do histórico</string>
   <string name="upload_date">Data de carregamento</string>
@@ -354,7 +354,7 @@
   <string name="openvpn_address_invalid">Endereço de configuração da OpenVPN não definido.</string>
   <string name="internet_censorship">Censura da internet</string>
   <string name="rename_section">Renomear essa seção</string>
-  <string name="simple_edit_value_hint">Insira um valor</string>
+  <string name="simple_edit_value_hint">Escreva algo interessante aqui!</string>
   <string name="seek_interval">Intervalo de avanço/retrocesso</string>
   <string name="seek_interval_sec">%s seg</string>
   <string name="subtitle_system">Estilo do sistema (configurações do Android &gt; Acessibilidade)</string>
@@ -536,7 +536,7 @@
   <string name="old_home_look">Voltar para a aparência antiga da sessão Início</string>
   <string name="hide_shorts_everywhere">Esconder os Shorts em todos os lugares</string>
   <string name="update_found">Atualização</string>
-  <string name="volume_boost_warning">Qualquer configuração acima do limite pode potencialmente danificar undefinedos alto-falantes</string>
+  <string name="volume_boost_warning">Qualquer configuração acima do limite pode potencialmente danificar os alto-falantes</string>
   <string name="play_video_incognito">Reproduzir de forma anônima</string>
   <string name="header_kids_home">Crianças</string>
   <string name="player_section_playlist">Utilizar os conteúdos da sessão atual como playlist</string>
@@ -568,10 +568,10 @@
   <string name="protect_account_with_password">Proteja essa conta com uma Senha</string>
   <string name="enter_account_password">Entra com a senha da conta</string>
   <string name="play_next">Reproduzir próximo</string>
-  <string name="hide_watched_from_subscriptions">Ocultar videos assistidos das inscrições</string>
+  <string name="hide_watched_from_subscriptions">Ocultar vídeos assistidos das inscrições</string>
   <string name="hide_unwanted_content">Ocultar conteúdo indesejado</string>
-  <string name="hide_watched_from_home">Ocultar videos assistidos do Início</string>
-  <string name="prefer_avc_over_vp9_desc">Atenção: Resolução Maxima é 1080p</string>
+  <string name="hide_watched_from_home">Ocultar vídeos assistidos do Início</string>
+  <string name="prefer_avc_over_vp9_desc">Atenção: Resolução Máxima é 1080p</string>
   <string name="disable_search_history">Desabilitar histórico de pesquisa</string>
   <string name="msg_player_unknown_error">Erro desconhecido</string>
   <string name="auto_history">Automático (usar configurações da conta)</string>
@@ -602,10 +602,18 @@
   <string name="screensaver_timout">Tempo limite do protetor de tela</string>
   <string name="screensaver_dimming">Quantidade de escurecimento do protetor de tela</string>
   <string name="item_postion">Posição de</string>
-  <string name="keyboard_fix">Consertar: Mostrar teclado quando pressionar OK (G20s and outros)</string>
+  <string name="keyboard_fix">Consertar: Mostrar teclado quando pressionar OK (G20s e outros)</string>
   <string name="open_comments">Abrir comentários</string>
   <string name="hide_upcoming_channel">Ocultar Em breve de Canais</string>
   <string name="hide_upcoming_home">Ocultar Em breve do início</string>
   <string name="show_connect_messages">Mostrar mensagens de conexão</string>
   <string name="player_network_stack">Ponte de Conexão</string>
+  <string name="share_qr_link">Link de compartilhamento (Código QR)</string>
+  <string name="player_corner_ending_time">Player: Relógio no canto superior direito (Horário do Término do vídeo.)</string>
+  <string name="player_corner_clock">Player: Relógio no canto superior direito</string>
+  <string name="app_corner_clock">Inicio: Relógio no canto superior direito</string>
+  <string name="player_global_focus"></string>
+  <string name="news_row_name">Novos</string>
+  <string name="hide_shorts_channel">Ocultar shorts de Canais</string>
+  <string name="hide_shorts_from_trending">Ocultar os shorts do Em Alta</string>
 </resources>
