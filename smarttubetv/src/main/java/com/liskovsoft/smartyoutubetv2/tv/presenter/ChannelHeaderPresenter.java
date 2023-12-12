@@ -52,19 +52,19 @@ public class ChannelHeaderPresenter extends RowPresenter {
     private String mTitle;
 
     public interface ChannelHeaderProvider {
-        boolean onQueryTextChange(String newQuery);
-        boolean onQueryTextSubmit(String query);
+        boolean onSearchChange(String newQuery);
+        boolean onSearchSubmit(String query);
         void onSearchSettingsClicked();
     }
 
     public static class ChannelHeaderCallback extends Row implements ChannelHeaderProvider {
         @Override
-        public boolean onQueryTextChange(String newQuery) {
+        public boolean onSearchChange(String newQuery) {
             return false;
         }
 
         @Override
-        public boolean onQueryTextSubmit(String query) {
+        public boolean onSearchSubmit(String query) {
             return false;
         }
 
@@ -334,7 +334,7 @@ public class ChannelHeaderPresenter extends RowPresenter {
         }
         
         if (null != provider) {
-            provider.onQueryTextSubmit(query);
+            provider.onSearchSubmit(query);
         }
     }
 
@@ -344,7 +344,7 @@ public class ChannelHeaderPresenter extends RowPresenter {
 
     private void retrieveResults(ChannelHeaderProvider provider, String searchQuery) {
         if (BuildConfig.DEBUG) Log.v(TAG, "retrieveResults " + searchQuery);
-        if (provider.onQueryTextChange(searchQuery)) {
+        if (provider.onSearchChange(searchQuery)) {
             mStatus &= ~QUERY_COMPLETE;
         }
     }
