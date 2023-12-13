@@ -349,6 +349,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                     for (MediaGroup group : items) {
                         final int tempIdx = idx;
                         options.add(UiOptionItem.from(group.getTitle(), item -> {
+                            dialogPresenter.closeDialog();
                             Observable<MediaGroup> continuation = mHubService.getContentService().continueGroupObserve(group);
                             Disposable result2 = continuation.subscribe(mediaGroup -> {
                                 VideoGroup replace = VideoGroup.from(mediaGroup);
