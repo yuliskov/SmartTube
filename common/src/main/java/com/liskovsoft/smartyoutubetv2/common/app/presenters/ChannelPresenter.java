@@ -365,4 +365,21 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 }
         );
     }
+
+    public boolean onSearchSubmit(String query) {
+        if (mChannelId == null) {
+            return false;
+        }
+
+        Observable<MediaGroup> search = mHubService.getContentService().getChannelSearchObserve(mChannelId, query);
+        Disposable result = search.subscribe(
+                items -> {
+                    VideoGroup update = VideoGroup.from(items);
+                    update.setAction(VideoGroup.ACTION_PREPEND);
+                    getView().update(update);
+                }
+        );
+
+        return true;
+    }
 }

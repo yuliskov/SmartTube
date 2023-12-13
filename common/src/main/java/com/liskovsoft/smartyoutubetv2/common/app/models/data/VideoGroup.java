@@ -226,6 +226,10 @@ public class VideoGroup {
 
     public void setAction(int action) {
         mAction = action;
+
+        if (action == ACTION_PREPEND) {
+            mPosition = 0;
+        }
     }
 
     /**

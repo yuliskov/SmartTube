@@ -34,6 +34,11 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
         //    public void onSearchSettingsClicked() {
         //        mChannelPresenter.onSearchSettingsClicked();
         //    }
+        //
+        //    @Override
+        //    public boolean onSearchSubmit(String query) {
+        //        return mChannelPresenter.onSearchSubmit(query);
+        //    }
         //});
     }
 
