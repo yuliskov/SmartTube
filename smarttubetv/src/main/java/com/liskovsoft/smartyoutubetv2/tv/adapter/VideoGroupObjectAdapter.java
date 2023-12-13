@@ -55,7 +55,7 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
 
     private void initData(VideoGroup videoGroup) {
         if (videoGroup != null) {
-            append(videoGroup);
+            add(videoGroup);
         }
     }
 
@@ -77,36 +77,44 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         return mVideoItems;
     }
 
-    public void prepend(VideoGroup group) {
-        if (group != null && group.getVideos() != null) {
-            int begin = mVideoItems.size();
+    public void add(VideoGroup group) {
+        if (group == null || group.getVideos() == null) {
+            return;
+        }
 
-            if (mVideoGroups.contains(group)) {
-                mVideoItems.addAll(0, group.getVideos().subList(begin, group.getVideos().size()));
-            } else {
-                mVideoItems.addAll(0, group.getVideos());
-                mVideoGroups.add(0, group);
-            }
-
-            // Fix double item blinking by specifying exact range
-            notifyItemRangeInserted(0, mVideoItems.size() - begin);
+        if (group.getAction() == VideoGroup.ACTION_PREPEND) {
+            prepend(group); // add at the begin of the existing group
+        } else {
+            append(group); // add at the end of the the existing group
         }
     }
 
-    public void append(VideoGroup group) {
-        if (group != null && group.getVideos() != null) {
-            int begin = mVideoItems.size();
+    private void prepend(VideoGroup group) {
+        int begin = mVideoItems.size();
 
-            if (mVideoGroups.contains(group)) {
-                mVideoItems.addAll(group.getVideos().subList(begin, group.getVideos().size()));
-            } else {
-                mVideoItems.addAll(group.getVideos());
-                mVideoGroups.add(group);
-            }
-
-            // Fix double item blinking by specifying exact range
-            notifyItemRangeInserted(begin, mVideoItems.size() - begin);
+        if (mVideoGroups.contains(group)) {
+            mVideoItems.addAll(0, group.getVideos().subList(begin, group.getVideos().size()));
+        } else {
+            mVideoItems.addAll(0, group.getVideos());
+            mVideoGroups.add(0, group);
         }
+
+        // Fix double item blinking by specifying exact range
+        notifyItemRangeInserted(0, mVideoItems.size() - begin);
+    }
+
+    private void append(VideoGroup group) {
+        int begin = mVideoItems.size();
+
+        if (mVideoGroups.contains(group)) {
+            mVideoItems.addAll(group.getVideos().subList(begin, group.getVideos().size()));
+        } else {
+            mVideoItems.addAll(group.getVideos());
+            mVideoGroups.add(group);
+        }
+
+        // Fix double item blinking by specifying exact range
+        notifyItemRangeInserted(begin, mVideoItems.size() - begin);
     }
 
     /**

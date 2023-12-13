@@ -29,17 +29,17 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
         mChannelPresenter.setView(this);
 
         mProgressBarManager = new ProgressBarManager();
-        //addHeader(new ChannelHeaderCallback() {
-        //    @Override
-        //    public void onSearchSettingsClicked() {
-        //        mChannelPresenter.onSearchSettingsClicked();
-        //    }
-        //
-        //    @Override
-        //    public boolean onSearchSubmit(String query) {
-        //        return mChannelPresenter.onSearchSubmit(query);
-        //    }
-        //});
+        addHeader(new ChannelHeaderCallback() {
+            @Override
+            public void onSearchSettingsClicked() {
+                mChannelPresenter.onSearchSettingsClicked();
+            }
+
+            @Override
+            public boolean onSearchSubmit(String query) {
+                return mChannelPresenter.onSearchSubmit(query);
+            }
+        });
     }
 
     @Override

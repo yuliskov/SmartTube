@@ -8,6 +8,7 @@
     <androidx.leanback.widget.SearchBar
         android:id="@+id/lb_search_bar"
         android:layout_marginTop="@dimen/lb_search_bar_padding_top"
+        android:layout_marginBottom="@dimen/lb_search_bar_padding_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clipChildren="false"

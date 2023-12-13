@@ -186,7 +186,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
                         continueMediaGroup -> {
                             getPlayer().showProgressBar(false);
 
-                            VideoGroup videoGroup = VideoGroup.from(continueMediaGroup, group);
+                            VideoGroup videoGroup = VideoGroup.from(group, continueMediaGroup);
                             getPlayer().updateSuggestions(videoGroup);
 
                             // Merge remote queue with player's queue

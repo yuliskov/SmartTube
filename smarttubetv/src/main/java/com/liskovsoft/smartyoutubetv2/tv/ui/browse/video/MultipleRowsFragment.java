@@ -121,12 +121,29 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         setPosition(0);
     }
 
-    private void remove(int idx) {
+    private void removeByIndex(int idx) {
         if (mRowsAdapter != null && mRowsAdapter.size() > idx) {
             ListRow row = (ListRow) mRowsAdapter.get(idx);
             mRowsAdapter.remove(row);
             VideoGroupObjectAdapter group = (VideoGroupObjectAdapter) row.getAdapter();
             mVideoGroupAdapters.values().remove(group);
+        }
+    }
+
+    private void removeById(int id) {
+        if (mRowsAdapter != null) {
+            VideoGroupObjectAdapter needed = mVideoGroupAdapters.get(id);
+            for (int i = 0; i < mRowsAdapter.size(); i++) {
+                Object row = mRowsAdapter.get(i);
+
+                if (row instanceof ListRow) {
+                    VideoGroupObjectAdapter adapter = (VideoGroupObjectAdapter) ((ListRow) row).getAdapter();
+                    if (adapter == needed) {
+                        mRowsAdapter.remove(row);
+                        mVideoGroupAdapters.remove(id);
+                    }
+                }
+            }
         }
     }
 
@@ -157,7 +174,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             if (group.getPosition() == -1) {
                 clear();
             } else {
-                remove(group.getPosition());
+                removeById(group.getId());
             }
         } else if (action == VideoGroup.ACTION_REMOVE) {
             VideoGroupObjectAdapter adapter = mVideoGroupAdapters.get(group.getId());
@@ -199,7 +216,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
 
             freeze(true);
 
-            existingAdapter.append(group); // continue row
+            existingAdapter.add(group); // continue
 
             freeze(false);
         }
@@ -244,7 +261,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         // Disable scrolling on partially updated rows. This prevent controls from misbehaving.
         if (mRowPresenter != null) {
             ViewHolder vh = getRowViewHolder(getSelectedPosition());
-            if (vh != null) {
+            if (vh instanceof ListRowPresenter.ViewHolder) {
                 mRowPresenter.freeze(vh, freeze);
             }
         }
