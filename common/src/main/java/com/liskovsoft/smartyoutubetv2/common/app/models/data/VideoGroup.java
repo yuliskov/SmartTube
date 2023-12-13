@@ -16,6 +16,9 @@ public class VideoGroup {
      * Add at the end of the the existing group
      */
     public static final int ACTION_APPEND = 0;
+    /**
+     * Clear whole fragment and then add this group
+     */
     public static final int ACTION_REPLACE = 1;
     public static final int ACTION_REMOVE = 2;
     public static final int ACTION_REMOVE_AUTHOR = 3;
@@ -123,7 +126,7 @@ public class VideoGroup {
         return videoGroup;
     }
 
-    public static VideoGroup from(MediaGroup mediaGroup, VideoGroup baseGroup) {
+    public static VideoGroup from(VideoGroup baseGroup, MediaGroup mediaGroup) {
         baseGroup.mMediaGroup = mediaGroup;
 
         if (mediaGroup == null) {
@@ -153,6 +156,8 @@ public class VideoGroup {
             }
             baseGroup.mVideos.add(video);
         }
+
+        baseGroup.mAction = ACTION_APPEND;
 
         return baseGroup;
     }

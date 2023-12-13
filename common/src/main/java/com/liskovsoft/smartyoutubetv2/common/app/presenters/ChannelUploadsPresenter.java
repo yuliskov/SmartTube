@@ -217,7 +217,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         mScrollAction = continuation
                 .subscribe(
                         //continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
-                        continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup, group)),
+                        continueMediaGroup -> getView().update(VideoGroup.from(group, continueMediaGroup)),
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             if (getView() != null) {

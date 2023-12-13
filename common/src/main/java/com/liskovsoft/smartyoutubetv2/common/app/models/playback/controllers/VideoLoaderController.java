@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
+import android.annotation.SuppressLint;
+
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
@@ -47,12 +49,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
     private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
-    private final Runnable mPendingSync = () -> {
+    private final Runnable mMetadataSync = () -> {
         if (getPlayer() != null) {
             waitMetadataSync(getPlayer().getVideo(), false);
         }
     };
-    private final Runnable mPendingRestartEngine = () -> {
+    private final Runnable mFixAndRestartEngine = () -> {
         if (getPlayer() != null) {
             YouTubeHubService.instance().invalidateCache();
             getPlayer().restartEngine(); // properly save position of the current track
@@ -209,7 +211,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             getPlayer().setVideo(mLastVideo);
         }
 
-        Utils.removeCallbacks(mPendingRestartEngine);
+        Utils.removeCallbacks(mFixAndRestartEngine);
 
         return false;
     }
@@ -265,7 +267,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             // Short videos next fix (suggestions aren't loaded yet)
             boolean isEnded = getPlayer() != null && Math.abs(getPlayer().getDurationMs() - getPlayer().getPositionMs()) < 100;
             if (isEnded) {
-                Utils.postDelayed(mPendingSync, 1_000);
+                Utils.postDelayed(mMetadataSync, 1_000);
             }
         }
     }
@@ -374,9 +376,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private void disposeActions() {
         MediaServiceManager.instance().disposeActions();
         RxHelper.disposeActions(mFormatInfoAction, mMpdStreamAction);
-        Utils.removeCallbacks(mReloadVideoHandler, mPendingRestartEngine, mPendingSync);
+        Utils.removeCallbacks(mReloadVideoHandler, mFixAndRestartEngine, mMetadataSync);
     }
 
+    @SuppressLint("StringFormatMatches")
     private void runErrorAction(int error, int rendererIndex, String message) {
         switch (error) {
             // Some ciphered data could be outdated.
@@ -398,7 +401,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         }
 
         // Delay to fix frequent requests
-        Utils.postDelayed(mPendingRestartEngine, 3_000);
+        Utils.postDelayed(mFixAndRestartEngine, 3_000);
     }
 
     private void applyRendererErrorAction(int rendererIndex) {

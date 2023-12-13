@@ -253,7 +253,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         mScrollAction = contentService.continueGroupObserve(mediaGroup)
                 .subscribe(
                         //continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
-                        continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup, group)),
+                        continueMediaGroup -> getView().update(VideoGroup.from(group, continueMediaGroup)),
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             if (getView() != null) {
@@ -352,6 +352,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                             Observable<MediaGroup> continuation = mHubService.getContentService().continueGroupObserve(group);
                             Disposable result2 = continuation.subscribe(mediaGroup -> {
                                 VideoGroup replace = VideoGroup.from(mediaGroup);
+                                replace.setId(144);
                                 replace.setPosition(0);
                                 replace.setAction(VideoGroup.ACTION_REPLACE);
                                 getView().update(replace);
@@ -375,7 +376,9 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         Disposable result = search.subscribe(
                 items -> {
                     VideoGroup update = VideoGroup.from(items);
-                    update.setAction(VideoGroup.ACTION_PREPEND);
+                    update.setId(112);
+                    update.setPosition(0);
+                    update.setAction(VideoGroup.ACTION_REPLACE);
                     getView().update(update);
                 }
         );
