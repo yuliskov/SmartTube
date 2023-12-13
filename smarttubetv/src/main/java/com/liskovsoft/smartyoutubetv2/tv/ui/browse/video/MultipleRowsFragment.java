@@ -199,7 +199,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
 
             freeze(true);
 
-            existingAdapter.append(group); // continue row
+            existingAdapter.add(group); // continue
 
             freeze(false);
         }

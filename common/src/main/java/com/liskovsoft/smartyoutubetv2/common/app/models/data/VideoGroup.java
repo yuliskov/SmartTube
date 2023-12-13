@@ -12,11 +12,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class VideoGroup {
+    /**
+     * Add at the end of the the existing group
+     */
     public static final int ACTION_APPEND = 0;
     public static final int ACTION_REPLACE = 1;
     public static final int ACTION_REMOVE = 2;
     public static final int ACTION_REMOVE_AUTHOR = 3;
     public static final int ACTION_SYNC = 4;
+    /**
+     * Add at the begin of the existing group
+     */
     public static final int ACTION_PREPEND = 5;
     private static final String TAG = VideoGroup.class.getSimpleName();
     private int mId;

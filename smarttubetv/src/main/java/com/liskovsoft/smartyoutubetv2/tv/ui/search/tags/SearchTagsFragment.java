@@ -308,7 +308,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
 
             freeze(true);
 
-            existingAdapter.append(group); // continue row
+            existingAdapter.add(group); // continue row
 
             freeze(false);
         }

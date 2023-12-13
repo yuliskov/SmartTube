@@ -225,7 +225,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
 
         freeze1(true);
 
-        mGridAdapter1.append(group);
+        mGridAdapter1.add(group);
 
         freeze1(false);
 
@@ -256,7 +256,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
 
         freeze2(true);
 
-        mGridAdapter2.append(group);
+        mGridAdapter2.add(group);
 
         freeze2(false);
 

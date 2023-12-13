@@ -161,7 +161,7 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
 
         freeze(true);
 
-        mGridAdapter.append(group);
+        mGridAdapter.add(group);
 
         freeze(false);
 
