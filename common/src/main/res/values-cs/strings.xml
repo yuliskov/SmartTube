@@ -219,6 +219,9 @@
     <string name="header_uploads">Nahraná videa</string>
     <string name="player_show_global_clock">Vždy zobrazit hodiny v horní části videa</string>
     <string name="player_show_global_ending_time">Vždy zobrazit čas ukončení na obrazovce</string>
+    <string name="app_corner_clock">Hlavní stránka: hodiny v pravém horním rohu</string>
+    <string name="player_corner_clock">Přehrávač: hodiny v pravém horním rohu</string>
+    <string name="player_corner_ending_time">Přehrávač: čas ukončení v pravém horním rohu</string>
     <string name="uploads_old_look">Vrátit zpět starý vzhled sekce Nahraná videa</string>
     <string name="background_playback_activation">Přehrávání na pozadí (aktivace)</string>
     <string name="channels_old_look">Vrátit zpět starý vzhled sekce Kanály</string>
@@ -236,6 +239,7 @@
     <string name="card_text_scroll_factor">Rychlost posouvání textu karty</string>
     <string name="preferred_update_source">Preferovaný zdroj aktualizace</string>
     <string name="hide_shorts">Skrýt Shorts z Odběrů</string>
+    <string name="hide_shorts_channel">Skrýt Shorts z Kanálů</string>
     <string name="key_remapping">Přenastavení tlačítek</string>
     <string name="screen_dimming">Ztmavení obrazovky</string>
     <string name="removed_from_playback_queue">Smazáno z fronty přehrávání</string>
@@ -328,6 +332,8 @@
     <string name="msg_player_error_audio_source">AUDIO URL nefunguje nebo je na zařízení nesprávný čas.\nNejspíše je na vině aplikace.</string>
     <string name="msg_player_error_subtitle_source">SUBTITLE URL nefunguje nebo je na zařízení nesprávný čas.\nNejspíše je na vině aplikace.</string>
     <string name="hide_upcoming">Skrýt nadcházející videa v Odběrech</string>
+    <string name="hide_upcoming_channel">Skrýt nadcházející z Kanálů</string>
+    <string name="hide_upcoming_home">Skrýt nadcházející z Domů</string>
     <string name="search_background_playback">Zapni Obraz v obraze při vyhledávání/otevření kanálu</string>
     <string name="trending_row_name">Trendy</string>
     <string name="player_seek_type">Typ přetáčení</string>
@@ -338,6 +344,7 @@
     <string name="finish_on_disconnect">Ukončit aplikaci, když se telefon/tablet odpojí</string>
     <string name="update_error">Chyba aktualizace</string>
     <string name="hide_shorts_from_history">Skrýt Shorts z nabídky Historie</string>
+    <string name="hide_shorts_from_trending">Skrýt Shorts z nabídky Trendy</string>
     <string name="disable_screensaver">Zakaž spořič obrazovky</string>
     <string name="description_not_found">Popis nenalezen</string>
     <string name="proxy_port_hint">Proxy port</string>
@@ -544,8 +551,7 @@
     <string name="player_network_stack">Síťový zásobník</string>
     <string name="cronet_desc">Cronet je Chromium síťový zásobník. Může snížit latenci a zvýšit výkon sítě, což může pomoci s problémy s vyrovnávací pamětí.</string>
     <string name="unlock_all_formats">Odblokovat všechny formáty videa</string>
-    <string name="unlock_all_formats_desc">Na některých zařízeních firmware nesprávně hlásí určité formáty jako nepodporované i když podporované jsou.\n
-        (např. chytré televize s rozlišením 1080p mají tendenci hlásit 4K jako nepodporované)</string>
+    <string name="unlock_all_formats_desc">Na některých zařízeních firmware nesprávně hlásí určité formáty jako nepodporované i když podporované jsou.\n(např. chytré televize s rozlišením 1080p mají tendenci hlásit 4K jako nepodporované)</string>
     <string name="okhttp_desc">Tento síťový zásobník je nejpomalejší, ale má dobrou stabilitu.</string>
     <string name="select_channel_section">Otevřít odpovídající sekci při spuštění aplikace z kanálů ATV</string>
     <string name="enable_voice_search_desc">Oficiální aplikace bude nahrazena tzv. mostem. Most pomáhá přenášet požadavky globálního vyhledávání do této aplikace.</string>
@@ -554,8 +560,7 @@
     <string name="disable_stream_buffer">Zakázat vyrovnávací paměť u vysílání</string>
     <string name="disable_stream_buffer_desc">Oprava pro situace, kdy je vysílání dost pozadu. Pozor: vysílání se může začít zasekávat</string>
     <string name="sony_frame_drop_fix">Oprava výpadku snímků #1</string>
-    <string name="sony_frame_drop_fix_desc">Opravuje záseky na televizích Sony a jiných zařízeních. Pozor: mohou nastat problémy se synchronizací audia
-    </string>
+    <string name="sony_frame_drop_fix_desc">Opravuje záseky na televizích Sony a jiných zařízeních. Pozor: mohou nastat problémy se synchronizací audia</string>
     <string name="audio_language">Jazyk zvuku</string>
     <string name="old_home_look">Původní vzhled sekce Domů</string>
     <string name="hide_shorts_everywhere">Skrýt Shorts ze všech sekcí</string>
@@ -572,8 +577,8 @@
     <string name="mark_as_watched">Označit jako zhlédnuté</string>
     <string name="player_ui_animations">Povolit animace ovládacího panelu</string>
     <string name="player_likes_count">Zobrazit počet Líbí/Nelíbí</string>
-    <string name="sorting_alphabetically2">Abecedně (rychle)</string>
-    <string name="sorting_default">Výchozí (rychle)</string>
+    <string name="sorting_alphabetically2">Abecedně (rychle, animované náhledy)</string>
+    <string name="sorting_default">Výchozí (rychle, animované náhledy)</string>
     <string name="content_block_exclude_channel">Vyloučit tento kanál ze SponsorBlocku</string>
     <string name="content_block_stop_excluding_channel">Přestat vylučovat tento kanál ze SponsorBlocku</string>
     <string name="player_chapter_notification">Zobrazit oznámení pro rychlé procházení kapitolami</string>
@@ -611,4 +616,7 @@
     <string name="hide_unwanted_content">Skrýt nežádoucí obsah</string>
     <string name="hide_watched_from_home">Skrýt zhlédnutá videa ze sekce Domů</string>
     <string name="remote_control_permission">Dálkové ovládání na pozadí vyžaduje oprávnění pro překrytí přes okna</string>
+    <string name="login_from_browser">Přihlášení přes prohlížeč</string>
+    <string name="disable_remote_history">Zazázat historii při používání dálkového ovládání</string>
+    <string name="keyboard_fix">Oprava zobrazení klávesnice stisknutím tlačítka OK (G20s a další)</string>
 </resources>
