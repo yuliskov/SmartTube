@@ -4,9 +4,9 @@
     <string name="title_search">Arama</string>
     <string name="header_subscriptions">Abonelikler</string>
     <string name="header_history">Geçmiş</string>
-    <string name="header_music">Müzikler</string>
+    <string name="header_music">Müzik</string>
     <string name="header_news">Haberler</string>
-    <string name="header_gaming">Oyunlar</string>
+    <string name="header_gaming">Oyun</string>
     <string name="header_playlists">Oynatma Listeleri</string>
     <string name="header_settings">Ayarlar</string>
     <string name="header_channels">Kanallar</string>
@@ -161,7 +161,7 @@
     <string name="subscribe_to_channel">Kanala abone ol</string>
     <string name="wait_data_loading">Lütfen veriler yüklenirken bekleyin…</string>
     <string name="auto_frame_rate_pause">Otomatik kare hızı değişim duraklaması</string>
-    <string name="auto_frame_rate_applying">Otomatik kare hızı uygulanıyor: %sx%s@%s</string>
+    <string name="auto_frame_rate_applying">Otomatik kare hızı uygulanıyor: %sx%s\@%s</string>
     <string name="audio_shift">Ses kaydırma</string>
     <string name="player_remember_speed">Hızı hatırla</string>
     <string name="mark_channel_as_watched">İzlendi olarak işaretle</string>
@@ -186,7 +186,7 @@
     <string name="content_block_interaction">Etkileşim hatırlatıcısı (abone olun)</string>
     <string name="content_block_self_promo">Tanıtımlar</string>
     <string name="content_block_music_off_topic">Klibin müzik dışı yeri</string>
-    <string name="confirm_segment_skip">\"%s\" bölümü atlansın mı?</string>
+    <string name="confirm_segment_skip">\"%s\" bölümü atlansın mı\?</string>
     <string name="cancel_segment_skip">Bölüm atlamayı iptal et</string>
     <string name="msg_skipping_segment">\"%s\" bölümü atlanıyor…</string>
     <string name="content_block_notification_type">Bildirim türü</string>
@@ -378,7 +378,7 @@
     <string name="simple_edit_value_hint">Değer girin</string>
     <string name="seek_interval">Arama aralığı</string>
     <string name="seek_interval_sec">%s sn.</string>
-    <string name="subtitle_system">Sistem stili (Android ayarları > Erişilebilirlik)</string>
+    <string name="subtitle_system">Sistem stili (Android ayarları &gt; Erişilebilirlik)</string>
     <string name="subtitle_scale">Altyazı ölçeği</string>
     <string name="audio_sync_fix_desc">Ses/video senkronize etmenin alternatif bir yolu. Eskimiş bir yöntem sayılır ama bazı durumlarda işe yarayabilir.</string>
     <string name="audio_sync_fix">Ses senk. düzeltmesi</string>
@@ -393,8 +393,8 @@
     <string name="playback_notifications_fix_desc">Parça değişikliği bildirimlerini gizler. AOSP tabanlı aygıt yazılımlarında faydalı olabilir.</string>
     <string name="playback_notifications_fix">Oynatma bildirimlerini devre dışı bırak</string>
     <string name="amlogic_fix_desc">Amlogic tabanlı cihazlarda kare atlaması düzeltmesi.</string>
-    <string name="amlogic_fix">Amlogic 1080p@60fps düzeltmesi</string>
-    <string name="tunneled_video_playback_desc">Tünelli video oynatma, daha iyi ses/video senkronizasyonu (SV senk.) ve daha sorunsuz oynatma gibi avantajlar vaat ediyor. Android 5+ gerekli.</string>
+    <string name="amlogic_fix">Amlogic 1080p\@60fps düzeltmesi</string>
+    <string name="tunneled_video_playback_desc">Tünelli video oynatma, daha iyi ses/video senkronizasyonu (SV senk.) ve daha sorunsuz oynatma gibi avantajlar vaat ediyor. Android 5+ gerekli. NOT: Duraklatma düzgün çalışmayabilir!</string>
     <string name="tunneled_video_playback">Tünelli video oynatma (Android 5+)</string>
     <string name="master_volume">Ana ses</string>
     <string name="volume_limit">Ses sınırı</string>
@@ -441,7 +441,7 @@
     <string name="playlist_order_added_date_newer_first">Eklenme tarihi (önce daha yenisi)</string>
     <string name="playlist_order_added_date_older_first">Eklenme tarihi (önce eski)</string>
     <string name="playlist_order_published_date_newer_first">Yayımlanma tarihi (önce daha yenisi)</string>
-    <string name="playlist_order_published_date_older_first">Yayımlanma tarihi(önce eski)</string>
+    <string name="playlist_order_published_date_older_first">Yayımlanma tarihi (önce eski)</string>
     <string name="playlist_order_popularity">Popülerlik</string>
     <string name="cant_do_this_for_foreign_playlist">Bunu yabancı oynatma listesi için yapamazsınız</string>
     <string name="owned_playlist_warning">Hata. Bu işlem sedece sahip olunan oynatma listeleri için uygulanabilir</string>
@@ -462,13 +462,13 @@
     <string name="player_ending_time">Bitiş saati: %s</string>
     <string name="badge_new_content">YENİ İÇERİK</string>
     <string name="badge_live">CANLI</string>
-    <string name="add_device_view_description">Cihazı bağlamak için bu kodu telefonunuzun YouTube uygulamasında Ayarlar / TV\'de İzle bölümüne girin. Yalnızca Gboard klavye ile çalışır.</string>
+    <string name="add_device_view_description">Cihazı bağlamak için bu kodu telefonunuzun YouTube uygulamasında Ayarlar/TV\'de İzle bölümüne girin.\nNot: Yalnızca Gboard klavye ile çalışır.</string>
     <string name="playback_controls_repeat_pause">Tekrarla Duraklat</string>
     <string name="playback_controls_repeat_list">Tekrarla Liste</string>
     <string name="action_subscribe_off">Abone ol Kapalı</string>
     <string name="action_subscribe_on">Abone ol Açık</string>
     <!-- END Moved strings -->
-    <string name="skip_24_rate">24 fps biçimlerini atla (gerçek sinema modu düzeltmesi?)</string>
+    <string name="skip_24_rate">24 fps biçimlerini atla (gerçek sinema modu düzeltmesi\?)</string>
     <string name="player_disable_suggestions">Önerileri devre dışı bırak</string>
     <string name="feedback">Geri bildirim</string>
     <string name="sources">Kaynaklar</string>
@@ -551,8 +551,7 @@
     <string name="player_network_stack">Ağ yığını</string>
     <string name="cronet_desc">Cronet, Chromium ağ yığınıdır. Cronet, ara belleğe alma sorunlarına yardımcı olabilecek gecikmeyi azaltabilir ve ağ performansını artırabilir.</string>
     <string name="unlock_all_formats">Tüm video biçimlerinin kilidini aç</string>
-    <string name="unlock_all_formats_desc">Bazı cihazlarda aygıt yazılımı, desteklense bile bazı biçimlerin desteklenmediğini hatalı bir şekilde bildirir.\n
-        (ör. 1080p akıllı TV\'ler genellikle 4k\'yı desteklenmiyor olarak bildirir).</string>
+    <string name="unlock_all_formats_desc">Bazı cihazlarda aygıt yazılımı, desteklense bile bazı biçimlerin desteklenmediğini hatalı bir şekilde bildirir.\n(ör. 1080p akıllı TV\'ler genellikle 4k\'yı desteklenmiyor olarak bildirir).</string>
     <string name="okhttp_desc">Bu ağ yığını en yavaş olanıdır ancak iyi bir kararlılığa sahiptir.</string>
     <string name="select_channel_section">Uygulama ATV Kanallarından açıldığında ilgili bölümü aç</string>
     <string name="enable_voice_search_desc">Resmi uygulama sözde bir köprü ile değiştirilecek. Bir köprü, genel arama isteklerini uygulamamıza aktarmaya yardımcı olur.</string>
@@ -561,8 +560,7 @@
     <string name="disable_stream_buffer">Canlı yayınlarda ara belleği devre dışı bırak</string>
     <string name="disable_stream_buffer_desc">Canlı yayının çok geride olduğu durumlar için düzeltme. Not: Canlı yayın gecikmeye başlayabilir.</string>
     <string name="sony_frame_drop_fix">Kare bırakma düzeltmesi #1</string>
-    <string name="sony_frame_drop_fix_desc">Sony TV ve diğer bazı cihazlardaki gecikmeleri düzeltir. Not: Ses senkronizasyonu ile ilgili olası sorunlar olabilir.
-    </string>
+    <string name="sony_frame_drop_fix_desc">Sony TV ve diğer bazı cihazlardaki gecikmeleri düzeltir. Not: Ses senkronizasyonu ile ilgili olası sorunlar olabilir.</string>
     <string name="audio_language">Ses dili</string>
     <string name="old_home_look">Ana Sayfa bölümünün eski görünümü</string>
     <string name="hide_shorts_everywhere">Shortsları her yerde gizle</string>
