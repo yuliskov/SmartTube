@@ -97,8 +97,6 @@ public class ChannelHeaderPresenter extends RowPresenter {
         ChannelHeaderProvider provider = (ChannelHeaderProvider) item;
         SearchBar searchBar = vh.view.findViewById(R.id.lb_search_bar);
         Context context = searchBar.getContext();
-        // Default recognizer. Used when there's no speech callbacks specified.
-        searchBar.setSpeechRecognizer(SpeechRecognizer.createSpeechRecognizer(context));
         SearchOrbView searchOrbView = searchBar.findViewById(R.id.lb_search_bar_search_orb);
         SpeechOrbView speechOrbView = searchBar.findViewById(R.id.lb_search_bar_speech_orb);
         SearchEditText searchTextEditor = searchBar.findViewById(R.id.lb_search_text_editor);
@@ -130,12 +128,8 @@ public class ChannelHeaderPresenter extends RowPresenter {
         });
         switch (SearchData.instance(context).getSpeechRecognizerType()) {
             case SearchData.SPEECH_RECOGNIZER_SYSTEM:
-                // Don't uncomment. Sometimes system recognizer works on lower api
-                // Do nothing unless we have old api.
-                // Internal recognizer needs API >= 23. See: androidx.leanback.widget.SearchBar.startRecognition()
-                //if (Build.VERSION.SDK_INT < 23) {
-                //    setSpeechRecognitionCallback(mDefaultCallback);
-                //}
+                // Default recognizer. Used when there's no speech callbacks specified.
+                searchBar.setSpeechRecognizer(SpeechRecognizer.createSpeechRecognizer(context));
                 break;
             case SearchData.SPEECH_RECOGNIZER_DEFAULT:
                 searchBar.setSpeechRecognitionCallback(new DefaultCallback(context, searchBar));
