@@ -98,12 +98,12 @@
     <string name="select_account_on_boot">Mostra la selezione dell\'account all\'avvio</string>
     <string name="player_other">Varie</string>
     <string name="player_full_date">Data precisa nella descrizione</string>
-    <string name="open_channel">Apri canale</string>
+    <string name="open_channel">Apri Canale</string>
     <string name="open_playlist">Apri playlist</string>
     <string name="not_interested">Non interessato</string>
-    <string name="not_recommend_channel">Non consigliare il canale</string>
+    <string name="not_recommend_channel">Non consigliare il Canale</string>
     <string name="you_wont_see_this_video">Il video è stato rimosso dai consigliati</string>
-    <string name="you_wont_see_this_channel">Non vedrai questo canale nei consigli</string>
+    <string name="you_wont_see_this_channel">Non vedrai questo Canale nei consigli</string>
     <string name="settings_search">Cerca</string>
     <string name="dialog_search">Cerca</string>
     <string name="instant_voice_search">Ricerca vocale istantanea</string>
@@ -153,19 +153,19 @@
     <string name="player_seek_preview_carousel">Carosello</string>
     <string name="player_seek_preview_carousel_slow">Carosello (lento, per fotogrammi chiave)</string>
     <string name="player_seek_preview_carousel_fast">Carosello (anteprima veloce, non precisa)</string>
-    <string name="unsubscribe_from_channel">Disiscriviti dal canale</string>
+    <string name="unsubscribe_from_channel">Disiscriviti dal Canale</string>
     <string name="card_title_lines_num">Numero righe titoli cartoline</string>
     <string name="card_auto_scrolled_title">Scorrimento automatico titoli tagliati</string>
     <string name="share_link">Condividi link</string>
     <string name="share_qr_link">Condividi link (codice QR)</string>
-    <string name="subscribe_to_channel">Iscriviti al canale</string>
+    <string name="subscribe_to_channel">Iscriviti al Canale</string>
     <string name="wait_data_loading">Attendi il caricamento dei dati…</string>
     <string name="auto_frame_rate_pause">Frequenza fotogrammi automatica (pausa durante il passaggio)</string>
     <string name="auto_frame_rate_applying">Applica frequenza automatica fotogrammi %sx%s@%s</string>
     <string name="audio_shift">Modifica audio</string>
     <string name="player_remember_speed">Ricorda velocità</string>
     <string name="mark_channel_as_watched">Contrassegna come già visto</string>
-    <string name="channel_marked_as_watched">Il canale è stato contrassegnato come già visto</string>
+    <string name="channel_marked_as_watched">Il Canale è stato contrassegnato come già visto</string>
     <string name="dialog_add_device">Aggiungi dispositivo</string>
     <string name="dialog_remove_all_devices">Rimuovi tutti i dispositivi</string>
     <string name="device_link_enabled">Collegamento abilitato</string>
@@ -219,6 +219,9 @@
     <string name="header_uploads">Caricamenti</string>
     <string name="player_show_global_clock">Mostra sempre l\'orologio sullo schermo</string>
     <string name="player_show_global_ending_time">Mostra sempre l\'ora di fine sullo schermo</string>
+    <string name="app_corner_clock">Home: orologio nell\'angolo in alto a destra</string>
+    <string name="player_corner_clock">Lettore: orologio nell\'angolo in alto a destra</string>
+    <string name="player_corner_ending_time">Lettore: ora di fine nell\'angolo in alto a destra</string>
     <string name="uploads_old_look">Ripristina il vecchio aspetto della sezione Caricamenti</string>
     <string name="background_playback_activation">Riproduzione in background (attivazione)</string>
     <string name="channels_old_look">Ripristina il vecchio aspetto della sezione Canali</string>
@@ -226,7 +229,7 @@
     <string name="return_to_background_video">Torna al video in esecuzione in background</string>
     <string name="pin_unpin_from_sidebar">Aggiungi/Rimuovi dalla barra laterale</string>
     <string name="pin_unpin_playlist">Aggiungi/Rimuovi playlist dalla barra laterale</string>
-    <string name="pin_unpin_channel">Aggiungi/Rimuovi canale dalla barra laterale</string>
+    <string name="pin_unpin_channel">Aggiungi/Rimuovi Canale dalla barra laterale</string>
     <string name="pinned_to_sidebar">Aggiungi alla barra laterale</string>
     <string name="unpin_from_sidebar">Rimuovi dalla barra laterale</string>
     <string name="unpinned_from_sidebar">Rimosso dalla barra laterale</string>
@@ -236,6 +239,7 @@
     <string name="card_text_scroll_factor">Velocità scorrimento testo titoli cartoline</string>
     <string name="preferred_update_source">Seleziona fonte aggiornamenti</string>
     <string name="hide_shorts">Nascondi i video brevi dalle Iscrizioni</string>
+    <string name="hide_shorts_channel">Nascondi i video brevi dal Canale</string>
     <string name="key_remapping">Rimappatura tasti</string>
     <string name="screen_dimming">Oscuramento schermo</string>
     <string name="removed_from_playback_queue">Rimosso dalla coda di riproduzione</string>
@@ -252,7 +256,7 @@
     <string name="breaking_news_row_name">Ultime notizie</string>
     <string name="covid_news_row_name">Notizie su COVID-19</string>
     <string name="enable_voice_search">Abilita ricerca vocale (supporto firmware necessario)</string>
-    <string name="subscribe_unsubscribe_from_channel">Iscriviti/Disiscriviti dal canale</string>
+    <string name="subscribe_unsubscribe_from_channel">Iscriviti/Disiscriviti dal Canale</string>
     <string name="app_backup_restore">Backup e ripristino</string>
     <string name="app_backup">Backup dati</string>
     <string name="app_restore">Ripristino dati dal backup</string>
@@ -300,7 +304,7 @@
     <string name="action_playlist_add">Aggiungi alla playlist</string>
     <string name="action_video_stats">Statistiche video</string>
     <string name="action_subscribe">Sottoscrivi</string>
-    <string name="action_channel">Apri canale</string>
+    <string name="action_channel">Apri Canale</string>
     <string name="action_pip">PIP</string>
     <string name="action_video_info">Descrizione video</string>
     <string name="action_screen_off">Spegni schermo</string>
@@ -328,7 +332,9 @@
     <string name="msg_player_error_audio_source">L\'URL AUDIO non funziona o l\'ora del dispositivo non è corretta.\nIn genere, è un problema dell\'app.</string>
     <string name="msg_player_error_subtitle_source">L\'URL SUBTITLE non funziona o l\'ora del dispositivo non è corretta.\nIn genere, è un problema dell\'app.</string>	
     <string name="hide_upcoming">Nascondi in arrivo dalle Iscrizioni</string>
-    <string name="search_background_playback">Entra in PiP quando cerchi/apri il canale</string>
+    <string name="hide_upcoming_channel">Nascondi in arrivo dal Canale</string>
+    <string name="hide_upcoming_home">Nascondi in arrivo dalla Home</string>
+    <string name="search_background_playback">Entra in PiP quando cerchi/apri il Canale</string>
     <string name="trending_row_name">Tendenze</string>
     <string name="player_seek_type">Tipo di ricerca</string>
     <string name="player_seek_regular">Regolare</string>
@@ -338,6 +344,7 @@
     <string name="finish_on_disconnect">Termina l\'app dopo aver scollegato il telefono/tablet</string>
     <string name="update_error">Errore di aggiornamento</string>
     <string name="hide_shorts_from_history">Nascondi i video brevi dalla Cronologia</string>
+    <string name="hide_shorts_from_trending">Nascondi i video brevi dalle Tendenze</string>
     <string name="disable_screensaver">Disabilita lo screensaver</string>
     <string name="description_not_found">Descrizione non trovata</string>
     <string name="proxy_port_hint">Porta proxy</string>
@@ -479,7 +486,7 @@
     <string name="speech_recognizer_system">Sistema (preferito)</string>
     <string name="speech_recognizer_external_1">Esterno 1 (gravemente difettato, per funzionare è necessario disabilitare l\'accesso al microfono)</string>
     <string name="speech_recognizer_external_2">Esterno 2 (seriamente difettato)</string>
-    <string name="real_channel_icon">Mostra icona sul pulsante del canale</string>
+    <string name="real_channel_icon">Mostra icona sul pulsante del Canale</string>
     <string name="subtitle_yellow_semi_transparent">Giallo su sfondo semitrasparente</string>
     <string name="subtitle_yellow_black">Giallo su sfondo nero</string>
     <string name="player_pixel_ratio">Rapporto pixel</string>
@@ -544,8 +551,7 @@
     <string name="player_network_stack">Stack di rete</string>
     <string name="cronet_desc">Cronet è lo stack di rete di Chromium. Cronet può ridurre la latenza e aumentare le prestazioni di rete, il che può aiutare con problemi di buffering.</string>
     <string name="unlock_all_formats">Sblocca tutti i formati video</string>
-    <string name="unlock_all_formats_desc">Su alcuni dispositivi il firmware riporta erroneamente alcuni formati come non supportati, anche se lo sono.\n
-        (ad esempio, le smart TV 1080p tendono a segnalare 4k come non supportato).</string>
+    <string name="unlock_all_formats_desc">Su alcuni dispositivi il firmware riporta erroneamente alcuni formati come non supportati, anche se lo sono.\n(ad esempio, le smart TV 1080p tendono a segnalare 4k come non supportato).</string>
     <string name="okhttp_desc">Questo stack di rete è il più lento ma ha una buona stabilità.</string>
     <string name="select_channel_section">Apri la sezione corrispondente quando l\'app è stata avviata dai canali ATV</string>
     <string name="enable_voice_search_desc">L\'app ufficiale verrà sostituita da un cosiddetto bridge (ponte). Un bridge aiuta a trasferire le richieste di ricerca globali alla nostra app.</string>
@@ -554,8 +560,7 @@
     <string name="disable_stream_buffer">Disabilita buffer sui flussi</string>
     <string name="disable_stream_buffer_desc">Correggi situazioni in cui il flusso è tanto indietro. Nota: il flusso potrebbe iniziare a rallentare.</string>
     <string name="sony_frame_drop_fix">Correggi salto fotogrammi #1</string>
-    <string name="sony_frame_drop_fix_desc">Correggi ritardi sulle TV Sony e su alcuni altri dispositivi. Nota: possibili problemi con la sincronizzazione audio.
-    </string>
+    <string name="sony_frame_drop_fix_desc">Correggi ritardi sulle TV Sony e su alcuni altri dispositivi. Nota: possibili problemi con la sincronizzazione audio.</string>
     <string name="audio_language">Lingua audio</string>
     <string name="old_home_look">Il vecchio aspetto della sezione Home</string>
     <string name="hide_shorts_everywhere">Nascondi i video brevi ovunque</string>
@@ -574,10 +579,10 @@
     <string name="player_likes_count">Mostra il conteggio dei Mi piace/Non mi piace</string>
     <string name="sorting_alphabetically2">In ordine alfabetico (anteprime veloci e animate)</string>
     <string name="sorting_default">Predefinito (anteprime veloci e animate)</string>
-    <string name="content_block_exclude_channel">Escludi questo canale da SponsorBlock</string>
-    <string name="content_block_stop_excluding_channel">Non escludere più questo canale da SponsorBlock</string>
+    <string name="content_block_exclude_channel">Escludi questo Canale da SponsorBlock</string>
+    <string name="content_block_stop_excluding_channel">Non escludere più questo Canale da SponsorBlock</string>
     <string name="player_chapter_notification">Mostra notifica per avanzare rapidamente tra i capitoli</string>
-    <string name="subtitle_remember">Ricorda i sottotitoli abilitati per ogni canale</string>
+    <string name="subtitle_remember">Ricorda i sottotitoli abilitati per ogni Canale</string>
     <string name="amazon_frame_drop_fix">Correggi salto fotogrammi #2</string>
     <string name="amazon_frame_drop_fix_desc">Destinato ai dispositivi Amazon Stick. Può funzionare anche su altri dispositivi.</string>
     <string name="default_stack_desc">Stack di rete integrato. Questo stack può avere una migliore stabilità in determinate situazioni.</string>
@@ -599,7 +604,7 @@
     <string name="unlock_high_bitrate_audio_formats">Sblocca formati mp4a 1080p ad alto bitrate</string>
     <string name="color_scheme_blue">Blu</string>
     <string name="color_scheme_dark_blue">Blu scuro</string>
-    <string name="player_speed_per_channel">Per ciascun canale</string>
+    <string name="player_speed_per_channel">Per ciascun Canale</string>
     <string name="disable_popular_searches">Disabilita le query di ricerca più popolari</string>
     <string name="multi_profiles">Usa impostazioni separate per ciascun account</string>
     <string name="protect_account_with_password">Proteggi questo account con una password</string>
@@ -611,4 +616,7 @@
     <string name="hide_unwanted_content">Nascondi i contenuti indesiderati</string>
     <string name="hide_watched_from_home">Nascondi i video già visti dalla Home</string>
     <string name="remote_control_permission">Il controllo remoto in background richiede l\'autorizzazione alla sovrapposizione</string>
+    <string name="login_from_browser">Accedi dal browser</string>
+    <string name="disable_remote_history">Disabilita la Cronologia quando si utilizza il controllo remoto</string>
+    <string name="keyboard_fix">Risolvi il problema con la visualizzazione della tastiera premendo il tasto OK (G20 e altri)</string>
 </resources>
