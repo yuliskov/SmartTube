@@ -23,7 +23,7 @@
   <string name="audio_max_quality">Auto (max minőség)</string>
   <string name="subtitles_disabled">Feliratok letiltva</string>
   <string name="auto_frame_rate">Képkockasebesség</string>
-  <string name="frame_rate_correction">Fix fps:\n%s</string>
+  <string name="frame_rate_correction">FPS javítása:\n%s</string>
   <string name="category_background_playback">Lejátszás a háttérben</string>
   <string name="not_implemented">Nincs megvalósítva</string>
   <string name="option_background_playback_off">Kikapcsolva</string>
@@ -58,8 +58,8 @@
   <string name="default_lang">Rendszer</string>
   <string name="dialog_select_language">Alkalmazás nyelve</string>
   <string name="subtitle_default">Alap</string>
-  <string name="subtitle_white_semi_transparent">Félig átlátszó háttérrel</string>
-  <string name="subtitle_style">Felirat színe</string>
+  <string name="subtitle_white_semi_transparent">Fehér, félig átlátszó háttérrel</string>
+  <string name="subtitle_style">Felirat megjelenése</string>
   <string name="subtitle_language">Felirat nyelve</string>
   <string name="action_search">Keresés indítása</string>
   <string name="settings_main_ui">Kinézet</string>
@@ -114,8 +114,8 @@
   <string name="repeat_mode_shuffle">Véletlenszerű lejátszás</string>
   <string name="subscribed_to_channel">Feliratkozva</string>
   <string name="unsubscribed_from_channel">Leliratkozva</string>
-  <string name="subtitle_yellow_transparent">Sárga</string>
-  <string name="subtitle_white_black">Fekete háttérrel</string>
+  <string name="subtitle_yellow_transparent">Sárga, átlátszó háttérrel</string>
+  <string name="subtitle_white_black">Fehér, fekete háttérrel</string>
   <string name="player_seek_preview">Előnézet gyorstekeréskor</string>
   <string name="color_scheme_dark_grey_oled">Sötétszürke (OLED)</string>
   <string name="channels_section_sorting">Csatornák rendezése</string>
@@ -212,8 +212,8 @@
   <string name="video_aspect">Képarány</string>
   <string name="player_tweaks">Fejlesztői beállítások</string>
   <string name="header_uploads">Feltöltések</string>
-  <string name="player_show_global_clock">Az aktuális idő mindig látható a jobb felső sarokban</string>
-  <string name="player_show_global_ending_time">A videó végének ideje mindig látható a jobb felső sarokban</string>
+  <string name="player_show_global_clock">Az aktuális idő mindig látható</string>
+  <string name="player_show_global_ending_time">A videó végének ideje mindig látható</string>
   <string name="uploads_old_look">A Feltöltések szakasz régi megjelenésének visszaállítása</string>
   <string name="background_playback_activation">Lejátszás a háttérben (aktiválás)</string>
   <string name="channels_old_look">A csatornák régi megjelenésének visszaállítása</string>
@@ -230,7 +230,7 @@
   <string name="share_embed_link">Beágyazási hivatkozás megosztása</string>
   <string name="card_text_scroll_factor">Indexkép szöveg görgetési sebessége</string>
   <string name="preferred_update_source">Válassza ki a frissítési forrást</string>
-  <string name="hide_shorts">Rövid klipek elrejtése a feliratkozások közül</string>
+  <string name="hide_shorts">Rövid klipek elrejtése a Feliratkozások menüből</string>
   <string name="key_remapping">Billentyű hozzárendelések cseréje</string>
   <string name="screen_dimming">Képernyő elsötétítése</string>
   <string name="removed_from_playback_queue">Videó eltávolítva</string>
@@ -245,7 +245,7 @@
   <string name="popular_uploads_row_name">Népszerű feltöltések</string>
   <string name="breaking_news_row_name">Friss hírek</string>
   <string name="covid_news_row_name">COVID-19 hírek</string>
-  <string name="enable_voice_search">Hangalapú keresés engedélyezése</string>
+  <string name="enable_voice_search">Hangalapú keresés engedélyezése (firmware támogatás szükséges)</string>
   <string name="subscribe_unsubscribe_from_channel">Feliratkozás/Leiratkozás a csatornáról</string>
   <string name="app_backup_restore">Biztonsági mentés</string>
   <string name="app_backup">Adatok biztonsági mentése</string>
@@ -258,7 +258,7 @@
   <string name="refresh_section">Videólista frissítése</string>
   <string name="live_now_row_name">Élő adás</string>
   <string name="run_in_background">Lejátszás a háttérben</string>
-  <string name="settings_remote_control">Távirányító</string>
+  <string name="settings_remote_control">Távvezérlés</string>
   <string name="background_service_started">Elindult a háttér szolgáltatás</string>
   <string name="dialog_add_to">Hozzáadás ehhez: %s</string>
   <string name="dialog_remove_from">Eltávolítás innen: %s</string>
@@ -316,8 +316,8 @@
   <string name="content_block_filler">Téma nélkül/Kitöltés</string>
   <string name="keyboard_auto_show">A billentyűzet automatikus megjelenítése</string>
   <string name="cancel_dialog">Mégsem</string>
-  <string name="msg_player_error_source2">A videoforrás nem működik, vagy helytelen az idő</string>
-  <string name="hide_upcoming">Közelgő premierek üzeneteinek elrejtése a Feliratkozások közül</string>
+  <string name="msg_player_error_source2">A videoforrás nem működik, vagy helytelen az idő.\nÁltalában az alkalmazással van a probléma.</string>
+  <string name="hide_upcoming">Közelgő premierek elrejtése a Feliratkozások menüből</string>
   <string name="search_background_playback">Írja be a PIP-t a kereséshez/csatorna megnyitásához</string>
   <string name="trending_row_name">Felkapott</string>
   <string name="player_seek_type">Gyorstekerés viselkedése</string>
@@ -325,7 +325,7 @@
   <string name="player_seek_confirmation_pause">Megerősítéssel (szünet tekerés közben)</string>
   <string name="player_seek_confirmation_play">Megerősítéssel (lejátszás tekerés közben)</string>
   <string name="hide_shorts_from_home">Rövid klipek elrejtése a kezdőlapon</string>
-  <string name="finish_on_disconnect">A telefon/táblagép leválasztása után az alkalmazás bezárása</string>
+  <string name="finish_on_disconnect">Az alkalmazás bezárása a telefon/táblagép leválasztása után</string>
   <string name="update_error">Frissítési hiba!</string>
   <string name="hide_shorts_from_history">Rövid klipek elrejtése az előzményekből</string>
   <string name="disable_screensaver">Képernyővédő tiltása</string>
@@ -602,4 +602,20 @@
   <string name="show_connect_messages">Csatlakozási üzenetek megjelenítése</string>
   <string name="prefer_avc_over_vp9_desc">FIgyelem!: Maximum 1080p</string>
   <string name="news_row_name">Hírek</string>
+  <string name="play_next">Következő lejátszása</string>
+  <string name="nothing_found">Nincs találat</string>
+  <string name="app_corner_clock">Főoldal: aktuális idő a jobb felső sarokban</string>
+  <string name="player_corner_clock">Lejátszó: aktuális idő a jobb felső sarokban</string>
+  <string name="player_corner_ending_time">Lejátszó: befejezési idő a jobb felső sarokban</string>
+  <string name="hide_upcoming_channel">Közelgő premierek elrejtése a Csatornák menüből</string>
+  <string name="hide_upcoming_home">Közelgő premierek elrejtése a Főoldalon</string>
+  <string name="hide_shorts_from_trending">Rövid klipek elrejtése a Felkapott menüből</string>
+  <string name="hide_watched_from_subscriptions">Megnézett videók elrejtése a Feliratkozások menüből</string>
+  <string name="hide_unwanted_content">Kéretlen tartalom elrejtése</string>
+  <string name="hide_watched_from_home">Megnézett videók elrejtése a Főoldalról</string>
+  <string name="login_from_browser">Bejelentkezés böngészőből</string>
+  <string name="disable_remote_history">Előzmények kikapcsolása távvezérlő használatakor</string>
+  <string name="remote_control_permission">A háttérben való távvezérléshez átfedés-engedély szükséges</string>
+  <string name="keyboard_fix">Megakadályozza a billentyűzet megjelenítését az OK gomb megnyomásával (G20s és egyebek)</string>
+  <string name="hide_shorts_channel">Rövid klipek elrejtése a Csatornák menüből</string>
 </resources>
