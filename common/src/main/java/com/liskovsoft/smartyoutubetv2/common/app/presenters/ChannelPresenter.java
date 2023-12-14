@@ -364,7 +364,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                         }, mSortIdx == idx));
                         idx++;
                     }
-                    dialogPresenter.appendRadioCategory(getContext().getString(R.string.channels_section_sorting), options);
+                    dialogPresenter.appendRadioCategory(getContext().getString(R.string.search_sorting), options);
                     dialogPresenter.showDialog();
                 }
         );
