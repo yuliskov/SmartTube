@@ -619,4 +619,5 @@
     <string name="login_from_browser">Login from browser</string>
     <string name="disable_remote_history">Disable history when using remote control</string>
     <string name="keyboard_fix">Fix show keyboard by the OK key press (G20s and others)</string>
+    <string name="nothing_found">Nothing found</string>
 </resources>

@@ -612,4 +612,5 @@
     <string name="login_from_browser">Увійти з браузера</string>
     <string name="disable_remote_history">Вимкнути історію під час дистанційного керування</string>
     <string name="keyboard_fix">Виправити показ клавіатури натисканням клавіші OK (G20s та інші)</string>
+    <string name="nothing_found">Нічого не знайдено</string>
 </resources>

@@ -118,7 +118,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         }
 
         // Reset the position (bug appeared after fragment been reused)
-        setPosition(0);
+        setPosition(mChannelHeaderCallback != null ? 1 : 0);
     }
 
     private void removeByIndex(int idx) {

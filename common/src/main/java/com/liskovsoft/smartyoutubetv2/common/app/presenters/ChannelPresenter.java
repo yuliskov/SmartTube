@@ -7,6 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -349,7 +350,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                     for (MediaGroup group : items) {
                         final int tempIdx = idx;
                         options.add(UiOptionItem.from(group.getTitle(), item -> {
-                            dialogPresenter.closeDialog();
+                            //dialogPresenter.closeDialog();
                             Observable<MediaGroup> continuation = mHubService.getContentService().continueGroupObserve(group);
                             Disposable result2 = continuation.subscribe(mediaGroup -> {
                                 VideoGroup replace = VideoGroup.from(mediaGroup);
@@ -357,6 +358,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                                 replace.setPosition(0);
                                 replace.setAction(VideoGroup.ACTION_REPLACE);
                                 getView().update(replace);
+                                //getView().setPosition(1);
                                 mSortIdx = tempIdx;
                             });
                         }, mSortIdx == idx));
@@ -377,10 +379,17 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         Disposable result = search.subscribe(
                 items -> {
                     VideoGroup update = VideoGroup.from(items);
+
+                    if (update.isEmpty()) {
+                        MessageHelpers.showMessage(getContext(), R.string.nothing_found);
+                        return;
+                    }
+
                     update.setId(112);
                     update.setPosition(0);
                     update.setAction(VideoGroup.ACTION_REPLACE);
                     getView().update(update);
+                    //getView().setPosition(1);
                 }
         );
 

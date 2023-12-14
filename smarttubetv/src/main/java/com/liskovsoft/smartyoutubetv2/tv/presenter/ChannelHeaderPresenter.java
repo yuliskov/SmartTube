@@ -1,10 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -94,6 +96,9 @@ public class ChannelHeaderPresenter extends RowPresenter {
 
         ChannelHeaderProvider provider = (ChannelHeaderProvider) item;
         SearchBar searchBar = vh.view.findViewById(R.id.lb_search_bar);
+        Context context = searchBar.getContext();
+        // Default recognizer. Used when there's no speech callbacks specified.
+        searchBar.setSpeechRecognizer(SpeechRecognizer.createSpeechRecognizer(context));
         SearchOrbView searchOrbView = searchBar.findViewById(R.id.lb_search_bar_search_orb);
         SpeechOrbView speechOrbView = searchBar.findViewById(R.id.lb_search_bar_speech_orb);
         SearchEditText searchTextEditor = searchBar.findViewById(R.id.lb_search_text_editor);
@@ -123,7 +128,7 @@ public class ChannelHeaderPresenter extends RowPresenter {
                 //queryComplete();
             }
         });
-        switch (SearchData.instance(searchBar.getContext()).getSpeechRecognizerType()) {
+        switch (SearchData.instance(context).getSpeechRecognizerType()) {
             case SearchData.SPEECH_RECOGNIZER_SYSTEM:
                 // Don't uncomment. Sometimes system recognizer works on lower api
                 // Do nothing unless we have old api.
@@ -133,14 +138,14 @@ public class ChannelHeaderPresenter extends RowPresenter {
                 //}
                 break;
             case SearchData.SPEECH_RECOGNIZER_DEFAULT:
-                searchBar.setSpeechRecognitionCallback(new DefaultCallback(searchBar.getContext(), searchBar));
+                searchBar.setSpeechRecognitionCallback(new DefaultCallback(context, searchBar));
                 break;
             case SearchData.SPEECH_RECOGNIZER_GOTEV:
-                Speech.init(searchBar.getContext());
-                searchBar.setSpeechRecognitionCallback(new GotevCallback(searchBar.getContext(), provider, searchBar, speechOrbView));
+                Speech.init(context);
+                searchBar.setSpeechRecognitionCallback(new GotevCallback(context, provider, searchBar, speechOrbView));
                 break;
         }
-        searchBar.setPermissionListener(() -> PermissionHelpers.verifyMicPermissions(searchBar.getContext()));
+        searchBar.setPermissionListener(() -> PermissionHelpers.verifyMicPermissions(context));
 
         searchTextEditor.setSelectAllOnFocus(true); // Select all on focus (easy clear previous search)
         searchTextEditor.setOnFocusChangeListener((v, focused) -> {
@@ -178,7 +183,7 @@ public class ChannelHeaderPresenter extends RowPresenter {
 
         searchOrbView.setOnFocusChangeListener((v, focused) -> {
             if (focused) {
-                Helpers.hideKeyboard(searchBar.getContext(), v);
+                Helpers.hideKeyboard(context, v);
             }
         });
         searchOrbView.setOnOrbClickedListener(v -> submitQuery(provider, getSearchBarText(searchTextEditor)));
@@ -187,7 +192,7 @@ public class ChannelHeaderPresenter extends RowPresenter {
         SearchOrbView searchSettingsOrbView = searchBar.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.search_settings_orb);
         searchSettingsOrbView.setOnFocusChangeListener((v, focused) -> {
             if (focused) {
-                Helpers.hideKeyboard(searchBar.getContext(), v);
+                Helpers.hideKeyboard(context, v);
             }
         });
         searchSettingsOrbView.setOnOrbClickedListener(v -> provider.onSearchSettingsClicked());
@@ -195,7 +200,7 @@ public class ChannelHeaderPresenter extends RowPresenter {
         OnFocusChangeListener previousListener = speechOrbView.getOnFocusChangeListener();
         speechOrbView.setOnFocusChangeListener((v, focused) -> {
             if (!focused) {
-                stopSpeechService(searchBar.getContext());
+                stopSpeechService(context);
             }
 
             // Fix: Enable edit field dynamic style: white/grey, listening/non listening
@@ -229,8 +234,10 @@ public class ChannelHeaderPresenter extends RowPresenter {
             }
 
             try {
-                // TODO: implement
-                //startActivityForResult(getRecognizerIntent(mSearchBar), REQUEST_SPEECH);
+                // TODO: not fully implemented???
+                if (mContext instanceof Activity) {
+                    ((Activity) mContext).startActivityForResult(getRecognizerIntent(mSearchBar), REQUEST_SPEECH);
+                }
             } catch (ActivityNotFoundException e) {
                 com.liskovsoft.sharedutils.mylogger.Log.e(TAG, "Cannot find activity for speech recognizer", e);
             } catch (NullPointerException e) {
