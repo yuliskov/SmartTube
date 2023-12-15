@@ -158,7 +158,7 @@ public class ChannelHeaderPresenter extends RowPresenter {
                 break;
             case SearchData.SPEECH_RECOGNIZER_INTENT:
                 searchBar.setSpeechRecognizer(null);
-                searchBar.setSpeechRecognitionCallback(new DefaultCallback(context, provider, searchBar));
+                searchBar.setSpeechRecognitionCallback(new RecognizerIntentCallback(context, provider, searchBar));
                 break;
             case SearchData.SPEECH_RECOGNIZER_GOTEV:
                 searchBar.setSpeechRecognizer(null);
@@ -217,12 +217,12 @@ public class ChannelHeaderPresenter extends RowPresenter {
         }
     }
 
-    private final class DefaultCallback implements SpeechRecognitionCallback {
+    private final class RecognizerIntentCallback implements SpeechRecognitionCallback {
         private final Context mContext;
         private final ChannelHeaderProvider mProvider;
         private final SearchBar mSearchBar;
 
-        public DefaultCallback(Context context, ChannelHeaderProvider provider, SearchBar searchBar) {
+        public RecognizerIntentCallback(Context context, ChannelHeaderProvider provider, SearchBar searchBar) {
             mContext = context;
             mProvider = provider;
             mSearchBar = searchBar;
