@@ -42,7 +42,7 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
 
         for (int[] pair : new int[][] {
                 {R.string.speech_recognizer_system, SearchData.SPEECH_RECOGNIZER_SYSTEM},
-                {R.string.speech_recognizer_external_1, SearchData.SPEECH_RECOGNIZER_DEFAULT},
+                {R.string.speech_recognizer_external_1, SearchData.SPEECH_RECOGNIZER_INTENT},
                 {R.string.speech_recognizer_external_2, SearchData.SPEECH_RECOGNIZER_GOTEV}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]),
                     optionItem -> mSearchData.setSpeechRecognizerType(pair[1]),

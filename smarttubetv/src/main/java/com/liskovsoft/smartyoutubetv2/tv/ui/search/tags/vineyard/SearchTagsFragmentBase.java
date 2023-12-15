@@ -160,7 +160,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                 //    setSpeechRecognitionCallback(mDefaultCallback);
                 //}
                 break;
-            case SearchData.SPEECH_RECOGNIZER_DEFAULT:
+            case SearchData.SPEECH_RECOGNIZER_INTENT:
                 setSpeechRecognitionCallback(mDefaultCallback);
                 break;
             case SearchData.SPEECH_RECOGNIZER_GOTEV:
