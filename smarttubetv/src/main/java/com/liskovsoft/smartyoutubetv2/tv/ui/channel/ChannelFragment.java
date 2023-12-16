@@ -39,6 +39,11 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
             public boolean onSearchSubmit(String query) {
                 return mChannelPresenter.onSearchSubmit(query);
             }
+
+            @Override
+            public String getChannelName() {
+                return null;
+            }
         });
     }
 
