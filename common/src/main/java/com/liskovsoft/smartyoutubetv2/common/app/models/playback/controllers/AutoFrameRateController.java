@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -85,6 +86,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
         }
 
         // Ugoos already displays this message on each mode switch
+        @SuppressLint("StringFormatMatches")
         String message = getContext().getString(
                 R.string.auto_frame_rate_applying,
                 newMode.getPhysicalWidth(),
@@ -273,14 +275,15 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
     private static OptionCategory createAutoFrameRateCategory(Context context, PlayerData playerData,
             Runnable onAfrCallback, Runnable onResolutionCallback, Runnable onFpsCorrectionCallback,
             Runnable onDoubleRefreshRateCallback, Runnable onSkip24RateCallback) {
-        String title = context.getString(R.string.auto_frame_rate);
+        String afrEnable = context.getString(R.string.auto_frame_rate);
+        String afrEnableDesc = context.getString(R.string.auto_frame_rate_desc);
         String fpsCorrection = context.getString(R.string.frame_rate_correction, "24->23.97, 30->29.97, 60->59.94");
         String resolutionSwitch = context.getString(R.string.resolution_switch);
         String doubleRefreshRate = context.getString(R.string.double_refresh_rate);
         String skip24Rate = context.getString(R.string.skip_24_rate);
         List<OptionItem> options = new ArrayList<>();
 
-        OptionItem afrEnableOption = UiOptionItem.from(title, optionItem -> {
+        OptionItem afrEnableOption = UiOptionItem.from(afrEnable, afrEnableDesc, optionItem -> {
             playerData.setAfrEnabled(optionItem.isSelected());
             onAfrCallback.run();
         }, playerData.isAfrEnabled());
@@ -312,7 +315,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
         options.add(doubleRefreshRateOption);
         options.add(skip24RateOption);
 
-        return OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_CHECKBOX_LIST, title, options);
+        return OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_CHECKBOX_LIST, afrEnable, options);
     }
 
     public static OptionCategory createAutoFrameRatePauseCategory(Context context, PlayerData playerData) {
@@ -321,6 +324,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
         List<OptionItem> options = new ArrayList<>();
 
         for (int pauseMs : Helpers.range(0, 7_000, 250)) {
+            @SuppressLint("StringFormatMatches")
             String optionTitle = pauseMs == 0 ? context.getString(R.string.option_never) : context.getString(R.string.auto_frame_rate_sec, pauseMs / 1_000f);
             options.add(UiOptionItem.from(optionTitle,
                     optionItem -> {

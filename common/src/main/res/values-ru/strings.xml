@@ -613,4 +613,5 @@
     <string name="disable_remote_history">Отключить историю во время дистанционного управления</string>
     <string name="keyboard_fix">Исправить отображение клавиатуры при нажатии клавиши ОК (G20 и другие)</string>
     <string name="nothing_found">Ничего не найдено</string>
+    <string name="auto_frame_rate_desc">Эта опция устраняет дрожание в сценах, где камера движется быстро, например. спортивные трансляции</string>
 </resources>

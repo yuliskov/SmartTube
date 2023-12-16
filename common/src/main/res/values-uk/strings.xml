@@ -613,4 +613,5 @@
     <string name="disable_remote_history">Вимкнути історію під час дистанційного керування</string>
     <string name="keyboard_fix">Виправити показ клавіатури натисканням клавіші OK (G20s та інші)</string>
     <string name="nothing_found">Нічого не знайдено</string>
+    <string name="auto_frame_rate_desc">Ця опція усуває тремтіння на сценах, де камера рухається швидко, напр. спортивна трансляція</string>
 </resources>
