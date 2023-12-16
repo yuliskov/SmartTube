@@ -596,4 +596,17 @@
   <string name="player_speed_per_channel">每个通道</string>
   <string name="disable_popular_searches">禁用流行搜索查询</string>
   <string name="multi_profiles">为每个帐户使用单独的设置</string>
+  <string name="protect_account_with_password">使用密码保护该帐户</string>
+  <string name="enter_account_password">输入账户密码</string>
+  <string name="show_connect_messages">显示连接信息</string>
+  <string name="prefer_avc_over_vp9_desc">警告: 最高支持 1080p</string>
+  <string name="play_next">播放下一个</string>
+  <string name="hide_watched_from_subscriptions">隐藏订阅中已观看的视频</string>
+  <string name="hide_unwanted_content">隐藏无用内容</string>
+  <string name="hide_watched_from_home">从主页隐藏已观看的视频</string>
+  <string name="remote_control_permission">后台远程控制需要悬浮权限</string>
+  <string name="login_from_browser">从浏览器登录</string>
+  <string name="disable_remote_history">使用远程控制时禁用历史记录</string>
+  <string name="keyboard_fix">修复按 OK 键时显示键盘的问题（G20 和其他机型）</string>
+  <string name="nothing_found">什么都没找到</string>
 </resources>
