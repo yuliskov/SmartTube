@@ -26,7 +26,7 @@ import java.util.List;
  */
 public final class Video {
     public static final String TERTIARY_TEXT_DELIM = "•";
-    public static final long MAX_DURATION_MS = 24 * 60 * 60 * 1_000;
+    public static final long MAX_LIVE_DURATION_MS = 24 * 60 * 60 * 1_000;
     private static final String OBJ_DELIM = "&vi;";
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     private static final String[] sNotPlaylistParams = new String[] {"EAIYAQ%3D%3D"};

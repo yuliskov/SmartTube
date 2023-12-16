@@ -934,8 +934,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public long getDurationMs() {
         long durationMs = mExoPlayerController.getDurationMs();
 
-        if (durationMs > Video.MAX_DURATION_MS && getVideo() != null) {
-            durationMs = getVideo().getLiveDurationMs();
+        long liveDurationMs = getVideo() != null ? getVideo().getLiveDurationMs() : 0;
+
+        if (durationMs > Video.MAX_LIVE_DURATION_MS && liveDurationMs != 0) {
+            durationMs = liveDurationMs;
         }
 
         return durationMs;
