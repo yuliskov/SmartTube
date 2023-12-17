@@ -619,4 +619,6 @@
     <string name="login_from_browser">Anmeldung über Browser</string>
     <string name="disable_remote_history">Verlauf bei Verwendung der Fernsteuerung deaktivieren</string>
     <string name="keyboard_fix">Reparieren der Anzeige der Tastatur beim Drücken der OK-Taste (G20s und andere)</string>
+    <string name="nothing_found">Nichts gefunden</string>
+    <string name="auto_frame_rate_desc">Diese Option verhindert Ruckeln in Szenen, in denen sich die Kamera schnell bewegt, z.B. bei Sportübertragungen</string>
 </resources>
