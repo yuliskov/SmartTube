@@ -146,7 +146,7 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
                     }
                     int position = mGridViewHolder1.getGridView().getSelectedPosition();
                     if (DEBUG) Log.v(TAG, "grid selected position " + position);
-                    grid1OnItemSelected(position, itemViewHolder.view.isFocused());
+                    grid1OnItemSelected(position, itemViewHolder.view.findFocus() != null);
                     if (mOnItemViewSelectedListener1 != null) {
                         mOnItemViewSelectedListener1.onItemSelected(itemViewHolder, item,
                                 rowViewHolder, row);
@@ -238,11 +238,15 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
                 || mMainFragmentAdapter.getFragmentHost() == null) {
             return;
         }
-        if (!mGridViewHolder1.getGridView().hasPreviousViewInSameRow(mSelectedPosition1)) {
-            mMainFragmentAdapter.getFragmentHost().showTitleView(true);
-        } else {
-            mMainFragmentAdapter.getFragmentHost().showTitleView(false);
-        }
+
+        // TODO: set value depending on card size. Current settings for small cards.
+        mMainFragmentAdapter.getFragmentHost().showTitleView(mSelectedPosition1 < 4);
+
+        //if (!mGridViewHolder1.getGridView().hasPreviousViewInSameRow(mSelectedPosition1)) {
+        //    mMainFragmentAdapter.getFragmentHost().showTitleView(true);
+        //} else {
+        //    mMainFragmentAdapter.getFragmentHost().showTitleView(false);
+        //}
     }
 
     private void showOrHideTitle2() {
