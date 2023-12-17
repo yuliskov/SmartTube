@@ -294,7 +294,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
             mAllItems = null;
             mAllGroups = null;
             mGridAdapter1.clear();
-            //addSearchHeader();
+            addSearchHeader();
         }
     }
 

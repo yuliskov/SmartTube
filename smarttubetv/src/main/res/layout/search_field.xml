@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints=""
-        android:hint="@string/simple_edit_value_hint"
+        android:hint="@string/channel_filter_hint"
         android:imeOptions="actionNext"
         android:inputType="textUri|textPersonName"
         android:textColor="@color/dialog_text_color"

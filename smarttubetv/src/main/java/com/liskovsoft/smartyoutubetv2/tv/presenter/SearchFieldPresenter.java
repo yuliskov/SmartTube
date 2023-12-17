@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import androidx.leanback.widget.Presenter;
 
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -37,13 +38,18 @@ public class SearchFieldPresenter extends Presenter {
         View contentView = inflater.inflate(R.layout.search_field, parent, false);
 
         EditText editField = contentView.findViewById(R.id.simple_edit_value);
-        KeyHelpers.fixShowKeyboard(editField);
+        //KeyHelpers.fixShowKeyboard(editField);
         ViewUtil.setDimensions(editField, mWidth, -1); // don't do auto height
         contentView.setOnFocusChangeListener((v, hasFocus) -> {
             Log.d(TAG, "On edit field focused");
             if (hasFocus) {
                 editField.requestFocus();
             }
+        });
+
+        editField.setOnClickListener(v -> {
+            Log.d(TAG, "On click");
+            Helpers.showKeyboardAlt(v.getContext(), v);
         });
 
         return new ViewHolder(contentView);
