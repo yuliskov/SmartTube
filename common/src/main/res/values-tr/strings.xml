@@ -619,4 +619,6 @@
     <string name="login_from_browser">Tarayıcıdan giriş yap</string>
     <string name="disable_remote_history">Uzaktan kontrol kullanırken geçmişi devre dışı bırak</string>
     <string name="keyboard_fix">TAMAM tuşuna basarak klavyeyi göstermeyi düzelt (G20\'ler ve diğerleri)</string>
+    <string name="nothing_found">Hiçbir şey bulunamadı</string>
+    <string name="auto_frame_rate_desc">Bu seçenek, spor yayınları gibi kameranın hızlı hareket ettiği sahnelerdeki titremeyi ortadan kaldırır</string>
 </resources>
