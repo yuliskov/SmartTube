@@ -1,12 +1,21 @@
 package com.liskovsoft.smartyoutubetv2.tv.adapter;
 
+import android.text.TextUtils;
+
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HeaderVideoGroupObjectAdapter extends VideoGroupObjectAdapter {
     private Object mHeader;
+    private List<Video> mAllItems;
+    private List<VideoGroup> mAllGroups; // keep away from garbage collector
 
     public HeaderVideoGroupObjectAdapter(VideoGroup videoGroup, Presenter presenter) {
         super(videoGroup, presenter);
@@ -38,8 +47,50 @@ public class HeaderVideoGroupObjectAdapter extends VideoGroupObjectAdapter {
         return super.get(mHeader != null ? index - 1 : index);
     }
 
+    @Override
+    public void clear() {
+        super.clear();
+
+        mAllItems = null;
+        mAllGroups = null;
+    }
+
     public void setHeader(Object header) {
+        if (header == null && mHeader != null) {
+            notifyItemRangeRemoved(0, 1);
+        }
+
         mHeader = header;
+    }
+
+    public Object getHeader() {
+        return mHeader;
+    }
+
+    public void filter(String text) {
+        if (mAllItems == null) {
+            mAllItems = new ArrayList<>(getAll());
+            mAllGroups = new ArrayList<>(getAllGroups());
+        }
+
+        super.clear();
+
+        if (TextUtils.isEmpty(text)) {
+            add(mAllItems);
+            return;
+        }
+
+        List<Video> result = Helpers.filter(mAllItems, video -> {
+            if (text.length() > 1 || Helpers.isNumeric(text)) {
+                return Helpers.contains(video.getTitle(), text);
+            } else {
+                return Helpers.startsWith(video.getTitle(), text);
+            }
+        });
+
+        //Collections.sort(result, (o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
+
+        add(result);
     }
 
     @Override

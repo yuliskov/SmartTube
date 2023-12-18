@@ -1,9 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse.video;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.ClassPresenterSelector;
 import androidx.leanback.widget.OnItemViewClickedListener;
@@ -14,21 +14,20 @@ import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.VerticalGridPresenter;
 import androidx.leanback.widget.VerticalGridView;
 
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
-import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.HeaderVideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelCardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.SearchFieldPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.SearchFieldPresenter.SearchFieldCallback;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelCardPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoSection;
@@ -54,9 +53,6 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
     private int mSelectedItemIndex2 = -1;
     private float mVideoGridScale;
     private final Runnable mRestore1Task = this::restorePosition1;
-    private List<Video> mAllItems;
-    private List<VideoGroup> mAllGroups;
-    private boolean mWithSearchHeader;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,6 +109,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
     @Override
     public void update(VideoGroup group) {
         if (group.getPosition() == 0) {
+            addSearchHeader();
             updateGroup1(group);
         } else if (group.getPosition() == 1) {
             updateGroup2(group);
@@ -292,13 +289,9 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
 
     private void clear1() {
         if (mGridAdapter1 != null) {
-            mAllItems = null;
-            mAllGroups = null;
+            mGridAdapter1.setHeader(null);
             mGridAdapter1.clear();
-            addSearchHeader();
         }
-
-        setPosition(mWithSearchHeader ? 1 : 0);
     }
 
     private void clear2() {
@@ -308,31 +301,16 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
     }
 
     private void addSearchHeader() {
-        mWithSearchHeader = true;
+        if (mGridAdapter1 == null || mGridAdapter1.getHeader() != null) {
+            return;
+        }
+
+        setPosition(1);
+
         mGridAdapter1.setHeader(new SearchFieldCallback() {
             @Override
             public void onTextChanged(String text) {
-                if (mAllItems == null) {
-                    mAllItems = new ArrayList<>(mGridAdapter1.getAll());
-                    mAllGroups = new ArrayList<>(mGridAdapter1.getAllGroups());
-                }
-
-                mGridAdapter1.clear();
-
-                if (TextUtils.isEmpty(text)) {
-                    mGridAdapter1.add(mAllItems);
-                    return;
-                }
-
-                List<Video> result = Helpers.filter(mAllItems, video -> {
-                    if (text.length() > 1 || Helpers.isNumeric(text)) {
-                        return Helpers.contains(video.getTitle(), text);
-                    } else {
-                        return Helpers.startsWith(video.getTitle(), text);
-                    }
-                });
-
-                mGridAdapter1.add(result);
+                mGridAdapter1.filter(text);
             }
         });
     }
