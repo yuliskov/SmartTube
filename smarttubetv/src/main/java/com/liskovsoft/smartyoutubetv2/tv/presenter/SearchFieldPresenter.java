@@ -12,7 +12,6 @@ import android.widget.EditText;
 import androidx.leanback.widget.Presenter;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
@@ -58,10 +57,14 @@ public class SearchFieldPresenter extends Presenter {
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
         SearchFieldCallback callback = (SearchFieldCallback) item;
         EditText editField = viewHolder.view.findViewById(R.id.simple_edit_value);
-        editField.addTextChangedListener(new TextWatcher() {
+        if (editField.getTag() != null) {
+            editField.removeTextChangedListener((TextWatcher) editField.getTag());
+        }
+        editField.getText().clear();
+        TextWatcher watcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                
+
             }
 
             @Override
@@ -73,7 +76,9 @@ public class SearchFieldPresenter extends Presenter {
             public void afterTextChanged(Editable s) {
                 callback.onTextChanged(s.toString());
             }
-        });
+        };
+        editField.addTextChangedListener(watcher);
+        editField.setTag(watcher);
     }
 
     @Override
