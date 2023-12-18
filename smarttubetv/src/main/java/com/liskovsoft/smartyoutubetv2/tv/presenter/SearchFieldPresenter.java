@@ -38,7 +38,6 @@ public class SearchFieldPresenter extends Presenter {
         View contentView = inflater.inflate(R.layout.search_field, parent, false);
 
         EditText editField = contentView.findViewById(R.id.simple_edit_value);
-        //KeyHelpers.fixShowKeyboard(editField);
         ViewUtil.setDimensions(editField, mWidth, -1); // don't do auto height
         contentView.setOnFocusChangeListener((v, hasFocus) -> {
             Log.d(TAG, "On edit field focused");

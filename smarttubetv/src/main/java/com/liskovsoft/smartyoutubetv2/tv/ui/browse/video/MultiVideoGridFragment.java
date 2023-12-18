@@ -56,6 +56,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
     private final Runnable mRestore1Task = this::restorePosition1;
     private List<Video> mAllItems;
     private List<VideoGroup> mAllGroups;
+    private boolean mWithSearchHeader;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -296,6 +297,8 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
             mGridAdapter1.clear();
             addSearchHeader();
         }
+
+        setPosition(mWithSearchHeader ? 1 : 0);
     }
 
     private void clear2() {
@@ -305,6 +308,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
     }
 
     private void addSearchHeader() {
+        mWithSearchHeader = true;
         mGridAdapter1.setHeader(new SearchFieldCallback() {
             @Override
             public void onTextChanged(String text) {
