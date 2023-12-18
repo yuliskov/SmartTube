@@ -609,4 +609,6 @@
   <string name="disable_remote_history">Desactivar el historial al utilizar el control remoto</string>
   <string name="keyboard_fix">Corregir la visualización del teclado pulsando la tecla OK (G20s y otros)</string>
   <string name="nothing_found">No se ha encontrado nada</string>
+  <string name="channel_filter_hint">Filtrar canales</string>
+  <string name="auto_frame_rate_desc">Esta opción elimina las fluctuaciones en las escenas en las que la cámara se mueve con rapidez, como las retransmisiones deportivas.</string>
 </resources>
