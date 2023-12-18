@@ -24,8 +24,14 @@ public class SearchFieldPresenter extends Presenter {
     private int mHeight;
 
     public static class SearchFieldCallback {
+        private String mText;
+
         public void onTextChanged(String text) {
-            
+            mText = text;
+        }
+
+        public String getText() {
+            return mText;
         }
     }
 
@@ -60,7 +66,7 @@ public class SearchFieldPresenter extends Presenter {
         if (editField.getTag() != null) {
             editField.removeTextChangedListener((TextWatcher) editField.getTag());
         }
-        editField.getText().clear();
+        editField.setText(callback.getText());
         TextWatcher watcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

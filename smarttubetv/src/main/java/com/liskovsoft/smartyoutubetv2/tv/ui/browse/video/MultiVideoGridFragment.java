@@ -310,6 +310,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
         mGridAdapter1.setHeader(new SearchFieldCallback() {
             @Override
             public void onTextChanged(String text) {
+                super.onTextChanged(text);
                 mGridAdapter1.filter(text);
             }
         });
