@@ -621,4 +621,5 @@
     <string name="keyboard_fix">Reparieren der Anzeige der Tastatur beim Drücken der OK-Taste (G20s und andere)</string>
     <string name="nothing_found">Nichts gefunden</string>
     <string name="auto_frame_rate_desc">Diese Option verhindert Ruckeln in Szenen, in denen sich die Kamera schnell bewegt, z.B. bei Sportübertragungen</string>
+    <string name="channel_filter_hint">Kanäle filtern</string>
 </resources>
