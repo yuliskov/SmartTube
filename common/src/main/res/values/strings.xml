@@ -622,4 +622,5 @@
     <string name="nothing_found">Nothing found</string>
     <string name="auto_frame_rate_desc">This option removes jittering on scenes where the camera moves fast, e.g. sports streaming</string>
     <string name="channel_filter_hint">Filter channels</string>
+    <string name="player_loop_shorts">Loop Shorts</string>
 </resources>

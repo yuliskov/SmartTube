@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Pair;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -95,6 +96,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_ok_button_behavior), options);
     }
 
+    @SuppressLint("StringFormatMatches")
     private void appendUIAutoHideCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
@@ -520,6 +522,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_loop_shorts),
+                option -> mPlayerTweaksData.enableLoopShorts(option.isSelected()),
+                mPlayerTweaksData.isLoopShortsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_global_focus),
                 option -> mPlayerTweaksData.enablePlayerGlobalFocus(option.isSelected()),
