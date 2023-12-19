@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
 import android.content.Context;
+import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
@@ -253,7 +255,7 @@ public final class Video {
             return author;
         }
 
-        return extractAuthor(secondTitle != null ? secondTitle : metadataSecondTitle);
+        return extractAuthor(metadataSecondTitle != null ? metadataSecondTitle : secondTitle); // BAD idea
     }
 
     public VideoGroup getGroup() {
@@ -280,7 +282,8 @@ public final class Video {
             }
         }
 
-        return result != null ? Helpers.abbreviate(result.trim(), MAX_AUTHOR_LENGTH_CHARS) : null;
+        // Skip subtitles starting with number of views (e.g. 1.4M views)
+        return !TextUtils.isEmpty(result) && !Helpers.isNumeric(result.substring(0, 1)) ? Helpers.abbreviate(result.trim(), MAX_AUTHOR_LENGTH_CHARS) : null;
     }
 
     public static List<Video> findVideosByAuthor(VideoGroup group, String author) {
@@ -595,6 +598,7 @@ public final class Video {
         likeCount = metadata.getLikeCount();
         dislikeCount = metadata.getDislikeCount();
         notificationStates = metadata.getNotificationStates();
+        author = metadata.getAuthor();
         isSynced = true;
 
         if (mediaItem != null) {

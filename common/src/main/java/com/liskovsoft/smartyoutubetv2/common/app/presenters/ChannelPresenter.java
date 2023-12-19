@@ -42,6 +42,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private Disposable mScrollAction;
     private MediaGroup mLastScrollGroup;
     private int mSortIdx;
+    private Video mChannel;
 
     private interface OnChannelId {
         void onChannelId(String channelId);
@@ -151,6 +152,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     public void openChannel(Video item) {
+        mChannel = item;
         extractChannelId(item, this::openChannel);
     }
 
@@ -171,6 +173,10 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         }
 
         ViewManager.instance(getContext()).startView(ChannelView.class);
+    }
+
+    public Video getChannel() {
+        return mChannel;
     }
 
     private void disposeActions() {
@@ -284,6 +290,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         if (getView() != null) {
             getView().clear();
         }
+        mChannel = null;
     }
 
     private void extractChannelId(Video item, OnChannelId callback) {
