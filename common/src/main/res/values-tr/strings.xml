@@ -621,4 +621,6 @@
     <string name="keyboard_fix">TAMAM tuşuna basarak klavyeyi göstermeyi düzelt (G20\'ler ve diğerleri)</string>
     <string name="nothing_found">Hiçbir şey bulunamadı</string>
     <string name="auto_frame_rate_desc">Bu seçenek, spor yayınları gibi kameranın hızlı hareket ettiği sahnelerdeki titremeyi ortadan kaldırır</string>
+    <string name="channel_filter_hint">Kanalları filtrele</string>
+    <string name="player_loop_shorts">Shortsları tekrarla</string>
 </resources>
