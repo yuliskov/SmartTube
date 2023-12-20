@@ -219,6 +219,9 @@
     <string name="header_uploads">Nahraté videá</string>
     <string name="player_show_global_clock">Neustále zobrazovať hodiny na obrazovke</string>
     <string name="player_show_global_ending_time">Neustále zobrazovať čas ukončenia videa na obrazovke</string>
+    <string name="app_corner_clock">Domov: hodiny v pravom hornom rohu</string>
+    <string name="player_corner_clock">Prehrávač: hodiny v pravom hornom rohu</string>
+    <string name="player_corner_ending_time">Prehrávač: čas ukončenia v pravom hornom rohu</string>
     <string name="uploads_old_look">Vrátiť späť starý vzhľad sekcie Nahraté videá</string>
     <string name="background_playback_activation">Prehrávanie na pozadí (aktivácia)</string>
     <string name="channels_old_look">Vrátiť späť starý vzhľad sekcie Kanály</string>
@@ -236,6 +239,7 @@
     <string name="card_text_scroll_factor">Rýchlosť posúvania textu v názve videa</string>
     <string name="preferred_update_source">Preferovaný zdroj aktualizácie</string>
     <string name="hide_shorts">Skryť Shorts z Odberov</string>
+    <string name="hide_shorts_channel">Skryť Shorts z Kanálov</string>
     <string name="key_remapping">Prednastavenie tlačidiel</string>
     <string name="screen_diming">Stmavenie obrazovky</string>
     <string name="removed_from_playback_queue">Odstránené zo zoznamu</string>
@@ -328,16 +332,19 @@
     <string name="msg_player_error_audio_source">AUDIO URL nefunguje alebo je na zariadení nesprávny čas.\nZvyčajne je to chyba aplikácie.</string>
     <string name="msg_player_error_subtitle_source">TITULKOVÁ URL nefunguje alebo je na zariadení nesprávny čas.\nZvyčajne je to chyba aplikácie.</string>
     <string name="hide_upcoming">Skryť nadchádzajúce z Odberov</string>
+    <string name="hide_upcoming_channel">Skryť nadchádzajúce z Kanálov</string>
+    <string name="hide_upcoming_home">Skryť nadchádzajúce z Domov</string>
     <string name="search_background_playback">Zapnúť PIP pri vyhľadávaní/otvorení kanála z prehrávania</string>
     <string name="trending_row_name">Trendy</string>
     <string name="player_seek_type">Typ pratáčania</string>
     <string name="player_seek_regular">Bežné</string>
     <string name="player_seek_confirmation_pause">S potvrdením (pozastavenie pri pratáčaní)</string>
     <string name="player_seek_confirmation_play">S potvrdením (prehrávanie pri pratáčaní)</string>
-    <string name="hide_shorts_from_home">Skryť krátke videá v Domovskej sekcii</string>
+    <string name="hide_shorts_from_home">Skryť Shorts z Domov</string>
     <string name="finish_on_disconnect">Ukončiť aplikáciu po odpojení telefónu/tabletu</string>
     <string name="update_error">Chyba aktualizácie</string>
-    <string name="hide_shorts_from_history">Skryť krátke videá z Histórie</string>
+    <string name="hide_shorts_from_history">Skryť Shorts z Histórie</string>
+    <string name="hide_shorts_from_trending">Skryť Shorts z Trendy</string>
     <string name="disable_screensaver">Vypnúť šetrič obrazovky</string>
     <string name="description_not_found">Popis nenájdený</string>
     <string name="proxy_port_hint">Proxy port</string>
@@ -393,7 +400,7 @@
     <string name="volume_limit">Obmedzenie hlasitosti</string>
     <string name="player_volume">Hlasitosť</string>
     <string name="play_video">Prehrať</string>
-    <string name="remember_position_of_short_videos">Zapamätať pozíciu v krátkych videách (menej ako 5 min)</string>
+    <string name="remember_position_of_short_videos">Zapamätať pozíciu v Shorts (menej ako 5 min)</string>
     <string name="player_show_tooltips">Zobraziť popis tlačítok</string>
     <string name="action_like_unset">"Páči sa" nie je nastavené</string>
     <string name="action_dislike_unset">"Nepáči sa" nie je nastavené</string>
@@ -544,8 +551,7 @@
     <string name="player_network_stack">Sieťový zásobník</string>
     <string name="cronet_desc">Cronet je Chromium sieťový zásobník. Môže znížiť oneskorenie a zvýšiť výkon siete, čo môže pomôcť pri problémoch s ukladaním do medzipamäte.</string>
     <string name="unlock_all_formats">Odblokovať všetky video formáty</string>
-    <string name="unlock_all_formats_desc">Na niektorých zariadeniach hlási firmvér niektoré formáty ako nepodporované aj keď podporované sú.\n
-        (napr. smart televízie s rozlíšením 1080p majú tendenciu hlásiť 4K ako nepodporované).</string>
+    <string name="unlock_all_formats_desc">Na niektorých zariadeniach hlási firmvér niektoré formáty ako nepodporované aj keď podporované sú.\n(napr. smart televízie s rozlíšením 1080p majú tendenciu hlásiť 4K ako nepodporované).</string>
     <string name="okhttp_desc">Tento sieťový zásobník je najpomalší, ale najstabilnejší.</string>
     <string name="select_channel_section">Otvoriť zodpovedajúcu sekciu po otvorení aplikácie z kanálov ATV</string>
     <string name="enable_voice_search_desc">Oficiálna aplikácia bude nahradená tzv. mostom. Most pomáha prenášať požiadavky globálneho vyhľadávania do tejto aplikácie.</string>
@@ -554,8 +560,7 @@
     <string name="disable_stream_buffer">Zakázať medzipamäť pri živom vysielaní</string>
     <string name="disable_stream_buffer_desc">Oprava pre situácie, keď je živé vysielanie dosť pozadu. Pozor: živé vysielanie môže začať sekať.</string>
     <string name="sony_frame_drop_fix">Oprava výpadkov prehrávania #1</string>
-    <string name="sony_frame_drop_fix_desc">Opravuje sekanie na Sony TV a iných zariadeniach. Pozor: môžu nastať problémy so synchronizáciou audia.
-    </string>
+    <string name="sony_frame_drop_fix_desc">Opravuje sekanie na Sony TV a iných zariadeniach. Pozor: môžu nastať problémy so synchronizáciou audia.</string>
     <string name="audio_language">Jazyk zvuku</string>
     <string name="old_home_look">Starý vzhľad sekcie Domov</string>
     <string name="hide_shorts_everywhere">Skryť Shorts všade</string>
@@ -609,6 +614,13 @@
     <string name="play_next">Prehrať ďalšie</string>
     <string name="hide_watched_from_subscriptions">Skryť videné videá v Odberoch</string>
     <string name="hide_unwanted_content">Skryť nežiaduci obsah</string>
-    <string name="hide_watched_from_home">Skryť videné videá v Domovskej sekcii</string>
+    <string name="hide_watched_from_home">Skryť videné videá v Domov</string>
     <string name="remote_control_permission">Diaľkové ovládanie na pozadí vyžaduje povolenie na prekrytie cez okná</string>
+    <string name="login_from_browser">Prihlásenie z prehliadača</string>
+    <string name="disable_remote_history">Zakázanť históriu pri používaní diaľkového ovládania</string>
+    <string name="keyboard_fix">Opraviť zobrazenie klávesnice stlačením tlačidla OK (G20s a iné)</string>
+    <string name="nothing_found">Nič nebolo nájdené</string>
+    <string name="auto_frame_rate_desc">Táto možnosť odstraňuje chvenie pri scénach, v ktorých sa kamera rýchlo pohybuje, napr. pri športové prenosy</string>
+    <string name="channel_filter_hint">Filtrovať kanály</string>
+    <string name="player_loop_shorts">Shorts v slučke</string>
 </resources>
