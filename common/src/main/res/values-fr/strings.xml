@@ -600,4 +600,25 @@
   <string name="enter_account_password">Entrez le mot de passe du compte</string>
   <string name="show_connect_messages">Afficher les messages de connexion</string>
   <string name="prefer_avc_over_vp9_desc">ATT: 1080p maximum</string>
+  <string name="share_qr_link">Lien de partage (QR code)</string>
+  <string name="app_corner_clock">Accueil: horloge en haut à droite</string>
+  <string name="player_corner_clock">Lecteur: horloge en haut à droite</string>
+  <string name="player_corner_ending_time">Lecteur: heure de fin dans le coin supérieur droit</string>
+  <string name="hide_shorts_channel">Masquer les shorts de la chaîne</string>
+  <string name="news_row_name">Nouvelles</string>
+  <string name="hide_upcoming_channel">Masquer les nouvelles de la chaîne</string>
+  <string name="hide_upcoming_home">Masquer les nouvelles depuis la page d’accueil</string>
+  <string name="hide_shorts_from_trending">Masquer les shorts des tendances</string>
+  <string name="play_next">Lire suivant</string>
+  <string name="hide_watched_from_subscriptions">Masquer les vidéos regardées des abonnements</string>
+  <string name="hide_unwanted_content">Masquer le contenu indésirable</string>
+  <string name="hide_watched_from_home">Masquer les vidéos regardées depuis l\'accueil</string>
+  <string name="remote_control_permission">Le contrôle à distance en arrière-plan nécessite l’autorisation de superposition</string>
+  <string name="login_from_browser">Se connecter à partir du navigateur</string>
+  <string name="disable_remote_history">Désactiver l’historique lors de l’utilisation de la télécommande</string>
+  <string name="keyboard_fix">Correction de l’affichage du clavier par la pression de la touche OK (G20s et autres)</string>
+  <string name="nothing_found">Rien n’a été trouvé</string>
+  <string name="auto_frame_rate_desc">Cette option supprime les tremblements sur les scènes où la caméra se déplace rapidement, par exemple le streaming sportif</string>
+  <string name="channel_filter_hint">Filtrer les chaines</string>
+  <string name="player_loop_shorts">Short en boucle</string>
 </resources>
