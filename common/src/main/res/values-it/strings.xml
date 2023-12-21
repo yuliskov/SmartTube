@@ -619,4 +619,8 @@
     <string name="login_from_browser">Accedi dal browser</string>
     <string name="disable_remote_history">Disabilita la Cronologia quando si utilizza il controllo remoto</string>
     <string name="keyboard_fix">Risolvi il problema con la visualizzazione della tastiera premendo il tasto OK (G20 e altri)</string>
+    <string name="nothing_found">Nessun risultato trovato</string>
+    <string name="auto_frame_rate_desc">Questa opzione rimuove il tremolio nelle scene in cui la telecamera si muove velocemente, ad esempio nello sport</string>
+    <string name="channel_filter_hint">Filtra canali</string>
+    <string name="player_loop_shorts">Ripeti continuamente i video brevi</string>
 </resources>
