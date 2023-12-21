@@ -680,7 +680,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     }
 
     private boolean handleShortsNavigation(int keyCode) {
-        if (getPlayer().isOverlayShown() || getPlayer().getVideo() == null || !getPlayer().getVideo().isShorts) {
+        if (getPlayer().isOverlayShown() || getPlayer().getVideo() == null || !getPlayer().getVideo().isShorts || !mPlayerTweaksData.isQuickShortsSkipEnabled()) {
             return false;
         }
 

@@ -88,6 +88,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsUnsafeAudioFormatsEnabled;
     private boolean mIsHighBitrateFormatsUnlocked;
     private boolean mIsLoopShortsEnabled;
+    private boolean mIsQuickShortsSkipEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -497,6 +498,15 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsLoopShortsEnabled;
     }
 
+    public void enableQuickShortsSkip(boolean enable) {
+        mIsQuickShortsSkipEnabled = enable;
+        persistData();
+    }
+
+    public boolean isQuickShortsSkipEnabled() {
+        return mIsQuickShortsSkipEnabled;
+    }
+
     public void unlockHighBitrateFormats(boolean enable) {
         mIsHighBitrateFormatsUnlocked = enable;
         persistData();
@@ -559,6 +569,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsUnsafeAudioFormatsEnabled = Helpers.parseBoolean(split, 42, true);
         mIsHighBitrateFormatsUnlocked = Helpers.parseBoolean(split, 43, false);
         mIsLoopShortsEnabled = Helpers.parseBoolean(split, 44, true);
+        mIsQuickShortsSkipEnabled = Helpers.parseBoolean(split, 45, true);
 
         updateDefaultValues();
     }
@@ -575,7 +586,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
-                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked, mIsLoopShortsEnabled
+                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked, mIsLoopShortsEnabled, mIsQuickShortsSkipEnabled
                 ));
     }
 

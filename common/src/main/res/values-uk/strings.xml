@@ -616,4 +616,5 @@
     <string name="auto_frame_rate_desc">Ця опція усуває тремтіння на сценах, де камера рухається швидко, напр. спортивна трансляція</string>
     <string name="channel_filter_hint">Фільтрувати канали</string>
     <string name="player_loop_shorts">Зациклювати короткі відео</string>
+    <string name="player_quick_shorts_skip">Перемикати короткі відео кнопками ліво/право</string>
 </resources>
