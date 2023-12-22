@@ -585,14 +585,22 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private void initPresenters() {
         mRowPresenter = new CustomListRowPresenter() {
             @Override
+            protected void onBindRowViewHolder(RowPresenter.ViewHolder holder, Object item) {
+                super.onBindRowViewHolder(holder, item);
+
+                focusPendingSuggestedItem();
+            }
+
+            @Override
             protected void onRowViewSelected(RowPresenter.ViewHolder holder, boolean selected) {
                 super.onRowViewSelected(holder, selected);
 
                 updatePlayerBackground();
 
-                if (selected) {
-                    focusPendingSuggestedItem();
-                }
+                // Don't select the pending item here because multiple items will be focused.
+                //if (selected) {
+                //    focusPendingSuggestedItem();
+                //}
             }
         };
 
