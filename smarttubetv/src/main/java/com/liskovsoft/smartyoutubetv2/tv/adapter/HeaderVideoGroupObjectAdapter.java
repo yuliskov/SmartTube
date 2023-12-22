@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HeaderVideoGroupObjectAdapter extends VideoGroupObjectAdapter {
@@ -88,7 +89,17 @@ public class HeaderVideoGroupObjectAdapter extends VideoGroupObjectAdapter {
             }
         });
 
-        //Collections.sort(result, (o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
+        // Move 'started with text' channels to the top
+        if (text.length() > 1 || Helpers.isNumeric(text)) {
+            Collections.sort(result, (o1, o2) -> {
+                String title1 = o1.getTitle();
+                String title2 = o2.getTitle();
+                boolean starts1 = Helpers.startsWith(title1, text);
+                boolean starts2 = Helpers.startsWith(title2, text);
+
+                return starts1 == starts2 ? title1.compareTo(title2) : starts1 ? -1 : 1;
+            });
+        }
 
         add(result);
     }
