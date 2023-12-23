@@ -75,12 +75,20 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         return mBootResolution;
     }
 
+    //public String getStateUpdaterData() {
+    //    return getString(STATE_UPDATER_DATA, null);
+    //}
+    //
+    //public void setStateUpdaterData(String data) {
+    //    putString(STATE_UPDATER_DATA, data);
+    //}
+
     public String getStateUpdaterData() {
-        return getString(STATE_UPDATER_DATA, null);
+        return getProfileData(STATE_UPDATER_DATA);
     }
 
     public void setStateUpdaterData(String data) {
-        putString(STATE_UPDATER_DATA, data);
+        setProfileData(STATE_UPDATER_DATA, data);
     }
 
     public void setProfileData(String key, String data) {
