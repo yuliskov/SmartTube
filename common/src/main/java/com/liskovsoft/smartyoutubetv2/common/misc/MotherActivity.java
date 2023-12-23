@@ -137,6 +137,7 @@ public class MotherActivity extends FragmentActivity {
         // E.g. Hide bottom navigation bar (couldn't be done in styles).
         Helpers.makeActivityFullscreen(this);
 
+        // Remove screensaver from the previous activity when closing current one.
         // Called on player's next track. Reason unknown.
         mScreensaverManager.enable();
     }
@@ -145,6 +146,7 @@ public class MotherActivity extends FragmentActivity {
     protected void onPause() {
         super.onPause();
 
+        // Remove screensaver from the previous activity when closing current one.
         // Called on player's next track. Reason unknown.
         mScreensaverManager.disable();
     }
