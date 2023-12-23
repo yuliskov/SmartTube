@@ -612,4 +612,5 @@
   <string name="channel_filter_hint">Filtrar canales</string>
   <string name="auto_frame_rate_desc">Esta opción elimina las fluctuaciones en las escenas en las que la cámara se mueve con rapidez, como las retransmisiones deportivas.</string>
   <string name="player_loop_shorts">Reproducir los Shorts en bucle</string>
+  <string name="player_quick_shorts_skip">Saltar los Shorts con los botones izquierda/derecha</string>
 </resources>
