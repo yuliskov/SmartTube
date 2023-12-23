@@ -619,4 +619,9 @@
     <string name="login_from_browser">Přihlášení přes prohlížeč</string>
     <string name="disable_remote_history">Zazázat historii při používání dálkového ovládání</string>
     <string name="keyboard_fix">Oprava zobrazení klávesnice stisknutím tlačítka OK (G20s a další)</string>
+    <string name="nothing_found">Nic nenalezeno</string>
+    <string name="auto_frame_rate_desc">Tato možnost eliminuje chvění ve scénách, kde se kamera rychle pohybuje(např. sportovní přenosy)</string>
+    <string name="channel_filter_hint">Filtrovat kanály</string>
+    <string name="player_loop_shorts">Opakovat Shorts</string>
+    <string name="player_quick_shorts_skip">Přeskakovat Shorts tlačítky vlevo/vpravo</string>
 </resources>
