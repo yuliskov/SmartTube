@@ -623,4 +623,5 @@
     <string name="auto_frame_rate_desc">Diese Option verhindert Ruckeln in Szenen, in denen sich die Kamera schnell bewegt, z.B. bei Sportübertragungen</string>
     <string name="channel_filter_hint">Kanäle filtern</string>
     <string name="player_loop_shorts">Shorts wiederholen</string>
+    <string name="player_quick_shorts_skip">Shorts überspringen mit Links/Rechts-Tasten</string>
 </resources>
