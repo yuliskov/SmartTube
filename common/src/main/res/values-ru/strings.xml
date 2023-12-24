@@ -433,7 +433,7 @@
     <string name="skip_codec_profile_check_desc">Не проверять поддержку кодеков при запуске видео. Может быть полезно для глючных прошивок.</string>
     <string name="force_sw_codec">Активировать программный декодер</string>
     <string name="force_sw_codec_desc">Может воспроизводить любое видео, но производительность очень низкая.</string>
-    <string name="playlist_order">Упорядочить плейлист</string>
+    <string name="playlist_order">Сортировать плейлист</string>
     <string name="playlist_order_added_date_newer_first">Дата добавления (сначала более новые)</string>
     <string name="playlist_order_added_date_older_first">Дата добавления (сначала более старые)</string>
     <string name="playlist_order_published_date_newer_first">Дата публикации (сначала более новые)</string>
@@ -530,7 +530,7 @@
     <string name="video_feature_live">Прямые трансляции</string>
     <string name="video_feature_4k">4K</string>
     <string name="video_feature_hdr">HDR</string>
-    <string name="search_sorting">Упорядочить</string>
+    <string name="search_sorting">Сортировать</string>
     <string name="sort_by_relevance">Релевантность</string>
     <string name="sort_by_views">Число просмотров</string>
     <string name="sort_by_date">Дата загрузки</string>
