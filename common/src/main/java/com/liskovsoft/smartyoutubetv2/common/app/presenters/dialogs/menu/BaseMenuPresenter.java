@@ -39,6 +39,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private boolean mIsClearHistoryEnabled;
     private boolean mIsUpdateCheckEnabled;
     private boolean mIsExcludeFromContentBlockEnabled;
+    private boolean mIsRenamePlaylistEnabled;
 
     protected BaseMenuPresenter(Context context) {
         super(context);
@@ -412,7 +413,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     protected void appendRenamePlaylistButton() {
-        if (!mIsCreatePlaylistEnabled) {
+        if (!mIsRenamePlaylistEnabled) {
             return;
         }
 
@@ -550,6 +551,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         mIsPinToSidebarEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR);
         mIsSavePlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SAVE_PLAYLIST);
         mIsCreatePlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_CREATE_PLAYLIST);
+        mIsRenamePlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_RENAME_PLAYLIST);
         mIsAccountSelectionEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SELECT_ACCOUNT);
         mIsAddToNewPlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_NEW_PLAYLIST);
         mIsToggleHistoryEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_TOGGLE_HISTORY);
