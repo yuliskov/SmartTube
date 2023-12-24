@@ -91,6 +91,8 @@ public class MainUIData extends DataChangeBase {
     private int mTopButtons;
     private int mThumbQuality;
     private List<Long> mMenuItemsOrdered;
+    private boolean mIsChannelsFilterEnabled;
+    private boolean mIsChannelSearchBarEnabled;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -220,6 +222,24 @@ public class MainUIData extends DataChangeBase {
 
     public boolean isUploadsOldLookEnabled() {
         return mIsUploadsOldLookEnabled;
+    }
+
+    public void enableChannelsFilter(boolean enable) {
+        mIsChannelsFilterEnabled = enable;
+        persistState();
+    }
+
+    public boolean isChannelsFilterEnabled() {
+        return mIsChannelsFilterEnabled;
+    }
+
+    public void enableChannelSearchBar(boolean enable) {
+        mIsChannelSearchBarEnabled = enable;
+        persistState();
+    }
+
+    public boolean isChannelSearchBarEnabled() {
+        return mIsChannelSearchBarEnabled;
     }
 
     public void enableUploadsAutoLoad(boolean enable) {
@@ -362,6 +382,8 @@ public class MainUIData extends DataChangeBase {
         mThumbQuality = Helpers.parseInt(split, 15, ClickbaitRemover.THUMB_QUALITY_DEFAULT);
         mIsCardMultilineSubtitleEnabled = Helpers.parseBoolean(split, 16, true);
         mMenuItemsOrdered = Helpers.parseLongList(split, 17);
+        mIsChannelsFilterEnabled = Helpers.parseBoolean(split, 18, true);
+        mIsChannelSearchBarEnabled = Helpers.parseBoolean(split, 19, true);
 
         for (Long menuItem : MENU_ITEM_DEFAULT_ORDER) {
             if (!mMenuItemsOrdered.contains(menuItem)) {
@@ -379,7 +401,8 @@ public class MainUIData extends DataChangeBase {
                 mVideoGridScale, mUIScale, mColorSchemeIndex, mIsCardMultilineTitleEnabled,
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
                 mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,
-                null, mThumbQuality, mIsCardMultilineSubtitleEnabled, Helpers.mergeList(mMenuItemsOrdered)));
+                null, mThumbQuality, mIsCardMultilineSubtitleEnabled, Helpers.mergeList(mMenuItemsOrdered),
+                mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled));
 
         super.persistState();
     }
