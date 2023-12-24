@@ -90,7 +90,7 @@ public class HeaderVideoGroupObjectAdapter extends VideoGroupObjectAdapter {
         });
 
         // Move 'started with text' channels to the top
-        if (text.length() > 1 || Helpers.isNumeric(text)) {
+        if (result != null && (text.length() > 1 || Helpers.isNumeric(text))) {
             Collections.sort(result, (o1, o2) -> {
                 String title1 = o1.getTitle();
                 String title2 = o2.getTitle();
