@@ -42,7 +42,7 @@
     <string name="section_is_empty">Здесь ничего нет</string>
     <string name="dialog_add_to_playlist">Добавить/Удалить из плейлиста</string>
     <string name="msg_signed_users_only">Необходимо войти в вккаунт</string>
-    <string name="msg_cant_load_content">Не получилось загрузить содержимое.\n1) Проверьте дату и время на устройстве.\n2) Проверьте сетевое подключение.\n3) Проверьте настройки прокси.\n4) Попробуйте войти в аккаунт.\n5) Возможно, здесь ничего нет.</string>
+    <string name="msg_cant_load_content">Не получилось загрузить содержимое.\n1) Включите историю просмотров.\n2) Проверьте дату и время на устройстве.\n3) Проверьте сетевое подключение.\n4) Проверьте настройки прокси.\n5) Попробуйте войти в аккаунт.\n6) Возможно, здесь ничего нет.</string>
     <string name="title_video_presets">Профили видео</string>
     <string name="settings_accounts">Аккаунты</string>
     <string name="settings_left_panel">Настроить категории</string>

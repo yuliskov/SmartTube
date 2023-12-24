@@ -656,6 +656,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 getView().showError(new CategoryEmptyError(getContext()));
                                 Utils.postDelayed(mRefreshSection, 30_000);
                             }
+                            if (isHomeSection()) { // maybe the history turned off?
+                                MediaServiceManager.instance().enableHistory(true);
+                                mGeneralData.enableHistory(true);
+                            }
                         });
 
         mActions.add(updateAction);
@@ -956,6 +960,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     public boolean isPlaylistsSection() {
         return isSection(MediaGroup.TYPE_USER_PLAYLISTS);
+    }
+
+    public boolean isHomeSection() {
+        return isSection(MediaGroup.TYPE_HOME);
     }
 
     public boolean isHistorySection() {
