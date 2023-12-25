@@ -396,7 +396,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                     update.setPosition(0);
                     update.setAction(VideoGroup.ACTION_REPLACE);
                     getView().update(update);
-                    //getView().setPosition(1);
+                    getView().setPosition(1);
                 }
         );
 
