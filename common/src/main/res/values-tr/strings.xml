@@ -43,7 +43,7 @@
     <string name="section_is_empty">Hata! Burada hiçbir şey yok.</string>
     <string name="dialog_add_to_playlist">Oynatma listesine Ekle/Kaldır</string>
     <string name="msg_signed_users_only">Sadece oturum açmış kullanıcılar</string>
-    <string name="msg_cant_load_content">İçerik yüklenemiyor.\n1) Cihazdaki tarih ve saati kontrol edin.\n2) Ağ bağlantısını kontrol edin.\n3) Vekil Sunucu ayarlarınızı kontrol edin.\n4) Hesabınızda oturum açmayı deneyin.\n5) Belki burada hiçbir şey yoktur.</string>
+    <string name="msg_cant_load_content">İçerik yüklenemiyor.\n1) İzleme geçmişini açın.\n2) Cihazdaki tarih ve saati kontrol edin.\n3) Ağ bağlantısını kontrol edin.\n4) Vekil Sunucu ayarlarınızı kontrol edin.\n5) Hesabınızda oturum açmayı deneyin.\n6) Belki burada hiçbir şey yoktur.</string>
     <string name="title_video_presets">Video ön ayarları</string>
     <string name="settings_accounts">Hesaplar</string>
     <string name="settings_left_panel">Kategorileri düzenle</string>
@@ -623,4 +623,7 @@
     <string name="auto_frame_rate_desc">Bu seçenek, spor yayınları gibi kameranın hızlı hareket ettiği sahnelerdeki titremeyi ortadan kaldırır</string>
     <string name="channel_filter_hint">Kanalları filtrele</string>
     <string name="player_loop_shorts">Shortsları tekrarla</string>
+    <string name="player_quick_shorts_skip">Shortsları sol/sağ düğmeyle atla</string>
+    <string name="channel_search_bar">Kanal sayfasında arama çubuğu</string>
+    <string name="channels_filter">Kanallar bölümünde kanal listesi filtreleme</string>
 </resources>
