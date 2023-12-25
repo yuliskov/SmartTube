@@ -633,6 +633,10 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             return;
         }
 
+        if (dialogPresenter.isDialogShown() && getPlayer() != null && !getPlayer().isPlaying()) {
+            return;
+        }
+
         dialogPresenter.closeDialog(); // remove previous dialog
 
         if (chapter == null || getPlayer() == null || getPlayer().isOverlayShown() || getPlayer().isInPIPMode() ||

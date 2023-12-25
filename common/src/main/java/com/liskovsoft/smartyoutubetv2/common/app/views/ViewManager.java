@@ -456,6 +456,20 @@ public class ViewManager {
         return false;
     }
 
+    public static MotherActivity getMotherActivity(Object view) {
+        MotherActivity motherActivity = null;
+
+        if (view instanceof Fragment && ((Fragment) view).getActivity() instanceof MotherActivity) {
+            motherActivity = ((MotherActivity) ((Fragment) view).getActivity());
+        }
+
+        if (view instanceof androidx.fragment.app.Fragment && ((androidx.fragment.app.Fragment) view).getActivity() instanceof MotherActivity) {
+            motherActivity = ((MotherActivity) ((androidx.fragment.app.Fragment) view).getActivity());
+        }
+
+        return motherActivity;
+    }
+
     public boolean isPlayerInForeground() {
         return Utils.isAppInForeground() && getTopView() == PlaybackView.class;
     }
