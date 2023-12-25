@@ -624,4 +624,6 @@
     <string name="channel_filter_hint">Kanäle filtern</string>
     <string name="player_loop_shorts">Shorts wiederholen</string>
     <string name="player_quick_shorts_skip">Shorts überspringen mit Links/Rechts-Tasten</string>
+    <string name="channels_filter">Liste der Kanäle innerhalb der Kanäle-Kategorie filtern</string>
+    <string name="channel_search_bar">Suchleiste innerhalb der Kanalseite</string>
 </resources>
