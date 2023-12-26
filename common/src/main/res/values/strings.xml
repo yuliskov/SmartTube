@@ -153,12 +153,12 @@
     <string name="player_seek_preview_carousel">Carousel</string>
     <string name="player_seek_preview_carousel_slow">Carousel (slow, by keyframes)</string>
     <string name="player_seek_preview_carousel_fast">Carousel (fast, not precise preview)</string>
-    <string name="unsubscribe_from_channel">Unsubscribe from channel</string>
+    <string name="unsubscribe_from_channel">Unsubscribe from the channel</string>
     <string name="card_title_lines_num">Card title lines num</string>
     <string name="card_auto_scrolled_title">Auto-scroll cropped title</string>
     <string name="share_link">Share link</string>
     <string name="share_qr_link">Share link (QR code)</string>
-    <string name="subscribe_to_channel">Subscribe to channel</string>
+    <string name="subscribe_to_channel">Subscribe to the channel</string>
     <string name="wait_data_loading">Please wait while data is loading…</string>
     <string name="auto_frame_rate_pause">Auto Frame Rate (pause when switching)</string>
     <string name="auto_frame_rate_applying">Applying auto frame rate %sx%s@%s</string>
@@ -258,7 +258,7 @@
     <string name="breaking_news_row_name">Breaking news</string>
     <string name="covid_news_row_name">COVID-19 news</string>
     <string name="enable_voice_search">Enable global search (firmware support needed)</string>
-    <string name="subscribe_unsubscribe_from_channel">Subscribe/Unsubscribe from channel</string>
+    <string name="subscribe_unsubscribe_from_channel">Subscribe/Unsubscribe from the channel</string>
     <string name="app_backup_restore">Backup/Restore</string>
     <string name="app_backup">Backup data</string>
     <string name="app_restore">Restore data from backup</string>
