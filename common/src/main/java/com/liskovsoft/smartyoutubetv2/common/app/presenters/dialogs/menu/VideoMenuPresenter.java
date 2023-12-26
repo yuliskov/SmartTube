@@ -633,7 +633,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
                         mVideo.isSubscribed || mVideo.belongsToSubscriptions() || mVideo.belongsToChannelUploads() ?
-                                R.string.unsubscribe_from_channel : R.string.subscribe_unsubscribe_from_channel),
+                                R.string.unsubscribe_from_channel : R.string.subscribe_to_channel),
                         optionItem -> toggleSubscribe()));
     }
 
@@ -821,6 +821,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         if (mVideo == null) {
             return;
         }
+
+        mVideo.isSynced = true; // default to subscribe
 
         // Until synced we won't really know weather we subscribed to a channel.
         // Exclusion: channel item (can't be synced)
