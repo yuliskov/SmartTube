@@ -153,7 +153,7 @@
     <string name="player_seek_preview_carousel">Mehrere Bilder</string>
     <string name="player_seek_preview_carousel_slow">Mehrere Bilder (langsam, nach Keyframes)</string>
     <string name="player_seek_preview_carousel_fast">Mehrere Bilder (schnell, ungenaue Vorschau)</string>
-    <string name="unsubscribe_from_channel">Kanal-Abo beenden</string>
+    <string name="unsubscribe_from_channel">Kanal nicht mehr abonnieren</string>
     <string name="card_title_lines_num">Zeilenanzahl in Titeln</string>
     <string name="card_auto_scrolled_title">Auto-Scrollen in Titeln</string>
     <string name="share_link">Link teilen</string>
@@ -230,6 +230,8 @@
     <string name="pin_unpin_from_sidebar">Hinzufügen/Entfernen aus Seitenleiste</string>
     <string name="pin_unpin_playlist">Wiedergabeliste zur Seitenleiste hinzufügen/entfernen</string>
     <string name="pin_unpin_channel">Kanal zur Seitenleiste hinzufügen/entfernen</string>
+    <string name="pin_playlist">Wiedergabeliste zur Seitenleiste hinzufügen</string>
+    <string name="pin_channel">Kanal zur Seitenleiste hinzufügen</string>
     <string name="pinned_to_sidebar">Zur Seitenleiste hinzugefügt</string>
     <string name="unpin_from_sidebar">Entfernen aus Seitenleiste</string>
     <string name="unpinned_from_sidebar">Aus Seitenleiste entfernt</string>
@@ -412,6 +414,7 @@
     <string name="pressing_back">durch Drücken von BACK</string>
     <string name="player_number_key_seek">Spulen mit Zifferntasten</string>
     <string name="save_remove_playlist">Wiedergabeliste zur Wiedergabelisten-Kategorie hinzufügen/entfernen</string>
+    <string name="save_playlist">Wiedergabeliste zur Wiedergabelisten-Kategorie hinzufügen</string>
     <string name="remove_playlist">Wiedergabeliste dauerhaft aus Wiedergabelisten-Kategorie entfernen</string>
     <string name="removed_from_playlists">Entfernt aus der Wiedergabelisten-Kategorie</string>
     <string name="saved_to_playlists">Hinzugefügt zur Wiedergabelisten-Kategorie</string>
