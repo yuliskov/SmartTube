@@ -164,11 +164,12 @@ public final class Video {
         video.playlistId = item.playlistId;
         video.playlistIndex = item.playlistIndex;
         video.playlistParams = item.playlistParams;
-        video.reloadPageKey = item.reloadPageKey;
+        video.reloadPageKey = item.getReloadPageKey();
         video.isLive = item.isLive;
         video.isUpcoming = item.isUpcoming;
         video.clickTrackingParams = item.clickTrackingParams;
         video.mediaItem = item.mediaItem;
+        video.group = item.group;
 
         return video;
     }

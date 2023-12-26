@@ -230,6 +230,8 @@
     <string name="pin_unpin_from_sidebar">Add/Remove from sidebar</string>
     <string name="pin_unpin_playlist">Add/Remove playlist from sidebar</string>
     <string name="pin_unpin_channel">Add/Remove channel from sidebar</string>
+    <string name="pin_playlist">Add playlist to the sidebar</string>
+    <string name="pin_channel">Add channel to the sidebar</string>
     <string name="pinned_to_sidebar">Added to the sidebar</string>
     <string name="unpin_from_sidebar">Remove from the sidebar</string>
     <string name="unpinned_from_sidebar">Removed from the sidebar</string>
@@ -412,6 +414,7 @@
     <string name="pressing_back">by pressing BACK</string>
     <string name="player_number_key_seek">Seek with number keys</string>
     <string name="save_remove_playlist">Add/Remove playlist from Playlists section</string>
+    <string name="save_playlist">Add playlist to Playlists section</string>
     <string name="remove_playlist">Remove playlist from Playlists section permanently</string>
     <string name="removed_from_playlists">Removed from Playlists section</string>
     <string name="saved_to_playlists">Added to Playlists section</string>
