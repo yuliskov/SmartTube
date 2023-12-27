@@ -411,6 +411,15 @@ public class ViewManager {
      * View=android.widget.TextView not attached to window manager
      */
     private void safeStartActivity(Context context, Intent intent) {
+        // Small delay to fix PIP bug
+        Utils.postDelayed(() -> safeStartActivityInt(context, intent), 50);
+    }
+
+    /**
+     * Fix: java.lang.IllegalArgumentException<br/>
+     * View=android.widget.TextView not attached to window manager
+     */
+    private void safeStartActivityInt(Context context, Intent intent) {
         try {
             context.startActivity(intent);
         } catch (IllegalArgumentException | ActivityNotFoundException e) {
