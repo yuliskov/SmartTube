@@ -627,6 +627,6 @@
     <string name="channel_filter_hint">Filtra canali</string>
     <string name="player_loop_shorts">Ripeti continuamente i video brevi</string>
     <string name="player_quick_shorts_skip">Salta i video brevi con il tasto sinistro/destro</string>
-    <string name="channels_filter">Filtra l'elenco dei canali nella sezione Canali</string>
-    <string name="channel_search_bar">Barra di ricerca all'interno della pagina Canale</string>
+    <string name="channels_filter">Filtra l\'elenco dei canali nella sezione Canali</string>
+    <string name="channel_search_bar">Barra di ricerca all\'interno della pagina Canale</string>
 </resources>
