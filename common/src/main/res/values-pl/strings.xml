@@ -542,8 +542,7 @@
   <string name="player_network_stack">Protokół sieciowy</string>
   <string name="cronet_desc">Cronet jest to protokół Chromium. Cronet potrafi zmniejszyć czas oczekiwania i zwiększyć szybkość sieci, pomaga w przypadku buforowania</string>
   <string name="unlock_all_formats">Odblokuj wszystkie formaty wideo</string>
-  <string name="unlock_all_formats_desc">Na niektórych urządzeniach oprogramowanie nieprawidłowo pokazuje nieobsługiwane formaty nawet jeśli są \n
-  (np. 1080p SmartTVs pokazuje 4K jako nieobsługiwane) </string>
+  <string name="unlock_all_formats_desc">Na niektórych urządzeniach oprogramowanie nieprawidłowo pokazuje nieobsługiwane formaty nawet jeśli są \nundefined  (np. 1080p SmartTVs pokazuje 4K jako nieobsługiwane) </string>
   <string name="okhttp_desc">Protokół sieciowy jest jednym z wolniejszych, ale jest stabilny</string>
   <string name="select_channel_section">Otwórz odpowiednią sekcję kiedy aplikacja jest uruchamiana z ATV Channels</string>
   <string name="enable_voice_search_desc">Oficjalna aplikacja będzie zastąpiona aplikacją Bridge, to pomoże przenieść wyszukiwane zapytania do naszej aplikacji</string>
@@ -552,14 +551,13 @@
   <string name="disable_stream_buffer">Zablokuj bufor na transmisjach</string>
   <string name="disable_stream_buffer_desc">Poprawka dla sytuacji gdy transmisja zaczęła się opóźniać. Uwaga może zacząć przerywać transmisję</string>
   <string name="sony_frame_drop_fix">Poprawka dla gubienia klatek #1</string>
-  <string name="sony_frame_drop_fix_desc">Poprawka dla opóźnień na telewizorach marki Sony i kilku innych urządzeniach. Uwaga: możliwy problem z synchronizacją audio
-  </string>
+  <string name="sony_frame_drop_fix_desc">Poprawka dla opóźnień na telewizorach marki Sony i kilku innych urządzeniach. Uwaga: możliwy problem z synchronizacją audioundefined  </string>
   <string name="audio_language">Język audio</string>
   <string name="old_home_look">Stary wygląd ekranu głównego</string>
   <string name="hide_shorts_everywhere">Ukryj Shorts (wszędzie)</string>
   <string name="update_found">Aktualizacja dostępna</string>
   <string name="volume_boost_warning">Wszystkie ustawiania powyżej limitu mogą uszkodzić głośniki</string>
-  <string name="play_video_incognito">Odtwarzaj w trybie incognito</string>>
+  <string name="play_video_incognito">Odtwarzaj w trybie incognito</string>
   <string name="header_kids_home">Dzieci</string>
   <string name="player_section_playlist">Użyj bieżącej zawartości jako listy odtwarzania</string>
   <string name="header_trending">Na Czasie</string>
@@ -605,5 +603,13 @@
   <string name="show_connect_messages">Pokaż wiadomości połączenia</string>
   <string name="prefer_avc_over_vp9_desc">OSTRZEŻENIE: 1080p maksymalnie</string>
   <string name="play_next">Odtwórz następnie</string>
-  <string name="hide_watched_from_subscriptions">Ukryj obejrzane filmy z Subskrybcji</string>
+  <string name="hide_watched_from_subscriptions">Ukryj obejrzane wideo z Subskrybcji</string>
+  <string name="login_from_browser">Zaloguj przy użyciu przeglądarki</string>
+  <string name="nothing_found">Nic nie znaleziono</string>
+  <string name="disable_remote_history">Wyłącz historię gdy używany jest pilot</string>
+  <string name="hide_watched_from_home">Ukryj obejrzane wideo z Głównej</string>
+  <string name="hide_unwanted_content">Ukryj niechciane treści</string>
+  <string name="channel_filter_hint">Filtruj kanały</string>
+  <string name="channel_search_bar">Pasek wyszukiwania w stronie Kanały</string>
+  <string name="player_loop_shorts">Zapętl krótkie wideo</string>
 </resources>
