@@ -31,6 +31,8 @@ public class MotherActivity extends FragmentActivity {
     private ScreensaverManager mScreensaverManager;
     private List<OnPermissions> mOnPermissions;
     private List<OnResult> mOnResults;
+    private long mLastKeyDownTime;
+    private boolean mEnableThrottleKeyDown;
 
     public interface OnPermissions {
         void onPermissions(int requestCode, String[] permissions, int[] grantResults);
@@ -109,7 +111,7 @@ public class MotherActivity extends FragmentActivity {
         boolean result = super.onKeyDown(keyCode, event);
 
         // Fix buggy G20s menu key (focus lost on key press)
-        return KeyHelpers.isMenuKey(keyCode) || result;
+        return KeyHelpers.isMenuKey(keyCode) || throttleKeyDown() || result;
     }
 
     public void finishReally() {
@@ -292,5 +294,30 @@ public class MotherActivity extends FragmentActivity {
     public static void invalidate() {
         sCachedDisplayMetrics = null;
         sIsInPipMode = false;
+    }
+
+    /**
+     * Comments focus fix<br/>
+     * https://stackoverflow.com/questions/34277425/recyclerview-items-lose-focus
+     */
+    private boolean throttleKeyDown() {
+        if (mEnableThrottleKeyDown) {
+            long current = System.currentTimeMillis();
+            if (current - mLastKeyDownTime < 300) {
+                return true;
+            }
+
+            mLastKeyDownTime = current;
+        }
+
+        return false;
+    }
+
+    /**
+     * Comments focus fix<br/>
+     * https://stackoverflow.com/questions/34277425/recyclerview-items-lose-focus
+     */
+    public void enableThrottleKeyDown(boolean enable) {
+        mEnableThrottleKeyDown = enable;
     }
 }
