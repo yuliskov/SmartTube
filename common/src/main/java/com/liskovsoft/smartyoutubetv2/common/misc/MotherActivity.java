@@ -111,7 +111,7 @@ public class MotherActivity extends FragmentActivity {
         boolean result = super.onKeyDown(keyCode, event);
 
         // Fix buggy G20s menu key (focus lost on key press)
-        return KeyHelpers.isMenuKey(keyCode) || throttleKeyDown() || result;
+        return KeyHelpers.isMenuKey(keyCode) || throttleKeyDown(keyCode) || result;
     }
 
     public void finishReally() {
@@ -300,8 +300,8 @@ public class MotherActivity extends FragmentActivity {
      * Comments focus fix<br/>
      * https://stackoverflow.com/questions/34277425/recyclerview-items-lose-focus
      */
-    private boolean throttleKeyDown() {
-        if (mEnableThrottleKeyDown) {
+    private boolean throttleKeyDown(int keyCode) {
+        if (mEnableThrottleKeyDown && keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
             long current = System.currentTimeMillis();
             if (current - mLastKeyDownTime < 300) {
                 return true;
