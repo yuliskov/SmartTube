@@ -30,7 +30,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
     private static final int AUTO_FRAME_RATE_ID = 21;
     private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
     private static final int AUTO_FRAME_RATE_MODES_ID = 23;
-    private static final long SHORTS_DURATION_MS = 60 * 1_000;
+    private static final long SHORTS_DURATION_MS = 30 * 1_000;
     private final HQDialogController mUiManager;
     private final VideoStateController mStateUpdater;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
