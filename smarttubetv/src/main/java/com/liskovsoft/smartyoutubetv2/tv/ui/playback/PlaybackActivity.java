@@ -1,15 +1,17 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
+import android.annotation.TargetApi;
 import android.app.PictureInPictureParams;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+
 import androidx.fragment.app.Fragment;
+
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -124,6 +126,7 @@ public class PlaybackActivity extends LeanbackActivity {
 
     // For N devices that support it, not "officially"
     // More: https://medium.com/s23nyc-tech/drop-in-android-video-exoplayer2-with-picture-in-picture-e2d4f8c1eb30
+    @TargetApi(24)
     @SuppressWarnings("deprecation")
     private void enterPipMode() {
         // NOTE: When exiting PIP mode onPause is called immediately after onResume
@@ -150,6 +153,7 @@ public class PlaybackActivity extends LeanbackActivity {
         }
     }
 
+    @TargetApi(24)
     private boolean wannaEnterToPip() {
         return mPlaybackFragment != null && mPlaybackFragment.getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
     }
@@ -175,7 +179,7 @@ public class PlaybackActivity extends LeanbackActivity {
         if (doNotDestroy() && !skipPip()) {
             // Ensure to opening this activity when the user is returning to the app
             mViewManager.blockTop(this);
-            mViewManager.startParentView(this);
+            mViewManager.startParentViewDelay(this);
         } else {
             if (mPlayerTweaksData.isKeepFinishedActivityEnabled()) {
                 //moveTaskToBack(true); // Don't do this or you'll have problems when player overlaps other apps (e.g. casting)
@@ -279,7 +283,7 @@ public class PlaybackActivity extends LeanbackActivity {
                     // Ensure to opening this activity when the user is returning to the app
                     mViewManager.blockTop(this);
                     // Return to previous activity (create point from that app could be launched)
-                    mViewManager.startParentView(this);
+                    mViewManager.startParentViewDelay(this);
                     // Enable collapse app to Home launcher
                     mViewManager.enableMoveToBack(true);
                 }
