@@ -435,7 +435,7 @@ public class ViewManager {
     private void safeStartActivityInt(Context context, Intent intent) {
         try {
             context.startActivity(intent);
-        } catch (IllegalArgumentException | ActivityNotFoundException e) {
+        } catch (IllegalArgumentException | ActivityNotFoundException | IndexOutOfBoundsException e) {
             Log.e(TAG, "Error when starting activity: %s", e.getMessage());
             MessageHelpers.showLongMessage(context, e.getLocalizedMessage());
         }
