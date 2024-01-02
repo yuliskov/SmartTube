@@ -42,7 +42,7 @@
     <string name="section_is_empty">Ups! Tidak ada apa-apa di sini.</string>
     <string name="dialog_add_to_playlist">Tambahkan ke Daftar Putar</string>
     <string name="msg_signed_users_only">Hanya pengguna yang terdaftar</string>
-    <string name="msg_cant_load_content">Ups. Tidak dapat memuat konten.</string>
+    <string name="msg_cant_load_content">Tidak dapat memuat konten.\n1) Aktifkan riwayat tontonan.\n2) Periksa tanggal dan waktu pada perangkat.\n3) Periksa koneksi jaringan.\n4) Periksa pengaturan proxy Anda.\n5) Coba masuk ke akun anda.\n6) Mungkin tidak ada apa pun di sini.</string>
     <string name="title_video_presets">Prasetel vidio</string>
     <string name="settings_accounts">Akun</string>
     <string name="settings_left_panel">Edit kategori</string>
@@ -216,6 +216,9 @@
     <string name="header_uploads">Unggahan</string>
     <string name="player_show_global_clock">Tampilkan jam di layar terus-menerus</string>
     <string name="player_show_global_ending_time">Tampilkan waktu akhir vidio di layar terus-menerus</string>
+    <string name="app_corner_clock">Beranda: jam pojok kanan atas</string>
+	<string name="player_corner_clock">Pemutar: jam sudut kanan atas</string>
+	<string name="player_corner_ending_time">Pemutar: sudut kanan atas waktu berakhir</string>
     <string name="uploads_old_look">Kembalikan tampilan lama bagian Unggahan</string>
     <string name="background_playback_activation">Pemutaran latar belakang (aktivasi)</string>
     <string name="channels_old_look">Kembalikan tampilan lama bagian channel</string>
@@ -224,6 +227,8 @@
     <string name="pin_unpin_from_sidebar">Sematkan/Lepas sematan dari bilah sisi</string>
     <string name="pin_unpin_playlist">Sematkan/Lepas sematan daftar putar</string>
     <string name="pin_unpin_channel">Sematkan/Lepas sematan channel</string>
+    <string name="pin_playlist">Menambahkan daftar putar ke bilah sisi</string>
+	<string name="pin_channel">Menambahkan channel ke bilah sisi</string>
     <string name="pinned_to_sidebar">Disematkan ke bilah sisi</string>
     <string name="unpin_from_sidebar">Lepaskan pin dari bilah sisi</string>
     <string name="unpinned_from_sidebar">Lepas pin dari bilah sisi</string>
@@ -233,6 +238,7 @@
     <string name="card_text_scroll_factor">Kecepatan gulir teks kartu</string>
     <string name="preferred_update_source">Pilih sumber pembaruan</string>
     <string name="hide_shorts">Sembunyikan vidio pendek dari Langganan</string>
+    <string name="hide_shorts_channel">Sembunyikan vidio pendek dari Channel</string>
     <string name="key_remapping">Pemetaan ulang tombol</string>
     <string name="screen_dimming">Peredupan layar</string>
     <string name="removed_from_playback_queue">Dihapus dari antrian pemutaran</string>
@@ -322,6 +328,8 @@
     <string name="msg_player_error_audio_source">URL AUDIO tidak berfungsi atau waktu perangkat tidak tepat.\nBiasanya, ini adalah masalah aplikasi.</string>
     <string name="msg_player_error_subtitle_source">URL SUBTITLE tidak berfungsi atau waktu perangkat yang salah.\nBiasanya, ini adalah masalah aplikasi.</string>
     <string name="hide_upcoming">Sembunyikan yang akan datang dari langganan</string>
+    <string name="hide_upcoming_channel">Sembunyikan yang akan datang dari Channel</string>
+	<string name="hide_upcoming_home">Sembunyikan yang akan datang dari Beranda</string>
     <string name="search_background_playback">Masuk ke PIP saat mencari dari pemutar</string>
     <string name="trending_row_name">Sedang tren</string>
     <string name="player_seek_type">Perilaku pencarian</string>
@@ -332,6 +340,7 @@
     <string name="finish_on_disconnect">Selesaikan aplikasi setelah memutuskan sambungan telepon</string>
     <string name="update_error">Pembaharuan error</string>
     <string name="hide_shorts_from_history">Sembunyikan vidio pendek dari Riwayat</string>
+    <string name="hide_shorts_from_trending">Sembunyikan vidio pendek dari Trending</string>
     <string name="disable_screensaver">Nonaktifkan screensaver</string>
     <string name="description_not_found">Deskripsi tidak ditemukan</string>
     <string name="proxy_port_hint">Port proxy</string>
@@ -393,6 +402,7 @@
     <string name="pressing_back">dengan menekan BACK</string>
     <string name="player_number_key_seek">Cari dengan tombol angka</string>
     <string name="save_remove_playlist">Simpan/Hapus daftar putar dari bagian Daftar Putar</string>
+    <string name="save_playlist">Menambahkan daftar putar ke bagian Daftar Putar</string>
     <string name="remove_playlist">Hapus daftar putar dari bagian Daftar Putar secara permanen</string>
     <string name="removed_from_playlists">Dihapus dari bagian Daftar Putar</string>
     <string name="saved_to_playlists">Ditambahkan ke bagian Daftar Putar</string>
@@ -523,7 +533,7 @@
     <string name="player_network_stack">Tumpukan jaringan</string>
     <string name="cronet_desc">Cronet adalah tumpukan jaringan Chromium. Cronet dapat mengurangi latensi dan meningkatkan kinerja jaringan, yang dapat membantu mengatasi masalah buffering.</string>
     <string name="unlock_all_formats">Membuka semua format vidio</string>
-    <string name="unlock_all_formats_desc">Pada beberapa perangkat, firmware salah melaporkan beberapa format sebagai format yang tidak didukung, meskipun sebenarnya format tersebut didukung. (misalnya, smart TV 1080p cenderung melaporkan 4k sebagai tidak didukung).</string>
+    <string name="unlock_all_formats_desc">Pada beberapa perangkat, firmware salah melaporkan beberapa format sebagai format yang tidak didukung, meskipun sebenarnya format tersebut didukung.\n(misalnya, smart TV 1080p cenderung melaporkan 4k sebagai tidak didukung).</string>
     <string name="okhttp_desc">Tumpukan jaringan ini adalah yang paling lambat tetapi memiliki stabilitas yang baik.</string>
     <string name="select_channel_section">Buka bagian yang sesuai saat aplikasi diluncurkan dari ATV Channels</string>
     <string name="enable_voice_search_desc">Aplikasi resmi akan digantikan dengan apa yang disebut jembatan. Jembatan membantu mentransfer permintaan pencarian global ke aplikasi kami.</string>
@@ -586,4 +596,14 @@
     <string name="hide_unwanted_content">Sembunyikan konten yang tidak diinginkan</string>
     <string name="hide_watched_from_home">Menyembunyikan video yang ditonton dari Beranda</string>
     <string name="remote_control_permission">Latar Belakang Remote control memerlukan izin Overlay</string>
+    <string name="login_from_browser">Masuk dari browser</string>
+	<string name="disable_remote_history">Menonaktifkan riwayat saat menggunakan remote control</string>
+	<string name="keyboard_fix">Memperbaiki tampilan keyboard dengan menekan tombol OK (G20 dan lainnya)</string>
+	<string name="nothing_found">Tidak ada yang ditemukan</string>
+	<string name="auto_frame_rate_desc">Opsi ini menghilangkan jitter pada adegan di mana kamera bergerak cepat, misalnya, streaming olahraga</string>
+	<string name="channel_filter_hint">Menyaring channels</string>
+	<string name="player_loop_shorts">Ulangi Shorts</string>
+	<string name="player_quick_shorts_skip">Lewati vidio Pendek dengan tombol kiri/kanan</string>
+	<string name="channels_filter">Menyaring daftar channel di dalam bagian Channel</string>
+	<string name="channel_search_bar">Bilah pencarian di dalam halaman Channel</string>
 </resources>
