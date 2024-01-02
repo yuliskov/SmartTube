@@ -223,7 +223,7 @@ public class ScreensaverManager {
         }
 
         // Disable screensaver on certain circumstances
-        if (show && (isPlaying() || isSigning() || mGeneralData.isScreensaverDisabled())) {
+        if (show && (isPlaying() || isSigning() || mGeneralData.isScreensaverDisabled() || mMode == MODE_SCREEN_OFF)) {
             Helpers.disableScreensaver(activity);
             return;
         }
