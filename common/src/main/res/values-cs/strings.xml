@@ -43,7 +43,7 @@
     <string name="section_is_empty">Tady nic není</string>
     <string name="dialog_add_to_playlist">Přidat do playlistu</string>
     <string name="msg_signed_users_only">Pouze přihlášení uživatelé</string>
-    <string name="msg_cant_load_content">Jejda. Nelze načíst obsah.\n1) Zkontrolujte čas a datum zařízení.\n2) Zkontrolujte připojení k síti.\n3) Zkontrolujte nastavení proxy.\n4) Zkuste se přihlásit do svého účtu.\n5) Možná tu nic není.</string>   
+    <string name="msg_cant_load_content">Jejda. Nelze načíst obsah.\n1) Zapněte historii prohlížení.\n2) Zkontrolujte čas a datum zařízení.\n3) Zkontrolujte připojení k síti.\n4) Zkontrolujte nastavení proxy.\n5) Zkuste se přihlásit do svého účtu.\n6) Možná tu nic není.</string>   
     <string name="title_video_presets">Video předvolby</string>
     <string name="settings_accounts">Účty</string>
     <string name="settings_left_panel">Upravit kategorie</string>
@@ -230,6 +230,8 @@
     <string name="pin_unpin_from_sidebar">Přidat/Odebrat k postrannímu panelu</string>
     <string name="pin_unpin_playlist">Přidat/Odebrat playlist k postrannímu panelu</string>
     <string name="pin_unpin_channel">Přidat/Odebrat kanál k postrannímu panelu</string>
+    <string name="pin_playlist">Přidat playlist na postranní panel</string>
+    <string name="pin_channel">Přidat kanál na postranní panel</string>
     <string name="pinned_to_sidebar">Přidáno na postranní panel</string>
     <string name="unpin_from_sidebar">Odebrat z postranního panelu</string>
     <string name="unpinned_from_sidebar">Odebráno z postranního panelu</string>
@@ -412,6 +414,7 @@
     <string name="pressing_back">stisknutím tlačítka ZPĚT</string>
     <string name="player_number_key_seek">Posuv pomocí čísel</string>
     <string name="save_remove_playlist">Přidat/Odebrat playlist ze sekce Playlisty</string>
+    <string name="save_playlist">Přidat playlist do sekce Playlisty</string>
     <string name="remove_playlist">Odstranit playlist ze sekce Playlisty natrvalo</string>
     <string name="removed_from_playlists">Odstraněno ze sekce Playlisty</string>
     <string name="saved_to_playlists">Přidáno do sekce Playlisty</string>
@@ -624,4 +627,6 @@
     <string name="channel_filter_hint">Filtrovat kanály</string>
     <string name="player_loop_shorts">Opakovat Shorts</string>
     <string name="player_quick_shorts_skip">Přeskakovat Shorts tlačítky vlevo/vpravo</string>
+    <string name="channels_filter">Filtrovat seznam kanálů v sekci Kanály</string>
+    <string name="channel_search_bar">Vyhledávací panel na stránce kanálu</string>
 </resources>
