@@ -132,7 +132,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         Utils.updateRemoteControlService(getContext());
 
         // Move default focus
-        int selectedSectionIndex = findSectionIndex(mBootstrapSectionId);
+        int selectedSectionIndex = findSectionIndex(mCurrentSection != null ? mCurrentSection.getId() : mBootstrapSectionId);
         mBootstrapSectionId = -1;
         getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, true);
     }
@@ -477,6 +477,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     public void enableSection(int sectionId, boolean enable) {
         mGeneralData.enableSection(sectionId, enable);
+
+        if (!enable && mCurrentSection != null && mCurrentSection.getId() == sectionId) {
+            mCurrentSection = findNearestSection(sectionId);
+        }
 
         updateSections();
     }
@@ -891,6 +895,37 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         return -1;
+    }
+
+    private BrowseSection findNearestSection(int sectionId) {
+        BrowseSection result = findNearestSection(mErrorSections, sectionId);
+
+        if (result == null) {
+            result = findNearestSection(mSections, sectionId);
+        }
+
+        return result;
+    }
+
+    private BrowseSection findNearestSection(List<BrowseSection> sections, int sectionId) {
+        BrowseSection result = null;
+        BrowseSection previousSection = null;
+        boolean found = false;
+        for (BrowseSection section : sections) {
+            if (section.getId() == sectionId) {
+                found = true;
+                continue;
+            }
+            if (section.isEnabled()) {
+                if (found) {
+                    result = section;
+                    break;
+                }
+                previousSection = section;
+            }
+        }
+
+        return result != null ? result : previousSection;
     }
 
     private void filterIfNeeded(List<MediaGroup> mediaGroups) {
