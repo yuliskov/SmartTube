@@ -217,8 +217,8 @@
     <string name="player_show_global_clock">Tampilkan jam di layar terus-menerus</string>
     <string name="player_show_global_ending_time">Tampilkan waktu akhir vidio di layar terus-menerus</string>
     <string name="app_corner_clock">Beranda: jam pojok kanan atas</string>
-	<string name="player_corner_clock">Pemutar: jam sudut kanan atas</string>
-	<string name="player_corner_ending_time">Pemutar: sudut kanan atas waktu berakhir</string>
+    <string name="player_corner_clock">Pemutar: jam sudut kanan atas</string>
+    <string name="player_corner_ending_time">Pemutar: sudut kanan atas waktu berakhir</string>
     <string name="uploads_old_look">Kembalikan tampilan lama bagian Unggahan</string>
     <string name="background_playback_activation">Pemutaran latar belakang (aktivasi)</string>
     <string name="channels_old_look">Kembalikan tampilan lama bagian channel</string>
@@ -228,7 +228,7 @@
     <string name="pin_unpin_playlist">Sematkan/Lepas sematan daftar putar</string>
     <string name="pin_unpin_channel">Sematkan/Lepas sematan channel</string>
     <string name="pin_playlist">Menambahkan daftar putar ke bilah sisi</string>
-	<string name="pin_channel">Menambahkan channel ke bilah sisi</string>
+    <string name="pin_channel">Menambahkan channel ke bilah sisi</string>
     <string name="pinned_to_sidebar">Disematkan ke bilah sisi</string>
     <string name="unpin_from_sidebar">Lepaskan pin dari bilah sisi</string>
     <string name="unpinned_from_sidebar">Lepas pin dari bilah sisi</string>
@@ -329,7 +329,7 @@
     <string name="msg_player_error_subtitle_source">URL SUBTITLE tidak berfungsi atau waktu perangkat yang salah.\nBiasanya, ini adalah masalah aplikasi.</string>
     <string name="hide_upcoming">Sembunyikan yang akan datang dari langganan</string>
     <string name="hide_upcoming_channel">Sembunyikan yang akan datang dari Channel</string>
-	<string name="hide_upcoming_home">Sembunyikan yang akan datang dari Beranda</string>
+    <string name="hide_upcoming_home">Sembunyikan yang akan datang dari Beranda</string>
     <string name="search_background_playback">Masuk ke PIP saat mencari dari pemutar</string>
     <string name="trending_row_name">Sedang tren</string>
     <string name="player_seek_type">Perilaku pencarian</string>
@@ -597,13 +597,13 @@
     <string name="hide_watched_from_home">Menyembunyikan video yang ditonton dari Beranda</string>
     <string name="remote_control_permission">Latar Belakang Remote control memerlukan izin Overlay</string>
     <string name="login_from_browser">Masuk dari browser</string>
-	<string name="disable_remote_history">Menonaktifkan riwayat saat menggunakan remote control</string>
-	<string name="keyboard_fix">Memperbaiki tampilan keyboard dengan menekan tombol OK (G20 dan lainnya)</string>
-	<string name="nothing_found">Tidak ada yang ditemukan</string>
-	<string name="auto_frame_rate_desc">Opsi ini menghilangkan jitter pada adegan di mana kamera bergerak cepat, misalnya, streaming olahraga</string>
-	<string name="channel_filter_hint">Menyaring channels</string>
-	<string name="player_loop_shorts">Ulangi Shorts</string>
-	<string name="player_quick_shorts_skip">Lewati vidio Pendek dengan tombol kiri/kanan</string>
-	<string name="channels_filter">Menyaring daftar channel di dalam bagian Channel</string>
-	<string name="channel_search_bar">Bilah pencarian di dalam halaman Channel</string>
+    <string name="disable_remote_history">Menonaktifkan riwayat saat menggunakan remote control</string>
+    <string name="keyboard_fix">Memperbaiki tampilan keyboard dengan menekan tombol OK (G20 dan lainnya)</string>
+    <string name="nothing_found">Tidak ada yang ditemukan</string>
+    <string name="auto_frame_rate_desc">Opsi ini menghilangkan jitter pada adegan di mana kamera bergerak cepat, misalnya, streaming olahraga</string>
+    <string name="channel_filter_hint">Menyaring channels</string>
+    <string name="player_loop_shorts">Ulangi Shorts</string>
+    <string name="player_quick_shorts_skip">Lewati vidio Pendek dengan tombol kiri/kanan</string>
+    <string name="channels_filter">Menyaring daftar channel di dalam bagian Channel</string>
+    <string name="channel_search_bar">Bilah pencarian di dalam halaman Channel</string>
 </resources>
