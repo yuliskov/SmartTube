@@ -118,13 +118,6 @@ public class ViewManager {
         }
     }
 
-    /**
-     * Small delay to fix PIP transition bug (UI become unresponsive)
-     */
-    public void startParentViewDelay(Activity activity) {
-        Utils.postDelayed(() -> startParentView(activity), 50);
-    }
-
     public void startParentView(Activity activity) {
         if (activity.getIntent() != null) {
             removeTopActivity();
@@ -414,10 +407,21 @@ public class ViewManager {
     }
 
     /**
+     * Small delay to fix PIP transition bug (UI become unresponsive)
+     */
+    private void safeStartActivity(Context context, Intent intent) {
+        if (PlaybackPresenter.instance(mContext).isInPipMode()) {
+            Utils.postDelayed(() -> safeStartActivityInt(context, intent), 50);
+        } else {
+            safeStartActivityInt(context, intent);
+        }
+    }
+
+    /**
      * Fix: java.lang.IllegalArgumentException<br/>
      * View=android.widget.TextView not attached to window manager
      */
-    private void safeStartActivity(Context context, Intent intent) {
+    private void safeStartActivityInt(Context context, Intent intent) {
         try {
             context.startActivity(intent);
         } catch (IllegalArgumentException | ActivityNotFoundException | IndexOutOfBoundsException e) {

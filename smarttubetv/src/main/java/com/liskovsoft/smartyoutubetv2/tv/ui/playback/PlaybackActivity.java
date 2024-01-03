@@ -179,7 +179,7 @@ public class PlaybackActivity extends LeanbackActivity {
         if (doNotDestroy() && !skipPip()) {
             // Ensure to opening this activity when the user is returning to the app
             mViewManager.blockTop(this);
-            mViewManager.startParentViewDelay(this);
+            mViewManager.startParentView(this);
         } else {
             if (mPlayerTweaksData.isKeepFinishedActivityEnabled()) {
                 //moveTaskToBack(true); // Don't do this or you'll have problems when player overlaps other apps (e.g. casting)
@@ -283,7 +283,7 @@ public class PlaybackActivity extends LeanbackActivity {
                     // Ensure to opening this activity when the user is returning to the app
                     mViewManager.blockTop(this);
                     // Return to previous activity (create point from that app could be launched)
-                    mViewManager.startParentViewDelay(this);
+                    mViewManager.startParentView(this);
                     // Enable collapse app to Home launcher
                     mViewManager.enableMoveToBack(true);
                 }
