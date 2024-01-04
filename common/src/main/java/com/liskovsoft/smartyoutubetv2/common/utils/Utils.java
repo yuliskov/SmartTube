@@ -553,6 +553,7 @@ public class Utils {
             } else if (type == MediaGroup.TYPE_CHANNEL) {
                 if (atomicIndex.incrementAndGet() == 1) {
                     ChannelPresenter.instance(context).clear();
+                    ChannelPresenter.instance(context).setChannel(item);
                 }
                 ChannelPresenter.instance(context).updateRows(group);
             } else {
