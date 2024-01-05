@@ -38,6 +38,7 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.util.Util;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -841,11 +842,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         if (getContext() != null && video.likeCount != null && mIsLikesCounterEnabled) {
-            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.likeCount);
+            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.likeCount, " ", Helpers.THUMB_UP); // color of thumb cannot be changed
         }
 
         if (getContext() != null && video.dislikeCount != null && mIsLikesCounterEnabled) {
-            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.dislikeCount);
+            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.dislikeCount, " ", Helpers.THUMB_DOWN); // color of thumb cannot be changed
         }
 
         return result;

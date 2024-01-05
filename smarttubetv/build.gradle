@@ -125,7 +125,7 @@ android {
             versionCode 11000 + defaultConfig.versionCode
             applicationId "com.redboxtv.smartyoutubetv"
         }
-        stamazon {
+        stfiretv {
             // matchingFallbacks = ['lite']
             applicationId "com.amazon.firetv.youtube"
         }
