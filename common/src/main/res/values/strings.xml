@@ -403,6 +403,7 @@
     <string name="player_volume">Volume</string>
     <string name="play_video">Play</string>
     <string name="remember_position_of_short_videos">Remember position of short videos (less than 5 min)</string>
+    <string name="remember_position_of_live_videos">Remember live stream position</string>
     <string name="player_show_tooltips">Show button tooltips</string>
     <string name="action_like_unset">Like is unset</string>
     <string name="action_dislike_unset">Dislike is unset</string>

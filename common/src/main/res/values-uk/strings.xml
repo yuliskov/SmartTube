@@ -399,6 +399,7 @@
     <string name="player_volume">Гучність</string>
     <string name="play_video">Відтворити</string>
     <string name="remember_position_of_short_videos">Запам\'ятовувати позицію коротких відео (меньше 5 хв)</string>
+    <string name="remember_position_of_live_videos">Запам\'ятовувати позицію прямих трансляцій</string>
     <string name="player_show_tooltips">Показати підказки для кнопок</string>
     <string name="action_like_unset">Подобається не встановлено</string>
     <string name="action_dislike_unset">Не подобається не встановлено</string>

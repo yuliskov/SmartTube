@@ -335,15 +335,15 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         // Reset position of music videos
         boolean isShort = state != null && state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled();
         boolean isVideoEnded = state != null && state.durationMs - state.positionMs < 3_000;
+        boolean isLive = item.isLive && !mPlayerTweaksData.isRememberPositionOfLiveVideosEnabled();
 
-        //if (isShort || isVideoEnded || item.isLive || !mGeneralData.isHistoryEnabled()) {
-        if (isShort || isVideoEnded || item.isLive) {
+        if (isShort || isVideoEnded || isLive) {
             resetPosition(item);
         }
     }
 
     private void resetGlobalSpeedIfNeeded() {
-        if (mPlayerData != null && !mPlayerData.isAllSpeedEnabled()) {
+        if (!mPlayerData.isAllSpeedEnabled()) {
             mPlayerData.setSpeed(1.0f);
         }
     }

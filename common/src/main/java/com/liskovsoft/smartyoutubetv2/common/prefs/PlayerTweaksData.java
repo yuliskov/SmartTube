@@ -62,6 +62,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private int mPlayerButtons;
     private boolean mIsNoFpsPresetsEnabled;
     private boolean mIsRememberPositionOfShortVideosEnabled;
+    private boolean mIsRememberPositionOfLiveVideosEnabled;
     private boolean mIsSuggestionsDisabled;
     private boolean mIsAvcOverVp9Preferred;
     private boolean mIsChatPlacedLeft;
@@ -297,6 +298,15 @@ public class PlayerTweaksData implements ProfileChangeListener {
 
     public boolean isRememberPositionOfShortVideosEnabled() {
         return mIsRememberPositionOfShortVideosEnabled;
+    }
+
+    public void enableRememberPositionOfLiveVideos(boolean enable) {
+        mIsRememberPositionOfLiveVideosEnabled = enable;
+        persistData();
+    }
+
+    public boolean isRememberPositionOfLiveVideosEnabled() {
+        return mIsRememberPositionOfLiveVideosEnabled;
     }
 
     public boolean isSuggestionsDisabled() {
@@ -570,6 +580,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsHighBitrateFormatsUnlocked = Helpers.parseBoolean(split, 43, false);
         mIsLoopShortsEnabled = Helpers.parseBoolean(split, 44, true);
         mIsQuickShortsSkipEnabled = Helpers.parseBoolean(split, 45, true);
+        mIsRememberPositionOfLiveVideosEnabled = Helpers.parseBoolean(split, 46, false);
 
         updateDefaultValues();
     }
@@ -586,7 +597,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
-                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked, mIsLoopShortsEnabled, mIsQuickShortsSkipEnabled
+                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked, mIsLoopShortsEnabled, mIsQuickShortsSkipEnabled, mIsRememberPositionOfLiveVideosEnabled
                 ));
     }
 
