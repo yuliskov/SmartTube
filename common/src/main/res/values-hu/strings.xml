@@ -331,7 +331,7 @@
   <string name="disable_screensaver">Képernyővédő tiltása</string>
   <string name="description_not_found">Leírás nem található</string>
   <string name="proxy_port_hint">Proxy port</string>
-  <string name="proxy_host_hint">Proxy hostname vagy IP</string>
+  <string name="proxy_host_hint">Proxy gépnév vagy IP</string>
   <string name="proxy_username_hint">Proxy felhasználónév</string>
   <string name="proxy_password_hint">Proxy jelszó</string>
   <string name="proxy_type">Proxy típus</string>
@@ -341,7 +341,7 @@
   <string name="proxy_settings_title">Proxy szerver beállítások</string>
   <string name="proxy_test_cancelled">Teszt#%d: törölve.</string>
   <string name="proxy_type_invalid">Proxy típus nincs beállítva</string>
-  <string name="proxy_host_invalid">Proxy host nincs beállítva</string>
+  <string name="proxy_host_invalid">Proxy nincs beállítva</string>
   <string name="proxy_port_invalid">Érvénytelen proxy port, &gt;0</string>
   <string name="proxy_credentials_invalid">Érvénytelen felhasználónév vagy jelszó</string>
   <string name="proxy_test_aborted">A teszt megszakadt, először javítsa ki a proxy beállításait.</string>
@@ -561,7 +561,7 @@
   <string name="player_chapter_notification">Értesítés megjelenítése a fejezetek ugrásához</string>
   <string name="player_volume">Hangerő</string>
   <string name="player_network_stack">Hálózati verem</string>
-  <string name="subtitle_remember">Ne felejtse el az egyes csatornákon engedélyezett feliratokat</string>
+  <string name="subtitle_remember">Emlékezzen a felirat beállításokra a felvett csatornákon</string>
   <string name="amazon_frame_drop_fix">Képkocka eldobása #2</string>
   <string name="amazon_frame_drop_fix_desc">Amazon Stick eszközökhöz készült. Működhet más eszközökön is.</string>
   <string name="default_stack_desc">Beépített hálózati verem. Ez a verem bizonyos helyzetekben jobb stabilitású lehet.</string>
@@ -618,4 +618,13 @@
   <string name="remote_control_permission">A háttérben való távvezérléshez átfedés-engedély szükséges</string>
   <string name="keyboard_fix">Megakadályozza a billentyűzet megjelenítését az OK gomb megnyomásával (G20s és egyebek)</string>
   <string name="hide_shorts_channel">Rövid klipek elrejtése a Csatornák menüből</string>
+  <string name="channel_filter_hint">Csatornaszűrés</string>
+  <string name="player_quick_shorts_skip">Rövid klip lapozás Bal/jobb gomb</string>
+  <string name="channels_filter">Csatornaszűrés a Csatornák részben</string>
+  <string name="channel_search_bar">Keresősáv a csatornaoldalon belül</string>
+  <string name="player_loop_shorts">Rövid klipek újrajátszása</string>
+  <string name="auto_frame_rate_desc">Ez az opció eltávolítja a remegést olyan jeleneteknél, ahol a kamera gyorsan mozog, pl. sport streaming</string>
+  <string name="save_playlist">Lista hozzáadása a videólisták részhez</string>
+  <string name="pin_playlist">Videólista hozzáadása az oldalsávhoz</string>
+  <string name="pin_channel">Csatorna hozzáadása az oldalsávhoz</string>
 </resources>
