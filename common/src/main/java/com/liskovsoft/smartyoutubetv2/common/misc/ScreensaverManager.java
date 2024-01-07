@@ -223,7 +223,8 @@ public class ScreensaverManager {
         }
 
         // Disable screensaver on certain circumstances
-        if (show && (isPlaying() || isSigning() || mGeneralData.isScreensaverDisabled())) {
+        // Fix screen off before the video started
+        if (show && (isPlaying() || isSigning() || mGeneralData.isScreensaverDisabled() || (mMode == MODE_SCREEN_OFF && getPosition() == 0))) {
             Helpers.disableScreensaver(activity);
             return;
         }
@@ -243,8 +244,19 @@ public class ScreensaverManager {
         }
 
         PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
+        return playbackView != null && playbackView.getPlayer().isPlaying();
+    }
+
+    private long getPosition() {
+        Activity activity = mActivity.get();
+
+        if (activity == null) {
+            return 0;
+        }
+
+        PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
         // Fix screen off before the video started
-        return playbackView != null && (playbackView.getPlayer().isPlaying() || playbackView.getPlayer().getPositionMs() == 0);
+        return playbackView != null ? playbackView.getPlayer().getPositionMs() : 0;
     }
 
     private boolean isSigning() {
