@@ -235,7 +235,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void applyTickle(MotionEvent event) {
-        if (event.getAxisValue(MotionEvent.AXIS_X) < 30) { // add area for the back gesture
+        if (event.getAxisValue(MotionEvent.AXIS_X) < 50) { // add area for the back gesture
             return;
         }
 
