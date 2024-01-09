@@ -16,7 +16,6 @@ public interface FormatItem {
     FormatItem AUDIO_HQ_MP4A = ExoFormatItem.fromAudioSpecs(String.format("%s,null", "mp4a")); // Note, 5.1 mp4a doesn't work in 5.1 mode
     FormatItem AUDIO_51_EC3 = ExoFormatItem.fromAudioSpecs(String.format("%s,null", "ec-3")); // Note, 5.1 mp4a doesn't work in 5.1 mode
     FormatItem AUDIO_51_AC3 = ExoFormatItem.fromAudioSpecs(String.format("%s,null", "ac-3")); // Note, 5.1 mp4a doesn't work in 5.1 mode
-    FormatItem AUDIO_NONE = ExoFormatItem.fromAudioSpecs("null,null");
     int TYPE_VIDEO = 0;
     int TYPE_AUDIO = 1;
     int TYPE_SUBTITLE = 2;

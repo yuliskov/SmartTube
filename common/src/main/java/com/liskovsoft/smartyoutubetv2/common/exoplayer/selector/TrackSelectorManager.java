@@ -172,6 +172,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             noAudioTrack.isSelected = true;
             sortedTracks.add(noAudioTrack);
             renderer.selectedTrack = noAudioTrack;
+        } else if (rendererIndex == RENDERER_INDEX_VIDEO) {
+            MediaTrack noVideoTrack = MediaTrack.forRendererIndex(rendererIndex);
+            noVideoTrack.isSelected = true;
+            sortedTracks.add(noVideoTrack);
+            renderer.selectedTrack = noVideoTrack;
         }
 
         for (int groupIndex = 0; groupIndex < renderer.trackGroups.length; groupIndex++) {
@@ -239,7 +244,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     continue;
                 }
 
-                mediaTrack.isSelected = groupIndex == trackGroupIndex && Helpers.equalsAny(trackIndex, trackIndexes);
+                mediaTrack.isSelected = groupIndex == trackGroupIndex && Helpers.equalsAny(trackIndex, trackIndexes) && !renderer.isDisabled;
 
                 if (mediaTrack.isSelected) {
                     renderer.selectedTrack = mediaTrack;
@@ -256,6 +261,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             MediaTrack noAudioTrack = renderer.sortedTracks.first();
             noAudioTrack.isSelected = true;
             renderer.selectedTrack = noAudioTrack;
+            renderer.isDisabled = true;
+        } else if (rendererIndex == RENDERER_INDEX_VIDEO && renderer.selectedTrack == null) { // no video selected
+            MediaTrack noVideoTrack = renderer.sortedTracks.first();
+            noVideoTrack.isSelected = true;
+            renderer.selectedTrack = noVideoTrack;
+            renderer.isDisabled = true;
         }
     }
 
