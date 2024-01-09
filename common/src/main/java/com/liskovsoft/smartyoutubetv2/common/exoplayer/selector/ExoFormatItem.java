@@ -64,14 +64,6 @@ public class ExoFormatItem implements FormatItem {
         return videoFormatItem;
     }
 
-    public static MediaTrack toMediaTrack(FormatItem option) {
-        if (option instanceof ExoFormatItem) {
-            return ((ExoFormatItem) option).mTrack;
-        }
-
-        return null;
-    }
-
     public static ExoFormatItem from(Format format) {
         ExoFormatItem formatItem = new ExoFormatItem();
 
@@ -393,5 +385,10 @@ public class ExoFormatItem implements FormatItem {
     @Override
     public boolean isPreset() {
         return mIsPreset;
+    }
+
+    @Override
+    public MediaTrack getTrack() {
+        return mTrack;
     }
 }

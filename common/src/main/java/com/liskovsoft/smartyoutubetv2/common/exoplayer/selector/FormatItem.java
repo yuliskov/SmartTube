@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
 import androidx.annotation.NonNull;
 
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
+
 public interface FormatItem {
     FormatItem VIDEO_AUTO = ExoFormatItem.fromVideoParams(-1, -1, -1);
     FormatItem VIDEO_SD_AVC_30 = ExoFormatItem.fromVideoSpec("640,360,30,avc", false);
@@ -14,6 +16,7 @@ public interface FormatItem {
     FormatItem AUDIO_HQ_MP4A = ExoFormatItem.fromAudioSpecs(String.format("%s,null", "mp4a")); // Note, 5.1 mp4a doesn't work in 5.1 mode
     FormatItem AUDIO_51_EC3 = ExoFormatItem.fromAudioSpecs(String.format("%s,null", "ec-3")); // Note, 5.1 mp4a doesn't work in 5.1 mode
     FormatItem AUDIO_51_AC3 = ExoFormatItem.fromAudioSpecs(String.format("%s,null", "ac-3")); // Note, 5.1 mp4a doesn't work in 5.1 mode
+    FormatItem AUDIO_NONE = ExoFormatItem.fromAudioSpecs("null,null");
     int TYPE_VIDEO = 0;
     int TYPE_AUDIO = 1;
     int TYPE_SUBTITLE = 2;
@@ -27,12 +30,18 @@ public interface FormatItem {
     int getWidth();
     int getHeight();
     int getType();
+    MediaTrack getTrack();
 
     static FormatItem checkFormat(FormatItem format, int type) {
         return format != null && format.getType() == type ? format : null;
     }
+
     static @NonNull FormatItem fromLanguage(String langCode) {
         return ExoFormatItem.fromSubtitleParams(langCode);
+    }
+
+    static MediaTrack toMediaTrack(FormatItem item) {
+        return item != null ? item.getTrack() : null;
     }
 
     class VideoPreset {
