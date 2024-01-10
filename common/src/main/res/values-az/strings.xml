@@ -335,7 +335,7 @@
     <string name="hide_upcoming_channel">Kanaldan gələni gizlət</string>
     <string name="hide_upcoming_home">Ev gələni gizlədin</string>
     <string name="search_background_playback">Axtarış/açıq kanalda PIP daxil edin</string>
-    <string name="trending_row_name">Trend</string>
+    <string name="trending_row_name">Trendlər</string>
     <string name="player_seek_type">Davranış axtarın</string>
     <string name="player_seek_regular">Adi</string>
     <string name="player_seek_confirmation_pause">Təsdiqlə (axtararkən fasilə verin)</string>
