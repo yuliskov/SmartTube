@@ -708,7 +708,7 @@ public class PlayerData extends DataChangeBase implements ProfileChangeListener 
     private void restoreState() {
         String data = mPrefs.getProfileData(VIDEO_PLAYER_DATA);
 
-        String[] split = Helpers.splitObjectLegacy(data);
+        String[] split = Helpers.splitObject(data);
 
         mOKButtonBehavior = Helpers.parseInt(split, 0, ONLY_UI);
         mUIHideTimeoutSec = Helpers.parseInt(split, 1, 3);

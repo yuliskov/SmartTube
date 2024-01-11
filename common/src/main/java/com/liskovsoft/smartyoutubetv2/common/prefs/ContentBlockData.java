@@ -218,7 +218,7 @@ public class ContentBlockData {
     private void restoreState() {
         String data = mAppPrefs.getData(CONTENT_BLOCK_DATA);
 
-        String[] split = Helpers.splitObjectLegacy(data);
+        String[] split = Helpers.splitObject(data);
 
         mIsSponsorBlockEnabled = Helpers.parseBoolean(split, 0, VERSION.SDK_INT > 19); // Android 4 may have memory problems
         // categories: index 2

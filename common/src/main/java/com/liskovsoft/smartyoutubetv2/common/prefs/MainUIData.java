@@ -366,7 +366,7 @@ public class MainUIData extends DataChangeBase {
     private void restoreState() {
         String data = mPrefs.getData(MAIN_UI_DATA);
 
-        String[] split = Helpers.splitObjectLegacy(data);
+        String[] split = Helpers.splitObject(data);
 
         mIsCardAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
         mVideoGridScale = Helpers.parseFloat(split, 1, 1.0f); // 4 cards in a row

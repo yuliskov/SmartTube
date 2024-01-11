@@ -529,7 +529,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private void restoreData() {
         String data = mPrefs.getProfileData(VIDEO_PLAYER_TWEAKS_DATA);
 
-        String[] split = Helpers.splitObjectLegacy(data);
+        String[] split = Helpers.splitObject(data);
 
         mIsAmlogicFixEnabled = Helpers.parseBoolean(split, 0, false);
         mIsAmazonFrameDropFixEnabled = Helpers.parseBoolean(split, 1, false);

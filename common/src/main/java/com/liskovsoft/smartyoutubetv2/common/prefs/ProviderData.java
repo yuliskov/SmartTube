@@ -38,7 +38,7 @@ public class ProviderData {
     private void restoreData() {
         String data = mAppPrefs.getData(PROVIDER_DATA);
 
-        String[] split = Helpers.splitObjectLegacy(data);
+        String[] split = Helpers.splitObject(data);
 
         mIsInstantVoiceSearchEnabled = Helpers.parseBoolean(split, 0, false);
     }

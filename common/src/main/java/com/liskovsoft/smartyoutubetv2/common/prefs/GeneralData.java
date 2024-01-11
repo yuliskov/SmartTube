@@ -827,7 +827,7 @@ public class GeneralData implements ProfileChangeListener {
     private void restoreState() {
         String data = mPrefs.getProfileData(GENERAL_DATA);
 
-        String[] split = Helpers.splitObjectLegacy(data);
+        String[] split = Helpers.splitObject(data);
 
         // Zero index is skipped. Selected sections were there.
         mBootSectionId = Helpers.parseInt(split, 1, MediaGroup.TYPE_HOME);

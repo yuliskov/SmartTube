@@ -138,7 +138,7 @@ public class SearchData {
     private void restoreData() {
         String data = mAppPrefs.getData(SEARCH_DATA);
 
-        String[] split = Helpers.splitObjectLegacy(data);
+        String[] split = Helpers.splitObject(data);
 
         // WARN: Don't enable Instant Voice Search
         // Serious bug on Nvidia Shield. Can't type anything with soft keyboard.
