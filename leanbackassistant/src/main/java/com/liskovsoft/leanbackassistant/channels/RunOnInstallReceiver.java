@@ -25,8 +25,8 @@ public class RunOnInstallReceiver extends BroadcastReceiver {
         Log.d(TAG, "Synchronizing database");
 
         if (Helpers.isATVChannelsSupported(context) || Helpers.isATVRecommendationsSupported(context)) {
-            SynchronizeDatabaseWorker.schedule(context);
-            //SynchronizeDatabaseJobService.schedule(context);
+            //SynchronizeDatabaseWorker.schedule(context);
+            SynchronizeDatabaseJobService.schedule(context);
         }
     }
 }
