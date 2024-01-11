@@ -198,6 +198,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         }
 
         mPlayerView = null;
+        mVideo = null;
         // Don't destroy it (needed inside bridge)!
         //mEventListener = null;
     }
