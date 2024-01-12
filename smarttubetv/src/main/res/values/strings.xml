@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- NOTE: Please don't translate this file. All strings have been moved to the common module. -->
-    <string translatable="false" name="app_name"><![CDATA[SmartTube Next]]></string>
-    <string translatable="false" name="browse_title"><![CDATA[SmartTube Next]]></string>
+    <string translatable="false" name="app_name"><![CDATA[SmartTube]]></string>
+    <string translatable="false" name="browse_title"><![CDATA[SmartTube]]></string>
     <string name="related_movies">Related Videos</string>
     <string name="vertical_grid_title"><![CDATA[Vertical Video Grid]]></string>
 
