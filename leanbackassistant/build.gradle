@@ -1,4 +1,4 @@
-apply from: '../../SharedModules/constants.gradle'
+apply from: gradle.ext.sharedModulesConstants
 apply plugin: 'com.android.library'
 
 android {
