@@ -14,6 +14,7 @@
     <color name="orange_peel">#ff9900</color>
     <!--<color name="yellow">#CDDC39</color>-->
     <color name="light_grey">#E4E4E4</color>
+    <color name="light_grey2">#AFAFAF</color>
     <color name="leanback">#0096A6</color>
     <color name="semi_transparent">#64000000</color>
     <color name="live_chat_bg">#90000000</color>
