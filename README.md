@@ -194,7 +194,7 @@ To build and install debug version, run these commands:
 
 ```
 git clone https://github.com/yuliskov/SmartTube.git
-cd SmartTubeNext
+cd SmartTube
 git submodule update --init
 adb connect <device_ip_address>
 gradlew clean installStorigDebug
