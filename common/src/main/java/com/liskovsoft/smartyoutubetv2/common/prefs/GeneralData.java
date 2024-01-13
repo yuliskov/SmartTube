@@ -83,6 +83,7 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsOldHomeLookEnabled;
     private boolean mIsOldUpdateNotificationsEnabled;
     private boolean mRememberSubscriptionsPosition;
+    private boolean mIsRemapDpadUpDownToSpeedEnabled;
     private Video mSelectedSubscriptionsItem;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
@@ -466,6 +467,15 @@ public class GeneralData implements ProfileChangeListener {
 
     public boolean isRemapNumbersToSpeedEnabled() {
         return mIsRemapNumbersToSpeedEnabled;
+    }
+
+    public void remapDpadUpDownToSpeed(boolean enable) {
+        mIsRemapDpadUpDownToSpeedEnabled = enable;
+        persistState();
+    }
+
+    public boolean isRemapDpadUpDownToSpeedEnabled() {
+        return mIsRemapDpadUpDownToSpeedEnabled;
     }
 
     public void remapPlayPauseToOK(boolean enable) {
@@ -881,6 +891,7 @@ public class GeneralData implements ProfileChangeListener {
         mRememberSubscriptionsPosition = Helpers.parseBoolean(split, 48, false);
         mSelectedSubscriptionsItem = Video.fromString(Helpers.parseStr(split, 49));
         mIsRemapNumbersToSpeedEnabled = Helpers.parseBoolean(split, 50, false);
+        mIsRemapDpadUpDownToSpeedEnabled = Helpers.parseBoolean(split, 51, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -944,7 +955,7 @@ public class GeneralData implements ProfileChangeListener {
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
                 mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextPrevToSpeedEnabled,
                 mIsRemapPlayPauseToOKEnabled, mHistoryState, mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem),
-                mIsRemapNumbersToSpeedEnabled));
+                mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpDownToSpeedEnabled));
     }
 
     private int getSectionId(Video item) {

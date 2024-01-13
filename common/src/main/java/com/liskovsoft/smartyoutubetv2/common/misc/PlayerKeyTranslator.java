@@ -126,6 +126,11 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_PREVIOUS, speedDownAction);
         }
 
+        if (mGeneralData.isRemapDpadUpDownToSpeedEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_DPAD_UP, speedUpAction);
+            actionMapping.put(KeyEvent.KEYCODE_DPAD_DOWN, speedDownAction);
+        }
+
         if (mGeneralData.isRemapNumbersToSpeedEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_3, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_1, speedDownAction);
