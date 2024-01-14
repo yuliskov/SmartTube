@@ -266,6 +266,10 @@ SUCH DAMAGES.
 
 ## FAQ
 
+### Q: Videos buffer a LOT
+
+A: Try to switch to encrypted DNS like NextDNS. You can set-up such DNS automatically or manually. To automatic set-up you can [the Intra apk at fdroid](https://f-droid.org/en/packages/app.intra/) and the ["AutoStart - No root"](https://play.google.com/store/apps/details?id=com.autostart) apk to make it autolaunch after every TV restart. For manual set-up [use this guide](https://www.reddit.com/r/MiBox/s/7esEVGtAAa).
+
 ### Q: There is no result for the search that I say (Android 11)
 
 A: They're some reports that the latest update for "Google app for Android TV" could cause this bug. Deleting the update should fix the problem.
