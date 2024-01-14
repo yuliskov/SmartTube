@@ -403,6 +403,7 @@
     <string name="player_volume">Ses</string>
     <string name="play_video">Oynat</string>
     <string name="remember_position_of_short_videos">Kısa videoların konumunu hatırla (5 dakikadan az)</string>
+    <string name="remember_position_of_live_videos">Canlı yayın konumunu hatırla</string>
     <string name="player_show_tooltips">Düğme ipuçlarını göster</string>
     <string name="action_like_unset">Beğen</string>
     <string name="action_dislike_unset">Beğenme</string>
