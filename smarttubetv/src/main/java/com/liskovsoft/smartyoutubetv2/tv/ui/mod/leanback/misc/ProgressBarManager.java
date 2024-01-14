@@ -1,14 +1,16 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc;
 
-import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.BrowseFragment;
 import androidx.leanback.app.VerticalGridFragment;
+
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
@@ -20,11 +22,11 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 public final class ProgressBarManager {
     // Default delay for progress bar widget.
     private static final long SHOW_DELAY_MS = 500;
-    private static final long HIDE_DELAY_MS = 700;
+    private static final long HIDE_DELAY_MS = 50;
+    private long mHideTimeMs;
     
     ViewGroup rootView;
     View mProgressBarView;
-    private Handler mHandler = new Handler();
     boolean mEnableProgressBar = true;
     boolean mUserProvidedProgressBar;
     boolean mIsShowing;
@@ -92,8 +94,8 @@ public final class ProgressBarManager {
     public void show() {
         if (mEnableProgressBar) {
             mIsShowing = true;
-            mHandler.removeCallbacks(hideRunnable);
-            mHandler.postDelayed(showRunnable, SHOW_DELAY_MS);
+            Utils.removeCallbacks(hideRunnable);
+            Utils.postDelayed(showRunnable, System.currentTimeMillis() - mHideTimeMs > HIDE_DELAY_MS ? SHOW_DELAY_MS : 0);
         }
     }
 
@@ -101,9 +103,10 @@ public final class ProgressBarManager {
      * Hides the progress bar.
      */
     public void hide() {
+        mHideTimeMs = System.currentTimeMillis();
         mIsShowing = false;
-        mHandler.removeCallbacks(showRunnable);
-        mHandler.postDelayed(hideRunnable, HIDE_DELAY_MS);
+        Utils.removeCallbacks(showRunnable);
+        Utils.postDelayed(hideRunnable, HIDE_DELAY_MS);
     }
 
     public boolean isShowing() {
