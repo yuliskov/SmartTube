@@ -403,6 +403,7 @@
     <string name="player_volume">Lautstärke</string>
     <string name="play_video">Abspielen</string>
     <string name="remember_position_of_short_videos">Position von kurzen Videos merken (weniger als 5 Min.)</string>
+    <string name="remember_position_of_live_videos">Position von Live-Streams merken</string>
     <string name="player_show_tooltips">Schaltflächen-Tooltips anzeigen</string>
     <string name="action_like_unset">Mag ich</string>
     <string name="action_dislike_unset">Mag ich nicht</string>
