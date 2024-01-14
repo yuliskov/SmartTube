@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 import android.view.KeyEvent;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -63,8 +64,8 @@ public abstract class KeyTranslator {
     private boolean checkEvent(KeyEvent event) {
         return (event.getKeyCode() != KeyEvent.KEYCODE_DPAD_UP && event.getKeyCode() != KeyEvent.KEYCODE_DPAD_DOWN &&
                 event.getKeyCode() != KeyEvent.KEYCODE_DPAD_LEFT && event.getKeyCode() != KeyEvent.KEYCODE_DPAD_RIGHT) ||
-                (PlaybackPresenter.instance(null).getView() != null &&
-                        !PlaybackPresenter.instance(null).getView().getPlayer().isOverlayShown());
+                (!PlaybackPresenter.instance(null).isOverlayShown() &&
+                 !AppDialogPresenter.instance(null).isDialogShown());
     }
 
     protected abstract void initKeyMapping();

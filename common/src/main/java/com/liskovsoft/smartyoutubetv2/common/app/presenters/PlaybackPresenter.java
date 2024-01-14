@@ -94,6 +94,10 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
         return getView() != null && getView().getPlayer().isInPIPMode();
     }
 
+    public boolean isOverlayShown() {
+        return getView() != null && getView().getPlayer().isOverlayShown();
+    }
+
     private boolean isPreferBackground() {
         int mode = PlayerData.instance(getContext()).getBackgroundMode();
 
