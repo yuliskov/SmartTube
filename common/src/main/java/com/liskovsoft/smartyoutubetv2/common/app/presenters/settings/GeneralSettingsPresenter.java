@@ -300,6 +300,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.remapPlayPauseToOK(option.isSelected()),
                 mGeneralData.isRemapPlayPauseToOKEnabled()));
 
+        options.add(UiOptionItem.from("DPAD UP/DOWN -> Volume Up/Down",
+                option -> mGeneralData.remapDpadUpDownToVolume(option.isSelected()),
+                mGeneralData.isRemapDpadUpDownToVolumeEnabled()));
+
         options.add(UiOptionItem.from("DPAD UP/DOWN -> Speed Up/Down",
                 option -> mGeneralData.remapDpadUpDownToSpeed(option.isSelected()),
                 mGeneralData.isRemapDpadUpDownToSpeedEnabled()));
@@ -331,6 +335,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from("Page Up/Down -> Speed Up/Down",
                 option -> mGeneralData.remapPageUpToSpeed(option.isSelected()),
                 mGeneralData.isRemapPageUpToSpeedEnabled()));
+
+        options.add(UiOptionItem.from("Channel Up/Down -> Volume Up/Down",
+                option -> mGeneralData.remapChannelUpToVolume(option.isSelected()),
+                mGeneralData.isRemapChannelUpToVolumeEnabled()));
 
         options.add(UiOptionItem.from("Channel Up/Down -> Next/Previous",
                 option -> mGeneralData.remapChannelUpToNext(option.isSelected()),

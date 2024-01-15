@@ -37,6 +37,8 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
     };
     private final Runnable speedUpAction = () -> speedUp(true);
     private final Runnable speedDownAction = () -> speedUp(false);
+    private final Runnable volumeUpAction = () -> volumeUp(true);
+    private final Runnable volumeDownAction = () -> volumeUp(false);
 
     public PlayerKeyTranslator(Context context) {
         super(context);
@@ -135,6 +137,16 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             actionMapping.put(KeyEvent.KEYCODE_3, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_1, speedDownAction);
         }
+
+        if (mGeneralData.isRemapChannelUpToVolumeEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, volumeUpAction);
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, volumeDownAction);
+        }
+
+        if (mGeneralData.isRemapDpadUpDownToVolumeEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_DPAD_UP, volumeUpAction);
+            actionMapping.put(KeyEvent.KEYCODE_DPAD_DOWN, volumeDownAction);
+        }
     }
 
     private void speedUp(boolean up) {
@@ -157,6 +169,21 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             PlayerData.instance(mContext).setSpeed(speed);
             playbackView.getPlayer().setSpeed(speed);
             MessageHelpers.showMessage(mContext, String.format("%sx", speed));
+        }
+    }
+
+    private void volumeUp(boolean up) {
+        PlaybackView playbackView = getPlaybackView();
+
+        if (playbackView != null && playbackView.getPlayer() != null) {
+            int volume = Utils.getVolume(mContext, playbackView.getPlayer());
+            final int delta = 10;
+
+            if (up) {
+                Utils.setVolume(mContext, playbackView.getPlayer(), Math.min(volume + delta, 100));
+            } else {
+                Utils.setVolume(mContext, playbackView.getPlayer(), Math.max(volume - delta, 0));
+            }
         }
     }
 

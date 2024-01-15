@@ -322,10 +322,10 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
                 break;
             case Command.TYPE_VOLUME:
                 //Utils.setGlobalVolume(getActivity(), command.getVolume());
-                setVolume(command.getVolume());
+                Utils.setVolume(getContext(), getPlayer(), command.getVolume());
 
                 //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-                postVolumeChange(getVolume()); // Just in case volume cannot be changed (e.g. Fire TV stick)
+                postVolumeChange(Utils.getVolume(getContext(), getPlayer())); // Just in case volume cannot be changed (e.g. Fire TV stick)
                 break;
             case Command.TYPE_STOP:
                 // Close player
@@ -413,7 +413,7 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
     @Override
     public boolean onKeyDown(int keyCode) {
         //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-        postVolumeChange(getVolume());
+        postVolumeChange(Utils.getVolume(getContext(), getPlayer()));
 
         return false;
     }
@@ -431,33 +431,6 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
         } else if (newVideo != null) {
             newVideo.isRemote = true;
             PlaybackPresenter.instance(getContext()).openVideo(newVideo);
-        }
-    }
-
-    /**
-     * Volume: 0 - 100
-     */
-    private int getVolume() {
-        if (getContext() != null) {
-            return Utils.isGlobalVolumeFixed() ? (int)(getPlayer().getVolume() * 100) : Utils.getGlobalVolume(getContext());
-        }
-
-        return 100;
-    }
-
-    /**
-     * Volume: 0 - 100
-     */
-    private void setVolume(int volume) {
-        if (getContext() != null) {
-            if (Utils.isGlobalVolumeFixed()) {
-                getPlayer().setVolume(volume / 100f);
-            } else {
-                Utils.setGlobalVolume(getContext(), volume);
-            }
-            // Check that volume is set.
-            // Because global value may not be supported (see FireTV Stick).
-            MessageHelpers.showMessage(getContext(), getContext().getString(R.string.volume, getVolume()));
         }
     }
 

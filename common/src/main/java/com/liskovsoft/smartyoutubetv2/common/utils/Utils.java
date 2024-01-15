@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -53,6 +54,7 @@ import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
@@ -306,6 +308,34 @@ public class Utils {
 
     public static boolean isGlobalVolumeFixed() {
         return sIsGlobalVolumeFixed;
+    }
+
+    /**
+     * Volume: 0 - 100
+     */
+    public static int getVolume(Context context, PlayerManager player) {
+        if (context != null) {
+            return Utils.isGlobalVolumeFixed() ? (int)(player.getVolume() * 100) : Utils.getGlobalVolume(context);
+        }
+
+        return 100;
+    }
+
+    /**
+     * Volume: 0 - 100
+     */
+    @SuppressLint("StringFormatMatches")
+    public static void setVolume(Context context, PlayerManager player, int volume) {
+        if (context != null) {
+            if (Utils.isGlobalVolumeFixed()) {
+                player.setVolume(volume / 100f);
+            } else {
+                Utils.setGlobalVolume(context, volume);
+            }
+            // Check that volume is set.
+            // Because global value may not be supported (see FireTV Stick).
+            MessageHelpers.showMessage(context, context.getString(R.string.volume, getVolume(context, player)));
+        }
     }
 
     /**
