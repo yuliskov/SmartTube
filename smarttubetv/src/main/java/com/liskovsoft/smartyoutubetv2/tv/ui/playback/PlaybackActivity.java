@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.PictureInPictureParams;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -17,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
@@ -120,6 +122,10 @@ public class PlaybackActivity extends LeanbackActivity {
         } else if (event.getAxisValue(MotionEvent.AXIS_LTRIGGER) < GAMEPAD_TRIGGER_INTENSITY_OFF
                 && event.getAxisValue(MotionEvent.AXIS_RTRIGGER) < GAMEPAD_TRIGGER_INTENSITY_OFF) {
             gamepadTriggerPressed = false;
+        } else if ((event.getSource() & InputDevice.SOURCE_CLASS_POINTER) != 0 && event.getAction() == MotionEvent.ACTION_SCROLL) {
+            // mouse wheel handling
+            Utils.volumeUp(this, getPlaybackView().getPlayer(), event.getAxisValue(MotionEvent.AXIS_VSCROLL) < 0.0f);
+            return true;
         }
         return super.onGenericMotionEvent(event);
     }

@@ -338,6 +338,19 @@ public class Utils {
         }
     }
 
+    public static void volumeUp(Context context, PlayerManager player, boolean up) {
+        if (player != null) {
+            int volume = Utils.getVolume(context, player);
+            final int delta = 10; // volume step
+
+            if (up) {
+                Utils.setVolume(context, player, Math.min(volume + delta, 100));
+            } else {
+                Utils.setVolume(context, player, Math.max(volume - delta, 0));
+            }
+        }
+    }
+
     /**
      * <a href="https://stackoverflow.com/questions/2891337/turning-on-screen-programmatically">More info</a>
      */

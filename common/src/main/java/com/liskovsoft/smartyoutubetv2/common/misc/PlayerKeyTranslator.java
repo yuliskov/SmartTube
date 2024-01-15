@@ -175,15 +175,8 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
     private void volumeUp(boolean up) {
         PlaybackView playbackView = getPlaybackView();
 
-        if (playbackView != null && playbackView.getPlayer() != null) {
-            int volume = Utils.getVolume(mContext, playbackView.getPlayer());
-            final int delta = 10;
-
-            if (up) {
-                Utils.setVolume(mContext, playbackView.getPlayer(), Math.min(volume + delta, 100));
-            } else {
-                Utils.setVolume(mContext, playbackView.getPlayer(), Math.max(volume - delta, 0));
-            }
+        if (playbackView != null) {
+            Utils.volumeUp(mContext, playbackView.getPlayer(), up);
         }
     }
 
