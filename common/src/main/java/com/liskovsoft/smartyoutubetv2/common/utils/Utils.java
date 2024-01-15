@@ -281,7 +281,8 @@ public class Utils {
         if (context != null) {
             AudioManager audioManager = (AudioManager) context.getSystemService(GLOBAL_VOLUME_SERVICE);
             if (audioManager != null) {
-                int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE) / 2; // max volume is too loud
+                //int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE) / 2; // max volume is too loud
+                int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE);
                 audioManager.setStreamVolume(GLOBAL_VOLUME_TYPE, (int) Math.ceil(streamMaxVolume / 100f * volume), 0);
             }
         }
@@ -296,7 +297,8 @@ public class Utils {
         if (context != null) {
             AudioManager audioManager = (AudioManager) context.getSystemService(GLOBAL_VOLUME_SERVICE);
             if (audioManager != null) {
-                int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE) / 2; // max volume is too loud
+                //int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE) / 2; // max volume is too loud
+                int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE);
                 int streamVolume = audioManager.getStreamVolume(GLOBAL_VOLUME_TYPE);
 
                 return (int) Math.ceil(streamVolume / (streamMaxVolume / 100f));
