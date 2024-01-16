@@ -297,24 +297,28 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from("Play/Pause -> OK",
-                option -> mGeneralData.remapPlayPauseToOK(option.isSelected()),
-                mGeneralData.isRemapPlayPauseToOKEnabled()));
+                option -> mGeneralData.remapPlayToOK(option.isSelected()),
+                mGeneralData.isRemapPlayToOKEnabled()));
 
         options.add(UiOptionItem.from("DPAD UP/DOWN -> Volume Up/Down",
-                option -> mGeneralData.remapDpadUpDownToVolume(option.isSelected()),
-                mGeneralData.isRemapDpadUpDownToVolumeEnabled()));
+                option -> mGeneralData.remapDpadUpToVolume(option.isSelected()),
+                mGeneralData.isRemapDpadUpToVolumeEnabled()));
+
+        options.add(UiOptionItem.from("DPAD LEFT/RIGHT -> Volume Down/Up",
+                option -> mGeneralData.remapDpadLeftToVolume(option.isSelected()),
+                mGeneralData.isRemapDpadLeftToVolumeEnabled()));
 
         options.add(UiOptionItem.from("DPAD UP/DOWN -> Speed Up/Down",
                 option -> mGeneralData.remapDpadUpDownToSpeed(option.isSelected()),
-                mGeneralData.isRemapDpadUpDownToSpeedEnabled()));
+                mGeneralData.isRemapDpadUpToSpeedEnabled()));
 
         options.add(UiOptionItem.from("Numbers 3/1 -> Speed Up/Down",
                 option -> mGeneralData.remapNumbersToSpeed(option.isSelected()),
                 mGeneralData.isRemapNumbersToSpeedEnabled()));
 
         options.add(UiOptionItem.from("Next/Previous -> Speed Up/Down",
-                option -> mGeneralData.remapNextPrevToSpeed(option.isSelected()),
-                mGeneralData.isRemapNextPrevToSpeedEnabled()));
+                option -> mGeneralData.remapNextToSpeed(option.isSelected()),
+                mGeneralData.isRemapNextToSpeedEnabled()));
 
         options.add(UiOptionItem.from("Fast Forward/Rewind -> Next/Previous",
                 option -> mGeneralData.remapFastForwardToNext(option.isSelected()),

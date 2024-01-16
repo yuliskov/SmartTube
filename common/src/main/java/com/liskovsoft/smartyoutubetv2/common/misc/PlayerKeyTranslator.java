@@ -72,7 +72,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             globalKeyMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
         }
         
-        if (!PlaybackPresenter.instance(mContext).isInPipMode() && mGeneralData.isRemapPlayPauseToOKEnabled()) {
+        if (!PlaybackPresenter.instance(mContext).isInPipMode() && mGeneralData.isRemapPlayToOKEnabled()) {
             globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_DPAD_CENTER);
         } else {
             globalKeyMapping.remove(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
@@ -123,12 +123,12 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, speedDownAction);
         }
 
-        if (mGeneralData.isRemapNextPrevToSpeedEnabled()) {
+        if (mGeneralData.isRemapNextToSpeedEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_NEXT, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_PREVIOUS, speedDownAction);
         }
 
-        if (mGeneralData.isRemapDpadUpDownToSpeedEnabled()) {
+        if (mGeneralData.isRemapDpadUpToSpeedEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_DPAD_UP, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_DPAD_DOWN, speedDownAction);
         }
@@ -143,9 +143,14 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, volumeDownAction);
         }
 
-        if (mGeneralData.isRemapDpadUpDownToVolumeEnabled()) {
+        if (mGeneralData.isRemapDpadUpToVolumeEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_DPAD_UP, volumeUpAction);
             actionMapping.put(KeyEvent.KEYCODE_DPAD_DOWN, volumeDownAction);
+        }
+
+        if (mGeneralData.isRemapDpadLeftToVolumeEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_DPAD_LEFT, volumeDownAction);
+            actionMapping.put(KeyEvent.KEYCODE_DPAD_RIGHT, volumeUpAction);
         }
     }
 

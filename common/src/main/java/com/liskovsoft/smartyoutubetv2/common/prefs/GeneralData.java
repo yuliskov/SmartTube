@@ -64,9 +64,9 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsRemapPageUpToSpeedEnabled;
     private boolean mIsRemapChannelUpToSpeedEnabled;
     private boolean mIsRemapFastForwardToSpeedEnabled;
-    private boolean mIsRemapNextPrevToSpeedEnabled;
+    private boolean mIsRemapNextToSpeedEnabled;
     private boolean mIsRemapNumbersToSpeedEnabled;
-    private boolean mIsRemapPlayPauseToOKEnabled;
+    private boolean mIsRemapPlayToOKEnabled;
     private boolean mIsRemapChannelUpToSearchEnabled;
     private boolean mIsHideShortsFromHomeEnabled;
     private boolean mIsHideShortsFromHistoryEnabled;
@@ -84,8 +84,9 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsOldHomeLookEnabled;
     private boolean mIsOldUpdateNotificationsEnabled;
     private boolean mRememberSubscriptionsPosition;
-    private boolean mIsRemapDpadUpDownToSpeedEnabled;
-    private boolean mIsRemapDpadUpDownToVolumeEnabled;
+    private boolean mIsRemapDpadUpToSpeedEnabled;
+    private boolean mIsRemapDpadUpToVolumeEnabled;
+    private boolean mIsRemapDpadLeftToVolumeEnabled;
     private Video mSelectedSubscriptionsItem;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
@@ -453,13 +454,13 @@ public class GeneralData implements ProfileChangeListener {
         return mIsRemapFastForwardToSpeedEnabled;
     }
 
-    public void remapNextPrevToSpeed(boolean enable) {
-        mIsRemapNextPrevToSpeedEnabled = enable;
+    public void remapNextToSpeed(boolean enable) {
+        mIsRemapNextToSpeedEnabled = enable;
         persistState();
     }
 
-    public boolean isRemapNextPrevToSpeedEnabled() {
-        return mIsRemapNextPrevToSpeedEnabled;
+    public boolean isRemapNextToSpeedEnabled() {
+        return mIsRemapNextToSpeedEnabled;
     }
 
     public void remapNumbersToSpeed(boolean enable) {
@@ -472,37 +473,46 @@ public class GeneralData implements ProfileChangeListener {
     }
 
     public void remapDpadUpDownToSpeed(boolean enable) {
-        resetDpadUpDownSettings();
-        mIsRemapDpadUpDownToSpeedEnabled = enable;
+        resetDpadUpSettings();
+        mIsRemapDpadUpToSpeedEnabled = enable;
         persistState();
     }
 
-    public boolean isRemapDpadUpDownToSpeedEnabled() {
-        return mIsRemapDpadUpDownToSpeedEnabled;
+    public boolean isRemapDpadUpToSpeedEnabled() {
+        return mIsRemapDpadUpToSpeedEnabled;
     }
 
-    public void remapDpadUpDownToVolume(boolean enable) {
-        resetDpadUpDownSettings();
-        mIsRemapDpadUpDownToVolumeEnabled = enable;
+    public void remapDpadUpToVolume(boolean enable) {
+        resetDpadUpSettings();
+        mIsRemapDpadUpToVolumeEnabled = enable;
         persistState();
     }
 
-    public boolean isRemapDpadUpDownToVolumeEnabled() {
-        return mIsRemapDpadUpDownToVolumeEnabled;
+    public boolean isRemapDpadUpToVolumeEnabled() {
+        return mIsRemapDpadUpToVolumeEnabled;
     }
 
-    private void resetDpadUpDownSettings() {
-        mIsRemapDpadUpDownToSpeedEnabled = false;
-        mIsRemapDpadUpDownToVolumeEnabled = false;
+    private void resetDpadUpSettings() {
+        mIsRemapDpadUpToSpeedEnabled = false;
+        mIsRemapDpadUpToVolumeEnabled = false;
     }
 
-    public void remapPlayPauseToOK(boolean enable) {
-        mIsRemapPlayPauseToOKEnabled = enable;
+    public void remapDpadLeftToVolume(boolean enable) {
+        mIsRemapDpadLeftToVolumeEnabled = enable;
         persistState();
     }
 
-    public boolean isRemapPlayPauseToOKEnabled() {
-        return mIsRemapPlayPauseToOKEnabled;
+    public boolean isRemapDpadLeftToVolumeEnabled() {
+        return mIsRemapDpadLeftToVolumeEnabled;
+    }
+
+    public void remapPlayToOK(boolean enable) {
+        mIsRemapPlayToOKEnabled = enable;
+        persistState();
+    }
+
+    public boolean isRemapPlayToOKEnabled() {
+        return mIsRemapPlayToOKEnabled;
     }
 
     public void remapPageUpToNext(boolean enable) {
@@ -916,15 +926,16 @@ public class GeneralData implements ProfileChangeListener {
         mIsOldHomeLookEnabled = Helpers.parseBoolean(split, 42, Build.VERSION.SDK_INT <= 19);
         mIsOldUpdateNotificationsEnabled = Helpers.parseBoolean(split, 43, false);
         mScreensaverDimmingPercents = Helpers.parseInt(split, 44, 80);
-        mIsRemapNextPrevToSpeedEnabled = Helpers.parseBoolean(split, 45, false);
-        mIsRemapPlayPauseToOKEnabled = Helpers.parseBoolean(split, 46, false);
+        mIsRemapNextToSpeedEnabled = Helpers.parseBoolean(split, 45, false);
+        mIsRemapPlayToOKEnabled = Helpers.parseBoolean(split, 46, false);
         mHistoryState = Helpers.parseInt(split, 47, HISTORY_ENABLED);
         mRememberSubscriptionsPosition = Helpers.parseBoolean(split, 48, false);
         mSelectedSubscriptionsItem = Video.fromString(Helpers.parseStr(split, 49));
         mIsRemapNumbersToSpeedEnabled = Helpers.parseBoolean(split, 50, false);
-        mIsRemapDpadUpDownToSpeedEnabled = Helpers.parseBoolean(split, 51, false);
+        mIsRemapDpadUpToSpeedEnabled = Helpers.parseBoolean(split, 51, false);
         mIsRemapChannelUpToVolumeEnabled = Helpers.parseBoolean(split, 52, false);
-        mIsRemapDpadUpDownToVolumeEnabled = Helpers.parseBoolean(split, 53, false);
+        mIsRemapDpadUpToVolumeEnabled = Helpers.parseBoolean(split, 53, false);
+        mIsRemapDpadLeftToVolumeEnabled = Helpers.parseBoolean(split, 54, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -986,9 +997,9 @@ public class GeneralData implements ProfileChangeListener {
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
                 playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
-                mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextPrevToSpeedEnabled,
-                mIsRemapPlayPauseToOKEnabled, mHistoryState, mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem),
-                mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpDownToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled, mIsRemapDpadUpDownToVolumeEnabled));
+                mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextToSpeedEnabled, mIsRemapPlayToOKEnabled, mHistoryState, mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem),
+                mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled, mIsRemapDpadUpToVolumeEnabled,
+                mIsRemapDpadLeftToVolumeEnabled));
     }
 
     private int getSectionId(Video item) {
