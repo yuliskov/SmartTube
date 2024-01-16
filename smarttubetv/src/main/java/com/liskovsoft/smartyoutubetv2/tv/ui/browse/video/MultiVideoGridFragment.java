@@ -51,6 +51,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
     private LongClickPresenter mCardPresenter2;
     private int mSelectedItemIndex1 = -1;
     private int mSelectedItemIndex2 = -1;
+    private Video mSelectedItem1;
     private float mVideoGridScale;
     private final Runnable mRestore1Task = this::restorePosition1;
 
@@ -82,7 +83,6 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
 
     @Override
     public int getPosition() {
-        // TODO: getPosition2 not used
         return getSelectedPosition1();
     }
 
@@ -92,18 +92,30 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
             return;
         }
 
+        mSelectedItemIndex1 = index;
+
         if (mGridAdapter1 != null && index < mGridAdapter1.size()) {
-            // TODO: setPosition2 not used
             setSelectedPosition1(index);
             mSelectedItemIndex1 = -1;
-        } else {
-            mSelectedItemIndex1 = index;
         }
     }
 
     @Override
     public void selectItem(Video item) {
-        // NOP
+        if (item == null) {
+            return;
+        }
+
+        mSelectedItem1 = item;
+
+        if (mGridAdapter1 != null) {
+            int index = mGridAdapter1.indexOfAlt(item);
+
+            if (index != -1) {
+                setSelectedPosition1(index);
+                mSelectedItem1 = null;
+            }
+        }
     }
 
     @Override
@@ -270,6 +282,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
 
     private void restorePosition1() {
         setPosition(mSelectedItemIndex1);
+        selectItem(mSelectedItem1);
 
         // Item not found? Lookup in next group.
         if (mSelectedItemIndex1 != -1) {

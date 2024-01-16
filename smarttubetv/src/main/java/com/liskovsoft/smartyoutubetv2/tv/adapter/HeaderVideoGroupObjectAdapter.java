@@ -49,6 +49,18 @@ public class HeaderVideoGroupObjectAdapter extends VideoGroupObjectAdapter {
     }
 
     @Override
+    public int indexOf(Video item) {
+        int index = super.indexOf(item);
+        return mHeader != null && index != -1 ? index + 1 : index;
+    }
+
+    @Override
+    public int indexOfAlt(Video item) {
+        int index = super.indexOfAlt(item);
+        return mHeader != null && index != -1 ? index + 1 : index;
+    }
+
+    @Override
     public void clear() {
         super.clear();
 
