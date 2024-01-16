@@ -322,10 +322,10 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
                 break;
             case Command.TYPE_VOLUME:
                 //Utils.setGlobalVolume(getActivity(), command.getVolume());
-                Utils.setVolume(getContext(), getPlayer(), command.getVolume());
+                Utils.setVolume(getContext(), getPlayer(), command.getVolume(), true);
 
                 //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-                postVolumeChange(Utils.getVolume(getContext(), getPlayer())); // Just in case volume cannot be changed (e.g. Fire TV stick)
+                postVolumeChange(Utils.getVolume(getContext(), getPlayer(), true)); // Just in case volume cannot be changed (e.g. Fire TV stick)
                 break;
             case Command.TYPE_STOP:
                 // Close player
@@ -413,7 +413,7 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
     @Override
     public boolean onKeyDown(int keyCode) {
         //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-        postVolumeChange(Utils.getVolume(getContext(), getPlayer()));
+        postVolumeChange(Utils.getVolume(getContext(), getPlayer(), true));
 
         return false;
     }

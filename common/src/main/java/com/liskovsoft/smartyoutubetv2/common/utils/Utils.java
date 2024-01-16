@@ -277,28 +277,34 @@ public class Utils {
     /**
      * Volume: 0 - 100
      */
-    public static void setGlobalVolume(Context context, int volume) {
+    private static void setGlobalVolume(Context context, int volume, boolean normalize) {
         if (context != null) {
             AudioManager audioManager = (AudioManager) context.getSystemService(GLOBAL_VOLUME_SERVICE);
             if (audioManager != null) {
                 //int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE) / 2; // max volume is too loud
                 int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE);
+                if (normalize) {
+                    streamMaxVolume /= 2; // max volume is too loud
+                }
                 audioManager.setStreamVolume(GLOBAL_VOLUME_TYPE, (int) Math.ceil(streamMaxVolume / 100f * volume), 0);
             }
         }
 
-        sIsGlobalVolumeFixed = getGlobalVolume(context) != volume;
+        sIsGlobalVolumeFixed = getGlobalVolume(context, normalize) != volume;
     }
 
     /**
      * Volume: 0 - 100
      */
-    public static int getGlobalVolume(Context context) {
+    private static int getGlobalVolume(Context context, boolean normalize) {
         if (context != null) {
             AudioManager audioManager = (AudioManager) context.getSystemService(GLOBAL_VOLUME_SERVICE);
             if (audioManager != null) {
                 //int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE) / 2; // max volume is too loud
                 int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE);
+                if (normalize) {
+                    streamMaxVolume /= 2; // max volume is too loud
+                }
                 int streamVolume = audioManager.getStreamVolume(GLOBAL_VOLUME_TYPE);
 
                 return (int) Math.ceil(streamVolume / (streamMaxVolume / 100f));
@@ -308,35 +314,43 @@ public class Utils {
         return 100;
     }
 
-    public static boolean isGlobalVolumeFixed() {
+    private static boolean isGlobalVolumeFixed() {
         return sIsGlobalVolumeFixed;
+    }
+
+    public static int getVolume(Context context, PlayerManager player) {
+        return getVolume(context, player, false);
     }
 
     /**
      * Volume: 0 - 100
      */
-    public static int getVolume(Context context, PlayerManager player) {
+    public static int getVolume(Context context, PlayerManager player, boolean normalize) {
         if (context != null) {
-            return Utils.isGlobalVolumeFixed() ? (int)(player.getVolume() * 100) : Utils.getGlobalVolume(context);
+            return Utils.isGlobalVolumeFixed() ? (int)(player.getVolume() * 100) : Utils.getGlobalVolume(context, normalize);
         }
 
         return 100;
+    }
+
+    public static void setVolume(Context context, PlayerManager player, int volume) {
+        setVolume(context, player, volume, false);
     }
 
     /**
      * Volume: 0 - 100
      */
     @SuppressLint("StringFormatMatches")
-    public static void setVolume(Context context, PlayerManager player, int volume) {
+    public static void setVolume(Context context, PlayerManager player, int volume, boolean normalize) {
         if (context != null) {
             if (Utils.isGlobalVolumeFixed()) {
                 player.setVolume(volume / 100f);
             } else {
-                Utils.setGlobalVolume(context, volume);
+                Utils.setGlobalVolume(context, volume, normalize);
             }
             // Check that volume is set.
             // Because global value may not be supported (see FireTV Stick).
-            MessageHelpers.showMessage(context, context.getString(R.string.volume, getVolume(context, player)));
+            MessageHelpers.showMessage(context, context.getString(R.string.volume, getVolume(context, player, normalize)));
         }
     }
 
