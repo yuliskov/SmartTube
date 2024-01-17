@@ -62,6 +62,11 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
         }
 
+        if (mGeneralData.isRemapNextToFastForwardEnabled()) {
+            globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_NEXT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
+            globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_PREVIOUS, KeyEvent.KEYCODE_MEDIA_REWIND);
+        }
+
         if (mGeneralData.isRemapPageUpToNextEnabled()) {
             globalKeyMapping.put(KeyEvent.KEYCODE_PAGE_UP, KeyEvent.KEYCODE_MEDIA_NEXT);
             globalKeyMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS);

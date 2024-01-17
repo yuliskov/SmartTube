@@ -300,13 +300,13 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.remapPlayToOK(option.isSelected()),
                 mGeneralData.isRemapPlayToOKEnabled()));
 
+        options.add(UiOptionItem.from("DPAD RIGHT/LEFT -> Volume Up/Down",
+                option -> mGeneralData.remapDpadLeftToVolume(option.isSelected()),
+                mGeneralData.isRemapDpadLeftToVolumeEnabled()));
+
         options.add(UiOptionItem.from("DPAD UP/DOWN -> Volume Up/Down",
                 option -> mGeneralData.remapDpadUpToVolume(option.isSelected()),
                 mGeneralData.isRemapDpadUpToVolumeEnabled()));
-
-        options.add(UiOptionItem.from("DPAD LEFT/RIGHT -> Volume Down/Up",
-                option -> mGeneralData.remapDpadLeftToVolume(option.isSelected()),
-                mGeneralData.isRemapDpadLeftToVolumeEnabled()));
 
         options.add(UiOptionItem.from("DPAD UP/DOWN -> Speed Up/Down",
                 option -> mGeneralData.remapDpadUpDownToSpeed(option.isSelected()),
@@ -315,6 +315,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from("Numbers 3/1 -> Speed Up/Down",
                 option -> mGeneralData.remapNumbersToSpeed(option.isSelected()),
                 mGeneralData.isRemapNumbersToSpeedEnabled()));
+
+        options.add(UiOptionItem.from("Next/Previous -> Fast Forward/Rewind",
+                option -> mGeneralData.remapNextToFastForward(option.isSelected()),
+                mGeneralData.isRemapNextToFastForwardEnabled()));
 
         options.add(UiOptionItem.from("Next/Previous -> Speed Up/Down",
                 option -> mGeneralData.remapNextToSpeed(option.isSelected()),
