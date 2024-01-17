@@ -358,14 +358,6 @@ public class GeneralData implements ProfileChangeListener {
         return GlobalPreferences.sInstance.isHideWatchedFromSubscriptionsEnabled();
     }
 
-    public void hideShortsEverywhere(boolean enable) {
-        GlobalPreferences.sInstance.hideShortsEverywhere(enable);
-    }
-
-    public boolean isHideShortsEverywhereEnabled() {
-        return GlobalPreferences.sInstance.isHideShortsEverywhereEnabled();
-    }
-
     public boolean isHideStreamsFromSubscriptionsEnabled() {
         return GlobalPreferences.sInstance.isHideStreamsFromSubscriptionsEnabled();
     }
