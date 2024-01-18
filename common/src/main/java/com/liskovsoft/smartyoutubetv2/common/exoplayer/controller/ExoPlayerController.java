@@ -23,6 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.VolumeBooster;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
@@ -295,6 +296,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         }
         
         setQualityInfo(mTrackFormatter.getQualityLabel());
+
+        // Manage audio focus. E.g. use Spotify when audio is disabled.
+        ExoPlayerInitializer.enableAudioFocus(mPlayer, !mTrackSelectorManager.getAudioTrack().isEmpty());
     }
 
     private void notifyOnVideoLoad() {

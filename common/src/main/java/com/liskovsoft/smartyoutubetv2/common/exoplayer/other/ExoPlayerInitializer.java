@@ -55,7 +55,7 @@ public class ExoPlayerInitializer {
         //        null, new DummyBandwidthMeter(), new AnalyticsCollector.Factory(), Util.getLooper()
         //);
 
-        enableAudioFocus(player);
+        //enableAudioFocus(player);
 
         // Lead to numbered errors
         //player.setRepeatMode(Player.REPEAT_MODE_ONE);
@@ -66,14 +66,17 @@ public class ExoPlayerInitializer {
         return player;
     }
 
-    private void enableAudioFocus(SimpleExoPlayer player) {
+    /**
+     * Manage audio focus. E.g. use Spotify when audio is disabled.
+     */
+    public static void enableAudioFocus(SimpleExoPlayer player, boolean enable) {
         if (player != null) {
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setUsage(C.USAGE_MEDIA)
                     .setContentType(C.CONTENT_TYPE_MOVIE)
                     .build();
 
-            player.setAudioAttributes(audioAttributes, true);
+            player.setAudioAttributes(audioAttributes, enable);
         }
     }
 

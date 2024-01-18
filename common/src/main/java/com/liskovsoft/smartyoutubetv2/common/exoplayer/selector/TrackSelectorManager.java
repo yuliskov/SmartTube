@@ -417,6 +417,18 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         return renderer.selectedTrack;
     }
 
+    public MediaTrack getAudioTrack() {
+        initRenderer(RENDERER_INDEX_AUDIO);
+
+        Renderer renderer = mRenderers[RENDERER_INDEX_AUDIO];
+
+        if (renderer == null) {
+            return null;
+        }
+
+        return renderer.selectedTrack;
+    }
+
     /**
      *  Video/audio tracks should be selected at this point.<br/>
      *  Reselect if not done yet.
