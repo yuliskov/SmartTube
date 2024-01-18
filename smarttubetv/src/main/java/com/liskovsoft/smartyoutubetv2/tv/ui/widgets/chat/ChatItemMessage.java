@@ -15,7 +15,7 @@ public class ChatItemMessage implements IMessage {
     private CharSequence mText;
     private ChatItemAuthor mAuthor;
     private Date mCreatedAt;
-    private String mNestedCommentsKey;
+    private CommentItem mCommentItem;
 
     public static ChatItemMessage from(ChatItem chatItem) {
         ChatItemMessage message = new ChatItemMessage();
@@ -43,7 +43,7 @@ public class ChatItemMessage implements IMessage {
         }
         message.mAuthor = ChatItemAuthor.from(commentItem);
         message.mCreatedAt = new Date();
-        message.mNestedCommentsKey = commentItem.getNestedCommentsKey();
+        message.mCommentItem = commentItem;
 
         return message;
     }
@@ -68,7 +68,7 @@ public class ChatItemMessage implements IMessage {
         return mCreatedAt;
     }
 
-    public String getNestedCommentsKey() {
-        return mNestedCommentsKey;
+    public CommentItem getCommentItem() {
+        return mCommentItem;
     }
 }

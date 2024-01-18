@@ -1,5 +1,6 @@
 package com.stfalcon.chatkit.messages;
 
+import android.annotation.SuppressLint;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.util.SparseArray;
@@ -575,6 +576,7 @@ public class MessageHolders {
                         final ImageLoader imageLoader,
                         final View.OnClickListener onMessageClickListener,
                         final View.OnLongClickListener onMessageLongClickListener,
+                        final View.OnFocusChangeListener onMessageFocusChangeListener,
                         final DateFormatter.Formatter dateHeadersFormatter,
                         final SparseArray<MessagesListAdapter.OnMessageViewClickListener> clickListenersArray) {
 
@@ -583,6 +585,7 @@ public class MessageHolders {
             ((MessageHolders.BaseMessageViewHolder) holder).imageLoader = imageLoader;
             holder.itemView.setOnLongClickListener(onMessageLongClickListener);
             holder.itemView.setOnClickListener(onMessageClickListener);
+            holder.itemView.setOnFocusChangeListener(onMessageFocusChangeListener);
 
             for (int i = 0; i < clickListenersArray.size(); i++) {
                 final int key = clickListenersArray.keyAt(i);
@@ -778,6 +781,7 @@ public class MessageHolders {
             }
         }
 
+        @SuppressLint("WrongConstant")
         @Override
         public void applyStyle(MessagesListStyle style) {
             super.applyStyle(style);
@@ -812,10 +816,11 @@ public class MessageHolders {
                     //wrapper.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
                     //wrapper.requestFocus();
                     //wrapper.setBackgroundResource(R.drawable.bgchange);
-                    wrapper.setOnFocusChangeListener((v, hasFocus) -> {
-                        //text.setBackgroundResource(hasFocus ? R.color.tg_selected_bg : R.color.transparent);
-                        bubble.setBackgroundResource(hasFocus ? R.drawable.shape_incoming_message_focused : R.drawable.shape_incoming_message);
-                    });
+
+                    //wrapper.setOnFocusChangeListener((v, hasFocus) -> {
+                    //    //text.setBackgroundResource(hasFocus ? R.color.tg_selected_bg : R.color.transparent);
+                    //    bubble.setBackgroundResource(hasFocus ? R.drawable.shape_incoming_message_focused : R.drawable.shape_incoming_message);
+                    //});
                 }
             }
         }
@@ -861,6 +866,7 @@ public class MessageHolders {
             }
         }
 
+        @SuppressLint("WrongConstant")
         @Override
         public final void applyStyle(MessagesListStyle style) {
             super.applyStyle(style);
@@ -930,6 +936,7 @@ public class MessageHolders {
             }
         }
 
+        @SuppressLint("WrongConstant")
         @Override
         public final void applyStyle(MessagesListStyle style) {
             super.applyStyle(style);
@@ -1000,6 +1007,7 @@ public class MessageHolders {
             }
         }
 
+        @SuppressLint("WrongConstant")
         @Override
         public final void applyStyle(MessagesListStyle style) {
             super.applyStyle(style);
@@ -1062,6 +1070,7 @@ public class MessageHolders {
             }
         }
 
+        @SuppressLint("WrongConstant")
         @Override
         public void applyStyle(MessagesListStyle style) {
             if (text != null) {
@@ -1093,6 +1102,7 @@ public class MessageHolders {
             }
         }
 
+        @SuppressLint("WrongConstant")
         @Override
         public void applyStyle(MessagesListStyle style) {
             if (text != null) {
@@ -1143,6 +1153,7 @@ public class MessageHolders {
             }
         }
 
+        @SuppressLint("WrongConstant")
         @Override
         public void applyStyle(MessagesListStyle style) {
             if (time != null) {
@@ -1191,6 +1202,7 @@ public class MessageHolders {
             }
         }
 
+        @SuppressLint("WrongConstant")
         @Override
         public void applyStyle(MessagesListStyle style) {
             if (time != null) {
