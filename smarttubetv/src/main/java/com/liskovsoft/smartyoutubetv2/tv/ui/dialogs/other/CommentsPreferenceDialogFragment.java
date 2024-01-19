@@ -168,7 +168,9 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mCommentsReceiver.onFinish(new CommentsBackup(mBackupMessages, mFocusedMessage, mCurrentGroup));
+        if (mCommentsReceiver != null) {
+            mCommentsReceiver.onFinish(new CommentsBackup(mBackupMessages, mFocusedMessage, mCurrentGroup));
+        }
     }
 
     private void backupMessages() {
