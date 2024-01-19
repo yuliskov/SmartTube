@@ -8,6 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.ContentService;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 
 import java.util.ArrayList;
@@ -112,6 +113,9 @@ public class ClipService {
                     }
                     mediaItems.addAll(mediaGroup.getMediaItems());
                 }
+
+                // Fix duplicated items inside ATV channels???
+                Helpers.removeDuplicates(mediaItems);
 
                 clips = convertToClips(mediaItems);
             } else {

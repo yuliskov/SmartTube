@@ -605,5 +605,13 @@
   <string name="show_connect_messages">Pokaż wiadomości połączenia</string>
   <string name="prefer_avc_over_vp9_desc">OSTRZEŻENIE: 1080p maksymalnie</string>
   <string name="play_next">Odtwórz następnie</string>
-  <string name="hide_watched_from_subscriptions">Ukryj obejrzane filmy z Subskrybcji</string>
+  <string name="hide_watched_from_subscriptions">Ukryj obejrzane wideo z Subskrybcji</string>
+  <string name="login_from_browser">Zaloguj przy użyciu przeglądarki</string>
+  <string name="nothing_found">Nic nie znaleziono</string>
+  <string name="disable_remote_history">Wyłącz historię gdy używany jest pilot</string>
+  <string name="hide_watched_from_home">Ukryj obejrzane wideo z Głównej</string>
+  <string name="hide_unwanted_content">Ukryj niechciane treści</string>
+  <string name="channel_filter_hint">Filtruj kanały</string>
+  <string name="channel_search_bar">Pasek wyszukiwania w stronie Kanały</string>
+  <string name="player_loop_shorts">Zapętl krótkie wideo</string>
 </resources>

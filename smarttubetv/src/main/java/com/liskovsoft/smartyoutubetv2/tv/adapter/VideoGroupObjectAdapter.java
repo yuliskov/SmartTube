@@ -77,6 +77,10 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         return mVideoItems;
     }
 
+    public List<VideoGroup> getAllGroups() {
+        return mVideoGroups;
+    }
+
     public void add(VideoGroup group) {
         if (group == null || group.getVideos() == null) {
             return;
@@ -87,6 +91,14 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         } else {
             append(group); // add at the end of the the existing group
         }
+    }
+
+    public void add(List<Video> videos) {
+        if (videos == null || videos.isEmpty()) {
+            return;
+        }
+
+        add(VideoGroup.from(videos));
     }
 
     private void prepend(VideoGroup group) {

@@ -160,6 +160,10 @@ public abstract class MediaTrack {
         return format != null && isMP4ACodec(format.codecs);
     }
 
+    public boolean isEmpty() {
+        return groupIndex == -1 && trackIndex == -1;
+    }
+
     public int getWidth() {
         return format != null ? format.width : -1;
     }

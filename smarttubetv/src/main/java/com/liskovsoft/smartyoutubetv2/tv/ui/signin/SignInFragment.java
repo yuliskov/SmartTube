@@ -28,8 +28,10 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
     private static final String TAG = SignInFragment.class.getSimpleName();
     private static final int CONTINUE = 2;
     private static final int OPEN_BROWSER = 3;
-    private static final String SIGN_IN_URL_SHORT = "https://yt.be/activate"; // doesn't support query params
-    private static final String SIGN_IN_URL_FULL = "https://youtube.com/tv/activate"; // support query params
+    //private static final String SIGN_IN_URL_SHORT = "https://yt.be/activate"; // doesn't support query params, no search history
+    //private static final String SIGN_IN_URL_FULL = "https://youtube.com/tv/activate"; // support query params, no search history
+    private static final String SIGN_IN_URL_SHORT = "https://youtube.com/activate"; // supports search history
+    private static final String SIGN_IN_URL_FULL = "https://youtube.com/activate"; // supports search history
     private SignInPresenter mSignInPresenter;
     private String mSignInCodeUrl = SIGN_IN_URL_SHORT;
 

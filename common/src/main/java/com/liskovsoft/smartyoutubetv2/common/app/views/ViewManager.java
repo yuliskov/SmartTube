@@ -407,13 +407,24 @@ public class ViewManager {
     }
 
     /**
+     * Small delay to fix PIP transition bug (UI become unresponsive)
+     */
+    private void safeStartActivity(Context context, Intent intent) {
+        if (PlaybackPresenter.instance(mContext).isInPipMode()) {
+            Utils.postDelayed(() -> safeStartActivityInt(context, intent), 50);
+        } else {
+            safeStartActivityInt(context, intent);
+        }
+    }
+
+    /**
      * Fix: java.lang.IllegalArgumentException<br/>
      * View=android.widget.TextView not attached to window manager
      */
-    private void safeStartActivity(Context context, Intent intent) {
+    private void safeStartActivityInt(Context context, Intent intent) {
         try {
             context.startActivity(intent);
-        } catch (IllegalArgumentException | ActivityNotFoundException e) {
+        } catch (IllegalArgumentException | ActivityNotFoundException | IndexOutOfBoundsException e) {
             Log.e(TAG, "Error when starting activity: %s", e.getMessage());
             MessageHelpers.showLongMessage(context, e.getLocalizedMessage());
         }
@@ -454,6 +465,20 @@ public class ViewManager {
         }
 
         return false;
+    }
+
+    public static MotherActivity getMotherActivity(Object view) {
+        MotherActivity motherActivity = null;
+
+        if (view instanceof Fragment && ((Fragment) view).getActivity() instanceof MotherActivity) {
+            motherActivity = ((MotherActivity) ((Fragment) view).getActivity());
+        }
+
+        if (view instanceof androidx.fragment.app.Fragment && ((androidx.fragment.app.Fragment) view).getActivity() instanceof MotherActivity) {
+            motherActivity = ((MotherActivity) ((androidx.fragment.app.Fragment) view).getActivity());
+        }
+
+        return motherActivity;
     }
 
     public boolean isPlayerInForeground() {

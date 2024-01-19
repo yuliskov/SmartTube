@@ -183,7 +183,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         Video video = getPlayer().getVideo();
         if (video != null && video.finishOnEnded) {
             repeatMode = PlayerUI.REPEAT_MODE_CLOSE;
-        } else if (video != null && video.isShorts) {
+        } else if (video != null && video.isShorts && mPlayerTweaksData.isLoopShortsEnabled()) {
             repeatMode = PlayerUI.REPEAT_MODE_ONE;
         }
 

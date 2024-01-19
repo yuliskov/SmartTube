@@ -43,7 +43,7 @@
     <string name="section_is_empty">Hata! Burada hiçbir şey yok.</string>
     <string name="dialog_add_to_playlist">Oynatma listesine Ekle/Kaldır</string>
     <string name="msg_signed_users_only">Sadece oturum açmış kullanıcılar</string>
-    <string name="msg_cant_load_content">İçerik yüklenemiyor.\n1) Cihazdaki tarih ve saati kontrol edin.\n2) Ağ bağlantısını kontrol edin.\n3) Vekil Sunucu ayarlarınızı kontrol edin.\n4) Hesabınızda oturum açmayı deneyin.\n5) Belki burada hiçbir şey yoktur.</string>
+    <string name="msg_cant_load_content">İçerik yüklenemiyor.\n1) İzleme geçmişini açın.\n2) Cihazdaki tarih ve saati kontrol edin.\n3) Ağ bağlantısını kontrol edin.\n4) Vekil Sunucu ayarlarınızı kontrol edin.\n5) Hesabınızda oturum açmayı deneyin.\n6) Belki burada hiçbir şey yoktur.</string>
     <string name="title_video_presets">Video ön ayarları</string>
     <string name="settings_accounts">Hesaplar</string>
     <string name="settings_left_panel">Kategorileri düzenle</string>
@@ -227,10 +227,12 @@
     <string name="channels_old_look">Kanallar bölümünün eski görünümününe geri dön</string>
     <string name="channels_auto_load">Kanallar bölümü içeriğini otomatik yükle</string>
     <string name="return_to_background_video">Arka planda oynatılan videoya dön</string>
-    <string name="pin_unpin_from_sidebar">Kenar çubuğuna Sabitle/Kaldır</string>
-    <string name="pin_unpin_playlist">Bu oynatma listesini kenar çubuğuna Sabitle/Kaldır</string>
-    <string name="pin_unpin_channel">Bu kanalı kenar çubuğuna Sabitle/Kaldır</string>
-    <string name="pinned_to_sidebar">Kenar çubuğuna sabitlendi</string>
+    <string name="pin_unpin_from_sidebar">Kenar çubuğuna Ekle/Kaldır</string>
+    <string name="pin_unpin_playlist">Oynatma listesini kenar çubuğuna Ekle/Kaldır</string>
+    <string name="pin_unpin_channel">Kanalı kenar çubuğuna Ekle/Kaldır</string>
+    <string name="pin_playlist">Onatma listesini kenar çubuğuna ekle</string>>
+    <string name="pin_channel">Kanalı kenar çubuğuna ekle</string>
+    <string name="pinned_to_sidebar">Kenar çubuğuna eklendi</string>
     <string name="unpin_from_sidebar">Kenar çubuğundan kaldır</string>
     <string name="unpinned_from_sidebar">Kenar çubuğundan kaldırıldı</string>
     <string name="dialog_select_country">Ülke</string>
@@ -401,6 +403,7 @@
     <string name="player_volume">Ses</string>
     <string name="play_video">Oynat</string>
     <string name="remember_position_of_short_videos">Kısa videoların konumunu hatırla (5 dakikadan az)</string>
+    <string name="remember_position_of_live_videos">Canlı yayın konumunu hatırla</string>
     <string name="player_show_tooltips">Düğme ipuçlarını göster</string>
     <string name="action_like_unset">Beğen</string>
     <string name="action_dislike_unset">Beğenme</string>
@@ -411,12 +414,13 @@
     <string name="pressing_home_back">ANA EKRAN\'a ya da GERİ\'ye basarak</string>
     <string name="pressing_back">GERİ\'ye basarak</string>
     <string name="player_number_key_seek">Sayı tuşlarıyla arama</string>
-    <string name="save_remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümüne Ekle/Kaldır</string>
-    <string name="remove_playlist">Bu oynatma listesini Oynatma Listeleri bölümünden kalıcı olarak kaldır</string>
+    <string name="save_remove_playlist">Oynatma listesini Oynatma Listeleri bölümüne Ekle/Kaldır</string>
+    <string name="save_playlist">Oynatma listesini Oynatma Listeleri bölümüne Ekle</string>
+    <string name="remove_playlist">Oynatma listesini Oynatma Listeleri bölümünden kalıcı olarak kaldır</string>
     <string name="removed_from_playlists">Oynatma Listeleri bölümünden kaldırıldı</string>
     <string name="saved_to_playlists">Oynatma Listeleri bölümüne eklendi</string>
     <string name="create_playlist">Oynatma listesi oluştur</string>
-    <string name="add_video_to_new_playlist">Bu videoyu yeni oynatma listesine ekle</string>
+    <string name="add_video_to_new_playlist">Videoyu yeni oynatma listesine ekle</string>
     <string name="cant_delete_empty_playlist">Boş oynatma listesi silinemiyor</string>
     <string name="playlist">Oynatma listesi</string>
     <string name="rename_playlist">Oynatma listesini yeniden adlandır</string>
@@ -619,4 +623,11 @@
     <string name="login_from_browser">Tarayıcıdan giriş yap</string>
     <string name="disable_remote_history">Uzaktan kontrol kullanırken geçmişi devre dışı bırak</string>
     <string name="keyboard_fix">TAMAM tuşuna basarak klavyeyi göstermeyi düzelt (G20\'ler ve diğerleri)</string>
+    <string name="nothing_found">Hiçbir şey bulunamadı</string>
+    <string name="auto_frame_rate_desc">Bu seçenek, spor yayınları gibi kameranın hızlı hareket ettiği sahnelerdeki titremeyi ortadan kaldırır</string>
+    <string name="channel_filter_hint">Kanalları filtrele</string>
+    <string name="player_loop_shorts">Shortsları tekrarla</string>
+    <string name="player_quick_shorts_skip">Shortsları sol/sağ düğmeyle atla</string>
+    <string name="channel_search_bar">Kanal sayfasında arama çubuğu</string>
+    <string name="channels_filter">Kanallar bölümünde kanal listesi filtreleme</string>
 </resources>

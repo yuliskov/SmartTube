@@ -38,6 +38,7 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.util.Util;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -234,6 +235,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void applyTickle(MotionEvent event) {
+        if (event.getAxisValue(MotionEvent.AXIS_X) < 100) { // reserve left area for the back gesture
+            return;
+        }
+
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             tickle(); // show Player UI
         }
@@ -585,14 +590,22 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private void initPresenters() {
         mRowPresenter = new CustomListRowPresenter() {
             @Override
+            protected void onBindRowViewHolder(RowPresenter.ViewHolder holder, Object item) {
+                super.onBindRowViewHolder(holder, item);
+
+                focusPendingSuggestedItem();
+            }
+
+            @Override
             protected void onRowViewSelected(RowPresenter.ViewHolder holder, boolean selected) {
                 super.onRowViewSelected(holder, selected);
 
                 updatePlayerBackground();
 
-                if (selected) {
-                    focusPendingSuggestedItem();
-                }
+                // Don't select the pending item here because multiple items will be focused.
+                //if (selected) {
+                //    focusPendingSuggestedItem();
+                //}
             }
         };
 
@@ -833,11 +846,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         if (getContext() != null && video.likeCount != null && mIsLikesCounterEnabled) {
-            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.likeCount);
+            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.likeCount, " ", Helpers.THUMB_UP); // color of thumb cannot be changed
         }
 
         if (getContext() != null && video.dislikeCount != null && mIsLikesCounterEnabled) {
-            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.dislikeCount);
+            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.dislikeCount, " ", Helpers.THUMB_DOWN); // color of thumb cannot be changed
         }
 
         return result;
@@ -934,8 +947,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public long getDurationMs() {
         long durationMs = mExoPlayerController.getDurationMs();
 
-        if (durationMs > Video.MAX_DURATION_MS && getVideo() != null) {
-            durationMs = getVideo().getLiveDurationMs();
+        long liveDurationMs = getVideo() != null ? getVideo().getLiveDurationMs() : 0;
+
+        if (durationMs > Video.MAX_LIVE_DURATION_MS && liveDurationMs != 0) {
+            durationMs = liveDurationMs;
         }
 
         return durationMs;

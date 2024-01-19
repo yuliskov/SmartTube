@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
 import androidx.annotation.NonNull;
 
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
+
 public interface FormatItem {
     FormatItem VIDEO_AUTO = ExoFormatItem.fromVideoParams(-1, -1, -1);
     FormatItem VIDEO_SD_AVC_30 = ExoFormatItem.fromVideoSpec("640,360,30,avc", false);
@@ -27,12 +29,18 @@ public interface FormatItem {
     int getWidth();
     int getHeight();
     int getType();
+    MediaTrack getTrack();
 
     static FormatItem checkFormat(FormatItem format, int type) {
         return format != null && format.getType() == type ? format : null;
     }
+
     static @NonNull FormatItem fromLanguage(String langCode) {
         return ExoFormatItem.fromSubtitleParams(langCode);
+    }
+
+    static MediaTrack toMediaTrack(FormatItem item) {
+        return item != null ? item.getTrack() : null;
     }
 
     class VideoPreset {

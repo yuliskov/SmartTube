@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelHeaderPresenter.ChannelHeaderCallback;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultipleRowsFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
@@ -29,17 +30,24 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
         mChannelPresenter.setView(this);
 
         mProgressBarManager = new ProgressBarManager();
-        addHeader(new ChannelHeaderCallback() {
-            @Override
-            public void onSearchSettingsClicked() {
-                mChannelPresenter.onSearchSettingsClicked();
-            }
+        if (MainUIData.instance(getContext()).isChannelSearchBarEnabled()) {
+            addHeader(new ChannelHeaderCallback() {
+                @Override
+                public void onSearchSettingsClicked() {
+                    mChannelPresenter.onSearchSettingsClicked();
+                }
 
-            @Override
-            public boolean onSearchSubmit(String query) {
-                return mChannelPresenter.onSearchSubmit(query);
-            }
-        });
+                @Override
+                public boolean onSearchSubmit(String query) {
+                    return mChannelPresenter.onSearchSubmit(query);
+                }
+
+                @Override
+                public String getChannelName() {
+                    return mChannelPresenter.getChannel() != null ? mChannelPresenter.getChannel().getAuthor() : null;
+                }
+            });
+        }
     }
 
     @Override

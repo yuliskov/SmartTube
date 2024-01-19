@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Build.VERSION;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
@@ -371,7 +373,7 @@ public class PlayerData extends DataChangeBase implements ProfileChangeListener 
                 break;
         }
 
-        MediaTrack track = ExoFormatItem.toMediaTrack(format);
+        MediaTrack track = FormatItem.toMediaTrack(format);
         if (track != null) {
             track.isSaved = true;
         }
@@ -706,7 +708,7 @@ public class PlayerData extends DataChangeBase implements ProfileChangeListener 
     private void restoreState() {
         String data = mPrefs.getProfileData(VIDEO_PLAYER_DATA);
 
-        String[] split = Helpers.splitObjectLegacy(data);
+        String[] split = Helpers.splitObject(data);
 
         mOKButtonBehavior = Helpers.parseInt(split, 0, ONLY_UI);
         mUIHideTimeoutSec = Helpers.parseInt(split, 1, 3);

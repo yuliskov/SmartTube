@@ -42,6 +42,7 @@ android {
         stbolshoetv {}
         stredboxtv {}
         stsibsetru {}
+        stamazon {}
     }
 }
 
@@ -100,4 +101,5 @@ dependencies {
     strtarmeniaImplementation project(':appupdatechecker2')
     stredboxtvImplementation project(':appupdatechecker2')
     stsibsetruImplementation project(':appupdatechecker2')
+    stamazonImplementation project(':appupdatechecker2')
 }

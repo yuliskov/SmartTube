@@ -42,6 +42,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private Disposable mScrollAction;
     private MediaGroup mLastScrollGroup;
     private int mSortIdx;
+    private Video mChannel;
 
     private interface OnChannelId {
         void onChannelId(String channelId);
@@ -151,6 +152,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     public void openChannel(Video item) {
+        mChannel = item;
         extractChannelId(item, this::openChannel);
     }
 
@@ -171,6 +173,22 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         }
 
         ViewManager.instance(getContext()).startView(ChannelView.class);
+    }
+
+    public String getChannelId() {
+        return mChannel != null ? mChannel.channelId : mChannelId;
+    }
+
+    public void setChannelId(String channelId) {
+        mChannelId = channelId;
+    }
+
+    public Video getChannel() {
+        return mChannel;
+    }
+
+    public void setChannel(Video channel) {
+        mChannel = channel;
     }
 
     private void disposeActions() {
@@ -284,6 +302,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         if (getView() != null) {
             getView().clear();
         }
+        mChannel = null;
+        mChannelId = null;
     }
 
     private void extractChannelId(Video item, OnChannelId callback) {
@@ -337,11 +357,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     public void onSearchSettingsClicked() {
-        if (mChannelId == null) {
-            return;
-        }
-
-        Observable<List<MediaGroup>> sorting = mHubService.getContentService().getChannelSortingObserve(mChannelId);
+        Observable<List<MediaGroup>> sorting = mHubService.getContentService().getChannelSortingObserve(getChannelId());
         Disposable result = sorting.subscribe(
                 items -> {
                     AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
@@ -371,11 +387,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     public boolean onSearchSubmit(String query) {
-        if (mChannelId == null) {
-            return false;
-        }
-
-        Observable<MediaGroup> search = mHubService.getContentService().getChannelSearchObserve(mChannelId, query);
+        Observable<MediaGroup> search = mHubService.getContentService().getChannelSearchObserve(getChannelId(), query);
         Disposable result = search.subscribe(
                 items -> {
                     VideoGroup update = VideoGroup.from(items);
@@ -389,7 +401,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                     update.setPosition(0);
                     update.setAction(VideoGroup.ACTION_REPLACE);
                     getView().update(update);
-                    //getView().setPosition(1);
+                    getView().setPosition(1);
                 }
         );
 

@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 import android.view.KeyEvent;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.HashMap;
@@ -17,7 +19,7 @@ public abstract class KeyTranslator {
         boolean handled = false;
 
         Runnable action = mActionMapping.get(event.getKeyCode());
-        if (action != null) {
+        if (action != null && checkEvent(event)) {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
                 action.run();
             }
@@ -27,7 +29,7 @@ public abstract class KeyTranslator {
         if (!handled) {
             Integer newKeyCode = mKeyMapping.get(event.getKeyCode());
             KeyEvent newKeyEvent = translate(event, newKeyCode);
-            if (newKeyEvent != event) {
+            if (newKeyEvent != event && checkEvent(event)) {
                 RxHelper.runAsync(() -> Utils.sendKey(newKeyEvent));
                 handled = true;
             }
@@ -57,6 +59,13 @@ public abstract class KeyTranslator {
         Log.d(TAG, "Translating %s to %s", origin, newKey);
 
         return newKey;
+    }
+
+    private boolean checkEvent(KeyEvent event) {
+        return (event.getKeyCode() != KeyEvent.KEYCODE_DPAD_UP && event.getKeyCode() != KeyEvent.KEYCODE_DPAD_DOWN &&
+                event.getKeyCode() != KeyEvent.KEYCODE_DPAD_LEFT && event.getKeyCode() != KeyEvent.KEYCODE_DPAD_RIGHT) ||
+                (!PlaybackPresenter.instance(null).isOverlayShown() &&
+                 !AppDialogPresenter.instance(null).isDialogShown());
     }
 
     protected abstract void initKeyMapping();

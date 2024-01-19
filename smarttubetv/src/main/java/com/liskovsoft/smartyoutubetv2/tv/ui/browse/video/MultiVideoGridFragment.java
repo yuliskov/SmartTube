@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse.video;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.ClassPresenterSelector;
 import androidx.leanback.widget.OnItemViewClickedListener;
@@ -12,19 +13,21 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.VerticalGridPresenter;
 import androidx.leanback.widget.VerticalGridView;
+
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
-import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.HeaderVideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.SearchFieldPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.SearchFieldPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.SearchFieldPresenter.SearchFieldCallback;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoSection;
@@ -48,6 +51,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
     private LongClickPresenter mCardPresenter2;
     private int mSelectedItemIndex1 = -1;
     private int mSelectedItemIndex2 = -1;
+    private Video mSelectedItem1;
     private float mVideoGridScale;
     private final Runnable mRestore1Task = this::restorePosition1;
 
@@ -79,7 +83,6 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
 
     @Override
     public int getPosition() {
-        // TODO: getPosition2 not used
         return getSelectedPosition1();
     }
 
@@ -89,23 +92,36 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
             return;
         }
 
+        mSelectedItemIndex1 = index;
+
         if (mGridAdapter1 != null && index < mGridAdapter1.size()) {
-            // TODO: setPosition2 not used
             setSelectedPosition1(index);
             mSelectedItemIndex1 = -1;
-        } else {
-            mSelectedItemIndex1 = index;
         }
     }
 
     @Override
     public void selectItem(Video item) {
-        // NOP
+        if (item == null) {
+            return;
+        }
+
+        mSelectedItem1 = item;
+
+        if (mGridAdapter1 != null) {
+            int index = mGridAdapter1.indexOfAlt(item);
+
+            if (index != -1) {
+                setSelectedPosition1(index);
+                mSelectedItem1 = null;
+            }
+        }
     }
 
     @Override
     public void update(VideoGroup group) {
         if (group.getPosition() == 0) {
+            addSearchHeader();
             updateGroup1(group);
         } else if (group.getPosition() == 1) {
             updateGroup2(group);
@@ -187,7 +203,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
         if (mGridAdapter1 == null) {
             ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
             presenterSelector.addClassPresenter(Video.class, mCardPresenter1);
-            presenterSelector.addClassPresenter(SearchFieldPresenter.Data.class, new SearchFieldPresenter());
+            presenterSelector.addClassPresenter(SearchFieldCallback.class, new SearchFieldPresenter());
 
             mGridAdapter1 = new HeaderVideoGroupObjectAdapter(presenterSelector);
             setAdapter1(mGridAdapter1);
@@ -266,6 +282,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
 
     private void restorePosition1() {
         setPosition(mSelectedItemIndex1);
+        selectItem(mSelectedItem1);
 
         // Item not found? Lookup in next group.
         if (mSelectedItemIndex1 != -1) {
@@ -285,8 +302,8 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
 
     private void clear1() {
         if (mGridAdapter1 != null) {
+            mGridAdapter1.setHeader(null);
             mGridAdapter1.clear();
-            //addSearchHeader();
         }
     }
 
@@ -297,7 +314,19 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
     }
 
     private void addSearchHeader() {
-        mGridAdapter1.setHeader(new SearchFieldPresenter.Data());
+        if (mGridAdapter1 == null || mGridAdapter1.getHeader() != null || !MainUIData.instance(getContext()).isChannelsFilterEnabled()) {
+            return;
+        }
+
+        setPosition(1);
+
+        mGridAdapter1.setHeader(new SearchFieldCallback() {
+            @Override
+            public void onTextChanged(String text) {
+                super.onTextChanged(text);
+                mGridAdapter1.filter(text);
+            }
+        });
     }
 
     @Override

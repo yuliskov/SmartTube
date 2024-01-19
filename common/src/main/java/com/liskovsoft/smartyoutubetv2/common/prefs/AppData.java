@@ -37,7 +37,7 @@ public class AppData {
     private void restoreData() {
         String data = mPrefs.getData(APP_DATA);
 
-        String[] split = Helpers.splitObjectLegacy(data);
+        String[] split = Helpers.splitObject(data);
 
         mPreferredSource = Helpers.parseStr(split, 0);
     }

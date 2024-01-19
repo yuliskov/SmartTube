@@ -43,7 +43,7 @@
     <string name="section_is_empty">Тут нічого немає</string>
     <string name="dialog_add_to_playlist">Додати/Видалити із плейлиста</string>
     <string name="msg_signed_users_only">Необхідно увійти в обліковий запис</string>
-    <string name="msg_cant_load_content">Не вдалося завантажити вміст.\n1) Перевірте дату та час на пристрої.\n2) Перевірте мережеве з\`єднання.\n3) Перевірте налаштування проксі.\n4) Спробуйте увійти в обліковий запис.\n5) Можливо, тут нічого не має.</string>
+    <string name="msg_cant_load_content">Не вдалося завантажити вміст.\n1) Увімкніть історію переглядів.\n2) Перевірте дату та час на пристрої.\n3) Перевірте мережеве з\`єднання.\n4) Перевірте налаштування проксі.\n5) Спробуйте увійти в обліковий запис.\n6) Можливо, тут нічого не має.</string>
     <string name="title_video_presets">Відео пресети</string>
     <string name="settings_accounts">Облікові записи</string>
     <string name="settings_left_panel">Налаштувати категорії</string>
@@ -117,7 +117,7 @@
     <string name="repeat_mode_pause_alt">Відтворювати безперервно тільки відео з плейлиста</string>
     <string name="repeat_mode_none">Завершувати відтворення після одного відео</string>
     <string name="subscribed_to_channel">Підписка оформлена</string>
-    <string name="unsubscribed_from_channel">Підписка скасована</string>
+    <string name="unsubscribed_from_channel">Підписка не оформлена</string>
     <string name="subtitle_yellow_transparent">Жовті на прозорому фоні</string>
     <string name="subtitle_white_transparent">Білі на прозорому фоні</string>
     <string name="subtitle_white_black">Білі на чорному фоні</string>
@@ -230,6 +230,8 @@
     <string name="pin_unpin_from_sidebar">Додати/Видалити з бічної панелі</string>
     <string name="pin_unpin_playlist">Додати/Видалити плейлист з бічної панелі</string>
     <string name="pin_unpin_channel">Додати/Видалити канал з бічної панелі</string>
+    <string name="pin_playlist">Додати плейлист на бічну панель</string>
+    <string name="pin_channel">Додати канал на бічну панель</string>
     <string name="pinned_to_sidebar">Додано на бічну панель</string>
     <string name="unpin_from_sidebar">Видалити з бічної панелі</string>
     <string name="unpinned_from_sidebar">Видалено з бічної панелі</string>
@@ -397,6 +399,7 @@
     <string name="player_volume">Гучність</string>
     <string name="play_video">Відтворити</string>
     <string name="remember_position_of_short_videos">Запам\'ятовувати позицію коротких відео (меньше 5 хв)</string>
+    <string name="remember_position_of_live_videos">Запам\'ятовувати позицію прямих трансляцій</string>
     <string name="player_show_tooltips">Показати підказки для кнопок</string>
     <string name="action_like_unset">Подобається не встановлено</string>
     <string name="action_dislike_unset">Не подобається не встановлено</string>
@@ -408,6 +411,7 @@
     <string name="pressing_back">натиснувши ПОВЕРНУТИСЯ</string>
     <string name="player_number_key_seek">Перемотувати цифровими клавішами</string>
     <string name="save_remove_playlist">Додати/Видалити плейлист з розділу Плейлисти</string>
+    <string name="save_playlist">Додати плейлист до розділу Плейлисти</string>
     <string name="remove_playlist">Видалити плейлист з розділу Плейлисти назавжди</string>
     <string name="removed_from_playlists">Видалено з розділу Плейлисти</string>
     <string name="saved_to_playlists">Додано у розділ Плейлисти</string>
@@ -613,4 +617,10 @@
     <string name="disable_remote_history">Вимкнути історію під час дистанційного керування</string>
     <string name="keyboard_fix">Виправити показ клавіатури натисканням клавіші OK (G20s та інші)</string>
     <string name="nothing_found">Нічого не знайдено</string>
+    <string name="auto_frame_rate_desc">Ця опція усуває тремтіння на сценах, де камера рухається швидко, напр. спортивна трансляція</string>
+    <string name="channel_filter_hint">Фільтрувати канали</string>
+    <string name="player_loop_shorts">Зациклювати короткі відео</string>
+    <string name="player_quick_shorts_skip">Перемикати короткі відео кнопками ліво/право</string>
+    <string name="channels_filter">Фільтрувати список каналів у розділі Канали</string>
+    <string name="channel_search_bar">Панель пошуку на сторінці каналу</string>
 </resources>

@@ -70,7 +70,7 @@ public class RemoteControlData extends DataChangeBase {
     private void restoreState() {
         String data = mAppPrefs.getData(DEVICE_LINK_DATA);
 
-        String[] split = Helpers.splitObjectLegacy(data);
+        String[] split = Helpers.splitObject(data);
 
         // null
         // null

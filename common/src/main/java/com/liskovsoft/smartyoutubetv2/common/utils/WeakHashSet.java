@@ -3,15 +3,15 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class WeakHashSet<T> {
     public interface OnItem<T> {
         void onItem(T item);
     }
 
-    private final List<WeakReference<T>> mWeakReferences = new ArrayList<>();
+    private final List<WeakReference<T>> mWeakReferences = new CopyOnWriteArrayList<>(); // ConcurrentModificationException fix
 
     public boolean add(T item) {
         if (item != null && !contains(item)) {

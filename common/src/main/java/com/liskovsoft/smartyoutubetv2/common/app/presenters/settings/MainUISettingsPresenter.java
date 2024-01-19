@@ -233,6 +233,14 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.channels_filter),
+                optionItem -> mMainUIData.enableChannelsFilter(optionItem.isSelected()),
+                mMainUIData.isChannelsFilterEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.channel_search_bar),
+                optionItem -> mMainUIData.enableChannelSearchBar(optionItem.isSelected()),
+                mMainUIData.isChannelSearchBarEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.channels_old_look),
                 optionItem -> {
                     mMainUIData.enableUploadsOldLook(optionItem.isSelected());

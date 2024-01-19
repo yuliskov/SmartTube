@@ -1,20 +1,24 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
+import android.annotation.TargetApi;
 import android.app.PictureInPictureParams;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+
 import androidx.fragment.app.Fragment;
+
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
@@ -118,12 +122,17 @@ public class PlaybackActivity extends LeanbackActivity {
         } else if (event.getAxisValue(MotionEvent.AXIS_LTRIGGER) < GAMEPAD_TRIGGER_INTENSITY_OFF
                 && event.getAxisValue(MotionEvent.AXIS_RTRIGGER) < GAMEPAD_TRIGGER_INTENSITY_OFF) {
             gamepadTriggerPressed = false;
+        } else if ((event.getSource() & InputDevice.SOURCE_CLASS_POINTER) != 0 && event.getAction() == MotionEvent.ACTION_SCROLL) {
+            // mouse wheel handling
+            Utils.volumeUp(this, getPlaybackView().getPlayer(), event.getAxisValue(MotionEvent.AXIS_VSCROLL) < 0.0f);
+            return true;
         }
         return super.onGenericMotionEvent(event);
     }
 
     // For N devices that support it, not "officially"
     // More: https://medium.com/s23nyc-tech/drop-in-android-video-exoplayer2-with-picture-in-picture-e2d4f8c1eb30
+    @TargetApi(24)
     @SuppressWarnings("deprecation")
     private void enterPipMode() {
         // NOTE: When exiting PIP mode onPause is called immediately after onResume
@@ -150,6 +159,7 @@ public class PlaybackActivity extends LeanbackActivity {
         }
     }
 
+    @TargetApi(24)
     private boolean wannaEnterToPip() {
         return mPlaybackFragment != null && mPlaybackFragment.getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
     }

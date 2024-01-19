@@ -62,6 +62,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private int mPlayerButtons;
     private boolean mIsNoFpsPresetsEnabled;
     private boolean mIsRememberPositionOfShortVideosEnabled;
+    private boolean mIsRememberPositionOfLiveVideosEnabled;
     private boolean mIsSuggestionsDisabled;
     private boolean mIsAvcOverVp9Preferred;
     private boolean mIsChatPlacedLeft;
@@ -87,6 +88,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsPlayerGlobalFocusEnabled;
     private boolean mIsUnsafeAudioFormatsEnabled;
     private boolean mIsHighBitrateFormatsUnlocked;
+    private boolean mIsLoopShortsEnabled;
+    private boolean mIsQuickShortsSkipEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -297,6 +300,15 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsRememberPositionOfShortVideosEnabled;
     }
 
+    public void enableRememberPositionOfLiveVideos(boolean enable) {
+        mIsRememberPositionOfLiveVideosEnabled = enable;
+        persistData();
+    }
+
+    public boolean isRememberPositionOfLiveVideosEnabled() {
+        return mIsRememberPositionOfLiveVideosEnabled;
+    }
+
     public boolean isSuggestionsDisabled() {
         return mIsSuggestionsDisabled;
     }
@@ -487,6 +499,24 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsPlayerGlobalFocusEnabled;
     }
 
+    public void enableLoopShorts(boolean enable) {
+        mIsLoopShortsEnabled = enable;
+        persistData();
+    }
+
+    public boolean isLoopShortsEnabled() {
+        return mIsLoopShortsEnabled;
+    }
+
+    public void enableQuickShortsSkip(boolean enable) {
+        mIsQuickShortsSkipEnabled = enable;
+        persistData();
+    }
+
+    public boolean isQuickShortsSkipEnabled() {
+        return mIsQuickShortsSkipEnabled;
+    }
+
     public void unlockHighBitrateFormats(boolean enable) {
         mIsHighBitrateFormatsUnlocked = enable;
         persistData();
@@ -499,7 +529,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private void restoreData() {
         String data = mPrefs.getProfileData(VIDEO_PLAYER_TWEAKS_DATA);
 
-        String[] split = Helpers.splitObjectLegacy(data);
+        String[] split = Helpers.splitObject(data);
 
         mIsAmlogicFixEnabled = Helpers.parseBoolean(split, 0, false);
         mIsAmazonFrameDropFixEnabled = Helpers.parseBoolean(split, 1, false);
@@ -535,7 +565,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsSonyFrameDropFixEnabled = Helpers.parseBoolean(split, 29, false);
         mIsBufferOnStreamsDisabled = Helpers.parseBoolean(split, 30, false);
         // Cause severe garbage collector stuttering
-        mIsSectionPlaylistEnabled = Helpers.parseBoolean(split, 31, VERSION.SDK_INT > 21);
+        mIsSectionPlaylistEnabled = Helpers.parseBoolean(split, 31, VERSION.SDK_INT > 21 && Helpers.getDeviceRam(mPrefs.getContext()) > 1_000_000_000);
         mIsScreenOffTimeoutEnabled = Helpers.parseBoolean(split, 32, false);
         mScreenOffTimeoutSec = Helpers.parseInt(split, 33, 0);
         mIsUIAnimationsEnabled = Helpers.parseBoolean(split, 34, false);
@@ -548,6 +578,9 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsPlayerGlobalFocusEnabled = Helpers.parseBoolean(split, 41, true);
         mIsUnsafeAudioFormatsEnabled = Helpers.parseBoolean(split, 42, true);
         mIsHighBitrateFormatsUnlocked = Helpers.parseBoolean(split, 43, false);
+        mIsLoopShortsEnabled = Helpers.parseBoolean(split, 44, true);
+        mIsQuickShortsSkipEnabled = Helpers.parseBoolean(split, 45, true);
+        mIsRememberPositionOfLiveVideosEnabled = Helpers.parseBoolean(split, 46, false);
 
         updateDefaultValues();
     }
@@ -564,7 +597,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
-                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked
+                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked, mIsLoopShortsEnabled, mIsQuickShortsSkipEnabled, mIsRememberPositionOfLiveVideosEnabled
                 ));
     }
 

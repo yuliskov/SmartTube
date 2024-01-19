@@ -42,7 +42,7 @@
     <string name="section_is_empty">Здесь ничего нет</string>
     <string name="dialog_add_to_playlist">Добавить/Удалить из плейлиста</string>
     <string name="msg_signed_users_only">Необходимо войти в вккаунт</string>
-    <string name="msg_cant_load_content">Не получилось загрузить содержимое.\n1) Проверьте дату и время на устройстве.\n2) Проверьте сетевое подключение.\n3) Проверьте настройки прокси.\n4) Попробуйте войти в аккаунт.\n5) Возможно, здесь ничего нет.</string>
+    <string name="msg_cant_load_content">Не получилось загрузить содержимое.\n1) Включите историю просмотров.\n2) Проверьте дату и время на устройстве.\n3) Проверьте сетевое подключение.\n4) Проверьте настройки прокси.\n5) Попробуйте войти в аккаунт.\n6) Возможно, здесь ничего нет.</string>
     <string name="title_video_presets">Профили видео</string>
     <string name="settings_accounts">Аккаунты</string>
     <string name="settings_left_panel">Настроить категории</string>
@@ -230,6 +230,8 @@
     <string name="pin_unpin_from_sidebar">Добавить/Удалить из боковой панели</string>
     <string name="pin_unpin_playlist">Добавить/Удалить плейлист из боковой панели</string>
     <string name="pin_unpin_channel">Добавить/Удалить канал из боковой панели</string>
+    <string name="pin_playlist">Добавить плейлист на боковую панель</string>
+    <string name="pin_channel">Добавить канал на боковую панель</string>
     <string name="pinned_to_sidebar">Добавлено на боковую панель</string>
     <string name="unpin_from_sidebar">Удалить из боковой панели</string>
     <string name="unpinned_from_sidebar">Удалено из боковой панели</string>
@@ -397,6 +399,7 @@
     <string name="player_volume">Громкость</string>
     <string name="play_video">Воспроизвести</string>
     <string name="remember_position_of_short_videos">Запоминать позицию коротких видео (менее 5 мин)</string>
+    <string name="remember_position_of_live_videos">Запоминать позицию прямых трансляций</string>
     <string name="player_show_tooltips">Показать подсказки для кнопок</string>
     <string name="action_like_unset">Нравится не установлено</string>
     <string name="action_dislike_unset">Не нравится не установлено</string>
@@ -408,6 +411,7 @@
     <string name="pressing_back">по нажатию НАЗАД</string>
     <string name="player_number_key_seek">Перематывать цифровыми клавишами</string>
     <string name="save_remove_playlist">Добавить/Удалить плейлист из раздела Плейлисты</string>
+    <string name="save_playlist">Добавить плейлист в раздел Плейлисты</string>
     <string name="remove_playlist">Удалить плейлист из раздела Плейлисты навсегда</string>
     <string name="removed_from_playlists">Удалено из раздела Плейлисты</string>
     <string name="saved_to_playlists">Добавлено в раздел Плейлисты</string>
@@ -433,7 +437,7 @@
     <string name="skip_codec_profile_check_desc">Не проверять поддержку кодеков при запуске видео. Может быть полезно для глючных прошивок.</string>
     <string name="force_sw_codec">Активировать программный декодер</string>
     <string name="force_sw_codec_desc">Может воспроизводить любое видео, но производительность очень низкая.</string>
-    <string name="playlist_order">Упорядочить плейлист</string>
+    <string name="playlist_order">Сортировать плейлист</string>
     <string name="playlist_order_added_date_newer_first">Дата добавления (сначала более новые)</string>
     <string name="playlist_order_added_date_older_first">Дата добавления (сначала более старые)</string>
     <string name="playlist_order_published_date_newer_first">Дата публикации (сначала более новые)</string>
@@ -530,7 +534,7 @@
     <string name="video_feature_live">Прямые трансляции</string>
     <string name="video_feature_4k">4K</string>
     <string name="video_feature_hdr">HDR</string>
-    <string name="search_sorting">Упорядочить</string>
+    <string name="search_sorting">Сортировать</string>
     <string name="sort_by_relevance">Релевантность</string>
     <string name="sort_by_views">Число просмотров</string>
     <string name="sort_by_date">Дата загрузки</string>
@@ -613,4 +617,10 @@
     <string name="disable_remote_history">Отключить историю во время дистанционного управления</string>
     <string name="keyboard_fix">Исправить отображение клавиатуры при нажатии клавиши ОК (G20 и другие)</string>
     <string name="nothing_found">Ничего не найдено</string>
+    <string name="auto_frame_rate_desc">Эта опция устраняет дрожание в сценах, где камера движется быстро, например. спортивные трансляции</string>
+    <string name="channel_filter_hint">Фильтровать каналы</string>
+    <string name="player_loop_shorts">Зацикливать короткие видео</string>
+    <string name="player_quick_shorts_skip">Переключать короткие видео кнопками лево/право</string>
+    <string name="channels_filter">Фильтровать список каналов в разделе Каналы</string>
+    <string name="channel_search_bar">Панель поиска на странице канала</string>
 </resources>

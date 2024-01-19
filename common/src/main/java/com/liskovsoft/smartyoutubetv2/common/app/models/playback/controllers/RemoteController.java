@@ -322,10 +322,10 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
                 break;
             case Command.TYPE_VOLUME:
                 //Utils.setGlobalVolume(getActivity(), command.getVolume());
-                setVolume(command.getVolume());
+                Utils.setVolume(getContext(), getPlayer(), command.getVolume(), true);
 
                 //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-                postVolumeChange(getVolume()); // Just in case volume cannot be changed (e.g. Fire TV stick)
+                postVolumeChange(Utils.getVolume(getContext(), getPlayer(), true)); // Just in case volume cannot be changed (e.g. Fire TV stick)
                 break;
             case Command.TYPE_STOP:
                 // Close player
@@ -345,20 +345,20 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
                 //    Utils.moveAppToForeground(getActivity());
                 //    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
                 //}
-                if (mRemoteControlData.isConnectMessagesEnabled()) {
-                    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
-                }
+                //if (mRemoteControlData.isConnectMessagesEnabled()) {
+                //    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
+                //}
                 break;
             case Command.TYPE_DISCONNECTED:
                 // NOTE: there are possible false calls when mobile client unloaded from the memory.
                 if (getContext() != null && mRemoteControlData.isFinishOnDisconnectEnabled()) {
                     // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
-                    //MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.device_disconnected, command.getDeviceName()));
+                    MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.device_disconnected, command.getDeviceName()));
                     ViewManager.instance(getContext()).properlyFinishTheApp(getContext());
                 }
-                if (mRemoteControlData.isConnectMessagesEnabled()) {
-                    MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.device_disconnected, command.getDeviceName()));
-                }
+                //if (mRemoteControlData.isConnectMessagesEnabled()) {
+                //    MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.device_disconnected, command.getDeviceName()));
+                //}
                 break;
             case Command.TYPE_DPAD:
                 int key = KeyEvent.KEYCODE_UNKNOWN;
@@ -413,7 +413,7 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
     @Override
     public boolean onKeyDown(int keyCode) {
         //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-        postVolumeChange(getVolume());
+        postVolumeChange(Utils.getVolume(getContext(), getPlayer(), true));
 
         return false;
     }
@@ -431,33 +431,6 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
         } else if (newVideo != null) {
             newVideo.isRemote = true;
             PlaybackPresenter.instance(getContext()).openVideo(newVideo);
-        }
-    }
-
-    /**
-     * Volume: 0 - 100
-     */
-    private int getVolume() {
-        if (getContext() != null) {
-            return Utils.isGlobalVolumeFixed() ? (int)(getPlayer().getVolume() * 100) : Utils.getGlobalVolume(getContext());
-        }
-
-        return 100;
-    }
-
-    /**
-     * Volume: 0 - 100
-     */
-    private void setVolume(int volume) {
-        if (getContext() != null) {
-            if (Utils.isGlobalVolumeFixed()) {
-                getPlayer().setVolume(volume / 100f);
-            } else {
-                Utils.setGlobalVolume(getContext(), volume);
-            }
-            // Check that volume is set.
-            // Because global value may not be supported (see FireTV Stick).
-            MessageHelpers.showMessage(getContext(), getContext().getString(R.string.volume, getVolume()));
         }
     }
 

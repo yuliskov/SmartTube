@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui;
 
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.CommentGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
 import com.liskovsoft.smartyoutubetv2.common.R;
 
 public abstract class CommentsReceiverImpl implements CommentsReceiver {
@@ -20,18 +21,30 @@ public abstract class CommentsReceiverImpl implements CommentsReceiver {
     }
 
     @Override
+    public void loadBackup(Backup backup) {
+        if (mCallback != null) {
+            mCallback.onBackup(backup);
+        }
+    }
+
+    @Override
     public void setCallback(Callback callback) {
         mCallback = callback;
     }
 
     @Override
-    public void onLoadMore(String nextCommentsKey) {
+    public void onLoadMore(CommentGroup commentGroup) {
 
     }
 
     @Override
-    public void onCommentClicked(String nestedCommentsKey) {
+    public void onCommentClicked(CommentItem commentItem) {
 
+    }
+
+    @Override
+    public void onFinish(Backup backup) {
+        
     }
 
     @Override

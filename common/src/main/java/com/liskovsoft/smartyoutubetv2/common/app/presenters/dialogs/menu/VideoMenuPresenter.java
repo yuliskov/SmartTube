@@ -601,8 +601,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void appendPlayVideoIncognitoButton() {
-        if (!mIsPlayVideoIncognitoButtonEnabled || mVideo == null || mVideo.videoId == null ||
-            ViewManager.instance(getContext()).getTopView() == PlaybackView.class) {
+        if (!mIsPlayVideoIncognitoButtonEnabled || mVideo == null || mVideo.videoId == null) {
             return;
         }
 
@@ -630,10 +629,12 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
+        mVideo.isSubscribed = mVideo.isSubscribed || mVideo.belongsToSubscriptions() || mVideo.belongsToChannelUploads();
+
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
-                        mVideo.isSubscribed || mVideo.belongsToSubscriptions() || mVideo.belongsToChannelUploads() ?
-                                R.string.unsubscribe_from_channel : R.string.subscribe_unsubscribe_from_channel),
+                        mVideo.isSubscribed ?
+                                R.string.unsubscribe_from_channel : R.string.subscribe_to_channel),
                         optionItem -> toggleSubscribe()));
     }
 
@@ -822,6 +823,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
+        mVideo.isSynced = true; // default to subscribe
+
         // Until synced we won't really know weather we subscribed to a channel.
         // Exclusion: channel item (can't be synced)
         // Note, regular items (from subscribed section etc) aren't contain channel id
@@ -854,8 +857,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             mCallback.onItemAction(video, VideoMenuCallback.ACTION_UNSUBSCRIBE);
         }
 
-        MessageHelpers.showMessage(getContext(),
-                video.getAuthor() + ": " + getContext().getString(!video.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel));
+        MessageHelpers.showMessage(getContext(), getContext().getString(!video.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel));
     }
 
     @Override
@@ -900,6 +902,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.put(MainUIData.MENU_ITEM_RECENT_PLAYLIST, new MenuAction(this::appendAddToRecentPlaylistButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_ADD_TO_PLAYLIST, new MenuAction(this::appendAddToPlaylistButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_CREATE_PLAYLIST, new MenuAction(this::appendCreatePlaylistButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_RENAME_PLAYLIST, new MenuAction(this::appendRenamePlaylistButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_ADD_TO_NEW_PLAYLIST, new MenuAction(this::appendAddToNewPlaylistButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_NOT_INTERESTED,
                 new MenuAction(() -> {appendNotInterestedButton(); appendNotRecommendChannelButton();}, true));
@@ -914,7 +917,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.put(MainUIData.MENU_ITEM_SUBSCRIBE, new MenuAction(this::appendSubscribeButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK, new MenuAction(this::appendToggleExcludeFromContentBlockButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR, new MenuAction(this::appendTogglePinVideoToSidebarButton, false));
-        mMenuMapping.put(MainUIData.MENU_ITEM_SAVE_PLAYLIST, new MenuAction(this::appendSaveRemovePlaylistButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_SAVE_REMOVE_PLAYLIST, new MenuAction(this::appendSaveRemovePlaylistButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_DESCRIPTION, new MenuAction(this::appendOpenDescriptionButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_SHARE_LINK, new MenuAction(this::appendShareLinkButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_SHARE_QR_LINK, new MenuAction(this::appendShareQRLinkButton, false));

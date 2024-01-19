@@ -100,7 +100,7 @@ public class AccountsData implements AccountChangeListener {
     private void restoreState() {
         String data = mAppPrefs.getData(ACCOUNTS_DATA);
 
-        String[] split = Helpers.splitObjectLegacy(data);
+        String[] split = Helpers.splitObject(data);
 
         mIsSelectAccountOnBootEnabled = Helpers.parseBoolean(split, 0, false);
         // mIsAccountProtectedWithPassword

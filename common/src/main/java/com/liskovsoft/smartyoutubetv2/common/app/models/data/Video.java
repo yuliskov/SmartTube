@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
 import android.content.Context;
+import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
@@ -26,7 +28,7 @@ import java.util.List;
  */
 public final class Video {
     public static final String TERTIARY_TEXT_DELIM = "•";
-    public static final long MAX_DURATION_MS = 24 * 60 * 60 * 1_000;
+    public static final long MAX_LIVE_DURATION_MS = 24 * 60 * 60 * 1_000;
     private static final String OBJ_DELIM = "&vi;";
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     private static final String[] sNotPlaylistParams = new String[] {"EAIYAQ%3D%3D"};
@@ -162,11 +164,12 @@ public final class Video {
         video.playlistId = item.playlistId;
         video.playlistIndex = item.playlistIndex;
         video.playlistParams = item.playlistParams;
-        video.reloadPageKey = item.reloadPageKey;
+        video.reloadPageKey = item.getReloadPageKey();
         video.isLive = item.isLive;
         video.isUpcoming = item.isUpcoming;
         video.clickTrackingParams = item.clickTrackingParams;
         video.mediaItem = item.mediaItem;
+        video.group = item.group;
 
         return video;
     }
@@ -253,7 +256,7 @@ public final class Video {
             return author;
         }
 
-        return extractAuthor(secondTitle != null ? secondTitle : metadataSecondTitle);
+        return extractAuthor(metadataSecondTitle != null ? metadataSecondTitle : secondTitle); // BAD idea
     }
 
     public VideoGroup getGroup() {
@@ -280,7 +283,8 @@ public final class Video {
             }
         }
 
-        return result != null ? Helpers.abbreviate(result.trim(), MAX_AUTHOR_LENGTH_CHARS) : null;
+        // Skip subtitles starting with number of views (e.g. 1.4M views)
+        return !TextUtils.isEmpty(result) && !Helpers.isNumeric(result.substring(0, 1)) ? Helpers.abbreviate(result.trim(), MAX_AUTHOR_LENGTH_CHARS) : null;
     }
 
     public static List<Video> findVideosByAuthor(VideoGroup group, String author) {
@@ -595,6 +599,7 @@ public final class Video {
         likeCount = metadata.getLikeCount();
         dislikeCount = metadata.getDislikeCount();
         notificationStates = metadata.getNotificationStates();
+        author = metadata.getAuthor();
         isSynced = true;
 
         if (mediaItem != null) {
