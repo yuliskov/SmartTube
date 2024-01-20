@@ -177,12 +177,12 @@
   <string name="content_block_categories">Pular segmentos</string>
   <string name="content_block_sponsor">Patrocinador</string>
   <string name="content_block_intro">Introdução/animação de intervalo</string>
-  <string name="content_block_outro">Cartões finais/créditos</string>
+  <string name="content_block_outro">Créditos finais/finalização</string>
   <string name="content_block_interaction">Lembrete de interação (inscrição)</string>
-  <string name="content_block_self_promo">Não remunerado/Autopromoção</string>
-  <string name="content_block_music_off_topic">Seção do clipe sem música</string>
+  <string name="content_block_self_promo">Não-pago/Autopromoção</string>
+  <string name="content_block_music_off_topic">Música: Seção sem musica</string>
   <string name="confirm_segment_skip">Pular segmento \"%s\"\?</string>
-  <string name="cancel_segment_skip">Cancelar pulo de segmento</string>
+  <string name="cancel_segment_skip">Cancelar pulo do segmento</string>
   <string name="msg_skipping_segment">Pulando segmento \"%s\"…</string>
   <string name="content_block_notification_type">Tipo de notificação</string>
   <string name="content_block_notify_none">Sem notificação</string>
@@ -354,7 +354,7 @@
   <string name="openvpn_address_invalid">Endereço de configuração da OpenVPN não definido.</string>
   <string name="internet_censorship">Censura da internet</string>
   <string name="rename_section">Renomear essa seção</string>
-  <string name="simple_edit_value_hint">Insira um valor</string>
+  <string name="simple_edit_value_hint">Escreva algo aqui...</string>
   <string name="seek_interval">Intervalo de avanço/retrocesso</string>
   <string name="seek_interval_sec">%s seg</string>
   <string name="subtitle_system">Estilo do sistema (configurações do Android &gt; Acessibilidade)</string>
@@ -536,7 +536,7 @@
   <string name="old_home_look">Voltar para a aparência antiga da sessão Início</string>
   <string name="hide_shorts_everywhere">Esconder os Shorts em todos os lugares</string>
   <string name="update_found">Atualização</string>
-  <string name="volume_boost_warning">Qualquer configuração acima do limite pode potencialmente danificar undefinedos alto-falantes</string>
+  <string name="volume_boost_warning">Qualquer configuração acima do limite pode potencialmente danificar os alto-falantes</string>
   <string name="play_video_incognito">Reproduzir de forma anônima</string>
   <string name="header_kids_home">Crianças</string>
   <string name="player_section_playlist">Utilizar os conteúdos da sessão atual como lista de reprodução</string>
@@ -598,7 +598,7 @@
   <string name="login_from_browser">Logar a partir do navegador</string>
   <string name="disable_remote_history">Desativar o histórico quando usar o controle remoto</string>
   <string name="remote_control_permission">O controle remoto em segundo plano requer permissão de sobreposição</string>
-  <string name="player_screen_off_dimming">Tela desativada quantidade de escurecimento</string>
+  <string name="player_screen_off_dimming">Quantidade de escurecimento para tela desativada</string>
   <string name="screensaver_timout">Tempo limite do protetor de tela</string>
   <string name="screensaver_dimming">Quantidade de escurecimento do protetor de tela</string>
   <string name="item_postion">Posição de</string>
@@ -612,4 +612,13 @@
   <string name="player_corner_clock">Reprodutor: relógio no canto superior direito</string>
   <string name="player_corner_ending_time">Reprodutor: hora de término no canto superior direito</string>
   <string name="hide_shorts_channel">Ocultar Shorts do canal</string>
+  <string name="nothing_found">Nada encontrado</string>
+  <string name="auto_frame_rate_desc">Essa opção remove atrasos nas cenas quando a câmera movimenta muito rápido, ex: Streaming de esportes</string>
+  <string name="channel_filter_hint">Filtrar canais</string>
+  <string name="player_quick_shorts_skip">Pular Shorts com os botões direito/esquerdo</string>
+  <string name="channel_search_bar">Barra de pesquisa dentro das páginas de canais</string>
+  <string name="channels_filter">Filtrar lista de canais dentro da seção de canais</string>
+  <string name="player_global_focus">Navegação perfeita entre as linhas de botões do player</string>
+  <string name="hide_shorts_from_trending">Ocultar os Shorts do Em Alta</string>
+  <string name="player_loop_shorts">Loopar Shorts</string>
 </resources>
