@@ -145,7 +145,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void saveSelectedItems() {
-        if (mCurrentVideo != null && mCurrentVideo.belongsToSubscriptions()) {
+        if (mCurrentVideo != null && mCurrentVideo.belongsToSubscriptions() && mGeneralData.isRememberSubscriptionsPositionEnabled()) {
             mGeneralData.setSelectedSubscriptionsItem(mCurrentVideo);
         }
     }
@@ -636,7 +636,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         mediaGroups -> {
                             getView().showProgressBar(false);
 
-                            filterIfNeeded(mediaGroups);
+                            filterHomeIfNeeded(mediaGroups);
 
                             for (MediaGroup mediaGroup : mediaGroups) {
                                 if (mediaGroup.isEmpty()) {
@@ -928,28 +928,22 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return result != null ? result : previousSection;
     }
 
-    private void filterIfNeeded(List<MediaGroup> mediaGroups) {
-        if (mediaGroups == null) {
+    private void filterHomeIfNeeded(List<MediaGroup> mediaGroups) {
+        if (mediaGroups == null || !isHomeSection()) {
             return;
         }
 
-        Helpers.removeIf(mediaGroups, value -> isPartialMatch(value) || isFullMatch(value));
-    }
-
-    private boolean isPartialMatch(MediaGroup value) {
-        return Helpers.containsAny(
+        Helpers.removeIf(mediaGroups, value -> Helpers.containsAny(
                 value.getTitle(),
-                "Primetime" // Free movies and shows row
-        );
-    }
-
-    private boolean isFullMatch(MediaGroup value) {
-        return Helpers.equalsAny(
+                "Primetime", // Free movies and shows row
+                "News", // Top news
+                "news" // Top news
+        ) || Helpers.equalsAny(
                 value.getTitle(),
                 //getContext().getString(R.string.news_row_name),
                 getContext().getString(R.string.breaking_news_row_name),
                 getContext().getString(R.string.covid_news_row_name)
-        );
+        ));
     }
 
     private int moveToTopIfNeeded(MediaGroup mediaGroup) {
@@ -959,24 +953,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         return Helpers.equalsAny(mediaGroup.getTitle(), getContext().getString(R.string.trending_row_name)) ? 0 : -1;
     }
-
-    //private Observable<MediaGroup> createPinnedAction(Video item) {
-    //    return (item.hasPlaylist() || item.hasReloadPageKey()) ?
-    //            ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item) :
-    //            mGroupManager.getChannelObserve(item.channelId).map(list -> {
-    //                MediaGroup group = null;
-    //
-    //                // Default row is Uploads
-    //                for (MediaGroup mediaGroup : list) {
-    //                    if (mediaGroup != null && Helpers.equals(mediaGroup.getTitle(), getContext().getString(R.string.uploads_row_name))) {
-    //                        group = mediaGroup;
-    //                        break;
-    //                    }
-    //                }
-    //
-    //                return group != null ? group : list.get(0);
-    //            });
-    //}
 
     private Observable<MediaGroup> createPinnedAction(Video item) {
         return ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item);
