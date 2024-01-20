@@ -43,7 +43,7 @@
     <string name="section_is_empty">Hups! Žiadne videá</string>
     <string name="dialog_add_to_playlist">Uložiť do zoznamu</string>
     <string name="msg_signed_users_only">Iba pre prihlásených</string>
-    <string name="msg_cant_load_content">Nemožno načítať obsah.\n1) Skontrolujte dátum a čas na zariadení.\n2) Skontrolujte sieťové pripojenie.\n3) Skontrolujte nastavenia proxy.\n4) Skúste sa prihlásiť do vášho účtu.\n5) Je možné, že tu nie je žiaden obsah.</string>
+    <string name="msg_cant_load_content">Nemožno načítať obsah.\n1) Zapnite históriu sledovania.\n2)  Skontrolujte dátum a čas na zariadení.\n3) Skontrolujte sieťové pripojenie.\n4) Skontrolujte nastavenia proxy.\n5) Skúste sa prihlásiť do vášho účtu.\n6) Je možné, že tu nie je žiaden obsah.</string>
     <string name="title_video_presets">Video prednastavenia</string>
     <string name="settings_accounts">Účty</string>
     <string name="settings_left_panel">Upraviť kategórie</string>
@@ -230,6 +230,8 @@
     <string name="pin_unpin_from_sidebar">Pridať/Odstrániť na postranný panel</string>
     <string name="pin_unpin_playlist">Pridať/Odstrániť playlist na postranný panel</string>
     <string name="pin_unpin_channel">Pridať/Odstrániť kanál na postranný panel</string>
+    <string name="pin_playlist">Pridať playlist na postranný panel</string>
+    <string name="pin_channel">Pridať kanál na postranný panel</string>
     <string name="pin_to_sidebar">Pridať na postranný panel</string>
     <string name="unpin_from_sidebar">Odstrániť z postranného panela</string>
     <string name="unpinned_from_sidebar">Odstránené z postranného panela</string>
@@ -401,6 +403,7 @@
     <string name="player_volume">Hlasitosť</string>
     <string name="play_video">Prehrať</string>
     <string name="remember_position_of_short_videos">Zapamätať pozíciu v Shorts (menej ako 5 min)</string>
+    <string name="remember_position_of_live_videos">Zapamätať pozíciu živého vysielania</string>
     <string name="player_show_tooltips">Zobraziť popis tlačítok</string>
     <string name="action_like_unset">"Páči sa" nie je nastavené</string>
     <string name="action_dislike_unset">"Nepáči sa" nie je nastavené</string>
@@ -412,6 +415,7 @@
     <string name="pressing_back">stlačením tlačidla SPÄŤ</string>
     <string name="player_number_key_seek">Pretáčanie s číslami</string>
     <string name="save_remove_playlist">Uložiť/Zmazať playlist zo sekcie Playlisty</string>
+    <string name="save_playlist">Uložiť playlist do sekcie Playlisty</string>
     <string name="remove_playlist">Zmazať playlist zo sekcie Playlisty natrvalo</string>
     <string name="removed_from_playlists">Zmazané zo sekcie Playlisty</string>
     <string name="saved_to_playlists">Pridané do sekcie Playlisty</string>
@@ -623,4 +627,7 @@
     <string name="auto_frame_rate_desc">Táto možnosť odstraňuje chvenie pri scénach, v ktorých sa kamera rýchlo pohybuje, napr. pri športové prenosy</string>
     <string name="channel_filter_hint">Filtrovať kanály</string>
     <string name="player_loop_shorts">Shorts v slučke</string>
+    <string name="player_quick_shorts_skip">Preskočiť Shorts s tlačidlami vľavo/vpravo</string>
+    <string name="channels_filter">Filtrovať zoznam kanálov v sekcii Kanály</string>
+    <string name="channel_search_bar">Vyhľadávací panel v sekcii Kanály</string>
 </resources>
