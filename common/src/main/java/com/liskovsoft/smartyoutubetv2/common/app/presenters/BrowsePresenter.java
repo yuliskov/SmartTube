@@ -624,6 +624,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         Log.d(TAG, "updateRowsHeader: Start loading section: " + section.getTitle());
 
         disposeActions();
+
+        if (getView() == null) {
+            Log.e(TAG, "Browse view has been unloaded from the memory. Low RAM?");
+            ViewManager.instance(getContext()).startView(BrowseView.class);
+            return;
+        }
         
         getView().showProgressBar(true);
 
