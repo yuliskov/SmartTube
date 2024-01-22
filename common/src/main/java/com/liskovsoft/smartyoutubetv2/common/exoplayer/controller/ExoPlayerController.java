@@ -324,7 +324,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         Throwable nested = error.getCause() != null ? error.getCause() : error;
 
-        mEventListener.onEngineError(error.type, error.rendererIndex, nested.getMessage());
+        mEventListener.onEngineError(error.type, error.rendererIndex, nested);
     }
 
     @Override

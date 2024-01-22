@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
@@ -113,12 +114,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     }
 
     @Override
-    public void onEngineError(int error, int rendererIndex, String message) {
-        Log.e(TAG, "Player error occurred: %s. Trying to fix…", error);
+    public void onEngineError(int type, int rendererIndex, Throwable error) {
+        Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
 
-        mLastError = error;
+        mLastError = type;
 
-        runErrorAction(error, rendererIndex, message);
+        runErrorAction(type, rendererIndex, error);
     }
 
     @Override
@@ -380,8 +381,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     }
 
     @SuppressLint("StringFormatMatches")
-    private void runErrorAction(int error, int rendererIndex, String message) {
-        switch (error) {
+    private void runErrorAction(int type, int rendererIndex, Throwable error) {
+        String message = error != null ? error.getMessage() : null;
+
+        switch (type) {
             // Some ciphered data could be outdated.
             // Might happen when the app wasn't used quite a long time.
             case PlayerEventListener.ERROR_TYPE_SOURCE:
@@ -396,7 +399,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 // NOP
                 break;
             default:
-                MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.msg_player_error, error) + "\n" + message);
+                MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.msg_player_error, type) + "\n" + message);
+                applyErrorAction(error);
                 break;
         }
 
@@ -418,6 +422,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
                 mPlayerData.setFormat(FormatItem.SUBTITLE_NONE);
                 break;
+        }
+    }
+
+    private void applyErrorAction(Throwable error) {
+        if (error instanceof OutOfMemoryError) {
+            mPlayerData.setVideoBufferType(PlayerEngine.BUFFER_LOW);
         }
     }
 
