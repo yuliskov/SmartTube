@@ -400,9 +400,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 break;
             default:
                 MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.msg_player_error, type) + "\n" + message);
-                applyErrorAction(error);
                 break;
         }
+
+        applyErrorAction(error);
 
         // Delay to fix frequent requests
         Utils.postDelayed(mFixAndRestartEngine, 3_000);
