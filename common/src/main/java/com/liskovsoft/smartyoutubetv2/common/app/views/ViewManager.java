@@ -15,6 +15,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -410,7 +411,8 @@ public class ViewManager {
      * Small delay to fix PIP transition bug (UI become unresponsive)
      */
     private void safeStartActivity(Context context, Intent intent) {
-        if (PlaybackPresenter.instance(mContext).isInPipMode()) {
+        //if (PlaybackPresenter.instance(mContext).isInPipMode()) {
+        if (PlaybackPresenter.instance(mContext).getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_PIP) {
             Utils.postDelayed(() -> safeStartActivityInt(context, intent), 50);
         } else {
             safeStartActivityInt(context, intent);
