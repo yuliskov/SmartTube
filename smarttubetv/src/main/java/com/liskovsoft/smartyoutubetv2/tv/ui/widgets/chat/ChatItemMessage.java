@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 public class ChatItemMessage implements IMessage {
-    private static final int MAX_LENGTH = 800;
+    private static final int MAX_LENGTH = 700;
     private String mId;
     private CharSequence mText;
     private ChatItemAuthor mAuthor;
