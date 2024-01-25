@@ -303,7 +303,7 @@ public class MotherActivity extends FragmentActivity {
     private boolean throttleKeyDown(int keyCode) {
         if (mEnableThrottleKeyDown && keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
             long current = System.currentTimeMillis();
-            if (current - mLastKeyDownTime < 300) {
+            if (current - mLastKeyDownTime < 100) {
                 return true;
             }
 
