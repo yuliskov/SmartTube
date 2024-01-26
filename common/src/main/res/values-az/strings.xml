@@ -3,7 +3,7 @@
     <string name="header_home">Ev</string>
     <string name="title_search">Axtarış</string>
     <string name="header_subscriptions">Abunəliklər</string>
-    <string name="header_history">Baxış tarixçəsi</string>
+    <string name="header_history">Tarixçə</string>
     <string name="header_music">Musiqi</string>
     <string name="header_news">Xəbərlər</string>
     <string name="header_gaming">Oyun</string>
@@ -279,7 +279,7 @@
     <string name="content_block_preview_recap">Videonun önbaxışı və ya təkrarı</string>
     <string name="content_block_highlight">Maraqlı məqam (əlfəcin)</string>
     <string name="removed_from_history">Video tarixçədən silindi</string>
-    <string name="remove_from_history">Remove from history</string>
+    <string name="remove_from_history">Tarixçədən sil</string>
     <string name="upload_date">Yüklənmə vaxtı</string>
     <string name="upload_date_any">Həmişə</string>
     <string name="upload_date_today">Bugün</string>
