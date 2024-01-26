@@ -115,9 +115,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.hideWatchedFromSubscriptions(option.isSelected()),
                 mGeneralData.isHideWatchedFromSubscriptionsEnabled()));
 
-        //options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_everywhere),
-        //        option -> mGeneralData.hideShortsEverywhere(option.isSelected()),
-        //        mGeneralData.isHideShortsEverywhereEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_watched_from_notifications),
+                option -> mGeneralData.hideWatchedFromNotifications(option.isSelected()),
+                mGeneralData.isHideWatchedFromNotificationsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_home),
                 option -> mGeneralData.hideShortsFromHome(option.isSelected()),
@@ -127,10 +127,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.hideShortsFromChannel(option.isSelected()),
                 mGeneralData.isHideShortsFromChannelEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.hide_streams),
-                option -> mGeneralData.hideStreamsFromSubscriptions(option.isSelected()),
-                mGeneralData.isHideStreamsFromSubscriptionsEnabled()));
-
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_history),
                 option -> mGeneralData.hideShortsFromHistory(option.isSelected()),
                 mGeneralData.isHideShortsFromHistoryEnabled()));
@@ -138,6 +134,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_trending),
                 option -> mGeneralData.hideShortsFromTrending(option.isSelected()),
                 mGeneralData.isHideShortsFromTrendingEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_streams),
+                option -> mGeneralData.hideStreamsFromSubscriptions(option.isSelected()),
+                mGeneralData.isHideStreamsFromSubscriptionsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_upcoming),
                 option -> mGeneralData.hideUpcomingFromSubscriptions(option.isSelected()),

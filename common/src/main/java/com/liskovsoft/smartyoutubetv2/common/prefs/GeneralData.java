@@ -88,6 +88,7 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsRemapDpadUpToSpeedEnabled;
     private boolean mIsRemapDpadUpToVolumeEnabled;
     private boolean mIsRemapDpadLeftToVolumeEnabled;
+    private boolean mIsHideWatchedFromNotificationsEnabled;
     private Video mSelectedSubscriptionsItem;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
@@ -356,6 +357,15 @@ public class GeneralData implements ProfileChangeListener {
 
     public boolean isHideWatchedFromSubscriptionsEnabled() {
         return GlobalPreferences.sInstance.isHideWatchedFromSubscriptionsEnabled();
+    }
+
+    public void hideWatchedFromNotifications(boolean enable) {
+        mIsHideWatchedFromNotificationsEnabled = enable;
+        persistState();
+    }
+
+    public boolean isHideWatchedFromNotificationsEnabled() {
+        return mIsHideWatchedFromNotificationsEnabled;
     }
 
     public boolean isHideStreamsFromSubscriptionsEnabled() {
@@ -943,6 +953,7 @@ public class GeneralData implements ProfileChangeListener {
         mIsRemapDpadUpToVolumeEnabled = Helpers.parseBoolean(split, 53, false);
         mIsRemapDpadLeftToVolumeEnabled = Helpers.parseBoolean(split, 54, false);
         mIsRemapNextToFastForwardEnabled = Helpers.parseBoolean(split, 55, false);
+        mIsHideWatchedFromNotificationsEnabled = Helpers.parseBoolean(split, 56, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -1006,7 +1017,7 @@ public class GeneralData implements ProfileChangeListener {
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
                 mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextToSpeedEnabled, mIsRemapPlayToOKEnabled, mHistoryState, mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem),
                 mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled, mIsRemapDpadUpToVolumeEnabled,
-                mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled));
+                mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled));
     }
 
     private int getSectionId(Video item) {
