@@ -870,7 +870,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mSubscribeAction = RxHelper.execute(observable);
 
-        video.isSubscribed = !video.isSubscribed;
+        //video.isSubscribed = !video.isSubscribed;
 
         if (!video.isSubscribed && mCallback != null) {
             mCallback.onItemAction(video, VideoMenuCallback.ACTION_UNSUBSCRIBE);
