@@ -34,7 +34,6 @@
   <string name="video_speed">再生速度</string>
   <string name="resolution_switch">画質を変更</string>
   <string name="video_buffer">動画のバッファ</string>
-  <string name="video_buffer_size_none">なし</string>
   <string name="video_buffer_size_low">低</string>
   <string name="video_buffer_size_med">中</string>
   <string name="video_buffer_size_high">高</string>
@@ -315,18 +314,6 @@
   <string name="cancel_dialog">キャンセル</string>
   <string name="msg_player_error_source2">動画ソースが動作していないか不正な時間です</string>
   <string name="hide_upcoming">登録チャンネルからライブ配信予定を非表示にする</string>
-  <string name="search_background_playback">プレーヤーからの検索時にピクチャーインピクチャーに切り替え</string>
-  <string name="trending_row_name">話題の動画</string>
-  <string name="player_seek_type">シーク時の動作</string>
-  <string name="player_seek_regular">通常</string>
-  <string name="player_seek_confirmation_pause">確認する (シーク中は一時停止)</string>
-  <string name="player_seek_confirmation_play">確認する (シーク中に再生)</string>
-  <string name="hide_shorts_from_home">ホームからショートを非表示にする</string>
-  <string name="finish_on_disconnect">デバイスからの切断時にアプリを終了</string>
-  <string name="update_error">アップデートエラー</string>
-  <string name="hide_shorts_from_history">履歴からショートを非表示にする</string>
-  <string name="disable_screensaver">スクリーンセーバーを無効化する</string>
-  <string name="description_not_found">概要が見つかりませんでした</string>
   <string name="proxy_port_hint">プロキシのポート</string>
   <string name="proxy_host_hint">プロキシのホスト名またはIP</string>
   <string name="proxy_username_hint">プロキシのユーザー名</string>
@@ -627,7 +614,7 @@
   <string name="dialog_notification">アップデート通知をポップアップダイアログで表示する</string>
   <string name="app_corner_clock">ホーム: 上部右端の時計</string>
   <string name="player_corner_clock">プレーヤー: 上部右端の時計</string>
-  <string name="player_corner_ending_time">プレーヤー: 上部右端の終了時間までの時間/string>
+  <string name="player_corner_ending_time">プレーヤー: 上部右端の終了時間までの時間</string>
   <string name="remember_position_of_live_videos">ライブ配信の位置を記憶する</string>
   <string name="share_qr_link">リンクを共有 (QRコード)</string>
 </resources>
