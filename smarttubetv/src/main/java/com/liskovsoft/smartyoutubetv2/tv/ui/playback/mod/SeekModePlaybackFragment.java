@@ -83,7 +83,7 @@ public class SeekModePlaybackFragment extends EventsOverridePlaybackFragment {
             stopFadeTimer();
         }
         // immediately fade in control row.
-        showControlsOverlay(true);
+        //showControlsOverlay(true);
     }
 
     private void stopFadeTimer() {
