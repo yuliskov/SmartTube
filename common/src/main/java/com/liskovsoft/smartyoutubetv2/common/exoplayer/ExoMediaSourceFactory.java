@@ -51,7 +51,7 @@ public class ExoMediaSourceFactory {
     private static final String TAG = ExoMediaSourceFactory.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static ExoMediaSourceFactory sInstance;
-    private static final int MAX_SEGMENTS_PER_LOAD = 10;
+    private static final int MAX_SEGMENTS_PER_LOAD = 1;
     private static final String USER_AGENT = DefaultHeaders.USER_AGENT_WEB;
     @SuppressLint("StaticFieldLeak")
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
