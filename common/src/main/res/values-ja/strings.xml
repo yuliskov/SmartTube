@@ -42,7 +42,7 @@
   <string name="section_is_empty">おっと！ここには何もありません。</string>
   <string name="dialog_add_to_playlist">再生リストへの追加または削除</string>
   <string name="msg_signed_users_only">ログインユーザーのみ</string>
-  <string name="msg_cant_load_content">コンテンツを読み込めません。\n1)本体の日付と時刻を確認してください。\n2)インターネット接続を確認してください。\n3)アカウントにログインしてみてください。\n4)このページが空白の場合もあります。</string>
+  <string name="msg_cant_load_content">コンテンツを読み込めません。\n1)検索履歴を有効にしてください。\n2)本体の日時設定を確認してください。\n3)インターネット接続を確認してください。\n4)プロキシ設定を確認してください。\n5)アカウントにログインしてみてください。\n6)このページが空白の場合もあります。</string>
   <string name="title_video_presets">動画のプリセット</string>
   <string name="settings_accounts">アカウント</string>
   <string name="settings_left_panel">カテゴリーを編集</string>
@@ -202,7 +202,7 @@
   <string name="player_remember_speed_all">すべての動画で共通</string>
   <string name="player_remember_speed_each">動画ごと</string>
   <string name="msg_player_error_source">動画をダウンロードできません</string>
-  <string name="msg_player_error_renderer">選択した動画形式は未対応です。\nファームウェアのバグの可能性があります。デバイスを再起動してみてください。</string>
+  <string name="msg_player_error_renderer">選択した形式は未対応です。\n他の形式を選択してみてください。\n改善しなければ、デバイスを再起動してみてください。</string>
   <string name="msg_player_error_unexpected">映像のデコーダーが不明のエラー</string>
   <string name="video_aspect">アスペクト比</string>
   <string name="player_tweaks">開発者向けオプション</string>
@@ -312,7 +312,7 @@
   <string name="content_block_filler">内容からの脱線 (つなぎ)</string>
   <string name="keyboard_auto_show">自動でキーボードを表示する</string>
   <string name="cancel_dialog">キャンセル</string>
-  <string name="msg_player_error_source2">動画ソースが動作していないか不正な時間です</string>
+  <string name="msg_player_error_source2">URLが動作していないか、デバイスの日時が不正です。\n通常はアプリ側の不具合です。</string>
   <string name="hide_upcoming">登録チャンネルからライブ配信予定を非表示にする</string>
   <string name="proxy_port_hint">プロキシのポート</string>
   <string name="proxy_host_hint">プロキシのホスト名またはIP</string>
@@ -323,7 +323,7 @@
   <string name="proxy_not_supported">プロキシを使用する (Android4.4以上が必要です)</string>
   <string name="proxy_test_btn">テスト</string>
   <string name="proxy_settings_title">プロキシサーバーの設定</string>
-  <string name="hide_upcoming_home">ホームから近日公開を非表示にする</string>
+  <string name="hide_upcoming_home">ホームからライブ配信予定を非表示にする</string>
   <string name="search_background_playback">検索またはチャンネルを開いた時にピクチャーインピクチャーを開く</string>
   <string name="trending_row_name">急上昇</string>
   <string name="player_seek_type">シーク時の振る舞い</string>
@@ -609,7 +609,7 @@
   <string name="channel_filter_hint">チャンネルの絞り込み</string>
   <string name="player_loop_shorts">ショートをループ再生</string>
   <string name="player_quick_shorts_skip">左右のボタンでショートをスキップする</string>
-  <string name="channels_filter">登録チャンネルセクション内のチャンネルリストを絞り込む</string>
+  <string name="channels_filter">チャンネルセクション内のチャンネルリストを絞り込む</string>
   <string name="channel_search_bar">チャンネルページ内の検索バー</string>
   <string name="dialog_notification">アップデート通知をポップアップダイアログで表示する</string>
   <string name="app_corner_clock">ホーム: 上部右端の時計</string>
@@ -617,4 +617,16 @@
   <string name="player_corner_ending_time">プレーヤー: 上部右端の終了時間までの時間</string>
   <string name="remember_position_of_live_videos">ライブ配信の位置を記憶する</string>
   <string name="share_qr_link">リンクを共有 (QRコード)</string>
+  <string name="msg_player_error_video_renderer">選択した動画形式は未対応です。\nHQ (再生設定) ボタンから他の形式を選択してみてください。\n改善しなければ、デバイスを再起動してみてください。</string>
+  <string name="msg_player_error_audio_renderer">選択した音声形式は未対応です。\nHQ (再生設定) ボタンから他の形式を選択してみてください。\n改善しなければ、デバイスを再起動してみてください。</string>
+  <string name="msg_player_error_subtitle_renderer">選択した字幕形式は未対応です。\nCC (字幕) ボタンを長押しして、他の形式を選択してみてください。\n改善しなければ、デバイスを再起動してみてください。</string>
+  <string name="pin_channel">サイドバーにチャンネルを固定</string>
+  <string name="pin_playlist">サイドバーに再生リストを固定</string>
+  <string name="hide_shorts_channel">チャンネル欄からショートを非表示にする</string>
+  <string name="news_row_name">ニュース</string>
+  <string name="msg_player_error_video_source">動画URLが動作していないか、デバイスの日時が不正です。\n通常はアプリ側の不具合です。</string>
+  <string name="msg_player_error_audio_source">音声URLが動作していないか、デバイスの日時が不正です。\n通常はアプリ側の不具合です。</string>
+  <string name="msg_player_error_subtitle_source">字幕URLが動作していないか、デバイスの日時が不正です。\n通常はアプリ側の不具合です。</string>
+  <string name="hide_upcoming_channel">チャンネル欄からライブ配信予定を非表示にする</string>
+  <string name="save_playlist">再生リストのセクションに追加</string>
 </resources>
