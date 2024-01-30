@@ -360,11 +360,13 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.disableBufferOnStreams(option.isSelected()),
                 mPlayerTweaksData.isBufferOnStreamsDisabled()));
 
-        options.add(UiOptionItem.from("Keep finished activities",
+        options.add(UiOptionItem.from(getContext().getString(R.string.keep_finished_activities),
+                getContext().getString(R.string.keep_finished_activities),
                 option -> mPlayerTweaksData.enableKeepFinishedActivity(option.isSelected()),
                 mPlayerTweaksData.isKeepFinishedActivityEnabled()));
 
-        options.add(UiOptionItem.from("Disable Channels service",
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_channels_service),
+                getContext().getString(R.string.disable_channels_service),
                 option -> GlobalPreferences.instance(getContext()).enableChannelsService(!option.isSelected()),
                 !GlobalPreferences.instance(getContext()).isChannelsServiceEnabled()));
 
