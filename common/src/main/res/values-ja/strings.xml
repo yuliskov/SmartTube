@@ -182,7 +182,7 @@
   <string name="content_block_music_off_topic">音楽以外の部分</string>
   <string name="confirm_segment_skip">「%s」をスキップしますか？</string>
   <string name="msg_skipping_segment">「%s」をスキップします…</string>
-  <string name="content_block_notification_type">通知形式</string>
+  <string name="content_block_notification_type">通知方法</string>
   <string name="content_block_notify_none">通知なし</string>
   <string name="content_block_notify_toast">トースト通知</string>
   <string name="content_block_notify_dialog">確認ダイアログ</string>
@@ -194,7 +194,7 @@
   <string name="msg_mode_switch_error">表示モードを \"%s\" に切り替えられません</string>
   <string name="msg_player_error">プレーヤーエラー %s が発生しました。再生を再開します…</string>
   <string name="video_preset_disabled">プリセットなし</string>
-  <string name="video_preset_enabled">次の動画の形式は、プリセットに従って設定されます</string>
+  <string name="video_preset_enabled">次の動画のフォーマットは、プリセットに従って設定されます</string>
   <string name="player_sleep_timer">スリープタイマー</string>
   <string name="player_show_quality_info">画質情報をコントロールバーに表示</string>
   <string name="player_remember_each_speed">各動画の再生速度を記憶する</string>
@@ -202,7 +202,7 @@
   <string name="player_remember_speed_all">すべての動画で共通</string>
   <string name="player_remember_speed_each">動画ごと</string>
   <string name="msg_player_error_source">動画をダウンロードできません</string>
-  <string name="msg_player_error_renderer">選択した形式は未対応です。\n他の形式を選択してください。\n改善しなければ、デバイスを再起動してください。</string>
+  <string name="msg_player_error_renderer">選択したフォーマットは未対応です。\n他のフォーマットを選択してください。\n改善しなければ、デバイスを再起動してください。</string>
   <string name="msg_player_error_unexpected">映像のデコーダーが不明のエラー</string>
   <string name="video_aspect">アスペクト比</string>
   <string name="player_tweaks">開発者向けオプション</string>
@@ -551,7 +551,7 @@
   <string name="prefer_avc_over_vp9">コーデック選択: VP9よりAVCを優先</string>
   <string name="alt_app_icon">代替のアプリアイコン (要再起動)</string>
   <string name="unlock_all_formats">すべての映像フォーマットを解除</string>
-  <string name="unlock_all_formats_desc">一部の機器のファームウェアは、一部の形式に未対応だと誤って報告します。(例: 1080pのスマートテレビは、4Kに未対応と報告する傾向あり)</string>
+  <string name="unlock_all_formats_desc">一部の機器のファームウェアは、一部のフォーマットに未対応だと誤って報告します。(例: 1080pのスマートテレビは、4Kに未対応と報告する傾向あり)</string>
   <string name="cronet_desc">CronetはChromiumのネットワークスタックです。これは遅延を減らし、ネットワーク性能を向上させることでバッファの問題を解決できます。</string>
   <string name="network_stack">%s のネットワークスタックを優先する</string>
   <string name="okhttp_desc">このネットワークスタックは最も遅いですが、安定性は良好です。</string>
