@@ -108,13 +108,13 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
                 }
 
                 for (CommentItem commentItem : commentGroup.getComments()) {
-                    ChatItemMessage message = ChatItemMessage.from(commentItem);
-
-                    adapter.addToStart(message, false);
-
-                    if (mFocusedMessage == null && IMessage.checkMessage(message)) {
-                        mFocusedMessage = message;
-                        adapter.setFocusedMessage(message);
+                    if (ChatItemMessage.shouldSplit(commentItem)) {
+                        List<ChatItemMessage> split = ChatItemMessage.fromSplit(commentItem);
+                        for (ChatItemMessage splitItem : split) {
+                            renderMessage(adapter, splitItem);
+                        }
+                    } else {
+                        renderMessage(adapter, ChatItemMessage.from(commentItem));
                     }
                 }
                 if (adapter.getMessagesCount() == 0) { // No comments under the video
@@ -155,6 +155,15 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
         return view;
     }
 
+    private void renderMessage(MessagesListAdapter<ChatItemMessage> adapter, ChatItemMessage message) {
+        adapter.addToStart(message, false);
+
+        if (mFocusedMessage == null && IMessage.checkMessage(message)) {
+            mFocusedMessage = message;
+            adapter.setFocusedMessage(message);
+        }
+    }
+
     public void enableTransparent(boolean enable) {
         mIsTransparent = enable;
     }
@@ -168,7 +177,9 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mCommentsReceiver.onFinish(new CommentsBackup(mBackupMessages, mFocusedMessage, mCurrentGroup));
+        if (mCommentsReceiver != null) {
+            mCommentsReceiver.onFinish(new CommentsBackup(mBackupMessages, mFocusedMessage, mCurrentGroup));
+        }
     }
 
     private void backupMessages() {

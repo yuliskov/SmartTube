@@ -50,6 +50,8 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
 
         appendUpdateCheckButton(settingsPresenter);
 
+        appendUpdateChangelogButton(settingsPresenter);
+
         appendUpdateSource(settingsPresenter);
 
         appendInstallBridge(settingsPresenter);
@@ -84,6 +86,22 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
                 option -> AppUpdatePresenter.instance(getContext()).start(true));
 
         settingsPresenter.appendSingleButton(updateCheckOption);
+    }
+
+    private void appendUpdateChangelogButton(AppDialogPresenter settingsPresenter) {
+        List<String> changes = GeneralData.instance(getContext()).getChangelog();
+
+        if (changes == null || changes.isEmpty()) {
+            return;
+        }
+
+        List<OptionItem> changelog = new ArrayList<>();
+
+        for (String change : changes) {
+            changelog.add(UiOptionItem.from(change));
+        }
+
+        settingsPresenter.appendStringsCategory(getContext().getString(R.string.update_changelog), changelog);
     }
 
     private void appendLinks(AppDialogPresenter settingsPresenter) {

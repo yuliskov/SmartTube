@@ -999,6 +999,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
     public void onReappear(RowPresenter.ViewHolder rowViewHolder) {
         ViewHolder vh = (ViewHolder) rowViewHolder;
         if (vh.view.hasFocus()) {
+            // Reset position in mode 'Seek with confirmation (play while seeking)'
+            vh.stopSeek(Build.VERSION.SDK_INT >= 21
+                    ? !vh.mProgressBar.isAccessibilityFocused() : true);
+
             // player controls hidden
             vh.setControlsMode(ViewHolder.CONTROLS_MODE_FULL);
             vh.mProgressBar.requestFocus();

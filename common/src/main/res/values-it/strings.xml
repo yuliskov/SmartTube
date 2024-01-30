@@ -77,7 +77,7 @@
     <string name="player_only_ui">Solo interfaccia utente</string>
     <string name="player_ui_and_pause">Interfaccia utente e pausa</string>
     <string name="player_only_pause">Fai solo una pausa</string>
-    <string name="check_for_updates">Controlla aggiornamento</string>
+    <string name="check_for_updates">Controlla aggiornamenti</string>
     <string name="update_not_found">Stai utilizzando l\'ultima versione</string>
     <string name="update_in_progress">Attesa…</string>
     <string name="player_ui_hide_behavior">Nascondi automaticamente l\'interfaccia utente</string>
@@ -94,7 +94,7 @@
     <string name="color_scheme_dark_grey">Grigio scuro</string>
     <string name="disable_update_check">Disabilita controllo aggiornamenti</string>
     <string name="show_again">Mostra di nuovo</string>
-    <string name="check_updates_auto">Notifica aggiornamento</string>
+    <string name="check_updates_auto">Notifica aggiornamenti</string>
     <string name="select_account_on_boot">Mostra la selezione dell\'account all\'avvio</string>
     <string name="player_other">Varie</string>
     <string name="player_full_date">Data precisa nella descrizione</string>
@@ -577,8 +577,8 @@
     <string name="screensaver">Screensaver</string>
     <string name="player_screen_off_timeout">Timeout di spegnimento dello schermo</string>
     <string name="old_update_notifications">Il vecchio aspetto delle notifiche di aggiornamento</string>
-    <string name="dialog_notification">Notifica aggiornamento con una finestra di dialogo pop-up</string>
-    <string name="mark_as_watched">Segna come già visto</string>
+    <string name="dialog_notification">Notifica aggiornamenti con una finestra di dialogo pop-up</string>
+    <string name="mark_as_watched">Contrassegna come già visto</string>
     <string name="player_ui_animations">Abilita le animazioni del pannello di controllo</string>
     <string name="player_likes_count">Mostra il conteggio dei Mi piace/Non mi piace</string>
     <string name="sorting_alphabetically2">In ordine alfabetico (anteprime veloci e animate)</string>
@@ -617,6 +617,7 @@
     <string name="prefer_avc_over_vp9_desc">ATTENZIONE: massimo 1080p</string>
     <string name="play_next">Riproduci successivo</string>
     <string name="hide_watched_from_subscriptions">Nascondi i video già visti dalle Iscrizioni</string>
+    <string name="hide_watched_from_notifications">Nascondi i video già visti dalle Notifiche</string>
     <string name="hide_unwanted_content">Nascondi i contenuti indesiderati</string>
     <string name="hide_watched_from_home">Nascondi i video già visti dalla Home</string>
     <string name="remote_control_permission">Il controllo remoto in background richiede l\'autorizzazione alla sovrapposizione</string>

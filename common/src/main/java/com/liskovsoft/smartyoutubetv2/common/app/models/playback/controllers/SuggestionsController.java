@@ -35,6 +35,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private final List<MetadataListener> mListeners = new ArrayList<>();
     private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
+    private GeneralData mGeneralData;
     private MediaGroup mLastScrollGroup;
     //private VideoGroup mCurrentGroup; // disable garbage collected
     private Video mNextVideo;
@@ -61,6 +62,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     @Override
     public void onInit() {
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
+        mGeneralData = GeneralData.instance(getContext());
     }
 
     @Override
@@ -71,7 +73,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         //mCurrentGroup = video.getGroup(); // disable garbage collected
         appendNextSectionVideoIfNeeded(video);
         appendPreviousSectionVideoIfNeeded(video);
-        MediaServiceManager.instance().hideNotification(video);
+        if (mGeneralData.isHideWatchedFromNotificationsEnabled()) {
+            MediaServiceManager.instance().hideNotification(video);
+        }
     }
 
     /**

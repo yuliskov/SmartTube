@@ -58,6 +58,8 @@ public class MotherActivity extends FragmentActivity {
         initTheme();
 
         mScreensaverManager = new ScreensaverManager(this);
+
+        //Helpers.addFullscreenListener(this);
     }
 
     @Override
@@ -138,6 +140,7 @@ public class MotherActivity extends FragmentActivity {
         // Most of the fullscreen tweaks could be performed in styles but not all.
         // E.g. Hide bottom navigation bar (couldn't be done in styles).
         Helpers.makeActivityFullscreen(this);
+        //Helpers.makeActivityFullscreen2(this);
 
         // Remove screensaver from the previous activity when closing current one.
         // Called on player's next track. Reason unknown.
@@ -152,6 +155,15 @@ public class MotherActivity extends FragmentActivity {
         // Called on player's next track. Reason unknown.
         mScreensaverManager.disable();
     }
+
+    //@Override
+    //public void onWindowFocusChanged(boolean hasFocus) {
+    //    super.onWindowFocusChanged(hasFocus);
+    //
+    //    if (hasFocus) {
+    //        Helpers.makeActivityFullscreen2(this);
+    //    }
+    //}
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -303,7 +315,7 @@ public class MotherActivity extends FragmentActivity {
     private boolean throttleKeyDown(int keyCode) {
         if (mEnableThrottleKeyDown && keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
             long current = System.currentTimeMillis();
-            if (current - mLastKeyDownTime < 300) {
+            if (current - mLastKeyDownTime < 100) {
                 return true;
             }
 

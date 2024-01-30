@@ -88,7 +88,9 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsRemapDpadUpToSpeedEnabled;
     private boolean mIsRemapDpadUpToVolumeEnabled;
     private boolean mIsRemapDpadLeftToVolumeEnabled;
+    private boolean mIsHideWatchedFromNotificationsEnabled;
     private Video mSelectedSubscriptionsItem;
+    private List<String> mChangelog;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new CopyOnWriteArrayList<>();
@@ -356,6 +358,15 @@ public class GeneralData implements ProfileChangeListener {
 
     public boolean isHideWatchedFromSubscriptionsEnabled() {
         return GlobalPreferences.sInstance.isHideWatchedFromSubscriptionsEnabled();
+    }
+
+    public void hideWatchedFromNotifications(boolean enable) {
+        mIsHideWatchedFromNotificationsEnabled = enable;
+        persistState();
+    }
+
+    public boolean isHideWatchedFromNotificationsEnabled() {
+        return mIsHideWatchedFromNotificationsEnabled;
     }
 
     public boolean isHideStreamsFromSubscriptionsEnabled() {
@@ -854,6 +865,15 @@ public class GeneralData implements ProfileChangeListener {
         return mSelectedSubscriptionsItem;
     }
 
+    public void setChangelog(List<String> changelog) {
+        mChangelog = changelog;
+        persistState();
+    }
+
+    public List<String> getChangelog() {
+        return mChangelog;
+    }
+
     private void initSections() {
         mDefaultSections.put(R.string.header_notifications, MediaGroup.TYPE_NOTIFICATIONS);
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
@@ -943,6 +963,8 @@ public class GeneralData implements ProfileChangeListener {
         mIsRemapDpadUpToVolumeEnabled = Helpers.parseBoolean(split, 53, false);
         mIsRemapDpadLeftToVolumeEnabled = Helpers.parseBoolean(split, 54, false);
         mIsRemapNextToFastForwardEnabled = Helpers.parseBoolean(split, 55, false);
+        mIsHideWatchedFromNotificationsEnabled = Helpers.parseBoolean(split, 56, false);
+        mChangelog = Helpers.parseStrList(split, 57);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -986,27 +1008,25 @@ public class GeneralData implements ProfileChangeListener {
     }
 
     private void persistState() {
-        String pinnedItems = Helpers.mergeArray(mPinnedItems.toArray());
-        String pendingStreams = Helpers.mergeArray(mPendingStreams.toArray());
         List<String> playlistOrderPairs = new ArrayList<>();
         for (Entry<String, Integer> pair : mPlaylistOrder.entrySet()) {
             playlistOrderPairs.add(String.format("%s|%s", pair.getKey(), pair.getValue()));
         }
-        String playlistOrder = Helpers.mergeArray(playlistOrderPairs.toArray());
+        String playlistOrder = Helpers.mergeList(playlistOrderPairs);
         // Zero index is skipped. Selected sections were there.
         mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
-                mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems, mIsHideShortsFromSubscriptionsEnabled,
+                mIsReturnToLauncherEnabled, mBackgroundShortcut, Helpers.mergeList(mPinnedItems), mIsHideShortsFromSubscriptionsEnabled,
                 mIsRemapFastForwardToNextEnabled, null,
                 mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
-                playlistOrder, pendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
+                playlistOrder, Helpers.mergeList(mPendingStreams), mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
                 mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextToSpeedEnabled, mIsRemapPlayToOKEnabled, mHistoryState, mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem),
                 mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled, mIsRemapDpadUpToVolumeEnabled,
-                mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled));
+                mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled, Helpers.mergeList(mChangelog)));
     }
 
     private int getSectionId(Video item) {
