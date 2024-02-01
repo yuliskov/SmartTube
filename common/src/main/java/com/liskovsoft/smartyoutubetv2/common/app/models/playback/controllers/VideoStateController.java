@@ -607,6 +607,6 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         float posPercents1 = state.positionMs * 100f / state.durationMs;
         float posPercents2 = item.getPositionMs() * 100f / item.getDurationMs();
 
-        return Math.abs(posPercents1 - posPercents2) > 3 && state.timestamp < item.timestamp;
+        return (posPercents2 != 0 && Math.abs(posPercents1 - posPercents2) > 3) && state.timestamp < item.timestamp;
     }
 }
