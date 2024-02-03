@@ -57,7 +57,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     private PlayerData mPlayerData;
     private PlayerTweaksData mPlayerTweaksData;
     private List<PlaylistInfo> mPlaylistInfos;
-    private FormatItem mAudioFormat;
+    private FormatItem mAudioFormat = FormatItem.AUDIO_HQ_MP4A;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
     private boolean mIsMetadataLoaded;
