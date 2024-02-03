@@ -57,6 +57,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     private PlayerData mPlayerData;
     private PlayerTweaksData mPlayerTweaksData;
     private List<PlaylistInfo> mPlaylistInfos;
+    private FormatItem mAudioFormat;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
     private boolean mIsMetadataLoaded;
@@ -252,6 +253,10 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     @Override
     public void onVideoLoaded(Video item) {
         getPlayer().updateEndingTime();
+        getPlayer().setButtonState(R.id.action_sound_off, getPlayer().getAudioFormat().isDefault() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        if (getPlayer().getAudioFormat().isDefault()) {
+            MessageHelpers.showMessage(getContext(), R.string.action_sound_off);
+        }
     }
 
     @Override
@@ -504,6 +509,8 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             applyScreenOffTimeout(buttonState);
         } else if (buttonId == R.id.action_subscribe) {
             onSubscribe(buttonState);
+        } else if (buttonId == R.id.action_sound_off) {
+            applySoundOff(buttonState);
         }
     }
 
@@ -843,7 +850,18 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             callMediaItemObservable(mMediaItemManager::unsubscribeObserve);
         }
 
-        getPlayer().setButtonState(R.id.action_subscribe, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON: PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_subscribe, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+    }
+
+    private void applySoundOff(int buttonState) {
+        if (buttonState == PlayerUI.BUTTON_OFF) {
+            mAudioFormat = getPlayer().getAudioFormat();
+            getPlayer().setFormat(FormatItem.NO_AUDIO);
+        } else {
+            getPlayer().setFormat(mAudioFormat);
+        }
+
+        getPlayer().setButtonState(R.id.action_sound_off, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
     private void reorderSubtitles(List<FormatItem> subtitleFormats) {

@@ -1003,6 +1003,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public FormatItem getAudioFormat() {
+        return mExoPlayerController.getAudioFormat();
+    }
+
+    @Override
     public boolean isEngineInitialized() {
         return mPlayer != null;
     }
