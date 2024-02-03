@@ -631,4 +631,5 @@
     <string name="player_quick_shorts_skip">Skip Shorts with left/right buttons</string>
     <string name="channels_filter">Filter channels list inside the Channels section</string>
     <string name="channel_search_bar">Search bar inside the Channel page</string>
+    <string name="header_sports">Sports</string>
 </resources>

@@ -624,4 +624,5 @@
     <string name="player_quick_shorts_skip">Перемикати короткі відео кнопками ліво/право</string>
     <string name="channels_filter">Фільтрувати список каналів у розділі Канали</string>
     <string name="channel_search_bar">Панель пошуку на сторінці каналу</string>
+    <string name="header_sports">Спорт</string>
 </resources>
