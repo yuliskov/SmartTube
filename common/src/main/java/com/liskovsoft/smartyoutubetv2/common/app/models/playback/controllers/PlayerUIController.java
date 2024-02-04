@@ -253,10 +253,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     @Override
     public void onVideoLoaded(Video item) {
         getPlayer().updateEndingTime();
-        getPlayer().setButtonState(R.id.action_sound_off, getPlayer().getAudioFormat().isDefault() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-        if (getPlayer().getAudioFormat().isDefault()) {
-            MessageHelpers.showMessage(getContext(), R.string.action_sound_off);
-        }
+        applyMuteButtonState();
     }
 
     @Override
@@ -280,6 +277,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
         // Maybe dialog just closed. Reset timeout just in case.
         enableUiAutoHideTimeout();
+        applyMuteButtonState();
     }
 
     @Override
@@ -880,5 +878,14 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             }
         }
         subtitleFormats.addAll(subtitleFormats.size() < begin ? 0 : begin, topSubtitles);
+    }
+
+    private void applyMuteButtonState() {
+        if (getPlayer().getAudioFormat() != null) {
+            getPlayer().setButtonState(R.id.action_sound_off, getPlayer().getAudioFormat().isDefault() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+            if (getPlayer().getAudioFormat().isDefault()) {
+                MessageHelpers.showMessage(getContext(), R.string.action_sound_off);
+            }
+        }
     }
 }
