@@ -310,6 +310,7 @@
     <string name="action_pip">Bild-in-Bild</string>
     <string name="action_video_info">Video-Beschreibung</string>
     <string name="action_screen_off">Bildschirm aus</string>
+    <string name="action_sound_off">Ton aus</string>
     <string name="action_playback_queue">Warteschlange</string>
     <string name="action_video_speed">Video-Geschwindigkeit</string>
     <string name="action_subtitles">Untertitel anzeigen</string>
@@ -631,4 +632,5 @@
     <string name="player_quick_shorts_skip">Shorts überspringen mit Links/Rechts-Tasten</string>
     <string name="channels_filter">Liste der Kanäle innerhalb der Kanäle-Kategorie filtern</string>
     <string name="channel_search_bar">Suchleiste innerhalb der Kanalseite</string>
+    <string name="header_sports">Sport</string>
 </resources>
