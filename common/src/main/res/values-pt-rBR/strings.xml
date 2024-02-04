@@ -522,7 +522,7 @@
   <string name="network_stack">Preferir Ponte de Conexão %s</string>
   <string name="cronet_desc">Cronet é a pilha de rede do Chromium. O Cronet pode reduzir a latência e aumentar a performance da rede, o que pode ajudar com problemas de buffering.</string>
   <string name="unlock_all_formats">Desbloquear todos os formatos de vídeo</string>
-  <string name="unlock_all_formats_desc">Em alguns dispositivos o firmware apresenta incorretamente alguns formatos como não suportados, mesmo que eles sejam.\n (e.g. Smart TVs 1080p costumam reportar o 4K como não suportado).</string>
+  <string name="unlock_all_formats_desc">Em alguns dispositivos o firmware apresenta incorretamente alguns formatos como não suportados, mesmo que eles sejam.\n (ex. Smart TVs 1080p costumam reportar o 4K como não suportado).</string>
   <string name="okhttp_desc">Essa pilha de rede é a mais lenta porém possui boa estabilidade.</string>
   <string name="select_channel_section">Abrir a sessão correspondente quando o aplicativo for iniciado por canais ATV</string>
   <string name="enable_voice_search_desc">O aplicativo oficial será substituído por uma ponte. Uma ponte ajuda a transferir resultados de pesquisas globais ao nosso aplicativo.</string>
@@ -602,7 +602,7 @@
   <string name="screensaver_timout">Tempo limite do protetor de tela</string>
   <string name="screensaver_dimming">Quantidade de escurecimento do protetor de tela</string>
   <string name="item_postion">Posição de</string>
-  <string name="keyboard_fix">Consertar: Mostrar teclado quando pressionar OK (G20s and outros)</string>
+  <string name="keyboard_fix">Consertar: Mostrar teclado quando pressionar OK (G20s e outros)</string>
   <string name="open_comments">Abrir comentários</string>
   <string name="hide_upcoming_channel">Ocultar Em breve de Canais</string>
   <string name="hide_upcoming_home">Ocultar Em breve do início</string>
@@ -621,4 +621,9 @@
   <string name="player_global_focus">Navegação perfeita entre as linhas de botões do player</string>
   <string name="hide_shorts_from_trending">Ocultar os Shorts do Em Alta</string>
   <string name="player_loop_shorts">Loopar Shorts</string>
+  <string name="pin_channel">Adicionar Canal na barra lateral</string>
+  <string name="pin_playlist">Adicionar lista de Reprodução na barra lateral</string>
+  <string name="hide_watched_from_notifications">Ocultar videos assistidos das Notificações</string>
+  <string name="keep_finished_activities">Manter atividades finalizadas</string>
+  <string name="disable_channels_service">Desabilitar serviços de canais</string>
 </resources>

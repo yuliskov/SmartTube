@@ -633,4 +633,6 @@
     <string name="channels_filter">Filter channels list inside the Channels section</string>
     <string name="channel_search_bar">Search bar inside the Channel page</string>
     <string name="header_sports">Sports</string>
+    <string name="keep_finished_activities">Keep finished activities</string>
+    <string name="disable_channels_service">Disable Channels service</string>
 </resources>
