@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DataSaverBase extends DataChangeBase {
+public abstract class DataSaverBase extends DataChangeBase {
     private final AppPrefs mAppPrefs;
     private final String mDataKey;
     private final List<String> mValues;
