@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
@@ -313,5 +314,36 @@ public class VideoGroup {
             video.playlistId = null;
             video.remotePlaylistId = null;
         }
+    }
+
+    public List<String> getVideoIds() {
+        if (mVideos == null) {
+            return null;
+        }
+
+        List<String> result = new ArrayList<>();
+
+        for (Video video : mVideos) {
+            result.add(video.videoId);
+        }
+
+        return result;
+    }
+
+    public Video findVideoById(String videoId) {
+        if (mVideos == null) {
+            return null;
+        }
+
+        Video result = null;
+
+        for (Video video : mVideos) {
+            if (Helpers.equals(videoId, video.videoId)) {
+                result = video;
+                break;
+            }
+        }
+
+        return result;
     }
 }

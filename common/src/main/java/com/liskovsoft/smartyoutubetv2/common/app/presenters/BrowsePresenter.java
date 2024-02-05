@@ -2,14 +2,16 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+
 import com.liskovsoft.mediaserviceinterfaces.ContentService;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.HubService;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.NotificationsService;
 import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.ScreenHelper;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -34,16 +36,14 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
-import com.liskovsoft.sharedutils.helpers.ScreenHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeHubService;
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,6 +52,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 
 public class BrowsePresenter extends BasePresenter<BrowseView> implements SectionPresenter, VideoGroupPresenter, AccountChangeListener {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
@@ -71,6 +74,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final MediaItemService mItemService;
     private final SignInService mSignInService;
     private final NotificationsService mNotificationsService;
+    private final DeArrowProcessor mDeArrowProcessor;
     private final List<Disposable> mActions;
     private final Runnable mRefreshSection = this::refresh;
     private BrowseSection mCurrentSection;
@@ -99,6 +103,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mItemService = hubService.getMediaItemService();
         mSignInService = hubService.getSignInService();
         mNotificationsService = hubService.getNotificationsService();
+        mDeArrowProcessor = new DeArrowProcessor(getContext(), this::syncItem);
         mActions = new ArrayList<>();
 
         initSections();
@@ -652,6 +657,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 VideoGroup videoGroup = VideoGroup.from(mediaGroup, section);
 
                                 getView().updateSection(videoGroup);
+                                mDeArrowProcessor.process(videoGroup);
 
                                 continueGroupIfNeeded(videoGroup, false);
                             }
@@ -714,6 +720,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
                             VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, position);
                             getView().updateSection(videoGroup);
+                            mDeArrowProcessor.process(videoGroup);
 
                             continueGroupIfNeeded(videoGroup);
                         },
@@ -777,6 +784,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
                             VideoGroup videoGroup = VideoGroup.from(group, continueGroup);
                             getView().updateSection(videoGroup);
+                            mDeArrowProcessor.process(videoGroup);
 
                             continueGroupIfNeeded(videoGroup, showLoading);
                         },

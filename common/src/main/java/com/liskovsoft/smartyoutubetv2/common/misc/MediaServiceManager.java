@@ -83,7 +83,7 @@ public class MediaServiceManager {
         void onAccountChanged(Account account);
     }
 
-    public MediaServiceManager() {
+    private MediaServiceManager() {
         HubService service = YouTubeHubService.instance();
         mItemService = service.getMediaItemService();
         mContentService = service.getContentService();

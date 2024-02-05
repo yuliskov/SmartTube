@@ -33,6 +33,7 @@ public class DeArrowSettingsPresenter extends BasePresenter<Void> {
 
         //appendDeArrowSwitch(settingsPresenter);
         appendThumbQuality(settingsPresenter);
+        appendMiscSection(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dearrow_provider), onFinish);
     }
@@ -56,6 +57,16 @@ public class DeArrowSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.card_content), options);
+    }
+
+    private void appendMiscSection(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.replace_titles),
+                optionItem -> mDeArrowData.replaceTitles(optionItem.isSelected()),
+                mDeArrowData.isReplaceTitlesEnabled()));
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 
     private void appendDeArrowSwitch(AppDialogPresenter settingsPresenter) {
