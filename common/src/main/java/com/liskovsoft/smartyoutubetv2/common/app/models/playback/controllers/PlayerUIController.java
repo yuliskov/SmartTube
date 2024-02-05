@@ -444,7 +444,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         AppDialogUtil.appendShareQRLinkDialogItem(getContext(), dialogPresenter, getPlayer().getVideo(), positionSec);
         AppDialogUtil.appendShareEmbedLinkDialogItem(getContext(), dialogPresenter, getPlayer().getVideo(), positionSec);
 
-        dialogPresenter.showDialog(getPlayer().getVideo().title);
+        dialogPresenter.showDialog(getPlayer().getVideo().getTitle());
 
         //if (video.videoId != null) {
         //    Utils.displayShareVideoDialog(getActivity(), video.videoId, (int)(getController().getPositionMs() / 1_000));

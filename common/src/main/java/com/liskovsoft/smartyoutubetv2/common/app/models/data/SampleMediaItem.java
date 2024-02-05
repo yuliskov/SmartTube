@@ -50,8 +50,8 @@ public final class SampleMediaItem implements MediaItem {
         SampleMediaItem mediaItem = new SampleMediaItem();
 
         mediaItem.mId = (int) video.id;
-        mediaItem.mTitle = video.title;
-        mediaItem.mSecondTitle = video.secondTitle;
+        mediaItem.mTitle = video.getTitle();
+        mediaItem.mSecondTitle = video.getSecondTitle();
         mediaItem.mContentType = video.category;
         mediaItem.mType = video.itemType;
         mediaItem.mVideoId = video.videoId;

@@ -36,6 +36,7 @@ public final class Video {
     private static final float RESTORE_POSITION_PERCENTS = 10; // min value for immediately closed videos
     public long id;
     public String title;
+    public String altTitle;
     public String secondTitle;
     private String metadataTitle;
     private String metadataSecondTitle;
@@ -244,11 +245,16 @@ public final class Video {
     }
 
     public String getTitle() {
-        return title != null ? title : metadataTitle;
+        return altTitle != null ? altTitle : metadataTitle != null ? metadataTitle : title;
     }
 
     public String getSecondTitle() {
-        return secondTitle != null ? secondTitle : metadataSecondTitle;
+        // Don't sync future translation because of not precise info
+        return metadataSecondTitle != null && !isUpcoming ? metadataSecondTitle : secondTitle;
+    }
+
+    public String getPlaylistId() {
+        return isRemote && remotePlaylistId != null ? remotePlaylistId : playlistId;
     }
 
     public String getAuthor() {
@@ -573,16 +579,6 @@ public final class Video {
 
             metadataSecondTitle = useAltSecondTitle ? metadata.getSecondTitleAlt() : metadata.getSecondTitle();
 
-            // Casting fix (no title, no desc)
-            if (title == null) {
-                title = metadataTitle;
-            }
-
-            // Casting fix (no title, no desc)
-            if (secondTitle == null) {
-                secondTitle = metadataSecondTitle;
-            }
-
             // NOTE: Upcoming videos metadata wrongly reported as live (live == true, upcoming == false)
             isLive = metadata.isLive();
             isUpcoming = metadata.isUpcoming();
@@ -653,19 +649,6 @@ public final class Video {
         }
 
         return video;
-    }
-
-    public String getPlayerTitle() {
-        return metadataTitle != null ? metadataTitle : title != null ? title : null;
-    }
-
-    public String getPlayerSecondTitle() {
-        // Don't sync future translation because of not precise info
-        return metadataSecondTitle != null && !isUpcoming ? metadataSecondTitle : secondTitle != null ? secondTitle : null;
-    }
-
-    public String getPlaylistId() {
-        return isRemote && remotePlaylistId != null ? remotePlaylistId : playlistId;
     }
 
     private boolean checkMediaItems() {

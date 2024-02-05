@@ -322,7 +322,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
         if (suggestions == null) {
-            String msg = "loadSuggestions: Can't obtain suggestions for video: " + video.title;
+            String msg = "loadSuggestions: Can't obtain suggestions for video: " + video.getTitle();
             Log.e(TAG, msg);
             return;
         }
@@ -481,7 +481,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         int index = findCurrentChapterIndex(group.getVideos());
 
         if (index != -1) {
-            String title = group.getVideos().get(index).title;
+            String title = group.getVideos().get(index).getTitle();
             getPlayer().focusSuggestedItem(index);
             getPlayer().setSeekPreviewTitle(title);
         }

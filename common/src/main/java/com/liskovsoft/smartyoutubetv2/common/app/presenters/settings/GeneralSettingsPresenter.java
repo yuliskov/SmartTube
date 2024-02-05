@@ -259,10 +259,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         Collection<Video> pinnedItems = mGeneralData.getPinnedItems();
 
         for (Video item : pinnedItems) {
-            if (item != null && item.title != null) {
+            if (item != null && item.getTitle() != null) {
                 options.add(
                         UiOptionItem.from(
-                                item.title,
+                                item.getTitle(),
                                 optionItem -> mGeneralData.setBootSectionId(item.hashCode()),
                                 item.hashCode() == mGeneralData.getBootSectionId()
                         )

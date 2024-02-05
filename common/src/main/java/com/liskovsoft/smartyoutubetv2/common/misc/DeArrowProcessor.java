@@ -49,7 +49,7 @@ public class DeArrowProcessor implements OnDataChange {
         Disposable result = mItemService.getDeArrowDataObserve(videoIds)
                 .subscribe(deArrowData -> {
                     Video video = videoGroup.findVideoById(deArrowData.getVideoId());
-                    video.title = deArrowData.getTitle();
+                    video.altTitle = deArrowData.getTitle();
                     mOnItemReady.onItemReady(video);
                 },
                 error -> {

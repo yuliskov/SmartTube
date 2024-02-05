@@ -289,7 +289,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
 
             if (newVisibility == View.VISIBLE) {
                 Video video = PlaybackPresenter.instance(getContext()).getVideo();
-                mPipTitle.setText(video != null ? String.format("%s - %s", video.title, video.getAuthor()) : "");
+                mPipTitle.setText(video != null ? String.format("%s - %s", video.getTitle(), video.getAuthor()) : "");
             }
         }
     }
