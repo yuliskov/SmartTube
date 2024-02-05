@@ -7,6 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.DeArrowData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 
@@ -15,10 +16,12 @@ import java.util.List;
 
 public class DeArrowSettingsPresenter extends BasePresenter<Void> {
     private final MainUIData mMainUIData;
+    private final DeArrowData mDeArrowData;
 
-    public DeArrowSettingsPresenter(Context context) {
+    private DeArrowSettingsPresenter(Context context) {
         super(context);
         mMainUIData = MainUIData.instance(context);
+        mDeArrowData = DeArrowData.instance(context);
     }
 
     public static DeArrowSettingsPresenter instance(Context context) {
@@ -28,9 +31,10 @@ public class DeArrowSettingsPresenter extends BasePresenter<Void> {
     public void show(Runnable onFinish) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
+        appendDeArrowSwitch(settingsPresenter);
         appendThumbQuality(settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.content_dearrow_provider), onFinish);
+        settingsPresenter.showDialog(getContext().getString(R.string.dearrow_provider), onFinish);
     }
 
     public void show() {
@@ -52,5 +56,19 @@ public class DeArrowSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.card_content), options);
+    }
+
+    private void appendDeArrowSwitch(AppDialogPresenter settingsPresenter) {
+        String title = String.format(
+                "%s (%s)",
+                getContext().getString(R.string.dearrow_provider),
+                getContext().getString(R.string.dearrow_provider_url)
+        );
+        OptionItem sponsorBlockOption = UiOptionItem.from(title,
+                option -> mDeArrowData.enableDeArrow(option.isSelected()),
+                mDeArrowData.isDeArrowEnabled()
+        );
+
+        settingsPresenter.appendSingleSwitch(sponsorBlockOption);
     }
 }

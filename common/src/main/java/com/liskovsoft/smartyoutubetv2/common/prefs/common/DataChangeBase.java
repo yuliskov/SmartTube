@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.prefs;
+package com.liskovsoft.smartyoutubetv2.common.prefs.common;
 
 import com.liskovsoft.smartyoutubetv2.common.utils.WeakHashSet;
 
