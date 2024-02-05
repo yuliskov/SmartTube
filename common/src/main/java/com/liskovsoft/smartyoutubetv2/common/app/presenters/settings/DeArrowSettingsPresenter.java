@@ -31,7 +31,7 @@ public class DeArrowSettingsPresenter extends BasePresenter<Void> {
     public void show(Runnable onFinish) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
-        appendDeArrowSwitch(settingsPresenter);
+        //appendDeArrowSwitch(settingsPresenter);
         appendThumbQuality(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dearrow_provider), onFinish);
