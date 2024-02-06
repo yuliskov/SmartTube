@@ -7,6 +7,7 @@
   <string name="header_music">Música</string>
   <string name="header_news">Notícias</string>
   <string name="header_gaming">Jogos</string>
+  <string name="header_sports">Esportes</string>
   <string name="header_playlists">Biblioteca</string>
   <string name="header_settings">Configurações</string>
   <string name="header_channels">Canais</string>
@@ -235,6 +236,7 @@
   <string name="proxy_disabled">Proxy desabilitado</string>
   <string name="uploads_row_name">Carregamentos</string>
   <string name="playlists_row_name">Listas de reprodução criadas</string>
+  <string name="news_row_name">Noticias</string>
   <string name="popular_uploads_row_name">Carregamentos populares</string>
   <string name="breaking_news_row_name">Últimas notícias</string>
   <string name="covid_news_row_name">Notícias sobre o COVID-19</string>
@@ -436,7 +438,7 @@
   <string name="badge_live">AO VIVO</string>
   <string name="badge_new_content">NOVO CONTEÚDO</string>
   <string name="player_disable_suggestions">Desabilitar sugestões</string>
-  <string name="skip_24_rate">Pular formatos de 24fps (correção real do modo cinema)</string>
+  <string name="skip_24_rate">Pular formatos de 24fps (correção real do modo cinema?)</string>
   <string name="add_device_view_description">Para vincular o dispositivo, insira esse código no aplicativo do YouTube do seu telefone (Configurações &gt; Assistir na TV).\nNOTA: funciona apenas com o teclado Gboard.</string>
   <string name="signin_view_title">O código do usuário está carregando...</string>
   <string name="signin_view_description">Para fazer o login, digite esse código na página %s\nNOTA: funciona apenas nos navegadores Firefox e Chrome.</string>
@@ -626,4 +628,10 @@
   <string name="hide_watched_from_notifications">Ocultar videos assistidos das Notificações</string>
   <string name="keep_finished_activities">Manter atividades finalizadas</string>
   <string name="disable_channels_service">Desabilitar serviços de canais</string>
+  <string name="more_info">Nais informação</string>
+  <string name="replace_titles">Substituir títulos</string>
+  <string name="enable">Habilitar</string>
+  <string name="remember_position_of_live_videos">Lembrar-se da posição das Lives</string>
+  <string name="save_playlist">Adicionar lista de reprodução para Seção de Listas de reprodução</string>
+  <string name="dearrow_status">Verificar o status do DeArrow</string>
 </resources>
