@@ -172,7 +172,7 @@
   <string name="msg_done">完了</string>
   <string name="settings_general">一般</string>
   <string name="settings_video">動画</string>
-  <string name="content_block_confirm_skip">スキップで確認する</string>
+  <string name="content_block_confirm_skip">スキップを確認する</string>
   <string name="content_block_categories">セグメントのスキップ</string>
   <string name="content_block_sponsor">スポンサー</string>
   <string name="content_block_intro">合間または導入のアニメ</string>
@@ -181,7 +181,7 @@
   <string name="content_block_self_promo">無報酬または自己の宣伝</string>
   <string name="content_block_music_off_topic">音楽以外の部分</string>
   <string name="confirm_segment_skip">「%s」をスキップしますか？</string>
-  <string name="msg_skipping_segment">「%s」をスキップします…</string>
+  <string name="msg_skipping_segment">「%s」をスキップしました</string>
   <string name="content_block_notification_type">通知方法</string>
   <string name="content_block_notify_none">通知なし</string>
   <string name="content_block_notify_toast">トースト通知</string>
@@ -412,7 +412,7 @@
   <string name="msg_press_again_to_exit">もう一度押すと終了します</string>
   <string name="player_remaining_time">残り時間: %s</string>
   <string name="player_ending_time">終了時間: %s</string>
-  <string name="badge_live">ライブ配信</string>
+  <string name="badge_live">ライブ</string>
   <string name="badge_new_content">新しい動画</string>
   <string name="add_device_view_description">デバイスとリンクするには、このコードをスマートフォンのYouTubeアプリの 設定&gt;テレビで見る で入力してください</string>
   <string name="playback_controls_repeat_pause">一時停止リピート</string>
@@ -452,6 +452,7 @@
   <string name="thumb_quality_middle">動画の中心位置</string>
   <string name="thumb_quality_end">動画の終端位置</string>
   <string name="content_block_status">SponsorBlockのステータスを確認する</string>
+  <string name="dearrow_status">DeArrowのステータスを確認する</string>
   <string name="player_show_quality_info_bitrate">画質情報にビットレート情報を追加する</string>
   <string name="player_speed_button_old_behavior">再生速度ボタンを旧仕様に戻す</string>
   <string name="protect_settings_with_password">すべての設定をパスワードで保護をする</string>
@@ -537,8 +538,8 @@
   <string name="amlogic_fix_desc">Amlogicのデバイスのフレームドロップを修正します。</string>
   <string name="playback_notifications_fix">再生の通知を無効化する</string>
   <string name="playback_notifications_fix_desc">トラックの変更通知を非表示にします。AOSP のファームウェアで役立つことがあります。</string>
-  <string name="tunneled_video_playback_desc">注意: 一時停止が正しく機能しないことがあります！トンネルモードの動画再生は、オーディオと映像の同期 (AV Sync) の向上、よりスムーズな再生などにおいて有益です。Android 5以上が必要。</string>
-  <string name="tunneled_video_playback">トンネルモードの動画再生 (Android 5以上)</string>
+  <string name="tunneled_video_playback_desc">注意: 一時停止が正しく機能しないことがあります！トンネルモードの動画再生は、オーディオと映像の同期 (AVSync) の向上、よりスムーズな再生などにおいて有益です。Android 5以降が必要です。</string>
+  <string name="tunneled_video_playback">トンネルモードの動画再生 (Android 5以降)</string>
   <string name="sleep_timer_desc">1時間リモコンを使用していない場合、再生を一時停止する</string>
   <string name="force_sw_codec_desc">ほぼすべての動画を再生できますが、パフォーマンスは非常に悪くなります。</string>
   <string name="force_sw_codec">SW映像デコーダーを強制する</string>
@@ -558,7 +559,7 @@
   <string name="sony_frame_drop_fix">フレームドロップの修正 #1</string>
   <string name="sony_frame_drop_fix_desc">Sony製のテレビやその他デバイスの遅延を修正します。注意: オーディオの同期に問題が発生する可能性があります。</string>
   <string name="disable_stream_buffer">ライブ配信のバッファを無効化する</string>
-  <string name="disable_stream_buffer_desc">ライブ配信が大きく遅延を起こす問題を修正します。注: ライブ配信でラグが起きる可能性があります。</string>
+  <string name="disable_stream_buffer_desc">ライブ配信が大きく遅延を起こす問題を修正します。注意: ライブ配信でラグが起きる可能性があります。</string>
   <string name="disable_ok_long_press">OKボタンの長押しを無効化する</string>
   <string name="disable_ok_long_press_desc">OKボタンが正常に機能しないコントローラー向けです。</string>
   <string name="hide_settings_section">設定セクションを非表示にする (危険です!)</string>
@@ -606,7 +607,7 @@
   <string name="keyboard_fix">OKボタンでキーボードを表示するように修正する (G20sとその他のデバイス向け)</string>
   <string name="nothing_found">何も見つかりませんでした</string>
   <string name="auto_frame_rate_desc">このオプションは、スポーツのライブ配信などのカメラの動きが速いシーンでのジッターを除去します。</string>
-  <string name="channel_filter_hint">チャンネルの絞り込み</string>
+  <string name="channel_filter_hint">チャンネルを検索</string>
   <string name="player_loop_shorts">ショート動画をループ再生する</string>
   <string name="player_quick_shorts_skip">左右のボタンでショート動画をスキップする</string>
   <string name="channels_filter">チャンネルセクション内のチャンネルリストを絞り込む</string>
@@ -629,4 +630,9 @@
   <string name="msg_player_error_subtitle_source">字幕URLが動作していないか、デバイスの日時が不正です。\n通常はアプリ側の不具合です。</string>
   <string name="hide_upcoming_channel">チャンネル欄からライブ配信予定を非表示にする</string>
   <string name="save_playlist">再生リストのセクションに追加</string>
+  <string name="keep_finished_activities">完了時のアクティビティを保持する</string>
+  <string name="disable_channels_service">チャンネルサービスを無効化する</string>
+  <string name="replace_titles">タイトルを置き換える</string>
+  <string name="enable">有効化</string>
+  <string name="more_info">詳細情報</string>
 </resources>
