@@ -145,7 +145,7 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendLinks(AppDialogPresenter settingsPresenter) {
-        OptionItem webSiteOption = UiOptionItem.from(getContext().getString(R.string.dialog_about),
+        OptionItem webSiteOption = UiOptionItem.from(getContext().getString(R.string.more_info),
                 option -> Utils.openLink(getContext(), getContext().getString(R.string.content_block_provider_url)));
 
         OptionItem statsCheckOption = UiOptionItem.from(getContext().getString(R.string.content_block_status),

@@ -638,4 +638,5 @@
     <string name="disable_channels_service">Disable Channels service</string>
     <string name="replace_titles">Replace titles</string>
     <string name="enable">Enable</string>
+    <string name="more_info">More info</string>
 </resources>
