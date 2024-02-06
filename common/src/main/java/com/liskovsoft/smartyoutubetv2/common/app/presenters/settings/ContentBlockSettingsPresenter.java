@@ -41,8 +41,8 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         appendExcludeChannelButton(settingsPresenter);
         appendActionsSection(settingsPresenter);
         appendColorMarkersSection(settingsPresenter);
-        appendStatusCheckSection(settingsPresenter);
         appendMiscSection(settingsPresenter);
+        appendLinks(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.content_block_provider), onFinish);
     }
@@ -52,12 +52,12 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendSponsorBlockSwitch(AppDialogPresenter settingsPresenter) {
-        String title = String.format(
-                "%s (%s)",
-                getContext().getString(R.string.content_block_provider),
-                getContext().getString(R.string.content_block_provider_url)
-        );
-        OptionItem sponsorBlockOption = UiOptionItem.from(title,
+        //String title = String.format(
+        //        "%s (%s)",
+        //        getContext().getString(R.string.content_block_provider),
+        //        getContext().getString(R.string.content_block_provider_url)
+        //);
+        OptionItem sponsorBlockOption = UiOptionItem.from(getContext().getString(R.string.enable),
                 option -> mContentBlockData.enableSponsorBlock(option.isSelected()),
                 mContentBlockData.isSponsorBlockEnabled()
         );
@@ -144,9 +144,14 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.sponsor_color_markers), options);
     }
 
-    private void appendStatusCheckSection(AppDialogPresenter settingsPresenter) {
+    private void appendLinks(AppDialogPresenter settingsPresenter) {
+        OptionItem webSiteOption = UiOptionItem.from(getContext().getString(R.string.dialog_about),
+                option -> Utils.openLink(getContext(), getContext().getString(R.string.content_block_provider_url)));
+
         OptionItem statsCheckOption = UiOptionItem.from(getContext().getString(R.string.content_block_status),
                 option -> Utils.openLink(getContext(), getContext().getString(R.string.content_block_status_url)));
+
+        settingsPresenter.appendSingleButton(webSiteOption);
         settingsPresenter.appendSingleButton(statsCheckOption);
     }
 

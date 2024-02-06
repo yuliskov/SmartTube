@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DeArrowData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class DeArrowSettingsPresenter extends BasePresenter<Void> {
         //appendDeArrowSwitch(settingsPresenter);
         appendThumbQuality(settingsPresenter);
         appendMiscSection(settingsPresenter);
+        appendLinks(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dearrow_provider), onFinish);
     }
@@ -67,6 +69,17 @@ public class DeArrowSettingsPresenter extends BasePresenter<Void> {
                 mDeArrowData.isReplaceTitlesEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
+    }
+
+    private void appendLinks(AppDialogPresenter settingsPresenter) {
+        OptionItem webSiteOption = UiOptionItem.from(getContext().getString(R.string.dialog_about),
+                option -> Utils.openLink(getContext(), getContext().getString(R.string.dearrow_provider_url)));
+
+        OptionItem statsCheckOption = UiOptionItem.from(getContext().getString(R.string.dearrow_status),
+                option -> Utils.openLink(getContext(), getContext().getString(R.string.dearrow_status_url)));
+
+        settingsPresenter.appendSingleButton(webSiteOption);
+        settingsPresenter.appendSingleButton(statsCheckOption);
     }
 
     private void appendDeArrowSwitch(AppDialogPresenter settingsPresenter) {
