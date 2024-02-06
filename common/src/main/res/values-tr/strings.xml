@@ -507,6 +507,7 @@
     <string name="thumb_quality_middle">Videonun ortasından</string>
     <string name="thumb_quality_end">Videonun sonundan</string>
     <string name="content_block_status">SponsorBlock durumunu kontrol et</string>
+    <string name="dearrow_status">DeArrow durumunu kontrol et</string>
     <string name="player_show_quality_info_bitrate">Kalite bilgisine bit hızı ekle</string>
     <string name="player_speed_button_old_behavior">Hız düğmesinin eski davranışına geri dön</string>
     <string name="protect_settings_with_password">Tüm ayarları şifre ile koru</string>
@@ -633,4 +634,9 @@
     <string name="channels_filter">Kanallar bölümünde kanal listesi filtreleme</string>
     <string name="channel_search_bar">Kanal sayfasında arama çubuğu</string>
     <string name="header_sports">Spor</string>
+    <string name="keep_finished_activities">Bitmiş etkinlikleri sakla</string>
+    <string name="disable_channels_service">Kanallar hizmetini devre dışı bırak</string>
+    <string name="replace_titles">Başlıkları değiştir</string>
+    <string name="enable">Etkinleştir</string>
+    <string name="more_info">Daha fazla bilgi</string>
 </resources>
