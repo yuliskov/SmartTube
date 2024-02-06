@@ -11,7 +11,7 @@
     <string name="header_settings">設定</string>
     <string name="header_channels">チャンネル</string>
     <string name="subscriptions_signin_title">お気に入りのチャンネルの最新情報</string>
-    <string name="subscriptions_signin_subtitle">ログインして登録チャンネルに追加をしましょう</string>
+    <string name="subscriptions_signin_subtitle">ログインをして登録チャンネルに追加をしましょう</string>
     <string name="subscriptions_signin_button_text">ログイン</string>
     <string name="library_signin_to_show_more">高評価、保存、またはチャンネルを登録した動画を視聴しましょう</string>
     <string name="library_signin_subtitle">ライブラリを見るにはログインしてください</string>
@@ -22,7 +22,7 @@
     <string name="playback_queue_category_title">再生キュー</string>
     <string name="video_max_quality">自動 (最高品質)</string>
     <string name="audio_max_quality">自動 (最高品質)</string>
-    <string name="subtitles_disabled">字幕オフ</string>
+    <string name="subtitles_disabled">字幕OFF</string>
     <string name="auto_frame_rate">自動フレームレート</string>
     <string name="frame_rate_correction">固定FPS:\n%s</string>
     <string name="category_background_playback">バックグラウンド再生</string>
@@ -309,7 +309,7 @@
     <string name="action_channel">チャンネルを開く</string>
     <string name="action_pip">ピクチャーインピクチャー</string>
     <string name="action_video_info">概要欄</string>
-    <string name="action_screen_off">画面をオフにする</string>
+    <string name="action_screen_off">画面をOFFにする</string>
     <string name="action_sound_off">サウンドOFF</string>
     <string name="action_playback_queue">再生キュー</string>
     <string name="action_video_speed">再生速度</string>
@@ -593,7 +593,7 @@
     <string name="amazon_frame_drop_fix_desc">Amazon Fire TV向け、他のデバイスでも効果がある場合があります。</string>
     <string name="default_stack_desc">内蔵のネットワークスタックを使用します。特定の状況下では優れた安定性を有します。</string>
     <string name="item_postion">位置の設定:</string>
-    <string name="player_screen_off_dimming">画面オフ時の減光量</string>
+    <string name="player_screen_off_dimming">画面OFF時の減光量</string>
     <string name="screensaver_timout">一定時間後にスクリーンセーバーを起動する</string>
     <string name="screensaver_dimming">スクリーンセーバーの減光量</string>
     <string name="player_ui_on_next">次の動画再生時にプレーヤーユーザーインターフェースを表示する</string>
