@@ -1375,6 +1375,14 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
+        if (group.getAction() == VideoGroup.ACTION_SYNC) {
+            VideoGroupObjectAdapter adapter = mMediaGroupAdapters.get(group.getId());
+            if (adapter != null) {
+                adapter.sync(group);
+            }
+            return;
+        }
+
         HeaderItem rowHeader = new HeaderItem(group.getTitle());
         int mediaGroupId = group.getId(); // Create unique int from category.
 

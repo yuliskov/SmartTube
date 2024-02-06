@@ -22,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMe
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
 import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -34,6 +35,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     private static ChannelUploadsPresenter sInstance;
     private final ContentService mContentService;
     private final MediaItemService mItemManager;
+    private final DeArrowProcessor mDeArrowProcessor;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
     private Video mVideoItem;
@@ -45,6 +47,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         HubService hubService = YouTubeHubService.instance();
         mContentService = hubService.getContentService();
         mItemManager = hubService.getMediaItemService();
+        mDeArrowProcessor = new DeArrowProcessor(getContext(), this::syncItem);
     }
 
     public static ChannelUploadsPresenter instance(Context context) {
@@ -216,8 +219,11 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         mScrollAction = continuation
                 .subscribe(
-                        //continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
-                        continueMediaGroup -> getView().update(VideoGroup.from(group, continueMediaGroup)),
+                        continueMediaGroup -> {
+                            VideoGroup newGroup = VideoGroup.from(group, continueMediaGroup);
+                            getView().update(newGroup);
+                            mDeArrowProcessor.process(newGroup);
+                        },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             if (getView() != null) {
@@ -260,7 +266,9 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
             ViewManager.instance(getContext()).startView(ChannelUploadsView.class);
         }
 
-        getView().update(VideoGroup.from(mediaGroup));
+        VideoGroup group = VideoGroup.from(mediaGroup);
+        getView().update(group);
+        mDeArrowProcessor.process(group);
 
         // Hide loading as long as first group received
         if (mediaGroup.getMediaItems() != null) {
