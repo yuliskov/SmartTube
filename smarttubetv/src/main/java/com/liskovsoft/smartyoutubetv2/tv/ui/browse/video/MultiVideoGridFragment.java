@@ -262,7 +262,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
             // Remove not supported
             return;
         } else if (action == VideoGroup.ACTION_SYNC) {
-            // Sync not supported
+            mGridAdapter2.sync(group);
             return;
         }
 
