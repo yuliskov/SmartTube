@@ -610,7 +610,8 @@
     <string name="player_loop_shorts">Ulangi Shorts</string>
     <string name="player_quick_shorts_skip">Lewati vidio Pendek dengan tombol kiri/kanan</string>
     <string name="channels_filter">Menyaring daftar channel di dalam bagian Channel</string>
-    <string name="channel_search_bar">Bilah pencarian di dalam halaman Channel</string><string name="header_sports">Sports</string>
+    <string name="channel_search_bar">Bilah pencarian di dalam halaman Channel</string>
+    <string name="header_sports">Olahraga</string>
     <string name="keep_finished_activities">Menyimpan aktivitas yang telah selesai</string>
     <string name="disable_channels_service">Nonaktifkan layanan Channels</string>
     <string name="replace_titles">Ganti judul</string>
