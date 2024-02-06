@@ -31,7 +31,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
     private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
     private static final int AUTO_FRAME_RATE_MODES_ID = 23;
     private static final long SHORTS_DURATION_MS = 30 * 1_000;
-    private final HQDialogController mUiManager;
+    private final HQDialogController mHQController;
     private final VideoStateController mStateUpdater;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
     private final ModeSyncManager mModeSyncManager;
@@ -45,8 +45,8 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
         }
     };
 
-    public AutoFrameRateController(HQDialogController uiManager, VideoStateController stateUpdater) {
-        mUiManager = uiManager;
+    public AutoFrameRateController(HQDialogController hqController, VideoStateController stateUpdater) {
+        mHQController = hqController;
         mStateUpdater = stateUpdater;
         mAutoFrameRateHelper = AutoFrameRateHelper.instance(null);
         mAutoFrameRateHelper.setListener(this);
@@ -260,11 +260,11 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
                 dialogPresenter.showDialog(modesCategory.title);
             }));
 
-            mUiManager.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING_LIST, getContext().getString(R.string.auto_frame_rate), options));
-            mUiManager.addOnDialogHide(mApplyAfr); // Apply NEW Settings on dialog close
+            mHQController.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING_LIST, getContext().getString(R.string.auto_frame_rate), options));
+            mHQController.addOnDialogHide(mApplyAfr); // Apply NEW Settings on dialog close
         } else {
-            mUiManager.removeCategory(AUTO_FRAME_RATE_ID);
-            mUiManager.removeOnDialogHide(mApplyAfr);
+            mHQController.removeCategory(AUTO_FRAME_RATE_ID);
+            mHQController.removeOnDialogHide(mApplyAfr);
         }
     }
 

@@ -306,6 +306,7 @@
     <string name="action_pip">Картинка в картинці</string>
     <string name="action_video_info">Опис відео</string>
     <string name="action_screen_off">Вимкнути екран</string>
+    <string name="action_sound_off">Вимкнути звук</string>
     <string name="action_playback_queue">Черга відтворення</string>
     <string name="action_video_speed">Швидкість відео</string>
     <string name="action_subtitles">Субтитри</string>
@@ -498,6 +499,7 @@
     <string name="thumb_quality_middle">Середина відео</string>
     <string name="thumb_quality_end">Кінець відео</string>
     <string name="content_block_status">Перевірити стан SponsorBlock</string>
+    <string name="dearrow_status">Перевірити стан DeArrow</string>
     <string name="player_show_quality_info_bitrate">Додавати бітрейт до інформації о якості відео</string>
     <string name="player_speed_button_old_behavior">Повернути стару поведінку кнопки швидкість</string>
     <string name="protect_settings_with_password">Захистити усі налаштування паролем</string>
@@ -624,4 +626,8 @@
     <string name="player_quick_shorts_skip">Перемикати короткі відео кнопками ліво/право</string>
     <string name="channels_filter">Фільтрувати список каналів у розділі Канали</string>
     <string name="channel_search_bar">Панель пошуку на сторінці каналу</string>
+    <string name="header_sports">Спорт</string>
+    <string name="replace_titles">Змінювати назви</string>
+    <string name="enable">Увімкнути</string>
+    <string name="more_info">Більше інформації</string>
 </resources>

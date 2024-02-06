@@ -119,12 +119,12 @@ public class ContentBlockData {
 
     public void enableColorMarker(String segmentCategory) {
         mColorCategories.add(segmentCategory);
-        persistData();
+        persistState();
     }
 
     public void disableColorMarker(String segmentCategory) {
         mColorCategories.remove(segmentCategory);
-        persistData();
+        persistState();
     }
 
     public boolean isColorMarkerEnabled(String segmentCategory) {
@@ -137,12 +137,12 @@ public class ContentBlockData {
 
     public void excludeChannel(String channelId) {
         mExcludedChannels.add(channelId);
-        persistData();
+        persistState();
     }
 
     public void stopExcludingChannel(String channelId) {
         mExcludedChannels.remove(channelId);
-        persistData();
+        persistState();
     }
 
     public boolean isChannelExcluded(String channelId) {
@@ -181,11 +181,11 @@ public class ContentBlockData {
 
     public void enableSponsorBlock(boolean enabled) {
         mIsSponsorBlockEnabled = enabled;
-        persistData();
+        persistState();
     }
 
     public void persistActions() {
-        persistData();
+        persistState();
     }
 
     public boolean isActionsEnabled() {
@@ -204,7 +204,7 @@ public class ContentBlockData {
 
     public void enableDontSkipSegmentAgain(boolean enabled) {
         mIsDontSkipSegmentAgainEnabled = enabled;
-        persistData();
+        persistState();
     }
 
     public boolean isAltServerEnabled() {
@@ -275,7 +275,7 @@ public class ContentBlockData {
         }
     }
 
-    private void persistData() {
+    private void persistState() {
         String colorCategories = Helpers.mergeArray(mColorCategories.toArray());
         String actions = Helpers.mergeArray(mActions.toArray());
         String excludedChannels = Helpers.mergeArray(mExcludedChannels.toArray());

@@ -218,7 +218,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         //appendClearHistoryButton();
 
         if (!mDialogPresenter.isEmpty()) {
-            String title = mVideo != null ? mVideo.title : null;
+            String title = mVideo != null ? mVideo.getTitle() : null;
             // No need to add author because: 1) This could be a channel card. 2) This info isn't so important.
             mDialogPresenter.showDialog(title);
         }
@@ -256,7 +256,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         if (mDialogPresenter.isEmpty()) {
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
         } else {
-            mDialogPresenter.showDialog(mVideo.title);
+            mDialogPresenter.showDialog(mVideo.getTitle());
         }
     }
 
@@ -635,8 +635,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void showLongTextDialog(String description) {
-        mDialogPresenter.appendLongTextCategory(mVideo.title, UiOptionItem.from(description));
-        mDialogPresenter.showDialog(mVideo.title);
+        mDialogPresenter.appendLongTextCategory(mVideo.getTitle(), UiOptionItem.from(description));
+        mDialogPresenter.showDialog(mVideo.getTitle());
     }
 
     private void appendSubscribeButton() {

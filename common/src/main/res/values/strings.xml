@@ -310,6 +310,7 @@
     <string name="action_pip">PIP</string>
     <string name="action_video_info">Video description</string>
     <string name="action_screen_off">Screen off</string>
+    <string name="action_sound_off">Sound off</string>
     <string name="action_playback_queue">Playback queue</string>
     <string name="action_video_speed">Video speed</string>
     <string name="action_subtitles">Subtitles</string>
@@ -506,6 +507,7 @@
     <string name="thumb_quality_middle">Middle of the video</string>
     <string name="thumb_quality_end">End of the video</string>
     <string name="content_block_status">Check SponsorBlock status</string>
+    <string name="dearrow_status">Check DeArrow status</string>
     <string name="player_show_quality_info_bitrate">Add bitrate into the quality info</string>
     <string name="player_speed_button_old_behavior">Revert old behavior of the speed button</string>
     <string name="protect_settings_with_password">Protect all settings with password</string>
@@ -631,6 +633,10 @@
     <string name="player_quick_shorts_skip">Skip Shorts with left/right buttons</string>
     <string name="channels_filter">Filter channels list inside the Channels section</string>
     <string name="channel_search_bar">Search bar inside the Channel page</string>
+    <string name="header_sports">Sports</string>
     <string name="keep_finished_activities">Keep finished activities</string>
     <string name="disable_channels_service">Disable Channels service</string>
+    <string name="replace_titles">Replace titles</string>
+    <string name="enable">Enable</string>
+    <string name="more_info">More info</string>
 </resources>

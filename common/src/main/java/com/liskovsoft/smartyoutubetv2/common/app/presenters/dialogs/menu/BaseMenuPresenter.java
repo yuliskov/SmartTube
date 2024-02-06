@@ -138,7 +138,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         // Trying to properly format channel playlists, mixes etc
         boolean isChannelPlaylistItem = video.getGroupTitle() != null && video.belongsToSameAuthorGroup() && video.belongsToSamePlaylistGroup();
         boolean isUserPlaylistItem = video.getGroupTitle() != null && video.belongsToSamePlaylistGroup();
-        String title = isChannelPlaylistItem ? video.getAuthor() : isUserPlaylistItem ? null : video.title;
+        String title = isChannelPlaylistItem ? video.getAuthor() : isUserPlaylistItem ? null : video.getTitle();
         String subtitle = isChannelPlaylistItem || isUserPlaylistItem ? video.getGroupTitle() : video.getAuthor();
         section.title = title != null && subtitle != null ? String.format("%s - %s", title, subtitle) : String.format("%s", title != null ? title : subtitle);
 
@@ -155,7 +155,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         // Trying to properly format channel playlists, mixes etc
         boolean hasChannel = video.hasChannel() && !video.isChannel();
         boolean isUserPlaylistItem = video.getGroupTitle() != null && video.belongsToSamePlaylistGroup();
-        String title = hasChannel ? video.getAuthor() : isUserPlaylistItem ? null : video.title;
+        String title = hasChannel ? video.getAuthor() : isUserPlaylistItem ? null : video.getTitle();
         String subtitle = isUserPlaylistItem ? video.getGroupTitle() : hasChannel || video.isChannel() ? null : video.getAuthor();
         section.title = title != null && subtitle != null ? String.format("%s - %s", title, subtitle) : String.format("%s", title != null ? title : subtitle);
 
@@ -289,7 +289,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             boolean isSaved = false;
 
             for (MediaItem playlist : group.getMediaItems()) {
-                if (playlist.getTitle().contains(video.title)) {
+                if (playlist.getTitle().contains(video.getTitle())) {
                     isSaved = true;
                     break;
                 }
@@ -445,7 +445,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
                     SimpleEditDialog.show(
                             getContext(),
-                            video.title,
+                            video.getTitle(),
                             newValue -> {
                                 MediaItemService manager = YouTubeMediaItemService.instance();
                                 Observable<Void> action = manager.renamePlaylistObserve(firstItem.getPlaylistId(), newValue);

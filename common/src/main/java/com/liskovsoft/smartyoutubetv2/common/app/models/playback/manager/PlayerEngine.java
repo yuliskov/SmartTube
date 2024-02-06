@@ -48,6 +48,7 @@ public interface PlayerEngine {
     List<FormatItem> getSubtitleFormats();
     void setFormat(FormatItem option);
     FormatItem getVideoFormat();
+    FormatItem getAudioFormat();
     boolean isEngineInitialized();
     void restartEngine();
     void reloadPlayback();

@@ -403,6 +403,7 @@
     <string name="player_volume">Hlasitost</string>
     <string name="play_video">Přehrát</string>
     <string name="remember_position_of_short_videos">Pamatovat si pozici krátkých videí (méně než 5 minut)</string>
+    <string name="remember_position_of_live_videos">Pamatovat si pozici živých přenosů</string>
     <string name="player_show_tooltips">Zobrazit nápovědu tlačítek</string>
     <string name="action_like_unset">"Líbí se" není nastaveno</string>
     <string name="action_dislike_unset">"Nelíbí se" není nastaveno</string>
@@ -616,6 +617,7 @@
     <string name="prefer_avc_over_vp9_desc">POZOR: Maximálně 1080p</string>
     <string name="play_next">Přehrát další</string>
     <string name="hide_watched_from_subscriptions">Skrýt zhlédnutá videa v Odběrech</string>
+    <string name="hide_watched_from_notifications">Skrýt zhlédnutá videa v Oznámení</string>
     <string name="hide_unwanted_content">Skrýt nežádoucí obsah</string>
     <string name="hide_watched_from_home">Skrýt zhlédnutá videa ze sekce Domů</string>
     <string name="remote_control_permission">Dálkové ovládání na pozadí vyžaduje oprávnění pro překrytí přes okna</string>
@@ -629,4 +631,5 @@
     <string name="player_quick_shorts_skip">Přeskakovat Shorts tlačítky vlevo/vpravo</string>
     <string name="channels_filter">Filtrovat seznam kanálů v sekci Kanály</string>
     <string name="channel_search_bar">Vyhledávací panel na stránce kanálu</string>
+    <string name="header_sports">Sporty</string>
 </resources>

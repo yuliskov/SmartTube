@@ -32,7 +32,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         //System.setProperty("java.net.preferIPv6Addresses", "true");
         // Another IPv6 fix (no effect)
         // https://stackoverflow.com/questions/1920623/sometimes-httpurlconnection-getinputstream-executes-too-slowly
-        System.setProperty("java.net.preferIPv4Stack" , "true");
+        //System.setProperty("java.net.preferIPv4Stack" , "true");
     }
 
     @Override

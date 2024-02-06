@@ -20,6 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMe
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
@@ -36,6 +37,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private static ChannelPresenter sInstance;
     private final HubService mHubService;
     private final MediaServiceManager mServiceManager;
+    private final DeArrowProcessor mDeArrowProcessor;
     private String mChannelId;
     private final List<List<MediaGroup>> mPendingGroups = new ArrayList<>();
     private Disposable mUpdateAction;
@@ -56,6 +58,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         super(context);
         mHubService = YouTubeHubService.instance();
         mServiceManager = MediaServiceManager.instance();
+        mDeArrowProcessor = new DeArrowProcessor(getContext(), this::syncItem);
     }
 
     public static ChannelPresenter instance(Context context) {
@@ -237,7 +240,9 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 continue;
             }
 
-            getView().update(VideoGroup.from(mediaGroup));
+            VideoGroup group = VideoGroup.from(mediaGroup);
+            getView().update(group);
+            mDeArrowProcessor.process(group);
         }
 
         getView().showProgressBar(false);
@@ -271,8 +276,11 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         mScrollAction = contentService.continueGroupObserve(mediaGroup)
                 .subscribe(
-                        //continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
-                        continueMediaGroup -> getView().update(VideoGroup.from(group, continueMediaGroup)),
+                        continueMediaGroup -> {
+                            VideoGroup newGroup = VideoGroup.from(group, continueMediaGroup);
+                            getView().update(newGroup);
+                            mDeArrowProcessor.process(newGroup);
+                        },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             if (getView() != null) {

@@ -139,7 +139,7 @@ public class MotherActivity extends FragmentActivity {
         applyCustomConfig();
         // Most of the fullscreen tweaks could be performed in styles but not all.
         // E.g. Hide bottom navigation bar (couldn't be done in styles).
-        Helpers.makeActivityFullscreen(this);
+        Helpers.makeActivityFullscreen2(this);
         //Helpers.makeActivityFullscreen2(this);
 
         // Remove screensaver from the previous activity when closing current one.

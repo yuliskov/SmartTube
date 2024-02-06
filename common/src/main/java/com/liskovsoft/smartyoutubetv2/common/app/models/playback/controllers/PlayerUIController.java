@@ -57,6 +57,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     private PlayerData mPlayerData;
     private PlayerTweaksData mPlayerTweaksData;
     private List<PlaylistInfo> mPlaylistInfos;
+    private FormatItem mAudioFormat = FormatItem.AUDIO_HQ_MP4A;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
     private boolean mIsMetadataLoaded;
@@ -252,6 +253,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     @Override
     public void onVideoLoaded(Video item) {
         getPlayer().updateEndingTime();
+        applySoundOffButtonState();
     }
 
     @Override
@@ -275,6 +277,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
         // Maybe dialog just closed. Reset timeout just in case.
         enableUiAutoHideTimeout();
+        applySoundOffButtonState();
     }
 
     @Override
@@ -441,7 +444,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         AppDialogUtil.appendShareQRLinkDialogItem(getContext(), dialogPresenter, getPlayer().getVideo(), positionSec);
         AppDialogUtil.appendShareEmbedLinkDialogItem(getContext(), dialogPresenter, getPlayer().getVideo(), positionSec);
 
-        dialogPresenter.showDialog(getPlayer().getVideo().title);
+        dialogPresenter.showDialog(getPlayer().getVideo().getTitle());
 
         //if (video.videoId != null) {
         //    Utils.displayShareVideoDialog(getActivity(), video.videoId, (int)(getController().getPositionMs() / 1_000));
@@ -504,6 +507,8 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             applyScreenOffTimeout(buttonState);
         } else if (buttonId == R.id.action_subscribe) {
             onSubscribe(buttonState);
+        } else if (buttonId == R.id.action_sound_off) {
+            applySoundOff(buttonState);
         }
     }
 
@@ -843,7 +848,24 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             callMediaItemObservable(mMediaItemManager::unsubscribeObserve);
         }
 
-        getPlayer().setButtonState(R.id.action_subscribe, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON: PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_subscribe, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+    }
+
+    private void applySoundOff(int buttonState) {
+        if (buttonState == PlayerUI.BUTTON_OFF) {
+            mAudioFormat = getPlayer().getAudioFormat();
+            getPlayer().setFormat(FormatItem.NO_AUDIO);
+        } else {
+            getPlayer().setFormat(mAudioFormat);
+        }
+
+        getPlayer().setButtonState(R.id.action_sound_off, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+    }
+
+    private void applySoundOffButtonState() {
+        if (getPlayer().getAudioFormat() != null) {
+            getPlayer().setButtonState(R.id.action_sound_off, getPlayer().getAudioFormat().isDefault() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        }
     }
 
     private void reorderSubtitles(List<FormatItem> subtitleFormats) {

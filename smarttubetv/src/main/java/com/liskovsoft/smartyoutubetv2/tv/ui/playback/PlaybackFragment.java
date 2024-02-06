@@ -514,10 +514,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
             MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder();
 
-            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, getVideo().title);
-            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, getVideo().title);
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, getVideo().getTitle());
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, getVideo().getTitle());
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, getVideo().getAuthor());
-            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, getVideo().secondTitle);
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, getVideo().getSecondTitle());
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, getVideo().cardImageUrl);
             metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, getDurationMs());
 
@@ -822,8 +822,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         if (mPlayerGlue != null && video != null) {
             // Preserve player formatting
-            mPlayerGlue.setTitle(video.getPlayerTitle() != null ? video.getPlayerTitle() : "...");
-            mPlayerGlue.setSubtitle(video.getPlayerSecondTitle() != null ? createSecondTitle(video) : "...");
+            mPlayerGlue.setTitle(video.getTitle() != null ? video.getTitle() : "...");
+            mPlayerGlue.setSubtitle(video.getSecondTitle() != null ? createSecondTitle(video) : "...");
             mPlayerGlue.setVideo(video);
         }
     }
@@ -839,7 +839,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private CharSequence createSecondTitle(Video video) {
-        CharSequence result = video.getPlayerSecondTitle();
+        CharSequence result = video.getSecondTitle();
 
         if (getContext() != null && video.isLive) {
             result = TextUtils.concat( result, " ", Video.TERTIARY_TEXT_DELIM, " ", Utils.color(getContext().getString(R.string.badge_live), ContextCompat.getColor(getContext(), R.color.red)));
@@ -1000,6 +1000,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public FormatItem getVideoFormat() {
         return mExoPlayerController.getVideoFormat();
+    }
+
+    @Override
+    public FormatItem getAudioFormat() {
+        return mExoPlayerController.getAudioFormat();
     }
 
     @Override
@@ -1367,6 +1372,14 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         if (group == null || group.isEmpty()) {
             Log.e(TAG, "Suggestions row is empty!");
+            return;
+        }
+
+        if (group.getAction() == VideoGroup.ACTION_SYNC) {
+            VideoGroupObjectAdapter adapter = mMediaGroupAdapters.get(group.getId());
+            if (adapter != null) {
+                adapter.sync(group);
+            }
             return;
         }
 

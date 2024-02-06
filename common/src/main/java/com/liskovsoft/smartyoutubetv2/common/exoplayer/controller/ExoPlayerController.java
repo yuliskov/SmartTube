@@ -271,6 +271,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
+    public FormatItem getAudioFormat() {
+        return ExoFormatItem.from(mTrackSelectorManager.getAudioTrack());
+    }
+
+    @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
         Log.d(TAG, "onTracksChanged: start: groups length: " + trackGroups.length);
 

@@ -18,6 +18,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -37,7 +39,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private PlayerTweaksData mPlayerTweaksData;
     private GeneralData mGeneralData;
     private MediaGroup mLastScrollGroup;
-    //private VideoGroup mCurrentGroup; // disable garbage collected
+    private DeArrowProcessor mDeArrowProcessor;
     private Video mNextVideo;
     private Video mPreviousVideo;
     private int mFocusCount;
@@ -63,6 +65,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     public void onInit() {
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
         mGeneralData = GeneralData.instance(getContext());
+        mDeArrowProcessor = new DeArrowProcessor(getContext(), PlaybackPresenter.instance(getContext())::syncItem);
     }
 
     @Override
@@ -192,6 +195,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
                             VideoGroup videoGroup = VideoGroup.from(group, continueMediaGroup);
                             getPlayer().updateSuggestions(videoGroup);
+                            mDeArrowProcessor.process(videoGroup);
 
                             // Merge remote queue with player's queue
                             Video video = getPlayer().getVideo();
@@ -322,7 +326,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
         if (suggestions == null) {
-            String msg = "loadSuggestions: Can't obtain suggestions for video: " + video.title;
+            String msg = "loadSuggestions: Can't obtain suggestions for video: " + video.getTitle();
             Log.e(TAG, msg);
             return;
         }
@@ -349,6 +353,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
                 }
 
                 getPlayer().updateSuggestions(videoGroup);
+                mDeArrowProcessor.process(videoGroup);
 
                 if (groupIndex == 0) {
                     focusAndContinueIfNeeded(videoGroup);
@@ -481,7 +486,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         int index = findCurrentChapterIndex(group.getVideos());
 
         if (index != -1) {
-            String title = group.getVideos().get(index).title;
+            String title = group.getVideos().get(index).getTitle();
             getPlayer().focusSuggestedItem(index);
             getPlayer().setSeekPreviewTitle(title);
         }
