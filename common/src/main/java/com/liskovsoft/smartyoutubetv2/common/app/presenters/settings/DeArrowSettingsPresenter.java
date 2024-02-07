@@ -72,7 +72,7 @@ public class DeArrowSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendLinks(AppDialogPresenter settingsPresenter) {
-        OptionItem webSiteOption = UiOptionItem.from(getContext().getString(R.string.more_info),
+        OptionItem webSiteOption = UiOptionItem.from(getContext().getString(R.string.about_dearrow),
                 option -> Utils.openLink(getContext(), getContext().getString(R.string.dearrow_provider_url)));
 
         OptionItem statsCheckOption = UiOptionItem.from(getContext().getString(R.string.dearrow_status),

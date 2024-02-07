@@ -639,4 +639,6 @@
     <string name="replace_titles">Replace titles</string>
     <string name="enable">Enable</string>
     <string name="more_info">More info</string>
+    <string name="about_sponsorblock">About SponsorBlock</string>
+    <string name="about_dearrow">About DeArrow</string>
 </resources>
