@@ -635,4 +635,5 @@
     <string name="replace_thumbnails">Замінити мініатюри</string>
     <string name="crowdsourced_thumbnails">Краудсорсингові мініатюри</string>
     <string name="crowdsoursed_titles">Краудсорсингові назви</string>
+    <string name="dearrow_not_submitted_thumbs">Звідки брати не надіслані мініатюри</string>
 </resources>

@@ -57,7 +57,7 @@ public class DeArrowSettingsPresenter extends BasePresenter<Void> {
             ));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.card_content), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.dearrow_not_submitted_thumbs), options);
     }
 
     private void appendSwitches(AppDialogPresenter settingsPresenter) {
