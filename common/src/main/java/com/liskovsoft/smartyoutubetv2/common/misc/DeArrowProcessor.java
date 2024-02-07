@@ -11,12 +11,14 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.DeArrowData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase.OnDataChange;
 import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
 public class DeArrowProcessor implements OnDataChange {
     private static final String TAG = DeArrowProcessor.class.getSimpleName();
+    private static final int PROCESSING_DONE = 99;
     private final OnItemReady mOnItemReady;
     private final MediaItemService mItemService;
     private final DeArrowData mDeArrowData;
@@ -51,7 +53,7 @@ public class DeArrowProcessor implements OnDataChange {
             return;
         }
 
-        List<String> videoIds = videoGroup.getVideoIds();
+        List<String> videoIds = getVideoIds(videoGroup);
         Disposable result = mItemService.getDeArrowDataObserve(videoIds)
                 .subscribe(deArrowData -> {
                     Video video = videoGroup.findVideoById(deArrowData.getVideoId());
@@ -66,5 +68,19 @@ public class DeArrowProcessor implements OnDataChange {
                 error -> {
                     Log.d(TAG, "DeArrow cannot process the video");
                 });
+    }
+
+    private List<String> getVideoIds(VideoGroup videoGroup) {
+        List<String> result = new ArrayList<>();
+
+        for (Video video : videoGroup.getVideos()) {
+            if (video.extra == PROCESSING_DONE) {
+                continue;
+            }
+            video.extra = PROCESSING_DONE;
+            result.add(video.videoId);
+        }
+
+        return result;
     }
 }

@@ -31,7 +31,6 @@ public final class Video {
     public static final long MAX_LIVE_DURATION_MS = 24 * 60 * 60 * 1_000;
     private static final String OBJ_DELIM = "&vi;";
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
-    private static final String[] sNotPlaylistParams = new String[] {"EAIYAQ%3D%3D"};
     private static final String BLACK_PLACEHOLDER_URL = "https://via.placeholder.com/1280x720/000000/000000";
     private static final float RESTORE_POSITION_PERCENTS = 10; // min value for immediately closed videos
     public long id;
