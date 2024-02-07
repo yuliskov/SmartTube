@@ -213,7 +213,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         for (Video item : pinnedItems) {
             if (item != null) {
                 if (item.extra == -1) {
-                    BrowseSection section = new BrowseSection(item.hashCode(), item.getTitle(), BrowseSection.TYPE_GRID, item.cardImageUrl, false, item);
+                    BrowseSection section = new BrowseSection(item.hashCode(), item.getTitle(), BrowseSection.TYPE_GRID, item.getCardImageUrl(), false, item);
                     mSections.add(section);
                 } else {
                     BrowseSection section = mSectionsMapping.get(item.extra);
@@ -497,7 +497,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mGeneralData.addPinnedItem(item);
         mGridMapping.put(item.hashCode(), createPinnedAction(item));
 
-        BrowseSection newSection = new BrowseSection(item.hashCode(), item.getTitle(), BrowseSection.TYPE_GRID, item.cardImageUrl, false, item);
+        BrowseSection newSection = new BrowseSection(item.hashCode(), item.getTitle(), BrowseSection.TYPE_GRID, item.getCardImageUrl(), false, item);
         Helpers.removeIf(mSections, section -> section.getId() == newSection.getId());
         mSections.add(newSection);
         getView().addSection(-1, newSection);

@@ -34,4 +34,12 @@ public class DeArrowData extends DataSaverBase {
     public boolean isReplaceTitlesEnabled() {
         return getBoolean(1, false);
     }
+
+    public void replaceThumbnails(boolean replace) {
+        setBoolean(2, replace);
+    }
+
+    public boolean isReplaceThumbnailsEnabled() {
+        return getBoolean(2, false);
+    }
 }

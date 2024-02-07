@@ -641,4 +641,5 @@
     <string name="more_info">More info</string>
     <string name="about_sponsorblock">About SponsorBlock</string>
     <string name="about_dearrow">About DeArrow</string>
+    <string name="replace_thumbnails">Replace thumbnails</string>
 </resources>

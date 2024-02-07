@@ -31,10 +31,9 @@ public class DeArrowSettingsPresenter extends BasePresenter<Void> {
 
     public void show(Runnable onFinish) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-
-        //appendDeArrowSwitch(settingsPresenter);
+        
+        appendSwitches(settingsPresenter);
         appendThumbQuality(settingsPresenter);
-        appendMiscSection(settingsPresenter);
         appendLinks(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dearrow_provider), onFinish);
@@ -61,14 +60,20 @@ public class DeArrowSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.card_content), options);
     }
 
-    private void appendMiscSection(AppDialogPresenter settingsPresenter) {
+    private void appendSwitches(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.replace_titles),
                 optionItem -> mDeArrowData.replaceTitles(optionItem.isSelected()),
                 mDeArrowData.isReplaceTitlesEnabled()));
 
-        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
+        options.add(UiOptionItem.from(getContext().getString(R.string.replace_thumbnails),
+                optionItem -> mDeArrowData.replaceThumbnails(optionItem.isSelected()),
+                mDeArrowData.isReplaceThumbnailsEnabled()));
+
+        for (OptionItem item : options) {
+            settingsPresenter.appendSingleSwitch(item);
+        }
     }
 
     private void appendLinks(AppDialogPresenter settingsPresenter) {

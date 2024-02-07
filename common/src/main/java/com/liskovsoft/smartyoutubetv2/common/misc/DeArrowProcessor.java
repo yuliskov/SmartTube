@@ -20,7 +20,8 @@ public class DeArrowProcessor implements OnDataChange {
     private final OnItemReady mOnItemReady;
     private final MediaItemService mItemService;
     private final DeArrowData mDeArrowData;
-    private boolean mIsEnabled;
+    private boolean mIsReplaceTitlesEnabled;
+    private boolean mIsReplaceThumbnailsEnabled;
 
     public interface OnItemReady {
         void onItemReady(Video video);
@@ -31,17 +32,22 @@ public class DeArrowProcessor implements OnDataChange {
         HubService hubService = YouTubeHubService.instance();
         mItemService = hubService.getMediaItemService();
         mDeArrowData = DeArrowData.instance(context);
-        mIsEnabled = mDeArrowData.isReplaceTitlesEnabled();
         mDeArrowData.setOnChange(this);
+        initData();
     }
 
     @Override
     public void onDataChange() {
-        mIsEnabled = mDeArrowData.isReplaceTitlesEnabled();
+        initData();
+    }
+
+    private void initData() {
+        mIsReplaceTitlesEnabled = mDeArrowData.isReplaceTitlesEnabled();
+        mIsReplaceThumbnailsEnabled = mDeArrowData.isReplaceThumbnailsEnabled();
     }
 
     public void process(VideoGroup videoGroup) {
-        if (!mIsEnabled || videoGroup == null || videoGroup.isEmpty()) {
+        if ((!mIsReplaceTitlesEnabled && !mIsReplaceThumbnailsEnabled) || videoGroup == null || videoGroup.isEmpty()) {
             return;
         }
 
@@ -49,7 +55,12 @@ public class DeArrowProcessor implements OnDataChange {
         Disposable result = mItemService.getDeArrowDataObserve(videoIds)
                 .subscribe(deArrowData -> {
                     Video video = videoGroup.findVideoById(deArrowData.getVideoId());
-                    video.altTitle = deArrowData.getTitle();
+                    if (mIsReplaceTitlesEnabled) {
+                        video.altTitle = deArrowData.getTitle();
+                    }
+                    if (mIsReplaceThumbnailsEnabled) {
+                        video.altCardImageUrl = deArrowData.getThumbnailUrl();
+                    }
                     mOnItemReady.onItemReady(video);
                 },
                 error -> {

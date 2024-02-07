@@ -53,6 +53,7 @@ public final class Video {
     public String reloadPageKey;
     public String bgImageUrl;
     public String cardImageUrl;
+    public String altCardImageUrl;
     public String author;
     public String badge;
     public String previewUrl;
@@ -255,6 +256,10 @@ public final class Video {
 
     public String getPlaylistId() {
         return isRemote && remotePlaylistId != null ? remotePlaylistId : playlistId;
+    }
+
+    public String getCardImageUrl() {
+        return altCardImageUrl != null ? altCardImageUrl : cardImageUrl;
     }
 
     public String getAuthor() {
