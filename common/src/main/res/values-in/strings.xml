@@ -251,6 +251,7 @@
     <string name="uploads_row_name">Unggahan</string>
     <string name="playlists_row_name">Daftar putar yang dibuat</string>
     <string name="popular_uploads_row_name">Unggahan populer</string>
+    <string name="news_row_name">Berita</string>
     <string name="breaking_news_row_name">Berita terbaru</string>
     <string name="covid_news_row_name">Berita COVID-19</string>
     <string name="enable_voice_search">Aktifkan pencarian suara</string>
@@ -304,6 +305,7 @@
     <string name="action_channel">Buka channel</string>    
     <string name="action_video_info">Deskripsi Vidio</string>
     <string name="action_screen_off">Layar mati</string>
+    <string name="action_sound_off">Suara mati</string>
     <string name="action_playback_queue">Antrian pemutaran</string>
     <string name="action_video_speed">Kecepatan vidio</string>
     <string name="action_subtitles">Subtitle</string>
@@ -391,7 +393,7 @@
     <string name="volume_limit">Batas volume</string>
     <string name="play_video">Putar</string>
     <string name="remember_position_of_short_videos">Ingat posisi video pendek (kurang dari 5 menit)</string>
-    <string name="remember_position_of_live_videos">Mengingat posisi streaming langsung</string>
+    <string name="remember_position_of_live_videos">Ingat posisi streaming langsung</string>
     <string name="player_show_tooltips">Tampilkan tooltips tombol</string>
     <string name="action_like_unset">Like tidak disetel</string>
     <string name="action_dislike_unset">Dislike tidak disetel</string>
@@ -490,6 +492,7 @@
     <string name="thumb_quality_middle">Tengah vidio</string>
     <string name="thumb_quality_end">Akhir vidio</string>
     <string name="content_block_status">Cek status SponsorBlock</string>
+    <string name="dearrow_status">Cek status DeArrow</string>
     <string name="player_show_quality_info_bitrate">Tambahkan bitrate ke dalam informasi kualitas</string>
     <string name="player_speed_button_old_behavior">Mengembalikan perilaku lama tombol kecepatan</string>
     <string name="protect_settings_with_password">Lindungi semua pengaturan dengan sandi</string>
@@ -516,7 +519,6 @@
     <string name="content_type">Tipe</string>
     <string name="content_type_any">Apa saja</string>
     <string name="content_type_video">Vidio</string>
-    <string name="content_type_channel">Channel</string>
     <string name="content_type_playlist">Daftar Putar</string>
     <string name="content_type_movie">Film</string>
     <string name="video_features">Unggulan</string>
@@ -544,8 +546,6 @@
     <string name="disable_stream_buffer_desc">Memperbaiki situasi ketika streaming tertinggal jauh di belakang. Catatan: streaming mungkin mulai lag.</string>
     <string name="sony_frame_drop_fix">Perbaikan Frame drop #1</string>
     <string name="sony_frame_drop_fix_desc">Memperbaiki lag pada TV Sony dan beberapa perangkat lain. Catatan: kemungkinan masalah dengan sinkronisasi suara.</string>
-    <string name="amazon_frame_drop_fix">Perbaika Frame drop #2</string>
-    <string name="amazon_frame_drop_fix_desc">Diperuntukkan untuk perangkat Amazon Stick. Dapat berfungsi pada perangkat lain juga.</string>
     <string name="audio_language">Bahasa suara</string>
     <string name="old_home_look">Tampilan lama bagian Beranda</string>
     <string name="hide_shorts_everywhere">Sembunyikan vidio pendek di mana saja</string>
@@ -566,7 +566,9 @@
     <string name="content_block_exclude_channel">Kecualikan channel ini dari SponsorBlock</string>
     <string name="content_block_stop_excluding_channel">Berhenti mengecualikan channel ini dari SponsorBlock</string>
     <string name="player_chapter_notification">Menampilkan pemberitahuan untuk maju dengan cepat melalui chapters</string>
-    <string name="subtitle_remember">Ingat subtitle yang diaktifkan untuk setiap channel</string>
+    <string name="subtitle_remember">Ingat subtitle yang diaktifkan untuk setiap channel</string>    
+    <string name="amazon_frame_drop_fix">Perbaikan Frame drop #2</string>
+    <string name="amazon_frame_drop_fix_desc">Diperuntukkan untuk perangkat Amazon Stick. Dapat berfungsi pada perangkat lain juga.</string>
     <string name="default_stack_desc">Tumpukan jaringan bawaan. Tumpukan ini mungkin memiliki stabilitas yang lebih baik dalam situasi tertentu.</string>
     <string name="item_postion">Posisi</string>
     <string name="player_screen_off_dimming">Jumlah peredupan</string>
@@ -582,7 +584,8 @@
     <string name="msg_player_unknown_error">Kesalahan tidak diketahui</string>
     <string name="header_notifications">Notifikasi</string>
     <string name="disable_search_history">Nonaktifkan riwayat pencarian</string>
-    <string name="unlock_high_bitrate_formats">Membuka format 1080p VP9 kecepatan bit tinggi</string>
+    <string name="unlock_high_bitrate_formats">Membuka format 1080p VP9 bitrate tinggi</string>
+    <string name="unlock_high_bitrate_audio_formats">Buka format mp4a bitrate tinggi</string>
     <string name="color_scheme_blue">Biru</string>
     <string name="color_scheme_dark_blue">Biru Tua</string>
     <string name="player_speed_per_channel">Per setiap channel</string>
@@ -608,4 +611,10 @@
     <string name="player_quick_shorts_skip">Lewati vidio Pendek dengan tombol kiri/kanan</string>
     <string name="channels_filter">Menyaring daftar channel di dalam bagian Channel</string>
     <string name="channel_search_bar">Bilah pencarian di dalam halaman Channel</string>
+    <string name="header_sports">Olahraga</string>
+    <string name="keep_finished_activities">Menyimpan aktivitas yang telah selesai</string>
+    <string name="disable_channels_service">Nonaktifkan layanan Channels</string>
+    <string name="replace_titles">Ganti judul</string>
+    <string name="enable">Aktifkan</string>
+    <string name="more_info">Info lebih lanjut</string>
 </resources>
