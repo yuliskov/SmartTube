@@ -150,7 +150,7 @@ public class VideoCardPresenter extends LongClickPresenter {
                 .error(
                     // Updated thumbnail url not found
                     Glide.with(context)
-                        .load(video.getCardImageUrl())
+                        .load(video.cardImageUrl)
                         //.placeholder(mDefaultCardImage)
                         .apply(ViewUtil.glideOptions())
                         .listener(mErrorListener)
