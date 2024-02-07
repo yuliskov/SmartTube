@@ -226,7 +226,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         if (getPlayer().containsMedia()) {
             video.isUpcoming = false; // live stream started
         }
-        video.sync(mediaItemMetadata, PlayerData.instance(getContext()).isAbsoluteDateEnabled());
+        video.sync(mediaItemMetadata);
         getPlayer().setVideo(video);
 
         getPlayer().setNextTitle(getNext() != null ? getNext().getTitle() : null);

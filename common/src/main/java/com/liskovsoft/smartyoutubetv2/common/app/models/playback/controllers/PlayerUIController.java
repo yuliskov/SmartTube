@@ -565,8 +565,8 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     private void enableUiAutoHideTimeout() {
         Log.d(TAG, "Starting auto hide ui timer...");
         disableUiAutoHideTimeout();
-        if (mEngineReady && mPlayerData.getUIHideTimoutSec() > 0) {
-            mHandler.postDelayed(mUiAutoHideHandler, mPlayerData.getUIHideTimoutSec() * 1_000L);
+        if (mEngineReady && mPlayerData.getUiHideTimeoutSec() > 0) {
+            mHandler.postDelayed(mUiAutoHideHandler, mPlayerData.getUiHideTimeoutSec() * 1_000L);
         }
     }
 
