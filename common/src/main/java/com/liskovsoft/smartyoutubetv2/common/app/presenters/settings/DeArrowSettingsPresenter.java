@@ -63,11 +63,11 @@ public class DeArrowSettingsPresenter extends BasePresenter<Void> {
     private void appendSwitches(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.replace_titles),
+        options.add(UiOptionItem.from(getContext().getString(R.string.crowdsoursed_titles),
                 optionItem -> mDeArrowData.replaceTitles(optionItem.isSelected()),
                 mDeArrowData.isReplaceTitlesEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.replace_thumbnails),
+        options.add(UiOptionItem.from(getContext().getString(R.string.crowdsourced_thumbnails),
                 optionItem -> mDeArrowData.replaceThumbnails(optionItem.isSelected()),
                 mDeArrowData.isReplaceThumbnailsEnabled()));
 

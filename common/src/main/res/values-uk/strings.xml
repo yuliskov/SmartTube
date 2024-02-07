@@ -633,4 +633,6 @@
     <string name="about_sponsorblock">Про SponsorBlock</string>
     <string name="about_dearrow">Про DeArrow</string>
     <string name="replace_thumbnails">Замінити мініатюри</string>
+    <string name="crowdsourced_thumbnails">Краудсорсингові мініатюри</string>
+    <string name="crowdsoursed_titles">Краудсорсингові назви</string>
 </resources>

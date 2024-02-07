@@ -642,4 +642,6 @@
     <string name="about_sponsorblock">About SponsorBlock</string>
     <string name="about_dearrow">About DeArrow</string>
     <string name="replace_thumbnails">Replace thumbnails</string>
+    <string name="crowdsourced_thumbnails">Crowdsourced thumbnails</string>
+    <string name="crowdsoursed_titles">Crowdsourced titles</string>
 </resources>
