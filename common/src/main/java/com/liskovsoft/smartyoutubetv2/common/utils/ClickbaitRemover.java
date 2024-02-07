@@ -40,10 +40,10 @@ public class ClickbaitRemover {
             return null;
         }
 
-        if (video.isLive || video.isUpcoming) {
-            return video.cardImageUrl;
+        if (video.isLive || video.isUpcoming || video.altCardImageUrl != null) { // priority to DeArrow
+            return video.getCardImageUrl();
         }
 
-        return updateThumbnail(video.cardImageUrl, thumbQuality);
+        return updateThumbnail(video.getCardImageUrl(), thumbQuality);
     }
 }

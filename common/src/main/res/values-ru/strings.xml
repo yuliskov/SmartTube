@@ -627,7 +627,12 @@
     <string name="channels_filter">Фильтровать список каналов в разделе Каналы</string>
     <string name="channel_search_bar">Панель поиска на странице канала</string>
     <string name="header_sports">Спорт</string>
-    <string name="replace_titles">Изменять заголовки</string>
+    <string name="replace_titles">Заменять заголовки</string>
     <string name="enable">Включить</string>
     <string name="more_info">Больше информации</string>
+    <string name="about_sponsorblock">О SponsorBlock</string>
+    <string name="about_dearrow">О DeArrow</string>
+    <string name="replace_thumbnails">Заменять миниатюры</string>
+    <string name="crowdsourced_thumbnails">Краудсорсинговые миниатюры</string>
+    <string name="crowdsoursed_titles">Краудсорсинговые названия</string>
 </resources>

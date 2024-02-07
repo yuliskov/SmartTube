@@ -316,20 +316,6 @@ public class VideoGroup {
         }
     }
 
-    public List<String> getVideoIds() {
-        if (mVideos == null) {
-            return null;
-        }
-
-        List<String> result = new ArrayList<>();
-
-        for (Video video : mVideos) {
-            result.add(video.videoId);
-        }
-
-        return result;
-    }
-
     public Video findVideoById(String videoId) {
         if (mVideos == null) {
             return null;

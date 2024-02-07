@@ -139,7 +139,7 @@ public class GeneralData implements ProfileChangeListener {
             int index = getDefaultSectionIndex(sectionId);
 
             Video item = new Video();
-            item.extra = sectionId;
+            item.sectionId = sectionId;
 
             if (mPinnedItems.contains(item)) { // don't reorder if item already exists
                 persistState();
@@ -152,7 +152,7 @@ public class GeneralData implements ProfileChangeListener {
                 mPinnedItems.add(index, item);
             }
         } else {
-            Helpers.removeIf(mPinnedItems, value -> value.extra == sectionId);
+            Helpers.removeIf(mPinnedItems, value -> value.sectionId == sectionId);
         }
 
         persistState();
@@ -177,8 +177,8 @@ public class GeneralData implements ProfileChangeListener {
         List<Integer> enabledSections = new ArrayList<>();
 
         for (Video item : mPinnedItems) {
-            if (item.extra != -1) {
-                enabledSections.add(item.extra);
+            if (item.sectionId != -1) {
+                enabledSections.add(item.sectionId);
             }
         }
 
@@ -898,7 +898,7 @@ public class GeneralData implements ProfileChangeListener {
             }
 
             value.videoId = null;
-            return !value.hasPlaylist() && value.channelId == null && value.extra == -1 && !value.hasReloadPageKey();
+            return !value.hasPlaylist() && value.channelId == null && value.sectionId == -1 && !value.hasReloadPageKey();
         });
     }
 
@@ -1035,7 +1035,7 @@ public class GeneralData implements ProfileChangeListener {
             return -1;
         }
 
-        return item.extra == -1 ? item.hashCode() : item.extra;
+        return item.sectionId == -1 ? item.hashCode() : item.sectionId;
     }
 
     @Override

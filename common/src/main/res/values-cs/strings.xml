@@ -310,6 +310,7 @@
     <string name="action_pip">Obraz v obraze</string>
     <string name="action_video_info">Popis videa</string>
     <string name="action_screen_off">Vypnout obrazovku</string>
+    <string name="action_sound_off">Vypnout zvuk</string>
     <string name="action_playback_queue">Fronta přehrávání</string>
     <string name="action_video_speed">Rychlost videa</string>
     <string name="action_subtitles">Titulky</string>
@@ -506,6 +507,7 @@
     <string name="thumb_quality_middle">Uprostřed videa</string>
     <string name="thumb_quality_end">Na konci videa</string>
     <string name="content_block_status">Zkontrolovat stav SponsorBlocku</string>
+    <string name="dearrow_status">Zkontrolovat stav DeArrow</string>
     <string name="player_show_quality_info_bitrate">Přidej bitrate do informací o kvalitě</string>
     <string name="player_speed_button_old_behavior">Vrátit původní chování tlačítka rychlosti</string>
     <string name="protect_settings_with_password">Chránit všechna nastavení heslem</string>
@@ -632,4 +634,14 @@
     <string name="channels_filter">Filtrovat seznam kanálů v sekci Kanály</string>
     <string name="channel_search_bar">Vyhledávací panel na stránce kanálu</string>
     <string name="header_sports">Sporty</string>
+    <string name="keep_finished_activities">Udržovat dokončené aktivity</string>
+    <string name="disable_channels_service">Zakázat službu Kanály</string>
+    <string name="replace_titles">Nahradit názvy videí</string>
+    <string name="enable">Povolit</string>
+    <string name="more_info">Více informací</string>
+    <string name="about_sponsorblock">O SponsorBlocku</string>
+    <string name="about_dearrow">O DeArrow</string>
+    <string name="replace_thumbnails">Nahradit náhledy</string>
+    <string name="crowdsourced_thumbnails">Komunitní náhledy</string>
+    <string name="crowdsoursed_titles">Komunitní názvy</string>
 </resources>

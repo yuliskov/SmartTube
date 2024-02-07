@@ -31,7 +31,6 @@ public final class Video {
     public static final long MAX_LIVE_DURATION_MS = 24 * 60 * 60 * 1_000;
     private static final String OBJ_DELIM = "&vi;";
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
-    private static final String[] sNotPlaylistParams = new String[] {"EAIYAQ%3D%3D"};
     private static final String BLACK_PLACEHOLDER_URL = "https://via.placeholder.com/1280x720/000000/000000";
     private static final float RESTORE_POSITION_PERCENTS = 10; // min value for immediately closed videos
     public long id;
@@ -53,6 +52,7 @@ public final class Video {
     public String reloadPageKey;
     public String bgImageUrl;
     public String cardImageUrl;
+    public String altCardImageUrl;
     public String author;
     public String badge;
     public String previewUrl;
@@ -73,7 +73,7 @@ public final class Video {
     public String clickTrackingParams;
     public boolean isSynced;
     public final long timestamp = System.currentTimeMillis();
-    public int extra = -1;
+    public int sectionId = -1;
     public long startTimeMs;
     public long pendingPosMs;
     public boolean fromQueue;
@@ -83,6 +83,7 @@ public final class Video {
     public String likeCount;
     public String dislikeCount;
     public float volume = 1.0f;
+    public boolean deArrowProcessed;
     private int startSegmentNum;
     private WeakReference<VideoGroup> group; // Memory leak fix. Used to get next page when scrolling.
     public List<NotificationState> notificationStates;
@@ -221,14 +222,14 @@ public final class Video {
      */
     @Override
     public int hashCode() {
-        int hashCode = Helpers.hashCodeAny(videoId, playlistId, reloadPageKey, playlistParams, channelId, mediaItem, extra);
+        int hashCode = Helpers.hashCodeAny(videoId, playlistId, reloadPageKey, playlistParams, channelId, mediaItem, sectionId);
         return hashCode != -1 ? hashCode : super.hashCode();
     }
 
     public static void printDebugInfo(Context context, Video item) {
         MessageHelpers.showLongMessage(context,
                 String.format("videoId=%s, playlistId=%s, reloadPageKey=%s, playlistParams=%s, channelId=%s, mediaItem=%s, extra=%s",
-                        item.videoId, item.playlistId, item.reloadPageKey, item.playlistParams, item.channelId, item.mediaItem, item.extra)
+                        item.videoId, item.playlistId, item.reloadPageKey, item.playlistParams, item.channelId, item.mediaItem, item.sectionId)
         );
     }
     
@@ -255,6 +256,10 @@ public final class Video {
 
     public String getPlaylistId() {
         return isRemote && remotePlaylistId != null ? remotePlaylistId : playlistId;
+    }
+
+    public String getCardImageUrl() {
+        return altCardImageUrl != null ? altCardImageUrl : cardImageUrl;
     }
 
     public String getAuthor() {
@@ -355,7 +360,7 @@ public final class Video {
         result.cardImageUrl = Helpers.parseStr(split[8]);
         result.mediaItem = YouTubeHubService.deserializeMediaItem(Helpers.parseStr(split[9]));
         result.playlistParams = Helpers.parseStr(split[10]);
-        result.extra = Helpers.parseInt(split[11]);
+        result.sectionId = Helpers.parseInt(split[11]);
         result.reloadPageKey = Helpers.parseStr(split[12]);
         result.itemType = Helpers.parseInt(split[13]);
 
@@ -367,7 +372,7 @@ public final class Video {
     public String toString() {
         return Helpers.merge(OBJ_DELIM,
                 id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl,
-                YouTubeHubService.serialize(mediaItem), playlistParams, extra, getReloadPageKey(), itemType);
+                YouTubeHubService.serialize(mediaItem), playlistParams, sectionId, getReloadPageKey(), itemType);
     }
 
     //@Override

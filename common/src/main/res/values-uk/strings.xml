@@ -627,7 +627,12 @@
     <string name="channels_filter">Фільтрувати список каналів у розділі Канали</string>
     <string name="channel_search_bar">Панель пошуку на сторінці каналу</string>
     <string name="header_sports">Спорт</string>
-    <string name="replace_titles">Змінювати назви</string>
+    <string name="replace_titles">Замінити назви</string>
     <string name="enable">Увімкнути</string>
     <string name="more_info">Більше інформації</string>
+    <string name="about_sponsorblock">Про SponsorBlock</string>
+    <string name="about_dearrow">Про DeArrow</string>
+    <string name="replace_thumbnails">Замінити мініатюри</string>
+    <string name="crowdsourced_thumbnails">Краудсорсингові мініатюри</string>
+    <string name="crowdsoursed_titles">Краудсорсингові назви</string>
 </resources>

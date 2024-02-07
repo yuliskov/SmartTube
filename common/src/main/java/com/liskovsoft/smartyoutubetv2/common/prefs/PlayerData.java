@@ -42,8 +42,7 @@ public class PlayerData extends DataChangeBase implements ProfileChangeListener 
     private static PlayerData sInstance;
     private final AppPrefs mPrefs;
     private int mOKButtonBehavior;
-    private int mUIHideTimeoutSec;
-    private boolean mIsAbsoluteDateEnabled;
+    private int mUiHideTimeoutSec;
     private boolean mIsSeekConfirmPauseEnabled;
     private boolean mIsClockEnabled;
     private boolean mIsGlobalClockEnabled;
@@ -148,22 +147,13 @@ public class PlayerData extends DataChangeBase implements ProfileChangeListener 
         return mOKButtonBehavior;
     }
 
-    public void setUIHideTimoutSec(int timoutSec) {
-        mUIHideTimeoutSec = timoutSec;
+    public void setUiHideTimeoutSec(int timeoutSec) {
+        mUiHideTimeoutSec = timeoutSec;
         persistState();
     }
 
-    public int getUIHideTimoutSec() {
-        return mUIHideTimeoutSec;
-    }
-
-    public void enableAbsoluteDate(boolean show) {
-        mIsAbsoluteDateEnabled = show;
-        persistState();
-    }
-
-    public boolean isAbsoluteDateEnabled() {
-        return mIsAbsoluteDateEnabled;
+    public int getUiHideTimeoutSec() {
+        return mUiHideTimeoutSec;
     }
 
     public void setSeekPreviewMode(int mode) {
@@ -712,8 +702,8 @@ public class PlayerData extends DataChangeBase implements ProfileChangeListener 
         String[] split = Helpers.splitObject(data);
 
         mOKButtonBehavior = Helpers.parseInt(split, 0, ONLY_UI);
-        mUIHideTimeoutSec = Helpers.parseInt(split, 1, 3);
-        mIsAbsoluteDateEnabled = Helpers.parseBoolean(split, 2, false);
+        mUiHideTimeoutSec = Helpers.parseInt(split, 1, 3);
+        // mIsAbsoluteDateEnabled
         mSeekPreviewMode = Helpers.parseInt(split, 3, SEEK_PREVIEW_SINGLE);
         mIsSeekConfirmPauseEnabled = Helpers.parseBoolean(split, 4, false);
         mIsClockEnabled = Helpers.parseBoolean(split, 5, true);
@@ -795,7 +785,7 @@ public class PlayerData extends DataChangeBase implements ProfileChangeListener 
     protected void persistState() {
         String enabledSubtitles = Helpers.mergeArray(mEnabledSubtitlesPerChannel.toArray());
 
-        mPrefs.setProfileData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsAbsoluteDateEnabled,
+        mPrefs.setProfileData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUiHideTimeoutSec, null,
                 mSeekPreviewMode, mIsSeekConfirmPauseEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),

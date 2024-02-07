@@ -507,6 +507,7 @@
     <string name="thumb_quality_middle">Mitte des Videos</string>
     <string name="thumb_quality_end">Ende des Videos</string>
     <string name="content_block_status">Status von SponsorBlock prüfen</string>
+    <string name="dearrow_status">Status von DeArrow prüfen</string>
     <string name="player_show_quality_info_bitrate">Bitrate zu den Qualitätsinfos hinzufügen</string>
     <string name="player_speed_button_old_behavior">Altes Verhalten der Geschwindigkeitstaste wiederherstellen</string>
     <string name="protect_settings_with_password">Alle Einstellungen mit einem Passwort schützen</string>
@@ -633,4 +634,14 @@
     <string name="channels_filter">Liste der Kanäle innerhalb der Kanäle-Kategorie filtern</string>
     <string name="channel_search_bar">Suchleiste innerhalb der Kanalseite</string>
     <string name="header_sports">Sport</string>
+    <string name="keep_finished_activities">Beendete Aktivitäten behalten</string>
+    <string name="disable_channels_service">Kanäle-Dienst deaktivieren</string>
+    <string name="replace_titles">Titel ersetzen</string>
+    <string name="enable">Aktivieren</string>
+    <string name="more_info">Mehr Infos</string>
+    <string name="about_sponsorblock">Über SponsorBlock</string>
+    <string name="about_dearrow">Über DeArrow</string>
+    <string name="replace_thumbnails">Vorschaubilder ersetzen</string>
+    <string name="crowdsourced_thumbnails">Community-basierte Vorschaubilder</string>
+    <string name="crowdsoursed_titles">Community-basierte Titel</string>
 </resources>

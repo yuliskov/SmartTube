@@ -102,15 +102,15 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.option_never),
-                option -> mPlayerData.setUIHideTimoutSec(PlayerData.AUTO_HIDE_NEVER),
-                mPlayerData.getUIHideTimoutSec() == PlayerData.AUTO_HIDE_NEVER));
+                option -> mPlayerData.setUiHideTimeoutSec(PlayerData.AUTO_HIDE_NEVER),
+                mPlayerData.getUiHideTimeoutSec() == PlayerData.AUTO_HIDE_NEVER));
 
         for (int i = 1; i <= 15; i++) {
             int timeoutSec = i;
             options.add(UiOptionItem.from(
                     getContext().getString(R.string.ui_hide_timeout_sec, i),
-                    option -> mPlayerData.setUIHideTimoutSec(timeoutSec),
-                    mPlayerData.getUIHideTimoutSec() == i));
+                    option -> mPlayerData.setUiHideTimeoutSec(timeoutSec),
+                    mPlayerData.getUiHideTimeoutSec() == i));
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_ui_hide_behavior), options);
