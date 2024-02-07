@@ -64,7 +64,7 @@ public class DeArrowProcessor implements OnDataChange {
                     mOnItemReady.onItemReady(video);
                 },
                 error -> {
-                    Log.d(TAG, "DeArrow not working");
+                    Log.d(TAG, "DeArrow cannot process the video");
                 });
     }
 }
