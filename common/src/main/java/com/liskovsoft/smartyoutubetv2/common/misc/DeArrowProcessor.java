@@ -18,7 +18,6 @@ import io.reactivex.disposables.Disposable;
 
 public class DeArrowProcessor implements OnDataChange {
     private static final String TAG = DeArrowProcessor.class.getSimpleName();
-    private static final int PROCESSING_DONE = 99;
     private final OnItemReady mOnItemReady;
     private final MediaItemService mItemService;
     private final DeArrowData mDeArrowData;
@@ -74,10 +73,10 @@ public class DeArrowProcessor implements OnDataChange {
         List<String> result = new ArrayList<>();
 
         for (Video video : videoGroup.getVideos()) {
-            if (video.extra == PROCESSING_DONE) {
+            if (video.deArrowProcessed) {
                 continue;
             }
-            video.extra = PROCESSING_DONE;
+            video.deArrowProcessed = true;
             result.add(video.videoId);
         }
 
