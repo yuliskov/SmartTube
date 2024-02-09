@@ -68,8 +68,21 @@
   <string name="dialog_add_account">Fazer login</string>
   <string name="default_lang">Padrão</string>
   <string name="dialog_select_language">Idioma</string>
-  <string name="subtitle_default">Padrão</string>
+  <string name="action_subtitles">Legendas</string>
+  <string name="msg_player_error_subtitle_source">A fonte do Legenda não está funcionando ou o tempo está incorreto</string>
+  <string name="msg_player_error_subtitle_renderer">Formato de Legenda não é suportado.\nTente selecionar outro pressionando o botão CC player.\nOu Tente reiniciar o seu dispositivo.</string>
+  <string name="card_multiline_subtitle">Legendas em múltiplas linhas</string>
+  <string name="subtitle_system">Estilo do sistema (configurações do Android &gt; Acessibilidade)</string>
+  <string name="subtitle_scale">Escala das legendas</string>
+  <string name="subtitle_position">Posicionamento inferior da legenda</string>
+  <string name="subtitle_remember">Lembrar da ativação das legendas para cada canal</string>
+  <string name="subtitle_yellow_black">Amarela com fundo preto</string>
+  <string name="subtitle_yellow_transparent">Amarela com fundo transparente</string>
+  <string name="subtitle_yellow_semi_transparent">Amarela com fundo semitransparente</string>
+  <string name="subtitle_white_black">Branca com fundo preto</string>
+  <string name="subtitle_white_transparent">Branca com fundo transparente</string>
   <string name="subtitle_white_semi_transparent">Branca com fundo semitransparente</string>
+  <string name="subtitle_default">Padrão</string>
   <string name="subtitle_style">Estilo da legenda</string>
   <string name="subtitle_language">Idioma da legenda</string>
   <string name="action_search">Pesquisar</string>
@@ -125,8 +138,6 @@
   <string name="repeat_mode_none">Parar a reprodução após um vídeo</string>
   <string name="subscribed_to_channel">Inscreveu-se</string>
   <string name="unsubscribed_from_channel">Desinscreveu-se</string>
-  <string name="subtitle_yellow_transparent">Amarela com fundo transparente</string>
-  <string name="subtitle_white_black">Branca com fundo preto</string>
   <string name="player_seek_preview">Pré-visualizar durante avanço/retrocesso</string>
   <string name="color_scheme_dark_grey_oled">Cinza escuro (OLED)</string>
   <string name="channels_section_sorting">Ordenamento da seção Canais</string>
@@ -162,7 +173,6 @@
   <string name="unsubscribe_from_channel">Cancelar inscrição do canal</string>
   <string name="card_title_lines_num">Número de linhas dos títulos das miniaturas</string>
   <string name="card_auto_scrolled_title">Rolagem automática de títulos</string>
-  <string name="share_link">Compartilhar link</string>
   <string name="subscribe_to_channel">Inscrever-se no canal</string>
   <string name="wait_data_loading">Carregando dados...</string>
   <string name="audio_shift">Sincronização de áudio</string>
@@ -218,7 +228,6 @@
   <string name="unpinned_from_sidebar">Removido da barra lateral</string>
   <string name="dialog_select_country">País</string>
   <string name="settings_language_country">Idioma/País</string>
-  <string name="share_embed_link">Compartilhar link incorporado</string>
   <string name="card_text_scroll_factor">Velocidade de rolagem do texto da miniatura</string>
   <string name="preferred_update_source">Selecionar a fonte de atualização</string>
   <string name="hide_shorts">Ocultar Shorts nas suas inscrições</string>
@@ -246,7 +255,6 @@
   <string name="sponsor_color_markers">Marcadores de cor na barra de progresso</string>
   <string name="refresh_section">Atualizar seção</string>
   <string name="option_disabled">Desativado</string>
-  <string name="subtitle_white_transparent">Branca com fundo transparente</string>
   <string name="pin_unpin_playlist">Adicionar/Remover lista de reprodução da barra lateral</string>
   <string name="pin_unpin_channel">Adicionar/Remover canal da barra lateral</string>
   <string name="live_now_row_name">Ao vivo agora</string>
@@ -289,7 +297,6 @@
   <string name="action_screen_off">Desligar a tela</string>
   <string name="action_playback_queue">Fila de reprodução</string>
   <string name="action_video_speed">Velocidade do vídeo</string>
-  <string name="action_subtitles">Legendas</string>
   <string name="action_like">Gostei</string>
   <string name="action_dislike">Não Gostei</string>
   <string name="action_repeat_mode">Modo de reprodução</string>
@@ -344,8 +351,6 @@
   <string name="simple_edit_value_hint">Escreva algo aqui...</string>
   <string name="seek_interval">Intervalo de avanço/retrocesso</string>
   <string name="seek_interval_sec">%s seg</string>
-  <string name="subtitle_system">Estilo do sistema (configurações do Android &gt; Acessibilidade)</string>
-  <string name="subtitle_scale">Escala das legendas</string>
   <string name="audio_sync_fix_desc">Uma maneira alternativa de sincronizar áudio/vídeo. Considerada obsoleta, mas, em alguns casos, pode ajudar.</string>
   <string name="audio_sync_fix">Correção de sincronização de áudio</string>
   <string name="ambilight_ratio_fix_desc">Corrige a iluminação de polarização ausente. Corrige a proporção incorreta. Corrige capturas de tela em branco. Afeta o desempenho!</string>
@@ -369,7 +374,6 @@
   <string name="action_dislike_unset">Não Gostei removido</string>
   <string name="various_buttons">Botões no topo da janela principal</string>
   <string name="not_compatible_with">A opção selecionada não é compatível</string>
-  <string name="subtitle_position">Posicionamento inferior da legenda</string>
   <string name="pressing_home">pressionando o botão HOME</string>
   <string name="pressing_home_back">pressionando o botão HOME ou VOLTAR</string>
   <string name="player_number_key_seek">Avanço/Retrocesso com as teclas numéricas</string>
@@ -385,6 +389,8 @@
   <string name="cant_rename_empty_playlist">Não é possível renomear uma lista de reprodução vazia</string>
   <string name="cant_rename_foreign_playlist">Não é possível renomear uma lista de reprodução de terceiros</string>
   <string name="cant_save_playlist">Essa lista de reprodução não pode ser salva</string>
+  <string name="share_link">Compartilhar link</string>
+  <string name="share_embed_link">Compartilhar link de incorporação</string>
   <string name="enter_value">Digite qualquer valor que não seja vazio</string>
   <string name="dialog_add_remove_from">Adicionar/Remover de %s</string>
   <string name="lb_playback_controls_skip_next">Pular o próximo</string>
@@ -446,8 +452,6 @@
   <string name="speech_recognizer_external_1">Externo 1 (pode causar sérios problemas; para funcionar é necessário desabilitar o acesso ao microfone)</string>
   <string name="speech_recognizer_external_2">Externo 2 (pode causar sérios problemas)</string>
   <string name="real_channel_icon">Mostrar ícone no botão do canal</string>
-  <string name="subtitle_yellow_semi_transparent">Amarela com fundo semitransparente</string>
-  <string name="subtitle_yellow_black">Amarela com fundo preto</string>
   <string name="player_pixel_ratio">Proporção de pixel</string>
   <string name="color_scheme_dark_grey_monochrome">Cinza escuro (monocromático)</string>
   <string name="disable_mic_permission">Por favor, desabilite o acesso ao microfone para o aplicativo para que esse reconhecimento funcione corretamente.</string>
@@ -489,9 +493,10 @@
   <string name="about_sponsorblock">Sobre Sponsorblock</string>
   <string name="dearrow_status">Verificar o status do DeArrow</string>
   <string name="about_dearrow">Sobre DeArrow</string>
-  <string name="crowdsoursed_titles">Títulos da Comunidade de DeArrow</string>
   <string name="crowdsourced_thumbnails">Miniaturas selecionadas pela Comunidade de DeArrow</string>
   <string name="replace_thumbnails">Substituir miniaturas</string>
+  <string name="replace_titles">Substituir títulos</string>
+  <string name="crowdsoursed_titles">Títulos da Comunidade de DeArrow</string>
   <string name="player_show_quality_info_bitrate">Adicionar o bitrate nas informações de qualidade</string>
   <string name="player_speed_button_old_behavior">Reverter o comportamento antigo do botão de velocidade</string>
   <string name="protect_settings_with_password">Proteger todas as configurações com senha</string>
@@ -504,7 +509,6 @@
   <string name="resume_history">Retomar histórico</string>
   <string name="clear_history">Limpar histórico</string>
   <string name="chapters">Capítulos</string>
-  <string name="card_multiline_subtitle">Legendas em múltiplas linhas</string>
   <string name="loading">Carregando...</string>
   <string name="hide_streams">Esconder transmissões ao vivo das inscrições</string>
   <string name="video_rotate">Rotacionar</string>
@@ -570,7 +574,6 @@
   <string name="live_stream_fix_4k">Correção de transmissão ao vivo (4K)</string>
   <string name="pressing_back">pressionando o botão VOLTAR</string>
   <string name="player_chapter_notification">Mostrar notificação para avançar rapidamente pelos capítulos</string>
-  <string name="subtitle_remember">Lembrar da ativação das legendas para cada canal</string>
   <string name="color_scheme_dark_blue">Azul Escuro</string>
   <string name="player_speed_per_channel">Por cada canal</string>
   <string name="disable_popular_searches">Desabilitar pesquisas populares</string>
@@ -598,11 +601,9 @@
   <string name="enable_history">Habilitar histórico</string>
   <string name="disable_history">Desabilitar histórico</string>
   <string name="msg_player_error_video_source">A fonte do Video não está funcionando ou o tempo está incorreto</string>
-  <string name="msg_player_error_subtitle_source">A fonte do Legenda não está funcionando ou o tempo está incorreto</string>
   <string name="msg_player_error_audio_source">A fonte do Audio não está funcionando ou o tempo está incorreto</string>
   <string name="msg_player_error_video_renderer">Formato de video não é suportado.\ntente selecionar outro pressionando o botão HQ no player.\nTente reiniciar o dispositivo.</string>
   <string name="msg_player_error_audio_renderer">Formato de audio não é suportado.\nTente selecionar outro pressionando o botão HQ player.\nOu Tente reiniciar o seu dispositivo.</string>
-  <string name="msg_player_error_subtitle_renderer">Formato de Legenda não é suportado.\nTente selecionar outro pressionando o botão CC player.\nOu Tente reiniciar o seu dispositivo.</string>
   <string name="player_volume">Volume do player</string>
   <string name="login_from_browser">Logar a partir do navegador</string>
   <string name="disable_remote_history">Desativar o histórico quando usar o controle remoto</string>
@@ -635,9 +636,9 @@
   <string name="keep_finished_activities">Manter atividades finalizadas</string>
   <string name="disable_channels_service">Desabilitar serviços de canais</string>
   <string name="more_info">Mais informações</string>
-  <string name="replace_titles">Substituir títulos</string>
   <string name="enable">Habilitar</string>
   <string name="remember_position_of_live_videos">Lembrar-se da posição das Lives</string>
   <string name="save_playlist">Adicionar lista de reprodução para Seção de Listas de reprodução</string>
   <string name="dearrow_not_submitted_thumbs">De onde obter as miniaturas não enviadas\?</string>
+  <string name="pitch_effect">Mudar Tom - Grave/Agudo</string>
 </resources>
