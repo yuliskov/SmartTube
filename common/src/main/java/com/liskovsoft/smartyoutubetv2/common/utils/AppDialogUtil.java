@@ -54,6 +54,7 @@ public class AppDialogUtil {
     private static final int PLAYER_SPEED_LIST_ID = 141;
     private static final int PLAYER_REMEMBER_SPEED_ID = 142;
     private static final int PLAYER_SPEED_MISC_ID = 143;
+    private static final int PITCH_EFFECT_ID = 144;
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
@@ -366,6 +367,24 @@ public class AppDialogUtil {
         }
 
         return OptionCategory.from(AUDIO_DELAY_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
+    }
+
+    public static OptionCategory createPitchEffectCategory(Context context, PlayerManager playerManager, PlayerData playerData) {
+        String title = context.getString(R.string.pitch_effect);
+
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int pitchRaw : Helpers.range(1, 20, 1)) {
+            float pitch = pitchRaw / 10f;
+            options.add(UiOptionItem.from(Helpers.toString(pitch),
+                    optionItem -> {
+                        playerManager.setPitch(pitch);
+                        playerData.setPitch(pitch);
+                    },
+                    Helpers.floatEquals(pitch, playerManager.getPitch())));
+        }
+
+        return OptionCategory.from(PITCH_EFFECT_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
     public static OptionCategory createSubtitleStylesCategory(Context context, PlayerData playerData) {

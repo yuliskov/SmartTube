@@ -27,7 +27,7 @@
   <string name="auto_frame_rate">Taxa de quadros automática</string>
   <string name="frame_rate_correction">Corrigir FPS:\n%s</string>
   <string name="auto_frame_rate_sec">%s seg</string>
-  <strsing name="auto_frame_rate_modes">Modos suportados</string>
+  <string name="auto_frame_rate_modes">Modos suportados</string>
   <string name="amazon_frame_drop_fix">Correção de queda de quadros #2</string>
   <string name="amazon_frame_drop_fix_desc">Recomendado para aparelhos Amazon Stick. Pode funcionar em outros dispositivos.</string>
   <string name="auto_frame_rate_desc">Essa opção remove atrasos nas cenas quando a câmera movimenta muito rápido, ex: Streaming de esportes</string>
@@ -489,7 +489,7 @@
   <string name="about_sponsorblock">Sobre Sponsorblock</string>
   <string name="dearrow_status">Verificar o status do DeArrow</string>
   <string name="about_dearrow">Sobre DeArrow</string>
-  <string name="crowdsoursed_titles">Titulo da Comunidade de DeArrow</string>
+  <string name="crowdsoursed_titles">Títulos da Comunidade de DeArrow</string>
   <string name="crowdsourced_thumbnails">Miniaturas selecionadas pela Comunidade de DeArrow</string>
   <string name="replace_thumbnails">Substituir miniaturas</string>
   <string name="player_show_quality_info_bitrate">Adicionar o bitrate nas informações de qualidade</string>

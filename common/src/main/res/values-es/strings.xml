@@ -628,4 +628,16 @@
   <string name="hide_shorts_from_trending">Ocultar Shorts en Tendencias</string>
   <string name="remember_position_of_live_videos">Recordar posición en el directo</string>
   <string name="save_playlist">Añadir lista de reproducción a la sección listas de reproducción</string>
+  <string name="header_sports">Deportes</string>
+  <string name="enable">Habilitar</string>
+  <string name="more_info">Más información</string>
+  <string name="about_sponsorblock">Sobre SponsorBlock</string>
+  <string name="about_dearrow">Sobre DeArrow</string>
+  <string name="replace_thumbnails">Reemplazar miniaturas</string>
+  <string name="crowdsourced_thumbnails">Miniaturas de Crowdsourcing</string>
+  <string name="crowdsoursed_titles">Títulos de Crowdsourcing</string>
+  <string name="dearrow_not_submitted_thumbs">De dónde obtener las miniaturas no enviadas</string>
+  <string name="replace_titles">Reemplazar títulos</string>
+  <string name="keep_finished_activities">Guardar las actividades terminadas</string>
+  <string name="disable_channels_service">Desactivar el servicio Canales</string>
 </resources>

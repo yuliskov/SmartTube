@@ -204,6 +204,7 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         //restoreSubtitleFormat();
 
         restoreVolume();
+        restorePitch();
     }
 
     @Override
@@ -548,6 +549,10 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
         }
 
         getPlayer().setVolume(newVolume);
+    }
+
+    private void restorePitch() {
+        getPlayer().setPitch(mPlayerData.getPitch());
     }
 
     private void restoreFormats() {
