@@ -631,6 +631,9 @@ public class Utils {
         }
     }
 
+    /**
+     * NOTE: Doesn't work in Android 13
+     */
     public static void sendKey(KeyEvent keyEvent) {
         try {
             Instrumentation instrumentation = new Instrumentation();
