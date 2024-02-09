@@ -642,4 +642,7 @@
     <string name="about_sponsorblock">SponsorBlockについて</string>
     <string name="about_dearrow">DeArrowについて</string>
     <string name="replace_thumbnails">サムネイルを置き換える</string>
+    <string name="crowdsourced_thumbnails">クラウドソースのサムネイル</string>
+    <string name="crowdsoursed_titles">クラウドソースのタイトル</string>
+    <string name="dearrow_not_submitted_thumbs">未送信のサムネイルを取得する箇所</string>
 </resources>
