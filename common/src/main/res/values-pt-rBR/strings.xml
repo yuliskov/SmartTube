@@ -489,7 +489,7 @@
   <string name="about_sponsorblock">Sobre Sponsorblock</string>
   <string name="dearrow_status">Verificar o status do DeArrow</string>
   <string name="about_dearrow">Sobre DeArrow</string>
-  <string name="crowdsoursed_titles">Titulo da Comunidade de DeArrow</string>
+  <string name="crowdsoursed_titles">Títulos da Comunidade de DeArrow</string>
   <string name="crowdsourced_thumbnails">Miniaturas selecionadas pela Comunidade de DeArrow</string>
   <string name="replace_thumbnails">Substituir miniaturas</string>
   <string name="player_show_quality_info_bitrate">Adicionar o bitrate nas informações de qualidade</string>
@@ -634,9 +634,10 @@
   <string name="hide_watched_from_notifications">Ocultar videos assistidos das Notificações</string>
   <string name="keep_finished_activities">Manter atividades finalizadas</string>
   <string name="disable_channels_service">Desabilitar serviços de canais</string>
-  <string name="more_info">Nais informações</string>
+  <string name="more_info">Mais informações</string>
   <string name="replace_titles">Substituir títulos</string>
   <string name="enable">Habilitar</string>
   <string name="remember_position_of_live_videos">Lembrar-se da posição das Lives</string>
   <string name="save_playlist">Adicionar lista de reprodução para Seção de Listas de reprodução</string>
+  <string name="dearrow_not_submitted_thumbs">De onde obter as miniaturas não enviadas\?</string>
 </resources>
