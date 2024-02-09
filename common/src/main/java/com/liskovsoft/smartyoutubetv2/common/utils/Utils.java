@@ -621,6 +621,10 @@ public class Utils {
         });
     }
 
+    /**
+     * NOTE: Doesn't work in Android 13<br/>
+     * java.lang.SecurityException: Injecting input events requires the caller (or the source of the instrumentation, if any) to have the INJECT_EVENTS permission.
+     */
     public static void sendKey(int key) {
         try {
             Instrumentation instrumentation = new Instrumentation();
@@ -631,6 +635,10 @@ public class Utils {
         }
     }
 
+    /**
+     * NOTE: Doesn't work in Android 13<br/>
+     * java.lang.SecurityException: Injecting input events requires the caller (or the source of the instrumentation, if any) to have the INJECT_EVENTS permission.
+     */
     public static void sendKey(KeyEvent keyEvent) {
         try {
             Instrumentation instrumentation = new Instrumentation();

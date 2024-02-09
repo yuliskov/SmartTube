@@ -22,6 +22,7 @@ public class GlobalKeyTranslator extends KeyTranslator {
         Map<Integer, Integer> globalKeyMapping = getKeyMapping();
 
         // Fix rare situations with some remotes. E.g. Shield.
+        // NOTE: 'sendKey' won't work with Android 13
         globalKeyMapping.put(KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_BACK);
         // Fix for the unknown usb remote controller: https://smartyoutubetv.github.io/#comment-3742343397
         globalKeyMapping.put(KeyEvent.KEYCODE_ESCAPE, KeyEvent.KEYCODE_BACK);
