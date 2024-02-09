@@ -58,6 +58,8 @@ public interface PlayerEngine {
     boolean containsMedia();
     void setSpeed(float speed);
     float getSpeed();
+    void setPitch(float pitch);
+    float getPitch();
     void setVolume(float volume);
     float getVolume();
     void setVideoZoomMode(int mode);

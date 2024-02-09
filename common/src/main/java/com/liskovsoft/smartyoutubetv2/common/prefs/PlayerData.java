@@ -93,6 +93,7 @@ public class PlayerData extends DataChangeBase implements ProfileChangeListener 
     private boolean mIsSubtitlesPerChannelEnabled;
     private boolean mIsSpeedPerChannelEnabled;
     private final Map<String, SpeedItem> mSpeeds = new HashMap<>();
+    private float mPitch;
 
     private static class SpeedItem {
         private static final String OBJ_DELIM = "&vi;";
@@ -585,6 +586,15 @@ public class PlayerData extends DataChangeBase implements ProfileChangeListener 
         persistState();
     }
 
+    public float getPitch() {
+        return mPitch;
+    }
+
+    public void setPitch(float pitch) {
+        mPitch = pitch;
+        persistState();
+    }
+
     public String getAudioLanguage() {
         return mAudioLanguage;
     }
@@ -758,6 +768,7 @@ public class PlayerData extends DataChangeBase implements ProfileChangeListener 
         mIsSubtitlesPerChannelEnabled = Helpers.parseBoolean(split, 55, true);
         mIsSpeedPerChannelEnabled = Helpers.parseBoolean(split, 56, true);
         String[] speeds = Helpers.parseArray(split, 57);
+        mPitch = Helpers.parseFloat(split, 58, 1.0f);
 
         if (speeds != null) {
             for (String speedSpec : speeds) {
@@ -797,7 +808,7 @@ public class PlayerData extends DataChangeBase implements ProfileChangeListener 
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
                 mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, Helpers.toString(mLastSubtitleFormat), mLastSpeed, mVideoRotation,
                 mVideoZoom, mRepeatMode, mAudioLanguage, mSubtitleLanguage, enabledSubtitles, mIsSubtitlesPerChannelEnabled,
-                mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray())
+                mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch
         ));
 
         super.persistState();

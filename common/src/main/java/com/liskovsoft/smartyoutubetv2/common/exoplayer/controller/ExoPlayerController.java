@@ -52,7 +52,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private SimpleExoPlayer mPlayer;
     private PlayerView mPlayerView;
     private VolumeBooster mVolumeBooster;
-    //private float mCurrentSpeed = 1.0f;
     private boolean mIsEnded;
 
     public ExoPlayerController(Context context) {
@@ -384,7 +383,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void setSpeed(float speed) {
         if (mPlayer != null && speed > 0 && !Helpers.floatEquals(speed, getSpeed())) {
             mPlayer.setPlaybackParameters(new PlaybackParameters(speed, mPlayer.getPlaybackParameters().pitch));
-            //mCurrentSpeed = speed; // NOTE: backup speed in case params not applied (playback is paused)
 
             mTrackFormatter.setSpeed(speed);
             setQualityInfo(mTrackFormatter.getQualityLabel());
@@ -395,9 +393,23 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public float getSpeed() {
         if (mPlayer != null) {
-            // NOTE: restore backup speed in case params not applied (playback is paused)
-            //return isPlaying() ? mPlayer.getPlaybackParameters().speed : mCurrentSpeed;
             return mPlayer.getPlaybackParameters().speed;
+        } else {
+            return -1;
+        }
+    }
+
+    @Override
+    public void setPitch(float pitch) {
+        if (mPlayer != null && pitch > 0 && !Helpers.floatEquals(pitch, getPitch())) {
+            mPlayer.setPlaybackParameters(new PlaybackParameters(mPlayer.getPlaybackParameters().speed, pitch));
+        }
+    }
+
+    @Override
+    public float getPitch() {
+        if (mPlayer != null) {
+            return mPlayer.getPlaybackParameters().pitch;
         } else {
             return -1;
         }
