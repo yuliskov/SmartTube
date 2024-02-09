@@ -501,7 +501,7 @@
     <string name="chat_left">Sol</string>
     <string name="chat_right">Sağ</string>
     <string name="card_real_thumbnails">Küçük resimleri videodan bir kareyle değiştir</string>
-    <string name="card_content">Küçük resimler nereden alınsın</string>
+    <string name="card_content">Küçük resimler nereden alınsın\?</string>
     <string name="thumb_quality_default">Varsayılan</string>
     <string name="thumb_quality_start">Videonun başlangıcından</string>
     <string name="thumb_quality_middle">Videonun ortasından</string>
@@ -639,4 +639,10 @@
     <string name="replace_titles">Başlıkları değiştir</string>
     <string name="enable">Etkinleştir</string>
     <string name="more_info">Daha fazla bilgi</string>
+    <string name="about_sponsorblock">SponsorBlock Hakkında</string>
+    <string name="about_dearrow">DeArrow Hakkında</string>
+    <string name="replace_thumbnails">Küçük resimleri değiştir</string>
+    <string name="crowdsourced_thumbnails">Kitle kaynaklı küçük resimler</string>
+    <string name="crowdsoursed_titles">Kitle kaynaklı başlıklar</string>
+    <string name="dearrow_not_submitted_thumbs">Gönderilmeyen küçük resimler nereden alınsın\?</string>
 </resources>
