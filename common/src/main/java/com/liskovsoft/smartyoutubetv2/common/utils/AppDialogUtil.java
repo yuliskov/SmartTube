@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
@@ -374,8 +375,8 @@ public class AppDialogUtil {
 
         List<OptionItem> options = new ArrayList<>();
 
-        for (int pitchRaw : Helpers.range(1, 20, 1)) {
-            float pitch = pitchRaw / 10f;
+        for (int pitchRaw : Helpers.range(1, 20 * 4, 1)) {
+            float pitch = pitchRaw / (10f * 4);
             options.add(UiOptionItem.from(Helpers.toString(pitch),
                     optionItem -> {
                         playerManager.setPitch(pitch);
@@ -560,6 +561,7 @@ public class AppDialogUtil {
         return OptionCategory.from(PLAYER_SCREEN_DIMMING_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
+    @SuppressLint("StringFormatMatches")
     public static OptionCategory createPlayerScreenOffTimeoutCategory(Context context, PlayerTweaksData data, Runnable onApply) {
         List<OptionItem> options = new ArrayList<>();
 

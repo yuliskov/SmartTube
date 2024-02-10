@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
+import com.liskovsoft.mediaserviceinterfaces.data.DislikeData;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
@@ -626,6 +627,15 @@ public final class Video {
         }
 
         volume = formatInfo.getVolumeLevel();
+    }
+
+    public void sync(DislikeData dislikeData) {
+        if (dislikeData == null) {
+            return;
+        }
+
+        likeCount = dislikeData.getLikeCount();
+        dislikeCount = dislikeData.getDislikeCount();
     }
 
     /**

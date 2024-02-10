@@ -310,6 +310,7 @@
     <string name="action_pip">PIP</string>
     <string name="action_video_info">Descrizione video</string>
     <string name="action_screen_off">Spegni schermo</string>
+    <string name="action_sound_off">Disattiva audio</string>
     <string name="action_playback_queue">Coda di riproduzione</string>
     <string name="action_video_speed">Velocità video</string>
     <string name="action_subtitles">Sottotitoli</string>
@@ -506,6 +507,7 @@
     <string name="thumb_quality_middle">Metà del video</string>
     <string name="thumb_quality_end">Fine del video</string>
     <string name="content_block_status">Controlla lo stato di SponsorBlock</string>
+    <string name="dearrow_status">Controlla lo stato di DeArrow</string>
     <string name="player_show_quality_info_bitrate">Aggiungi bitrate nelle informazioni sulla qualità</string>
     <string name="player_speed_button_old_behavior">Ripristina il vecchio comportamento del pulsante di velocità</string>
     <string name="protect_settings_with_password">Proteggi tutte le Impostazioni con una password</string>
@@ -631,4 +633,17 @@
     <string name="player_quick_shorts_skip">Salta i video brevi con il tasto sinistro/destro</string>
     <string name="channels_filter">Filtra l\'elenco dei canali nella sezione Canali</string>
     <string name="channel_search_bar">Barra di ricerca all\'interno della pagina Canale</string>
+    <string name="header_sports">Sport</string>
+    <string name="keep_finished_activities">Mantieni le attività terminate</string>
+    <string name="disable_channels_service">Disattiva il servizio Canali</string>
+    <string name="replace_titles">Sostituisci i titoli</string>
+    <string name="enable">Abilita</string>
+    <string name="more_info">Ulteriori informazioni</string>
+    <string name="about_sponsorblock">Informazioni su SponsorBlock</string>
+    <string name="about_dearrow">Informazioni su DeArrow</string>
+    <string name="replace_thumbnails">Sostituisci le miniature</string>
+    <string name="crowdsourced_thumbnails">Miniature in crowdsourcing</string>
+    <string name="crowdsoursed_titles">Titoli in crowdsourcing</string>
+    <string name="dearrow_not_submitted_thumbs">Dove prendere le miniature non inviate</string>
+    <string name="pitch_effect">Effetto pitch</string>
 </resources>

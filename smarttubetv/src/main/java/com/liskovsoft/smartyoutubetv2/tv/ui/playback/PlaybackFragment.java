@@ -110,7 +110,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private UriBackgroundManager mBackgroundManager;
     private RowsSupportFragment mRowsSupportFragment;
     private boolean mIsUIAnimationsEnabled = false;
-    private boolean mIsLikesCounterEnabled = true;
     private int mPlaybackMode = PlayerEngine.BACKGROUND_MODE_DEFAULT;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
@@ -454,7 +453,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         hideControlsOverlay(true); // fix player ui not synced correctly
 
         mIsUIAnimationsEnabled = PlayerTweaksData.instance(getContext()).isUIAnimationsEnabled();
-        mIsLikesCounterEnabled = PlayerTweaksData.instance(getContext()).isLikesCounterEnabled();
 
         mExoPlayerController.setPlayerView(mPlayerGlue);
     }
@@ -845,11 +843,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             result = TextUtils.concat( result, " ", Video.TERTIARY_TEXT_DELIM, " ", Utils.color(getContext().getString(R.string.badge_live), ContextCompat.getColor(getContext(), R.color.red)));
         }
 
-        if (getContext() != null && video.likeCount != null && mIsLikesCounterEnabled) {
+        if (getContext() != null && video.likeCount != null) {
             result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.likeCount, " ", Helpers.THUMB_UP); // color of thumb cannot be changed
         }
 
-        if (getContext() != null && video.dislikeCount != null && mIsLikesCounterEnabled) {
+        if (getContext() != null && video.dislikeCount != null) {
             result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.dislikeCount, " ", Helpers.THUMB_DOWN); // color of thumb cannot be changed
         }
 
