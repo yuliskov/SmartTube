@@ -2,8 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import androidx.core.content.ContextCompat;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
+import com.liskovsoft.mediaserviceinterfaces.data.DislikeData;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -22,7 +22,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeHubService;
@@ -39,6 +38,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private PlayerTweaksData mPlayerTweaksData;
     private GeneralData mGeneralData;
     private MediaGroup mLastScrollGroup;
+    private MediaItemService mMediaItemService;
     private DeArrowProcessor mDeArrowProcessor;
     private Video mNextVideo;
     private Video mPreviousVideo;
@@ -66,6 +66,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
         mGeneralData = GeneralData.instance(getContext());
         mDeArrowProcessor = new DeArrowProcessor(getContext(), PlaybackPresenter.instance(getContext())::syncItem);
+        mMediaItemService = YouTubeHubService.instance().getMediaItemService();
     }
 
     @Override
@@ -186,9 +187,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaItemService mediaItemService = YouTubeHubService.instance().getMediaItemService();
-
-        Disposable continueAction = mediaItemService.continueGroupObserve(mediaGroup)
+        Disposable continueAction = mMediaItemService.continueGroupObserve(mediaGroup)
                 .subscribe(
                         continueMediaGroup -> {
                             getPlayer().showProgressBar(false);
@@ -245,14 +244,11 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             return;
         }
 
-        HubService service = YouTubeHubService.instance();
-        MediaItemService mediaItemManager = service.getMediaItemService();
-
         Observable<MediaItemMetadata> observable;
 
         // NOTE: Load suggestions from mediaItem isn't robust. Because playlistId may be initialized from RemoteControlManager.
         // Video might be loaded from Channels section (has playlistParams)
-        observable = mediaItemManager.getMetadataObserve(video.videoId, video.getPlaylistId(), video.playlistIndex, video.playlistParams);
+        observable = mMediaItemService.getMetadataObserve(video.videoId, video.getPlaylistId(), video.playlistIndex, video.playlistParams);
 
         Disposable metadataAction = observable
                 .subscribe(
@@ -302,6 +298,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
     private void updateSuggestions(MediaItemMetadata mediaItemMetadata, Video video) {
         syncCurrentVideo(mediaItemMetadata, video);
+        appendDislikes(video);
 
         appendSuggestions(video, mediaItemMetadata);
 
@@ -727,5 +724,23 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private boolean isSectionPlaylistEnabled(Video video) {
         return mPlayerTweaksData.isSectionPlaylistEnabled() && video != null && video.getGroup() != null &&
                 (video.playlistId == null || video.nextMediaItem == null) && (!video.isRemote || video.remotePlaylistId == null);
+    }
+
+    private void appendDislikes(Video video) {
+        if (video == null || !mPlayerTweaksData.isLikesCounterEnabled()) {
+            return;
+        }
+
+        Observable<DislikeData> dislikeDataObserve = mMediaItemService.getDislikeDataObserve(video.videoId);
+
+        Disposable dislikeAction = dislikeDataObserve.subscribe(
+                dislikeData -> {
+                    video.sync(dislikeData);
+                    getPlayer().setVideo(video);
+                },
+                error -> Log.e(TAG, "Dislike not working...")
+        );
+
+        mActions.add(dislikeAction);
     }
 }
