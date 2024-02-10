@@ -374,8 +374,8 @@ public class AppDialogUtil {
 
         List<OptionItem> options = new ArrayList<>();
 
-        for (int pitchRaw : Helpers.range(1, 20, 1)) {
-            float pitch = pitchRaw / 10f;
+        for (int pitchRaw : Helpers.range(1, 20 * 4, 1)) {
+            float pitch = pitchRaw / (10f * 4);
             options.add(UiOptionItem.from(Helpers.toString(pitch),
                     optionItem -> {
                         playerManager.setPitch(pitch);
