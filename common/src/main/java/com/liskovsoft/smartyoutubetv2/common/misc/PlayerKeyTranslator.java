@@ -96,11 +96,6 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
 
         Map<Integer, Runnable> actionMapping = getActionMapping();
 
-        addLikeAction(actionMapping);
-        addSpeedAction(actionMapping);
-    }
-
-    private void addLikeAction(Map<Integer, Runnable> actionMapping) {
         if (mGeneralData.isRemapPageUpToLikeEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, likeAction);
             actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, dislikeAction);
@@ -110,9 +105,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, likeAction);
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, dislikeAction);
         }
-    }
 
-    private void addSpeedAction(Map<Integer, Runnable> actionMapping) {
         if (mGeneralData.isRemapPageUpToSpeedEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, speedDownAction);
