@@ -18,6 +18,7 @@ import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class MotherActivity extends FragmentActivity {
     private List<OnResult> mOnResults;
     private long mLastKeyDownTime;
     private boolean mEnableThrottleKeyDown;
+    private boolean mIsOculusQuestFixEnabled;
 
     public interface OnPermissions {
         void onPermissions(int requestCode, String[] permissions, int[] grantResults);
@@ -58,6 +60,7 @@ public class MotherActivity extends FragmentActivity {
         initTheme();
 
         mScreensaverManager = new ScreensaverManager(this);
+        mIsOculusQuestFixEnabled = PlayerTweaksData.instance(this).isOculusQuestFixEnabled();
 
         //Helpers.addFullscreenListener(this);
     }
@@ -250,17 +253,13 @@ public class MotherActivity extends FragmentActivity {
     }
 
     @Override
-    public void finishAfterTransition() {
-        // Oculus Quest fix: back button not closing activity?
-        finish();
+    public void onBackPressed() {
+        super.onBackPressed();
+        // Oculus Quest fix: back button not closing the activity
+        if (mIsOculusQuestFixEnabled) {
+            finish();
+        }
     }
-
-    //@Override
-    //public void onBackPressed() {
-    //    // Oculus Quest fix: back button not closing activity
-    //    super.onBackPressed();
-    //    finish();
-    //}
 
     /**
      * NOTE: When enabled, you could face IllegalStateException: Can not perform this action after onSaveInstanceState<br/>

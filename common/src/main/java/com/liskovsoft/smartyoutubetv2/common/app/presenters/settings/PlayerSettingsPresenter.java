@@ -636,6 +636,14 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableSpeedButtonOldBehavior(option.isSelected()),
                 mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()));
 
+        // Oculus Quest fix: back button not closing the activity
+        options.add(UiOptionItem.from("Oculus Quest fix",
+                option -> {
+                    mPlayerTweaksData.enableOculusQuestFix(option.isSelected());
+                    mRestartApp = true;
+                },
+                mPlayerTweaksData.isOculusQuestFixEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 }
