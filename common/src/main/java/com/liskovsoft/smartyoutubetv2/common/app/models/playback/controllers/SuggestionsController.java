@@ -229,6 +229,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         getPlayer().setVideo(video);
 
         getPlayer().setNextTitle(getNext() != null ? getNext().getTitle() : null);
+
+        appendDislikes(video);
     }
 
     public void loadSuggestions(Video video) {
@@ -298,7 +300,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
     private void updateSuggestions(MediaItemMetadata mediaItemMetadata, Video video) {
         syncCurrentVideo(mediaItemMetadata, video);
-        appendDislikes(video);
 
         appendSuggestions(video, mediaItemMetadata);
 

@@ -15,6 +15,7 @@ public abstract class KeyTranslator {
     private static final String TAG = KeyTranslator.class.getSimpleName();
     private final Map<Integer, Integer> mKeyMapping = new HashMap<>();
     private final Map<Integer, Runnable> mActionMapping = new HashMap<>();
+    private boolean mIsChecked;
 
     /**
      * NOTE: 'sendKey' won't work with Android 13
@@ -84,10 +85,17 @@ public abstract class KeyTranslator {
     }
 
     private boolean checkEvent(KeyEvent event) {
-        return (event.getKeyCode() != KeyEvent.KEYCODE_DPAD_UP && event.getKeyCode() != KeyEvent.KEYCODE_DPAD_DOWN &&
+        // Fix Volume binding when UI hide
+        if (event.getAction() == KeyEvent.ACTION_UP) {
+            return mIsChecked;
+        }
+
+        mIsChecked = (event.getKeyCode() != KeyEvent.KEYCODE_DPAD_UP && event.getKeyCode() != KeyEvent.KEYCODE_DPAD_DOWN &&
                 event.getKeyCode() != KeyEvent.KEYCODE_DPAD_LEFT && event.getKeyCode() != KeyEvent.KEYCODE_DPAD_RIGHT) ||
                 (!PlaybackPresenter.instance(null).isOverlayShown() &&
-                 !AppDialogPresenter.instance(null).isDialogShown());
+                        !AppDialogPresenter.instance(null).isDialogShown());
+
+        return mIsChecked;
     }
 
     protected abstract void initKeyMapping();
