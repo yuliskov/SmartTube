@@ -251,8 +251,8 @@ public class MotherActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         // Oculus Quest fix: back button not closing activity
+        //super.onBackPressed();
         finish();
     }
 
