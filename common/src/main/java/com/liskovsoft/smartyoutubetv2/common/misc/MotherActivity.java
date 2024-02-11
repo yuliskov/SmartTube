@@ -250,11 +250,17 @@ public class MotherActivity extends FragmentActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        // Oculus Quest fix: back button not closing activity
-        //super.onBackPressed();
+    public void finishAfterTransition() {
+        // Oculus Quest fix: back button not closing activity?
         finish();
     }
+
+    //@Override
+    //public void onBackPressed() {
+    //    // Oculus Quest fix: back button not closing activity
+    //    super.onBackPressed();
+    //    finish();
+    //}
 
     /**
      * NOTE: When enabled, you could face IllegalStateException: Can not perform this action after onSaveInstanceState<br/>
