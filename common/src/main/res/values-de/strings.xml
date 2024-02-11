@@ -645,4 +645,5 @@
     <string name="crowdsourced_thumbnails">Community-basierte Vorschaubilder</string>
     <string name="crowdsoursed_titles">Community-basierte Titel</string>
     <string name="dearrow_not_submitted_thumbs">Quelle für nicht eingereichte Vorschaubilder</string>
+    <string name="pitch_effect">Tonhöhen-Effekt</string>
 </resources>
