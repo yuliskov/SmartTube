@@ -65,7 +65,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendPixelRatioCategory(settingsPresenter);
         appendNetworkEngineCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
-        appendTweaksCategory(settingsPresenter);
+        appendDeveloperCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_player_ui), () -> {
             if (mRestartApp) {
@@ -227,7 +227,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_buttons), options);
     }
 
-    private void appendTweaksCategory(AppDialogPresenter settingsPresenter) {
+    private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         // Disable long press on buggy controllers.

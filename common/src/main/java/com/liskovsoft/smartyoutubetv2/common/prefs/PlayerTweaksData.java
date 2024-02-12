@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build.VERSION;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 public class PlayerTweaksData implements ProfileChangeListener {
     private static final String VIDEO_PLAYER_TWEAKS_DATA = "video_player_tweaks_data";
@@ -592,7 +593,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsLoopShortsEnabled = Helpers.parseBoolean(split, 44, true);
         mIsQuickShortsSkipEnabled = Helpers.parseBoolean(split, 45, true);
         mIsRememberPositionOfLiveVideosEnabled = Helpers.parseBoolean(split, 46, false);
-        mIsOculusQuestFixEnabled = Helpers.parseBoolean(split, 47, false);
+        mIsOculusQuestFixEnabled = Helpers.parseBoolean(split, 47, Utils.isOculusQuest());
 
         updateDefaultValues();
     }
