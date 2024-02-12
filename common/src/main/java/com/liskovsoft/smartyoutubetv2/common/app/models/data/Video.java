@@ -570,10 +570,6 @@ public final class Video {
     }
 
     public void sync(MediaItemMetadata metadata) {
-        sync(metadata, false);
-    }
-
-    public void sync(MediaItemMetadata metadata, boolean useAltSecondTitle) {
         if (metadata == null) {
             return;
         }
@@ -583,7 +579,7 @@ public final class Video {
         if (!isUpcoming) {
             metadataTitle = metadata.getTitle();
 
-            metadataSecondTitle = useAltSecondTitle ? metadata.getSecondTitleAlt() : metadata.getSecondTitle();
+            metadataSecondTitle = metadata.getSecondTitle();
 
             // NOTE: Upcoming videos metadata wrongly reported as live (live == true, upcoming == false)
             isLive = metadata.isLive();

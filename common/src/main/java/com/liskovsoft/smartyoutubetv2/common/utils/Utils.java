@@ -777,4 +777,8 @@ public class Utils {
 
         return result;
     }
+
+    public static boolean isOculusQuest() {
+        return Helpers.getDeviceName().startsWith("Oculus Quest");
+    }
 }

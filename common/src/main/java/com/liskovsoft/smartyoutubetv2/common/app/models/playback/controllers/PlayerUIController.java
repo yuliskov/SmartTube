@@ -515,45 +515,17 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     @Override
     public void onButtonLongClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_screen_off || buttonId == R.id.action_screen_off_timeout) {
-            AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-            OptionCategory dimmingCategory =
-                    AppDialogUtil.createPlayerScreenOffDimmingCategory(getContext(), mPlayerTweaksData, () -> {
-                        prepareScreenOff();
-                        applyScreenOff(PlayerUI.BUTTON_OFF);
-                    });
-            OptionCategory category =
-                    AppDialogUtil.createPlayerScreenOffTimeoutCategory(getContext(), mPlayerTweaksData, () -> {
-                        prepareScreenOff();
-                        applyScreenOffTimeout(PlayerUI.BUTTON_OFF);
-                    });
-            settingsPresenter.appendRadioCategory(dimmingCategory.title, dimmingCategory.options);
-            settingsPresenter.appendRadioCategory(category.title, category.options);
-            settingsPresenter.showDialog(getContext().getString(R.string.action_screen_off));
+            showScreenOffDialog();
         } else if (buttonId == R.id.action_subscribe) {
-            if (getPlayer().getVideo() == null || getPlayer().getVideo().notificationStates == null) {
-                return;
-            }
-
-            // Can't change notification state while unsubscribed
-            if (buttonState == PlayerUI.BUTTON_OFF) {
-                onSubscribe(buttonState);
-                return;
-            }
-
+            showNotificationsDialog(buttonState);
+        } else if (buttonId == R.id.action_sound_off) {
             AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-
-            List<OptionItem> items = new ArrayList<>();
-
-            for (NotificationState item : getPlayer().getVideo().notificationStates) {
-                 items.add(UiOptionItem.from(item.getTitle(), optionItem -> {
-                     if (optionItem.isSelected()) {
-                         MediaServiceManager.instance().setNotificationState(item);
-                     }
-                 }, item.isSelected()));
-            }
-
-            settingsPresenter.appendRadioCategory(getContext().getString(R.string.header_notifications), items);
-            settingsPresenter.showDialog(getContext().getString(R.string.header_notifications));
+            OptionCategory audioVolumeCategory = AppDialogUtil.createAudioVolumeCategory(getContext(), mPlayerData, () -> {
+                applySoundOff(mPlayerData.getPlayerVolume() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
+                getPlayer().setVolume(mPlayerData.getPlayerVolume());
+            });
+            settingsPresenter.appendCategory(audioVolumeCategory);
+            settingsPresenter.showDialog();
         }
     }
 
@@ -864,7 +836,8 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
     private void applySoundOffButtonState() {
         if (getPlayer().getAudioFormat() != null) {
-            getPlayer().setButtonState(R.id.action_sound_off, getPlayer().getAudioFormat().isDefault() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+            getPlayer().setButtonState(R.id.action_sound_off,
+                    (getPlayer().getAudioFormat().isDefault() || mPlayerData.getPlayerVolume() == 0) ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
     }
 
@@ -884,5 +857,49 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             }
         }
         subtitleFormats.addAll(subtitleFormats.size() < begin ? 0 : begin, topSubtitles);
+    }
+
+    private void showNotificationsDialog(int buttonState) {
+        if (getPlayer().getVideo() == null || getPlayer().getVideo().notificationStates == null) {
+            return;
+        }
+
+        // Can't change notification state while unsubscribed
+        if (buttonState == PlayerUI.BUTTON_OFF) {
+            onSubscribe(buttonState);
+            return;
+        }
+
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+
+        List<OptionItem> items = new ArrayList<>();
+
+        for (NotificationState item : getPlayer().getVideo().notificationStates) {
+            items.add(UiOptionItem.from(item.getTitle(), optionItem -> {
+                if (optionItem.isSelected()) {
+                    MediaServiceManager.instance().setNotificationState(item);
+                }
+            }, item.isSelected()));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.header_notifications), items);
+        settingsPresenter.showDialog(getContext().getString(R.string.header_notifications));
+    }
+
+    private void showScreenOffDialog() {
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+        OptionCategory dimmingCategory =
+                AppDialogUtil.createPlayerScreenOffDimmingCategory(getContext(), mPlayerTweaksData, () -> {
+                    prepareScreenOff();
+                    applyScreenOff(PlayerUI.BUTTON_OFF);
+                });
+        OptionCategory category =
+                AppDialogUtil.createPlayerScreenOffTimeoutCategory(getContext(), mPlayerTweaksData, () -> {
+                    prepareScreenOff();
+                    applyScreenOffTimeout(PlayerUI.BUTTON_OFF);
+                });
+        settingsPresenter.appendRadioCategory(dimmingCategory.title, dimmingCategory.options);
+        settingsPresenter.appendRadioCategory(category.title, category.options);
+        settingsPresenter.showDialog(getContext().getString(R.string.action_screen_off));
     }
 }

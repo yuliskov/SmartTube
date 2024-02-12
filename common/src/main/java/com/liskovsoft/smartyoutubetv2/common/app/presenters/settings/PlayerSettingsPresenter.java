@@ -65,7 +65,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendPixelRatioCategory(settingsPresenter);
         appendNetworkEngineCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
-        appendTweaksCategory(settingsPresenter);
+        appendDeveloperCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_player_ui), () -> {
             if (mRestartApp) {
@@ -142,22 +142,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendMasterVolumeCategory(AppDialogPresenter settingsPresenter) {
-        List<OptionItem> options = new ArrayList<>();
-
-        for (int scalePercent : Helpers.range(0, 300, 5)) {
-            float scale = scalePercent / 100f;
-            options.add(UiOptionItem.from(String.format("%s%%", scalePercent),
-                    optionItem -> {
-                        mPlayerData.setPlayerVolume(scale);
-
-                        if (scalePercent > 100) {
-                            MessageHelpers.showLongMessage(getContext(), R.string.volume_boost_warning);
-                        }
-                    },
-                    Helpers.floatEquals(scale, mPlayerData.getPlayerVolume())));
-        }
-
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_volume), options);
+        OptionCategory category = AppDialogUtil.createAudioVolumeCategory(getContext(), mPlayerData);
+        settingsPresenter.appendCategory(category);
     }
 
     private void appendSeekingPreviewCategory(AppDialogPresenter settingsPresenter) {
@@ -241,7 +227,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_buttons), options);
     }
 
-    private void appendTweaksCategory(AppDialogPresenter settingsPresenter) {
+    private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         // Disable long press on buggy controllers.
@@ -375,6 +361,14 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                     mRestartApp = true;
                 },
                 !mGeneralData.isSettingsSectionEnabled()));
+
+        // Oculus Quest fix: back button not closing the activity
+        options.add(UiOptionItem.from("Oculus Quest fix",
+                option -> {
+                    mPlayerTweaksData.enableOculusQuestFix(option.isSelected());
+                    mRestartApp = true;
+                },
+                mPlayerTweaksData.isOculusQuestFixEnabled()));
 
         // Disabled inside RetrofitHelper
         //options.add(UiOptionItem.from("Prefer IPv4 DNS",
