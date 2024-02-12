@@ -56,6 +56,7 @@ public class AppDialogUtil {
     private static final int PLAYER_REMEMBER_SPEED_ID = 142;
     private static final int PLAYER_SPEED_MISC_ID = 143;
     private static final int PITCH_EFFECT_ID = 144;
+    private static final int AUDIO_VOLUME_ID = 145;
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
@@ -368,6 +369,33 @@ public class AppDialogUtil {
         }
 
         return OptionCategory.from(AUDIO_DELAY_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
+    }
+
+    public static OptionCategory createAudioVolumeCategory(Context context, PlayerData playerData) {
+        return createAudioVolumeCategory(context, playerData, () -> {});
+    }
+
+    public static OptionCategory createAudioVolumeCategory(Context context, PlayerData playerData, Runnable onSetCallback) {
+        String title = context.getString(R.string.player_volume);
+
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int scalePercent : Helpers.range(0, 300, 5)) {
+            float scale = scalePercent / 100f;
+            options.add(UiOptionItem.from(String.format("%s%%", scalePercent),
+                    optionItem -> {
+                        playerData.setPlayerVolume(scale);
+
+                        if (scalePercent > 100) {
+                            MessageHelpers.showLongMessage(context, R.string.volume_boost_warning);
+                        }
+
+                        onSetCallback.run();
+                    },
+                    Helpers.floatEquals(scale, playerData.getPlayerVolume())));
+        }
+
+        return OptionCategory.from(AUDIO_VOLUME_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
     public static OptionCategory createPitchEffectCategory(Context context, PlayerManager playerManager, PlayerData playerData) {
