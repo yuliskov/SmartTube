@@ -17,7 +17,7 @@
   <string name="library_signin_to_show_more">Assistir a vídeos que você gostou, salvou ou se inscreveu</string>
   <string name="library_signin_subtitle">Faça login para ver sua biblioteca</string>
   <string name="action_signin">FAZER LOGIN</string>
-  <string name="title_video_formats">Formatos de vídeo</string>
+  <string name="title_video_formats">Formatos/Qualidades de vídeo</string>
   <string name="title_audio_formats">Formatos de áudio</string>
   <string name="subtitle_category_title">Legendas</string>
   <string name="playback_queue_category_title">Fila de reprodução</string>
@@ -641,4 +641,5 @@
   <string name="save_playlist">Adicionar lista de reprodução para Seção de Listas de reprodução</string>
   <string name="dearrow_not_submitted_thumbs">De onde obter as miniaturas não enviadas\?</string>
   <string name="pitch_effect">Mudar Tom - Grave/Agudo</string>
+  <string name="action_sound_off">Mudo\n(Mantenha pressionado para configurações de Volume)</string>
 </resources>
