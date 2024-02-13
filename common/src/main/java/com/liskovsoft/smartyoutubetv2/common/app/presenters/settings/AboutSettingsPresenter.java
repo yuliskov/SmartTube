@@ -101,7 +101,11 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
             changelog.add(UiOptionItem.from(change));
         }
 
-        settingsPresenter.appendStringsCategory(getContext().getString(R.string.update_changelog), changelog);
+        String title = String.format("%s %s",
+                getContext().getString(R.string.update_changelog),
+                AppInfoHelpers.getAppVersionName(getContext()));
+
+        settingsPresenter.appendStringsCategory(title, changelog);
     }
 
     private void appendLinks(AppDialogPresenter settingsPresenter) {
