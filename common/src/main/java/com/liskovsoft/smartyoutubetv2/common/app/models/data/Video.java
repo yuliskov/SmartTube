@@ -83,6 +83,7 @@ public final class Video {
     public boolean incognito;
     public String likeCount;
     public String dislikeCount;
+    public String subscriberCount;
     public float volume = 1.0f;
     public boolean deArrowProcessed;
     private int startSegmentNum;
@@ -596,6 +597,7 @@ public final class Video {
         isSubscribed = metadata.isSubscribed();
         likeCount = metadata.getLikeCount();
         dislikeCount = metadata.getDislikeCount();
+        subscriberCount = metadata.getSubscriberCount();
         notificationStates = metadata.getNotificationStates();
         author = metadata.getAuthor();
         isSynced = true;

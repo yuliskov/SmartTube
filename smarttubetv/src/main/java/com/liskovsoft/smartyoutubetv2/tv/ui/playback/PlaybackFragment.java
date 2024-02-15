@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.media.PlayerAdapter;
@@ -90,6 +91,7 @@ import java.util.Map;
  * Plays selected video, loads playlist and related videos, and delegates playback to
  * {@link VideoPlayerGlue}.
  */
+@RequiresApi(19)
 public class PlaybackFragment extends SeekModePlaybackFragment implements PlaybackView, PlayerManager {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
     private static final int UPDATE_DELAY_MS = 100;
@@ -849,6 +851,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         if (getContext() != null && video.dislikeCount != null) {
             result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.dislikeCount, " ", Helpers.THUMB_DOWN); // color of thumb cannot be changed
+        }
+
+        if (getContext() != null && video.subscriberCount != null) {
+            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.subscriberCount);
         }
 
         return result;
