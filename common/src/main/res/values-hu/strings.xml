@@ -379,7 +379,7 @@
   <string name="master_volume">Fő hangerő</string>
   <string name="volume_limit">Hangerő korlát</string>
   <string name="play_video">Lejátszás</string>
-  <string name="remember_position_of_short_videos">Emlékezzen az 5 percnél rövidebb videók helyzetére</string>
+  <string name="remember_position_of_short_videos">Emlékezzen az 5 percnél rövidebb videók pozíciójára</string>
   <string name="player_show_tooltips">Buboréksúgó a gomboknál</string>
   <string name="action_like_unset">A \"Tetszik\" nincs beállítva</string>
   <string name="action_dislike_unset">A \"Nem tetszik\" nincs beállítva</string>
@@ -627,4 +627,21 @@
   <string name="save_playlist">Lista hozzáadása a videólisták részhez</string>
   <string name="pin_playlist">Videólista hozzáadása az oldalsávhoz</string>
   <string name="pin_channel">Csatorna hozzáadása az oldalsávhoz</string>
+  <string name="action_sound_off">Hang kikapcsolása</string>
+  <string name="remember_position_of_live_videos">Emlékezzen az élő adás pozíciójára</string>
+  <string name="dearrow_status">DeArrow állapotának ellenőrzése</string>
+  <string name="hide_watched_from_notifications">Megnézett videók elrejtése az Értesítésekből</string>
+  <string name="header_sports">Sport</string>
+  <string name="keep_finished_activities">Befejezett tevékenységek megőrzése</string>
+  <string name="disable_channels_service">Csatornák szolgáltatás letiltása</string>
+  <string name="replace_titles">Címek lecserélése</string>
+  <string name="enable">Engedélyez</string>
+  <string name="more_info">További infó</string>
+  <string name="about_sponsorblock">A SponsorBlock-ról</string>
+  <string name="about_dearrow">A deArrow-ról</string>
+  <string name="replace_thumbnails">Bélyegképek lecserélése</string>
+  <string name="crowdsourced_thumbnails">Közösségi alapú bélyegképek</string>
+  <string name="crowdsoursed_titles">közösségi alapú címek</string>
+  <string name="dearrow_not_submitted_thumbs">A nem feliratkozott előnézeti képek forrása</string>
+  <string name="pitch_effect">Hangmagasság effekt</string>
 </resources>
