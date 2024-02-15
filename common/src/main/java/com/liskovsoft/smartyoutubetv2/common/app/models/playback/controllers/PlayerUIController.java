@@ -519,13 +519,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         } else if (buttonId == R.id.action_subscribe) {
             showNotificationsDialog(buttonState);
         } else if (buttonId == R.id.action_sound_off) {
-            AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-            OptionCategory audioVolumeCategory = AppDialogUtil.createAudioVolumeCategory(getContext(), mPlayerData, () -> {
-                applySoundOff(mPlayerData.getPlayerVolume() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
-                getPlayer().setVolume(mPlayerData.getPlayerVolume());
-            });
-            settingsPresenter.appendCategory(audioVolumeCategory);
-            settingsPresenter.showDialog();
+            showSoundOffDialog();
         }
     }
 
@@ -901,5 +895,17 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         settingsPresenter.appendRadioCategory(dimmingCategory.title, dimmingCategory.options);
         settingsPresenter.appendRadioCategory(category.title, category.options);
         settingsPresenter.showDialog(getContext().getString(R.string.action_screen_off));
+    }
+
+    private void showSoundOffDialog() {
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+        OptionCategory audioVolumeCategory = AppDialogUtil.createAudioVolumeCategory(getContext(), mPlayerData, () -> {
+            applySoundOff(mPlayerData.getPlayerVolume() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
+            getPlayer().setVolume(mPlayerData.getPlayerVolume());
+        });
+        OptionCategory pitchEffectCategory = AppDialogUtil.createPitchEffectCategory(getContext(), getPlayer(), mPlayerData);
+        settingsPresenter.appendCategory(audioVolumeCategory);
+        settingsPresenter.appendCategory(pitchEffectCategory);
+        settingsPresenter.showDialog(getContext().getString(R.string.player_volume));
     }
 }

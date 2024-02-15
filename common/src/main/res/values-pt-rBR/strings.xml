@@ -641,5 +641,5 @@
   <string name="save_playlist">Adicionar lista de reprodução para Seção de Listas de reprodução</string>
   <string name="dearrow_not_submitted_thumbs">De onde obter as miniaturas não enviadas\?</string>
   <string name="pitch_effect">Mudar Tom - Grave/Agudo</string>
-  <string name="action_sound_off">Mudo</string>
+  <string name="action_sound_off">Mudo\n(Mantenha pressionado para configurações de Volume)</string>
 </resources>

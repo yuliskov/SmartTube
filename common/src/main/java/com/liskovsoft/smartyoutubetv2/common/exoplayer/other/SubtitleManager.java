@@ -9,6 +9,8 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.accessibility.CaptioningManager;
 import android.view.accessibility.CaptioningManager.CaptionStyle;
+
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.google.android.exoplayer2.text.Cue;
@@ -22,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiresApi(19)
 public class SubtitleManager implements TextOutput, OnDataChange {
     private static final String TAG = SubtitleManager.class.getSimpleName();
     private final SubtitleView mSubtitleView;
