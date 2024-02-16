@@ -846,11 +846,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         if (getContext() != null && video.likeCount != null) {
-            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.likeCount, " ", Helpers.THUMB_UP); // color of thumb cannot be changed
+            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.likeCount, Helpers.NON_BREAKING_SPACE, Helpers.THUMB_UP); // color of thumb cannot be changed
         }
 
         if (getContext() != null && video.dislikeCount != null) {
-            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.dislikeCount, " ", Helpers.THUMB_DOWN); // color of thumb cannot be changed
+            result = TextUtils.concat(result, Helpers.NON_BREAKING_SPACE, Video.TERTIARY_TEXT_DELIM, Helpers.NON_BREAKING_SPACE, video.dislikeCount, Helpers.NON_BREAKING_SPACE, Helpers.THUMB_DOWN); // color of thumb cannot be changed
         }
 
         if (getContext() != null && video.subscriberCount != null) {
