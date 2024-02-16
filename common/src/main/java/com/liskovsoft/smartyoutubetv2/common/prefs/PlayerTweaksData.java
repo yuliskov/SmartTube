@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build.VERSION;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -571,7 +572,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsButtonLongClickEnabled = Helpers.parseBoolean(split, 24, true);
         mIsLongSpeedListEnabled = Helpers.parseBoolean(split, 25, true);
         // Android 6 and below may crash running Cronet???
-        mPlayerDataSource = Helpers.parseInt(split, 26, VERSION.SDK_INT > 23 ? PLAYER_DATA_SOURCE_CRONET : PLAYER_DATA_SOURCE_DEFAULT);
+        mPlayerDataSource = Helpers.parseInt(split, 26, VERSION.SDK_INT > 23 && !Helpers.equals(BuildConfig.FLAVOR, "strtarmenia") ?
+                PLAYER_DATA_SOURCE_CRONET : PLAYER_DATA_SOURCE_DEFAULT);
         mUnlockAllFormats = Helpers.parseBoolean(split, 27, false);
         mIsDashUrlStreamsForced = Helpers.parseBoolean(split, 28, false);
         mIsSonyFrameDropFixEnabled = Helpers.parseBoolean(split, 29, false);
