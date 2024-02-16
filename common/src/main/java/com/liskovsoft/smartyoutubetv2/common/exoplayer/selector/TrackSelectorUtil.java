@@ -62,14 +62,16 @@ public class TrackSelectorUtil {
         return trackName.length() == 0 ? "unknown" : trackName;
     }
 
-    public static String buildHighBitrateMark(Format format) {
-        //if (format == null) {
-        //    return "";
-        //}
-        //
-        // https://symbl.cc/en/search/?q=mark
-        //return format.containerMimeType == null ? "*" : "";
-        return "";
+    /**
+     * Add high bitrate (Premium) mark
+     */
+    private static String buildHighBitrateMark(Format format) {
+        if (format == null) {
+            return "";
+        }
+
+        // Unicode chars: https://symbl.cc/en/search/?q=mark
+        return format.containerMimeType == null ? "HighBitrate" : "";
     }
 
     public static String buildHDRString(Format format) {
