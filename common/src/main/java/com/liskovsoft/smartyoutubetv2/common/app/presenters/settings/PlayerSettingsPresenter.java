@@ -64,6 +64,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendEndingTimeCategory(settingsPresenter);
         appendPixelRatioCategory(settingsPresenter);
         appendNetworkEngineCategory(settingsPresenter);
+        appendPlayerExitCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
         appendDeveloperCategory(settingsPresenter);
 
@@ -631,5 +632,19 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
+    }
+
+    private void appendPlayerExitCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.app_double_back_exit, GeneralData.EXIT_DOUBLE_BACK},
+                {R.string.app_single_back_exit, GeneralData.EXIT_SINGLE_BACK}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]),
+                    optionItem -> mGeneralData.setPlayerExitShortcut(pair[1]),
+                    mGeneralData.getPlayerExitShortcut() == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_exit_shortcut), options);
     }
 }

@@ -43,6 +43,7 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsSettingsSectionEnabled;
     private int mBootSectionId;
     private int mAppExitShortcut;
+    private int mPlayerExitShortcut;
     private boolean mIsReturnToLauncherEnabled;
     private int mBackgroundShortcut;
     private boolean mIsHideShortsFromSubscriptionsEnabled;
@@ -293,6 +294,15 @@ public class GeneralData implements ProfileChangeListener {
 
     public void setAppExitShortcut(int type) {
         mAppExitShortcut = type;
+        persistState();
+    }
+
+    public int getPlayerExitShortcut() {
+        return mPlayerExitShortcut;
+    }
+
+    public void setPlayerExitShortcut(int type) {
+        mPlayerExitShortcut = type;
         persistState();
     }
 
@@ -966,6 +976,7 @@ public class GeneralData implements ProfileChangeListener {
         mIsRemapNextToFastForwardEnabled = Helpers.parseBoolean(split, 55, false);
         mIsHideWatchedFromNotificationsEnabled = Helpers.parseBoolean(split, 56, false);
         mChangelog = Helpers.parseStrList(split, 57);
+        mPlayerExitShortcut = Helpers.parseInt(split, 58, EXIT_SINGLE_BACK);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -1027,7 +1038,7 @@ public class GeneralData implements ProfileChangeListener {
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
                 mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextToSpeedEnabled, mIsRemapPlayToOKEnabled, mHistoryState, mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem),
                 mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled, mIsRemapDpadUpToVolumeEnabled,
-                mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled, Helpers.mergeList(mChangelog)));
+                mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled, Helpers.mergeList(mChangelog), mPlayerExitShortcut));
     }
 
     private int getSectionId(Video item) {

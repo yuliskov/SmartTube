@@ -55,9 +55,10 @@ public abstract class LeanbackActivity extends MotherActivity {
     public boolean dispatchKeyEvent(KeyEvent event) {
         Log.d(TAG, event);
 
-        if (mDoubleBackManager.checkDoubleBack(event)) {
-            finishTheApp();
-        }
+        mDoubleBackManager.checkDoubleBack(event);
+        //if (mDoubleBackManager.checkDoubleBack(event)) {
+        //    //finishTheApp();
+        //}
 
         //return mGlobalKeyTranslator.translate(event) || super.dispatchKeyEvent(event);
         KeyEvent newEvent = mGlobalKeyTranslator.translateAlt(event);
@@ -106,10 +107,19 @@ public abstract class LeanbackActivity extends MotherActivity {
         if (!mViewManager.hasParentView(this)) {
             switch (mGeneralData.getAppExitShortcut()) {
                 case GeneralData.EXIT_DOUBLE_BACK:
-                    mDoubleBackManager.enableDoubleBackExit();
+                    mDoubleBackManager.enableDoubleBackExit(this::finishTheApp);
                     break;
                 case GeneralData.EXIT_SINGLE_BACK:
                     finishTheApp();
+                    break;
+            }
+        } else if (this instanceof PlaybackActivity) {
+            switch (mGeneralData.getPlayerExitShortcut()) {
+                case GeneralData.EXIT_DOUBLE_BACK:
+                    mDoubleBackManager.enableDoubleBackExit(this::finishReally);
+                    break;
+                case GeneralData.EXIT_SINGLE_BACK:
+                    finishReally();
                     break;
             }
         } else {
@@ -126,5 +136,9 @@ public abstract class LeanbackActivity extends MotherActivity {
 
     private void finishTheApp() {
         mViewManager.properlyFinishTheApp(this);
+    }
+
+    protected boolean shouldFinish() {
+        return !mDoubleBackManager.isMsgShown();
     }
 }

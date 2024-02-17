@@ -28,6 +28,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
  * For more information on game controller capabilities with leanback, review the
  * <a href="https://developer.android.com/training/game-controllers/controller-input.html">docs</href>.
  */
+@TargetApi(19)
 public class PlaybackActivity extends LeanbackActivity {
     private static final String TAG = PlaybackActivity.class.getSimpleName();
     private static final float GAMEPAD_TRIGGER_INTENSITY_ON = 0.5f;
@@ -194,8 +195,10 @@ public class PlaybackActivity extends LeanbackActivity {
                 // Player with TextureView keeps running in background because onStop() fired with huge delay (~5sec).
                 mPlaybackFragment.maybeReleasePlayer();
             } else {
-                mPlaybackFragment.onFinish();
                 super.finish();
+                if (shouldFinish()) {
+                    mPlaybackFragment.onFinish();
+                }
             }
         }
     }
