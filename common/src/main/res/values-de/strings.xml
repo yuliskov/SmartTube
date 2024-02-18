@@ -136,6 +136,7 @@
     <string name="player_show_ending_time">Endzeit im Bedienfeld anzeigen</string>
     <string name="open_channel_uploads">Kanal-Videos öffnen</string>
     <string name="app_exit_shortcut">App beenden</string>
+    <string name="player_exit_shortcut">Player beenden</string>
     <string name="app_exit_none">Nicht beenden</string>
     <string name="app_double_back_exit">2x Zurück-Taste</string>
     <string name="app_single_back_exit">1x Zurück-Taste</string>
