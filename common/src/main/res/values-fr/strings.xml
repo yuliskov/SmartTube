@@ -621,4 +621,25 @@
   <string name="auto_frame_rate_desc">Cette option supprime les tremblements sur les scènes où la caméra se déplace rapidement, par exemple le streaming sportif</string>
   <string name="channel_filter_hint">Filtrer les chaines</string>
   <string name="player_loop_shorts">Short en boucle</string>
+  <string name="hide_watched_from_notifications">Masquer les vidéos regardées dans les notifications</string>
+  <string name="remember_position_of_live_videos">Mémoriser la position de la diffusion en direct</string>
+  <string name="pin_channel">Ajouter une chaîne à la barre latérale</string>
+  <string name="pin_playlist">Ajouter une playlist à la barre latérale</string>
+  <string name="channels_filter">Filtrer la liste des chaînes dans la section Chaînes</string>
+  <string name="player_quick_shorts_skip">Sauter les Shorts avec les boutons gauche/droite</string>
+  <string name="channel_search_bar">Barre de recherche à l’intérieur de la page Chaîne</string>
+  <string name="header_sports">Sports	</string>
+  <string name="keep_finished_activities">Conserver les activités terminées</string>
+  <string name="disable_channels_service">Désactiver le service Chaînes</string>
+  <string name="replace_titles">Remplacer les titres</string>
+  <string name="enable">Activer</string>
+  <string name="more_info">Plus d\'informations</string>
+  <string name="about_sponsorblock">À propos de SponsorBlock</string>
+  <string name="about_dearrow">À propos de DeArrow</string>
+  <string name="replace_thumbnails">Remplacer les vignettes</string>
+  <string name="crowdsourced_thumbnails">Vignettes participatives</string>
+  <string name="crowdsoursed_titles">Titres participatifs</string>
+  <string name="dearrow_not_submitted_thumbs">Où récupérer les vignettes non soumises</string>
+  <string name="pitch_effect">Effet de hauteur</string>
+  <string name="action_sound_off">Son désactivé</string>
 </resources>
