@@ -563,6 +563,7 @@
     </string>
     <string name="audio_language">Язык аудио</string>
     <string name="old_home_look">Старый вид Главного раздела</string>
+    <string name="old_channel_look">Старый вид страницы Канала</string>
     <string name="hide_shorts_everywhere">Скрывать короткие видео повсюду</string>
     <string name="update_found">Обновление</string>
     <string name="volume_boost_warning">Настройки привышающие лимит могу повредить динамики</string>

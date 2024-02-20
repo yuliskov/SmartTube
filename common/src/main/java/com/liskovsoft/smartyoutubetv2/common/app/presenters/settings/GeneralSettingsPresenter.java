@@ -566,6 +566,13 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.isOldHomeLookEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.old_channel_look),
+                option -> {
+                    mGeneralData.enableOldChannelLook(option.isSelected());
+                    mMainUIData.enableChannelSearchBar(!option.isSelected());
+                },
+                mGeneralData.isOldChannelLookEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_subscriptions),
                 option -> mGeneralData.rememberSubscriptionsPosition(option.isSelected()),
                 mGeneralData.isRememberSubscriptionsPositionEnabled()));

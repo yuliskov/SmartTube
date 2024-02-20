@@ -84,6 +84,7 @@ public class GeneralData implements ProfileChangeListener {
     private int mVersionCode;
     private boolean mIsSelectChannelSectionEnabled;
     private boolean mIsOldHomeLookEnabled;
+    private boolean mIsOldChannelLookEnabled;
     private boolean mIsOldUpdateNotificationsEnabled;
     private boolean mRememberSubscriptionsPosition;
     private boolean mIsRemapDpadUpToSpeedEnabled;
@@ -857,6 +858,15 @@ public class GeneralData implements ProfileChangeListener {
         return mIsOldHomeLookEnabled;
     }
 
+    public void enableOldChannelLook(boolean enable) {
+        mIsOldChannelLookEnabled = enable;
+        persistState();
+    }
+
+    public boolean isOldChannelLookEnabled() {
+        return mIsOldChannelLookEnabled;
+    }
+
     public void enableOldUpdateNotifications(boolean enable) {
         mIsOldUpdateNotificationsEnabled = enable;
         persistState();
@@ -977,6 +987,8 @@ public class GeneralData implements ProfileChangeListener {
         mIsHideWatchedFromNotificationsEnabled = Helpers.parseBoolean(split, 56, false);
         mChangelog = Helpers.parseStrList(split, 57);
         mPlayerExitShortcut = Helpers.parseInt(split, 58, EXIT_SINGLE_BACK);
+        // StackOverflow on old devices?
+        mIsOldChannelLookEnabled = Helpers.parseBoolean(split, 59, Build.VERSION.SDK_INT <= 19);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -1036,9 +1048,11 @@ public class GeneralData implements ProfileChangeListener {
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
                 playlistOrder, Helpers.mergeList(mPendingStreams), mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
-                mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextToSpeedEnabled, mIsRemapPlayToOKEnabled, mHistoryState, mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem),
+                mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextToSpeedEnabled, mIsRemapPlayToOKEnabled, mHistoryState,
+                mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem),
                 mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled, mIsRemapDpadUpToVolumeEnabled,
-                mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled, Helpers.mergeList(mChangelog), mPlayerExitShortcut));
+                mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled, Helpers.mergeList(mChangelog), mPlayerExitShortcut,
+                mIsOldChannelLookEnabled));
     }
 
     private int getSectionId(Video item) {

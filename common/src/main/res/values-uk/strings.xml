@@ -563,6 +563,7 @@
     </string>
     <string name="audio_language">Мова аудіо</string>
     <string name="old_home_look">Старий вигляд розділу Головна</string>
+    <string name="old_channel_look">Старий вигляд сторінки Каналу</string>
     <string name="hide_shorts_everywhere">Приховувати короткі відео з усіх розділів</string>
     <string name="update_found">Оновлення</string>
     <string name="volume_boost_warning">Налаштування, які перевищують ліміт можуть пошкодити динаміки</string>
