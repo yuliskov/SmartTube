@@ -136,6 +136,7 @@
     <string name="player_show_ending_time">Bitiş saatini göster</string>
     <string name="open_channel_uploads">Kanal yüklemelerini aç</string>
     <string name="app_exit_shortcut">Uygulamadan çıkış</string>
+    <string name="player_exit_shortcut">Oynatıcıdan çıkış</string>
     <string name="app_exit_none">Çıkış yapma</string>
     <string name="app_double_back_exit">Çift geri</string>
     <string name="app_single_back_exit">Tek geri</string>
@@ -569,6 +570,7 @@
     <string name="sony_frame_drop_fix_desc">Sony TV ve diğer bazı cihazlardaki gecikmeleri düzeltir. Not: Ses senkronizasyonu ile ilgili olası sorunlar olabilir.</string>
     <string name="audio_language">Ses dili</string>
     <string name="old_home_look">Ana Sayfa bölümünün eski görünümü</string>
+    <string name="old_channel_look">Kanal sayfasının eski görünümü</string>
     <string name="hide_shorts_everywhere">Shortsları her yerde gizle</string>
     <string name="update_found">Güncelleme</string>
     <string name="volume_boost_warning">Sınırın üzerindeki herhangi bir ayar hoparlörlere zarar verebilir</string>
@@ -645,4 +647,5 @@
     <string name="crowdsourced_thumbnails">Kitle kaynaklı küçük resimler</string>
     <string name="crowdsoursed_titles">Kitle kaynaklı başlıklar</string>
     <string name="dearrow_not_submitted_thumbs">Gönderilmeyen küçük resimler nereden alınsın\?</string>
+    <string name="pitch_effect">Pitch efekti</string>
 </resources>
