@@ -37,9 +37,8 @@ public final class SampleMediaItem implements MediaItem {
         mediaItem.mTitle = metadata.getTitle();
         mediaItem.mSecondTitle = metadata.getSecondTitle();
         mediaItem.mVideoId = metadata.getVideoId();
-        mediaItem.mPlaylistId = metadata.getPlaylistInfo() != null ?
-                metadata.getPlaylistInfo().getPlaylistId() : metadata.getNextVideo() != null ?
-                metadata.getNextVideo().getPlaylistId() : null;
+        mediaItem.mPlaylistId = metadata.getPlaylistInfo() != null ? metadata.getPlaylistInfo().getPlaylistId()
+                : metadata.getNextVideo() != null ? metadata.getNextVideo().getPlaylistId() : null;
         mediaItem.mParams = metadata.getParams();
         mediaItem.mChannelId = metadata.getChannelId();
 
