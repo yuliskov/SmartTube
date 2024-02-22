@@ -236,7 +236,9 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             ViewManager.instance(getContext()).startView(ChannelView.class);
         }
 
-        moveToTopIfNeeded(mediaGroups);
+        if (GeneralData.instance(getContext()).isOldChannelLookEnabled()) {
+            moveToTopIfNeeded(mediaGroups);
+        }
 
         for (MediaGroup mediaGroup : mediaGroups) {
             if (mediaGroup.getMediaItems() == null) {
