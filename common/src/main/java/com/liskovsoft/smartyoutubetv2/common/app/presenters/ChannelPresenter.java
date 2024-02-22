@@ -236,6 +236,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             ViewManager.instance(getContext()).startView(ChannelView.class);
         }
 
+        moveToTopIfNeeded(mediaGroups);
+
         for (MediaGroup mediaGroup : mediaGroups) {
             if (mediaGroup.getMediaItems() == null) {
                 Log.e(TAG, "updateRowsHeader: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
@@ -292,6 +294,16 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                         },
                         () -> getView().showProgressBar(false)
                 );
+    }
+
+    /**
+     * Sort channel content: move Uploads on top.
+     */
+    private void moveToTopIfNeeded(List<MediaGroup> mediaGroups) {
+        moveToTop(mediaGroups, R.string.playlists_row_name);
+        moveToTop(mediaGroups, R.string.popular_uploads_row_name);
+        moveToTop(mediaGroups, R.string.uploads_row_name);
+        moveToTop(mediaGroups, R.string.live_now_row_name);
     }
 
     private void moveToTop(List<MediaGroup> mediaGroups, int rowNameResId) {
