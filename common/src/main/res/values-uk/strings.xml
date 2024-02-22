@@ -136,6 +136,7 @@
     <string name="player_show_ending_time">Відображати час закінчення у панелі керування</string>
     <string name="open_channel_uploads">Відкрити завантаження</string>
     <string name="app_exit_shortcut">Вихід з додатку</string>
+    <string name="player_exit_shortcut">Вихід з плеєру</string>
     <string name="app_exit_none">Не виходити</string>
     <string name="app_double_back_exit">Подвійне назад</string>
     <string name="app_single_back_exit">Одиночне назад</string>
@@ -562,6 +563,7 @@
     </string>
     <string name="audio_language">Мова аудіо</string>
     <string name="old_home_look">Старий вигляд розділу Головна</string>
+    <string name="old_channel_look">Старий вигляд сторінки Каналу</string>
     <string name="hide_shorts_everywhere">Приховувати короткі відео з усіх розділів</string>
     <string name="update_found">Оновлення</string>
     <string name="volume_boost_warning">Налаштування, які перевищують ліміт можуть пошкодити динаміки</string>

@@ -23,6 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import com.liskovsoft.youtubeapi.service.YouTubeHubService;
 import io.reactivex.Observable;
@@ -209,7 +210,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         getView().showProgressBar(true);
 
-        Observable<List<MediaGroup>> channelObserve = mHubService.getContentService().getChannelObserve(channelId);
+        Observable<List<MediaGroup>> channelObserve = GeneralData.instance(getContext()).isOldChannelLookEnabled() ?
+                mHubService.getContentService().getChannelV1Observe(channelId) :  mHubService.getContentService().getChannelObserve(channelId);
 
         mUpdateAction = channelObserve
                 .subscribe(
@@ -349,19 +351,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                         });
             }
         }
-    }
-
-    public void obtainUploadsRowObservable(Video item, OnUploadsRow callback) {
-        extractChannelId(item, channelId -> {
-            if (channelId == null) {
-                return;
-            }
-
-            callback.onUploadsRow(mHubService.getContentService().getChannelObserve(channelId).map(mediaGroups -> {
-                moveToTop(mediaGroups, R.string.uploads_row_name);
-                return mediaGroups.get(0);
-            }));
-        });
     }
 
     public void onSearchSettingsClicked() {
