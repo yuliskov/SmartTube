@@ -26,7 +26,6 @@ public class SynchronizeDatabaseWorker extends Worker {
     private static final String TAG = SynchronizeDatabaseWorker.class.getSimpleName();
     private static final String WORK_NAME = "Update channels";
     private final UpdateChannelsTask mTask;
-    private static boolean sDone;
 
     public SynchronizeDatabaseWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -35,9 +34,7 @@ public class SynchronizeDatabaseWorker extends Worker {
     }
 
     public static void schedule(Context context) {
-        if (VERSION.SDK_INT >= 23 && GlobalPreferences.instance(context).isChannelsServiceEnabled() && !sDone) {
-            sDone = true;
-
+        if (VERSION.SDK_INT >= 23 && GlobalPreferences.instance(context).isChannelsServiceEnabled()) {
             WorkManager workManager = WorkManager.getInstance(context);
 
             // https://stackoverflow.com/questions/50943056/avoiding-duplicating-periodicworkrequest-from-workmanager
