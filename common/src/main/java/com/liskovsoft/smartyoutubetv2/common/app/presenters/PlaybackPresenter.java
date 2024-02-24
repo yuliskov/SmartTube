@@ -98,6 +98,10 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
         return getView() != null && getView().getPlayer().isOverlayShown();
     }
 
+    public boolean isPlaying() {
+        return getView() != null && getView().getPlayer().isPlaying();
+    }
+
     public int getBackgroundMode() {
         return getView() != null ? getView().getPlayer().getBackgroundMode() : -1;
     }
