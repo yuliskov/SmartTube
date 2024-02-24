@@ -648,4 +648,5 @@
     <string name="crowdsoursed_titles">Community-basierte Titel</string>
     <string name="dearrow_not_submitted_thumbs">Quelle für nicht eingereichte Vorschaubilder</string>
     <string name="pitch_effect">Tonhöhen-Effekt</string>
+    <string name="fullscreen_mode">Vollbildmodus (ohne Systemleisten)</string>
 </resources>
