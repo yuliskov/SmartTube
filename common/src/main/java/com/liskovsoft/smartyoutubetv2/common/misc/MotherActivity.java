@@ -17,6 +17,7 @@ import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
@@ -35,6 +36,7 @@ public class MotherActivity extends FragmentActivity {
     private long mLastKeyDownTime;
     private boolean mEnableThrottleKeyDown;
     private boolean mIsOculusQuestFixEnabled;
+    private boolean mIsFullscreenModeEnabled;
 
     public interface OnPermissions {
         void onPermissions(int requestCode, String[] permissions, int[] grantResults);
@@ -61,6 +63,7 @@ public class MotherActivity extends FragmentActivity {
 
         mScreensaverManager = new ScreensaverManager(this);
         mIsOculusQuestFixEnabled = PlayerTweaksData.instance(this).isOculusQuestFixEnabled();
+        mIsFullscreenModeEnabled = GeneralData.instance(this).isFullscreenModeEnabled();
 
         //Helpers.addFullscreenListener(this);
     }
@@ -144,10 +147,13 @@ public class MotherActivity extends FragmentActivity {
 
         // 4K fix with AFR
         applyCustomConfig();
-        // Most of the fullscreen tweaks could be performed in styles but not all.
-        // E.g. Hide bottom navigation bar (couldn't be done in styles).
-        Helpers.makeActivityFullscreen2(this);
-        //Helpers.makeActivityFullscreen2(this);
+
+        if (mIsFullscreenModeEnabled) {
+            // Most of the fullscreen tweaks could be performed in styles but not all.
+            // E.g. Hide bottom navigation bar (couldn't be done in styles).
+            Helpers.makeActivityFullscreen2(this);
+            //Helpers.makeActivityFullscreen2(this);
+        }
 
         // Remove screensaver from the previous activity when closing current one.
         // Called on player's next track. Reason unknown.

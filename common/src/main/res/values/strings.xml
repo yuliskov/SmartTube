@@ -648,4 +648,5 @@
     <string name="crowdsoursed_titles">Crowdsourced titles</string>
     <string name="dearrow_not_submitted_thumbs">Where to grab not submitted thumbnails</string>
     <string name="pitch_effect">Pitch effect</string>
+    <string name="fullscreen_mode">Fullscreen mode (without system bars)</string>
 </resources>

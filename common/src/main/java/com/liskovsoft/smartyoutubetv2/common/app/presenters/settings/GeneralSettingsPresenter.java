@@ -502,6 +502,13 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.fullscreen_mode),
+                option -> {
+                    mGeneralData.enableFullscreenMode(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.isFullscreenModeEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.multi_profiles),
                 option -> {
                     AppPrefs.instance(getContext()).enableMultiProfiles(option.isSelected());

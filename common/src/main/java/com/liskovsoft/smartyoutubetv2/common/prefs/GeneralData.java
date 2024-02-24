@@ -97,6 +97,7 @@ public class GeneralData implements ProfileChangeListener {
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new CopyOnWriteArrayList<>();
     private final List<Video> mPinnedItems = new CopyOnWriteHashList<>();
+    private boolean mIsFullscreenModeEnabled;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -876,6 +877,15 @@ public class GeneralData implements ProfileChangeListener {
         return mIsOldUpdateNotificationsEnabled;
     }
 
+    public void enableFullscreenMode(boolean enable) {
+        mIsFullscreenModeEnabled = enable;
+        persistState();
+    }
+
+    public boolean isFullscreenModeEnabled() {
+        return mIsFullscreenModeEnabled;
+    }
+
     public void setSelectedSubscriptionsItem(Video item) {
         mSelectedSubscriptionsItem = item;
         persistState();
@@ -989,6 +999,7 @@ public class GeneralData implements ProfileChangeListener {
         mPlayerExitShortcut = Helpers.parseInt(split, 58, EXIT_SINGLE_BACK);
         // StackOverflow on old devices?
         mIsOldChannelLookEnabled = Helpers.parseBoolean(split, 59, Build.VERSION.SDK_INT <= 19);
+        mIsFullscreenModeEnabled = Helpers.parseBoolean(split, 60, true);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -1052,7 +1063,7 @@ public class GeneralData implements ProfileChangeListener {
                 mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem),
                 mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled, mIsRemapDpadUpToVolumeEnabled,
                 mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled, Helpers.mergeList(mChangelog), mPlayerExitShortcut,
-                mIsOldChannelLookEnabled));
+                mIsOldChannelLookEnabled, mIsFullscreenModeEnabled));
     }
 
     private int getSectionId(Video item) {

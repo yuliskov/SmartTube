@@ -639,4 +639,5 @@
     <string name="crowdsoursed_titles">Краудсорсинговые названия</string>
     <string name="dearrow_not_submitted_thumbs">Откуда брать не присланные миниатюры</string>
     <string name="pitch_effect">Эффект высоты тона</string>
+    <string name="fullscreen_mode">Полноэкранный режим (без системных панелей)</string>
 </resources>
