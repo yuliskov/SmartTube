@@ -132,8 +132,4 @@ public abstract class LeanbackActivity extends MotherActivity {
     private void finishTheApp() {
         mViewManager.properlyFinishTheApp(this);
     }
-
-    protected boolean shouldFinish() {
-        return !mDoubleBackManager.isMsgShown();
-    }
 }

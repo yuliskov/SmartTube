@@ -9,9 +9,7 @@ public class DoubleBackManager2 {
     private static final String TAG = DoubleBackManager2.class.getSimpleName();
     private static final int DEFAULT_REPEAT_COUNT = 2;
     private final Context mContext;
-    private boolean mIsDoubleBackPressed;
     private int mRepeatCount;
-    private boolean mIsMsgShown;
     private long mMsgShownTimeMs;
 
     public DoubleBackManager2(Context ctx) {
@@ -37,24 +35,13 @@ public class DoubleBackManager2 {
     }
 
     private void showMsg() {
-        mIsMsgShown = false;
         if (mRepeatCount == (DEFAULT_REPEAT_COUNT - 1)) {
             MessageHelpers.showMessageThrottled(mContext, R.string.msg_press_again_to_exit);
-            mIsMsgShown = true;
             mMsgShownTimeMs = System.currentTimeMillis();
         }
     }
 
     private void resetBackPressed() {
-        mIsDoubleBackPressed = false;
         mRepeatCount = 0;
-    }
-
-    public boolean isDoubleBackPressed() {
-        return mIsDoubleBackPressed;
-    }
-
-    public boolean isMsgShown() {
-        return mIsMsgShown;
     }
 }

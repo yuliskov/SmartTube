@@ -196,9 +196,6 @@ public class PlaybackActivity extends LeanbackActivity {
                 mPlaybackFragment.maybeReleasePlayer();
             } else {
                 super.finish();
-                if (shouldFinish()) {
-                    mPlaybackFragment.onFinish();
-                }
             }
         }
     }
