@@ -136,6 +136,7 @@
     <string name="player_show_ending_time">Ukaž čas ukončení na ovládacím panelu</string>
     <string name="open_channel_uploads">Otevřít videa kanálu</string>
     <string name="app_exit_shortcut">Ukončit aplikaci</string>
+    <string name="player_exit_shortcut">Ukončit z přehrávače</string>
     <string name="app_exit_none">Neukončovat</string>
     <string name="app_double_back_exit">2x tlačítko Zpět</string>
     <string name="app_single_back_exit">1x tlačítko Zpět</string>
@@ -569,6 +570,7 @@
     <string name="sony_frame_drop_fix_desc">Opravuje záseky na televizích Sony a jiných zařízeních. Pozor: mohou nastat problémy se synchronizací audia</string>
     <string name="audio_language">Jazyk zvuku</string>
     <string name="old_home_look">Původní vzhled sekce Domů</string>
+    <string name="old_channel_look">Původní vzhled stránky Kanálu</string>
     <string name="hide_shorts_everywhere">Skrýt Shorts ze všech sekcí</string>
     <string name="update_found">Aktualizace</string>
     <string name="volume_boost_warning">Další nastavení nad limit může poškodit reproduktory</string>
@@ -644,4 +646,7 @@
     <string name="replace_thumbnails">Nahradit náhledy</string>
     <string name="crowdsourced_thumbnails">Komunitní náhledy</string>
     <string name="crowdsoursed_titles">Komunitní názvy</string>
+    <string name="dearrow_not_submitted_thumbs">Odkud vzít nepřidané náhledy</string>
+    <string name="pitch_effect">Efekt výšky tónu</string>
+    <string name="fullscreen_mode">Režim celé obrazovky (bez systémových lišt)</string>
 </resources>
