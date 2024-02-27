@@ -64,7 +64,7 @@ public class CommentsController extends PlayerEventListenerHelper implements Met
             getPlayer().showControls(false);
         }
 
-        String title = getPlayer() != null ? getPlayer().getVideo().getTitle() : mTitle;
+        String title = getPlayer() != null && getPlayer().getVideo() != null ? getPlayer().getVideo().getTitle() : mTitle;
 
         CommentsReceiver commentsReceiver = new CommentsReceiverImpl(getContext()) {
             @Override
