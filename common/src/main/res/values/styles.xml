@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fullscreen mode is set here: leanback-1.0.0\src\main\res\values-v19\values-v19.xml:3 -->
+    <style name="FitSystemWindows">
+        <item name="android:fitsSystemWindows">true</item>
+        <!--<item name="android:windowTranslucentStatus">false</item>-->
+        <!--<item name="android:windowTranslucentNavigation">false</item>-->
+        <item name="android:windowFullscreen">false</item>
+    </style>
+</resources>
