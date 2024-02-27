@@ -641,4 +641,5 @@
   <string name="keep_finished_activities">Guardar las actividades terminadas</string>
   <string name="disable_channels_service">Desactivar el servicio Canales</string>
   <string name="pitch_effect">Efecto de tono</string>
+  <string name="fullscreen_mode">Modo pantalla completa (sin barras del sistema)</string>
 </resources>
