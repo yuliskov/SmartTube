@@ -574,7 +574,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         // Android 6 and below may crash running Cronet???
         //mPlayerDataSource = Helpers.parseInt(split, 26, VERSION.SDK_INT > 23 && !Helpers.equals(BuildConfig.FLAVOR, "strtarmenia") ?
         //        PLAYER_DATA_SOURCE_CRONET : PLAYER_DATA_SOURCE_DEFAULT);
-        // Cronet is buffering too, unfortunately, so leave the default as a safest method
+        // Cronet is buffering too, unfortunately, so leave the default as a safest method (e.g. for "strtarmenia")
         mPlayerDataSource = Helpers.parseInt(split, 26, PLAYER_DATA_SOURCE_DEFAULT);
         mUnlockAllFormats = Helpers.parseBoolean(split, 27, false);
         mIsDashUrlStreamsForced = Helpers.parseBoolean(split, 28, false);
