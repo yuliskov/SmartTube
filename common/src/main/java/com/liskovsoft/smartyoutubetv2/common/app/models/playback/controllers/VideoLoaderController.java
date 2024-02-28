@@ -430,11 +430,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private void applyErrorAction(Throwable error) {
         if (error instanceof OutOfMemoryError) {
             mPlayerData.setVideoBufferType(PlayerEngine.BUFFER_LOW);
-        } else if (Helpers.startsWith(error.getMessage(), "Unable to connect to ")) {
-            int dataSource = mPlayerTweaksData.getPlayerDataSource();
-            mPlayerTweaksData.setPlayerDataSource(
-                    dataSource == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET
-            );
+        } else if (Helpers.startsWithAny(error.getMessage(), "Unable to connect to ", "Invalid NAL length")) {
+            mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
         }
     }
 
