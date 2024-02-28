@@ -348,12 +348,21 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
             mIconHeight = view.getHeight();
         }
 
+        try {
+            loadIcon(context, view, url, mIconWidth, mIconHeight);
+        } catch (ExceptionInInitializerError e) {
+            // Glide Kivi error
+            e.printStackTrace();
+        }
+    }
+
+    private static void loadIcon(Context context, SearchOrbView view, String url, int iconWidth, int iconHeight) {
         Glide.with(context)
                 .load(url)
                 .apply(ViewUtil.glideOptions())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .circleCrop() // resize image
-                .into(new SimpleTarget<Drawable>(mIconWidth, mIconHeight) {
+                .into(new SimpleTarget<Drawable>(iconWidth, iconHeight) {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                         Colors orbColors = view.getOrbColors();
@@ -365,7 +374,12 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
 
     @Override
     public void onDataChange() {
-        setupButtons();
-        updateComponentsVisibility(mFlags);
+        try {
+            setupButtons();
+            updateComponentsVisibility(mFlags);
+        } catch (IllegalStateException e) {
+            // Fragment BrowseFragment has not been attached yet.
+            e.printStackTrace();
+        }
     }
 }
