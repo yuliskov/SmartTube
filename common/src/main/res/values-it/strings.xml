@@ -646,7 +646,7 @@
     <string name="replace_thumbnails">Sostituisci le miniature</string>
     <string name="crowdsourced_thumbnails">Miniature in crowdsourcing</string>
     <string name="crowdsoursed_titles">Titoli in crowdsourcing</string>
-    <string name="dearrow_not_submitted_thumbs">Dove prendere le miniature non inviate</string>
+    <string name="dearrow_not_submitted_thumbs">Dove prendere le miniature non inviate</string>
     <string name="pitch_effect">Effetto pitch</string>
     <string name="fullscreen_mode">Modalità a schermo intero (senza barre di sistema)</string>
 </resources>
