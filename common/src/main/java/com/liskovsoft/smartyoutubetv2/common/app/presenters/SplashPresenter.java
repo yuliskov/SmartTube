@@ -211,7 +211,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
             if (searchText != null || IntentExtractor.isStartVoiceCommand(intent)) {
                 SearchPresenter searchPresenter = SearchPresenter.instance(getContext());
-                searchPresenter.startSearch(searchText);
+                if (IntentExtractor.isInstantPlayCommand(intent)) {
+                    searchPresenter.startPlay(searchText);
+                } else {
+                    searchPresenter.startSearch(searchText);
+                }
                 return true;
             }
 

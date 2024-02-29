@@ -181,6 +181,13 @@ public class IntentExtractor {
         return intent != null && extractUri(intent) != null && extractUri(intent).toString().contains("launch=voice");
     }
 
+    /**
+     * Detect Amazon Alexa play command
+     */
+    public static boolean isInstantPlayCommand(Intent intent) {
+        return intent != null && extractUri(intent) != null && extractUri(intent).toString().contains("method=play");
+    }
+
     public static boolean hasFinishOnEndedFlag(Intent intent) {
         return intent != null && intent.getBooleanExtra("finish_on_ended", false);
     }
