@@ -25,7 +25,7 @@ public class TrackSelectorUtil {
     private static final String SEPARATOR = ", ";
     private static final HashMap<Integer, Integer> mResolutionMap = new HashMap<>();
     // Unicode chars: https://symbl.cc/en/search/?q=mark
-    public static final String HIGH_BITRATE_MARK = "❗";
+    public static final String HIGH_BITRATE_MARK = "\uD83D\uDC8E";
 
     // Try to amplify resolution of aspect ratios that differ from 16:9
     static {
