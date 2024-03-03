@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -68,6 +69,10 @@ public class MotherActivity extends FragmentActivity {
         if (!mIsFullscreenModeEnabled) {
             // There's no way to do this programmatically!
             setTheme(R.style.FitSystemWindows);
+        }
+
+        if (mIsOculusQuestFixEnabled) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
 
         mScreensaverManager = new ScreensaverManager(this); // moved below the theme to fix side effects
