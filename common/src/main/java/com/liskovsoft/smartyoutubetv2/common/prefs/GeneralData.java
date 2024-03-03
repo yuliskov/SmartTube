@@ -999,7 +999,7 @@ public class GeneralData implements ProfileChangeListener {
         mPlayerExitShortcut = Helpers.parseInt(split, 58, EXIT_SINGLE_BACK);
         // StackOverflow on old devices?
         mIsOldChannelLookEnabled = Helpers.parseBoolean(split, 59, Build.VERSION.SDK_INT <= 19);
-        mIsFullscreenModeEnabled = Helpers.parseBoolean(split, 60, true);
+        mIsFullscreenModeEnabled = Helpers.parseBoolean(split, 60, !Helpers.isTouchSupported(mContext));
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
