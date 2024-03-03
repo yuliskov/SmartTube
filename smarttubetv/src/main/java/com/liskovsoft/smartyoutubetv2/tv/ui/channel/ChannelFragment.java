@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
@@ -44,7 +46,14 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
 
                 @Override
                 public String getChannelName() {
-                    return mChannelPresenter.getChannel() != null ? mChannelPresenter.getChannel().getAuthor() : null;
+                    if (mChannelPresenter.getChannel() == null) {
+                        return null;
+                    }
+
+                    String author = mChannelPresenter.getChannel().getAuthor();
+                    String title = mChannelPresenter.getChannel().getTitle();
+
+                    return Helpers.firstNonNull(author, title);
                 }
             });
         }
