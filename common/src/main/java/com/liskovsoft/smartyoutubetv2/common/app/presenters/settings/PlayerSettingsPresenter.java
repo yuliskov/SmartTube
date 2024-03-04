@@ -271,7 +271,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.live_stream_fix_desc),
                 option -> {
                     mPlayerTweaksData.forceHlsStreams(option.isSelected());
-                    mPlayerTweaksData.forceDashUrlStreams(false);
                 },
                 mPlayerTweaksData.isHlsStreamsForced()));
 
@@ -279,7 +278,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.live_stream_fix_4k_desc),
                 option -> {
                     mPlayerTweaksData.forceDashUrlStreams(option.isSelected());
-                    mPlayerTweaksData.forceHlsStreams(false);
                 },
                 mPlayerTweaksData.isDashUrlStreamsForced()));
 

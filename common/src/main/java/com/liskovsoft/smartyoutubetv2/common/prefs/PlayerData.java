@@ -12,6 +12,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
@@ -28,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class PlayerData extends DataChangeBase implements ProfileChangeListener {
+public class PlayerData extends DataChangeBase implements PlayerEngineConstants, ProfileChangeListener {
     private static final String VIDEO_PLAYER_DATA = "video_player_data";
     public static final int ONLY_UI = 0;
     public static final int UI_AND_PAUSE = 1;

@@ -211,6 +211,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
 
     public void forceHlsStreams(boolean enable) {
         mIsHlsStreamsForced = enable;
+        mIsDashUrlStreamsForced = false;
         persistData();
     }
 
@@ -220,6 +221,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
 
     public void forceDashUrlStreams(boolean enable) {
         mIsDashUrlStreamsForced = enable;
+        mIsHlsStreamsForced = false;
         persistData();
     }
 
