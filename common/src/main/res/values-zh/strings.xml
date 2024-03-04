@@ -113,8 +113,8 @@
   <string name="repeat_mode_pause">视频结束后暂停播放</string>
   <string name="repeat_mode_pause_alt">在每个非播放列表视频后暂停播放</string>
   <string name="repeat_mode_none">视频结束后停止播放</string>
-  <string name="subscribed_to_channel">取消频道订阅</string>
-  <string name="unsubscribed_from_channel">频道订阅</string>
+  <string name="subscribed_to_channel">取消订阅本频道</string>
+  <string name="unsubscribed_from_channel">订阅本频道</string>
   <string name="subtitle_yellow_transparent">黄色</string>
   <string name="subtitle_white_black">白色带黑色背景</string>
   <string name="player_seek_preview">搜索时预览</string>
