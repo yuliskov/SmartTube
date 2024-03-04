@@ -526,6 +526,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             return false;
         }
 
+        // Live dash url doesn't work with None buffer
         if (formatInfo.isLive() && (mPlayerTweaksData.isDashUrlStreamsForced() || mPlayerData.getVideoBufferType() == PlayerData.BUFFER_NONE)) {
             return false;
         }
