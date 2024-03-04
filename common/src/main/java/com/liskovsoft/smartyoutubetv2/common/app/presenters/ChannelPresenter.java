@@ -228,12 +228,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             disposeActions();
             mChannelId = null;
             mPendingGroups.add(mediaGroups);
-            ViewManager.instance(getContext()).startView(ChannelView.class);
             return;
-        }
-
-        if (ViewManager.instance(getContext()).getTopView() != ChannelView.class) {
-            ViewManager.instance(getContext()).startView(ChannelView.class);
         }
 
         if (GeneralData.instance(getContext()).isOldChannelLookEnabled()) {

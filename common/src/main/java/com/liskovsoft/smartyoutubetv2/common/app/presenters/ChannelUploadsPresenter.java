@@ -258,12 +258,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
             disposeActions();
             mVideoItem = null;
             mRootGroup = mediaGroup;
-            ViewManager.instance(getContext()).startView(ChannelUploadsView.class);
             return;
-        }
-
-        if (ViewManager.instance(getContext()).getTopView() != ChannelUploadsView.class) {
-            ViewManager.instance(getContext()).startView(ChannelUploadsView.class);
         }
 
         VideoGroup group = VideoGroup.from(mediaGroup);
