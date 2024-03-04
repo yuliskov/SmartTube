@@ -609,4 +609,24 @@
   <string name="disable_remote_history">使用远程控制时禁用历史记录</string>
   <string name="keyboard_fix">修复按 OK 键时显示键盘的问题（G20 和其他机型）</string>
   <string name="nothing_found">什么都没找到</string>
+  <string name="auto_frame_rate_desc">This option removes jittering on scenes where the camera moves fast, e.g. sports streaming</string>
+  <string name="channel_filter_hint">Filter channels</string>
+  <string name="player_loop_shorts">Loop Shorts</string>
+  <string name="player_quick_shorts_skip">Skip Shorts with left/right buttons</string>
+  <string name="channels_filter">Filter channels list inside the Channels section</string>
+  <string name="channel_search_bar">Search bar inside the Channel page</string>
+  <string name="header_sports">Sports</string>
+  <string name="keep_finished_activities">Keep finished activities</string>
+  <string name="disable_channels_service">Disable Channels service</string>
+  <string name="replace_titles">Replace titles</string>
+  <string name="enable">Enable</string>
+  <string name="more_info">More info</string>
+  <string name="about_sponsorblock">About SponsorBlock</string>
+  <string name="about_dearrow">About DeArrow</string>
+  <string name="replace_thumbnails">Replace thumbnails</string>
+  <string name="crowdsourced_thumbnails">Crowdsourced thumbnails</string>
+  <string name="crowdsoursed_titles">Crowdsourced titles</string>
+  <string name="dearrow_not_submitted_thumbs">Where to grab not submitted thumbnails</string>
+  <string name="pitch_effect">Pitch effect</string>
+  <string name="fullscreen_mode">Fullscreen mode (without system bars)</string>
 </resources>
