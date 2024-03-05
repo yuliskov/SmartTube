@@ -550,6 +550,10 @@ public final class Video {
         return belongsToGroup(MediaGroup.TYPE_SHORTS);
     }
 
+    public boolean belongsToSearch() {
+        return belongsToGroup(MediaGroup.TYPE_SEARCH);
+    }
+
     public boolean belongsToNotifications() {
         return belongsToGroup(MediaGroup.TYPE_NOTIFICATIONS);
     }
