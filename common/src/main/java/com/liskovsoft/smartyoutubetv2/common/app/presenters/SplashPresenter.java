@@ -255,7 +255,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 ViewManager viewManager = ViewManager.instance(getContext());
 
                 // Also, ensure that we're not opening tube link from description dialog
-                if (GeneralData.instance(getContext()).isReturnToLauncherEnabled() && !AppDialogPresenter.instance(getContext()).isDialogShown()) {
+                if (GeneralData.instance(getContext()).isReturnToLauncherEnabled() && !ViewManager.isVisible(PlaybackPresenter.instance(getContext()).getView())) {
                     viewManager.setSinglePlayerMode(true);
                 }
 
