@@ -26,6 +26,7 @@ public class SynchronizeDatabaseWorker extends Worker {
     private static final String TAG = SynchronizeDatabaseWorker.class.getSimpleName();
     private static final String WORK_NAME = "Update channels";
     private final UpdateChannelsTask mTask;
+    private static long mPreviousRunTimeMS;
 
     public SynchronizeDatabaseWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -58,7 +59,13 @@ public class SynchronizeDatabaseWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        mTask.run();
+        if (System.currentTimeMillis() - mPreviousRunTimeMS > 10_000) { // duplicate items fix
+            mTask.run();
+        } else {
+            Log.d(TAG, "Oops. Seems like the channel worker running multiple times...");
+        }
+
+        mPreviousRunTimeMS = System.currentTimeMillis();
 
         return Result.success();
     }
