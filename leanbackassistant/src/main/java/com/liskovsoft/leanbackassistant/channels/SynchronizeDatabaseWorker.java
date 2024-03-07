@@ -43,7 +43,7 @@ public class SynchronizeDatabaseWorker extends Worker {
             // https://stackoverflow.com/questions/50943056/avoiding-duplicating-periodicworkrequest-from-workmanager
             workManager.enqueueUniquePeriodicWork(
                     WORK_NAME,
-                    ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (worker running multiple times)
+                    ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (when old worker is running)
                     new PeriodicWorkRequest.Builder(SynchronizeDatabaseWorker.class, 20, TimeUnit.MINUTES).addTag(WORK_NAME).build()
             );
         }
