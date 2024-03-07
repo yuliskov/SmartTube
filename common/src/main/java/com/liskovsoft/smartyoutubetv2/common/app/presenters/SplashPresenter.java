@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+
+import com.liskovsoft.leanbackassistant.channels.RunOnInstallReceiver;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -31,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SplashPresenter extends BasePresenter<SplashView> {
-    private static final String CHANNELS_RECEIVER_CLASS_NAME = "com.liskovsoft.leanbackassistant.channels.RunOnInstallReceiver";
     private static final String TAG = SplashPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static SplashPresenter sInstance;
@@ -178,26 +179,14 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     public void updateChannels() {
-        Class<?> clazz = null;
-
-        try {
-            clazz = Class.forName(CHANNELS_RECEIVER_CLASS_NAME);
-        } catch (ClassNotFoundException e) {
-            // NOP
-        }
-
-        if (clazz != null) {
-            if (getContext() != null) {
-                Log.d(TAG, "Starting channels receiver...");
-                Intent intent = new Intent(getContext(), clazz);
-                try {
-                    getContext().sendBroadcast(intent);
-                } catch (Exception e) {
-                    // NullPointerException on MX9Pro (rk3328  7.1.2)
-                }
+        if (getContext() != null) {
+            Log.d(TAG, "Starting channels receiver...");
+            Intent intent = new Intent(getContext(), RunOnInstallReceiver.class);
+            try {
+                getContext().sendBroadcast(intent);
+            } catch (Exception e) {
+                // NullPointerException on MX9Pro (rk3328  7.1.2)
             }
-        } else {
-            Log.e(TAG, "Channels receiver class not found: " + CHANNELS_RECEIVER_CLASS_NAME);
         }
     }
 
