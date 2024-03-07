@@ -256,7 +256,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 ViewManager viewManager = ViewManager.instance(getContext());
 
                 // Also, ensure that we're not opening tube link from description dialog
-                if (GeneralData.instance(getContext()).isReturnToLauncherEnabled() && !ViewManager.isVisible(PlaybackPresenter.instance(getContext()).getView())) {
+                if (GeneralData.instance(getContext()).isReturnToLauncherEnabled() && !AppDialogPresenter.instance(getContext()).isDialogShown()) {
                     viewManager.setSinglePlayerMode(true);
                 }
 
@@ -311,7 +311,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         });
     }
 
-    private void applyNewIntent(Intent intent) {
+    public void applyNewIntent(Intent intent) {
         if (intent != null) {
             mBridgePackageName = intent.getStringExtra("bridge_package_name");
         }
