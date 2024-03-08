@@ -620,8 +620,24 @@
     <string name="disable_remote_history">Uzaqdan idarə etmədən istifadə edərkən tarixçəni söndürün</string>
     <string name="keyboard_fix">OK düyməsini basaraq klaviaturanı göstərilməsini düzəldin (G20s və s.)</string>
     <string name="nothing_found">Heç nə tapılmadı</string>
-    <string name="auto_frame_rate_desc">Bu seçim kameranın sürətlə hərəkət etdiyi səhnələrdə titrəməyi aradan qaldırır, məsələn. idman yayımı</string>
+    <string name="auto_frame_rate_desc">Bu seçim kameranın sürətlə hərəkət etdiyi səhnələrdə titrəməni aradan qaldırır, məsələn. idman yayımı</string>
     <string name="channel_filter_hint">Kanalları filterlə</string>
     <string name="player_loop_shorts">Shorts təkrarla</string>
     <string name="player_quick_shorts_skip">Shorts sol/sağ düymələr ilə ötür</string>
+    <string name="channels_filter">Kanallar bölməsindəki kanallar siyahısını filtrləyin</string>
+    <string name="channel_search_bar">Kanal səhifəsindəki axtarış çubuğu</string>
+    <string name="header_sports">İdman</string>
+    <string name="keep_finished_activities">Bitmiş fəaliyyətləri saxlayın</string>
+    <string name="disable_channels_service">Kanallar xidmətini deaktiv edin</string>
+    <string name="replace_titles">Başlıqları dəyişdirin</string>
+    <string name="enable">Aktivləşdirin</string>
+    <string name="more_info">Daha çox məlumat</string>
+    <string name="about_sponsorblock">SponsorBlock haqqında</string>
+    <string name="about_dearrow">DeArrow haqqında</string>
+    <string name="replace_thumbnails">Miniatürləri dəyişdirin</string>
+    <string name="crowdsourced_thumbnails">Crowdsourced miniatürlər</string>
+    <string name="crowdsoursed_titles">Crowdsourced başlıqlar</string>
+    <string name="dearrow_not_submitted_thumbs">Təqdim edilməmiş miniatürləri haradan götürmək olar</string>
+    <string name="pitch_effect">Pitch effekti</string>
+    <string name="fullscreen_mode">Tam ekran rejimi (sistem kənarları olmadan)</string>
 </resources>
