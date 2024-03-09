@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.liskovsoft.mediaserviceinterfaces.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
@@ -213,7 +215,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         for (Video item : pinnedItems) {
             if (item != null) {
                 if (item.sectionId == -1) {
-                    BrowseSection section = new BrowseSection(item.hashCode(), item.getTitle(), BrowseSection.TYPE_GRID, item.getCardImageUrl(), false, item);
+                    BrowseSection section = createPinnedSection(item);
                     mSections.add(section);
                 } else {
                     BrowseSection section = mSectionsMapping.get(item.sectionId);
@@ -231,7 +233,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         for (Video item : pinnedItems) {
             if (item != null && item.sectionId == -1) {
-                mGridMapping.put(item.hashCode(), createPinnedAction(item));
+                createPinnedMapping(item);
             }
         }
     }
@@ -495,9 +497,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         mGeneralData.addPinnedItem(item);
-        mGridMapping.put(item.hashCode(), createPinnedAction(item));
 
-        BrowseSection newSection = new BrowseSection(item.hashCode(), item.getTitle(), BrowseSection.TYPE_GRID, item.getCardImageUrl(), false, item);
+        createPinnedMapping(item);
+
+        BrowseSection newSection = createPinnedSection(item);
         Helpers.removeIf(mSections, section -> section.getId() == newSection.getId());
         mSections.add(newSection);
         getView().addSection(-1, newSection);
@@ -854,7 +857,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        updateVideoGrid(mCurrentSection, ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item), 1, true);
+        updateVideoGrid(mCurrentSection, ChannelUploadsPresenter.instance(getContext()).obtainUploadsObservable(item), 1, true);
         //ChannelPresenter.instance(getContext()).obtainUploadsRowObservable(item, row -> updateVideoGrid(mCurrentSection, row, 1, true));
     }
 
@@ -967,8 +970,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return Helpers.equalsAny(mediaGroup.getTitle(), getContext().getString(R.string.trending_row_name)) ? 0 : -1;
     }
 
-    private Observable<MediaGroup> createPinnedAction(Video item) {
-        return ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item);
+    private Observable<MediaGroup> createPinnedGridAction(Video item) {
+        return ChannelUploadsPresenter.instance(getContext()).obtainUploadsObservable(item);
+    }
+
+    private Observable<List<MediaGroup>> createPinnedRowAction(Video item) {
+        return ChannelPresenter.instance(getContext()).obtainChannelObservable(item.channelId);
     }
 
     /**
@@ -1054,5 +1061,18 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         mSections.clear();
         appendToSections(getContext().getString(R.string.header_notifications), R.drawable.icon_notification, new PasswordError(getContext()));
+    }
+
+    private void createPinnedMapping(Video item) {
+        if (item.hasChannel() && !item.isPlaylistAsChannel()) {
+            mRowMapping.put(item.hashCode(), createPinnedRowAction(item));
+        } else {
+            mGridMapping.put(item.hashCode(), createPinnedGridAction(item));
+        }
+    }
+
+    private static BrowseSection createPinnedSection(Video item) {
+        return new BrowseSection(
+                item.hashCode(), item.getTitle(), (item.hasChannel() && !item.isPlaylistAsChannel()) ? BrowseSection.TYPE_ROW : BrowseSection.TYPE_GRID, item.getCardImageUrl(), false, item);
     }
 }
