@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 
@@ -432,6 +433,7 @@ public class AppDialogUtil {
         );
     }
 
+    @TargetApi(19)
     private static List<OptionItem> fromSubtitleStyles(Context context, PlayerData playerData, List<SubtitleStyle> subtitleStyles) {
         List<OptionItem> styleOptions = new ArrayList<>();
 

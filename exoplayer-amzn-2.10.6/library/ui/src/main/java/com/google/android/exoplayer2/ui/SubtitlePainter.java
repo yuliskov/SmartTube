@@ -297,8 +297,8 @@ import com.liskovsoft.sharedutils.misc.RoundedBackgroundSpan;
     textLayout = new StaticLayout(cueText, textPaint, availableWidth, textAlignment, spacingMult,
         spacingAdd, true);
     // MOD: same height for multiline and single line subs (use 3 lines height)
-    //int textHeight = textLayout.getHeight();
-    int textHeight = textLayout.getLineBaseline(0) * 3; // base line has same height across single and multi line
+    //int textHeight = textLayout.getLineBaseline(0) * 3; // base line has same height across single and multi line
+    int textHeight = textLayout.getHeight();
     int textWidth = 0;
     int lineCount = textLayout.getLineCount();
     for (int i = 0; i < lineCount; i++) {
