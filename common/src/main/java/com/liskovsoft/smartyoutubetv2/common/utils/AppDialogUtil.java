@@ -819,6 +819,10 @@ public class AppDialogUtil {
     }
 
     private static void addRemoveFromPlaylist(Context context, Video video, VideoMenuCallback callback, String playlistId, boolean add) {
+        if (video == null) {
+            return;
+        }
+
         Observable<Void> editObserve;
         MediaItemService itemManager = YouTubeMediaItemService.instance();
 

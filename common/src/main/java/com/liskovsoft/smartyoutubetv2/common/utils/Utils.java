@@ -290,7 +290,12 @@ public class Utils {
                 if (normalize) {
                     streamMaxVolume /= 2; // max volume is too loud
                 }
-                audioManager.setStreamVolume(GLOBAL_VOLUME_TYPE, (int) Math.ceil(streamMaxVolume / 100f * volume), 0);
+                try {
+                    audioManager.setStreamVolume(GLOBAL_VOLUME_TYPE, (int) Math.ceil(streamMaxVolume / 100f * volume), 0);
+                } catch (SecurityException e) {
+                    // Not allowed to change Do Not Disturb state
+                    e.printStackTrace();
+                }
             }
         }
 
