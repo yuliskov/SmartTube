@@ -257,7 +257,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
                 playbackPresenter.openVideo(videoId, IntentExtractor.hasFinishOnEndedFlag(intent), timeMs);
 
-                enableSinglePlayerModeIfNeeded();
+                enablePlayerOnlyModeIfNeeded();
 
                 return true;
             }
@@ -343,12 +343,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
     }
 
-    private void enableSinglePlayerModeIfNeeded() {
+    private void enablePlayerOnlyModeIfNeeded() {
         ViewManager viewManager = ViewManager.instance(getContext());
 
-        // Also, ensure that we're not opening tube link from description dialog
-        if (GeneralData.instance(getContext()).isReturnToLauncherEnabled() && !AppDialogPresenter.instance(getContext()).isDialogShown()) {
-            viewManager.setSinglePlayerMode(true);
-        }
+        viewManager.enablePlayerOnlyMode(GeneralData.instance(getContext()).isPlayerOnlyModeEnabled());
     }
 }

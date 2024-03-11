@@ -44,7 +44,7 @@ public class GeneralData implements ProfileChangeListener {
     private int mBootSectionId;
     private int mAppExitShortcut;
     private int mPlayerExitShortcut;
-    private boolean mIsReturnToLauncherEnabled;
+    private boolean mIsPlayerOnlyModeEnabled;
     private int mBackgroundShortcut;
     private boolean mIsHideShortsFromSubscriptionsEnabled;
     private boolean mIsHideUpcomingEnabled;
@@ -308,13 +308,13 @@ public class GeneralData implements ProfileChangeListener {
         persistState();
     }
 
-    public void enableReturnToLauncher(boolean enable) {
-        mIsReturnToLauncherEnabled = enable;
+    public void enablePlayerOnlyMode(boolean enable) {
+        mIsPlayerOnlyModeEnabled = enable;
         persistState();
     }
 
-    public boolean isReturnToLauncherEnabled() {
-        return mIsReturnToLauncherEnabled;
+    public boolean isPlayerOnlyModeEnabled() {
+        return mIsPlayerOnlyModeEnabled;
     }
 
     public int getBackgroundPlaybackShortcut() {
@@ -941,7 +941,7 @@ public class GeneralData implements ProfileChangeListener {
         mBootSectionId = Helpers.parseInt(split, 1, MediaGroup.TYPE_HOME);
         mIsSettingsSectionEnabled = Helpers.parseBoolean(split, 2, true);
         mAppExitShortcut = Helpers.parseInt(split, 3, EXIT_DOUBLE_BACK);
-        mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 4, true);
+        mIsPlayerOnlyModeEnabled = Helpers.parseBoolean(split, 4, true);
         mBackgroundShortcut = Helpers.parseInt(split, 5, BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
         String pinnedItems = Helpers.parseStr(split, 6);
         mIsHideShortsFromSubscriptionsEnabled = Helpers.parseBoolean(split, 7, false);
@@ -1049,8 +1049,7 @@ public class GeneralData implements ProfileChangeListener {
         }
         String playlistOrder = Helpers.mergeList(playlistOrderPairs);
         // Zero index is skipped. Selected sections were there.
-        mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
-                mIsReturnToLauncherEnabled, mBackgroundShortcut, Helpers.mergeList(mPinnedItems), mIsHideShortsFromSubscriptionsEnabled,
+        mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut, mIsPlayerOnlyModeEnabled, mBackgroundShortcut, Helpers.mergeList(mPinnedItems), mIsHideShortsFromSubscriptionsEnabled,
                 mIsRemapFastForwardToNextEnabled, null,
                 mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,

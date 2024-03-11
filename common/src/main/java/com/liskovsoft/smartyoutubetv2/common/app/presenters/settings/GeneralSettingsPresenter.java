@@ -502,6 +502,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_only_mode),
+                option -> mGeneralData.enablePlayerOnlyMode(option.isSelected()),
+                mGeneralData.isPlayerOnlyModeEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.multi_profiles),
                 option -> {
                     AppPrefs.instance(getContext()).enableMultiProfiles(option.isSelected());
@@ -587,10 +591,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_screensaver),
                 option -> mGeneralData.disableScreensaver(option.isSelected()),
                 mGeneralData.isScreensaverDisabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.return_to_launcher),
-                option -> mGeneralData.enableReturnToLauncher(option.isSelected()),
-                mGeneralData.isReturnToLauncherEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.select_channel_section),
                 option -> mGeneralData.enableSelectChannelSection(option.isSelected()),

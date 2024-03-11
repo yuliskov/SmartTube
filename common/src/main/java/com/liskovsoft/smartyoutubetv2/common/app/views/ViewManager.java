@@ -16,6 +16,7 @@ import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -42,7 +43,7 @@ public class ViewManager {
     private long mPrevThrottleTimeMS;
     private boolean mIsMoveToBackEnabled;
     private boolean mIsFinishing;
-    private boolean mIsSinglePlayerMode;
+    private boolean mIsPlayerOnlyModeEnabled;
     private long mPendingActivityMs;
     private Class<?> mPendingActivityClass;
 
@@ -125,7 +126,7 @@ public class ViewManager {
 
             Class<?> parentActivity = getTopActivity();
 
-            if (parentActivity == null && !mIsSinglePlayerMode) {
+            if (parentActivity == null && !mIsPlayerOnlyModeEnabled) {
                 parentActivity = getDefaultParent(activity);
             }
 
@@ -134,7 +135,7 @@ public class ViewManager {
 
                 mIsMoveToBackEnabled = true;
 
-                if (mIsSinglePlayerMode) {
+                if (mIsPlayerOnlyModeEnabled) {
                     safeMoveTaskToBack(activity);
                 }
             } else {
@@ -157,7 +158,7 @@ public class ViewManager {
 
     public void startDefaultView() {
         mIsMoveToBackEnabled = false;
-        mIsSinglePlayerMode = false;
+        mIsPlayerOnlyModeEnabled = false;
 
         Class<?> lastActivity;
 
@@ -275,9 +276,17 @@ public class ViewManager {
         return false;
     }
 
-    public void setSinglePlayerMode(boolean enable) {
-        mActivityStack.clear();
-        mIsSinglePlayerMode = enable;
+    public void enablePlayerOnlyMode(boolean enable) {
+        // Ensure that we're not opening tube link from description dialog
+        if (enable && AppDialogPresenter.instance(mContext).isDialogShown()) {
+            return;
+        }
+
+        if (enable) {
+            mActivityStack.clear();
+        }
+
+        mIsPlayerOnlyModeEnabled = enable;
     }
 
     public void clearCaches() {

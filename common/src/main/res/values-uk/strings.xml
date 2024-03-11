@@ -640,4 +640,5 @@
     <string name="dearrow_not_submitted_thumbs">Звідки брати не надіслані мініатюри</string>
     <string name="pitch_effect">Ефект висоти тона</string>
     <string name="fullscreen_mode">Повноекранний режим (без системних панелей)</string>
+    <string name="player_only_mode">Показувати лише плеєр, якщо відео відкрито поза застосунком</string>
 </resources>
