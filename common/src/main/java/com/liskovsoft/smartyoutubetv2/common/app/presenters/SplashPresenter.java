@@ -253,16 +253,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             String videoId = IntentExtractor.extractVideoId(intent);
 
             if (videoId != null) {
-                ViewManager viewManager = ViewManager.instance(getContext());
-
-                // Also, ensure that we're not opening tube link from description dialog
-                if (GeneralData.instance(getContext()).isReturnToLauncherEnabled() && !AppDialogPresenter.instance(getContext()).isDialogShown()) {
-                    viewManager.setSinglePlayerMode(true);
-                }
-
                 long timeMs = IntentExtractor.extractVideoTimeMs(intent);
                 PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
                 playbackPresenter.openVideo(videoId, IntentExtractor.hasFinishOnEndedFlag(intent), timeMs);
+
+                enableSinglePlayerModeIfNeeded();
 
                 return true;
             }
@@ -345,6 +340,15 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                     true,
                     () -> getView().finishView() // critical part, fix black screen on app exit
             );
+        }
+    }
+
+    private void enableSinglePlayerModeIfNeeded() {
+        ViewManager viewManager = ViewManager.instance(getContext());
+
+        // Also, ensure that we're not opening tube link from description dialog
+        if (GeneralData.instance(getContext()).isReturnToLauncherEnabled() && !AppDialogPresenter.instance(getContext()).isDialogShown()) {
+            viewManager.setSinglePlayerMode(true);
         }
     }
 }
