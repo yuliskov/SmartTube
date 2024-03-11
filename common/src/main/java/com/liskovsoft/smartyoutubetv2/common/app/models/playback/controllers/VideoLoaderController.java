@@ -22,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerE
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase.OnDataChange;
@@ -359,6 +360,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             return;
         }
 
+        resetSinglePlayerMode();
+
         disposeActions();
 
         if (item.hasVideo()) {
@@ -594,5 +597,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             mLastVideo.nextMediaItem = mLastVideo.nextMediaItemBackup;
             getPlayer().setNextTitle(mLastVideo.nextMediaItem.getTitle());
         }
+    }
+
+    private void resetSinglePlayerMode() {
+        ViewManager.instance(getContext()).setSinglePlayerMode(false);
     }
 }
