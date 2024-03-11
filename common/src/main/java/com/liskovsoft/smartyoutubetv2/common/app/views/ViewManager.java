@@ -130,7 +130,7 @@ public class ViewManager {
                 parentActivity = getDefaultParent(activity);
             }
 
-            if (parentActivity == null) {
+            if (parentActivity == null || mIsPlayerOnlyModeEnabled) {
                 Log.d(TAG, "Parent activity name doesn't stored in registry. Exiting to Home...");
 
                 mIsMoveToBackEnabled = true;
@@ -280,10 +280,6 @@ public class ViewManager {
         // Ensure that we're not opening tube link from description dialog
         if (enable && AppDialogPresenter.instance(mContext).isDialogShown()) {
             return;
-        }
-
-        if (enable) {
-            mActivityStack.clear();
         }
 
         mIsPlayerOnlyModeEnabled = enable;
