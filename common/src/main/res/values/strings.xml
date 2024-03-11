@@ -507,8 +507,8 @@
     <string name="thumb_quality_start">Start of the video</string>
     <string name="thumb_quality_middle">Middle of the video</string>
     <string name="thumb_quality_end">End of the video</string>
-    <string name="content_block_status">Check SponsorBlock status</string>
-    <string name="dearrow_status">Check DeArrow status</string>
+    <string name="content_block_status">Check SponsorBlock server status</string>
+    <string name="dearrow_status">Check DeArrow server status</string>
     <string name="player_show_quality_info_bitrate">Add bitrate into the quality info</string>
     <string name="player_speed_button_old_behavior">Revert old behavior of the speed button</string>
     <string name="protect_settings_with_password">Protect all settings with password</string>
