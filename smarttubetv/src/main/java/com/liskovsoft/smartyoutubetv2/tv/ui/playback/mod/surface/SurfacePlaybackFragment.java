@@ -21,8 +21,8 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
  * and rendering video.
  */
 public class SurfacePlaybackFragment extends PlaybackSupportFragment {
-    SurfaceWrapper mVideoSurfaceWrapper;
-    AspectRatioFrameLayout mVideoSurfaceRoot;
+    private SurfaceWrapper mVideoSurfaceWrapper;
+    private AspectRatioFrameLayout mVideoSurfaceRoot;
     private int mBackgroundResId;
     private float mAspectRatio;
     private float mPixelRatio = 1.0f;
