@@ -136,6 +136,7 @@
     <string name="player_show_ending_time">Zobraziť čas ukončenia</string>
     <string name="open_channel_uploads">Otvoriť videá v kanáli</string>
     <string name="app_exit_shortcut">Vypnúť aplikáciu</string>
+    <string name="player_exit_shortcut">Vypnúť prehrávač</string>
     <string name="app_exit_none">Nevypínať</string>
     <string name="app_double_back_exit">2x tlačidlo Späť</string>
     <string name="app_single_back_exit">1x tlačidlo Späť</string>
@@ -310,6 +311,7 @@
     <string name="action_pip">PIP</string>
     <string name="action_video_info">Popis videa</string>
     <string name="action_screen_off">Vypnúť obrazovku</string>
+    <string name="action_sound_off">Vypnúť zvuk</string>
     <string name="action_playback_queue">Poradie prehrávania</string>
     <string name="action_video_speed">Rýchlosť prehrávania</string>
     <string name="action_subtitles">Titulky</string>
@@ -505,7 +507,8 @@
     <string name="thumb_quality_start">Na začiatku videa</string>
     <string name="thumb_quality_middle">V strede videa</string>
     <string name="thumb_quality_end">Na konci videa</string>
-    <string name="content_block_status">Skontrolovať stav SponsorBlocku</string>
+    <string name="content_block_status">Skontrolovať stav SponsorBlock servera</string>
+    <string name="dearrow_status">Skontrolovať stav DeArrow servera</string>
     <string name="player_show_quality_info_bitrate">Pridaj bitrate do informácií o kvalite</string>
     <string name="player_speed_button_old_behavior">Vrátiť staré správanie tlačidla rýchlosti</string>
     <string name="protect_settings_with_password">Chrániť všetky nastavenia heslom</string>
@@ -567,6 +570,7 @@
     <string name="sony_frame_drop_fix_desc">Opravuje sekanie na Sony TV a iných zariadeniach. Pozor: môžu nastať problémy so synchronizáciou audia.</string>
     <string name="audio_language">Jazyk zvuku</string>
     <string name="old_home_look">Starý vzhľad sekcie Domov</string>
+    <string name="old_channel_look">Starý vzhľad sekcie Kanály</string>
     <string name="hide_shorts_everywhere">Skryť Shorts všade</string>
     <string name="update_found">Aktualizácia</string>
     <string name="volume_boost_warning">Akékoľvek nastavenie nad limit môže poškodiť reproduktory</string>
@@ -617,6 +621,7 @@
     <string name="prefer_avc_over_vp9_desc">UPOZORNENIE: Maximálne 1080p</string>
     <string name="play_next">Prehrať ďalšie</string>
     <string name="hide_watched_from_subscriptions">Skryť videné videá v Odberoch</string>
+    <string name="hide_watched_from_notifications">Skryť videné videá v Notifikáciách</string>
     <string name="hide_unwanted_content">Skryť nežiaduci obsah</string>
     <string name="hide_watched_from_home">Skryť videné videá v Domov</string>
     <string name="remote_control_permission">Diaľkové ovládanie na pozadí vyžaduje povolenie na prekrytie cez okná</string>
@@ -630,4 +635,19 @@
     <string name="player_quick_shorts_skip">Preskočiť Shorts s tlačidlami vľavo/vpravo</string>
     <string name="channels_filter">Filtrovať zoznam kanálov v sekcii Kanály</string>
     <string name="channel_search_bar">Vyhľadávací panel v sekcii Kanály</string>
+    <string name="header_sports">Šport</string>
+    <string name="keep_finished_activities">Uchovávať dokončené aktivity</string>
+    <string name="disable_channels_service">Zakázať službu Kanály</string>
+    <string name="replace_titles">Nahradiť názvy</string>
+    <string name="enable">Povoliť</string>
+    <string name="more_info">Viac informácií</string>
+    <string name="about_sponsorblock">O SponsorBlocku</string>
+    <string name="about_dearrow">O DeArrow</string>
+    <string name="replace_thumbnails">Nahradiť náhľadové obrázky</string>
+    <string name="crowdsourced_thumbnails">Komunitné náhľadové obrázky</string>
+    <string name="crowdsoursed_titles">Komunitné názvy</string>
+    <string name="dearrow_not_submitted_thumbs">Kde zobrať nepridané náhľadové obrázky</string>
+    <string name="pitch_effect">Efekt výšky tónu</string>
+    <string name="fullscreen_mode">Režim celej obrazovky (bez systémových líšt)</string>
+    <string name="player_only_mode">Zobraziť iba prehrávač, ak je video otvorené mimo aplikácie</string>
 </resources>
