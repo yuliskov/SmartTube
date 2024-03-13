@@ -107,6 +107,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendHideUnwantedContent(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_watched_from_watch_later),
+                option -> mGeneralData.hideWatchedFromWatchLater(option.isSelected()),
+                mGeneralData.isHideWatchedFromWatchLaterEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_watched_from_home),
                 option -> mGeneralData.hideWatchedFromHome(option.isSelected()),
                 mGeneralData.isHideWatchedFromHomeEnabled()));

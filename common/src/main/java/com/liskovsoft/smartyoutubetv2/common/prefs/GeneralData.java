@@ -91,6 +91,7 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsRemapDpadUpToVolumeEnabled;
     private boolean mIsRemapDpadLeftToVolumeEnabled;
     private boolean mIsHideWatchedFromNotificationsEnabled;
+    private boolean mIsHideWatchedFromWatchLaterEnabled;
     private Video mSelectedSubscriptionsItem;
     private List<String> mChangelog;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
@@ -379,6 +380,15 @@ public class GeneralData implements ProfileChangeListener {
 
     public boolean isHideWatchedFromNotificationsEnabled() {
         return mIsHideWatchedFromNotificationsEnabled;
+    }
+
+    public void hideWatchedFromWatchLater(boolean enable) {
+        mIsHideWatchedFromWatchLaterEnabled = enable;
+        persistState();
+    }
+
+    public boolean isHideWatchedFromWatchLaterEnabled() {
+        return mIsHideWatchedFromWatchLaterEnabled;
     }
 
     public boolean isHideStreamsFromSubscriptionsEnabled() {
@@ -1000,6 +1010,7 @@ public class GeneralData implements ProfileChangeListener {
         // StackOverflow on old devices?
         mIsOldChannelLookEnabled = Helpers.parseBoolean(split, 59, Build.VERSION.SDK_INT <= 19);
         mIsFullscreenModeEnabled = Helpers.parseBoolean(split, 60, !Helpers.isTouchSupported(mContext));
+        mIsHideWatchedFromWatchLaterEnabled = Helpers.parseBoolean(split, 61, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -1062,7 +1073,7 @@ public class GeneralData implements ProfileChangeListener {
                 mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem),
                 mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled, mIsRemapDpadUpToVolumeEnabled,
                 mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled, Helpers.mergeList(mChangelog), mPlayerExitShortcut,
-                mIsOldChannelLookEnabled, mIsFullscreenModeEnabled));
+                mIsOldChannelLookEnabled, mIsFullscreenModeEnabled, mIsHideWatchedFromWatchLaterEnabled));
     }
 
     private int getSectionId(Video item) {

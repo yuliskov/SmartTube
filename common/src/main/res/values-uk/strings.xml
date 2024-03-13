@@ -617,6 +617,7 @@
     <string name="hide_watched_from_notifications">Приховати переглянуті відео з Повідомлень</string>
     <string name="hide_unwanted_content">Приховати небажаний вміст</string>
     <string name="hide_watched_from_home">Приховати переглянуті відео з Головного розділу</string>
+    <string name="hide_watched_from_watch_later">Приховати переглянуті відео зі списку Переглянути пізніше</string>
     <string name="remote_control_permission">Фонове Дистанційне керування вимагає дозволу на Перекривання інших вікон</string>
     <string name="login_from_browser">Увійти з браузера</string>
     <string name="disable_remote_history">Вимкнути історію під час дистанційного керування</string>
