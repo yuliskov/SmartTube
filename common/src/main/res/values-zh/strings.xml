@@ -340,7 +340,7 @@
     <string name="hide_upcoming_channel">在频道中隐藏即将上线</string>
     <string name="hide_upcoming_home">在首页隐藏即将上线</string>
     <string name="search_background_playback">搜索/打开频道后进入画中画</string>
-    <string name="trending_row_name">趋势</string>
+    <string name="trending_row_name">热门</string>
     <string name="player_seek_type">快进方式</string>
     <string name="player_seek_regular">常规</string>
     <string name="player_seek_confirmation_pause">带确认(快进时暂停)</string>
@@ -349,7 +349,7 @@
     <string name="finish_on_disconnect">断连后关闭应用</string>
     <string name="update_error">更新错误</string>
     <string name="hide_shorts_from_history">在历史中隐藏短视频</string>
-    <string name="hide_shorts_from_trending">在趋势中隐藏短视频</string>
+    <string name="hide_shorts_from_trending">在热门中隐藏短视频</string>
     <string name="disable_screensaver">禁用屏保</string>
     <string name="description_not_found">未找到视频描述</string>
     <string name="proxy_port_hint">代理端口</string>
@@ -379,7 +379,7 @@
     <string name="openvpn_test_aborted">测试被中断,请先修正OpenVPN设置。</string>
     <string name="openvpn_address_invalid">未设置OpenVPN配置地址。</string>
     <string name="internet_censorship">网络审查</string>
-    <string name="rename_section">重命名此部分</string>
+    <string name="rename_section">重命名此页</string>
     <string name="simple_edit_value_hint">输入值</string>
     <string name="seek_interval">快进间隔</string>
     <string name="seek_interval_sec">%s 秒</string>
@@ -397,8 +397,8 @@
     <string name="live_stream_fix_4k">直播流畅修正(4K)</string>
     <string name="playback_notifications_fix_desc">隐藏轨道更换通知。在AOSP系统下可能有用。</string>
     <string name="playback_notifications_fix">禁用播放通知</string>
-    <string name="amlogic_fix_desc">修正Amlogic设备上帧率掉落。</string>
-    <string name="amlogic_fix">修正Amlogic 1080p@60fps</string>
+    <string name="amlogic_fix_desc">修正Amlogic设备上掉帧问题。</string>
+    <string name="amlogic_fix">修正Amlogic设备的1080p@60fps</string>
     <string name="tunneled_video_playback_desc">注意:暂停可能无法正常工作!隧道播放承诺如音视频同步(AV同步)更好,流畅度提高。需要Android 5以上。</string>
     <string name="tunneled_video_playback">隧道视频播放(Android 5+)</string>
     <string name="master_volume">总音量</string>
@@ -578,7 +578,7 @@
     <string name="play_video_incognito">隐私模式播放</string>
     <string name="header_kids_home">儿童</string>
     <string name="player_section_playlist">将当前分类内容作为播放列表</string>
-    <string name="header_trending">趋势</string>
+    <string name="header_trending">热门</string>
     <string name="screensaver">屏保</string>
     <string name="player_screen_off_timeout">屏幕关闭超时</string>
     <string name="old_update_notifications">旧版更新通知样式</string>
