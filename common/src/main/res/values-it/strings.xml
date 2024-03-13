@@ -507,8 +507,8 @@
     <string name="thumb_quality_start">Inizio del video</string>
     <string name="thumb_quality_middle">Metà del video</string>
     <string name="thumb_quality_end">Fine del video</string>
-    <string name="content_block_status">Controlla lo stato di SponsorBlock</string>
-    <string name="dearrow_status">Controlla lo stato di DeArrow</string>
+    <string name="content_block_status">Controlla lo stato del server di SponsorBlock</string>
+    <string name="dearrow_status">Controlla lo stato del server di DeArrow</string>
     <string name="player_show_quality_info_bitrate">Aggiungi bitrate nelle informazioni sulla qualità</string>
     <string name="player_speed_button_old_behavior">Ripristina il vecchio comportamento del pulsante di velocità</string>
     <string name="protect_settings_with_password">Proteggi tutte le Impostazioni con una password</string>
@@ -624,6 +624,7 @@
     <string name="hide_watched_from_notifications">Nascondi i video già visti dalle Notifiche</string>
     <string name="hide_unwanted_content">Nascondi i contenuti indesiderati</string>
     <string name="hide_watched_from_home">Nascondi i video già visti dalla Home</string>
+    <string name="hide_watched_from_watch_later">Nascondi i video già visti dalla playlist Guarda più tardi</string>
     <string name="remote_control_permission">Il controllo remoto in background richiede l\'autorizzazione alla sovrapposizione</string>
     <string name="login_from_browser">Accedi dal browser</string>
     <string name="disable_remote_history">Disabilita la Cronologia quando si utilizza il controllo remoto</string>
@@ -634,7 +635,7 @@
     <string name="player_loop_shorts">Ripeti continuamente i video brevi</string>
     <string name="player_quick_shorts_skip">Salta i video brevi con il tasto sinistro/destro</string>
     <string name="channels_filter">Filtra l\'elenco dei canali nella sezione Canali</string>
-    <string name="channel_search_bar">Barra di ricerca all\'interno della pagina Canale</string>
+    <string name="channel_search_bar">Barra di ricerca all\'interno della pagina del Canale</string>
     <string name="header_sports">Sport</string>
     <string name="keep_finished_activities">Mantieni le attività terminate</string>
     <string name="disable_channels_service">Disattiva il servizio Canali</string>
@@ -649,4 +650,5 @@
     <string name="dearrow_not_submitted_thumbs">Dove prendere le miniature non inviate</string>
     <string name="pitch_effect">Effetto pitch</string>
     <string name="fullscreen_mode">Modalità a schermo intero (senza barre di sistema)</string>
+    <string name="player_only_mode">Mostra solo il lettore se il video viene aperto all\'esterno dell\'app</string>
 </resources>
