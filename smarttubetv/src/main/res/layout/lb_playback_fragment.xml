@@ -20,13 +20,16 @@
         android:layout_height="match_parent"
         android:layout_gravity="center">
         <!-- Modified place for VideoSurfaceView -->
-        <com.google.android.exoplayer2.ui.SubtitleView
-            android:id="@+id/leanback_subtitles"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="150sp"
-            android:paddingRight="150sp"/>
     </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
+
+    <!-- MOD: fix subs width issues on vertical videos by placing subs outside of the aspect layout -->
+    <!-- MOD: add subtitle padding -->
+    <com.google.android.exoplayer2.ui.SubtitleView
+        android:id="@+id/leanback_subtitles"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="150sp"
+        android:paddingRight="150sp"/>
 
     <LinearLayout
         android:id="@+id/live_chat_wrapper"
