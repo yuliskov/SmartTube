@@ -761,6 +761,39 @@ public class AppDialogUtil {
         dialogPresenter.appendRadioCategory(context.getString(R.string.seek_interval), options);
     }
 
+    public static void removeFromWatchLaterPlaylist(Context context, Video video) {
+        removeFromWatchLaterPlaylist(context, video, null);
+    }
+
+    public static void removeFromWatchLaterPlaylist(Context context, Video video, Runnable onSuccess) {
+        if (video == null || !YouTubeSignInService.instance().isSigned()) {
+            return;
+        }
+
+        MediaItemService itemManager = YouTubeMediaItemService.instance();
+
+        Disposable playlistsInfoAction = itemManager.getPlaylistsInfoObserve(video.videoId)
+                .subscribe(
+                        videoPlaylistInfos -> {
+                            PlaylistInfo watchLater = videoPlaylistInfos.get(0);
+
+                            if (watchLater.isSelected()) {
+                                Observable<Void> editObserve = itemManager.removeFromPlaylistObserve(watchLater.getPlaylistId(), video.videoId);
+
+                                RxHelper.execute(editObserve, () -> {
+                                    if (onSuccess != null) {
+                                        onSuccess.run();
+                                    }
+                                });
+                            }
+                        },
+                        error -> {
+                            // Fallback to something on error
+                            Log.e(TAG, "Get playlists error: %s", error.getMessage());
+                        }
+                );
+    }
+
     public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback) {
         if (!YouTubeSignInService.instance().isSigned()) {
             MessageHelpers.showMessage(context, R.string.msg_signed_users_only);

@@ -77,9 +77,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         //mCurrentGroup = video.getGroup(); // disable garbage collected
         appendNextSectionVideoIfNeeded(video);
         appendPreviousSectionVideoIfNeeded(video);
-        if (mGeneralData.isHideWatchedFromNotificationsEnabled()) {
-            MediaServiceManager.instance().hideNotification(video);
-        }
     }
 
     /**
