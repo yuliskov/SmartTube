@@ -43,8 +43,7 @@
     <string name="section_is_empty">哎呀!这里什么都没有</string>
     <string name="dialog_add_to_playlist">添加/删除播放列表</string>
     <string name="msg_signed_users_only">仅限注册用户</string>
-    <string name="msg_cant_load_content">无法加载内容。\n1) 开启观看历史。\n2) 检查设备日期和时间设置。\n3)
-        检查网络连接。\n4)检查代理设置。\n5) 尝试登录您的帐户。\n6) 这里可能什么都没有。</string>
+    <string name="msg_cant_load_content">无法加载内容。\n1) 开启观看历史。\n2) 检查设备日期和时间设置。\n3) 检查网络连接。\n4)检查代理设置。\n5) 尝试登录您的帐户。\n6) 这里可能什么都没有。</string>
     <string name="title_video_presets">视频预设</string>
     <string name="settings_accounts">帐户</string>
     <string name="settings_left_panel">编辑分类</string>
@@ -400,8 +399,7 @@
     <string name="playback_notifications_fix">禁用播放通知</string>
     <string name="amlogic_fix_desc">修正Amlogic设备上帧率掉落。</string>
     <string name="amlogic_fix">修正Amlogic 1080p@60fps</string>
-    <string name="tunneled_video_playback_desc">注意:暂停可能无法正常工作!隧道播放承诺如音视频同步(AV同步)更好,流畅度提高。需要Android
-        5以上。</string>
+    <string name="tunneled_video_playback_desc">注意:暂停可能无法正常工作!隧道播放承诺如音视频同步(AV同步)更好,流畅度提高。需要Android 5以上。</string>
     <string name="tunneled_video_playback">隧道视频播放(Android 5+)</string>
     <string name="master_volume">总音量</string>
     <string name="volume_limit">音量限制</string>
