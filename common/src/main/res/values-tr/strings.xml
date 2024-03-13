@@ -507,8 +507,8 @@
     <string name="thumb_quality_start">Videonun başlangıcından</string>
     <string name="thumb_quality_middle">Videonun ortasından</string>
     <string name="thumb_quality_end">Videonun sonundan</string>
-    <string name="content_block_status">SponsorBlock durumunu kontrol et</string>
-    <string name="dearrow_status">DeArrow durumunu kontrol et</string>
+    <string name="content_block_status">SponsorBlock sunucu durumunu kontrol et</string>
+    <string name="dearrow_status">DeArrow sunucu durumunu kontrol et</string>
     <string name="player_show_quality_info_bitrate">Kalite bilgisine bit hızı ekle</string>
     <string name="player_speed_button_old_behavior">Hız düğmesinin eski davranışına geri dön</string>
     <string name="protect_settings_with_password">Tüm ayarları şifre ile koru</string>
@@ -624,6 +624,7 @@
     <string name="hide_watched_from_notifications">İzlenen videoları Bildirimler\'de gizle</string>
     <string name="hide_unwanted_content">İstenmeyen içerik gizleme</string>
     <string name="hide_watched_from_home">İzlenen videoları Ana Sayfa\'da gizle</string>
+    <string name="hide_watched_from_watch_later">İzlenen videoları Daha sonra izle oynatma listesinde gizle</string>
     <string name="remote_control_permission">Arka plan Uzaktan kontrol, Yer Paylaşımı izni gerektirir</string>
     <string name="login_from_browser">Tarayıcıdan giriş yap</string>
     <string name="disable_remote_history">Uzaktan kontrol kullanırken geçmişi devre dışı bırak</string>
@@ -648,4 +649,6 @@
     <string name="crowdsoursed_titles">Kitle kaynaklı başlıklar</string>
     <string name="dearrow_not_submitted_thumbs">Gönderilmeyen küçük resimler nereden alınsın\?</string>
     <string name="pitch_effect">Pitch efekti</string>
+    <string name="fullscreen_mode">Tam ekran modu (sistem çubukları olmadan)</string>
+    <string name="player_only_mode">Video uygulama dışında açılırsa yalnızca oynatıcıyı göster</string>
 </resources>
