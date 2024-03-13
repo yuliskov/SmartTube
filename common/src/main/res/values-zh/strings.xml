@@ -80,7 +80,6 @@
     <string name="check_for_updates">检查更新</string>
     <string name="update_not_found">您正在使用最新版本</string>
     <string name="update_in_progress">请等待...</string>
-    <string name="player_ui_hide_behavior">界面自动隐藏</string>
     <string name="option_never">从不</string>
     <string name="side_panel_sections">设置分类</string>
     <string name="boot_to_section">启动时进入分类</string>
