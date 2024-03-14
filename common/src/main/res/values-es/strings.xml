@@ -646,4 +646,5 @@
   <string name="action_sound_off">Apagar sonido</string>
   <string name="dearrow_status">Comprobar el estado de DeArrow </string>
   <string name="old_channel_look">Aspecto antiguo de la página Canal</string>
+  <string name="player_only_mode">Mostrar sólo el reproductor si el vídeo se abre fuera de la aplicación</string>
 </resources>
