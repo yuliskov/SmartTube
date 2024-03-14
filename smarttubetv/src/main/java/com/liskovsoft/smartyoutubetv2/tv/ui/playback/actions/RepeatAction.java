@@ -35,7 +35,7 @@ public class RepeatAction extends MultiAction {
      */
     public RepeatAction(Context context, int selectionColor) {
         super(R.id.lb_control_repeat);
-        Drawable[] drawables = new Drawable[6];
+        Drawable[] drawables = new Drawable[7];
         BitmapDrawable repeatNoneDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_none);
         BitmapDrawable repeatOneDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_one);
         BitmapDrawable repeatAllDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_all);
