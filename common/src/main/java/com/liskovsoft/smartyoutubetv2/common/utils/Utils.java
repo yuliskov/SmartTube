@@ -584,6 +584,9 @@ public class Utils {
             case PlayerUI.REPEAT_MODE_LIST:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_pause_alt);
                 break;
+            case PlayerUI.REPEAT_MODE_REVERSE:
+                MessageHelpers.showMessage(context, R.string.repeat_mode_reverse);
+                break;
             case PlayerUI.REPEAT_MODE_CLOSE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_none);
                 break;

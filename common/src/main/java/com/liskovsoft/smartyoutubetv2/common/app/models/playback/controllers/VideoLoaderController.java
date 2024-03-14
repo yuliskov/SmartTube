@@ -481,6 +481,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             case PlayerUI.REPEAT_MODE_SHUFFLE:
                 loadNext();
                 break;
+            case PlayerUI.REPEAT_MODE_REVERSE:
+                loadPrevious();
+                break;
             case PlayerUI.REPEAT_MODE_ONE:
                 getPlayer().setPositionMs(100); // fix frozen image on Android 4?
                 break;

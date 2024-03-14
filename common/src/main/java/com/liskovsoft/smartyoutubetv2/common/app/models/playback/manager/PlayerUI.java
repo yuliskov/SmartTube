@@ -14,6 +14,7 @@ public interface PlayerUI {
     int REPEAT_MODE_ONE = 3;
     int REPEAT_MODE_SHUFFLE = 4;
     int REPEAT_MODE_LIST = 5;
+    int REPEAT_MODE_REVERSE = 6;
     int BUTTON_OFF = 0;
     int BUTTON_ON = 1;
     int BUTTON_DISABLED = -1;

@@ -42,7 +42,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         // Fallback dir: Stable (in case app installed from scratch)
         mBackupDirs.add(new File(new File(Environment.getExternalStorageDirectory(), "data/com.teamsmart.videomanager.tv"), BACKUP_DIR_NAME));
         // Fallback dir: Beta (in case app installed from scratch)
-        mBackupDirs.add(new File(new File(Environment.getExternalStorageDirectory(), "data/com.liskovsoft.smarttubetv.beta"), BACKUP_DIR_NAME));
+        mBackupDirs.add(new File(new File(Environment.getExternalStorageDirectory(), "data/com.liskovsoft.smarttubetv.secondary.beta"), BACKUP_DIR_NAME));
     }
 
     public void checkPermAndRestore() {

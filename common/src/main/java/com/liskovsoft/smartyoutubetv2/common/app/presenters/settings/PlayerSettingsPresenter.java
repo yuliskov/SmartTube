@@ -470,6 +470,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         for (int[] pair : new int[][] {
                 {R.string.repeat_mode_all, PlayerUI.REPEAT_MODE_ALL},
+                {R.string.repeat_mode_reverse, PlayerUI.REPEAT_MODE_REVERSE},
                 {R.string.repeat_mode_one, PlayerUI.REPEAT_MODE_ONE},
                 {R.string.repeat_mode_shuffle, PlayerUI.REPEAT_MODE_SHUFFLE},
                 {R.string.repeat_mode_pause_alt, PlayerUI.REPEAT_MODE_LIST},

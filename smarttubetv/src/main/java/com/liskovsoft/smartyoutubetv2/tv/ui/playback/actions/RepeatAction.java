@@ -18,6 +18,7 @@ public class RepeatAction extends MultiAction {
     public static final int INDEX_PAUSE = PlayerUI.REPEAT_MODE_PAUSE;
     public static final int INDEX_LIST = PlayerUI.REPEAT_MODE_LIST;
     public static final int INDEX_SHUFFLE = PlayerUI.REPEAT_MODE_SHUFFLE;
+    public static final int INDEX_REVERSE = PlayerUI.REPEAT_MODE_REVERSE;
 
     /**
      * Constructor
@@ -43,6 +44,7 @@ public class RepeatAction extends MultiAction {
         BitmapDrawable repeatShuffleDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_shuffle);
         drawables[INDEX_NONE] = ActionHelpers.createDrawable(context, repeatNoneDrawable, selectionColor);
         drawables[INDEX_ONE] = ActionHelpers.createDrawable(context, repeatOneDrawable, selectionColor);
+        drawables[INDEX_REVERSE] = ActionHelpers.createDrawable(context, repeatOneDrawable, selectionColor);
         drawables[INDEX_ALL] = ActionHelpers.createDrawable(context, repeatAllDrawable, selectionColor);
         drawables[INDEX_PAUSE] = ActionHelpers.createDrawable(context, repeatPauseDrawable, selectionColor);
         drawables[INDEX_LIST] = ActionHelpers.createDrawable(context, repeatListDrawable, selectionColor);
@@ -57,6 +59,7 @@ public class RepeatAction extends MultiAction {
         labels[INDEX_PAUSE] = context.getString(R.string.repeat_mode_pause);
         labels[INDEX_LIST] = context.getString(R.string.repeat_mode_pause_alt);
         labels[INDEX_SHUFFLE] = context.getString(R.string.repeat_mode_shuffle);
+        labels[INDEX_REVERSE] = context.getString(R.string.repeat_mode_reverse);
         setLabels(labels);
     }
 }
