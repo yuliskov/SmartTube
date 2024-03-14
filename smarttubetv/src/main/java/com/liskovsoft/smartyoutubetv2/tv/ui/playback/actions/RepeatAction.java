@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
@@ -42,9 +44,10 @@ public class RepeatAction extends MultiAction {
         BitmapDrawable repeatPauseDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_pause);
         BitmapDrawable repeatListDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_list);
         BitmapDrawable repeatShuffleDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_shuffle);
+        BitmapDrawable repeatReversedDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_reversed);
         drawables[INDEX_NONE] = ActionHelpers.createDrawable(context, repeatNoneDrawable, selectionColor);
         drawables[INDEX_ONE] = ActionHelpers.createDrawable(context, repeatOneDrawable, selectionColor);
-        drawables[INDEX_REVERSE] = ActionHelpers.createDrawable(context, repeatOneDrawable, selectionColor);
+        drawables[INDEX_REVERSE] = ActionHelpers.createDrawable(context, repeatReversedDrawable, selectionColor);
         drawables[INDEX_ALL] = ActionHelpers.createDrawable(context, repeatAllDrawable, selectionColor);
         drawables[INDEX_PAUSE] = ActionHelpers.createDrawable(context, repeatPauseDrawable, selectionColor);
         drawables[INDEX_LIST] = ActionHelpers.createDrawable(context, repeatListDrawable, selectionColor);
