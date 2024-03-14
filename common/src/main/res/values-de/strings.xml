@@ -507,8 +507,8 @@
     <string name="thumb_quality_start">Start des Videos</string>
     <string name="thumb_quality_middle">Mitte des Videos</string>
     <string name="thumb_quality_end">Ende des Videos</string>
-    <string name="content_block_status">Status von SponsorBlock prüfen</string>
-    <string name="dearrow_status">Status von DeArrow prüfen</string>
+    <string name="content_block_status">Server-Status von SponsorBlock prüfen</string>
+    <string name="dearrow_status">Server-Status von DeArrow prüfen</string>
     <string name="player_show_quality_info_bitrate">Bitrate zu den Qualitätsinfos hinzufügen</string>
     <string name="player_speed_button_old_behavior">Altes Verhalten der Geschwindigkeitstaste wiederherstellen</string>
     <string name="protect_settings_with_password">Alle Einstellungen mit einem Passwort schützen</string>
@@ -624,6 +624,7 @@
     <string name="hide_watched_from_notifications">Gesehene Videos in Benachrichtigungen ausblenden</string>
     <string name="hide_unwanted_content">Unerwünschte Inhalte ausblenden</string>
     <string name="hide_watched_from_home">Gesehene Videos in Start ausblenden</string>
+    <string name="hide_watched_from_watch_later">Gesehene Videos aus Wiedergabeliste Später ansehen ausblenden</string>
     <string name="remote_control_permission">Hintergrund-Fernsteuerung benötigt Overlay-Berechtigung</string>
     <string name="login_from_browser">Anmeldung über Browser</string>
     <string name="disable_remote_history">Verlauf bei Verwendung der Fernsteuerung deaktivieren</string>
@@ -649,4 +650,5 @@
     <string name="dearrow_not_submitted_thumbs">Quelle für nicht eingereichte Vorschaubilder</string>
     <string name="pitch_effect">Tonhöhen-Effekt</string>
     <string name="fullscreen_mode">Vollbildmodus (ohne Systemleisten)</string>
+    <string name="player_only_mode">Nur den Player anzeigen, wenn das Video außerhalb der App geöffnet wird</string>
 </resources>
