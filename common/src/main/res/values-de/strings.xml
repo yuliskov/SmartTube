@@ -624,7 +624,7 @@
     <string name="hide_watched_from_notifications">Gesehene Videos in Benachrichtigungen ausblenden</string>
     <string name="hide_unwanted_content">Unerwünschte Inhalte ausblenden</string>
     <string name="hide_watched_from_home">Gesehene Videos in Start ausblenden</string>
-    <string name="hide_watched_from_watch_later">Gesehene Videos aus Wiedergabeliste Später ansehen ausblenden</string>
+    <string name="hide_watched_from_watch_later">Gesehene Videos in Wiedergabeliste Später ansehen ausblenden</string>
     <string name="remote_control_permission">Hintergrund-Fernsteuerung benötigt Overlay-Berechtigung</string>
     <string name="login_from_browser">Anmeldung über Browser</string>
     <string name="disable_remote_history">Verlauf bei Verwendung der Fernsteuerung deaktivieren</string>
