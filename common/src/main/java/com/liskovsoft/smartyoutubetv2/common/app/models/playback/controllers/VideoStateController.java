@@ -619,11 +619,11 @@ public class VideoStateController extends PlayerEventListenerHelper implements M
     private void hideWatchedContent() {
         Video video = getVideo();
 
-        if (video == null || video.percentWatched < 95) {
+        if (video == null) {
             return;
         }
 
-        if (mGeneralData.isHideWatchedFromWatchLaterEnabled()) {
+        if (mGeneralData.isHideWatchedFromWatchLaterEnabled() && video.percentWatched > 95) {
             AppDialogUtil.removeFromWatchLaterPlaylist(getContext(), video);
         }
 
