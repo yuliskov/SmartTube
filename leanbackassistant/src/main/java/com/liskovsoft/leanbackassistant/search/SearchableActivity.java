@@ -36,6 +36,8 @@ public class SearchableActivity extends Activity {
                     Log.d(TAG, "Starting search intent: " + intent);
 
                     startActivity(intent);
+                } else {
+                    Log.e(TAG, "Cannot find video id inside the url: %s", uri);
                 }
             }
         }
