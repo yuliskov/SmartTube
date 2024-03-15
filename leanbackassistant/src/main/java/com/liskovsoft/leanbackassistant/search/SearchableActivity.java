@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import com.liskovsoft.leanbackassistant.utils.AppUtil;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
 import static androidx.core.content.IntentCompat.EXTRA_START_PLAYBACK;
@@ -23,7 +24,7 @@ public class SearchableActivity extends Activity {
             Uri uri = getIntent().getData();
 
             if (uri.getLastPathSegment() != null) {
-                int id = Integer.valueOf(uri.getLastPathSegment());
+                int id = Helpers.parseInt(uri.getLastPathSegment());
 
                 boolean startPlayback = getIntent().getBooleanExtra(EXTRA_START_PLAYBACK, false);
                 Log.d(TAG, "Should start playback? " + (startPlayback ? "yes" : "no"));
