@@ -126,16 +126,16 @@ public class ViewManager {
 
             Class<?> parentActivity = getTopActivity();
 
-            if (parentActivity == null && !mIsPlayerOnlyModeEnabled) {
+            if (parentActivity == null && !isPlayerOnlyModeEnabled()) {
                 parentActivity = getDefaultParent(activity);
             }
 
-            if (parentActivity == null || mIsPlayerOnlyModeEnabled) {
+            if (parentActivity == null || isPlayerOnlyModeEnabled()) {
                 Log.d(TAG, "Parent activity name doesn't stored in registry. Exiting to Home...");
 
                 mIsMoveToBackEnabled = true;
 
-                if (mIsPlayerOnlyModeEnabled) {
+                if (isPlayerOnlyModeEnabled()) {
                     safeMoveTaskToBack(activity);
                 }
             } else {
@@ -283,6 +283,10 @@ public class ViewManager {
         }
 
         mIsPlayerOnlyModeEnabled = enable;
+    }
+
+    public boolean isPlayerOnlyModeEnabled() {
+        return mIsPlayerOnlyModeEnabled && PlaybackPresenter.instance(mContext).getBackgroundMode() != PlayerEngine.BACKGROUND_MODE_PIP;
     }
 
     public void clearCaches() {
