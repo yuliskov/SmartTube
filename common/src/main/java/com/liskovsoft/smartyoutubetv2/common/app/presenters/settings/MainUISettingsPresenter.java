@@ -46,7 +46,6 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         if (Build.VERSION.SDK_INT > 19) {
             appendVideoGridScale(settingsPresenter);
         }
-        //appendContextMenuItemsCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
@@ -205,33 +204,15 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.video_grid_scale), options);
     }
 
-    //private void appendContextMenuItemsCategory(AppDialogPresenter settingsPresenter) {
-    //    List<OptionItem> options = new ArrayList<>();
-    //
-    //    for (int[] pair : new int[][] {
-    //            {R.string.not_interested, MainUIData.MENU_ITEM_NOT_INTERESTED},
-    //            {R.string.remove_from_history, MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY},
-    //            {R.string.add_remove_from_recent_playlist, MainUIData.MENU_ITEM_RECENT_PLAYLIST},
-    //            {R.string.pin_unpin_from_sidebar, MainUIData.MENU_ITEM_PIN_TO_SIDEBAR},
-    //            {R.string.add_remove_from_playback_queue, MainUIData.MENU_ITEM_ADD_TO_QUEUE},
-    //            {R.string.share_link, MainUIData.MENU_ITEM_SHARE_LINK},
-    //            {R.string.dialog_account_list, MainUIData.MENU_ITEM_SELECT_ACCOUNT},
-    //            {R.string.move_section_up, MainUIData.MENU_ITEM_MOVE_SECTION_UP},
-    //            {R.string.move_section_down, MainUIData.MENU_ITEM_MOVE_SECTION_DOWN}}) {
-    //        options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
-    //            if (optionItem.isSelected()) {
-    //                mMainUIData.enableMenuItem(pair[1]);
-    //            } else {
-    //                mMainUIData.disableMenuItem(pair[1]);
-    //            }
-    //        }, mMainUIData.isMenuItemEnabled(pair[1])));
-    //    }
-    //
-    //    settingsPresenter.appendCheckedCategory(getContext().getString(R.string.context_menu), options);
-    //}
-
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.pinned_channel_rows),
+                optionItem -> {
+                    mMainUIData.enablePinnedChannelRows(optionItem.isSelected());
+                    mRestartApp = true;
+                },
+                mMainUIData.isPinnedChannelRowsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.channels_filter),
                 optionItem -> mMainUIData.enableChannelsFilter(optionItem.isSelected()),

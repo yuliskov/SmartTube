@@ -627,7 +627,7 @@
     <string name="channel_filter_hint">Фільтрувати канали</string>
     <string name="player_loop_shorts">Зациклювати короткі відео</string>
     <string name="player_quick_shorts_skip">Перемикати короткі відео кнопками ліво/право</string>
-    <string name="channels_filter">Фільтрувати список каналів у розділі Канали</string>
+    <string name="channels_filter">Показати поле пошуку в розділі Канали</string>
     <string name="channel_search_bar">Панель пошуку на сторінці каналу</string>
     <string name="header_sports">Спорт</string>
     <string name="replace_titles">Замінити назви</string>
@@ -642,4 +642,5 @@
     <string name="pitch_effect">Ефект висоти тона</string>
     <string name="fullscreen_mode">Повноекранний режим (без системних панелей)</string>
     <string name="player_only_mode">Показувати лише плеєр, якщо відео відкрито поза застосунком</string>
+    <string name="pinned_channel_rows">Відображати закріплений канал у вигляді рядків</string>
 </resources>

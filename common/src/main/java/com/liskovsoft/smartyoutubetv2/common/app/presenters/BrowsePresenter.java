@@ -3,8 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-
 import com.liskovsoft.mediaserviceinterfaces.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
@@ -1064,15 +1062,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void createPinnedMapping(Video item) {
-        if (item.hasChannel() && !item.isPlaylistAsChannel()) {
+        if (enableRows(item)) {
             mRowMapping.put(item.hashCode(), createPinnedRowAction(item));
         } else {
             mGridMapping.put(item.hashCode(), createPinnedGridAction(item));
         }
     }
 
-    private static BrowseSection createPinnedSection(Video item) {
+    private BrowseSection createPinnedSection(Video item) {
         return new BrowseSection(
-                item.hashCode(), item.getTitle(), (item.hasChannel() && !item.isPlaylistAsChannel()) ? BrowseSection.TYPE_ROW : BrowseSection.TYPE_GRID, item.getCardImageUrl(), false, item);
+                item.hashCode(), item.getTitle(), enableRows(item) ? BrowseSection.TYPE_ROW : BrowseSection.TYPE_GRID, item.getCardImageUrl(), false, item);
+    }
+
+    private boolean enableRows(Video item) {
+        return mMainUIData.isPinnedChannelRowsEnabled() && item.hasChannel() && !item.isPlaylistAsChannel();
     }
 }

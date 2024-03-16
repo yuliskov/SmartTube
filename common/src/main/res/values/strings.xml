@@ -634,7 +634,7 @@
     <string name="channel_filter_hint">Filter channels</string>
     <string name="player_loop_shorts">Loop Shorts</string>
     <string name="player_quick_shorts_skip">Skip Shorts with left/right buttons</string>
-    <string name="channels_filter">Filter channels list inside the Channels section</string>
+    <string name="channels_filter">Show the search field inside Channels section</string>
     <string name="channel_search_bar">Search bar inside the Channel page</string>
     <string name="header_sports">Sports</string>
     <string name="keep_finished_activities">Keep finished activities</string>
@@ -651,4 +651,5 @@
     <string name="pitch_effect">Pitch effect</string>
     <string name="fullscreen_mode">Fullscreen mode (without system bars)</string>
     <string name="player_only_mode">Show only the player if the video is opened outside of the app</string>
+    <string name="pinned_channel_rows">Display pinned channel as rows</string>
 </resources>
