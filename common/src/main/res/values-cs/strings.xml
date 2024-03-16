@@ -507,8 +507,8 @@
     <string name="thumb_quality_start">Na začátku videa</string>
     <string name="thumb_quality_middle">Uprostřed videa</string>
     <string name="thumb_quality_end">Na konci videa</string>
-    <string name="content_block_status">Zkontrolovat stav SponsorBlocku</string>
-    <string name="dearrow_status">Zkontrolovat stav DeArrow</string>
+    <string name="content_block_status">Zkontrolovat stav SponsorBlock serveru</string>
+    <string name="dearrow_status">Zkontrolovat stav DeArrow serveru</string>
     <string name="player_show_quality_info_bitrate">Přidej bitrate do informací o kvalitě</string>
     <string name="player_speed_button_old_behavior">Vrátit původní chování tlačítka rychlosti</string>
     <string name="protect_settings_with_password">Chránit všechna nastavení heslem</string>
@@ -624,6 +624,7 @@
     <string name="hide_watched_from_notifications">Skrýt zhlédnutá videa v Oznámení</string>
     <string name="hide_unwanted_content">Skrýt nežádoucí obsah</string>
     <string name="hide_watched_from_home">Skrýt zhlédnutá videa ze sekce Domů</string>
+    <string name="hide_watched_from_watch_later">Skrýt zhlédnutá videa ze seznamu Přehrát později</string>
     <string name="remote_control_permission">Dálkové ovládání na pozadí vyžaduje oprávnění pro překrytí přes okna</string>
     <string name="login_from_browser">Přihlášení přes prohlížeč</string>
     <string name="disable_remote_history">Zazázat historii při používání dálkového ovládání</string>
@@ -633,7 +634,7 @@
     <string name="channel_filter_hint">Filtrovat kanály</string>
     <string name="player_loop_shorts">Opakovat Shorts</string>
     <string name="player_quick_shorts_skip">Přeskakovat Shorts tlačítky vlevo/vpravo</string>
-    <string name="channels_filter">Filtrovat seznam kanálů v sekci Kanály</string>
+    <string name="channels_filter">Zobrazit vyhledávací pole v sekci Kanály</string>
     <string name="channel_search_bar">Vyhledávací panel na stránce kanálu</string>
     <string name="header_sports">Sporty</string>
     <string name="keep_finished_activities">Udržovat dokončené aktivity</string>
@@ -649,4 +650,6 @@
     <string name="dearrow_not_submitted_thumbs">Odkud vzít nepřidané náhledy</string>
     <string name="pitch_effect">Efekt výšky tónu</string>
     <string name="fullscreen_mode">Režim celé obrazovky (bez systémových lišt)</string>
+    <string name="player_only_mode">Zobrazit pouze přehrávač, pokud je video otevřeno mimo aplikaci</string>
+    <string name="pinned_channel_rows">Zobrazit připnutý kanál jako řádky</string>
 </resources>
