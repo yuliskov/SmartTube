@@ -1047,7 +1047,9 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
     public boolean canScrollHorizontally() {
         // We can scroll horizontally if we have horizontal orientation, or if
         // we are vertical and have more than one column.
-        return mOrientation == HORIZONTAL || mNumRows > 1;
+        // MOD: fix gridview overscroll in touch mode
+        //return mOrientation == HORIZONTAL || mNumRows > 1;
+        return mOrientation == HORIZONTAL;
     }
 
     @Override
