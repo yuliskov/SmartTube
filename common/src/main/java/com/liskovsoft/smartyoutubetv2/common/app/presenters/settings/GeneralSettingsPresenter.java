@@ -107,6 +107,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendHideUnwantedContent(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_watched_from_watch_later),
+                option -> mGeneralData.hideWatchedFromWatchLater(option.isSelected()),
+                mGeneralData.isHideWatchedFromWatchLaterEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_watched_from_home),
                 option -> mGeneralData.hideWatchedFromHome(option.isSelected()),
                 mGeneralData.isHideWatchedFromHomeEnabled()));
@@ -502,6 +506,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_only_mode),
+                option -> mGeneralData.enablePlayerOnlyMode(option.isSelected()),
+                mGeneralData.isPlayerOnlyModeEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.multi_profiles),
                 option -> {
                     AppPrefs.instance(getContext()).enableMultiProfiles(option.isSelected());
@@ -573,6 +581,13 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.isOldChannelLookEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.fullscreen_mode),
+                option -> {
+                    mGeneralData.enableFullscreenMode(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.isFullscreenModeEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_subscriptions),
                 option -> mGeneralData.rememberSubscriptionsPosition(option.isSelected()),
                 mGeneralData.isRememberSubscriptionsPositionEnabled()));
@@ -580,10 +595,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_screensaver),
                 option -> mGeneralData.disableScreensaver(option.isSelected()),
                 mGeneralData.isScreensaverDisabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.return_to_launcher),
-                option -> mGeneralData.enableReturnToLauncher(option.isSelected()),
-                mGeneralData.isReturnToLauncherEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.select_channel_section),
                 option -> mGeneralData.enableSelectChannelSection(option.isSelected()),

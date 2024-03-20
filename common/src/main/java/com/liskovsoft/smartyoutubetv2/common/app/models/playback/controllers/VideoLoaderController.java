@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.HubService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -428,7 +429,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
     private void applyErrorAction(Throwable error) {
         if (error instanceof OutOfMemoryError) {
-            mPlayerData.setVideoBufferType(PlayerEngine.BUFFER_LOW);
+            mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
+        } else if (Helpers.startsWithAny(error.getMessage(), "Unable to connect to ", "Invalid NAL length")) {
+            mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
         }
     }
 
@@ -523,7 +526,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             return false;
         }
 
-        if (formatInfo.isLive() && mPlayerTweaksData.isDashUrlStreamsForced()) {
+        // Live dash url doesn't work with None buffer
+        if (formatInfo.isLive() && (mPlayerTweaksData.isDashUrlStreamsForced() || mPlayerData.getVideoBufferType() == PlayerData.BUFFER_NONE)) {
             return false;
         }
 

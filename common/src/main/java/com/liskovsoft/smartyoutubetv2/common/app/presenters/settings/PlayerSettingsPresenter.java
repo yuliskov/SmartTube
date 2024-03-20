@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -253,7 +254,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isTextureViewEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.unlock_high_bitrate_formats),
+        options.add(UiOptionItem.from(getContext().getString(R.string.unlock_high_bitrate_formats) + " " + TrackSelectorUtil.HIGH_BITRATE_MARK,
                 option -> mPlayerTweaksData.unlockHighBitrateFormats(option.isSelected()),
                 mPlayerTweaksData.isHighBitrateFormatsUnlocked()));
 
@@ -270,7 +271,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.live_stream_fix_desc),
                 option -> {
                     mPlayerTweaksData.forceHlsStreams(option.isSelected());
-                    mPlayerTweaksData.forceDashUrlStreams(false);
                 },
                 mPlayerTweaksData.isHlsStreamsForced()));
 
@@ -278,7 +278,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.live_stream_fix_4k_desc),
                 option -> {
                     mPlayerTweaksData.forceDashUrlStreams(option.isSelected());
-                    mPlayerTweaksData.forceHlsStreams(false);
                 },
                 mPlayerTweaksData.isDashUrlStreamsForced()));
 

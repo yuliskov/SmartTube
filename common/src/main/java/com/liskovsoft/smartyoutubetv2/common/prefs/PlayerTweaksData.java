@@ -211,6 +211,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
 
     public void forceHlsStreams(boolean enable) {
         mIsHlsStreamsForced = enable;
+        mIsDashUrlStreamsForced = false;
         persistData();
     }
 
@@ -220,6 +221,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
 
     public void forceDashUrlStreams(boolean enable) {
         mIsDashUrlStreamsForced = enable;
+        mIsHlsStreamsForced = false;
         persistData();
     }
 
@@ -571,9 +573,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsSpeedButtonOldBehaviorEnabled = Helpers.parseBoolean(split, 23, false);
         mIsButtonLongClickEnabled = Helpers.parseBoolean(split, 24, true);
         mIsLongSpeedListEnabled = Helpers.parseBoolean(split, 25, true);
-        // Android 6 and below may crash running Cronet???
-        mPlayerDataSource = Helpers.parseInt(split, 26, VERSION.SDK_INT > 23 && !Helpers.equals(BuildConfig.FLAVOR, "strtarmenia") ?
-                PLAYER_DATA_SOURCE_CRONET : PLAYER_DATA_SOURCE_DEFAULT);
+        // PlayerDataSource was here
         mUnlockAllFormats = Helpers.parseBoolean(split, 27, false);
         mIsDashUrlStreamsForced = Helpers.parseBoolean(split, 28, false);
         mIsSonyFrameDropFixEnabled = Helpers.parseBoolean(split, 29, false);
@@ -596,6 +596,11 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsQuickShortsSkipEnabled = Helpers.parseBoolean(split, 45, true);
         mIsRememberPositionOfLiveVideosEnabled = Helpers.parseBoolean(split, 46, false);
         mIsOculusQuestFixEnabled = Helpers.parseBoolean(split, 47, Utils.isOculusQuest());
+        // Android 6 and below may crash running Cronet???
+        //mPlayerDataSource = Helpers.parseInt(split, 26, VERSION.SDK_INT > 23 && !Helpers.equals(BuildConfig.FLAVOR, "strtarmenia") ?
+        //        PLAYER_DATA_SOURCE_CRONET : PLAYER_DATA_SOURCE_DEFAULT);
+        // Cronet is buffering too, unfortunately, so leave the default as a safest method (e.g. for "strtarmenia")
+        mPlayerDataSource = Helpers.parseInt(split, 48, PLAYER_DATA_SOURCE_DEFAULT);
 
         updateDefaultValues();
     }
@@ -608,12 +613,12 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
                 null, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
                 mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio, mIsQualityInfoBitrateEnabled,
-                mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
+                mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, null, mUnlockAllFormats,
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
                 mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked, mIsLoopShortsEnabled, mIsQuickShortsSkipEnabled, mIsRememberPositionOfLiveVideosEnabled,
-                mIsOculusQuestFixEnabled
+                mIsOculusQuestFixEnabled, mPlayerDataSource
                 ));
     }
 

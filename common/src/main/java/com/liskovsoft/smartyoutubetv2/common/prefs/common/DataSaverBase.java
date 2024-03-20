@@ -21,18 +21,32 @@ public abstract class DataSaverBase extends DataChangeBase {
         restoreState();
     }
 
-    protected void setBoolean(int index, Boolean value) {
+    protected void setBoolean(int index, boolean value) {
         checkCapacity(index);
         mValues.set(index, Helpers.toString(value));
         persistState();
     }
 
-    protected Boolean getBoolean(int index, Boolean defaultValue) {
-        if (index >= mValues.size()) {
+    protected boolean getBoolean(int index, boolean defaultValue) {
+        if (index >= mValues.size() || mValues.get(index) == null) {
             return defaultValue;
         }
 
         return Helpers.parseBoolean(mValues.get(index));
+    }
+
+    protected void setInt(int index, int value) {
+        checkCapacity(index);
+        mValues.set(index, Helpers.toString((Integer) value));
+        persistState();
+    }
+
+    protected int getInt(int index, int defaultValue) {
+        if (index >= mValues.size() || mValues.get(index) == null) {
+            return defaultValue;
+        }
+
+        return Helpers.parseInt(mValues.get(index));
     }
 
     private void checkCapacity(int index) {

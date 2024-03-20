@@ -482,7 +482,7 @@
   <string name="thumb_quality_start">Inicio del vídeo</string>
   <string name="thumb_quality_middle">Mitad del vídeo</string>
   <string name="thumb_quality_end">Final del vídeo</string>
-  <string name="content_block_status">Comprobar estatus de SponsorBlock</string>
+  <string name="content_block_status">Comprobar el estado de SponsorBlock</string>
   <string name="player_show_quality_info_bitrate">Añadir tasa de bits a la información de calidad</string>
   <string name="player_speed_button_old_behavior">Revertir comportamiento del bóton speed</string>
   <string name="protect_settings_with_password">Proteger configuración con contraseña</string>
@@ -540,7 +540,7 @@
   <string name="sony_frame_drop_fix">Corrección de caída de fotogramas #1</string>
   <string name="sony_frame_drop_fix_desc">Soluciona los retrasos en Sony TV y algunos otros dispositivos. Nota: posibles problemas con la sincronización de audio.</string>
   <string name="audio_language">Idioma de audio</string>
-  <string name="old_home_look">El aspecto antiguo de la sección Inicio</string>
+  <string name="old_home_look">Aspecto antiguo de la sección Inicio</string>
   <string name="hide_shorts_everywhere">Ocultar Shorts en todas partes</string>
   <string name="update_found">Actualizar</string>
   <string name="volume_boost_warning">Cualquier ajuste por encima del límite puede dañar los altavoces</string>
@@ -641,4 +641,10 @@
   <string name="keep_finished_activities">Guardar las actividades terminadas</string>
   <string name="disable_channels_service">Desactivar el servicio Canales</string>
   <string name="pitch_effect">Efecto de tono</string>
+  <string name="fullscreen_mode">Modo pantalla completa (sin barras del sistema)</string>
+  <string name="player_exit_shortcut">Salir del reproductor</string>
+  <string name="action_sound_off">Apagar sonido</string>
+  <string name="dearrow_status">Comprobar el estado de DeArrow </string>
+  <string name="old_channel_look">Aspecto antiguo de la página Canal</string>
+  <string name="player_only_mode">Mostrar sólo el reproductor si el vídeo se abre fuera de la aplicación</string>
 </resources>

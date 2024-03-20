@@ -98,6 +98,7 @@ public class MainUIData extends DataChangeBase {
     private List<Long> mMenuItemsOrdered;
     private boolean mIsChannelsFilterEnabled;
     private boolean mIsChannelSearchBarEnabled;
+    private boolean mIsPinnedChannelRowsEnabled;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -236,6 +237,15 @@ public class MainUIData extends DataChangeBase {
 
     public boolean isChannelsFilterEnabled() {
         return mIsChannelsFilterEnabled;
+    }
+
+    public void enablePinnedChannelRows(boolean enable) {
+        mIsPinnedChannelRowsEnabled = enable;
+        persistState();
+    }
+
+    public boolean isPinnedChannelRowsEnabled() {
+        return mIsPinnedChannelRowsEnabled;
     }
 
     public void enableChannelSearchBar(boolean enable) {
@@ -389,6 +399,7 @@ public class MainUIData extends DataChangeBase {
         mMenuItemsOrdered = Helpers.parseLongList(split, 17);
         mIsChannelsFilterEnabled = Helpers.parseBoolean(split, 18, true);
         mIsChannelSearchBarEnabled = Helpers.parseBoolean(split, 19, true);
+        mIsPinnedChannelRowsEnabled = Helpers.parseBoolean(split, 20, true);
 
         for (Long menuItem : MENU_ITEM_DEFAULT_ORDER) {
             if (!mMenuItemsOrdered.contains(menuItem)) {
@@ -407,7 +418,7 @@ public class MainUIData extends DataChangeBase {
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
                 mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,
                 null, mThumbQuality, mIsCardMultilineSubtitleEnabled, Helpers.mergeList(mMenuItemsOrdered),
-                mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled));
+                mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled, mIsPinnedChannelRowsEnabled));
 
         super.persistState();
     }

@@ -44,7 +44,7 @@ public class GeneralData implements ProfileChangeListener {
     private int mBootSectionId;
     private int mAppExitShortcut;
     private int mPlayerExitShortcut;
-    private boolean mIsReturnToLauncherEnabled;
+    private boolean mIsPlayerOnlyModeEnabled;
     private int mBackgroundShortcut;
     private boolean mIsHideShortsFromSubscriptionsEnabled;
     private boolean mIsHideUpcomingEnabled;
@@ -91,12 +91,14 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsRemapDpadUpToVolumeEnabled;
     private boolean mIsRemapDpadLeftToVolumeEnabled;
     private boolean mIsHideWatchedFromNotificationsEnabled;
+    private boolean mIsHideWatchedFromWatchLaterEnabled;
     private Video mSelectedSubscriptionsItem;
     private List<String> mChangelog;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Map<String, Integer> mPlaylistOrder = new HashMap<>();
     private final List<Video> mPendingStreams = new CopyOnWriteArrayList<>();
     private final List<Video> mPinnedItems = new CopyOnWriteHashList<>();
+    private boolean mIsFullscreenModeEnabled;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -307,13 +309,13 @@ public class GeneralData implements ProfileChangeListener {
         persistState();
     }
 
-    public void enableReturnToLauncher(boolean enable) {
-        mIsReturnToLauncherEnabled = enable;
+    public void enablePlayerOnlyMode(boolean enable) {
+        mIsPlayerOnlyModeEnabled = enable;
         persistState();
     }
 
-    public boolean isReturnToLauncherEnabled() {
-        return mIsReturnToLauncherEnabled;
+    public boolean isPlayerOnlyModeEnabled() {
+        return mIsPlayerOnlyModeEnabled;
     }
 
     public int getBackgroundPlaybackShortcut() {
@@ -378,6 +380,15 @@ public class GeneralData implements ProfileChangeListener {
 
     public boolean isHideWatchedFromNotificationsEnabled() {
         return mIsHideWatchedFromNotificationsEnabled;
+    }
+
+    public void hideWatchedFromWatchLater(boolean enable) {
+        mIsHideWatchedFromWatchLaterEnabled = enable;
+        persistState();
+    }
+
+    public boolean isHideWatchedFromWatchLaterEnabled() {
+        return mIsHideWatchedFromWatchLaterEnabled;
     }
 
     public boolean isHideStreamsFromSubscriptionsEnabled() {
@@ -876,6 +887,15 @@ public class GeneralData implements ProfileChangeListener {
         return mIsOldUpdateNotificationsEnabled;
     }
 
+    public void enableFullscreenMode(boolean enable) {
+        mIsFullscreenModeEnabled = enable;
+        persistState();
+    }
+
+    public boolean isFullscreenModeEnabled() {
+        return mIsFullscreenModeEnabled;
+    }
+
     public void setSelectedSubscriptionsItem(Video item) {
         mSelectedSubscriptionsItem = item;
         persistState();
@@ -931,7 +951,7 @@ public class GeneralData implements ProfileChangeListener {
         mBootSectionId = Helpers.parseInt(split, 1, MediaGroup.TYPE_HOME);
         mIsSettingsSectionEnabled = Helpers.parseBoolean(split, 2, true);
         mAppExitShortcut = Helpers.parseInt(split, 3, EXIT_DOUBLE_BACK);
-        mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 4, false);
+        mIsPlayerOnlyModeEnabled = Helpers.parseBoolean(split, 4, true);
         mBackgroundShortcut = Helpers.parseInt(split, 5, BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
         String pinnedItems = Helpers.parseStr(split, 6);
         mIsHideShortsFromSubscriptionsEnabled = Helpers.parseBoolean(split, 7, false);
@@ -989,6 +1009,8 @@ public class GeneralData implements ProfileChangeListener {
         mPlayerExitShortcut = Helpers.parseInt(split, 58, EXIT_SINGLE_BACK);
         // StackOverflow on old devices?
         mIsOldChannelLookEnabled = Helpers.parseBoolean(split, 59, Build.VERSION.SDK_INT <= 19);
+        mIsFullscreenModeEnabled = Helpers.parseBoolean(split, 60, !Helpers.isTouchSupported(mContext));
+        mIsHideWatchedFromWatchLaterEnabled = Helpers.parseBoolean(split, 61, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -1038,8 +1060,7 @@ public class GeneralData implements ProfileChangeListener {
         }
         String playlistOrder = Helpers.mergeList(playlistOrderPairs);
         // Zero index is skipped. Selected sections were there.
-        mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
-                mIsReturnToLauncherEnabled, mBackgroundShortcut, Helpers.mergeList(mPinnedItems), mIsHideShortsFromSubscriptionsEnabled,
+        mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut, mIsPlayerOnlyModeEnabled, mBackgroundShortcut, Helpers.mergeList(mPinnedItems), mIsHideShortsFromSubscriptionsEnabled,
                 mIsRemapFastForwardToNextEnabled, null,
                 mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
@@ -1052,7 +1073,7 @@ public class GeneralData implements ProfileChangeListener {
                 mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem),
                 mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled, mIsRemapDpadUpToVolumeEnabled,
                 mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled, Helpers.mergeList(mChangelog), mPlayerExitShortcut,
-                mIsOldChannelLookEnabled));
+                mIsOldChannelLookEnabled, mIsFullscreenModeEnabled, mIsHideWatchedFromWatchLaterEnabled));
     }
 
     private int getSectionId(Video item) {

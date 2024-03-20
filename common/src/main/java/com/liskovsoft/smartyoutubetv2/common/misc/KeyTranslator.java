@@ -92,7 +92,8 @@ public abstract class KeyTranslator {
 
         mIsChecked = (event.getKeyCode() != KeyEvent.KEYCODE_DPAD_UP && event.getKeyCode() != KeyEvent.KEYCODE_DPAD_DOWN &&
                 event.getKeyCode() != KeyEvent.KEYCODE_DPAD_LEFT && event.getKeyCode() != KeyEvent.KEYCODE_DPAD_RIGHT) ||
-                (!PlaybackPresenter.instance(null).isOverlayShown() &&
+                (PlaybackPresenter.instance(null).isPlaying() &&
+                        !PlaybackPresenter.instance(null).isOverlayShown() &&
                         !AppDialogPresenter.instance(null).isDialogShown());
 
         return mIsChecked;

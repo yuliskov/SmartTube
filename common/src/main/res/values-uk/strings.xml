@@ -499,8 +499,8 @@
     <string name="thumb_quality_start">Початок відео</string>
     <string name="thumb_quality_middle">Середина відео</string>
     <string name="thumb_quality_end">Кінець відео</string>
-    <string name="content_block_status">Перевірити стан SponsorBlock</string>
-    <string name="dearrow_status">Перевірити стан DeArrow</string>
+    <string name="content_block_status">Перевірити стан серверу SponsorBlock</string>
+    <string name="dearrow_status">Перевірити стан серверу DeArrow</string>
     <string name="player_show_quality_info_bitrate">Додавати бітрейт до інформації о якості відео</string>
     <string name="player_speed_button_old_behavior">Повернути стару поведінку кнопки швидкість</string>
     <string name="protect_settings_with_password">Захистити усі налаштування паролем</string>
@@ -617,6 +617,7 @@
     <string name="hide_watched_from_notifications">Приховати переглянуті відео з Повідомлень</string>
     <string name="hide_unwanted_content">Приховати небажаний вміст</string>
     <string name="hide_watched_from_home">Приховати переглянуті відео з Головного розділу</string>
+    <string name="hide_watched_from_watch_later">Приховати переглянуті відео зі списку Переглянути пізніше</string>
     <string name="remote_control_permission">Фонове Дистанційне керування вимагає дозволу на Перекривання інших вікон</string>
     <string name="login_from_browser">Увійти з браузера</string>
     <string name="disable_remote_history">Вимкнути історію під час дистанційного керування</string>
@@ -626,7 +627,7 @@
     <string name="channel_filter_hint">Фільтрувати канали</string>
     <string name="player_loop_shorts">Зациклювати короткі відео</string>
     <string name="player_quick_shorts_skip">Перемикати короткі відео кнопками ліво/право</string>
-    <string name="channels_filter">Фільтрувати список каналів у розділі Канали</string>
+    <string name="channels_filter">Показати поле пошуку в розділі Канали</string>
     <string name="channel_search_bar">Панель пошуку на сторінці каналу</string>
     <string name="header_sports">Спорт</string>
     <string name="replace_titles">Замінити назви</string>
@@ -639,4 +640,7 @@
     <string name="crowdsoursed_titles">Краудсорсингові назви</string>
     <string name="dearrow_not_submitted_thumbs">Звідки брати не надіслані мініатюри</string>
     <string name="pitch_effect">Ефект висоти тона</string>
+    <string name="fullscreen_mode">Повноекранний режим (без системних панелей)</string>
+    <string name="player_only_mode">Показувати лише плеєр, якщо відео відкрито поза застосунком</string>
+    <string name="pinned_channel_rows">Відображати закріплений канал у вигляді рядків</string>
 </resources>

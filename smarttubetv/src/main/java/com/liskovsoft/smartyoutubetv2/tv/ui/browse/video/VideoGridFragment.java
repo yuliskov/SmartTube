@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
@@ -31,7 +32,7 @@ import java.util.List;
 
 public class VideoGridFragment extends GridFragment implements VideoSection {
     private static final String TAG = VideoGridFragment.class.getSimpleName();
-    private static final int RESTORE_MAX_SIZE = 5_000;
+    private static final int RESTORE_MAX_SIZE = 10_000;
     private VideoGroupObjectAdapter mGridAdapter;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
@@ -169,10 +170,13 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
     }
 
     private void restorePosition() {
+        LoadingManager.showLoading(getContext(), true); // Restore task takes some time
+
         setPosition(mSelectedItemIndex);
         selectItem(mSelectedItem);
 
         if ((mSelectedItemIndex == -1 && mSelectedItem == null) || mGridAdapter == null || mGridAdapter.size() > RESTORE_MAX_SIZE) {
+            LoadingManager.showLoading(getContext(), false);
             return;
         }
 

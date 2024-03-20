@@ -44,6 +44,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private Disposable mLoadAction;
     private String mSearchText;
     private boolean mIsVoice;
+    private boolean mStartPlay;
     private int mUploadDateOptions;
     private int mDurationOptions;
     private int mTypeOptions;
@@ -193,6 +194,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                             Log.d(TAG, "Receiving results for '%s'", searchText);
                             for (MediaGroup mediaGroup : mediaGroups) {
                                 VideoGroup group = VideoGroup.from(mediaGroup);
+                                startPlayFirstVideo(group);
                                 getView().updateSearch(group);
                                 mDeArrowProcessor.process(group);
                             }
@@ -210,7 +212,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                         }
                 );
     }
-    
+
     private void continueGroup(VideoGroup group) {
         if (RxHelper.isAnyActionRunning(mScrollAction)) {
             return;
@@ -269,16 +271,21 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
 
     public void startVoice() {
-        startSearch(null, true);
+        startSearch(null, true, false);
     }
 
     public void startSearch(String searchText) {
-        startSearch(searchText, false);
+        startSearch(searchText, false, false);
     }
 
-    public void startSearch(String searchText, boolean isVoice) {
+    public void startPlay(String searchText) {
+        startSearch(searchText, false, true);
+    }
+
+    private void startSearch(String searchText, boolean isVoice, boolean startPlay) {
         mSearchText = searchText;
         mIsVoice = isVoice;
+        mStartPlay = startPlay;
 
         mViewManager.startView(SearchView.class);
         startSearchInt();
@@ -446,6 +453,21 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     public void forceFinish() {
         if (getView() != null) {
             getView().finishReally();
+        }
+    }
+
+    private void startPlayFirstVideo(VideoGroup group) {
+        if (!mStartPlay || group == null || group.isEmpty()) {
+            return;
+        }
+
+        mStartPlay = false;
+
+        for (Video video : group.getVideos()) {
+            if (video.videoId != null) {
+                PlaybackPresenter.instance(getContext()).openVideo(video);
+                break;
+            }
         }
     }
 }

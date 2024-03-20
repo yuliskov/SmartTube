@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager.BadTokenException;
 import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
@@ -44,7 +45,13 @@ public class SimpleEditDialog {
         if (onDismiss != null) {
             configDialog.setOnDismissListener(dialog -> onDismiss.run());
         }
-        configDialog.show();
+
+        try {
+            configDialog.show();
+        } catch (BadTokenException e) {
+            // Unable to add window -- token null is not for an application
+            e.printStackTrace();
+        }
 
         configDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((view) -> {
             String newValue = editField.getText().toString();

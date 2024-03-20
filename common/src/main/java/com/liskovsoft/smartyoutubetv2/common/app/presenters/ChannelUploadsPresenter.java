@@ -156,7 +156,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         }
     }
 
-    public Observable<MediaGroup> obtainPlaylistObservable(Video item) {
+    public Observable<MediaGroup> obtainUploadsObservable(Video item) {
         if (item == null) {
             return null;
         }
@@ -176,7 +176,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     private void updateGrid(Video item) {
-        updateVideoGrid(obtainPlaylistObservable(item));
+        updateVideoGrid(obtainUploadsObservable(item));
     }
 
     private void disposeActions() {
@@ -258,12 +258,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
             disposeActions();
             mVideoItem = null;
             mRootGroup = mediaGroup;
-            ViewManager.instance(getContext()).startView(ChannelUploadsView.class);
             return;
-        }
-
-        if (ViewManager.instance(getContext()).getTopView() != ChannelUploadsView.class) {
-            ViewManager.instance(getContext()).startView(ChannelUploadsView.class);
         }
 
         VideoGroup group = VideoGroup.from(mediaGroup);

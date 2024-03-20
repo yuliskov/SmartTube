@@ -2,12 +2,14 @@ package com.liskovsoft.leanbackassistant.channels;
 
 import android.content.Context;
 import android.os.Build.VERSION;
+
 import androidx.annotation.NonNull;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 
@@ -26,7 +28,7 @@ public class SynchronizeDatabaseWorker extends Worker {
     private static final String TAG = SynchronizeDatabaseWorker.class.getSimpleName();
     private static final String WORK_NAME = "Update channels";
     private final UpdateChannelsTask mTask;
-    private static boolean sDone;
+    private static long mPreviousRunTimeMS;
 
     public SynchronizeDatabaseWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -35,15 +37,13 @@ public class SynchronizeDatabaseWorker extends Worker {
     }
 
     public static void schedule(Context context) {
-        if (VERSION.SDK_INT >= 23 && GlobalPreferences.instance(context).isChannelsServiceEnabled() && !sDone) {
-            sDone = true;
-
+        if (VERSION.SDK_INT >= 23 && GlobalPreferences.instance(context).isChannelsServiceEnabled()) {
             WorkManager workManager = WorkManager.getInstance(context);
 
             // https://stackoverflow.com/questions/50943056/avoiding-duplicating-periodicworkrequest-from-workmanager
             workManager.enqueueUniquePeriodicWork(
                     WORK_NAME,
-                    ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+                    ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (when old worker is running)
                     new PeriodicWorkRequest.Builder(SynchronizeDatabaseWorker.class, 20, TimeUnit.MINUTES).addTag(WORK_NAME).build()
             );
         }
@@ -61,6 +61,8 @@ public class SynchronizeDatabaseWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        Log.d(TAG, "Starting worker %s...", this);
+
         mTask.run();
 
         return Result.success();

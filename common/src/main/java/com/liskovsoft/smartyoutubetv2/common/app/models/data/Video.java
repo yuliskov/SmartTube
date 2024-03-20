@@ -434,12 +434,12 @@ public final class Video {
         return mediaItem != null && mediaItem.hasUploads();
     }
 
-    public boolean isChannel() {
-        return videoId == null && channelId != null;
-    }
-
     public boolean hasPlaylistIndex() {
         return playlistIndex > 0;
+    }
+
+    public boolean isChannel() {
+        return videoId == null && channelId != null;
     }
 
     /**
@@ -548,6 +548,10 @@ public final class Video {
 
     public boolean belongsToShorts() {
         return belongsToGroup(MediaGroup.TYPE_SHORTS);
+    }
+
+    public boolean belongsToSearch() {
+        return belongsToGroup(MediaGroup.TYPE_SEARCH);
     }
 
     public boolean belongsToNotifications() {

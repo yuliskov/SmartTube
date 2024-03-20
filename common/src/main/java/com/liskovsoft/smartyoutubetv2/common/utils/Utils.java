@@ -62,7 +62,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresen
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.WebBrowserPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
@@ -156,7 +159,8 @@ public class Utils {
         //intent.setClass(context, ViewManager.instance(context).getActivity(SplashView.class));
         PackageManager packageManager = context.getPackageManager();
         if (intent.resolveActivity(packageManager) != null) {
-            context.startActivity(intent);
+            SplashPresenter.instance(context).applyNewIntent(intent);
+            //context.startActivity(intent);
         } else {
             // Fallback to the chooser dialog
             showMultiChooser(context, url);
@@ -286,7 +290,12 @@ public class Utils {
                 if (normalize) {
                     streamMaxVolume /= 2; // max volume is too loud
                 }
-                audioManager.setStreamVolume(GLOBAL_VOLUME_TYPE, (int) Math.ceil(streamMaxVolume / 100f * volume), 0);
+                try {
+                    audioManager.setStreamVolume(GLOBAL_VOLUME_TYPE, (int) Math.ceil(streamMaxVolume / 100f * volume), 0);
+                } catch (SecurityException e) {
+                    // Not allowed to change Do Not Disturb state
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -607,12 +616,14 @@ public class Utils {
             if (type == MediaGroup.TYPE_CHANNEL_UPLOADS) {
                 if (atomicIndex.incrementAndGet() == 1) {
                     ChannelUploadsPresenter.instance(context).clear();
+                    ViewManager.instance(context).startView(ChannelUploadsView.class);
                 }
                 ChannelUploadsPresenter.instance(context).updateGrid(group.get(0));
             } else if (type == MediaGroup.TYPE_CHANNEL) {
                 if (atomicIndex.incrementAndGet() == 1) {
                     ChannelPresenter.instance(context).clear();
                     ChannelPresenter.instance(context).setChannel(item);
+                    ViewManager.instance(context).startView(ChannelView.class);
                 }
                 ChannelPresenter.instance(context).updateRows(group);
             } else {

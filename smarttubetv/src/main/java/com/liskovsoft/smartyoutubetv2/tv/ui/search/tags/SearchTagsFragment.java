@@ -275,7 +275,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         }
     }
 
-    public void update(VideoGroup group) {
+    private void update(VideoGroup group) {
         int action = group.getAction();
 
         if (action == VideoGroup.ACTION_REPLACE) {

@@ -31,6 +31,7 @@ import java.util.List;
  */
 /* package */ final class WebvttSubtitle implements Subtitle {
 
+  private static final long MAX_CUE_LENGTH_US = 10_000_000; // NOTE: lower values may broke some videos
   private final List<WebvttCue> cues;
   private final int numCues;
   private final long[] cueTimesUs;
@@ -52,7 +53,7 @@ import java.util.List;
       cueTimesUs[arrayIndex] = startTime;
       // MOD: fix long lasting subs
       //cueTimesUs[arrayIndex + 1] = cue.endTime;
-      cueTimesUs[arrayIndex + 1] = length <= 5_000_000 ? endTime : startTime + 5_000_000;
+      cueTimesUs[arrayIndex + 1] = length <= MAX_CUE_LENGTH_US ? endTime : startTime + MAX_CUE_LENGTH_US;
     }
     sortedCueTimesUs = Arrays.copyOf(cueTimesUs, cueTimesUs.length);
     Arrays.sort(sortedCueTimesUs);

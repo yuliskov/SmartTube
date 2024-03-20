@@ -10,6 +10,7 @@ public class TrackInfoFormatter2 {
     private String mHdrStr;
     private String mSpeedStr;
     private String mChannelsStr;
+    private String mHighBitrateStr;
     private boolean mEnableBitrate;
 
     public void setFormat(Format format) {
@@ -39,6 +40,8 @@ public class TrackInfoFormatter2 {
         }
 
         mHdrStr = TrackSelectorUtil.buildHDRString(format);
+
+        mHighBitrateStr = TrackSelectorUtil.buildHighBitrateMark(format);
     }
 
     public void setAudioFormat(Format format) {
@@ -54,7 +57,7 @@ public class TrackInfoFormatter2 {
     }
 
     public String getQualityLabel() {
-        return combine(mResolutionStr, mFpsStr, mCodecStr, mBitrateStr, mHdrStr, mChannelsStr, mSpeedStr);
+        return combine(mResolutionStr, mFpsStr, mCodecStr, mBitrateStr, mHdrStr, mChannelsStr, mSpeedStr, mHighBitrateStr);
     }
 
     private static String combine(String... items) {

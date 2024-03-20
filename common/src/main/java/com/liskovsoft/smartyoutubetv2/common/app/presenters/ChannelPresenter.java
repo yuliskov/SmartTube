@@ -210,8 +210,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         getView().showProgressBar(true);
 
-        Observable<List<MediaGroup>> channelObserve = GeneralData.instance(getContext()).isOldChannelLookEnabled() ?
-                mHubService.getContentService().getChannelV1Observe(channelId) :  mHubService.getContentService().getChannelObserve(channelId);
+        Observable<List<MediaGroup>> channelObserve = obtainChannelObservable(channelId);
 
         mUpdateAction = channelObserve
                 .subscribe(
@@ -223,17 +222,21 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                  );
     }
 
+    public Observable<List<MediaGroup>> obtainChannelObservable(String channelId) {
+        return GeneralData.instance(getContext()).isOldChannelLookEnabled() ?
+                mHubService.getContentService().getChannelV1Observe(channelId) :  mHubService.getContentService().getChannelObserve(channelId);
+    }
+
     public void updateRows(List<MediaGroup> mediaGroups) {
         if (getView() == null) { // starting from outside (e.g. MediaServiceManager)
             disposeActions();
             mChannelId = null;
             mPendingGroups.add(mediaGroups);
-            ViewManager.instance(getContext()).startView(ChannelView.class);
             return;
         }
 
-        if (ViewManager.instance(getContext()).getTopView() != ChannelView.class) {
-            ViewManager.instance(getContext()).startView(ChannelView.class);
+        if (GeneralData.instance(getContext()).isOldChannelLookEnabled()) {
+            moveToTopIfNeeded(mediaGroups);
         }
 
         for (MediaGroup mediaGroup : mediaGroups) {
@@ -292,6 +295,16 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                         },
                         () -> getView().showProgressBar(false)
                 );
+    }
+
+    /**
+     * Sort channel content: move Uploads on top.
+     */
+    private void moveToTopIfNeeded(List<MediaGroup> mediaGroups) {
+        moveToTop(mediaGroups, R.string.playlists_row_name);
+        moveToTop(mediaGroups, R.string.popular_uploads_row_name);
+        moveToTop(mediaGroups, R.string.uploads_row_name);
+        moveToTop(mediaGroups, R.string.live_now_row_name);
     }
 
     private void moveToTop(List<MediaGroup> mediaGroups, int rowNameResId) {

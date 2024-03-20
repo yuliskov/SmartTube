@@ -20,7 +20,6 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.UUID;
@@ -100,7 +99,7 @@ public class ExoPlayerInitializer {
         int bufferForPlaybackAfterRebufferMs = 5_000;
 
         switch (mPlayerData.getVideoBufferType()) {
-            case PlayerEngine.BUFFER_HIGH:
+            case PlayerData.BUFFER_HIGH:
                 minBufferMs = 50_000;
                 maxBufferMs = 100_000;
                 // Infinite buffer works awfully on live streams. Constant stuttering.
@@ -109,16 +108,16 @@ public class ExoPlayerInitializer {
                         .setTargetBufferBytes(mMaxBufferBytes);
                 baseBuilder.setBackBuffer(minBufferMs, true);
                 break;
-            case PlayerEngine.BUFFER_MEDIUM:
+            case PlayerData.BUFFER_MEDIUM:
                 minBufferMs = 50_000;
                 maxBufferMs = 50_000;
                 baseBuilder.setBackBuffer(minBufferMs, true);
                 break;
-            case PlayerEngine.BUFFER_LOW:
+            case PlayerData.BUFFER_LOW:
                 minBufferMs = 30_000;
                 maxBufferMs = 30_000;
                 break;
-            case PlayerEngine.BUFFER_NONE:
+            case PlayerData.BUFFER_NONE:
                 minBufferMs = 1_000;
                 maxBufferMs = 1_000;
                 bufferForPlaybackMs = 1_000;

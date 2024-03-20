@@ -77,9 +77,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         //mCurrentGroup = video.getGroup(); // disable garbage collected
         appendNextSectionVideoIfNeeded(video);
         appendPreviousSectionVideoIfNeeded(video);
-        if (mGeneralData.isHideWatchedFromNotificationsEnabled()) {
-            MediaServiceManager.instance().hideNotification(video);
-        }
     }
 
     /**
@@ -541,7 +538,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         }
     }
 
-    public void focusAndContinueIfNeeded(VideoGroup group) {
+    private void focusAndContinueIfNeeded(VideoGroup group) {
         Video video = getPlayer().getVideo();
 
         if (group == null || group.isEmpty() || video == null || !video.hasVideo()) {
@@ -553,7 +550,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         if (index >= 0) { // continuation group starts with zero index
             Log.d(TAG, "Found current video index: %s", index);
             Video found = group.getVideos().get(index);
-            if (!found.isMix()) {
+            if (!found.isMix() || isSectionPlaylistEnabled(video)) {
                 getPlayer().focusSuggestedItem(found);
             }
             mFocusCount = 0; // Stop the continuation loop
@@ -724,7 +721,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
     private boolean isSectionPlaylistEnabled(Video video) {
         return mPlayerTweaksData.isSectionPlaylistEnabled() && video != null && video.getGroup() != null &&
-                (video.playlistId == null || video.nextMediaItem == null) && (!video.isRemote || video.remotePlaylistId == null);
+                (video.playlistId == null || video.nextMediaItem == null || video.belongsToSearch()) && (!video.isRemote || video.remotePlaylistId == null);
     }
 
     private void appendDislikes(Video video) {

@@ -20,6 +20,7 @@ import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
 import static androidx.recyclerview.widget.RecyclerView.VERTICAL;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.os.Build;
@@ -708,6 +709,8 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
      */
     private FacetProviderAdapter mFacetProviderAdapter;
 
+    private boolean mIsPortrait;
+
     public GridLayoutManager(BaseGridView baseGridView) {
         mBaseGridView = baseGridView;
         mChildVisibility = -1;
@@ -1047,7 +1050,10 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
     public boolean canScrollHorizontally() {
         // We can scroll horizontally if we have horizontal orientation, or if
         // we are vertical and have more than one column.
-        return mOrientation == HORIZONTAL || mNumRows > 1;
+        // MOD: fix VerticalGridView overscroll in touch mode
+        // MOD: use regular behavior in portrait mode (content clipped)
+        //return mOrientation == HORIZONTAL || mNumRows > 1;
+        return mOrientation == HORIZONTAL || (mNumRows > 1 && mIsPortrait);
     }
 
     @Override
@@ -1438,6 +1444,9 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
     @Override
     public void onMeasure(Recycler recycler, State state, int widthSpec, int heightSpec) {
         saveContext(recycler, state);
+
+        // MOD: disable overscroll fix for portrait mode
+        mIsPortrait = mBaseGridView.getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
 
         int sizePrimary, sizeSecondary, modeSecondary, paddingSecondary;
         int measuredSizeSecondary;

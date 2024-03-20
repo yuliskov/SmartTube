@@ -507,8 +507,8 @@
     <string name="thumb_quality_start">Start of the video</string>
     <string name="thumb_quality_middle">Middle of the video</string>
     <string name="thumb_quality_end">End of the video</string>
-    <string name="content_block_status">Check SponsorBlock status</string>
-    <string name="dearrow_status">Check DeArrow status</string>
+    <string name="content_block_status">Check SponsorBlock server status</string>
+    <string name="dearrow_status">Check DeArrow server status</string>
     <string name="player_show_quality_info_bitrate">Add bitrate into the quality info</string>
     <string name="player_speed_button_old_behavior">Revert old behavior of the speed button</string>
     <string name="protect_settings_with_password">Protect all settings with password</string>
@@ -624,6 +624,7 @@
     <string name="hide_watched_from_notifications">Hide watched videos from Notifications</string>
     <string name="hide_unwanted_content">Hide unwanted content</string>
     <string name="hide_watched_from_home">Hide watched videos from Home</string>
+    <string name="hide_watched_from_watch_later">Hide watched videos from Watch later playlist</string>
     <string name="remote_control_permission">Background Remote control requires Overlay permission</string>
     <string name="login_from_browser">Login from browser</string>
     <string name="disable_remote_history">Disable history when using remote control</string>
@@ -633,7 +634,7 @@
     <string name="channel_filter_hint">Filter channels</string>
     <string name="player_loop_shorts">Loop Shorts</string>
     <string name="player_quick_shorts_skip">Skip Shorts with left/right buttons</string>
-    <string name="channels_filter">Filter channels list inside the Channels section</string>
+    <string name="channels_filter">Show the search field inside Channels section</string>
     <string name="channel_search_bar">Search bar inside the Channel page</string>
     <string name="header_sports">Sports</string>
     <string name="keep_finished_activities">Keep finished activities</string>
@@ -648,4 +649,7 @@
     <string name="crowdsoursed_titles">Crowdsourced titles</string>
     <string name="dearrow_not_submitted_thumbs">Where to grab not submitted thumbnails</string>
     <string name="pitch_effect">Pitch effect</string>
+    <string name="fullscreen_mode">Fullscreen mode (without system bars)</string>
+    <string name="player_only_mode">Show only the player if the video is opened outside of the app</string>
+    <string name="pinned_channel_rows">Display pinned channel as rows</string>
 </resources>
