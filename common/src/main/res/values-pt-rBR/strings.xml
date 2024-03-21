@@ -646,4 +646,6 @@
   <string name="fullscreen_mode">Modo Tela Cheia (Sem barras do sistema)</string>
   <string name="share_qr_link">Inscrito no Canal</string>
   <string name="old_channel_look">Voltar para a aparência antiga da Página de canal</string>
+  <string name="player_only_mode">Mostrar apenas o player se o vídeo for aberto fora do aplicativo</string>
+  <string name="pinned_channel_rows">Mostrar canal fixado como linhas</string>
 </resources>
