@@ -636,8 +636,10 @@ public final class Video {
             return;
         }
 
-        likeCount = dislikeData.getLikeCount();
-        dislikeCount = dislikeData.getDislikeCount();
+        String likeCountNew = dislikeData.getLikeCount();
+        String dislikeCountNew = dislikeData.getDislikeCount();
+        likeCount = likeCountNew != null ? likeCountNew : likeCount;
+        dislikeCount = dislikeCountNew != null ? dislikeCountNew : dislikeCount;
     }
 
     /**
