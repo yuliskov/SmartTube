@@ -643,4 +643,6 @@
     <string name="fullscreen_mode">Повноекранний режим (без системних панелей)</string>
     <string name="player_only_mode">Показувати лише плеєр, якщо відео відкрито поза застосунком</string>
     <string name="pinned_channel_rows">Відображати закріплений канал у вигляді рядків</string>
+    <string name="prefer_ipv4">Надавати перевагу IPv4 DNS</string>
+    <string name="prefer_ipv4_desc">Може виправити випадки, коли застосунок взагалі не працює.\nУвага. На деяких пристроях можливі падіння застосунку (особливо на Android 8 та пристроях Dune HD)</string>
 </resources>

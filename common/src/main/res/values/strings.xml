@@ -652,4 +652,6 @@
     <string name="fullscreen_mode">Fullscreen mode (without system bars)</string>
     <string name="player_only_mode">Show only the player if the video is opened outside of the app</string>
     <string name="pinned_channel_rows">Display pinned channel as rows</string>
+    <string name="prefer_ipv4">Prefer IPv4 DNS</string>
+    <string name="prefer_ipv4_desc">Could fix situations when the app isn\'t working at all.\nNote. May cause hangs and crashes (especially on Android 8 devices or Dune HD)</string>
 </resources>
