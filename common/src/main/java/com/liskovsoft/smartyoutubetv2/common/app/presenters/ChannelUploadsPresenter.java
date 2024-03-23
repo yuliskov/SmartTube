@@ -40,7 +40,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     private Disposable mScrollAction;
     private Video mVideoItem;
     private MediaGroup mRootGroup;
-    private MediaGroup mLastScrollGroup;
 
     public ChannelUploadsPresenter(Context context) {
         super(context);
@@ -196,13 +195,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
             return;
         }
 
-        if (mLastScrollGroup == group.getMediaGroup()) {
-            Log.d(TAG, "Can't continue group. Another action is running.");
-            return;
-        }
-
-        mLastScrollGroup = group.getMediaGroup();
-
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         getView().showProgressBar(true);
@@ -229,7 +221,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                             }
-                            mLastScrollGroup = null;
                         },
                         () -> getView().showProgressBar(false)
                 );
