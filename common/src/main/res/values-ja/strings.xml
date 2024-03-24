@@ -624,6 +624,7 @@
     <string name="hide_watched_from_notifications">視聴済みの動画を通知から非表示にする</string>
     <string name="hide_unwanted_content">不要なコンテンツを非表示にする</string>
     <string name="hide_watched_from_home">ホームから視聴済みの動画を非表示にする</string>
+    <string name="hide_watched_from_watch_later">「後で見る」の再生リストから視聴済みの動画を非表示にする</string>
     <string name="remote_control_permission">バックグラウンドリモコンはオーバーレイの権限の許可が必要です</string>
     <string name="login_from_browser">ブラウザからログインする</string>
     <string name="disable_remote_history">リモコン使用時の履歴を無効化する</string>
@@ -649,4 +650,8 @@
     <string name="dearrow_not_submitted_thumbs">未送信のサムネイルを取得する箇所</string>
     <string name="pitch_effect">ピッチエフェクト</string>
     <string name="fullscreen_mode">フルスクリーンモード (ナビゲーションバーなし)</string>
+    <string name="player_only_mode">動画がアプリ外で開かれた場合にプレーヤーのみを表示する</string>
+    <string name="pinned_channel_rows">固定されたチャンネルを行として表示する</string>
+    <string name="prefer_ipv4">IPv4 DNSを優先する</string>
+    <string name="prefer_ipv4_desc">アプリが全く動作しない状態を修正できる可能性があります。\n注意: ハングやクラッシュが発生する可能性があります (特にAndroid 8のデバイスまたはDune HD)</string>
 </resources>
