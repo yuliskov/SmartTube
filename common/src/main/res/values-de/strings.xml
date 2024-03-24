@@ -634,7 +634,7 @@
     <string name="channel_filter_hint">Kanäle filtern</string>
     <string name="player_loop_shorts">Shorts wiederholen</string>
     <string name="player_quick_shorts_skip">Shorts überspringen mit Links/Rechts-Tasten</string>
-    <string name="channels_filter">Liste der Kanäle innerhalb der Kanäle-Kategorie filtern</string>
+    <string name="channels_filter">Suchfeld in der Kanäle-Kategorie anzeigen</string>
     <string name="channel_search_bar">Suchleiste innerhalb der Kanalseite</string>
     <string name="header_sports">Sport</string>
     <string name="keep_finished_activities">Beendete Aktivitäten behalten</string>
@@ -651,4 +651,7 @@
     <string name="pitch_effect">Tonhöhen-Effekt</string>
     <string name="fullscreen_mode">Vollbildmodus (ohne Systemleisten)</string>
     <string name="player_only_mode">Nur den Player anzeigen, wenn das Video außerhalb der App geöffnet wird</string>
+    <string name="pinned_channel_rows">Angeheftete Kanäle als Reihen anzeigen</string>
+    <string name="prefer_ipv4">IPv4 DNS bevorzugen</string>
+    <string name="prefer_ipv4_desc">Könnte Situationen beheben, in denen die App überhaupt nicht funktioniert.\nHinweis: Kann Einfrieren und Abstürze verursachen (besonders auf Android 8 Geräten oder Dune HD)</string>
 </resources>
