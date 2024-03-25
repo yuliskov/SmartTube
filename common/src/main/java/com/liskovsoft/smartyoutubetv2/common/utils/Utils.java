@@ -73,6 +73,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 
 import java.util.LinkedHashMap;
@@ -373,6 +374,30 @@ public class Utils {
             } else {
                 Utils.setVolume(context, player, Math.max(volume - delta, 0));
             }
+        }
+    }
+
+    @SuppressLint("StringFormatMatches")
+    public static void volumeUpPlayer(Context context, PlayerManager player, boolean up) {
+        if (player != null) {
+            float volume = player.getVolume();
+            float delta = 0.1f; // volume step
+
+            float newVolume;
+
+            if (up) {
+                newVolume = Math.min(volume + delta, 3);
+            } else {
+                newVolume = Math.max(volume - delta, 0);
+            }
+
+            player.setVolume(newVolume);
+
+            PlayerData.instance(context).setPlayerVolume(newVolume);
+
+            // Check that volume is set.
+            // Because global value may not be supported (see FireTV Stick).
+            MessageHelpers.showMessage(context, context.getString(R.string.volume, (int) (player.getVolume() * 100)));
         }
     }
 

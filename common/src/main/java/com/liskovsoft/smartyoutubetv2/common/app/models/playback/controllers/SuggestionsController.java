@@ -715,7 +715,13 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void appendDislikes(Video video) {
-        if (video == null || !mPlayerTweaksData.isLikesCounterEnabled()) {
+        if (video == null) {
+            return;
+        }
+
+        if (!mPlayerTweaksData.isLikesCounterEnabled()) {
+            video.likeCount = null;
+            video.dislikeCount = null;
             return;
         }
 
