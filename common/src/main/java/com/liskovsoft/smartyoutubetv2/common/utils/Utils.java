@@ -380,20 +380,24 @@ public class Utils {
     @SuppressLint("StringFormatMatches")
     public static void volumeUpPlayer(Context context, PlayerManager player, boolean up) {
         if (player != null) {
-            float volume = player.getVolume();
-            float delta = 0.1f; // volume step
+            int volume = (int) (player.getVolume() * 100);
+            int round = 10 - volume % 10;
+            if (round != 10) {
+                volume += round;
+            }
+            final int delta = 10; // volume step
 
-            float newVolume;
+            int newVolume;
 
             if (up) {
-                newVolume = Math.min(volume + delta, 3);
+                newVolume = Math.min(volume + delta, 300);
             } else {
                 newVolume = Math.max(volume - delta, 0);
             }
 
-            player.setVolume(newVolume);
+            player.setVolume(newVolume / 100f);
 
-            PlayerData.instance(context).setPlayerVolume(newVolume);
+            PlayerData.instance(context).setPlayerVolume(newVolume / 100f);
 
             // Check that volume is set.
             // Because global value may not be supported (see FireTV Stick).
