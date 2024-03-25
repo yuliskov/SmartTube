@@ -166,8 +166,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
     }
 
     private void applyAfr() {
-        if (mPlayerData.isAfrEnabled() &&
-                getPlayer() != null && getPlayer().getDurationMs() > SHORTS_DURATION_MS) {
+        if (!skipAfr() && mPlayerData.isAfrEnabled()) {
             FormatItem videoFormat = getPlayer().getVideoFormat();
             applyAfr(videoFormat, false);
             // Send data to AFR daemon via tvQuickActions app
@@ -214,8 +213,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
     }
 
     private void savePlayback() {
-        if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseMs() > 0 &&
-                getPlayer() != null && getPlayer().getDurationMs() > SHORTS_DURATION_MS) {
+        if (!skipAfr() && mAutoFrameRateHelper.isSupported() && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseMs() > 0) {
             mStateUpdater.blockPlay(true);
         }
 
@@ -223,7 +221,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
     }
 
     private void restorePlayback() {
-        if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseMs() > 0) {
+        if (!skipAfr() && mAutoFrameRateHelper.isSupported() && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseMs() > 0) {
             mStateUpdater.blockPlay(false);
             getPlayer().setPlayWhenReady(mIsPlay);
         }
@@ -352,5 +350,13 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
         }
 
         return OptionCategory.from(AUTO_FRAME_RATE_MODES_ID, OptionCategory.TYPE_LONG_TEXT, title, UiOptionItem.from(result.toString()));
+    }
+
+    private boolean skipAfr() {
+        if (mPlayerData == null || getPlayer() == null || getPlayer().getVideo() == null) {
+            return true;
+        }
+
+        return getPlayer().getDurationMs() <= SHORTS_DURATION_MS || getPlayer().getVideo().isShorts;
     }
 }
