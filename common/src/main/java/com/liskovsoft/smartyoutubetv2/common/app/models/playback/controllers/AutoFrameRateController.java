@@ -357,6 +357,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
             return true;
         }
 
-        return getPlayer().getDurationMs() <= SHORTS_DURATION_MS || getPlayer().getVideo().isShorts;
+        // NOTE: Avoid detecting shorts by Video.isShorts. Because this is working only in certain places (e.g. Shorts section).
+        return getPlayer().getDurationMs() <= SHORTS_DURATION_MS;
     }
 }
