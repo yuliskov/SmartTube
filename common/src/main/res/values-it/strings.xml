@@ -474,7 +474,8 @@
     <string name="action_subscribe_off">Iscrizione non attivata</string>
     <string name="action_subscribe_on">Iscrizione attivata</string>
     <!-- END Moved strings -->
-    <string name="skip_24_rate">Salta formati a 24 fps (fix per la modalità cinema reale?)</string>
+    <string name="skip_24_rate">Salta i formati a 24 fps (fix per la modalità cinema reale?)</string>
+    <string name="skip_shorts">Salta i video brevi</string>
     <string name="player_disable_suggestions">Disabilita suggerimenti</string>
     <string name="feedback">Feedback</string>
     <string name="sources">Sorgenti</string>
@@ -634,7 +635,7 @@
     <string name="channel_filter_hint">Filtra canali</string>
     <string name="player_loop_shorts">Ripeti continuamente i video brevi</string>
     <string name="player_quick_shorts_skip">Salta i video brevi con il tasto sinistro/destro</string>
-    <string name="channels_filter">Filtra l\'elenco dei canali nella sezione Canali</string>
+    <string name="channels_filter">Mostra il campo di ricerca all\'interno della sezione Canali</string>
     <string name="channel_search_bar">Barra di ricerca all\'interno della pagina del Canale</string>
     <string name="header_sports">Sport</string>
     <string name="keep_finished_activities">Mantieni le attività terminate</string>
@@ -651,4 +652,7 @@
     <string name="pitch_effect">Effetto pitch</string>
     <string name="fullscreen_mode">Modalità a schermo intero (senza barre di sistema)</string>
     <string name="player_only_mode">Mostra solo il lettore se il video viene aperto all\'esterno dell\'app</string>
+    <string name="pinned_channel_rows">Visualizza il canale bloccato come righe</string>
+    <string name="prefer_ipv4">Preferisci DNS IPv4</string>
+    <string name="prefer_ipv4_desc">Potrebbe risolvere situazioni in cui l\'app non funziona affatto.\nNota: potrebbe causare blocchi e arresti anomali (specialmente su dispositivi Android 8 o Dune HD)</string>
 </resources>
