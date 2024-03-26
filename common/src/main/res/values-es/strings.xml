@@ -647,4 +647,7 @@
   <string name="dearrow_status">Comprobar el estado de DeArrow </string>
   <string name="old_channel_look">Aspecto antiguo de la página Canal</string>
   <string name="player_only_mode">Mostrar sólo el reproductor si el vídeo se abre fuera de la aplicación</string>
+  <string name="pinned_channel_rows">Mostrar el canal fijado como filas</string>
+  <string name="prefer_ipv4">Preferir DNS IPv4</string>
+  <string name="prefer_ipv4_desc">Podría solucionar situaciones en las que la aplicación no funciona en absoluto.\nNota. Puede causar cuelgues y bloqueos (especialmente en dispositivos Android 8 o Dune HD).</string>
 </resources>
