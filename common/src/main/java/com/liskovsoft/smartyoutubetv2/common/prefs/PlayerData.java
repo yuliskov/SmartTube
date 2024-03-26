@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -88,6 +89,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     private float mSubtitlePosition;
     private boolean mIsNumberKeySeekEnabled;
     private boolean mIsSkip24RateEnabled;
+    private boolean mIsSkipShortsEnabled;
     private boolean mIsLiveChatEnabled;
     private FormatItem mLastSubtitleFormat;
     private final Set<String> mEnabledSubtitlesPerChannel = new LinkedHashSet<>();
@@ -641,6 +643,15 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         persistState();
     }
 
+    public boolean isSkipShortsEnabled() {
+        return mIsSkipShortsEnabled;
+    }
+
+    public void enableSkipShorts(boolean enable) {
+        mIsSkipShortsEnabled = enable;
+        persistState();
+    }
+
     public boolean isLiveChatEnabled() {
         return mIsLiveChatEnabled;
     }
@@ -684,6 +695,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         persistState();
     }
 
+    @TargetApi(19)
     private void initSubtitleStyles() {
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_white_transparent, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_white_semi_transparent, R.color.light_grey, R.color.semi_transparent, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
@@ -770,6 +782,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         mIsSpeedPerChannelEnabled = Helpers.parseBoolean(split, 56, true);
         String[] speeds = Helpers.parseArray(split, 57);
         mPitch = Helpers.parseFloat(split, 58, 1.0f);
+        mIsSkipShortsEnabled = Helpers.parseBoolean(split, 59, false);
 
         if (speeds != null) {
             for (String speedSpec : speeds) {
@@ -809,7 +822,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
                 mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, Helpers.toString(mLastSubtitleFormat), mLastSpeed, mVideoRotation,
                 mVideoZoom, mRepeatMode, mAudioLanguage, mSubtitleLanguage, enabledSubtitles, mIsSubtitlesPerChannelEnabled,
-                mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch
+                mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled
         ));
 
         super.persistState();

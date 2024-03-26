@@ -475,6 +475,7 @@
     <string name="action_subscribe_on">Subscribe On</string>
     <!-- END Moved strings -->
     <string name="skip_24_rate">Skip 24fps formats (real cinema mode fix?)</string>
+    <string name="skip_shorts">Skip Shorts</string>
     <string name="player_disable_suggestions">Disable suggestions</string>
     <string name="feedback">Feedback</string>
     <string name="sources">Sources</string>

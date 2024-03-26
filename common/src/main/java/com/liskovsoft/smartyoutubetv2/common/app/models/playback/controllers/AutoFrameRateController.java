@@ -30,7 +30,8 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
     private static final int AUTO_FRAME_RATE_ID = 21;
     private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
     private static final int AUTO_FRAME_RATE_MODES_ID = 23;
-    private static final long SHORTS_DURATION_MS = 30 * 1_000;
+    private static final long SHORTS_DURATION_MIN_MS = 30 * 1_000;
+    private static final long SHORTS_DURATION_MAX_MS = 60 * 1_000;
     private final HQDialogController mHQController;
     private final VideoStateController mStateUpdater;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
@@ -279,6 +280,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
         String resolutionSwitch = context.getString(R.string.resolution_switch);
         String doubleRefreshRate = context.getString(R.string.double_refresh_rate);
         String skip24Rate = context.getString(R.string.skip_24_rate);
+        String skipShorts = context.getString(R.string.skip_shorts);
         List<OptionItem> options = new ArrayList<>();
 
         OptionItem afrEnableOption = UiOptionItem.from(afrEnable, afrEnableDesc, optionItem -> {
@@ -301,17 +303,22 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
             playerData.enableSkip24Rate(optionItem.isSelected());
             onSkip24RateCallback.run();
         }, playerData.isSkip24RateEnabled());
+        OptionItem skipShortsOption = UiOptionItem.from(skipShorts, optionItem -> {
+            playerData.enableSkipShorts(optionItem.isSelected());
+        }, playerData.isSkipShortsEnabled());
 
         afrResSwitchOption.setRequired(afrEnableOption);
         afrFpsCorrectionOption.setRequired(afrEnableOption);
         doubleRefreshRateOption.setRequired(afrEnableOption);
         skip24RateOption.setRequired(afrEnableOption);
+        skipShortsOption.setRequired(afrEnableOption);
 
         options.add(afrEnableOption);
         options.add(afrResSwitchOption);
         options.add(afrFpsCorrectionOption);
         options.add(doubleRefreshRateOption);
         options.add(skip24RateOption);
+        options.add(skipShortsOption);
 
         return OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_CHECKBOX_LIST, afrEnable, options);
     }
@@ -357,7 +364,9 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
             return true;
         }
 
+        boolean skipShortsPrefs = mPlayerData.isSkipShortsEnabled() && (getPlayer().getVideo().isShorts || getPlayer().getDurationMs() <= SHORTS_DURATION_MAX_MS);
+
         // NOTE: Avoid detecting shorts by Video.isShorts. Because this is working only in certain places (e.g. Shorts section).
-        return getPlayer().getDurationMs() <= SHORTS_DURATION_MS;
+        return getPlayer().getDurationMs() <= SHORTS_DURATION_MIN_MS || skipShortsPrefs;
     }
 }
