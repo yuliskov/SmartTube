@@ -232,6 +232,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.prefer_ipv4),
+                getContext().getString(R.string.prefer_ipv4_desc),
+                option -> GlobalPreferences.instance(getContext()).preferIPv4Dns(!option.isSelected()),
+                !GlobalPreferences.instance(getContext()).isIPv4DnsPreferred()));
+
         // Disable long press on buggy controllers.
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
                 getContext().getString(R.string.disable_ok_long_press_desc),

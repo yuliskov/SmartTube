@@ -37,7 +37,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
     private GeneralData mGeneralData;
-    private MediaGroup mLastScrollGroup;
     private MediaItemService mMediaItemService;
     private DeArrowProcessor mDeArrowProcessor;
     private Video mNextVideo;
@@ -169,13 +168,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             return;
         }
 
-        if (mLastScrollGroup == group.getMediaGroup()) {
-            Log.d(TAG, "Can't continue group. Another action is running.");
-            return;
-        }
-
-        mLastScrollGroup = group.getMediaGroup();
-
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         if (showLoading) {
@@ -211,7 +203,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
                             if (getPlayer() != null) {
                                 getPlayer().showProgressBar(false);
                             }
-                            mLastScrollGroup = null;
                         }
                 );
 
@@ -715,7 +706,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
     private void disposeActions() {
         RxHelper.disposeActions(mActions);
-        mLastScrollGroup = null;
         mChapters = null;
     }
 
@@ -725,7 +715,13 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void appendDislikes(Video video) {
-        if (video == null || !mPlayerTweaksData.isLikesCounterEnabled()) {
+        if (video == null) {
+            return;
+        }
+
+        if (!mPlayerTweaksData.isLikesCounterEnabled()) {
+            video.likeCount = null;
+            video.dislikeCount = null;
             return;
         }
 

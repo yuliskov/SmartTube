@@ -82,7 +82,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private long mLastUpdateTimeMs;
     private int mBootSectionIndex;
     private int mBootstrapSectionId = -1;
-    private MediaGroup mLastScrollGroup;
 
     private BrowsePresenter(Context context) {
         super(context);
@@ -754,13 +753,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (mLastScrollGroup == group.getMediaGroup()) {
-            Log.d(TAG, "Can't continue group. Another action is running.");
-            return;
-        }
-
-        mLastScrollGroup = group.getMediaGroup();
-
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         // Small amount of items == small load time. Loading bar are useless?
@@ -794,7 +786,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                             }
-                            mLastScrollGroup = null;
                         }
                 );
 
@@ -846,7 +837,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private void disposeActions() {
         RxHelper.disposeActions(mActions);
         Utils.removeCallbacks(mRefreshSection);
-        mLastScrollGroup = null;
         mLastUpdateTimeMs = 0;
     }
 

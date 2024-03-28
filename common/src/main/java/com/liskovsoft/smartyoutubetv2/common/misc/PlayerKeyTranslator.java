@@ -179,7 +179,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
         PlaybackView playbackView = getPlaybackView();
 
         if (playbackView != null) {
-            Utils.volumeUp(mContext, playbackView.getPlayer(), up);
+            Utils.volumeUpPlayer(mContext, playbackView.getPlayer(), up);
         }
     }
 
