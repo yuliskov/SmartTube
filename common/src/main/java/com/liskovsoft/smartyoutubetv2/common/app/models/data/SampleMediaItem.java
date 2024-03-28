@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 
 public final class SampleMediaItem implements MediaItem {
     private int mId;

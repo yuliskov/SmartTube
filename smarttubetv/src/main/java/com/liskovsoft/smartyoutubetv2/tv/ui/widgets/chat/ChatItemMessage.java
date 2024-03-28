@@ -2,8 +2,8 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat;
 
 import android.text.TextUtils;
 
-import com.liskovsoft.mediaserviceinterfaces.data.ChatItem;
-import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ChatItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.CommentItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;

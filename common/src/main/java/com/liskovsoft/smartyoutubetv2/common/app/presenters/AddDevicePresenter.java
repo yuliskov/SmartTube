@@ -2,25 +2,25 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.HubService;
+import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AddDeviceView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.sharedutils.rx.RxHelper;
-import com.liskovsoft.youtubeapi.service.YouTubeHubService;
+import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
 import io.reactivex.disposables.Disposable;
 
 public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
     private static final String TAG = AddDevicePresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static AddDevicePresenter sInstance;
-    private final HubService mHubService;
+    private final MotherService mService;
     private Disposable mDeviceCodeAction;
 
     private AddDevicePresenter(Context context) {
         super(context);
-        mHubService = YouTubeHubService.instance();
+        mService = YouTubeMotherService.instance();
     }
 
     public static AddDevicePresenter instance(Context context) {
@@ -55,7 +55,7 @@ public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
     }
 
     private void updateDeviceCode() {
-        mDeviceCodeAction = mHubService.getRemoteControlService().getPairingCodeObserve()
+        mDeviceCodeAction = mService.getRemoteControlService().getPairingCodeObserve()
                 .subscribe(
                         deviceCode -> getView().showCode(deviceCode),
                         error -> Log.e(TAG, "Get pairing code error: %s", error.getMessage())

@@ -2,10 +2,10 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.ContentService;
-import com.liskovsoft.mediaserviceinterfaces.HubService;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.data.SearchOptions;
+import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
+import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.SearchOptions;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -26,7 +26,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
-import com.liskovsoft.youtubeapi.service.YouTubeHubService;
+import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
 import io.reactivex.disposables.Disposable;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private static final String TAG = SearchPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static SearchPresenter sInstance;
-    private final HubService mHubService;
+    private final MotherService mService;
     private final ViewManager mViewManager;
     private final SearchData mSearchData;
     private final DeArrowProcessor mDeArrowProcessor;
@@ -53,7 +53,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     private SearchPresenter(Context context) {
         super(context);
-        mHubService = YouTubeHubService.instance();
+        mService = YouTubeMotherService.instance();
         mViewManager = ViewManager.instance(context);
         mSearchData = SearchData.instance(context);
         mDeArrowProcessor = new DeArrowProcessor(getContext(), this::syncItem);
@@ -161,7 +161,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         disposeActions();
         getView().showProgressBar(true);
 
-        ContentService contentService = mHubService.getContentService();
+        ContentService contentService = mService.getContentService();
 
         getView().clearSearch();
 
@@ -183,7 +183,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         disposeActions();
         getView().showProgressBar(true);
 
-        ContentService contentService = mHubService.getContentService();
+        ContentService contentService = mService.getContentService();
 
         getView().clearSearch();
 
@@ -228,7 +228,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        ContentService contentService = mHubService.getContentService();
+        ContentService contentService = mService.getContentService();
 
         mScrollAction = contentService.continueGroupObserve(mediaGroup)
                 .subscribe(
