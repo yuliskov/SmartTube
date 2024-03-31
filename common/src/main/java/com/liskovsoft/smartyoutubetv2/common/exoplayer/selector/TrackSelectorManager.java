@@ -159,25 +159,33 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         // Won't help: renderer.sortedTracks = Collections.synchronizedSortedSet(new TreeSet<>(new MediaTrackFormatComparator()));
         SortedSet<MediaTrack> sortedTracks = new TreeSet<>(new MediaTrackFormatComparator());
 
-        if (rendererIndex == RENDERER_INDEX_SUBTITLE) {
-            // AUTO OPTION: add disable subs option
-            MediaTrack noSubsTrack = MediaTrack.forRendererIndex(rendererIndex);
-            // Temporal selection.
-            // Real selection will be override later on setSelection() routine.
-            noSubsTrack.isSelected = true;
-            sortedTracks.add(noSubsTrack);
-            renderer.selectedTrack = noSubsTrack;
-        } else if (rendererIndex == RENDERER_INDEX_AUDIO) {
-            MediaTrack noAudioTrack = MediaTrack.forRendererIndex(rendererIndex);
-            noAudioTrack.isSelected = true;
-            sortedTracks.add(noAudioTrack);
-            renderer.selectedTrack = noAudioTrack;
-        } else if (rendererIndex == RENDERER_INDEX_VIDEO) {
-            MediaTrack noVideoTrack = MediaTrack.forRendererIndex(rendererIndex);
-            noVideoTrack.isSelected = true;
-            sortedTracks.add(noVideoTrack);
-            renderer.selectedTrack = noVideoTrack;
-        }
+        // AUTO OPTION: add disable track option
+        MediaTrack noMediaTrack = MediaTrack.forRendererIndex(rendererIndex);
+        // Temporal selection.
+        // Real selection will be override later on setSelection() routine.
+        noMediaTrack.isSelected = true;
+        sortedTracks.add(noMediaTrack);
+        renderer.selectedTrack = noMediaTrack;
+
+        //if (rendererIndex == RENDERER_INDEX_SUBTITLE) {
+        //    // AUTO OPTION: add disable subs option
+        //    MediaTrack noSubsTrack = MediaTrack.forRendererIndex(rendererIndex);
+        //    // Temporal selection.
+        //    // Real selection will be override later on setSelection() routine.
+        //    noSubsTrack.isSelected = true;
+        //    sortedTracks.add(noSubsTrack);
+        //    renderer.selectedTrack = noSubsTrack;
+        //} else if (rendererIndex == RENDERER_INDEX_AUDIO) {
+        //    MediaTrack noAudioTrack = MediaTrack.forRendererIndex(rendererIndex);
+        //    noAudioTrack.isSelected = true;
+        //    sortedTracks.add(noAudioTrack);
+        //    renderer.selectedTrack = noAudioTrack;
+        //} else if (rendererIndex == RENDERER_INDEX_VIDEO) {
+        //    MediaTrack noVideoTrack = MediaTrack.forRendererIndex(rendererIndex);
+        //    noVideoTrack.isSelected = true;
+        //    sortedTracks.add(noVideoTrack);
+        //    renderer.selectedTrack = noVideoTrack;
+        //}
 
         for (int groupIndex = 0; groupIndex < renderer.trackGroups.length; groupIndex++) {
             TrackGroup group = renderer.trackGroups.get(groupIndex);
@@ -253,21 +261,27 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         }
 
         // Special handling for tracks with auto option
-        if (rendererIndex == RENDERER_INDEX_SUBTITLE && renderer.selectedTrack == null) { // no subs selected
-            MediaTrack noSubsTrack = renderer.sortedTracks.first();
-            noSubsTrack.isSelected = true;
-            renderer.selectedTrack = noSubsTrack;
-        } else if (rendererIndex == RENDERER_INDEX_AUDIO && renderer.selectedTrack == null) { // no audio selected
-            MediaTrack noAudioTrack = renderer.sortedTracks.first();
-            noAudioTrack.isSelected = true;
-            renderer.selectedTrack = noAudioTrack;
-            renderer.isDisabled = true;
-        } else if (rendererIndex == RENDERER_INDEX_VIDEO && renderer.selectedTrack == null) { // no video selected
-            MediaTrack noVideoTrack = renderer.sortedTracks.first();
-            noVideoTrack.isSelected = true;
-            renderer.selectedTrack = noVideoTrack;
-            renderer.isDisabled = true;
-        }
+        MediaTrack noMediaTrack = renderer.sortedTracks.first();
+        noMediaTrack.isSelected = renderer.selectedTrack == null;
+        renderer.isDisabled = renderer.selectedTrack == null;
+        renderer.selectedTrack = renderer.selectedTrack == null ? noMediaTrack : renderer.selectedTrack;
+
+        //// Special handling for tracks with auto option
+        //if (rendererIndex == RENDERER_INDEX_SUBTITLE && renderer.selectedTrack == null) { // no subs selected
+        //    MediaTrack noSubsTrack = renderer.sortedTracks.first();
+        //    noSubsTrack.isSelected = true;
+        //    renderer.selectedTrack = noSubsTrack;
+        //} else if (rendererIndex == RENDERER_INDEX_AUDIO && renderer.selectedTrack == null) { // no audio selected
+        //    MediaTrack noAudioTrack = renderer.sortedTracks.first();
+        //    noAudioTrack.isSelected = true;
+        //    renderer.selectedTrack = noAudioTrack;
+        //    renderer.isDisabled = true;
+        //} else if (rendererIndex == RENDERER_INDEX_VIDEO && renderer.selectedTrack == null) { // no video selected
+        //    MediaTrack noVideoTrack = renderer.sortedTracks.first();
+        //    noVideoTrack.isSelected = true;
+        //    renderer.selectedTrack = noVideoTrack;
+        //    renderer.isDisabled = true;
+        //}
     }
 
     private void enableAutoSelection(int rendererIndex) {

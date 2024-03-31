@@ -179,8 +179,9 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             settingsPresenter.appendRadioCategory(subtitlesOrigCategoryTitle,
                     UiOptionItem.from(subtitleOrigFormats,
                             option -> {
-                                enableSubtitleForChannel(true);
-                                getPlayer().setFormat(UiOptionItem.toFormat(option));
+                                FormatItem format = UiOptionItem.toFormat(option);
+                                enableSubtitleForChannel(!format.isDefault());
+                                getPlayer().setFormat(format);
                             },
                             getContext().getString(R.string.subtitles_disabled)));
             settingsPresenter.showDialog();
@@ -194,8 +195,9 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             settingsPresenter.appendRadioCategory(subtitlesAutoCategoryTitle,
                     UiOptionItem.from(subtitleAutoFormats,
                             option -> {
-                                enableSubtitleForChannel(true);
-                                getPlayer().setFormat(UiOptionItem.toFormat(option));
+                                FormatItem format = UiOptionItem.toFormat(option);
+                                enableSubtitleForChannel(!format.isDefault());
+                                getPlayer().setFormat(format);
                             },
                             getContext().getString(R.string.subtitles_disabled)));
             settingsPresenter.showDialog();
