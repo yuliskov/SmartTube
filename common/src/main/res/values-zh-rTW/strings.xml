@@ -649,7 +649,7 @@
   <string name="fullscreen_mode">全螢幕模式（無系統欄）</string>
   <string name="player_only_mode">如果影片在應用程式外打開，僅顯示播放器</string>
   <string name="hide_watched_from_watch_later">在稍後觀看的播放清單中隱藏已觀看的影片</string>
-  <string name="pinned_channel_rows">顯示固定的頻道作爲行列</string>
-  <string name="prefer_ipv4">設定首選DNS為IPv4</string>
-  <string name="prefer_ipv4_desc">修復應用程式完全無法使用情況。\n注意：可能會導致卡死與閃退（尤其是在Android 8設備或Dune HD上）</string>
+  <string name="pinned_channel_rows">將釘選頻道顯示為列</string>
+  <string name="prefer_ipv4">優先使用IPv4 DNS</string>
+  <string name="prefer_ipv4_desc">可能修復應用程式完全無法運作的情況。\n註：可能導致程式暫停或崩潰（特別是在 Android 8 裝置或 Dune HD 上）</string>
 </resources>
