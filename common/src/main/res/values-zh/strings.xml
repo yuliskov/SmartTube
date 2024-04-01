@@ -646,8 +646,8 @@
   <string name="dearrow_not_submitted_thumbs">尚未提交封面来源</string>
   <string name="pitch_effect">音调效果</string>
   <string name="fullscreen_mode">全屏模式(无系统栏)</string>
-  <string name="player_only_mode">如果视频在应用程序外播放，则仅显示播放器</string>
-  <string name="pinned_channel_rows">显示固定的频道作为行</string>
-  <string name="prefer_ipv4">首选DNS为IPv4</string>
-  <string name="prefer_ipv4_desc">可以修复应用完全无法运行的情况。\n注意：可能会导致卡死和闪退（尤其是在 Android 8 设备或 Dune HD 上）</string>
+  <string name="player_only_mode">如果在应用外打开视频，则仅显示播放器</string>
+  <string name="pinned_channel_rows">将置顶频道显示为一行</string>
+  <string name="prefer_ipv4">优先使用IPv4 DNS</string>
+  <string name="prefer_ipv4_desc">可能修复应用程序无法使用的情况。\n注意：可能导致应用程序卡顿和崩溃（尤其是在 Android 8 设备或 Dune HD 设备上）</string>
 </resources>
