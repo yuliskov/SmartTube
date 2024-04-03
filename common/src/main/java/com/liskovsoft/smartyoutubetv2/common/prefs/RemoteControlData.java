@@ -71,7 +71,7 @@ public class RemoteControlData extends DataChangeBase {
     private void restoreState() {
         String data = mAppPrefs.getData(DEVICE_LINK_DATA);
 
-        String[] split = Helpers.splitObject(data);
+        String[] split = Helpers.splitPrefs(data);
 
         // null
         // null
@@ -82,7 +82,7 @@ public class RemoteControlData extends DataChangeBase {
     }
 
     protected void persistState() {
-        mAppPrefs.setData(DEVICE_LINK_DATA, Helpers.mergeObject(
+        mAppPrefs.setData(DEVICE_LINK_DATA, Helpers.mergePrefs(
                 null, null, mIsDeviceLinkEnabled, mIsFinishOnDisconnectEnabled, mIsConnectMessagesEnabled, mIsRemoteHistoryDisabled
         ));
 

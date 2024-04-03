@@ -218,7 +218,7 @@ public class ContentBlockData {
     private void restoreState() {
         String data = mAppPrefs.getData(CONTENT_BLOCK_DATA);
 
-        String[] split = Helpers.splitObject(data);
+        String[] split = Helpers.splitPrefs(data);
 
         mIsSponsorBlockEnabled = Helpers.parseBoolean(split, 0, VERSION.SDK_INT > 19); // Android 4 may have memory problems
         // categories: index 2
@@ -280,7 +280,7 @@ public class ContentBlockData {
         String actions = Helpers.mergeArray(mActions.toArray());
         String excludedChannels = Helpers.mergeArray(mExcludedChannels.toArray());
 
-        mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeObject(
+        mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergePrefs(
                 mIsSponsorBlockEnabled, null, null, null,
                 null, null, actions, colorCategories, mIsDontSkipSegmentAgainEnabled,
                 excludedChannels

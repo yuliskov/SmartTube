@@ -38,12 +38,12 @@ public class ProviderData {
     private void restoreData() {
         String data = mAppPrefs.getData(PROVIDER_DATA);
 
-        String[] split = Helpers.splitObject(data);
+        String[] split = Helpers.splitPrefs(data);
 
         mIsInstantVoiceSearchEnabled = Helpers.parseBoolean(split, 0, false);
     }
 
     private void persistData() {
-        mAppPrefs.setData(PROVIDER_DATA, Helpers.mergeObject(mIsInstantVoiceSearchEnabled));
+        mAppPrefs.setData(PROVIDER_DATA, Helpers.mergePrefs(mIsInstantVoiceSearchEnabled));
     }
 }

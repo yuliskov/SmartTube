@@ -377,7 +377,7 @@ public class MainUIData extends DataChangeBase {
     private void restoreState() {
         String data = mPrefs.getData(MAIN_UI_DATA);
 
-        String[] split = Helpers.splitObject(data);
+        String[] split = Helpers.splitPrefs(data);
 
         mIsCardAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
         mVideoGridScale = Helpers.parseFloat(split, 1, 1.0f); // 4 cards in a row
@@ -413,7 +413,7 @@ public class MainUIData extends DataChangeBase {
 
     @Override
     protected void persistState() {
-        mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled,
+        mPrefs.setData(MAIN_UI_DATA, Helpers.mergePrefs(mIsCardAnimatedPreviewsEnabled,
                 mVideoGridScale, mUIScale, mColorSchemeIndex, mIsCardMultilineTitleEnabled,
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
                 mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,

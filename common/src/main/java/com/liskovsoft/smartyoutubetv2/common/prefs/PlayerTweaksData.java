@@ -544,7 +544,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private void restoreData() {
         String data = mPrefs.getProfileData(VIDEO_PLAYER_TWEAKS_DATA);
 
-        String[] split = Helpers.splitObject(data);
+        String[] split = Helpers.splitPrefs(data);
 
         mIsAmlogicFixEnabled = Helpers.parseBoolean(split, 0, false);
         mIsAmazonFrameDropFixEnabled = Helpers.parseBoolean(split, 1, false);
@@ -606,7 +606,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     }
 
     private void persistData() {
-        mPrefs.setProfileData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
+        mPrefs.setProfileData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergePrefs(
                 mIsAmlogicFixEnabled, mIsAmazonFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled, mIsHlsStreamsForced,

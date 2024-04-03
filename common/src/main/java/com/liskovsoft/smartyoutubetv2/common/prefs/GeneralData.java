@@ -945,7 +945,7 @@ public class GeneralData implements ProfileChangeListener {
     private void restoreState() {
         String data = mPrefs.getProfileData(GENERAL_DATA);
 
-        String[] split = Helpers.splitObject(data);
+        String[] split = Helpers.splitPrefs(data);
 
         // Zero index is skipped. Selected sections were there.
         mBootSectionId = Helpers.parseInt(split, 1, MediaGroup.TYPE_HOME);
@@ -1060,7 +1060,7 @@ public class GeneralData implements ProfileChangeListener {
         }
         String playlistOrder = Helpers.mergeList(playlistOrderPairs);
         // Zero index is skipped. Selected sections were there.
-        mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut, mIsPlayerOnlyModeEnabled, mBackgroundShortcut, Helpers.mergeList(mPinnedItems), mIsHideShortsFromSubscriptionsEnabled,
+        mPrefs.setProfileData(GENERAL_DATA, Helpers.mergePrefs(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut, mIsPlayerOnlyModeEnabled, mBackgroundShortcut, Helpers.mergeList(mPinnedItems), mIsHideShortsFromSubscriptionsEnabled,
                 mIsRemapFastForwardToNextEnabled, null,
                 mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
