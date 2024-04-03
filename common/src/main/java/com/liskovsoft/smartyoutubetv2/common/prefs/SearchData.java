@@ -138,7 +138,7 @@ public class SearchData {
     private void restoreData() {
         String data = mAppPrefs.getData(SEARCH_DATA);
 
-        String[] split = Helpers.splitPrefs(data);
+        String[] split = Helpers.splitData(data);
 
         // WARN: Don't enable Instant Voice Search
         // Serious bug on Nvidia Shield. Can't type anything with soft keyboard.
@@ -158,7 +158,7 @@ public class SearchData {
 
     private void persistData() {
         mAppPrefs.setData(SEARCH_DATA,
-                Helpers.mergePrefs(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
+                Helpers.mergeData(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
                         mIsKeyboardAutoShowEnabled, mIsTempBackgroundModeEnabled, null, mSpeechRecognizerType,
                         mIsTrendingSearchesEnabled, mIsSearchHistoryDisabled, mIsPopularSearchesDisabled, mIsKeyboardFixEnabled));
     }

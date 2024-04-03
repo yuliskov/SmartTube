@@ -722,7 +722,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     private void restoreState() {
         String data = mPrefs.getProfileData(VIDEO_PLAYER_DATA);
 
-        String[] split = Helpers.splitPrefs(data);
+        String[] split = Helpers.splitData(data);
 
         mOKButtonBehavior = Helpers.parseInt(split, 0, ONLY_UI);
         mUiHideTimeoutSec = Helpers.parseInt(split, 1, 3);
@@ -810,7 +810,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     protected void persistState() {
         String enabledSubtitles = Helpers.mergeArray(mEnabledSubtitlesPerChannel.toArray());
 
-        mPrefs.setProfileData(VIDEO_PLAYER_DATA, Helpers.mergePrefs(mOKButtonBehavior, mUiHideTimeoutSec, null,
+        mPrefs.setProfileData(VIDEO_PLAYER_DATA, Helpers.mergeData(mOKButtonBehavior, mUiHideTimeoutSec, null,
                 mSeekPreviewMode, mIsSeekConfirmPauseEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
