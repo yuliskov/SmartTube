@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat;
 
-import com.liskovsoft.mediaserviceinterfaces.data.ChatItem;
-import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ChatItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.CommentItem;
 import com.stfalcon.chatkit.commons.models.IUser;
 
 public class ChatItemAuthor implements IUser {

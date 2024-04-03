@@ -3,13 +3,13 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import com.liskovsoft.mediaserviceinterfaces.ContentService;
-import com.liskovsoft.mediaserviceinterfaces.HubService;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.NotificationsService;
-import com.liskovsoft.mediaserviceinterfaces.SignInService;
-import com.liskovsoft.mediaserviceinterfaces.data.Account;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
+import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
+import com.liskovsoft.mediaserviceinterfaces.yt.NotificationsService;
+import com.liskovsoft.mediaserviceinterfaces.yt.SignInService;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.ScreenHelper;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
@@ -43,7 +43,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeHubService;
+import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -97,11 +97,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         MediaServiceManager.instance().addAccountListener(this);
         ScreenHelper.updateScreenInfo(context);
 
-        HubService hubService = YouTubeHubService.instance();
-        mContentService = hubService.getContentService();
-        mItemService = hubService.getMediaItemService();
-        mSignInService = hubService.getSignInService();
-        mNotificationsService = hubService.getNotificationsService();
+        MotherService service = YouTubeMotherService.instance();
+        mContentService = service.getContentService();
+        mItemService = service.getMediaItemService();
+        mSignInService = service.getSignInService();
+        mNotificationsService = service.getNotificationsService();
         mDeArrowProcessor = new DeArrowProcessor(getContext(), this::syncItem);
         mActions = new ArrayList<>();
 

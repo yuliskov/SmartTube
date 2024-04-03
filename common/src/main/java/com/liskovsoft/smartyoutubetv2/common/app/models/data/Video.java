@@ -5,20 +5,20 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
-import com.liskovsoft.mediaserviceinterfaces.data.DislikeData;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
-import com.liskovsoft.mediaserviceinterfaces.data.NotificationState;
-import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ChapterItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.DislikeData;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemFormatInfo;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.NotificationState;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
-import com.liskovsoft.youtubeapi.service.YouTubeHubService;
+import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -360,7 +360,7 @@ public final class Video {
         result.channelId = Helpers.parseStr(split[6]);
         result.bgImageUrl = Helpers.parseStr(split[7]);
         result.cardImageUrl = Helpers.parseStr(split[8]);
-        result.mediaItem = YouTubeHubService.deserializeMediaItem(Helpers.parseStr(split[9]));
+        result.mediaItem = YouTubeMotherService.deserializeMediaItem(Helpers.parseStr(split[9]));
         result.playlistParams = Helpers.parseStr(split[10]);
         result.sectionId = Helpers.parseInt(split[11]);
         result.reloadPageKey = Helpers.parseStr(split[12]);
@@ -374,7 +374,7 @@ public final class Video {
     public String toString() {
         return Helpers.merge(OBJ_DELIM,
                 id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl,
-                YouTubeHubService.serialize(mediaItem), playlistParams, sectionId, getReloadPageKey(), itemType);
+                YouTubeMotherService.serialize(mediaItem), playlistParams, sectionId, getReloadPageKey(), itemType);
     }
 
     //@Override

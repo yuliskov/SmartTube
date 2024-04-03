@@ -10,15 +10,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.HubService;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemStoryboard;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemStoryboard.Size;
+import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
+import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemStoryboard;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemStoryboard.Size;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
-import com.liskovsoft.youtubeapi.service.YouTubeHubService;
+import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -46,8 +46,8 @@ public class StoryboardManager {
 
     public StoryboardManager(Context context) {
         mContext = context;
-        HubService hubService = YouTubeHubService.instance();
-        mMediaItemService = hubService.getMediaItemService();
+        MotherService service = YouTubeMotherService.instance();
+        mMediaItemService = service.getMediaItemService();
     }
 
     public void init(Video video, long lengthMs) {

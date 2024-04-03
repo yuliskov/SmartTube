@@ -2,14 +2,14 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
 
-import com.liskovsoft.mediaserviceinterfaces.HubService;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
+import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DeArrowData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase.OnDataChange;
-import com.liskovsoft.youtubeapi.service.YouTubeHubService;
+import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +30,8 @@ public class DeArrowProcessor implements OnDataChange {
 
     public DeArrowProcessor(Context context, OnItemReady onItemReady) {
         mOnItemReady = onItemReady;
-        HubService hubService = YouTubeHubService.instance();
-        mItemService = hubService.getMediaItemService();
+        MotherService service = YouTubeMotherService.instance();
+        mItemService = service.getMediaItemService();
         mDeArrowData = DeArrowData.instance(context);
         mDeArrowData.setOnChange(this);
         initData();

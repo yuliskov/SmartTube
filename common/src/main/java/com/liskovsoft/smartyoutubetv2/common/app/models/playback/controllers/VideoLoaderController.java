@@ -2,10 +2,10 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import android.annotation.SuppressLint;
 
-import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.HubService;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
+import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemFormatInfo;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -18,7 +18,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
@@ -31,7 +30,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.UniqueRandom;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeHubService;
+import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
 import io.reactivex.disposables.Disposable;
 
 import java.util.Collections;
@@ -58,7 +57,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     };
     private final Runnable mFixAndRestartEngine = () -> {
         if (getPlayer() != null) {
-            YouTubeHubService.instance().invalidateCache();
+            YouTubeMotherService.instance().invalidateCache();
             getPlayer().restartEngine(); // properly save position of the current track
         }
     };
@@ -277,7 +276,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private void loadFormatInfo(Video video) {
         disposeActions();
 
-        HubService service = YouTubeHubService.instance();
+        MotherService service = YouTubeMotherService.instance();
         MediaItemService mediaItemManager = service.getMediaItemService();
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribe(this::processFormatInfo,

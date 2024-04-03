@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import com.liskovsoft.leanbackassistant.utils.AppUtil;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 

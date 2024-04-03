@@ -2,28 +2,28 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.HubService;
+import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.sharedutils.rx.RxHelper;
-import com.liskovsoft.youtubeapi.service.YouTubeHubService;
+import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
 import io.reactivex.disposables.Disposable;
 
 public class SignInPresenter extends BasePresenter<SignInView> {
     private static final String TAG = SignInPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static SignInPresenter sInstance;
-    private final HubService mHubService;
+    private final MotherService mService;
     private final BrowsePresenter mBrowsePresenter;
     private final SplashPresenter mSplashPresenter;
     private Disposable mSignInAction;
 
     private SignInPresenter(Context context) {
         super(context);
-        mHubService = YouTubeHubService.instance();
+        mService = YouTubeMotherService.instance();
         mBrowsePresenter = BrowsePresenter.instance(context);
         mSplashPresenter = SplashPresenter.instance(context);
     }
@@ -62,7 +62,7 @@ public class SignInPresenter extends BasePresenter<SignInView> {
     }
 
     private void updateUserCode() {
-        mSignInAction = mHubService.getSignInService().signInObserve()
+        mSignInAction = mService.getSignInService().signInObserve()
                 .subscribe(
                         userCode -> getView().showCode(userCode),
                         error -> Log.e(TAG, "Sign in error: %s", error.getMessage()),

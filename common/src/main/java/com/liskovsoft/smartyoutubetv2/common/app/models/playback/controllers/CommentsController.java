@@ -3,10 +3,10 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 import android.content.Context;
 import android.util.Pair;
 
-import com.liskovsoft.mediaserviceinterfaces.CommentsService;
-import com.liskovsoft.mediaserviceinterfaces.data.CommentGroup;
-import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.yt.CommentsService;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.CommentGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.CommentItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -19,7 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsRece
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiverImpl;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
-import com.liskovsoft.youtubeapi.service.YouTubeHubService;
+import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
 import io.reactivex.disposables.Disposable;
 
 public class CommentsController extends PlayerEventListenerHelper implements MetadataListener {
@@ -42,7 +42,7 @@ public class CommentsController extends PlayerEventListenerHelper implements Met
 
     @Override
     public void onInit() {
-        mCommentsService = YouTubeHubService.instance().getCommentsService();
+        mCommentsService = YouTubeMotherService.instance().getCommentsService();
     }
 
     @Override

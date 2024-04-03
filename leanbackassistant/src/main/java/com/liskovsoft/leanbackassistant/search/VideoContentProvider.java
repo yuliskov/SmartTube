@@ -11,12 +11,12 @@ import android.provider.BaseColumns;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.liskovsoft.leanbackassistant.R;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.AppSchedulerProvider;
 import com.liskovsoft.sharedutils.rx.SchedulerProvider;
-import com.liskovsoft.youtubeapi.service.YouTubeHubService;
+import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
 import io.reactivex.disposables.CompositeDisposable;
 
 import java.util.ArrayList;
@@ -130,7 +130,7 @@ public class VideoContentProvider extends ContentProvider {
     private Cursor search(String query, int limit) {
         MatrixCursor matrixCursor = new MatrixCursor(queryProjection);
 
-        mSearch = YouTubeHubService.instance().getContentService().getSearch(query);
+        mSearch = YouTubeMotherService.instance().getContentService().getSearch(query);
 
         if (mSearch != null) {
             List<MediaItem> mediaItems = mSearch.getMediaItems();
@@ -149,7 +149,7 @@ public class VideoContentProvider extends ContentProvider {
     }
 
     private void nextSearch(MatrixCursor cursor, int limit) {
-        mSearch = YouTubeHubService.instance().getContentService().continueGroup(mSearch);
+        mSearch = YouTubeMotherService.instance().getContentService().continueGroup(mSearch);
 
         if (mSearch != null) {
             List<MediaItem> mediaItems = mSearch.getMediaItems();
