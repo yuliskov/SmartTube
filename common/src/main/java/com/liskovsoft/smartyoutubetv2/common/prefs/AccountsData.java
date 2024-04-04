@@ -22,8 +22,6 @@ public class AccountsData implements AccountChangeListener {
     private final Map<String, PasswordItem> mPasswords = new HashMap<>();
 
     private static class PasswordItem {
-        private static final String OBJ_DELIM = "&vi;";
-
         public String accountName;
         public String password;
 
@@ -33,7 +31,7 @@ public class AccountsData implements AccountChangeListener {
         }
 
         public static PasswordItem fromString(String specs) {
-            String[] split = Helpers.split(OBJ_DELIM, specs);
+            String[] split = Helpers.splitObj(specs);
 
             if (split == null || split.length != 2) {
                 return new PasswordItem(null, null);
@@ -45,7 +43,7 @@ public class AccountsData implements AccountChangeListener {
         @NonNull
         @Override
         public String toString() {
-            return Helpers.merge(OBJ_DELIM, accountName, password);
+            return Helpers.mergeObj(accountName, password);
         }
     }
 

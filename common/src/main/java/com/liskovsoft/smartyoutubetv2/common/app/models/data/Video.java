@@ -30,7 +30,6 @@ import java.util.List;
 public final class Video {
     public static final String TERTIARY_TEXT_DELIM = "•";
     public static final long MAX_LIVE_DURATION_MS = 24 * 60 * 60 * 1_000;
-    private static final String OBJ_DELIM = "&vi;";
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     private static final String BLACK_PLACEHOLDER_URL = "https://via.placeholder.com/1280x720/000000/000000";
     private static final float RESTORE_POSITION_PERCENTS = 10; // min value for immediately closed videos
@@ -323,7 +322,7 @@ public final class Video {
             return null;
         }
 
-        String[] split = Helpers.split(OBJ_DELIM, spec);
+        String[] split = Helpers.splitObj(spec);
 
         // 'playlistParams' backward compatibility
         if (split.length == 10) {
@@ -372,8 +371,7 @@ public final class Video {
     @NonNull
     @Override
     public String toString() {
-        return Helpers.merge(OBJ_DELIM,
-                id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl,
+        return Helpers.mergeObj(id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl,
                 YouTubeMotherService.serialize(mediaItem), playlistParams, sectionId, getReloadPageKey(), itemType);
     }
 

@@ -99,8 +99,6 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     private float mPitch;
 
     private static class SpeedItem {
-        private static final String OBJ_DELIM = "&vi;";
-
         public String channelId;
         public float speed;
 
@@ -110,7 +108,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         }
 
         public static SpeedItem fromString(String specs) {
-            String[] split = Helpers.split(OBJ_DELIM, specs);
+            String[] split = Helpers.splitObj(specs);
 
             if (split == null || split.length != 2) {
                 return new SpeedItem(null, 1);
@@ -122,7 +120,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         @NonNull
         @Override
         public String toString() {
-            return Helpers.merge(OBJ_DELIM, channelId, speed);
+            return Helpers.mergeObj(channelId, speed);
         }
     }
 
