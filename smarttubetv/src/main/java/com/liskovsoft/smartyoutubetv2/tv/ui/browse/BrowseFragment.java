@@ -326,7 +326,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             mFocusOnContent = focusOnContent; // focus after header transition
 
             if (getSelectedPosition() == index) {
-                // update section when clicked or pressed
+                // headers transition event not fired on the same index
+                // update section manually
                 focusOnContentIfNeeded();
                 mBrowsePresenter.onSectionFocused(getSelectedHeaderId());
             } else {
