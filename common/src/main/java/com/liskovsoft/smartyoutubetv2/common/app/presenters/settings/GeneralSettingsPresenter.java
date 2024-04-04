@@ -592,6 +592,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.rememberSubscriptionsPosition(option.isSelected()),
                 mGeneralData.isRememberSubscriptionsPositionEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_pinned),
+                option -> mGeneralData.rememberPinnedPosition(option.isSelected()),
+                mGeneralData.isRememberPinnedPositionEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_screensaver),
                 option -> mGeneralData.disableScreensaver(option.isSelected()),
                 mGeneralData.isScreensaverDisabled()));

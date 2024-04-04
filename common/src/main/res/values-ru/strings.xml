@@ -599,6 +599,7 @@
     <string name="player_global_focus">Бесшовная навигация между рядами кнопок плеера</string>
     <string name="auto_history">Auto (использовать настройки аккаунта)</string>
     <string name="remember_position_subscriptions">Запоминать последнюю просмотренную позицию в Подписках</string>
+    <string name="remember_position_pinned">Запоминать последнюю просмотренную позицию в закрепленных плейлистах</string>
     <string name="msg_player_unknown_error">Неизвестная ошибка</string>
     <string name="header_notifications">Уведомления</string>
     <string name="disable_search_history">Отключить историю поиска</string>

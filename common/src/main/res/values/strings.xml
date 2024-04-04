@@ -606,6 +606,7 @@
     <string name="player_global_focus">Seamless navigation between player button rows</string>
     <string name="auto_history">Auto (use account settings)</string>
     <string name="remember_position_subscriptions">Remember last viewed position in Subscriptions</string>
+    <string name="remember_position_pinned">Remember last viewed position in the pinned playlists</string>
     <string name="msg_player_unknown_error">Unknown error</string>
     <string name="header_notifications">Notifications</string>
     <string name="disable_search_history">Disable search history</string>
