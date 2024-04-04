@@ -1015,10 +1015,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         if (sectionIndex != -1) {
             getView().selectSection(sectionIndex, true);
-
-            if (mCurrentSection != null && mCurrentSection.getId() == sectionId) {
-                refresh();
-            }
         }
     }
 
