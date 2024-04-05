@@ -100,6 +100,7 @@ public class GeneralData implements ProfileChangeListener {
     private final List<Video> mPendingStreams = new CopyOnWriteArrayList<>();
     private final List<Video> mPinnedItems = new CopyOnWriteHashList<>();
     private boolean mIsFullscreenModeEnabled;
+    private List<Video> mSelectedVideos;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -1023,6 +1024,7 @@ public class GeneralData implements ProfileChangeListener {
         mIsFullscreenModeEnabled = Helpers.parseBoolean(split, 60, !Helpers.isTouchSupported(mContext));
         mIsHideWatchedFromWatchLaterEnabled = Helpers.parseBoolean(split, 61, false);
         mRememberPinnedPosition = Helpers.parseBoolean(split, 62, false);
+        mSelectedVideos = Helpers.parseList(split, 63, Video::fromString);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -1079,13 +1081,13 @@ public class GeneralData implements ProfileChangeListener {
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
-                playlistOrder, Helpers.mergeList(mPendingStreams), mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
+                playlistOrder, mPendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
                 mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextToSpeedEnabled, mIsRemapPlayToOKEnabled, mHistoryState,
                 mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem),
                 mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled, mIsRemapDpadUpToVolumeEnabled,
-                mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled, Helpers.mergeList(mChangelog), mPlayerExitShortcut,
-                mIsOldChannelLookEnabled, mIsFullscreenModeEnabled, mIsHideWatchedFromWatchLaterEnabled, mRememberPinnedPosition));
+                mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled, mChangelog, mPlayerExitShortcut,
+                mIsOldChannelLookEnabled, mIsFullscreenModeEnabled, mIsHideWatchedFromWatchLaterEnabled, mRememberPinnedPosition, mSelectedVideos));
     }
 
     private int getSectionId(Video item) {
