@@ -559,7 +559,7 @@
   <string name="update_found">Atualização</string>
   <string name="volume_boost_warning">Qualquer configuração acima do limite pode potencialmente danificar os alto-falantes</string>
   <string name="action_sound_off">Mudo\\(Mantenha pressionado para configurações de Volume)</string>
-  <string name="pitch_effect">Mudar Tom - ∆Grave/1 (Normal)/Agudo∇</string>
+  <string name="pitch_effect">Mudar Tom - ∆ Grave/ "1" é Normalizado / ∇ Agudo</string>
   <string name="player_volume">Volume do player</string>
   <string name="play_video_incognito">Reproduzir de forma anônima</string>
   <string name="header_kids_home">Crianças</string>
@@ -648,4 +648,6 @@
   <string name="old_channel_look">Voltar para a aparência antiga da Página de canal</string>
   <string name="player_only_mode">Mostrar apenas o player se o vídeo for aberto fora do aplicativo</string>
   <string name="pinned_channel_rows">Mostrar canal fixado como linhas</string>
+  <string name="prefer_ipv4">Preferir DNS IPv4</string>
+  <string name="prefer_ipv4_desc">Pode corrigir situações em que o aplicativo não está funcionando. \n Observação. Pode causar Lentidões e travamentos (especialmente em dispositivos Android 8 ou Dune HD)</string>
 </resources>
