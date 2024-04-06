@@ -38,7 +38,6 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.browse.NavigateTitleView;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /*

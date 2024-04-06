@@ -437,8 +437,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public void onSectionFocused(int sectionId) {
-        saveSelectedItems();
-        updateSection(sectionId);
+        saveSelectedItems(); // save previous state
+        mCurrentSection = findSectionById(sectionId);
+        mCurrentVideo = null; // fast scroll through the sections (fix empty selected item)
+        updateCurrentSection();
     }
 
     @Override
@@ -562,11 +564,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void refresh(boolean focusOnContent) {
-        if (mCurrentSection != null) {
-            updateSection(mCurrentSection.getId());
-            if (focusOnContent && getView() != null) {
-                getView().focusOnContent();
-            }
+        updateCurrentSection();
+        if (focusOnContent && getView() != null) {
+            getView().focusOnContent();
         }
     }
 
@@ -574,10 +574,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mLastUpdateTimeMs = System.currentTimeMillis();
     }
 
-    private void updateSection(int sectionId) {
+    private void updateCurrentSection() {
         disposeActions();
-
-        mCurrentSection = findSectionById(sectionId);
 
         if (getView() == null || mCurrentSection == null) {
             return;

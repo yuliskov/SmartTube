@@ -916,11 +916,11 @@ public class GeneralData implements ProfileChangeListener {
     }
 
     public void setSelectedItem(int sectionId, Video item) {
-        if (item != null) {
-            mSelectedItems.put(sectionId, item);
-        } else {
-            mSelectedItems.remove(sectionId);
+        if (item == null) {
+            return;
         }
+
+        mSelectedItems.put(sectionId, item);
 
         persistState();
     }
