@@ -15,11 +15,9 @@ import com.liskovsoft.smartyoutubetv2.common.utils.CopyOnWriteHashList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GeneralData implements ProfileChangeListener {
@@ -100,7 +98,7 @@ public class GeneralData implements ProfileChangeListener {
     private final List<Video> mPendingStreams = new CopyOnWriteArrayList<>();
     private final List<Video> mPinnedItems = new CopyOnWriteHashList<>();
     private boolean mIsFullscreenModeEnabled;
-    private List<Video> mSelectedVideos;
+    private Map<Integer, Video> mSelectedItems;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -917,6 +915,24 @@ public class GeneralData implements ProfileChangeListener {
         return mSelectedSubscriptionsItem;
     }
 
+    public void setSelectedItem(int sectionId, Video item) {
+        if (item != null) {
+            mSelectedItems.put(sectionId, item);
+        } else {
+            mSelectedItems.remove(sectionId);
+        }
+
+        persistState();
+    }
+
+    public Video getSelectedItem(int sectionId) {
+        return mSelectedItems.get(sectionId);
+    }
+
+    public void removeSelectedItem(int sectionId) {
+        mSelectedItems.remove(sectionId);
+    }
+
     public void setChangelog(List<String> changelog) {
         mChangelog = changelog;
         persistState();
@@ -1024,7 +1040,7 @@ public class GeneralData implements ProfileChangeListener {
         mIsFullscreenModeEnabled = Helpers.parseBoolean(split, 60, !Helpers.isTouchSupported(mContext));
         mIsHideWatchedFromWatchLaterEnabled = Helpers.parseBoolean(split, 61, false);
         mRememberPinnedPosition = Helpers.parseBoolean(split, 62, false);
-        mSelectedVideos = Helpers.parseList(split, 63, Video::fromString);
+        mSelectedItems = Helpers.parseMap(split, 63, Helpers::parseInt, Video::fromString);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             mPinnedItems.clear();
@@ -1074,7 +1090,7 @@ public class GeneralData implements ProfileChangeListener {
                 mRememberSubscriptionsPosition, Helpers.toString(mSelectedSubscriptionsItem),
                 mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled, mIsRemapDpadUpToVolumeEnabled,
                 mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled, mChangelog, mPlayerExitShortcut,
-                mIsOldChannelLookEnabled, mIsFullscreenModeEnabled, mIsHideWatchedFromWatchLaterEnabled, mRememberPinnedPosition, mSelectedVideos));
+                mIsOldChannelLookEnabled, mIsFullscreenModeEnabled, mIsHideWatchedFromWatchLaterEnabled, mRememberPinnedPosition, mSelectedItems));
     }
 
     private int getSectionId(Video item) {
