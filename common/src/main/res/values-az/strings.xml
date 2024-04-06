@@ -439,7 +439,7 @@
     <string name="sleep_timer_desc">İstifadəçi bir saat ərzində pultdan istifadə etməyibsə, oxutmanı dayandırın</string>
     <string name="disable_vsync">Vsync-ə keçidi söndürün</string>
     <string name="disable_vsync_desc">Bu seçim ekranın şaquli sinxronizasiya siqnalı ilə kadrların uyğunlaşdırılmasını qeyri-aktiv edir. Bu, CPU resurslarını buraxmaqla aşağı səviyyəli cihazlarda performansı yaxşılaşdıra bilər.</string>
-    <string name="skip_codec_profile_check">Kodek profil səviyyəsi yoxlamasını keçin</string>
+    <string name="skip_codec_profile_check">Kodek profil səviyyəsi yoxlamasını ötürün</string>
     <string name="skip_codec_profile_check_desc">Videoya başladıqda kodek dəstəyini yoxlamayın. Səhv olan proqram təminatında faydalı ola bilər.</string>
     <string name="force_sw_codec">SW video dekoderini məcbur edin</string>
     <string name="force_sw_codec_desc">Demək olar ki, istənilən videonu oxuda bilər, lakin performans çox zəifdir.</string>
@@ -475,6 +475,7 @@
     <string name="action_subscribe_on">Abunə Qoşulu</string>
     <!-- END Moved strings -->
     <string name="skip_24_rate">24 kadr formatlarını ötürün (real kino rejimi düzəldildi?)</string>
+    <string name="skip_shorts">Short-ları ötürün</string>
     <string name="player_disable_suggestions">Təklifləri deaktiv edin</string>
     <string name="feedback">Rəy</string>
     <string name="sources">Mənbələr</string>
@@ -605,6 +606,7 @@
     <string name="player_global_focus">Pleyer düymələri sıraları arasında qüsursuz naviqasiya</string>
     <string name="auto_history">Avto (hesab parametrlərindən istifadə edin)</string>
     <string name="remember_position_subscriptions">Abunəliklərdə son baxılan mövqeyi yadda saxla</string>
+    <string name="remember_position_pinned">Saxlanmış pleylistlərdə sonuncu baxılmış mövqeyi yadda saxla</string>
     <string name="msg_player_unknown_error">Naməlum xəta</string>
     <string name="header_notifications">Bildirişlər</string>
     <string name="disable_search_history">Axtarış tarixçəsini söndür</string>
@@ -624,6 +626,7 @@
     <string name="hide_watched_from_notifications">İzlənmiş videoları Bildirişlərdən gizlədin</string>
     <string name="hide_unwanted_content">İstənməyən məzmunu gizlət</string>
     <string name="hide_watched_from_home">Baxılmış videoları Evdən gizlət</string>
+    <string name="hide_watched_from_watch_later">Baxılmış videoları Sonra izlə pleylistindən gizlədin</string>
     <string name="remote_control_permission">Arxa fon Uzaqdan idarəetməsi Overlay icazəsi tələb edir</string>
     <string name="login_from_browser">Brauzerdən daxil olun</string>
     <string name="disable_remote_history">Uzaqdan idarə etmədən istifadə edərkən tarixçəni söndürün</string>
@@ -649,4 +652,8 @@
     <string name="dearrow_not_submitted_thumbs">Təqdim edilməmiş miniatürləri haradan götürmək olar</string>
     <string name="pitch_effect">Pitch effekti</string>
     <string name="fullscreen_mode">Tam ekran rejimi (sistem kənarları olmadan)</string>
+    <string name="player_only_mode">Video proqramdan kənarda açılırsa, yalnız pleyeri göstərin</string>
+    <string name="pinned_channel_rows">Saxlanmış kanalı sətirlər kimi göstərin</string>
+    <string name="prefer_ipv4">IPv4 DNS-ə üstünlük verin</string>
+    <string name="prefer_ipv4_desc">Tətbiqin ümumiyyətlə işləmədiyi vəziyyətləri düzəldə bilər.\nQeyd. Donmalara və xətalara səbəb ola bilər (xüsusilə Android 8 cihazlarında və ya Dune HD-də)</string>
 </resources>
