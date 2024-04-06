@@ -633,6 +633,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     //mTimeInfo.setVisibility(View.VISIBLE);
                     // Don't set to GONE or carousel will crash (can't properly calculate length)
                     mThumbsBarWrapper.setVisibility(View.INVISIBLE);
+                    // MOD: fix old preview image on seek start
+                    mThumbsBar.clearThumbBitmaps();
                     break;
                 case CONTROLS_MODE_COMPACT:
                     mControlsVh.view.setVisibility(View.GONE);
