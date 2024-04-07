@@ -606,6 +606,7 @@
     <string name="player_global_focus">Navigazione senza interruzioni tra le righe dei pulsanti del lettore</string>
     <string name="auto_history">Automatico (utilizza impostazioni dell\'account)</string>
     <string name="remember_position_subscriptions">Ricorda l\'ultima posizione visualizzata nelle Iscrizioni</string>
+    <string name="remember_position_pinned">Ricorda l\'ultima posizione visualizzata nelle playlist appuntate</string>
     <string name="msg_player_unknown_error">Errore sconosciuto</string>
     <string name="header_notifications">Notifiche</string>
     <string name="disable_search_history">Disabilita la Cronologia delle ricerche</string>
