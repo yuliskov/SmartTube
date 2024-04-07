@@ -23,7 +23,7 @@ public class IntentExtractor {
      * https://youtube.com/channel/BLABLA/video
      */
     private static final String CHANNEL_KEY = "channel";
-    private static final String CHANNEL_URL_ALT = "/c/";
+    private static final String CHANNEL_ALT_KEY = "c";
     private static final String USER_URL = "/user/";
     private static final String SUBSCRIPTIONS_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEsubscriptions"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String HISTORY_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEmy_youtube"; // last 'resume' param isn't parsed by intent and should be removed
@@ -109,9 +109,31 @@ public class IntentExtractor {
 
         // https://youtube.com/channel/BLABLA/video
         // Don't Uri directly or you might get UnsupportedOperationException on some urls.
-        UrlQueryString parser = UrlQueryStringFactory.parse(extractUri(intent));
+        Uri url = extractUri(intent);
+        UrlQueryString parser = UrlQueryStringFactory.parse(url);
 
-        return parser.get(CHANNEL_KEY);
+        // https://youtube.com/channel/UCIy_mMwdwbC6GkRSm6gqo6Q
+        String channelId = parser.get(CHANNEL_KEY);
+
+        if (channelId == null) {
+            // https://www.youtube.com/c/IngaMezerya
+            channelId = parser.get(CHANNEL_ALT_KEY);
+
+            if (channelId != null) {
+                channelId = "@" + channelId; // add the prefix to quickly distinguish later
+            }
+        }
+
+        if (channelId == null) {
+            // https://www.youtube.com/@IngaMezerya
+            String lastPathSegment = url.getLastPathSegment();
+
+            if (Helpers.startsWith(lastPathSegment, "@")) {
+                channelId = lastPathSegment; // already contains the prefix
+            }
+        }
+
+        return channelId;
     }
 
     /**
