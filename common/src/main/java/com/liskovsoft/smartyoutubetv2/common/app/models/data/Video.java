@@ -279,6 +279,10 @@ public final class Video {
         this.group = new WeakReference<>(group);
     }
 
+    public int getPositionInsideGroup() {
+        return getGroup() != null && !getGroup().isEmpty() ? getGroup().getVideos().indexOf(this) : -1;
+    }
+
     private static String extractAuthor(String secondTitle) {
         String result = null;
 

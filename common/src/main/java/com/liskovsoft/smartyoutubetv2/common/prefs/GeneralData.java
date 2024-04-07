@@ -1094,7 +1094,6 @@ public class GeneralData implements ProfileChangeListener {
         // reset on profile change
         mPinnedItems.clear();
         mPendingStreams.clear();
-        mPlaylistOrder.clear();
 
         restoreState();
     }
