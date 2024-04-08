@@ -75,6 +75,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsSpeedButtonOldBehaviorEnabled;
     private boolean mIsButtonLongClickEnabled;
     private boolean mIsLongSpeedListEnabled;
+    private boolean mIsExtraLongSpeedListEnabled;
     private int mPlayerDataSource;
     private boolean mUnlockAllFormats;
     private boolean mIsBufferOnStreamsDisabled;
@@ -388,12 +389,23 @@ public class PlayerTweaksData implements ProfileChangeListener {
     }
 
     public void enableLongSpeedList(boolean enable) {
+        mIsExtraLongSpeedListEnabled = false;
         mIsLongSpeedListEnabled = enable;
         persistData();
     }
 
     public boolean isLongSpeedListEnabled() {
         return mIsLongSpeedListEnabled;
+    }
+
+    public void enableExtraLongSpeedList(boolean enable) {
+        mIsLongSpeedListEnabled = false;
+        mIsExtraLongSpeedListEnabled = enable;
+        persistData();
+    }
+
+    public boolean isExtraLongSpeedListEnabled() {
+        return mIsExtraLongSpeedListEnabled;
     }
 
     public void unlockAllFormats(boolean unlock) {
@@ -601,6 +613,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         // mPlayerDataSource was here
         // Cronet is buffering too, unfortunately, so leave the default as a safest method (e.g. for "strtarmenia")
         // mPlayerDataSource = Helpers.parseInt(split, 48, PLAYER_DATA_SOURCE_DEFAULT);
+        mIsExtraLongSpeedListEnabled = Helpers.parseBoolean(split, 49, false);
 
         updateDefaultValues();
     }
@@ -618,7 +631,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
                 mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked, mIsLoopShortsEnabled, mIsQuickShortsSkipEnabled, mIsRememberPositionOfLiveVideosEnabled,
-                mIsOculusQuestFixEnabled, null
+                mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled
                 ));
     }
 

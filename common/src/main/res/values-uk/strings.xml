@@ -546,6 +546,7 @@
     <string name="clear_search_history">Видалити історію пошуку</string>
     <string name="remove_from_subscriptions">Приховати</string>
     <string name="player_long_speed_list">Довгий список швидкостей</string>
+    <string name="player_extra_long_speed_list">Дуже довгий список швидкостей</string>
     <string name="alt_app_icon">Альтернативна іконка застосунку (потрібне перезавантаження)</string>
     <string name="network_stack">Надавати перевагу мережевому стеку %s</string>
     <string name="player_network_stack">Мережевий стек</string>
