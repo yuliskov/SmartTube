@@ -514,9 +514,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         } else if (buttonId == R.id.action_sound_off) {
             applySoundOff(buttonState);
         } else if (buttonId == R.id.action_afr) {
-            mPlayerData.setAfrEnabled(buttonState == PlayerUI.BUTTON_OFF);
-            getController(AutoFrameRateController.class).applyAfr();
-            getPlayer().setButtonState(buttonId, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+            applyAfr(buttonState);
         }
     }
 
@@ -529,7 +527,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         } else if (buttonId == R.id.action_sound_off) {
             showSoundOffDialog();
         } else if (buttonId == R.id.action_afr) {
-            AutoFrameRateSettingsPresenter.instance(getContext()).show();
+            AutoFrameRateSettingsPresenter.instance(getContext()).show(() -> applyAfr(mPlayerData.isAfrEnabled() ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON));
         }
     }
 
@@ -843,6 +841,12 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             getPlayer().setButtonState(R.id.action_sound_off,
                     (getPlayer().getAudioFormat().isDefault() || mPlayerData.getPlayerVolume() == 0) ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
+    }
+
+    private void applyAfr(int buttonState) {
+        mPlayerData.setAfrEnabled(buttonState == PlayerUI.BUTTON_OFF);
+        getController(AutoFrameRateController.class).applyAfr();
+        getPlayer().setButtonState(R.id.action_afr, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
     private void reorderSubtitles(List<FormatItem> subtitleFormats) {

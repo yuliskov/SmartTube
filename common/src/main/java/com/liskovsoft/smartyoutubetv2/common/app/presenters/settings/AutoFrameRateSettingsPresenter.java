@@ -21,13 +21,17 @@ public class AutoFrameRateSettingsPresenter extends BasePresenter<Void> {
     }
 
     public void show() {
+        show(() -> {});
+    }
+
+    public void show(Runnable onFinish) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
         appendAutoFrameRateCategory(settingsPresenter);
         appendAutoFrameRatePauseCategory(settingsPresenter);
         appendAutoFrameRateModesCategory(settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.auto_frame_rate));
+        settingsPresenter.showDialog(getContext().getString(R.string.auto_frame_rate), onFinish);
     }
 
     private void appendAutoFrameRateCategory(AppDialogPresenter settingsPresenter) {
