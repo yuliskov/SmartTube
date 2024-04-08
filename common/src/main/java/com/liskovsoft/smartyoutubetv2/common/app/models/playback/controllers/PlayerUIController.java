@@ -327,6 +327,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         setSubtitleButtonState();
         getPlayer().setButtonState(R.id.action_rotate, mPlayerData.getVideoRotation() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
         getPlayer().setButtonState(R.id.action_subscribe, metadata.isSubscribed() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_afr, mPlayerData.isAfrEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
     @Override
@@ -511,6 +512,9 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             onSubscribe(buttonState);
         } else if (buttonId == R.id.action_sound_off) {
             applySoundOff(buttonState);
+        } else if (buttonId == R.id.action_afr) {
+            mPlayerData.setAfrEnabled(buttonState == PlayerUI.BUTTON_OFF);
+            getPlayer().setButtonState(buttonId, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
     }
 
