@@ -97,6 +97,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     private boolean mIsSpeedPerChannelEnabled;
     private final Map<String, SpeedItem> mSpeeds = new HashMap<>();
     private float mPitch;
+    private long mAfrSwitchTimeMs;
 
     private static class SpeedItem {
         public String channelId;
@@ -691,6 +692,14 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     public void setStartSeekIncrementMs(int startSeekIncrementMs) {
         mStartSeekIncrementMs = startSeekIncrementMs;
         persistState();
+    }
+
+    public void setAfrSwitchTimeMs(long timeMillis) {
+        mAfrSwitchTimeMs = timeMillis;
+    }
+
+    public long getAfrSwitchTimeMs() {
+        return mAfrSwitchTimeMs;
     }
 
     @TargetApi(19)

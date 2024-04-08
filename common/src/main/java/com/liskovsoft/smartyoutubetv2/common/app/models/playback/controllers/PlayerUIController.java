@@ -29,6 +29,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AutoFrameRateSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
@@ -514,6 +515,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             applySoundOff(buttonState);
         } else if (buttonId == R.id.action_afr) {
             mPlayerData.setAfrEnabled(buttonState == PlayerUI.BUTTON_OFF);
+            getController(AutoFrameRateController.class).applyAfr();
             getPlayer().setButtonState(buttonId, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
     }
@@ -526,6 +528,8 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             showNotificationsDialog(buttonState);
         } else if (buttonId == R.id.action_sound_off) {
             showSoundOffDialog();
+        } else if (buttonId == R.id.action_afr) {
+            AutoFrameRateSettingsPresenter.instance(getContext()).show();
         }
     }
 

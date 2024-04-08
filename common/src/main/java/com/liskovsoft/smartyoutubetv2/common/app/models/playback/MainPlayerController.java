@@ -56,7 +56,7 @@ public class MainPlayerController implements PlayerEventListener {
 
         RemoteController commandManager = new RemoteController(context, suggestionsController, videoLoader);
         HQDialogController hqDialogManager = new HQDialogController(stateUpdater);
-        AutoFrameRateController autoFrameRateManager = new AutoFrameRateController(hqDialogManager, stateUpdater);
+        AutoFrameRateController autoFrameRateManager = new AutoFrameRateController();
 
         suggestionsController.addMetadataListener(stateUpdater);
         suggestionsController.addMetadataListener(uiManager);
@@ -107,6 +107,17 @@ public class MainPlayerController implements PlayerEventListener {
 
     public Activity getActivity() {
         return mActivity.get();
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends PlayerEventListener> T getController(Class<T> clazz) {
+        for (PlayerEventListener listener : mEventListeners) {
+            if (clazz.isInstance(listener)) {
+                return (T) listener;
+            }
+        }
+
+        return null;
     }
 
     // Core events

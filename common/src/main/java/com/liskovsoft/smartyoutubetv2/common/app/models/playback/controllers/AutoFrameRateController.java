@@ -32,23 +32,21 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
     private static final int AUTO_FRAME_RATE_MODES_ID = 23;
     private static final long SHORTS_DURATION_MIN_MS = 30 * 1_000;
     private static final long SHORTS_DURATION_MAX_MS = 61 * 1_000;
-    private final HQDialogController mHQController;
-    private final VideoStateController mStateUpdater;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
     private final ModeSyncManager mModeSyncManager;
     private final Runnable mApplyAfr = this::applyAfr;
     private final Runnable mApplyAfrStop = this::applyAfrStop;
     private PlayerData mPlayerData;
     private boolean mIsPlay;
+    private VideoStateController mStateController;
+    private HQDialogController mHQDialogController;
     private final Runnable mPlaybackResumeHandler = () -> {
         if (getPlayer() != null) {
             restorePlayback();
         }
     };
 
-    public AutoFrameRateController(HQDialogController hqController, VideoStateController stateUpdater) {
-        mHQController = hqController;
-        mStateUpdater = stateUpdater;
+    public AutoFrameRateController() {
         mAutoFrameRateHelper = AutoFrameRateHelper.instance(null);
         mAutoFrameRateHelper.setListener(this);
         mModeSyncManager = ModeSyncManager.instance();
@@ -59,6 +57,8 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
     public void onInit() {
         mPlayerData = PlayerData.instance(getContext());
         mAutoFrameRateHelper.saveOriginalState(getActivity());
+        mStateController = getController(VideoStateController.class);
+        mHQDialogController = getController(HQDialogController.class);
     }
 
     @Override
@@ -96,6 +96,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
         Log.d(TAG, message);
         //MessageHelpers.showLongMessage(getActivity(), message);
         maybePausePlayback();
+        mPlayerData.setAfrSwitchTimeMs(System.currentTimeMillis());
     }
 
     @Override
@@ -104,23 +105,17 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
             return;
         }
 
-        if (newMode != null) {
-            String msg = getContext().getString(R.string.msg_mode_switch_error, UhdHelper.toResolution(newMode));
-            Log.e(TAG, msg);
+        // This error could appear even on success.
+        String msg = getContext().getString(R.string.msg_mode_switch_error, newMode != null ? UhdHelper.toResolution(newMode) : null);
+        Log.e(TAG, msg);
 
-            restorePlayback();
-
-            // This error could appear even on success.
-            // MessageHelpers.showMessage(getActivity(), msg);
-        } else {
-            // Seems that the device doesn't support direct mode switching.
-            // Use tvQuickActions instead.
-            maybePausePlayback();
-        }
+        // Seems that the device doesn't support direct mode switching.
+        // Use tvQuickActions instead.
+        maybePausePlayback();
     }
 
     @Override
-    public void onCancel() {
+    public void onModeCancel() {
         restorePlayback();
     }
 
@@ -162,11 +157,14 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
         }
     }
 
+    /**
+     * Sometimes AFR is not working on activity startup. Trying to fix with delay.
+     */
     private void applyAfrDelayed() {
         Utils.postDelayed(mApplyAfr, 500);
     }
 
-    private void applyAfr() {
+    public void applyAfr() {
         if (!skipAfr() && mPlayerData.isAfrEnabled()) {
             FormatItem videoFormat = getPlayer().getVideoFormat();
             applyAfr(videoFormat, false);
@@ -215,15 +213,16 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
 
     private void savePlayback() {
         if (!skipAfr() && mAutoFrameRateHelper.isSupported() && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseMs() > 0) {
-            mStateUpdater.blockPlay(true);
+            mStateController.blockPlay(true);
         }
 
-        mIsPlay = mStateUpdater.getPlayEnabled();
+        mIsPlay = mStateController.getPlayEnabled();
     }
 
     private void restorePlayback() {
-        if (!skipAfr() && mAutoFrameRateHelper.isSupported() && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseMs() > 0) {
-            mStateUpdater.blockPlay(false);
+        // Fix restore after disable afr: don't do afr enabled check
+        if (!skipAfr() && mAutoFrameRateHelper.isSupported() && mPlayerData.getAfrPauseMs() > 0) {
+            mStateController.blockPlay(false);
             getPlayer().setPlayWhenReady(mIsPlay);
         }
     }
@@ -259,11 +258,11 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
                 dialogPresenter.showDialog(modesCategory.title);
             }));
 
-            mHQController.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING_LIST, getContext().getString(R.string.auto_frame_rate), options));
-            mHQController.addOnDialogHide(mApplyAfr); // Apply NEW Settings on dialog close
+            mHQDialogController.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING_LIST, getContext().getString(R.string.auto_frame_rate), options));
+            mHQDialogController.addOnDialogHide(mApplyAfr); // Apply NEW Settings on dialog close
         } else {
-            mHQController.removeCategory(AUTO_FRAME_RATE_ID);
-            mHQController.removeOnDialogHide(mApplyAfr);
+            mHQDialogController.removeCategory(AUTO_FRAME_RATE_ID);
+            mHQDialogController.removeOnDialogHide(mApplyAfr);
         }
     }
 

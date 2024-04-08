@@ -99,7 +99,7 @@ public class AutoFrameRateHelper {
         if (activity == null) {
             Log.e(TAG, "Activity in null. exiting...");
             if (mListener != null) {
-                mListener.onCancel();
+                mListener.onModeCancel();
             }
             return;
         }
@@ -107,7 +107,7 @@ public class AutoFrameRateHelper {
         if (format == null) {
             Log.e(TAG, "Can't apply mode change: format is null");
             if (mListener != null) {
-                mListener.onCancel();
+                mListener.onModeCancel();
             }
             return;
         }
@@ -115,7 +115,7 @@ public class AutoFrameRateHelper {
         if (!isSupported()) {
             Log.e(TAG, "Autoframerate not supported. Exiting...");
             if (mListener != null) {
-                mListener.onCancel();
+                mListener.onModeCancel();
             }
             return;
         }
@@ -123,7 +123,7 @@ public class AutoFrameRateHelper {
         if (System.currentTimeMillis() - mPrevCall < THROTTLE_INTERVAL_MS) {
             Log.e(TAG, "Throttling afr calls...");
             if (mListener != null) {
-                mListener.onCancel();
+                mListener.onModeCancel();
             }
             return;
         } else {

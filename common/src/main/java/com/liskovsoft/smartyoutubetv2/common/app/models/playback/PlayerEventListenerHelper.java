@@ -15,12 +15,16 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
         mMainController = mainController;
     }
 
-    public void setAltContext(Context context) {
+    protected void setAltContext(Context context) {
         mContext = context;
     }
 
-    public MainPlayerController getMainController() {
+    protected MainPlayerController getMainController() {
         return mMainController;
+    }
+
+    protected <T extends PlayerEventListener> T getController(Class<T> clazz) {
+        return getMainController().getController(clazz);
     }
 
     public PlayerManager getPlayer() {
