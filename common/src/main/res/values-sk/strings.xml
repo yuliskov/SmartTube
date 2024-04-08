@@ -475,6 +475,7 @@
     <string name="action_subscribe_on">Odoberať</string>
     <!-- END Moved strings -->
     <string name="skip_24_rate">Preskočiť formáty s 24fps (oprava pre režim Real Cinema?)</string>
+    <string name="skip_shorts">Preskočiť Shorts</string>
     <string name="player_disable_suggestions">Vypnúť návrhy</string>
     <string name="feedback">Spätná väzba</string>
     <string name="sources">Zdroje</string>
@@ -552,7 +553,8 @@
     <string name="sort_by_rating">Hodnotenie</string>
     <string name="clear_search_history">Zmazať históriu vyhľadávania</string>
     <string name="remove_from_subscriptions">Skryť</string>
-    <string name="player_long_speed_list">Viac možností rýchlosti videa</string>
+    <string name="player_long_speed_list">Dlhý zoznam rýchlostí videa</string>
+    <string name="player_extra_long_speed_list">Extra dlhý zoznam rýchlostí videa</string>
     <string name="alt_app_icon">Alternatívna ikonka aplikácie (potrebný reštart)</string>
     <string name="network_stack">Preferovať sieťový zásobník %s</string>
     <string name="player_network_stack">Sieťový zásobník</string>
@@ -605,6 +607,7 @@
     <string name="player_global_focus">Plynulá navigácia medzi radmi tlačidiel prehrávača</string>
     <string name="auto_history">Automaticky (použiť nastavenie účtu)</string>
     <string name="remember_position_subscriptions">Zapamätať poslednú zobrazenú pozíciu v Odberoch</string>
+    <string name="remember_position_pinned">Zapamätať poslednú zobrazenú pozíciu v pripnutých playlistoch</string>
     <string name="msg_player_unknown_error">Neznáma chyba</string>
     <string name="header_notifications">Notifikácie</string>
     <string name="disable_search_history">Zakázať históriu vyhľadávania</string>
@@ -624,6 +627,7 @@
     <string name="hide_watched_from_notifications">Skryť videné videá v Notifikáciách</string>
     <string name="hide_unwanted_content">Skryť nežiaduci obsah</string>
     <string name="hide_watched_from_home">Skryť videné videá v Domov</string>
+    <string name="hide_watched_from_watch_later">Skryť videné videá zo zoznamu Pozrieť neskôr</string>
     <string name="remote_control_permission">Diaľkové ovládanie na pozadí vyžaduje povolenie na prekrytie cez okná</string>
     <string name="login_from_browser">Prihlásenie z prehliadača</string>
     <string name="disable_remote_history">Zakázanť históriu pri používaní diaľkového ovládania</string>
@@ -633,7 +637,7 @@
     <string name="channel_filter_hint">Filtrovať kanály</string>
     <string name="player_loop_shorts">Shorts v slučke</string>
     <string name="player_quick_shorts_skip">Preskočiť Shorts s tlačidlami vľavo/vpravo</string>
-    <string name="channels_filter">Filtrovať zoznam kanálov v sekcii Kanály</string>
+    <string name="channels_filter">Zobraziť vyhľadávacie pole v sekcii Kanály</string>
     <string name="channel_search_bar">Vyhľadávací panel v sekcii Kanály</string>
     <string name="header_sports">Šport</string>
     <string name="keep_finished_activities">Uchovávať dokončené aktivity</string>
@@ -650,4 +654,7 @@
     <string name="pitch_effect">Efekt výšky tónu</string>
     <string name="fullscreen_mode">Režim celej obrazovky (bez systémových líšt)</string>
     <string name="player_only_mode">Zobraziť iba prehrávač, ak je video otvorené mimo aplikácie</string>
+    <string name="pinned_channel_rows">Zobraziť pripnutý kanál ako riadky</string>
+    <string name="prefer_ipv4">Uprednostniť IPv4 DNS protokol</string>
+    <string name="prefer_ipv4_desc">Mohlo by to vyriešiť situácie, keď aplikácia vôbec nefunguje.\nPoznámka. Môže spôsobiť mrznutie a pády (najmä na zariadeniach so systémom Android 8 alebo Dune HD)</string>
 </resources>
