@@ -98,6 +98,10 @@ public class TrackErrorFixer extends DefaultMediaSourceEventListener {
         MediaTrack nextTrack = null;
 
         for (MediaTrack track : tracks) {
+            if (track.format == null) {
+                continue;
+            }
+
             if (!currentCodec.equals(track.format.codecs) && track.format.width <= width) {
                 nextTrack = track;
                 break;
