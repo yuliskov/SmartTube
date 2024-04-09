@@ -33,7 +33,6 @@ import java.util.List;
 
 public class SuggestionsController extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsController.class.getSimpleName();
-    private final List<MetadataListener> mListeners = new ArrayList<>();
     private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
     private GeneralData mGeneralData;
@@ -47,10 +46,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private final Runnable mChapterHandler = this::startChapterNotificationServiceIfNeededInt;
     private static final int MAX_PLAYLIST_CONTINUATIONS = 20;
     private static final int CHAPTER_NOTIFICATION_Id = 565;
-
-    public interface MetadataListener {
-        void onMetadata(MediaItemMetadata metadata);
-    }
 
     private interface OnVideoGroup {
         void onVideoGroup(VideoGroup group);
@@ -690,17 +685,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         return currentChapter;
     }
 
-    public void addMetadataListener(MetadataListener listener) {
-        if (!mListeners.contains(listener)) {
-            mListeners.add(listener);
-        }
-    }
-
     private void callListener(MediaItemMetadata mediaItemMetadata) {
         if (mediaItemMetadata != null) {
-            for (MetadataListener listener : mListeners) {
-                listener.onMetadata(mediaItemMetadata);
-            }
+            getMainController().onMetadata(mediaItemMetadata);
         }
     }
 

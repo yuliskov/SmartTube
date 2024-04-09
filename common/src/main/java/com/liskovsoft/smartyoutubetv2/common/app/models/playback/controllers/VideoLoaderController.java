@@ -16,7 +16,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.SampleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
@@ -36,14 +35,14 @@ import io.reactivex.disposables.Disposable;
 import java.util.Collections;
 import java.util.List;
 
-public class VideoLoaderController extends PlayerEventListenerHelper implements MetadataListener, OnDataChange {
+public class VideoLoaderController extends PlayerEventListenerHelper implements OnDataChange {
     private static final String TAG = VideoLoaderController.class.getSimpleName();
     private final Playlist mPlaylist;
-    private final SuggestionsController mSuggestionsController;
     private final UniqueRandom mRandom;
     private Video mLastVideo;
     private int mLastError = -1;
     private long mPrevErrorTimeMs;
+    private SuggestionsController mSuggestionsController;
     private PlayerData mPlayerData;
     private PlayerTweaksData mPlayerTweaksData;
     private long mSleepTimerStartMs;
@@ -63,14 +62,14 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     };
     private final Runnable mLoadRandomNext = this::loadRandomNext;
 
-    public VideoLoaderController(SuggestionsController suggestionsController) {
-        mSuggestionsController = suggestionsController;
+    public VideoLoaderController() {
         mPlaylist = Playlist.instance();
         mRandom = new UniqueRandom();
     }
 
     @Override
     public void onInit() {
+        mSuggestionsController = getController(SuggestionsController.class);
         mPlayerData = PlayerData.instance(getContext());
         mPlayerData.setOnChange(this);
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());

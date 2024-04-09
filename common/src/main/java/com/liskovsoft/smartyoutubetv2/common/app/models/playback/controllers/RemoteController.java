@@ -29,23 +29,19 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
     private static final String TAG = RemoteController.class.getSimpleName();
     private final RemoteControlService mRemoteControlService;
     private final RemoteControlData mRemoteControlData;
-    private final SuggestionsController mSuggestionsLoader;
-    private final VideoLoaderController mVideoLoader;
     private Disposable mListeningAction;
     private Disposable mPostStartPlayAction;
     private Disposable mPostStateAction;
     private Disposable mPostVolumeAction;
     private Video mVideo;
     private boolean mConnected;
-    private int mIsGlobalVolumeWorking = -1;
     private long mNewVideoPositionMs;
     private Disposable mActionDown;
     private Disposable mActionUp;
 
-    public RemoteController(Context context, SuggestionsController suggestionsLoader, VideoLoaderController videoLoader) {
+    public RemoteController(Context context) {
+        // Start receiving a commands as early as possible
         MotherService service = YouTubeMotherService.instance();
-        mSuggestionsLoader = suggestionsLoader;
-        mVideoLoader = videoLoader;
         mRemoteControlService = service.getRemoteControlService();
         mRemoteControlData = RemoteControlData.instance(context);
         mRemoteControlData.setOnChange(this);
@@ -261,7 +257,7 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
                         video.remotePlaylistId = command.getPlaylistId();
                         video.playlistParams = null;
                         video.isRemote = true;
-                        mSuggestionsLoader.loadSuggestions(video);
+                        getController(SuggestionsController.class).loadSuggestions(video);
                     }
                 }
                 break;
@@ -298,7 +294,7 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
             case Command.TYPE_NEXT:
                 if (getMainController() != null) {
                     movePlayerToForeground();
-                    mVideoLoader.loadNext();
+                    getController(VideoLoaderController.class).loadNext();
                 } else {
                     openNewVideo(mVideo);
                 }
@@ -307,7 +303,7 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
                 if (getMainController() != null && getPlayer() != null) {
                     movePlayerToForeground();
                     // Switch immediately. Skip position reset logic.
-                    mVideoLoader.loadPrevious();
+                    getController(VideoLoaderController.class).loadPrevious();
                 } else {
                     openNewVideo(mVideo);
                 }

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import androidx.fragment.app.Fragment;
+
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
@@ -41,41 +43,22 @@ public class MainPlayerController implements PlayerEventListener {
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private Video mPendingVideo;
 
-    public MainPlayerController(Context context) {
+    private MainPlayerController(Context context) {
         if (context instanceof Activity) {
             mActivity = new WeakReference<>((Activity) context);
         }
 
-        SuggestionsController suggestionsController = new SuggestionsController();
-        VideoLoaderController videoLoader = new VideoLoaderController(suggestionsController);
-        PlayerUIController uiManager = new PlayerUIController(suggestionsController, videoLoader);
-        VideoStateController stateUpdater = new VideoStateController();
-        ContentBlockController contentBlockManager = new ContentBlockController();
-        ChatController liveChatManager = new ChatController();
-        CommentsController commentsManager = new CommentsController();
-
-        RemoteController commandManager = new RemoteController(context, suggestionsController, videoLoader);
-        HQDialogController hqDialogManager = new HQDialogController(stateUpdater);
-        AutoFrameRateController autoFrameRateManager = new AutoFrameRateController();
-
-        suggestionsController.addMetadataListener(stateUpdater);
-        suggestionsController.addMetadataListener(uiManager);
-        suggestionsController.addMetadataListener(videoLoader);
-        suggestionsController.addMetadataListener(contentBlockManager);
-        suggestionsController.addMetadataListener(liveChatManager);
-        suggestionsController.addMetadataListener(commentsManager);
-
         // NOTE: position matters!!!
-        mEventListeners.add(autoFrameRateManager);
-        mEventListeners.add(uiManager);
-        mEventListeners.add(hqDialogManager);
-        mEventListeners.add(stateUpdater);
-        mEventListeners.add(suggestionsController);
-        mEventListeners.add(videoLoader);
-        mEventListeners.add(commandManager);
-        mEventListeners.add(contentBlockManager);
-        mEventListeners.add(liveChatManager);
-        mEventListeners.add(commentsManager);
+        mEventListeners.add(new AutoFrameRateController());
+        mEventListeners.add(new PlayerUIController());
+        mEventListeners.add(new HQDialogController());
+        mEventListeners.add(new VideoStateController());
+        mEventListeners.add(new SuggestionsController());
+        mEventListeners.add(new VideoLoaderController());
+        mEventListeners.add(new RemoteController(context));
+        mEventListeners.add(new ContentBlockController());
+        mEventListeners.add(new ChatController());
+        mEventListeners.add(new CommentsController());
     }
 
     public static MainPlayerController instance(Context context) {
@@ -140,6 +123,11 @@ public class MainPlayerController implements PlayerEventListener {
     @Override
     public void onInit() {
         // NOP. Internal event.
+    }
+
+    @Override
+    public void onMetadata(MediaItemMetadata metadata) {
+        process(listener -> listener.onMetadata(metadata));
     }
 
     // End core events

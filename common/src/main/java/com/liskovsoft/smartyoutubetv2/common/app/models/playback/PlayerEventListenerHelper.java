@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import android.app.Activity;
 import android.content.Context;
+
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
@@ -299,6 +301,11 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
 
     @Override
     public void onTickle() {
+        // NOP
+    }
+
+    @Override
+    public void onMetadata(MediaItemMetadata metadata) {
         // NOP
     }
 }

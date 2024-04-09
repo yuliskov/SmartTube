@@ -18,7 +18,6 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
@@ -48,13 +47,13 @@ import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerUIController extends PlayerEventListenerHelper implements MetadataListener {
+public class PlayerUIController extends PlayerEventListenerHelper {
     private static final String TAG = PlayerUIController.class.getSimpleName();
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private final Handler mHandler;
     private final MediaItemService mMediaItemManager;
-    private final VideoLoaderController mVideoLoader;
-    private final SuggestionsController mSuggestionsController;
+    private VideoLoaderController mVideoLoader;
+    private SuggestionsController mSuggestionsController;
     private PlayerData mPlayerData;
     private PlayerTweaksData mPlayerTweaksData;
     private List<PlaylistInfo> mPlaylistInfos;
@@ -77,9 +76,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         }
     };
 
-    public PlayerUIController(SuggestionsController suggestionsController, VideoLoaderController videoLoader) {
-        mSuggestionsController = suggestionsController;
-        mVideoLoader = videoLoader;
+    public PlayerUIController() {
         mHandler = new Handler(Looper.getMainLooper());
 
         MotherService service = YouTubeMotherService.instance();
@@ -88,6 +85,8 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
     @Override
     public void onInit() {
+        mSuggestionsController = getController(SuggestionsController.class);
+        mVideoLoader = getController(VideoLoaderController.class);
         mPlayerData = PlayerData.instance(getContext());
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
 

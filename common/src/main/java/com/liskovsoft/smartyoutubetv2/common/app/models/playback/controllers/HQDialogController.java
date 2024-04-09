@@ -27,18 +27,15 @@ public class HQDialogController extends PlayerEventListenerHelper {
     private final Map<Integer, OptionCategory> mCategories = new LinkedHashMap<>();
     private final Map<Integer, OptionCategory> mCategoriesInt = new LinkedHashMap<>();
     private final Set<Runnable> mHideListeners = new HashSet<>();
-    private final VideoStateController mStateUpdater;
+    private VideoStateController mStateUpdater;
     private PlayerData mPlayerData;
-    private AppDialogPresenter mAppDialogPresenter;;
-
-    public HQDialogController(VideoStateController stateUpdater) {
-        mStateUpdater = stateUpdater;
-    }
+    private AppDialogPresenter mAppDialogPresenter;
 
     @Override
     public void onInit() {
         mPlayerData = PlayerData.instance(getContext());
         mAppDialogPresenter = AppDialogPresenter.instance(getContext());
+        mStateUpdater = getController(VideoStateController.class);
     }
 
     @Override
