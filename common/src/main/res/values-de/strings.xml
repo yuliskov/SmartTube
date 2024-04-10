@@ -475,6 +475,7 @@
     <string name="action_subscribe_on">Abonnieren an</string>
     <!-- END Moved strings -->
     <string name="skip_24_rate">24fps-Formate überspringen (Echter-Kinomodus-Fix?)</string>
+    <string name="skip_shorts">Shorts überspringen</string>
     <string name="player_disable_suggestions">Vorschläge deaktivieren</string>
     <string name="feedback">Feedback</string>
     <string name="sources">Quellen</string>
@@ -552,7 +553,8 @@
     <string name="sort_by_rating">Bewertung</string>
     <string name="clear_search_history">Suchverlauf löschen</string>
     <string name="remove_from_subscriptions">Ausblenden</string>
-    <string name="player_long_speed_list">Mehr Optionen für Video-Geschwindigkeit</string>
+    <string name="player_long_speed_list">Lange Geschwindigkeitsliste</string>
+    <string name="player_extra_long_speed_list">Extra lange Geschwindigkeitsliste</string>
     <string name="alt_app_icon">Alternatives App-Symbol (Neustart erforderlich)</string>
     <string name="network_stack">Netzwerkstack %s bevorzugen</string>
     <string name="player_network_stack">Netzwerkstack</string>
@@ -605,6 +607,7 @@
     <string name="player_global_focus">Nahtlose Navigation zwischen Player-Schaltflächenreihen</string>
     <string name="auto_history">Automatisch (Kontoeinstellungen verwenden)</string>
     <string name="remember_position_subscriptions">Zuletzt angesehene Position in Abos merken</string>
+    <string name="remember_position_pinned">Zuletzt angesehene Position in angehefteten Wiedergabelisten merken</string>
     <string name="msg_player_unknown_error">Unbekannter Fehler</string>
     <string name="header_notifications">Benachrichtigungen</string>
     <string name="disable_search_history">Suchverlauf deaktivieren</string>
