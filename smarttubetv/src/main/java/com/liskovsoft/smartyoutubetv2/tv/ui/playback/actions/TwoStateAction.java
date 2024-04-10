@@ -20,10 +20,15 @@ public class TwoStateAction extends MultiAction {
     public static final int INDEX_ON = 1;
 
     private TwoStateAction mBoundAction;
-    private String mLongPressMsg;
+    private final String mLongPressMsg;
+    private final boolean mEnableLongPressMsg;
 
     public TwoStateAction(Context context, int actionId, int offIconResId) {
-        this(context, actionId, offIconResId, ActionHelpers.getIconHighlightColor(context));
+        this(context, actionId, offIconResId, true);
+    }
+
+    public TwoStateAction(Context context, int actionId, int offIconResId, boolean enableLongPressMsg) {
+        this(context, actionId, offIconResId, ActionHelpers.getIconHighlightColor(context), enableLongPressMsg);
     }
 
     /**
@@ -31,6 +36,10 @@ public class TwoStateAction extends MultiAction {
      * @param context Context used for loading resources.
      */
     public TwoStateAction(Context context, int actionId, int offIconResId, int highlightColor) {
+        this(context, actionId, offIconResId, highlightColor, true);
+    }
+
+    public TwoStateAction(Context context, int actionId, int offIconResId, int highlightColor, boolean enableLongPressMsg) {
         super(actionId);
 
         Drawable[] drawables = new Drawable[2];
@@ -51,6 +60,7 @@ public class TwoStateAction extends MultiAction {
         setIndex(INDEX_OFF); // default state
 
         mLongPressMsg = context.getString(R.string.long_press_for_settings);
+        mEnableLongPressMsg = enableLongPressMsg;
     }
 
     @Override
@@ -72,7 +82,7 @@ public class TwoStateAction extends MultiAction {
 
     @Override
     public void setLabels(String[] labels) {
-        if (mLongPressMsg != null) {
+        if (mEnableLongPressMsg) {
             for (int i = 0; i < labels.length; i++) {
                 if (labels[i] != null) {
                     labels[i] = String.format("%s (%s)", labels[i], mLongPressMsg);
@@ -81,9 +91,5 @@ public class TwoStateAction extends MultiAction {
         }
 
         super.setLabels(labels);
-    }
-
-    protected void disableLongPressMsg() {
-        mLongPressMsg = null;
     }
 }
