@@ -12,5 +12,6 @@ public class VideoStatsAction extends TwoStateAction {
         labels[INDEX_OFF] = context.getString(R.string.player_tweaks);
         labels[INDEX_ON] = context.getString(R.string.player_tweaks);
         setLabels(labels);
+        disableLongPressMsg();
     }
 }

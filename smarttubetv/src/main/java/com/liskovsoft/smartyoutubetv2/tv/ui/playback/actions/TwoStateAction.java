@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.PlaybackControlsRow.MultiAction;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class TwoStateAction extends MultiAction {
     /**
@@ -19,6 +20,7 @@ public class TwoStateAction extends MultiAction {
     public static final int INDEX_ON = 1;
 
     private TwoStateAction mBoundAction;
+    private String mLongPressMsg;
 
     public TwoStateAction(Context context, int actionId, int offIconResId) {
         this(context, actionId, offIconResId, ActionHelpers.getIconHighlightColor(context));
@@ -47,6 +49,8 @@ public class TwoStateAction extends MultiAction {
         setLabels(labels);
 
         setIndex(INDEX_OFF); // default state
+
+        mLongPressMsg = context.getString(R.string.long_press_for_settings);
     }
 
     @Override
@@ -64,5 +68,22 @@ public class TwoStateAction extends MultiAction {
 
     public void setBoundAction(TwoStateAction boundAction) {
         mBoundAction = boundAction;
+    }
+
+    @Override
+    public void setLabels(String[] labels) {
+        if (mLongPressMsg != null) {
+            for (int i = 0; i < labels.length; i++) {
+                if (labels[i] != null) {
+                    labels[i] = String.format("%s (%s)", labels[i], mLongPressMsg);
+                }
+            }
+        }
+
+        super.setLabels(labels);
+    }
+
+    protected void disableLongPressMsg() {
+        mLongPressMsg = null;
     }
 }

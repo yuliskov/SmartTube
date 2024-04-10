@@ -12,5 +12,6 @@ public class ThumbsDownAction extends TwoStateAction {
         labels[INDEX_OFF] = context.getString(R.string.action_dislike);
         labels[INDEX_ON] = context.getString(R.string.action_dislike);
         setLabels(labels);
+        disableLongPressMsg();
     }
 }

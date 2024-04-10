@@ -12,5 +12,6 @@ public class PlaylistAddAction extends TwoStateAction {
         labels[INDEX_OFF] = context.getString(R.string.action_playlist_add);
         labels[INDEX_ON] = context.getString(R.string.action_playlist_remove);
         setLabels(labels);
+        disableLongPressMsg();
     }
 }
