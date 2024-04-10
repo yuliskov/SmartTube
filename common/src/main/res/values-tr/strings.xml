@@ -475,6 +475,7 @@
     <string name="action_subscribe_on">Abone ol Açık</string>
     <!-- END Moved strings -->
     <string name="skip_24_rate">24 fps biçimlerini atla (gerçek sinema modu düzeltmesi\?)</string>
+    <string name="skip_shorts">Shortsları atla</string>
     <string name="player_disable_suggestions">Önerileri devre dışı bırak</string>
     <string name="feedback">Geri bildirim</string>
     <string name="sources">Kaynaklar</string>
@@ -553,6 +554,7 @@
     <string name="clear_search_history">Arama geçmişini temizle</string>
     <string name="remove_from_subscriptions">Gizle</string>
     <string name="player_long_speed_list">Uzun oynatma hızı listesi</string>
+    <string name="player_extra_long_speed_list">Ekstra uzun oynatma hızı listesi</string>
     <string name="alt_app_icon">Alternatif uygulama simgesi (yeniden başlatma gerekli)</string>
     <string name="network_stack">%s ağ yığınını tercih et</string>
     <string name="player_network_stack">Ağ yığını</string>
@@ -605,6 +607,7 @@
     <string name="player_global_focus">Oynatıcı düğmesi satırları arasında kusursuz gezinme</string>
     <string name="auto_history">Otomatik (hesap ayarlarını kullan)</string>
     <string name="remember_position_subscriptions">Abonelikler\'de son görüntülenen konumu hatırla</string>
+    <string name="remember_position_pinned">Sabitlenmiş oynatma listelerinde son görüntülenen konumu hatırla</string>
     <string name="msg_player_unknown_error">Bilinmeyen hata</string>
     <string name="header_notifications">Bildirimler</string>
     <string name="disable_search_history">Arama geçmişini devre dışı bırak</string>
