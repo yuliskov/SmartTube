@@ -642,4 +642,18 @@
   <string name="dearrow_not_submitted_thumbs">Où récupérer les vignettes non soumises</string>
   <string name="pitch_effect">Effet de hauteur</string>
   <string name="action_sound_off">Son désactivé</string>
+  <string name="hide_watched_from_watch_later">Masquer les vidéos regardées de la playlist À regarder plus tard</string>
+  <string name="fullscreen_mode">Mode plein écran (sans barres système)</string>
+  <string name="player_only_mode">Afficher uniquement le lecteur si la vidéo est ouverte en dehors de l’application</string>
+  <string name="pinned_channel_rows">Afficher le canal épinglé sous forme de lignes</string>
+  <string name="prefer_ipv4">Privilégiez le DNS IPv4</string>
+  <string name="prefer_ipv4_desc">Peut résoudre les situations où l’application ne fonctionne pas du tout.\nRemarque. Peut provoquer des blocages et des plantages (en particulier sur les appareils Android 8 ou Dune HD)</string>
+  <string name="long_press_for_settings">APPUYEZ LONGUEMENT POUR OUVRIR LES PARAMÈTRES</string>
+  <string name="remember_position_pinned">Mémoriser la dernière position consultée dans les playlists épinglées</string>
+  <string name="old_channel_look">Ancienne apparence de la page Chaîne</string>
+  <string name="player_extra_long_speed_list">Liste de vitesse extra longue</string>
+  <string name="dearrow_status">Vérifier l’état du serveur DeArrow</string>
+  <string name="skip_shorts">Sauter les Shorts</string>
+  <string name="save_playlist">Ajouter une playlist à la section Playlists</string>
+  <string name="player_exit_shortcut">Quitter le lecteur</string>
 </resources>
