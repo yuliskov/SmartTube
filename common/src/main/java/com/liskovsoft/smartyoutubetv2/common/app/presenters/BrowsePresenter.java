@@ -149,7 +149,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void saveSelectedItems() {
-        if (mCurrentVideo != null && mCurrentVideo.getPositionInsideGroup() == 0) { // fix position reset when jumping between sections
+        // Fix position reset when jumping between sections
+        if (mCurrentVideo != null && mCurrentVideo.getPositionInsideGroup() == 0 && (System.currentTimeMillis() - mCurrentVideo.timestamp) < 10_000) {
             return;
         }
 
