@@ -2,28 +2,30 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+
 import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
 import com.liskovsoft.mediaserviceinterfaces.yt.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
-import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
-import io.reactivex.disposables.Disposable;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.disposables.Disposable;
 
 public class AccountSelectionPresenter extends BasePresenter<Void> {
     private static final String TAG = AccountSelectionPresenter.class.getSimpleName();
@@ -135,7 +137,7 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
         mSignInService.selectAccount(account);
         ExoMediaSourceFactory.unhold();
         BrowsePresenter.instance(getContext()).refresh(false);
-        SplashPresenter.instance(getContext()).updateChannels();
+        Utils.updateChannels(getContext());
         //BrowsePresenter.instance(getContext()).onViewInitialized(); // reset state
 
         // Account history might be turned off (common issue).

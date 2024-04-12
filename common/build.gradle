@@ -91,6 +91,8 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + kotlinxVersion
 
+    implementation 'com.jakewharton:process-phoenix:' + phoenixVersion
+
     stbetaImplementation project(':leanbackassistant')
     ststableImplementation project(':leanbackassistant')
     storigImplementation project(':leanbackassistant')

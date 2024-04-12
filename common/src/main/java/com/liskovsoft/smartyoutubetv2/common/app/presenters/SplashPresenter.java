@@ -3,11 +3,11 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
-import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -25,13 +25,13 @@ import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
-import io.reactivex.disposables.Disposable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.disposables.Disposable;
+
 public class SplashPresenter extends BasePresenter<SplashView> {
-    private static final String CHANNELS_RECEIVER_CLASS_NAME = "com.liskovsoft.leanbackassistant.channels.RunOnInstallReceiver";
     private static final String TAG = SplashPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static SplashPresenter sInstance;
@@ -86,7 +86,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             mRunPerInstance = true;
             //clearCache();
             enableHistoryIfNeeded();
-            updateChannels();
+            Utils.updateChannels(getContext());
             initIntentChain();
             // Fake service to prevent the app destroying?
             //runRemoteControlFakeTask();
@@ -173,32 +173,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private void checkTouchSupport() {
         if (Helpers.isTouchSupported(getContext())) {
             MessageHelpers.showLongMessage(getContext(), "The app is designed for tv boxes. Phones aren't supported.");
-            ViewManager.instance(getContext()).forceFinishTheApp();
-        }
-    }
-
-    public void updateChannels() {
-        // Can't use class directly! ATV module is disabled for some flavors.
-        Class<?> clazz = null;
-
-        try {
-            clazz = Class.forName(CHANNELS_RECEIVER_CLASS_NAME);
-        } catch (ClassNotFoundException e) {
-            // NOP
-        }
-
-        if (clazz != null) {
-            if (getContext() != null) {
-                Log.d(TAG, "Starting channels receiver...");
-                Intent intent = new Intent(getContext(), clazz);
-                try {
-                    getContext().sendBroadcast(intent);
-                } catch (Exception e) {
-                    // NullPointerException on MX9Pro (rk3328  7.1.2)
-                }
-            }
-        } else {
-            Log.e(TAG, "Channels receiver class not found: " + CHANNELS_RECEIVER_CLASS_NAME);
+            Utils.forceFinishTheApp();
         }
     }
 

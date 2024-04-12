@@ -10,6 +10,7 @@ import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -123,7 +124,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         MessageHelpers.showMessage(mContext, R.string.msg_done);
 
         // To apply settings we need to kill the app
-        new Handler(mContext.getMainLooper()).postDelayed(() -> ViewManager.instance(mContext).forceFinishTheApp(), 1_000);
+        new Handler(mContext.getMainLooper()).postDelayed(() -> Utils.restartTheApp(mContext), 1_000);
     }
 
     /**

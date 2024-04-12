@@ -47,6 +47,7 @@ import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -84,6 +85,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Utils {
+    private static final String REMOTE_CONTROL_RECEIVER_CLASS_NAME = "com.liskovsoft.leanbackassistant.channels.RunOnInstallReceiver";
+    private static final String UPDATE_CHANNELS_RECEIVER_CLASS_NAME = "com.liskovsoft.leanbackassistant.channels.RunOnInstallReceiver";
+    private static final String PROPERLY_FINISH_ACTIVITY_CLASS_NAME = "com.liskovsoft.smartyoutubetv2.tv.launchers.ProperlyFinishTheAppActivity";
+    private static final String BOOTSTRAP_ACTIVITY_CLASS_NAME = "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity";
     private static final String TASK_ID = RemoteControlWorker.class.getSimpleName();
     private static final String TAG = Utils.class.getSimpleName();
     private static final String QR_CODE_URL_TEMPLATE = "https://api.qrserver.com/v1/create-qr-code/?data=%s";
@@ -821,5 +826,61 @@ public class Utils {
 
     public static boolean isOculusQuest() {
         return Helpers.getDeviceName().startsWith("Oculus Quest");
+    }
+
+    public static void properlyFinishTheApp(Context context) {
+        restartTheApp(context, PROPERLY_FINISH_ACTIVITY_CLASS_NAME);
+    }
+
+    public static void restartTheApp(Context context) {
+        restartTheApp(context, BOOTSTRAP_ACTIVITY_CLASS_NAME);
+    }
+
+    /**
+     * Simply kills the app.
+     */
+    public static void forceFinishTheApp() {
+        Runtime.getRuntime().exit(0);
+    }
+
+    public static void updateChannels(Context context) {
+        startReceiver(context, UPDATE_CHANNELS_RECEIVER_CLASS_NAME);
+    }
+
+    public static void startRemoteControl(Context context) {
+        startReceiver(context, REMOTE_CONTROL_RECEIVER_CLASS_NAME);
+    }
+
+    private static void restartTheApp(Context context, String bootActivityClassName) {
+        try {
+            ProcessPhoenix.triggerRebirth(context, new Intent(context, Class.forName(bootActivityClassName)));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void startReceiver(Context context, String receiverClassName) {
+        // Can't use class directly! ATV module is disabled for some flavors.
+        Class<?> clazz = null;
+
+        try {
+            clazz = Class.forName(receiverClassName);
+        } catch (ClassNotFoundException e) {
+            // NOP
+        }
+
+        if (clazz != null) {
+            if (context != null) {
+                Log.d(TAG, "Starting channels receiver...");
+                Intent intent = new Intent(context, clazz);
+                try {
+                    context.sendBroadcast(intent);
+                } catch (Exception e) {
+                    // NullPointerException on MX9Pro (rk3328  7.1.2)
+                }
+            }
+        } else {
+            Log.e(TAG, "Channels receiver class not found: " + receiverClassName);
+        }
     }
 }

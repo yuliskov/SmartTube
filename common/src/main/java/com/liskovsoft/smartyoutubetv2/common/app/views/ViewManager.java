@@ -9,7 +9,9 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+
 import androidx.annotation.NonNull;
+
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
@@ -346,7 +348,7 @@ public class ViewManager {
      * The app continue to run in the background.
      * @param activity this activity
      */
-    public void properlyFinishTheApp(Context activity) {
+    public void properlyFinishTheApp2(Context activity) {
         if (activity instanceof MotherActivity) {
             Log.d(TAG, "Trying finish the app...");
             mIsMoveToBackEnabled = true; // close all activities below current one
@@ -371,17 +373,6 @@ public class ViewManager {
                 mIsFinishing = false;
             }, 1_000);
         }
-    }
-
-    /**
-     * Simply kills the app.
-     */
-    public void forceFinishTheApp() {
-        destroyApp();
-    }
-
-    private static void destroyApp() {
-        Runtime.getRuntime().exit(0);
     }
 
     public Class<?> getTopView() {
