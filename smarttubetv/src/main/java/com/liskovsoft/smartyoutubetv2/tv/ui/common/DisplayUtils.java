@@ -14,7 +14,7 @@ import android.widget.VideoView;
 
 import java.util.HashMap;
 
-public class DislayUtils {
+public class DisplayUtils {
 
     public interface MediaDimensions {
         double MEDIA_HEIGHT = 0.95;
@@ -25,7 +25,7 @@ public class DislayUtils {
         double MEDIA_LEFT_MARGIN = 0.025;
     }
     
-    private DislayUtils() {
+    private DisplayUtils() {
         // NOP
     }
 
