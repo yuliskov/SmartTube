@@ -295,13 +295,6 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="unspecified"/>
 
-        <activity
-            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.ProperlyFinishTheAppActivity"
-            android:exported="false"
-            android:launchMode="singleInstance"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
-            android:screenOrientation="unspecified"/>
-
         <!-- END Launchers -->
     </application>
 

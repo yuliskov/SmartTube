@@ -85,9 +85,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Utils {
-    private static final String REMOTE_CONTROL_RECEIVER_CLASS_NAME = "com.liskovsoft.leanbackassistant.channels.RunOnInstallReceiver";
-    private static final String UPDATE_CHANNELS_RECEIVER_CLASS_NAME = "com.liskovsoft.leanbackassistant.channels.RunOnInstallReceiver";
-    private static final String PROPERLY_FINISH_ACTIVITY_CLASS_NAME = "com.liskovsoft.smartyoutubetv2.tv.launchers.ProperlyFinishTheAppActivity";
+    private static final String REMOTE_CONTROL_RECEIVER_CLASS_NAME = "com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlReceiver";
+    private static final String UPDATE_CHANNELS_RECEIVER_CLASS_NAME = "com.liskovsoft.leanbackassistant.channels.UpdateChannelsReceiver";
     private static final String BOOTSTRAP_ACTIVITY_CLASS_NAME = "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity";
     private static final String TASK_ID = RemoteControlWorker.class.getSimpleName();
     private static final String TAG = Utils.class.getSimpleName();
@@ -828,8 +827,12 @@ public class Utils {
         return Helpers.getDeviceName().startsWith("Oculus Quest");
     }
 
+    /**
+     * Finish the app but remain running services
+     */
     public static void properlyFinishTheApp(Context context) {
-        restartTheApp(context, PROPERLY_FINISH_ACTIVITY_CLASS_NAME);
+        //ViewManager.instance(context).properlyFinishTheApp2(context);
+        forceFinishTheApp();
     }
 
     public static void restartTheApp(Context context) {

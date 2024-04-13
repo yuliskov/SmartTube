@@ -24,13 +24,13 @@ import java.util.concurrent.TimeUnit;
  * appear in the TV provider database, and that these and all other programs are synchronized with
  * TV provider database.
  */
-public class SynchronizeDatabaseWorker extends Worker {
-    private static final String TAG = SynchronizeDatabaseWorker.class.getSimpleName();
+public class UpdateChannelsWorker extends Worker {
+    private static final String TAG = UpdateChannelsWorker.class.getSimpleName();
     private static final String WORK_NAME = "Update channels";
     private final UpdateChannelsTask mTask;
     private static long mPreviousRunTimeMS;
 
-    public SynchronizeDatabaseWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    public UpdateChannelsWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
 
         mTask = new UpdateChannelsTask(context);
@@ -44,7 +44,7 @@ public class SynchronizeDatabaseWorker extends Worker {
             workManager.enqueueUniquePeriodicWork(
                     WORK_NAME,
                     ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (when old worker is running)
-                    new PeriodicWorkRequest.Builder(SynchronizeDatabaseWorker.class, 20, TimeUnit.MINUTES).addTag(WORK_NAME).build()
+                    new PeriodicWorkRequest.Builder(UpdateChannelsWorker.class, 20, TimeUnit.MINUTES).addTag(WORK_NAME).build()
             );
         }
     }

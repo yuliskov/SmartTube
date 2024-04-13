@@ -9,14 +9,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
-import com.liskovsoft.leanbackassistant.media.ClipService;
-import com.liskovsoft.leanbackassistant.media.Playlist;
-import com.liskovsoft.leanbackassistant.recommendations.RecommendationsProvider;
-import com.liskovsoft.sharedutils.helpers.Helpers;
+
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * JobScheduler task to synchronize the TV provider database with the desired list of channels and
@@ -28,8 +23,8 @@ import java.util.concurrent.TimeUnit;
  * TV provider database.
  */
 @TargetApi(21)
-public class SynchronizeDatabaseJobService extends JobService {
-    private static final String TAG = SynchronizeDatabaseJobService.class.getSimpleName();
+public class UpdateChannelsJobService extends JobService {
+    private static final String TAG = UpdateChannelsJobService.class.getSimpleName();
     private static final int SYNC_JOB_ID = 1;
     private static boolean sInProgress;
     private SynchronizeDatabaseTask mSynchronizeDatabaseTask;
@@ -41,7 +36,7 @@ public class SynchronizeDatabaseJobService extends JobService {
 
             // setup scheduled job
             scheduler.schedule(
-                    new JobInfo.Builder(SYNC_JOB_ID, new ComponentName(context, SynchronizeDatabaseJobService.class))
+                    new JobInfo.Builder(SYNC_JOB_ID, new ComponentName(context, UpdateChannelsJobService.class))
                             //.setPeriodic(TimeUnit.MINUTES.toMillis(30))
                             .setPeriodic(20 * 60 * 1_000)
                             .setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
