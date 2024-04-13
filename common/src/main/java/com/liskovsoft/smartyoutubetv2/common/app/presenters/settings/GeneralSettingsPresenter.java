@@ -211,11 +211,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             options.add(UiOptionItem.from((i + 1) + " " + getContext().getString(nameResId), optionItem -> {
                 if (optionItem.isSelected()) {
                     mMainUIData.setMenuItemIndex(index, menuItem);
+                    dialog.goBack();
 
-                    AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-                    settingsPresenter.clearBackstack();
-                    appendContextMenuItemsCategory(settingsPresenter);
-                    settingsPresenter.showDialog();
+                    //AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+                    //settingsPresenter.clearBackstack();
+                    //appendContextMenuItemsCategory(settingsPresenter);
+                    //settingsPresenter.showDialog();
                 }
             }, currentIndex == i));
         }
