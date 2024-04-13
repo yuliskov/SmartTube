@@ -475,6 +475,7 @@
     <string name="action_subscribe_on">Odebírat</string>
     <!-- KONEC Přesunutých řetězců -->
     <string name="skip_24_rate">Přeskakovat formáty s 24fps (oprava pro režim Real Cinema?)</string>
+    <string name="skip_shorts">Přeskočit Shorts</string>
     <string name="player_disable_suggestions">Zakázat návrhy</string>
     <string name="feedback">Zpětná vazba</string>
     <string name="sources">Zdroje</string>
@@ -552,7 +553,8 @@
     <string name="sort_by_rating">Hodnocení</string>
     <string name="clear_search_history">Vymazat historii vyhledávání</string>
     <string name="remove_from_subscriptions">Skrýt</string>
-    <string name="player_long_speed_list">Více možností rychlosti videa</string>
+    <string name="player_long_speed_list">Dlouhý seznam rychlostí</string>
+    <string name="player_extra_long_speed_list">Velmi dlouhý seznam rychlostí</string>
     <string name="alt_app_icon">Alternativní ikona aplikace (vyžaduje restart)</string>
     <string name="network_stack">Preferovat síťový zásobník %s</string>
     <string name="player_network_stack">Síťový zásobník</string>
@@ -605,6 +607,7 @@
     <string name="player_global_focus">Souvislá navigace mezi řadami tlačítek přehrávače</string>
     <string name="auto_history">Automaticky (použije nastavení účtu)</string>
     <string name="remember_position_subscriptions">Pamatovat si poslední zhlédnutou pozici v Odběrech</string>
+    <string name="remember_position_pinned">Pamatovat si poslední zhlédnutou pozici v připnutých playlistech</string>
     <string name="msg_player_unknown_error">Neznámá chyba</string>
     <string name="header_notifications">Oznámení</string>
     <string name="disable_search_history">Zakázat historii vyhledávání</string>
@@ -652,4 +655,7 @@
     <string name="fullscreen_mode">Režim celé obrazovky (bez systémových lišt)</string>
     <string name="player_only_mode">Zobrazit pouze přehrávač, pokud je video otevřeno mimo aplikaci</string>
     <string name="pinned_channel_rows">Zobrazit připnutý kanál jako řádky</string>
+    <string name="prefer_ipv4">Preferovat IPv4 DNS</string>
+    <string name="prefer_ipv4_desc">Může vyřešit situace, kdy aplikace vůbec nefunguje\nPozn. Může způsobit zamrznutí a pády (především na zařízeních s Android 8 nebo Dune HD)</string>
+    <string name="long_press_for_settings">DLOUZE STISKNĚTE PRO NASTAVENÍ</string>
 </resources>
