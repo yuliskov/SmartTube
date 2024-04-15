@@ -98,10 +98,10 @@ public class ContentBlockController extends PlayerEventListenerHelper {
     public void onVideoLoaded(Video item) {
         disposeActions();
 
-        boolean enabled = mContentBlockData.isSponsorBlockEnabled() && !isChannelExcluded(item.channelId);
+        boolean enabled = mContentBlockData.isSponsorBlockEnabled();
         getPlayer().setButtonState(R.id.action_content_block, enabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
 
-        if (enabled && checkVideo(item)) {
+        if (enabled && checkVideo(item) && !isChannelExcluded(item.channelId)) {
             updateSponsorSegmentsAndWatch(item);
         }
     }
