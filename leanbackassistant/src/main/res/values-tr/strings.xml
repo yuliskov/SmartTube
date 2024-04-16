@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">LeanbackAssistant</string>
-
     <string name="search_hint">Videolarda Ara</string>
     <string name="search_label">SmartTube</string>
     <string name="settings_description">SmartTube Videoları</string>
