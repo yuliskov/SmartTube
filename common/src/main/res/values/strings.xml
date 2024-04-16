@@ -637,7 +637,7 @@
     <string name="channel_filter_hint">Filter channels</string>
     <string name="player_loop_shorts">Loop Shorts</string>
     <string name="player_quick_shorts_skip">Skip Shorts with left/right buttons</string>
-    <string name="channels_filter">Show the search field inside Channels section</string>
+    <string name="channels_filter">Show Filter channels field inside Channels section</string>
     <string name="channel_search_bar">Search bar inside the Channel page</string>
     <string name="header_sports">Sports</string>
     <string name="keep_finished_activities">Keep finished activities</string>
