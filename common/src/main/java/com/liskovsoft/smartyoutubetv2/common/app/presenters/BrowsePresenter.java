@@ -1004,7 +1004,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public boolean isPinnedSection() {
-        return mCurrentSection != null && mCurrentSection.getId() > 100;
+        return mCurrentSection != null && isPinnedId(mCurrentSection.getId());
+    }
+
+    private boolean isPinnedId(int id) {
+        return id > 100;
     }
 
     private boolean isSection(int sectionId) {
