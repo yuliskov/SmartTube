@@ -6,5 +6,4 @@
     <string name="subscriptions_playlist_name">Abonenelikler</string>
     <string name="history_playlist_name">Geçmiş Videolar</string>
     <string name="recommended_playlist_name">Önerilen Videolar</string>
-    <string translatable="false" name="search_authority">com.liskovsoft.leanbackassistant</string>
 </resources>

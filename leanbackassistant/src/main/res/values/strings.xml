@@ -1,5 +1,6 @@
 <resources>
     <string translatable="false" name="app_name">LeanbackAssistant</string>
+    <string translatable="false" name="search_authority">com.liskovsoft.leanbackassistant</string>
 
     <string name="search_hint">Search for Videos</string>
     <string name="search_label">SmartYouTubeTV</string>
@@ -8,5 +9,4 @@
     <string name="subscriptions_playlist_name">Subscriptions</string>
     <string name="history_playlist_name">History</string>
     <string name="recommended_playlist_name">Recommended</string>
-    <string translatable="false" name="search_authority">com.liskovsoft.leanbackassistant</string>
 </resources>

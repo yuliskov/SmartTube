@@ -1,5 +1,5 @@
 <resources>
-    <string name="search_label">SmartTube TV</string>
-    <string name="settings_description">SmartTube TV Videos</string>
+    <string name="search_label">SmartTube</string>
+    <string name="settings_description">SmartTube Videos</string>
     <string translatable="false" name="search_authority">com.liskovsoft.leanbackassistant.storig</string>
 </resources>
