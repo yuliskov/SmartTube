@@ -324,15 +324,17 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         if (index >= 0 && mSectionRowAdapter.size() > 0) {
             mFocusOnContent = focusOnContent; // focus after header transition
 
+            // Fix refresh current section
             if (getSelectedPosition() == index) {
-                // headers transition event not fired on the same index
                 // update section manually
+                // headers transition event not fired on the same index
+                // if current header wasn't removed previously (can't check it for now)
                 focusOnContentIfNeeded();
                 mBrowsePresenter.onSectionFocused(getSelectedHeaderId());
-            } else {
-                // Fallback to the last section if index above size
-                setSelectedPosition(index < mSectionRowAdapter.size() ? index : mSectionRowAdapter.size() - 1, false);
             }
+
+            // Fallback to the last section if index above size
+            setSelectedPosition(index < mSectionRowAdapter.size() ? index : mSectionRowAdapter.size() - 1, false);
         }
     }
 

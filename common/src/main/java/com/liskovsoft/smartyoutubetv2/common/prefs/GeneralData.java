@@ -139,15 +139,14 @@ public class GeneralData implements ProfileChangeListener {
                 mIsSettingsSectionEnabled = true; // prevent Settings lock
             }
 
-            int index = getDefaultSectionIndex(sectionId);
-
             Video item = new Video();
             item.sectionId = sectionId;
 
             if (mPinnedItems.contains(item)) { // don't reorder if item already exists
-                persistState();
                 return;
             }
+
+            int index = getDefaultSectionIndex(sectionId);
 
             if (index == -1) {
                 mPinnedItems.add(item);
@@ -176,18 +175,6 @@ public class GeneralData implements ProfileChangeListener {
         return index;
     }
 
-    public Collection<Integer> getEnabledSections() {
-        List<Integer> enabledSections = new ArrayList<>();
-
-        for (Video item : mPinnedItems) {
-            if (item.sectionId != -1) {
-                enabledSections.add(item.sectionId);
-            }
-        }
-
-        return enabledSections;
-    }
-
     /**
      * Contains sections and pinned items!
      */
@@ -195,11 +182,6 @@ public class GeneralData implements ProfileChangeListener {
         Video section = Helpers.findFirst(mPinnedItems, item -> getSectionId(item) == sectionId);
         return section != null; // by default enable all pinned items
     }
-
-    //public void setSectionIndex(int sectionId, int index) {
-    //    // 1) distinguish section from pinned item
-    //    // 2) add pinned items after the sections
-    //}
 
     public int getSectionIndex(int sectionId) {
         // 1) Distinguish section from pinned item
@@ -1050,9 +1032,7 @@ public class GeneralData implements ProfileChangeListener {
         }
 
         // Backward compatibility
-        if (!isSectionPinned(MediaGroup.TYPE_SETTINGS)) {
-            initPinnedItems();
-        }
+        enableSection(MediaGroup.TYPE_SETTINGS, true);
 
         cleanupPinnedItems();
     }
