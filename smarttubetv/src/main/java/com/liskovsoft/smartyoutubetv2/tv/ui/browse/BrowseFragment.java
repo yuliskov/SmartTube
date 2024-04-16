@@ -328,11 +328,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             if (getSelectedPosition() == index) {
                 // update section manually
                 // headers transition event not fired on the same index
-                // if current header wasn't removed previously (can't check it for now)
                 focusOnContentIfNeeded();
                 mBrowsePresenter.onSectionFocused(getSelectedHeaderId());
             }
 
+            // Need select again if current header is removed previously (can't check for it right now)
             // Fallback to the last section if index above size
             setSelectedPosition(index < mSectionRowAdapter.size() ? index : mSectionRowAdapter.size() - 1, false);
         }
