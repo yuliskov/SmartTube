@@ -224,7 +224,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         for (Video item : pinnedItems) {
             if (item != null) {
-                if (item.sectionId == -1) {
+                if (item.sectionId == -1) { // pinned channel or playlist
                     BrowseSection section = createPinnedSection(item);
                     mSections.add(section);
                 } else {

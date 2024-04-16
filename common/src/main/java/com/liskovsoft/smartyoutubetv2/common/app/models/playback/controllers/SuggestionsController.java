@@ -709,6 +709,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         if (!mPlayerTweaksData.isLikesCounterEnabled()) {
             video.likeCount = null;
             video.dislikeCount = null;
+            getPlayer().setVideo(video);
             return;
         }
 
