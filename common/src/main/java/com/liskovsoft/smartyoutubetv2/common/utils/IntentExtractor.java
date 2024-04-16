@@ -103,7 +103,7 @@ public class IntentExtractor {
      * Data: https://www.youtube.com/channel/UCtDjOV5nk982w35AIdVDuNw
      */
     public static String extractChannelId(Intent intent) {
-        if (isEmptyIntent(intent)) {
+        if (isEmptyIntent(intent) || isATVChannelUrl(intent)) {
             return null;
         }
 
@@ -160,7 +160,7 @@ public class IntentExtractor {
     /**
      * ATV: Channel icon url
      */
-    public static boolean isChannelUrl(Intent intent) {
+    public static boolean isATVChannelUrl(Intent intent) {
         return intent != null
                 && extractUri(intent) != null
                 && Helpers.startsWithAny(extractUri(intent).toString(), SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL);
