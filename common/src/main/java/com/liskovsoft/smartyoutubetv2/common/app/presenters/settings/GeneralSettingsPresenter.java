@@ -507,7 +507,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_only_mode),
+        options.add(UiOptionItem.from(getContext().getString(R.string.return_to_launcher),
                 option -> mGeneralData.enablePlayerOnlyMode(option.isSelected()),
                 mGeneralData.isPlayerOnlyModeEnabled()));
 
