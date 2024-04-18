@@ -299,7 +299,7 @@ public final class DataSpec {
     this.flags = flags;
     this.httpRequestHeaders = Collections.unmodifiableMap(new HashMap<>(httpRequestHeaders));
 
-    applyRangeQuery();
+    //applyRangeQuery();
   }
 
   /**
