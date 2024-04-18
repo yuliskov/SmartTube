@@ -336,13 +336,6 @@ public class ViewManager {
         Runtime.getRuntime().exit(0);
     }
 
-    private void exitToHome() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        safeStartActivity(mContext, intent);
-    }
-
     /**
      * Finishes the app without killing it (by moves tasks to back).<br/>
      * The app continue to run in the background.

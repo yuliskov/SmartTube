@@ -832,6 +832,7 @@ public class Utils {
      */
     public static void properlyFinishTheApp(Context context) {
         //ViewManager.instance(context).properlyFinishTheApp2(context);
+        exitToHome(context);
         forceFinishTheApp();
     }
 
@@ -884,6 +885,17 @@ public class Utils {
             }
         } else {
             Log.e(TAG, "Channels receiver class not found: " + receiverClassName);
+        }
+    }
+
+    private static void exitToHome(Context context) {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }
