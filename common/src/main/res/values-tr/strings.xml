@@ -637,7 +637,7 @@
     <string name="channel_filter_hint">Kanalları filtrele</string>
     <string name="player_loop_shorts">Shortsları tekrarla</string>
     <string name="player_quick_shorts_skip">Shortsları sol/sağ düğmeyle atla</string>
-    <string name="channels_filter">Kanallar bölümünde kanal listesi filtreleme</string>
+    <string name="channels_filter">Kanallar bölümü içindeki Kanalları filtrele alanını göster</string>
     <string name="channel_search_bar">Kanal sayfasında arama çubuğu</string>
     <string name="header_sports">Spor</string>
     <string name="keep_finished_activities">Bitmiş etkinlikleri sakla</string>
@@ -657,4 +657,5 @@
     <string name="pinned_channel_rows">Sabitlenmiş kanalı satır olarak göster</string>
     <string name="prefer_ipv4">IPv4 DNS tercih et</string>
     <string name="prefer_ipv4_desc">Uygulamanın hiç çalışmadığı durumları düzeltebilir.\nNot: Takılmalara ve çökmelere neden olabilir (özellikle Android 8 cihazlarda ya da Dune HD\'de)</string>
+    <string name="long_press_for_settings">AYARLAR İÇİN UZUN BASIN</string>
 </resources>
