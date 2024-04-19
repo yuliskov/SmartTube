@@ -650,4 +650,9 @@
   <string name="pinned_channel_rows">Mostrar el canal fijado como filas</string>
   <string name="prefer_ipv4">Preferir DNS IPv4</string>
   <string name="prefer_ipv4_desc">Podría solucionar situaciones en las que la aplicación no funciona en absoluto.\nNota. Puede causar cuelgues y bloqueos (especialmente en dispositivos Android 8 o Dune HD).</string>
+  <string name="hide_watched_from_watch_later">Ocultar videos vistos de la lista de reproducción Ver más tarde</string>
+  <string name="hide_watched_from_notifications">Ocultar vídeos vistos de Notificaciones</string>
+  <string name="player_extra_long_speed_list">Lista de velocidad extra larga</string>
+  <string name="remember_position_pinned">Recordar la última posición vista en las listas de reproducción fijadas</string>
+  <string name="long_press_for_settings">PULSACIÓN LARGA PARA AJUSTES</string>
 </resources>
