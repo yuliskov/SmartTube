@@ -300,48 +300,11 @@ public class ViewManager {
     }
 
     /**
-     * More info: https://stackoverflow.com/questions/6609414/how-do-i-programmatically-restart-an-android-app
-     */
-    private static void triggerRebirth(Context context, Class<?> rootActivity) {
-        Intent intent = new Intent(context, rootActivity);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-        if (context instanceof MotherActivity) {
-            ((MotherActivity) context).finishReally();
-        }
-        Runtime.getRuntime().exit(0);
-    }
-
-    /**
-     * More info: https://stackoverflow.com/questions/6609414/how-do-i-programmatically-restart-an-android-app
-     */
-    private static void triggerRebirth2(Context context, Class<?> rootActivity) {
-        Intent mStartActivity = new Intent(context, rootActivity);
-        int mPendingIntentId = 123456;
-        int flags = PendingIntent.FLAG_CANCEL_CURRENT;
-        if (Build.VERSION.SDK_INT >= 23) {
-            // IllegalArgumentException fix: Targeting S+ (version 31 and above) requires that one of FLAG_IMMUTABLE...
-            flags |= PendingIntent.FLAG_IMMUTABLE;
-        }
-        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity, flags);
-        AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-        System.exit(0);
-    }
-
-    public static void triggerRebirth3(Context context, Class<?> myClass) {
-        Intent intent = new Intent(context, myClass);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        context.startActivity(intent);
-        Runtime.getRuntime().exit(0);
-    }
-
-    /**
      * Finishes the app without killing it (by moves tasks to back).<br/>
      * The app continue to run in the background.
      * @param activity this activity
      */
-    public void properlyFinishTheApp2(Context activity) {
+    public void properlyFinishTheApp(Context activity) {
         if (activity instanceof MotherActivity) {
             Log.d(TAG, "Trying finish the app...");
             mIsMoveToBackEnabled = true; // close all activities below current one

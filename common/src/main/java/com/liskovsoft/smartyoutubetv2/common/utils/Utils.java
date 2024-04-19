@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.app.AlarmManager;
 import android.app.Instrumentation;
 import android.app.KeyguardManager;
 import android.app.Notification;
@@ -831,8 +832,8 @@ public class Utils {
      * Finish the app but remain running services
      */
     public static void properlyFinishTheApp(Context context) {
-        //ViewManager.instance(context).properlyFinishTheApp2(context);
-        exitToHome(context);
+        ViewManager.instance(context).properlyFinishTheApp(context);
+        //exitToHome(context);
         forceFinishTheApp();
     }
 
@@ -897,5 +898,42 @@ public class Utils {
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * More info: https://stackoverflow.com/questions/6609414/how-do-i-programmatically-restart-an-android-app
+     */
+    private static void triggerRebirth(Context context, Class<?> rootActivity) {
+        Intent intent = new Intent(context, rootActivity);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+        if (context instanceof MotherActivity) {
+            ((MotherActivity) context).finishReally();
+        }
+        Runtime.getRuntime().exit(0);
+    }
+
+    /**
+     * More info: https://stackoverflow.com/questions/6609414/how-do-i-programmatically-restart-an-android-app
+     */
+    private static void triggerRebirth2(Context context, Class<?> rootActivity) {
+        Intent mStartActivity = new Intent(context, rootActivity);
+        int mPendingIntentId = 123456;
+        int flags = PendingIntent.FLAG_CANCEL_CURRENT;
+        if (Build.VERSION.SDK_INT >= 23) {
+            // IllegalArgumentException fix: Targeting S+ (version 31 and above) requires that one of FLAG_IMMUTABLE...
+            flags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity, flags);
+        AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+        System.exit(0);
+    }
+
+    public static void triggerRebirth3(Context context, Class<?> myClass) {
+        Intent intent = new Intent(context, myClass);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+        Runtime.getRuntime().exit(0);
     }
 }
