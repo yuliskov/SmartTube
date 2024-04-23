@@ -1,7 +1,7 @@
 @echo off
 
 echo Running %~n0...
-echo This script removes all apks from the repo. 
+echo This script removes old apks from the repo. 
 echo Existing tags and releases won't be touched.
 echo To skip specific tags add your patterns below.
 echo This could be helpful when you need to clean the repo after DMCA Notice.

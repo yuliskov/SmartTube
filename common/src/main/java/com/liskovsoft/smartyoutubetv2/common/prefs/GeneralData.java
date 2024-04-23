@@ -94,8 +94,8 @@ public class GeneralData implements ProfileChangeListener {
     private List<String> mChangelog;
     private Map<String, Integer> mPlaylistOrder;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
-    private final List<Video> mPendingStreams = new CopyOnWriteArrayList<>();
-    private final List<Video> mPinnedItems = new CopyOnWriteHashList<>();
+    private List<Video> mPinnedItems;
+    private List<Video> mPendingStreams;
     private boolean mIsFullscreenModeEnabled;
     private Map<Integer, Video> mSelectedItems;
 
@@ -951,7 +951,8 @@ public class GeneralData implements ProfileChangeListener {
         mAppExitShortcut = Helpers.parseInt(split, 3, EXIT_DOUBLE_BACK);
         mIsPlayerOnlyModeEnabled = Helpers.parseBoolean(split, 4, false);
         mBackgroundShortcut = Helpers.parseInt(split, 5, BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
-        String pinnedItems = Helpers.parseStr(split, 6);
+        //String pinnedItems = Helpers.parseStr(split, 6);
+        mPinnedItems = Helpers.parseList(split, 6, Video::fromString);
         mIsHideShortsFromSubscriptionsEnabled = Helpers.parseBoolean(split, 7, false);
         mIsRemapFastForwardToNextEnabled = Helpers.parseBoolean(split, 8, false);
         //mScreenDimmingTimeoutMs = Helpers.parseInt(split, 9, 1);
@@ -975,7 +976,8 @@ public class GeneralData implements ProfileChangeListener {
         mIsVPNEnabled = Helpers.parseBoolean(split, 27, false);
         mLastPlaylistTitle = Helpers.parseStr(split, 28);
         mPlaylistOrder = Helpers.parseMap(split, 29, Helpers::parseStr, Helpers::parseInt);
-        String pendingStreams = Helpers.parseStr(split, 30);
+        //String pendingStreams = Helpers.parseStr(split, 30);
+        mPendingStreams = Helpers.parseList(split, 30, Video::fromString);
         mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, true);
         mTimeFormat = Helpers.parseInt(split, 32, -1);
         mSettingsPassword = Helpers.parseStr(split, 33);
@@ -1012,23 +1014,8 @@ public class GeneralData implements ProfileChangeListener {
         mRememberPinnedPosition = Helpers.parseBoolean(split, 62, false);
         mSelectedItems = Helpers.parseMap(split, 63, Helpers::parseInt, Video::fromString);
 
-        if (pinnedItems != null && !pinnedItems.isEmpty()) {
-            mPinnedItems.clear();
-            String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
-
-            for (String pinnedItem : pinnedItemsArr) {
-                mPinnedItems.add(Video.fromString(pinnedItem));
-            }
-        } else {
+        if (mPinnedItems == null) {
             initPinnedItems();
-        }
-
-        if (pendingStreams != null && !pendingStreams.isEmpty()) {
-            mPendingStreams.clear();
-            String[] pendingStreamsArr = Helpers.splitArray(pendingStreams);
-            for (String pendingStream : pendingStreamsArr) {
-                mPendingStreams.add(Video.fromString(pendingStream));
-            }
         }
 
         // Backward compatibility
@@ -1071,10 +1058,6 @@ public class GeneralData implements ProfileChangeListener {
 
     @Override
     public void onProfileChanged() {
-        // reset on profile change
-        mPinnedItems.clear();
-        mPendingStreams.clear();
-
         restoreState();
     }
 }
