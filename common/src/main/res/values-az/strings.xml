@@ -554,6 +554,7 @@
     <string name="clear_search_history">Axtarış tarixçəsini təmizlə</string>
     <string name="remove_from_subscriptions">Gizlət</string>
     <string name="player_long_speed_list">Sürət siyahısında daha çox sürət</string>
+    <string name="player_extra_long_speed_list">Əlavə uzun sürət siyahısı</string>
     <string name="alt_app_icon">Alternativ proqram ikonası (yenidən başlamalıdır)</string>
     <string name="network_stack">%s şəbəkə yığınına üstünlük verin</string>
     <string name="player_network_stack">Şəbəkə yığını</string>
@@ -656,4 +657,5 @@
     <string name="pinned_channel_rows">Saxlanmış kanalı sətirlər kimi göstərin</string>
     <string name="prefer_ipv4">IPv4 DNS-ə üstünlük verin</string>
     <string name="prefer_ipv4_desc">Tətbiqin ümumiyyətlə işləmədiyi vəziyyətləri düzəldə bilər.\nQeyd. Donmalara və xətalara səbəb ola bilər (xüsusilə Android 8 cihazlarında və ya Dune HD-də)</string>
+    <string name="long_press_for_settings">PARAMETRLƏR ÜÇÜN BASIB SAXLAYIN</string>
 </resources>
