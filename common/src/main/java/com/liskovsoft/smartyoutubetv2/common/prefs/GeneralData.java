@@ -1014,7 +1014,7 @@ public class GeneralData implements ProfileChangeListener {
         mRememberPinnedPosition = Helpers.parseBoolean(split, 62, false);
         mSelectedItems = Helpers.parseMap(split, 63, Helpers::parseInt, Video::fromString);
 
-        if (mPinnedItems == null) {
+        if (mPinnedItems.isEmpty()) {
             initPinnedItems();
         }
 
