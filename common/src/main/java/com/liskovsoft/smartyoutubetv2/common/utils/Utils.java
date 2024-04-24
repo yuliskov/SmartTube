@@ -832,7 +832,7 @@ public class Utils {
      * Finish the app but remain running services
      */
     public static void properlyFinishTheApp(Context context) {
-        ViewManager.instance(context).properlyFinishTheApp(context);
+        //ViewManager.instance(context).properlyFinishTheApp(context);
         //exitToHome(context);
         forceFinishTheApp();
     }
