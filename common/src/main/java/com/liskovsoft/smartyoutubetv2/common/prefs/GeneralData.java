@@ -233,7 +233,10 @@ public class GeneralData implements ProfileChangeListener {
         int index = findPinnedItemIndex(sectionId);
 
         if (index != -1) {
-            mPinnedItems.add(index + shift, mPinnedItems.get(index));
+            Video current = mPinnedItems.get(index);
+            mPinnedItems.remove(current);
+
+            mPinnedItems.add(index + shift, current);
             persistState();
         }
     }
@@ -930,6 +933,8 @@ public class GeneralData implements ProfileChangeListener {
     }
 
     private void cleanupPinnedItems() {
+        Helpers.removeDuplicates(mPinnedItems);
+
         Helpers.removeIf(mPinnedItems, value -> {
             if (value == null) {
                 return true;
