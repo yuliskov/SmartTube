@@ -30,7 +30,7 @@
   <string name="auto_frame_rate_modes">Modos suportados</string>
   <string name="amazon_frame_drop_fix">Correção de queda de quadros #2</string>
   <string name="amazon_frame_drop_fix_desc">Recomendado para aparelhos Amazon Stick. Pode funcionar em outros dispositivos.</string>
-  <string name="auto_frame_rate_desc">Essa opção remove atrasos nas cenas quando a câmera movimenta muito rápido, ex: Streaming de esportes</string>
+  <string name="auto_frame_rate_desc">Essa opção remove atrasos nas cenas quando a câmera movimenta muito rápido, Ex: Streaming de esportes</string>
   <string name="sony_frame_drop_fix">Correção de queda de quadros #1</string>
   <string name="sony_frame_drop_fix_desc">Corrige travamentos em TVs Sony e alguns outros dispositivos. Nota: possíveis problemas com a sincronização de áudio.</string>
   <string name="auto_frame_rate_pause">Taxa de quadros automática (pausar ao trocar)</string>
@@ -426,7 +426,7 @@
   <string name="badge_live">AO VIVO</string>
   <string name="badge_new_content">NOVO CONTEÚDO</string>
   <string name="player_disable_suggestions">Desabilitar sugestões</string>
-  <string name="skip_24_rate">Pular formatos de 24fps (correção real do modo cinema\?)</string>
+  <string name="skip_24_rate">Pular formatos de 24fps (correção real do modo cinema?)</string>
   <string name="add_device_view_description">Para vincular o dispositivo, insira esse código no aplicativo do YouTube do seu telefone (Configurações &gt; Assistir na TV).\nNOTA: funciona apenas com o teclado Gboard.</string>
   <string name="signin_view_title">O código do usuário está carregando...</string>
   <string name="signin_view_description">Para fazer o login, digite esse código na página %s\nNOTA: funciona apenas nos navegadores Firefox e Chrome.</string>
@@ -463,6 +463,7 @@
   <string name="thumb_quality_middle">Meio do vídeo</string>
   <string name="thumb_quality_end">Final do vídeo</string>
   <string name="content_block_status">Verificar o status do SponsorBlock</string>
+  <string name="skip_shorts">Ignorar Shorts</string>
   <string name="content_block_preview_recap">Previa/Recapitulação do vídeo</string>
   <string name="content_block_sponsor">Patrocinador</string>
   <string name="content_block_highlight">Destaques (As vezes não funciona!)</string>
@@ -558,7 +559,7 @@
   <string name="hide_shorts_everywhere">Esconder os Shorts em todos os lugares</string>
   <string name="update_found">Atualização</string>
   <string name="volume_boost_warning">Qualquer configuração acima do limite pode potencialmente danificar os alto-falantes</string>
-  <string name="action_sound_off">Mudo\\(Mantenha pressionado para configurações de Volume)</string>
+  <string name="action_sound_off">Mudo</string>
   <string name="pitch_effect">Mudar Tom - ∆ Grave/ "1" é Normalizado / ∇ Agudo</string>
   <string name="player_volume">Volume do player</string>
   <string name="play_video_incognito">Reproduzir de forma anônima</string>
@@ -650,4 +651,8 @@
   <string name="pinned_channel_rows">Mostrar canal fixado como linhas</string>
   <string name="prefer_ipv4">Preferir DNS IPv4</string>
   <string name="prefer_ipv4_desc">Pode corrigir situações em que o aplicativo não está funcionando. \n Observação. Pode causar Lentidões e travamentos (especialmente em dispositivos Android 8 ou Dune HD)</string>
+  <string name="long_press_for_settings">Mantenha pressionado para algumas configurações</string>
+  <string name="remember_position_pinned">Lembrar-se do ponto em que você parou nas Listas de Reproduções fixadas</string>
+  <string name="player_extra_long_speed_list">Lista alongada de Velocidades de reprodução</string>
+  <string name="hide_watched_from_watch_later">Ocultar vídeos assistidos da Lista de Reprodução Assistir mais tarde</string>
 </resources>
