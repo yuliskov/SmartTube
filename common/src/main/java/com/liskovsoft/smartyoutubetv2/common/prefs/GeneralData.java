@@ -148,7 +148,7 @@ public class GeneralData implements ProfileChangeListener {
 
             int index = getDefaultSectionIndex(sectionId);
 
-            if (index == -1) {
+            if (index == -1 || index > mPinnedItems.size()) {
                 mPinnedItems.add(item);
             } else {
                 mPinnedItems.add(index, item);
