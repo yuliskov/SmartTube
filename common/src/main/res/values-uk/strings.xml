@@ -584,7 +584,7 @@
     <string name="sorting_default">За замовчуванням (швидко, анімовані прев\'ю)</string>
     <string name="content_block_exclude_channel">Виключити канал із SponsorBlock</string>
     <string name="content_block_stop_excluding_channel">Припинити виключати канал із SponsorBlock</string>
-    <string name="player_chapter_notification">Показувати сповіщення для швидкого переходу між епізодами</string>
+    <string name="player_chapter_notification">Швидке просування по епізодах за допомогою спливаючого сповіщення</string>
     <string name="subtitle_remember">Запам\'ятати ввімкнені субтитри для кожного каналу</string>
     <string name="amazon_frame_drop_fix">Виправлення випадіння кадрів #2</string>
     <string name="amazon_frame_drop_fix_desc">Виправляє лагання на Amazon Stick та деяких інших пристроях.</string>

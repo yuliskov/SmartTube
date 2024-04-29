@@ -524,6 +524,27 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_section_playlist),
+                option -> mPlayerTweaksData.enableSectionPlaylist(option.isSelected()),
+                mPlayerTweaksData.isSectionPlaylistEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_auto_volume),
+                option -> mPlayerTweaksData.enablePlayerAutoVolume(option.isSelected()),
+                mPlayerTweaksData.isPlayerAutoVolumeEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_chapter_notification),
+                option -> mPlayerTweaksData.enableChapterNotification(option.isSelected()),
+                mPlayerTweaksData.isChapterNotificationEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.sleep_timer),
+                //getContext().getString(R.string.sleep_timer_desc),
+                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
+                mPlayerData.isSonyTimerFixEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.search_background_playback),
+                option -> mSearchData.enableTempBackgroundMode(option.isSelected()),
+                mSearchData.isTempBackgroundModeEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_loop_shorts),
                 option -> mPlayerTweaksData.enableLoopShorts(option.isSelected()),
                 mPlayerTweaksData.isLoopShortsEnabled()));
@@ -536,17 +557,9 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enablePlayerGlobalFocus(option.isSelected()),
                 mPlayerTweaksData.isPlayerGlobalFocusEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_auto_volume),
-                option -> mPlayerTweaksData.enablePlayerAutoVolume(option.isSelected()),
-                mPlayerTweaksData.isPlayerAutoVolumeEnabled()));
-
         options.add(UiOptionItem.from(getContext().getString(R.string.player_ui_on_next),
                 option -> mPlayerTweaksData.enablePlayerUiOnNext(option.isSelected()),
                 mPlayerTweaksData.isPlayerUiOnNextEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_chapter_notification),
-                option -> mPlayerTweaksData.enableChapterNotification(option.isSelected()),
-                mPlayerTweaksData.isChapterNotificationEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_ui_animations),
                 option -> mPlayerTweaksData.enableUIAnimations(option.isSelected()),
@@ -556,10 +569,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableLikesCounter(option.isSelected()),
                 mPlayerTweaksData.isLikesCounterEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_section_playlist),
-                option -> mPlayerTweaksData.enableSectionPlaylist(option.isSelected()),
-                mPlayerTweaksData.isSectionPlaylistEnabled()));
-
         //options.add(UiOptionItem.from(getContext().getString(R.string.player_long_speed_list),
         //        option -> mPlayerTweaksData.enableLongSpeedList(option.isSelected()),
         //        mPlayerTweaksData.isLongSpeedListEnabled()));
@@ -567,15 +576,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_button_long_click),
                 option -> mPlayerTweaksData.enableButtonLongClick(option.isSelected()),
                 mPlayerTweaksData.isButtonLongClickEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.sleep_timer),
-                //getContext().getString(R.string.sleep_timer_desc),
-                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
-                mPlayerData.isSonyTimerFixEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.search_background_playback),
-                option -> mSearchData.enableTempBackgroundMode(option.isSelected()),
-                mSearchData.isTempBackgroundModeEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.real_channel_icon),
                 option -> mPlayerTweaksData.enableRealChannelIcon(option.isSelected()),
