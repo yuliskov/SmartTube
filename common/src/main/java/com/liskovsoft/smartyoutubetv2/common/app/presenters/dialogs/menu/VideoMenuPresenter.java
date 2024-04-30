@@ -145,8 +145,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        RxHelper.disposeActions(mAddToPlaylistAction, mNotInterestedAction, mSubscribeAction);
-
         mVideo = video;
         sVideoHolder = new WeakReference<>(video);
 
@@ -396,6 +394,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
+        RxHelper.disposeActions(mNotInterestedAction);
+
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.not_interested), optionItem -> {
                     mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken())
@@ -422,6 +422,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         if ((!mVideo.belongsToHome() && !mVideo.belongsToShorts()) || !mIsNotRecommendChannelEnabled) {
             return;
         }
+
+        RxHelper.disposeActions(mNotInterestedAction);
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.not_recommend_channel), optionItem -> {
@@ -450,6 +452,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
+        RxHelper.disposeActions(mNotInterestedAction);
+
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.remove_from_history), optionItem -> {
                     mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken())
@@ -477,6 +481,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         if (!mVideo.belongsToSubscriptions() || !mIsRemoveFromSubscriptionsButtonEnabled) {
             return;
         }
+
+        RxHelper.disposeActions(mNotInterestedAction);
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.remove_from_subscriptions), optionItem -> {
@@ -795,6 +801,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void addRemoveFromPlaylist(String playlistId, String playlistTitle, boolean add) {
+        RxHelper.disposeActions(mAddToPlaylistAction);
         if (add) {
             Observable<Void> editObserve = mItemManager.addToPlaylistObserve(playlistId, mVideo.videoId);
             // Handle error: Maximum playlist size exceeded (> 5000 items)
@@ -864,6 +871,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         if (video == null) {
             return;
         }
+
+        RxHelper.disposeActions(mSubscribeAction);
 
         Observable<Void> observable = video.isSubscribed ?
                 mItemManager.unsubscribeObserve(video.channelId) : mItemManager.subscribeObserve(video.channelId);
