@@ -14,7 +14,7 @@ import java.util.List;
 
 public class VideoGroup {
     /**
-     * Add at the end of the the existing group
+     * Add at the end of the existing group
      */
     public static final int ACTION_APPEND = 0;
     /**
