@@ -652,4 +652,8 @@
   <string name="pinned_channel_rows">將釘選頻道顯示為列</string>
   <string name="prefer_ipv4">優先使用IPv4 DNS</string>
   <string name="prefer_ipv4_desc">可能修復應用程式完全無法運作的情況。\n註：可能導致程式暫停或崩潰（特別是在 Android 8 裝置或 Dune HD 上）</string>
+  <string name="skip_shorts">跳過 Shorts</string>
+  <string name="player_extra_long_speed_list">超長速度列表</string>
+  <string name="remember_position_pinned">記住釘選播放列表中最後觀看的位置</string>
+  <string name="long_press_for_settings">長按進入設定</string>
 </resources>
