@@ -51,7 +51,7 @@ public class PlayerUIController extends PlayerEventListenerHelper {
     private static final String TAG = PlayerUIController.class.getSimpleName();
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private final Handler mHandler;
-    private final MediaItemService mMediaItemManager;
+    private final MediaItemService mMediaItemService;
     private VideoLoaderController mVideoLoader;
     private SuggestionsController mSuggestionsController;
     private PlayerData mPlayerData;
@@ -80,7 +80,7 @@ public class PlayerUIController extends PlayerEventListenerHelper {
         mHandler = new Handler(Looper.getMainLooper());
 
         MotherService service = YouTubeMotherService.instance();
-        mMediaItemManager = service.getMediaItemService();
+        mMediaItemService = service.getMediaItemService();
     }
 
     @Override
@@ -371,9 +371,9 @@ public class PlayerUIController extends PlayerEventListenerHelper {
         }
 
         if (dislike) {
-            callMediaItemObservable(mMediaItemManager::setDislikeObserve);
+            callMediaItemObservable(mMediaItemService::setDislikeObserve);
         } else {
-            callMediaItemObservable(mMediaItemManager::removeDislikeObserve);
+            callMediaItemObservable(mMediaItemService::removeDislikeObserve);
         }
     }
 
@@ -392,9 +392,9 @@ public class PlayerUIController extends PlayerEventListenerHelper {
         }
 
         if (like) {
-            callMediaItemObservable(mMediaItemManager::setLikeObserve);
+            callMediaItemObservable(mMediaItemService::setLikeObserve);
         } else {
-            callMediaItemObservable(mMediaItemManager::removeLikeObserve);
+            callMediaItemObservable(mMediaItemService::removeLikeObserve);
         }
     }
 
@@ -816,11 +816,12 @@ public class PlayerUIController extends PlayerEventListenerHelper {
         }
 
         if (buttonState == PlayerUI.BUTTON_OFF) {
-            callMediaItemObservable(mMediaItemManager::subscribeObserve);
+            callMediaItemObservable(mMediaItemService::subscribeObserve);
         } else {
-            callMediaItemObservable(mMediaItemManager::unsubscribeObserve);
+            callMediaItemObservable(mMediaItemService::unsubscribeObserve);
         }
 
+        getPlayer().getVideo().isSubscribed = buttonState == PlayerUI.BUTTON_OFF;
         getPlayer().setButtonState(R.id.action_subscribe, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
