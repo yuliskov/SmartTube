@@ -98,6 +98,7 @@ public class GeneralData implements ProfileChangeListener {
     private List<Video> mPendingStreams;
     private boolean mIsFullscreenModeEnabled;
     private Map<Integer, Video> mSelectedItems;
+    private boolean mIsFirstUseTooltipEnabled;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -915,6 +916,15 @@ public class GeneralData implements ProfileChangeListener {
         return mChangelog;
     }
 
+    public void enableFirstUseTooltip(boolean enable) {
+        mIsFirstUseTooltipEnabled = enable;
+        persistState();
+    }
+
+    public boolean isFirstUseTooltipEnabled() {
+        return mIsFirstUseTooltipEnabled;
+    }
+
     private void initSections() {
         mDefaultSections.put(R.string.header_notifications, MediaGroup.TYPE_NOTIFICATIONS);
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
@@ -1018,6 +1028,7 @@ public class GeneralData implements ProfileChangeListener {
         mIsHideWatchedFromWatchLaterEnabled = Helpers.parseBoolean(split, 61, false);
         mRememberPinnedPosition = Helpers.parseBoolean(split, 62, false);
         mSelectedItems = Helpers.parseMap(split, 63, Helpers::parseInt, Video::fromString);
+        mIsFirstUseTooltipEnabled = Helpers.parseBoolean(split, 64, true);
 
         if (mPinnedItems.isEmpty()) {
             initPinnedItems();
@@ -1050,7 +1061,7 @@ public class GeneralData implements ProfileChangeListener {
                 mHistoryState, mRememberSubscriptionsPosition, null, mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled,
                 mIsRemapDpadUpToVolumeEnabled, mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled,
                 mChangelog, mPlayerExitShortcut, mIsOldChannelLookEnabled, mIsFullscreenModeEnabled, mIsHideWatchedFromWatchLaterEnabled,
-                mRememberPinnedPosition, mSelectedItems));
+                mRememberPinnedPosition, mSelectedItems, mIsFirstUseTooltipEnabled));
     }
 
     private int getSectionId(Video item) {
