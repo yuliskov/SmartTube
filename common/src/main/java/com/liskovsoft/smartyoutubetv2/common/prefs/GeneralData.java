@@ -955,7 +955,11 @@ public class GeneralData implements ProfileChangeListener {
         });
     }
 
-    private void restoreState() {
+    /**
+     * Fixed ConcurrentModificationException after onProfileChanged()<br/>
+     * Happened inside cleanupPinnedItems()
+     */
+    private synchronized void restoreState() {
         String data = mPrefs.getProfileData(GENERAL_DATA);
 
         String[] split = Helpers.splitData(data);
