@@ -134,6 +134,7 @@
     <string name="player_show_ending_time">Tampilkan waktu berakhir</string>
     <string name="open_channel_uploads">Buka upload channel</string>
     <string name="app_exit_shortcut">Keluar dari aplikasi</string>
+    <string name="player_exit_shortcut">Keluar dari pemutar</string>
     <string name="app_exit_none">Jangan keluar</string>
     <string name="app_double_back_exit">Tekan BACK 2X </string>
     <string name="app_single_back_exit">Tekan BACK sekali</string>
@@ -460,6 +461,7 @@
     <string name="action_subscribe_off">Berlangganan Mati</string>
     <string name="action_subscribe_on">Berlangganan Aktif</string>
     <string name="skip_24_rate">Lewati format 24fps (perbaikan mode real cinema?)</string>
+    <string name="skip_shorts">Lewati vidio pendenk</string>
     <string name="player_disable_suggestions">Nonaktifkan saran</string>
     <string name="feedback">Masukan</string>
     <string name="sources">Sumber</string>
@@ -491,8 +493,8 @@
     <string name="thumb_quality_start">Awal vidio</string>
     <string name="thumb_quality_middle">Tengah vidio</string>
     <string name="thumb_quality_end">Akhir vidio</string>
-    <string name="content_block_status">Cek status SponsorBlock</string>
-    <string name="dearrow_status">Cek status DeArrow</string>
+    <string name="content_block_status">Cek status server SponsorBlock</string>
+    <string name="dearrow_status">Cek status server DeArrow</string>
     <string name="player_show_quality_info_bitrate">Tambahkan bitrate ke dalam informasi kualitas</string>
     <string name="player_speed_button_old_behavior">Mengembalikan perilaku lama tombol kecepatan</string>
     <string name="protect_settings_with_password">Lindungi semua pengaturan dengan sandi</string>
@@ -530,7 +532,8 @@
     <string name="sort_by_rating">Peringkat</string>
     <string name="clear_search_history">Hapus riwayat pencarian</string>
     <string name="remove_from_subscriptions">Sembunyi</string>
-    <string name="player_long_speed_list">Lebih banyak kecepatan di daftar</string>
+    <string name="player_long_speed_list">Daftar panjang kecepatan</string>
+    <string name="player_extra_long_speed_list">Daftar ekstra panjang kecepatan</string>
     <string name="alt_app_icon">Ikon alternatif aplikasi (perlu reboot)</string>
     <string name="network_stack">Lebih suka %s tumpukan jaringan</string>
     <string name="player_network_stack">Tumpukan jaringan</string>
@@ -548,6 +551,7 @@
     <string name="sony_frame_drop_fix_desc">Memperbaiki lag pada TV Sony dan beberapa perangkat lain. Catatan: kemungkinan masalah dengan sinkronisasi suara.</string>
     <string name="audio_language">Bahasa suara</string>
     <string name="old_home_look">Tampilan lama bagian Beranda</string>
+    <string name="old_channel_look">tampilan lama halaman Channel</string>
     <string name="hide_shorts_everywhere">Sembunyikan vidio pendek di mana saja</string>
     <string name="update_found">Pembaharuan</string>
     <string name="volume_boost_warning">Pengaturan apa pun yang melebihi batas dapat berpotensi merusak speaker</string>
@@ -565,7 +569,7 @@
     <string name="sorting_default">Standar (cepat, pratinjau animasi)</string>
     <string name="content_block_exclude_channel">Kecualikan channel ini dari SponsorBlock</string>
     <string name="content_block_stop_excluding_channel">Berhenti mengecualikan channel ini dari SponsorBlock</string>
-    <string name="player_chapter_notification">Menampilkan pemberitahuan untuk maju dengan cepat melalui chapters</string>
+    <string name="player_chapter_notification">Maju cepat melalui chapters menggunakan notifikasi popup</string>
     <string name="subtitle_remember">Ingat subtitle yang diaktifkan untuk setiap channel</string>    
     <string name="amazon_frame_drop_fix">Perbaikan Frame drop #2</string>
     <string name="amazon_frame_drop_fix_desc">Diperuntukkan untuk perangkat Amazon Stick. Dapat berfungsi pada perangkat lain juga.</string>
@@ -581,6 +585,7 @@
     <string name="player_global_focus">Navigasi yang mulus di antara deretan tombol pemutar</string>
     <string name="auto_history">Otomatis (gunakan pengaturan akun)</string>
     <string name="remember_position_subscriptions">Ingat posisi terakhir yang dilihat di Langganan</string>
+    <string name="remember_position_pinned">Mengingat posisi terakhir dilihat di daftar putar yang disematkan</string>
     <string name="msg_player_unknown_error">Kesalahan tidak diketahui</string>
     <string name="header_notifications">Notifikasi</string>
     <string name="disable_search_history">Nonaktifkan riwayat pencarian</string>
@@ -600,6 +605,7 @@
     <string name="hide_watched_from_notifications">Menyembunyikan video yang ditonton dari Notifikasi</string>
     <string name="hide_unwanted_content">Sembunyikan konten yang tidak diinginkan</string>
     <string name="hide_watched_from_home">Menyembunyikan video yang ditonton dari Beranda</string>
+    <string name="hide_watched_from_watch_later">Menyembunyikan video yang ditonton dari daftar putar Tonton nanti</string>
     <string name="remote_control_permission">Latar Belakang Remote control memerlukan izin Overlay</string>
     <string name="login_from_browser">Masuk dari browser</string>
     <string name="disable_remote_history">Menonaktifkan riwayat saat menggunakan remote control</string>
@@ -607,9 +613,9 @@
     <string name="nothing_found">Tidak ada yang ditemukan</string>
     <string name="auto_frame_rate_desc">Opsi ini menghilangkan jitter pada adegan di mana kamera bergerak cepat, misalnya, streaming olahraga</string>
     <string name="channel_filter_hint">Menyaring channels</string>
-    <string name="player_loop_shorts">Ulangi Shorts</string>
+    <string name="player_loop_shorts">Ulangi vidio pendek</string>
     <string name="player_quick_shorts_skip">Lewati vidio Pendek dengan tombol kiri/kanan</string>
-    <string name="channels_filter">Menyaring daftar channel di dalam bagian Channel</string>
+    <string name="channels_filter">Tampilkan bidang Filter channel di dalam chapter Channel</string>
     <string name="channel_search_bar">Bilah pencarian di dalam halaman Channel</string>
     <string name="header_sports">Olahraga</string>
     <string name="keep_finished_activities">Menyimpan aktivitas yang telah selesai</string>
@@ -623,4 +629,10 @@
     <string name="crowdsourced_thumbnails">Thumbnails dari Crowdsourced</string>
     <string name="crowdsoursed_titles">Judul dari Crowdsourced</string>
     <string name="dearrow_not_submitted_thumbs">Tempat mengambil thumbnail tidak tersedia</string>
+    <string name="fullscreen_mode">Mode layar penuh (tanpa bar sistem)</string>
+    <string name="player_only_mode">Hanya menampilkan pemutar jika video dibuka di luar aplikasi</string>
+    <string name="pinned_channel_rows">Menampilkan channel yang disematkan sebagai baris</string>
+    <string name="prefer_ipv4">Lebih memilih DNS IPv4</string>
+    <string name="prefer_ipv4_desc">Dapat memperbaiki situasi ketika aplikasi tidak berfungsi sama sekali.\nCatatan. Dapat menyebabkan hang dan crash (terutama pada perangkat Android 8 atau Dune HD)</string>
+    <string name="long_press_for_settings">TEKAN LAMA UNTUK PENGATURAN</string>
 </resources>
