@@ -2,34 +2,32 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+
+import com.liskovsoft.googleapi.service.GoogleSignInService;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.sharedutils.rx.RxHelper;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+
 import io.reactivex.disposables.Disposable;
 
-public class SignInPresenter extends BasePresenter<SignInView> {
-    private static final String TAG = SignInPresenter.class.getSimpleName();
-    //private static final String SIGN_IN_URL_SHORT = "https://yt.be/activate"; // doesn't support query params, no search history
-    //private static final String SIGN_IN_URL_FULL = "https://youtube.com/tv/activate"; // support query params, no search history
-    private static final String SIGN_IN_URL = "https://youtube.com/activate"; // supports search history
+public class GoogleSignInPresenter extends BasePresenter<SignInView> {
+    private static final String TAG = GoogleSignInPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
-    private static SignInPresenter sInstance;
-    private final MotherService mService;
+    private static GoogleSignInPresenter sInstance;
+    private final GoogleSignInService mSignInService;
     private Disposable mSignInAction;
+    private Runnable mCallback;
 
-    private SignInPresenter(Context context) {
+    private GoogleSignInPresenter(Context context) {
         super(context);
-        mService = YouTubeMotherService.instance();
+        mSignInService = GoogleSignInService.instance();
     }
 
-    public static SignInPresenter instance(Context context) {
+    public static GoogleSignInPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new SignInPresenter(context);
+            sInstance = new GoogleSignInPresenter(context);
         }
 
         sInstance.setContext(context);
@@ -61,9 +59,9 @@ public class SignInPresenter extends BasePresenter<SignInView> {
     }
 
     private void updateUserCode() {
-        mSignInAction = mService.getSignInService().signInObserve()
+        mSignInAction = mSignInService.signInObserve()
                 .subscribe(
-                        userCode -> getView().showCode(userCode, SIGN_IN_URL),
+                        code -> getView().showCode(code.getSignInCode(), code.getSignInUrl()),
                         error -> Log.e(TAG, "Sign in error: %s", error.getMessage()),
                         () -> {
                             // Success
@@ -71,12 +69,19 @@ public class SignInPresenter extends BasePresenter<SignInView> {
                                 getView().close();
                             }
 
-                            AccountSelectionPresenter.instance(getContext()).show(true);
+                            if (mCallback != null) {
+                                mCallback.run();
+                            }
                         }
                  );
     }
 
     public void start() {
+        start(null);
+    }
+
+    public void start(Runnable onSuccess) {
+        mCallback = onSuccess;
         RxHelper.disposeActions(mSignInAction);
         ViewManager.instance(getContext()).startView(SignInView.class);
     }

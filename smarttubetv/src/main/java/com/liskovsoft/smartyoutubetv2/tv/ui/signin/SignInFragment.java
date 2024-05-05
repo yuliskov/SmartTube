@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.signin;
 
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
@@ -28,12 +27,8 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
     private static final String TAG = SignInFragment.class.getSimpleName();
     private static final int CONTINUE = 2;
     private static final int OPEN_BROWSER = 3;
-    //private static final String SIGN_IN_URL_SHORT = "https://yt.be/activate"; // doesn't support query params, no search history
-    //private static final String SIGN_IN_URL_FULL = "https://youtube.com/tv/activate"; // support query params, no search history
-    private static final String SIGN_IN_URL_SHORT = "https://youtube.com/activate"; // supports search history
-    private static final String SIGN_IN_URL_FULL = "https://youtube.com/activate"; // supports search history
     private SignInPresenter mSignInPresenter;
-    private String mSignInCodeUrl = SIGN_IN_URL_SHORT;
+    private String mFullSignInUrl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,24 +52,26 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
     }
 
     @Override
-    public void showCode(String userCode) {
-        setTitle(userCode);
+    public void showCode(String userCode, String signInUrl) {
+        setTitle(userCode, signInUrl);
     }
 
-    private void setTitle(String userCode) {
+    private void setTitle(String userCode, String signInUrl) {
         if (TextUtils.isEmpty(userCode)) {
             return;
         }
 
         getGuidanceStylist().getTitleView().setText(userCode);
 
-        mSignInCodeUrl = SIGN_IN_URL_FULL + "?user_code=" + userCode.replace(" ", "-");
+        mFullSignInUrl = signInUrl + "?user_code=" + userCode.replace(" ", "-");
 
         Glide.with(getContext())
-                .load(Utils.toQrCodeLink(mSignInCodeUrl))
+                .load(Utils.toQrCodeLink(mFullSignInUrl))
                 .apply(ViewUtil.glideOptions()).error(ContextCompat.getDrawable(getContext(), R.drawable.activate_account_qrcode))
                 .listener(mErrorListener)
                 .into(getGuidanceStylist().getIconView());
+
+        getGuidanceStylist().getDescriptionView().setText(getString(R.string.signin_view_description, signInUrl));
     }
 
     @Override
@@ -86,7 +83,7 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
     @NonNull
     public GuidanceStylist.Guidance onCreateGuidance(@NonNull Bundle savedInstanceState) {
         String title = getString(R.string.signin_view_title);
-        String description = getString(R.string.signin_view_description, SIGN_IN_URL_SHORT);
+        String description = getString(R.string.signin_view_description, "");
         return new GuidanceStylist.Guidance(title, description, "", ContextCompat.getDrawable(getContext(), R.drawable.activate_account_qrcode));
     }
 
@@ -109,7 +106,7 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
         if (action.getId() == CONTINUE) {
             mSignInPresenter.onActionClicked();
         } else if (action.getId() == OPEN_BROWSER) {
-            Utils.openLinkExt(getContext(), mSignInCodeUrl);
+            Utils.openLinkExt(getContext(), mFullSignInUrl);
         }
     }
 
