@@ -13,7 +13,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.GoogleSignInPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -65,6 +64,8 @@ public class CloudBackupSettingsPresenter extends BasePresenter<Void> {
         appendSelectAccountSection(accounts, settingsPresenter);
         appendAddAccountButton(settingsPresenter);
         appendRemoveAccountSection(accounts, settingsPresenter);
+        appendBackupSettings(settingsPresenter);
+        appendRestoreSettings(settingsPresenter);
 
         Account account = mSignInService.getSelectedAccount();
         settingsPresenter.showDialog(account != null ? account.getName() : getContext().getString(R.string.settings_accounts), this::unhold);
@@ -122,6 +123,14 @@ public class CloudBackupSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.dialog_remove_account), optionItems);
+    }
+
+    private void appendRestoreSettings(AppDialogPresenter settingsPresenter) {
+
+    }
+
+    private void appendBackupSettings(AppDialogPresenter settingsPresenter) {
+
     }
 
     private void appendAddAccountButton(AppDialogPresenter settingsPresenter) {

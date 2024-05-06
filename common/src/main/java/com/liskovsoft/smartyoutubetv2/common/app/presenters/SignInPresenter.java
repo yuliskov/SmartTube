@@ -2,29 +2,20 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
-import com.liskovsoft.sharedutils.mylogger.Log;
+
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.sharedutils.rx.RxHelper;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
-import io.reactivex.disposables.Disposable;
 
 public class SignInPresenter extends BasePresenter<SignInView> {
     private static final String TAG = SignInPresenter.class.getSimpleName();
-    //private static final String SIGN_IN_URL_SHORT = "https://yt.be/activate"; // doesn't support query params, no search history
-    //private static final String SIGN_IN_URL_FULL = "https://youtube.com/tv/activate"; // support query params, no search history
-    private static final String SIGN_IN_URL = "https://youtube.com/activate"; // supports search history
     @SuppressLint("StaticFieldLeak")
     private static SignInPresenter sInstance;
-    private final MotherService mService;
-    private Disposable mSignInAction;
+    private SignInPresenter mPresenter;
+    private boolean mIsWaiting;
 
-    private SignInPresenter(Context context) {
+    protected SignInPresenter(Context context) {
         super(context);
-        mService = YouTubeMotherService.instance();
     }
 
     public static SignInPresenter instance(Context context) {
@@ -38,7 +29,6 @@ public class SignInPresenter extends BasePresenter<SignInView> {
     }
 
     public void unhold() {
-        RxHelper.disposeActions(mSignInAction);
         sInstance = null;
     }
 
@@ -50,34 +40,39 @@ public class SignInPresenter extends BasePresenter<SignInView> {
 
     @Override
     public void onViewInitialized() {
-        RxHelper.disposeActions(mSignInAction);
-        updateUserCode();
-    }
+        if (this.getClass() != SignInPresenter.class) {
+            doWait(false);
+            return;
+        }
 
-    public void onActionClicked() {
-        if (getView() != null) {
-            getView().close();
+        if (YTSignInPresenter.instance(getContext()).isWaiting()) {
+            mPresenter = YTSignInPresenter.instance(getContext());
+        } else if (GoogleSignInPresenter.instance(getContext()).isWaiting()) {
+            mPresenter = GoogleSignInPresenter.instance(getContext());
+        }
+
+        if (mPresenter != null) {
+            mPresenter.setView(getView());
+            mPresenter.onViewInitialized();
         }
     }
 
-    private void updateUserCode() {
-        mSignInAction = mService.getSignInService().signInObserve()
-                .subscribe(
-                        userCode -> getView().showCode(userCode, SIGN_IN_URL),
-                        error -> Log.e(TAG, "Sign in error: %s", error.getMessage()),
-                        () -> {
-                            // Success
-                            if (getView() != null) {
-                                getView().close();
-                            }
+    public void onActionClicked() {
+        if (mPresenter != null) {
+            mPresenter.onActionClicked();
+        }
+    }
 
-                            AccountSelectionPresenter.instance(getContext()).show(true);
-                        }
-                 );
+    private void doWait(boolean doWait) {
+        mIsWaiting = doWait;
+    }
+
+    protected final boolean isWaiting() {
+        return mIsWaiting;
     }
 
     public void start() {
-        RxHelper.disposeActions(mSignInAction);
         ViewManager.instance(getContext()).startView(SignInView.class);
+        doWait(true);
     }
 }
