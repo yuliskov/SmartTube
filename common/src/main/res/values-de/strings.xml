@@ -261,8 +261,8 @@
     <string name="enable_voice_search">Globale Sprachsuche aktivieren (Firmware-Unterstützung erforderlich)</string>
     <string name="subscribe_unsubscribe_from_channel">Kanal abonnieren/nicht mehr abonnieren</string>
     <string name="app_backup_restore">Sichern/Wiederherstellen</string>
-    <string name="app_backup">Daten sichern</string>
-    <string name="app_restore">Daten aus Sicherung wiederherstellen</string>
+    <string name="app_backup">Einstellungen sichern</string>
+    <string name="app_restore">Einstellungen wiederherstellen</string>
     <string name="skip_each_segment_once">Jedes Segment nur einmal überspringen</string>
     <string name="disable_ok_long_press">Langes Drücken der OK-Taste deaktivieren</string>
     <string name="disable_ok_long_press_desc">Vorgesehen für fehlerhafte Fernbedienungen, bei denen die OK-Taste nicht richtig funktioniert</string>
@@ -338,7 +338,7 @@
     <string name="hide_upcoming">Anstehende Videos in Abos ausblenden</string>
     <string name="hide_upcoming_channel">Anstehende Videos in Kanäle ausblenden</string>
     <string name="hide_upcoming_home">Anstehende Videos in Start ausblenden</string>
-    <string name="search_background_playback">Bild-in-Bild öffnen bei Suche/Kanal öffnen</string>
+    <string name="search_background_playback">Hintergrund-Wiedergabe beim Suchen/Öffnen eines Kanals</string>
     <string name="trending_row_name">Trends</string>
     <string name="player_seek_type">Verhalten beim Spulen</string>
     <string name="player_seek_regular">Normal</string>
