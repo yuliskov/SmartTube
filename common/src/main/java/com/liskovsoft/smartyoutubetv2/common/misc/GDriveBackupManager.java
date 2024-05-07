@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.liskovsoft.googleapi.service.GDriveService;
 import com.liskovsoft.googleapi.service.GoogleSignInService;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.GoogleSignInPresenter;
 
 public class GDriveBackupManager {
     private final Context mContext;
@@ -47,6 +48,6 @@ public class GDriveBackupManager {
     }
 
     private void logIn(Runnable onDone) {
-
+        GoogleSignInPresenter.instance(mContext).start(onDone);
     }
 }

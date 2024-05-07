@@ -261,8 +261,8 @@
     <string name="enable_voice_search">Enable global search (firmware support needed)</string>
     <string name="subscribe_unsubscribe_from_channel">Subscribe/Unsubscribe from the channel</string>
     <string name="app_backup_restore">Backup/Restore</string>
-    <string name="app_backup">Backup data</string>
-    <string name="app_restore">Restore data from backup</string>
+    <string name="app_backup">Backup settings</string>
+    <string name="app_restore">Restore settings</string>
     <string name="skip_each_segment_once">Don\'t skip segments again</string>
     <string name="disable_ok_long_press">Disable OK button long press</string>
     <string name="disable_ok_long_press_desc">Intended for buggy controllers where OK button is not function properly</string>
@@ -338,7 +338,7 @@
     <string name="hide_upcoming">Hide upcoming from Subscriptions</string>
     <string name="hide_upcoming_channel">Hide upcoming from Channel</string>
     <string name="hide_upcoming_home">Hide upcoming from Home</string>
-    <string name="search_background_playback">Enter PIP on search/open channel</string>
+    <string name="search_background_playback">Background play while searching/browsing a channel</string>
     <string name="trending_row_name">Trending</string>
     <string name="player_seek_type">Seek behavior</string>
     <string name="player_seek_regular">Regular</string>

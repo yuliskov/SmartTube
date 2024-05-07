@@ -261,8 +261,8 @@
     <string name="enable_voice_search">Увімкнути глобальний пошук (потрібна підтримка прошивки)</string>
     <string name="subscribe_unsubscribe_from_channel">Підписатися/Відписатися від каналу</string>
     <string name="app_backup_restore">Бекап та відновлення</string>
-    <string name="app_backup">Створити бекап даних</string>
-    <string name="app_restore">Відновити дані з бекапу</string>
+    <string name="app_backup">Створити бекап налаштувань</string>
+    <string name="app_restore">Відновити налаштування</string>
     <string name="skip_each_segment_once">Не пропускати сегменти повторно</string>
     <string name="disable_ok_long_press">Не обробляти довге утримання кнопки ОК</string>
     <string name="disable_ok_long_press_desc">Призначено для глючних пультів, де кнопка OK не працює належним чином</string>
@@ -334,7 +334,7 @@
     <string name="hide_upcoming">Приховувати анонси з Підписок</string>
     <string name="hide_upcoming_channel">Приховувати анонси на Каналі</string>
     <string name="hide_upcoming_home">Приховувати анонси з Головної</string>
-    <string name="search_background_playback">Переходити у режим Картинка в картинці при пошуку/відкритті каналу</string>
+    <string name="search_background_playback">Фонове відтворення під час пошуку/перегляду каналу</string>
     <string name="trending_row_name">Популярне</string>
     <string name="player_seek_type">Поведінка перемотування</string>
     <string name="player_seek_regular">Звичайна</string>
