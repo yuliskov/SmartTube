@@ -475,6 +475,7 @@
   <string name="action_subscribe_on">Subskrybcja wł.</string>
   
   <string name="skip_24_rate">Pomiń format 24kl./s (naprawa prawdziwego trybu kinowego\?)</string>
+  <string name="skip_shorts">Pomiń shorty</string>
   <string name="player_disable_suggestions">Wyłącz sugestie</string>
   <string name="feedback">Opinie</string>
   <string name="sources">Źródła</string>
@@ -605,6 +606,7 @@
   <string name="player_global_focus">Płynna nawigacja między rzędami przycisków odtwarzacza</string>
   <string name="auto_history">Automatyczne (użyj ustawień konta)</string>
   <string name="remember_position_subscriptions">Zapamiętaj ostatnio oglądaną pozycję w Subskrypcjach</string>
+  <string name="remember_position_pinned">Zapamiętaj pozycję ostatnio oglądanego filmu w przypiętej liście odtwarzania</string>
   <string name="msg_player_unknown_error">Nieznany błąd</string>
   <string name="header_notifications">Powiadomienia</string>
   <string name="disable_search_history">Zablokuj historię wyszukiwania</string>
@@ -624,6 +626,7 @@
   <string name="hide_watched_from_notifications">Ukryj obejrzane wideo z powiadomień</string>
   <string name="hide_unwanted_content">Ukryj niechciane treści</string>
   <string name="hide_watched_from_home">Ukryj obejrzane wideo z Głównej</string>
+  <string name="hide_watched_from_watch_later">Ukryj obejrzane filmy z listy Do obejrzenia</string>
   <string name="remote_control_permission">Zdalne sterowanie w tle wymaga uprawnienia Wyświetlanie nad innnymi aplikacjami</string>
   <string name="login_from_browser">Zaloguj przy użyciu przeglądarki</string>
   <string name="disable_remote_history">Wyłącz historię, gdy używany jest pilot</string>
@@ -649,4 +652,8 @@
   <string name="dearrow_not_submitted_thumbs">Skąd brać nieprzesłane miniatury</string>
   <string name="pitch_effect">Pitch</string>
   <string name="fullscreen_mode">Tryb pełnoekranowy (bez pasków systemowych)</string>
+  <string name="player_only_mode">Pokaż jedynie odtwarzacz jeżeli wideo zostało otworzone spoza aplikacji</string>
+  <string name="pinned_channel_rows">Wyświetlaj przypięte kanały jako wiersze</string>
+  <string name="prefer_ipv4">Preferuj DNS IPv4</string>
+  <string name="prefer_ipv4_desc">Może pomóc w sytuacji gdy aplikacja zupełnie nie działa.\nMoże powodować zawieszanie się i crashe (szczególnie na Androidzie 8 lub Dune HD)</string>
 </resources>
