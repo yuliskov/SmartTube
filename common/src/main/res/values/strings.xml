@@ -261,8 +261,8 @@
     <string name="enable_voice_search">Enable global search (firmware support needed)</string>
     <string name="subscribe_unsubscribe_from_channel">Subscribe/Unsubscribe from the channel</string>
     <string name="app_backup_restore">Backup/Restore</string>
-    <string name="app_backup">Backup settings</string>
-    <string name="app_restore">Restore settings</string>
+    <string name="app_backup">Backup app data</string>
+    <string name="app_restore">Restore app data</string>
     <string name="skip_each_segment_once">Don\'t skip segments again</string>
     <string name="disable_ok_long_press">Disable OK button long press</string>
     <string name="disable_ok_long_press_desc">Intended for buggy controllers where OK button is not function properly</string>

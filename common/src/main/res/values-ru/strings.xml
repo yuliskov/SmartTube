@@ -261,8 +261,8 @@
     <string name="enable_voice_search">Включить глобальный поиск (требуется поддержка прошивки)</string>
     <string name="subscribe_unsubscribe_from_channel">Подписаться/Отписаться от канала</string>
     <string name="app_backup_restore">Бэкап и восстановление</string>
-    <string name="app_backup">Создать бэкап настроек</string>
-    <string name="app_restore">Восстановить настройки</string>
+    <string name="app_backup">Резервное копирование данных приложения</string>
+    <string name="app_restore">Восстановить данные приложения</string>
     <string name="skip_each_segment_once">Не пропускать сегменты повторно</string>
     <string name="disable_ok_long_press">Не обрабатывать долгое удержание кнопки ОК</string>
     <string name="disable_ok_long_press_desc">Предназначено для глючных пультов, где кнопка OK не работает должным образом</string>

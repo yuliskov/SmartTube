@@ -52,7 +52,7 @@
     <string name="settings_player">Відеоплеєр</string>
     <string name="settings_language">Мова</string>
     <string name="settings_linked_devices">Прив`язані пристрої</string>
-    <string name="settings_about">Про додаток</string>
+    <string name="settings_about">Про застосунок</string>
     <string name="dialog_account_list">Обрати обліковий запис</string>
     <string name="dialog_account_none">Не обрано</string>
     <string name="dialog_remove_account">Вийти з облікового запису</string>
@@ -65,11 +65,11 @@
     <string name="subtitle_language">Мова субтитрів</string>
     <string name="action_search">Пошук</string>
     <string name="settings_main_ui">Інтерфейс</string>
-    <string name="dialog_main_ui">Інтерфейс додатку</string>
+    <string name="dialog_main_ui">Інтерфейс застосунку</string>
     <string name="card_animated_previews">Анімований попередній перегляд</string>
     <string name="web_site">Вебсайт</string>
     <string name="donation">Підтримати проект</string>
-    <string name="dialog_about">Про додаток</string>
+    <string name="dialog_about">Про застосунок</string>
     <string name="dialog_player_ui">Відеоплеєр</string>
     <string name="player_show_ui_on_pause">Відображати інтерфейс на паузі</string>
     <string name="player_pause_on_ok">Клавіша OK зупиняє відтворення</string>
@@ -135,7 +135,7 @@
     <string name="player_show_remaining_time">Відображати час, що залишився у панелі керування</string>
     <string name="player_show_ending_time">Відображати час закінчення у панелі керування</string>
     <string name="open_channel_uploads">Відкрити завантаження</string>
-    <string name="app_exit_shortcut">Вихід з додатку</string>
+    <string name="app_exit_shortcut">Вихід з застосунку</string>
     <string name="player_exit_shortcut">Вихід з плеєру</string>
     <string name="app_exit_none">Не виходити</string>
     <string name="app_double_back_exit">Подвійне назад</string>
@@ -173,7 +173,7 @@
     <string name="device_connected">Пристрій \"%s\" підключений</string>
     <string name="device_disconnected">Пристрій \"%s\" відключений</string>
     <string name="settings_ui_scale">Масштаб інтерфейсу</string>
-    <string name="msg_restart_app">Будь ласка, перезапустіть додаток, щоб зміни набули чинності</string>
+    <string name="msg_restart_app">Будь ласка, перезапустіть застосунок, щоб зміни набули чинності</string>
     <string name="settings_block">Блокування контенту</string>
     <string name="msg_applying">Застосовується %s…</string>
     <string name="msg_done">Готово</string>
@@ -261,8 +261,8 @@
     <string name="enable_voice_search">Увімкнути глобальний пошук (потрібна підтримка прошивки)</string>
     <string name="subscribe_unsubscribe_from_channel">Підписатися/Відписатися від каналу</string>
     <string name="app_backup_restore">Бекап та відновлення</string>
-    <string name="app_backup">Створити бекап налаштувань</string>
-    <string name="app_restore">Відновити налаштування</string>
+    <string name="app_backup">Резервне копіювання даних застосунку</string>
+    <string name="app_restore">Відновити дані застосунку</string>
     <string name="skip_each_segment_once">Не пропускати сегменти повторно</string>
     <string name="disable_ok_long_press">Не обробляти довге утримання кнопки ОК</string>
     <string name="disable_ok_long_press_desc">Призначено для глючних пультів, де кнопка OK не працює належним чином</string>
@@ -341,7 +341,7 @@
     <string name="player_seek_confirmation_pause">З підтвердженням (пауза під час перемотування)</string>
     <string name="player_seek_confirmation_play">З підтвердженням (грати під час перемотування)</string>
     <string name="hide_shorts_from_home">Приховувати короткі відео з Головної</string>
-    <string name="finish_on_disconnect">Завершувати додаток після відключення телефону/планшету</string>
+    <string name="finish_on_disconnect">Завершувати застосунок після відключення телефону/планшету</string>
     <string name="update_error">Помилка оновлення</string>
     <string name="hide_shorts_from_history">Приховувати короткі відео з Історії</string>
     <string name="hide_shorts_from_trending">Приховувати короткі відео з Трендів</string>
@@ -464,7 +464,7 @@
     <string name="player_ending_time">Закінчиться в %s</string>
     <string name="badge_new_content">НОВИЙ КОНТЕНТ</string>
     <string name="badge_live">НАЖИВО</string>
-    <string name="add_device_view_description">Щоб прив`язати пристрій, введіть цей код у додатку YouTube на телефоні у розділі Налаштування/Дивитися на ТВ\nПРИМІТКА. Працює лише з клавіатурою Gboard.</string>
+    <string name="add_device_view_description">Щоб прив`язати пристрій, введіть цей код у застосунку YouTube на телефоні у розділі Налаштування/Дивитися на ТВ\nПРИМІТКА. Працює лише з клавіатурою Gboard.</string>
     <!-- END Moved strings -->
     <string name="skip_24_rate">Пропускати 24fps формати (виправлення режиму real cinema?)</string>
     <string name="skip_shorts">Пропускати Shorts</string>
