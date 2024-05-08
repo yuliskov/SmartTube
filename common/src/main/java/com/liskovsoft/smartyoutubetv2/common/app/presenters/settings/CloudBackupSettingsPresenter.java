@@ -69,8 +69,9 @@ public class CloudBackupSettingsPresenter extends BasePresenter<Void> {
             appendBackupSettings(settingsPresenter2);
             appendRestoreSettings(settingsPresenter2);
             appendAddAccountButton(settingsPresenter2);
-            appendRemoveAccountSection(accounts, settingsPresenter2);
-            appendSelectAccountSection(accounts, settingsPresenter2);
+            // NOTE: google account doesn't have a name or email
+            //appendRemoveAccountSection(accounts, settingsPresenter2);
+            //appendSelectAccountSection(accounts, settingsPresenter2);
             settingsPresenter2.showDialog("Google Drive");
         }));
 
