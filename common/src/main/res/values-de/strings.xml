@@ -261,8 +261,8 @@
     <string name="enable_voice_search">Globale Sprachsuche aktivieren (Firmware-Unterstützung erforderlich)</string>
     <string name="subscribe_unsubscribe_from_channel">Kanal abonnieren/nicht mehr abonnieren</string>
     <string name="app_backup_restore">Sichern/Wiederherstellen</string>
-    <string name="app_backup">Einstellungen sichern</string>
-    <string name="app_restore">Einstellungen wiederherstellen</string>
+    <string name="app_backup">App-Daten sichern</string>
+    <string name="app_restore">App-Daten wiederherstellen</string>
     <string name="skip_each_segment_once">Jedes Segment nur einmal überspringen</string>
     <string name="disable_ok_long_press">Langes Drücken der OK-Taste deaktivieren</string>
     <string name="disable_ok_long_press_desc">Vorgesehen für fehlerhafte Fernbedienungen, bei denen die OK-Taste nicht richtig funktioniert</string>
