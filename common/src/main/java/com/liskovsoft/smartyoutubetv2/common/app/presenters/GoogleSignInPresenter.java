@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import com.liskovsoft.googleapi.service.GoogleSignInService;
+import com.liskovsoft.googleapi.oauth2.impl.GoogleSignInService;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 

@@ -53,7 +53,7 @@ dependencies {
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion
     androidTestImplementation 'androidx.test.ext:junit:' + testXSupportLibraryVersion
-    
+
     implementation project(':sharedutils')
     implementation project(':fragment-1.1.0')
     implementation project(':mediaserviceinterfaces')
