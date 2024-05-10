@@ -30,7 +30,7 @@ public class GDriveBackupManager {
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
     private final GoogleSignInService mSignInService;
     private final DriveService mDriveService;
-    private final File mDataDir;
+    private final String mDataDir;
     private final String mBackupDir;
     private Disposable mBackupAction;
     private Disposable mRestoreAction;
@@ -38,14 +38,14 @@ public class GDriveBackupManager {
 
     private GDriveBackupManager(Context context) {
         mContext = context;
-        mDataDir = new File(mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR);
+        mDataDir = String.format("%s/%s", mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR);
         mBackupDir = String.format("SmartTubeBackup/%s", context.getPackageName());
         mSignInService = GoogleSignInService.instance();
         mDriveService = GDriveService.instance();
         mBackupNames = new String[] {
                 "com.liskovsoft.appupdatechecker2.preferences.xml",
                 "com.liskovsoft.sharedutils.prefs.GlobalPreferences.xml",
-                String.format("%s_preferences.xml", context.getPackageName())
+                "_preferences.xml" // before _ should be the app package name
         };
     }
 
@@ -88,7 +88,11 @@ public class GDriveBackupManager {
     }
 
     private void startBackup() {
-        Collection<File> files = FileHelpers.listFileTree(mDataDir);
+        startBackup(mBackupDir, mDataDir);
+    }
+
+    private void startBackup(String backupDir, String dataDir) {
+        Collection<File> files = FileHelpers.listFileTree(new File(dataDir));
 
         mBackupAction = Observable.fromIterable(files)
                 .subscribeOn(Schedulers.io())
@@ -98,15 +102,19 @@ public class GDriveBackupManager {
                         if (checkFileName(file.getName())) {
                             MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_backup) + "\n" + file.getName());
 
-                            RxHelper.runBlocking(mDriveService.uploadFile(file, Uri.parse(String.format("%s%s", mBackupDir,
-                                    file.getAbsolutePath().replace(mDataDir.getAbsolutePath(), "")))));
+                            RxHelper.runBlocking(mDriveService.uploadFile(file, Uri.parse(String.format("%s%s", backupDir,
+                                    file.getAbsolutePath().replace(dataDir, "")))));
                         }
                     }
                 });
     }
 
     private void startRestore() {
-        mRestoreAction = mDriveService.getList(Uri.parse(mBackupDir))
+       startRestore(mBackupDir, mDataDir, () -> startRestore(applyAltPackageName(mBackupDir), mDataDir, null));
+    }
+
+    private void startRestore(String backupDir, String dataDir, Runnable onError) {
+        mRestoreAction = mDriveService.getList(Uri.parse(backupDir))
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io()) // run subscribe on separate thread
                 .subscribe(names -> {
@@ -114,12 +122,15 @@ public class GDriveBackupManager {
                         if (checkFileName(name)) {
                             MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_restore) + "\n" + name);
 
-                            mDriveService.getFile(Uri.parse(String.format("%s/%s", mBackupDir, name)))
-                                    .blockingSubscribe(inputStream -> FileHelpers.copy(inputStream, new File(mDataDir.getAbsolutePath(), name)));
+                            mDriveService.getFile(Uri.parse(String.format("%s/%s", backupDir, name)))
+                                    .blockingSubscribe(inputStream -> FileHelpers.copy(inputStream, new File(dataDir, fixAltPackageName(name))));
                         }
                     }
                     
                     Utils.restartTheApp(mContext);
+                }, error -> {
+                    if (onError != null)
+                        onError.run();
                 });
     }
 
@@ -129,5 +140,20 @@ public class GDriveBackupManager {
 
     private boolean checkFileName(String name) {
         return Helpers.endsWith(name, mBackupNames);
+    }
+
+    private String fixAltPackageName(String name) {
+        String altPackageName = getAltPackageName();
+        return name.replace(altPackageName, mContext.getPackageName());
+    }
+
+    private String applyAltPackageName(String name) {
+        String altPackageName = getAltPackageName();
+        return name.replace(mContext.getPackageName(), altPackageName);
+    }
+
+    private String getAltPackageName() {
+        String[] altPackages = new String[] {"com.liskovsoft.smarttubetv.beta", "com.teamsmart.videomanager.tv"};
+        return mContext.getPackageName().equals(altPackages[0]) ? altPackages[1] : altPackages[0];
     }
 }
