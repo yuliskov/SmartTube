@@ -65,7 +65,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendEndingTimeCategory(settingsPresenter);
         appendPixelRatioCategory(settingsPresenter);
         appendNetworkEngineCategory(settingsPresenter);
-        appendPlayerExitCategory(settingsPresenter);
+        //appendPlayerExitCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
         appendDeveloperCategory(settingsPresenter);
 
@@ -544,6 +544,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.search_background_playback),
                 option -> mSearchData.enableTempBackgroundMode(option.isSelected()),
                 mSearchData.isTempBackgroundModeEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.app_double_back_exit) + " " + getContext().getString(R.string.player_exit_shortcut),
+                option -> mGeneralData.setPlayerExitShortcut(option.isSelected() ? GeneralData.EXIT_DOUBLE_BACK : GeneralData.EXIT_SINGLE_BACK),
+                mGeneralData.getPlayerExitShortcut() == GeneralData.EXIT_DOUBLE_BACK));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_loop_shorts),
                 option -> mPlayerTweaksData.enableLoopShorts(option.isSelected()),
