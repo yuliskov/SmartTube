@@ -126,6 +126,13 @@ public class ContentBlockController extends PlayerEventListenerHelper {
     @Override
     public void onButtonClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_content_block) {
+            List<SponsorSegment> foundSegment = findMatchedSegments(getPlayer().getPositionMs(), mOriginalSegments);
+
+            if (foundSegment != null) {
+                setPositionMs(foundSegment.get(foundSegment.size() - 1).getEndMs());
+                return;
+            }
+
             boolean enabled = buttonState == PlayerUI.BUTTON_ON;
 
             mSkipExclude = !enabled;
@@ -235,7 +242,7 @@ public class ContentBlockController extends PlayerEventListenerHelper {
 
         long positionMs = getPlayer().getPositionMs();
 
-        List<SponsorSegment> foundSegment = findMatchedSegments(positionMs);
+        List<SponsorSegment> foundSegment = findMatchedSegments(positionMs, mActiveSegments);
 
         applyActions(foundSegment);
 
@@ -338,14 +345,14 @@ public class ContentBlockController extends PlayerEventListenerHelper {
         getPlayer().setPositionMs(Math.min(positionMs, durationMs));
     }
 
-    private List<SponsorSegment> findMatchedSegments(long positionMs) {
-        if (mActiveSegments == null) {
+    private List<SponsorSegment> findMatchedSegments(long positionMs, List<SponsorSegment> segments) {
+        if (segments == null) {
             return null;
         }
 
         List<SponsorSegment> foundSegment = null;
 
-        for (SponsorSegment segment : mActiveSegments) {
+        for (SponsorSegment segment : segments) {
             int action = mContentBlockData.getAction(segment.getCategory());
             boolean isSkipAction = action == ContentBlockData.ACTION_SKIP_ONLY ||
                     action == ContentBlockData.ACTION_SKIP_WITH_TOAST;
