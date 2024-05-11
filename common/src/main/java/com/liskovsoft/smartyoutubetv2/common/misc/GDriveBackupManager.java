@@ -106,7 +106,7 @@ public class GDriveBackupManager {
                                     file.getAbsolutePath().replace(dataDir, "")))));
                         }
                     }
-                });
+                }, error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
     }
 
     private void startRestore() {
