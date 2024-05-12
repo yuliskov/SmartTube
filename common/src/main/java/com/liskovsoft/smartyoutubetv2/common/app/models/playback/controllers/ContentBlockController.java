@@ -126,10 +126,11 @@ public class ContentBlockController extends PlayerEventListenerHelper {
     @Override
     public void onButtonClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_content_block) {
-            List<SponsorSegment> foundSegment = findMatchedSegments(getPlayer().getPositionMs(), mOriginalSegments);
+            List<SponsorSegment> foundSegments = findMatchedSegments(getPlayer().getPositionMs(), mOriginalSegments);
 
-            if (foundSegment != null) {
-                setPositionMs(foundSegment.get(foundSegment.size() - 1).getEndMs());
+            if (foundSegments != null) {
+                SponsorSegment lastSegment = foundSegments.get(foundSegments.size() - 1);
+                setPositionMs(lastSegment.getEndMs());
                 return;
             }
 
@@ -242,13 +243,13 @@ public class ContentBlockController extends PlayerEventListenerHelper {
 
         long positionMs = getPlayer().getPositionMs();
 
-        List<SponsorSegment> foundSegment = findMatchedSegments(positionMs, mActiveSegments);
+        List<SponsorSegment> foundSegments = findMatchedSegments(positionMs, mActiveSegments);
 
-        applyActions(foundSegment);
+        applyActions(foundSegments);
 
         // Skip each segment only once
-        if (foundSegment != null && mContentBlockData.isDontSkipSegmentAgainEnabled()) {
-            mActiveSegments.removeAll(foundSegment);
+        if (foundSegments != null && mContentBlockData.isDontSkipSegmentAgainEnabled()) {
+            mActiveSegments.removeAll(foundSegments);
         }
     }
 
@@ -377,12 +378,12 @@ public class ContentBlockController extends PlayerEventListenerHelper {
         return foundSegment;
     }
 
-    private void applyActions(List<SponsorSegment> foundSegment) {
-        if (foundSegment != null) {
-            SponsorSegment lastSegment = foundSegment.get(foundSegment.size() - 1);
+    private void applyActions(List<SponsorSegment> foundSegments) {
+        if (foundSegments != null) {
+            SponsorSegment lastSegment = foundSegments.get(foundSegments.size() - 1);
 
             Integer resId = mContentBlockData.getLocalizedRes(lastSegment.getCategory());
-            String localizedCategory = resId != null ? getContext().getString(resId) : lastSegment.getCategory();
+            String skipMessage = resId != null ? getContext().getString(resId) : lastSegment.getCategory();
 
             int type = mContentBlockData.getAction(lastSegment.getCategory());
 
@@ -391,13 +392,13 @@ public class ContentBlockController extends PlayerEventListenerHelper {
             if (type == ContentBlockData.ACTION_SKIP_ONLY || getPlayer().isInPIPMode() || Utils.isScreenOff(getContext())) {
                 simpleSkip(skipPosMs);
             } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
-                messageSkip(skipPosMs, localizedCategory);
+                messageSkip(skipPosMs, skipMessage);
             } else if (type == ContentBlockData.ACTION_SHOW_DIALOG) {
-                confirmSkip(skipPosMs, localizedCategory);
+                confirmSkip(skipPosMs, skipMessage);
             }
         }
 
-        mLastSkipPosMs = foundSegment != null ? foundSegment.get(foundSegment.size() - 1).getEndMs() : 0;
+        mLastSkipPosMs = foundSegments != null ? foundSegments.get(foundSegments.size() - 1).getEndMs() : 0;
     }
 
     private void closeTransparentDialog() {
