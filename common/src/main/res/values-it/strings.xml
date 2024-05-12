@@ -261,8 +261,8 @@
     <string name="enable_voice_search">Abilita ricerca vocale (supporto firmware necessario)</string>
     <string name="subscribe_unsubscribe_from_channel">Iscriviti/Disiscriviti dal canale</string>
     <string name="app_backup_restore">Backup e ripristino</string>
-    <string name="app_backup">Backup dati</string>
-    <string name="app_restore">Ripristino dati dal backup</string>
+    <string name="app_backup">Backup dati app</string>
+    <string name="app_restore">Ripristino dati app</string>
     <string name="skip_each_segment_once">Non saltare di nuovo i segmenti</string>
     <string name="disable_ok_long_press">Disabilita pressione prolungata del pulsante OK</string>
     <string name="disable_ok_long_press_desc">Destinato a controller difettosi in cui il pulsante OK non funziona correttamente</string>
@@ -338,7 +338,7 @@
     <string name="hide_upcoming">Nascondi in arrivo dalle Iscrizioni</string>
     <string name="hide_upcoming_channel">Nascondi in arrivo dal canale</string>
     <string name="hide_upcoming_home">Nascondi in arrivo dalla Home</string>
-    <string name="search_background_playback">Entra in PiP quando cerchi/apri il canale</string>
+    <string name="search_background_playback">Riproduzione in background durante la ricerca/navigazione di un canale</string>
     <string name="trending_row_name">Tendenze</string>
     <string name="player_seek_type">Tipo di ricerca</string>
     <string name="player_seek_regular">Regolare</string>
@@ -659,4 +659,3 @@
     <string name="prefer_ipv4_desc">Potrebbe risolvere situazioni in cui l\'app non funziona affatto.\nNota: potrebbe causare blocchi e arresti anomali (specialmente su dispositivi Android 8 o Dune HD)</string>
 	<string name="long_press_for_settings">PREMI A LUNGO PER LE IMPOSTAZIONI</string>
 </resources>
-
