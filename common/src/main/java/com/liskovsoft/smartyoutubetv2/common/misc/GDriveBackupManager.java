@@ -3,9 +3,10 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 
-import com.liskovsoft.googleapi.oauth2.impl.GoogleSignInService;
 import com.liskovsoft.googleapi.drive3.impl.GDriveService;
+import com.liskovsoft.googleapi.oauth2.impl.GoogleSignInService;
 import com.liskovsoft.mediaserviceinterfaces.google.DriveService;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -13,6 +14,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.GoogleSignInPresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 
@@ -32,12 +34,14 @@ public class GDriveBackupManager {
     private final DriveService mDriveService;
     private final String mDataDir;
     private final String mBackupDir;
+    private final GeneralData mGeneralData;
     private Disposable mBackupAction;
     private Disposable mRestoreAction;
     private final String[] mBackupNames;
 
     private GDriveBackupManager(Context context) {
         mContext = context;
+        mGeneralData = GeneralData.instance(context);
         mDataDir = String.format("%s/%s", mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR);
         mBackupDir = String.format("SmartTubeBackup/%s", context.getPackageName());
         mSignInService = GoogleSignInService.instance();
@@ -88,7 +92,8 @@ public class GDriveBackupManager {
     }
 
     private void startBackup() {
-        startBackup(mBackupDir, mDataDir);
+        String backupDir = mBackupDir + getDeviceSuffix();
+        startBackup(backupDir, mDataDir);
     }
 
     private void startBackup(String backupDir, String dataDir) {
@@ -110,7 +115,8 @@ public class GDriveBackupManager {
     }
 
     private void startRestore() {
-       startRestore(mBackupDir, mDataDir, () -> startRestore(applyAltPackageName(mBackupDir), mDataDir, null));
+        String backupDir = mBackupDir + getDeviceSuffix();
+        startRestore(backupDir, mDataDir, () -> startRestore(applyAltPackageName(backupDir), mDataDir, null));
     }
 
     private void startRestore(String backupDir, String dataDir, Runnable onError) {
@@ -131,6 +137,7 @@ public class GDriveBackupManager {
                 }, error -> {
                     if (onError != null)
                         onError.run();
+                    else MessageHelpers.showLongMessage(mContext, R.string.nothing_found);
                 });
     }
 
@@ -155,5 +162,9 @@ public class GDriveBackupManager {
     private String getAltPackageName() {
         String[] altPackages = new String[] {"com.liskovsoft.smarttubetv.beta", "com.teamsmart.videomanager.tv"};
         return mContext.getPackageName().equals(altPackages[0]) ? altPackages[1] : altPackages[0];
+    }
+
+    private String getDeviceSuffix() {
+        return mGeneralData.isDeviceSpecificBackupEnabled() ? "_" + Build.MODEL.replace(" ", "_") : "";
     }
 }

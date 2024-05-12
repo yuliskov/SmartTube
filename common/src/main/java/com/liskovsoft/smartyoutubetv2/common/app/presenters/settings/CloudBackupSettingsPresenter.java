@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.GoogleSignInPresente
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.GDriveBackupManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
 import java.util.ArrayList;
@@ -29,12 +30,14 @@ public class CloudBackupSettingsPresenter extends BasePresenter<Void> {
     private static CloudBackupSettingsPresenter sInstance;
     private final GoogleSignInService mSignInService;
     private final GDriveBackupManager mBackupManager;
+    private final GeneralData mGeneralData;
     private Disposable mAccountListAction;
 
     private CloudBackupSettingsPresenter(Context context) {
         super(context);
         mSignInService = GoogleSignInService.instance();
         mBackupManager = GDriveBackupManager.instance(context);
+        mGeneralData = GeneralData.instance(context);
     }
 
     public static CloudBackupSettingsPresenter instance(Context context) {
@@ -68,10 +71,8 @@ public class CloudBackupSettingsPresenter extends BasePresenter<Void> {
             AppDialogPresenter settingsPresenter2 = AppDialogPresenter.instance(getContext());
             appendBackupSettings(settingsPresenter2);
             appendRestoreSettings(settingsPresenter2);
-            appendAddAccountButton(settingsPresenter2);
             // NOTE: google account doesn't have a name or email
-            //appendRemoveAccountSection(accounts, settingsPresenter2);
-            //appendSelectAccountSection(accounts, settingsPresenter2);
+            appendMiscButton(settingsPresenter2);
             settingsPresenter2.showDialog("Google Drive");
         }));
 
@@ -140,9 +141,19 @@ public class CloudBackupSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.app_backup), optionItem -> mBackupManager.backup()));
     }
 
-    private void appendAddAccountButton(AppDialogPresenter settingsPresenter) {
+    private void appendMiscButton(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(
-                getContext().getString(R.string.dialog_add_account), option -> GoogleSignInPresenter.instance(getContext()).start()));
+                getContext().getString(R.string.player_other), option -> {
+                    AppDialogPresenter settingsPresenter2 = AppDialogPresenter.instance(getContext());
+                    settingsPresenter2.appendSingleSwitch(UiOptionItem.from(
+                            getContext().getString(R.string.device_specific_backup),
+                            option2 -> mGeneralData.enableDeviceSpecificBackup(option2.isSelected()),
+                            mGeneralData.isDeviceSpecificBackupEnabled()
+                    ));
+                    settingsPresenter2.appendSingleButton(UiOptionItem.from(
+                            getContext().getString(R.string.dialog_add_account), option2 -> GoogleSignInPresenter.instance(getContext()).start()));
+                    settingsPresenter2.showDialog(getContext().getString(R.string.player_other));
+                }));
     }
 
     private String getFullName(Account account) {

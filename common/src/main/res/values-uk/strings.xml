@@ -649,4 +649,5 @@
     <string name="prefer_ipv4">Надавати перевагу IPv4 DNS</string>
     <string name="prefer_ipv4_desc">Може виправити випадки, коли застосунок взагалі не працює.\nУвага. На деяких пристроях можливі падіння застосунку (особливо на Android 8 та пристроях Dune HD)</string>
     <string name="long_press_for_settings">ТРИВАЛЕ НАТИСКАННЯ ДЛЯ НАЛАШТУВАНЬ</string>
+    <string name="device_specific_backup">Резервне копіювання лише для цього пристрою</string>
 </resources>

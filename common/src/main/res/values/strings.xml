@@ -658,4 +658,5 @@
     <string name="prefer_ipv4">Prefer IPv4 DNS</string>
     <string name="prefer_ipv4_desc">Could fix situations when the app isn\'t working at all.\nNote. May cause hangs and crashes (especially on Android 8 devices or Dune HD)</string>
     <string name="long_press_for_settings">LONG PRESS FOR SETTINGS</string>
+    <string name="device_specific_backup">Backup for this device only</string>
 </resources>
