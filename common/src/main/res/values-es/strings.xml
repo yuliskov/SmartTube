@@ -655,4 +655,5 @@
   <string name="player_extra_long_speed_list">Lista de velocidad extra larga</string>
   <string name="remember_position_pinned">Recordar la última posición vista en las listas de reproducción fijadas</string>
   <string name="long_press_for_settings">PULSACIÓN LARGA PARA AJUSTES</string>
+  <string name="device_specific_backup">Copia de seguridad sólo para este dispositivo</string>
 </resources>
