@@ -133,23 +133,23 @@ public class ContentBlockController extends PlayerEventListenerHelper {
                 return;
             }
 
-            //boolean enabled = buttonState == PlayerUI.BUTTON_ON;
-            //
-            //mSkipExclude = !enabled;
-            //
-            //Video video = getPlayer().getVideo();
-            //
-            //if (video != null && video.hasChannel()) {
-            //    if (enabled) {
-            //        mContentBlockData.excludeChannel(video.channelId);
-            //    } else {
-            //        mContentBlockData.stopExcludingChannel(video.channelId);
-            //    }
-            //} else {
-            //    mContentBlockData.enableSponsorBlock(!enabled);
-            //}
-            //
-            //onVideoLoaded(video);
+            boolean enabled = buttonState == PlayerUI.BUTTON_ON;
+
+            mSkipExclude = !enabled;
+
+            Video video = getPlayer().getVideo();
+
+            if (video != null && video.hasChannel()) {
+                if (enabled) {
+                    mContentBlockData.excludeChannel(video.channelId);
+                } else {
+                    mContentBlockData.stopExcludingChannel(video.channelId);
+                }
+            } else {
+                mContentBlockData.enableSponsorBlock(!enabled);
+            }
+
+            onVideoLoaded(video);
         }
     }
 
