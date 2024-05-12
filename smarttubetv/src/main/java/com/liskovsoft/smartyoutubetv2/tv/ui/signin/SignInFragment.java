@@ -111,7 +111,9 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
         if (action.getId() == CONTINUE) {
             mSignInPresenter.onActionClicked();
         } else if (action.getId() == OPEN_BROWSER) {
-            Utils.openLinkExt(getContext(), mFullSignInUrl);
+            if (mFullSignInUrl != null) {
+                Utils.openLinkExt(getContext(), mFullSignInUrl);
+            }
         }
     }
 
