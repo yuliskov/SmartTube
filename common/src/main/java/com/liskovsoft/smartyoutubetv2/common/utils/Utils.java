@@ -489,6 +489,14 @@ public class Utils {
         }
     }
 
+    public static CharSequence color(CharSequence string, int color, int start, int end) {
+        SpannableString spannable = new SpannableString(string);
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(color);
+        spannable.setSpan(foregroundColorSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return spannable;
+    }
+
     public static CharSequence color(CharSequence string, int color) {
         SpannableString spannable = new SpannableString(string);
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(color);
