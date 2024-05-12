@@ -778,9 +778,15 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         Integer bitrate = mBlacklist.get(formatId);
 
-        if (bitrate == null || (bitrate < format.bitrate || mediaTrack instanceof AudioTrack)) {
-          mBlacklist.put(formatId, format.bitrate + 500_000);
-          return true;
+        //if (bitrate == null || (bitrate < format.bitrate || mediaTrack instanceof AudioTrack)) {
+        //  mBlacklist.put(formatId, format.bitrate + 500_000);
+        //  return true;
+        //}
+
+        if (bitrate == null || bitrate < format.bitrate || (mediaTrack instanceof AudioTrack && Math.abs(bitrate - format.bitrate) > 10_000)) {
+            int diff = mediaTrack instanceof AudioTrack ? 0 : 500_000; // video bitrate min diff
+            mBlacklist.put(formatId, format.bitrate + diff);
+            return true;
         }
 
         return false;
