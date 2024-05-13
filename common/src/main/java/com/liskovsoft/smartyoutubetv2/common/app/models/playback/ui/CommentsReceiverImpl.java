@@ -49,6 +49,10 @@ public abstract class CommentsReceiverImpl implements CommentsReceiver {
 
     @Override
     public String getLoadingMessage() {
+        if (mContext == null) {
+            return null;
+        }
+
         return mContext.getString(R.string.loading);
     }
 
