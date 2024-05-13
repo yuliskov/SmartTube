@@ -261,8 +261,8 @@
     <string name="enable_voice_search">Genel aramayı etkinleştir (aygıt yazılımı desteği gerekli)</string>
     <string name="subscribe_unsubscribe_from_channel">Kanala Abone ol/Aboneliği iptal et</string>
     <string name="app_backup_restore">Yedekle/Geri al</string>
-    <string name="app_backup">Veriyi yedekle</string>
-    <string name="app_restore">Veriyi yedekten geri yükle</string>
+    <string name="app_backup">Uygulama verilerini yedekle</string>
+    <string name="app_restore">Uygulama verilerini geri yükle</string>
     <string name="skip_each_segment_once">Bölümleri tekrar atlama</string>
     <string name="disable_ok_long_press">TAMAM düğmesine uzun basmayı devre dışı bırak</string>
     <string name="disable_ok_long_press_desc">TAMAM düğmesinin düzgün çalışmadığı hatalı denetleyiciler için tasarlanmıştır</string>
@@ -338,7 +338,7 @@
     <string name="hide_upcoming">Yaklaşan yayınları Abonelikler\'de gizle</string>
     <string name="hide_upcoming_channel">Yaklaşan yayınları Kanalda gizle</string>
     <string name="hide_upcoming_home">Yaklaşan yayınları Ana Sayfa\'da gizle</string>
-    <string name="search_background_playback">Arama yaparken/Kanalı açarken resim içinde resim moduna geç</string>
+    <string name="search_background_playback">Arama yaparken/Kanalda gezinirken arka planda oynat</string>
     <string name="trending_row_name">Trendler</string>
     <string name="player_seek_type">Arama davranışı</string>
     <string name="player_seek_regular">Normal</string>
@@ -591,7 +591,7 @@
     <string name="sorting_default">Varsayılan (hızlı, hareketli ön izlemeler)</string>
     <string name="content_block_exclude_channel">Bu kanalı SponsorBlock\'tan hariç tut</string>
     <string name="content_block_stop_excluding_channel">Bu kanalı SponsorBlock\'tan hariç tutmayı durdur</string>
-    <string name="player_chapter_notification">Bölümler arasında hızla ilerlemek için bildirim göster</string>
+    <string name="player_chapter_notification">Açılır bildirimi kullanarak bölümler arasında hızlı ilerle</string>
     <string name="subtitle_remember">Her kanal için etkinleştirilmiş altyazıları hatırla</string>
     <string name="amazon_frame_drop_fix">Kare bırakma düzeltmesi #2</string>
     <string name="amazon_frame_drop_fix_desc">Amazon Stick cihazları için tasarlanmıştır. Diğer cihazlarda da çalışabilir.</string>
@@ -658,4 +658,5 @@
     <string name="prefer_ipv4">IPv4 DNS tercih et</string>
     <string name="prefer_ipv4_desc">Uygulamanın hiç çalışmadığı durumları düzeltebilir.\nNot: Takılmalara ve çökmelere neden olabilir (özellikle Android 8 cihazlarda ya da Dune HD\'de)</string>
     <string name="long_press_for_settings">AYARLAR İÇİN UZUN BASIN</string>
+    <string name="device_specific_backup">Yalnızca bu cihaz için yedekleme</string>
 </resources>
