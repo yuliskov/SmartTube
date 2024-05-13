@@ -15,6 +15,7 @@ import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.GoogleSignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 
@@ -72,9 +73,9 @@ public class GDriveBackupManager {
         }
 
         if (mSignInService.isSigned()) {
-            startBackup();
+            startBackupConfirm();
         } else {
-            logIn(this::startBackup);
+            logIn(this::startBackupConfirm);
         }
     }
 
@@ -85,10 +86,14 @@ public class GDriveBackupManager {
         }
 
         if (mSignInService.isSigned()) {
-            startRestore();
+            startRestoreConfirm();
         } else {
-            logIn(this::startRestore);
+            logIn(this::startRestoreConfirm);
         }
+    }
+
+    private void startBackupConfirm() {
+        AppDialogUtil.showConfirmationDialog(mContext, mContext.getString(R.string.app_backup), this::startBackup);
     }
 
     private void startBackup() {
@@ -112,6 +117,10 @@ public class GDriveBackupManager {
                         }
                     }
                 }, error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
+    }
+
+    private void startRestoreConfirm() {
+        AppDialogUtil.showConfirmationDialog(mContext, mContext.getString(R.string.app_restore), this::startRestore);
     }
 
     private void startRestore() {
