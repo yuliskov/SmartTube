@@ -49,6 +49,11 @@ public class VideoStateService implements ProfileChangeListener {
         mStates.remove(videoId);
     }
 
+    public void clear() {
+        mStates.clear();
+        persistState();
+    }
+
     private void restoreState() {
         mStates.clear();
         String data = mPrefs.getStateUpdaterData();

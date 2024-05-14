@@ -11,6 +11,7 @@ import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
@@ -509,6 +510,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                         optionItem -> AppDialogUtil.showConfirmationDialog(getContext(),
                                 getContext().getString(R.string.clear_history), () -> {
                                     mServiceManager.clearHistory();
+                                    VideoStateService.instance(getContext()).clear();
                                     getDialogPresenter().closeDialog();
                                     presenter.refresh();
                         })));
