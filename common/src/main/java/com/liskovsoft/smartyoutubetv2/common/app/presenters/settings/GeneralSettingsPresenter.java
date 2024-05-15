@@ -70,7 +70,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendScreensaverTimeoutCategory(settingsPresenter);
         appendTimeFormatCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
-        appendAppBackupCategory(settingsPresenter);
+        //appendAppBackupCategory(settingsPresenter);
         appendInternetCensorship(settingsPresenter);
         appendHistoryCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
@@ -437,55 +437,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 mGeneralData.getTimeFormat() == GeneralData.TIME_FORMAT_12));
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.time_format), options);
-    }
-
-    private void appendAppBackupCategory(AppDialogPresenter settingsPresenter) {
-        List<OptionItem> options = new ArrayList<>();
-
-        BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext());
-
-        options.add(UiOptionItem.from(
-                String.format("%s:\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
-                option -> {
-                    AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_backup), () -> {
-                        mGeneralData.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
-                        backupManager.checkPermAndBackup();
-                        MessageHelpers.showMessage(getContext(), R.string.msg_done);
-                    });
-                }));
-
-        String backupPathCheck = backupManager.getBackupPathCheck();
-        options.add(UiOptionItem.from(
-                String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupPathCheck != null ? backupPathCheck : ""),
-                option -> {
-                    backupManager.getBackupNames(names -> showRestoreDialog(backupManager, names));
-                }));
-
-        settingsPresenter.appendStringsCategory(getContext().getString(R.string.app_backup_restore), options);
-    }
-
-    private void showRestoreDialog(BackupAndRestoreManager backupManager, List<String> backups) {
-        if (backups != null && backups.size() > 1) {
-            showRestoreSelectorDialog(backups, backupManager);
-        } else {
-            AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
-                backupManager.checkPermAndRestore();
-            });
-        }
-    }
-
-    private void showRestoreSelectorDialog(List<String> backups, BackupAndRestoreManager backupManager) {
-        AppDialogPresenter dialog = AppDialogPresenter.instance(getContext());
-        List<OptionItem> options = new ArrayList<>();
-
-        for (String name : backups) {
-            options.add(UiOptionItem.from(name, optionItem -> {
-                backupManager.checkPermAndRestore(name);
-            }));
-        }
-
-        dialog.appendStringsCategory(getContext().getString(R.string.app_restore), options);
-        dialog.showDialog();
     }
 
     private void appendHistoryCategory(AppDialogPresenter settingsPresenter) {

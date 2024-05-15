@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.liskovsoft.googleapi.oauth2.impl.GoogleSignInService;
 import com.liskovsoft.mediaserviceinterfaces.google.data.Account;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -15,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.GoogleSignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.GDriveBackupManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -76,61 +78,9 @@ public class CloudBackupSettingsPresenter extends BasePresenter<Void> {
             settingsPresenter2.showDialog("Google Drive");
         }));
 
+        appendLocalBackupCategory(settingsPresenter);
+
         settingsPresenter.showDialog(getContext().getString(R.string.app_backup_restore), this::unhold);
-    }
-
-    private void appendSelectAccountSection(List<Account> accounts, AppDialogPresenter settingsPresenter) {
-        if (accounts == null || accounts.isEmpty()) {
-            return;
-        }
-
-        List<OptionItem> optionItems = new ArrayList<>();
-
-        optionItems.add(UiOptionItem.from(
-                getContext().getString(R.string.dialog_account_none), optionItem -> {
-                    AccountSelectionPresenter.instance(getContext()).selectAccount(null);
-                    settingsPresenter.closeDialog();
-                }, true
-        ));
-
-        String accountName = " (" + getContext().getString(R.string.dialog_account_none) + ")";
-
-        for (Account account : accounts) {
-            optionItems.add(UiOptionItem.from(
-                    getFullName(account), option -> {
-                        mSignInService.selectAccount(account);
-                        settingsPresenter.closeDialog();
-                    }, account.isSelected()
-            ));
-
-            if (account.isSelected()) {
-                accountName = " (" + getSimpleName(account) + ")";
-            }
-        }
-
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.dialog_account_list) + accountName, optionItems);
-    }
-
-    private void appendRemoveAccountSection(List<Account> accounts, AppDialogPresenter settingsPresenter) {
-        if (accounts == null || accounts.isEmpty()) {
-            return;
-        }
-
-        List<OptionItem> optionItems = new ArrayList<>();
-
-        for (Account account : accounts) {
-            optionItems.add(UiOptionItem.from(
-                    getFullName(account), option ->
-                        AppDialogUtil.showConfirmationDialog(
-                                getContext(), getContext().getString(R.string.dialog_remove_account), () -> {
-                                    removeAccount(account);
-                                    settingsPresenter.closeDialog();
-                                    MessageHelpers.showMessage(getContext(), R.string.msg_done);
-                                })
-            ));
-        }
-
-        settingsPresenter.appendStringsCategory(getContext().getString(R.string.dialog_remove_account), optionItems);
     }
 
     private void appendRestoreSettings(AppDialogPresenter settingsPresenter) {
@@ -154,6 +104,55 @@ public class CloudBackupSettingsPresenter extends BasePresenter<Void> {
                             getContext().getString(R.string.dialog_add_account), option2 -> GoogleSignInPresenter.instance(getContext()).start()));
                     settingsPresenter2.showDialog(getContext().getString(R.string.player_other));
                 }));
+    }
+
+    private void appendLocalBackupCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext());
+
+        options.add(UiOptionItem.from(
+                String.format("%s:\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
+                option -> {
+                    AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_backup), () -> {
+                        mGeneralData.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
+                        backupManager.checkPermAndBackup();
+                        MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                    });
+                }));
+
+        String backupPathCheck = backupManager.getBackupPathCheck();
+        options.add(UiOptionItem.from(
+                String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupPathCheck != null ? backupPathCheck : ""),
+                option -> {
+                    backupManager.getBackupNames(names -> showRestoreDialog(backupManager, names));
+                }));
+
+        settingsPresenter.appendStringsCategory("SD card", options);
+    }
+
+    private void showRestoreDialog(BackupAndRestoreManager backupManager, List<String> backups) {
+        if (backups != null && backups.size() > 1) {
+            showRestoreSelectorDialog(backups, backupManager);
+        } else {
+            AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
+                backupManager.checkPermAndRestore();
+            });
+        }
+    }
+
+    private void showRestoreSelectorDialog(List<String> backups, BackupAndRestoreManager backupManager) {
+        AppDialogPresenter dialog = AppDialogPresenter.instance(getContext());
+        List<OptionItem> options = new ArrayList<>();
+
+        for (String name : backups) {
+            options.add(UiOptionItem.from(name, optionItem -> {
+                backupManager.checkPermAndRestore(name);
+            }));
+        }
+
+        dialog.appendStringsCategory(getContext().getString(R.string.app_restore), options);
+        dialog.showDialog();
     }
 
     private String getFullName(Account account) {
