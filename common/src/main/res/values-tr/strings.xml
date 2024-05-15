@@ -659,4 +659,5 @@
     <string name="prefer_ipv4_desc">Uygulamanın hiç çalışmadığı durumları düzeltebilir.\nNot: Takılmalara ve çökmelere neden olabilir (özellikle Android 8 cihazlarda ya da Dune HD\'de)</string>
     <string name="long_press_for_settings">AYARLAR İÇİN UZUN BASIN</string>
     <string name="device_specific_backup">Yalnızca bu cihaz için yedekleme</string>
+    <string name="local_backup">Yerel yedekleme</string>
 </resources>

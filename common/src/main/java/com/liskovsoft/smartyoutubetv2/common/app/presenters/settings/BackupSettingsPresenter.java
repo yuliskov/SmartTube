@@ -15,7 +15,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.GoogleSignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.GDriveBackupManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -26,25 +25,25 @@ import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
-public class CloudBackupSettingsPresenter extends BasePresenter<Void> {
-    private static final String TAG = CloudBackupSettingsPresenter.class.getSimpleName();
+public class BackupSettingsPresenter extends BasePresenter<Void> {
+    private static final String TAG = BackupSettingsPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
-    private static CloudBackupSettingsPresenter sInstance;
+    private static BackupSettingsPresenter sInstance;
     private final GoogleSignInService mSignInService;
     private final GDriveBackupManager mBackupManager;
     private final GeneralData mGeneralData;
     private Disposable mAccountListAction;
 
-    private CloudBackupSettingsPresenter(Context context) {
+    private BackupSettingsPresenter(Context context) {
         super(context);
         mSignInService = GoogleSignInService.instance();
         mBackupManager = GDriveBackupManager.instance(context);
         mGeneralData = GeneralData.instance(context);
     }
 
-    public static CloudBackupSettingsPresenter instance(Context context) {
+    public static BackupSettingsPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new CloudBackupSettingsPresenter(context);
+            sInstance = new BackupSettingsPresenter(context);
         }
 
         sInstance.setContext(context);
@@ -128,7 +127,7 @@ public class CloudBackupSettingsPresenter extends BasePresenter<Void> {
                     backupManager.getBackupNames(names -> showRestoreDialog(backupManager, names));
                 }));
 
-        settingsPresenter.appendStringsCategory("SD card", options);
+        settingsPresenter.appendStringsCategory(getContext().getString(R.string.local_backup), options);
     }
 
     private void showRestoreDialog(BackupAndRestoreManager backupManager, List<String> backups) {
