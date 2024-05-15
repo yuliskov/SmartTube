@@ -57,6 +57,7 @@ public final class Video {
     public String badge;
     public String previewUrl;
     public float percentWatched = -1;
+    public int startTimeSeconds;
     public MediaItem mediaItem;
     public MediaItem nextMediaItem;
     public MediaItem nextMediaItemBackup;
@@ -129,6 +130,7 @@ public final class Video {
         video.cardImageUrl = item.getCardImageUrl();
         video.author = item.getAuthor();
         video.percentWatched = item.getPercentWatched();
+        video.startTimeSeconds = item.getStartTimeSeconds();
         video.badge = item.getBadgeText();
         video.hasNewContent = item.hasNewContent();
         video.previewUrl = item.getVideoPreviewUrl();

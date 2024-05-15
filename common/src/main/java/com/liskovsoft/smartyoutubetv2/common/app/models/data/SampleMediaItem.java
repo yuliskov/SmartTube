@@ -19,6 +19,7 @@ public final class SampleMediaItem implements MediaItem {
     private String mBackgroundImageUrl;
     private String mAuthor;
     private int mPercentWatched;
+    private int mStartTimeSeconds;
     private String mBadgeText;
     private boolean mHaseNewContent;
     private String mVideoPreviewUrl;
@@ -61,6 +62,7 @@ public final class SampleMediaItem implements MediaItem {
         mediaItem.mCardImageUrl = video.cardImageUrl;
         mediaItem.mAuthor = video.author;
         mediaItem.mPercentWatched = (int) video.percentWatched;
+        mediaItem.mStartTimeSeconds = video.startTimeSeconds;
         mediaItem.mBadgeText = video.badge;
         mediaItem.mHaseNewContent = video.hasNewContent;
         mediaItem.mVideoPreviewUrl = video.previewUrl;
@@ -104,6 +106,11 @@ public final class SampleMediaItem implements MediaItem {
     @Override
     public int getPercentWatched() {
         return mPercentWatched;
+    }
+
+    @Override
+    public int getStartTimeSeconds() {
+        return mStartTimeSeconds;
     }
 
     @Override
