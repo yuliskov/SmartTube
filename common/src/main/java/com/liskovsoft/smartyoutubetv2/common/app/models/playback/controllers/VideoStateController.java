@@ -349,7 +349,7 @@ public class VideoStateController extends PlayerEventListenerHelper {
     }
 
     private void resetPosition(Video video) {
-        video.percentWatched = 0;
+        video.markNotViewed();
         resetPosition(video.videoId);
     }
 
@@ -438,7 +438,7 @@ public class VideoStateController extends PlayerEventListenerHelper {
         } else { // fully viewed
             // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
             mStateService.save(new State(video.videoId, durationMs, durationMs, getPlayer().getSpeed()));
-            video.percentWatched = 100;
+            video.markFullyViewed();
         }
 
         Playlist.instance().sync(video);

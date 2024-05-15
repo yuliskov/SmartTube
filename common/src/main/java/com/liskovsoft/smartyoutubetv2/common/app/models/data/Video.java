@@ -699,6 +699,16 @@ public final class Video {
         return nextVideo;
     }
 
+    public void markFullyViewed() {
+        percentWatched = 100;
+        startTimeSeconds = (int)(getDurationMs() / 1_000);
+    }
+
+    public void markNotViewed() {
+        percentWatched = 0;
+        startTimeSeconds = 0;
+    }
+
     public long getLiveDurationMs() {
         if (startTimeMs == 0) {
             return 0;
@@ -714,6 +724,11 @@ public final class Video {
     }
 
     public long getPositionMs() {
+        long positionMs = getPositionFromStartPosition();
+        return positionMs != 0 ? positionMs : getPositionFromPercentWatched();
+    }
+
+    private long getPositionFromPercentWatched() {
         // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
         if (mediaItem == null || percentWatched <= RESTORE_POSITION_PERCENTS || percentWatched >= 100) {
             return 0;
@@ -721,6 +736,10 @@ public final class Video {
 
         long posMs = (long) (mediaItem.getDurationMs() / 100 * percentWatched);
         return posMs > 0 && posMs < mediaItem.getDurationMs() ? posMs : 0;
+    }
+
+    private long getPositionFromStartPosition() {
+        return startTimeSeconds * 1_000L;
     }
 
     public MediaItem toMediaItem() {
