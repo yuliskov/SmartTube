@@ -659,4 +659,5 @@
     <string name="prefer_ipv4_desc">Könnte Situationen beheben, in denen die App überhaupt nicht funktioniert.\nHinweis: Kann Einfrieren und Abstürze verursachen (besonders auf Android 8 Geräten oder Dune HD)</string>
     <string name="long_press_for_settings">LANGE DRÜCKEN FÜR EINSTELLUNGEN</string>
     <string name="device_specific_backup">Sicherung nur für dieses Gerät</string>
+    <string name="local_backup">Lokale Sicherung</string>
 </resources>
