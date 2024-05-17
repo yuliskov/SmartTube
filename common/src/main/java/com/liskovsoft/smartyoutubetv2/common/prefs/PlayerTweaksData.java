@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build.VERSION;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -546,12 +547,11 @@ public class PlayerTweaksData implements ProfileChangeListener {
     }
 
     public void unlockHighBitrateFormats(boolean enable) {
-        mIsHighBitrateFormatsUnlocked = enable;
-        persistData();
+        GlobalPreferences.sInstance.enableExtendedHlsFormats(enable);
     }
 
     public boolean isHighBitrateFormatsUnlocked() {
-        return mIsHighBitrateFormatsUnlocked;
+        return GlobalPreferences.sInstance.isExtendedHlsFormatsEnabled();
     }
 
     private void restoreData() {
@@ -646,6 +646,11 @@ public class PlayerTweaksData implements ProfileChangeListener {
         // Replace old button with new one
         if (isPlayerButtonEnabled(PLAYER_BUTTON_SCREEN_OFF)) {
             enablePlayerButton(PLAYER_BUTTON_SCREEN_OFF_TIMEOUT);
+        }
+
+        if (mIsHighBitrateFormatsUnlocked) {
+            mIsHighBitrateFormatsUnlocked = false;
+            GlobalPreferences.sInstance.enableExtendedHlsFormats(true);
         }
     }
 

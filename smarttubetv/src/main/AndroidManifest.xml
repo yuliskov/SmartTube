@@ -56,7 +56,6 @@
         android:banner="@mipmap/app_banner"
         android:logo="@mipmap/app_logo"
         android:icon="@mipmap/app_icon"
-        android:roundIcon="@mipmap/app_icon_round"
         android:label="@string/app_name"
         android:theme="@style/App.Theme.Leanback.Browse"
         tools:node="merge"
