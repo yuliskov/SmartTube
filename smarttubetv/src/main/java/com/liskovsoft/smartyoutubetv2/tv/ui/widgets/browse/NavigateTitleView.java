@@ -302,7 +302,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         Account current = MediaServiceManager.instance().getSelectedAccount();
 
         if (current != null && current.getAvatarImageUrl() != null) {
-            loadIcon(mAccountView, current.getAvatarImageUrl());
+            loadIcon(mAccountView, current.getAvatarImageUrl(), false);
             String accountName = current.getName() != null ? current.getName() : current.getEmail();
             TooltipCompatHandler.setTooltipText(mAccountView, Utils.updateTooltip(getContext(), accountName));
         } else {
@@ -321,19 +321,19 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         // Use delay to fix icon initialization on app boot
         new Handler(Looper.myLooper()).postDelayed(() -> {
             Locale locale = LocaleUtility.getCurrentLocale(getContext());
-            loadIcon(mLanguageView, Utils.getCountryFlagUrl(locale.getCountry()));
+            loadIcon(mLanguageView, Utils.getCountryFlagUrl(locale.getCountry()), true); // flag server could be down
             TooltipCompatHandler.setTooltipText(mLanguageView, String.format("%s (%s)", locale.getDisplayCountry(), locale.getDisplayLanguage()));
         }, 100);
     }
 
-    private void loadIcon(SearchOrbView view, String url) {
+    private void loadIcon(SearchOrbView view, String url, boolean useCache) {
         if (view == null) {
             return;
         }
 
         // The view with GONE visibility has zero width and height
         if (view.getWidth() <= 0 || view.getHeight() <= 0) {
-            Utils.postDelayed(() -> loadIcon(view, url), 500);
+            Utils.postDelayed(() -> loadIcon(view, url, useCache), 500);
             return;
         }
 
@@ -350,18 +350,18 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         }
 
         try {
-            loadIcon(context, view, url, mIconWidth, mIconHeight);
+            loadIcon(context, view, url, mIconWidth, mIconHeight, useCache);
         } catch (ExceptionInInitializerError e) {
             // Glide Kivi error
             e.printStackTrace();
         }
     }
 
-    private static void loadIcon(Context context, SearchOrbView view, String url, int iconWidth, int iconHeight) {
+    private static void loadIcon(Context context, SearchOrbView view, String url, int iconWidth, int iconHeight, boolean useCache) {
         Glide.with(context)
                 .load(url)
                 .apply(ViewUtil.glideOptions())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(useCache ? DiskCacheStrategy.ALL : DiskCacheStrategy.NONE)
                 .circleCrop() // resize image
                 .into(new SimpleTarget<Drawable>(iconWidth, iconHeight) {
                     @Override
