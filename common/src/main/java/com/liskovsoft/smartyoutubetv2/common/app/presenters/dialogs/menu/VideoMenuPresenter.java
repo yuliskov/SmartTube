@@ -658,8 +658,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
-                        mVideo.isSubscribed ?
-                                R.string.unsubscribe_from_channel : R.string.subscribe_to_channel),
+                        mVideo.isSynced || mVideo.isSubscribed ? mVideo.isSubscribed ?
+                                R.string.unsubscribe_from_channel : R.string.subscribe_to_channel : R.string.subscribe_unsubscribe_from_channel),
                         optionItem -> toggleSubscribe()));
     }
 
@@ -849,7 +849,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        mVideo.isSynced = true; // default to subscribe
+        //mVideo.isSynced = true; // default to subscribe
 
         // Until synced we won't really know weather we subscribed to a channel.
         // Exclusion: channel item (can't be synced)
@@ -860,9 +860,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
 
             mServiceManager.loadMetadata(mVideo, metadata -> {
-                Video video = Video.from(mVideo);
-                video.sync(metadata);
-                toggleSubscribe(video);
+                mVideo.sync(metadata);
+                toggleSubscribe(mVideo);
             });
         }
     }
@@ -879,13 +878,13 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mSubscribeAction = RxHelper.execute(observable);
 
-        boolean isSubscribed = !video.isSubscribed;
+        video.isSubscribed = !video.isSubscribed;
 
-        if (!isSubscribed && mCallback != null) {
+        if (!video.isSubscribed && mCallback != null) {
             mCallback.onItemAction(video, VideoMenuCallback.ACTION_UNSUBSCRIBE);
         }
 
-        MessageHelpers.showMessage(getContext(), getContext().getString(!isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel));
+        MessageHelpers.showMessage(getContext(), getContext().getString(!video.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel));
     }
 
     @Override
