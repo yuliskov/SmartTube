@@ -60,6 +60,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitialize
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -332,7 +333,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     public void maybeReleasePlayer() {
         // Inside dialogs we could change engine settings on fly
-        if (AppDialogPresenter.instance(getContext()).isDialogShown()) {
+        if (AppDialogPresenter.instance(getContext()).isDialogShown() ||
+                (isBackgroundPlaybackEnabled() && Utils.isHardScreenOff(getContext()))) {
             Log.d(TAG, "releasePlayer: Engine release is blocked by dialog. Exiting...");
             return;
         }
@@ -1623,5 +1625,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     private boolean forbidShowOverlay(boolean show) {
         return show && isInPIPMode();
+    }
+
+    private boolean isBackgroundPlaybackEnabled() {
+        int shortcut = GeneralData.instance(getContext()).getBackgroundPlaybackShortcut();
+
+        return shortcut == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME || shortcut == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK;
     }
 }
