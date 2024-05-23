@@ -801,6 +801,10 @@ public class Utils {
     }
 
     public static boolean isHardScreenOff(Context context) {
+        if (context == null) {
+            return false;
+        }
+
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         
         if (Build.VERSION.SDK_INT < 20) {
