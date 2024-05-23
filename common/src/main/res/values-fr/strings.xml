@@ -656,4 +656,6 @@
   <string name="skip_shorts">Sauter les Shorts</string>
   <string name="save_playlist">Ajouter une playlist à la section Playlists</string>
   <string name="player_exit_shortcut">Quitter le lecteur</string>
+  <string name="device_specific_backup">Sauvegarde pour cet appareil uniquement</string>
+  <string name="local_backup">Sauvegarde locale</string>
 </resources>
