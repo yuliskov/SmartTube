@@ -5,11 +5,11 @@ import com.liskovsoft.mediaserviceinterfaces.yt.data.CommentGroup;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.CommentItem;
 import com.liskovsoft.smartyoutubetv2.common.R;
 
-public abstract class CommentsReceiverImpl implements CommentsReceiver {
+public abstract class AbstractCommentsReceiver implements CommentsReceiver {
     private final Context mContext;
     private Callback mCallback;
 
-    public CommentsReceiverImpl(Context context) {
+    public AbstractCommentsReceiver(Context context) {
         mContext = context;
     }
 

@@ -1,4 +1,6 @@
 <resources>
+    <color name="dark_red">#ffcc0000</color>
+    <color name="light_red">#ffff4444</color>
     <color name="white">#ffffff</color>
     <color name="white60">#a0ffffff</color>
     <color name="white_two">#efefef</color>

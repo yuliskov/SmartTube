@@ -15,7 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiver.Backup;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiverImpl;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.AbstractCommentsReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
@@ -61,13 +61,15 @@ public class CommentsController extends PlayerEventListenerHelper {
             return;
         }
 
+        final String backupKey = mCommentsKey;
+
         if (getPlayer() != null) {
             getPlayer().showControls(false);
         }
 
         String title = getPlayer() != null && getPlayer().getVideo() != null ? getPlayer().getVideo().getTitle() : mTitle;
 
-        CommentsReceiver commentsReceiver = new CommentsReceiverImpl(getContext()) {
+        CommentsReceiver commentsReceiver = new AbstractCommentsReceiver(getContext()) {
             @Override
             public void onLoadMore(CommentGroup commentGroup) {
                 loadComments(this, commentGroup.getNextCommentsKey());
@@ -75,7 +77,7 @@ public class CommentsController extends PlayerEventListenerHelper {
 
             @Override
             public void onStart() {
-                if (mBackup != null) {
+                if (mBackup != null && Helpers.equals(mBackup.first, mCommentsKey)) {
                     loadBackup(mBackup.second);
                     return;
                 }
@@ -89,7 +91,7 @@ public class CommentsController extends PlayerEventListenerHelper {
                     return;
                 }
 
-                CommentsReceiver nestedReceiver = new CommentsReceiverImpl(getContext()) {
+                CommentsReceiver nestedReceiver = new AbstractCommentsReceiver(getContext()) {
                     @Override
                     public void onLoadMore(CommentGroup commentGroup) {
                         loadComments(this, commentGroup.getNextCommentsKey());
@@ -106,7 +108,9 @@ public class CommentsController extends PlayerEventListenerHelper {
 
             @Override
             public void onFinish(Backup backup) {
-                mBackup = new Pair<>(mCommentsKey, backup);
+                if (Helpers.equals(backupKey, mCommentsKey)) {
+                    mBackup = new Pair<>(mCommentsKey, backup);
+                }
             }
         };
 
