@@ -145,6 +145,10 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         }
 
         loadMetadata(video, metadata -> {
+            if (video.isLive != metadata.isLive()) {
+                video.isLiveEnd = true;
+            }
+
             syncCurrentVideo(metadata, video);
         });
     }

@@ -86,6 +86,7 @@ public final class Video {
     public String subscriberCount;
     public float volume = 1.0f;
     public boolean deArrowProcessed;
+    public boolean isLiveEnd;
     private int startSegmentNum;
     private WeakReference<VideoGroup> group; // Memory leak fix. Used to get next page when scrolling.
     public List<NotificationState> notificationStates;
