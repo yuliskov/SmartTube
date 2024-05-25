@@ -43,7 +43,7 @@ public class VideoStateController extends PlayerEventListenerHelper {
     private final Runnable mStreamEndCheck = () -> {
         if (getVideo() != null && getVideo().isLive && mIsBuffering &&
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < 3 * LIVE_BUFFER_MS) {
-            getPlayer().reloadPlayback();
+            getMainController().onPlayEnd();
         }
     };
 
