@@ -655,4 +655,6 @@
   <string name="remember_position_pinned">Lembrar-se do ponto em que você parou nas Listas de Reproduções fixadas</string>
   <string name="player_extra_long_speed_list">Lista alongada de Velocidades de reprodução</string>
   <string name="hide_watched_from_watch_later">Ocultar vídeos assistidos da Lista de Reprodução Assistir mais tarde</string>
+  <string name="device_specific_backup">Cópia de segurança somente para neste dispositivo </string>
+  <string name="local_backup">Cópia de segurança Local</string>
 </resources>
