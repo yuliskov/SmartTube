@@ -261,8 +261,8 @@
     <string name="enable_voice_search">グローバル音声検索を有効化する (ファームウェアが対応している必要があります)</string>
     <string name="subscribe_unsubscribe_from_channel">チャンネルを登録または登録を解除</string>
     <string name="app_backup_restore">バックアップと復元</string>
-    <string name="app_backup">データをバックアップ</string>
-    <string name="app_restore">データを復元</string>
+    <string name="app_backup">アプリデータをバックアップ</string>
+    <string name="app_restore">アプリデータを復元</string>
     <string name="skip_each_segment_once">2度目はセグメントをスキップしない</string>
     <string name="disable_ok_long_press">OKボタンの長押しを無効化する</string>
     <string name="disable_ok_long_press_desc">OKボタンが正常に機能しないコントローラー向けです</string>
@@ -338,7 +338,7 @@
     <string name="hide_upcoming">登録チャンネルからライブ配信予定を非表示にする</string>
     <string name="hide_upcoming_channel">チャンネル欄からライブ配信予定を非表示にする</string>
     <string name="hide_upcoming_home">ホームからライブ配信予定を非表示にする</string>
-    <string name="search_background_playback">検索またはチャンネルを開いた時にピクチャーインピクチャーを開く</string>
+    <string name="search_background_playback">チャンネルの検索または閲覧中のバックグラウンド再生</string>
     <string name="trending_row_name">急上昇</string>
     <string name="player_seek_type">シーク時の振る舞い</string>
     <string name="player_seek_regular">通常</string>
@@ -591,7 +591,7 @@
     <string name="sorting_default">デフォルト (高速)</string>
     <string name="content_block_exclude_channel">チャンネルにSponsorBlockを適用しない</string>
     <string name="content_block_stop_excluding_channel">チャンネルにSponsorBlockを適用する</string>
-    <string name="player_chapter_notification">チャプター間の迅速な移動を補助する通知を表示する</string>
+    <string name="player_chapter_notification">ポップアップ通知でチャプターを素早く進める</string>
     <string name="subtitle_remember">チャンネルごとに字幕ONを記憶する</string>
     <string name="amazon_frame_drop_fix">フレームドロップの修正 #2</string>
     <string name="amazon_frame_drop_fix_desc">Amazon Fire TV向け、他のデバイスでも効果がある場合があります。</string>
@@ -658,4 +658,6 @@
     <string name="prefer_ipv4">IPv4 DNSを優先する</string>
     <string name="prefer_ipv4_desc">アプリが全く動作しない状態を修正できる可能性があります。\n注意: ハングやクラッシュが発生する可能性があります (特にAndroid 8のデバイスまたはDune HD)</string>
     <string name="long_press_for_settings">長押しで設定を開きます</string>
+    <string name="device_specific_backup">このデバイスのみでバックアップ</string>
+    <string name="local_backup">ローカルでバックアップ</string>
 </resources>
