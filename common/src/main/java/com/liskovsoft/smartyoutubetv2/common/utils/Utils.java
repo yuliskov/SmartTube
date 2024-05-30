@@ -962,6 +962,6 @@ public class Utils {
 
     public static String updateTooltip(Context context, String tooltip) {
         return GeneralData.instance(context).isFirstUseTooltipEnabled() ?
-                String.format("%s (%s)", tooltip, context.getString(R.string.long_press_for_settings)) : tooltip;
+                String.format("%s (%s)", tooltip, context.getString(R.string.long_press_for_options)) : tooltip;
     }
 }

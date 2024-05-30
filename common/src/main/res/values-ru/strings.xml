@@ -649,6 +649,7 @@
     <string name="prefer_ipv4">Предпочитать IPv4 DNS</string>
     <string name="prefer_ipv4_desc">Можеть исправить случаи, когда приложение вообще не работает.\nВнимание. На некоторых устройствах могут быть вылеты приложения (особенно на Android 8 и приставке Dune HD)</string>
     <string name="long_press_for_settings">ДЛИТЕЛЬНОЕ НАЖАТИЕ ДЛЯ НАСТРОЕК</string>
+    <string name="long_press_for_options">ДЛИТЕЛЬНОЕ НАЖАТИЕ ДЛЯ ОПЦИЙ</string>
     <string name="device_specific_backup">Резервное копирование только для этого устройства</string>
     <string name="local_backup">Локальное резервное копирование</string>
 </resources>
