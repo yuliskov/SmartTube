@@ -10,15 +10,12 @@ import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
-import com.liskovsoft.smartyoutubetv2.common.utils.CopyOnWriteHashList;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GeneralData implements ProfileChangeListener {
     public static final int SCREENSAVER_TIMEOUT_NEVER = 0;
@@ -42,7 +39,7 @@ public class GeneralData implements ProfileChangeListener {
     private int mBootSectionId;
     private int mAppExitShortcut;
     private int mPlayerExitShortcut;
-    private boolean mIsPlayerOnlyModeEnabled;
+    private boolean mIsReturnToLauncherEnabled;
     private int mBackgroundShortcut;
     private boolean mIsHideShortsFromSubscriptionsEnabled;
     private boolean mIsHideUpcomingEnabled;
@@ -295,13 +292,13 @@ public class GeneralData implements ProfileChangeListener {
         persistState();
     }
 
-    public void enablePlayerOnlyMode(boolean enable) {
-        mIsPlayerOnlyModeEnabled = enable;
+    public void enableReturnToLauncher(boolean enable) {
+        mIsReturnToLauncherEnabled = enable;
         persistState();
     }
 
-    public boolean isPlayerOnlyModeEnabled() {
-        return mIsPlayerOnlyModeEnabled;
+    public boolean isReturnToLauncherEnabled() {
+        return mIsReturnToLauncherEnabled;
     }
 
     public int getBackgroundPlaybackShortcut() {
@@ -978,7 +975,7 @@ public class GeneralData implements ProfileChangeListener {
         mBootSectionId = Helpers.parseInt(split, 1, MediaGroup.TYPE_HOME);
         mIsSettingsSectionEnabled = Helpers.parseBoolean(split, 2, true);
         mAppExitShortcut = Helpers.parseInt(split, 3, EXIT_DOUBLE_BACK);
-        mIsPlayerOnlyModeEnabled = Helpers.parseBoolean(split, 4, false);
+        mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 4, false);
         mBackgroundShortcut = Helpers.parseInt(split, 5, BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
         //String pinnedItems = Helpers.parseStr(split, 6);
         mPinnedItems = Helpers.parseList(split, 6, Video::fromString);
@@ -1063,8 +1060,7 @@ public class GeneralData implements ProfileChangeListener {
 
     private void persistState() {
         // Zero index is skipped. Selected sections were there.
-        mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeData(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
-                mIsPlayerOnlyModeEnabled, mBackgroundShortcut, mPinnedItems, mIsHideShortsFromSubscriptionsEnabled,
+        mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeData(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut, mIsReturnToLauncherEnabled, mBackgroundShortcut, mPinnedItems, mIsHideShortsFromSubscriptionsEnabled,
                 mIsRemapFastForwardToNextEnabled, null, mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,

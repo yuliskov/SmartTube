@@ -459,8 +459,8 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.return_to_launcher),
-                option -> mGeneralData.enablePlayerOnlyMode(option.isSelected()),
-                mGeneralData.isPlayerOnlyModeEnabled()));
+                option -> mGeneralData.enableReturnToLauncher(option.isSelected()),
+                mGeneralData.isReturnToLauncherEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.multi_profiles),
                 option -> {

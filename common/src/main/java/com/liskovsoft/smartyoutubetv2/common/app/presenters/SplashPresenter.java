@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
+import com.liskovsoft.sharedutils.GlobalConstants;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -232,7 +233,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
                 playbackPresenter.openVideo(videoId, IntentExtractor.hasFinishOnEndedFlag(intent), timeMs);
 
-                enablePlayerOnlyModeIfNeeded();
+                enablePlayerOnlyModeIfNeeded(intent);
 
                 return true;
             }
@@ -318,9 +319,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
     }
 
-    private void enablePlayerOnlyModeIfNeeded() {
+    private void enablePlayerOnlyModeIfNeeded(Intent intent) {
         ViewManager viewManager = ViewManager.instance(getContext());
 
-        viewManager.enablePlayerOnlyMode(GeneralData.instance(getContext()).isPlayerOnlyModeEnabled());
+        boolean isInternalIntent = intent.getBooleanExtra(GlobalConstants.INTERNAL_INTENT, false);
+
+        viewManager.enablePlayerOnlyMode(!isInternalIntent || GeneralData.instance(getContext()).isReturnToLauncherEnabled());
     }
 }

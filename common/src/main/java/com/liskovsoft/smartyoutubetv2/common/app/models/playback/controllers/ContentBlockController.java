@@ -162,7 +162,8 @@ public class ContentBlockController extends PlayerEventListenerHelper {
     }
 
     private boolean checkVideo(Video video) {
-        return video != null && !video.isLive && !video.isUpcoming;
+        //return video != null && !video.isLive && !video.isUpcoming;
+        return video != null;
     }
 
     private void updateSponsorSegmentsAndWatch(Video item) {

@@ -626,15 +626,15 @@ public class AppDialogUtil {
     }
 
     public static OptionItem createExcludeFromContentBlockButton(
-            Context context,  Video original, MediaServiceManager serviceManager, Runnable onClose) {
+            Context context,  Video video, MediaServiceManager serviceManager, Runnable onClose) {
         return UiOptionItem.from(
                 context.getString(
-                        ContentBlockData.instance(context).isChannelExcluded(original.channelId) ?
+                        ContentBlockData.instance(context).isChannelExcluded(video.channelId) ?
                                 R.string.content_block_stop_excluding_channel :
                                 R.string.content_block_exclude_channel),
                 optionItem -> {
-                    if (original.hasChannel()) {
-                        ContentBlockData.instance(context).toggleExcludeChannel(original.channelId);
+                    if (video.hasChannel()) {
+                        ContentBlockData.instance(context).toggleExcludeChannel(video.channelId);
                         if (onClose != null) {
                             onClose.run();
                         }
@@ -642,10 +642,10 @@ public class AppDialogUtil {
                         MessageHelpers.showMessage(context, R.string.wait_data_loading);
 
                         serviceManager.loadMetadata(
-                                original,
+                                video,
                                 metadata -> {
-                                    original.sync(metadata);
-                                    ContentBlockData.instance(context).excludeChannel(original.channelId);
+                                    video.sync(metadata);
+                                    ContentBlockData.instance(context).excludeChannel(video.channelId);
                                     if (onClose != null) {
                                         onClose.run();
                                     }
