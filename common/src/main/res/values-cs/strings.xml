@@ -261,8 +261,8 @@
     <string name="enable_voice_search">Povolit globální vyhledávání (nutná podpora firmwaru)</string>
     <string name="subscribe_unsubscribe_from_channel">Přihlásit/Odhlásit k odběru kanálu</string>
     <string name="app_backup_restore">Záloha/Obnovení</string>
-    <string name="app_backup">Zálohovat data</string>
-    <string name="app_restore">Obnovit data ze zálohy</string>
+    <string name="app_backup">Zálohovat data aplikace</string>
+    <string name="app_restore">Obnovit data aplikace</string>
     <string name="skip_each_segment_once">Znovu nepřeskakovat segmenty</string>
     <string name="disable_ok_long_press">Deaktivovat dlouhé stisknutí tlačítka OK</string>
     <string name="disable_ok_long_press_desc">Určeno pro zabugované ovladače, kde tlačítko OK nefunguje správně</string>
@@ -338,7 +338,7 @@
     <string name="hide_upcoming">Skrýt nadcházející videa v Odběrech</string>
     <string name="hide_upcoming_channel">Skrýt nadcházející z Kanálů</string>
     <string name="hide_upcoming_home">Skrýt nadcházející z Domů</string>
-    <string name="search_background_playback">Zapni Obraz v obraze při vyhledávání/otevření kanálu</string>
+    <string name="search_background_playback">Přehrávání na pozadí při vyhledávání/procházení kanálu</string>
     <string name="trending_row_name">Trendy</string>
     <string name="player_seek_type">Typ přetáčení</string>
     <string name="player_seek_regular">Normální</string>
@@ -591,7 +591,7 @@
     <string name="sorting_default">Výchozí (rychle, animované náhledy)</string>
     <string name="content_block_exclude_channel">Vyloučit tento kanál ze SponsorBlocku</string>
     <string name="content_block_stop_excluding_channel">Přestat vylučovat tento kanál ze SponsorBlocku</string>
-    <string name="player_chapter_notification">Zobrazit oznámení pro rychlé procházení kapitolami</string>
+    <string name="player_chapter_notification">Rychlý posun mezi kapitolami pomocí vyskakovacího upozornění</string>
     <string name="subtitle_remember">Pamatovat si povolené titulky pro každý kanál</string>
     <string name="amazon_frame_drop_fix">Oprava poklesu snímků #2</string>
     <string name="amazon_frame_drop_fix_desc">Určeno pro zařízení Amazon Stick. Může fungovat i na jiných zařízeních.</string>
@@ -637,7 +637,7 @@
     <string name="channel_filter_hint">Filtrovat kanály</string>
     <string name="player_loop_shorts">Opakovat Shorts</string>
     <string name="player_quick_shorts_skip">Přeskakovat Shorts tlačítky vlevo/vpravo</string>
-    <string name="channels_filter">Zobrazit vyhledávací pole v sekci Kanály</string>
+    <string name="channels_filter">Zobrazit pole Filtrovat kanály v sekci Kanály</string>
     <string name="channel_search_bar">Vyhledávací panel na stránce kanálu</string>
     <string name="header_sports">Sporty</string>
     <string name="keep_finished_activities">Udržovat dokončené aktivity</string>
@@ -658,4 +658,7 @@
     <string name="prefer_ipv4">Preferovat IPv4 DNS</string>
     <string name="prefer_ipv4_desc">Může vyřešit situace, kdy aplikace vůbec nefunguje\nPozn. Může způsobit zamrznutí a pády (především na zařízeních s Android 8 nebo Dune HD)</string>
     <string name="long_press_for_settings">DLOUZE STISKNĚTE PRO NASTAVENÍ</string>
+    <string name="long_press_for_options">DLOUZE STISKNĚTE PRO MOŽNOSTI</string>
+    <string name="device_specific_backup">Záloha pouze pro toto zařízení</string>
+    <string name="local_backup">Místní záloha</string>
 </resources>
