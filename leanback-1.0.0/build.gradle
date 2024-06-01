@@ -34,7 +34,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'androidx.annotation:annotation:' + annotationXLibraryVersion
-    implementation 'androidx.core:core:' + kotlinCoreVersion
+    implementation 'androidx.core:core:' + coreXLibraryVersion
     implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXLibraryVersion
     implementation 'androidx.fragment:fragment:' + annotationXLibraryVersion
     implementation 'androidx.media:media:' + mediaXLibraryVersion

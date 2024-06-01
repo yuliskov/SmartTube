@@ -49,6 +49,8 @@ allprojects {
         resolutionStrategy.force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion
         resolutionStrategy.force 'org.jetbrains.kotlin:kotlin-stdlib:' + kotlinVersion
         resolutionStrategy.force 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + kotlinxVersion
+        resolutionStrategy.force 'androidx.core:core-ktx:' + kotlinCoreVersion
+        resolutionStrategy.force 'androidx.core:core:' + coreXLibraryVersion
         resolutionStrategy.force 'androidx.annotation:annotation:' + annotationXLibraryVersion
         // Downgrade Cronet version for cronet-okhttp
         resolutionStrategy.force 'org.chromium.net:cronet-api:' + cronetApiVersion

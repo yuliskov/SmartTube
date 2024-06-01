@@ -26,10 +26,12 @@ public class ScreensaverManager {
     private static final int MODE_SCREENSAVER = 0;
     private static final int MODE_SCREEN_OFF = 1;
     private static final WeakHashSet<ScreensaverManager> sInstances = new WeakHashSet<>();
+    private static boolean sLockInstance;
     private WeakReference<Activity> mActivity;
     private final WeakReference<View> mDimContainer;
     private final Runnable mDimScreen = this::dimScreen;
     private final Runnable mUndimScreen = this::undimScreen;
+    private final Runnable mUnlockInstance = () -> sLockInstance = false;
     private final GeneralData mGeneralData;
     private PlayerTweaksData mTweaksData;
     private int mMode = MODE_SCREENSAVER;
@@ -217,7 +219,7 @@ public class ScreensaverManager {
             hidePlayerOverlay();
         }
 
-        notifyRegistry(show);
+        notifyRegistry();
     }
 
     private void showHideScreensaver(boolean show) {
@@ -292,15 +294,19 @@ public class ScreensaverManager {
         sInstances.add(this);
     }
 
-    private void notifyRegistry(boolean show) {
-        if (!show) {
+    private void notifyRegistry() {
+        if (sLockInstance) {
             return;
         }
+
+        sLockInstance = true;
 
         sInstances.forEach(item -> {
             if (item != this) {
                 item.disableChecked();
             }
         });
+
+        Utils.postDelayed(mUnlockInstance, 0);
     }
 }

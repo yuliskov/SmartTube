@@ -35,7 +35,7 @@ dependencies {
 
     api 'androidx.activity:activity:' + leanbackXLibraryVersion // used inside other app modules
     implementation 'androidx.annotation:annotation:' + annotationXLibraryVersion
-    implementation 'androidx.core:core:' + kotlinCoreVersion
+    implementation 'androidx.core:core:' + coreXLibraryVersion
     implementation 'androidx.viewpager:viewpager:' + leanbackXLibraryVersion
     implementation 'androidx.loader:loader:' + leanbackXLibraryVersion
 }
