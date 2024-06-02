@@ -165,7 +165,8 @@ public class VideoTrack extends MediaTrack {
     private int inBounds(String id1, String id2, int size1, int size2, float frameRate1, float frameRate2, String codecs1, String codecs2, int bitrate1, int bitrate2) {
         int result = -1;
 
-        if (Helpers.equals(id1, id2)) {
+        // Fix same id between normal videos and shorts
+        if (Helpers.equals(id1, id2) && (size1 == size2)) {
             result = 0;
         //} else if (sizeLessOrEquals(size2, size1) && fpsLessOrEquals(frameRate2, frameRate1) && bitrateLessOrEquals(bitrate2, bitrate1)) {
         } else if (sizeLessOrEquals(size2, size1) && fpsLessOrEquals(frameRate2, frameRate1)) { // NOTE: Removed bitrate check to fix shorts?
@@ -180,7 +181,8 @@ public class VideoTrack extends MediaTrack {
     }
 
     private int inBoundsPreset(String id1, String id2, int size1, int size2, float frameRate1, float frameRate2, String codecs1, String codecs2) {
-        if (Helpers.equals(id1, id2)) {
+        // Fix same id between normal videos and shorts
+        if (Helpers.equals(id1, id2) && (size1 == size2)) {
             return 0;
         }
 
