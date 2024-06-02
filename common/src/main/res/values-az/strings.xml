@@ -658,4 +658,7 @@
     <string name="prefer_ipv4">IPv4 DNS-ə üstünlük verin</string>
     <string name="prefer_ipv4_desc">Tətbiqin ümumiyyətlə işləmədiyi vəziyyətləri düzəldə bilər.\nQeyd. Donmalara və xətalara səbəb ola bilər (xüsusilə Android 8 cihazlarında və ya Dune HD-də)</string>
     <string name="long_press_for_settings">PARAMETRLƏR ÜÇÜN BASIB SAXLAYIN</string>
+    <string name="long_press_for_options">SEÇİMLƏR ÜÇÜN BASIB SAXLAYIN</string>
+    <string name="device_specific_backup">Yalnız bu cihaz üçün ehtiyyatda saxlayın</string>
+    <string name="local_backup">Yerli ehtiyyat nüsxəsi</string>
 </resources>
