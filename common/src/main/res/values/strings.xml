@@ -384,7 +384,7 @@
     <string name="seek_interval_sec">%s sec</string>
     <string name="subtitle_system">System style (Android settings > Accessibility)</string>
     <string name="subtitle_scale">Subtitle scale</string>
-    <string name="audio_sync_fix_desc">An alternative way to synchronize audio/video. It's considered obsolete, but in some cases, may help.</string>
+    <string name="audio_sync_fix_desc">An alternative way to synchronize audio/video. It\'s considered obsolete, but in some cases, may help.</string>
     <string name="audio_sync_fix">Audio sync fix</string>
     <string name="ambilight_ratio_fix_desc">Fixes absent bias lighting. Fixes incorrect aspect ratio or video scale. Fixes blank screenshots. Affects performance!</string>
     <string name="ambilight_ratio_fix">Ambilight/Aspect ratio/Video scale/Screenshots fix</string>
