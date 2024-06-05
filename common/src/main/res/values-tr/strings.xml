@@ -490,6 +490,7 @@
     <string name="time_format_12">12 saat (ÖÖ/ÖS)</string>
     <string name="use_alt_speech_recognizer_desc">Ciddi hataları var. Yalnızca varsayılan tanıyıcıyla ilgili sorunlarınız varsa kullanın.</string>
     <string name="speech_recognizer">Konuşma tanıyıcı</string>
+    <string name="speech_engine">Sesli arama motoru</string>
     <string name="speech_recognizer_system">Sistem (tercih edilmiş)</string>
     <string name="speech_recognizer_external_1">Harici 1 (Ciddi hataları var, çalışması için mikrofona erişimi devre dışı bırakmanız gerekir)</string>
     <string name="speech_recognizer_external_2">Harici 2 (Ciddi hataları var)</string>

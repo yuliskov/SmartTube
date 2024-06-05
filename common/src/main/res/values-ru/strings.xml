@@ -117,7 +117,7 @@
     <string name="repeat_mode_pause_alt">Воспроизводить непрерывно только видео из плейлиста</string>
     <string name="repeat_mode_none">Завершать воспроизведение после одного видео</string>
     <string name="subscribed_to_channel">Подписка оформлена</string>
-    <string name="unsubscribed_from_channel">Подписка отменена</string>
+    <string name="unsubscribed_from_channel">Подписка не оформлена</string>
     <string name="subtitle_yellow_transparent">Жёлтые на прозрачном фоне</string>
     <string name="subtitle_white_transparent">Белые на прозрачном фоне</string>
     <string name="subtitle_white_black">Белые на чёрном фоне</string>
@@ -482,6 +482,7 @@
     <string name="time_format_12">12 часов (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Серьезно забагован. Используйте его, только если есть проблемы с распознавателем по умолчанию.</string>
     <string name="speech_recognizer">Распознаватель речи</string>
+    <string name="speech_engine">Движок голосового поиска</string>
     <string name="speech_recognizer_system">Системный (наилучший)</string>
     <string name="speech_recognizer_external_1">Внешний 1 (серьезно забагован, для работы нужно отключить доступ к микрофону)</string>
     <string name="speech_recognizer_external_2">Внешний 2 (серьезно забагован)</string>

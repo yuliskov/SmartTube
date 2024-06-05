@@ -49,7 +49,7 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
                     mSearchData.getSpeechRecognizerType() == pair[1]));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.speech_recognizer), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.speech_engine), options);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
