@@ -220,7 +220,7 @@
   <string name="header_uploads">Przesyłanie</string>
   <string name="player_show_global_clock">Zawsze pokazuj zegar na ekranie</string>
   <string name="player_show_global_ending_time">Zawsze pokazuj czas zakończenia na ekranie</string>
-  <string name="app_corner_clock">Strona głóna: zegar w górnym prawym rogu</string>
+  <string name="app_corner_clock">Strona główna: zegar w górnym prawym rogu</string>
   <string name="player_corner_clock">Odtwarzacz: zegar w górnym prawym rogu</string>
   <string name="player_corner_ending_time">Odtwarzacz: czas zakończenia w górnym prawym rogu</string>
   <string name="uploads_old_look">Przywróć stary wygląd sekcji przesyłania</string>
@@ -554,6 +554,7 @@
   <string name="clear_search_history">Wyczyść historię wyszukiwania</string>
   <string name="remove_from_subscriptions">Ukryj</string>
   <string name="player_long_speed_list">Długa lista prędkości</string>
+  <string name="player_extra_long_speed_list">Bardzo długa lista prędkości</string>
   <string name="alt_app_icon">Alternatywna ikona aplikacji (wymaga restartu)</string>
   <string name="network_stack">Preferuj %s protokół sieciowy</string>
   <string name="player_network_stack">Protokół sieciowy</string>
@@ -650,7 +651,7 @@
   <string name="crowdsourced_thumbnails">Miniatury współtworzone przez społeczność</string>
   <string name="crowdsoursed_titles">Tytuły współtworzone przez społeczność</string>
   <string name="dearrow_not_submitted_thumbs">Skąd brać nieprzesłane miniatury</string>
-  <string name="pitch_effect">Pitch</string>
+  <string name="pitch_effect">Wysokość dźwięku</string>
   <string name="fullscreen_mode">Tryb pełnoekranowy (bez pasków systemowych)</string>
   <string name="player_only_mode">Pokaż jedynie odtwarzacz jeżeli wideo zostało otworzone spoza aplikacji</string>
   <string name="pinned_channel_rows">Wyświetlaj przypięte kanały jako wiersze</string>
