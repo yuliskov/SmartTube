@@ -97,6 +97,7 @@ public class GeneralData implements ProfileChangeListener {
     private Map<Integer, Video> mSelectedItems;
     private boolean mIsFirstUseTooltipEnabled;
     private boolean mIsDeviceSpecificBackupEnabled;
+    private boolean mIsAutoBackupEnabled;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -932,6 +933,15 @@ public class GeneralData implements ProfileChangeListener {
         return mIsDeviceSpecificBackupEnabled;
     }
 
+    public void enableAutoBackup(boolean enable) {
+        mIsAutoBackupEnabled = enable;
+        persistState();
+    }
+
+    public boolean isAutoBackupEnabled() {
+        return mIsAutoBackupEnabled;
+    }
+
     private void initSections() {
         mDefaultSections.put(R.string.header_notifications, MediaGroup.TYPE_NOTIFICATIONS);
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
@@ -1041,6 +1051,7 @@ public class GeneralData implements ProfileChangeListener {
         mSelectedItems = Helpers.parseMap(split, 63, Helpers::parseInt, Video::fromString);
         mIsFirstUseTooltipEnabled = Helpers.parseBoolean(split, 64, true);
         mIsDeviceSpecificBackupEnabled = Helpers.parseBoolean(split, 65, false);
+        mIsAutoBackupEnabled = Helpers.parseBoolean(split, 66, false);
 
         if (mPinnedItems.isEmpty()) {
             initPinnedItems();
@@ -1072,7 +1083,7 @@ public class GeneralData implements ProfileChangeListener {
                 mHistoryState, mRememberSubscriptionsPosition, null, mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled,
                 mIsRemapDpadUpToVolumeEnabled, mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled,
                 mChangelog, mPlayerExitShortcut, mIsOldChannelLookEnabled, mIsFullscreenModeEnabled, mIsHideWatchedFromWatchLaterEnabled,
-                mRememberPinnedPosition, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled));
+                mRememberPinnedPosition, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, mIsAutoBackupEnabled));
     }
 
     private int getSectionId(Video item) {

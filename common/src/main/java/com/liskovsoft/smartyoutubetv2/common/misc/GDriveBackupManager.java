@@ -39,6 +39,7 @@ public class GDriveBackupManager {
     private Disposable mBackupAction;
     private Disposable mRestoreAction;
     private final String[] mBackupNames;
+    private boolean mIsSilent;
 
     private GDriveBackupManager(Context context) {
         mContext = context;
@@ -62,13 +63,32 @@ public class GDriveBackupManager {
         return sInstance;
     }
 
+    public static void unhold() {
+        sInstance = null;
+    }
+
     public void backup() {
+        mIsSilent = false;
+        backupInt();
+    }
+
+    public void backupSilent() {
+        mIsSilent = true;
+        backupInt();
+    }
+
+    private void backupInt() {
         if (!YouTubeSignInService.instance().isSigned()) {
             return;
         }
 
+        if (mIsSilent && !mSignInService.isSigned()) {
+            return;
+        }
+
         if (RxHelper.isAnyActionRunning(mBackupAction, mRestoreAction)) {
-            MessageHelpers.showMessage(mContext, R.string.wait_data_loading);
+            if (!mIsSilent)
+                MessageHelpers.showMessage(mContext, R.string.wait_data_loading);
             return;
         }
 
@@ -93,7 +113,11 @@ public class GDriveBackupManager {
     }
 
     private void startBackupConfirm() {
-        AppDialogUtil.showConfirmationDialog(mContext, mContext.getString(R.string.app_backup), this::startBackup);
+        if (!mIsSilent) {
+            AppDialogUtil.showConfirmationDialog(mContext, mContext.getString(R.string.app_backup), this::startBackup);
+        } else {
+            startBackup();
+        }
     }
 
     private void startBackup() {
@@ -110,7 +134,8 @@ public class GDriveBackupManager {
                 .subscribe(file -> {
                     if (file.isFile()) {
                         if (checkFileName(file.getName())) {
-                            MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_backup) + "\n" + file.getName());
+                            if (!mIsSilent)
+                                MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_backup) + "\n" + file.getName());
 
                             RxHelper.runBlocking(mDriveService.uploadFile(file, Uri.parse(String.format("%s%s", backupDir,
                                     file.getAbsolutePath().replace(dataDir, "")))));

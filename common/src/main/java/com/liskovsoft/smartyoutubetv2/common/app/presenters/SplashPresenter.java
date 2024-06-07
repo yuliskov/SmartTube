@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelec
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.GDriveBackupWorker;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
@@ -88,6 +89,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             //clearCache();
             enableHistoryIfNeeded();
             Utils.updateChannels(getContext());
+            GDriveBackupWorker.schedule(getContext());
             initIntentChain();
             // Fake service to prevent the app destroying?
             //runRemoteControlFakeTask();

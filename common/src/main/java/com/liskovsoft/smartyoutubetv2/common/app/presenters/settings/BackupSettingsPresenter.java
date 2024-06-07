@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.GoogleSignInPresente
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.GDriveBackupManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.GDriveBackupWorker;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
@@ -30,14 +31,14 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
     @SuppressLint("StaticFieldLeak")
     private static BackupSettingsPresenter sInstance;
     private final GoogleSignInService mSignInService;
-    private final GDriveBackupManager mBackupManager;
+    private final GDriveBackupManager mGDriveBackupManager;
     private final GeneralData mGeneralData;
     private Disposable mAccountListAction;
 
     private BackupSettingsPresenter(Context context) {
         super(context);
         mSignInService = GoogleSignInService.instance();
-        mBackupManager = GDriveBackupManager.instance(context);
+        mGDriveBackupManager = GDriveBackupManager.instance(context);
         mGeneralData = GeneralData.instance(context);
     }
 
@@ -70,10 +71,10 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
 
         settingsPresenter.appendSingleButton(UiOptionItem.from("Google Drive", optionItem -> {
             AppDialogPresenter settingsPresenter2 = AppDialogPresenter.instance(getContext());
-            appendBackupSettings(settingsPresenter2);
-            appendRestoreSettings(settingsPresenter2);
+            appendGDriveBackupSettings(settingsPresenter2);
+            appendGDriveRestoreSettings(settingsPresenter2);
             // NOTE: google account doesn't have a name or email
-            appendMiscButton(settingsPresenter2);
+            appendGDriveMiscButton(settingsPresenter2);
             settingsPresenter2.showDialog("Google Drive");
         }));
 
@@ -82,18 +83,30 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.showDialog(getContext().getString(R.string.app_backup_restore), this::unhold);
     }
 
-    private void appendRestoreSettings(AppDialogPresenter settingsPresenter) {
-        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.app_restore), optionItem -> mBackupManager.restore()));
+    private void appendGDriveRestoreSettings(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.app_restore), optionItem -> mGDriveBackupManager.restore()));
     }
 
-    private void appendBackupSettings(AppDialogPresenter settingsPresenter) {
-        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.app_backup), optionItem -> mBackupManager.backup()));
+    private void appendGDriveBackupSettings(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.app_backup), optionItem -> mGDriveBackupManager.backup()));
     }
 
-    private void appendMiscButton(AppDialogPresenter settingsPresenter) {
+    private void appendGDriveMiscButton(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(
                 getContext().getString(R.string.player_other), option -> {
                     AppDialogPresenter settingsPresenter2 = AppDialogPresenter.instance(getContext());
+                    settingsPresenter2.appendSingleSwitch(UiOptionItem.from(
+                            getContext().getString(R.string.auto_backup),
+                            option2 -> {
+                                if (option2.isSelected()) {
+                                    GDriveBackupWorker.schedule(getContext());
+                                } else {
+                                    GDriveBackupWorker.cancel(getContext());
+                                }
+                                mGeneralData.enableAutoBackup(option2.isSelected());
+                            },
+                            mGeneralData.isAutoBackupEnabled()
+                    ));
                     settingsPresenter2.appendSingleSwitch(UiOptionItem.from(
                             getContext().getString(R.string.device_specific_backup),
                             option2 -> mGeneralData.enableDeviceSpecificBackup(option2.isSelected()),
@@ -124,15 +137,15 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupPathCheck != null ? backupPathCheck : ""),
                 option -> {
-                    backupManager.getBackupNames(names -> showRestoreDialog(backupManager, names));
+                    backupManager.getBackupNames(names -> showLocalRestoreDialog(backupManager, names));
                 }));
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.local_backup), options);
     }
 
-    private void showRestoreDialog(BackupAndRestoreManager backupManager, List<String> backups) {
+    private void showLocalRestoreDialog(BackupAndRestoreManager backupManager, List<String> backups) {
         if (backups != null && backups.size() > 1) {
-            showRestoreSelectorDialog(backups, backupManager);
+            showLocalRestoreSelectorDialog(backups, backupManager);
         } else {
             AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
                 backupManager.checkPermAndRestore();
@@ -140,7 +153,7 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
         }
     }
 
-    private void showRestoreSelectorDialog(List<String> backups, BackupAndRestoreManager backupManager) {
+    private void showLocalRestoreSelectorDialog(List<String> backups, BackupAndRestoreManager backupManager) {
         AppDialogPresenter dialog = AppDialogPresenter.instance(getContext());
         List<OptionItem> options = new ArrayList<>();
 
@@ -152,25 +165,5 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
 
         dialog.appendStringsCategory(getContext().getString(R.string.app_restore), options);
         dialog.showDialog();
-    }
-
-    private String getFullName(Account account) {
-        String format;
-
-        if (account.getEmail() != null) {
-            format = String.format("%s (%s)", account.getName(), account.getEmail());
-        } else {
-            format = account.getName();
-        }
-
-        return format;
-    }
-
-    private String getSimpleName(Account account) {
-        return account.getName() != null ? account.getName() : account.getEmail();
-    }
-
-    private void removeAccount(Account account) {
-        mSignInService.removeAccount(account);
     }
 }

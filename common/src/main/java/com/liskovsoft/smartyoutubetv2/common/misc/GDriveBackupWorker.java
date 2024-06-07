@@ -1,4 +1,4 @@
-package com.liskovsoft.leanbackassistant.channels;
+package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
 import android.os.Build.VERSION;
@@ -11,7 +11,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,33 +24,33 @@ import java.util.concurrent.TimeUnit;
  * appear in the TV provider database, and that these and all other programs are synchronized with
  * TV provider database.
  */
-public class UpdateChannelsWorker extends Worker {
-    private static final String TAG = UpdateChannelsWorker.class.getSimpleName();
-    private static final String WORK_NAME = "Update channels";
-    private final UpdateChannelsTask mTask;
+public class GDriveBackupWorker extends Worker {
+    private static final String TAG = GDriveBackupWorker.class.getSimpleName();
+    private static final String WORK_NAME = TAG;
+    private final GDriveBackupManager mTask;
 
-    public UpdateChannelsWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    public GDriveBackupWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
 
-        mTask = new UpdateChannelsTask(context);
+        mTask = GDriveBackupManager.instance(context);
     }
 
     public static void schedule(Context context) {
-        if (VERSION.SDK_INT >= 23 && GlobalPreferences.instance(context).isChannelsServiceEnabled()) {
+        if (VERSION.SDK_INT >= 23 && GeneralData.instance(context).isAutoBackupEnabled()) {
             WorkManager workManager = WorkManager.getInstance(context);
 
             // https://stackoverflow.com/questions/50943056/avoiding-duplicating-periodicworkrequest-from-workmanager
             workManager.enqueueUniquePeriodicWork(
                     WORK_NAME,
                     ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (when old worker is running)
-                    new PeriodicWorkRequest.Builder(UpdateChannelsWorker.class, 20, TimeUnit.MINUTES).addTag(WORK_NAME).build()
+                    new PeriodicWorkRequest.Builder(GDriveBackupWorker.class, 1, TimeUnit.DAYS).addTag(WORK_NAME).build()
             );
         }
     }
 
     public static void cancel(Context context) {
         if (VERSION.SDK_INT >= 23) {
-            Log.d(TAG, "Unregistering Channels update job...");
+            Log.d(TAG, "Unregistering worker job...");
 
             WorkManager workManager = WorkManager.getInstance(context);
             workManager.cancelUniqueWork(WORK_NAME);
@@ -62,7 +62,8 @@ public class UpdateChannelsWorker extends Worker {
     public Result doWork() {
         Log.d(TAG, "Starting worker %s...", this);
 
-        mTask.run();
+        mTask.backupSilent();
+        GDriveBackupManager.unhold();
 
         return Result.success();
     }
