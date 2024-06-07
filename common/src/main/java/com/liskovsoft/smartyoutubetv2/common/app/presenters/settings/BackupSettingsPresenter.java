@@ -98,12 +98,12 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
                     settingsPresenter2.appendSingleSwitch(UiOptionItem.from(
                             getContext().getString(R.string.auto_backup),
                             option2 -> {
+                                mGeneralData.enableAutoBackup(option2.isSelected());
                                 if (option2.isSelected()) {
                                     GDriveBackupWorker.schedule(getContext());
                                 } else {
                                     GDriveBackupWorker.cancel(getContext());
                                 }
-                                mGeneralData.enableAutoBackup(option2.isSelected());
                             },
                             mGeneralData.isAutoBackupEnabled()
                     ));

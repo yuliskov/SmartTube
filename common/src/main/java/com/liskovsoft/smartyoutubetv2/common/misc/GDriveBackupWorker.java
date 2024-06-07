@@ -49,7 +49,7 @@ public class GDriveBackupWorker extends Worker {
     }
 
     public static void cancel(Context context) {
-        if (VERSION.SDK_INT >= 23) {
+        if (VERSION.SDK_INT >= 23 && GeneralData.instance(context).isAutoBackupEnabled()) {
             Log.d(TAG, "Unregistering worker job...");
 
             WorkManager workManager = WorkManager.getInstance(context);

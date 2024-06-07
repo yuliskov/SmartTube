@@ -49,7 +49,7 @@ public class UpdateChannelsWorker extends Worker {
     }
 
     public static void cancel(Context context) {
-        if (VERSION.SDK_INT >= 23) {
+        if (VERSION.SDK_INT >= 23 && GlobalPreferences.instance(context).isChannelsServiceEnabled()) {
             Log.d(TAG, "Unregistering Channels update job...");
 
             WorkManager workManager = WorkManager.getInstance(context);
