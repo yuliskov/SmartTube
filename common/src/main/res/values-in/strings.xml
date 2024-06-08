@@ -471,6 +471,7 @@
     <string name="open_comments">Buka Obrolan</string>
     <string name="place_chat_left">Tempatkan obrolan ke kiri</string>
     <string name="use_alt_speech_recognizer">Pengenal ucapan alternatif</string>
+    <string name="speech_engine">Mesin pencari suara</string>
     <string name="time_format">Mode waktu</string>
     <string name="time_format_24">24 jam</string>
     <string name="time_format_12">12 jam (AM/PM)</string>
@@ -637,4 +638,5 @@
     <string name="long_press_for_settings">TEKAN LAMA UNTUK PENGATURAN</string>
     <string name="device_specific_backup">Pencadangan hanya untuk perangkat ini</string>
     <string name="local_backup">Pencadangan lokal</string>
+    <string name="auto_backup">Pencadangan otomatis (sekali sehari)</string>
 </resources>
