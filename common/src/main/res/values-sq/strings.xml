@@ -659,4 +659,5 @@
   <string name="device_specific_backup">Kopja rezervë vetëm për këtë pajisje</string>
   <string name="local_backup">Kopje rezervë lokale</string>
   <string name="long_press_for_options">SHTYP GJATË PËR RREGULLIMET</string>
+  <string name="speech_engine">Motori i kërkimit me zë</string>
 </resources>
