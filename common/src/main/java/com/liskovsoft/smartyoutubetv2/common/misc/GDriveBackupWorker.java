@@ -62,7 +62,7 @@ public class GDriveBackupWorker extends Worker {
     public Result doWork() {
         Log.d(TAG, "Starting worker %s...", this);
 
-        mTask.backupSilent();
+        mTask.backupBlocking();
         GDriveBackupManager.unhold();
 
         return Result.success();

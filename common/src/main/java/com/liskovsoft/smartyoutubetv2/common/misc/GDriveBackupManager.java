@@ -24,6 +24,7 @@ import java.util.Collection;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class GDriveBackupManager {
@@ -39,7 +40,7 @@ public class GDriveBackupManager {
     private Disposable mBackupAction;
     private Disposable mRestoreAction;
     private final String[] mBackupNames;
-    private boolean mIsSilent;
+    private boolean mIsBlocking;
 
     private GDriveBackupManager(Context context) {
         mContext = context;
@@ -68,12 +69,12 @@ public class GDriveBackupManager {
     }
 
     public void backup() {
-        mIsSilent = false;
+        mIsBlocking = false;
         backupInt();
     }
 
-    public void backupSilent() {
-        mIsSilent = true;
+    public void backupBlocking() {
+        mIsBlocking = true;
         backupInt();
     }
 
@@ -82,12 +83,12 @@ public class GDriveBackupManager {
             return;
         }
 
-        if (mIsSilent && !mSignInService.isSigned()) {
+        if (mIsBlocking && !mSignInService.isSigned()) {
             return;
         }
 
         if (RxHelper.isAnyActionRunning(mBackupAction, mRestoreAction)) {
-            if (!mIsSilent)
+            if (!mIsBlocking)
                 MessageHelpers.showMessage(mContext, R.string.wait_data_loading);
             return;
         }
@@ -113,7 +114,7 @@ public class GDriveBackupManager {
     }
 
     private void startBackupConfirm() {
-        if (!mIsSilent) {
+        if (!mIsBlocking) {
             AppDialogUtil.showConfirmationDialog(mContext, mContext.getString(R.string.app_backup), this::startBackup);
         } else {
             startBackup();
@@ -128,20 +129,25 @@ public class GDriveBackupManager {
     private void startBackup(String backupDir, String dataDir) {
         Collection<File> files = FileHelpers.listFileTree(new File(dataDir));
 
-        mBackupAction = Observable.fromIterable(files)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io()) // run subscribe on separate thread
-                .subscribe(file -> {
-                    if (file.isFile()) {
-                        if (checkFileName(file.getName())) {
-                            if (!mIsSilent)
-                                MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_backup) + "\n" + file.getName());
+        Consumer<File> backupConsumer = file -> {
+            if (file.isFile()) {
+                if (checkFileName(file.getName())) {
+                    if (!mIsBlocking) MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_backup) + "\n" + file.getName());
 
-                            RxHelper.runBlocking(mDriveService.uploadFile(file, Uri.parse(String.format("%s%s", backupDir,
-                                    file.getAbsolutePath().replace(dataDir, "")))));
-                        }
-                    }
-                }, error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
+                    RxHelper.runBlocking(mDriveService.uploadFile(file, Uri.parse(String.format("%s%s", backupDir, file.getAbsolutePath().replace(dataDir, "")))));
+                }
+            }
+        };
+
+        if (mIsBlocking) {
+            Observable.fromIterable(files)
+                    .blockingSubscribe(backupConsumer);
+        } else {
+            mBackupAction = Observable.fromIterable(files)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io()) // run subscribe on separate thread
+                    .subscribe(backupConsumer, error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
+        }
     }
 
     private void startRestoreConfirm() {
