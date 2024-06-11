@@ -338,7 +338,7 @@
     <string name="hide_upcoming">Skryť nadchádzajúce z Odberov</string>
     <string name="hide_upcoming_channel">Skryť nadchádzajúce z Kanálov</string>
     <string name="hide_upcoming_home">Skryť nadchádzajúce z Domov</string>
-    <string name="search_background_playback">Zapnúť PIP pri vyhľadávaní/otvorení kanála z prehrávania</string>
+    <string name="search_background_playback">Prehrávanie na pozadí počas vyhľadávania/prezerania kanála</string>
     <string name="trending_row_name">Trendy</string>
     <string name="player_seek_type">Typ pratáčania</string>
     <string name="player_seek_regular">Bežné</string>
@@ -490,6 +490,7 @@
     <string name="time_format_12">12 hodín (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Dosť zabugované. Použite ho iba v prípade, že máte problémy s predvoleným rozpoznávačom.</string>
     <string name="speech_recognizer">Rozpoznávanie hlasu</string>
+    <string name="speech_engine">Hlasový vyhľadávač</string>
     <string name="speech_recognizer_system">Systém (odporúčané)</string>
     <string name="speech_recognizer_external_1">Externé 1 (dosť zabugované, pre funkčnosť musíte zakázať prístup k mikrofónu)</string>
     <string name="speech_recognizer_external_2">Externé 2 (dosť zabugované)</string>
@@ -591,7 +592,7 @@
     <string name="sorting_default">Predvolené (rýchle, animované ukážky)</string>
     <string name="content_block_exclude_channel">Neaplikovať SponsorBlock na tento kanál</string>
     <string name="content_block_stop_excluding_channel">Znovu aplikovať SponsorBlock na tento kanál</string>
-    <string name="player_chapter_notification">Zobraziť notifikáciu pre rýchlejší posun cez kapitoly</string>
+    <string name="player_chapter_notification">Rýchlejšie presúvanie cez kapitoly pomocou notifikácií</string>
     <string name="subtitle_remember">Zapamätať si povolené titulky pre každý kanál</string>
     <string name="amazon_frame_drop_fix">Oprava výpadkov prehrávania #2</string>
     <string name="amazon_frame_drop_fix_desc">Určené pre zariadenia Amazon Stick. Môže fungovať aj na iných zariadeniach.</string>
@@ -637,7 +638,7 @@
     <string name="channel_filter_hint">Filtrovať kanály</string>
     <string name="player_loop_shorts">Shorts v slučke</string>
     <string name="player_quick_shorts_skip">Preskočiť Shorts s tlačidlami vľavo/vpravo</string>
-    <string name="channels_filter">Zobraziť vyhľadávacie pole v sekcii Kanály</string>
+    <string name="channels_filter">Zobraziť pole filtrovania kanálov v sekcii Kanály</string>
     <string name="channel_search_bar">Vyhľadávací panel v sekcii Kanály</string>
     <string name="header_sports">Šport</string>
     <string name="keep_finished_activities">Uchovávať dokončené aktivity</string>
@@ -657,4 +658,9 @@
     <string name="pinned_channel_rows">Zobraziť pripnutý kanál ako riadky</string>
     <string name="prefer_ipv4">Uprednostniť IPv4 DNS protokol</string>
     <string name="prefer_ipv4_desc">Mohlo by to vyriešiť situácie, keď aplikácia vôbec nefunguje.\nPoznámka. Môže spôsobiť mrznutie a pády (najmä na zariadeniach so systémom Android 8 alebo Dune HD)</string>
+    <string name="long_press_for_settings">STLAČTE DLHO PRE NASTAVENIA</string>
+    <string name="long_press_for_options">STLAČTE DLHO PRE MOŽNOSTI</string>
+    <string name="device_specific_backup">Zálohovať len toto zariadenie</string>
+    <string name="local_backup">Lokálna záloha</string>
+    <string name="auto_backup">Automatická záloha (raz denne)</string>
 </resources>
