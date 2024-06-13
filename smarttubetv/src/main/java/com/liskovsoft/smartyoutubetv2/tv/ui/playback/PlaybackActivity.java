@@ -42,7 +42,7 @@ public class PlaybackActivity extends LeanbackActivity {
     private PlayerTweaksData mPlayerTweaksData;
     private PlayerData mPlayerData;
     private GeneralData mGeneralData;
-    private boolean mBackPressed;
+    private boolean mIsBackPressed;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -164,13 +164,6 @@ public class PlaybackActivity extends LeanbackActivity {
         }
     }
 
-    @TargetApi(24)
-    private boolean wannaEnterToPip() {
-        //return mPlaybackFragment != null && mPlaybackFragment.getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
-        //return mPlaybackFragment != null && mPlaybackFragment.isEngineBlocked() && !isInPictureInPictureMode();
-        return mPlayerData.getBackgroundMode() == PlayerData.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
-    }
-
     /**
      * BACK pressed, PIP player's button pressed
      */
@@ -231,21 +224,14 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void onBackPressed() {
-        mBackPressed = true;
+        mIsBackPressed = true;
         super.onBackPressed();
     }
 
     @Override
     protected void onResume() {
-        mBackPressed = false;
+        mIsBackPressed = false;
         super.onResume();
-    }
-
-    private boolean doNotDestroy() {
-        sIsInPipMode = isInPipMode();
-        //return sIsInPipMode || mPlaybackFragment.getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_SOUND;
-        //return sIsInPipMode || mPlaybackFragment.isEngineBlocked();
-        return sIsInPipMode || mPlayerData.getBackgroundMode() != PlayerData.BACKGROUND_MODE_DEFAULT;
     }
 
     @SuppressWarnings("deprecation")
@@ -298,7 +284,7 @@ public class PlaybackActivity extends LeanbackActivity {
     public void onUserLeaveHint() {
         // Check that user not open dialog/search activity instead of really leaving the activity
         // Activity may be overlapped by the dialog, back is pressed or new view started
-        if (skipPip() || mViewManager.isNewViewPending() || mPlaybackFragment.isEngineBlocked()) {
+        if (skipPip() || mViewManager.isNewViewPending() || mIsBackPressed) {
             return;
         }
 
@@ -310,7 +296,6 @@ public class PlaybackActivity extends LeanbackActivity {
             case PlayerData.BACKGROUND_MODE_PIP:
                 enterPipMode();
                 if (doNotDestroy()) {
-                    mPlaybackFragment.blockEngine(true);
                     // Ensure to opening this activity when the user is returning to the app
                     mViewManager.blockTop(this);
                     // Return to previous activity (create point from that app could be launched)
@@ -342,7 +327,27 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     private boolean skipPip() {
-        return mBackPressed && mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME;
+        return mIsBackPressed && mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME;
+    }
+
+    private boolean isEngineBlocked() {
+        return mPlaybackFragment != null && mPlaybackFragment.isEngineBlocked();
+    }
+
+    @TargetApi(24)
+    private boolean wannaEnterToPip() {
+        //return mPlaybackFragment != null && mPlaybackFragment.getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
+        //return mPlaybackFragment != null && mPlaybackFragment.isEngineBlocked() && !isInPictureInPictureMode();
+        boolean isPip = mPlayerData.getBackgroundMode() == PlayerData.BACKGROUND_MODE_PIP || isEngineBlocked();
+        return isPip && !isInPictureInPictureMode();
+    }
+
+    private boolean doNotDestroy() {
+        sIsInPipMode = isInPipMode();
+        //return sIsInPipMode || mPlaybackFragment.getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_SOUND;
+        //return sIsInPipMode || mPlaybackFragment.isEngineBlocked();
+        boolean isBackground = mPlayerData.getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_SOUND || isEngineBlocked();
+        return sIsInPipMode || isBackground;
     }
 
     //private boolean isBackgroundBackEnabled() {

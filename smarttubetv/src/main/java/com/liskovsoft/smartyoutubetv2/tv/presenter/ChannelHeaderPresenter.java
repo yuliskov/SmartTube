@@ -57,7 +57,7 @@ public class ChannelHeaderPresenter extends RowPresenter {
         boolean onSearchChange(String newQuery);
         boolean onSearchSubmit(String query);
         void onSearchSettingsClicked();
-        String getChannelName();
+        String getChannelTitle();
     }
 
     public static class ChannelHeaderCallback extends Row implements ChannelHeaderProvider {
@@ -77,7 +77,7 @@ public class ChannelHeaderPresenter extends RowPresenter {
         }
 
         @Override
-        public String getChannelName() {
+        public String getChannelTitle() {
             return null;
         }
     }
@@ -158,7 +158,7 @@ public class ChannelHeaderPresenter extends RowPresenter {
         SpeechOrbView speechOrbView = searchBar.findViewById(R.id.lb_search_bar_speech_orb);
         SearchEditText searchTextEditor = searchBar.findViewById(R.id.lb_search_text_editor);
         SearchOrbView searchSettingsOrbView = searchBar.findViewById(R.id.search_settings_orb);
-        String channelName = provider.getChannelName();
+        String channelName = provider.getChannelTitle();
         searchBar.setTitle(channelName != null ? channelName : context.getString(R.string.content_type_channel));
         switch (SearchData.instance(context).getSpeechRecognizerType()) {
             case SearchData.SPEECH_RECOGNIZER_SYSTEM:

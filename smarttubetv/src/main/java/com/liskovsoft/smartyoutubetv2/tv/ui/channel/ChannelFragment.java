@@ -13,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelHeaderPresenter.ChannelHeaderCallback;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultipleRowsFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
+import com.liskovsoft.youtubeapi.common.helpers.YouTubeHelper;
 
 public class ChannelFragment extends MultipleRowsFragment implements ChannelView {
     private static final String TAG = ChannelFragment.class.getSimpleName();
@@ -45,15 +46,16 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
                 }
 
                 @Override
-                public String getChannelName() {
+                public String getChannelTitle() {
                     if (mChannelPresenter.getChannel() == null) {
                         return null;
                     }
 
                     String author = mChannelPresenter.getChannel().getAuthor();
                     String title = mChannelPresenter.getChannel().getTitle();
+                    String subs = mChannelPresenter.getChannel().subscriberCount;
 
-                    return Helpers.firstNonNull(author, title);
+                    return YouTubeHelper.createInfo(Helpers.firstNonNull(author, title), subs);
                 }
             });
         }
