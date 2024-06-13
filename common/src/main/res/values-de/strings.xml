@@ -490,6 +490,7 @@
     <string name="time_format_12">12 Stunden (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Funktioniert nicht gut. Verwenden Sie es nur, wenn Sie Probleme mit der Standard-Spracherkennung haben.</string>
     <string name="speech_recognizer">Spracherkennung</string>
+    <string name="speech_engine">Engine für Sprachsuche</string>
     <string name="speech_recognizer_system">System (bevorzugt)</string>
     <string name="speech_recognizer_external_1">Extern 1 (Funktioniert nicht gut, um es zu benutzen, müssen Sie den Zugriff auf das Mikrofon deaktivieren)</string>
     <string name="speech_recognizer_external_2">Extern 2 (Funktioniert nicht gut)</string>
@@ -661,4 +662,5 @@
     <string name="long_press_for_options">LANGE DRÜCKEN FÜR OPTIONEN</string>
     <string name="device_specific_backup">Sicherung nur für dieses Gerät</string>
     <string name="local_backup">Lokale Sicherung</string>
+    <string name="auto_backup">Automatische Sicherung (einmal pro Tag)</string>
 </resources>
