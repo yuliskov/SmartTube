@@ -288,7 +288,8 @@ public class ViewManager {
     }
 
     public boolean isPlayerOnlyModeEnabled() {
-        return mIsPlayerOnlyModeEnabled && PlaybackPresenter.instance(mContext).getBackgroundMode() != PlayerEngine.BACKGROUND_MODE_PIP;
+        //return mIsPlayerOnlyModeEnabled && PlaybackPresenter.instance(mContext).getBackgroundMode() != PlayerEngine.BACKGROUND_MODE_PIP;
+        return mIsPlayerOnlyModeEnabled && !PlaybackPresenter.instance(mContext).isInPipMode();
     }
 
     public void clearCaches() {
@@ -368,7 +369,8 @@ public class ViewManager {
      */
     private void safeStartActivity(Context context, Intent intent) {
         //if (PlaybackPresenter.instance(mContext).isInPipMode()) {
-        if (PlaybackPresenter.instance(mContext).getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_PIP) {
+        //if (PlaybackPresenter.instance(mContext).getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_PIP) {
+        if (PlaybackPresenter.instance(mContext).isEngineBlocked()) {
             Utils.postDelayed(() -> safeStartActivityInt(context, intent), 50);
         } else {
             safeStartActivityInt(context, intent);

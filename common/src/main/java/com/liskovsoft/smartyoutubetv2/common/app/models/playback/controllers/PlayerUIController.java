@@ -487,10 +487,11 @@ public class PlayerUIController extends PlayerEventListenerHelper {
     @Override
     public void onPipClicked() {
         getPlayer().showOverlay(false);
-        getPlayer().setBackgroundMode(
-                Helpers.isPictureInPictureSupported(getContext()) ?
-                        PlayerEngine.BACKGROUND_MODE_PIP : PlayerEngine.BACKGROUND_MODE_SOUND
-        );
+        getPlayer().blockEngine(true);
+        //getPlayer().setBackgroundMode(
+        //        Helpers.isPictureInPictureSupported(getContext()) ?
+        //                PlayerEngine.BACKGROUND_MODE_PIP : PlayerEngine.BACKGROUND_MODE_SOUND
+        //);
         getPlayer().finish();
     }
 

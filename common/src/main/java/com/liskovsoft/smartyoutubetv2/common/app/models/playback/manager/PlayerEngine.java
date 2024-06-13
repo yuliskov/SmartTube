@@ -27,8 +27,10 @@ public interface PlayerEngine extends PlayerEngineConstants {
     boolean isEngineInitialized();
     void restartEngine();
     void reloadPlayback();
-    void setBackgroundMode(int type);
-    int getBackgroundMode();
+    void blockEngine(boolean block);
+    boolean isEngineBlocked();
+    //void setBackgroundMode(int type);
+    //int getBackgroundMode();
     boolean isInPIPMode();
     boolean containsMedia();
     void setSpeed(float speed);

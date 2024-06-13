@@ -40,7 +40,7 @@ public class HQDialogController extends PlayerEventListenerHelper {
 
     @Override
     public void onViewResumed() {
-        updateBackgroundPlayback();
+        //updateBackgroundPlayback();
     }
 
     @Override
@@ -117,27 +117,27 @@ public class HQDialogController extends PlayerEventListenerHelper {
     }
 
     private void onDialogHide() {
-        updateBackgroundPlayback();
+        //updateBackgroundPlayback();
 
         for (Runnable listener : mHideListeners) {
             listener.run();
         }
     }
 
-    private void updateBackgroundPlayback() {
-        ViewManager.instance(getContext()).blockTop(null);
+    //private void updateBackgroundPlayback() {
+    //    ViewManager.instance(getContext()).blockTop(null);
+    //
+    //    if (getPlayer() != null) {
+    //        getPlayer().setBackgroundMode(mPlayerData.getBackgroundMode());
+    //    }
+    //}
 
-        if (getPlayer() != null) {
-            getPlayer().setBackgroundMode(mPlayerData.getBackgroundMode());
-        }
-    }
-
-    private void addBackgroundPlaybackCategory() {
-        OptionCategory category =
-                AppDialogUtil.createBackgroundPlaybackCategory(getContext(), mPlayerData, GeneralData.instance(getContext()), this::updateBackgroundPlayback);
-
-        addCategoryInt(category);
-    }
+    //private void addBackgroundPlaybackCategory() {
+    //    OptionCategory category =
+    //            AppDialogUtil.createBackgroundPlaybackCategory(getContext(), mPlayerData, GeneralData.instance(getContext()), this::updateBackgroundPlayback);
+    //
+    //    addCategoryInt(category);
+    //}
 
     private void addPresetsCategory() {
         addCategoryInt(AppDialogUtil.createVideoPresetsCategory(

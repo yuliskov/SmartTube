@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
@@ -28,6 +29,7 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.RowPresenter.ViewHolder;
+
 import com.google.android.exoplayer2.ControlDispatcher;
 import com.google.android.exoplayer2.DefaultControlDispatcher;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -43,24 +45,23 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.DebugInfoManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
-import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -76,9 +77,9 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.SeekModePlaybackFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface.SurfacePlaybackFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigator;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.previewtimebar.StoryboardSeekDataProvider;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.previewtimebar.StoryboardSeekDataProvider;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.LiveChatView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.EndingTimeView;
@@ -113,7 +114,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private UriBackgroundManager mBackgroundManager;
     private RowsSupportFragment mRowsSupportFragment;
     private boolean mIsUIAnimationsEnabled = false;
-    private int mPlaybackMode = PlayerEngine.BACKGROUND_MODE_DEFAULT;
+    //private int mPlaybackMode = PlayerEngine.BACKGROUND_MODE_DEFAULT;
+    private boolean mIsEngineBlocked;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
     private Boolean mIsControlsShownPreviously;
@@ -205,6 +207,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mEventListener.onViewResumed();
 
         showHideWidgets(true); // PIP mode fix
+        blockEngine(false); // reset bg mode
     }
 
     @Override
@@ -246,17 +249,21 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     public void onFinish() {
-        // Fix background play when playing trailers from NUM
-        // On API > 23 onStop not immediately occurred after onPause
-        if (getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_DEFAULT) {
-            if (Util.SDK_INT > 23) {
-                maybeReleasePlayer();
-            }
+        //// Fix background play when playing trailers from NUM
+        //// On API > 23 onStop not immediately occurred after onPause
+        //if (getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_DEFAULT) {
+        //    if (Util.SDK_INT > 23) {
+        //        maybeReleasePlayer();
+        //    }
+        //
+        //    // Bug: history not updated on Android 6.0.1
+        //    // Remote control fix
+        //    // Assuming that user wants to close the player
+        //    // setVideo(null);
+        //}
 
-            // Bug: history not updated on Android 6.0.1
-            // Remote control fix
-            // Assuming that user wants to close the player
-            // setVideo(null);
+        if (Util.SDK_INT > 23) {
+            maybeReleasePlayer();
         }
 
         mEventListener.onFinish();
@@ -332,28 +339,31 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      * Internal method. Intended for enclosed Activity.
      */
     public void maybeReleasePlayer() {
-        // Inside dialogs we could change engine settings on fly
-        if (AppDialogPresenter.instance(getContext()).isDialogShown() ||
-                (isBackgroundPlaybackEnabled() && Utils.isHardScreenOff(getContext()))) {
-            Log.d(TAG, "releasePlayer: Engine release is blocked by dialog. Exiting...");
-            return;
-        }
-
-        // Background audio mode is complicated (null surface error) on Android 9 (api 28) and above. Try avoid it.
-        // More info: DebugInfoMediaCodecVideoRenderer#handleMessage
-        //if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
-        //    !ViewManager.instance(getContext()).isNewViewPending()) {
-        //    Log.d(TAG, "releasePlayer: Engine release is blocked by background playback. Exiting...");
-        //    return;
-        //}
-
-        // Ensure to continue playback in audio mode (activity should be blocked)
-        if (getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_SOUND &&
-                ViewManager.instance(getContext()).getBlockedTop() == PlaybackActivity.class &&
-                !isInPIPMode()) {
+        if (isEngineBlocked()) {
             Log.d(TAG, "releasePlayer: Playback activity is blocked. Exiting...");
             return;
         }
+
+        //if (AppDialogPresenter.instance(getContext()).isDialogShown() ||
+        //        isEngineBlocked()) {
+        //    Log.d(TAG, "releasePlayer: Playback activity is blocked. Exiting...");
+        //    return;
+        //}
+
+        //// Inside dialogs we could change engine settings on fly
+        //if (AppDialogPresenter.instance(getContext()).isDialogShown() ||
+        //        (getBackgroundMode() != PlayerEngine.BACKGROUND_MODE_DEFAULT && Utils.isHardScreenOff(getContext()))) {
+        //    Log.d(TAG, "releasePlayer: Engine release is blocked by dialog or the screen is off. Exiting...");
+        //    return;
+        //}
+        //
+        //// Ensure to continue playback in audio mode (activity should be blocked)
+        //if (getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_SOUND &&
+        //        ViewManager.instance(getContext()).getBlockedTop() == PlaybackActivity.class &&
+        //        !isInPIPMode()) {
+        //    Log.d(TAG, "releasePlayer: Playback activity is blocked. Exiting...");
+        //    return;
+        //}
 
         releasePlayer();
     }
@@ -1016,15 +1026,25 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setBackgroundMode(int type) {
-        Log.d(TAG, "Setting engine block type to %s...", type);
-        mPlaybackMode = type;
+    public void blockEngine(boolean block) {
+        mIsEngineBlocked = block;
     }
 
     @Override
-    public int getBackgroundMode() {
-        return mPlaybackMode;
+    public boolean isEngineBlocked() {
+        return mIsEngineBlocked;
     }
+
+    //@Override
+    //public void setBackgroundMode(int type) {
+    //    Log.d(TAG, "Setting engine block type to %s...", type);
+    //    mPlaybackMode = type;
+    //}
+    //
+    //@Override
+    //public int getBackgroundMode() {
+    //    return mPlaybackMode;
+    //}
 
     @Override
     public boolean isInPIPMode() {
@@ -1625,11 +1645,5 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     private boolean forbidShowOverlay(boolean show) {
         return show && isInPIPMode();
-    }
-
-    private boolean isBackgroundPlaybackEnabled() {
-        int shortcut = GeneralData.instance(getContext()).getBackgroundPlaybackShortcut();
-
-        return shortcut == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME || shortcut == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK;
     }
 }
