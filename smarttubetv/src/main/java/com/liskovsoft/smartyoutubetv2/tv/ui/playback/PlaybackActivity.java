@@ -302,8 +302,6 @@ public class PlaybackActivity extends LeanbackActivity {
             return;
         }
 
-        mPlaybackFragment.blockEngine(true);
-
         switch (mPlayerData.getBackgroundMode()) {
             case PlayerData.BACKGROUND_MODE_PLAY_BEHIND:
                 enterBackgroundPlayMode();
@@ -312,6 +310,7 @@ public class PlaybackActivity extends LeanbackActivity {
             case PlayerData.BACKGROUND_MODE_PIP:
                 enterPipMode();
                 if (doNotDestroy()) {
+                    mPlaybackFragment.blockEngine(true);
                     // Ensure to opening this activity when the user is returning to the app
                     mViewManager.blockTop(this);
                     // Return to previous activity (create point from that app could be launched)
@@ -323,11 +322,9 @@ public class PlaybackActivity extends LeanbackActivity {
             case PlayerData.BACKGROUND_MODE_SOUND:
                 if (doNotDestroy()) {
                     // Ensure to continue a playback
+                    mPlaybackFragment.blockEngine(true);
                     mViewManager.blockTop(this);
                 }
-                break;
-            case PlayerData.BACKGROUND_MODE_DEFAULT:
-                mPlaybackFragment.blockEngine(false);
                 break;
         }
     }
