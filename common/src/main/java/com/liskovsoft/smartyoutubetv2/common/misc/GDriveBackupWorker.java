@@ -48,6 +48,10 @@ public class GDriveBackupWorker extends Worker {
         }
     }
 
+    public static void forceSchedule(Context context) {
+
+    }
+
     public static void cancel(Context context) {
         if (VERSION.SDK_INT >= 23 && GeneralData.instance(context).isAutoBackupEnabled()) {
             Log.d(TAG, "Unregistering worker job...");
@@ -66,5 +70,9 @@ public class GDriveBackupWorker extends Worker {
         GDriveBackupManager.unhold();
 
         return Result.success();
+    }
+
+    private void checkedRunTask(Runnable task) {
+        
     }
 }
