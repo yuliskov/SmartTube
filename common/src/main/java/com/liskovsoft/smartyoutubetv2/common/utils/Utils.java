@@ -84,6 +84,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -963,5 +964,9 @@ public class Utils {
     public static String updateTooltip(Context context, String tooltip) {
         return GeneralData.instance(context).isFirstUseTooltipEnabled() ?
                 String.format("%s (%s)", tooltip, context.getString(R.string.long_press_for_options)) : tooltip;
+    }
+
+    public static String createTransactionID() {
+        return UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
     }
 }
