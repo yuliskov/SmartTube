@@ -515,6 +515,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
                     int bounds = originTrack.inBounds(mediaTrack);
 
+                    // Multiple ru track fix
+                    if (bounds == 0 && MediaTrack.bitrateEquals(originTrack, mediaTrack)) {
+                        result = mediaTrack;
+                        break;
+                    }
+
                     if (bounds >= 0) {
                         int compare = mediaTrack.compare(result);
 

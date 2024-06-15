@@ -23,12 +23,9 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListene
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class PlayerData extends DataChangeBase implements PlayerEngineConstants, ProfileChangeListener {
     private static final String VIDEO_PLAYER_DATA = "video_player_data";
@@ -51,6 +48,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     private boolean mIsRemainingTimeEnabled;
     private int mBackgroundMode;
     private FormatItem mVideoFormat;
+    private FormatItem mTempVideoFormat;
     private FormatItem mAudioFormat;
     private FormatItem mSubtitleFormat;
     private int mVideoBufferType;
@@ -376,7 +374,8 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     }
 
     public void setFormat(FormatItem format) {
-        if (format == null || Helpers.equalsAny(format, mVideoFormat, mAudioFormat, mSubtitleFormat)) {
+        //if (format == null || Helpers.equalsAny(format, mVideoFormat, mAudioFormat, mSubtitleFormat)) {
+        if (format == null) {
             return;
         }
 
@@ -394,6 +393,14 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         }
         
         persistState();
+    }
+
+    public void setTempVideoFormat(FormatItem format) {
+        mTempVideoFormat = format;
+    }
+
+    public FormatItem getTempVideoFormat() {
+        return mTempVideoFormat;
     }
 
     public FormatItem getLastSubtitleFormat() {

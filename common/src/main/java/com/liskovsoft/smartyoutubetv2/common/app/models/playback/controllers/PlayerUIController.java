@@ -155,7 +155,9 @@ public class PlayerUIController extends PlayerEventListenerHelper {
 
         // Match found
         if (getPlayer().getSubtitleFormats().contains(mPlayerData.getLastSubtitleFormat())) {
-            getPlayer().setFormat(enabled ? FormatItem.SUBTITLE_NONE : mPlayerData.getLastSubtitleFormat());
+            FormatItem format = enabled ? FormatItem.SUBTITLE_NONE : mPlayerData.getLastSubtitleFormat();
+            getPlayer().setFormat(format);
+            mPlayerData.setFormat(format);
             getPlayer().setSubtitleButtonState(!FormatItem.SUBTITLE_NONE.equals(mPlayerData.getLastSubtitleFormat()) && !enabled);
             enableSubtitleForChannel(!enabled);
         } else {
@@ -182,6 +184,7 @@ public class PlayerUIController extends PlayerEventListenerHelper {
                                 FormatItem format = UiOptionItem.toFormat(option);
                                 enableSubtitleForChannel(!format.isDefault());
                                 getPlayer().setFormat(format);
+                                mPlayerData.setFormat(format);
                             },
                             getContext().getString(R.string.subtitles_disabled)));
             settingsPresenter.showDialog();
@@ -198,6 +201,7 @@ public class PlayerUIController extends PlayerEventListenerHelper {
                                 FormatItem format = UiOptionItem.toFormat(option);
                                 enableSubtitleForChannel(!format.isDefault());
                                 getPlayer().setFormat(format);
+                                mPlayerData.setFormat(format);
                             },
                             getContext().getString(R.string.subtitles_disabled)));
             settingsPresenter.showDialog();
@@ -851,7 +855,7 @@ public class PlayerUIController extends PlayerEventListenerHelper {
     }
 
     private void reorderSubtitles(List<FormatItem> subtitleFormats) {
-        if (subtitleFormats == null || subtitleFormats.isEmpty()) {
+        if (subtitleFormats == null || subtitleFormats.isEmpty() || subtitleFormats.get(0).equals(mPlayerData.getLastSubtitleFormat())) {
             return;
         }
 

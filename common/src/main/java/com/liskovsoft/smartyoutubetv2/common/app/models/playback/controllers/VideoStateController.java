@@ -30,7 +30,6 @@ public class VideoStateController extends PlayerEventListenerHelper {
     private static final long BEGIN_THRESHOLD_MS = 10_000;
     private boolean mIsPlayEnabled;
     private Video mVideo = new Video();
-    private FormatItem mTempVideoFormat;
     private PlayerData mPlayerData;
     private GeneralData mGeneralData;
     private PlayerTweaksData mPlayerTweaksData;
@@ -75,7 +74,7 @@ public class VideoStateController extends PlayerEventListenerHelper {
 
         setPlayEnabled(true); // video just added
 
-        mTempVideoFormat = null;
+        mPlayerData.setTempVideoFormat(null);
 
         enableIncognitoIfNeeded(item);
 
@@ -222,18 +221,24 @@ public class VideoStateController extends PlayerEventListenerHelper {
 
     @Override
     public void onTrackSelected(FormatItem track) {
-        if (!getPlayer().isInPIPMode()) {
-            if (track.getType() == FormatItem.TYPE_VIDEO) {
-                if (mPlayerData.getFormat(FormatItem.TYPE_VIDEO).isPreset()) {
-                    mTempVideoFormat = track;
-                } else {
-                    mTempVideoFormat = null;
-                    mPlayerData.setFormat(track);
-                }
-            } else {
-                mPlayerData.setFormat(track);
-            }
-        }
+        //if (!getPlayer().isInPIPMode()) {
+        //    if (track.getType() == FormatItem.TYPE_VIDEO) {
+        //        if (mPlayerData.getFormat(FormatItem.TYPE_VIDEO).isPreset()) {
+        //            mTempVideoFormat = track;
+        //        } else {
+        //            mTempVideoFormat = null;
+        //            mPlayerData.setFormat(track);
+        //        }
+        //    } else {
+        //        mPlayerData.setFormat(track);
+        //    }
+        //}
+
+        //if (!getPlayer().isInPIPMode()) {
+        //    if (track.getType() == FormatItem.TYPE_VIDEO) {
+        //        mTempVideoFormat = mPlayerData.getFormat(FormatItem.TYPE_VIDEO).isPreset() ? track : null;
+        //    }
+        //}
     }
 
     @Override
@@ -387,8 +392,8 @@ public class VideoStateController extends PlayerEventListenerHelper {
     }
 
     private void restoreVideoFormat() {
-        if (mTempVideoFormat != null) {
-            getPlayer().setFormat(mTempVideoFormat);
+        if (mPlayerData.getTempVideoFormat() != null) {
+            getPlayer().setFormat(mPlayerData.getTempVideoFormat());
         } else {
             getPlayer().setFormat(mPlayerData.getFormat(FormatItem.TYPE_VIDEO));
         }
