@@ -656,7 +656,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.closeDialog();
-        SimpleEditDialog.show(
+        SimpleEditDialog.showPassword(
                 getContext(),
                 "", newValue -> {
                     mGeneralData.setSettingsPassword(newValue);
@@ -679,7 +679,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.closeDialog();
-        SimpleEditDialog.show(
+        SimpleEditDialog.showPassword(
                 getContext(),
                 "", newValue -> {
                     mGeneralData.setMasterPassword(newValue);

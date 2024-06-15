@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.content.Context;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager.BadTokenException;
@@ -24,11 +25,30 @@ public class SimpleEditDialog {
     }
 
     public static void show(Context context, String defaultValue, OnChange onChange, String dialogTitle, boolean emptyValueCheck, Runnable onDismiss) {
+        show(context, defaultValue, onChange, dialogTitle, emptyValueCheck, onDismiss, false);
+    }
+
+    public static void showPassword(Context context, String defaultValue, OnChange onChange, String dialogTitle) {
+        showPassword(context, defaultValue, onChange, dialogTitle, false);
+    }
+
+    public static void showPassword(Context context, String defaultValue, OnChange onChange, String dialogTitle, boolean emptyValueCheck) {
+        showPassword(context, defaultValue, onChange, dialogTitle, emptyValueCheck, null);
+    }
+
+    public static void showPassword(Context context, String defaultValue, OnChange onChange, String dialogTitle, boolean emptyValueCheck, Runnable onDismiss) {
+        show(context, defaultValue, onChange, dialogTitle, emptyValueCheck, onDismiss, true);
+    }
+
+    private static void show(Context context, String defaultValue, OnChange onChange, String dialogTitle, boolean emptyValueCheck, Runnable onDismiss, boolean isPassword) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppDialog);
         LayoutInflater inflater = LayoutInflater.from(context);
         View contentView = inflater.inflate(R.layout.simple_edit_dialog, null);
 
         EditText editField = contentView.findViewById(R.id.simple_edit_value);
+        if (isPassword) {
+            editField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }
         KeyHelpers.fixShowKeyboard(editField);
 
         editField.setText(defaultValue);

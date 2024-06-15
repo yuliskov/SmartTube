@@ -173,7 +173,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
     private void showAddPasswordDialog(AppDialogPresenter settingsPresenter) {
         settingsPresenter.closeDialog();
-        SimpleEditDialog.show(
+        SimpleEditDialog.showPassword(
                 getContext(),
                 "", newValue -> {
                     AccountsData.instance(getContext()).setAccountPassword(newValue);
@@ -194,7 +194,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.closeDialog();
-        SimpleEditDialog.show(
+        SimpleEditDialog.showPassword(
                 getContext(),
                 "", newValue -> {
                     if (password.equals(newValue)) {
@@ -217,7 +217,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
             return;
         }
 
-        SimpleEditDialog.show(
+        SimpleEditDialog.showPassword(
                 getContext(),
                 "", newValue -> {
                     if (password.equals(newValue)) {
