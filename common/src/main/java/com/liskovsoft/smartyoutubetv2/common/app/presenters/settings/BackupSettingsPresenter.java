@@ -100,7 +100,7 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
                             option2 -> {
                                 mGeneralData.enableAutoBackup(option2.isSelected());
                                 if (option2.isSelected()) {
-                                    GDriveBackupWorker.schedule(getContext());
+                                    GDriveBackupWorker.forceSchedule(getContext());
                                 } else {
                                     GDriveBackupWorker.cancel(getContext());
                                 }

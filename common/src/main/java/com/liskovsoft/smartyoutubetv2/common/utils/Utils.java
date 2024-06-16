@@ -32,6 +32,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.provider.Settings.Secure;
+import android.telephony.TelephonyManager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -77,9 +79,11 @@ import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.HiddenPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 
+import java.io.UnsupportedEncodingException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -966,7 +970,46 @@ public class Utils {
                 String.format("%s (%s)", tooltip, context.getString(R.string.long_press_for_options)) : tooltip;
     }
 
-    public static String createTransactionID() {
+    private static String createTransactionID() {
         return UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
+    }
+
+    /**
+     * https://stackoverflow.com/a/5626208/1279056<br/>
+     * https://stackoverflow.com/a/40237325/1279056
+     */
+    public static String getUniqueId(Context context) {
+        String uniqueId = HiddenPrefs.instance(context).getUniqueId();
+
+        if (uniqueId == null) {
+            UUID uuid = null;
+            @SuppressLint("HardwareIds")
+            final String androidId = Secure.getString(
+                    context.getContentResolver(), Secure.ANDROID_ID);
+            // Use the Android ID unless it's broken, in which case
+            // fallback on deviceId,
+            // unless it's not available, then fallback on a random
+            // number which we store to a prefs file
+            try {
+                if (!"9774d56d682e549c".equals(androidId)) {
+                    uuid = UUID.nameUUIDFromBytes(androidId
+                            .getBytes("utf8"));
+                } else {
+                    @SuppressLint("HardwareIds")
+                    final String deviceId = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+                    uuid = deviceId != null ? UUID
+                            .nameUUIDFromBytes(deviceId
+                                    .getBytes("utf8")) : UUID
+                            .randomUUID();
+                }
+            } catch (UnsupportedEncodingException e) {
+                Log.e(TAG, e.getMessage());
+            }
+
+            uniqueId = uuid != null ? uuid.toString() : createTransactionID();
+            HiddenPrefs.instance(context).setUniqueId(uniqueId);
+        }
+
+        return uniqueId;
     }
 }

@@ -404,8 +404,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
         applyErrorAction(error);
 
-        // Delay to fix frequent requests
-        Utils.postDelayed(mFixAndRestartEngine, 3_000);
+        // Give a time to user to do something
+        Utils.postDelayed(mFixAndRestartEngine, 5_000);
     }
 
     private void applyRendererErrorAction(int rendererIndex) {

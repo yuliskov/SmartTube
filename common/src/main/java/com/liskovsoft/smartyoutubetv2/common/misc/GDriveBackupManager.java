@@ -122,7 +122,7 @@ public class GDriveBackupManager {
     }
 
     private void startBackup() {
-        String backupDir = mBackupDir + getDeviceSuffix();
+        String backupDir = getBackupDir();
         startBackup(backupDir, mDataDir);
     }
 
@@ -155,7 +155,7 @@ public class GDriveBackupManager {
     }
 
     private void startRestore() {
-        String backupDir = mBackupDir + getDeviceSuffix();
+        String backupDir = getBackupDir();
         startRestore(backupDir, mDataDir, () -> startRestore(applyAltPackageName(backupDir), mDataDir, null));
     }
 
@@ -206,5 +206,9 @@ public class GDriveBackupManager {
 
     private String getDeviceSuffix() {
         return mGeneralData.isDeviceSpecificBackupEnabled() ? "_" + Build.MODEL.replace(" ", "_") : "";
+    }
+
+    public String getBackupDir() {
+        return mBackupDir + getDeviceSuffix();
     }
 }
