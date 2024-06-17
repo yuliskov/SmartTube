@@ -9,7 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 public class HiddenPrefs extends SharedPreferencesBase {
     @SuppressLint("StaticFieldLeak")
     private static HiddenPrefs sInstance;
-    private static final String SHARED_PREFERENCES_NAME = HiddenPrefs.class.getName();
+    public static final String SHARED_PREFERENCES_NAME = HiddenPrefs.class.getName();
     private static final String UNIQUE_ID = "unique_id";
 
     private HiddenPrefs(Context context) {

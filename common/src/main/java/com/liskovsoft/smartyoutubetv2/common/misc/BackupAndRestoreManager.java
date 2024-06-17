@@ -10,6 +10,7 @@ import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.HiddenPrefs;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.io.File;
@@ -91,7 +92,11 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         for (File dataDir : mDataDirs) {
             if (dataDir.isDirectory() && !FileHelpers.isEmpty(dataDir)) {
-                FileHelpers.copy(dataDir, new File(currentBackup, dataDir.getName()));
+                File destination = new File(currentBackup, dataDir.getName());
+                FileHelpers.copy(dataDir, destination);
+
+                // Don't store unique id
+                FileHelpers.delete(new File(destination, HiddenPrefs.SHARED_PREFERENCES_NAME + ".xml"));
             }
         }
     }
