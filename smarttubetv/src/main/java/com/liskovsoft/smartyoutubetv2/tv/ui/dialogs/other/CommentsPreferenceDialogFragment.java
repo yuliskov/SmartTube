@@ -124,6 +124,12 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
                     adapter.scrollToTop();
                 }
                 mCurrentGroup = commentGroup;
+
+                // Fix small replies list that can be continued (Show more replies link).
+                // On the such list 'onLoadMore' isn't called.
+                if (adapter.getItemCount() <= 10 && mCurrentGroup.getNextCommentsKey() != null) {
+                    mCommentsReceiver.onLoadMore(mCurrentGroup);
+                }
             }
 
             @Override
