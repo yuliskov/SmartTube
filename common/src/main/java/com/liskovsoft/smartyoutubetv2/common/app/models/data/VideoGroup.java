@@ -316,6 +316,14 @@ public class VideoGroup {
         }
     }
 
+    public boolean contains(Video video) {
+        if (mVideos == null) {
+            return false;
+        }
+
+        return mVideos.contains(video);
+    }
+
     public Video findVideoById(String videoId) {
         if (mVideos == null) {
             return null;

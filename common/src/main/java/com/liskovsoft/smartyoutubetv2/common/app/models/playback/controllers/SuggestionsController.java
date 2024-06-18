@@ -355,7 +355,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private void mergeRemoteAndUserQueueIfNeeded(Video video, VideoGroup videoGroup) {
         // NOTE: Commented out section below has risk of adding random videos into the queue
         //if (video.isRemote && (video.remotePlaylistId != null || !Playlist.instance().hasNext())) {
-        if (video.isRemote && video.remotePlaylistId != null) {
+        if (video.isRemote && video.remotePlaylistId != null && videoGroup.contains(video)) {
             videoGroup.removeAllBefore(video);
             // Double queue bugfix. Remove remote playlist id from the videos.
             videoGroup.stripPlaylistInfo();
