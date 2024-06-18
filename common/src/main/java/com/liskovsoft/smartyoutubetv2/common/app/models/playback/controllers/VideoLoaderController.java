@@ -429,7 +429,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         if (error instanceof OutOfMemoryError) {
             mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
         } else if (Helpers.startsWithAny(error.getMessage(), "Unable to connect to ", "Invalid NAL length")) {
-            mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
+            // Switch between network engines in hope that one of them fixes the error
+            mPlayerTweaksData.setPlayerDataSource(getNextEngine());
         }
     }
 
@@ -592,5 +593,23 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             mLastVideo.nextMediaItem = mLastVideo.nextMediaItemBackup;
             getPlayer().setNextTitle(mLastVideo.nextMediaItem.getTitle());
         }
+    }
+
+    private int getNextEngine() {
+        int currentEngine = mPlayerTweaksData.getPlayerDataSource();
+        int[] engineList = { PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET, PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP };
+        int nextEngine = engineList[0];
+        boolean found = false;
+        for (int engine : engineList) {
+            if (found) {
+                nextEngine = engine;
+                break;
+            }
+            if (engine == currentEngine) {
+                found = true;
+            }
+        }
+
+        return nextEngine;
     }
 }
