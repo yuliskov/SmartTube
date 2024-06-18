@@ -37,6 +37,7 @@ import java.util.List;
 
 public class VideoLoaderController extends PlayerEventListenerHelper implements OnDataChange {
     private static final String TAG = VideoLoaderController.class.getSimpleName();
+    private static final long STREAM_END_THRESHOLD_MS = 180_000;
     private final Playlist mPlaylist;
     private final UniqueRandom mRandom;
     private Video mLastVideo;
@@ -61,6 +62,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         }
     };
     private final Runnable mLoadRandomNext = this::loadRandomNext;
+    private final Runnable mOnLongBuffering = this::onLongBuffering;
 
     public VideoLoaderController() {
         mPlaylist = Playlist.instance();
@@ -101,6 +103,26 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     }
 
     @Override
+    public void onBuffering() {
+        Utils.postDelayed(mOnLongBuffering, 10_000);
+    }
+
+    private void onLongBuffering() {
+        if (mLastVideo == null) {
+            return;
+        }
+
+        // Stream end check (hangs on buffering)
+        if ((!mLastVideo.isLive || mLastVideo.isLiveEnd) &&
+                getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
+            getMainController().onPlayEnd();
+        } else {
+            // Switch between network engines in hope that one of them fixes the buffering
+            mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+        }
+    }
+
+    @Override
     public void onEngineInitialized() {
         loadVideo(mLastVideo);
         getPlayer().setRepeatButtonState(mPlayerData.getRepeatMode());
@@ -124,6 +146,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     @Override
     public void onVideoLoaded(Video video) {
         mLastError = -1;
+        Utils.removeCallbacks(mOnLongBuffering);
         getPlayer().setRepeatButtonState(video.finishOnEnded ? PlayerUI.REPEAT_MODE_CLOSE : mPlayerData.getRepeatMode());
     }
 
@@ -212,6 +235,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         }
 
         Utils.removeCallbacks(mFixAndRestartEngine);
+        Utils.removeCallbacks(mOnLongBuffering);
 
         return false;
     }
@@ -377,6 +401,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         MediaServiceManager.instance().disposeActions();
         RxHelper.disposeActions(mFormatInfoAction, mMpdStreamAction);
         Utils.removeCallbacks(mReloadVideoHandler, mFixAndRestartEngine, mMetadataSync);
+        Utils.removeCallbacks(mOnLongBuffering);
     }
 
     @SuppressLint("StringFormatMatches")
@@ -556,6 +581,11 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
         loadRandomNext();
+    }
+
+    @Override
+    public void onPlay() {
+        Utils.removeCallbacks(mOnLongBuffering);
     }
 
     @Override
