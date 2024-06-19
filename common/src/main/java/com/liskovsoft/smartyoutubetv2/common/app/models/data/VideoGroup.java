@@ -340,4 +340,12 @@ public class VideoGroup {
 
         mVideos.clear();
     }
+
+    public boolean contains(Video video) {
+        if (mVideos == null) {
+            return false;
+        }
+
+        return mVideos.contains(video);
+    }
 }

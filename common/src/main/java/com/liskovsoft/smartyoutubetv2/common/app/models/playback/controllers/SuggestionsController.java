@@ -304,7 +304,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         appendChaptersIfNeeded(mediaItemMetadata);
 
-        appendUserQueueIfNeeded(video);
+        appendUserQueueIfNeeded(video, mediaItemMetadata);
 
         appendSectionPlaylistIfNeeded(video);
 
@@ -333,9 +333,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             if (group != null && !group.isEmpty()) {
                 VideoGroup videoGroup = VideoGroup.from(group);
 
-                if (groupIndex == 0) {
-                    mergeRemoteAndUserQueueIfNeeded(video, videoGroup);
-                }
+                //if (groupIndex == 0) {
+                //    mergeRemoteAndUserQueueIfNeeded(video, videoGroup);
+                //}
 
                 getPlayer().updateSuggestions(videoGroup);
                 mDeArrowProcessor.process(videoGroup);
@@ -364,9 +364,51 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             Playlist.instance().removeAllAfterCurrent();
             Playlist.instance().addAll(remoteGroup.getVideos());
             Playlist.instance().setCurrent(video);
-        } else if (video.isRemote) {
-            // Double queue bugfix. Remove remote queue. Remain only user queue (should already be merged with remote).
-            remoteGroup.clear();
+        }
+    }
+
+    /**
+     * Merge remote queue with player's queue (when phone cast just started or user clicked on playlist item)
+     */
+    private void appendUserQueueIfNeeded(Video video, MediaItemMetadata metadata) {
+        // NOTE: Commented out section below has risk of adding random videos into the queue
+        //if (video.isRemote && (video.remotePlaylistId != null || !Playlist.instance().hasNext())) {
+        Playlist playlist = Playlist.instance();
+
+        if (video.isRemote && (video.playlistId != null || video.remotePlaylistId != null)) {
+            // Create user queue from remote queue
+
+            List<MediaGroup> suggestions = metadata.getSuggestions();
+
+            if (suggestions != null && !suggestions.isEmpty()) {
+                MediaGroup remoteRow = suggestions.get(0);
+
+                suggestions.remove(remoteRow);
+
+                VideoGroup remoteGroup = VideoGroup.from(remoteRow);
+
+                if (remoteGroup.contains(video)) {
+                    remoteGroup.removeAllBefore(video);
+                    remoteGroup.setTitle(getContext().getString(R.string.action_playback_queue));
+                    remoteGroup.setId(remoteGroup.getTitle().hashCode());
+
+                    playlist.removeAllAfterCurrent();
+                    playlist.addAll(remoteGroup.getVideos());
+                    playlist.setCurrent(video);
+
+                    getPlayer().updateSuggestions(remoteGroup);
+                }
+            }
+        } else if (playlist.hasNext()) {
+            // Create user queue from local playlist
+
+            List<Video> queue = playlist.getAllAfterCurrent();
+
+            VideoGroup videoGroup = VideoGroup.from(queue);
+            videoGroup.setTitle(getContext().getString(R.string.action_playback_queue));
+            videoGroup.setId(videoGroup.getTitle().hashCode());
+
+            getPlayer().updateSuggestions(videoGroup);
         }
     }
 
