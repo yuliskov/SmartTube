@@ -332,4 +332,12 @@ public class VideoGroup {
 
         return result;
     }
+
+    public void clear() {
+        if (mVideos == null) {
+            return;
+        }
+
+        mVideos.clear();
+    }
 }
