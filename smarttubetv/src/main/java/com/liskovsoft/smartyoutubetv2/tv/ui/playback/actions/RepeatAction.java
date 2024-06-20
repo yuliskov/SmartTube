@@ -5,19 +5,20 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.PlaybackControlsRow.MultiAction;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
+
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
  * An action for displaying two repeat states: none and all.
  */
 public class RepeatAction extends MultiAction {
-    public static final int INDEX_NONE = PlayerUI.REPEAT_MODE_CLOSE;
-    public static final int INDEX_ONE = PlayerUI.REPEAT_MODE_ONE;
-    public static final int INDEX_ALL = PlayerUI.REPEAT_MODE_ALL;
-    public static final int INDEX_PAUSE = PlayerUI.REPEAT_MODE_PAUSE;
-    public static final int INDEX_LIST = PlayerUI.REPEAT_MODE_LIST;
-    public static final int INDEX_SHUFFLE = PlayerUI.REPEAT_MODE_SHUFFLE;
+    private static final int INDEX_NONE = PlayerEngineConstants.REPEAT_MODE_CLOSE;
+    private static final int INDEX_ONE = PlayerEngineConstants.REPEAT_MODE_ONE;
+    private static final int INDEX_ALL = PlayerEngineConstants.REPEAT_MODE_ALL;
+    private static final int INDEX_PAUSE = PlayerEngineConstants.REPEAT_MODE_PAUSE;
+    private static final int INDEX_LIST = PlayerEngineConstants.REPEAT_MODE_LIST;
+    private static final int INDEX_SHUFFLE = PlayerEngineConstants.REPEAT_MODE_SHUFFLE;
 
     /**
      * Constructor
@@ -33,7 +34,7 @@ public class RepeatAction extends MultiAction {
      * @param selectionColor Color to display the repeat-all icon.
      */
     public RepeatAction(Context context, int selectionColor) {
-        super(R.id.lb_control_repeat);
+        super(R.id.action_repeat);
         Drawable[] drawables = new Drawable[6];
         BitmapDrawable repeatNoneDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_none);
         BitmapDrawable repeatOneDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_one);

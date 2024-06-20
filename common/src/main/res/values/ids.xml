@@ -8,6 +8,7 @@
     <item name="action_playlist_add" type="id"/>
     <item name="action_video_stats" type="id"/>
     <item name="action_video_speed" type="id"/>
+    <item name="action_repeat" type="id"/>
     <item name="action_search" type="id"/>
     <item name="action_pip" type="id"/>
     <item name="action_info" type="id"/>

@@ -272,11 +272,6 @@ public class MainPlayerController implements PlayerEventListener {
     }
 
     @Override
-    public void onRepeatModeClicked(int modeIndex) {
-        process(listener -> listener.onRepeatModeClicked(modeIndex));
-    }
-
-    @Override
     public void onVideoLoaded(Video item) {
         process(listener -> listener.onVideoLoaded(item));
     }

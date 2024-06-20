@@ -15,6 +15,7 @@ import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -59,6 +60,7 @@ public class AppDialogUtil {
     private static final int PLAYER_SPEED_MISC_ID = 143;
     private static final int PITCH_EFFECT_ID = 144;
     private static final int AUDIO_VOLUME_ID = 145;
+    private static final int PLAYER_REPEAT_ID = 146;
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
@@ -719,6 +721,38 @@ public class AppDialogUtil {
         String title = context.getString(R.string.player_other);
 
         return OptionCategory.from(PLAYER_SPEED_MISC_ID, OptionCategory.TYPE_CHECKBOX_LIST, title, options);
+    }
+
+    public static OptionCategory createPlaybackModeCategory(Context context, PlayerData playerData) {
+        return createPlaybackModeCategory(context, playerData, () -> {});
+    }
+
+    public static OptionCategory createPlaybackModeCategory(Context context, PlayerData playerData, Runnable onModeSelected) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.repeat_mode_all, PlayerEngineConstants.REPEAT_MODE_ALL},
+                {R.string.repeat_mode_one, PlayerEngineConstants.REPEAT_MODE_ONE},
+                {R.string.repeat_mode_shuffle, PlayerEngineConstants.REPEAT_MODE_SHUFFLE},
+                {R.string.repeat_mode_pause_alt, PlayerEngineConstants.REPEAT_MODE_LIST},
+                {R.string.repeat_mode_pause, PlayerEngineConstants.REPEAT_MODE_PAUSE},
+                {R.string.repeat_mode_none, PlayerEngineConstants.REPEAT_MODE_CLOSE}
+        }) {
+            options.add(UiOptionItem.from(context.getString(pair[0]),
+                    optionItem -> {
+                        playerData.setRepeatMode(pair[1]);
+                        onModeSelected.run();
+                    },
+                    playerData.getRepeatMode() == pair[1]
+            ));
+        }
+
+        return OptionCategory.from(
+                PLAYER_REPEAT_ID,
+                OptionCategory.TYPE_RADIO_LIST,
+                context.getString(R.string.action_repeat_mode),
+                options
+        );
     }
 
     public static void showConfirmationDialog(Context context, String title, Runnable onConfirm) {

@@ -18,7 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -500,12 +500,6 @@ public class PlayerUIController extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onRepeatModeClicked(int modeIndex) {
-        mPlayerData.setRepeatMode(modeIndex);
-        //Utils.showRepeatInfo(getActivity(), modeIndex);
-    }
-
-    @Override
     public void onButtonClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_rotate) {
             onRotate();
@@ -519,6 +513,8 @@ public class PlayerUIController extends PlayerEventListenerHelper {
             applySoundOff(buttonState);
         } else if (buttonId == R.id.action_afr) {
             applyAfr(buttonState);
+        } else if (buttonId == R.id.action_repeat) {
+            applyRepeatMode(buttonState);
         }
     }
 
@@ -852,6 +848,29 @@ public class PlayerUIController extends PlayerEventListenerHelper {
         mPlayerData.setAfrEnabled(buttonState == PlayerUI.BUTTON_OFF);
         getController(AutoFrameRateController.class).applyAfr();
         getPlayer().setButtonState(R.id.action_afr, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+    }
+
+    private void applyRepeatMode(int buttonState) {
+        //int nextMode = getNextRepeatMode(buttonState);
+        //
+        //mPlayerData.setRepeatMode(nextMode);
+        //getPlayer().setButtonState(R.id.action_repeat, nextMode);
+
+        OptionCategory category = AppDialogUtil.createPlaybackModeCategory(
+                getContext(), mPlayerData, () -> {
+                    getPlayer().setButtonState(R.id.action_repeat, mPlayerData.getRepeatMode());
+                });
+
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+        settingsPresenter.appendRadioCategory(category.title, category.options);
+        settingsPresenter.showDialog();
+    }
+
+    private int getNextRepeatMode(int buttonState) {
+        int[] modeList = {PlayerEngineConstants.REPEAT_MODE_ALL, PlayerEngineConstants.REPEAT_MODE_ONE, PlayerEngineConstants.REPEAT_MODE_SHUFFLE,
+                PlayerEngineConstants.REPEAT_MODE_LIST, PlayerEngineConstants.REPEAT_MODE_PAUSE, PlayerEngineConstants.REPEAT_MODE_CLOSE};
+        int nextMode = Utils.getNextState(buttonState, modeList);
+        return nextMode;
     }
 
     private void reorderSubtitles(List<FormatItem> subtitleFormats) {

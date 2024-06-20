@@ -7,7 +7,6 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -471,24 +470,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendPlaybackModeCategory(AppDialogPresenter settingsPresenter) {
-        List<OptionItem> options = new ArrayList<>();
-
-
-        for (int[] pair : new int[][] {
-                {R.string.repeat_mode_all, PlayerUI.REPEAT_MODE_ALL},
-                {R.string.repeat_mode_one, PlayerUI.REPEAT_MODE_ONE},
-                {R.string.repeat_mode_shuffle, PlayerUI.REPEAT_MODE_SHUFFLE},
-                {R.string.repeat_mode_pause_alt, PlayerUI.REPEAT_MODE_LIST},
-                {R.string.repeat_mode_pause, PlayerUI.REPEAT_MODE_PAUSE},
-                {R.string.repeat_mode_none, PlayerUI.REPEAT_MODE_CLOSE}
-        }) {
-            options.add(UiOptionItem.from(getContext().getString(pair[0]),
-                    optionItem -> mPlayerData.setRepeatMode(pair[1]),
-                    mPlayerData.getRepeatMode() == pair[1]
-            ));
-        }
-
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.action_repeat_mode), options);
+        OptionCategory category = AppDialogUtil.createPlaybackModeCategory(getContext(), mPlayerData);
+        settingsPresenter.appendCategory(category);
     }
 
     private void appendNetworkEngineCategory(AppDialogPresenter settingsPresenter) {

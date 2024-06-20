@@ -85,7 +85,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     private final PlaybackControlsRow.SkipNextAction mSkipNextAction;
     private final PlaybackControlsRow.FastForwardAction mFastForwardAction;
     private final PlaybackControlsRow.RewindAction mRewindAction;
-    private final RepeatAction mRepeatAction;
     private final HighQualityAction mHighQualityAction;
     private final ClosedCaptioningAction mClosedCaptioningAction;
     private final ChannelAction mChannelAction;
@@ -128,7 +127,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         mThumbsDownAction = new ThumbsDownAction(context);
         mThumbsUpAction.setBoundAction(mThumbsDownAction);
         mThumbsDownAction.setBoundAction(mThumbsUpAction);
-        mRepeatAction = new RepeatAction(context);
         mHighQualityAction = new HighQualityAction(context);
         mClosedCaptioningAction = new ClosedCaptioningAction(context);
         mChannelAction = new ChannelAction(context);
@@ -152,6 +150,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         putAction(new SubscribeAction(context));
         putAction(new SoundOffAction(context));
         putAction(new AFRAction(context));
+        putAction(new RepeatAction(context));
     }
 
     @Override
@@ -173,7 +172,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
             adapter.add(mSkipNextAction);
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_REPEAT_MODE)) {
-            adapter.add(mRepeatAction);
+            adapter.add(mActions.get(R.id.action_repeat));
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_SPEED)) {
             adapter.add(mVideoSpeedAction);
@@ -323,15 +322,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         }
     }
 
-    public void setRepeatActionState(int modeIndex) {
-        mRepeatAction.setIndex(modeIndex);
-        invalidateUi(mRepeatAction);
-    }
-
-    public int getRepeatActionState() {
-        return mRepeatAction.getIndex();
-    }
-
     public void setPlaylistAddButtonState(boolean selected) {
         mPlaylistAddAction.setIndex(selected ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
         invalidateUi(mPlaylistAddAction);
@@ -445,10 +435,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
             handled = true;
         } else if (action == mFastForwardAction) {
             fastForward();
-            handled = true;
-        } else if (action == mRepeatAction) {
-            incrementActionIndex(action);
-            mActionListener.setRepeatMode(getActionIndex(action));
             handled = true;
         } else if (action == mHighQualityAction) {
             mActionListener.onHighQuality();
@@ -701,8 +687,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         void onPlay();
 
         void onPause();
-
-        void setRepeatMode(int modeIndex);
 
         void onHighQuality();
 

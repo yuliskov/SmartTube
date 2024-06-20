@@ -9,7 +9,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -630,7 +630,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             mMainUIData.enableTopButton(topButtons);
             tweaksData.enablePlayerButton(playerButtons);
             mMainUIData.enableMenuItem(menuItems);
-            mPlayerData.setRepeatMode(PlayerUI.REPEAT_MODE_LIST);
+            mPlayerData.setRepeatMode(PlayerEngineConstants.REPEAT_MODE_LIST);
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HISTORY, true);
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_USER_PLAYLISTS, true);
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_SUBSCRIPTIONS, true);
@@ -642,7 +642,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             mMainUIData.enableMenuItem(MainUIData.MENU_ITEM_DEFAULT);
             BrowsePresenter.instance(getContext()).enableAllSections(true);
             tweaksData.disableSuggestions(false);
-            mPlayerData.setRepeatMode(PlayerUI.REPEAT_MODE_ALL);
+            mPlayerData.setRepeatMode(PlayerEngineConstants.REPEAT_MODE_ALL);
             searchData.disablePopularSearches(false);
         }
     }

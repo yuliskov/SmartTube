@@ -703,11 +703,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void setRepeatMode(int modeIndex) {
-            mEventListener.onRepeatModeClicked(modeIndex);
-        }
-
-        @Override
         public void onHighQuality() {
             mEventListener.onHighQualityClicked();
         }
@@ -1283,21 +1278,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         showOverlay(show);
 
         setPlayerRowIndex(0);
-    }
-
-    @Override
-    public void setRepeatButtonState(int modeIndex) {
-        if (mPlayerGlue != null) {
-            mPlayerGlue.setRepeatActionState(modeIndex);
-        }
-    }
-
-    private int getRepeatButtonState() {
-        if (mPlayerGlue != null) {
-            return mPlayerGlue.getRepeatActionState();
-        }
-
-        return 0;
     }
 
     @Override

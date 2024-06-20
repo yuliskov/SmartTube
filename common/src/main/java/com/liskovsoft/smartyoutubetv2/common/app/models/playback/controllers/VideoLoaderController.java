@@ -17,7 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
@@ -125,7 +125,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     @Override
     public void onEngineInitialized() {
         loadVideo(mLastVideo);
-        getPlayer().setRepeatButtonState(mPlayerData.getRepeatMode());
+        getPlayer().setButtonState(R.id.action_repeat, mPlayerData.getRepeatMode());
         mSleepTimerStartMs = System.currentTimeMillis();
     }
 
@@ -147,7 +147,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     public void onVideoLoaded(Video video) {
         mLastError = -1;
         Utils.removeCallbacks(mOnLongBuffering);
-        getPlayer().setRepeatButtonState(video.finishOnEnded ? PlayerUI.REPEAT_MODE_CLOSE : mPlayerData.getRepeatMode());
+        getPlayer().setButtonState(R.id.action_repeat, video.finishOnEnded ? PlayerEngineConstants.REPEAT_MODE_CLOSE : mPlayerData.getRepeatMode());
     }
 
     @Override
@@ -205,9 +205,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
         Video video = getPlayer().getVideo();
         if (video != null && video.finishOnEnded) {
-            repeatMode = PlayerUI.REPEAT_MODE_CLOSE;
+            repeatMode = PlayerEngineConstants.REPEAT_MODE_CLOSE;
         } else if (video != null && video.isShorts && mPlayerTweaksData.isLoopShortsEnabled()) {
-            repeatMode = PlayerUI.REPEAT_MODE_ONE;
+            repeatMode = PlayerEngineConstants.REPEAT_MODE_ONE;
         }
 
         applyRepeatMode(repeatMode);
@@ -501,14 +501,14 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         }
 
         switch (repeatMode) {
-            case PlayerUI.REPEAT_MODE_ALL:
-            case PlayerUI.REPEAT_MODE_SHUFFLE:
+            case PlayerEngineConstants.REPEAT_MODE_ALL:
+            case PlayerEngineConstants.REPEAT_MODE_SHUFFLE:
                 loadNext();
                 break;
-            case PlayerUI.REPEAT_MODE_ONE:
+            case PlayerEngineConstants.REPEAT_MODE_ONE:
                 getPlayer().setPositionMs(100); // fix frozen image on Android 4?
                 break;
-            case PlayerUI.REPEAT_MODE_CLOSE:
+            case PlayerEngineConstants.REPEAT_MODE_CLOSE:
                 // Close player if suggestions not shown
                 // Except when playing from queue
                 if (mPlaylist.getNext() != null) {
@@ -517,7 +517,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                     getPlayer().finishReally();
                 }
                 break;
-            case PlayerUI.REPEAT_MODE_PAUSE:
+            case PlayerEngineConstants.REPEAT_MODE_PAUSE:
                 // Stop player after each video.
                 // Except when playing from queue
                 if (mPlaylist.getNext() != null) {
@@ -528,7 +528,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                     getPlayer().showSuggestions(true);
                 }
                 break;
-            case PlayerUI.REPEAT_MODE_LIST:
+            case PlayerEngineConstants.REPEAT_MODE_LIST:
                 // stop player (if not playing playlist)
                 Video video = getPlayer().getVideo();
                 if ((video != null && video.hasNextPlaylist()) || mPlaylist.getNext() != null) {
@@ -600,7 +600,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             return;
         }
 
-        if (mPlayerData.getRepeatMode() == PlayerUI.REPEAT_MODE_SHUFFLE) {
+        if (mPlayerData.getRepeatMode() == PlayerEngineConstants.REPEAT_MODE_SHUFFLE) {
             Video video = new Video();
             video.playlistId = mLastVideo.playlistId;
             VideoGroup topRow = getPlayer().getSuggestionsByIndex(0);
@@ -628,18 +628,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private int getNextEngine() {
         int currentEngine = mPlayerTweaksData.getPlayerDataSource();
         int[] engineList = { PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET, PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP };
-        int nextEngine = engineList[0];
-        boolean found = false;
-        for (int engine : engineList) {
-            if (found) {
-                nextEngine = engine;
-                break;
-            }
-            if (engine == currentEngine) {
-                found = true;
-            }
-        }
-
-        return nextEngine;
+        return Utils.getNextState(currentEngine, engineList);
     }
 }

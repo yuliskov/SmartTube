@@ -11,7 +11,6 @@ public interface PlayerUiEventListener {
     void onPlayClicked();
     void onPauseClicked();
     boolean onKeyDown(int keyCode);
-    void onRepeatModeClicked(int modeIndex);
     void onHighQualityClicked();
     void onDislikeClicked(boolean dislike);
     void onLikeClicked(boolean like);

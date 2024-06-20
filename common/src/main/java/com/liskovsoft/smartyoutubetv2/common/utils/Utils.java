@@ -59,8 +59,8 @@ import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
@@ -622,19 +622,19 @@ public class Utils {
 
     public static void showRepeatInfo(Context context, int modeIndex) {
         switch (modeIndex) {
-            case PlayerUI.REPEAT_MODE_ALL:
+            case PlayerEngineConstants.REPEAT_MODE_ALL:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_all);
                 break;
-            case PlayerUI.REPEAT_MODE_ONE:
+            case PlayerEngineConstants.REPEAT_MODE_ONE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_one);
                 break;
-            case PlayerUI.REPEAT_MODE_PAUSE:
+            case PlayerEngineConstants.REPEAT_MODE_PAUSE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_pause);
                 break;
-            case PlayerUI.REPEAT_MODE_LIST:
+            case PlayerEngineConstants.REPEAT_MODE_LIST:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_pause_alt);
                 break;
-            case PlayerUI.REPEAT_MODE_CLOSE:
+            case PlayerEngineConstants.REPEAT_MODE_CLOSE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_none);
                 break;
         }
@@ -1011,5 +1011,22 @@ public class Utils {
         }
 
         return uniqueId;
+    }
+
+    public static int getNextState(int currentState, int[] stateList) {
+        int nextState = stateList[0];
+        boolean found = false;
+
+        for (int state : stateList) {
+            if (found) {
+                nextState = state;
+                break;
+            }
+
+            if (state == currentState) {
+                found = true;
+            }
+        }
+        return nextState;
     }
 }
