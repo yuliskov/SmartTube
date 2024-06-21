@@ -348,7 +348,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
      * Merge remote queue with player's queue (when phone cast just started or user clicked on playlist item)
      */
     private void mergeUserAndRemoteQueueIfNeeded(Video video, MediaItemMetadata metadata) {
-        if (video.isRemote && video.remotePlaylistId != null) { // ensure the user pressed video thumb on the phone
+        // Ensure that the user pressed video thumb on the phone
+        if (video.isRemote && video.remotePlaylistId != null) {
             // Create user queue from remote queue
 
             List<MediaGroup> suggestions = metadata.getSuggestions();

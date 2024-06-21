@@ -253,7 +253,8 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
             case Command.TYPE_UPDATE_PLAYLIST:
                 if (getPlayer() != null && mConnected) {
                     Video video = getPlayer().getVideo();
-                    if (video != null) {
+                    // Ensure that remote playlist already playing
+                    if (video != null && (video.getGroup() == null || video.getGroup().isQueue)) {
                         video.remotePlaylistId = command.getPlaylistId();
                         video.playlistParams = null;
                         video.isRemote = true;
@@ -416,9 +417,9 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
 
     private void openNewVideo(Video newVideo) {
         if (Video.equals(mVideo, newVideo) && ViewManager.instance(getContext()).isPlayerInForeground()) { // same video already playing
-            mVideo.playlistId = newVideo.playlistId;
-            mVideo.playlistIndex = newVideo.playlistIndex;
-            mVideo.playlistParams = newVideo.playlistParams;
+            //mVideo.playlistId = newVideo.playlistId;
+            //mVideo.playlistIndex = newVideo.playlistIndex;
+            //mVideo.playlistParams = newVideo.playlistParams;
             if (mNewVideoPositionMs > 0) {
                 getPlayer().setPositionMs(mNewVideoPositionMs);
                 mNewVideoPositionMs = 0;
