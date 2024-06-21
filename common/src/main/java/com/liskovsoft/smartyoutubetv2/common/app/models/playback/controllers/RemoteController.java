@@ -254,7 +254,7 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
                 if (getPlayer() != null && mConnected) {
                     Video video = getPlayer().getVideo();
                     // Ensure that remote playlist already playing
-                    if (video != null && (video.getGroup() == null || video.getGroup().isQueue)) {
+                    if (video != null && video.remotePlaylistId != null) {
                         video.remotePlaylistId = command.getPlaylistId();
                         video.playlistParams = null;
                         video.isRemote = true;

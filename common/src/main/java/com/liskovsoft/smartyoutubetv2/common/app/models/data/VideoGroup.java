@@ -349,4 +349,12 @@ public class VideoGroup {
 
         return mVideos.contains(video);
     }
+
+    public int getSize() {
+        if (mVideos == null) {
+            return -1;
+        }
+
+        return mVideos.size();
+    }
 }
