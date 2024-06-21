@@ -184,12 +184,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
                             getPlayer().updateSuggestions(videoGroup);
                             mDeArrowProcessor.process(videoGroup);
 
-                            // Merge remote queue with player's queue
-                            Video video = getPlayer().getVideo();
-                            if (video != null && video.isRemote && getPlayer().getSuggestionsIndex(videoGroup) == 0) {
-                                Playlist.instance().addAll(videoGroup.getVideos());
-                                Playlist.instance().setCurrent(video);
-                            }
+                            mergeUserAndRemoteQueue(videoGroup);
 
                             if (callback != null) {
                                 callback.onVideoGroup(videoGroup);
@@ -305,7 +300,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         appendChaptersIfNeeded(mediaItemMetadata);
 
         mergeUserAndRemoteQueueIfNeeded(video, mediaItemMetadata);
-        appendUserQueueIfNeeded();
 
         appendSectionPlaylistIfNeeded(video);
 
@@ -354,7 +348,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
      * Merge remote queue with player's queue (when phone cast just started or user clicked on playlist item)
      */
     private void mergeUserAndRemoteQueueIfNeeded(Video video, MediaItemMetadata metadata) {
-        if (video.isRemote && (video.playlistId != null || video.remotePlaylistId != null)) {
+        if (video.isRemote && video.remotePlaylistId != null) { // ensure the user pressed video thumb on the phone
             // Create user queue from remote queue
 
             List<MediaGroup> suggestions = metadata.getSuggestions();
@@ -368,14 +362,30 @@ public class SuggestionsController extends PlayerEventListenerHelper {
                     suggestions.remove(remoteRow);
 
                     remoteGroup.removeAllBefore(video);
-                    remoteGroup.stripPlaylistInfo(); // use user queue even when a phone disconnected
+                    remoteGroup.stripPlaylistInfo(); // prefer user queue even when a phone disconnected
 
                     Playlist playlist = Playlist.instance();
                     playlist.removeAllAfterCurrent();
                     playlist.addAll(remoteGroup.getVideos());
                     playlist.setCurrent(video);
+
+                    remoteGroup.setTitle(getContext().getString(R.string.action_playback_queue));
+                    remoteGroup.setId(remoteGroup.getTitle().hashCode());
+                    remoteGroup.isQueue = true;
+
+                    getPlayer().updateSuggestions(remoteGroup);
                 }
             }
+        } else {
+            appendUserQueueIfNeeded();
+        }
+    }
+
+    private void mergeUserAndRemoteQueue(VideoGroup videoGroup) {
+        Video video = getPlayer().getVideo();
+        if (videoGroup.isQueue) {
+            Playlist.instance().addAll(videoGroup.getVideos());
+            Playlist.instance().setCurrent(video);
         }
     }
 

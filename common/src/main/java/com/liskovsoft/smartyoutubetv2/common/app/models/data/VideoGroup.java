@@ -36,6 +36,7 @@ public class VideoGroup {
     private BrowseSection mSection;
     private int mPosition = -1;
     private int mAction;
+    public boolean isQueue;
 
     public static VideoGroup from(BrowseSection category) {
         return from(null, category);
