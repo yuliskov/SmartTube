@@ -394,10 +394,12 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         remoteGroup.removeAllBefore(video);
         remoteGroup.stripPlaylistInfo(); // prefer user queue even when a phone disconnected
 
-        Playlist playlist = Playlist.instance();
-        playlist.removeAllAfterCurrent();
-        playlist.addAll(remoteGroup.getVideos());
-        playlist.setCurrent(video);
+        if (remoteGroup.contains(video)) {
+            Playlist playlist = Playlist.instance();
+            playlist.removeAllAfterCurrent();
+            playlist.addAll(remoteGroup.getVideos());
+            playlist.setCurrent(video);
+        }
 
         remoteGroup.setTitle(getContext().getString(R.string.action_playback_queue));
         remoteGroup.setId(remoteGroup.getTitle().hashCode());
