@@ -661,4 +661,5 @@
     <string name="device_specific_backup">Backup for this device only</string>
     <string name="local_backup">Local backup</string>
     <string name="auto_backup">Auto backup (once a day)</string>
+    <string name="repeat_mode_reverse_list">Play the playlist in reverse order</string>
 </resources>

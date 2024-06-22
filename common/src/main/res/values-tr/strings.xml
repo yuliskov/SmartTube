@@ -663,4 +663,5 @@
     <string name="device_specific_backup">Yalnızca bu cihaz için yedekleme</string>
     <string name="local_backup">Yerel yedekleme</string>
     <string name="auto_backup">Otomatik yedekleme (günde bir kez)</string>
+    <string name="repeat_mode_reverse_list">Çalma listesini ters sırayla çal</string>
 </resources>

@@ -735,6 +735,7 @@ public class AppDialogUtil {
                 {R.string.repeat_mode_one, PlayerEngineConstants.REPEAT_MODE_ONE},
                 {R.string.repeat_mode_shuffle, PlayerEngineConstants.REPEAT_MODE_SHUFFLE},
                 {R.string.repeat_mode_pause_alt, PlayerEngineConstants.REPEAT_MODE_LIST},
+                {R.string.repeat_mode_reverse_list, PlayerEngineConstants.REPEAT_MODE_REVERSE_LIST},
                 {R.string.repeat_mode_pause, PlayerEngineConstants.REPEAT_MODE_PAUSE},
                 {R.string.repeat_mode_none, PlayerEngineConstants.REPEAT_MODE_CLOSE}
         }) {

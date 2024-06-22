@@ -654,4 +654,5 @@
     <string name="device_specific_backup">Резервне копіювання лише для цього пристрою</string>
     <string name="local_backup">Локальне резервне копіювання</string>
     <string name="auto_backup">Автоматичне резервне копіювання (один раз на день)</string>
+    <string name="repeat_mode_reverse_list">Відтворювати плейлист у зворотному порядку</string>
 </resources>

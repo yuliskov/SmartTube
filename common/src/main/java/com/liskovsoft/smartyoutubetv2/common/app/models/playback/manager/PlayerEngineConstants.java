@@ -9,6 +9,7 @@ public interface PlayerEngineConstants {
     int REPEAT_MODE_ONE = 3;
     int REPEAT_MODE_SHUFFLE = 4;
     int REPEAT_MODE_LIST = 5;
+    int REPEAT_MODE_REVERSE_LIST = 6;
     int BACKGROUND_MODE_DEFAULT = 0;
     int BACKGROUND_MODE_SOUND = 1;
     int BACKGROUND_MODE_PIP = 2;
