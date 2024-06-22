@@ -539,9 +539,13 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                     getPlayer().showSuggestions(true);
                 }
                 break;
+            case PlayerEngineConstants.REPEAT_MODE_REVERSE_LIST:
+                onPreviousClicked();
+                break;
+            default:
+                Log.e(TAG, "Undetected repeat mode " + repeatMode);
+                break;
         }
-
-        Log.e(TAG, "Undetected repeat mode " + repeatMode);
     }
 
     private boolean acceptDashVideoInfo(MediaItemFormatInfo formatInfo) {
