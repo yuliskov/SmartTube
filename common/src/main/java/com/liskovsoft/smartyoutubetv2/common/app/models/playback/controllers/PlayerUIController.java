@@ -52,7 +52,6 @@ public class PlayerUIController extends PlayerEventListenerHelper {
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private final Handler mHandler;
     private final MediaItemService mMediaItemService;
-    private VideoLoaderController mVideoLoader;
     private SuggestionsController mSuggestionsController;
     private PlayerData mPlayerData;
     private PlayerTweaksData mPlayerTweaksData;
@@ -86,7 +85,6 @@ public class PlayerUIController extends PlayerEventListenerHelper {
     @Override
     public void onInit() {
         mSuggestionsController = getController(SuggestionsController.class);
-        mVideoLoader = getController(VideoLoaderController.class);
         mPlayerData = PlayerData.instance(getContext());
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
 

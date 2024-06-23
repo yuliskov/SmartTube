@@ -35,11 +35,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsController.class.getSimpleName();
     private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
-    private GeneralData mGeneralData;
     private MediaItemService mMediaItemService;
     private DeArrowProcessor mDeArrowProcessor;
     private Video mNextVideo;
-    private Video mPreviousVideo;
     private int mFocusCount;
     private int mNextRetryCount;
     private List<ChapterItem> mChapters;
@@ -58,7 +56,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     @Override
     public void onInit() {
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
-        mGeneralData = GeneralData.instance(getContext());
         mDeArrowProcessor = new DeArrowProcessor(getContext(), PlaybackPresenter.instance(getContext())::syncItem);
         mMediaItemService = YouTubeMotherService.instance().getMediaItemService();
     }
@@ -70,7 +67,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         disposeActions();
         //mCurrentGroup = video.getGroup(); // disable garbage collected
         appendNextSectionVideoIfNeeded(video);
-        appendPreviousSectionVideoIfNeeded(video);
     }
 
     /**
@@ -266,7 +262,43 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     public Video getPrevious() {
-        return mPreviousVideo;
+        Video result = getPreviousFromGroup(getPlayer().getVideo());
+
+        if (result == null) {
+            Video previous = Playlist.instance().getPrevious();
+
+            if (previous != null) {
+                previous.fromQueue = true;
+                result = previous;
+            }
+        }
+
+        return result;
+    }
+
+    private Video getPreviousFromGroup(Video current) {
+        Video result = null;
+
+        if (current != null) {
+            VideoGroup group = current.getGroup();
+
+            if (group != null && !group.isEmpty()) {
+                Video previous = null;
+
+                for (Video item : group.getVideos()) {
+                    if (item.equals(current)) {
+                        result = previous;
+                        break;
+                    }
+
+                    if (item.hasVideo() && !item.isUpcoming) {
+                        previous = item;
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     private void clearSuggestionsIfNeeded(Video video) {
@@ -468,7 +500,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         if (!isSectionPlaylistEnabled(video)) {
             // Important fix. Gives priority to playlist or suggestion.
             mNextVideo = null;
-            mPreviousVideo = null;
             return;
         }
 
@@ -587,9 +618,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private void appendNextSectionVideoIfNeeded(Video video) {
         mNextVideo = null;
 
-        //if (!isSectionPlaylistEnabled(video)) {
-        //    return;
-        //}
+        if (!isSectionPlaylistEnabled(video)) {
+            return;
+        }
 
         VideoGroup group = video.getGroup();
 
@@ -617,35 +648,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         } else {
             continueGroup(group, continuation -> appendNextSectionVideoIfNeeded(video), getPlayer().isSuggestionsShown());
             mNextRetryCount++;
-        }
-    }
-
-    private void appendPreviousSectionVideoIfNeeded(Video video) {
-        mPreviousVideo = null;
-
-        //if (!isSectionPlaylistEnabled(video)) {
-        //    return;
-        //}
-
-        VideoGroup group = video.getGroup();
-
-        if (group == null || group.isEmpty()) {
-            return;
-        }
-
-        List<Video> videos = group.getVideos();
-        boolean found = false;
-
-        for (int i = (videos.size() - 1); i >= 0; i--) {
-            Video current = videos.get(i);
-            if (found && current.hasVideo() && !current.isUpcoming) {
-                mPreviousVideo = current;
-                return;
-            }
-
-            if (current.equals(video)) {
-                found = true;
-            }
         }
     }
 
