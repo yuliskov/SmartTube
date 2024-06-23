@@ -357,4 +357,20 @@ public class VideoGroup {
 
         return mVideos.size();
     }
+
+    public int indexOf(Video video) {
+        if (mVideos == null) {
+            return -1;
+        }
+
+        return mVideos.indexOf(video);
+    }
+
+    public Video get(int idx) {
+        if (mVideos == null) {
+            return null;
+        }
+
+        return mVideos.get(idx);
+    }
 }

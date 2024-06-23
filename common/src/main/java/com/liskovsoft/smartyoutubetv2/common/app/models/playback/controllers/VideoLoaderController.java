@@ -495,12 +495,18 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     }
 
     private void applyRepeatMode(int repeatMode) {
+        Video video = getPlayer().getVideo();
         // Fix simultaneous videos loading (e.g. when playback ends and user opens new video)
-        if (isActionsRunning()) {
+        if (isActionsRunning() || video == null) {
             return;
         }
 
         switch (repeatMode) {
+            case PlayerEngineConstants.REPEAT_MODE_REVERSE_LIST:
+                if (video.hasPlaylist()) {
+                    onPreviousClicked();
+                    break;
+                }
             case PlayerEngineConstants.REPEAT_MODE_ALL:
             case PlayerEngineConstants.REPEAT_MODE_SHUFFLE:
                 loadNext();
@@ -530,17 +536,13 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 break;
             case PlayerEngineConstants.REPEAT_MODE_LIST:
                 // stop player (if not playing playlist)
-                Video video = getPlayer().getVideo();
-                if ((video != null && video.hasNextPlaylist()) || mPlaylist.getNext() != null) {
+                if (video.hasNextPlaylist() || mPlaylist.getNext() != null) {
                     loadNext();
                 } else {
                     getPlayer().setPositionMs(getPlayer().getDurationMs());
                     getPlayer().setPlayWhenReady(false);
                     getPlayer().showSuggestions(true);
                 }
-                break;
-            case PlayerEngineConstants.REPEAT_MODE_REVERSE_LIST:
-                onPreviousClicked();
                 break;
             default:
                 Log.e(TAG, "Undetected repeat mode " + repeatMode);

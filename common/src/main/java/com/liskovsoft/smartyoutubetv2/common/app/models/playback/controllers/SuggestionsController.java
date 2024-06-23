@@ -587,9 +587,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private void appendNextSectionVideoIfNeeded(Video video) {
         mNextVideo = null;
 
-        if (!isSectionPlaylistEnabled(video)) {
-            return;
-        }
+        //if (!isSectionPlaylistEnabled(video)) {
+        //    return;
+        //}
 
         VideoGroup group = video.getGroup();
 
@@ -623,9 +623,9 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private void appendPreviousSectionVideoIfNeeded(Video video) {
         mPreviousVideo = null;
 
-        if (!isSectionPlaylistEnabled(video)) {
-            return;
-        }
+        //if (!isSectionPlaylistEnabled(video)) {
+        //    return;
+        //}
 
         VideoGroup group = video.getGroup();
 
