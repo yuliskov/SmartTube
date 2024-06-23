@@ -47,6 +47,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         appendPlaybackModeCategory(settingsPresenter);
         appendVideoPresetsCategory(settingsPresenter);
+        appendPlayerButtonsCategory(settingsPresenter);
+        appendNetworkEngineCategory(settingsPresenter);
         appendVideoBufferCategory(settingsPresenter);
         appendVideoZoomCategory(settingsPresenter);
         appendVideoSpeedCategory(settingsPresenter);
@@ -54,7 +56,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendAudioShiftCategory(settingsPresenter);
         appendMasterVolumeCategory(settingsPresenter);
         appendOKButtonCategory(settingsPresenter);
-        appendPlayerButtonsCategory(settingsPresenter);
         appendUIAutoHideCategory(settingsPresenter);
         appendSeekTypeCategory(settingsPresenter);
         appendSeekingPreviewCategory(settingsPresenter);
@@ -63,7 +64,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendScreenOffTimeoutCategory(settingsPresenter);
         appendEndingTimeCategory(settingsPresenter);
         appendPixelRatioCategory(settingsPresenter);
-        appendNetworkEngineCategory(settingsPresenter);
         //appendPlayerExitCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
         appendDeveloperCategory(settingsPresenter);
