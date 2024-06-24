@@ -126,6 +126,6 @@ public class GDriveBackupWorker extends Worker {
                         // if id not found then disable auto backup in settings
                         GeneralData.instance(getApplicationContext()).enableAutoBackup(false);
                     }
-                });
+                }, throwable -> Log.e(TAG, throwable.getMessage()));
     }
 }
