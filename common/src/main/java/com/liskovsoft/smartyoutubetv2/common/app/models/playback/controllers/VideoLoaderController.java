@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -446,7 +447,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         if (error instanceof OutOfMemoryError) {
             mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
         //} else if (Helpers.startsWithAny(error.getMessage(), "Unable to connect to ", "Invalid NAL length")) {
-        } else {
+        } else if (!Helpers.startsWithAny(error.getMessage(), "Unable to connect to ")) {
             // Switch between network engines in hope that one of them fixes the error
             mPlayerTweaksData.setPlayerDataSource(getNextEngine());
         }
