@@ -48,7 +48,7 @@
     <string name="settings_left_panel">Настроить категории</string>
     <string name="settings_themes">Темы</string>
     <string name="settings_other">Разное</string>
-    <string name="settings_player">Видеоплеер</string>
+    <string name="settings_player">Плеер</string>
     <string name="settings_language">Язык</string>
     <string name="settings_linked_devices">Привязанные устройства</string>
     <string name="settings_about">О приложении</string>
