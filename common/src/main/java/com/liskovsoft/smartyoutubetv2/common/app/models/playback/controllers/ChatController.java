@@ -14,7 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.disposables.Disposable;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class ChatController extends PlayerEventListenerHelper {
 
     @Override
     public void onInit() {
-        mChatService = YouTubeMotherService.instance().getLiveChatService();
+        mChatService = YouTubeServiceManager.instance().getLiveChatService();
         mPlayerData = PlayerData.instance(getContext());
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
     }

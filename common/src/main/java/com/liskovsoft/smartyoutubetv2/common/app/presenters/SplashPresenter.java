@@ -26,7 +26,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +87,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         if (!mRunPerInstance) {
             mRunPerInstance = true;
             //clearCache();
+            YouTubeServiceManager.instance().refreshCacheIfNeeded(); // warm up
             enableHistoryIfNeeded();
             Utils.updateChannels(getContext());
             GDriveBackupWorker.schedule(getContext());
@@ -162,7 +163,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             return;
         }
 
-        mRefreshCachePeriodicAction = RxHelper.startInterval(YouTubeMotherService.instance()::refreshCacheIfNeeded, 30 * 60);
+        mRefreshCachePeriodicAction = RxHelper.startInterval(YouTubeServiceManager.instance()::refreshCacheIfNeeded, 30 * 60);
     }
 
     private void enableHistoryIfNeeded() {

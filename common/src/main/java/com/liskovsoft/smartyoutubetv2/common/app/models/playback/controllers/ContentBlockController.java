@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.SponsorSegment;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -21,7 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.ContentBloc
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -81,7 +81,7 @@ public class ContentBlockController extends PlayerEventListenerHelper {
 
     @Override
     public void onInit() {
-        MotherService service = YouTubeMotherService.instance();
+        ServiceManager service = YouTubeServiceManager.instance();
         mMediaItemService = service.getMediaItemService();
         mContentBlockData = ContentBlockData.instance(getContext());
     }

@@ -18,7 +18,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -366,7 +366,7 @@ public final class Video {
         result.channelId = Helpers.parseStr(split[6]);
         result.bgImageUrl = Helpers.parseStr(split[7]);
         result.cardImageUrl = Helpers.parseStr(split[8]);
-        result.mediaItem = YouTubeMotherService.deserializeMediaItem(Helpers.parseStr(split[9]));
+        result.mediaItem = YouTubeServiceManager.deserializeMediaItem(Helpers.parseStr(split[9]));
         result.playlistParams = Helpers.parseStr(split[10]);
         result.sectionId = Helpers.parseInt(split[11]);
         result.reloadPageKey = Helpers.parseStr(split[12]);
@@ -379,7 +379,7 @@ public final class Video {
     @Override
     public String toString() {
         return Helpers.mergeObj(id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl,
-                YouTubeMotherService.serialize(mediaItem), playlistParams, sectionId, getReloadPageKey(), itemType);
+                YouTubeServiceManager.serialize(mediaItem), playlistParams, sectionId, getReloadPageKey(), itemType);
     }
 
     //@Override

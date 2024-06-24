@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -20,7 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
 
     public AccountSelectionPresenter(Context context) {
         super(context);
-        MotherService service = YouTubeMotherService.instance();
+        ServiceManager service = YouTubeServiceManager.instance();
         mSignInService = service.getSignInService();
     }
 

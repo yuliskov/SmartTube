@@ -2,25 +2,25 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AddDeviceView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.sharedutils.rx.RxHelper;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.disposables.Disposable;
 
 public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
     private static final String TAG = AddDevicePresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static AddDevicePresenter sInstance;
-    private final MotherService mService;
+    private final ServiceManager mService;
     private Disposable mDeviceCodeAction;
 
     private AddDevicePresenter(Context context) {
         super(context);
-        mService = YouTubeMotherService.instance();
+        mService = YouTubeServiceManager.instance();
     }
 
     public static AddDevicePresenter instance(Context context) {

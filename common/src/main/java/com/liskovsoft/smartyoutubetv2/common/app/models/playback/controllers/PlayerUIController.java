@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
 import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.NotificationState;
@@ -39,7 +39,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -78,7 +78,7 @@ public class PlayerUIController extends PlayerEventListenerHelper {
     public PlayerUIController() {
         mHandler = new Handler(Looper.getMainLooper());
 
-        MotherService service = YouTubeMotherService.instance();
+        ServiceManager service = YouTubeServiceManager.instance();
         mMediaItemService = service.getMediaItemService();
     }
 
@@ -682,7 +682,7 @@ public class PlayerUIController extends PlayerEventListenerHelper {
         String videoId = getPlayer().getVideo().videoId;
         mPlaylistInfos = null;
         Disposable playlistsInfoAction =
-                YouTubeMotherService.instance().getMediaItemService().getPlaylistsInfoObserve(videoId)
+                YouTubeServiceManager.instance().getMediaItemService().getPlaylistsInfoObserve(videoId)
                         .subscribe(
                                 videoPlaylistInfos -> {
                                     mPlaylistInfos = videoPlaylistInfos;

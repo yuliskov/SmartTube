@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
-import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.yt.NotificationsService;
 import com.liskovsoft.mediaserviceinterfaces.yt.SignInService;
@@ -43,7 +43,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -97,7 +97,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         MediaServiceManager.instance().addAccountListener(this);
         ScreenHelper.updateScreenInfo(context);
 
-        MotherService service = YouTubeMotherService.instance();
+        ServiceManager service = YouTubeServiceManager.instance();
         mContentService = service.getContentService();
         mItemService = service.getMediaItemService();
         mSignInService = service.getSignInService();

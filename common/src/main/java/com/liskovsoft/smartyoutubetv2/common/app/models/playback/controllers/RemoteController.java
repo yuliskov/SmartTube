@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
 import androidx.annotation.Nullable;
-import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.RemoteControlService;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.Command;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -22,7 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase.OnDataC
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.disposables.Disposable;
 
 public class RemoteController extends PlayerEventListenerHelper implements OnDataChange {
@@ -41,7 +41,7 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
 
     public RemoteController(Context context) {
         // Start receiving a commands as early as possible
-        MotherService service = YouTubeMotherService.instance();
+        ServiceManager service = YouTubeServiceManager.instance();
         mRemoteControlService = service.getRemoteControlService();
         mRemoteControlData = RemoteControlData.instance(context);
         mRemoteControlData.setOnChange(this);

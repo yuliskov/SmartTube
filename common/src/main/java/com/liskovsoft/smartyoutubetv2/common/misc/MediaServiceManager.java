@@ -5,7 +5,7 @@ import android.util.Pair;
 import com.liskovsoft.appupdatechecker2.other.SettingsManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.NotificationsService;
 import com.liskovsoft.mediaserviceinterfaces.yt.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
@@ -22,7 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -84,7 +84,7 @@ public class MediaServiceManager {
     }
 
     private MediaServiceManager() {
-        MotherService service = YouTubeMotherService.instance();
+        ServiceManager service = YouTubeServiceManager.instance();
         mItemService = service.getMediaItemService();
         mContentService = service.getContentService();
         mSingInService = service.getSignInService();

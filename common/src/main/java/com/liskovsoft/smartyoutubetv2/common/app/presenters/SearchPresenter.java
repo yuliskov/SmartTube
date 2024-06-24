@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
-import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.SearchOptions;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -26,7 +26,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.disposables.Disposable;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private static final String TAG = SearchPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static SearchPresenter sInstance;
-    private final MotherService mService;
+    private final ServiceManager mService;
     private final ViewManager mViewManager;
     private final SearchData mSearchData;
     private final DeArrowProcessor mDeArrowProcessor;
@@ -53,7 +53,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     private SearchPresenter(Context context) {
         super(context);
-        mService = YouTubeMotherService.instance();
+        mService = YouTubeServiceManager.instance();
         mViewManager = ViewManager.instance(context);
         mSearchData = SearchData.instance(context);
         mDeArrowProcessor = new DeArrowProcessor(getContext(), this::syncItem);

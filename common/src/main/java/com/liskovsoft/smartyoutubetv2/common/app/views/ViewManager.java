@@ -2,13 +2,10 @@ package com.liskovsoft.smartyoutubetv2.common.app.views;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.Fragment;
-import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 
 import androidx.annotation.NonNull;
 
@@ -17,7 +14,6 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
@@ -26,7 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -293,7 +289,7 @@ public class ViewManager {
     }
 
     public void clearCaches() {
-        YouTubeMotherService.instance().invalidateCache();
+        YouTubeServiceManager.instance().invalidateCache();
         // Note, also deletes cached flags (internal cache)
         // Note, deletes cached apks (external cache)
         FileHelpers.deleteCache(mContext);

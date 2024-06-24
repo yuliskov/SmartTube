@@ -1,11 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.search;
 
 import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
-import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.sharedutils.rx.RxHelper;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.disposables.Disposable;
 
 public class MediaServiceSearchTagProvider implements SearchTagsProvider {
@@ -14,7 +14,7 @@ public class MediaServiceSearchTagProvider implements SearchTagsProvider {
     private Disposable mTagsAction;
 
     public MediaServiceSearchTagProvider() {
-        MotherService service = YouTubeMotherService.instance();
+        ServiceManager service = YouTubeServiceManager.instance();
         mContentService = service.getContentService();
     }
 

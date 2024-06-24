@@ -18,7 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsRece
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.AbstractCommentsReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.disposables.Disposable;
 
 public class CommentsController extends PlayerEventListenerHelper {
@@ -41,7 +41,7 @@ public class CommentsController extends PlayerEventListenerHelper {
 
     @Override
     public void onInit() {
-        mCommentsService = YouTubeMotherService.instance().getCommentsService();
+        mCommentsService = YouTubeServiceManager.instance().getCommentsService();
     }
 
     @Override

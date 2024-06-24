@@ -24,7 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -57,7 +57,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     public void onInit() {
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
         mDeArrowProcessor = new DeArrowProcessor(getContext(), PlaybackPresenter.instance(getContext())::syncItem);
-        mMediaItemService = YouTubeMotherService.instance().getMediaItemService();
+        mMediaItemService = YouTubeServiceManager.instance().getMediaItemService();
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.RemoteControlService;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
@@ -16,7 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
 
     public RemoteControlSettingsPresenter(Context context) {
         super(context);
-        MotherService service = YouTubeMotherService.instance();
+        ServiceManager service = YouTubeServiceManager.instance();
         mRemoteManager = service.getRemoteControlService();
         mRemoteControlData = RemoteControlData.instance(context);
     }

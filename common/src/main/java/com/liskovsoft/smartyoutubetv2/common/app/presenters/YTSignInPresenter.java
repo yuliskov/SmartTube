@@ -3,11 +3,11 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import io.reactivex.disposables.Disposable;
 
@@ -18,12 +18,12 @@ public class YTSignInPresenter extends SignInPresenter {
     private static final String SIGN_IN_URL = "https://youtube.com/activate"; // supports search history
     @SuppressLint("StaticFieldLeak")
     private static YTSignInPresenter sInstance;
-    private final MotherService mService;
+    private final ServiceManager mService;
     private Disposable mSignInAction;
 
     private YTSignInPresenter(Context context) {
         super(context);
-        mService = YouTubeMotherService.instance();
+        mService = YouTubeServiceManager.instance();
     }
 
     public static YTSignInPresenter instance(Context context) {

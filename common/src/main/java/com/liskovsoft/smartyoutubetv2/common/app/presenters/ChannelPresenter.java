@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
-import com.liskovsoft.mediaserviceinterfaces.yt.MotherService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -25,7 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
-import com.liskovsoft.youtubeapi.service.YouTubeMotherService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -36,7 +36,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private static final String TAG = ChannelPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static ChannelPresenter sInstance;
-    private final MotherService mService;
+    private final ServiceManager mService;
     private final MediaServiceManager mServiceManager;
     private final DeArrowProcessor mDeArrowProcessor;
     private String mChannelId;
@@ -56,7 +56,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     public ChannelPresenter(Context context) {
         super(context);
-        mService = YouTubeMotherService.instance();
+        mService = YouTubeServiceManager.instance();
         mServiceManager = MediaServiceManager.instance();
         mDeArrowProcessor = new DeArrowProcessor(getContext(), this::syncItem);
     }
