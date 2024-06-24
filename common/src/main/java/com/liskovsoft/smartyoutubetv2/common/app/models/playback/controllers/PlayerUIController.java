@@ -418,6 +418,10 @@ public class PlayerUIController extends PlayerEventListenerHelper {
 
         Video video = getPlayer().getVideo();
 
+        if (video == null) {
+            return;
+        }
+
         String description = video.description;
 
         if (description == null || description.isEmpty()) {
