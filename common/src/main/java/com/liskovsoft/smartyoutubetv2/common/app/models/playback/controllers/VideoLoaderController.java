@@ -513,8 +513,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 // Except when playing from queue
                 if (mPlaylist.getNext() != null) {
                     loadNext();
-                } else if (!getPlayer().isSuggestionsShown() && !AppDialogPresenter.instance(getContext()).isDialogShown()) {
-                    getPlayer().finishReally();
+                } else {
+                    AppDialogPresenter dialog = AppDialogPresenter.instance(getContext());
+                    if (!getPlayer().isSuggestionsShown() && (!dialog.isDialogShown() || dialog.isTransparent())) {
+                        dialog.closeDialog();
+                        getPlayer().finishReally();
+                    }
                 }
                 break;
             case PlayerEngineConstants.REPEAT_MODE_PAUSE:

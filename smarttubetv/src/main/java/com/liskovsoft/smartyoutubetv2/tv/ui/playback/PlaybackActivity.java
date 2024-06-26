@@ -285,7 +285,7 @@ public class PlaybackActivity extends LeanbackActivity {
     public void onUserLeaveHint() {
         // Check that user not open dialog/search activity instead of really leaving the activity
         // Activity may be overlapped by the dialog, back is pressed or new view started
-        if (skipPip() || mViewManager.isNewViewPending() || mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_BACK) {
+        if (isFinishing() || skipPip() || mViewManager.isNewViewPending() || mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_BACK) {
             return;
         }
 
@@ -301,7 +301,7 @@ public class PlaybackActivity extends LeanbackActivity {
                     // Ensure to opening this activity when the user will return to the app
                     mViewManager.blockTop(this);
                     // Enable collapse app to Home launcher
-                    //mViewManager.enableMoveToBack(true);
+                    mViewManager.enableMoveToBack(true);
                 }
                 break;
             case PlayerData.BACKGROUND_MODE_SOUND:
@@ -309,7 +309,7 @@ public class PlaybackActivity extends LeanbackActivity {
                     // Ensure to continue a playback
                     mPlaybackFragment.blockEngine(true);
                     mViewManager.blockTop(this);
-                    //mViewManager.enableMoveToBack(true);
+                    mViewManager.enableMoveToBack(true);
                 }
                 break;
         }
