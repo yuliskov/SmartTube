@@ -49,7 +49,7 @@
   <string name="settings_left_panel">Redakto kategoritë</string>
   <string name="settings_themes">Temat</string>
   <string name="settings_other">Të tjera</string>
-  <string name="settings_player">Luajtësi i videos</string>
+  <string name="settings_player">Luajtësi</string>
   <string name="settings_language">Gjuha</string>
   <string name="settings_linked_devices">Pajisjet e lidhura</string>
   <string name="settings_about">Rreth</string>
@@ -173,7 +173,7 @@
   <string name="device_connected">Pajisja \"%s\" është lidhur</string>
   <string name="device_disconnected">Pajisja \"%s\" është shkëputur</string>
   <string name="settings_ui_scale">Madhësia e ndërfaqes së përdoruesit</string>
-  <string name="msg_restart_app">Të lutem rinis aplikacionin për të zbatuar këto cilësime</string>
+  <string name="msg_restart_app">Të lutem, rinis aplikacionin për të zbatuar këto cilësime</string>
   <string name="settings_block">Bllokim i përmbajtjes</string>
   <string name="msg_applying">Po zbatohet %s…</string>
   <string name="msg_done">U krye</string>
@@ -331,10 +331,10 @@
   <string name="content_block_filler">Jashtë temës (mbushës)</string>
   <string name="keyboard_auto_show">Shfaq automatikisht tastierën</string>
   <string name="cancel_dialog">Anulo</string>
-  <string name="msg_player_error_source2">URL-ja nuk punon ose koha e pajisjes është e pasaktë.\nZakonisht, është një problem i aplikacionit.</string>
-  <string name="msg_player_error_video_source">URL-ja e VIDEOS nuk punon ose koha e pajisjes është e pasaktë.\nZakonisht, është një problem i aplikacionit.</string>
-  <string name="msg_player_error_audio_source">URL-ja e TINGULLIT nuk punon ose koha e pajisjes është e pasaktë.\nZakonisht, është një problem i aplikacionit.</string>
-  <string name="msg_player_error_subtitle_source">URL-ja e TITRAVE nuk funksionon ose koha e pajisjes është e pasaktë.\nZakonisht, është një problem i aplikacionit.</string>
+  <string name="msg_player_error_source2">URL-ja nuk punon ose koha e pajisjes është e pasaktë.\nZakonisht, është një defekt i aplikacionit.</string>
+  <string name="msg_player_error_video_source">URL-ja e VIDEOS nuk punon ose koha e pajisjes është e pasaktë.\nZakonisht, është një defekt i aplikacionit.</string>
+  <string name="msg_player_error_audio_source">URL-ja e TINGULLIT nuk punon ose koha e pajisjes është e pasaktë.\nZakonisht, është një defekt i aplikacionit.</string>
+  <string name="msg_player_error_subtitle_source">URL-ja e TITRAVE nuk funksionon ose koha e pajisjes është e pasaktë.\nZakonisht, është një defekt i aplikacionit.</string>
   <string name="hide_upcoming">Fshih të ardhshmet nga Abonimet</string>
   <string name="hide_upcoming_channel">Fshih të ardhshmet nga Kanali</string>
   <string name="hide_upcoming_home">Fshih të ardhshmet nga Kryefaqja</string>
@@ -345,7 +345,7 @@
   <string name="player_seek_confirmation_pause">Me pranim (pezullo gjatë kërkimit)</string>
   <string name="player_seek_confirmation_play">Me pranim (luaj gjatë kërkimit)</string>
   <string name="hide_shorts_from_home">Fshih videot e shkurtra nga Kryefaqja</string>
-  <string name="finish_on_disconnect">Mbyll aplikacionin pasi të kesh shkëputur telefonin tuaj</string>
+  <string name="finish_on_disconnect">Mbyll aplikacionin pasi të kesh shkëputur telefonin tënd</string>
   <string name="update_error">Gabim përditësimi</string>
   <string name="hide_shorts_from_history">Fshih videot e shkurtra nga Historiku</string>
   <string name="hide_shorts_from_trending">Fshih videot e shkurtra nga Më të shikuarat</string>
@@ -361,16 +361,16 @@
   <string name="proxy_test_btn">Provë</string>
   <string name="proxy_settings_title">Cilësimet e Shërbyesit të Ndërmjetësit</string>
   <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
-  <string name="proxy_test_cancelled">Prova#%d: anuluar.</string>
+  <string name="proxy_test_cancelled">Prova #%d: anuluar.</string>
   <string name="proxy_type_invalid">Lloji i ndërmjetësit nuk është caktuar.</string>
   <string name="proxy_host_invalid">Pritësi i ndërmjetësit nuk është caktuar.</string>
   <string name="proxy_port_invalid">Porta e ndërmjetësit e pavlefshme, duhet të jetë më e madhe se 0.</string>
   <string name="proxy_credentials_invalid">Emri i përdoruesit ose fjalëkalimi i pavlefshëm.</string>
   <string name="proxy_test_aborted">Prova u ndërpre, të lutem së pari rregullo cilësimet e ndërmjetësit.</string>
   <string name="proxy_application_aborted">Të lutem, së pari rregullo cilësimet e ndërmjetësit tënd.</string>
-  <string name="proxy_test_start">Prova#%d: %s …</string>
-  <string name="proxy_test_error">Gabim#%d: %s</string>
-  <string name="proxy_test_status">Gjendja#%d: %s %d %s</string>
+  <string name="proxy_test_start">Prova #%d: %s …</string>
+  <string name="proxy_test_error">Gabimi #%d: %s</string>
+  <string name="proxy_test_status">Gjendja #%d: %s %d %s</string>
   <string name="openvpn_config_address_hint">Adresa e skedarit të formësimit (*.ovpn)</string>
   <string name="enable_openvpn">Përdor OpenVPN</string>
   <string name="openvpn_settings_title">Cilësimet e OpenVPN</string>
@@ -407,8 +407,8 @@
   <string name="remember_position_of_short_videos">Mbaj mend pozicionin e luajtjes në videot e shkurtra (më pak se 5 minuta)</string>
   <string name="remember_position_of_live_videos">Mos harro pozicionin e luajtjes e transmetimit të drejtpërdrejtë</string>
   <string name="player_show_tooltips">Shfaq përshkrimet e butonëve</string>
-  <string name="action_like_unset">Pëlqimi u hoq</string>
-  <string name="action_dislike_unset">Mospëlqimi u hoq</string>
+  <string name="action_like_unset">pëlqimi u hoq</string>
+  <string name="action_dislike_unset">mospëlqimi u hoq</string>
   <string name="various_buttons">Butonët në krye të dritares kryesore</string>
   <string name="not_compatible_with">Rregullimi i përzgjedhur nuk përputhet me</string>
   <string name="subtitle_position">Zhvendosja e titrave më poshtë</string>
@@ -450,7 +450,7 @@
   <string name="playlist_order_published_date_older_first">Data e publikimit (më e vjetra në fillim)</string>
   <string name="playlist_order_popularity">Popullariteti</string>
   <string name="cant_do_this_for_foreign_playlist">Nuk mund ta bëj këtë për listat e luajtjes të jashtme</string>
-  <string name="owned_playlist_warning">Gabim. Ky veprim mund të zbatohet vetëm për listat e luajtjes që zotëron.</string>
+  <string name="owned_playlist_warning">Gabim: Ky veprim mund të zbatohet vetëm për listat e luajtjes që zotëron.</string>
   <string name="content_block_alt_server">Përdor shërbyes tjetër</string>
   <string name="content_block_alt_server_desc">Aktivizo këtë rregullim nëse SponsorBlock refuzon të punojë për arsye të ndryshme.</string>
   <string name="unset_stream_reminder">Çaktivizo cilësimin e njoftuesit për transmetimin</string>
@@ -467,7 +467,7 @@
   <string name="player_ending_time">Përfundon në %s</string>
   <string name="badge_new_content">PËRMBAJTJE E RE</string>
   <string name="badge_live">DREJTPËRDREJT</string>
-  <string name="add_device_view_description">Për të lidhur pajisjen tënde, fute këtë kod në aplikacionin YouTube të telefonit tënd në seksionin Cilësimet/Shiko në TV\nSHËNIM. Punon vetëm me tastierën Gboard.</string>
+  <string name="add_device_view_description">Për të lidhur pajisjen tënde, fute këtë kod në aplikacionin YouTube të telefonit tënd në seksionin Cilësimet/Shiko në TV\nSHËNIM: Punon vetëm me tastierën Gboard!</string>
   <string name="playback_controls_repeat_pause">Përsërite Pezullimin</string>
   <string name="playback_controls_repeat_list">Përsërite Listën</string>
   <string name="action_subscribe_off">Abonimi nuk është aktivizuar</string>
@@ -496,7 +496,7 @@
   <string name="subtitle_yellow_black">E verdhë në sfond të zi</string>
   <string name="player_pixel_ratio">Përpjesëtimi i pikselëve</string>
   <string name="color_scheme_dark_grey_monochrome">Gri e errët (njëngjyrëshe)</string>
-  <string name="disable_mic_permission">Të lutem, çaktivizo qasjen në mikrofon për aplikacion që njohja e zërit të punoi siç duhet.</string>
+  <string name="disable_mic_permission">Të lutem çaktivizo qasjen në mikrofon për aplikacionin që njohja e zërit të punoi siç duhet.</string>
   <string name="repeat_mode_shuffle">Përziej çdo listë luajtjeje</string>
   <string name="chat_left">Majtas</string>
   <string name="chat_right">Djathtas</string>
@@ -515,7 +515,7 @@
   <string name="child_mode">Mënyra për fëmijë</string>
   <string name="child_mode_desc">Në këtë mënyrë, përdoruesi nuk mund të përdorë kërkimin ose të shikojë ndonjë përmbajtje të sugjeruar. Cilësimet do të mbrohen me fjalëkalim.</string>
   <string name="lost_setting_warning">Cilësimet e aplikacionit do të ndryshohen. Sigurohu që ke krijuar një kopje rezervë të cilësimeve tua.</string>
-  <string name="player_button_long_click">Një klikim i shkurtër mbi butonin fillon një veprim të shpejtë, një klikim i gjatë hap dialogun e cilësimeve</string>
+  <string name="player_button_long_click">Mbaj shtypur këtë buton për rregullime shtesë</string>
   <string name="pause_history">Ndalo Historikun</string>
   <string name="resume_history">Rifillo Historikun</string>
   <string name="disable_history">Çaktivizo Historikun</string>
@@ -561,7 +561,7 @@
   <string name="unlock_all_formats_desc">Në disa pajisje firmueri njofton gabimisht disa formate si të pambështetura, edhe pse janë.\n(për shembull, televizorët e mençur 1080p priten që të njoftojnë 4k si të pambështetur).</string>
   <string name="okhttp_desc">Kjo stiva e rrjeteve është më e ngadalshme, por ka qëndrueshmëri të mirë.</string>
   <string name="select_channel_section">Hap seksionin përkatës kur aplikacioni të jetë nisur nga Kanalet ATV</string>
-  <string name="enable_voice_search_desc">Aplikacioni zyrtar do të zëvendësohet nga një e ashtuquajtur urë. Një urë ndihmon në kalimin e kërkesave globale të kërkimit në aplikacionin tonë.</string>
+  <string name="enable_voice_search_desc">Aplikacioni zyrtar do të zëvendësohet nga një e ashtuquajtur \"urë\"\. Një urë ndihmon në kalimin e kërkesave globale të kërkimit në aplikacionin tonë.</string>
   <string name="enable_master_password">Aktivizo fjalëkalimin kryesor.</string>
   <string name="enter_master_password">Fut fjalëkalimin kryesor</string>
   <string name="disable_stream_buffer">Çaktivizo buferin në transmetime</string>
@@ -629,7 +629,7 @@
   <string name="remote_control_permission">Kontrolli në Largësi në sfond kërkon leje për Mbivendosjeje</string>
   <string name="login_from_browser">Hyr nga shfletuesi</string>
   <string name="disable_remote_history">Çaktivizo Historikun kur përdor telekomandën</string>
-  <string name="keyboard_fix">Rregullo shfaqjen e tastierës me shtypjen e butonit OK (G20-at dhe të tjerë)</string>
+  <string name="keyboard_fix">Parandalo hapjen e tastierës me butonin OK (G20 dhe të tjerë)</string>
   <string name="nothing_found">Nuk u gjet asgjë</string>
   <string name="auto_frame_rate_desc">Ky rregullim heq dridhjet në skenat ku kamera lëviz shpejt, si p.sh. në transmetimin e sporteve</string>
   <string name="channel_filter_hint">Filtro kanalet</string>
@@ -648,7 +648,7 @@
   <string name="replace_thumbnails">Zëvendëso miniaturat</string>
   <string name="crowdsourced_thumbnails">Miniaturat të mbledhura në grup</string>
   <string name="crowdsoursed_titles">Tituj të mbledhur në grup</string>
-  <string name="dearrow_not_submitted_thumbs">Ku të merren miniaturat e padërguara</string>
+  <string name="dearrow_not_submitted_thumbs">Burimi i miniaturave (nëse nuk ka paraqitje në DeArrow)</string>
   <string name="pitch_effect">Efekti i tonit</string>
   <string name="fullscreen_mode">Mënyra e ekranit të plotë (pa shirita të sistemit)</string>
   <string name="player_only_mode">Trego vetëm luajtësin nëse videoja hapet jashtë aplikacionit</string>
@@ -660,4 +660,5 @@
   <string name="local_backup">Kopje rezervë lokale</string>
   <string name="long_press_for_options">SHTYP GJATË PËR RREGULLIMET</string>
   <string name="speech_engine">Motori i kërkimit me zë</string>
+  <string name="auto_backup">Kopje rezervë automatike (një herë në ditë)</string>
 </resources>
