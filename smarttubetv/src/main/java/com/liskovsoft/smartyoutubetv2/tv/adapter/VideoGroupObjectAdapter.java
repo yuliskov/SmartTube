@@ -179,6 +179,7 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
                 if (index != -1) {
                     mVideoItems.remove(video);
                     notifyItemRangeRemoved(index, 1);
+                    removeFromGroup(video);
                 } else {
                     break;
                 }
@@ -208,6 +209,12 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     }
 
     public boolean isEmpty() {
-        return mVideoItems == null || mVideoItems.isEmpty();
+        return mVideoItems.isEmpty();
+    }
+
+    private void removeFromGroup(Video video) {
+        if (video != null && video.getGroup() != null) {
+            video.getGroup().remove(video);
+        }
     }
 }

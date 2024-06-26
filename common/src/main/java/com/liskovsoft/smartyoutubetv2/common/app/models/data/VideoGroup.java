@@ -373,4 +373,12 @@ public class VideoGroup {
 
         return mVideos.get(idx);
     }
+
+    public void remove(Video video) {
+        if (mVideos == null) {
+            return;
+        }
+
+        mVideos.remove(video);
+    }
 }

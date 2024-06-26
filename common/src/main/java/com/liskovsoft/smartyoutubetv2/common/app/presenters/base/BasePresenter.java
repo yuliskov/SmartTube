@@ -160,7 +160,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     }
 
     private void removeItem(List<Video> items, int action) {
-        if (items.size() == 0) {
+        if (items.isEmpty()) {
             return;
         }
 
@@ -176,7 +176,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     }
 
     public boolean syncItem(List<Video> items) {
-        if (items.size() == 0) {
+        if (items.isEmpty()) {
             return false;
         }
 
