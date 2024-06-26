@@ -35,6 +35,7 @@ import io.reactivex.disposables.Disposable;
 
 public class SplashPresenter extends BasePresenter<SplashView> {
     private static final String TAG = SplashPresenter.class.getSimpleName();
+    private static final long APP_INIT_DELAY_MS = 10_000;
     @SuppressLint("StaticFieldLeak")
     private static SplashPresenter sInstance;
     private static boolean sRunOnce;
@@ -42,6 +43,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private final List<IntentProcessor> mIntentChain = new ArrayList<>();
     private Disposable mRefreshCachePeriodicAction;
     private String mBridgePackageName;
+    private final Runnable mRunBackgroundTasks = this::runBackgroundTasks;
 
     private interface IntentProcessor {
         boolean process(Intent intent);
@@ -62,6 +64,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     public static void unhold() {
+        if (sInstance != null) {
+            Utils.removeCallbacks(sInstance.mRunBackgroundTasks);
+        }
         sInstance = null;
     }
 
@@ -87,10 +92,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         if (!mRunPerInstance) {
             mRunPerInstance = true;
             //clearCache();
-            YouTubeServiceManager.instance().refreshCacheIfNeeded(); // warm up
-            enableHistoryIfNeeded();
-            Utils.updateChannels(getContext());
-            GDriveBackupWorker.schedule(getContext());
+            Utils.postDelayed(mRunBackgroundTasks, APP_INIT_DELAY_MS);
             initIntentChain();
             // Fake service to prevent the app destroying?
             //runRemoteControlFakeTask();
@@ -104,6 +106,13 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             initVideoStateService();
             initStreamReminderService();
         }
+    }
+
+    private void runBackgroundTasks() {
+        YouTubeServiceManager.instance().refreshCacheIfNeeded(); // warm up
+        enableHistoryIfNeeded();
+        Utils.updateChannels(getContext());
+        GDriveBackupWorker.schedule(getContext());
     }
 
     private void showAccountSelectionIfNeeded() {

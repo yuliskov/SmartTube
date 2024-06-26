@@ -298,12 +298,10 @@ public class PlaybackActivity extends LeanbackActivity {
                 enterPipMode();
                 if (doNotDestroy()) {
                     mPlaybackFragment.blockEngine(true);
-                    // Ensure to opening this activity when the user is returning to the app
-                    //mViewManager.blockTop(this);
-                    // Return to previous activity (create point from that app could be launched)
-                    //mViewManager.startParentView(this);
+                    // Ensure to opening this activity when the user will return to the app
+                    mViewManager.blockTop(this);
                     // Enable collapse app to Home launcher
-                    mViewManager.enableMoveToBack(true);
+                    //mViewManager.enableMoveToBack(true);
                 }
                 break;
             case PlayerData.BACKGROUND_MODE_SOUND:
@@ -311,6 +309,7 @@ public class PlaybackActivity extends LeanbackActivity {
                     // Ensure to continue a playback
                     mPlaybackFragment.blockEngine(true);
                     mViewManager.blockTop(this);
+                    //mViewManager.enableMoveToBack(true);
                 }
                 break;
         }

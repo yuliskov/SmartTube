@@ -497,7 +497,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
         switch (repeatMode) {
             case PlayerEngineConstants.REPEAT_MODE_REVERSE_LIST:
-                if (video.hasPlaylist()) {
+                if (video.hasPlaylist() || video.belongsToChannelUploads() || video.belongsToChannel()) {
                     onPreviousClicked();
                     break;
                 }
