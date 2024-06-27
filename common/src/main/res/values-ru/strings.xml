@@ -603,6 +603,8 @@
     <string name="remember_position_subscriptions">Запоминать последнюю просмотренную позицию в Подписках</string>
     <string name="remember_position_pinned">Запоминать последнюю просмотренную позицию в закрепленных плейлистах</string>
     <string name="msg_player_unknown_error">Неизвестная ошибка</string>
+    <string name="unknown_source_error">Неизвестная ошибка источника</string>
+    <string name="unknown_renderer_error">Неизвестная ошибка рендера</string>
     <string name="header_notifications">Уведомления</string>
     <string name="disable_search_history">Отключить историю поиска</string>
     <string name="unlock_high_bitrate_formats">Разблокировать 1080p vp9 форматы с высоким битрейтом</string>

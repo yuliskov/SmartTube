@@ -610,6 +610,8 @@
     <string name="remember_position_subscriptions">Abonelikler\'de son görüntülenen konumu hatırla</string>
     <string name="remember_position_pinned">Sabitlenmiş oynatma listelerinde son görüntülenen konumu hatırla</string>
     <string name="msg_player_unknown_error">Bilinmeyen hata</string>
+    <string name="unknown_source_error">Bilinmeyen kaynak hatası</string>
+    <string name="unknown_renderer_error">Bilinmeyen çizici hatası</string>
     <string name="header_notifications">Bildirimler</string>
     <string name="disable_search_history">Arama geçmişini devre dışı bırak</string>
     <string name="unlock_high_bitrate_formats">Yüksek bit hızına sahip 1080p vp9 biçimlerinin kilidini aç</string>

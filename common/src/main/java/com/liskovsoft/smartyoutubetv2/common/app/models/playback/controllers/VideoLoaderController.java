@@ -433,6 +433,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 if (!videoFormat.isPreset()) {
                     mPlayerData.setFormat(mPlayerData.getDefaultVideoFormat());
                 }
+                mPlayerTweaksData.forceSWDecoder(false);
                 break;
             case PlayerEventListener.RENDERER_INDEX_AUDIO:
                 mPlayerData.setFormat(mPlayerData.getDefaultAudioFormat());
@@ -446,8 +447,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private void applyErrorAction(Throwable error) {
         if (error instanceof OutOfMemoryError) {
             mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
-        //} else if (Helpers.startsWithAny(error.getMessage(), "Unable to connect to ", "Invalid NAL length")) {
-        } else if (!Helpers.startsWithAny(error.getMessage(), "Unable to connect to ")) {
+        } else if (Helpers.startsWithAny(error.getMessage(), "Unable to connect to", "Invalid NAL length", "Response code: 421")) {
             // Switch between network engines in hope that one of them fixes the error
             mPlayerTweaksData.setPlayerDataSource(getNextEngine());
         }
@@ -462,7 +462,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
                 return R.string.msg_player_error_subtitle_source;
             default:
-                return R.string.msg_player_unknown_error;
+                return R.string.unknown_source_error;
         }
     }
 
@@ -475,7 +475,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
                 return R.string.msg_player_error_subtitle_renderer;
             default:
-                return R.string.msg_player_unknown_error;
+                return R.string.unknown_renderer_error;
         }
     }
 

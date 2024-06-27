@@ -603,6 +603,8 @@
     <string name="remember_position_subscriptions">Запам\'ятовувати останню переглянуту позицію у Підписках</string>
     <string name="remember_position_pinned">Запам\'ятовувати останню переглянуту позицію у закріплених плейлистах</string>
     <string name="msg_player_unknown_error">Невідома помилка</string>
+    <string name="unknown_source_error">Невідома помилка джерела</string>
+    <string name="unknown_renderer_error">Невідома помилка рендера</string>
     <string name="header_notifications">Повідомлення</string>
     <string name="disable_search_history">Вимкнути історію пошуку</string>
     <string name="unlock_high_bitrate_formats">Розблокувати 1080p vp9 формати з високим бітрейтом</string>
