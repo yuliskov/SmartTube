@@ -313,6 +313,10 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     //}
 
     private void updateDisplayModeId() {
+        if (mUhdHelper == null) {
+            return;
+        }
+
         mDisplayModeId.clear();
 
         Mode currentMode = mUhdHelper.getCurrentMode();

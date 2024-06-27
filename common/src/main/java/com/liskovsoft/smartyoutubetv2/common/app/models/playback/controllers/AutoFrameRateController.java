@@ -229,7 +229,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
 
     // Avoid nested dialogs. They have problems with timings. So player controls may hide without user interaction.
     private void addUiOptions() {
-        if (mAutoFrameRateHelper.isSupported()) {
+        if (mAutoFrameRateHelper.isSupported() && getContext() != null) {
             OptionCategory afrCategory = createAutoFrameRateCategory(
                     getContext(), PlayerData.instance(getContext()),
                     () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick, this::onDoubleRefreshRateClick, this::onSkip24RateClick);
