@@ -46,7 +46,8 @@ public class AudioTrack extends MediaTrack {
 
         if (Helpers.equals(id1, id2)) {
             result = 0;
-        } else if (bitrate1 != -1 && bitrateLessOrEquals(bitrate2, bitrate1)) {
+        //} else if (bitrate1 != -1 && bitrateLessOrEquals(bitrate2, bitrate1)) {
+        } else if (bitrate1 != -1 && bitrateLessOrEquals(bitrate2, (int)(bitrate1 * 1.1))) { // Fix muted audio on streams
             result = 1;
         } else if (bitrate1 == -1 && (TrackSelectorUtil.is51Audio(format) || !TrackSelectorUtil.is51Audio(track2.format))) {
             result = 1;
