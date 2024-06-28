@@ -491,6 +491,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         Renderer renderer = mRenderers[originTrack.rendererIndex];
 
         MediaTrack result = createAutoSelection(originTrack.rendererIndex);
+        MediaTrack tmpResult = null;
 
         if (originTrack.format != null) { // not auto selection
             MediaTrack prevResult;
@@ -511,6 +512,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 for (MediaTrack mediaTrack : trackGroup) {
                     if (mediaTrack == null) {
                         continue;
+                    }
+
+                    // Fix disabled audio on streams (select at least something)
+                    if (tmpResult == null) {
+                        tmpResult = mediaTrack;
                     }
 
                     int bounds = originTrack.inBounds(mediaTrack);
@@ -562,6 +568,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         result = prevResult;
                     }
                 }
+            }
+
+            // Fix disabled audio on streams (select at least something)
+            if (result == null || result.format == null) {
+                result = tmpResult;
             }
         }
 
