@@ -496,7 +496,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             MediaTrack prevResult;
 
             MediaTrack[][] mediaTracks = filterByLanguage(renderer.mediaTracks, originTrack);
-            
+
             for (int groupIndex = 0; groupIndex < mediaTracks.length; groupIndex++) {
                 prevResult = result;
 
@@ -523,6 +523,16 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
                     if (bounds >= 0) {
                         int compare = mediaTrack.compare(result);
+
+                        //if (compare == 0) {
+                        //    if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
+                        //        result = mediaTrack;
+                        //    }
+                        //} else if (compare > 0) {
+                        //    if (!MediaTrack.preferByCodec(result, mediaTrack)) {
+                        //        result = mediaTrack;
+                        //    }
+                        //}
 
                         if (compare == 0) {
                             if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
@@ -555,7 +565,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             }
         }
 
-        Log.d(TAG, "findBestMatch: Found: " + (result != null ? result.format : null));
+        Log.d(TAG, "findBestMatch: Found: " + result.format);
 
         return result;
     }
