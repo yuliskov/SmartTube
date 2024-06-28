@@ -55,9 +55,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             waitMetadataSync(getPlayer().getVideo(), false);
         }
     };
-    private boolean mIsRestartPending;
     private final Runnable mFixAndRestartEngine = () -> {
-        mIsRestartPending = false;
         if (getPlayer() != null) {
             YouTubeServiceManager.instance().invalidateCache();
             getPlayer().restartEngine(); // properly save position of the current track
@@ -229,10 +227,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             getPlayer().setVideo(mLastVideo);
         }
 
-        if (mIsRestartPending) {
-            restartEngine(); // reset the timer
-        }
-
+        Utils.removeCallbacks(mFixAndRestartEngine);
         Utils.removeCallbacks(mOnLongBuffering);
 
         return false;
@@ -396,7 +391,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     }
 
     private void disposeActions() {
-        mIsRestartPending = false;
         MediaServiceManager.instance().disposeActions();
         RxHelper.disposeActions(mFormatInfoAction, mMpdStreamAction);
         Utils.removeCallbacks(mReloadVideoHandler, mFixAndRestartEngine, mMetadataSync);
@@ -490,8 +484,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
     private void restartEngine() {
         // Give a time to user to do something
-        mIsRestartPending = true;
-        Utils.postDelayed(mFixAndRestartEngine, 10_000);
+        Utils.postDelayed(mFixAndRestartEngine, 5_000);
     }
 
     private List<String> applyFix(List<String> urlList) {
