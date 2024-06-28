@@ -567,7 +567,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             }
         }
 
-        Log.d(TAG, "findBestMatch: Found: " + result.format);
+        Log.d(TAG, "findBestMatch: Found: " + (result != null ? result.format : null));
 
         return result;
     }
