@@ -55,7 +55,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             waitMetadataSync(getPlayer().getVideo(), false);
         }
     };
+    private boolean mIsRestartPending;
     private final Runnable mFixAndRestartEngine = () -> {
+        mIsRestartPending = false;
         if (getPlayer() != null) {
             YouTubeServiceManager.instance().invalidateCache();
             getPlayer().restartEngine(); // properly save position of the current track
@@ -227,7 +229,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             getPlayer().setVideo(mLastVideo);
         }
 
-        Utils.removeCallbacks(mFixAndRestartEngine);
+        if (mIsRestartPending) {
+            restartEngine(); // reset the timer
+        }
+
         Utils.removeCallbacks(mOnLongBuffering);
 
         return false;
@@ -391,6 +396,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     }
 
     private void disposeActions() {
+        mIsRestartPending = false;
         MediaServiceManager.instance().disposeActions();
         RxHelper.disposeActions(mFormatInfoAction, mMpdStreamAction);
         Utils.removeCallbacks(mReloadVideoHandler, mFixAndRestartEngine, mMetadataSync);
@@ -405,11 +411,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             // Some ciphered data could be outdated.
             // Might happen when the app wasn't used quite a long time.
             case PlayerEventListener.ERROR_TYPE_SOURCE:
-                MessageHelpers.showLongMessage(getContext(), getContext().getString(getSourceErrorResId(rendererIndex)) + "\n" + message);
+                applySourceErrorAction(rendererIndex, error);
                 break;
             case PlayerEventListener.ERROR_TYPE_RENDERER:
-                MessageHelpers.showLongMessage(getContext(), getContext().getString(getRendererErrorResId(rendererIndex)) + "\n" + message);
-                applyRendererErrorAction(rendererIndex);
+                applyRendererErrorAction(rendererIndex, error);
                 break;
             // Hide unknown error on all devices
             case PlayerEventListener.ERROR_TYPE_UNEXPECTED:
@@ -420,15 +425,39 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 break;
         }
 
-        applyErrorAction(error);
+        applyGenericErrorAction(error);
 
-        // Give a time to user to do something
-        Utils.postDelayed(mFixAndRestartEngine, 5_000);
+        restartEngine();
     }
 
-    private void applyRendererErrorAction(int rendererIndex) {
+    private void applySourceErrorAction(int rendererIndex, Throwable error) {
+        String message = error != null ? error.getMessage() : null;
+        int msgResId;
+
         switch (rendererIndex) {
             case PlayerEventListener.RENDERER_INDEX_VIDEO:
+                msgResId = R.string.msg_player_error_video_source;
+                break;
+            case PlayerEventListener.RENDERER_INDEX_AUDIO:
+                msgResId = R.string.msg_player_error_audio_source;
+                break;
+            case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
+                msgResId = R.string.msg_player_error_subtitle_source;
+                break;
+            default:
+                msgResId = R.string.unknown_source_error;
+        }
+
+        MessageHelpers.showLongMessage(getContext(), getContext().getString(msgResId) + "\n" + message);
+    }
+
+    private void applyRendererErrorAction(int rendererIndex, Throwable error) {
+        String message = error != null ? error.getMessage() : null;
+        int msgResId;
+
+        switch (rendererIndex) {
+            case PlayerEventListener.RENDERER_INDEX_VIDEO:
+                msgResId = R.string.msg_player_error_video_renderer;
                 FormatItem videoFormat = mPlayerData.getFormat(FormatItem.TYPE_VIDEO);
                 if (!videoFormat.isPreset()) {
                     mPlayerData.setFormat(mPlayerData.getDefaultVideoFormat());
@@ -436,15 +465,21 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 mPlayerTweaksData.forceSWDecoder(false);
                 break;
             case PlayerEventListener.RENDERER_INDEX_AUDIO:
+                msgResId = R.string.msg_player_error_audio_renderer;
                 mPlayerData.setFormat(mPlayerData.getDefaultAudioFormat());
                 break;
             case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
+                msgResId = R.string.msg_player_error_subtitle_renderer;
                 mPlayerData.setFormat(FormatItem.SUBTITLE_NONE);
                 break;
+            default:
+                msgResId = R.string.unknown_renderer_error;
         }
+
+        MessageHelpers.showLongMessage(getContext(), getContext().getString(msgResId) + "\n" + message);
     }
 
-    private void applyErrorAction(Throwable error) {
+    private void applyGenericErrorAction(Throwable error) {
         if (error instanceof OutOfMemoryError) {
             mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
         } else if (Helpers.startsWithAny(error.getMessage(), "Unable to connect to", "Invalid NAL length", "Response code: 421")) {
@@ -453,30 +488,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         }
     }
 
-    private int getSourceErrorResId(int rendererIndex) {
-        switch (rendererIndex) {
-            case PlayerEventListener.RENDERER_INDEX_VIDEO:
-                return R.string.msg_player_error_video_source;
-            case PlayerEventListener.RENDERER_INDEX_AUDIO:
-                return R.string.msg_player_error_audio_source;
-            case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
-                return R.string.msg_player_error_subtitle_source;
-            default:
-                return R.string.unknown_source_error;
-        }
-    }
-
-    private int getRendererErrorResId(int rendererIndex) {
-        switch (rendererIndex) {
-            case PlayerEventListener.RENDERER_INDEX_VIDEO:
-                return R.string.msg_player_error_video_renderer;
-            case PlayerEventListener.RENDERER_INDEX_AUDIO:
-                return R.string.msg_player_error_audio_renderer;
-            case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
-                return R.string.msg_player_error_subtitle_renderer;
-            default:
-                return R.string.unknown_renderer_error;
-        }
+    private void restartEngine() {
+        // Give a time to user to do something
+        mIsRestartPending = true;
+        Utils.postDelayed(mFixAndRestartEngine, 10_000);
     }
 
     private List<String> applyFix(List<String> urlList) {

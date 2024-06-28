@@ -530,16 +530,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     if (bounds >= 0) {
                         int compare = mediaTrack.compare(result);
 
-                        //if (compare == 0) {
-                        //    if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
-                        //        result = mediaTrack;
-                        //    }
-                        //} else if (compare > 0) {
-                        //    if (!MediaTrack.preferByCodec(result, mediaTrack)) {
-                        //        result = mediaTrack;
-                        //    }
-                        //}
-
                         if (compare == 0) {
                             if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
                                 result = mediaTrack;
