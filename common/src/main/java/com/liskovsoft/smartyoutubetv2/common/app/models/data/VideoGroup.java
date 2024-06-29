@@ -379,6 +379,10 @@ public class VideoGroup {
             return;
         }
 
-        mVideos.remove(video);
+        try {
+            mVideos.remove(video);
+        } catch (UnsupportedOperationException e) { // read only collection
+            e.printStackTrace();
+        }
     }
 }
