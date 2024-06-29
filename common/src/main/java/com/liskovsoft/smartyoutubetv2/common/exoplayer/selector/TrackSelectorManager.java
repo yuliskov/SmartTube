@@ -494,6 +494,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         if (originTrack.format != null) { // not auto selection
             MediaTrack prevResult;
+            MediaTrack tmpResult = null;
 
             MediaTrack[][] mediaTracks = filterByLanguage(renderer.mediaTracks, originTrack);
 
@@ -511,6 +512,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 for (MediaTrack mediaTrack : trackGroup) {
                     if (mediaTrack == null) {
                         continue;
+                    }
+
+                    if (tmpResult == null) {
+                        tmpResult = mediaTrack;
                     }
 
                     int bounds = originTrack.inBounds(mediaTrack);
@@ -562,6 +567,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         result = prevResult;
                     }
                 }
+            }
+
+            // Fix muted audio on stream where the lowest bitrate higher than the original
+            if (result instanceof AudioTrack && result.isEmpty()) {
+                result = tmpResult;
             }
         }
 
