@@ -498,6 +498,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
             MediaTrack[][] mediaTracks = filterByLanguage(renderer.mediaTracks, originTrack);
 
+            outerloop:
             for (int groupIndex = 0; groupIndex < mediaTracks.length; groupIndex++) {
                 prevResult = result;
 
@@ -514,6 +515,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         continue;
                     }
 
+                    // Fix muted audio on stream with higher bitrate than the target
                     if (tmpResult == null) {
                         tmpResult = mediaTrack;
                     }
@@ -523,7 +525,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     // Multiple ru track fix
                     if (bounds == 0 && MediaTrack.bitrateEquals(originTrack, mediaTrack)) {
                         result = mediaTrack;
-                        break;
+                        break outerloop;
                     }
 
                     if (bounds >= 0) {
@@ -569,8 +571,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 }
             }
 
-            // Fix muted audio on stream where the lowest bitrate higher than the original
-            if (result instanceof AudioTrack && result.isEmpty()) {
+            // Fix muted audio on stream with higher bitrate than the target
+            if (result instanceof AudioTrack && result.isEmpty() && tmpResult != null) {
                 result = tmpResult;
             }
         }
