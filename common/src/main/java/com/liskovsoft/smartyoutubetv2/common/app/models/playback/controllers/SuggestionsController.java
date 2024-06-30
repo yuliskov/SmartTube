@@ -134,6 +134,10 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void updateLiveDescription() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         Video video = getPlayer().getVideo();
 
         if (video == null || !video.isLive || RxHelper.isAnyActionRunning(mActions)) {
