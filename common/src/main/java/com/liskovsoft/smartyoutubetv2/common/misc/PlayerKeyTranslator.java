@@ -111,6 +111,11 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, speedDownAction);
         }
 
+        if (mGeneralData.isRemapPageDownToSpeedEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, speedDownAction);
+            actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, speedUpAction);
+        }
+
         if (mGeneralData.isRemapChannelUpToSpeedEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, speedDownAction);

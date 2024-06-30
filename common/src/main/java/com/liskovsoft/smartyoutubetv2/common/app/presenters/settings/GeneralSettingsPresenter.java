@@ -348,6 +348,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from("Page Up/Down -> Speed Up/Down",
                 option -> mGeneralData.remapPageUpToSpeed(option.isSelected()),
                 mGeneralData.isRemapPageUpToSpeedEnabled()));
+        
+        options.add(UiOptionItem.from("Page Up/Down -> Speed Down/Up",
+                option -> mGeneralData.remapPageDownToSpeed(option.isSelected()),
+                mGeneralData.isRemapPageDownToSpeedEnabled()));
 
         options.add(UiOptionItem.from("Channel Up/Down -> Volume Up/Down",
                 option -> mGeneralData.remapChannelUpToVolume(option.isSelected()),

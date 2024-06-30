@@ -59,6 +59,7 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsRemapChannelUpToLikeEnabled;
     private boolean mIsRemapChannelUpToVolumeEnabled;
     private boolean mIsRemapPageUpToSpeedEnabled;
+    private boolean mIsRemapPageDownToSpeedEnabled;
     private boolean mIsRemapChannelUpToSpeedEnabled;
     private boolean mIsRemapFastForwardToSpeedEnabled;
     private boolean mIsRemapNextToFastForwardEnabled;
@@ -573,14 +574,25 @@ public class GeneralData implements ProfileChangeListener {
         persistState();
     }
 
+    public boolean isRemapPageUpToSpeedEnabled() {
+        return mIsRemapPageUpToSpeedEnabled;
+    }
+
+    public void remapPageDownToSpeed(boolean enable) {
+        resetPageUpSettings();
+        mIsRemapPageDownToSpeedEnabled = enable;
+        persistState();
+    }
+
+    public boolean isRemapPageDownToSpeedEnabled() {
+        return mIsRemapPageDownToSpeedEnabled;
+    }
+
     private void resetPageUpSettings() {
+        mIsRemapPageDownToSpeedEnabled = false;
         mIsRemapPageUpToSpeedEnabled = false;
         mIsRemapPageUpToLikeEnabled = false;
         mIsRemapPageUpToNextEnabled = false;
-    }
-
-    public boolean isRemapPageUpToSpeedEnabled() {
-        return mIsRemapPageUpToSpeedEnabled;
     }
 
     public void remapChannelUpToNext(boolean enable) {
@@ -1053,6 +1065,7 @@ public class GeneralData implements ProfileChangeListener {
         mIsFirstUseTooltipEnabled = Helpers.parseBoolean(split, 64, true);
         mIsDeviceSpecificBackupEnabled = Helpers.parseBoolean(split, 65, false);
         mIsAutoBackupEnabled = Helpers.parseBoolean(split, 66, false);
+        mIsRemapPageDownToSpeedEnabled = Helpers.parseBoolean(split, 67, false);
 
         if (mPinnedItems.isEmpty()) {
             initPinnedItems();
@@ -1084,7 +1097,7 @@ public class GeneralData implements ProfileChangeListener {
                 mHistoryState, mRememberSubscriptionsPosition, null, mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled,
                 mIsRemapDpadUpToVolumeEnabled, mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled,
                 mChangelog, mPlayerExitShortcut, mIsOldChannelLookEnabled, mIsFullscreenModeEnabled, mIsHideWatchedFromWatchLaterEnabled,
-                mRememberPinnedPosition, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, mIsAutoBackupEnabled));
+                mRememberPinnedPosition, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, mIsAutoBackupEnabled, mIsRemapPageDownToSpeedEnabled));
     }
 
     private int getSectionId(Video item) {
