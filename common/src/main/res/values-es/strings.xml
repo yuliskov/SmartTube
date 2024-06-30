@@ -661,4 +661,7 @@
   <string name="local_backup">Copia de seguridad local</string>
   <string name="auto_backup">Copia de seguridad automática (una vez al día)</string>
   <string name="repeat_mode_reverse_list">Reproducir la lista de reproducción o los vídeos del canal en orden inverso</string>
+  <string name="unknown_source_error">Error de fuente desconocida</string>
+  <string name="unknown_renderer_error">Error de renderizado desconocido</string>
+  <string name="skip_shorts">Saltar Cortos</string>
 </resources>
