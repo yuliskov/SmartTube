@@ -536,14 +536,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableLoopShorts(option.isSelected()),
                 mPlayerTweaksData.isLoopShortsEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_quick_shorts_skip),
-                option -> mPlayerTweaksData.enableQuickSkipShorts(option.isSelected()),
-                mPlayerTweaksData.isQuickSkipShortsEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_quick_skip_videos),
-                option -> mPlayerTweaksData.enableQuickSkipVideos(option.isSelected()),
-                mPlayerTweaksData.isQuickSkipVideosEnabled()));
-
         options.add(UiOptionItem.from(getContext().getString(R.string.player_global_focus),
                 option -> mPlayerTweaksData.enablePlayerGlobalFocus(option.isSelected()),
                 mPlayerTweaksData.isPlayerGlobalFocusEnabled()));
