@@ -633,6 +633,7 @@
     <string name="channel_filter_hint">Фильтровать каналы</string>
     <string name="player_loop_shorts">Зацикливать короткие видео</string>
     <string name="player_quick_shorts_skip">Переключать короткие видео кнопками лево/право</string>
+    <string name="player_quick_skip_videos">Переключать обычные видео кнопками лево/право</string>
     <string name="channels_filter">Показывать поле Фильтровать каналы в разделе Каналы</string>
     <string name="channel_search_bar">Панель поиска на странице канала</string>
     <string name="header_sports">Спорт</string>

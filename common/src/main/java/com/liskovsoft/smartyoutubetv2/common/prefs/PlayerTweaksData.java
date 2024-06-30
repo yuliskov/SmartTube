@@ -95,7 +95,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsUnsafeAudioFormatsEnabled;
     private boolean mIsHighBitrateFormatsUnlocked;
     private boolean mIsLoopShortsEnabled;
-    private boolean mIsQuickShortsSkipEnabled;
+    private boolean mIsQuickSkipShortsEnabled;
+    private boolean mIsQuickSkipVideosEnabled;
     private boolean mIsOculusQuestFixEnabled;
 
     private PlayerTweaksData(Context context) {
@@ -537,13 +538,22 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsLoopShortsEnabled;
     }
 
-    public void enableQuickShortsSkip(boolean enable) {
-        mIsQuickShortsSkipEnabled = enable;
+    public void enableQuickSkipShorts(boolean enable) {
+        mIsQuickSkipShortsEnabled = enable;
         persistData();
     }
 
-    public boolean isQuickShortsSkipEnabled() {
-        return mIsQuickShortsSkipEnabled;
+    public boolean isQuickSkipShortsEnabled() {
+        return mIsQuickSkipShortsEnabled;
+    }
+
+    public void enableQuickSkipVideos(boolean enable) {
+        mIsQuickSkipVideosEnabled = enable;
+        persistData();
+    }
+
+    public boolean isQuickSkipVideosEnabled() {
+        return mIsQuickSkipVideosEnabled;
     }
 
     public void unlockHighBitrateFormats(boolean enable) {
@@ -608,13 +618,14 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsUnsafeAudioFormatsEnabled = Helpers.parseBoolean(split, 42, true);
         mIsHighBitrateFormatsUnlocked = Helpers.parseBoolean(split, 43, false);
         mIsLoopShortsEnabled = Helpers.parseBoolean(split, 44, true);
-        mIsQuickShortsSkipEnabled = Helpers.parseBoolean(split, 45, true);
+        mIsQuickSkipShortsEnabled = Helpers.parseBoolean(split, 45, true);
         mIsRememberPositionOfLiveVideosEnabled = Helpers.parseBoolean(split, 46, false);
         mIsOculusQuestFixEnabled = Helpers.parseBoolean(split, 47, Utils.isOculusQuest());
         // mPlayerDataSource was here
         // Cronet is buffering too, unfortunately, so leave the default as a safest method (e.g. for "strtarmenia")
         // mPlayerDataSource = Helpers.parseInt(split, 48, PLAYER_DATA_SOURCE_DEFAULT);
         mIsExtraLongSpeedListEnabled = Helpers.parseBoolean(split, 49, false);
+        mIsQuickSkipVideosEnabled = Helpers.parseBoolean(split, 50, false);
 
         updateDefaultValues();
     }
@@ -631,8 +642,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
-                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked, mIsLoopShortsEnabled, mIsQuickShortsSkipEnabled, mIsRememberPositionOfLiveVideosEnabled,
-                mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled
+                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
+                mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled
                 ));
     }
 

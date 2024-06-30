@@ -121,7 +121,7 @@ public class PlayerUIController extends PlayerEventListenerHelper {
 
         boolean isHandled = handleBackKey(keyCode) || handleMenuKey(keyCode) ||
                 handleConfirmKey(keyCode) || handleStopKey(keyCode) || handleNumKeys(keyCode) ||
-                handlePlayPauseKey(keyCode) || handleShortsNavigation(keyCode);
+                handlePlayPauseKey(keyCode) || handleLeftRightSkip(keyCode);
 
         if (isHandled) {
             return true; // don't show UI
@@ -660,8 +660,10 @@ public class PlayerUIController extends PlayerEventListenerHelper {
         return false;
     }
 
-    private boolean handleShortsNavigation(int keyCode) {
-        if (getPlayer().isOverlayShown() || getPlayer().getVideo() == null || !getPlayer().getVideo().isShorts || !mPlayerTweaksData.isQuickShortsSkipEnabled()) {
+    private boolean handleLeftRightSkip(int keyCode) {
+        if (getPlayer().isOverlayShown() || getPlayer().getVideo() == null ||
+                (getPlayer().getVideo().isShorts && !mPlayerTweaksData.isQuickSkipShortsEnabled() ||
+                (!getPlayer().getVideo().isShorts && !mPlayerTweaksData.isQuickSkipVideosEnabled()))) {
             return false;
         }
 
