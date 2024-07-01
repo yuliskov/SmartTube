@@ -656,4 +656,13 @@
   <string name="player_extra_long_speed_list">超長速度列表</string>
   <string name="remember_position_pinned">記住釘選播放列表中最後觀看的位置</string>
   <string name="long_press_for_settings">長按進入設定</string>
+  <string name="speech_engine">語音搜尋引擎</string>
+  <string name="unknown_source_error">未知來源錯誤</string>
+  <string name="unknown_renderer_error">未知渲染器錯誤</string>
+  <string name="player_quick_skip_videos">使用左/右按鈕跳過普通影片</string>
+  <string name="long_press_for_options">長按進入選項</string>
+  <string name="device_specific_backup">僅此設備備份</string>
+  <string name="local_backup">本機備份</string>
+  <string name="auto_backup">自動備份（每天一次）</string>
+  <string name="repeat_mode_reverse_list">反向播放播放列表或頻道影片</string>
 </resources>
