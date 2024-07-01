@@ -331,7 +331,7 @@
     <string name="content_block_filler">Füller/Witze</string>
     <string name="keyboard_auto_show">Tastatur automatisch anzeigen</string>
     <string name="cancel_dialog">Abbrechen</string>
-    <string name="msg_player_error_source2">URL funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise handelt es sich um einen Fehler in der App.</string>
+    <string name="msg_player_error_source2">URL funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise ist es ein Fehler in der App.</string>
     <string name="msg_player_error_video_source">VIDEO URL funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise ist es ein Fehler in der App.</string>
     <string name="msg_player_error_audio_source">AUDIO URL funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise ist es ein Fehler in der App.</string>
     <string name="msg_player_error_subtitle_source">UNTERTITEL URL funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise ist es ein Fehler in der App.</string>
@@ -652,7 +652,7 @@
     <string name="replace_thumbnails">Vorschaubilder ersetzen</string>
     <string name="crowdsourced_thumbnails">Community-basierte Vorschaubilder</string>
     <string name="crowdsoursed_titles">Community-basierte Titel</string>
-    <string name="dearrow_not_submitted_thumbs">Vorschaubild-Quelle (wenn es keine DeArrow-Einreichung gibt)</string>
+    <string name="dearrow_not_submitted_thumbs">Vorschaubilder-Quelle (wenn es keine DeArrow-Einreichung gibt)</string>
     <string name="pitch_effect">Tonhöhen-Effekt</string>
     <string name="fullscreen_mode">Vollbildmodus (ohne Systemleisten)</string>
     <string name="player_only_mode">Nur den Player anzeigen, wenn das Video außerhalb der App geöffnet wird</string>
