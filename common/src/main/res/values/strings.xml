@@ -556,11 +556,11 @@
     <string name="player_extra_long_speed_list">Extra long speed list</string>
     <string name="alt_app_icon">Alternative app icon (needs reboot)</string>
     <string name="network_stack">Prefer %s network stack</string>
-    <string name="player_network_stack">Network stack</string>
+    <string name="player_network_stack">Network engine</string>
     <string name="cronet_desc">Cronet is the Chromium network stack. Cronet can reduce the latency and increase networking performance, which can help with buffering issues.</string>
     <string name="unlock_all_formats">Unlock all video formats</string>
     <string name="unlock_all_formats_desc">On some devices the firmware incorrectly reports some formats as unsupported, even if they are.\n(e.g. 1080p smart TVs tend to report 4k as not supported).</string>
-    <string name="okhttp_desc">This network stack is the slowest one but has good stability.</string>
+    <string name="okhttp_desc">This network engine is the slowest one but has good stability.</string>
     <string name="select_channel_section">Open corresponding section when the app launched from ATV Channels</string>
     <string name="enable_voice_search_desc">The official app will be replaced with a so-called \"bridge\". A bridge helps to transfer global search requests to our app.</string>
     <string name="enable_master_password">Enable master password</string>
@@ -594,7 +594,7 @@
     <string name="subtitle_remember">Remember enabled subtitles per each channel</string>
     <string name="amazon_frame_drop_fix">Frame drop fix #2</string>
     <string name="amazon_frame_drop_fix_desc">Intended for Amazon Stick devices. May work on other devices too.</string>
-    <string name="default_stack_desc">Built-in network stack. This stack may have better stability in certain situations.</string>
+    <string name="default_stack_desc">Built-in network engine. This engine may have better stability in certain situations.</string>
     <string name="item_postion">Position of</string>
     <string name="player_screen_off_dimming">Screen off dimming amount</string>
     <string name="screensaver_timout">Screensaver timeout</string>

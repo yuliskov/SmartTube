@@ -558,11 +558,11 @@
     <string name="player_extra_long_speed_list">Ekstra uzun oynatma hızı listesi</string>
     <string name="alt_app_icon">Alternatif uygulama simgesi (yeniden başlatma gerekli)</string>
     <string name="network_stack">%s ağ yığınını tercih et</string>
-    <string name="player_network_stack">Ağ yığını</string>
-    <string name="cronet_desc">Cronet, Chromium ağ yığınıdır. Cronet, ara belleğe alma sorunlarına yardımcı olabilecek gecikmeyi azaltabilir ve ağ performansını artırabilir.</string>
+    <string name="player_network_stack">Ağ motoru</string>
+    <string name="cronet_desc">Cronet, Chromium ağ motoru. Cronet, ara belleğe alma sorunlarına yardımcı olabilecek gecikmeyi azaltabilir ve ağ performansını artırabilir.</string>
     <string name="unlock_all_formats">Tüm video biçimlerinin kilidini aç</string>
     <string name="unlock_all_formats_desc">Bazı cihazlarda aygıt yazılımı, desteklense bile bazı biçimlerin desteklenmediğini hatalı bir şekilde bildirir.\n(ör. 1080p akıllı TV\'ler genellikle 4k\'yı desteklenmiyor olarak bildirir).</string>
-    <string name="okhttp_desc">Bu ağ yığını en yavaş olanıdır ancak iyi bir kararlılığa sahiptir.</string>
+    <string name="okhttp_desc">Bu ağ motoru en yavaş olanıdır ancak iyi bir kararlılığa sahiptir.</string>
     <string name="select_channel_section">Uygulama ATV Kanallarından açıldığında ilgili bölümü aç</string>
     <string name="enable_voice_search_desc">Resmi uygulama sözde bir köprü ile değiştirilecek. Bir köprü, genel arama isteklerini uygulamamıza aktarmaya yardımcı olur.</string>
     <string name="enable_master_password">Ana şifreyi etkinleştir</string>
@@ -596,7 +596,7 @@
     <string name="subtitle_remember">Her kanal için etkinleştirilmiş altyazıları hatırla</string>
     <string name="amazon_frame_drop_fix">Kare bırakma düzeltmesi #2</string>
     <string name="amazon_frame_drop_fix_desc">Amazon Stick cihazları için tasarlanmıştır. Diğer cihazlarda da çalışabilir.</string>
-    <string name="default_stack_desc">Dahili ağ yığını. Bu yığın belirli durumlarda daha iyi kararlılığa sahip olabilir.</string>
+    <string name="default_stack_desc">Dahili ağ motoru. Bu motoru belirli durumlarda daha iyi kararlılığa sahip olabilir.</string>
     <string name="item_postion">Konum:</string>
     <string name="player_screen_off_dimming">Ekran kapatma karartma miktarı</string>
     <string name="screensaver_timout">Ekran koruyucu zaman aşımı</string>

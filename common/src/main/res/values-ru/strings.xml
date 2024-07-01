@@ -550,11 +550,11 @@
     <string name="player_extra_long_speed_list">Очень длинный список скоростей</string>
     <string name="alt_app_icon">Альтернативный значок приложения (требуется перезагрузка)</string>
     <string name="network_stack">Предпочитать сетевой стек %s</string>
-    <string name="player_network_stack">Сетевой стек</string>
+    <string name="player_network_stack">Сетевой движок</string>
     <string name="cronet_desc">Cronet — это сетевой стек Chromium. Обычно быстрее других. Это может помочь с проблемами буферизации.</string>
     <string name="unlock_all_formats">Разблокировать все видео форматы</string>
     <string name="unlock_all_formats_desc">Разблокировать форматы, которые, вероятно, не поддерживаются вашим устройством.</string>
-    <string name="okhttp_desc">Этот сетевой стек является самым медленным, но имеет хорошую стабильность.</string>
+    <string name="okhttp_desc">Этот сетевой движок является самым медленным, но имеет хорошую стабильность.</string>
     <string name="select_channel_section">Открывать соответствующий раздел при запуске приложения с каналов ATV.</string>
     <string name="enable_voice_search_desc">Официальное приложение будет заменено так называемым мостом. Мост помогает передавать глобальные поисковые запросы в наше приложение.</string>
     <string name="enable_master_password">Включить мастер-пароль</string>
@@ -589,7 +589,7 @@
     <string name="subtitle_remember">Запомнить включенные субтитры для каждого канала</string>
     <string name="amazon_frame_drop_fix">Исправление выпадения кадров #2</string>
     <string name="amazon_frame_drop_fix_desc">Исправляет лаги на Amazon Stick и некоторых других устройствах.</string>
-    <string name="default_stack_desc">Встроенный сетевой стек. Этот стек может иметь лучшую стабильность в определенных ситуациях.</string>
+    <string name="default_stack_desc">Встроенный сетевой движок. Этот движок может иметь лучшую стабильность в определенных ситуациях.</string>
     <string name="item_postion">Позиция</string>
     <string name="player_screen_off_dimming">Величина затемнения экрана</string>
     <string name="screensaver_timout">Тайм-аут включения заставки</string>
