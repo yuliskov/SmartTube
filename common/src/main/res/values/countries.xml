@@ -25,17 +25,17 @@
         <item>Hungary|HU</item>
         <item>Nederland|NL</item>
         <item>België|BE</item>
-        <item>België (Nederland)|nl_BE</item>
-        <item>België (France)|fr_BE</item>
-        <item>Norsk|NB</item>
-        <item>Czech|CS</item>
+        <item>België (dutch)|nl_BE</item>
+        <item>België (french)|fr_BE</item>
+        <item>Noreg|NO</item>
+        <item>Czech|CZ</item>
         <item>Italia|IT</item>
         <item>Ελληνικά|GR</item>
         <item>Denmark|DK</item>
         <item>Lietuva|LT</item>
-        <item>Moldova|MO</item>
+        <item>Moldova|MD</item>
         <item>Slovakia|SK</item>
-        <item>Slovenia|SL</item>
+        <item>Slovenia|SI</item>
         <item>Sweden|SE</item>
         <item>Singapore|SG</item>
         <item>New Zealand|NZ</item>
@@ -61,7 +61,7 @@
         <item>China|CN</item>
         <item>Taiwan|TW</item>
         <item>Indonesia|ID</item>
-        <item>Korea|KR</item>
+        <item>South Korea|KR</item>
         <item>Pakistan|PK</item>
         <item>Bolivia|BO</item>
         <item>Chile|CL</item>
