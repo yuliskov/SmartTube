@@ -189,7 +189,7 @@
   <string name="content_block_music_off_topic">Niemuzyczna sekcja klipu</string>
   <string name="confirm_segment_skip">Pomiń segment \"%s\"\?</string>
   <string name="cancel_segment_skip">Anuluj pomijanie segmentu</string>
-  <string name="msg_skipping_segment">Pomijanie segmentu\"%s\"…</string>
+  <string name="msg_skipping_segment">Pomijanie segmentu \"%s\"…</string>
   <string name="content_block_notification_type">Typ powiadomienia</string>
   <string name="content_block_notify_none">Bez powiadomienia</string>
   <string name="content_block_notify_toast">Toast</string>
@@ -368,9 +368,9 @@
   <string name="proxy_credentials_invalid">Nieprawidłowy użytkownik lub hasło.</string>
   <string name="proxy_test_aborted">Test został przerwany, wprowadź prawidłowe ustawienia proxy.</string>
   <string name="proxy_application_aborted">Wprowadź prawidłowe ustawienia proxy.</string>
-  <string name="proxy_test_start">Test#%d: %s …</string>
-  <string name="proxy_test_error">Błąd#%d: %s</string>
-  <string name="proxy_test_status">Status#%d: %s %d %s</string>
+  <string name="proxy_test_start">Test #%d: %s …</string>
+  <string name="proxy_test_error">Błąd #%d: %s</string>
+  <string name="proxy_test_status">Status #%d: %s %d %s</string>
   <string name="openvpn_config_address_hint">Adres pliku konfiguracyjnego (*.ovpn)</string>
   <string name="enable_openvpn">Używaj OpenVPN</string>
   <string name="openvpn_settings_title">Ustawienia OpenVPN</string>
