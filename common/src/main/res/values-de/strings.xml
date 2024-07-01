@@ -49,7 +49,7 @@
     <string name="settings_left_panel">Kategorien bearbeiten</string>
     <string name="settings_themes">Themen</string>
     <string name="settings_other">Sonstige</string>
-    <string name="settings_player">Video-Player</string>
+    <string name="settings_player">Player</string>
     <string name="settings_language">Sprache</string>
     <string name="settings_linked_devices">Verbundene Geräte</string>
     <string name="settings_about">Über</string>
@@ -162,7 +162,7 @@
     <string name="subscribe_to_channel">Kanal abonnieren</string>
     <string name="wait_data_loading">Bitte warten, während die Daten geladen werden…</string>
     <string name="auto_frame_rate_pause">Automatische Bildrate (Pause beim Umschalten)</string>
-    <string name="auto_frame_rate_applying">Automatische Bildrate wird angewendet %sx%s@%s</string>
+    <string name="auto_frame_rate_applying">Automatische Bildrate wird angewendet %sx%s\@%s</string>
     <string name="audio_shift">Audio-Verschiebung</string>
     <string name="player_remember_speed">Video-Geschwindigkeit merken</string>
     <string name="mark_channel_as_watched">Als gesehen markieren</string>
@@ -173,7 +173,7 @@
     <string name="device_connected">Gerät \"%s\" wurde verbunden</string>
     <string name="device_disconnected">Gerät \"%s\" wurde getrennt</string>
     <string name="settings_ui_scale">Anzeigegröße</string>
-    <string name="msg_restart_app">App neu starten, um diese Einstellungen zu übernehmen</string>
+    <string name="msg_restart_app">Bitte starten Sie die App neu, um diese Einstellungen zu übernehmen</string>
     <string name="settings_block">Inhalte blockieren</string>
     <string name="msg_applying">%s aktiv</string>
     <string name="msg_done">Fertig</string>
@@ -181,15 +181,15 @@
     <string name="settings_video">Video</string>
     <string name="content_block_confirm_skip">Überspringen bestätigen</string>
     <string name="content_block_categories">Segmente überspringen</string>
-    <string name="content_block_sponsor">Gesponserte Videosegmente</string>
+    <string name="content_block_sponsor">Sponsor</string>
     <string name="content_block_intro">Unterbrechung/Intro</string>
     <string name="content_block_outro">Endkarten/Credits</string>
     <string name="content_block_interaction">Interaktions-Erinnerungen</string>
     <string name="content_block_self_promo">Unbezahlt/Eigenwerbung</string>
     <string name="content_block_music_off_topic">Nicht-Musik-Abschnitt</string>
-    <string name="confirm_segment_skip">Segment \"%s\" überspringen</string>
+    <string name="confirm_segment_skip">Überspringe Segment \"%s\"\?</string>
     <string name="cancel_segment_skip">Segment nicht überspringen</string>
-    <string name="msg_skipping_segment">Segment \"%s\" überspringen…</string>
+    <string name="msg_skipping_segment">Überspringe Segment \"%s\"…</string>
     <string name="content_block_notification_type">Benachrichtigungstyp</string>
     <string name="content_block_notify_none">Ohne Benachrichtigung</string>
     <string name="content_block_notify_toast">Toast-Meldung</string>
@@ -331,10 +331,10 @@
     <string name="content_block_filler">Füller/Witze</string>
     <string name="keyboard_auto_show">Tastatur automatisch anzeigen</string>
     <string name="cancel_dialog">Abbrechen</string>
-    <string name="msg_player_error_source2">URL funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise handelt es sich um ein Problem der App.</string>
-    <string name="msg_player_error_video_source">VIDEO URL funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise handelt es sich um ein Problem der App.</string>
-    <string name="msg_player_error_audio_source">AUDIO URL funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise handelt es sich um ein Problem der App.</string>
-    <string name="msg_player_error_subtitle_source">UNTERTITEL URL funktioniert nicht oder falsche Geräte-Uhrzeit.\Normalerweise handelt es sich um ein Problem der App.</string>
+    <string name="msg_player_error_source2">URL funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise ist es ein Fehler in der App.</string>
+    <string name="msg_player_error_video_source">VIDEO URL funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise ist es ein Fehler in der App.</string>
+    <string name="msg_player_error_audio_source">AUDIO URL funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise ist es ein Fehler in der App.</string>
+    <string name="msg_player_error_subtitle_source">UNTERTITEL URL funktioniert nicht oder falsche Geräte-Uhrzeit.\nNormalerweise ist es ein Fehler in der App.</string>
     <string name="hide_upcoming">Anstehende Videos in Abos ausblenden</string>
     <string name="hide_upcoming_channel">Anstehende Videos in Kanäle ausblenden</string>
     <string name="hide_upcoming_home">Anstehende Videos in Start ausblenden</string>
@@ -361,16 +361,16 @@
     <string name="proxy_test_btn">Test</string>
     <string name="proxy_settings_title">Proxy-Server-Einstellungen</string>
     <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
-    <string name="proxy_test_cancelled">Test#%d: abgebrochen.</string>
+    <string name="proxy_test_cancelled">Test #%d: abgebrochen.</string>
     <string name="proxy_type_invalid">Proxy-Typ nicht eingestellt.</string>
     <string name="proxy_host_invalid">Proxy-Host nicht eingestellt.</string>
     <string name="proxy_port_invalid">Ungültiger Proxy-Port, muss &gt; 0.</string>
     <string name="proxy_credentials_invalid">Ungültiger Benutzername oder Passwort.</string>
     <string name="proxy_test_aborted">Test abgebrochen, bitte korrigieren Sie zuerst die Proxy-Einstellungen.</string>
     <string name="proxy_application_aborted">Bitte korrigieren Sie zuerst die Proxy-Einstellungen.</string>
-    <string name="proxy_test_start">Test#%d: %s …</string>
-    <string name="proxy_test_error">Fehler#%d: %s</string>
-    <string name="proxy_test_status">Status#%d: %s %d %s</string>
+    <string name="proxy_test_start">Test #%d: %s …</string>
+    <string name="proxy_test_error">Fehler #%d: %s</string>
+    <string name="proxy_test_status">Status #%d: %s %d %s</string>
     <string name="openvpn_config_address_hint">Adresse der Konfigurationsdatei (*.ovpn)</string>
     <string name="enable_openvpn">OpenVPN verwenden</string>
     <string name="openvpn_settings_title">OpenVPN-Einstellungen</string>
@@ -382,7 +382,7 @@
     <string name="simple_edit_value_hint">Wert eingeben</string>
     <string name="seek_interval">Spulintervall</string>
     <string name="seek_interval_sec">%s sek.</string>
-    <string name="subtitle_system">System-Stil (Android-Einstellungen > Barrierefreiheit)</string>
+    <string name="subtitle_system">System-Stil (Android-Einstellungen &gt; Barrierefreiheit)</string>
     <string name="subtitle_scale">Untertitel-Skalierung</string>
     <string name="audio_sync_fix_desc">Eine alternative Methode zur Synchronisierung von Audio/Video. Sie gilt als veraltet, kann aber in manchen Fällen hilfreich sein.</string>
     <string name="audio_sync_fix">Audio-Synchronisation-Fix</string>
@@ -394,10 +394,10 @@
     <string name="live_stream_fix_4k_desc">Achtung, diese Option deaktiviert das Zurückspulen von Streams. Erhebliche Verbesserung der Live-Stream-Leistung. Die maximale Auflösung beträgt 4K.</string>
     <string name="live_stream_fix">Live-Stream-Fix (1080p)</string>
     <string name="live_stream_fix_4k">Live-Stream-Fix (4K)</string>
-    <string name="playback_notifications_fix_desc">Ausblenden von Benachrichtigungen. Könnte auf AOSP-basierten Firmwares nützlich sein.</string>
+    <string name="playback_notifications_fix_desc">Ausblenden von Benachrichtigungen. Könnte bei AOSP-basierter Firmware nützlich sein.</string>
     <string name="playback_notifications_fix">Wiedergabe-Benachrichtigungen deaktivieren</string>
     <string name="amlogic_fix_desc">Frame-Drop-Fix auf Amlogic-basierten Geräten.</string>
-    <string name="amlogic_fix">Amlogic 1080p@60fps Fix</string>
+    <string name="amlogic_fix">Amlogic 1080p\@60fps Fix</string>
     <string name="tunneled_video_playback_desc">HINWEIS: Pause funktioniert möglicherweise nicht richtig! Die getunnelte Video-Wiedergabe verspricht Vorteile wie eine bessere Audio/Video-Synchronisation (AV-Sync) und eine flüssigere Wiedergabe. Erfordert Android 5+</string>
     <string name="tunneled_video_playback">Getunnelte Video-Wiedergabe (Android 5+)</string>
     <string name="master_volume">Gesamtlautstärke</string>
@@ -440,7 +440,7 @@
     <string name="disable_vsync">Snap-to-VSync deaktivieren</string>
     <string name="disable_vsync_desc">Diese Option deaktiviert das Ausrichten von Bildern mit dem vertikalen Synchronisationssignal des Displays. Dies könnte die Leistung auf Low-End-Geräten verbessern, indem CPU-Ressourcen freigegeben werden.</string>
     <string name="skip_codec_profile_check">Überprüfung des Codec-Profil-Level überspringen</string>
-    <string name="skip_codec_profile_check_desc">Überprüft nicht die Codec-Unterstützung beim Starten eines Videos. Könnte bei fehlerhaften Firmwares hilfreich sein.</string>
+    <string name="skip_codec_profile_check_desc">Überprüft nicht die Codec-Unterstützung beim Starten eines Videos. Könnte bei fehlerhafter Firmware hilfreich sein.</string>
     <string name="force_sw_codec">SW-Video-Decoder erzwingen</string>
     <string name="force_sw_codec_desc">Könnte fast jedes Video abspielen, aber die Performance ist sehr schlecht.</string>
     <string name="playlist_order">Wiedergabeliste sortieren</string>
@@ -450,7 +450,7 @@
     <string name="playlist_order_published_date_older_first">Veröffentlichungsdatum (ältere zuerst)</string>
     <string name="playlist_order_popularity">Beliebtheit</string>
     <string name="cant_do_this_for_foreign_playlist">Kann dies nicht für fremde Wiedergabelisten tun</string>
-    <string name="owned_playlist_warning">Fehler. Diese Aktion kann nur auf eigene Wiedergabelisten angewendet werden</string>
+    <string name="owned_playlist_warning">Fehler: Diese Aktion kann nur auf eigene Wiedergabelisten angewendet werden</string>
     <string name="content_block_alt_server">Alternativen Server verwenden</string>
     <string name="content_block_alt_server_desc">Aktivieren Sie diese Option, wenn SponsorBlock aus verschiedenen Gründen nicht funktioniert.</string>
     <string name="unset_stream_reminder">Stream-Erinnerung deaktivieren</string>
@@ -458,7 +458,6 @@
     <string name="playback_starts_shortly">Die Wiedergabe wird automatisch gestartet, sobald der Stream bereit ist</string>
     <string name="starting_stream">Starten des Streams…</string>
     <string name="action_playlist_remove">Aus Wiedergabeliste entfernen</string>
-    <!-- BEGIN Moved strings -->
     <string name="signin_view_title">Benutzercode wird geladen…</string>
     <string name="signin_view_description">Um sich anzumelden, geben Sie diesen Code auf Seite %s ein.\nHINWEIS: Funktioniert nur mit Firefox- oder Chrome-Browsern.</string>
     <string name="signin_view_action_text">Erledigt</string>
@@ -468,13 +467,12 @@
     <string name="player_ending_time">Ende: %s</string>
     <string name="badge_new_content">NEU</string>
     <string name="badge_live">LIVE</string>
-    <string name="add_device_view_description">Um ein Gerät zu verbinden, geben Sie diesen TV-Code in der YouTube-App auf Ihrem Smartphone/Tablet unter Einstellungen/Auf Fernseher ansehen/TV-Code ein.\nHINWEIS: Funktioniert nur mit Gboard-Tastatur.</string>
+    <string name="add_device_view_description">Um ein Gerät zu verbinden, geben Sie diesen TV-Code in der YouTube-App auf Ihrem Smartphone/Tablet unter Einstellungen/Auf Fernseher ansehen/TV-Code ein.\nHINWEIS: Dies funktioniert nur mit der Gboard-Tastatur!</string>
     <string name="playback_controls_repeat_pause">Pause wiederholen</string>
     <string name="playback_controls_repeat_list">Liste wiederholen</string>
     <string name="action_subscribe_off">Abonnieren aus</string>
     <string name="action_subscribe_on">Abonnieren an</string>
-    <!-- END Moved strings -->
-    <string name="skip_24_rate">24fps-Formate überspringen (Echter-Kinomodus-Fix?)</string>
+    <string name="skip_24_rate">24fps-Formate überspringen (Echter-Kinomodus-Fix\?)</string>
     <string name="skip_shorts">Shorts überspringen</string>
     <string name="player_disable_suggestions">Vorschläge deaktivieren</string>
     <string name="feedback">Feedback</string>
@@ -516,9 +514,9 @@
     <string name="protect_settings_with_password">Alle Einstellungen mit einem Passwort schützen</string>
     <string name="enter_settings_password">Passwort für Einstellungen eingeben</string>
     <string name="child_mode">Kindermodus</string>
-    <string name="child_mode_desc">In diesem Modus kann der Benutzer die Suche nicht verwenden und keine vorgeschlagenen Inhalte sehen. Die Einstellungen werden mit dem Passwort gesichert.</string>
+    <string name="child_mode_desc">In diesem Modus kann der Benutzer die Suche nicht verwenden und keine vorgeschlagenen Inhalte sehen. Die Einstellungsseite wird durch ein Passwort geschützt.</string>
     <string name="lost_setting_warning">Die Einstellungen der App werden geändert. Stellen Sie sicher, dass Sie eine Sicherung der Einstellungen erstellt haben.</string>
-    <string name="player_button_long_click">Ein kurzer Klick auf die Taste führt zu einer schnellen Aktion und ein langer zum Einstellungsdialog.</string>
+    <string name="player_button_long_click">Diese Taste lange drücken für weitere Optionen</string>
     <string name="pause_history">Verlauf pausieren</string>
     <string name="resume_history">Verlauf fortsetzen</string>
     <string name="disable_history">Verlauf deaktivieren</string>
@@ -564,7 +562,7 @@
     <string name="unlock_all_formats_desc">Bei einigen Geräten meldet die Firmware fälschlicherweise, dass einige Formate nicht unterstützt werden, auch wenn sie es sind.\n(z.B. melden 1080p-Smart-TVs oft, dass 4k nicht unterstützt wird).</string>
     <string name="okhttp_desc">Dieser Netzwerkstack ist am langsamsten, hat aber eine gute Stabilität.</string>
     <string name="select_channel_section">Die entsprechende Kategorie öffnen, wenn die App über ATV-Kanäle gestartet wird</string>
-    <string name="enable_voice_search_desc">Die offizielle App wird durch eine sogenannte Bridge ersetzt. Eine Bridge hilft dabei, globale Suchanfragen an unsere App zu übertragen.</string>
+    <string name="enable_voice_search_desc">Die offizielle App wird durch eine sogenannte \"Bridge\" ersetzt. Eine Bridge hilft dabei, globale Suchanfragen an unsere App zu übertragen.</string>
     <string name="enable_master_password">Master-Passwort aktivieren</string>
     <string name="enter_master_password">Master-Passwort eingeben</string>
     <string name="disable_stream_buffer">Puffer für Streams deaktivieren</string>
@@ -610,6 +608,8 @@
     <string name="remember_position_subscriptions">Zuletzt angesehene Position in Abos merken</string>
     <string name="remember_position_pinned">Zuletzt angesehene Position in angehefteten Wiedergabelisten merken</string>
     <string name="msg_player_unknown_error">Unbekannter Fehler</string>
+    <string name="unknown_source_error">Unbekannter Quellen-Fehler</string>
+    <string name="unknown_renderer_error">Unbekannter Renderer-Fehler</string>
     <string name="header_notifications">Benachrichtigungen</string>
     <string name="disable_search_history">Suchverlauf deaktivieren</string>
     <string name="unlock_high_bitrate_formats">1080p vp9-Formate mit hoher Bitrate freischalten</string>
@@ -632,12 +632,13 @@
     <string name="remote_control_permission">Hintergrund-Fernsteuerung benötigt Overlay-Berechtigung</string>
     <string name="login_from_browser">Anmeldung über Browser</string>
     <string name="disable_remote_history">Verlauf bei Verwendung der Fernsteuerung deaktivieren</string>
-    <string name="keyboard_fix">Reparieren der Anzeige der Tastatur beim Drücken der OK-Taste (G20s und andere)</string>
+    <string name="keyboard_fix">Verhindern, dass die OK-Taste die Tastatur öffnet (G20s und andere)</string>
     <string name="nothing_found">Nichts gefunden</string>
     <string name="auto_frame_rate_desc">Diese Option verhindert Ruckeln in Szenen, in denen sich die Kamera schnell bewegt, z.B. bei Sportübertragungen</string>
     <string name="channel_filter_hint">Kanäle filtern</string>
     <string name="player_loop_shorts">Shorts wiederholen</string>
     <string name="player_quick_shorts_skip">Shorts überspringen mit Links/Rechts-Tasten</string>
+    <string name="player_quick_skip_videos">Normale Videos überspringen mit Links/Rechts-Tasten</string>
     <string name="channels_filter">Feld zum Filtern von Kanälen innerhalb der Kanäle-Kategorie anzeigen</string>
     <string name="channel_search_bar">Suchleiste innerhalb der Kanalseite</string>
     <string name="header_sports">Sport</string>
@@ -651,7 +652,7 @@
     <string name="replace_thumbnails">Vorschaubilder ersetzen</string>
     <string name="crowdsourced_thumbnails">Community-basierte Vorschaubilder</string>
     <string name="crowdsoursed_titles">Community-basierte Titel</string>
-    <string name="dearrow_not_submitted_thumbs">Quelle für nicht eingereichte Vorschaubilder</string>
+    <string name="dearrow_not_submitted_thumbs">Vorschaubilder-Quelle (wenn es keine DeArrow-Einreichung gibt)</string>
     <string name="pitch_effect">Tonhöhen-Effekt</string>
     <string name="fullscreen_mode">Vollbildmodus (ohne Systemleisten)</string>
     <string name="player_only_mode">Nur den Player anzeigen, wenn das Video außerhalb der App geöffnet wird</string>
@@ -663,4 +664,5 @@
     <string name="device_specific_backup">Sicherung nur für dieses Gerät</string>
     <string name="local_backup">Lokale Sicherung</string>
     <string name="auto_backup">Automatische Sicherung (einmal pro Tag)</string>
+    <string name="repeat_mode_reverse_list">Wiedergabeliste oder Kanalvideos in umgekehrter Reihenfolge abspielen</string>
 </resources>
