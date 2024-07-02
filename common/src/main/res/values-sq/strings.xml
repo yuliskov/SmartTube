@@ -104,7 +104,7 @@
   <string name="not_recommend_channel">Mos e këshillo kanalin</string>
   <string name="you_wont_see_this_video">Videoja është hequr nga këshillimet</string>
   <string name="you_wont_see_this_channel">Nuk do ta shohësh këtë kanal në këshillimet</string>
-  <string name="settings_search">Kërko</string>
+  <string name="settings_search">Kërkimi</string>
   <string name="dialog_search">Kërko</string>
   <string name="instant_voice_search">Kërkim i menjëhershëm me zë</string>
   <string name="option_background_playback_behind">Luaj në sfond</string>
@@ -555,11 +555,11 @@
   <string name="player_extra_long_speed_list">Edhe më shumë shpejtësi në listën e shpejtësive</string>
   <string name="alt_app_icon">Ikona alternative e aplikacionit (kërkon rinisje)</string>
   <string name="network_stack">Prefero stivën e rrjetit %s</string>
-  <string name="player_network_stack">Stiva e rrjetit</string>
+  <string name="player_network_stack">Motori i rrjetit</string>
   <string name="cronet_desc">Cronet është stiva e rrjetit të Chromium. Cronet mund të ul vonesën dhe të rrisë performancën e rrjetit, gjë që mund të ndihmojë në problemet me buferimin.</string>
   <string name="unlock_all_formats">Zhblloko të gjitha formatet e videos</string>
   <string name="unlock_all_formats_desc">Në disa pajisje firmueri njofton gabimisht disa formate si të pambështetura, edhe pse janë.\n(për shembull, televizorët e mençur 1080p priten që të njoftojnë 4k si të pambështetur).</string>
-  <string name="okhttp_desc">Kjo stiva e rrjeteve është më e ngadalshme, por ka qëndrueshmëri të mirë.</string>
+  <string name="okhttp_desc">Ky motor rrjeti është më i ngadalti, por ka qëndrueshmëri të mirë.</string>
   <string name="select_channel_section">Hap seksionin përkatës kur aplikacioni të jetë nisur nga Kanalet ATV</string>
   <string name="enable_voice_search_desc">Aplikacioni zyrtar do të zëvendësohet nga një e ashtuquajtur \"urë\"\. Një urë ndihmon në kalimin e kërkesave globale të kërkimit në aplikacionin tonë.</string>
   <string name="enable_master_password">Aktivizo fjalëkalimin kryesor.</string>
@@ -593,7 +593,7 @@
   <string name="subtitle_remember">Mbaj mend titrat e aktivizuara për çdo kanal</string>
   <string name="amazon_frame_drop_fix">Rregullo uljen e frekuencës #2</string>
   <string name="amazon_frame_drop_fix_desc">I menduar për pajisjet Amazon Stick. Mund të punoi edhe në pajisje të tjera.</string>
-  <string name="default_stack_desc">Stivë e integruar e rrjeteve. Kjo stivë mund të ketë qëndrueshmëri më të mirë në ca situata.</string>
+  <string name="default_stack_desc">Motor i integruar i rrjetit. Ky motor mund të ketë qëndrueshmëri më të mirë në ca situata.</string>
   <string name="item_postion">Vendndodhja e</string>
   <string name="player_screen_off_dimming">Niveli i zbehjes së ekranit të fikur</string>
   <string name="screensaver_timout">Koha e fikjes e mbrojtësit të ekranit</string>
