@@ -810,6 +810,10 @@ public class PlayerUIController extends PlayerEventListenerHelper {
     }
 
     private void onSubscribe(int buttonState) {
+        if (getPlayer().getVideo() == null) {
+            return;
+        }
+
         if (!mIsMetadataLoaded) {
             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
             return;
