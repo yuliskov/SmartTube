@@ -242,7 +242,7 @@
     <string name="card_text_scroll_factor">Швидкість прокрутки тексту картки</string>
     <string name="preferred_update_source">Вибрати джерело оновлень</string>
     <string name="hide_shorts">Приховувати короткі відео з Підписок</string>
-    <string name="hide_shorts_channel">Приховувати короткі відео на Каналі</string>
+    <string name="hide_shorts_channel">Приховувати короткі відео на каналі</string>
     <string name="key_remapping">Перевизначення клавіш</string>
     <string name="screen_dimming">Затемнення екрану</string>
     <string name="removed_from_playback_queue">Видалено з черги відтворення</string>

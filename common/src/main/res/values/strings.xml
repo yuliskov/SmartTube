@@ -242,7 +242,7 @@
     <string name="card_text_scroll_factor">Card text scroll speed</string>
     <string name="preferred_update_source">Select update source</string>
     <string name="hide_shorts">Hide shorts from Subscriptions</string>
-    <string name="hide_shorts_channel">Hide shorts from Channel</string>
+    <string name="hide_shorts_channel">Hide shorts from the channel</string>
     <string name="key_remapping">Key remapping</string>
     <string name="screen_dimming">Screen dimming</string>
     <string name="removed_from_playback_queue">Removed from playback queue</string>
