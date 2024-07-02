@@ -555,12 +555,12 @@
     <string name="player_long_speed_list">Lange Geschwindigkeitsliste</string>
     <string name="player_extra_long_speed_list">Extra lange Geschwindigkeitsliste</string>
     <string name="alt_app_icon">Alternatives App-Symbol (Neustart erforderlich)</string>
-    <string name="network_stack">Netzwerkstack %s bevorzugen</string>
-    <string name="player_network_stack">Netzwerkstack</string>
-    <string name="cronet_desc">Cronet ist der Chromium-Netzwerkstack. Cronet kann die Latenz verringern und die Netzwerkleistung erhöhen, was bei Pufferproblemen helfen kann.</string>
+    <string name="network_stack">Netzwerk-Engine %s bevorzugen</string>
+    <string name="player_network_stack">Netzwerk-Engine</string>
+    <string name="cronet_desc">Cronet ist die Netzwerk-Engine von Chromium. Cronet kann die Latenz verringern und die Netzwerkleistung erhöhen, was bei Pufferproblemen helfen kann.</string>
     <string name="unlock_all_formats">Alle Video-Formate freischalten</string>
     <string name="unlock_all_formats_desc">Bei einigen Geräten meldet die Firmware fälschlicherweise, dass einige Formate nicht unterstützt werden, auch wenn sie es sind.\n(z.B. melden 1080p-Smart-TVs oft, dass 4k nicht unterstützt wird).</string>
-    <string name="okhttp_desc">Dieser Netzwerkstack ist am langsamsten, hat aber eine gute Stabilität.</string>
+    <string name="okhttp_desc">Diese Netzwerk-Engine ist die langsamste, hat aber eine gute Stabilität.</string>
     <string name="select_channel_section">Die entsprechende Kategorie öffnen, wenn die App über ATV-Kanäle gestartet wird</string>
     <string name="enable_voice_search_desc">Die offizielle App wird durch eine sogenannte \"Bridge\" ersetzt. Eine Bridge hilft dabei, globale Suchanfragen an unsere App zu übertragen.</string>
     <string name="enable_master_password">Master-Passwort aktivieren</string>
@@ -594,7 +594,7 @@
     <string name="subtitle_remember">Aktivierte Untertitel für jeden Kanal merken</string>
     <string name="amazon_frame_drop_fix">Frame-Drop-Fix #2</string>
     <string name="amazon_frame_drop_fix_desc">Gedacht für Amazon Stick-Geräte. Kann auch auf anderen Geräten funktionieren.</string>
-    <string name="default_stack_desc">Eingebauter Netzwerkstack. Dieser Stack könnte in bestimmten Situationen eine bessere Stabilität haben.</string>
+    <string name="default_stack_desc">Eingebaute Netzwerk-Engine. Diese Engine könnte in bestimmten Situationen eine bessere Stabilität haben.</string>
     <string name="item_postion">Position von</string>
     <string name="player_screen_off_dimming">Dimmwert für Bildschirm aus</string>
     <string name="screensaver_timout">Bildschirmschoner-Timeout</string>
