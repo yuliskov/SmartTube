@@ -182,11 +182,11 @@ public class PlaybackActivity extends LeanbackActivity {
 
         // NOTE: block back button for PIP.
         // User pressed PIP button in the player.
-        if (!skipPip()) {
+        if (mIsBackPressed && mGeneralData.getBackgroundPlaybackShortcut() != GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME) {
             enterPipMode(); // NOTE: without this call app will hangs when pressing on PIP button
         }
 
-        if (doNotDestroy() && !skipPip()) {
+        if (doNotDestroy() && mIsBackPressed && mGeneralData.getBackgroundPlaybackShortcut() != GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME) {
             mPlaybackFragment.blockEngine(true);
             // Ensure to opening this activity when the user is returning to the app
             mViewManager.blockTop(this);
@@ -285,7 +285,7 @@ public class PlaybackActivity extends LeanbackActivity {
     public void onUserLeaveHint() {
         // Check that user not open dialog/search activity instead of really leaving the activity
         // Activity may be overlapped by the dialog, back is pressed or new view started
-        if (isFinishing() || skipPip() || mViewManager.isNewViewPending() || mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_BACK) {
+        if (mIsBackPressed || isFinishing() || mViewManager.isNewViewPending() || mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_BACK) {
             return;
         }
 
