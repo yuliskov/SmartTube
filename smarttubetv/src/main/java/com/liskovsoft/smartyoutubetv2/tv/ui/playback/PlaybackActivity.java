@@ -272,10 +272,10 @@ public class PlaybackActivity extends LeanbackActivity {
 
         mPlaybackFragment.onPIPChanged(isInPictureInPictureMode);
 
-        if (!isInPictureInPictureMode) {
-            // Disable collapse app to Home launcher
-            mViewManager.enableMoveToBack(false);
-        }
+        //if (!isInPictureInPictureMode) {
+        //    // Disable collapse app to Home launcher
+        //    mViewManager.enableMoveToBack(false);
+        //}
     }
 
     /**
@@ -301,7 +301,7 @@ public class PlaybackActivity extends LeanbackActivity {
                     // Ensure to opening this activity when the user will return to the app
                     mViewManager.blockTop(this);
                     // Enable collapse app to Home launcher
-                    mViewManager.enableMoveToBack(true);
+                    //mViewManager.enableMoveToBack(true);
                 }
                 break;
             case PlayerData.BACKGROUND_MODE_SOUND:
@@ -309,7 +309,7 @@ public class PlaybackActivity extends LeanbackActivity {
                     // Ensure to continue a playback
                     mPlaybackFragment.blockEngine(true);
                     mViewManager.blockTop(this);
-                    mViewManager.enableMoveToBack(true);
+                    //mViewManager.enableMoveToBack(true);
                 }
                 break;
         }

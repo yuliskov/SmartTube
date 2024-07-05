@@ -390,9 +390,9 @@ public class ViewManager {
         return mIsFinishing;
     }
 
-    public void enableMoveToBack(boolean enable) {
-        mIsMoveToBackEnabled = enable;
-    }
+    //public void enableMoveToBack(boolean enable) {
+    //    mIsMoveToBackEnabled = enable;
+    //}
 
     public boolean isNewViewPending() {
         return System.currentTimeMillis() - mPendingActivityMs < 1_000;
