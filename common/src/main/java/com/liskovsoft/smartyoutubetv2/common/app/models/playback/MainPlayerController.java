@@ -25,11 +25,12 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MainPlayerController implements PlayerEventListener {
     private static final String TAG = MainPlayerController.class.getSimpleName();
-    private final ArrayList<PlayerEventListener> mEventListeners = new ArrayList<PlayerEventListener>() {
+    private final List<PlayerEventListener> mEventListeners = new CopyOnWriteArrayList<PlayerEventListener>() {
         @Override
         public boolean add(PlayerEventListener listener) {
             ((PlayerEventListenerHelper) listener).setMainController(MainPlayerController.this);
