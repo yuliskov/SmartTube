@@ -530,6 +530,8 @@ public class PlayerUIController extends PlayerEventListenerHelper {
             showSoundOffDialog();
         } else if (buttonId == R.id.action_afr) {
             AutoFrameRateSettingsPresenter.instance(getContext()).show(() -> applyAfr(mPlayerData.isAfrEnabled() ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON));
+        } else if (buttonId == R.id.action_repeat) {
+            showRepeatModeDialog(buttonState);
         }
     }
 
@@ -859,11 +861,13 @@ public class PlayerUIController extends PlayerEventListenerHelper {
     }
 
     private void applyRepeatMode(int buttonState) {
-        //int nextMode = getNextRepeatMode(buttonState);
-        //
-        //mPlayerData.setRepeatMode(nextMode);
-        //getPlayer().setButtonState(R.id.action_repeat, nextMode);
+        int nextMode = getNextRepeatMode(buttonState);
 
+        mPlayerData.setRepeatMode(nextMode);
+        getPlayer().setButtonState(R.id.action_repeat, nextMode);
+    }
+
+    private void showRepeatModeDialog(int buttonState) {
         OptionCategory category = AppDialogUtil.createPlaybackModeCategory(
                 getContext(), mPlayerData, () -> {
                     getPlayer().setButtonState(R.id.action_repeat, mPlayerData.getRepeatMode());
@@ -876,7 +880,7 @@ public class PlayerUIController extends PlayerEventListenerHelper {
 
     private int getNextRepeatMode(int buttonState) {
         int[] modeList = {PlayerEngineConstants.REPEAT_MODE_ALL, PlayerEngineConstants.REPEAT_MODE_ONE, PlayerEngineConstants.REPEAT_MODE_SHUFFLE,
-                PlayerEngineConstants.REPEAT_MODE_LIST, PlayerEngineConstants.REPEAT_MODE_PAUSE, PlayerEngineConstants.REPEAT_MODE_CLOSE};
+                PlayerEngineConstants.REPEAT_MODE_LIST, PlayerEngineConstants.REPEAT_MODE_REVERSE_LIST, PlayerEngineConstants.REPEAT_MODE_PAUSE, PlayerEngineConstants.REPEAT_MODE_CLOSE};
         int nextMode = Utils.getNextState(buttonState, modeList);
         return nextMode;
     }

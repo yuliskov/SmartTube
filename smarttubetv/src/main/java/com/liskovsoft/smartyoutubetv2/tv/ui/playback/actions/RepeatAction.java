@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.PlaybackControlsRow.MultiAction;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
@@ -20,6 +21,7 @@ public class RepeatAction extends MultiAction {
     private static final int INDEX_LIST = PlayerEngineConstants.REPEAT_MODE_LIST;
     private static final int INDEX_SHUFFLE = PlayerEngineConstants.REPEAT_MODE_SHUFFLE;
     private static final int INDEX_REVERSE_LIST = PlayerEngineConstants.REPEAT_MODE_REVERSE_LIST;
+    private final Context mContext;
 
     /**
      * Constructor
@@ -36,6 +38,8 @@ public class RepeatAction extends MultiAction {
      */
     public RepeatAction(Context context, int selectionColor) {
         super(R.id.action_repeat);
+
+        mContext = context;
         Drawable[] drawables = new Drawable[7];
         BitmapDrawable repeatNoneDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_none);
         BitmapDrawable repeatOneDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_one);
@@ -63,5 +67,16 @@ public class RepeatAction extends MultiAction {
         labels[INDEX_SHUFFLE] = context.getString(R.string.repeat_mode_shuffle);
         labels[INDEX_REVERSE_LIST] = context.getString(R.string.repeat_mode_reverse_list);
         setLabels(labels);
+    }
+
+    @Override
+    public void setLabels(String[] labels) {
+        for (int i = 0; i < labels.length; i++) {
+            if (labels[i] != null) {
+                labels[i] = Utils.updateTooltip(mContext, labels[i]);
+            }
+        }
+
+        super.setLabels(labels);
     }
 }
