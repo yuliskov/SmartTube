@@ -286,7 +286,7 @@ public class PlayerUIController extends PlayerEventListenerHelper {
 
     @Override
     public void onViewPaused() {
-        if (getPlayer().isInPIPMode()) {
+        if (getPlayer() != null && getPlayer().isInPIPMode()) {
             // UI couldn't be properly displayed in PIP mode
             getPlayer().showOverlay(false);
             getPlayer().showDebugInfo(false);
