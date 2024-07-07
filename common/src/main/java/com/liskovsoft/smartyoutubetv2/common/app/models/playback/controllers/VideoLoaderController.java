@@ -49,7 +49,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private long mSleepTimerStartMs;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
-    private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
+    private final Runnable mReloadVideo = () -> loadVideo(mLastVideo);
+    private final Runnable mLoadNext = this::loadNext;
     private final Runnable mMetadataSync = () -> {
         if (getPlayer() != null) {
             waitMetadataSync(getPlayer().getVideo(), false);
@@ -313,7 +314,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             getPlayer().showOverlay(true);
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
-            loadNext();
+            Utils.postDelayed(mLoadNext, 5_000);
         } else if (formatInfo.containsDashVideoInfo() && acceptDashVideoInfo(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
@@ -356,7 +357,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         if (getPlayer().isEngineInitialized()) {
             Log.d(TAG, "Starting check for the future stream...");
             getPlayer().showOverlay(true);
-            Utils.postDelayed(mReloadVideoHandler, reloadIntervalMs);
+            Utils.postDelayed(mReloadVideo, reloadIntervalMs);
         }
     }
 
@@ -393,7 +394,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private void disposeActions() {
         MediaServiceManager.instance().disposeActions();
         RxHelper.disposeActions(mFormatInfoAction, mMpdStreamAction);
-        Utils.removeCallbacks(mReloadVideoHandler, mFixAndRestartEngine, mMetadataSync);
+        Utils.removeCallbacks(mReloadVideo, mLoadNext, mFixAndRestartEngine, mMetadataSync);
         Utils.removeCallbacks(mOnLongBuffering);
     }
 
