@@ -618,7 +618,7 @@
     <string name="enter_account_password">Введите пароль от аккаунта</string>
     <string name="show_connect_messages">Сообщения о подключенных устройствах</string>
     <string name="prefer_avc_over_vp9_desc">ПРЕДУПРЕЖДЕНИЕ: 1080p максимум</string>
-    <string name="play_next">Воспроизвезти следующим</string>
+    <string name="play_next">Воспроизвести следующим</string>
     <string name="hide_watched_from_subscriptions">Скрывать просмотренные видео из Подписок</string>
     <string name="hide_watched_from_notifications">Скрывать просмотренные видео из Уведомлений</string>
     <string name="hide_unwanted_content">Скрывать нежелательное содержимое</string>
