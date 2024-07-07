@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.search;
 
+import android.text.TextUtils;
+
 import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -11,9 +13,11 @@ import io.reactivex.disposables.Disposable;
 public class MediaServiceSearchTagProvider implements SearchTagsProvider {
     private static final String TAG = MediaServiceSearchTagProvider.class.getSimpleName();
     private final ContentService mContentService;
+    private final boolean mIgnoreEmptyQuery;
     private Disposable mTagsAction;
 
-    public MediaServiceSearchTagProvider() {
+    public MediaServiceSearchTagProvider(boolean ignoreEmptyQuery) {
+        mIgnoreEmptyQuery = ignoreEmptyQuery;
         ServiceManager service = YouTubeServiceManager.instance();
         mContentService = service.getContentService();
     }
@@ -21,6 +25,11 @@ public class MediaServiceSearchTagProvider implements SearchTagsProvider {
     @Override
     public void search(String query, ResultsCallback callback) {
         RxHelper.disposeActions(mTagsAction);
+
+        if (mIgnoreEmptyQuery && TextUtils.isEmpty(query)) {
+            callback.onResults(null);
+            return;
+        }
 
         mTagsAction = mContentService.getSearchTagsObserve(query)
                 .subscribe(

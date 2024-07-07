@@ -76,7 +76,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
-        getView().setTagsProvider(new MediaServiceSearchTagProvider());
+        getView().setTagsProvider(new MediaServiceSearchTagProvider(mSearchData.isSearchHistoryDisabled()));
 
         startSearchInt();
     }
