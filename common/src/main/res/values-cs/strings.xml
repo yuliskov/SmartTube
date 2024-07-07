@@ -49,7 +49,7 @@
     <string name="settings_left_panel">Upravit kategorie</string>
     <string name="settings_themes">Motivy</string>
     <string name="settings_other">Jiné</string>
-    <string name="settings_player">Nastavení přehrávače</string>
+    <string name="settings_player">Přehrávač</string>
     <string name="settings_language">Jazyk</string>
     <string name="settings_linked_devices">Propojená zařízení</string>
     <string name="settings_about">Informace</string>
@@ -162,7 +162,7 @@
     <string name="subscribe_to_channel">Přihlásit se k odběru kanálu</string>
     <string name="wait_data_loading">Prosím počkejte, než se načtou data…</string>
     <string name="auto_frame_rate_pause">Automatická snímková frekvence (pozastav při přepnutí)</string>
-    <string name="auto_frame_rate_applying">Aplikování automatické snímkové frekvence %sx%s@%s</string>
+    <string name="auto_frame_rate_applying">Aplikování automatické snímkové frekvence %sx%s\@%s</string>
     <string name="audio_shift">Posunutí zvuku</string>
     <string name="player_remember_speed">Pamatovat rychlost videa</string>
     <string name="mark_channel_as_watched">Označit jako zhlédnuté</string>
@@ -187,7 +187,7 @@
     <string name="content_block_interaction">Připomenutí interakce (odběr)</string>
     <string name="content_block_self_promo">Neplacená/vlastní propagace</string>
     <string name="content_block_music_off_topic">Hudba - nehudební sekce klipu</string>
-    <string name="confirm_segment_skip">Přeskočit segment \"%s\"?</string>
+    <string name="confirm_segment_skip">Přeskočit segment \"%s\"\?</string>
     <string name="cancel_segment_skip">Zrušit přeskočení segmentu</string>
     <string name="msg_skipping_segment">Přeskakuji segment \"%s\"…</string>
     <string name="content_block_notification_type">Typ oznámení</string>
@@ -242,7 +242,7 @@
     <string name="card_text_scroll_factor">Rychlost posouvání textu karty</string>
     <string name="preferred_update_source">Preferovaný zdroj aktualizace</string>
     <string name="hide_shorts">Skrýt Shorts z Odběrů</string>
-    <string name="hide_shorts_channel">Skrýt Shorts z Kanálů</string>
+    <string name="hide_shorts_channel">Skrýt shorts z kanálu</string>
     <string name="key_remapping">Přenastavení tlačítek</string>
     <string name="screen_dimming">Ztmavení obrazovky</string>
     <string name="removed_from_playback_queue">Smazáno z fronty přehrávání</string>
@@ -331,10 +331,10 @@
     <string name="content_block_filler">Mimo téma (výplň)</string>
     <string name="keyboard_auto_show">Zobraz klávesnici automaticky</string>
     <string name="cancel_dialog">Zrušit</string>
-    <string name="msg_player_error_source2">URL nefunguje nebo je na zařízení nesprávný čas.\nNejspíše je na vině aplikace.</string>
-    <string name="msg_player_error_video_source">VIDEO URL nefunguje nebo je na zařízení nesprávný čas.\nNejspíše je na vině aplikace.</string>
-    <string name="msg_player_error_audio_source">AUDIO URL nefunguje nebo je na zařízení nesprávný čas.\nNejspíše je na vině aplikace.</string>
-    <string name="msg_player_error_subtitle_source">SUBTITLE URL nefunguje nebo je na zařízení nesprávný čas.\nNejspíše je na vině aplikace.</string>
+    <string name="msg_player_error_source2">URL nefunguje nebo je na zařízení nesprávný čas.\nNejspíše je to bug aplikace.</string>
+    <string name="msg_player_error_video_source">VIDEO URL nefunguje nebo je na zařízení nesprávný čas.\nNejspíše je to bug aplikace.</string>
+    <string name="msg_player_error_audio_source">AUDIO URL nefunguje nebo je na zařízení nesprávný čas.\nNejspíše je to bug aplikace.</string>
+    <string name="msg_player_error_subtitle_source">SUBTITLE URL nefunguje nebo je na zařízení nesprávný čas.\nNejspíše je to bug aplikace.</string>
     <string name="hide_upcoming">Skrýt nadcházející videa v Odběrech</string>
     <string name="hide_upcoming_channel">Skrýt nadcházející z Kanálů</string>
     <string name="hide_upcoming_home">Skrýt nadcházející z Domů</string>
@@ -361,16 +361,16 @@
     <string name="proxy_test_btn">Test</string>
     <string name="proxy_settings_title">Nastavení proxy serveru</string>
     <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
-    <string name="proxy_test_cancelled">Test#%d: zrušen.</string>
+    <string name="proxy_test_cancelled">Test #%d: zrušen.</string>
     <string name="proxy_type_invalid">Typ proxy není nastaven.</string>
     <string name="proxy_host_invalid">Hostitel proxy není nastaven.</string>
     <string name="proxy_port_invalid">Neplatný proxy port, musí být &gt; 0.</string>
     <string name="proxy_credentials_invalid">Neplatné uživ. jméno nebo heslo.</string>
     <string name="proxy_test_aborted">Test přerušen, prosím opravte nastavení proxy.</string>
     <string name="proxy_application_aborted">Nejprve prosím opravte nastavení proxy.</string>
-    <string name="proxy_test_start">Test#%d: %s …</string>
-    <string name="proxy_test_error">Chyba#%d: %s</string>
-    <string name="proxy_test_status">Status#%d: %s %d %s</string>
+    <string name="proxy_test_start">Test #%d: %s …</string>
+    <string name="proxy_test_error">Chyba #%d: %s</string>
+    <string name="proxy_test_status">Status #%d: %s %d %s</string>
     <string name="openvpn_config_address_hint">Adresa konfiguračního souboru (*.ovpn)</string>
     <string name="enable_openvpn">Použít OpenVPN</string>
     <string name="openvpn_settings_title">Nastavení OpenVPN</string>
@@ -382,7 +382,7 @@
     <string name="simple_edit_value_hint">Zadejte hodnotu</string>
     <string name="seek_interval">Interval přeskakování</string>
     <string name="seek_interval_sec">%s sekund</string>
-    <string name="subtitle_system">Systémový styl (nastavení Androidu > Přístupnost)</string>
+    <string name="subtitle_system">Systémový styl (nastavení Androidu &gt; Přístupnost)</string>
     <string name="subtitle_scale">Velikost titulků</string>
     <string name="audio_sync_fix_desc">Jiný způsob synchronizace audia/videa. Pozažuje se za zastaralý, ale v některých případech může pomoci.</string>
     <string name="audio_sync_fix">Oprava synchronizace zvuku</string>
@@ -397,7 +397,7 @@
     <string name="playback_notifications_fix_desc">Skryje oznámení změny stopy. Mohlo by to být užitečné pro firmware založený na AOSP.</string>
     <string name="playback_notifications_fix">Zakázat oznámení přehrávání</string>
     <string name="amlogic_fix_desc">Oprava poklesu snímků na Amlogic zařízeních.</string>
-    <string name="amlogic_fix">Amlogic 1080p@60fps oprava</string>
+    <string name="amlogic_fix">Amlogic 1080p\@60fps oprava</string>
     <string name="tunneled_video_playback_desc">POZNÁMKA: Pozastavení nemusí správně fungovat! Tunelované video přehrávání slibuje výhody jako např. lepší audio/video synchronizace (AV synchronizace) a plynulejší přehrávání. Vyžaduje Android 5+</string>
     <string name="tunneled_video_playback">Tunelované video přehrávání (Android 5+)</string>
     <string name="master_volume">Hlavní hlasitost</string>
@@ -407,8 +407,8 @@
     <string name="remember_position_of_short_videos">Pamatovat si pozici krátkých videí (méně než 5 minut)</string>
     <string name="remember_position_of_live_videos">Pamatovat si pozici živých přenosů</string>
     <string name="player_show_tooltips">Zobrazit nápovědu tlačítek</string>
-    <string name="action_like_unset">"Líbí se" není nastaveno</string>
-    <string name="action_dislike_unset">"Nelíbí se" není nastaveno</string>
+    <string name="action_like_unset">"Líbí se" smazáno</string>
+    <string name="action_dislike_unset">"Nelíbí se" smazáno</string>
     <string name="various_buttons">Tlačítka v horní částí hlavního okna</string>
     <string name="not_compatible_with">Vybraná možnost není kompatibilní s</string>
     <string name="subtitle_position">Spodní posun titulků</string>
@@ -435,8 +435,8 @@
     <string name="lb_playback_controls_skip_previous">Přeskočit Předchozí/Přetočit do výchozí pozice</string>
     <string name="alt_presets_behavior">Náhradní chování předvoleb (omezit šířku pásma)</string>
     <string name="alt_presets_behavior_desc">Aplikace se pokusí zachovat šířku pásma odpovídající vybrané předvolbě namísto shody mezi rozlišením, fps a kodekem.</string>    
-    <string name="sleep_timer">Časovač spánku (1 hodina od posledního použití ovladače)</string>
-    <string name="sleep_timer_desc">Pozastav přehrávání pokud uživatel nepoužil ovladač během hodiny</string>
+    <string name="sleep_timer">Časovač spánku (pokud není ovladač použit 1 hodinu)</string>
+    <string name="sleep_timer_desc">Pozastav přehrávání pokud uživatel nepoužil ovladač během 1 hodiny</string>
     <string name="disable_vsync">Zakázat vertikální synchronizaci</string>
     <string name="disable_vsync_desc">Tato možnost zakáže zarovnání snímků se signálem vertikální synchronizace displeje. Tím se sníží zátěž CPU a zlepší výkon na slabších zařízeních.</string>
     <string name="skip_codec_profile_check">Přeskočit kontrolu kodeku</string>
@@ -450,7 +450,7 @@
     <string name="playlist_order_published_date_older_first">Podle data vydání (nejprve starší)</string>
     <string name="playlist_order_popularity">Podle popularity</string>
     <string name="cant_do_this_for_foreign_playlist">Nelze provést pro cizí playlist</string>
-    <string name="owned_playlist_warning">Chyba. Tuto akci lze provést pouze pro vlastněné playlisty</string>
+    <string name="owned_playlist_warning">Chyba: Tuto akci lze provést pouze pro vlastněné playlisty</string>
     <string name="content_block_alt_server">Použít alternativní server</string>
     <string name="content_block_alt_server_desc">Povolte toto nastavení, pokud z nějakého důvodu odmítá SponsorBlock fungovat.</string>
     <string name="unset_stream_reminder">Zrušit připomenutí živého vysílání</string>
@@ -458,7 +458,6 @@
     <string name="playback_starts_shortly">Přehrávání se spustí automaticky, jakmile bude živé vysílání připraveno</string>
     <string name="starting_stream">Živé vysílání začíná…</string>
     <string name="action_playlist_remove">Odstranit z playlistu</string>
-    <!--  ZAČÁTEK Přesunutých řetězců  -->
     <string name="signin_view_title">Uživatelský kód se načítá…</string>
     <string name="signin_view_description">Pro přihlášení zadejte tento kód na stránce %s\nPOZNÁMKA. Funguje pouze s Chrome nebo Firefox prohlížečem.</string>
     <string name="signin_view_action_text">Hotovo</string>
@@ -468,13 +467,12 @@
     <string name="player_ending_time">Končí v %s</string>
     <string name="badge_new_content">NOVÝ OBSAH</string>
     <string name="badge_live">ŽIVĚ</string>
-    <string name="add_device_view_description">Ke spárování zařízení zadejte tento kód na vašem telefonu v YouTube aplikaci v sekci Nastavení/Sledovat v televizi\nPOZNÁMKA. Funguje pouze s Gboard klávesnicí.</string>
+    <string name="add_device_view_description">Ke spárování zařízení zadejte tento kód na vašem telefonu v YouTube aplikaci v sekci Nastavení/Sledovat v televizi\nPOZNÁMKA: Toto funguje pouze s Gboard klávesnicí!</string>
     <string name="playback_controls_repeat_pause">Opakovat Pozastavení</string>
     <string name="playback_controls_repeat_list">Opakovat Seznam</string>
     <string name="action_subscribe_off">Přestat odebírat</string>
     <string name="action_subscribe_on">Odebírat</string>
-    <!-- KONEC Přesunutých řetězců -->
-    <string name="skip_24_rate">Přeskakovat formáty s 24fps (oprava pro režim Real Cinema?)</string>
+    <string name="skip_24_rate">Přeskakovat formáty s 24fps (oprava pro režim Real Cinema\?)</string>
     <string name="skip_shorts">Přeskočit Shorts</string>
     <string name="player_disable_suggestions">Zakázat návrhy</string>
     <string name="feedback">Zpětná vazba</string>
@@ -490,6 +488,7 @@
     <string name="time_format_12">12 hodin (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Dost zabugováno. Použijte pouze v případě, když máte problém s výchozím rozpoznávačem.</string>
     <string name="speech_recognizer">Rozpoznávač řeči</string>
+    <string name="speech_engine">Hlasový vyhledávač</string>
     <string name="speech_recognizer_system">Systémový (preferovaný)</string>
     <string name="speech_recognizer_external_1">Externí 1 (vážně zabugováno - aby fungovalo, musíte zakázat přístup k mikrofonu)</string>
     <string name="speech_recognizer_external_2">Externí 2 (vážně zabugováno)</string>
@@ -515,9 +514,9 @@
     <string name="protect_settings_with_password">Chránit všechna nastavení heslem</string>
     <string name="enter_settings_password">Zadejte heslo</string>
     <string name="child_mode">Dětský režim</string>
-    <string name="child_mode_desc">V tomto režimu uživatel nemůže použít vyhledávání ani vidět žádný navrhovaný obsah. Nastavení bude zaheslováno.</string>
+    <string name="child_mode_desc">V tomto režimu uživatel nemůže použít vyhledávání ani vidět žádný navrhovaný obsah. Stránka nastavení bude chráněna heslem.</string>
     <string name="lost_setting_warning">Nastavení aplikace se změní. Ujistěte se, že jste si vytvořili zálohu nastavení.</string>
-    <string name="player_button_long_click">Krátké kliknutí na tlačítko pro rychlou akci a dlouhé pro dialog nastavení</string>
+    <string name="player_button_long_click">Dlouhým stisknutím tohoto tlačítka zobrazíte další možnosti</string>
     <string name="pause_history">Pozastavit historii</string>
     <string name="resume_history">Obnovit historii</string>
     <string name="disable_history">Zakázat historii</string>
@@ -557,17 +556,17 @@
     <string name="player_extra_long_speed_list">Velmi dlouhý seznam rychlostí</string>
     <string name="alt_app_icon">Alternativní ikona aplikace (vyžaduje restart)</string>
     <string name="network_stack">Preferovat síťový zásobník %s</string>
-    <string name="player_network_stack">Síťový zásobník</string>
+    <string name="player_network_stack">Síťový vyhledávač</string>
     <string name="cronet_desc">Cronet je Chromium síťový zásobník. Může snížit latenci a zvýšit výkon sítě, což může pomoci s problémy s vyrovnávací pamětí.</string>
     <string name="unlock_all_formats">Odblokovat všechny formáty videa</string>
     <string name="unlock_all_formats_desc">Na některých zařízeních firmware nesprávně hlásí určité formáty jako nepodporované i když podporované jsou.\n(např. chytré televize s rozlišením 1080p mají tendenci hlásit 4K jako nepodporované)</string>
-    <string name="okhttp_desc">Tento síťový zásobník je nejpomalejší, ale má dobrou stabilitu.</string>
+    <string name="okhttp_desc">Tento síťový vyhledávač je nejpomalejší, ale má dobrou stabilitu.</string>
     <string name="select_channel_section">Otevřít odpovídající sekci při spuštění aplikace z kanálů ATV</string>
-    <string name="enable_voice_search_desc">Oficiální aplikace bude nahrazena tzv. mostem. Most pomáhá přenášet požadavky globálního vyhledávání do této aplikace.</string>
+    <string name="enable_voice_search_desc">Oficiální aplikace bude nahrazena tzv. \"mostem\". Most pomáhá přenášet požadavky globálního vyhledávání do této aplikace.</string>
     <string name="enable_master_password">Povolit hlavní heslo</string>
     <string name="enter_master_password">Zadejte hlavní heslo</string>
     <string name="disable_stream_buffer">Zakázat vyrovnávací paměť u vysílání</string>
-    <string name="disable_stream_buffer_desc">Oprava pro situace, kdy je vysílání dost pozadu. Pozor: vysílání se může začít zasekávat</string>
+    <string name="disable_stream_buffer_desc">Oprava pro situace, kdy je vysílání hodně pozadu. Pozor: vysílání se může začít zasekávat</string>
     <string name="sony_frame_drop_fix">Oprava výpadku snímků #1</string>
     <string name="sony_frame_drop_fix_desc">Opravuje záseky na televizích Sony a jiných zařízeních. Pozor: mohou nastat problémy se synchronizací audia</string>
     <string name="audio_language">Jazyk zvuku</string>
@@ -595,7 +594,7 @@
     <string name="subtitle_remember">Pamatovat si povolené titulky pro každý kanál</string>
     <string name="amazon_frame_drop_fix">Oprava poklesu snímků #2</string>
     <string name="amazon_frame_drop_fix_desc">Určeno pro zařízení Amazon Stick. Může fungovat i na jiných zařízeních.</string>
-    <string name="default_stack_desc">Vestavěný síťový zásobník. Tento zásobník může mít v určitých situacích lepší stabilitu.</string>
+    <string name="default_stack_desc">Vestavěný síťový vyhledávač. Tento vyhledávač může mít v určitých situacích lepší stabilitu.</string>
     <string name="item_postion">Pozice</string>
     <string name="player_screen_off_dimming">Míra ztmavení obrazovky</string>
     <string name="screensaver_timout">Časový limit spořiče</string>
@@ -609,6 +608,8 @@
     <string name="remember_position_subscriptions">Pamatovat si poslední zhlédnutou pozici v Odběrech</string>
     <string name="remember_position_pinned">Pamatovat si poslední zhlédnutou pozici v připnutých playlistech</string>
     <string name="msg_player_unknown_error">Neznámá chyba</string>
+    <string name="unknown_source_error">Neznámá chyba zdroje</string>
+    <string name="unknown_renderer_error">Neznámá chyba renderu</string>
     <string name="header_notifications">Oznámení</string>
     <string name="disable_search_history">Zakázat historii vyhledávání</string>
     <string name="unlock_high_bitrate_formats">Odemknout vyšší datový tok pro 1080p vp9 formáty</string>
@@ -631,12 +632,13 @@
     <string name="remote_control_permission">Dálkové ovládání na pozadí vyžaduje oprávnění pro překrytí přes okna</string>
     <string name="login_from_browser">Přihlášení přes prohlížeč</string>
     <string name="disable_remote_history">Zazázat historii při používání dálkového ovládání</string>
-    <string name="keyboard_fix">Oprava zobrazení klávesnice stisknutím tlačítka OK (G20s a další)</string>
+    <string name="keyboard_fix">Zabránit tlačítku OK v otevření klávesnice (G20s a další)</string>
     <string name="nothing_found">Nic nenalezeno</string>
     <string name="auto_frame_rate_desc">Tato možnost eliminuje chvění ve scénách, kde se kamera rychle pohybuje(např. sportovní přenosy)</string>
     <string name="channel_filter_hint">Filtrovat kanály</string>
     <string name="player_loop_shorts">Opakovat Shorts</string>
     <string name="player_quick_shorts_skip">Přeskakovat Shorts tlačítky vlevo/vpravo</string>
+    <string name="player_quick_skip_videos">Přeskakovat běžná videa tlačítky doleva/doprava</string>
     <string name="channels_filter">Zobrazit pole Filtrovat kanály v sekci Kanály</string>
     <string name="channel_search_bar">Vyhledávací panel na stránce kanálu</string>
     <string name="header_sports">Sporty</string>
@@ -650,7 +652,7 @@
     <string name="replace_thumbnails">Nahradit náhledy</string>
     <string name="crowdsourced_thumbnails">Komunitní náhledy</string>
     <string name="crowdsoursed_titles">Komunitní názvy</string>
-    <string name="dearrow_not_submitted_thumbs">Odkud vzít nepřidané náhledy</string>
+    <string name="dearrow_not_submitted_thumbs">Zdroj náhledů (pokud neexistuje žádný od DeArrow)</string>
     <string name="pitch_effect">Efekt výšky tónu</string>
     <string name="fullscreen_mode">Režim celé obrazovky (bez systémových lišt)</string>
     <string name="player_only_mode">Zobrazit pouze přehrávač, pokud je video otevřeno mimo aplikaci</string>
@@ -661,4 +663,6 @@
     <string name="long_press_for_options">DLOUZE STISKNĚTE PRO MOŽNOSTI</string>
     <string name="device_specific_backup">Záloha pouze pro toto zařízení</string>
     <string name="local_backup">Místní záloha</string>
+    <string name="auto_backup">Automatická záloha (1x denně)</string>
+    <string name="repeat_mode_reverse_list">Přehraj playlist nebo kanálová videa v opačném pořadí</string>
 </resources>
