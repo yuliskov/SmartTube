@@ -718,11 +718,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onChannel() {
-            mEventListener.onChannelClicked();
-        }
-
-        @Override
         public void onClosedCaptions(boolean enabled) {
             mEventListener.onSubtitleClicked(enabled);
         }

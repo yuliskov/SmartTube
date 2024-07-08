@@ -327,11 +327,6 @@ public class MainPlayerController implements PlayerEventListener {
     }
 
     @Override
-    public void onChannelClicked() {
-        process(PlayerUiEventListener::onChannelClicked);
-    }
-
-    @Override
     public void onTrackSelected(FormatItem track) {
         process(listener -> listener.onTrackSelected(track));
     }

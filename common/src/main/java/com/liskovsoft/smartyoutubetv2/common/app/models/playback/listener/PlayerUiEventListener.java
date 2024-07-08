@@ -14,7 +14,6 @@ public interface PlayerUiEventListener {
     void onHighQualityClicked();
     void onDislikeClicked(boolean dislike);
     void onLikeClicked(boolean like);
-    void onChannelClicked();
     void onSubtitleClicked(boolean enabled);
     void onSubtitleLongClicked(boolean enabled);
     void onPlaylistAddClicked();

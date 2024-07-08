@@ -133,12 +133,6 @@ public class PlayerUIController extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onChannelClicked() {
-        startTempBackgroundMode(ChannelPresenter.class);
-        ChannelPresenter.instance(getContext()).openChannel(getPlayer().getVideo());
-    }
-
-    @Override
     public void onSubtitleClicked(boolean enabled) {
         // First run
         if (FormatItem.SUBTITLE_NONE.equals(mPlayerData.getLastSubtitleFormat())) {
@@ -517,6 +511,8 @@ public class PlayerUIController extends PlayerEventListenerHelper {
             applyAfr(buttonState);
         } else if (buttonId == R.id.action_repeat) {
             applyRepeatMode(buttonState);
+        } else if (buttonId == R.id.action_channel) {
+            openChannel();
         }
     }
 
@@ -524,7 +520,7 @@ public class PlayerUIController extends PlayerEventListenerHelper {
     public void onButtonLongClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_screen_off || buttonId == R.id.action_screen_off_timeout) {
             showScreenOffDialog();
-        } else if (buttonId == R.id.action_subscribe) {
+        } else if (buttonId == R.id.action_subscribe || buttonId == R.id.action_channel) {
             showNotificationsDialog(buttonState);
         } else if (buttonId == R.id.action_sound_off) {
             showSoundOffDialog();
@@ -908,12 +904,6 @@ public class PlayerUIController extends PlayerEventListenerHelper {
             return;
         }
 
-        // Can't change notification state while unsubscribed
-        if (buttonState == PlayerUI.BUTTON_OFF) {
-            onSubscribe(buttonState);
-            return;
-        }
-
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
         List<OptionItem> items = new ArrayList<>();
@@ -922,6 +912,8 @@ public class PlayerUIController extends PlayerEventListenerHelper {
             items.add(UiOptionItem.from(item.getTitle(), optionItem -> {
                 if (optionItem.isSelected()) {
                     MediaServiceManager.instance().setNotificationState(item);
+                    getPlayer().getVideo().isSubscribed = true;
+                    getPlayer().setButtonState(R.id.action_subscribe, PlayerUI.BUTTON_ON);
                 }
             }, item.isSelected()));
         }
@@ -957,5 +949,10 @@ public class PlayerUIController extends PlayerEventListenerHelper {
         settingsPresenter.appendCategory(audioVolumeCategory);
         settingsPresenter.appendCategory(pitchEffectCategory);
         settingsPresenter.showDialog(getContext().getString(R.string.player_volume));
+    }
+
+    private void openChannel() {
+        startTempBackgroundMode(ChannelPresenter.class);
+        ChannelPresenter.instance(getContext()).openChannel(getPlayer().getVideo());
     }
 }

@@ -195,11 +195,6 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onChannelClicked() {
-        // NOP
-    }
-
-    @Override
     public void onTrackSelected(FormatItem track) {
         // NOP
     }
