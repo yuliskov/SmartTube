@@ -242,7 +242,7 @@
     <string name="card_text_scroll_factor">Velocità scorrimento testo titoli cartoline</string>
     <string name="preferred_update_source">Seleziona fonte aggiornamenti</string>
     <string name="hide_shorts">Nascondi i video brevi dalle Iscrizioni</string>
-    <string name="hide_shorts_channel">Nascondi i video brevi dal canale</string>
+    <string name="hide_shorts_channel">Nascondi i video brevi da un canale</string>
     <string name="key_remapping">Rimappatura tasti</string>
     <string name="screen_dimming">Oscuramento schermo</string>
     <string name="removed_from_playback_queue">Rimosso dalla coda di riproduzione</string>
@@ -556,11 +556,11 @@
     <string name="player_extra_long_speed_list">Ancora più velocità nell\'elenco delle velocità</string>
     <string name="alt_app_icon">Icona alternativa dell\'app (è necessario riavviare)</string>
     <string name="network_stack">Preferisci stack di rete %s</string>
-    <string name="player_network_stack">Stack di rete</string>
+    <string name="player_network_stack">Motore di rete</string>
     <string name="cronet_desc">Cronet è lo stack di rete di Chromium. Cronet può ridurre la latenza e aumentare le prestazioni di rete, il che può aiutare con problemi di buffering.</string>
     <string name="unlock_all_formats">Sblocca tutti i formati video</string>
     <string name="unlock_all_formats_desc">Su alcuni dispositivi il firmware riporta erroneamente alcuni formati come non supportati, anche se lo sono.\n(ad esempio, le smart TV 1080p tendono a segnalare 4k come non supportato).</string>
-    <string name="okhttp_desc">Questo stack di rete è il più lento ma ha una buona stabilità.</string>
+    <string name="okhttp_desc">Questo motore di rete è il più lento ma ha una buona stabilità.</string>
     <string name="select_channel_section">Apri la sezione corrispondente quando l\'app è stata avviata dai canali ATV</string>
     <string name="enable_voice_search_desc">L\'app ufficiale verrà sostituita da un cosiddetto \"bridge\". Un bridge aiuta a trasferire le richieste di ricerca globali alla nostra app.</string>
     <string name="enable_master_password">Abilita password principale.</string>
@@ -594,7 +594,7 @@
     <string name="subtitle_remember">Ricorda i sottotitoli abilitati per ciascun canale</string>
     <string name="amazon_frame_drop_fix">Correggi salto fotogrammi #2</string>
     <string name="amazon_frame_drop_fix_desc">Destinato ai dispositivi Amazon Stick. Può funzionare anche su altri dispositivi.</string>
-    <string name="default_stack_desc">Stack di rete integrato. Questo stack può avere una migliore stabilità in determinate situazioni.</string>
+    <string name="default_stack_desc">Motore di rete integrato. Questo motore può avere una migliore stabilità in determinate situazioni.</string>
     <string name="item_postion">Posizione di</string>
     <string name="player_screen_off_dimming">Livello di oscuramento a schermo spento</string>
     <string name="screensaver_timout">Timeout screensaver</string>
@@ -608,6 +608,8 @@
     <string name="remember_position_subscriptions">Ricorda l\'ultima posizione visualizzata nelle Iscrizioni</string>
     <string name="remember_position_pinned">Ricorda l\'ultima posizione visualizzata nelle playlist appuntate</string>
     <string name="msg_player_unknown_error">Errore sconosciuto</string>
+    <string name="unknown_source_error">Errore sconosciuto della sorgente</string>
+    <string name="unknown_renderer_error">Errore sconosciuto del renderer</string>
     <string name="header_notifications">Notifiche</string>
     <string name="disable_search_history">Disabilita la Cronologia delle ricerche</string>
     <string name="unlock_high_bitrate_formats">Sblocca formati vp9 1080p ad alto bitrate</string>
@@ -636,6 +638,7 @@
     <string name="channel_filter_hint">Filtra canali</string>
     <string name="player_loop_shorts">Ripeti continuamente i video brevi</string>
     <string name="player_quick_shorts_skip">Salta i video brevi con il tasto sinistro/destro</string>
+    <string name="player_quick_skip_videos">Salta i video normali con il tasto sinistro/destro</string>
     <string name="channels_filter">Mostra il campo Filtra canali nella sezione Canali</string>
     <string name="channel_search_bar">Barra di ricerca all\'interno della pagina del Canale</string>
     <string name="header_sports">Sport</string>
@@ -661,5 +664,5 @@
     <string name="device_specific_backup">Backup solo per questo dispositivo</string>
     <string name="local_backup">Backup locale</string>
     <string name="auto_backup">Backup automatico (una volta al giorno)</string>
-    <string name="repeat_mode_reverse_list">Riproduci la playlist in ordine inverso</string>
+    <string name="repeat_mode_reverse_list">Riproduci la playlist o i video dei canali in ordine inverso</string>
 </resources>
