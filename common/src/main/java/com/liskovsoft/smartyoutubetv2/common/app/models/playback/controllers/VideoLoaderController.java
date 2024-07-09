@@ -478,9 +478,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         if (error instanceof OutOfMemoryError) {
             mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
         } else if (Helpers.startsWithAny(error.getMessage(),
-                "Unable to connect to", "Invalid NAL length", "Response code: 421", "Response code: 403", "Invalid integer size")) {
+                "Unable to connect to", "Invalid NAL length", "Response code: 421", "Invalid integer size")) {
             // Switch between network engines in hope that one of them fixes the error
             mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+        } else if (Helpers.startsWithAny(error.getMessage(), "Response code: 403")) {
+            // "Response code: 403" is related to outdated VISITOR_INFO1_LIVE cookie
+            YouTubeServiceManager.instance().invalidateVisitorData();
         }
     }
 
