@@ -658,4 +658,11 @@
   <string name="player_exit_shortcut">Quitter le lecteur</string>
   <string name="device_specific_backup">Sauvegarde pour cet appareil uniquement</string>
   <string name="local_backup">Sauvegarde locale</string>
+  <string name="long_press_for_options">APPUYEZ LONGUEMENT POUR OUVRIR LES OPTIONS</string>
+  <string name="auto_backup">Sauvegarde automatique (une fois par jour)</string>
+  <string name="repeat_mode_reverse_list">Lire la playlist ou les vidéos de la chaîne dans l\'ordre inverse</string>
+  <string name="player_quick_skip_videos">Ignorer les vidéos classiques avec les boutons gauche/droite</string>
+  <string name="speech_engine">Moteur de recherche vocale</string>
+  <string name="unknown_source_error">Erreur de source inconnue</string>
+  <string name="unknown_renderer_error">Erreur de rendu inconnue</string>
 </resources>
