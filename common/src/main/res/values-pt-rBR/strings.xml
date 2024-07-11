@@ -426,7 +426,7 @@
   <string name="badge_live">AO VIVO</string>
   <string name="badge_new_content">NOVO CONTEÚDO</string>
   <string name="player_disable_suggestions">Desabilitar sugestões</string>
-  <string name="skip_24_rate">Pular formatos de 24fps (correção real do modo cinema?)</string>
+  <string name="skip_24_rate">Pular formatos de 24fps (correção real do modo cinema\?)</string>
   <string name="add_device_view_description">Para vincular o dispositivo, insira esse código no aplicativo do YouTube do seu telefone (Configurações &gt; Assistir na TV).\nNOTA: funciona apenas com o teclado Gboard.</string>
   <string name="signin_view_title">O código do usuário está carregando...</string>
   <string name="signin_view_description">Para fazer o login, digite esse código na página %s\nNOTA: funciona apenas nos navegadores Firefox e Chrome.</string>
@@ -560,7 +560,7 @@
   <string name="update_found">Atualização</string>
   <string name="volume_boost_warning">Qualquer configuração acima do limite pode potencialmente danificar os alto-falantes</string>
   <string name="action_sound_off">Mudo</string>
-  <string name="pitch_effect">Mudar Tom - ∆ Grave/ "1" é Normalizado / ∇ Agudo</string>
+  <string name="pitch_effect">Mudar Tom - ∆ Grave/ \"1\" é Normalizado / ∇ Agudo</string>
   <string name="player_volume">Volume do player</string>
   <string name="play_video_incognito">Reproduzir de forma anônima</string>
   <string name="header_kids_home">Crianças</string>
@@ -651,10 +651,18 @@
   <string name="pinned_channel_rows">Mostrar canal fixado como linhas</string>
   <string name="prefer_ipv4">Preferir DNS IPv4</string>
   <string name="prefer_ipv4_desc">Pode corrigir situações em que o aplicativo não está funcionando. \n Observação. Pode causar Lentidões e travamentos (especialmente em dispositivos Android 8 ou Dune HD)</string>
-  <string name="long_press_for_settings">Mantenha pressionado para algumas configurações</string>
+  <string name="long_press_for_settings">Mantenha pressionado para configurações</string>
   <string name="remember_position_pinned">Lembrar-se do ponto em que você parou nas Listas de Reproduções fixadas</string>
   <string name="player_extra_long_speed_list">Lista alongada de Velocidades de reprodução</string>
   <string name="hide_watched_from_watch_later">Ocultar vídeos assistidos da Lista de Reprodução Assistir mais tarde</string>
   <string name="device_specific_backup">Cópia de segurança somente para neste dispositivo </string>
   <string name="local_backup">Cópia de segurança Local</string>
+  <string name="auto_backup">Cópia de segurança automática (diária)</string>
+  <string name="repeat_mode_reverse_list">Tocar a lista de reprodução ou vídeos do canal em ordem reversa</string>
+  <string name="player_quick_skip_videos">Pular vídeos normais com botões direito/esquerdo</string>
+  <string name="unknown_source_error">Erro de fonte desconhecido</string>
+  <string name="unknown_renderer_error">Erro de renderizador desconhecido</string>
+  <string name="speech_engine">Engine de pesquisa por voz</string>
+  <string name="header_shorts">Shorts</string>
+  <string name="long_press_for_options">Mantenha pressionado para opções</string>
 </resources>
