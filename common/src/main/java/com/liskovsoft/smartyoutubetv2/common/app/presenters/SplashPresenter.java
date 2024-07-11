@@ -109,7 +109,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     private void runBackgroundTasks() {
-        YouTubeServiceManager.instance().refreshCacheIfNeeded(); // warm up
+        YouTubeServiceManager.instance().refreshCacheIfNeeded(); // decrease player first start
         enableHistoryIfNeeded();
         Utils.updateChannels(getContext());
         GDriveBackupWorker.schedule(getContext());
@@ -165,14 +165,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 ViewManager.instance(getContext()).clearCaches();
             }
         }
-    }
-
-    private void runRefreshCachePeriodicTask() {
-        if (RxHelper.isAnyActionRunning(mRefreshCachePeriodicAction)) {
-            return;
-        }
-
-        mRefreshCachePeriodicAction = RxHelper.startInterval(YouTubeServiceManager.instance()::refreshCacheIfNeeded, 30 * 60);
     }
 
     private void enableHistoryIfNeeded() {
