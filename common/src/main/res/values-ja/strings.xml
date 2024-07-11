@@ -49,7 +49,7 @@
     <string name="settings_left_panel">カテゴリーを編集</string>
     <string name="settings_themes">テーマ</string>
     <string name="settings_other">その他</string>
-    <string name="settings_player">動画プレーヤー</string>
+    <string name="settings_player">プレーヤー</string>
     <string name="settings_language">言語</string>
     <string name="settings_linked_devices">リンク済みのデバイス</string>
     <string name="settings_about">アプリについて</string>
@@ -229,7 +229,7 @@
     <string name="channels_auto_load">チャンネルセクションの内容を自動で読み込む</string>
     <string name="return_to_background_video">バックグラウンド再生中の動画に戻る</string>
     <string name="pin_unpin_from_sidebar">サイドバーに固定または解除</string>
-    <string name="pin_unpin_playlist">サイドバーにプレイリストを固定または解除</string>
+    <string name="pin_unpin_playlist">サイドバーに再生リストを固定または解除</string>
     <string name="pin_unpin_channel">サイドバーにチャンネルを固定または解除</string>
     <string name="pin_playlist">サイドバーに再生リストを固定</string>
     <string name="pin_channel">サイドバーにチャンネルを固定</string>
@@ -242,7 +242,7 @@
     <string name="card_text_scroll_factor">カードテキストのスクロール速度</string>
     <string name="preferred_update_source">アップデート元の選択</string>
     <string name="hide_shorts">登録チャンネルからショートを非表示にする</string>
-    <string name="hide_shorts_channel">チャンネル欄からショート動画を非表示にする</string>
+    <string name="hide_shorts_channel">チャンネルからショート動画を非表示にする</string>
     <string name="key_remapping">キーリマッピング</string>
     <string name="screen_dimming">画面の減光</string>
     <string name="removed_from_playback_queue">再生キューから削除されました</string>
@@ -265,7 +265,7 @@
     <string name="app_restore">アプリデータを復元</string>
     <string name="skip_each_segment_once">2度目はセグメントをスキップしない</string>
     <string name="disable_ok_long_press">OKボタンの長押しを無効化する</string>
-    <string name="disable_ok_long_press_desc">OKボタンが正常に機能しないコントローラー向けです</string>
+    <string name="disable_ok_long_press_desc">OKボタンが正常に機能しないバグがあるコントローラー向けです</string>
     <string name="player_time_correction">速度に応じた時間を表示する</string>
     <string name="sponsor_color_markers">シークバーのマーカーの色</string>
     <string name="refresh_section">セクションを更新する</string>
@@ -334,7 +334,7 @@
     <string name="msg_player_error_source2">URLが動作していないか、デバイスの日時が不正です。\n通常はアプリ側の不具合です。</string>
     <string name="msg_player_error_video_source">動画のURLが動作していないか、デバイスの日時が不正です。\n通常はアプリ側の不具合です。</string>
     <string name="msg_player_error_audio_source">オーディオのURLが動作していないか、デバイスの日時が不正です。\n通常はアプリ側の不具合です。</string>
-    <string name="msg_player_error_subtitle_source">字幕URLが動作していないか、デバイスの日時が不正です。\n通常はアプリ側の不具合です。</string>
+    <string name="msg_player_error_subtitle_source">字幕のURLが動作していないか、デバイスの日時が不正です。\n通常はアプリ側の不具合です。</string>
     <string name="hide_upcoming">登録チャンネルからライブ配信予定を非表示にする</string>
     <string name="hide_upcoming_channel">チャンネル欄からライブ配信予定を非表示にする</string>
     <string name="hide_upcoming_home">ホームからライブ配信予定を非表示にする</string>
@@ -361,16 +361,16 @@
     <string name="proxy_test_btn">テスト</string>
     <string name="proxy_settings_title">プロキシサーバーの設定</string>
     <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
-    <string name="proxy_test_cancelled">テスト#%d:キャンセルしました。</string>
+    <string name="proxy_test_cancelled">テスト #%d: キャンセルしました。</string>
     <string name="proxy_type_invalid">プロキシのタイプが設定されていません。</string>
     <string name="proxy_host_invalid">プロキシのホストが設定されていません。</string>
     <string name="proxy_port_invalid">プロキシのポートが不正です。0より上にしてください。</string>
     <string name="proxy_credentials_invalid">ユーザー名またはパスワードが不正です。</string>
     <string name="proxy_test_aborted">テストをキャンセルしました。先にプロキシの設定を修正してください。</string>
     <string name="proxy_application_aborted">先にプロキシの設定を修正してください。</string>
-    <string name="proxy_test_start">テスト#%d: %s …</string>
-    <string name="proxy_test_error">エラー#%d: %s</string>
-    <string name="proxy_test_status">ステータス#%d: %s %d %s</string>
+    <string name="proxy_test_start">テスト #%d: %s …</string>
+    <string name="proxy_test_error">エラー #%d: %s</string>
+    <string name="proxy_test_status">ステータス #%d: %s %d %s</string>
     <string name="openvpn_config_address_hint">設定ファイルのアドレス (*.ovpn)</string>
     <string name="enable_openvpn">OpenVPNを使用する</string>
     <string name="openvpn_settings_title">OpenVPNの設定</string>
@@ -394,10 +394,10 @@
     <string name="live_stream_fix_4k_desc">警告: ライブ配信の巻き戻しが無効になります。低性能なデバイスでライブ配信のパフォーマンスを大きく向上させます。最大解像度は4Kです。</string>
     <string name="live_stream_fix">ライブ配信の修正 (1080p)</string>
     <string name="live_stream_fix_4k">ライブ配信の修正 (4K)</string>
-    <string name="playback_notifications_fix_desc">トラックの変更通知を非表示にします。AOSP のファームウェアで役立つことがあります。</string>
+    <string name="playback_notifications_fix_desc">トラックの変更通知を非表示にします。AOSPのファームウェアで役立つことがあります。</string>
     <string name="playback_notifications_fix">再生の通知を無効化する</string>
     <string name="amlogic_fix_desc">Amlogicのデバイスのフレームドロップを修正します。</string>
-    <string name="amlogic_fix">Amlogic 1080p\@60FPSの修正</string>
+    <string name="amlogic_fix">Amlogic 1080p\@60fpsの修正</string>
     <string name="tunneled_video_playback_desc">注意: 一時停止が正しく機能しないことがあります！トンネルモードの動画再生は、オーディオと映像の同期 (AVSync) の向上、よりスムーズな再生などにおいて有益です。Android 5以降が必要です。</string>
     <string name="tunneled_video_playback">トンネルモードの動画再生 (Android 5以降)</string>
     <string name="master_volume">マスター音量</string>
@@ -407,8 +407,8 @@
     <string name="remember_position_of_short_videos">短い (5分未満) 動画の位置を記憶する</string>
     <string name="remember_position_of_live_videos">ライブ配信の位置を記憶する</string>
     <string name="player_show_tooltips">ボタンの説明を表示する</string>
-    <string name="action_like_unset">高評価は未設定です</string>
-    <string name="action_dislike_unset">低評価は未設定です</string>
+    <string name="action_like_unset">高評価を削除しました</string>
+    <string name="action_dislike_unset">低評価を削除しました</string>
     <string name="various_buttons">メイン画面上部のボタン</string>
     <string name="not_compatible_with">選択したオプションは互換性がありません</string>
     <string name="subtitle_position">字幕の下部シフト</string>
@@ -458,7 +458,6 @@
     <string name="playback_starts_shortly">ライブ配信の開始時に自動で再生を開始します</string>
     <string name="starting_stream">ライブ配信が開始しました…</string>
     <string name="action_playlist_remove">再生リストから削除</string>
-    <!-- BEGIN Moved strings -->
     <string name="signin_view_title">ユーザーコードを読み込んでいます…</string>
     <string name="signin_view_description">このページにコードを入力してログインしてください: %s\n注意: FirefoxかChromeでのみ動作します。</string>
     <string name="signin_view_action_text">完了</string>
@@ -473,8 +472,7 @@
     <string name="playback_controls_repeat_list">一覧リピート</string>
     <string name="action_subscribe_off">チャンネルの登録をOFF</string>
     <string name="action_subscribe_on">チャンネルの登録をON</string>
-    <!-- END Moved strings -->
-    <string name="skip_24_rate">24FPS フォーマットをスキップする (リアルシネマモードの修正?)</string>
+    <string name="skip_24_rate">24FPS フォーマットをスキップする (リアルシネマモードの修正\?)</string>
     <string name="skip_shorts">ショート動画をスキップ</string>
     <string name="player_disable_suggestions">おすすめを無効化する</string>
     <string name="feedback">フィードバック</string>
@@ -490,6 +488,7 @@
     <string name="time_format_12">12時間表示 (午前と午後)</string>
     <string name="use_alt_speech_recognizer_desc">重大なバグがあります。デフォルトの認識方法で問題がある場合にのみ使用してください。</string>
     <string name="speech_recognizer">音声認識</string>
+    <string name="speech_engine">音声検索エンジン</string>
     <string name="speech_recognizer_system">システム (推奨)</string>
     <string name="speech_recognizer_external_1">外部1 (深刻なバグがあります。マイクの権限を無効にする必要があります)</string>
     <string name="speech_recognizer_external_2">外部2 (深刻なバグがあります)</string>
@@ -498,7 +497,7 @@
     <string name="subtitle_yellow_black">黒い背景に黄色字</string>
     <string name="player_pixel_ratio">ピクセルアスペクト比</string>
     <string name="color_scheme_dark_grey_monochrome">ダークグレー (モノクロ)</string>
-    <string name="disable_mic_permission">この認識方法を使うには、このアプリのマイクの権限を無効にしてください。</string>
+    <string name="disable_mic_permission">この認識方法を使うには、このアプリのマイクの権限を無効化してください。</string>
     <string name="repeat_mode_shuffle">再生リストをシャッフルする</string>
     <string name="chat_left">左</string>
     <string name="chat_right">右</string>
@@ -517,7 +516,7 @@
     <string name="child_mode">チャイルドモード</string>
     <string name="child_mode_desc">このモードでは、検索とおすすめの機能は使用できません。設定はパスワードで保護されます。</string>
     <string name="lost_setting_warning">設定が変更されます。バックアップを作成しておいてください。</string>
-    <string name="player_button_long_click">ボタンを押下でクイック設定、長押しで詳細設定を開く</string>
+    <string name="player_button_long_click">追加のオプションを表示するには長押し</string>
     <string name="pause_history">履歴を一時停止する</string>
     <string name="resume_history">履歴を再開する</string>
     <string name="disable_history">履歴を無効化する</string>
@@ -557,11 +556,11 @@
     <string name="player_extra_long_speed_list">とても長い速度リスト</string>
     <string name="alt_app_icon">代替のアプリアイコン (要再起動)</string>
     <string name="network_stack">%s のネットワークスタックを優先する</string>
-    <string name="player_network_stack">ネットワークスタック</string>
+    <string name="player_network_stack">ネットワークエンジン</string>
     <string name="cronet_desc">Cronetは、Chromiumのネットワークスタックです。これは遅延を減らし、ネットワーク性能を向上させることでバッファの問題を解決できます。</string>
     <string name="unlock_all_formats">すべての動画フォーマットをアンロックする</string>
     <string name="unlock_all_formats_desc">一部のデバイスで対応しているフォーマットであっても、ファームウェアがいくつかのフォーマットに非対応と誤って報告します。\n(例: 1080pのスマートテレビは、4Kに非対応と報告する傾向があります)</string>
-    <string name="okhttp_desc">このネットワークスタックは最も遅いですが、安定性は良好です。</string>
+    <string name="okhttp_desc">このネットワークエンジンは低速ですが、良好な安定性があります。</string>
     <string name="select_channel_section">ATVチャンネルから起動した際に対応したセクションを開く</string>
     <string name="enable_voice_search_desc">公式アプリを「ブリッジ」に置き換えます。これには、グローバル検索リクエストをこのアプリへ転送する役割があります。</string>
     <string name="enable_master_password">マスターパスワードを有効化する</string>
@@ -595,7 +594,7 @@
     <string name="subtitle_remember">チャンネルごとに字幕ONを記憶する</string>
     <string name="amazon_frame_drop_fix">フレームドロップの修正 #2</string>
     <string name="amazon_frame_drop_fix_desc">Amazon Fire TV向け、他のデバイスでも効果がある場合があります。</string>
-    <string name="default_stack_desc">内蔵のネットワークスタックを使用します。特定の状況下では優れた安定性を有します。</string>
+    <string name="default_stack_desc">内蔵のネットワークエンジンです。特定の状況下では優れた安定性があります。</string>
     <string name="item_postion">位置の設定:</string>
     <string name="player_screen_off_dimming">画面OFF時の減光量</string>
     <string name="screensaver_timout">一定時間後にスクリーンセーバーを起動する</string>
@@ -609,6 +608,8 @@
     <string name="remember_position_subscriptions">登録チャンネルのリストの最終閲覧位置を記憶する</string>
     <string name="remember_position_pinned">固定した再生リストの最終閲覧位置を記憶する</string>
     <string name="msg_player_unknown_error">不明なエラー</string>
+    <string name="unknown_source_error">不明なソースのエラー</string>
+    <string name="unknown_renderer_error">不明なレンダラーのエラー</string>
     <string name="header_notifications">通知</string>
     <string name="disable_search_history">検索履歴を無効化する</string>
     <string name="unlock_high_bitrate_formats">高ビットレート1080p VP9フォーマットをアンロックする</string>
@@ -631,12 +632,13 @@
     <string name="remote_control_permission">バックグラウンドリモコンはオーバーレイの権限の許可が必要です</string>
     <string name="login_from_browser">ブラウザからログインする</string>
     <string name="disable_remote_history">リモコン使用時の履歴を無効化する</string>
-    <string name="keyboard_fix">OKボタンでキーボードを表示するように修正する (G20sとその他のデバイス向け)</string>
+    <string name="keyboard_fix">OKボタンでキーボードを開かないようにする (G20sとその他)</string>
     <string name="nothing_found">何も見つかりませんでした</string>
     <string name="auto_frame_rate_desc">このオプションは、スポーツのライブ配信などのカメラの動きが速いシーンでのジッターを除去します</string>
     <string name="channel_filter_hint">チャンネルを検索</string>
     <string name="player_loop_shorts">ショート動画をループ再生する</string>
     <string name="player_quick_shorts_skip">左右のボタンでショート動画をスキップする</string>
+    <string name="player_quick_skip_videos">右/左のボタンで動画をスキップする</string>
     <string name="channels_filter">チャンネルのセクション内にチャンネルの絞り込みを表示する</string>
     <string name="channel_search_bar">チャンネルページ内の検索バー</string>
     <string name="header_sports">スポーツ</string>
@@ -650,7 +652,7 @@
     <string name="replace_thumbnails">サムネイルを置き換える</string>
     <string name="crowdsourced_thumbnails">クラウドソースのサムネイル</string>
     <string name="crowdsoursed_titles">クラウドソースのタイトル</string>
-    <string name="dearrow_not_submitted_thumbs">未送信のサムネイルを取得する箇所</string>
+    <string name="dearrow_not_submitted_thumbs">サムネイルのソース (DeArrowに存在しない場合)</string>
     <string name="pitch_effect">ピッチエフェクト</string>
     <string name="fullscreen_mode">フルスクリーンモード (ナビゲーションバーなし)</string>
     <string name="player_only_mode">動画がアプリ外で開かれた場合にプレーヤーのみを表示する</string>
@@ -658,6 +660,9 @@
     <string name="prefer_ipv4">IPv4 DNSを優先する</string>
     <string name="prefer_ipv4_desc">アプリが全く動作しない状態を修正できる可能性があります。\n注意: ハングやクラッシュが発生する可能性があります (特にAndroid 8のデバイスまたはDune HD)</string>
     <string name="long_press_for_settings">長押しで設定を開きます</string>
+    <string name="long_press_for_options">長押しで設定を開く</string>
     <string name="device_specific_backup">このデバイスのみでバックアップ</string>
     <string name="local_backup">ローカルでバックアップ</string>
+    <string name="auto_backup">自動バックアップ (1日1回実行)</string>
+    <string name="repeat_mode_reverse_list">再生リストまたはチャンネルの動画を逆順に再生する</string>
 </resources>
