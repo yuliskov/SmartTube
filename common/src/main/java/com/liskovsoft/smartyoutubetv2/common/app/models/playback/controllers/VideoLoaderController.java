@@ -152,7 +152,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         if (!mIsWasVideoStartError && mLastVideo != null) {
             Analytics.sendVideoStartError(mLastVideo.videoId,
                     mLastVideo.title,
-                    Integer.toString(error));
+                    error.getMessage());
             mIsWasVideoStartError = true;
         }
     }
@@ -162,16 +162,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         mLastError = -1;
         Utils.removeCallbacks(mOnLongBuffering);
         getPlayer().setButtonState(R.id.action_repeat, video.finishOnEnded ? PlayerEngineConstants.REPEAT_MODE_CLOSE : mPlayerData.getRepeatMode());
-    }
-
-    @Override
-    public void onPlay() {
-        //MessageHelpers.showMessage(getActivity(), "Start playing!");
-
-        if (!mIsWasStarted && mLastVideo != null) {
-            Analytics.sendVideoStarted(mLastVideo.videoId, mLastVideo.title);
-            mIsWasStarted = true;
-        }
     }
 
     @Override
@@ -651,6 +641,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     @Override
     public void onPlay() {
         Utils.removeCallbacks(mOnLongBuffering);
+        if (!mIsWasStarted && mLastVideo != null) {
+            Analytics.sendVideoStarted(mLastVideo.videoId, mLastVideo.title);
+            mIsWasStarted = true;
+        }
     }
 
     @Override

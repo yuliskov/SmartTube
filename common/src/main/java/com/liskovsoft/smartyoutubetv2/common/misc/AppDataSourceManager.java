@@ -64,10 +64,10 @@ public class AppDataSourceManager {
 //                context.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(context).show(), R.drawable.settings_search));
 //        settingItems.add(new SettingsItem(
 //                context.getString(R.string.content_block_provider), () -> ContentBlockSettingsPresenter.instance(context).show(), R.drawable.settings_block));
-        settingItems.add(new SettingsItem(
-                context.getString(R.string.dearrow_provider), () -> DeArrowSettingsPresenter.instance(context).show(), R.drawable.settings_dearrow));
-        settingItems.add(new SettingsItem(
-                context.getString(R.string.app_backup_restore), () -> BackupSettingsPresenter.instance(context).show(), R.drawable.settings_bakup));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.dearrow_provider), () -> DeArrowSettingsPresenter.instance(context).show(), R.drawable.settings_dearrow));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.app_backup_restore), () -> BackupSettingsPresenter.instance(context).show(), R.drawable.settings_bakup));
 
 //        if (Helpers.equalsAny(context.getPackageName(), KNOWN_PACKAGES)) {
 //            settingItems.add(new SettingsItem(

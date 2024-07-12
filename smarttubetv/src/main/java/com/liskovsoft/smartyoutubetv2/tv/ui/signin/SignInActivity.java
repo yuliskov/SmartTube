@@ -39,7 +39,7 @@ public class SignInActivity extends LeanbackActivity implements SignInView {
     }
 
     @Override
-    public void showCode(String userCode) {
+    public void showCode(String userCode, String signInUrl) {
         ((TextView)findViewById(R.id.user_code)).setText(userCode);
     }
 
