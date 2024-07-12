@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 import android.content.Context;
 import android.os.Build;
 import android.os.Build.VERSION;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
@@ -20,11 +21,12 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.VolumeBooster;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.VolumeBooster;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter2;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
@@ -50,7 +52,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private SimpleExoPlayer mPlayer;
     private PlayerView mPlayerView;
     private VolumeBooster mVolumeBooster;
-    private float mCurrentSpeed = 1.0f;
     private boolean mIsEnded;
 
     public ExoPlayerController(Context context) {
@@ -72,9 +73,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     private void initFormats() {
         PlayerData playerData = PlayerData.instance(mContext);
-        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(playerData.getFormat(FormatItem.TYPE_VIDEO)));
-        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(playerData.getFormat(FormatItem.TYPE_AUDIO)));
-        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(playerData.getFormat(FormatItem.TYPE_SUBTITLE)));
+        mTrackSelectorManager.selectTrack(FormatItem.toMediaTrack(playerData.getFormat(FormatItem.TYPE_VIDEO)));
+        mTrackSelectorManager.selectTrack(FormatItem.toMediaTrack(playerData.getFormat(FormatItem.TYPE_AUDIO)));
+        mTrackSelectorManager.selectTrack(FormatItem.toMediaTrack(playerData.getFormat(FormatItem.TYPE_SUBTITLE)));
     }
 
     @Override
@@ -197,6 +198,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         }
 
         mPlayerView = null;
+        mVideo = null;
         // Don't destroy it (needed inside bridge)!
         //mEventListener = null;
     }
@@ -258,13 +260,18 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void selectFormat(FormatItem formatItem) {
         if (formatItem != null) {
             mEventListener.onTrackSelected(formatItem);
-            mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(formatItem));
+            mTrackSelectorManager.selectTrack(FormatItem.toMediaTrack(formatItem));
         }
     }
 
     @Override
     public FormatItem getVideoFormat() {
         return ExoFormatItem.from(mTrackSelectorManager.getVideoTrack());
+    }
+
+    @Override
+    public FormatItem getAudioFormat() {
+        return ExoFormatItem.from(mTrackSelectorManager.getAudioTrack());
     }
 
     @Override
@@ -293,6 +300,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         }
         
         setQualityInfo(mTrackFormatter.getQualityLabel());
+
+        // Manage audio focus. E.g. use Spotify when audio is disabled.
+        ExoPlayerInitializer.enableAudioFocus(mPlayer, mTrackSelectorManager.getAudioTrack() != null && !mTrackSelectorManager.getAudioTrack().isEmpty());
     }
 
     private void notifyOnVideoLoad() {
@@ -318,7 +328,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         Throwable nested = error.getCause() != null ? error.getCause() : error;
 
-        mEventListener.onEngineError(error.type, error.rendererIndex, nested.getMessage());
+        mEventListener.onEngineError(error.type, error.rendererIndex, nested);
     }
 
     @Override
@@ -373,7 +383,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void setSpeed(float speed) {
         if (mPlayer != null && speed > 0 && !Helpers.floatEquals(speed, getSpeed())) {
             mPlayer.setPlaybackParameters(new PlaybackParameters(speed, mPlayer.getPlaybackParameters().pitch));
-            mCurrentSpeed = speed; // NOTE: backup speed in case params not applied (playback is paused)
 
             mTrackFormatter.setSpeed(speed);
             setQualityInfo(mTrackFormatter.getQualityLabel());
@@ -384,8 +393,23 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public float getSpeed() {
         if (mPlayer != null) {
-            // NOTE: restore backup speed in case params not applied (playback is paused)
-            return isPlaying() ? mPlayer.getPlaybackParameters().speed : mCurrentSpeed;
+            return mPlayer.getPlaybackParameters().speed;
+        } else {
+            return -1;
+        }
+    }
+
+    @Override
+    public void setPitch(float pitch) {
+        if (mPlayer != null && pitch > 0 && !Helpers.floatEquals(pitch, getPitch())) {
+            mPlayer.setPlaybackParameters(new PlaybackParameters(mPlayer.getPlaybackParameters().speed, pitch));
+        }
+    }
+
+    @Override
+    public float getPitch() {
+        if (mPlayer != null) {
+            return mPlayer.getPlaybackParameters().pitch;
         } else {
             return -1;
         }

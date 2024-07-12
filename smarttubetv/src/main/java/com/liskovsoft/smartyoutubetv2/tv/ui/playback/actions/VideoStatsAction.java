@@ -5,7 +5,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class VideoStatsAction extends TwoStateAction {
     public VideoStatsAction(Context context) {
-        super(context, R.id.action_video_stats, R.drawable.action_video_stats);
+        super(context, R.id.action_video_stats, R.drawable.action_video_stats, false);
 
         String[] labels = new String[2];
         // Note, labels denote the action taken when clicked

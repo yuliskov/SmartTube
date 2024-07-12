@@ -81,9 +81,9 @@ public class SeekModePlaybackFragment extends EventsOverridePlaybackFragment {
         mInSeek = inSeek;
         if (mInSeek) {
             stopFadeTimer();
+            // Show UI while seeking with FastForward/Rewind keys
+            showControlsOverlay(false);
         }
-        // immediately fade in control row.
-        showControlsOverlay(true);
     }
 
     private void stopFadeTimer() {

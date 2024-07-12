@@ -2,18 +2,18 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
 import android.util.Pair;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.NotificationsService;
-import com.liskovsoft.mediaserviceinterfaces.SignInService;
-import com.liskovsoft.mediaserviceinterfaces.data.Account;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
-import com.liskovsoft.mediaserviceinterfaces.data.NotificationState;
-import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
+import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
+import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.yt.NotificationsService;
+import com.liskovsoft.mediaserviceinterfaces.yt.SignInService;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemFormatInfo;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.NotificationState;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -21,7 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -35,7 +35,7 @@ public class MediaServiceManager {
     private static final String TAG = MediaServiceManager.class.getSimpleName();
     private static MediaServiceManager sInstance;
     private final MediaItemService mItemService;
-    private final MediaGroupService mGroupService;
+    private final ContentService mContentService;
     private final SignInService mSingInService;
     private final NotificationsService mNotificationsService;
     private Disposable mMetadataAction;
@@ -82,10 +82,10 @@ public class MediaServiceManager {
         void onAccountChanged(Account account);
     }
 
-    public MediaServiceManager() {
-        MediaService service = YouTubeMediaService.instance();
+    private MediaServiceManager() {
+        ServiceManager service = YouTubeServiceManager.instance();
         mItemService = service.getMediaItemService();
-        mGroupService = service.getMediaGroupService();
+        mContentService = service.getContentService();
         mSingInService = service.getSignInService();
         mNotificationsService = service.getNotificationsService();
 
@@ -168,7 +168,7 @@ public class MediaServiceManager {
 
         RxHelper.disposeActions(mUploadsAction);
 
-        Observable<MediaGroup> observable = mGroupService.getGroupObserve(item);
+        Observable<MediaGroup> observable = mContentService.getGroupObserve(item);
 
         mUploadsAction = observable
                 .subscribe(
@@ -183,7 +183,7 @@ public class MediaServiceManager {
     public void loadSubscribedChannels(OnMediaGroup onMediaGroup) {
         RxHelper.disposeActions(mSubscribedChannelsAction);
 
-        Observable<MediaGroup> observable = mGroupService.getSubscribedChannelsByUpdateObserve();
+        Observable<MediaGroup> observable = mContentService.getSubscribedChannelsByUpdateObserve();
 
         mSubscribedChannelsAction = observable
                 .subscribe(
@@ -200,7 +200,7 @@ public class MediaServiceManager {
         RxHelper.disposeActions(mRowsAction);
 
         Observable<List<MediaGroup>> observable = item.mediaItem != null ?
-                mGroupService.getChannelObserve(item.mediaItem) : mGroupService.getChannelObserve(item.channelId);
+                mContentService.getChannelObserve(item.mediaItem) : mContentService.getChannelObserve(item.channelId);
 
         mRowsAction = observable
                 .subscribe(
@@ -239,7 +239,7 @@ public class MediaServiceManager {
 
         RxHelper.disposeActions(mPlaylistGroupAction);
 
-        Observable<MediaGroup> observable = mGroupService.getEmptyPlaylistsObserve();
+        Observable<MediaGroup> observable = mContentService.getEmptyPlaylistsObserve();
 
         mPlaylistGroupAction = observable
                 .subscribe(
@@ -364,15 +364,15 @@ public class MediaServiceManager {
     }
 
     public void enableHistory(boolean enable) {
-        RxHelper.runAsyncUser(() -> mGroupService.enableHistory(enable));
+        RxHelper.runAsyncUser(() -> mContentService.enableHistory(enable));
     }
 
     public void clearHistory() {
-        RxHelper.runAsyncUser(mGroupService::clearHistory);
+        RxHelper.runAsyncUser(mContentService::clearHistory);
     }
 
     public void clearSearchHistory() {
-        RxHelper.runAsyncUser(mGroupService::clearSearchHistory);
+        RxHelper.runAsyncUser(mContentService::clearSearchHistory);
     }
 
     public void updateHistory(Video video, long positionMs) {

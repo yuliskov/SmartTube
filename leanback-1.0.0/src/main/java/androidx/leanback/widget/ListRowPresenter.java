@@ -549,8 +549,10 @@ public class ListRowPresenter extends RowPresenter {
         if (vh.isExpanded()) {
             int headerSpaceUnderBaseline = getSpaceUnderBaseline(vh);
             if (DEBUG) Log.v(TAG, "headerSpaceUnderBaseline " + headerSpaceUnderBaseline);
-            paddingTop = (vh.isSelected() ? sExpandedSelectedRowTopPadding : vh.mPaddingTop)
-                    - headerSpaceUnderBaseline;
+            // MOD: fix different row padding when the row is unselected (channel fragment with search header)
+            paddingTop = sExpandedSelectedRowTopPadding - headerSpaceUnderBaseline;
+            //paddingTop = (vh.isSelected() ? sExpandedSelectedRowTopPadding : vh.mPaddingTop)
+            //        - headerSpaceUnderBaseline;
             paddingBottom = mHoverCardPresenterSelector == null
                     ? sExpandedRowNoHovercardBottomPadding : vh.mPaddingBottom;
         } else if (vh.isSelected()) {

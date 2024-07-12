@@ -89,7 +89,7 @@ public class ChannelCardPresenter extends LongClickPresenter {
         ViewUtil.setDimensions(viewHolder.view.findViewById(R.id.channel_card_wrapper), mWidth, -1); // don't do auto height
 
         TextView textView = viewHolder.view.findViewById(R.id.channel_title);
-        textView.setText(video.title);
+        textView.setText(video.getTitle());
 
         // We should setup props each time because object may be reused by the underlying RecyclerView
         textView.setBackgroundColor(video.hasNewContent ? mNewContentBackgroundColor : mDefaultBackgroundColor);

@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
 
 public class RemoteControlData extends DataChangeBase {
     private static final String DEVICE_LINK_DATA = "device_link_data";
@@ -14,6 +15,7 @@ public class RemoteControlData extends DataChangeBase {
     private boolean mIsRunInBackgroundEnabled;
     private boolean mIsFinishOnDisconnectEnabled;
     private boolean mIsConnectMessagesEnabled;
+    private boolean mIsRemoteHistoryDisabled;
 
     private RemoteControlData(Context context) {
         mContext = context;
@@ -57,19 +59,31 @@ public class RemoteControlData extends DataChangeBase {
         return mIsConnectMessagesEnabled;
     }
 
+    public void disableRemoteHistory(boolean disable) {
+        mIsRemoteHistoryDisabled = disable;
+        persistState();
+    }
+
+    public boolean isRemoteHistoryDisabled() {
+        return mIsRemoteHistoryDisabled;
+    }
+
     private void restoreState() {
         String data = mAppPrefs.getData(DEVICE_LINK_DATA);
 
-        String[] split = Helpers.splitObjectLegacy(data);
+        String[] split = Helpers.splitData(data);
 
         mIsDeviceLinkEnabled = false;
         mIsRunInBackgroundEnabled = false;
         mIsFinishOnDisconnectEnabled = Helpers.parseBoolean(split, 3, false);
         mIsConnectMessagesEnabled = Helpers.parseBoolean(split, 4, false);
+        mIsRemoteHistoryDisabled = Helpers.parseBoolean(split, 5, false);
     }
 
     protected void persistState() {
-        mAppPrefs.setData(DEVICE_LINK_DATA, Helpers.mergeObject(null, null, mIsDeviceLinkEnabled, mIsFinishOnDisconnectEnabled, mIsConnectMessagesEnabled));
+        mAppPrefs.setData(DEVICE_LINK_DATA, Helpers.mergeData(
+                null, null, mIsDeviceLinkEnabled, mIsFinishOnDisconnectEnabled, mIsConnectMessagesEnabled, mIsRemoteHistoryDisabled
+        ));
 
         super.persistState();
     }

@@ -523,9 +523,9 @@ public class DefaultHttpDataSource extends BaseDataSource implements HttpDataSou
       boolean allowIcyMetadata,
       boolean followRedirects)
       throws IOException {
-    //HttpURLConnection connection = (HttpURLConnection) url.openConnection();
     // MODIFIED: Add modern TLS ciphers to HttpUrlConnection and custom Dns
     // https://stackoverflow.com/questions/16299531/how-to-override-the-cipherlist-sent-to-the-server-by-android-when-using-httpsurl
+    //HttpURLConnection connection = (HttpURLConnection) url.openConnection();
     HttpURLConnection connection = NetworkHelpers.getHttpsURLConnection(url);
     connection.setConnectTimeout(connectTimeoutMillis);
     connection.setReadTimeout(readTimeoutMillis);

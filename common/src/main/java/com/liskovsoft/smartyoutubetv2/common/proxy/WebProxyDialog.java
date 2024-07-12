@@ -106,8 +106,15 @@ public class WebProxyDialog {
         return new Proxy(proxyType, PasswdInetSocketAddress.createUnresolved(proxyHost, proxyPort, proxyUser, proxyPassword));
     }
 
+    @RequiresApi(19)
     protected void testProxyConnections() {
-        Proxy proxy = validateProxyConfigFields();
+        Proxy proxy;
+        try {
+            proxy = validateProxyConfigFields();
+        } catch (IllegalArgumentException e) {
+            appendStatusMessage(e.getMessage());
+            return;
+        }
         if (proxy == null) {
             appendStatusMessage(R.string.proxy_test_aborted);
             return;
@@ -152,7 +159,7 @@ public class WebProxyDialog {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View contentView = inflater.inflate(R.layout.web_proxy_dialog, null);
 
-        KeyHelpers.fixEnterKey(
+        KeyHelpers.fixShowKeyboard(
                 contentView.findViewById(R.id.proxy_host),
                 contentView.findViewById(R.id.proxy_port),
                 contentView.findViewById(R.id.proxy_username),

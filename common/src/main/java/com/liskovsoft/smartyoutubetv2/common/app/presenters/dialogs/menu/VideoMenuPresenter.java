@@ -1,9 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
+import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -29,7 +29,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -40,7 +40,7 @@ import java.util.Map;
 
 public class VideoMenuPresenter extends BaseMenuPresenter {
     private static final String TAG = VideoMenuPresenter.class.getSimpleName();
-    private final MediaItemService mItemManager;
+    private final MediaItemService mMediaItemService;
     private final AppDialogPresenter mDialogPresenter;
     private final MediaServiceManager mServiceManager;
     private Disposable mAddToPlaylistAction;
@@ -64,6 +64,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsReturnToBackgroundVideoEnabled;
     private boolean mIsOpenPlaylistButtonEnabled;
     private boolean mIsAddToPlaybackQueueButtonEnabled;
+    private boolean mIsPlayNextButtonEnabled;
     private boolean mIsShowPlaybackQueueButtonEnabled;
     private boolean mIsOpenDescriptionButtonEnabled;
     private boolean mIsOpenCommentsButtonEnabled;
@@ -83,6 +84,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         int ACTION_REMOVE_FROM_PLAYLIST = 3;
         int ACTION_REMOVE_FROM_QUEUE = 4;
         int ACTION_ADD_TO_QUEUE = 5;
+        int ACTION_PLAY_NEXT = 6;
         void onItemAction(Video videoItem, int action);
     }
 
@@ -106,8 +108,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
     private VideoMenuPresenter(Context context) {
         super(context);
-        MediaService service = YouTubeMediaService.instance();
-        mItemManager = service.getMediaItemService();
+        ServiceManager service = YouTubeServiceManager.instance();
+        mMediaItemService = service.getMediaItemService();
         mServiceManager = MediaServiceManager.instance();
         mDialogPresenter = AppDialogPresenter.instance(context);
 
@@ -143,8 +145,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        RxHelper.disposeActions(mAddToPlaylistAction, mNotInterestedAction, mSubscribeAction);
-
         mVideo = video;
         sVideoHolder = new WeakReference<>(video);
 
@@ -155,7 +155,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mPlaylistInfos = null;
         RxHelper.disposeActions(mPlaylistsInfoAction);
         if (isAddToRecentPlaylistButtonEnabled()) {
-            mPlaylistsInfoAction = mItemManager.getPlaylistsInfoObserve(mVideo.videoId)
+            mPlaylistsInfoAction = mMediaItemService.getPlaylistsInfoObserve(mVideo.videoId)
                     .subscribe(
                             videoPlaylistInfos -> {
                                 mPlaylistInfos = videoPlaylistInfos;
@@ -216,7 +216,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         //appendClearHistoryButton();
 
         if (!mDialogPresenter.isEmpty()) {
-            String title = mVideo != null ? mVideo.title : null;
+            String title = mVideo != null ? mVideo.getTitle() : null;
             // No need to add author because: 1) This could be a channel card. 2) This info isn't so important.
             mDialogPresenter.showDialog(title);
         }
@@ -254,7 +254,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         if (mDialogPresenter.isEmpty()) {
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
         } else {
-            mDialogPresenter.showDialog(mVideo.title);
+            mDialogPresenter.showDialog(mVideo.getTitle());
         }
     }
 
@@ -394,9 +394,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
+        RxHelper.disposeActions(mNotInterestedAction);
+
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.not_interested), optionItem -> {
-                    mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken())
+                    mNotInterestedAction = mMediaItemService.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken())
                             .subscribe(
                                     var -> {},
                                     error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage()),
@@ -421,9 +423,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
+        RxHelper.disposeActions(mNotInterestedAction);
+
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.not_recommend_channel), optionItem -> {
-                    mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken2())
+                    mNotInterestedAction = mMediaItemService.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken2())
                             .subscribe(
                                     var -> {},
                                     error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage()),
@@ -448,9 +452,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
+        RxHelper.disposeActions(mNotInterestedAction);
+
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.remove_from_history), optionItem -> {
-                    mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken())
+                    mNotInterestedAction = mMediaItemService.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken())
                             .subscribe(
                                     var -> {},
                                     error -> Log.e(TAG, "Remove from history error: %s", error.getMessage()),
@@ -476,9 +482,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
+        RxHelper.disposeActions(mNotInterestedAction);
+
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.remove_from_subscriptions), optionItem -> {
-                    mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken())
+                    mNotInterestedAction = mMediaItemService.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken())
                             .subscribe(
                                     var -> {},
                                     error -> Log.e(TAG, "Remove from subscriptions error: %s", error.getMessage()),
@@ -492,6 +500,25 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 }));
     }
 
+    private void appendRemoveFromNotificationsButton() {
+        if (mVideo == null || mVideo.mediaItem == null) {
+            return;
+        }
+
+        if (!mVideo.belongsToNotifications() || !mIsRemoveFromSubscriptionsButtonEnabled) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.remove_from_subscriptions), optionItem -> {
+                    MediaServiceManager.instance().hideNotification(mVideo);
+                    if (mCallback != null) {
+                        mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+                    }
+                    mDialogPresenter.closeDialog();
+                }));
+    }
+
     private void appendMarkAsWatchedButton() {
         if (mVideo == null || !mIsMarkAsWatchedButtonEnabled) {
             return;
@@ -500,7 +527,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.mark_as_watched), optionItem -> {
                     MediaServiceManager.instance().updateHistory(mVideo, 0);
-                    mVideo.percentWatched = 100;
+                    mVideo.markFullyViewed();
                     VideoStateService.instance(getContext()).save(new State(mVideo.videoId, mVideo.getDurationMs()));
                     Playlist.instance().sync(mVideo);
                     mDialogPresenter.closeDialog();
@@ -599,9 +626,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void appendPlayVideoIncognitoButton() {
-        if (!mIsPlayVideoIncognitoButtonEnabled || mVideo == null || mVideo.videoId == null ||
-            ViewManager.instance(getContext()).getTopView() == PlaybackView.class ||
-            BrowsePresenter.instance(getContext()).isHistorySection()) {
+        if (!mIsPlayVideoIncognitoButtonEnabled || mVideo == null || mVideo.videoId == null) {
             return;
         }
 
@@ -616,8 +641,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void showLongTextDialog(String description) {
-        mDialogPresenter.appendLongTextCategory(mVideo.title, UiOptionItem.from(description));
-        mDialogPresenter.showDialog(mVideo.title);
+        mDialogPresenter.appendLongTextCategory(mVideo.getTitle(), UiOptionItem.from(description));
+        mDialogPresenter.showDialog(mVideo.getTitle());
     }
 
     private void appendSubscribeButton() {
@@ -629,10 +654,12 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
+        mVideo.isSubscribed = mVideo.isSubscribed || mVideo.belongsToSubscriptions() || mVideo.belongsToChannelUploads();
+
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
-                        mVideo.isSubscribed || mVideo.belongsToSubscriptions() || mVideo.belongsToChannelUploads() ?
-                                R.string.unsubscribe_from_channel : R.string.subscribe_unsubscribe_from_channel),
+                        mVideo.isSynced || mVideo.isSubscribed ? mVideo.isSubscribed ?
+                                R.string.unsubscribe_from_channel : R.string.subscribe_to_channel : R.string.subscribe_unsubscribe_from_channel),
                         optionItem -> toggleSubscribe()));
     }
 
@@ -687,6 +714,35 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                         }));
     }
 
+    private void appendPlayNextButton() {
+        if (!mIsPlayNextButtonEnabled) {
+            return;
+        }
+
+        if (mVideo == null || !mVideo.hasVideo()) {
+            return;
+        }
+
+        Playlist playlist = Playlist.instance();
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.play_next),
+                        optionItem -> {
+                            mVideo.fromQueue = true;
+                            playlist.next(mVideo);
+                            if (mCallback != null) {
+                                mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_PLAY_NEXT);
+                            }
+
+                            closeDialog();
+                            MessageHelpers.showMessage(getContext(), String.format("%s: %s",
+                                    mVideo.getAuthor(),
+                                    getContext().getString(R.string.play_next))
+                            );
+                        }));
+    }
+
     private void appendShowPlaybackQueueButton() {
         if (!mIsShowPlaybackQueueButtonEnabled) {
             return;
@@ -709,7 +765,9 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo == null || !BrowsePresenter.instance(getContext()).isPlaylistsSection()) {
+        BrowsePresenter presenter = BrowsePresenter.instance(getContext());
+
+        if (mVideo == null || !(presenter.isPlaylistsSection() && presenter.inForeground())) {
             return;
         }
 
@@ -743,8 +801,9 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void addRemoveFromPlaylist(String playlistId, String playlistTitle, boolean add) {
+        RxHelper.disposeActions(mAddToPlaylistAction);
         if (add) {
-            Observable<Void> editObserve = mItemManager.addToPlaylistObserve(playlistId, mVideo.videoId);
+            Observable<Void> editObserve = mMediaItemService.addToPlaylistObserve(playlistId, mVideo.videoId);
             // Handle error: Maximum playlist size exceeded (> 5000 items)
             mAddToPlaylistAction = RxHelper.execute(editObserve, error -> MessageHelpers.showLongMessage(getContext(), error.getMessage()));
             mDialogPresenter.closeDialog();
@@ -755,7 +814,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             if (mCallback != null && Helpers.equals(mVideo.playlistId, playlistId)) {
                 mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST);
             }
-            Observable<Void> editObserve = mItemManager.removeFromPlaylistObserve(playlistId, mVideo.videoId);
+            Observable<Void> editObserve = mMediaItemService.removeFromPlaylistObserve(playlistId, mVideo.videoId);
             mAddToPlaylistAction = RxHelper.execute(editObserve);
             mDialogPresenter.closeDialog();
             MessageHelpers.showMessage(getContext(),
@@ -790,6 +849,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
+        //mVideo.isSynced = true; // default to subscribe
+
         // Until synced we won't really know weather we subscribed to a channel.
         // Exclusion: channel item (can't be synced)
         // Note, regular items (from subscribed section etc) aren't contain channel id
@@ -799,9 +860,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
 
             mServiceManager.loadMetadata(mVideo, metadata -> {
-                Video video = Video.from(mVideo);
-                video.sync(metadata);
-                toggleSubscribe(video);
+                mVideo.sync(metadata);
+                toggleSubscribe(mVideo);
             });
         }
     }
@@ -811,8 +871,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
+        RxHelper.disposeActions(mSubscribeAction);
+
         Observable<Void> observable = video.isSubscribed ?
-                mItemManager.unsubscribeObserve(video.channelId) : mItemManager.subscribeObserve(video.channelId);
+                mMediaItemService.unsubscribeObserve(video.channelId) : mMediaItemService.subscribeObserve(video.channelId);
 
         mSubscribeAction = RxHelper.execute(observable);
 
@@ -822,8 +884,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             mCallback.onItemAction(video, VideoMenuCallback.ACTION_UNSUBSCRIBE);
         }
 
-        MessageHelpers.showMessage(getContext(),
-                video.getAuthor() + ": " + getContext().getString(!video.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel));
+        MessageHelpers.showMessage(getContext(), getContext().getString(!video.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel));
     }
 
     @Override
@@ -838,6 +899,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsOpenChannelButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_CHANNEL);
         mIsAddToRecentPlaylistButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_RECENT_PLAYLIST);
         mIsAddToPlaybackQueueButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_QUEUE);
+        mIsPlayNextButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAY_NEXT);
         mIsAddToPlaylistButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_PLAYLIST);
         mIsShareLinkButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_LINK);
         mIsShareQRLinkButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_QR_LINK);
@@ -867,20 +929,22 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.put(MainUIData.MENU_ITEM_RECENT_PLAYLIST, new MenuAction(this::appendAddToRecentPlaylistButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_ADD_TO_PLAYLIST, new MenuAction(this::appendAddToPlaylistButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_CREATE_PLAYLIST, new MenuAction(this::appendCreatePlaylistButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_RENAME_PLAYLIST, new MenuAction(this::appendRenamePlaylistButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_ADD_TO_NEW_PLAYLIST, new MenuAction(this::appendAddToNewPlaylistButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_NOT_INTERESTED,
                 new MenuAction(() -> {appendNotInterestedButton(); appendNotRecommendChannelButton();}, true));
-        mMenuMapping.put(MainUIData.MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS, new MenuAction(this::appendRemoveFromSubscriptionsButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS, new MenuAction(() -> { appendRemoveFromSubscriptionsButton(); appendRemoveFromNotificationsButton(); }, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_MARK_AS_WATCHED, new MenuAction(this::appendMarkAsWatchedButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_PLAYLIST_ORDER, new MenuAction(this::appendPlaylistOrderButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_ADD_TO_QUEUE, new MenuAction(this::appendAddToPlaybackQueueButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_PLAY_NEXT, new MenuAction(this::appendPlayNextButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_SHOW_QUEUE, new MenuAction(this::appendShowPlaybackQueueButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_CHANNEL, new MenuAction(this::appendOpenChannelButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_PLAYLIST, new MenuAction(this::appendOpenPlaylistButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_SUBSCRIBE, new MenuAction(this::appendSubscribeButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK, new MenuAction(this::appendToggleExcludeFromContentBlockButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR, new MenuAction(this::appendTogglePinVideoToSidebarButton, false));
-        mMenuMapping.put(MainUIData.MENU_ITEM_SAVE_PLAYLIST, new MenuAction(this::appendSaveRemovePlaylistButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_SAVE_REMOVE_PLAYLIST, new MenuAction(this::appendSaveRemovePlaylistButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_DESCRIPTION, new MenuAction(this::appendOpenDescriptionButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_SHARE_LINK, new MenuAction(this::appendShareLinkButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_SHARE_QR_LINK, new MenuAction(this::appendShareQRLinkButton, false));

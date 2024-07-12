@@ -5,9 +5,13 @@ import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.os.Handler;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.HiddenPrefs;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,6 +28,10 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private final List<File> mBackupDirs;
     private Runnable mPendingHandler;
     private String mBackupName;
+
+    public interface OnBackupNames {
+        void onBackupNames(List<String> backupNames);
+    }
 
     public BackupAndRestoreManager(Context context) {
         mContext = context;
@@ -84,7 +92,11 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         for (File dataDir : mDataDirs) {
             if (dataDir.isDirectory() && !FileHelpers.isEmpty(dataDir)) {
-                FileHelpers.copy(dataDir, new File(currentBackup, dataDir.getName()));
+                File destination = new File(currentBackup, dataDir.getName());
+                FileHelpers.copy(dataDir, destination);
+
+                // Don't store unique id
+                FileHelpers.delete(new File(destination, HiddenPrefs.SHARED_PREFERENCES_NAME + ".xml"));
             }
         }
     }
@@ -95,7 +107,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         File currentBackup = getBackupCheck();
 
         if (FileHelpers.isEmpty(currentBackup)) {
-            Log.d(TAG, "Oops. Backup not exists.");
+            Log.d(TAG, "Oops. Backup folder is empty.");
+            MessageHelpers.showLongMessage(mContext, "Oops. Backup folder is empty.");
             return;
         }
 
@@ -113,8 +126,10 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             }
         }
 
+        MessageHelpers.showMessage(mContext, R.string.msg_done);
+
         // To apply settings we need to kill the app
-        new Handler(mContext.getMainLooper()).postDelayed(() -> ViewManager.instance(mContext).forceFinishTheApp(), 1_000);
+        new Handler(mContext.getMainLooper()).postDelayed(() -> Utils.restartTheApp(mContext), 1_000);
     }
 
     /**
@@ -197,7 +212,18 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         return currentBackup != null ? currentBackup.toString() : null;
     }
 
-    public List<String> getBackupNames() {
+    public void getBackupNames(OnBackupNames callback) {
+        if (FileHelpers.isExternalStorageReadable()) {
+            if (PermissionHelpers.hasStoragePermissions(mContext)) {
+                callback.onBackupNames(getBackupNames());
+            } else {
+                mPendingHandler = () -> callback.onBackupNames(getBackupNames());
+                verifyStoragePermissionsAndReturn();
+            }
+        }
+    }
+
+    private List<String> getBackupNames() {
         File current = getBackup();
 
         if (current != null) {

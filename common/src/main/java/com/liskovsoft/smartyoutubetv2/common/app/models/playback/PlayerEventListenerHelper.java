@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import android.app.Activity;
 import android.content.Context;
+
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
@@ -15,12 +17,16 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
         mMainController = mainController;
     }
 
-    public void setAltContext(Context context) {
+    protected void setAltContext(Context context) {
         mContext = context;
     }
 
-    public MainPlayerController getMainController() {
+    protected MainPlayerController getMainController() {
         return mMainController;
+    }
+
+    protected <T extends PlayerEventListener> T getController(Class<T> clazz) {
+        return getMainController().getController(clazz);
     }
 
     public PlayerManager getPlayer() {
@@ -118,7 +124,7 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onEngineError(int type, int rendererIndex, String message) {
+    public void onEngineError(int type, int rendererIndex, Throwable error) {
         // NOP
     }
 
@@ -139,11 +145,6 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
 
     @Override
     public void onPauseClicked() {
-        // NOP
-    }
-
-    @Override
-    public void onRepeatModeClicked(int modeIndex) {
         // NOP
     }
 
@@ -190,11 +191,6 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
 
     @Override
     public void onLikeClicked(boolean like) {
-        // NOP
-    }
-
-    @Override
-    public void onChannelClicked() {
         // NOP
     }
 
@@ -295,6 +291,11 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
 
     @Override
     public void onTickle() {
+        // NOP
+    }
+
+    @Override
+    public void onMetadata(MediaItemMetadata metadata) {
         // NOP
     }
 }

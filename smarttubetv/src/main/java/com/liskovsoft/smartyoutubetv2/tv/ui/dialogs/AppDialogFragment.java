@@ -21,6 +21,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreference;
@@ -178,6 +179,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
 
             return true;
         } else if (pref instanceof CommentsPreference) {
+            ((MotherActivity) getActivity()).enableThrottleKeyDown(true);
             CommentsPreference commentsPreference = (CommentsPreference) pref;
             CommentsPreferenceDialogFragment f = CommentsPreferenceDialogFragment.newInstance(commentsPreference.getCommentsReceiver(), commentsPreference.getKey());
             f.enableTransparent(mIsTransparent);

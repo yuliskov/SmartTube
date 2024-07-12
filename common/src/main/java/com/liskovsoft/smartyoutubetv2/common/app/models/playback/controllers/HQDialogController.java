@@ -7,9 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCatego
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
-import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
@@ -27,23 +25,20 @@ public class HQDialogController extends PlayerEventListenerHelper {
     private final Map<Integer, OptionCategory> mCategories = new LinkedHashMap<>();
     private final Map<Integer, OptionCategory> mCategoriesInt = new LinkedHashMap<>();
     private final Set<Runnable> mHideListeners = new HashSet<>();
-    private final VideoStateController mStateUpdater;
+    private VideoStateController mStateUpdater;
     private PlayerData mPlayerData;
-    private AppDialogPresenter mAppDialogPresenter;;
-
-    public HQDialogController(VideoStateController stateUpdater) {
-        mStateUpdater = stateUpdater;
-    }
+    private AppDialogPresenter mAppDialogPresenter;
 
     @Override
     public void onInit() {
         mPlayerData = PlayerData.instance(getContext());
         mAppDialogPresenter = AppDialogPresenter.instance(getContext());
+        mStateUpdater = getController(VideoStateController.class);
     }
 
     @Override
     public void onViewResumed() {
-        updateBackgroundPlayback();
+        //updateBackgroundPlayback();
     }
 
     @Override
@@ -53,6 +48,7 @@ public class HQDialogController extends PlayerEventListenerHelper {
         addPresetsCategory();
         //addAudioLanguage();
         //addAudioDelayCategory();
+        addPitchEffectCategory();
         //addBackgroundPlaybackCategory();
 
         appendOptions(mCategoriesInt);
@@ -72,17 +68,18 @@ public class HQDialogController extends PlayerEventListenerHelper {
                 VIDEO_FORMATS_ID,
                 OptionCategory.TYPE_RADIO_LIST,
                 videoFormatsTitle,
-                UiOptionItem.from(videoFormats, this::selectFormatOption)));
+                UiOptionItem.from(videoFormats, this::selectFormatOption, getContext().getString(R.string.option_disabled))));
         addCategoryInt(OptionCategory.from(
                 AUDIO_FORMATS_ID,
                 OptionCategory.TYPE_RADIO_LIST,
                 audioFormatsTitle,
-                UiOptionItem.from(audioFormats, this::selectFormatOption)));
+                UiOptionItem.from(audioFormats, this::selectFormatOption, getContext().getString(R.string.option_disabled))));
     }
 
     private void selectFormatOption(OptionItem option) {
         FormatItem formatItem = UiOptionItem.toFormat(option);
         getPlayer().setFormat(formatItem);
+        persistFormat(formatItem);
 
         if (mPlayerData.getFormat(formatItem.getType()).isPreset()) {
             // Preset currently active. Show warning about format reset.
@@ -99,6 +96,18 @@ public class HQDialogController extends PlayerEventListenerHelper {
         }
     }
 
+    private void persistFormat(FormatItem formatItem) {
+        if (formatItem.getType() == FormatItem.TYPE_VIDEO) {
+            if (!mPlayerData.getFormat(FormatItem.TYPE_VIDEO).isPreset()) {
+                mPlayerData.setFormat(formatItem);
+            } else {
+                mPlayerData.setTempVideoFormat(formatItem);
+            }
+        } else {
+            mPlayerData.setFormat(formatItem);
+        }
+    }
+
     private void addVideoBufferCategory() {
         addCategoryInt(AppDialogUtil.createVideoBufferCategory(getContext(), mPlayerData,
                 () -> getPlayer().restartEngine()));
@@ -109,33 +118,37 @@ public class HQDialogController extends PlayerEventListenerHelper {
                 () -> getPlayer().restartEngine()));
     }
 
+    private void addPitchEffectCategory() {
+        addCategoryInt(AppDialogUtil.createPitchEffectCategory(getContext(), getPlayer(), mPlayerData));
+    }
+
     private void addAudioLanguage() {
         addCategoryInt(AppDialogUtil.createAudioLanguageCategory(getContext(), mPlayerData,
                 () -> getPlayer().restartEngine()));
     }
 
     private void onDialogHide() {
-        updateBackgroundPlayback();
+        //updateBackgroundPlayback();
 
         for (Runnable listener : mHideListeners) {
             listener.run();
         }
     }
 
-    private void updateBackgroundPlayback() {
-        ViewManager.instance(getContext()).blockTop(null);
+    //private void updateBackgroundPlayback() {
+    //    ViewManager.instance(getContext()).blockTop(null);
+    //
+    //    if (getPlayer() != null) {
+    //        getPlayer().setBackgroundMode(mPlayerData.getBackgroundMode());
+    //    }
+    //}
 
-        if (getPlayer() != null) {
-            getPlayer().setBackgroundMode(mPlayerData.getBackgroundMode());
-        }
-    }
-
-    private void addBackgroundPlaybackCategory() {
-        OptionCategory category =
-                AppDialogUtil.createBackgroundPlaybackCategory(getContext(), mPlayerData, GeneralData.instance(getContext()), this::updateBackgroundPlayback);
-
-        addCategoryInt(category);
-    }
+    //private void addBackgroundPlaybackCategory() {
+    //    OptionCategory category =
+    //            AppDialogUtil.createBackgroundPlaybackCategory(getContext(), mPlayerData, GeneralData.instance(getContext()), this::updateBackgroundPlayback);
+    //
+    //    addCategoryInt(category);
+    //}
 
     private void addPresetsCategory() {
         addCategoryInt(AppDialogUtil.createVideoPresetsCategory(

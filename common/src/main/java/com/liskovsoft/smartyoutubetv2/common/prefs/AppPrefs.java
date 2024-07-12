@@ -3,16 +3,16 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
-import com.liskovsoft.mediaserviceinterfaces.data.Account;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AppPrefs extends SharedPreferencesBase implements AccountChangeListener {
     private static final String TAG = AppPrefs.class.getSimpleName();
@@ -24,10 +24,10 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
     private static final String WEB_PROXY_URI = "web_proxy_uri";
     private static final String WEB_PROXY_ENABLED = "web_proxy_enabled";
+    private static final String LAST_PROFILE_NAME = "last_profile_name";
     private String mBootResolution;
     private final Map<String, Integer> mDataHashes = new HashMap<>();
-    private final List<ProfileChangeListener> mListeners = new ArrayList<>();
-    private String mProfileName;
+    private final List<ProfileChangeListener> mListeners = new CopyOnWriteArrayList<>();
 
     public interface ProfileChangeListener {
         void onProfileChanged();
@@ -41,8 +41,6 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
 
     private void initProfiles() {
         MediaServiceManager.instance().addAccountListener(this);
-        // Trigger on current account
-        onAccountChanged(MediaServiceManager.instance().getSelectedAccount());
     }
 
     @Override
@@ -77,12 +75,20 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         return mBootResolution;
     }
 
+    //public String getStateUpdaterData() {
+    //    return getString(STATE_UPDATER_DATA, null);
+    //}
+    //
+    //public void setStateUpdaterData(String data) {
+    //    putString(STATE_UPDATER_DATA, data);
+    //}
+
     public String getStateUpdaterData() {
-        return getString(STATE_UPDATER_DATA, null);
+        return getProfileData(STATE_UPDATER_DATA);
     }
 
     public void setStateUpdaterData(String data) {
-        putString(STATE_UPDATER_DATA, data);
+        setProfileData(STATE_UPDATER_DATA, data);
     }
 
     public void setProfileData(String key, String data) {
@@ -123,6 +129,14 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         putBoolean(WEB_PROXY_ENABLED, enabled);
     }
 
+    private void setProfileName(String profileName) {
+        putString(LAST_PROFILE_NAME, profileName);
+    }
+
+    private String getProfileName() {
+        return getString(LAST_PROFILE_NAME, null);
+    }
+
     private void selectAccount(Account account) {
         selectProfile(account != null && account.getName() != null ? account.getName().replace(" ", "_") : null);
     }
@@ -132,7 +146,7 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
             profileName = ANONYMOUS_PROFILE_NAME;
         }
 
-        mProfileName = profileName;
+        setProfileName(profileName);
 
         onProfileChanged();
     }
@@ -174,8 +188,9 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
     }
 
     private String getProfileKey(String key) {
-        if (!TextUtils.isEmpty(mProfileName)) {
-            key = mProfileName + "_" + key;
+        String profileName = getProfileName();
+        if (!TextUtils.isEmpty(profileName)) {
+            key = profileName + "_" + key;
         }
 
         return key;

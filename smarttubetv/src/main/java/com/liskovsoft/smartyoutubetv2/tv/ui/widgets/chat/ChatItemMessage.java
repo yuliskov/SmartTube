@@ -1,21 +1,27 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat;
 
 import android.text.TextUtils;
-import com.liskovsoft.mediaserviceinterfaces.data.ChatItem;
-import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
+
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ChatItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.CommentItem;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.stfalcon.chatkit.commons.models.IMessage;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 public class ChatItemMessage implements IMessage {
+    private static final int MAX_LENGTH = 700;
     private String mId;
     private CharSequence mText;
     private ChatItemAuthor mAuthor;
     private Date mCreatedAt;
-    private String mNestedCommentsKey;
+    private CommentItem mCommentItem;
 
     public static ChatItemMessage from(ChatItem chatItem) {
         ChatItemMessage message = new ChatItemMessage();
@@ -43,9 +49,65 @@ public class ChatItemMessage implements IMessage {
         }
         message.mAuthor = ChatItemAuthor.from(commentItem);
         message.mCreatedAt = new Date();
-        message.mNestedCommentsKey = commentItem.getNestedCommentsKey();
+        message.mCommentItem = commentItem;
 
         return message;
+    }
+
+    public static List<ChatItemMessage> fromSplit(CommentItem commentItem) {
+        if (shouldSplit(commentItem)) {
+            List<String> comments = Helpers.splitStringBySize(commentItem.getMessage(), MAX_LENGTH);
+            List<ChatItemMessage> result = new ArrayList<>();
+            for (int i = 0; i < comments.size(); i++) {
+                String prefix = i > 0 ? "..." : "";
+                String postfix = i < (comments.size() - 1) ? "..." : "";
+                String comment = prefix + comments.get(i) + postfix;
+                result.add(from(new CommentItem() {
+                    public String getId() {
+                        return String.valueOf(comment.hashCode());
+                    }
+
+                    public String getMessage() {
+                        return comment;
+                    }
+
+                    public String getAuthorName() {
+                        return commentItem.getAuthorName();
+                    }
+
+                    public String getAuthorPhoto() {
+                        return commentItem.getAuthorPhoto();
+                    }
+
+                    public String getPublishedDate() {
+                        return commentItem.getPublishedDate();
+                    }
+
+                    public String getNestedCommentsKey() {
+                        return commentItem.getNestedCommentsKey();
+                    }
+
+                    public boolean isLiked() {
+                        return commentItem.isLiked();
+                    }
+
+                    public String getLikeCount() {
+                        return commentItem.getLikeCount();
+                    }
+
+                    public String getReplyCount() {
+                        return commentItem.getReplyCount();
+                    }
+                }));
+            }
+            return result;
+        }
+
+        return Collections.singletonList(from(commentItem));
+    }
+
+    public static boolean shouldSplit(CommentItem commentItem) {
+        return commentItem != null && commentItem.getMessage() != null && commentItem.getMessage().trim().length() > MAX_LENGTH;
     }
 
     @Override
@@ -68,7 +130,7 @@ public class ChatItemMessage implements IMessage {
         return mCreatedAt;
     }
 
-    public String getNestedCommentsKey() {
-        return mNestedCommentsKey;
+    public CommentItem getCommentItem() {
+        return mCommentItem;
     }
 }

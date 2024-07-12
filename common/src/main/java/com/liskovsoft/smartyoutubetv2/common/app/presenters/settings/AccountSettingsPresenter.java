@@ -2,15 +2,16 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.data.Account;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.YTSignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
@@ -50,10 +51,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         mMediaServiceManager.loadAccounts(this::createAndShowDialog);
     }
 
-    public void nextAccountOrDialog() {
-        mMediaServiceManager.loadAccounts(this::nextAccountOrDialog);
-    }
-
     private void createAndShowDialog(List<Account> accounts) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
@@ -77,7 +74,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
         optionItems.add(UiOptionItem.from(
                 getContext().getString(R.string.dialog_account_none), optionItem -> {
-                    selectAccount(null);
+                    AccountSelectionPresenter.instance(getContext()).selectAccount(null);
                     settingsPresenter.closeDialog();
                 }, true
         ));
@@ -87,7 +84,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         for (Account account : accounts) {
             optionItems.add(UiOptionItem.from(
                     getFullName(account), option -> {
-                        selectAccount(account);
+                        AccountSelectionPresenter.instance(getContext()).selectAccount(account);
                         settingsPresenter.closeDialog();
                     }, account.isSelected()
             ));
@@ -124,7 +121,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
     private void appendAddAccountButton(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(
-                getContext().getString(R.string.dialog_add_account), option -> SignInPresenter.instance(getContext()).start()));
+                getContext().getString(R.string.dialog_add_account), option -> YTSignInPresenter.instance(getContext()).start()));
     }
 
     private void appendSelectAccountOnBoot(AppDialogPresenter settingsPresenter) {
@@ -152,29 +149,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                 AppPrefs.instance(getContext()).isMultiProfilesEnabled()));
     }
 
-    private void nextAccountOrDialog(List<Account> accounts) {
-        if (accounts == null || accounts.isEmpty()) {
-            createAndShowDialog(accounts);
-            return;
-        }
-
-        Account current = null;
-
-        for (Account account : accounts) {
-            if (account.isSelected()) {
-                current = account;
-                break;
-            }
-        }
-
-        int index = accounts.indexOf(current);
-
-        int nextIndex = index + 1;
-        // null == 'without account'
-        selectAccount(nextIndex == accounts.size() ? null : accounts.get(nextIndex));
-        //selectAccount(accounts.get(nextIndex == accounts.size() ? 0 : nextIndex));
-    }
-
     private String getFullName(Account account) {
         String format;
 
@@ -191,13 +165,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         return account.getName() != null ? account.getName() : account.getEmail();
     }
 
-    private void selectAccount(Account account) {
-        mMediaServiceManager.getSingInService().selectAccount(account);
-        ExoMediaSourceFactory.unhold();
-        BrowsePresenter.instance(getContext()).refresh(false);
-        //BrowsePresenter.instance(getContext()).onViewInitialized(); // reset state
-    }
-
     private void removeAccount(Account account) {
         mMediaServiceManager.getSingInService().removeAccount(account);
         ExoMediaSourceFactory.unhold();
@@ -206,7 +173,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
     private void showAddPasswordDialog(AppDialogPresenter settingsPresenter) {
         settingsPresenter.closeDialog();
-        SimpleEditDialog.show(
+        SimpleEditDialog.showPassword(
                 getContext(),
                 "", newValue -> {
                     AccountsData.instance(getContext()).setAccountPassword(newValue);
@@ -227,7 +194,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.closeDialog();
-        SimpleEditDialog.show(
+        SimpleEditDialog.showPassword(
                 getContext(),
                 "", newValue -> {
                     if (password.equals(newValue)) {
@@ -250,7 +217,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
             return;
         }
 
-        SimpleEditDialog.show(
+        SimpleEditDialog.showPassword(
                 getContext(),
                 "", newValue -> {
                     if (password.equals(newValue)) {

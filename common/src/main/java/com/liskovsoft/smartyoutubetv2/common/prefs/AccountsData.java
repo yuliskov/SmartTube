@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
-import com.liskovsoft.mediaserviceinterfaces.data.Account;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
@@ -22,8 +22,6 @@ public class AccountsData implements AccountChangeListener {
     private final Map<String, PasswordItem> mPasswords = new HashMap<>();
 
     private static class PasswordItem {
-        private static final String OBJ_DELIM = "&vi;";
-
         public String accountName;
         public String password;
 
@@ -33,7 +31,7 @@ public class AccountsData implements AccountChangeListener {
         }
 
         public static PasswordItem fromString(String specs) {
-            String[] split = Helpers.split(OBJ_DELIM, specs);
+            String[] split = Helpers.splitObj(specs);
 
             if (split == null || split.length != 2) {
                 return new PasswordItem(null, null);
@@ -45,7 +43,7 @@ public class AccountsData implements AccountChangeListener {
         @NonNull
         @Override
         public String toString() {
-            return Helpers.merge(OBJ_DELIM, accountName, password);
+            return Helpers.mergeObj(accountName, password);
         }
     }
 
@@ -100,7 +98,7 @@ public class AccountsData implements AccountChangeListener {
     private void restoreState() {
         String data = mAppPrefs.getData(ACCOUNTS_DATA);
 
-        String[] split = Helpers.splitObjectLegacy(data);
+        String[] split = Helpers.splitData(data);
 
         mIsSelectAccountOnBootEnabled = Helpers.parseBoolean(split, 0, false);
         // mIsAccountProtectedWithPassword
@@ -116,7 +114,7 @@ public class AccountsData implements AccountChangeListener {
     }
 
     private void persistState() {
-        mAppPrefs.setData(ACCOUNTS_DATA, Helpers.mergeObject(
+        mAppPrefs.setData(ACCOUNTS_DATA, Helpers.mergeData(
                 mIsSelectAccountOnBootEnabled, null, null, Helpers.mergeArray(mPasswords.values().toArray())
         ));
     }

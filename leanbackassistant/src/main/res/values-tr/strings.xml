@@ -1,5 +1,9 @@
 <resources>
-    <string name="subscriptions_playlist_name">Abonelikler</string>
-    <string name="history_playlist_name">History</string>
-    <string name="recommended_playlist_name">Recommended</string>
+    <string name="search_hint">Videolarda Ara</string>
+    <string name="search_label">SmartTube</string>
+    <string name="settings_description">SmartTube Videoları</string>
+    <string name="cant_play_video">Bu Video Oynatılamıyor</string>
+    <string name="subscriptions_playlist_name">Abonenelikler</string>
+    <string name="history_playlist_name">Geçmiş Videolar</string>
+    <string name="recommended_playlist_name">Önerilen Videolar</string>
 </resources>

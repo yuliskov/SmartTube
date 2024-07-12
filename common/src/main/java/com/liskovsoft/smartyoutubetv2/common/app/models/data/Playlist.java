@@ -84,6 +84,28 @@ public class Playlist {
         stripPrevItem();
     }
 
+    public void next(Video video) {
+        if (Video.isEmpty(video)) {
+            return;
+        }
+
+        remove(video);
+
+        int nextIdx = mPlaylist.size() > mCurrentIndex ? mCurrentIndex + 1 : mPlaylist.size() - 1;
+
+        // IndexOutOfBoundsException fix
+        if (nextIdx < 0) {
+            return;
+        }
+
+        mPlaylist.add(nextIdx, video);
+
+        // Video opened from the browser or suggestions.
+        // In this case remove all next items.
+        trimPlaylist();
+        stripPrevItem();
+    }
+
     public void remove(Video video) {
         if (Video.isEmpty(video)) {
             return;

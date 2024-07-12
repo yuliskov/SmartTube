@@ -3,12 +3,12 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
-import com.liskovsoft.mediaserviceinterfaces.data.NotificationState;
-import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
+import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.NotificationState;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -18,8 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -29,6 +28,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AutoFrameRateSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
@@ -39,7 +39,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -47,15 +47,16 @@ import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerUIController extends PlayerEventListenerHelper implements MetadataListener {
+public class PlayerUIController extends PlayerEventListenerHelper {
     private static final String TAG = PlayerUIController.class.getSimpleName();
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private final Handler mHandler;
-    private final MediaItemService mMediaItemManager;
-    private final VideoLoaderController mVideoLoader;
+    private final MediaItemService mMediaItemService;
+    private SuggestionsController mSuggestionsController;
     private PlayerData mPlayerData;
     private PlayerTweaksData mPlayerTweaksData;
     private List<PlaylistInfo> mPlaylistInfos;
+    private FormatItem mAudioFormat = FormatItem.AUDIO_HQ_MP4A;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
     private boolean mIsMetadataLoaded;
@@ -74,16 +75,16 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         }
     };
 
-    public PlayerUIController(VideoLoaderController videoLoader) {
-        mVideoLoader = videoLoader;
+    public PlayerUIController() {
         mHandler = new Handler(Looper.getMainLooper());
 
-        MediaService service = YouTubeMediaService.instance();
-        mMediaItemManager = service.getMediaItemService();
+        ServiceManager service = YouTubeServiceManager.instance();
+        mMediaItemService = service.getMediaItemService();
     }
 
     @Override
     public void onInit() {
+        mSuggestionsController = getController(SuggestionsController.class);
         mPlayerData = PlayerData.instance(getContext());
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
 
@@ -120,7 +121,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
         boolean isHandled = handleBackKey(keyCode) || handleMenuKey(keyCode) ||
                 handleConfirmKey(keyCode) || handleStopKey(keyCode) || handleNumKeys(keyCode) ||
-                handlePlayPauseKey(keyCode) || handleShortsNavigation(keyCode);
+                handlePlayPauseKey(keyCode) || handleLeftRightSkip(keyCode);
 
         if (isHandled) {
             return true; // don't show UI
@@ -129,12 +130,6 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         enableUiAutoHideTimeout();
 
         return false;
-    }
-
-    @Override
-    public void onChannelClicked() {
-        startTempBackgroundMode(ChannelPresenter.class);
-        ChannelPresenter.instance(getContext()).openChannel(getPlayer().getVideo());
     }
 
     @Override
@@ -152,7 +147,9 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
         // Match found
         if (getPlayer().getSubtitleFormats().contains(mPlayerData.getLastSubtitleFormat())) {
-            getPlayer().setFormat(enabled ? FormatItem.SUBTITLE_NONE : mPlayerData.getLastSubtitleFormat());
+            FormatItem format = enabled ? FormatItem.SUBTITLE_NONE : mPlayerData.getLastSubtitleFormat();
+            getPlayer().setFormat(format);
+            mPlayerData.setFormat(format);
             getPlayer().setSubtitleButtonState(!FormatItem.SUBTITLE_NONE.equals(mPlayerData.getLastSubtitleFormat()) && !enabled);
             enableSubtitleForChannel(!enabled);
         } else {
@@ -172,11 +169,14 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             List<FormatItem> subtitleFormats = getPlayer().getSubtitleFormats();
             List<FormatItem> subtitleOrigFormats = Helpers.filter(subtitleFormats,
                     value -> value.isDefault() || !SubtitleTrack.isAuto(value.getLanguage()));
+            reorderSubtitles(subtitleOrigFormats);
             settingsPresenter.appendRadioCategory(subtitlesOrigCategoryTitle,
                     UiOptionItem.from(subtitleOrigFormats,
                             option -> {
-                                enableSubtitleForChannel(true);
-                                getPlayer().setFormat(UiOptionItem.toFormat(option));
+                                FormatItem format = UiOptionItem.toFormat(option);
+                                enableSubtitleForChannel(!format.isDefault());
+                                getPlayer().setFormat(format);
+                                mPlayerData.setFormat(format);
                             },
                             getContext().getString(R.string.subtitles_disabled)));
             settingsPresenter.showDialog();
@@ -186,11 +186,14 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             List<FormatItem> subtitleFormats = getPlayer().getSubtitleFormats();
             List<FormatItem> subtitleAutoFormats = Helpers.filter(subtitleFormats,
                     value -> value.isDefault() || SubtitleTrack.isAuto(value.getLanguage()));
+            reorderSubtitles(subtitleAutoFormats);
             settingsPresenter.appendRadioCategory(subtitlesAutoCategoryTitle,
                     UiOptionItem.from(subtitleAutoFormats,
                             option -> {
-                                enableSubtitleForChannel(true);
-                                getPlayer().setFormat(UiOptionItem.toFormat(option));
+                                FormatItem format = UiOptionItem.toFormat(option);
+                                enableSubtitleForChannel(!format.isDefault());
+                                getPlayer().setFormat(format);
+                                mPlayerData.setFormat(format);
                             },
                             getContext().getString(R.string.subtitles_disabled)));
             settingsPresenter.showDialog();
@@ -248,6 +251,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     @Override
     public void onVideoLoaded(Video item) {
         getPlayer().updateEndingTime();
+        applySoundOffButtonState();
     }
 
     @Override
@@ -271,11 +275,12 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
 
         // Maybe dialog just closed. Reset timeout just in case.
         enableUiAutoHideTimeout();
+        applySoundOffButtonState();
     }
 
     @Override
     public void onViewPaused() {
-        if (getPlayer().isInPIPMode()) {
+        if (getPlayer() != null && getPlayer().isInPIPMode()) {
             // UI couldn't be properly displayed in PIP mode
             getPlayer().showOverlay(false);
             getPlayer().showDebugInfo(false);
@@ -318,6 +323,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         setSubtitleButtonState();
         getPlayer().setButtonState(R.id.action_rotate, mPlayerData.getVideoRotation() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
         getPlayer().setButtonState(R.id.action_subscribe, metadata.isSubscribed() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_afr, mPlayerData.isAfrEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
     @Override
@@ -331,13 +337,17 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
                 group.setTitle(title);
                 group.setId(id);
                 getPlayer().removeSuggestions(group);
-            } else if (action == VideoMenuCallback.ACTION_ADD_TO_QUEUE) {
+            } else if (action == VideoMenuCallback.ACTION_ADD_TO_QUEUE || action == VideoMenuCallback.ACTION_PLAY_NEXT) {
                 Video newItem = videoItem.copy();
                 VideoGroup group = VideoGroup.from(newItem, 0);
                 group.setTitle(title);
                 group.setId(id);
                 newItem.setGroup(group);
+                if (action == VideoMenuCallback.ACTION_PLAY_NEXT) {
+                    group.setAction(VideoGroup.ACTION_PREPEND);
+                }
                 getPlayer().updateSuggestions(group);
+                getPlayer().setNextTitle(mSuggestionsController.getNext() != null ? mSuggestionsController.getNext().getTitle() : null);
             }
         });
     }
@@ -357,9 +367,9 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         }
 
         if (dislike) {
-            callMediaItemObservable(mMediaItemManager::setDislikeObserve);
+            callMediaItemObservable(mMediaItemService::setDislikeObserve);
         } else {
-            callMediaItemObservable(mMediaItemManager::removeDislikeObserve);
+            callMediaItemObservable(mMediaItemService::removeDislikeObserve);
         }
     }
 
@@ -378,9 +388,9 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         }
 
         if (like) {
-            callMediaItemObservable(mMediaItemManager::setLikeObserve);
+            callMediaItemObservable(mMediaItemService::setLikeObserve);
         } else {
-            callMediaItemObservable(mMediaItemManager::removeLikeObserve);
+            callMediaItemObservable(mMediaItemService::removeLikeObserve);
         }
     }
 
@@ -401,6 +411,10 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         }
 
         Video video = getPlayer().getVideo();
+
+        if (video == null) {
+            return;
+        }
 
         String description = video.description;
 
@@ -433,7 +447,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         AppDialogUtil.appendShareQRLinkDialogItem(getContext(), dialogPresenter, getPlayer().getVideo(), positionSec);
         AppDialogUtil.appendShareEmbedLinkDialogItem(getContext(), dialogPresenter, getPlayer().getVideo(), positionSec);
 
-        dialogPresenter.showDialog(getPlayer().getVideo().title);
+        dialogPresenter.showDialog(getPlayer().getVideo().getTitle());
 
         //if (video.videoId != null) {
         //    Utils.displayShareVideoDialog(getActivity(), video.videoId, (int)(getController().getPositionMs() / 1_000));
@@ -473,17 +487,12 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     @Override
     public void onPipClicked() {
         getPlayer().showOverlay(false);
-        getPlayer().setBackgroundMode(
-                Helpers.isPictureInPictureSupported(getContext()) ?
-                        PlayerEngine.BACKGROUND_MODE_PIP : PlayerEngine.BACKGROUND_MODE_SOUND
-        );
+        getPlayer().blockEngine(true);
+        //getPlayer().setBackgroundMode(
+        //        Helpers.isPictureInPictureSupported(getContext()) ?
+        //                PlayerEngine.BACKGROUND_MODE_PIP : PlayerEngine.BACKGROUND_MODE_SOUND
+        //);
         getPlayer().finish();
-    }
-
-    @Override
-    public void onRepeatModeClicked(int modeIndex) {
-        mPlayerData.setRepeatMode(modeIndex);
-        //Utils.showRepeatInfo(getActivity(), modeIndex);
     }
 
     @Override
@@ -496,51 +505,29 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
             applyScreenOffTimeout(buttonState);
         } else if (buttonId == R.id.action_subscribe) {
             onSubscribe(buttonState);
+        } else if (buttonId == R.id.action_sound_off) {
+            applySoundOff(buttonState);
+        } else if (buttonId == R.id.action_afr) {
+            applyAfr(buttonState);
+        } else if (buttonId == R.id.action_repeat) {
+            applyRepeatMode(buttonState);
+        } else if (buttonId == R.id.action_channel) {
+            openChannel();
         }
     }
 
     @Override
     public void onButtonLongClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_screen_off || buttonId == R.id.action_screen_off_timeout) {
-            AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-            OptionCategory dimmingCategory =
-                    AppDialogUtil.createPlayerScreenOffDimmingCategory(getContext(), mPlayerTweaksData, () -> {
-                        prepareScreenOff();
-                        applyScreenOff(PlayerUI.BUTTON_OFF);
-                    });
-            OptionCategory category =
-                    AppDialogUtil.createPlayerScreenOffTimeoutCategory(getContext(), mPlayerTweaksData, () -> {
-                        prepareScreenOff();
-                        applyScreenOffTimeout(PlayerUI.BUTTON_OFF);
-                    });
-            settingsPresenter.appendRadioCategory(dimmingCategory.title, dimmingCategory.options);
-            settingsPresenter.appendRadioCategory(category.title, category.options);
-            settingsPresenter.showDialog(getContext().getString(R.string.action_screen_off));
-        } else if (buttonId == R.id.action_subscribe) {
-            if (getPlayer().getVideo() == null || getPlayer().getVideo().notificationStates == null) {
-                return;
-            }
-
-            // Can't change notification state while unsubscribed
-            if (buttonState == PlayerUI.BUTTON_OFF) {
-                onSubscribe(buttonState);
-                return;
-            }
-
-            AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-
-            List<OptionItem> items = new ArrayList<>();
-
-            for (NotificationState item : getPlayer().getVideo().notificationStates) {
-                 items.add(UiOptionItem.from(item.getTitle(), optionItem -> {
-                     if (optionItem.isSelected()) {
-                         MediaServiceManager.instance().setNotificationState(item);
-                     }
-                 }, item.isSelected()));
-            }
-
-            settingsPresenter.appendRadioCategory(getContext().getString(R.string.header_notifications), items);
-            settingsPresenter.showDialog(getContext().getString(R.string.header_notifications));
+            showScreenOffDialog();
+        } else if (buttonId == R.id.action_subscribe || buttonId == R.id.action_channel) {
+            showNotificationsDialog(buttonState);
+        } else if (buttonId == R.id.action_sound_off) {
+            showSoundOffDialog();
+        } else if (buttonId == R.id.action_afr) {
+            AutoFrameRateSettingsPresenter.instance(getContext()).show(() -> applyAfr(mPlayerData.isAfrEnabled() ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON));
+        } else if (buttonId == R.id.action_repeat) {
+            showRepeatModeDialog(buttonState);
         }
     }
 
@@ -552,8 +539,8 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     private void enableUiAutoHideTimeout() {
         Log.d(TAG, "Starting auto hide ui timer...");
         disableUiAutoHideTimeout();
-        if (mEngineReady && mPlayerData.getUIHideTimoutSec() > 0) {
-            mHandler.postDelayed(mUiAutoHideHandler, mPlayerData.getUIHideTimoutSec() * 1_000L);
+        if (mEngineReady && mPlayerData.getUiHideTimeoutSec() > 0) {
+            mHandler.postDelayed(mUiAutoHideHandler, mPlayerData.getUiHideTimeoutSec() * 1_000L);
         }
     }
 
@@ -671,19 +658,21 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         return false;
     }
 
-    private boolean handleShortsNavigation(int keyCode) {
-        if (getPlayer().isOverlayShown() || getPlayer().getVideo() == null || !getPlayer().getVideo().isShorts) {
+    private boolean handleLeftRightSkip(int keyCode) {
+        if (getPlayer().isOverlayShown() || getPlayer().getVideo() == null ||
+                (getPlayer().getVideo().isShorts && !mPlayerTweaksData.isQuickSkipShortsEnabled() ||
+                (!getPlayer().getVideo().isShorts && !mPlayerTweaksData.isQuickSkipVideosEnabled()))) {
             return false;
         }
 
         if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
             getMainController().onNextClicked();
-            return true;
+            return true; // hide ui
         }
 
         if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
             getMainController().onPreviousClicked();
-            return true;
+            return true; // hide ui
         }
 
         return false;
@@ -697,7 +686,7 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         String videoId = getPlayer().getVideo().videoId;
         mPlaylistInfos = null;
         Disposable playlistsInfoAction =
-                YouTubeMediaService.instance().getMediaItemService().getPlaylistsInfoObserve(videoId)
+                YouTubeServiceManager.instance().getMediaItemService().getPlaylistsInfoObserve(videoId)
                         .subscribe(
                                 videoPlaylistInfos -> {
                                     mPlaylistInfos = videoPlaylistInfos;
@@ -819,6 +808,10 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
     }
 
     private void onSubscribe(int buttonState) {
+        if (getPlayer().getVideo() == null) {
+            return;
+        }
+
         if (!mIsMetadataLoaded) {
             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
             return;
@@ -830,11 +823,136 @@ public class PlayerUIController extends PlayerEventListenerHelper implements Met
         }
 
         if (buttonState == PlayerUI.BUTTON_OFF) {
-            callMediaItemObservable(mMediaItemManager::subscribeObserve);
+            callMediaItemObservable(mMediaItemService::subscribeObserve);
         } else {
-            callMediaItemObservable(mMediaItemManager::unsubscribeObserve);
+            callMediaItemObservable(mMediaItemService::unsubscribeObserve);
         }
 
-        getPlayer().setButtonState(R.id.action_subscribe, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON: PlayerUI.BUTTON_OFF);
+        getPlayer().getVideo().isSubscribed = buttonState == PlayerUI.BUTTON_OFF;
+        getPlayer().setButtonState(R.id.action_subscribe, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+    }
+
+    private void applySoundOff(int buttonState) {
+        if (buttonState == PlayerUI.BUTTON_OFF) {
+            mAudioFormat = getPlayer().getAudioFormat();
+            getPlayer().setFormat(FormatItem.NO_AUDIO);
+        } else {
+            getPlayer().setFormat(mAudioFormat);
+        }
+
+        getPlayer().setButtonState(R.id.action_sound_off, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+    }
+
+    private void applySoundOffButtonState() {
+        if (getPlayer().getAudioFormat() != null) {
+            getPlayer().setButtonState(R.id.action_sound_off,
+                    (getPlayer().getAudioFormat().isDefault() || mPlayerData.getPlayerVolume() == 0) ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        }
+    }
+
+    private void applyAfr(int buttonState) {
+        mPlayerData.setAfrEnabled(buttonState == PlayerUI.BUTTON_OFF);
+        getController(AutoFrameRateController.class).applyAfr();
+        getPlayer().setButtonState(R.id.action_afr, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+    }
+
+    private void applyRepeatMode(int buttonState) {
+        int nextMode = getNextRepeatMode(buttonState);
+
+        mPlayerData.setRepeatMode(nextMode);
+        getPlayer().setButtonState(R.id.action_repeat, nextMode);
+    }
+
+    private void showRepeatModeDialog(int buttonState) {
+        OptionCategory category = AppDialogUtil.createPlaybackModeCategory(
+                getContext(), mPlayerData, () -> {
+                    getPlayer().setButtonState(R.id.action_repeat, mPlayerData.getRepeatMode());
+                });
+
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+        settingsPresenter.appendRadioCategory(category.title, category.options);
+        settingsPresenter.showDialog();
+    }
+
+    private int getNextRepeatMode(int buttonState) {
+        int[] modeList = {PlayerEngineConstants.REPEAT_MODE_ALL, PlayerEngineConstants.REPEAT_MODE_ONE, PlayerEngineConstants.REPEAT_MODE_SHUFFLE,
+                PlayerEngineConstants.REPEAT_MODE_LIST, PlayerEngineConstants.REPEAT_MODE_REVERSE_LIST, PlayerEngineConstants.REPEAT_MODE_PAUSE, PlayerEngineConstants.REPEAT_MODE_CLOSE};
+        int nextMode = Utils.getNextState(buttonState, modeList);
+        return nextMode;
+    }
+
+    private void reorderSubtitles(List<FormatItem> subtitleFormats) {
+        if (subtitleFormats == null || subtitleFormats.isEmpty() || subtitleFormats.get(0).equals(mPlayerData.getLastSubtitleFormat())) {
+            return;
+        }
+
+        // Move last format to the top
+        int index = 0;
+        int begin = subtitleFormats.get(0).isDefault() ? 1 : 0;
+        List<FormatItem> topSubtitles = new ArrayList<>();
+        while (index != -1) {
+            index = subtitleFormats.indexOf(mPlayerData.getLastSubtitleFormat());
+            if (index != -1) {
+                topSubtitles.add(subtitleFormats.remove(index));
+            }
+        }
+        subtitleFormats.addAll(subtitleFormats.size() < begin ? 0 : begin, topSubtitles);
+    }
+
+    private void showNotificationsDialog(int buttonState) {
+        if (getPlayer().getVideo() == null || getPlayer().getVideo().notificationStates == null) {
+            return;
+        }
+
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+
+        List<OptionItem> items = new ArrayList<>();
+
+        for (NotificationState item : getPlayer().getVideo().notificationStates) {
+            items.add(UiOptionItem.from(item.getTitle(), optionItem -> {
+                if (optionItem.isSelected()) {
+                    MediaServiceManager.instance().setNotificationState(item);
+                    getPlayer().getVideo().isSubscribed = true;
+                    getPlayer().setButtonState(R.id.action_subscribe, PlayerUI.BUTTON_ON);
+                }
+            }, item.isSelected()));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.header_notifications), items);
+        settingsPresenter.showDialog(getContext().getString(R.string.header_notifications));
+    }
+
+    private void showScreenOffDialog() {
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+        OptionCategory dimmingCategory =
+                AppDialogUtil.createPlayerScreenOffDimmingCategory(getContext(), mPlayerTweaksData, () -> {
+                    prepareScreenOff();
+                    applyScreenOff(PlayerUI.BUTTON_OFF);
+                });
+        OptionCategory category =
+                AppDialogUtil.createPlayerScreenOffTimeoutCategory(getContext(), mPlayerTweaksData, () -> {
+                    prepareScreenOff();
+                    applyScreenOffTimeout(PlayerUI.BUTTON_OFF);
+                });
+        settingsPresenter.appendRadioCategory(dimmingCategory.title, dimmingCategory.options);
+        settingsPresenter.appendRadioCategory(category.title, category.options);
+        settingsPresenter.showDialog(getContext().getString(R.string.action_screen_off));
+    }
+
+    private void showSoundOffDialog() {
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+        OptionCategory audioVolumeCategory = AppDialogUtil.createAudioVolumeCategory(getContext(), mPlayerData, () -> {
+            applySoundOff(mPlayerData.getPlayerVolume() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
+            getPlayer().setVolume(mPlayerData.getPlayerVolume());
+        });
+        OptionCategory pitchEffectCategory = AppDialogUtil.createPitchEffectCategory(getContext(), getPlayer(), mPlayerData);
+        settingsPresenter.appendCategory(audioVolumeCategory);
+        settingsPresenter.appendCategory(pitchEffectCategory);
+        settingsPresenter.showDialog(getContext().getString(R.string.player_volume));
+    }
+
+    private void openChannel() {
+        startTempBackgroundMode(ChannelPresenter.class);
+        ChannelPresenter.instance(getContext()).openChannel(getPlayer().getVideo());
     }
 }

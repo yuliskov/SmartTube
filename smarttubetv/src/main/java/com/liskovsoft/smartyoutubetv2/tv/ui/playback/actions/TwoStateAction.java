@@ -6,6 +6,8 @@ import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.PlaybackControlsRow.MultiAction;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class TwoStateAction extends MultiAction {
     /**
@@ -18,10 +20,16 @@ public class TwoStateAction extends MultiAction {
      */
     public static final int INDEX_ON = 1;
 
+    private final Context mContext;
     private TwoStateAction mBoundAction;
+    private final boolean mEnableLongPressMsg;
 
     public TwoStateAction(Context context, int actionId, int offIconResId) {
-        this(context, actionId, offIconResId, ActionHelpers.getIconHighlightColor(context));
+        this(context, actionId, offIconResId, true);
+    }
+
+    public TwoStateAction(Context context, int actionId, int offIconResId, boolean enableLongPressMsg) {
+        this(context, actionId, offIconResId, ActionHelpers.getIconHighlightColor(context), enableLongPressMsg);
     }
 
     /**
@@ -29,8 +37,13 @@ public class TwoStateAction extends MultiAction {
      * @param context Context used for loading resources.
      */
     public TwoStateAction(Context context, int actionId, int offIconResId, int highlightColor) {
+        this(context, actionId, offIconResId, highlightColor, true);
+    }
+
+    public TwoStateAction(Context context, int actionId, int offIconResId, int highlightColor, boolean enableLongPressMsg) {
         super(actionId);
 
+        mContext = context;
         Drawable[] drawables = new Drawable[2];
         BitmapDrawable offDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, offIconResId);
         drawables[INDEX_OFF] = offDrawable;
@@ -47,6 +60,8 @@ public class TwoStateAction extends MultiAction {
         setLabels(labels);
 
         setIndex(INDEX_OFF); // default state
+
+        mEnableLongPressMsg = enableLongPressMsg;
     }
 
     @Override
@@ -64,5 +79,18 @@ public class TwoStateAction extends MultiAction {
 
     public void setBoundAction(TwoStateAction boundAction) {
         mBoundAction = boundAction;
+    }
+
+    @Override
+    public void setLabels(String[] labels) {
+        if (mEnableLongPressMsg) {
+            for (int i = 0; i < labels.length; i++) {
+                if (labels[i] != null) {
+                    labels[i] = Utils.updateTooltip(mContext, labels[i]);
+                }
+            }
+        }
+
+        super.setLabels(labels);
     }
 }

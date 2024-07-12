@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFFFFF</color>
-    <color name="white_50">#7DFFFFFF</color>
+    <color name="white_20">#33FFFFFF</color>
+    <color name="white_50">#80FFFFFF</color>
     <color name="white_70">#B2FFFFFF</color>
     <color name="black">#000000</color>
     <color name="red">#FF0000</color>
@@ -14,6 +15,7 @@
     <color name="orange_peel">#ff9900</color>
     <!--<color name="yellow">#CDDC39</color>-->
     <color name="light_grey">#E4E4E4</color>
+    <color name="light_grey2">#7A7A7A</color>
     <color name="leanback">#0096A6</color>
     <color name="semi_transparent">#64000000</color>
     <color name="live_chat_bg">#90000000</color>

@@ -18,6 +18,9 @@ public class DoubleBackManager {
     private boolean mDownPressed;
     private boolean mIsDoubleBackPressed;
     private int mRepeatCount;
+    private Runnable mOnDoubleBack;
+    private boolean mIsMsgShown;
+    private long mMsgShownTimeMs;
 
     public DoubleBackManager(Activity ctx) {
         mHandler = new Handler(ctx.getMainLooper());
@@ -41,25 +44,38 @@ public class DoubleBackManager {
         }
     }
     
-    public boolean checkDoubleBack(KeyEvent event) {
+    public void checkDoubleBack(KeyEvent event) {
+        // Reset if the user didn't do second press within interval
+        if (System.currentTimeMillis() - mMsgShownTimeMs > 5_000) {
+            resetBackPressed();
+        }
+
         if (ignoreEvent(event)) {
             Log.d(TAG, "Oops. Seems phantom key received. Ignoring... " + event);
             resetBackPressed();
-            return false;
+            //return false;
+            return;
         }
 
         if (isReservedKey(event)) {
             Log.d(TAG, "Found globally reserved key. Ignoring..." + event);
             resetBackPressed();
-            return false;
+            //return false;
+            return;
         }
 
         checkBackPressed(event);
 
-        return mIsDoubleBackPressed;
+        if (mIsDoubleBackPressed) {
+            mOnDoubleBack.run();
+        }
+
+        //return mIsDoubleBackPressed;
     }
 
-    public void enableDoubleBackExit() {
+    public void enableDoubleBackExit(Runnable onDoubleBack) {
+        mOnDoubleBack = onDoubleBack;
+
         showMsg();
 
         if (mEnableDoubleBackExit) {
@@ -97,8 +113,11 @@ public class DoubleBackManager {
     }
 
     private void showMsg() {
+        mIsMsgShown = false;
         if (mRepeatCount == (DEFAULT_REPEAT_COUNT - 1)) {
             MessageHelpers.showMessageThrottled(mContext, R.string.msg_press_again_to_exit);
+            mIsMsgShown = true;
+            mMsgShownTimeMs = System.currentTimeMillis();
         }
     }
 
@@ -136,5 +155,9 @@ public class DoubleBackManager {
 
     public boolean isDoubleBackPressed() {
         return mIsDoubleBackPressed;
+    }
+
+    public boolean isMsgShown() {
+        return mIsMsgShown;
     }
 }

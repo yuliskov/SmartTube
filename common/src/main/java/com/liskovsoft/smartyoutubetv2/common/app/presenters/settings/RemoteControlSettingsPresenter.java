@@ -2,19 +2,21 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.RemoteControlService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.yt.RemoteControlService;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AddDevicePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +29,8 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
 
     public RemoteControlSettingsPresenter(Context context) {
         super(context);
-        MediaService mediaService = YouTubeMediaService.instance();
-        mRemoteManager = mediaService.getRemoteControlService();
+        ServiceManager service = YouTubeServiceManager.instance();
+        mRemoteManager = service.getRemoteControlService();
         mRemoteControlData = RemoteControlData.instance(context);
     }
 
@@ -72,10 +74,16 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
     private void appendAddDeviceButton(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(
                 getContext().getString(R.string.dialog_add_device), option -> {
-                    AddDevicePresenter.instance(getContext()).start();
-
                     mRemoteControlData.enableDeviceLink(true);
                     Utils.updateRemoteControlService(getContext());
+
+                    if (!PermissionHelpers.hasOverlayPermissions(getContext()) && getContext() instanceof MotherActivity) {
+                        ((MotherActivity) getContext()).addOnResult(
+                                (requestCode, resultCode, data) -> AddDevicePresenter.instance(getContext()).start()
+                        );
+                    } else {
+                        AddDevicePresenter.instance(getContext()).start();
+                    }
                 }));
     }
 
@@ -104,9 +112,12 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.finish_on_disconnect),
                 option -> mRemoteControlData.enableFinishOnDisconnect(option.isSelected()),
                 mRemoteControlData.isFinishOnDisconnectEnabled()));
-        options.add(UiOptionItem.from(getContext().getString(R.string.show_connect_messages),
-                option -> mRemoteControlData.enableConnectMessages(option.isSelected()),
-                mRemoteControlData.isConnectMessagesEnabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.show_connect_messages),
+        //        option -> mRemoteControlData.enableConnectMessages(option.isSelected()),
+        //        mRemoteControlData.isConnectMessagesEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_remote_history),
+                option -> mRemoteControlData.disableRemoteHistory(option.isSelected()),
+                mRemoteControlData.isRemoteHistoryDisabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }

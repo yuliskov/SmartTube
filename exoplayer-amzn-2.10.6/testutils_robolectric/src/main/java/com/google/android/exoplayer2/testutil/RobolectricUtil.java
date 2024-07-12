@@ -30,8 +30,9 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
 import org.robolectric.annotation.Implementation;
 import org.robolectric.annotation.Implements;
+import org.robolectric.shadows.ShadowLegacyLooper;
+import org.robolectric.shadows.ShadowLegacyMessageQueue;
 import org.robolectric.shadows.ShadowLooper;
-import org.robolectric.shadows.ShadowMessageQueue;
 
 /** Collection of shadow classes used to run tests with Robolectric which require Loopers. */
 public final class RobolectricUtil {
@@ -50,7 +51,7 @@ public final class RobolectricUtil {
    * SystemClock} is not advanced automatically.
    */
   @Implements(Looper.class)
-  public static final class CustomLooper extends ShadowLooper {
+  public static final class CustomLooper extends ShadowLegacyLooper {
 
     private final PriorityBlockingQueue<PendingMessage> pendingMessages;
     private final CopyOnWriteArraySet<RemovedMessage> removedMessages;
@@ -152,7 +153,7 @@ public final class RobolectricUtil {
    * CustomLooper} work as intended.
    */
   @Implements(MessageQueue.class)
-  public static final class CustomMessageQueue extends ShadowMessageQueue {
+  public static final class CustomMessageQueue extends ShadowLegacyMessageQueue {
 
     private final Thread looperThread;
 

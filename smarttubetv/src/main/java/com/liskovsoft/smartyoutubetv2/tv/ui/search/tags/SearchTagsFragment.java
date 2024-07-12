@@ -48,6 +48,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
 
         setupEventListeners();
         enableKeyboardAutoShow(mSearchData.isKeyboardAutoShowEnabled());
+        enableKeyboardFix(mSearchData.isKeyboardFixEnabled());
     }
 
     private void setupEventListeners() {
@@ -274,7 +275,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         }
     }
 
-    public void update(VideoGroup group) {
+    private void update(VideoGroup group) {
         int action = group.getAction();
 
         if (action == VideoGroup.ACTION_REPLACE) {
@@ -307,7 +308,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
 
             freeze(true);
 
-            existingAdapter.append(group); // continue row
+            existingAdapter.add(group); // continue row
 
             freeze(false);
         }

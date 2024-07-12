@@ -2,11 +2,12 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.data.SearchOptions;
+import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.SearchOptions;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -20,12 +21,12 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMe
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
-import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.disposables.Disposable;
 
 import java.util.ArrayList;
@@ -35,13 +36,15 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private static final String TAG = SearchPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static SearchPresenter sInstance;
-    private final MediaService mMediaService;
+    private final ServiceManager mService;
     private final ViewManager mViewManager;
     private final SearchData mSearchData;
+    private final DeArrowProcessor mDeArrowProcessor;
     private Disposable mScrollAction;
     private Disposable mLoadAction;
     private String mSearchText;
     private boolean mIsVoice;
+    private boolean mStartPlay;
     private int mUploadDateOptions;
     private int mDurationOptions;
     private int mTypeOptions;
@@ -50,9 +53,10 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     private SearchPresenter(Context context) {
         super(context);
-        mMediaService = YouTubeMediaService.instance();
+        mService = YouTubeServiceManager.instance();
         mViewManager = ViewManager.instance(context);
         mSearchData = SearchData.instance(context);
+        mDeArrowProcessor = new DeArrowProcessor(getContext(), this::syncItem);
     }
 
     public static SearchPresenter instance(Context context) {
@@ -72,7 +76,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
-        getView().setTagsProvider(new MediaServiceSearchTagProvider());
+        getView().setTagsProvider(new MediaServiceSearchTagProvider(mSearchData.isSearchHistoryDisabled()));
 
         startSearchInt();
     }
@@ -157,11 +161,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         disposeActions();
         getView().showProgressBar(true);
 
-        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
+        ContentService contentService = mService.getContentService();
 
         getView().clearSearch();
 
-        mLoadAction = mediaGroupManager.getSearchObserve(searchText,
+        mLoadAction = contentService.getSearchObserve(searchText,
                 mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions | mSortingOptions)
                 .subscribe(
                         mediaGroup -> {
@@ -179,17 +183,20 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         disposeActions();
         getView().showProgressBar(true);
 
-        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
+        ContentService contentService = mService.getContentService();
 
         getView().clearSearch();
 
-        mLoadAction = mediaGroupManager.getSearchAltObserve(searchText,
+        mLoadAction = contentService.getSearchAltObserve(searchText,
                 mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions | mSortingOptions)
                 .subscribe(
                         mediaGroups -> {
                             Log.d(TAG, "Receiving results for '%s'", searchText);
                             for (MediaGroup mediaGroup : mediaGroups) {
-                                getView().updateSearch(VideoGroup.from(mediaGroup));
+                                VideoGroup group = VideoGroup.from(mediaGroup);
+                                startPlayFirstVideo(group);
+                                getView().updateSearch(group);
+                                mDeArrowProcessor.process(group);
                             }
                         },
                         error -> {
@@ -205,7 +212,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                         }
                 );
     }
-    
+
     private void continueGroup(VideoGroup group) {
         if (RxHelper.isAnyActionRunning(mScrollAction)) {
             return;
@@ -221,12 +228,15 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaGroupService mediaGroupManager = mMediaService.getMediaGroupService();
+        ContentService contentService = mService.getContentService();
 
-        mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
+        mScrollAction = contentService.continueGroupObserve(mediaGroup)
                 .subscribe(
-                        //continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup)),
-                        continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup, group)),
+                        continueMediaGroup -> {
+                            VideoGroup newGroup = VideoGroup.from(group, continueMediaGroup);
+                            getView().updateSearch(newGroup);
+                            mDeArrowProcessor.process(newGroup);
+                        },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             if (getView() != null) {
@@ -261,16 +271,21 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
 
     public void startVoice() {
-        startSearch(null, true);
+        startSearch(null, true, false);
     }
 
     public void startSearch(String searchText) {
-        startSearch(searchText, false);
+        startSearch(searchText, false, false);
     }
 
-    public void startSearch(String searchText, boolean isVoice) {
+    public void startPlay(String searchText) {
+        startSearch(searchText, false, true);
+    }
+
+    private void startSearch(String searchText, boolean isVoice, boolean startPlay) {
         mSearchText = searchText;
         mIsVoice = isVoice;
+        mStartPlay = startPlay;
 
         mViewManager.startView(SearchView.class);
         startSearchInt();
@@ -438,6 +453,21 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     public void forceFinish() {
         if (getView() != null) {
             getView().finishReally();
+        }
+    }
+
+    private void startPlayFirstVideo(VideoGroup group) {
+        if (!mStartPlay || group == null || group.isEmpty()) {
+            return;
+        }
+
+        mStartPlay = false;
+
+        for (Video video : group.getVideos()) {
+            if (video.videoId != null) {
+                PlaybackPresenter.instance(getContext()).openVideo(video);
+                break;
+            }
         }
     }
 }

@@ -16,6 +16,7 @@
 
 package com.stfalcon.chatkit.messages;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -63,6 +64,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
     private OnLoadMoreListener loadMoreListener;
     private OnMessageClickListener<MESSAGE> onMessageClickListener;
     private OnMessageViewClickListener<MESSAGE> onMessageViewClickListener;
+    private OnMessageViewFocusListener<MESSAGE> onMessageViewFocusListener;
     private OnMessageLongClickListener<MESSAGE> onMessageLongClickListener;
     private OnMessageViewLongClickListener<MESSAGE> onMessageViewLongClickListener;
     private ImageLoader imageLoader;
@@ -71,7 +73,6 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
     private DateFormatter.Formatter dateHeadersFormatter;
     private SparseArray<OnMessageViewClickListener> viewClickListenersArray = new SparseArray<>();
     private boolean isDateHeaderEnabled;
-    private int currentPosition = -1;
     private MESSAGE focusedMessage;
 
     /**
@@ -111,6 +112,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         holders.bind(holder, wrapper.item, wrapper.isSelected, imageLoader,
                 getMessageClickListener(wrapper),
                 getMessageLongClickListener(wrapper),
+                getMessageFocusChangeListener(wrapper),
                 dateHeadersFormatter,
                 viewClickListenersArray);
 
@@ -187,7 +189,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
      * @param reverse  {@code true} if need to reverse messages before adding.
      */
     public void addToEnd(List<MESSAGE> messages, boolean reverse) {
-        if (messages.isEmpty()) return;
+        if (messages == null || messages.isEmpty()) return;
 
         if (reverse) Collections.reverse(messages);
 
@@ -380,6 +382,12 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         }
     }
 
+    public void scrollToPosition(int position) {
+        if (position != -1 && layoutManager != null && !items.isEmpty()) {
+            layoutManager.scrollToPosition(position);
+        }
+    }
+
     public void scrollToTop() {
         if (layoutManager != null && !items.isEmpty()) {
             layoutManager.scrollToPosition(items.size() - 1);
@@ -567,6 +575,10 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         this.onMessageViewLongClickListener = onMessageViewLongClickListener;
     }
 
+    public void setOnMessageViewFocusListener(OnMessageViewFocusListener<MESSAGE> onMessageViewFocusListener) {
+        this.onMessageViewFocusListener = onMessageViewFocusListener;
+    }
+
     /**
      * Set callback to be invoked when list scrolled to top.
      *
@@ -627,6 +639,14 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
                 this.items.add(new Wrapper<>(message.getCreatedAt()));
             }
         }
+    }
+
+    public int getMessagePosition(MESSAGE message) {
+        if (message == null) {
+            return -1;
+        }
+
+        return getMessagePositionById(message.getId());
     }
 
     @SuppressWarnings("unchecked")
@@ -702,6 +722,12 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         }
     }
 
+    private void notifyMessageViewFocused(View view, MESSAGE message) {
+        if (onMessageViewFocusListener != null) {
+            onMessageViewFocusListener.onMessageViewFocus(view, message);
+        }
+    }
+
     private View.OnClickListener getMessageClickListener(final Wrapper<MESSAGE> wrapper) {
         return new DebouncedOnClickListener(3_000) {
             @Override
@@ -737,9 +763,13 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
 
     private View.OnFocusChangeListener getMessageFocusChangeListener(final Wrapper<MESSAGE> wrapper) {
         return (v, hasFocus) -> {
+            // Change background of the focused message
+            // NOTE: you can have only one focus listener
+            View bubble = v.findViewById(R.id.bubble);
+            bubble.setBackgroundResource(hasFocus ? R.drawable.shape_incoming_message_focused : R.drawable.shape_incoming_message);
+
             if (hasFocus) {
-                MESSAGE message = (wrapper.item);
-                currentPosition = getMessagePositionById(message.getId());
+                notifyMessageViewFocused(v, wrapper.item);
             }
         };
     }
@@ -858,6 +888,10 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
          * @param message clicked message.
          */
         void onMessageViewClick(View view, MESSAGE message);
+    }
+
+    public interface OnMessageViewFocusListener<MESSAGE extends IMessage> {
+        void onMessageViewFocus(View view, MESSAGE message);
     }
 
     /**
@@ -1067,6 +1101,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
             }
         }
 
+        @SuppressLint("WrongConstant")
         @Override
         public void applyStyle(MessagesListStyle style) {
             if (text != null) {

@@ -633,6 +633,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     //mTimeInfo.setVisibility(View.VISIBLE);
                     // Don't set to GONE or carousel will crash (can't properly calculate length)
                     mThumbsBarWrapper.setVisibility(View.INVISIBLE);
+                    // MOD: fix old preview image on seek start
+                    mThumbsBar.clearThumbBitmaps();
                     break;
                 case CONTROLS_MODE_COMPACT:
                     mControlsVh.view.setVisibility(View.GONE);
@@ -999,6 +1001,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
     public void onReappear(RowPresenter.ViewHolder rowViewHolder) {
         ViewHolder vh = (ViewHolder) rowViewHolder;
         if (vh.view.hasFocus()) {
+            // Reset position in mode 'Seek with confirmation (play while seeking)'
+            vh.stopSeek(Build.VERSION.SDK_INT >= 21
+                    ? !vh.mProgressBar.isAccessibilityFocused() : true);
+
             // player controls hidden
             vh.setControlsMode(ViewHolder.CONTROLS_MODE_FULL);
             vh.mProgressBar.requestFocus();

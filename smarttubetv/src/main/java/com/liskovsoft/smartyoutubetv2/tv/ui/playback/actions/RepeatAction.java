@@ -5,19 +5,23 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.PlaybackControlsRow.MultiAction;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
+
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
  * An action for displaying two repeat states: none and all.
  */
 public class RepeatAction extends MultiAction {
-    public static final int INDEX_NONE = PlayerUI.REPEAT_MODE_CLOSE;
-    public static final int INDEX_ONE = PlayerUI.REPEAT_MODE_ONE;
-    public static final int INDEX_ALL = PlayerUI.REPEAT_MODE_ALL;
-    public static final int INDEX_PAUSE = PlayerUI.REPEAT_MODE_PAUSE;
-    public static final int INDEX_LIST = PlayerUI.REPEAT_MODE_LIST;
-    public static final int INDEX_SHUFFLE = PlayerUI.REPEAT_MODE_SHUFFLE;
+    private static final int INDEX_NONE = PlayerEngineConstants.REPEAT_MODE_CLOSE;
+    private static final int INDEX_ONE = PlayerEngineConstants.REPEAT_MODE_ONE;
+    private static final int INDEX_ALL = PlayerEngineConstants.REPEAT_MODE_ALL;
+    private static final int INDEX_PAUSE = PlayerEngineConstants.REPEAT_MODE_PAUSE;
+    private static final int INDEX_LIST = PlayerEngineConstants.REPEAT_MODE_LIST;
+    private static final int INDEX_SHUFFLE = PlayerEngineConstants.REPEAT_MODE_SHUFFLE;
+    private static final int INDEX_REVERSE_LIST = PlayerEngineConstants.REPEAT_MODE_REVERSE_LIST;
+    private final Context mContext;
 
     /**
      * Constructor
@@ -33,20 +37,24 @@ public class RepeatAction extends MultiAction {
      * @param selectionColor Color to display the repeat-all icon.
      */
     public RepeatAction(Context context, int selectionColor) {
-        super(R.id.lb_control_repeat);
-        Drawable[] drawables = new Drawable[6];
+        super(R.id.action_repeat);
+
+        mContext = context;
+        Drawable[] drawables = new Drawable[7];
         BitmapDrawable repeatNoneDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_none);
         BitmapDrawable repeatOneDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_one);
         BitmapDrawable repeatAllDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_all);
         BitmapDrawable repeatPauseDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_pause);
         BitmapDrawable repeatListDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_list);
         BitmapDrawable repeatShuffleDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_shuffle);
+        BitmapDrawable reverseListDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_reverse_list);
         drawables[INDEX_NONE] = ActionHelpers.createDrawable(context, repeatNoneDrawable, selectionColor);
         drawables[INDEX_ONE] = ActionHelpers.createDrawable(context, repeatOneDrawable, selectionColor);
         drawables[INDEX_ALL] = ActionHelpers.createDrawable(context, repeatAllDrawable, selectionColor);
         drawables[INDEX_PAUSE] = ActionHelpers.createDrawable(context, repeatPauseDrawable, selectionColor);
         drawables[INDEX_LIST] = ActionHelpers.createDrawable(context, repeatListDrawable, selectionColor);
         drawables[INDEX_SHUFFLE] = ActionHelpers.createDrawable(context, repeatShuffleDrawable, selectionColor);
+        drawables[INDEX_REVERSE_LIST] = ActionHelpers.createDrawable(context, reverseListDrawable, selectionColor);
         setDrawables(drawables);
 
         String[] labels = new String[drawables.length];
@@ -57,6 +65,18 @@ public class RepeatAction extends MultiAction {
         labels[INDEX_PAUSE] = context.getString(R.string.repeat_mode_pause);
         labels[INDEX_LIST] = context.getString(R.string.repeat_mode_pause_alt);
         labels[INDEX_SHUFFLE] = context.getString(R.string.repeat_mode_shuffle);
+        labels[INDEX_REVERSE_LIST] = context.getString(R.string.repeat_mode_reverse_list);
         setLabels(labels);
+    }
+
+    @Override
+    public void setLabels(String[] labels) {
+        for (int i = 0; i < labels.length; i++) {
+            if (labels[i] != null) {
+                labels[i] = Utils.updateTooltip(mContext, labels[i]);
+            }
+        }
+
+        super.setLabels(labels);
     }
 }

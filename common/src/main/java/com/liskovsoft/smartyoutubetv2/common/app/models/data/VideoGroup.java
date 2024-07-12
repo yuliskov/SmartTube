@@ -1,8 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
-import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ChapterItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
@@ -12,11 +13,21 @@ import java.util.Collections;
 import java.util.List;
 
 public class VideoGroup {
+    /**
+     * Add at the end of the existing group
+     */
     public static final int ACTION_APPEND = 0;
+    /**
+     * Clear whole fragment and then add this group
+     */
     public static final int ACTION_REPLACE = 1;
     public static final int ACTION_REMOVE = 2;
     public static final int ACTION_REMOVE_AUTHOR = 3;
     public static final int ACTION_SYNC = 4;
+    /**
+     * Add at the begin of the existing group
+     */
+    public static final int ACTION_PREPEND = 5;
     private static final String TAG = VideoGroup.class.getSimpleName();
     private int mId;
     private String mTitle;
@@ -25,6 +36,7 @@ public class VideoGroup {
     private BrowseSection mSection;
     private int mPosition = -1;
     private int mAction;
+    public boolean isQueue;
 
     public static VideoGroup from(BrowseSection category) {
         return from(null, category);
@@ -116,7 +128,7 @@ public class VideoGroup {
         return videoGroup;
     }
 
-    public static VideoGroup from(MediaGroup mediaGroup, VideoGroup baseGroup) {
+    public static VideoGroup from(VideoGroup baseGroup, MediaGroup mediaGroup) {
         baseGroup.mMediaGroup = mediaGroup;
 
         if (mediaGroup == null) {
@@ -146,6 +158,8 @@ public class VideoGroup {
             }
             baseGroup.mVideos.add(video);
         }
+
+        baseGroup.mAction = ACTION_APPEND;
 
         return baseGroup;
     }
@@ -204,7 +218,7 @@ public class VideoGroup {
             return false;
         }
 
-        return mVideos.get(0).isShorts;
+        return mVideos.get(mVideos.size() - 1).isShorts;
     }
 
     /**
@@ -215,12 +229,20 @@ public class VideoGroup {
         return mPosition;
     }
 
+    public void setPosition(int position) {
+        mPosition = position;
+    }
+
     public int getAction() {
         return mAction;
     }
 
     public void setAction(int action) {
         mAction = action;
+
+        if (action == ACTION_PREPEND) {
+            mPosition = 0;
+        }
     }
 
     /**
@@ -292,6 +314,75 @@ public class VideoGroup {
         for (Video video : mVideos) {
             video.playlistId = null;
             video.remotePlaylistId = null;
+        }
+    }
+
+    public Video findVideoById(String videoId) {
+        if (mVideos == null) {
+            return null;
+        }
+
+        Video result = null;
+
+        for (Video video : mVideos) {
+            if (Helpers.equals(videoId, video.videoId)) {
+                result = video;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    public void clear() {
+        if (mVideos == null) {
+            return;
+        }
+
+        mVideos.clear();
+    }
+
+    public boolean contains(Video video) {
+        if (mVideos == null) {
+            return false;
+        }
+
+        return mVideos.contains(video);
+    }
+
+    public int getSize() {
+        if (mVideos == null) {
+            return -1;
+        }
+
+        return mVideos.size();
+    }
+
+    public int indexOf(Video video) {
+        if (mVideos == null) {
+            return -1;
+        }
+
+        return mVideos.indexOf(video);
+    }
+
+    public Video get(int idx) {
+        if (mVideos == null) {
+            return null;
+        }
+
+        return mVideos.get(idx);
+    }
+
+    public void remove(Video video) {
+        if (mVideos == null) {
+            return;
+        }
+
+        try {
+            mVideos.remove(video);
+        } catch (UnsupportedOperationException e) { // read only collection
+            e.printStackTrace();
         }
     }
 }

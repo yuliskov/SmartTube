@@ -1300,6 +1300,10 @@ public class BrowseSupportFragment extends BaseSupportFragment {
         mScaleFrameLayout.setPivotX(0);
         mScaleFrameLayout.setPivotY(mContainerListAlignTop);
 
+        // MOD: touch support improvements. Show side bar by clicking on the left padding area.
+        View dock = root.findViewById(R.id.browse_headers_dock);
+        dock.setOnClickListener(v -> startHeadersTransitionInternal(true));
+
         if (mBrandColorSet) {
             mHeadersSupportFragment.setBackgroundColor(mBrandColor);
         }

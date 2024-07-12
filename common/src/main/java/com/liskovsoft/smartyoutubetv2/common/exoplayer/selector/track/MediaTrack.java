@@ -18,6 +18,7 @@ public abstract class MediaTrack {
     public int groupIndex = -1;
     public int trackIndex = -1;
     public boolean isSelected;
+    public boolean isSaved;
     public boolean isPreset;
     public int rendererIndex;
 
@@ -157,6 +158,10 @@ public abstract class MediaTrack {
 
     public boolean isMP4ACodec() {
         return format != null && isMP4ACodec(format.codecs);
+    }
+
+    public boolean isEmpty() {
+        return groupIndex == -1 && trackIndex == -1;
     }
 
     public int getWidth() {

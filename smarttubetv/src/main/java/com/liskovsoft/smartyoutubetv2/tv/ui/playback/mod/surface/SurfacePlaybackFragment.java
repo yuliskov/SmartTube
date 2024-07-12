@@ -21,8 +21,8 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
  * and rendering video.
  */
 public class SurfacePlaybackFragment extends PlaybackSupportFragment {
-    SurfaceWrapper mVideoSurfaceWrapper;
-    AspectRatioFrameLayout mVideoSurfaceRoot;
+    private SurfaceWrapper mVideoSurfaceWrapper;
+    private AspectRatioFrameLayout mVideoSurfaceRoot;
     private int mBackgroundResId;
     private float mAspectRatio;
     private float mPixelRatio = 1.0f;
@@ -75,25 +75,25 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
      *
      * @param resizeMode The {@link ResizeMode}.
      */
-    public void setResizeMode(@ResizeMode int resizeMode) {
+    protected void setResizeMode(@ResizeMode int resizeMode) {
         mVideoSurfaceRoot.setResizeMode(resizeMode);
     }
 
-    public void setZoom(int percents) {
+    protected void setZoom(int percents) {
         mVideoSurfaceRoot.setZoom(percents);
     }
 
     /** Returns the {@link ResizeMode}. */
-    public @ResizeMode int getResizeMode() {
+    protected @ResizeMode int getResizeMode() {
         return mVideoSurfaceRoot.getResizeMode();
     }
 
-    public void setAspectRatio(float aspectRatio) {
+    protected void setAspectRatio(float aspectRatio) {
         mAspectRatio = aspectRatio;
         mVideoSurfaceRoot.setAspectRatio(calculateAspectRatio());
     }
 
-    public void setRotation(int angle) {
+    protected void setRotation(int angle) {
         if (Helpers.floatEquals(mVideoSurfaceRoot.getRotation(), angle)) {
             return;
         }
@@ -142,7 +142,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         textureView.setLayoutParams(params);
     }
 
-    public void setPixelRatio(float pixelRatio) {
+    protected void setPixelRatio(float pixelRatio) {
         mPixelRatio = pixelRatio;
     }
 
@@ -150,7 +150,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
      * Setup player's background used when controls are showed.
      * @param resId background
      */
-    public void setBackgroundResource(int resId) {
+    protected void setBackgroundResource(int resId) {
         if (resId <= 0 || mBackgroundResId == resId) {
             return;
         }

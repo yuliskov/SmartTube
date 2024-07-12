@@ -84,7 +84,8 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
 
     public boolean isRunningInBackground() {
         return getView() != null &&
-                getView().getPlayer().getBackgroundMode() != PlayerEngine.BACKGROUND_MODE_DEFAULT &&
+                getView().getPlayer().isEngineBlocked() &&
+                //getView().getPlayer().getBackgroundMode() != PlayerEngine.BACKGROUND_MODE_DEFAULT &&
                 getView().getPlayer().isEngineInitialized() &&
                 !ViewManager.instance(getContext()).isPlayerInForeground() &&
                 getContext() instanceof Activity && Utils.checkActivity((Activity) getContext()); // Check that activity is not in Finishing state
@@ -94,11 +95,21 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
         return getView() != null && getView().getPlayer().isInPIPMode();
     }
 
-    private boolean isPreferBackground() {
-        int mode = PlayerData.instance(getContext()).getBackgroundMode();
-
-        return mode != PlayerEngine.BACKGROUND_MODE_DEFAULT;
+    public boolean isOverlayShown() {
+        return getView() != null && getView().getPlayer().isOverlayShown();
     }
+
+    public boolean isPlaying() {
+        return getView() != null && getView().getPlayer().isPlaying();
+    }
+
+    public boolean isEngineBlocked() {
+        return getView() != null && getView().getPlayer().isEngineBlocked();
+    }
+
+    //public int getBackgroundMode() {
+    //    return getView() != null ? getView().getPlayer().getBackgroundMode() : -1;
+    //}
 
     public void forceFinish() {
         if (getView() != null) {

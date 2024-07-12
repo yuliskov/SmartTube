@@ -2,26 +2,27 @@ package com.liskovsoft.smartyoutubetv2.common.app.views;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.Fragment;
-import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+
 import androidx.annotation.NonNull;
+
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class ViewManager {
     private long mPrevThrottleTimeMS;
     private boolean mIsMoveToBackEnabled;
     private boolean mIsFinishing;
-    private boolean mIsSinglePlayerMode;
+    private boolean mIsPlayerOnlyModeEnabled;
     private long mPendingActivityMs;
     private Class<?> mPendingActivityClass;
 
@@ -123,16 +124,16 @@ public class ViewManager {
 
             Class<?> parentActivity = getTopActivity();
 
-            if (parentActivity == null && !mIsSinglePlayerMode) {
+            if (parentActivity == null && !isPlayerOnlyModeEnabled()) {
                 parentActivity = getDefaultParent(activity);
             }
 
-            if (parentActivity == null) {
+            if (parentActivity == null || isPlayerOnlyModeEnabled()) {
                 Log.d(TAG, "Parent activity name doesn't stored in registry. Exiting to Home...");
 
                 mIsMoveToBackEnabled = true;
 
-                if (mIsSinglePlayerMode) {
+                if (isPlayerOnlyModeEnabled()) {
                     safeMoveTaskToBack(activity);
                 }
             } else {
@@ -155,7 +156,7 @@ public class ViewManager {
 
     public void startDefaultView() {
         mIsMoveToBackEnabled = false;
-        mIsSinglePlayerMode = false;
+        mIsPlayerOnlyModeEnabled = false;
 
         Class<?> lastActivity;
 
@@ -273,61 +274,26 @@ public class ViewManager {
         return false;
     }
 
-    public void setSinglePlayerMode(boolean enable) {
-        mActivityStack.clear();
-        mIsSinglePlayerMode = enable;
+    public void enablePlayerOnlyMode(boolean enable) {
+        // Ensure that we're not opening tube link from description dialog
+        if (enable && AppDialogPresenter.instance(mContext).isDialogShown()) {
+            return;
+        }
+
+        mIsPlayerOnlyModeEnabled = enable;
+    }
+
+    public boolean isPlayerOnlyModeEnabled() {
+        //return mIsPlayerOnlyModeEnabled && PlaybackPresenter.instance(mContext).getBackgroundMode() != PlayerEngine.BACKGROUND_MODE_PIP;
+        return mIsPlayerOnlyModeEnabled && !PlaybackPresenter.instance(mContext).isInPipMode();
     }
 
     public void clearCaches() {
-        YouTubeMediaService.instance().invalidateCache();
+        YouTubeServiceManager.instance().invalidateCache();
         // Note, also deletes cached flags (internal cache)
         // Note, deletes cached apks (external cache)
         FileHelpers.deleteCache(mContext);
         LocaleUpdater.clearCache();
-    }
-
-    /**
-     * More info: https://stackoverflow.com/questions/6609414/how-do-i-programmatically-restart-an-android-app
-     */
-    private static void triggerRebirth(Context context, Class<?> rootActivity) {
-        Intent intent = new Intent(context, rootActivity);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-        if (context instanceof MotherActivity) {
-            ((MotherActivity) context).finishReally();
-        }
-        Runtime.getRuntime().exit(0);
-    }
-
-    /**
-     * More info: https://stackoverflow.com/questions/6609414/how-do-i-programmatically-restart-an-android-app
-     */
-    private static void triggerRebirth2(Context context, Class<?> rootActivity) {
-        Intent mStartActivity = new Intent(context, rootActivity);
-        int mPendingIntentId = 123456;
-        int flags = PendingIntent.FLAG_CANCEL_CURRENT;
-        if (Build.VERSION.SDK_INT >= 23) {
-            // IllegalArgumentException fix: Targeting S+ (version 31 and above) requires that one of FLAG_IMMUTABLE...
-            flags |= PendingIntent.FLAG_IMMUTABLE;
-        }
-        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity, flags);
-        AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-        System.exit(0);
-    }
-
-    public static void triggerRebirth3(Context context, Class<?> myClass) {
-        Intent intent = new Intent(context, myClass);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        context.startActivity(intent);
-        Runtime.getRuntime().exit(0);
-    }
-
-    private void exitToHome() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        safeStartActivity(mContext, intent);
     }
 
     /**
@@ -354,22 +320,12 @@ public class ViewManager {
                 clearCaches();
                 SplashPresenter.unhold();
                 BrowsePresenter.unhold();
+                AppUpdatePresenter.unhold();
                 MotherActivity.invalidate();
                 mIsMoveToBackEnabled = false;
                 mIsFinishing = false;
             }, 1_000);
         }
-    }
-
-    /**
-     * Simply kills the app.
-     */
-    public void forceFinishTheApp() {
-        destroyApp();
-    }
-
-    private static void destroyApp() {
-        Runtime.getRuntime().exit(0);
     }
 
     public Class<?> getTopView() {
@@ -405,13 +361,26 @@ public class ViewManager {
     }
 
     /**
+     * Small delay to fix PIP transition bug (UI become unresponsive)
+     */
+    private void safeStartActivity(Context context, Intent intent) {
+        //if (PlaybackPresenter.instance(mContext).isInPipMode()) {
+        //if (PlaybackPresenter.instance(mContext).getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_PIP) {
+        if (PlaybackPresenter.instance(mContext).isEngineBlocked()) {
+            Utils.postDelayed(() -> safeStartActivityInt(context, intent), 50);
+        } else {
+            safeStartActivityInt(context, intent);
+        }
+    }
+
+    /**
      * Fix: java.lang.IllegalArgumentException<br/>
      * View=android.widget.TextView not attached to window manager
      */
-    private void safeStartActivity(Context context, Intent intent) {
+    private void safeStartActivityInt(Context context, Intent intent) {
         try {
             context.startActivity(intent);
-        } catch (IllegalArgumentException | ActivityNotFoundException e) {
+        } catch (IllegalArgumentException | ActivityNotFoundException | IndexOutOfBoundsException e) {
             Log.e(TAG, "Error when starting activity: %s", e.getMessage());
             MessageHelpers.showLongMessage(context, e.getLocalizedMessage());
         }
@@ -421,9 +390,9 @@ public class ViewManager {
         return mIsFinishing;
     }
 
-    public void enableMoveToBack(boolean enable) {
-        mIsMoveToBackEnabled = enable;
-    }
+    //public void enableMoveToBack(boolean enable) {
+    //    mIsMoveToBackEnabled = enable;
+    //}
 
     public boolean isNewViewPending() {
         return System.currentTimeMillis() - mPendingActivityMs < 1_000;
@@ -452,6 +421,20 @@ public class ViewManager {
         }
 
         return false;
+    }
+
+    public static MotherActivity getMotherActivity(Object view) {
+        MotherActivity motherActivity = null;
+
+        if (view instanceof Fragment && ((Fragment) view).getActivity() instanceof MotherActivity) {
+            motherActivity = ((MotherActivity) ((Fragment) view).getActivity());
+        }
+
+        if (view instanceof androidx.fragment.app.Fragment && ((androidx.fragment.app.Fragment) view).getActivity() instanceof MotherActivity) {
+            motherActivity = ((MotherActivity) ((androidx.fragment.app.Fragment) view).getActivity());
+        }
+
+        return motherActivity;
     }
 
     public boolean isPlayerInForeground() {

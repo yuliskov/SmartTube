@@ -6,7 +6,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class SearchData {
     public static final int SPEECH_RECOGNIZER_SYSTEM = 0;
-    public static final int SPEECH_RECOGNIZER_DEFAULT = 1;
+    public static final int SPEECH_RECOGNIZER_INTENT = 1;
     public static final int SPEECH_RECOGNIZER_GOTEV = 2;
     private static final String SEARCH_DATA = "search_data";
     @SuppressLint("StaticFieldLeak")
@@ -22,6 +22,7 @@ public class SearchData {
     private boolean mIsTrendingSearchesEnabled;
     private boolean mIsSearchHistoryDisabled;
     private boolean mIsPopularSearchesDisabled;
+    private boolean mIsKeyboardFixEnabled;
 
     private SearchData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
@@ -70,6 +71,15 @@ public class SearchData {
 
     public boolean isKeyboardAutoShowEnabled() {
         return mIsKeyboardAutoShowEnabled;
+    }
+
+    public void enableKeyboardFix(boolean enabled) {
+        mIsKeyboardFixEnabled = enabled;
+        persistData();
+    }
+
+    public boolean isKeyboardFixEnabled() {
+        return mIsKeyboardFixEnabled;
     }
 
     public void enableTrendingSearches(boolean enabled) {
@@ -128,7 +138,7 @@ public class SearchData {
     private void restoreData() {
         String data = mAppPrefs.getData(SEARCH_DATA);
 
-        String[] split = Helpers.splitObjectLegacy(data);
+        String[] split = Helpers.splitData(data);
 
         // WARN: Don't enable Instant Voice Search
         // Serious bug on Nvidia Shield. Can't type anything with soft keyboard.
@@ -143,12 +153,13 @@ public class SearchData {
         mIsTrendingSearchesEnabled = Helpers.parseBoolean(split, 7, true);
         mIsSearchHistoryDisabled = Helpers.parseBoolean(split, 8, false);
         mIsPopularSearchesDisabled = Helpers.parseBoolean(split, 9, false);
+        mIsKeyboardFixEnabled = Helpers.parseBoolean(split, 10, false);
     }
 
     private void persistData() {
         mAppPrefs.setData(SEARCH_DATA,
-                Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
+                Helpers.mergeData(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
                         mIsKeyboardAutoShowEnabled, mIsTempBackgroundModeEnabled, null, mSpeechRecognizerType,
-                        mIsTrendingSearchesEnabled, mIsSearchHistoryDisabled, mIsPopularSearchesDisabled));
+                        mIsTrendingSearchesEnabled, mIsSearchHistoryDisabled, mIsPopularSearchesDisabled, mIsKeyboardFixEnabled));
     }
 }

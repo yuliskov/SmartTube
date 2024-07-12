@@ -216,7 +216,7 @@ public class SearchFragment extends SearchSupportFragment
             ListRow row = new ListRow(header, mAdapter);
             mRowsAdapter.add(row);
         } else {
-            mAdapter.append(group);
+            mAdapter.add(group);
         }
     }
 

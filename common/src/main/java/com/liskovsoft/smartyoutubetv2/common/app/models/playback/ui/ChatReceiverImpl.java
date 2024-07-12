@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui;
 
-import com.liskovsoft.mediaserviceinterfaces.data.ChatItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ChatItem;
 
 public class ChatReceiverImpl implements ChatReceiver {
     private Callback mCallback;

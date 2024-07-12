@@ -1,16 +1,17 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
-import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
+import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
@@ -39,6 +40,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private boolean mIsClearHistoryEnabled;
     private boolean mIsUpdateCheckEnabled;
     private boolean mIsExcludeFromContentBlockEnabled;
+    private boolean mIsRenamePlaylistEnabled;
 
     protected BaseMenuPresenter(Context context) {
         super(context);
@@ -75,7 +77,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         }
 
         getDialogPresenter().appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.pin_unpin_playlist),
+                UiOptionItem.from(getContext().getString(R.string.pin_playlist),
                         optionItem -> togglePinToSidebar(createPinnedPlaylist(original))));
     }
 
@@ -92,7 +94,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(original.isPlaylistAsChannel() || (original.hasNestedItems() && original.belongsToUserPlaylists()) ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
+                        getContext().getString(original.isPlaylistAsChannel() || (original.hasNestedItems() && original.belongsToUserPlaylists()) ? R.string.pin_playlist : R.string.pin_channel),
                         optionItem -> {
                             if (original.hasVideo()) {
                                 MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
@@ -117,12 +119,14 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         // Toggle between pin/unpin while dialog is opened
         boolean isItemPinned = presenter.isItemPinned(section);
 
-        if (isItemPinned) {
+        if (isItemPinned && section.getGroup() == null) { // allow deletion only from the Sidebar
             presenter.unpinItem(section);
+            MessageHelpers.showMessage(getContext(), getContext().getString(R.string.unpinned_from_sidebar));
         } else {
             presenter.pinItem(section);
+            section.setGroup(null);
+            MessageHelpers.showMessage(getContext(), getContext().getString(R.string.pinned_to_sidebar));
         }
-        MessageHelpers.showMessage(getContext(), section.title + "\n" + getContext().getString(isItemPinned ? R.string.unpinned_from_sidebar : R.string.pinned_to_sidebar));
     }
 
     private Video createPinnedPlaylist(Video video) {
@@ -130,17 +134,14 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             return null;
         }
 
-        Video section = new Video();
-        section.itemType = video.itemType;
-        section.playlistId = video.playlistId;
-        section.playlistParams = video.playlistParams;
+        Video section = Video.from(video);
+        section.videoId = section.channelId = section.reloadPageKey = null; // reset to proper comparison
         // Trying to properly format channel playlists, mixes etc
         boolean isChannelPlaylistItem = video.getGroupTitle() != null && video.belongsToSameAuthorGroup() && video.belongsToSamePlaylistGroup();
         boolean isUserPlaylistItem = video.getGroupTitle() != null && video.belongsToSamePlaylistGroup();
-        String title = isChannelPlaylistItem ? video.getAuthor() : isUserPlaylistItem ? null : video.title;
+        String title = isChannelPlaylistItem ? video.getAuthor() : isUserPlaylistItem ? null : video.getTitle();
         String subtitle = isChannelPlaylistItem || isUserPlaylistItem ? video.getGroupTitle() : video.getAuthor();
         section.title = title != null && subtitle != null ? String.format("%s - %s", title, subtitle) : String.format("%s", title != null ? title : subtitle);
-        section.cardImageUrl = video.cardImageUrl;
 
         return section;
     }
@@ -150,17 +151,14 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             return null;
         }
 
-        Video section = new Video();
-        section.itemType = video.itemType;
-        section.channelId = video.channelId;
-        section.reloadPageKey = video.getReloadPageKey();
+        Video section = Video.from(video);
+        section.videoId = section.playlistId = section.playlistParams = null; // reset to proper comparison
         // Trying to properly format channel playlists, mixes etc
         boolean hasChannel = video.hasChannel() && !video.isChannel();
         boolean isUserPlaylistItem = video.getGroupTitle() != null && video.belongsToSamePlaylistGroup();
-        String title = hasChannel ? video.getAuthor() : isUserPlaylistItem ? null : video.title;
+        String title = hasChannel ? video.getAuthor() : isUserPlaylistItem ? null : video.getTitle();
         String subtitle = isUserPlaylistItem ? video.getGroupTitle() : hasChannel || video.isChannel() ? null : video.getAuthor();
         section.title = title != null && subtitle != null ? String.format("%s - %s", title, subtitle) : String.format("%s", title != null ? title : subtitle);
-        section.cardImageUrl = video.cardImageUrl;
 
         return section;
     }
@@ -226,17 +224,14 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        // Allow removing user playlist only from Playlists section to prevent accidental deletion
-        //if (!BrowsePresenter.instance(getContext()).isPlaylistsSection()) {
-        //    return;
-        //}
-
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(original.belongsToUserPlaylists()? R.string.remove_playlist : R.string.save_remove_playlist),
+                        getContext().getString(original.belongsToUserPlaylists()? R.string.remove_playlist : R.string.save_playlist),
                         optionItem -> {
                             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
                             if (original.hasPlaylist()) {
+
+
                                 syncToggleSaveRemovePlaylist(original, null);
                             } else if (original.belongsToUserPlaylists()) {
                                 // NOTE: Can't get empty playlist id. Empty playlist doesn't contain videos.
@@ -295,17 +290,17 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             boolean isSaved = false;
 
             for (MediaItem playlist : group.getMediaItems()) {
-                if (playlist.getTitle().contains(video.title)) {
+                if (playlist.getTitle().contains(video.getTitle())) {
                     isSaved = true;
                     break;
                 }
             }
 
-            if (isSaved) {
+            if (isSaved && video.belongsToUserPlaylists()) { // allow deletion only from the Playlists section
                 if (video.playlistId == null) {
                     MessageHelpers.showMessage(getContext(), R.string.cant_delete_empty_playlist);
                 } else {
-                    AppDialogUtil.showConfirmationDialog(getContext(), String.format("%s: %s", getContext().getString(R.string.remove_playlist), video.title), () -> {
+                    AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.remove_playlist), () -> {
                         removePlaylist(video);
                         if (getCallback() != null) {
                             getCallback().onItemAction(getVideo(), VideoMenuCallback.ACTION_REMOVE);
@@ -324,8 +319,8 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         Observable<Void> action = manager.removePlaylistObserve(video.playlistId);
         GeneralData.instance(getContext()).setPlaylistOrder(video.playlistId, -1);
         RxHelper.execute(action,
-                (error) -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.cant_delete_empty_playlist), video.title)),
-                () -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.removed_from_playlists), video.title))
+                (error) -> MessageHelpers.showMessage(getContext(), getContext().getString(R.string.cant_delete_empty_playlist)),
+                () -> MessageHelpers.showMessage(getContext(), getContext().getString(R.string.removed_from_playlists))
         );
     }
 
@@ -333,8 +328,8 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         MediaItemService manager = YouTubeMediaItemService.instance();
         Observable<Void> action = manager.savePlaylistObserve(video.playlistId);
         RxHelper.execute(action,
-                (error) -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.cant_save_playlist), video.title)),
-                () -> MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.saved_to_playlists), video.title))
+                (error) -> MessageHelpers.showMessage(getContext(), getContext().getString(R.string.cant_save_playlist)),
+                () -> MessageHelpers.showMessage(getContext(), getContext().getString(R.string.saved_to_playlists))
         );
     }
 
@@ -354,7 +349,9 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo() != null ? getVideo() : new Video();
 
-        if (original.hasVideo() || !BrowsePresenter.instance(getContext()).isPlaylistsSection()) {
+        BrowsePresenter presenter = BrowsePresenter.instance(getContext());
+
+        if (original.hasVideo() || !(presenter.isPlaylistsSection() && presenter.inForeground())) {
             return;
         }
 
@@ -393,12 +390,12 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                     Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
                     RxHelper.execute(
                             action,
-                            (error) -> MessageHelpers.showMessage(getContext(), newValue + ": " + getContext().getString(R.string.cant_save_playlist)),
+                            (error) -> MessageHelpers.showMessage(getContext(), getContext().getString(R.string.cant_save_playlist)),
                             () -> {
                                 if (!video.hasVideo()) { // Playlists section
                                     BrowsePresenter.instance(getContext()).refresh();
                                 } else {
-                                    MessageHelpers.showMessage(getContext(), newValue + ": " + getContext().getString(R.string.saved_to_playlists));
+                                    MessageHelpers.showMessage(getContext(), getContext().getString(R.string.saved_to_playlists));
                                 }
                             }
                     );
@@ -410,13 +407,15 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     protected void appendRenamePlaylistButton() {
-        if (!mIsCreatePlaylistEnabled) {
+        if (!mIsRenamePlaylistEnabled) {
             return;
         }
 
         Video original = getVideo();
 
-        if (original == null || !BrowsePresenter.instance(getContext()).isPlaylistsSection()) {
+        BrowsePresenter presenter = BrowsePresenter.instance(getContext());
+
+        if (original == null || !(presenter.isPlaylistsSection() && presenter.inForeground())) {
             return;
         }
 
@@ -447,7 +446,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
                     SimpleEditDialog.show(
                             getContext(),
-                            video.title,
+                            video.getTitle(),
                             newValue -> {
                                 MediaItemService manager = YouTubeMediaItemService.instance();
                                 Observable<Void> action = manager.renamePlaylistObserve(firstItem.getPlaylistId(), newValue);
@@ -502,7 +501,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         BrowsePresenter presenter = BrowsePresenter.instance(getContext());
 
-        if (!presenter.isHistorySection()) {
+        if (!(presenter.isHistorySection() && presenter.inForeground())) {
             return;
         }
 
@@ -511,6 +510,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                         optionItem -> AppDialogUtil.showConfirmationDialog(getContext(),
                                 getContext().getString(R.string.clear_history), () -> {
                                     mServiceManager.clearHistory();
+                                    VideoStateService.instance(getContext()).clear();
                                     getDialogPresenter().closeDialog();
                                     presenter.refresh();
                         })));
@@ -544,8 +544,9 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         MainUIData mainUIData = MainUIData.instance(getContext());
         
         mIsPinToSidebarEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR);
-        mIsSavePlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SAVE_PLAYLIST);
+        mIsSavePlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SAVE_REMOVE_PLAYLIST);
         mIsCreatePlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_CREATE_PLAYLIST);
+        mIsRenamePlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_RENAME_PLAYLIST);
         mIsAccountSelectionEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SELECT_ACCOUNT);
         mIsAddToNewPlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_NEW_PLAYLIST);
         mIsToggleHistoryEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_TOGGLE_HISTORY);

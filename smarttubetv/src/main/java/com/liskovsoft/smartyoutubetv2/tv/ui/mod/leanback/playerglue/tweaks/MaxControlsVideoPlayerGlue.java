@@ -197,7 +197,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         }
 
         // Apply duration on videos with uncommon length.
-        if (playerAdapter.getDuration() > Video.MAX_DURATION_MS) {
+        if (playerAdapter.getDuration() > Video.MAX_LIVE_DURATION_MS) {
             controlsRow.setDuration(
                     playerAdapter.isPrepared() ? liveDurationMs : -1);
         }

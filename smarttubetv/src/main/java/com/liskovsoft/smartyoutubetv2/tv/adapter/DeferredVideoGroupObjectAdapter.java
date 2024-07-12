@@ -11,7 +11,7 @@ public class DeferredVideoGroupObjectAdapter extends VideoGroupObjectAdapter {
     }
 
     @Override
-    public void append(VideoGroup group) {
+    public void add(VideoGroup group) {
         long currentTimeMillis = System.currentTimeMillis();
 
         if (currentTimeMillis - mPrevAppendTimeMs < 3_000) {
@@ -20,6 +20,6 @@ public class DeferredVideoGroupObjectAdapter extends VideoGroupObjectAdapter {
 
         mPrevAppendTimeMs = currentTimeMillis;
 
-        super.append(group);
+        super.add(group);
     }
 }

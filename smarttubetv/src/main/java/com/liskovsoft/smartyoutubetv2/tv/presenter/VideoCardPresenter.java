@@ -119,8 +119,8 @@ public class VideoCardPresenter extends LongClickPresenter {
         ComplexImageCardView cardView = (ComplexImageCardView) viewHolder.view;
         Context context = cardView.getContext();
 
-        cardView.setTitleText(video.title);
-        cardView.setContentText(video.secondTitle);
+        cardView.setTitleText(video.getTitle());
+        cardView.setContentText(video.getSecondTitle());
         // Count progress that very close to zero. E.g. when user closed video immediately.
         cardView.setProgress(video.percentWatched > 0 && video.percentWatched < 1 ? 1 : Math.round(video.percentWatched));
         cardView.setBadgeText(
@@ -150,7 +150,7 @@ public class VideoCardPresenter extends LongClickPresenter {
                 .error(
                     // Updated thumbnail url not found
                     Glide.with(context)
-                        .load(video.cardImageUrl)
+                        .load(video.cardImageUrl) // always working
                         //.placeholder(mDefaultCardImage)
                         .apply(ViewUtil.glideOptions())
                         .listener(mErrorListener)

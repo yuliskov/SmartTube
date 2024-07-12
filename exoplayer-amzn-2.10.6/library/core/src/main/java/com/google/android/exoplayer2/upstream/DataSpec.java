@@ -412,7 +412,7 @@ public final class DataSpec {
   }
 
   /**
-   * MODIFIED: Google throttle fix. Found on googlevideo.com<br/>
+   * MOD: Google throttle fix. Add range param to the video url. Found on googlevideo.com<br/>
    * Source: https://github.com/yt-dlp/yt-dlp/issues/6369#issuecomment-1447763187<br/>
    * Also see: {@link DefaultHttpDataSource}
    */

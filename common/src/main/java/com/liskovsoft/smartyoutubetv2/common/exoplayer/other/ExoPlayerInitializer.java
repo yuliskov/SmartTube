@@ -20,24 +20,23 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.UUID;
 
 public class ExoPlayerInitializer {
-    private final int mDeviceRam;
+    private final int mMaxBufferBytes;
     private final PlayerData mPlayerData;
 
     public ExoPlayerInitializer(Context context) {
         mPlayerData = PlayerData.instance(context);
 
-        int deviceRam = Helpers.getDeviceRam(context);
+        long deviceRam = Helpers.getDeviceRam(context);
 
         // If ram is too big, bigger then max int value DeviceRam will return a negative number...
         // use 196MB as that can only happens if device has more than 17GB of RAM, so 196 is enough and safe
         // https://github.com/yuliskov/SmartYouTubeTV/issues/532
-        mDeviceRam = deviceRam < 0 ? 196000000 : deviceRam;
+        mMaxBufferBytes = deviceRam <= 0 ? 196_000_000 : (int)(deviceRam / 18);
     }
 
     public SimpleExoPlayer createPlayer(Context context, DefaultRenderersFactory renderersFactory, DefaultTrackSelector trackSelector) {
@@ -55,7 +54,7 @@ public class ExoPlayerInitializer {
         //        null, new DummyBandwidthMeter(), new AnalyticsCollector.Factory(), Util.getLooper()
         //);
 
-        enableAudioFocus(player);
+        //enableAudioFocus(player);
 
         // Lead to numbered errors
         //player.setRepeatMode(Player.REPEAT_MODE_ONE);
@@ -66,14 +65,17 @@ public class ExoPlayerInitializer {
         return player;
     }
 
-    private void enableAudioFocus(SimpleExoPlayer player) {
+    /**
+     * Manage audio focus. E.g. use Spotify when audio is disabled.
+     */
+    public static void enableAudioFocus(SimpleExoPlayer player, boolean enable) {
         if (player != null) {
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setUsage(C.USAGE_MEDIA)
                     .setContentType(C.CONTENT_TYPE_MOVIE)
                     .build();
 
-            player.setAudioAttributes(audioAttributes, true);
+            player.setAudioAttributes(audioAttributes, enable);
         }
     }
 
@@ -97,23 +99,25 @@ public class ExoPlayerInitializer {
         int bufferForPlaybackAfterRebufferMs = 5_000;
 
         switch (mPlayerData.getVideoBufferType()) {
-            case PlayerEngine.BUFFER_HIGH:
+            case PlayerData.BUFFER_HIGH:
                 minBufferMs = 50_000;
-                maxBufferMs = 36_000_000; // technical infinity, recommended here a very high number, the max will be based on setTargetBufferBytes() value
+                maxBufferMs = 100_000;
+                // Infinite buffer works awfully on live streams. Constant stuttering.
+                //maxBufferMs = 36_000_000; // technical infinity, recommended here a very high number, the max will be based on setTargetBufferBytes() value
                 baseBuilder
-                        .setTargetBufferBytes(mDeviceRam);
+                        .setTargetBufferBytes(mMaxBufferBytes);
                 baseBuilder.setBackBuffer(minBufferMs, true);
                 break;
-            case PlayerEngine.BUFFER_MEDIUM:
+            case PlayerData.BUFFER_MEDIUM:
                 minBufferMs = 50_000;
                 maxBufferMs = 50_000;
                 baseBuilder.setBackBuffer(minBufferMs, true);
                 break;
-            case PlayerEngine.BUFFER_LOW:
+            case PlayerData.BUFFER_LOW:
                 minBufferMs = 30_000;
                 maxBufferMs = 30_000;
                 break;
-            case PlayerEngine.BUFFER_NONE:
+            case PlayerData.BUFFER_NONE:
                 minBufferMs = 1_000;
                 maxBufferMs = 1_000;
                 bufferForPlaybackMs = 1_000;

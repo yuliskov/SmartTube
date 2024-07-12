@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 
 public final class SampleMediaItem implements MediaItem {
     private int mId;
@@ -19,6 +19,7 @@ public final class SampleMediaItem implements MediaItem {
     private String mBackgroundImageUrl;
     private String mAuthor;
     private int mPercentWatched;
+    private int mStartTimeSeconds;
     private String mBadgeText;
     private boolean mHaseNewContent;
     private String mVideoPreviewUrl;
@@ -50,8 +51,8 @@ public final class SampleMediaItem implements MediaItem {
         SampleMediaItem mediaItem = new SampleMediaItem();
 
         mediaItem.mId = (int) video.id;
-        mediaItem.mTitle = video.title;
-        mediaItem.mSecondTitle = video.secondTitle;
+        mediaItem.mTitle = video.getTitle();
+        mediaItem.mSecondTitle = video.getSecondTitle();
         mediaItem.mContentType = video.category;
         mediaItem.mType = video.itemType;
         mediaItem.mVideoId = video.videoId;
@@ -61,6 +62,7 @@ public final class SampleMediaItem implements MediaItem {
         mediaItem.mCardImageUrl = video.cardImageUrl;
         mediaItem.mAuthor = video.author;
         mediaItem.mPercentWatched = (int) video.percentWatched;
+        mediaItem.mStartTimeSeconds = video.startTimeSeconds;
         mediaItem.mBadgeText = video.badge;
         mediaItem.mHaseNewContent = video.hasNewContent;
         mediaItem.mVideoPreviewUrl = video.previewUrl;
@@ -104,6 +106,11 @@ public final class SampleMediaItem implements MediaItem {
     @Override
     public int getPercentWatched() {
         return mPercentWatched;
+    }
+
+    @Override
+    public int getStartTimeSeconds() {
+        return mStartTimeSeconds;
     }
 
     @Override

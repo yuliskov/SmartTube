@@ -37,7 +37,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
     public interface AutoFrameRateListener {
         void onModeStart(Mode newMode);
         void onModeError(Mode newMode);
-        void onCancel();
+        void onModeCancel();
     }
 
     public DisplaySyncHelper(Context context) {
@@ -404,7 +404,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
                 if (modes.length == 1) { // notify tvQuickActions or other related software
                     mListener.onModeError(null);
                 } else {
-                    mListener.onCancel();
+                    mListener.onModeCancel();
                 }
                 return false;
             }
@@ -414,7 +414,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
             if (!force && closerMode.equals(currentMode)) {
                 Log.i(TAG, "Do not need to change mode.");
-                mListener.onCancel();
+                mListener.onModeCancel();
                 return false;
             }
 
@@ -507,6 +507,10 @@ public class DisplaySyncHelper implements UhdHelperListener {
                 window,
                 modeTmp.getModeId(),
                 true);
+
+        if (mListener != null) {
+            mListener.onModeStart(mOriginalMode);
+        }
 
         return true;
     }

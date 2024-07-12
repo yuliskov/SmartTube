@@ -131,6 +131,8 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
             if (resultPair != null) {
                 Log.d(TAG, "selectVideoTrack: choose custom video processing");
                 return resultPair.first;
+            } else {
+                return null; // video disabled
             }
         }
 
@@ -156,6 +158,8 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
             if (resultPair != null) {
                 Log.d(TAG, "selectVideoTrack: choose custom audio processing");
                 return new Pair<>(resultPair.first, new AudioTrackScore(resultPair.second.format, params, RendererCapabilities.FORMAT_HANDLED));
+            } else {
+                return null; // audio disabled
             }
         }
 

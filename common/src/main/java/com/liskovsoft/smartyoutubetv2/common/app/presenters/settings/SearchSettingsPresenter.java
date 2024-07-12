@@ -42,14 +42,14 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
 
         for (int[] pair : new int[][] {
                 {R.string.speech_recognizer_system, SearchData.SPEECH_RECOGNIZER_SYSTEM},
-                {R.string.speech_recognizer_external_1, SearchData.SPEECH_RECOGNIZER_DEFAULT},
+                {R.string.speech_recognizer_external_1, SearchData.SPEECH_RECOGNIZER_INTENT},
                 {R.string.speech_recognizer_external_2, SearchData.SPEECH_RECOGNIZER_GOTEV}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]),
                     optionItem -> mSearchData.setSpeechRecognizerType(pair[1]),
                     mSearchData.getSpeechRecognizerType() == pair[1]));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.speech_recognizer), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.speech_engine), options);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
@@ -79,9 +79,9 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
                 option -> mSearchData.enableKeyboardAutoShow(option.isSelected()),
                 mSearchData.isKeyboardAutoShowEnabled()));
 
-        //options.add(UiOptionItem.from(getContext().getString(R.string.trending_searches),
-        //        option -> mSearchData.enableTrendingSearches(option.isSelected()),
-        //        mSearchData.isTrendingSearchesEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.keyboard_fix),
+                option -> mSearchData.enableKeyboardFix(option.isSelected()),
+                mSearchData.isKeyboardFixEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }

@@ -6,4 +6,7 @@
     <string name="content_block_provider" translatable="false">SponsorBlock</string>
     <string name="content_block_provider_url" translatable="false">https://sponsor.ajay.app</string>
     <string name="content_block_status_url" translatable="false">https://status.sponsor.ajay.app</string>
+    <string name="dearrow_provider" translatable="false">DeArrow</string>
+    <string name="dearrow_provider_url" translatable="false">https://dearrow.ajay.app</string>
+    <string name="dearrow_status_url" translatable="false">https://status.sponsor.ajay.app</string>
 </resources>

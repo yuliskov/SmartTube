@@ -13,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.media.PlayerAdapter;
@@ -28,34 +30,37 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.RowPresenter.ViewHolder;
+
 import com.google.android.exoplayer2.ControlDispatcher;
 import com.google.android.exoplayer2.DefaultControlDispatcher;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.util.Util;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.DebugInfoManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -73,9 +78,9 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.SeekModePlaybackFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface.SurfacePlaybackFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigator;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.previewtimebar.StoryboardSeekDataProvider;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.previewtimebar.StoryboardSeekDataProvider;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.LiveChatView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.EndingTimeView;
@@ -89,6 +94,7 @@ import java.util.Map;
  * Plays selected video, loads playlist and related videos, and delegates playback to
  * {@link VideoPlayerGlue}.
  */
+@RequiresApi(19)
 public class PlaybackFragment extends SeekModePlaybackFragment implements PlaybackView, PlayerManager {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
     private static final int UPDATE_DELAY_MS = 100;
@@ -109,11 +115,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private UriBackgroundManager mBackgroundManager;
     private RowsSupportFragment mRowsSupportFragment;
     private boolean mIsUIAnimationsEnabled = false;
-    private boolean mIsLikesCounterEnabled = true;
-    private int mPlaybackMode = PlayerEngine.BACKGROUND_MODE_DEFAULT;
+    //private int mPlaybackMode = PlayerEngine.BACKGROUND_MODE_DEFAULT;
+    private boolean mIsEngineBlocked;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
-    private long mResumeTimeMs;
     private Boolean mIsControlsShownPreviously;
     private Video mPendingFocus;
 
@@ -203,8 +208,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mEventListener.onViewResumed();
 
         showHideWidgets(true); // PIP mode fix
-
-        mResumeTimeMs = System.currentTimeMillis();
+        blockEngine(false); // reset bg mode
     }
 
     @Override
@@ -234,6 +238,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void applyTickle(MotionEvent event) {
+        if (event.getAxisValue(MotionEvent.AXIS_X) < 100) { // reserve left area for the back gesture
+            return;
+        }
+
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             tickle(); // show Player UI
         }
@@ -242,17 +250,21 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     public void onFinish() {
-        // Fix background play when playing trailers from NUM
-        // On API > 23 onStop not immediately occurred after onPause
-        if (getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_DEFAULT) {
-            if (Util.SDK_INT > 23) {
-                maybeReleasePlayer();
-            }
+        //// Fix background play when playing trailers from NUM
+        //// On API > 23 onStop not immediately occurred after onPause
+        //if (getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_DEFAULT) {
+        //    if (Util.SDK_INT > 23) {
+        //        maybeReleasePlayer();
+        //    }
+        //
+        //    // Bug: history not updated on Android 6.0.1
+        //    // Remote control fix
+        //    // Assuming that user wants to close the player
+        //    // setVideo(null);
+        //}
 
-            // Bug: history not updated on Android 6.0.1
-            // Remote control fix
-            // Assuming that user wants to close the player
-            // setVideo(null);
+        if (Util.SDK_INT > 23) {
+            maybeReleasePlayer();
         }
 
         mEventListener.onFinish();
@@ -328,27 +340,31 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      * Internal method. Intended for enclosed Activity.
      */
     public void maybeReleasePlayer() {
-        // Inside dialogs we could change engine settings on fly
-        if (AppDialogPresenter.instance(getContext()).isDialogShown()) {
-            Log.d(TAG, "releasePlayer: Engine release is blocked by dialog. Exiting...");
-            return;
-        }
-
-        // Background audio mode is complicated (null surface error) on Android 9 (api 28) and above. Try avoid it.
-        // More info: DebugInfoMediaCodecVideoRenderer#handleMessage
-        //if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
-        //    !ViewManager.instance(getContext()).isNewViewPending()) {
-        //    Log.d(TAG, "releasePlayer: Engine release is blocked by background playback. Exiting...");
-        //    return;
-        //}
-
-        // Ensure to continue playback in audio mode (activity should be blocked)
-        if (getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_SOUND &&
-                ViewManager.instance(getContext()).getBlockedTop() == PlaybackActivity.class &&
-                !isInPIPMode()) {
+        if (isEngineBlocked()) {
             Log.d(TAG, "releasePlayer: Playback activity is blocked. Exiting...");
             return;
         }
+
+        //if (AppDialogPresenter.instance(getContext()).isDialogShown() ||
+        //        isEngineBlocked()) {
+        //    Log.d(TAG, "releasePlayer: Playback activity is blocked. Exiting...");
+        //    return;
+        //}
+
+        //// Inside dialogs we could change engine settings on fly
+        //if (AppDialogPresenter.instance(getContext()).isDialogShown() ||
+        //        (getBackgroundMode() != PlayerEngine.BACKGROUND_MODE_DEFAULT && Utils.isHardScreenOff(getContext()))) {
+        //    Log.d(TAG, "releasePlayer: Engine release is blocked by dialog or the screen is off. Exiting...");
+        //    return;
+        //}
+        //
+        //// Ensure to continue playback in audio mode (activity should be blocked)
+        //if (getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_SOUND &&
+        //        ViewManager.instance(getContext()).getBlockedTop() == PlaybackActivity.class &&
+        //        !isInPIPMode()) {
+        //    Log.d(TAG, "releasePlayer: Playback activity is blocked. Exiting...");
+        //    return;
+        //}
 
         releasePlayer();
     }
@@ -427,7 +443,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         //mPlayer.setForegroundMode(true);
         // NOTE: Avoid using seekParameters. ContentBlock hangs because of constant skipping to the segment start.
         // ContentBlock hangs on the last segment: https://www.youtube.com/watch?v=pYymRbfjKv8
-        //mPlayer.setSeekParameters(SeekParameters.CLOSEST_SYNC); // live stream (dash) seeking fix
+
+        // Fix seeking on TextureView (some devices only)
+        if (PlayerTweaksData.instance(getContext()).isTextureViewEnabled()) {
+            // Also, live stream (dash) seeking fix
+            mPlayer.setSeekParameters(SeekParameters.CLOSEST_SYNC);
+        }
+
         mExoPlayerController.setPlayer(mPlayer);
     }
 
@@ -443,7 +465,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         hideControlsOverlay(true); // fix player ui not synced correctly
 
         mIsUIAnimationsEnabled = PlayerTweaksData.instance(getContext()).isUIAnimationsEnabled();
-        mIsLikesCounterEnabled = PlayerTweaksData.instance(getContext()).isLikesCounterEnabled();
 
         mExoPlayerController.setPlayerView(mPlayerGlue);
     }
@@ -503,11 +524,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
             MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder();
 
-            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, getVideo().title);
-            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, getVideo().title);
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, getVideo().getTitle());
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, getVideo().getTitle());
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, getVideo().getAuthor());
-            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, getVideo().secondTitle);
-            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, getVideo().cardImageUrl);
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, getVideo().getSecondTitle());
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, getVideo().getCardImageUrl());
             metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, getDurationMs());
 
             return metadataBuilder.build();
@@ -537,15 +558,15 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
                 // Fix exoplayer pause after activity is resumed (AFR switching).
                 // It's tied to activity state transitioning because window has different mode.
                 // NOTE: may be a problems with background playback or bluetooth button events
-                if (System.currentTimeMillis() - mResumeTimeMs < 5_000 ||
-                        (!isResumed() && !isInPIPMode() && !AppDialogPresenter.instance(getContext()).isDialogShown())
-                ) {
-                    return false;
-                }
-
-                //if (System.currentTimeMillis() - mResumeTimeMs < 5_000) {
+                //if (System.currentTimeMillis() - mResumeTimeMs < 5_000 ||
+                //        (!isResumed() && !isInPIPMode() && !AppDialogPresenter.instance(getContext()).isDialogShown())
+                //) {
                 //    return false;
                 //}
+
+                if (System.currentTimeMillis() - PlayerData.instance(getContext()).getAfrSwitchTimeMs() < 5_000) {
+                    return false;
+                }
 
                 return super.dispatchSetPlayWhenReady(player, playWhenReady);
             }
@@ -579,14 +600,22 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private void initPresenters() {
         mRowPresenter = new CustomListRowPresenter() {
             @Override
+            protected void onBindRowViewHolder(RowPresenter.ViewHolder holder, Object item) {
+                super.onBindRowViewHolder(holder, item);
+
+                focusPendingSuggestedItem();
+            }
+
+            @Override
             protected void onRowViewSelected(RowPresenter.ViewHolder holder, boolean selected) {
                 super.onRowViewSelected(holder, selected);
 
                 updatePlayerBackground();
 
-                if (selected) {
-                    focusPendingSuggestedItem();
-                }
+                // Don't select the pending item here because multiple items will be focused.
+                //if (selected) {
+                //    focusPendingSuggestedItem();
+                //}
             }
         };
 
@@ -675,11 +704,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void setRepeatMode(int modeIndex) {
-            mEventListener.onRepeatModeClicked(modeIndex);
-        }
-
-        @Override
         public void onHighQuality() {
             mEventListener.onHighQualityClicked();
         }
@@ -692,11 +716,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         @Override
         public void onThumbsUp(boolean thumbsUp) {
             mEventListener.onLikeClicked(thumbsUp);
-        }
-
-        @Override
-        public void onChannel() {
-            mEventListener.onChannelClicked();
         }
 
         @Override
@@ -803,8 +822,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         if (mPlayerGlue != null && video != null) {
             // Preserve player formatting
-            mPlayerGlue.setTitle(video.getPlayerTitle() != null ? video.getPlayerTitle() : "...");
-            mPlayerGlue.setSubtitle(video.getPlayerSecondTitle() != null ? createSecondTitle(video) : "...");
+            mPlayerGlue.setTitle(video.getTitle() != null ? video.getTitle() : "...");
+            mPlayerGlue.setSubtitle(video.getSecondTitle() != null ? createSecondTitle(video) : "...");
             mPlayerGlue.setVideo(video);
         }
     }
@@ -820,18 +839,22 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private CharSequence createSecondTitle(Video video) {
-        CharSequence result = video.getPlayerSecondTitle();
+        CharSequence result = video.getSecondTitle();
 
         if (getContext() != null && video.isLive) {
             result = TextUtils.concat( result, " ", Video.TERTIARY_TEXT_DELIM, " ", Utils.color(getContext().getString(R.string.badge_live), ContextCompat.getColor(getContext(), R.color.red)));
         }
 
-        if (getContext() != null && video.likeCount != null && mIsLikesCounterEnabled) {
-            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.likeCount);
+        if (getContext() != null && video.likeCount != null) {
+            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.likeCount, Helpers.NON_BREAKING_SPACE, Helpers.THUMB_UP); // color of thumb cannot be changed
         }
 
-        if (getContext() != null && video.dislikeCount != null && mIsLikesCounterEnabled) {
-            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.dislikeCount);
+        if (getContext() != null && video.dislikeCount != null) {
+            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.dislikeCount, Helpers.NON_BREAKING_SPACE, Helpers.THUMB_DOWN); // color of thumb cannot be changed
+        }
+
+        if (getContext() != null && video.subscriberCount != null) {
+            result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.subscriberCount.replace(" ", Helpers.NON_BREAKING_SPACE));
         }
 
         return result;
@@ -928,8 +951,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public long getDurationMs() {
         long durationMs = mExoPlayerController.getDurationMs();
 
-        if (durationMs > Video.MAX_DURATION_MS && getVideo() != null) {
-            durationMs = getVideo().getLiveDurationMs();
+        long liveDurationMs = getVideo() != null ? getVideo().getLiveDurationMs() : 0;
+
+        if (durationMs > Video.MAX_LIVE_DURATION_MS && liveDurationMs != 0) {
+            durationMs = liveDurationMs;
         }
 
         return durationMs;
@@ -982,20 +1007,35 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public FormatItem getAudioFormat() {
+        return mExoPlayerController.getAudioFormat();
+    }
+
+    @Override
     public boolean isEngineInitialized() {
         return mPlayer != null;
     }
 
     @Override
-    public void setBackgroundMode(int type) {
-        Log.d(TAG, "Setting engine block type to %s...", type);
-        mPlaybackMode = type;
+    public void blockEngine(boolean block) {
+        mIsEngineBlocked = block;
     }
 
     @Override
-    public int getBackgroundMode() {
-        return mPlaybackMode;
+    public boolean isEngineBlocked() {
+        return mIsEngineBlocked;
     }
+
+    //@Override
+    //public void setBackgroundMode(int type) {
+    //    Log.d(TAG, "Setting engine block type to %s...", type);
+    //    mPlaybackMode = type;
+    //}
+    //
+    //@Override
+    //public int getBackgroundMode() {
+    //    return mPlaybackMode;
+    //}
 
     @Override
     public boolean isInPIPMode() {
@@ -1024,6 +1064,16 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public float getSpeed() {
         return mExoPlayerController.getSpeed();
+    }
+
+    @Override
+    public void setPitch(float pitch) {
+        mExoPlayerController.setPitch(pitch);
+    }
+
+    @Override
+    public float getPitch() {
+        return mExoPlayerController.getPitch();
     }
 
     @Override
@@ -1227,21 +1277,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setRepeatButtonState(int modeIndex) {
-        if (mPlayerGlue != null) {
-            mPlayerGlue.setRepeatActionState(modeIndex);
-        }
-    }
-
-    private int getRepeatButtonState() {
-        if (mPlayerGlue != null) {
-            return mPlayerGlue.getRepeatActionState();
-        }
-
-        return 0;
-    }
-
-    @Override
     public void setLikeButtonState(boolean like) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setThumbsUpActionState(like);
@@ -1349,6 +1384,21 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
+        if (group.getAction() == VideoGroup.ACTION_SYNC) {
+            VideoGroupObjectAdapter adapter = mMediaGroupAdapters.get(group.getId());
+            if (adapter != null) {
+                adapter.sync(group);
+            }
+            return;
+        } else if (group.getAction() == VideoGroup.ACTION_REPLACE) {
+            VideoGroupObjectAdapter adapter = mMediaGroupAdapters.get(group.getId());
+            if (adapter != null) {
+                adapter.clear();
+                adapter.add(group);
+                return;
+            }
+        }
+
         HeaderItem rowHeader = new HeaderItem(group.getTitle());
         int mediaGroupId = group.getId(); // Create unique int from category.
 
@@ -1370,7 +1420,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         } else {
             freeze(true);
 
-            existingAdapter.append(group); // continue row
+            existingAdapter.add(group); // continue
 
             freeze(false);
         }

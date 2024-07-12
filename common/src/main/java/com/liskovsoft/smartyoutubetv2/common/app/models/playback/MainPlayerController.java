@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import androidx.fragment.app.Fragment;
+
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
@@ -23,11 +25,12 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MainPlayerController implements PlayerEventListener {
     private static final String TAG = MainPlayerController.class.getSimpleName();
-    private final ArrayList<PlayerEventListener> mEventListeners = new ArrayList<PlayerEventListener>() {
+    private final List<PlayerEventListener> mEventListeners = new CopyOnWriteArrayList<PlayerEventListener>() {
         @Override
         public boolean add(PlayerEventListener listener) {
             ((PlayerEventListenerHelper) listener).setMainController(MainPlayerController.this);
@@ -41,41 +44,34 @@ public class MainPlayerController implements PlayerEventListener {
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private Video mPendingVideo;
 
-    public MainPlayerController(Context context) {
+    private MainPlayerController(Context context) {
         if (context instanceof Activity) {
             mActivity = new WeakReference<>((Activity) context);
         }
 
-        SuggestionsController suggestionsLoader = new SuggestionsController();
-        VideoLoaderController videoLoader = new VideoLoaderController(suggestionsLoader);
-        PlayerUIController uiManager = new PlayerUIController(videoLoader);
-        VideoStateController stateUpdater = new VideoStateController();
-        //ContentBlockController contentBlockManager = new ContentBlockController();
-        ChatController liveChatManager = new ChatController();
-        CommentsController commentsManager = new CommentsController();
-
-        //RemoteController commandManager = new RemoteController(context, suggestionsLoader, videoLoader);
-        HQDialogController hqDialogManager = new HQDialogController(stateUpdater);
-        AutoFrameRateController autoFrameRateManager = new AutoFrameRateController(hqDialogManager, stateUpdater);
-
-        suggestionsLoader.addMetadataListener(stateUpdater);
-        suggestionsLoader.addMetadataListener(uiManager);
-        suggestionsLoader.addMetadataListener(videoLoader);
-        //suggestionsLoader.addMetadataListener(contentBlockManager);
-        suggestionsLoader.addMetadataListener(liveChatManager);
-        suggestionsLoader.addMetadataListener(commentsManager);
+        // NOTE: position matters!!!
+        //mEventListeners.add(new AutoFrameRateController());
+        //mEventListeners.add(new PlayerUIController());
+        //mEventListeners.add(new HQDialogController());
+        //mEventListeners.add(new VideoStateController());
+        //mEventListeners.add(new SuggestionsController());
+        //mEventListeners.add(new VideoLoaderController());
+        //mEventListeners.add(new RemoteController(context));
+        //mEventListeners.add(new ContentBlockController());
+        //mEventListeners.add(new ChatController());
+        //mEventListeners.add(new CommentsController());
 
         // NOTE: position matters!!!
-        mEventListeners.add(autoFrameRateManager);
-        mEventListeners.add(uiManager);
-        mEventListeners.add(hqDialogManager);
-        mEventListeners.add(stateUpdater);
-        mEventListeners.add(suggestionsLoader);
-        mEventListeners.add(videoLoader);
-//        mEventListeners.add(commandManager);
-//        mEventListeners.add(contentBlockManager);
-        mEventListeners.add(liveChatManager);
-        mEventListeners.add(commentsManager);
+        mEventListeners.add(new VideoStateController());
+        mEventListeners.add(new SuggestionsController());
+        mEventListeners.add(new VideoLoaderController());
+        mEventListeners.add(new RemoteController(context));
+        mEventListeners.add(new ContentBlockController());
+        mEventListeners.add(new AutoFrameRateController());
+//        mEventListeners.add(new PlayerUIController());
+//        mEventListeners.add(new HQDialogController());
+        mEventListeners.add(new ChatController());
+        mEventListeners.add(new CommentsController());
     }
 
     public static MainPlayerController instance(Context context) {
@@ -109,6 +105,17 @@ public class MainPlayerController implements PlayerEventListener {
         return mActivity.get();
     }
 
+    @SuppressWarnings("unchecked")
+    public <T extends PlayerEventListener> T getController(Class<T> clazz) {
+        for (PlayerEventListener listener : mEventListeners) {
+            if (clazz.isInstance(listener)) {
+                return (T) listener;
+            }
+        }
+
+        return null;
+    }
+
     // Core events
 
     @Override
@@ -129,6 +136,11 @@ public class MainPlayerController implements PlayerEventListener {
     @Override
     public void onInit() {
         // NOP. Internal event.
+    }
+
+    @Override
+    public void onMetadata(MediaItemMetadata metadata) {
+        process(listener -> listener.onMetadata(metadata));
     }
 
     // End core events
@@ -211,8 +223,8 @@ public class MainPlayerController implements PlayerEventListener {
     }
 
     @Override
-    public void onEngineError(int type, int rendererIndex, String message) {
-        process(listener -> listener.onEngineError(type, rendererIndex, message));
+    public void onEngineError(int type, int rendererIndex, Throwable error) {
+        process(listener -> listener.onEngineError(type, rendererIndex, error));
     }
 
     @Override
@@ -258,11 +270,6 @@ public class MainPlayerController implements PlayerEventListener {
     @Override
     public boolean onKeyDown(int keyCode) {
         return chainProcess(listener -> listener.onKeyDown(keyCode));
-    }
-
-    @Override
-    public void onRepeatModeClicked(int modeIndex) {
-        process(listener -> listener.onRepeatModeClicked(modeIndex));
     }
 
     @Override
@@ -317,11 +324,6 @@ public class MainPlayerController implements PlayerEventListener {
     @Override
     public void onLikeClicked(boolean like) {
         process(listener -> listener.onLikeClicked(like));
-    }
-
-    @Override
-    public void onChannelClicked() {
-        process(PlayerUiEventListener::onChannelClicked);
     }
 
     @Override

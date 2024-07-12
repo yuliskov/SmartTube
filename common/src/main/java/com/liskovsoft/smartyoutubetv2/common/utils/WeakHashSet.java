@@ -3,29 +3,29 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class WeakHashSet<T> {
     public interface OnItem<T> {
         void onItem(T item);
     }
 
-    private final List<WeakReference<T>> mWeakReferences = new ArrayList<>();
+    private final List<WeakReference<T>> mWeakReferences = new CopyOnWriteArrayList<>(); // ConcurrentModificationException fix
 
-    public boolean add(T t) {
-        if (t != null && !contains(t)) {
+    public boolean add(T item) {
+        if (item != null && !contains(item)) {
             cleanup();
-            mWeakReferences.add(new WeakReference<>(t));
+            mWeakReferences.add(new WeakReference<>(item));
             return true;
         }
 
         return false;
     }
 
-    public void remove(T t) {
-        if (t != null) {
-            Helpers.removeIf(mWeakReferences, item -> t.equals(item.get()));
+    public void remove(T item) {
+        if (item != null) {
+            Helpers.removeIf(mWeakReferences, next -> item.equals(next.get()));
         }
     }
 
@@ -41,8 +41,8 @@ public class WeakHashSet<T> {
         }
     }
 
-    public boolean contains(T t) {
-        return Helpers.containsIf(mWeakReferences, item -> t.equals(item.get()));
+    public boolean contains(T item) {
+        return Helpers.containsIf(mWeakReferences, next -> item.equals(next.get()));
     }
 
     public void clear() {

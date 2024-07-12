@@ -5,48 +5,44 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
 import androidx.annotation.Nullable;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.RemoteControlService;
-import com.liskovsoft.mediaserviceinterfaces.data.Command;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.yt.RemoteControlService;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.Command;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.prefs.DataChangeBase.OnDataChange;
+import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.disposables.Disposable;
 
 public class RemoteController extends PlayerEventListenerHelper implements OnDataChange {
     private static final String TAG = RemoteController.class.getSimpleName();
     private final RemoteControlService mRemoteControlService;
     private final RemoteControlData mRemoteControlData;
-    private final SuggestionsController mSuggestionsLoader;
-    private final VideoLoaderController mVideoLoader;
     private Disposable mListeningAction;
     private Disposable mPostStartPlayAction;
     private Disposable mPostStateAction;
     private Disposable mPostVolumeAction;
     private Video mVideo;
     private boolean mConnected;
-    private int mIsGlobalVolumeWorking = -1;
     private long mNewVideoPositionMs;
     private Disposable mActionDown;
     private Disposable mActionUp;
 
-    public RemoteController(Context context, SuggestionsController suggestionsLoader, VideoLoaderController videoLoader) {
-        MediaService mediaService = YouTubeMediaService.instance();
-        mSuggestionsLoader = suggestionsLoader;
-        mVideoLoader = videoLoader;
-        mRemoteControlService = mediaService.getRemoteControlService();
+    public RemoteController(Context context) {
+        // Start receiving a commands as early as possible
+        ServiceManager service = YouTubeServiceManager.instance();
+        mRemoteControlService = service.getRemoteControlService();
         mRemoteControlData = RemoteControlData.instance(context);
         mRemoteControlData.setOnChange(this);
         tryListening();
@@ -99,12 +95,12 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
     @Override
     public void onPlayEnd() {
         switch (PlayerData.instance(getContext()).getRepeatMode()) {
-            case PlayerUI.REPEAT_MODE_CLOSE:
-            case PlayerUI.REPEAT_MODE_PAUSE:
-            case PlayerUI.REPEAT_MODE_ALL:
+            case PlayerEngineConstants.REPEAT_MODE_CLOSE:
+            case PlayerEngineConstants.REPEAT_MODE_PAUSE:
+            case PlayerEngineConstants.REPEAT_MODE_ALL:
                 postPlay(false);
                 break;
-            case PlayerUI.REPEAT_MODE_ONE:
+            case PlayerEngineConstants.REPEAT_MODE_ONE:
                 postStartPlaying(getPlayer().getVideo(), true);
                 break;
         }
@@ -242,6 +238,7 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
 
         switch (command.getType()) {
             case Command.TYPE_OPEN_VIDEO:
+            case Command.TYPE_SUBTITLES: // open same video fix
                 if (getPlayer() != null) {
                     getPlayer().showOverlay(false);
                 }
@@ -256,11 +253,12 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
             case Command.TYPE_UPDATE_PLAYLIST:
                 if (getPlayer() != null && mConnected) {
                     Video video = getPlayer().getVideo();
-                    if (video != null) {
+                    // Ensure that remote playlist already playing
+                    if (video != null && video.remotePlaylistId != null) {
                         video.remotePlaylistId = command.getPlaylistId();
                         video.playlistParams = null;
                         video.isRemote = true;
-                        mSuggestionsLoader.loadSuggestions(video);
+                        getController(SuggestionsController.class).loadSuggestions(video);
                     }
                 }
                 break;
@@ -297,7 +295,7 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
             case Command.TYPE_NEXT:
                 if (getMainController() != null) {
                     movePlayerToForeground();
-                    mVideoLoader.loadNext();
+                    getController(VideoLoaderController.class).loadNext();
                 } else {
                     openNewVideo(mVideo);
                 }
@@ -306,7 +304,7 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
                 if (getMainController() != null && getPlayer() != null) {
                     movePlayerToForeground();
                     // Switch immediately. Skip position reset logic.
-                    mVideoLoader.loadPrevious();
+                    getController(VideoLoaderController.class).loadPrevious();
                 } else {
                     openNewVideo(mVideo);
                 }
@@ -321,10 +319,10 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
                 break;
             case Command.TYPE_VOLUME:
                 //Utils.setGlobalVolume(getActivity(), command.getVolume());
-                setVolume(command.getVolume());
+                Utils.setVolume(getContext(), getPlayer(), command.getVolume(), true);
 
                 //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-                postVolumeChange(getVolume()); // Just in case volume cannot be changed (e.g. Fire TV stick)
+                postVolumeChange(Utils.getVolume(getContext(), getPlayer(), true)); // Just in case volume cannot be changed (e.g. Fire TV stick)
                 break;
             case Command.TYPE_STOP:
                 // Close player
@@ -344,20 +342,20 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
                 //    Utils.moveAppToForeground(getActivity());
                 //    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
                 //}
-                if (mRemoteControlData.isConnectMessagesEnabled()) {
-                    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
-                }
+                //if (mRemoteControlData.isConnectMessagesEnabled()) {
+                //    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
+                //}
                 break;
             case Command.TYPE_DISCONNECTED:
                 // NOTE: there are possible false calls when mobile client unloaded from the memory.
                 if (getContext() != null && mRemoteControlData.isFinishOnDisconnectEnabled()) {
                     // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
-                    //MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.device_disconnected, command.getDeviceName()));
-                    ViewManager.instance(getContext()).properlyFinishTheApp(getContext());
-                }
-                if (mRemoteControlData.isConnectMessagesEnabled()) {
                     MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.device_disconnected, command.getDeviceName()));
+                    Utils.properlyFinishTheApp(getContext());
                 }
+                //if (mRemoteControlData.isConnectMessagesEnabled()) {
+                //    MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.device_disconnected, command.getDeviceName()));
+                //}
                 break;
             case Command.TYPE_DPAD:
                 int key = KeyEvent.KEYCODE_UNKNOWN;
@@ -412,16 +410,16 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
     @Override
     public boolean onKeyDown(int keyCode) {
         //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-        postVolumeChange(getVolume());
+        postVolumeChange(Utils.getVolume(getContext(), getPlayer(), true));
 
         return false;
     }
 
     private void openNewVideo(Video newVideo) {
         if (Video.equals(mVideo, newVideo) && ViewManager.instance(getContext()).isPlayerInForeground()) { // same video already playing
-            mVideo.playlistId = newVideo.playlistId;
-            mVideo.playlistIndex = newVideo.playlistIndex;
-            mVideo.playlistParams = newVideo.playlistParams;
+            //mVideo.playlistId = newVideo.playlistId;
+            //mVideo.playlistIndex = newVideo.playlistIndex;
+            //mVideo.playlistParams = newVideo.playlistParams;
             if (mNewVideoPositionMs > 0) {
                 getPlayer().setPositionMs(mNewVideoPositionMs);
                 mNewVideoPositionMs = 0;
@@ -430,33 +428,6 @@ public class RemoteController extends PlayerEventListenerHelper implements OnDat
         } else if (newVideo != null) {
             newVideo.isRemote = true;
             PlaybackPresenter.instance(getContext()).openVideo(newVideo);
-        }
-    }
-
-    /**
-     * Volume: 0 - 100
-     */
-    private int getVolume() {
-        if (getContext() != null) {
-            return Utils.isGlobalVolumeFixed() ? (int)(getPlayer().getVolume() * 100) : Utils.getGlobalVolume(getContext());
-        }
-
-        return 100;
-    }
-
-    /**
-     * Volume: 0 - 100
-     */
-    private void setVolume(int volume) {
-        if (getContext() != null) {
-            if (Utils.isGlobalVolumeFixed()) {
-                getPlayer().setVolume(volume / 100f);
-            } else {
-                Utils.setGlobalVolume(getContext(), volume);
-            }
-            // Check that volume is set.
-            // Because global value may not be supported (see FireTV Stick).
-            MessageHelpers.showMessage(getContext(), getContext().getString(R.string.volume, getVolume()));
         }
     }
 

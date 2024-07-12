@@ -39,7 +39,7 @@ public interface PlayerEngineEventListener {
     void onVideoLoaded(Video item);
     void onEngineInitialized();
     void onEngineReleased();
-    void onEngineError(int type, int rendererIndex, String message);
+    void onEngineError(int type, int rendererIndex, Throwable error);
     void onTrackChanged(FormatItem track);
     void onTrackSelected(FormatItem track);
 }

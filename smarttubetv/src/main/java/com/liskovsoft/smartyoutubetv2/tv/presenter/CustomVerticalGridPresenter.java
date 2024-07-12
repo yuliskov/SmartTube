@@ -15,7 +15,9 @@ public class CustomVerticalGridPresenter extends VerticalGridPresenter {
     }
 
     public CustomVerticalGridPresenter(int layoutResId, int rootResId) {
-        super(ViewUtil.FOCUS_ZOOM_FACTOR, ViewUtil.USE_FOCUS_DIMMER);
+        super(ViewUtil.FOCUS_ZOOM_FACTOR, ViewUtil.FOCUS_DIMMER_ENABLED);
+
+        enableChildRoundedCorners(ViewUtil.ROUNDED_CORNERS_ENABLED);
 
         mLayoutResId = layoutResId;
         mRootResId = rootResId;

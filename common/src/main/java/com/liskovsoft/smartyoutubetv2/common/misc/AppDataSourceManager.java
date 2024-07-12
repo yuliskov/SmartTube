@@ -6,7 +6,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 //import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AutoFrameRateSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BackupSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.ContentBlockSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.DeArrowSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.GeneralSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.MainUISettingsPresenter;
@@ -62,6 +64,10 @@ public class AppDataSourceManager {
 //                context.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(context).show(), R.drawable.settings_search));
 //        settingItems.add(new SettingsItem(
 //                context.getString(R.string.content_block_provider), () -> ContentBlockSettingsPresenter.instance(context).show(), R.drawable.settings_block));
+        settingItems.add(new SettingsItem(
+                context.getString(R.string.dearrow_provider), () -> DeArrowSettingsPresenter.instance(context).show(), R.drawable.settings_dearrow));
+        settingItems.add(new SettingsItem(
+                context.getString(R.string.app_backup_restore), () -> BackupSettingsPresenter.instance(context).show(), R.drawable.settings_bakup));
 
 //        if (Helpers.equalsAny(context.getPackageName(), KNOWN_PACKAGES)) {
 //            settingItems.add(new SettingsItem(
@@ -78,6 +84,8 @@ public class AppDataSourceManager {
         VideoPreset[] presets = {
                 new VideoPreset("144p     30fps    avc", "256,144,30,avc"),
                 new VideoPreset("144p     30fps    vp9", "256,144,30,vp9"),
+                new VideoPreset("240p     30fps    avc", "320,240,30,avc"),
+                new VideoPreset("240p     30fps    vp9", "320,240,30,vp9"),
                 new VideoPreset("360p     30fps    avc", "640,360,30,avc"),
                 new VideoPreset("360p     30fps    vp9", "640,360,30,vp9"),
                 new VideoPreset("360p     60fps    avc", "640,360,60,avc"),

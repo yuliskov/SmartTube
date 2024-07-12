@@ -34,7 +34,7 @@ public class ViewUtil {
     /**
      * Dim focused card?
      */
-    public static final boolean USE_FOCUS_DIMMER = false;
+    public static final boolean FOCUS_DIMMER_ENABLED = false;
     /**
      * Dim other rows in {@link RowPresenter}
      */
@@ -44,6 +44,7 @@ public class ViewUtil {
      */
     public static final int GRID_SCROLL_CONTINUE_NUM = 10;
     public static final int ROW_SCROLL_CONTINUE_NUM = 4;
+    public static final boolean ROUNDED_CORNERS_ENABLED = true;
 
     /**
      * Checks whether text is truncated (e.g. has ... at the end)
@@ -182,7 +183,7 @@ public class ViewUtil {
         int semiTransparent = ContextCompat.getColor(context, R.color.semi_grey);
 
         // Disable shadow outline on parent fragment
-        if (mainContainer instanceof FrameLayout) {
+        if (mainContainer instanceof FrameLayout && VERSION.SDK_INT >= 21) {
             // ViewOutlineProvider: NoClassDefFoundError on API 19
             mainContainer.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
         }

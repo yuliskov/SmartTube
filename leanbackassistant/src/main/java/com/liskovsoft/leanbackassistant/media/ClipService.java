@@ -4,11 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.tvprovider.media.tv.TvContractCompat;
 import com.liskovsoft.leanbackassistant.R;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupService;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,7 @@ public class ClipService {
                 SUBS_PROGRAMS_IDS,
                 SUBSCRIPTIONS_URL,
                 R.drawable.generic_channels,
-                MediaGroupService::getSubscriptions,
+                ContentService::getSubscriptions,
                 false
         );
     }
@@ -64,7 +65,7 @@ public class ClipService {
                 HISTORY_PROGRAMS_IDS,
                 HISTORY_URL,
                 R.drawable.generic_channels,
-                MediaGroupService::getHistory,
+                ContentService::getHistory,
                 false);
     }
 
@@ -76,7 +77,7 @@ public class ClipService {
                 RECOMMENDED_PROGRAMS_IDS,
                 RECOMMENDED_URL,
                 R.drawable.generic_channels,
-                MediaGroupService::getRecommended,
+                ContentService::getRecommended,
                 true);
     }
 
@@ -92,9 +93,9 @@ public class ClipService {
         playlist.setPlaylistUrl(recommendedUrl);
         playlist.setLogoResId(logoResId);
 
-        MediaService service = YouTubeMediaService.instance();
-        MediaGroupService mediaGroupService = service.getMediaGroupService();
-        MediaGroup selectedGroup = callback.call(mediaGroupService);
+        ServiceManager service = YouTubeServiceManager.instance();
+        ContentService contentService = service.getContentService();
+        MediaGroup selectedGroup = callback.call(contentService);
 
         if (selectedGroup != null) {
             List<MediaItem> mediaItems = selectedGroup.getMediaItems();
@@ -106,12 +107,15 @@ public class ClipService {
                         break;
                     }
 
-                    MediaGroup mediaGroup = mediaGroupService.continueGroup(selectedGroup);
+                    MediaGroup mediaGroup = contentService.continueGroup(selectedGroup);
                     if (mediaGroup == null) {
                         break;
                     }
                     mediaItems.addAll(mediaGroup.getMediaItems());
                 }
+
+                // Fix duplicated items inside ATV channels???
+                Helpers.removeDuplicates(mediaItems);
 
                 clips = convertToClips(mediaItems);
             } else {
@@ -152,6 +156,6 @@ public class ClipService {
     }
 
     private interface GroupCallback {
-        MediaGroup call(MediaGroupService mediaTabManager);
+        MediaGroup call(ContentService mediaTabManager);
     }
 }

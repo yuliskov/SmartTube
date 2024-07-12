@@ -1,6 +1,6 @@
 # SmartTube (old name SmartTubeNext)
   
-<img width="100" src="https://github.com/yuliskov/SmartTubeNext/blob/master/smarttubetv/src/ststable/res/mipmap-nodpi/app_icon.png" alt="logo"/>
+<img width="100" src="https://github.com/yuliskov/SmartTube/blob/master/smarttubetv/src/ststable/res/mipmap-nodpi/app_icon.png" alt="logo"/>
 
 **SmartTube** is an advanced player for **Android TVs** and **TV boxes**, free & open source. You can play content from different public sources.
 
@@ -11,7 +11,7 @@ stability, voice search and casting support **might** be worse than in the offic
 
 **Do you have any question?** Ctrl+F or ⌘F this readme first!
 
-[**Installation**](#installation) | [**Official Site**](https://smarttubeapp.github.io) | [**Donation**](#donation) | [**FAQ**](#faq) | [Support / Chat](#support) | [Build](#build) | [Translate the app](https://jtbrinkmann.de/tools/android-strings.xml-translator.html) | [Changelog](https://t.me/s/SmartTubeNewsEN) | [Source Code](https://github.com/yuliskov/SmartTubeNext) | [Liability](#liability)
+[**Installation**](#installation) | [**Official Site**](https://smarttubeapp.github.io) | [**Donation**](#donation) | [**FAQ**](#faq) | [Support / Chat](#support) | [Build](#build) | [Translate the app](https://jtbrinkmann.de/tools/android-strings.xml-translator.html) | [Changelog](https://t.me/s/SmartTubeNewsEN) | [Liability](#liability)
 
 
 ## Device support
@@ -37,11 +37,11 @@ You can use either of the following methods to install the app:
 
 **Troubleshooting:** See device specific notes below. If installation fails, either your **disk space is full** or the APK file didn't download correctly; clear up space and try downloading again. If the app installed, but crashes when opening, make sure to install it to internal memory, not to an SD card / external storage.
 
-**The app has a built-in updater** with changelog. You can also find all releases and the **changelog** on the [Telegram channel @SmartTubeNewsEN](https://t.me/s/SmartTubeNewsEN) (readable without account) or on [Github](https://github.com/yuliskov/SmartTubeNext/releases/).
+**The app has a built-in updater** with changelog. You can also find all releases and the **changelog** on the [Telegram channel @SmartTubeNewsEN](https://t.me/s/SmartTubeNewsEN) (readable without account) or on [Github](https://github.com/yuliskov/SmartTube/releases/).
 
-> latest [**beta download**](https://github.com/yuliskov/SmartTubeNext/releases/download/latest/smarttube_beta.apk)
+> latest [**beta download**](https://github.com/yuliskov/SmartTube/releases/download/latest/smarttube_beta.apk)
 >
-> latest [stable download](https://github.com/yuliskov/SmartTubeNext/releases/download/latest/smarttube_stable.apk)
+> latest [stable download](https://github.com/yuliskov/SmartTube/releases/download/latest/smarttube_stable.apk)
 
 
 ### Installation (Chromecast with Google TV)
@@ -173,7 +173,7 @@ If you want to support my developments you are welcome to buy me a cup of coffee
 
 **Please check the [FAQ](#faq) first!** Also at least have a short look at the recent chat history.
 
-You can report in our Telegram group or via [issue tracker on Github](https://github.com/yuliskov/SmartTubeNext/issues) (account required).
+You can report in our Telegram group or via [issue tracker on Github](https://github.com/yuliskov/SmartTube/issues) (account required).
 
 > **Telegram group (international)**: [@SmartTubeEN](http://t.me/SmartTubeEN)  
 > **Telegram group (RU/UA)**: [@SmartTubeUA](http://t.me/SmartTubeUA)  
@@ -184,7 +184,7 @@ The international group is in **English only**. But don't worry if your English 
 
 ## Team
 
-SmartTube is developed single-handedly; there is no larger team or company behind this. This is an open source, hobby project. Several others have helped with translations, some of which can be seen on [Github](https://github.com/yuliskov/SmartTubeNext/graphs/contributors), some have sent their translations directly to Yurii. There are also helpful people in the support chat.
+SmartTube is developed single-handedly; there is no larger team or company behind this. This is an open source, hobby project. Several others have helped with translations, some of which can be seen on [Github](https://github.com/yuliskov/SmartTube/graphs/contributors), some have sent their translations directly to Yurii. There are also helpful people in the support chat.
 
 
 ## Build
@@ -193,8 +193,8 @@ SmartTube is developed single-handedly; there is no larger team or company behin
 To build and install debug version, run these commands:
 
 ```
-git clone https://github.com/yuliskov/SmartTubeNext.git
-cd SmartTubeNext
+git clone https://github.com/yuliskov/SmartTube.git
+cd SmartTube
 git submodule update --init
 adb connect <device_ip_address>
 gradlew clean installStorigDebug
@@ -265,6 +265,10 @@ EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGES.
 
 ## FAQ
+
+### Q: Videos buffer a LOT
+
+A: Try to switch to encrypted DNS like NextDNS. You can set-up such DNS either automatically or manually. To automatic set-up you can use the [Intra apk at fdroid](https://f-droid.org/en/packages/app.intra/) and the ["AutoStart - No root"](https://play.google.com/store/apps/details?id=com.autostart) apk to make it autolaunch after every TV restart. For manual set-up [use this guide](https://www.reddit.com/r/MiBox/s/7esEVGtAAa).
 
 ### Q: There is no result for the search that I say (Android 11)
 

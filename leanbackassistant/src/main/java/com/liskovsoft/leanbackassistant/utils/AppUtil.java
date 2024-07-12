@@ -57,7 +57,7 @@ public class AppUtil {
         intent.setAction(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         intent.setClassName(getAppPackageName(), getBootstrapClassName());
-        intent.putExtra(GlobalConstants.STANDALONE_PLAYER, true);
+        intent.putExtra(GlobalConstants.INTERNAL_INTENT, true);
 
         return intent;
     }

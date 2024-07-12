@@ -25,6 +25,8 @@ public class TrackSelectorUtil {
     private static final String HDR_PROFILE_ENDING = "hdr";
     private static final String SEPARATOR = ", ";
     private static final HashMap<Integer, Integer> mResolutionMap = new HashMap<>();
+    // Unicode chars: https://symbl.cc/en/search/?q=mark
+    public static final String HIGH_BITRATE_MARK = "\uD83D\uDC8E"; // diamond
 
     // Try to amplify resolution of aspect ratios that differ from 16:9
     static {
@@ -63,14 +65,16 @@ public class TrackSelectorUtil {
         return trackName.length() == 0 ? "unknown" : trackName;
     }
 
+    /**
+     * Add high bitrate (Premium) mark
+     */
     public static String buildHighBitrateMark(Format format) {
         if (format == null) {
             return "";
         }
 
-        // https://symbl.cc/en/search/?q=mark
-        return format.containerMimeType == null ? "*" : "";
-        //return format.containerMimeType == null ? "✨" : "";
+        // Unicode chars: https://symbl.cc/en/search/?q=mark
+        return format.containerMimeType == null ? HIGH_BITRATE_MARK : "";
     }
 
     public static String buildHDRString(Format format) {

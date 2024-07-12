@@ -1,11 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import androidx.core.content.ContextCompat;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ChapterItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.DislikeData;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -18,12 +18,13 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -32,23 +33,17 @@ import java.util.List;
 
 public class SuggestionsController extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsController.class.getSimpleName();
-    private final List<MetadataListener> mListeners = new ArrayList<>();
     private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
-    private MediaGroup mLastScrollGroup;
-    //private VideoGroup mCurrentGroup; // disable garbage collected
+    private MediaItemService mMediaItemService;
+    private DeArrowProcessor mDeArrowProcessor;
     private Video mNextVideo;
-    private Video mPreviousVideo;
     private int mFocusCount;
     private int mNextRetryCount;
     private List<ChapterItem> mChapters;
     private final Runnable mChapterHandler = this::startChapterNotificationServiceIfNeededInt;
     private static final int MAX_PLAYLIST_CONTINUATIONS = 20;
     private static final int CHAPTER_NOTIFICATION_Id = 565;
-
-    public interface MetadataListener {
-        void onMetadata(MediaItemMetadata metadata);
-    }
 
     private interface OnVideoGroup {
         void onVideoGroup(VideoGroup group);
@@ -61,6 +56,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     @Override
     public void onInit() {
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
+        mDeArrowProcessor = new DeArrowProcessor(getContext(), PlaybackPresenter.instance(getContext())::syncItem);
+        mMediaItemService = YouTubeServiceManager.instance().getMediaItemService();
     }
 
     @Override
@@ -70,8 +67,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         disposeActions();
         //mCurrentGroup = video.getGroup(); // disable garbage collected
         appendNextSectionVideoIfNeeded(video);
-        appendPreviousSectionVideoIfNeeded(video);
-        MediaServiceManager.instance().hideNotification(video);
     }
 
     /**
@@ -139,6 +134,10 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void updateLiveDescription() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         Video video = getPlayer().getVideo();
 
         if (video == null || !video.isLive || RxHelper.isAnyActionRunning(mActions)) {
@@ -146,6 +145,10 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         }
 
         loadMetadata(video, metadata -> {
+            if (video.isLive != metadata.isLive()) {
+                video.isLiveEnd = true;
+            }
+
             syncCurrentVideo(metadata, video);
         });
     }
@@ -164,13 +167,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             return;
         }
 
-        if (mLastScrollGroup == group.getMediaGroup()) {
-            Log.d(TAG, "Can't continue group. Another action is running.");
-            return;
-        }
-
-        mLastScrollGroup = group.getMediaGroup();
-
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         if (showLoading) {
@@ -179,22 +175,16 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaItemService mediaItemManager = YouTubeMediaService.instance().getMediaItemService();
-
-        Disposable continueAction = mediaItemManager.continueGroupObserve(mediaGroup)
+        Disposable continueAction = mMediaItemService.continueGroupObserve(mediaGroup)
                 .subscribe(
                         continueMediaGroup -> {
                             getPlayer().showProgressBar(false);
 
-                            VideoGroup videoGroup = VideoGroup.from(continueMediaGroup, group);
+                            VideoGroup videoGroup = VideoGroup.from(group, continueMediaGroup);
                             getPlayer().updateSuggestions(videoGroup);
+                            mDeArrowProcessor.process(videoGroup);
 
-                            // Merge remote queue with player's queue
-                            Video video = getPlayer().getVideo();
-                            if (video != null && video.isRemote && getPlayer().getSuggestionsIndex(videoGroup) == 0) {
-                                Playlist.instance().addAll(videoGroup.getVideos());
-                                Playlist.instance().setCurrent(video);
-                            }
+                            mergeUserAndRemoteQueue(videoGroup);
 
                             if (callback != null) {
                                 callback.onVideoGroup(videoGroup);
@@ -217,25 +207,12 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         if (getPlayer().containsMedia()) {
             video.isUpcoming = false; // live stream started
         }
-        video.sync(mediaItemMetadata, PlayerData.instance(getContext()).isAbsoluteDateEnabled());
+        video.sync(mediaItemMetadata);
         getPlayer().setVideo(video);
 
-        getPlayer().setNextTitle(getNextTitle());
-    }
+        getPlayer().setNextTitle(getNext() != null ? getNext().getTitle() : null);
 
-    private String getNextTitle() {
-        String title = null;
-
-        Video video = getPlayer().getVideo();
-        Video nextVideo = getNext() != null && isSectionPlaylistEnabled(video) ? getNext() : Playlist.instance().getNext();
-
-        if (nextVideo != null) {
-            title = nextVideo.title;
-        } else if (video != null && video.nextMediaItem != null) {
-            title = video.nextMediaItem.getTitle();
-        }
-
-        return title;
+        appendDislikes(video);
     }
 
     public void loadSuggestions(Video video) {
@@ -251,14 +228,11 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             return;
         }
 
-        MediaService service = YouTubeMediaService.instance();
-        MediaItemService mediaItemManager = service.getMediaItemService();
-
         Observable<MediaItemMetadata> observable;
 
         // NOTE: Load suggestions from mediaItem isn't robust. Because playlistId may be initialized from RemoteControlManager.
         // Video might be loaded from Channels section (has playlistParams)
-        observable = mediaItemManager.getMetadataObserve(video.videoId, video.getPlaylistId(), video.playlistIndex, video.playlistParams);
+        observable = mMediaItemService.getMetadataObserve(video.videoId, video.getPlaylistId(), video.playlistIndex, video.playlistParams);
 
         Disposable metadataAction = observable
                 .subscribe(
@@ -275,11 +249,60 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     public Video getNext() {
-        return mNextVideo;
+        Video result = null;
+        Video next = Playlist.instance().getNext();
+        Video current = getPlayer().getVideo();
+
+        if (next != null) {
+            next.fromQueue = true;
+            result = next;
+        } else if (mNextVideo != null) {
+            result = mNextVideo;
+        } else if (current != null && current.nextMediaItem != null) {
+            result = Video.from(current.nextMediaItem);
+        }
+
+        return result;
     }
 
     public Video getPrevious() {
-        return mPreviousVideo;
+        Video result = getPreviousFromGroup(getPlayer().getVideo());
+
+        if (result == null) {
+            Video previous = Playlist.instance().getPrevious();
+
+            if (previous != null) {
+                previous.fromQueue = true;
+                result = previous;
+            }
+        }
+
+        return result;
+    }
+
+    private Video getPreviousFromGroup(Video current) {
+        Video result = null;
+
+        if (current != null) {
+            VideoGroup group = current.getGroup();
+
+            if (group != null && !group.isEmpty()) {
+                Video previous = null;
+
+                for (Video item : group.getVideos()) {
+                    if (item.equals(current)) {
+                        result = previous;
+                        break;
+                    }
+
+                    if (item.hasVideo() && !item.isUpcoming) {
+                        previous = item;
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     private void clearSuggestionsIfNeeded(Video video) {
@@ -312,14 +335,14 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         appendChaptersIfNeeded(mediaItemMetadata);
 
-        appendUserQueueIfNeeded(video);
+        mergeUserAndRemoteQueueIfNeeded(video, mediaItemMetadata);
 
         appendSectionPlaylistIfNeeded(video);
 
         List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
         if (suggestions == null) {
-            String msg = "loadSuggestions: Can't obtain suggestions for video: " + video.title;
+            String msg = "loadSuggestions: Can't obtain suggestions for video: " + video.getTitle();
             Log.e(TAG, msg);
             return;
         }
@@ -341,11 +364,12 @@ public class SuggestionsController extends PlayerEventListenerHelper {
             if (group != null && !group.isEmpty()) {
                 VideoGroup videoGroup = VideoGroup.from(group);
 
-                if (groupIndex == 0) {
-                    mergeRemoteAndUserQueueIfNeeded(video, videoGroup);
-                }
+                //if (groupIndex == 0) {
+                //    mergeRemoteAndUserQueueIfNeeded(video, videoGroup);
+                //}
 
                 getPlayer().updateSuggestions(videoGroup);
+                mDeArrowProcessor.process(videoGroup);
 
                 if (groupIndex == 0) {
                     focusAndContinueIfNeeded(videoGroup);
@@ -359,20 +383,69 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     /**
      * Merge remote queue with player's queue (when phone cast just started or user clicked on playlist item)
      */
-    private void mergeRemoteAndUserQueueIfNeeded(Video video, VideoGroup videoGroup) {
-        // NOTE: Commented out section below has risk of adding random videos into the queue
-        //if (video.isRemote && (video.remotePlaylistId != null || !Playlist.instance().hasNext())) {
+    private void mergeUserAndRemoteQueueIfNeeded(Video video, MediaItemMetadata metadata) {
+        // Ensure that the user pressed video thumb on the phone
         if (video.isRemote && video.remotePlaylistId != null) {
-            videoGroup.removeAllBefore(video);
-            // Double queue bugfix. Remove remote playlist id from the videos.
-            videoGroup.stripPlaylistInfo();
+            // Create user queue from remote queue
 
+            List<MediaGroup> suggestions = metadata.getSuggestions();
+
+            if (suggestions != null && !suggestions.isEmpty()) {
+                MediaGroup remoteRow = suggestions.get(0);
+
+                VideoGroup remoteGroup = VideoGroup.from(remoteRow);
+
+                suggestions.remove(remoteRow);
+
+                appendRemoteQueueIfNeeded(video, remoteGroup);
+            }
+        } else {
+            appendUserQueueIfNeeded();
+        }
+    }
+
+    private void mergeUserAndRemoteQueue(VideoGroup videoGroup) {
+        Video video = getPlayer().getVideo();
+        if (videoGroup.isQueue) {
+            Playlist.instance().addAll(videoGroup.getVideos());
+            Playlist.instance().setCurrent(video);
+        }
+    }
+
+    private void appendUserQueueIfNeeded() {
+        Playlist playlist = Playlist.instance();
+
+        if (playlist.hasNext()) {
+            List<Video> queue = playlist.getAllAfterCurrent();
+
+            VideoGroup videoGroup = VideoGroup.from(queue);
             videoGroup.setTitle(getContext().getString(R.string.action_playback_queue));
             videoGroup.setId(videoGroup.getTitle().hashCode());
 
-            Playlist.instance().removeAllAfterCurrent();
-            Playlist.instance().addAll(videoGroup.getVideos());
-            Playlist.instance().setCurrent(video);
+            getPlayer().updateSuggestions(videoGroup);
+        }
+    }
+
+    private void appendRemoteQueueIfNeeded(Video video, VideoGroup remoteGroup) {
+        remoteGroup.removeAllBefore(video);
+        remoteGroup.stripPlaylistInfo(); // prefer user queue even when a phone disconnected
+
+        if (remoteGroup.contains(video)) {
+            Playlist playlist = Playlist.instance();
+            playlist.removeAllAfterCurrent();
+            playlist.addAll(remoteGroup.getVideos());
+            playlist.setCurrent(video);
+        }
+
+        remoteGroup.setTitle(getContext().getString(R.string.action_playback_queue));
+        remoteGroup.setId(remoteGroup.getTitle().hashCode());
+        remoteGroup.isQueue = true;
+
+        remoteGroup.setAction(VideoGroup.ACTION_REPLACE);
+        getPlayer().updateSuggestions(remoteGroup);
+
+        if (!remoteGroup.contains(video) && remoteGroup.getSize() < 100) {
+            continueGroup(remoteGroup, group -> appendRemoteQueueIfNeeded(video, group), false);
         }
     }
 
@@ -427,25 +500,10 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         focusCurrentChapter();
     }
 
-    private void appendUserQueueIfNeeded(Video video) {
-        // Exclude situations when phone cast just started or next item is null
-        if ((video.isRemote && video.remotePlaylistId != null) || !Playlist.instance().hasNext()) {
-            return;
-        }
-
-        List<Video> queue = Playlist.instance().getAllAfterCurrent();
-
-        VideoGroup videoGroup = VideoGroup.from(queue);
-        videoGroup.setTitle(getContext().getString(R.string.action_playback_queue));
-        videoGroup.setId(videoGroup.getTitle().hashCode());
-        getPlayer().updateSuggestions(videoGroup);
-    }
-
     private void appendSectionPlaylistIfNeeded(Video video) {
         if (!isSectionPlaylistEnabled(video)) {
             // Important fix. Gives priority to playlist or suggestion.
             mNextVideo = null;
-            mPreviousVideo = null;
             return;
         }
 
@@ -478,7 +536,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         int index = findCurrentChapterIndex(group.getVideos());
 
         if (index != -1) {
-            String title = group.getVideos().get(index).title;
+            String title = group.getVideos().get(index).getTitle();
             getPlayer().focusSuggestedItem(index);
             getPlayer().setSeekPreviewTitle(title);
         }
@@ -535,7 +593,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         }
     }
 
-    public void focusAndContinueIfNeeded(VideoGroup group) {
+    private void focusAndContinueIfNeeded(VideoGroup group) {
         Video video = getPlayer().getVideo();
 
         if (group == null || group.isEmpty() || video == null || !video.hasVideo()) {
@@ -547,7 +605,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         if (index >= 0) { // continuation group starts with zero index
             Log.d(TAG, "Found current video index: %s", index);
             Video found = group.getVideos().get(index);
-            if (!found.isMix()) {
+            if (!found.isMix() || isSectionPlaylistEnabled(video)) {
                 getPlayer().focusSuggestedItem(found);
             }
             mFocusCount = 0; // Stop the continuation loop
@@ -597,40 +655,15 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         }
     }
 
-    private void appendPreviousSectionVideoIfNeeded(Video video) {
-        mPreviousVideo = null;
-
-        if (!isSectionPlaylistEnabled(video)) {
-            return;
-        }
-
-        VideoGroup group = video.getGroup();
-
-        if (group == null || group.isEmpty()) {
-            return;
-        }
-
-        List<Video> videos = group.getVideos();
-        boolean found = false;
-
-        for (int i = (videos.size() - 1); i >= 0; i--) {
-            Video current = videos.get(i);
-            if (found && current.hasVideo() && !current.isUpcoming) {
-                mPreviousVideo = current;
-                return;
-            }
-
-            if (current.equals(video)) {
-                found = true;
-            }
-        }
-    }
-
     private void showChapterDialog(ChapterItem chapter) {
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
 
         if (dialogPresenter.isDialogShown() && dialogPresenter.getId() != CHAPTER_NOTIFICATION_Id) {
             // Another dialog is opened. Don't distract a user.
+            return;
+        }
+
+        if (dialogPresenter.isDialogShown() && getPlayer() != null && !getPlayer().isPlaying()) {
             return;
         }
 
@@ -692,28 +725,44 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         return currentChapter;
     }
 
-    public void addMetadataListener(MetadataListener listener) {
-        if (!mListeners.contains(listener)) {
-            mListeners.add(listener);
-        }
-    }
-
     private void callListener(MediaItemMetadata mediaItemMetadata) {
         if (mediaItemMetadata != null) {
-            for (MetadataListener listener : mListeners) {
-                listener.onMetadata(mediaItemMetadata);
-            }
+            getMainController().onMetadata(mediaItemMetadata);
         }
     }
 
     private void disposeActions() {
         RxHelper.disposeActions(mActions);
-        mLastScrollGroup = null;
         mChapters = null;
     }
 
     private boolean isSectionPlaylistEnabled(Video video) {
         return mPlayerTweaksData.isSectionPlaylistEnabled() && video != null && video.getGroup() != null &&
-                (video.playlistId == null || video.nextMediaItem == null) && (!video.isRemote || video.remotePlaylistId == null);
+                (video.playlistId == null || video.nextMediaItem == null || video.belongsToSearch()) && (!video.isRemote || video.remotePlaylistId == null);
+    }
+
+    private void appendDislikes(Video video) {
+        if (video == null) {
+            return;
+        }
+
+        if (!mPlayerTweaksData.isLikesCounterEnabled()) {
+            video.likeCount = null;
+            video.dislikeCount = null;
+            getPlayer().setVideo(video);
+            return;
+        }
+
+        Observable<DislikeData> dislikeDataObserve = mMediaItemService.getDislikeDataObserve(video.videoId);
+
+        Disposable dislikeAction = dislikeDataObserve.subscribe(
+                dislikeData -> {
+                    video.sync(dislikeData);
+                    getPlayer().setVideo(video);
+                },
+                error -> Log.e(TAG, "Dislike not working...")
+        );
+
+        mActions.add(dislikeAction);
     }
 }

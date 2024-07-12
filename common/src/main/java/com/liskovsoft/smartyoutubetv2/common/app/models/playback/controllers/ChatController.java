@@ -1,13 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
-import com.liskovsoft.mediaserviceinterfaces.LiveChatService;
-import com.liskovsoft.mediaserviceinterfaces.data.ChatItem;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.yt.LiveChatService;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ChatItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiverImpl;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -15,13 +14,13 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.disposables.Disposable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatController extends PlayerEventListenerHelper implements MetadataListener {
+public class ChatController extends PlayerEventListenerHelper {
     private static final String TAG = ChatController.class.getSimpleName();
     /**
      * NOTE: Don't remove duplicates! They contain different chars.
@@ -35,7 +34,7 @@ public class ChatController extends PlayerEventListenerHelper implements Metadat
 
     @Override
     public void onInit() {
-        mChatService = YouTubeMediaService.instance().getLiveChatService();
+        mChatService = YouTubeServiceManager.instance().getLiveChatService();
         mPlayerData = PlayerData.instance(getContext());
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
     }

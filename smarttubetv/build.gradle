@@ -25,7 +25,8 @@ buildscript {
 apply plugin: 'com.android.application'
 
 // First letter of flavor name must be in Uppercase
-if (getGradle().getStartParameter().getTaskRequests().toString().contains("Stbeta")) {
+if (new File("${projectDir}/google-services.json").exists() && (getGradle().getStartParameter().getTaskRequests().toString().contains("Stbeta") ||
+        getGradle().getStartParameter().getTaskRequests().toString().contains("Strtarmenia"))) {
     // Google Services Gradle plugin (transforms google-services.json file)
     apply plugin: 'com.google.gms.google-services'
 
@@ -59,8 +60,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 1153
-        versionName "19.63"
+        versionCode 1431
+        versionName "22.41"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -135,11 +136,10 @@ android {
             versionCode 11000 + defaultConfig.versionCode
             applicationId "com.redboxtv.smartyoutubetv"
         }
-        // stsibsetru {
-        //     // matchingFallbacks = ['lite']
-        //     versionCode 11000 + defaultConfig.versionCode
-        //     applicationId "com.sibsetru.smartyoutubetv"
-        // }
+        stfiretv {
+            // matchingFallbacks = ['lite']
+            applicationId "com.amazon.firetv.youtube"
+        }
     }
 
     // naming example: SmartYouTubeTV_Xwalk_v6.8.12_r.apk
@@ -224,7 +224,12 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
 
     // Add the Firebase Crashlytics SDK.
+
     stbetaImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
+        transitive = true
+    }
+
+    strtarmeniaImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
         transitive = true
     }
 

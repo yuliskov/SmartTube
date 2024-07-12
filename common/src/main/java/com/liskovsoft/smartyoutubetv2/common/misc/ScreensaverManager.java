@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.smartyoutubetv2.common.utils.WeakHashSet;
 
 import java.lang.ref.WeakReference;
 
@@ -24,10 +25,13 @@ public class ScreensaverManager {
     private static final String TAG = ScreensaverManager.class.getSimpleName();
     private static final int MODE_SCREENSAVER = 0;
     private static final int MODE_SCREEN_OFF = 1;
+    private static final WeakHashSet<ScreensaverManager> sInstances = new WeakHashSet<>();
+    private static boolean sLockInstance;
     private WeakReference<Activity> mActivity;
     private final WeakReference<View> mDimContainer;
     private final Runnable mDimScreen = this::dimScreen;
     private final Runnable mUndimScreen = this::undimScreen;
+    private final Runnable mUnlockInstance = () -> sLockInstance = false;
     private final GeneralData mGeneralData;
     private PlayerTweaksData mTweaksData;
     private int mMode = MODE_SCREENSAVER;
@@ -53,6 +57,7 @@ public class ScreensaverManager {
         mGeneralData = GeneralData.instance(activity);
         mTweaksData = PlayerTweaksData.instance(activity);
         enable();
+        addToRegistry();
     }
 
     private View createDimContainer(Activity activity) {
@@ -213,6 +218,8 @@ public class ScreensaverManager {
         if (mIsScreenOff) {
             hidePlayerOverlay();
         }
+
+        notifyRegistry();
     }
 
     private void showHideScreensaver(boolean show) {
@@ -223,7 +230,8 @@ public class ScreensaverManager {
         }
 
         // Disable screensaver on certain circumstances
-        if (show && (isPlaying() || isSigning() || mGeneralData.isScreensaverDisabled())) {
+        // Fix screen off before the video started
+        if (show && (isPlaying() || isSigning() || mGeneralData.isScreensaverDisabled() || (mMode == MODE_SCREEN_OFF && getPosition() == 0))) {
             Helpers.disableScreensaver(activity);
             return;
         }
@@ -244,6 +252,18 @@ public class ScreensaverManager {
 
         PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
         return playbackView != null && playbackView.getPlayer().isPlaying();
+    }
+
+    private long getPosition() {
+        Activity activity = mActivity.get();
+
+        if (activity == null) {
+            return 0;
+        }
+
+        PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
+        // Fix screen off before the video started
+        return playbackView != null ? playbackView.getPlayer().getPositionMs() : 0;
     }
 
     private boolean isSigning() {
@@ -268,5 +288,25 @@ public class ScreensaverManager {
         if (playbackView != null) {
             playbackView.getPlayer().showOverlay(false);
         }
+    }
+
+    private void addToRegistry() {
+        sInstances.add(this);
+    }
+
+    private void notifyRegistry() {
+        if (sLockInstance) {
+            return;
+        }
+
+        sLockInstance = true;
+
+        sInstances.forEach(item -> {
+            if (item != this) {
+                item.disableChecked();
+            }
+        });
+
+        Utils.postDelayed(mUnlockInstance, 0);
     }
 }

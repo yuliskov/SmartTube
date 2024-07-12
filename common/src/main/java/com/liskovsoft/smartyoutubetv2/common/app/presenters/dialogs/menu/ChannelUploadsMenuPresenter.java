@@ -1,9 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -14,7 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.disposables.Disposable;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
 
     private ChannelUploadsMenuPresenter(Context context) {
         super(context);
-        MediaService service = YouTubeMediaService.instance();
+        ServiceManager service = YouTubeServiceManager.instance();
         mItemManager = service.getMediaItemService();
         mDialogPresenter = AppDialogPresenter.instance(context);
         mServiceManager = MediaServiceManager.instance();
@@ -79,7 +79,7 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
         appendMarkAsWatched();
         appendTogglePinVideoToSidebarButton();
 
-        mDialogPresenter.showDialog(mVideo.title);
+        mDialogPresenter.showDialog(mVideo.getTitle());
     }
 
     private void appendOpenChannelUploadsButton() {

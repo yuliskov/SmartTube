@@ -37,6 +37,8 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
     };
     private final Runnable speedUpAction = () -> speedUp(true);
     private final Runnable speedDownAction = () -> speedUp(false);
+    private final Runnable volumeUpAction = () -> volumeUp(true);
+    private final Runnable volumeDownAction = () -> volumeUp(false);
 
     public PlayerKeyTranslator(Context context) {
         super(context);
@@ -60,6 +62,11 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
         }
 
+        if (mGeneralData.isRemapNextToFastForwardEnabled()) {
+            globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_NEXT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
+            globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_PREVIOUS, KeyEvent.KEYCODE_MEDIA_REWIND);
+        }
+
         if (mGeneralData.isRemapPageUpToNextEnabled()) {
             globalKeyMapping.put(KeyEvent.KEYCODE_PAGE_UP, KeyEvent.KEYCODE_MEDIA_NEXT);
             globalKeyMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
@@ -70,7 +77,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             globalKeyMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
         }
         
-        if (!PlaybackPresenter.instance(mContext).isInPipMode() && mGeneralData.isRemapPlayPauseToOKEnabled()) {
+        if (!PlaybackPresenter.instance(mContext).isInPipMode() && mGeneralData.isRemapPlayToOKEnabled()) {
             globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_DPAD_CENTER);
         } else {
             globalKeyMapping.remove(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
@@ -89,11 +96,6 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
 
         Map<Integer, Runnable> actionMapping = getActionMapping();
 
-        addLikeAction(actionMapping);
-        addSpeedAction(actionMapping);
-    }
-
-    private void addLikeAction(Map<Integer, Runnable> actionMapping) {
         if (mGeneralData.isRemapPageUpToLikeEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, likeAction);
             actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, dislikeAction);
@@ -103,12 +105,15 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, likeAction);
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, dislikeAction);
         }
-    }
 
-    private void addSpeedAction(Map<Integer, Runnable> actionMapping) {
         if (mGeneralData.isRemapPageUpToSpeedEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, speedDownAction);
+        }
+
+        if (mGeneralData.isRemapPageDownToSpeedEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, speedDownAction);
+            actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, speedUpAction);
         }
 
         if (mGeneralData.isRemapChannelUpToSpeedEnabled()) {
@@ -121,19 +126,41 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, speedDownAction);
         }
 
-        if (mGeneralData.isRemapNextPrevToSpeedEnabled()) {
+        if (mGeneralData.isRemapNextToSpeedEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_NEXT, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_PREVIOUS, speedDownAction);
+        }
+
+        if (mGeneralData.isRemapDpadUpToSpeedEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_DPAD_UP, speedUpAction);
+            actionMapping.put(KeyEvent.KEYCODE_DPAD_DOWN, speedDownAction);
         }
 
         if (mGeneralData.isRemapNumbersToSpeedEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_3, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_1, speedDownAction);
         }
+
+        if (mGeneralData.isRemapChannelUpToVolumeEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, volumeUpAction);
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, volumeDownAction);
+        }
+
+        if (mGeneralData.isRemapDpadUpToVolumeEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_DPAD_UP, volumeUpAction);
+            actionMapping.put(KeyEvent.KEYCODE_DPAD_DOWN, volumeDownAction);
+        }
+
+        if (mGeneralData.isRemapDpadLeftToVolumeEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_DPAD_LEFT, volumeDownAction);
+            actionMapping.put(KeyEvent.KEYCODE_DPAD_RIGHT, volumeUpAction);
+        }
     }
 
     private void speedUp(boolean up) {
-        float[] speedSteps = PlayerTweaksData.instance(mContext).isLongSpeedListEnabled() ? Utils.SPEED_LIST_LONG : Utils.SPEED_LIST_SHORT;
+        PlayerTweaksData data = PlayerTweaksData.instance(mContext);
+        float[] speedSteps = data.isLongSpeedListEnabled() ? Utils.SPEED_LIST_LONG :
+                data.isExtraLongSpeedListEnabled() ? Utils.SPEED_LIST_EXTRA_LONG : Utils.SPEED_LIST_SHORT;
 
         PlaybackView playbackView = getPlaybackView();
 
@@ -152,6 +179,14 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             PlayerData.instance(mContext).setSpeed(speed);
             playbackView.getPlayer().setSpeed(speed);
             MessageHelpers.showMessage(mContext, String.format("%sx", speed));
+        }
+    }
+
+    private void volumeUp(boolean up) {
+        PlaybackView playbackView = getPlaybackView();
+
+        if (playbackView != null) {
+            Utils.volumeUp(mContext, playbackView.getPlayer(), up);
         }
     }
 

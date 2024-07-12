@@ -38,7 +38,6 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.browse.NavigateTitleView;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /*
@@ -106,12 +105,14 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView,
 
         mBrowsePresenter.onViewInitialized();
 
-        // Restore state after crash
-        selectSection(mRestoredHeaderIndex, true);
-        mRestoredHeaderIndex = -1;
+        if (mRestoredHeaderIndex != -1) {
+            // Restore state after crash
+            selectSection(mRestoredHeaderIndex, true);
+            mRestoredHeaderIndex = -1;
 
-        // Restore state after crash
-        selectSectionItem(mBrowsePresenter.getCurrentVideo());
+            // Restore state after crash
+            selectSectionItem(mBrowsePresenter.getCurrentVideo());
+        }
     }
 
     @Override
@@ -321,9 +322,19 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView,
     @Override
     public void selectSection(int index, boolean focusOnContent) {
         if (index >= 0 && mSectionRowAdapter.size() > 0) {
+            mFocusOnContent = focusOnContent; // focus after header transition
+
+            // Fix refresh current section
+            if (getSelectedPosition() == index) {
+                // update section manually
+                // headers transition event not fired on the same index
+                focusOnContentIfNeeded();
+                mBrowsePresenter.onSectionFocused(getSelectedHeaderId());
+            }
+
+            // Need select again if current header is removed previously (can't check for it right now)
             // Fallback to the last section if index above size
             setSelectedPosition(index < mSectionRowAdapter.size() ? index : mSectionRowAdapter.size() - 1, false);
-            mFocusOnContent = focusOnContent; // focus after header transition
         }
     }
 

@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -16,8 +17,11 @@ import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +35,10 @@ public class MotherActivity extends FragmentActivity {
     private ScreensaverManager mScreensaverManager;
     private List<OnPermissions> mOnPermissions;
     private List<OnResult> mOnResults;
+    private long mLastKeyDownTime;
+    private boolean mEnableThrottleKeyDown;
+    private boolean mIsOculusQuestFixEnabled;
+    private boolean mIsFullscreenModeEnabled;
 
     public interface OnPermissions {
         void onPermissions(int requestCode, String[] permissions, int[] grantResults);
@@ -52,10 +60,24 @@ public class MotherActivity extends FragmentActivity {
 
         Log.d(TAG, "Starting %s...", this.getClass().getSimpleName());
 
+        mIsOculusQuestFixEnabled = PlayerTweaksData.instance(this).isOculusQuestFixEnabled();
+        mIsFullscreenModeEnabled = GeneralData.instance(this).isFullscreenModeEnabled();
+
         initDpi();
         initTheme();
 
-        mScreensaverManager = new ScreensaverManager(this);
+        if (!mIsFullscreenModeEnabled) {
+            // There's no way to do this programmatically!
+            setTheme(R.style.FitSystemWindows);
+        }
+
+        if (mIsOculusQuestFixEnabled) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+
+        mScreensaverManager = new ScreensaverManager(this); // moved below the theme to fix side effects
+
+        //Helpers.addFullscreenListener(this);
     }
 
     @Override
@@ -79,6 +101,10 @@ public class MotherActivity extends FragmentActivity {
     @SuppressLint("RestrictedApi")
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event == null) { // handled
+            return true;
+        }
+
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             boolean isKeepScreenOff = mScreensaverManager.isScreenOff() && Helpers.equalsAny(event.getKeyCode(),
                     new int[]{KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_VOLUME_DOWN});
@@ -109,7 +135,7 @@ public class MotherActivity extends FragmentActivity {
         boolean result = super.onKeyDown(keyCode, event);
 
         // Fix buggy G20s menu key (focus lost on key press)
-        return KeyHelpers.isMenuKey(keyCode) || result;
+        return KeyHelpers.isMenuKey(keyCode) || throttleKeyDown(keyCode) || result;
     }
 
     public void finishReally() {
@@ -133,10 +159,10 @@ public class MotherActivity extends FragmentActivity {
 
         // 4K fix with AFR
         applyCustomConfig();
-        // Most of the fullscreen tweaks could be performed in styles but not all.
-        // E.g. Hide bottom navigation bar (couldn't be done in styles).
-        Helpers.makeActivityFullscreen(this);
 
+        applyFullscreenModeIfNeeded();
+
+        // Remove screensaver from the previous activity when closing current one.
         // Called on player's next track. Reason unknown.
         mScreensaverManager.enable();
     }
@@ -145,9 +171,19 @@ public class MotherActivity extends FragmentActivity {
     protected void onPause() {
         super.onPause();
 
+        // Remove screensaver from the previous activity when closing current one.
         // Called on player's next track. Reason unknown.
         mScreensaverManager.disable();
     }
+
+    //@Override
+    //public void onWindowFocusChanged(boolean hasFocus) {
+    //    super.onWindowFocusChanged(hasFocus);
+    //
+    //    if (hasFocus) {
+    //        Helpers.makeActivityFullscreen2(this);
+    //    }
+    //}
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -203,6 +239,14 @@ public class MotherActivity extends FragmentActivity {
         initDpi();
     }
 
+    private void applyFullscreenModeIfNeeded() {
+        if (mIsFullscreenModeEnabled) {
+            // Most of the fullscreen tweaks could be performed in styles but not all.
+            // E.g. Hide bottom navigation bar (couldn't be done in styles).
+            Helpers.makeActivityFullscreen2(this);
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -226,6 +270,15 @@ public class MotherActivity extends FragmentActivity {
             }
             mOnResults.clear();
             mOnResults = null;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        // Oculus Quest fix: back button not closing the activity
+        if (mIsOculusQuestFixEnabled) {
+            finish();
         }
     }
 
@@ -291,4 +344,39 @@ public class MotherActivity extends FragmentActivity {
         sCachedDisplayMetrics = null;
         sIsInPipMode = false;
     }
+
+    /**
+     * Comments focus fix<br/>
+     * https://stackoverflow.com/questions/34277425/recyclerview-items-lose-focus
+     */
+    private boolean throttleKeyDown(int keyCode) {
+        if (mEnableThrottleKeyDown && keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+            long current = System.currentTimeMillis();
+            if (current - mLastKeyDownTime < 100) {
+                return true;
+            }
+
+            mLastKeyDownTime = current;
+        }
+
+        return false;
+    }
+
+    /**
+     * Comments focus fix<br/>
+     * https://stackoverflow.com/questions/34277425/recyclerview-items-lose-focus
+     */
+    public void enableThrottleKeyDown(boolean enable) {
+        mEnableThrottleKeyDown = enable;
+    }
+
+    //@Override
+    //public void setTheme(int resid) {
+    //    super.setTheme(resid);
+    //
+    //    // No way to do this programmatically!
+    //    if (!GeneralData.instance(this).isFullscreenModeEnabled()) {
+    //        super.setTheme(R.style.FitSystemWindows);
+    //    }
+    //}
 }

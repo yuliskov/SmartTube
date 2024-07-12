@@ -5,11 +5,12 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.Map;
 
-public class VideoStateService {
+public class VideoStateService implements ProfileChangeListener {
     @SuppressLint("StaticFieldLeak")
     private static VideoStateService sInstance;
     private static final int MAX_PERSISTENT_STATE_SIZE = 100;
@@ -20,7 +21,7 @@ public class VideoStateService {
 
     private VideoStateService(Context context) {
         mPrefs = AppPrefs.instance(context);
-
+        mPrefs.addListener(this);
         restoreState();
     }
 
@@ -48,7 +49,13 @@ public class VideoStateService {
         mStates.remove(videoId);
     }
 
+    public void clear() {
+        mStates.clear();
+        persistState();
+    }
+
     private void restoreState() {
+        mStates.clear();
         String data = mPrefs.getStateUpdaterData();
 
         if (data != null) {
@@ -129,5 +136,10 @@ public class VideoStateService {
         public String toString() {
             return String.format("%s,%s,%s,%s", videoId, positionMs, durationMs, speed);
         }
+    }
+
+    @Override
+    public void onProfileChanged() {
+        restoreState();
     }
 }
