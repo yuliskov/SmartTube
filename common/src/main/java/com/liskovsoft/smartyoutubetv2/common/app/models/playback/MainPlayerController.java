@@ -68,8 +68,8 @@ public class MainPlayerController implements PlayerEventListener {
         mEventListeners.add(new RemoteController(context));
         mEventListeners.add(new ContentBlockController());
         mEventListeners.add(new AutoFrameRateController());
-//        mEventListeners.add(new PlayerUIController());
-//        mEventListeners.add(new HQDialogController());
+        mEventListeners.add(new PlayerUIController());
+        mEventListeners.add(new HQDialogController());
         mEventListeners.add(new ChatController());
         mEventListeners.add(new CommentsController());
     }

@@ -68,7 +68,7 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
         mAutoFrameRateHelper.setDoubleRefreshRateEnabled(mPlayerData.isDoubleRefreshRateEnabled());
         mAutoFrameRateHelper.setSkip24RateEnabled(mPlayerData.isSkip24RateEnabled());
 
-//        addUiOptions();
+        addUiOptions();
     }
 
     @Override
@@ -258,8 +258,8 @@ public class AutoFrameRateController extends PlayerEventListenerHelper implement
                 dialogPresenter.showDialog(modesCategory.title);
             }));
 
-            mHQDialogController.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING_LIST, getContext().getString(R.string.auto_frame_rate), options));
-            mHQDialogController.addOnDialogHide(mApplyAfr); // Apply NEW Settings on dialog close
+//            mHQDialogController.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING_LIST, getContext().getString(R.string.auto_frame_rate), options));
+//            mHQDialogController.addOnDialogHide(mApplyAfr); // Apply NEW Settings on dialog close
         } else {
             mHQDialogController.removeCategory(AUTO_FRAME_RATE_ID);
             mHQDialogController.removeOnDialogHide(mApplyAfr);

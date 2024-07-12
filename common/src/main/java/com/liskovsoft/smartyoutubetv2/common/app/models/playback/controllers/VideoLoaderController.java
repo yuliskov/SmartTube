@@ -441,7 +441,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             // Some ciphered data could be outdated.
             // Might happen when the app wasn't used quite a long time.
             case PlayerEventListener.ERROR_TYPE_SOURCE:
-                applySourceErrorAction(rendererIndex, error);
+//                applySourceErrorAction(rendererIndex, error);
                 break;
             case PlayerEventListener.ERROR_TYPE_RENDERER:
                 applyRendererErrorAction(rendererIndex, error);
