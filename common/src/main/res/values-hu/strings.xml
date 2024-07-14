@@ -644,4 +644,25 @@
   <string name="crowdsoursed_titles">közösségi alapú címek</string>
   <string name="dearrow_not_submitted_thumbs">A nem feliratkozott előnézeti képek forrása</string>
   <string name="pitch_effect">Hangmagasság effekt</string>
+  <string name="player_exit_shortcut">Kilépés a lejátszóból</string>
+  <string name="skip_shorts">Rövid klipek kihagyása</string>
+  <string name="speech_engine">Hang keresőmotor</string>
+  <string name="player_extra_long_speed_list">Extra hosszú sebességlista</string>
+  <string name="old_channel_look">A csatornalista régi megjelenése</string>
+  <string name="remember_position_pinned">Emlékezzen az utoljára megtekintett pozícióra a rögzített lejátszási listákon</string>
+  <string name="unknown_source_error">Ismeretlen forrás hiba</string>
+  <string name="unknown_renderer_error">Ismeretlen renderelő hiba</string>
+  <string name="hide_watched_from_watch_later">A megtekintett videók elrejtése a Megnézendő videók lejátszási listáról</string>
+  <string name="player_quick_skip_videos">A normál videók kihagyása a bal/jobb gombokkal</string>
+  <string name="fullscreen_mode">Teljes képernyős mód (rendszersávok nélkül)</string>
+  <string name="player_only_mode">Csak a lejátszó megjelenítése, ha a videót az alkalmazáson kívül nyitották meg</string>
+  <string name="pinned_channel_rows">A rögzített csatorna megjelenítése soronként</string>
+  <string name="prefer_ipv4">IPv4 DNS előnyben részesítése</string>
+  <string name="prefer_ipv4_desc">Kijavíthatja azokat a helyzeteket, amikor az alkalmazás egyáltalán nem működik.\nMegjegyzés. Lefagyást és összeomlást okozhat (különösen Android 8 vagy Dune HD eszközökön)</string>
+  <string name="long_press_for_settings">A BEÁLLÍTÁSOKHOZ HOSSZAN NYOMJA MEG</string>
+  <string name="long_press_for_options">HOGYAN NYOMJA MEG AZ OPCIÓKHOZ</string>
+  <string name="device_specific_backup">Biztonsági mentés csak ehhez az eszközhöz</string>
+  <string name="local_backup">Helyi biztonsági mentés</string>
+  <string name="auto_backup">Automatikus biztonsági mentés (naponta egyszer)</string>
+  <string name="repeat_mode_reverse_list">Játssza le a lejátszási listát vagy a csatornavideókat fordított sorrendben</string>
 </resources>
