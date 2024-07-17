@@ -1012,21 +1012,4 @@ public class Utils {
 
         return uniqueId;
     }
-
-    public static int getNextState(int currentState, int[] stateList) {
-        int nextState = stateList[0];
-        boolean found = false;
-
-        for (int state : stateList) {
-            if (found) {
-                nextState = state;
-                break;
-            }
-
-            if (state == currentState) {
-                found = true;
-            }
-        }
-        return nextState;
-    }
 }

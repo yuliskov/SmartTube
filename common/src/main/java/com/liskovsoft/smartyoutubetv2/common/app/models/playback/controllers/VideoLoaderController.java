@@ -648,6 +648,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private int getNextEngine() {
         int currentEngine = mPlayerTweaksData.getPlayerDataSource();
         int[] engineList = { PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET, PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP };
-        return Utils.getNextState(currentEngine, engineList);
+        return Helpers.getNextValue(currentEngine, engineList);
     }
 }
