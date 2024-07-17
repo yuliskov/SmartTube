@@ -242,7 +242,7 @@
     <string name="card_text_scroll_factor">Rýchlosť posúvania textu v názve videa</string>
     <string name="preferred_update_source">Preferovaný zdroj aktualizácie</string>
     <string name="hide_shorts">Skryť Shorts z Odberov</string>
-    <string name="hide_shorts_channel">Skryť Shorts z Kanálov</string>
+    <string name="hide_shorts_channel">Skryť Shorts z kanála</string>
     <string name="key_remapping">Prednastavenie tlačidiel</string>
     <string name="screen_diming">Stmavenie obrazovky</string>
     <string name="removed_from_playback_queue">Odstránené zo zoznamu</string>
@@ -458,7 +458,6 @@
     <string name="playback_starts_shortly">Prehrávanie začne automaticky pri začatí živého vysielania</string>
     <string name="starting_stream">Začína živé vysielanie…</string>
     <string name="action_playlist_remove">Odobrať z playlistu</string>
-    <!-- BEGIN Moved strings -->
     <string name="signin_view_title">Načítavanie Používateľského Kódu…</string>
     <string name="signin_view_description">Pre prihlásenie vložte kód zo stránky %s\nPOZNÁMKA. Funguje len na prehliadačoch Firefox alebo Chrome.</string>
     <string name="signin_view_action_text">Hotovo</string>
@@ -473,7 +472,6 @@
     <string name="playback_controls_repeat_list">Opakovať Zoznam</string>
     <string name="action_subscribe_off">Neodoberať</string>
     <string name="action_subscribe_on">Odoberať</string>
-    <!-- END Moved strings -->
     <string name="skip_24_rate">Preskočiť formáty s 24fps (oprava pre režim Real Cinema\?)</string>
     <string name="skip_shorts">Preskočiť Shorts</string>
     <string name="player_disable_suggestions">Vypnúť návrhy</string>
@@ -558,11 +556,11 @@
     <string name="player_extra_long_speed_list">Extra dlhý zoznam rýchlostí videa</string>
     <string name="alt_app_icon">Alternatívna ikonka aplikácie (potrebný reštart)</string>
     <string name="network_stack">Preferovať sieťový zásobník %s</string>
-    <string name="player_network_stack">Sieťový zásobník</string>
+    <string name="player_network_stack">Sieťový mechanizmus</string>
     <string name="cronet_desc">Cronet je Chromium sieťový zásobník. Môže znížiť oneskorenie a zvýšiť výkon siete, čo môže pomôcť pri problémoch s ukladaním do medzipamäte.</string>
     <string name="unlock_all_formats">Odblokovať všetky video formáty</string>
     <string name="unlock_all_formats_desc">Na niektorých zariadeniach hlási firmvér niektoré formáty ako nepodporované aj keď podporované sú.\n(napr. smart televízie s rozlíšením 1080p majú tendenciu hlásiť 4K ako nepodporované).</string>
-    <string name="okhttp_desc">Tento sieťový zásobník je najpomalší, ale najstabilnejší.</string>
+    <string name="okhttp_desc">Tento sieťový mechanizmus je najpomalší, ale najstabilnejší.</string>
     <string name="select_channel_section">Otvoriť zodpovedajúcu sekciu po otvorení aplikácie z kanálov ATV</string>
     <string name="enable_voice_search_desc">Oficiálna aplikácia bude nahradená tzv. \"mostom\". Most pomáha prenášať požiadavky globálneho vyhľadávania do tejto aplikácie.</string>
     <string name="enable_master_password">Povoliť hlavné heslo</string>
@@ -596,7 +594,7 @@
     <string name="subtitle_remember">Zapamätať si povolené titulky pre každý kanál</string>
     <string name="amazon_frame_drop_fix">Oprava výpadkov prehrávania #2</string>
     <string name="amazon_frame_drop_fix_desc">Určené pre zariadenia Amazon Stick. Môže fungovať aj na iných zariadeniach.</string>
-    <string name="default_stack_desc">Predvolený sieťový zásobník. Tento zásobník môže mať v určitých situáciách lepšiu stabilitu.</string>
+    <string name="default_stack_desc">Predvolený sieťový mechanizmus. Tento mechanizmus môže mať v určitých situáciách lepšiu stabilitu.</string>
     <string name="item_postion">Pozícia</string>
     <string name="player_screen_off_dimming">Intenzita stmievania obrazovky</string>
     <string name="screensaver_timout">Časový limit šetriča obrazovky</string>
@@ -640,6 +638,7 @@
     <string name="channel_filter_hint">Filtrovať kanály</string>
     <string name="player_loop_shorts">Shorts v slučke</string>
     <string name="player_quick_shorts_skip">Preskočiť Shorts s tlačidlami vľavo/vpravo</string>
+    <string name="player_quick_skip_videos">Preskočiť videá s tlačidlami vľavo/vpravo</string>
     <string name="channels_filter">Zobraziť pole filtrovania kanálov v sekcii Kanály</string>
     <string name="channel_search_bar">Vyhľadávací panel v sekcii Kanály</string>
     <string name="header_sports">Šport</string>
