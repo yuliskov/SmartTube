@@ -483,7 +483,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             mPlayerTweaksData.setPlayerDataSource(getNextEngine());
         } else if (Helpers.startsWithAny(error.getMessage(), "Response code: 403")) {
             // "Response code: 403" is related to outdated VISITOR_INFO1_LIVE cookie
-            YouTubeServiceManager.instance().invalidateVisitorData();
+            YouTubeServiceManager.instance().applyVideoInfoFix();
         }
     }
 
