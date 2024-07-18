@@ -145,7 +145,7 @@ public class VideoStateController extends PlayerEventListenerHelper {
         }
 
         // Sync history every five minutes
-        if (++mTickleLeft > 5) {
+        if (++mTickleLeft > 5 && getPlayer().isPlaying()) {
             mTickleLeft = 0;
             updateHistory();
         }

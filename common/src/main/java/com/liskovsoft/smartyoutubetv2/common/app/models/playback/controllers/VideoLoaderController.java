@@ -117,10 +117,11 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         if ((!mLastVideo.isLive || mLastVideo.isLiveEnd) &&
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
-        } else {
-            // Switch between network engines in hope that one of them fixes the buffering
-            mPlayerTweaksData.setPlayerDataSource(getNextEngine());
         }
+        //} else {
+        //    // Switch between network engines in hope that one of them fixes the buffering
+        //    mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+        //}
     }
 
     @Override
