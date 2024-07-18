@@ -664,4 +664,5 @@
   <string name="unknown_source_error">Error de fuente desconocida</string>
   <string name="unknown_renderer_error">Error de renderizado desconocido</string>
   <string name="skip_shorts">Saltar Cortos</string>
+  <string name="player_quick_skip_videos">Saltar los vídeos normales con los botones izquierda/derecha</string>
 </resources>
