@@ -716,6 +716,7 @@ public final class Video {
             return 0;
         }
 
+        // fix stream end while watching
         if (!isLive) {
             return liveDurationMs;
         }
