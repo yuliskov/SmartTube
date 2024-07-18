@@ -95,7 +95,12 @@ public class MotherActivity extends FragmentActivity {
             mScreensaverManager.enable();
         }
 
-        return super.dispatchTouchEvent(event);
+        try {
+            return super.dispatchTouchEvent(event);
+        } catch (NullPointerException e) {
+            // Attempt to invoke interface method 'boolean android.app.trust.ITrustManager.isDeviceLocked(int)' on a null object reference
+            return false;
+        }
     }
 
     @SuppressLint("RestrictedApi")
