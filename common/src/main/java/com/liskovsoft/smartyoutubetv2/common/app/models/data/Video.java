@@ -716,8 +716,8 @@ public final class Video {
             return 0;
         }
 
-        // fix stream end while watching
-        if (!isLive) {
+        // Disable updates if stream ended while watching
+        if (!isLive && liveDurationMs != 0) {
             return liveDurationMs;
         }
 
