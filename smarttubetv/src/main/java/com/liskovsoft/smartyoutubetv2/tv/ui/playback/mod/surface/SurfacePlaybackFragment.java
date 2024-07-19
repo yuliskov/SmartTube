@@ -94,7 +94,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     }
 
     protected void setRotation(int angle) {
-        if (Helpers.floatEquals(mVideoSurfaceRoot.getRotation(), angle)) {
+        if (Helpers.floatEquals(mVideoSurfaceRoot.getRotation(), angle) || mVideoSurfaceWrapper == null) {
             return;
         }
 
