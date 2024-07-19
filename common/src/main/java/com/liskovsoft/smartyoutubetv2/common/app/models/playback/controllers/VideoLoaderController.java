@@ -518,7 +518,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             mPlayerTweaksData.setPlayerDataSource(getNextEngine());
         } else if (Helpers.startsWithAny(error.getMessage(), "Response code: 403")) {
             // "Response code: 403" is related to outdated VISITOR_INFO1_LIVE cookie
-            YouTubeServiceManager.instance().invalidateVisitorData();
+            YouTubeServiceManager.instance().applyVideoInfoFix();
         }
     }
 
@@ -687,6 +687,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private int getNextEngine() {
         int currentEngine = mPlayerTweaksData.getPlayerDataSource();
         int[] engineList = { PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET, PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP };
-        return Utils.getNextState(currentEngine, engineList);
+        return Helpers.getNextValue(currentEngine, engineList);
     }
 }
