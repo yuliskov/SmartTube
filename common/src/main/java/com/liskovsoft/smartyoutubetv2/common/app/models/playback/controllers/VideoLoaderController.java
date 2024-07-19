@@ -118,6 +118,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         if ((!mLastVideo.isLive || mLastVideo.isLiveEnd) &&
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
+        } else {
+            YouTubeServiceManager.instance().applyVideoInfoFix();
         }
     }
 
