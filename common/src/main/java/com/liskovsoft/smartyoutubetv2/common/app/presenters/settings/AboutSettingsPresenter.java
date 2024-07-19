@@ -115,12 +115,12 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         OptionItem sourcesOption = UiOptionItem.from(getContext().getString(R.string.sources),
                 option -> Utils.openLink(getContext(), Utils.toQrCodeLink(getContext().getString(R.string.sources_url))));
 
-        OptionItem webSiteOption = UiOptionItem.from(getContext().getString(R.string.web_site),
-                option -> Utils.openLink(getContext(), Utils.toQrCodeLink(getContext().getString(R.string.web_site_url))));
+        //OptionItem webSiteOption = UiOptionItem.from(getContext().getString(R.string.web_site),
+        //        option -> Utils.openLink(getContext(), Utils.toQrCodeLink(getContext().getString(R.string.web_site_url))));
 
         settingsPresenter.appendSingleButton(releasesOption);
         settingsPresenter.appendSingleButton(sourcesOption);
-        settingsPresenter.appendSingleButton(webSiteOption);
+        //settingsPresenter.appendSingleButton(webSiteOption);
     }
 
     private void appendDonation(AppDialogPresenter settingsPresenter) {
