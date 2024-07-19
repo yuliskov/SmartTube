@@ -16,6 +16,7 @@ package androidx.leanback.app;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -232,8 +233,12 @@ public class SearchSupportFragment extends Fragment {
             new SearchBar.SearchBarPermissionListener() {
         @Override
         public void requestAudioPermission() {
-            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO},
-                    AUDIO_PERMISSION_REQUEST_CODE);
+            try {
+                requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO},
+                        AUDIO_PERMISSION_REQUEST_CODE);
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     };
 

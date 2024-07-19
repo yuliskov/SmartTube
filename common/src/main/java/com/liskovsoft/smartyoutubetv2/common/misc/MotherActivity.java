@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.KeyCharacterMap.UnavailableException;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import androidx.annotation.NonNull;
@@ -99,6 +100,7 @@ public class MotherActivity extends FragmentActivity {
             return super.dispatchTouchEvent(event);
         } catch (NullPointerException e) {
             // Attempt to invoke interface method 'boolean android.app.trust.ITrustManager.isDeviceLocked(int)' on a null object reference
+            e.printStackTrace();
             return false;
         }
     }
@@ -120,7 +122,7 @@ public class MotherActivity extends FragmentActivity {
 
         try {
             return super.dispatchKeyEvent(event);
-        } catch (IllegalStateException | SecurityException e) {
+        } catch (IllegalStateException | SecurityException | UnavailableException e) {
             // Fatal Exception: java.lang.IllegalStateException
             // android.permission.RECORD_AUDIO required for search (Android 5 mostly)
             // Fatal Exception: java.lang.SecurityException
