@@ -659,8 +659,8 @@
   <string name="pinned_channel_rows">A rögzített csatorna megjelenítése soronként</string>
   <string name="prefer_ipv4">IPv4 DNS előnyben részesítése</string>
   <string name="prefer_ipv4_desc">Kijavíthatja azokat a helyzeteket, amikor az alkalmazás egyáltalán nem működik.\nMegjegyzés. Lefagyást és összeomlást okozhat (különösen Android 8 vagy Dune HD eszközökön)</string>
-  <string name="long_press_for_settings">A BEÁLLÍTÁSOKHOZ HOSSZAN NYOMJA MEG</string>
-  <string name="long_press_for_options">HOGYAN NYOMJA MEG AZ OPCIÓKHOZ</string>
+  <string name="long_press_for_settings">HOSSZAN MEGNYOMVA: Beállítások</string>
+  <string name="long_press_for_options">HOSSZAN MEGNYOMVA: Opciók</string>
   <string name="device_specific_backup">Biztonsági mentés csak ehhez az eszközhöz</string>
   <string name="local_backup">Helyi biztonsági mentés</string>
   <string name="auto_backup">Automatikus biztonsági mentés (naponta egyszer)</string>
