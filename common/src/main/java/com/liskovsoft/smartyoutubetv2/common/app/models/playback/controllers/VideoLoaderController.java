@@ -400,6 +400,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         }
 
         mLastErrorType = type;
+        mLastErrorTimeMs = currentTimeMillis;
     }
 
     @SuppressLint("StringFormatMatches")
