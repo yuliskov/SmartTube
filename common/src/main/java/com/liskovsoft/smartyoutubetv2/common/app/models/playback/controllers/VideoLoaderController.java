@@ -57,9 +57,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             waitMetadataSync(getPlayer().getVideo(), false);
         }
     };
-    private final Runnable mFixAndRestartEngine = () -> {
+    private final Runnable mRestartEngine = () -> {
         if (getPlayer() != null) {
-            YouTubeServiceManager.instance().invalidateCache();
             getPlayer().restartEngine(); // properly save position of the current track
         }
     };
@@ -121,7 +120,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         } else {
             updateErrorCounter(-1);
             if (mErrorCount > 2) {
-                YouTubeServiceManager.instance().applyVideoInfoFix();
+                YouTubeServiceManager.instance().applyNoPlaybackFix();
             }
         }
     }
@@ -230,7 +229,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             getPlayer().setVideo(mLastVideo);
         }
 
-        Utils.removeCallbacks(mFixAndRestartEngine);
+        Utils.removeCallbacks(mRestartEngine);
         Utils.removeCallbacks(mOnLongBuffering);
 
         return false;
@@ -387,7 +386,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private void disposeActions() {
         MediaServiceManager.instance().disposeActions();
         RxHelper.disposeActions(mFormatInfoAction, mMpdStreamAction);
-        Utils.removeCallbacks(mReloadVideo, mLoadNext, mFixAndRestartEngine, mMetadataSync);
+        Utils.removeCallbacks(mReloadVideo, mLoadNext, mRestartEngine, mMetadataSync);
         Utils.removeCallbacks(mOnLongBuffering);
     }
 
@@ -406,6 +405,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     @SuppressLint("StringFormatMatches")
     private void runErrorAction(int type, int rendererIndex, Throwable error) {
         String message = error != null ? error.getMessage() : null;
+
+        YouTubeServiceManager.instance().invalidatePlaybackCache();
 
         switch (type) {
             // Some ciphered data could be outdated.
@@ -490,16 +491,16 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 "Unable to connect to", "Invalid NAL length", "Response code: 421", "Invalid integer size")) {
             // Switch between network engines in hope that one of them fixes the error
             //mPlayerTweaksData.setPlayerDataSource(getNextEngine());
-            YouTubeServiceManager.instance().applyVideoInfoFix();
+            YouTubeServiceManager.instance().applyNoPlaybackFix();
         } else if (Helpers.startsWithAny(error.getMessage(), "Response code: 403")) {
             // "Response code: 403" is related to outdated VISITOR_INFO1_LIVE cookie
-            YouTubeServiceManager.instance().applyVideoInfoFix();
+            YouTubeServiceManager.instance().applyNoPlaybackFix();
         }
     }
 
     private void restartEngine() {
         // Give a time to user to do something
-        Utils.postDelayed(mFixAndRestartEngine, 5_000);
+        Utils.postDelayed(mRestartEngine, 5_000);
     }
 
     private List<String> applyFix(List<String> urlList) {
