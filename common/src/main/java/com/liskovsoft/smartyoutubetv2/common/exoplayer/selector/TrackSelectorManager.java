@@ -403,7 +403,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         mSelectedTracks[rendererIndex] = track;
 
-        if (mRenderers[rendererIndex] == null || mRenderers[rendererIndex].mediaTracks == null) {
+        if (mRenderers[rendererIndex] == null || mRenderers[rendererIndex].mediaTracks == null || mRenderers[rendererIndex].sortedTracks == null) {
             Log.e(TAG, "Renderer isn't initialized. Waiting for later selection...");
             return;
         }
