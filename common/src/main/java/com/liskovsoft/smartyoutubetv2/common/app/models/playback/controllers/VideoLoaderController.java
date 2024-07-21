@@ -119,10 +119,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             getMainController().onPlayEnd();
         } else {
             updateErrorCounter(-1);
-            if (mErrorCount > 2) {
+            if (mErrorCount > 1) {
                 // Switch between network engines in hope that one of them fixes the error
-                //mPlayerTweaksData.setPlayerDataSource(getNextEngine());
-                YouTubeServiceManager.instance().applyNoPlaybackFix();
+                // Cronet engine do less buffering
+                mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
                 restartEngine();
             }
         }
