@@ -120,7 +120,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         } else {
             updateErrorCounter(-1);
             if (mErrorCount > 2) {
+                // Switch between network engines in hope that one of them fixes the error
+                //mPlayerTweaksData.setPlayerDataSource(getNextEngine());
                 YouTubeServiceManager.instance().applyNoPlaybackFix();
+                restartEngine();
             }
         }
     }
