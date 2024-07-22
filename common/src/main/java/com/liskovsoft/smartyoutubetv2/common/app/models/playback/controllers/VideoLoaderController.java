@@ -302,9 +302,16 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribe(this::processFormatInfo,
                            error -> {
-                               Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
-                               Log.e(TAG, "Probably no internet connection");
-                               scheduleReloadVideoTimer(1_000);
+                               String message = error.getMessage();
+                               MessageHelpers.showLongMessage(getContext(), message);
+                               Log.e(TAG, "loadFormatInfo error: %s", message);
+                               if (message != null && message.contains("Unexpected token")) { // temporal fix
+                                   YouTubeServiceManager.instance().applyNoPlaybackFix();
+                                   restartEngine();
+                               } else {
+                                   Log.e(TAG, "Probably no internet connection");
+                                   scheduleReloadVideoTimer(1_000);
+                               }
                            });
     }
 
@@ -409,8 +416,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private void runErrorAction(int type, int rendererIndex, Throwable error) {
         String message = error != null ? error.getMessage() : null;
 
-        YouTubeServiceManager.instance().invalidatePlaybackCache();
-
         switch (type) {
             // Some ciphered data could be outdated.
             // Might happen when the app wasn't used quite a long time.
@@ -430,6 +435,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         }
 
         applyGenericErrorAction(error);
+
+        YouTubeServiceManager.instance().invalidatePlaybackCache();
 
         restartEngine();
     }
