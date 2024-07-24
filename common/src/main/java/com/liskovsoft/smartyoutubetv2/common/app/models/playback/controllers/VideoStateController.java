@@ -145,7 +145,7 @@ public class VideoStateController extends PlayerEventListenerHelper {
         }
 
         // Sync history every five minutes
-        if (++mTickleLeft > 5) {
+        if (++mTickleLeft > 5 && getPlayer().isPlaying()) {
             mTickleLeft = 0;
             updateHistory();
         }
@@ -474,7 +474,7 @@ public class VideoStateController extends PlayerEventListenerHelper {
         Video video = getVideo();
 
         if (video == null || (video.isShorts && mGeneralData.isHideShortsFromHistoryEnabled()) ||
-                mIncognito || !getPlayer().containsMedia() || (video.isRemote && mRemoteControlData.isRemoteHistoryDisabled())) {
+                mIncognito || getPlayer() == null || !getPlayer().containsMedia() || (video.isRemote && mRemoteControlData.isRemoteHistoryDisabled())) {
             return;
         }
 

@@ -43,8 +43,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private final Playlist mPlaylist;
     private final UniqueRandom mRandom;
     private Video mLastVideo;
-    private int mLastError = -1;
-    private long mPrevErrorTimeMs;
+    private int mLastErrorType = -1;
+    private long mLastErrorTimeMs;
+    private int mErrorCount;
     private SuggestionsController mSuggestionsController;
     private PlayerData mPlayerData;
     private PlayerTweaksData mPlayerTweaksData;
@@ -58,9 +59,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             waitMetadataSync(getPlayer().getVideo(), false);
         }
     };
-    private final Runnable mFixAndRestartEngine = () -> {
+    private final Runnable mRestartEngine = () -> {
         if (getPlayer() != null) {
-            YouTubeServiceManager.instance().invalidateCache();
             getPlayer().restartEngine(); // properly save position of the current track
         }
     };
@@ -125,8 +125,13 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
         } else {
-            // Switch between network engines in hope that one of them fixes the buffering
-            mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+            updateErrorCounter(-1);
+            if (mErrorCount > 1) {
+                // Switch between network engines in hope that one of them fixes the error
+                // Cronet engine do less buffering
+                mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
+                restartEngine();
+            }
         }
     }
 
@@ -146,8 +151,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     public void onEngineError(int type, int rendererIndex, Throwable error) {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
 
-        mLastError = type;
-
+        updateErrorCounter(type);
         runErrorAction(type, rendererIndex, error);
         if (!mIsWasVideoStartError && mLastVideo != null) {
             Analytics.sendVideoStartError(mLastVideo.videoId,
@@ -159,7 +163,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
     @Override
     public void onVideoLoaded(Video video) {
-        mLastError = -1;
+        mLastErrorType = -1;
         Utils.removeCallbacks(mOnLongBuffering);
         getPlayer().setButtonState(R.id.action_repeat, video.finishOnEnded ? PlayerEngineConstants.REPEAT_MODE_CLOSE : mPlayerData.getRepeatMode());
     }
@@ -241,7 +245,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             getPlayer().setVideo(mLastVideo);
         }
 
-        Utils.removeCallbacks(mFixAndRestartEngine);
+        Utils.removeCallbacks(mRestartEngine);
         Utils.removeCallbacks(mOnLongBuffering);
 
         return false;
@@ -311,9 +315,16 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribe(this::processFormatInfo,
                            error -> {
-                               Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
-                               Log.e(TAG, "Probably no internet connection");
-                               scheduleReloadVideoTimer(1_000);
+                               String message = error.getMessage();
+                               MessageHelpers.showLongMessage(getContext(), message);
+                               Log.e(TAG, "loadFormatInfo error: %s", message);
+                               if (message != null && message.contains("Unexpected token")) { // temporal fix
+                                   YouTubeServiceManager.instance().applyNoPlaybackFix();
+                                   restartEngine();
+                               } else {
+                                   Log.e(TAG, "Probably no internet connection");
+                                   scheduleReloadVideoTimer(1_000);
+                               }
                                if (!mIsWasVideoStartError) {
                                    Analytics.sendVideoStartError(video.videoId,
                                            video.title,
@@ -396,15 +407,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         }
     }
 
-    private boolean isWithinTimeWindow() {
-        // Restart once per n seconds
-        long currentTimeMillis = System.currentTimeMillis();
-        boolean withinTimeWindow = currentTimeMillis - mPrevErrorTimeMs > 10_000;
-        mPrevErrorTimeMs = currentTimeMillis;
-
-        return withinTimeWindow;
-    }
-
     private void openVideoInt(Video item) {
         if (item == null) {
             return;
@@ -429,8 +431,20 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private void disposeActions() {
         MediaServiceManager.instance().disposeActions();
         RxHelper.disposeActions(mFormatInfoAction, mMpdStreamAction);
-        Utils.removeCallbacks(mReloadVideo, mLoadNext, mFixAndRestartEngine, mMetadataSync);
+        Utils.removeCallbacks(mReloadVideo, mLoadNext, mRestartEngine, mMetadataSync);
         Utils.removeCallbacks(mOnLongBuffering);
+    }
+
+    private void updateErrorCounter(int type) {
+        long currentTimeMillis = System.currentTimeMillis();
+        if (currentTimeMillis - mLastErrorTimeMs < 60_000 && mLastErrorType == type) {
+            mErrorCount++;
+        } else {
+            mErrorCount = 1;
+        }
+
+        mLastErrorType = type;
+        mLastErrorTimeMs = currentTimeMillis;
     }
 
     @SuppressLint("StringFormatMatches")
@@ -456,6 +470,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         }
 
         applyGenericErrorAction(error);
+
+        YouTubeServiceManager.instance().invalidatePlaybackCache();
 
         restartEngine();
     }
@@ -511,25 +527,30 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
     private void applyGenericErrorAction(Throwable error) {
         if (error instanceof OutOfMemoryError) {
-            mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
+            if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
+                mPlayerTweaksData.enableSectionPlaylist(false);
+            } else {
+                mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
+            }
         } else if (Helpers.startsWithAny(error.getMessage(),
                 "Unable to connect to", "Invalid NAL length", "Response code: 421", "Invalid integer size")) {
             // Switch between network engines in hope that one of them fixes the error
-            mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+            //mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+            YouTubeServiceManager.instance().applyNoPlaybackFix();
         } else if (Helpers.startsWithAny(error.getMessage(), "Response code: 403")) {
             // "Response code: 403" is related to outdated VISITOR_INFO1_LIVE cookie
-            YouTubeServiceManager.instance().applyVideoInfoFix();
+            YouTubeServiceManager.instance().applyNoPlaybackFix();
         }
     }
 
     private void restartEngine() {
         // Give a time to user to do something
-        Utils.postDelayed(mFixAndRestartEngine, 5_000);
+        Utils.postDelayed(mRestartEngine, 5_000);
     }
 
     private List<String> applyFix(List<String> urlList) {
         // Sometimes top url cannot be played
-        if (mLastError == PlayerEventListener.ERROR_TYPE_SOURCE) {
+        if (mLastErrorType == PlayerEventListener.ERROR_TYPE_SOURCE) {
             Collections.reverse(urlList);
         }
 

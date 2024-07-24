@@ -88,6 +88,7 @@ public final class Video {
     public boolean deArrowProcessed;
     public boolean isLiveEnd;
     private int startSegmentNum;
+    private long liveDurationMs;
     private WeakReference<VideoGroup> group; // Memory leak fix. Used to get next page when scrolling.
     public List<NotificationState> notificationStates;
 
@@ -715,8 +716,13 @@ public final class Video {
             return 0;
         }
 
+        // Disable updates if stream ended while watching
+        if (!isLive) {
+            return liveDurationMs;
+        }
+
         // Is stream real length may exceeds calculated length???
-        long liveDurationMs = System.currentTimeMillis() - startTimeMs;
+        liveDurationMs = System.currentTimeMillis() - startTimeMs;
         return liveDurationMs > 0 ? liveDurationMs : 0;
     }
 

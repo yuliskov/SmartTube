@@ -2,6 +2,6 @@
 <resources>
     <string-array name="feedback">
         <item>Telegram|https://t.me/SmartTubeEN</item>
-        <item>Email|firsthash@gmail.com</item>
+        <!--<item>Email|firsthash@gmail.com</item>-->
     </string-array>
 </resources>
