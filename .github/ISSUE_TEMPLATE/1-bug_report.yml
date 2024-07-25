@@ -82,7 +82,7 @@ body:
       label: Additional information
       description: |
         Any other information you'd like to include, for instance that
-        * app logcat
+        * Device (NVIDIA Sheild, Xiaomi Mi Box, etc)
         * screenshot
         * your cat disabled your network connection
         * ...
