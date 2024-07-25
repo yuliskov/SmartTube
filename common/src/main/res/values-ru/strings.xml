@@ -658,5 +658,6 @@
     <string name="local_backup">Локальное резервное копирование</string>
     <string name="auto_backup">Автоматическое резервное копирование (раз в день)</string>
     <string name="repeat_mode_reverse_list">Воспроизвести плейлист или видео с канала в обратном порядке</string>
+    <string name="calm_msg">Мы решаем проблему. Время от времени проверяйте обновления</string>
     <string name="cancel">Отмена</string>
 </resources>

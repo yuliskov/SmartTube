@@ -522,7 +522,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 msgResId = R.string.unknown_renderer_error;
         }
 
-        MessageHelpers.showLongMessage(getContext(), getContext().getString(msgResId) + "\n" + message);
+        MessageHelpers.showLongMessage(getContext(), getContext().getString(msgResId) + "\n" + message + "\n" + getContext().getString(R.string.calm_msg));
     }
 
     private void applyGenericErrorAction(Throwable error) {
