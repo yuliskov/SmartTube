@@ -30,7 +30,7 @@ body:
     attributes:
      label: Affected version
      description: "In which SmartTube version did you encounter the bug?"
-     placeholder: "x.xx.x - Can be seen in the app from the 'About' section in the sidebar"
+     placeholder: "x.xx.x - Can be seen in the app from the 'About' section in Settings"
     validations:
       required: true
 
@@ -82,7 +82,7 @@ body:
       label: Additional information
       description: |
         Any other information you'd like to include, for instance that
-        * Device (NVIDIA Sheild, Xiaomi Mi Box, etc)
+        * Device (NVIDIA Shield, Xiaomi Mi Box, etc)
         * screenshot
         * your cat disabled your network connection
         * ...
