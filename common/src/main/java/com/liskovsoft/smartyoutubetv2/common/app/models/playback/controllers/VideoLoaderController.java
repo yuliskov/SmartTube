@@ -508,6 +508,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         } else if (Helpers.startsWithAny(error.getMessage(), "Response code: 403")) {
             // "Response code: 403" is related to outdated VISITOR_INFO1_LIVE cookie
             YouTubeServiceManager.instance().applyNoPlaybackFix();
+        } else if (Helpers.startsWithAny(error.getMessage(), "Response code: 500")) {
+            // Subs error
+            if (mLastVideo != null) {
+                mPlayerData.disableSubtitlesPerChannel(mLastVideo.channelId);
+                mPlayerData.setFormat(mPlayerData.getDefaultSubtitleFormat());
+            }
         }
     }
 
