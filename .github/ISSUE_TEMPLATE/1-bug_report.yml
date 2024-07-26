@@ -41,7 +41,7 @@ body:
       description: Is it Smart TV/Box or Phone
       options:
         - "Smart TV/Box"
-        - "Phone"
+        - "Phone/Tablet"
     validations:
       required: true
 
