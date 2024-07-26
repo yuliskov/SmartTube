@@ -303,9 +303,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 .subscribe(this::processFormatInfo,
                            error -> {
                                String message = error.getMessage();
-                               MessageHelpers.showLongMessage(getContext(), message);
                                Log.e(TAG, "loadFormatInfo error: %s", message);
-                               if (message != null && message.contains("Unexpected token")) { // temporal fix
+                               if (!Helpers.containsAny(message, "fromNullable result is null")) {
+                                   MessageHelpers.showLongMessage(getContext(), message);
+                               }
+
+                               if (Helpers.containsAny(message, "Unexpected token", "Syntax error")) { // temporal fix
                                    YouTubeServiceManager.instance().applyNoPlaybackFix();
                                    restartEngine();
                                } else {
@@ -487,7 +490,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 msgResId = R.string.unknown_renderer_error;
         }
 
-        MessageHelpers.showLongMessage(getContext(), getContext().getString(msgResId) + "\n" + message + "\n" + getContext().getString(R.string.calm_msg));
+        MessageHelpers.showLongMessage(getContext(), getContext().getString(msgResId) + "\n" + message);
     }
 
     private void applyGenericErrorAction(Throwable error) {

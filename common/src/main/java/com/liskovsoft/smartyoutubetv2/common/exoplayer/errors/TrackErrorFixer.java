@@ -117,104 +117,104 @@ public class TrackErrorFixer extends DefaultMediaSourceEventListener {
         return false;
     }
 
-    private boolean selectNextTrack() {
-        if (mLastEx == null) {
-            return false;
-        }
-
-        if (System.currentTimeMillis() - mSelectionTimeMs < BLACKLIST_CLEAR_MS) {
-            return false;
-        }
-
-        Set<MediaTrack> tracks = isAudio(mLastEx) ? mTrackSelectorManager.getAudioTracks() : mTrackSelectorManager.getVideoTracks();
-
-        if (tracks == null) {
-            return false;
-        }
-
-        MediaTrack nextTrack = null;
-        boolean afterSelected = false;
-
-        for (MediaTrack track : tracks) {
-            if (track.isSelected) {
-                afterSelected = true;
-                continue;
-            }
-
-            if (afterSelected) {
-                nextTrack = track;
-                break;
-            }
-        }
-
-        if (nextTrack != null) {
-            mTrackSelectorManager.selectTrack(nextTrack);
-            return true;
-        }
-
-        mSelectionTimeMs = System.currentTimeMillis();
-        return false;
-    }
-
-    private boolean selectNextTrackOld() {
-        if (mLastEx == null) {
-            return false;
-        }
-
-        if (System.currentTimeMillis() - mSelectionTimeMs > BLACKLIST_CLEAR_MS) {
-            mBlacklistedTracks.clear();
-        }
-
-        Set<MediaTrack> tracks = isAudio(mLastEx) ? mTrackSelectorManager.getAudioTracks() : mTrackSelectorManager.getVideoTracks();
-        MediaTrack tmpTrack = null;
-
-        if (tracks == null) {
-            return false;
-        }
-
-        for (MediaTrack track : tracks) {
-            if (track.isSelected) {
-                addToBlacklist(track);
-            } else {
-                tmpTrack = track;
-                if (!isBlacklisted(track)) {
-                    addToBlacklist(track);
-                    break;
-                }
-            }
-        }
-
-        if (tmpTrack != null) {
-            mTrackSelectorManager.selectTrack(tmpTrack);
-            mSelectionTimeMs = System.currentTimeMillis();
-            //Utils.postDelayed(mHandler, mSelectFirstTrack, SELECT_FIRST_TRACK_MS);
-            return true;
-        }
-
-        return false;
-    }
-
-    private void selectFirstTrack() {
-        if (mLastEx == null) {
-            return;
-        }
-
-        mBlacklistedTracks.clear();
-
-        Set<MediaTrack> tracks = isAudio(mLastEx) ? mTrackSelectorManager.getAudioTracks() : mTrackSelectorManager.getVideoTracks();
-        MediaTrack tmpTrack = null;
-
-        for (MediaTrack track : tracks) {
-            addToBlacklist(track);
-            tmpTrack = track;
-            break;
-        }
-
-        if (tmpTrack != null) {
-            mTrackSelectorManager.selectTrack(tmpTrack);
-            mSelectionTimeMs = System.currentTimeMillis();
-        }
-    }
+    //private boolean selectNextTrack() {
+    //    if (mLastEx == null) {
+    //        return false;
+    //    }
+    //
+    //    if (System.currentTimeMillis() - mSelectionTimeMs < BLACKLIST_CLEAR_MS) {
+    //        return false;
+    //    }
+    //
+    //    Set<MediaTrack> tracks = isAudio(mLastEx) ? mTrackSelectorManager.getAudioTracks() : mTrackSelectorManager.getVideoTracks();
+    //
+    //    if (tracks == null) {
+    //        return false;
+    //    }
+    //
+    //    MediaTrack nextTrack = null;
+    //    boolean afterSelected = false;
+    //
+    //    for (MediaTrack track : tracks) {
+    //        if (track.isSelected) {
+    //            afterSelected = true;
+    //            continue;
+    //        }
+    //
+    //        if (afterSelected) {
+    //            nextTrack = track;
+    //            break;
+    //        }
+    //    }
+    //
+    //    if (nextTrack != null) {
+    //        mTrackSelectorManager.selectTrack(nextTrack);
+    //        return true;
+    //    }
+    //
+    //    mSelectionTimeMs = System.currentTimeMillis();
+    //    return false;
+    //}
+    //
+    //private boolean selectNextTrackOld() {
+    //    if (mLastEx == null) {
+    //        return false;
+    //    }
+    //
+    //    if (System.currentTimeMillis() - mSelectionTimeMs > BLACKLIST_CLEAR_MS) {
+    //        mBlacklistedTracks.clear();
+    //    }
+    //
+    //    Set<MediaTrack> tracks = isAudio(mLastEx) ? mTrackSelectorManager.getAudioTracks() : mTrackSelectorManager.getVideoTracks();
+    //    MediaTrack tmpTrack = null;
+    //
+    //    if (tracks == null) {
+    //        return false;
+    //    }
+    //
+    //    for (MediaTrack track : tracks) {
+    //        if (track.isSelected) {
+    //            addToBlacklist(track);
+    //        } else {
+    //            tmpTrack = track;
+    //            if (!isBlacklisted(track)) {
+    //                addToBlacklist(track);
+    //                break;
+    //            }
+    //        }
+    //    }
+    //
+    //    if (tmpTrack != null) {
+    //        mTrackSelectorManager.selectTrack(tmpTrack);
+    //        mSelectionTimeMs = System.currentTimeMillis();
+    //        //Utils.postDelayed(mHandler, mSelectFirstTrack, SELECT_FIRST_TRACK_MS);
+    //        return true;
+    //    }
+    //
+    //    return false;
+    //}
+    //
+    //private void selectFirstTrack() {
+    //    if (mLastEx == null) {
+    //        return;
+    //    }
+    //
+    //    mBlacklistedTracks.clear();
+    //
+    //    Set<MediaTrack> tracks = isAudio(mLastEx) ? mTrackSelectorManager.getAudioTracks() : mTrackSelectorManager.getVideoTracks();
+    //    MediaTrack tmpTrack = null;
+    //
+    //    for (MediaTrack track : tracks) {
+    //        addToBlacklist(track);
+    //        tmpTrack = track;
+    //        break;
+    //    }
+    //
+    //    if (tmpTrack != null) {
+    //        mTrackSelectorManager.selectTrack(tmpTrack);
+    //        mSelectionTimeMs = System.currentTimeMillis();
+    //    }
+    //}
 
     private boolean isAudio(InvalidResponseCodeException ex) {
         String url = ex.dataSpec.uri.toString();
