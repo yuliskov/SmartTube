@@ -665,4 +665,5 @@
     <string name="local_backup">Backup locale</string>
     <string name="auto_backup">Backup automatico (una volta al giorno)</string>
     <string name="repeat_mode_reverse_list">Riproduci la playlist o i video dei canali in ordine inverso</string>
+    <string name="calm_msg">Stiamo lavorando per risolvere il problema. Controlla gli aggiornamenti regolarmente</string>
 </resources>
