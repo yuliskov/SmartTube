@@ -665,4 +665,5 @@
   <string name="speech_engine">Moteur de recherche vocale</string>
   <string name="unknown_source_error">Erreur de source inconnue</string>
   <string name="unknown_renderer_error">Erreur de rendu inconnue</string>
+  <string name="calm_msg">Nous sommes en train de résoudre le problème. Vérifiez les mises à jour de temps à autre</string>
 </resources>
