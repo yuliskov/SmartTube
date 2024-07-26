@@ -308,7 +308,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                                    MessageHelpers.showLongMessage(getContext(), message);
                                }
 
-                               if (Helpers.containsAny(message, "Unexpected token", "Syntax error")) { // temporal fix
+                               if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument")) { // temporal fix
                                    YouTubeServiceManager.instance().applyNoPlaybackFix();
                                    restartEngine();
                                } else {
