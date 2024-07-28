@@ -520,7 +520,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
     private void restartEngine() {
         // Give a time to user to do something
-        Utils.postDelayed(mRestartEngine, 5_000);
+        Utils.postDelayed(mRestartEngine, 1_000);
     }
 
     private List<String> applyFix(List<String> urlList) {
