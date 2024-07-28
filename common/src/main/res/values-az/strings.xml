@@ -490,6 +490,7 @@
     <string name="time_format_12">12 saat (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Ciddi xarabdır. Onu yalnız standart tanıyıcı ilə probleminiz varsa istifadə edin.</string>
     <string name="speech_recognizer">Nitq tanıyıcısı</string>
+    <string name="speech_engine">Səsli axtarış hərəkətvericisi</string>
     <string name="speech_recognizer_system">Sistem (üstünlük verilir)</string>
     <string name="speech_recognizer_external_1">Xarici 1 (ciddi səhvdir, işləməsi üçün mikrofona girişi söndürməlisiniz)</string>
     <string name="speech_recognizer_external_2">Xarici 2 (ciddi səhvdir)</string>
@@ -609,6 +610,8 @@
     <string name="remember_position_subscriptions">Abunəliklərdə son baxılan mövqeyi yadda saxla</string>
     <string name="remember_position_pinned">Saxlanmış pleylistlərdə sonuncu baxılmış mövqeyi yadda saxla</string>
     <string name="msg_player_unknown_error">Naməlum xəta</string>
+    <string name="unknown_source_error">Naməlum mənbə xətası</string>
+    <string name="unknown_renderer_error">Naməlum göstərmə xətası</string>
     <string name="header_notifications">Bildirişlər</string>
     <string name="disable_search_history">Axtarış tarixçəsini söndür</string>
     <string name="unlock_high_bitrate_formats">Yüksək bit sürətli 1080p vp9 formatlarının kilidini açın</string>
@@ -661,4 +664,7 @@
     <string name="long_press_for_options">SEÇİMLƏR ÜÇÜN BASIB SAXLAYIN</string>
     <string name="device_specific_backup">Yalnız bu cihaz üçün ehtiyyatda saxlayın</string>
     <string name="local_backup">Yerli ehtiyyat nüsxəsi</string>
+    <string name="auto_backup">Avtomatik ehtiyat nüsxəsi (gündə bir dəfə)</string>
+    <string name="repeat_mode_reverse_list">Pleylist və ya kanal videolarını tərs qaydada oynadın</string>
+    <string name="calm_msg">Problemi həll edirik. Vaxt aşırı yeniləmələri yoxlayın</string>  
 </resources>
