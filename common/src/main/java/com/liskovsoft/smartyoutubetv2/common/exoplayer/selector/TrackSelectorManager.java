@@ -645,7 +645,15 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         // Tracks are grouped by the language/formats
         for (MediaTrack[] trackGroup : trackGroupList) {
             if (trackGroup != null && trackGroup.length >= 1) {
-                MediaTrack mediaTrack = trackGroup[0];
+                MediaTrack mediaTrack = null;
+
+                // All tracks in the group have same language. Pick up first non empty.
+                for (MediaTrack track : trackGroup) {
+                    if (track != null) {
+                        mediaTrack = track;
+                        break;
+                    }
+                }
 
                 if (mediaTrack != null && mediaTrack.format != null) {
                     if (Helpers.startsWith(mediaTrack.format.language, resultLanguage)) { // format language: en-us
