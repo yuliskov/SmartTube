@@ -62,6 +62,10 @@
         tools:replace="android:theme,android:allowBackup"
         tools:ignore="GoogleAppIndexingWarning,LockedOrientationActivity,UnusedAttribute">
 
+        <meta-data
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.widgets.glide.LimitCacheSizeGlideModule"
+            android:value="AppGlideModule" />
+
         <!-- Screen Mirror (e.g. DIAL) for Amazon TV -->
         <!-- Not implemented yet( -->
         <!--<meta-data android:name="whisperplay" android:resource="@xml/whisperplay"/>-->
