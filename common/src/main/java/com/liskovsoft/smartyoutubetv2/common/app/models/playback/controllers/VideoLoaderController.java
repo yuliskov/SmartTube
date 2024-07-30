@@ -502,7 +502,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             }
         } else if (Helpers.startsWithAny(error.getMessage(),
                 "Unable to connect to", "Invalid NAL length", "Response code: 421",
-                "Invalid integer size", "Unexpected ArrayIndexOutOfBoundsException")) {
+                "Response code: 404", "Response code: 429", "Invalid integer size",
+                "Unexpected ArrayIndexOutOfBoundsException")) {
             // Switch between network engines in hope that one of them fixes the error
             //mPlayerTweaksData.setPlayerDataSource(getNextEngine());
             YouTubeServiceManager.instance().applyNoPlaybackFix();
