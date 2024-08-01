@@ -38,6 +38,7 @@ import java.util.List;
 public class VideoLoaderController extends PlayerEventListenerHelper implements OnDataChange {
     private static final String TAG = VideoLoaderController.class.getSimpleName();
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
+    private static final long LONG_BUFFERING_THRESHOLD_MS = 20_000;
     private final Playlist mPlaylist;
     private final UniqueRandom mRandom;
     private Video mLastVideo;
@@ -103,7 +104,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
     @Override
     public void onBuffering() {
-        Utils.postDelayed(mOnLongBuffering, 10_000);
+        Utils.postDelayed(mOnLongBuffering, LONG_BUFFERING_THRESHOLD_MS);
     }
 
     private void onLongBuffering() {
