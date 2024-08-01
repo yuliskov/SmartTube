@@ -423,11 +423,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     }
 
     private String getFormatId(Format video) {
-        String id = video.id;
-        if (Helpers.isNumeric(id)) {
-            return id;
-        }
-        return null;
+        return video.id;
     }
 
     private String getFormatMimeType(Format video) {
