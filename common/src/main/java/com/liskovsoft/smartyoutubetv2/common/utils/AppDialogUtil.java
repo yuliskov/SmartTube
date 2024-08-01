@@ -24,8 +24,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
@@ -272,6 +275,13 @@ public class AppDialogUtil {
                     option -> setFormat(preset.format, playerData, onFormatSelected),
                     isPresetSelection && preset.format.equals(selectedFormat)));
         }
+
+        FormatItem noVideo = ExoFormatItem.from(MediaTrack.forRendererIndex(TrackSelectorManager.RENDERER_INDEX_VIDEO), true);
+        result.add(0, UiOptionItem.from(
+                context.getString(R.string.without_picture),
+                optionItem ->
+                        setFormat(noVideo, playerData, onFormatSelected),
+                isPresetSelection && Helpers.equals(noVideo, selectedFormat)));
 
         result.add(0, UiOptionItem.from(
                 context.getString(R.string.video_preset_disabled),

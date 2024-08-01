@@ -692,6 +692,10 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         return formatItem != null ? formatItem : FormatItem.VIDEO_HD_AVC_30;
     }
 
+    public FormatItem getDefaultSubtitleFormat() {
+        return FormatItem.SUBTITLE_NONE;
+    }
+
     public int getStartSeekIncrementMs() {
         return mStartSeekIncrementMs;
     }
@@ -753,7 +757,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
             mVideoFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 9)), FormatItem.VIDEO_HD_AVC_30);
         }
         mAudioFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 10)), getDefaultAudioFormat());
-        mSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 11)), FormatItem.SUBTITLE_NONE);
+        mSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 11)), getDefaultSubtitleFormat());
         mVideoBufferType = Helpers.parseInt(split, 12, PlayerEngine.BUFFER_LOW);
         mSubtitleStyleIndex = Helpers.parseInt(split, 13, 4); // yellow on semi bg
         mVideoZoomMode = Helpers.parseInt(split, 14, PlayerEngine.ZOOM_MODE_DEFAULT);

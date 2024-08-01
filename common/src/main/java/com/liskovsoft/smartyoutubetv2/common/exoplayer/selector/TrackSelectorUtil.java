@@ -55,8 +55,8 @@ public class TrackSelectorUtil {
             trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(buildResolutionShortString(format),
                     buildFPSString(format)), buildBitrateString(format)), extractCodec(format)), buildHDRString(format)), buildHighBitrateMark(format));
         } else if (MimeTypes.isAudio(format.sampleMimeType)) {
-            trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(buildLanguageString(format),
-                    buildAudioPropertyString(format)), buildBitrateString(format)), extractCodec(format)), buildChannels(format));
+            trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(buildLanguageString(format),
+                    buildAudioPropertyString(format)), buildBitrateString(format)), extractCodec(format)), buildChannels(format)), buildDrcMark(format));
         } else if (MimeTypes.isText(format.sampleMimeType)) {
             trackName = buildLanguageString(format);
         } else {
@@ -178,6 +178,10 @@ public class TrackSelectorUtil {
 
     public static String buildChannels(Format format) {
         return is51Audio(format) ? "5.1" : "";
+    }
+
+    public static String buildDrcMark(Format format) {
+        return format != null && Helpers.endsWith(format.id, "drc") ? "DRC" : "";
     }
 
     public static boolean is51Audio(Format format) {

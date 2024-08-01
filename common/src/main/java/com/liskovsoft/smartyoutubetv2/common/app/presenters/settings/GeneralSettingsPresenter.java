@@ -568,12 +568,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.enableSelectChannelSection(option.isSelected()),
                 mGeneralData.isSelectChannelSectionEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_tooltips) + ": " + getContext().getString(R.string.long_press_for_options),
-                option -> {
-                    mGeneralData.enableFirstUseTooltip(option.isSelected());
-                    mRestartApp = true;
-                },
-                mGeneralData.isFirstUseTooltipEnabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.player_show_tooltips) + ": " + getContext().getString(R.string.long_press_for_options),
+        //        option -> {
+        //            mGeneralData.enableFirstUseTooltip(option.isSelected());
+        //            mRestartApp = true;
+        //        },
+        //        mGeneralData.isFirstUseTooltipEnabled()));
 
         //// Disable long press on buggy controllers.
         //options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),

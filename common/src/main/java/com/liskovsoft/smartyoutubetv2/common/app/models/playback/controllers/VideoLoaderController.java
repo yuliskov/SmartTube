@@ -316,9 +316,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 .subscribe(this::processFormatInfo,
                            error -> {
                                String message = error.getMessage();
-                               MessageHelpers.showLongMessage(getContext(), message);
                                Log.e(TAG, "loadFormatInfo error: %s", message);
-                               if (message != null && message.contains("Unexpected token")) { // temporal fix
+                               if (!Helpers.containsAny(message, "fromNullable result is null")) {
+                                   MessageHelpers.showLongMessage(getContext(), message);
+                               }
+
+                               if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument")) { // temporal fix
                                    YouTubeServiceManager.instance().applyNoPlaybackFix();
                                    restartEngine();
                                } else {
@@ -522,7 +525,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 msgResId = R.string.unknown_renderer_error;
         }
 
-        MessageHelpers.showLongMessage(getContext(), getContext().getString(msgResId) + "\n" + message + "\n" + getContext().getString(R.string.calm_msg));
+        MessageHelpers.showLongMessage(getContext(), getContext().getString(msgResId) + "\n" + message);
     }
 
     private void applyGenericErrorAction(Throwable error) {
@@ -533,19 +536,27 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
             }
         } else if (Helpers.startsWithAny(error.getMessage(),
-                "Unable to connect to", "Invalid NAL length", "Response code: 421", "Invalid integer size")) {
+                "Unable to connect to", "Invalid NAL length", "Response code: 421",
+                "Response code: 404", "Response code: 429", "Invalid integer size",
+                "Unexpected ArrayIndexOutOfBoundsException")) {
             // Switch between network engines in hope that one of them fixes the error
             //mPlayerTweaksData.setPlayerDataSource(getNextEngine());
             YouTubeServiceManager.instance().applyNoPlaybackFix();
         } else if (Helpers.startsWithAny(error.getMessage(), "Response code: 403")) {
             // "Response code: 403" is related to outdated VISITOR_INFO1_LIVE cookie
             YouTubeServiceManager.instance().applyNoPlaybackFix();
+        } else if (Helpers.startsWithAny(error.getMessage(), "Response code: 500")) {
+            // Subs error
+            if (mLastVideo != null) {
+                mPlayerData.disableSubtitlesPerChannel(mLastVideo.channelId);
+                mPlayerData.setFormat(mPlayerData.getDefaultSubtitleFormat());
+            }
         }
     }
 
     private void restartEngine() {
         // Give a time to user to do something
-        Utils.postDelayed(mRestartEngine, 5_000);
+        Utils.postDelayed(mRestartEngine, 1_000);
     }
 
     private List<String> applyFix(List<String> urlList) {

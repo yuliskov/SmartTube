@@ -49,6 +49,15 @@ public class ExoFormatItem implements FormatItem {
         return formats;
     }
 
+    public static ExoFormatItem from(MediaTrack track, boolean isPreset) {
+        if (track == null) {
+            return null;
+        }
+
+        track.isPreset = isPreset;
+        return from(track);
+    }
+
     public static ExoFormatItem from(MediaTrack track) {
         if (track == null) {
             return null;

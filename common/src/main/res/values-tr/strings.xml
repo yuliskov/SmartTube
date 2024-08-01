@@ -668,4 +668,5 @@
     <string name="auto_backup">Otomatik yedekleme (günde bir kez)</string>
     <string name="repeat_mode_reverse_list">Çalma listesini ters sırayla çal</string>
     <string name="calm_msg">Sorunu düzeltiyoruz. Zaman zaman güncellemeleri kontrol edin</string>
+    <string name="without_picture">Resimsiz</string>
 </resources>

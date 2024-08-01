@@ -559,6 +559,17 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         //        option -> mPlayerTweaksData.enableLongSpeedList(option.isSelected()),
         //        mPlayerTweaksData.isLongSpeedListEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_tooltips),
+                option -> mPlayerData.enableTooltips(option.isSelected()),
+                mPlayerData.isTooltipsEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_tooltips) + ": " + getContext().getString(R.string.long_press_for_options),
+                option -> {
+                    mGeneralData.enableFirstUseTooltip(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.isFirstUseTooltipEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_button_long_click),
                 option -> mPlayerTweaksData.enableButtonLongClick(option.isSelected()),
                 mPlayerTweaksData.isButtonLongClickEnabled()));
@@ -578,10 +589,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_number_key_seek),
                 option -> mPlayerData.enableNumberKeySeek(option.isSelected()),
                 mPlayerData.isNumberKeySeekEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_tooltips),
-                option -> mPlayerData.enableTooltips(option.isSelected()),
-                mPlayerData.isTooltipsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_clock),
                 option -> mPlayerData.enableClock(option.isSelected()),

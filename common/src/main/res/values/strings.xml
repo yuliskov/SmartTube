@@ -666,5 +666,6 @@
     <string name="auto_backup">Auto backup (once a day)</string>
     <string name="repeat_mode_reverse_list">Play the playlist or channel videos in reverse order</string>
     <string name="calm_msg">We are fixing the issue. Check for updates from time to time</string>
+    <string name="without_picture">Without picture</string>
     <string name="cancel">Cancel</string>
 </resources>

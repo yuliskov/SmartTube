@@ -189,7 +189,7 @@
   <string name="content_block_music_off_topic">Pjesë jo muzikore e videos</string>
   <string name="confirm_segment_skip">Të kapërcehet pjesa \"%s\"\?</string>
   <string name="cancel_segment_skip">Zhbëj kapërcimin e pjesës</string>
-  <string name="msg_skipping_segment">Po e kapërcej pjesën \"%s\"...</string>
+  <string name="msg_skipping_segment">Po kapërcehet pjesa \"%s\"...</string>
   <string name="content_block_notification_type">Lloji i njoftimit</string>
   <string name="content_block_notify_none">Pa njoftim</string>
   <string name="content_block_notify_toast">Toast</string>
@@ -242,7 +242,7 @@
   <string name="card_text_scroll_factor">Shpejtësia e lëvizjes së tekstit të skedave</string>
   <string name="preferred_update_source">Zgjidh burimin e përditësimit</string>
   <string name="hide_shorts">Fshih videot e shkurtra nga Abonimet</string>
-  <string name="hide_shorts_channel">Fshih videot e shkurtra nga Kanali</string>
+  <string name="hide_shorts_channel">Fshih videot e shkurtra nga kanali</string>
   <string name="key_remapping">Ndryshimi i butonëve</string>
   <string name="screen_dimming">Zbehja e ekranit</string>
   <string name="removed_from_playback_queue">U hoq nga radha e luajtjes</string>
@@ -456,9 +456,9 @@
   <string name="unset_stream_reminder">Çaktivizo cilësimin e njoftuesit për transmetimin</string>
   <string name="set_stream_reminder">Cakto njoftuesin për transmetimin</string>
   <string name="playback_starts_shortly">Luajtja do të fillojë automatikisht kur transmetimi të jetë gati</string>
-  <string name="starting_stream">Po fillon transmetimin...</string>
+  <string name="starting_stream">Po fillon transmetimi...</string>
   <string name="action_playlist_remove">Hiq nga lista e luajtjes</string>
-  <string name="signin_view_title">Po ngarkohet Kodin e Përdoruesit...</string>
+  <string name="signin_view_title">Po ngarkohet Kodi i Përdoruesit...</string>
   <string name="signin_view_description">Për të hyrë, futeni këtë kod në faqen %s\nSHËNIM. Punon vetëm me shfletuesin Firefox ose Chrome.</string>
   <string name="signin_view_action_text">U krye</string>
   <string name="require_checked">Kërkon \"%s\"</string>
@@ -634,7 +634,7 @@
   <string name="auto_frame_rate_desc">Ky rregullim heq dridhjet në skenat ku kamera lëviz shpejt, si p.sh. në transmetimin e sporteve</string>
   <string name="channel_filter_hint">Filtro kanalet</string>
   <string name="player_loop_shorts">Përsërit Videot e Shkurtra vazhdimisht</string>
-  <string name="player_quick_shorts_skip">Kapërce Videot e Shkurtra me butonin majtas/djathtas</string>
+  <string name="player_quick_shorts_skip">Kapërce Videot e Shkurtra me butonat majtas/djathtas</string>
   <string name="channels_filter">Shfaq fushën e Filtrimit të kanaleve në seksionin Kanale</string>
   <string name="channel_search_bar">Shiriti i kërkimit brenda faqes së Kanalit</string>
   <string name="header_sports">Sporti</string>
@@ -661,4 +661,9 @@
   <string name="long_press_for_options">SHTYP GJATË PËR RREGULLIMET</string>
   <string name="speech_engine">Motori i kërkimit me zë</string>
   <string name="auto_backup">Kopje rezervë automatike (një herë në ditë)</string>
+  <string name="repeat_mode_reverse_list">Luaj listën e luajtjes ose videot e kanalit në rend të kundërt</string>
+  <string name="unknown_source_error">Gabim i panjohur i burimit</string>
+  <string name="unknown_renderer_error">Gabim i panjohur i pasqyruesit</string>
+  <string name="player_quick_skip_videos">Kapërce videot e zakonshme me butonat majtas/djathtas</string>
+  <string name="calm_msg">Po e rregullojmë problemin. Kontrollo për përditësime herë pas here</string>
 </resources>
