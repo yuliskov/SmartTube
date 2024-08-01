@@ -34,7 +34,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private WeakReference<Context> mApplicationContext = new WeakReference<>(null);
     private Runnable mOnDone;
-    private static boolean sRunOnce;
+    //private static boolean sRunOnce;
     private long mUpdateCheckMs;
 
     public BasePresenter(Context context) {
@@ -68,11 +68,11 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         // In case view was disposed like SplashView does
         mApplicationContext = new WeakReference<>(context.getApplicationContext());
 
-        if (!sRunOnce) {
-            sRunOnce = true;
-            // Init shared prefs used inside remote control service.
-            initGlobalData();
-        }
+        //if (!sRunOnce) {
+        //    sRunOnce = true;
+        //    // Init shared prefs used inside remote control service.
+        //    initGlobalData();
+        //}
     }
 
     @Override
@@ -233,31 +233,31 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     //    }
     //}
 
-    /**
-     * Need to be the first line and executed on earliest stage once.<br/>
-     * Inits media service language and context.<br/>
-     * NOTE: this command should run before using any of the media service api.
-     */
-    private void initGlobalData() {
-        Log.d(TAG, "initGlobalData called...");
-
-        if (getContext() == null) {
-            return;
-        }
-
-        // 1) Auth token storage init
-        // 2) Media service language setup (I assume that context has proper language)
-        GlobalPreferences.instance(getContext());
-
-        // Apply proxy config after global prefs but before starting networking.
-        if (GeneralData.instance(getContext()).isProxyEnabled()) {
-            new ProxyManager(getContext()).configureSystemProxy();
-        }
-
-        // 1) Remove downloaded apks
-        // 2) Setup language
-        ViewManager.instance(getContext()).clearCaches();
-    }
+    ///**
+    // * Need to be the first line and executed on earliest stage once.<br/>
+    // * Inits media service language and context.<br/>
+    // * NOTE: this command should run before using any of the media service api.
+    // */
+    //private void initGlobalData() {
+    //    Log.d(TAG, "initGlobalData called...");
+    //
+    //    if (getContext() == null) {
+    //        return;
+    //    }
+    //
+    //    // 1) Auth token storage init
+    //    // 2) Media service language setup (I assume that context has proper language)
+    //    GlobalPreferences.instance(getContext());
+    //
+    //    // Apply proxy config after global prefs but before starting networking.
+    //    if (GeneralData.instance(getContext()).isProxyEnabled()) {
+    //        new ProxyManager(getContext()).configureSystemProxy();
+    //    }
+    //
+    //    // 1) Remove downloaded apks
+    //    // 2) Setup language
+    //    //ViewManager.instance(getContext()).clearCaches();
+    //}
 
     /**
      * Check that view's activity is alive

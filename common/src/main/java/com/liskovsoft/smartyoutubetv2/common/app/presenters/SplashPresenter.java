@@ -9,6 +9,8 @@ import com.liskovsoft.sharedutils.GlobalConstants;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -23,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -103,6 +106,8 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         if (!sRunOnce) {
             sRunOnce = true;
             RxHelper.setupGlobalErrorHandler();
+            initGlobalData();
+            initProxy();
             initVideoStateService();
             initStreamReminderService();
         }
@@ -152,6 +157,38 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private void initStreamReminderService() {
         if (getContext() != null) {
             StreamReminderService.instance(getContext()).start();
+        }
+    }
+
+    /**
+     * Need to be the first line and executed on earliest stage once.<br/>
+     * Inits media service language and context.<br/>
+     * NOTE: this command should run before using any of the media service api.
+     */
+    private void initGlobalData() {
+        Log.d(TAG, "initGlobalData called...");
+
+        if (getContext() != null) {
+            // 1) Auth token storage init
+            // 2) Media service language setup (I assume that context has proper language)
+            GlobalPreferences.instance(getContext());
+        }
+    }
+
+    private void initProxy() {
+        if (getContext() != null) {
+            // Apply proxy config after global prefs but before starting networking.
+            if (GeneralData.instance(getContext()).isProxyEnabled()) {
+                new ProxyManager(getContext()).configureSystemProxy();
+            }
+        }
+    }
+
+    private void clearCache2() {
+        if (getContext() != null) {
+            // 1) Remove downloaded apks
+            // 2) Setup language
+            ViewManager.instance(getContext()).clearCaches();
         }
     }
 
