@@ -42,8 +42,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     private final UniqueRandom mRandom;
     private Video mLastVideo;
     private int mLastErrorType = -1;
-    private long mLastErrorTimeMs;
-    private int mErrorCount;
     private SuggestionsController mSuggestionsController;
     private PlayerData mPlayerData;
     private PlayerTweaksData mPlayerTweaksData;
@@ -118,13 +116,13 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
         } else {
-            updateErrorCounter(-1);
-            if (mErrorCount > 1) {
-                // Switch between network engines in hope that one of them fixes the error
-                // Cronet engine do less buffering
-                mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
-                restartEngine();
-            }
+            // Switch between network engines in hope that one of them fixes the error
+            // Cronet engine do less buffering
+            //mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
+            //restartEngine();
+
+            YouTubeServiceManager.instance().applyNoPlaybackFix();
+            restartEngine();
         }
     }
 
@@ -144,7 +142,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     public void onEngineError(int type, int rendererIndex, Throwable error) {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
 
-        updateErrorCounter(type);
+        mLastErrorType = type;
         runErrorAction(type, rendererIndex, error);
     }
 
@@ -401,18 +399,6 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         RxHelper.disposeActions(mFormatInfoAction, mMpdStreamAction);
         Utils.removeCallbacks(mReloadVideo, mLoadNext, mRestartEngine, mMetadataSync);
         Utils.removeCallbacks(mOnLongBuffering);
-    }
-
-    private void updateErrorCounter(int type) {
-        long currentTimeMillis = System.currentTimeMillis();
-        if (currentTimeMillis - mLastErrorTimeMs < 60_000 && mLastErrorType == type) {
-            mErrorCount++;
-        } else {
-            mErrorCount = 1;
-        }
-
-        mLastErrorType = type;
-        mLastErrorTimeMs = currentTimeMillis;
     }
 
     @SuppressLint("StringFormatMatches")

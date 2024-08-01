@@ -660,4 +660,5 @@
     <string name="repeat_mode_reverse_list">Відтворювати плейлист або відео з каналу у зворотньому порядку</string>
     <string name="calm_msg">Ми вирішуємо проблему. Час від часу перевіряйте наявність оновлень</string>
     <string name="without_picture">Без зображення</string>
+    <string name="video_disabled">Відео вимкнено</string>
 </resources>
