@@ -424,7 +424,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 break;
         }
 
-        applyGenericErrorAction(error);
+        applyGenericErrorAction(type, error);
 
         YouTubeServiceManager.instance().invalidatePlaybackCache();
 
@@ -480,20 +480,13 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         MessageHelpers.showLongMessage(getContext(), getContext().getString(msgResId) + "\n" + message);
     }
 
-    private void applyGenericErrorAction(Throwable error) {
+    private void applyGenericErrorAction(int type, Throwable error) {
         if (error instanceof OutOfMemoryError) {
             if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
                 mPlayerTweaksData.enableSectionPlaylist(false);
             } else {
                 mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
             }
-        } else if (Helpers.startsWithAny(error.getMessage(),
-                "Unable to connect to", "Invalid NAL length", "Response code: 421",
-                "Response code: 404", "Response code: 429", "Invalid integer size",
-                "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException")) {
-            // Switch between network engines in hope that one of them fixes the error
-            //mPlayerTweaksData.setPlayerDataSource(getNextEngine());
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
         } else if (Helpers.startsWithAny(error.getMessage(), "Response code: 403")) {
             // "Response code: 403" is related to outdated VISITOR_INFO1_LIVE cookie
             YouTubeServiceManager.instance().applyNoPlaybackFix();
@@ -503,6 +496,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 mPlayerData.disableSubtitlesPerChannel(mLastVideo.channelId);
                 mPlayerData.setFormat(mPlayerData.getDefaultSubtitleFormat());
             }
+        } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE) {
+            // Switch between network engines in hope that one of them fixes the error
+            //mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+            YouTubeServiceManager.instance().applyNoPlaybackFix();
         }
     }
 
