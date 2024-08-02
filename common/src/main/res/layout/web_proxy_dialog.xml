@@ -84,7 +84,7 @@
             android:id="@+id/proxy_type_http"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="HTTP"
+            android:text="HTTP(S)"
             android:textColor="@color/dialog_text_color"
             android:buttonTint="@color/dialog_text_color" />
 

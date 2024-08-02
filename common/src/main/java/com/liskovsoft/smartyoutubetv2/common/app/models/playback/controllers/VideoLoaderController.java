@@ -410,10 +410,10 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             // Some ciphered data could be outdated.
             // Might happen when the app wasn't used quite a long time.
             case PlayerEventListener.ERROR_TYPE_SOURCE:
-                applySourceErrorAction(rendererIndex, error);
+                showSourceError(rendererIndex, error);
                 break;
             case PlayerEventListener.ERROR_TYPE_RENDERER:
-                applyRendererErrorAction(rendererIndex, error);
+                showRendererError(rendererIndex, error);
                 break;
             // Hide unknown error on all devices
             case PlayerEventListener.ERROR_TYPE_UNEXPECTED:
@@ -424,14 +424,14 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 break;
         }
 
-        applyGenericErrorAction(type, error);
+        applyGenericErrorAction(type, rendererIndex, error);
 
         YouTubeServiceManager.instance().invalidatePlaybackCache();
 
         restartEngine();
     }
 
-    private void applySourceErrorAction(int rendererIndex, Throwable error) {
+    private void showSourceError(int rendererIndex, Throwable error) {
         String message = error != null ? error.getMessage() : null;
         int msgResId;
 
@@ -452,26 +452,19 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         MessageHelpers.showLongMessage(getContext(), getContext().getString(msgResId) + "\n" + message);
     }
 
-    private void applyRendererErrorAction(int rendererIndex, Throwable error) {
+    private void showRendererError(int rendererIndex, Throwable error) {
         String message = error != null ? error.getMessage() : null;
         int msgResId;
 
         switch (rendererIndex) {
             case PlayerEventListener.RENDERER_INDEX_VIDEO:
                 msgResId = R.string.msg_player_error_video_renderer;
-                FormatItem videoFormat = mPlayerData.getFormat(FormatItem.TYPE_VIDEO);
-                if (!videoFormat.isPreset()) {
-                    mPlayerData.setFormat(mPlayerData.getDefaultVideoFormat());
-                }
-                mPlayerTweaksData.forceSWDecoder(false);
                 break;
             case PlayerEventListener.RENDERER_INDEX_AUDIO:
                 msgResId = R.string.msg_player_error_audio_renderer;
-                mPlayerData.setFormat(mPlayerData.getDefaultAudioFormat());
                 break;
             case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
                 msgResId = R.string.msg_player_error_subtitle_renderer;
-                mPlayerData.setFormat(FormatItem.SUBTITLE_NONE);
                 break;
             default:
                 msgResId = R.string.unknown_renderer_error;
@@ -480,26 +473,35 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         MessageHelpers.showLongMessage(getContext(), getContext().getString(msgResId) + "\n" + message);
     }
 
-    private void applyGenericErrorAction(int type, Throwable error) {
+    private void applyGenericErrorAction(int type, int rendererIndex, Throwable error) {
         if (error instanceof OutOfMemoryError) {
             if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
                 mPlayerTweaksData.enableSectionPlaylist(false);
             } else {
                 mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
             }
-        } else if (Helpers.startsWithAny(error.getMessage(), "Response code: 403")) {
-            // "Response code: 403" is related to outdated VISITOR_INFO1_LIVE cookie
+        } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE &&
+                (rendererIndex == PlayerEventListener.RENDERER_INDEX_VIDEO ||
+                rendererIndex == PlayerEventListener.RENDERER_INDEX_AUDIO)) {
+            // "Unable to connect to", "Invalid NAL length", "Response code: 421",
+            // "Response code: 404", "Response code: 429", "Invalid integer size",
+            // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
+            // "Response code: 403" (url deciphered incorrectly)
             YouTubeServiceManager.instance().applyNoPlaybackFix();
-        } else if (Helpers.startsWithAny(error.getMessage(), "Response code: 500")) {
-            // Subs error
+        } else if (rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
+            // "Response code: 500"
             if (mLastVideo != null) {
                 mPlayerData.disableSubtitlesPerChannel(mLastVideo.channelId);
                 mPlayerData.setFormat(mPlayerData.getDefaultSubtitleFormat());
             }
-        } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE) {
-            // Switch between network engines in hope that one of them fixes the error
-            //mPlayerTweaksData.setPlayerDataSource(getNextEngine());
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
+        } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_VIDEO) {
+            FormatItem videoFormat = mPlayerData.getFormat(FormatItem.TYPE_VIDEO);
+            if (!videoFormat.isPreset()) {
+                mPlayerData.setFormat(mPlayerData.getDefaultVideoFormat());
+            }
+            mPlayerTweaksData.forceSWDecoder(false);
+        } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_AUDIO) {
+            mPlayerData.setFormat(mPlayerData.getDefaultAudioFormat());
         }
     }
 
