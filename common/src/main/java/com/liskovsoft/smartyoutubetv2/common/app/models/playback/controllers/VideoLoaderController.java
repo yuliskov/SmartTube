@@ -474,6 +474,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     }
 
     private void applyGenericErrorAction(int type, int rendererIndex, Throwable error) {
+        if (Helpers.startsWithAny(error.getMessage(),
+                "Unable to connect to")) {
+            // No internet connection
+            return;
+        }
+
         if (error instanceof OutOfMemoryError) {
             if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
                 mPlayerTweaksData.enableSectionPlaylist(false);
