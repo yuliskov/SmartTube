@@ -358,7 +358,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             scheduleReloadVideoTimer(30 * 1_000);
         }
 
-        getPlayer().showBackground(bgImageUrl); // remove bg (null) or set new one
+        getPlayer().showBackground(bgImageUrl); // remove bg (if video playing) or set another bg
 
         //if (bgImageUrl != null && getPlayer().containsMedia()) {
         //    // Make background visible
