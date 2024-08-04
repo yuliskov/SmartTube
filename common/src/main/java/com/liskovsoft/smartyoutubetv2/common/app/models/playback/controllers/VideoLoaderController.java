@@ -324,10 +324,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
         if (formatInfo.isUnplayable()) {
             getPlayer().setTitle(formatInfo.getPlayabilityStatus());
-            getPlayer().showOverlay(true);
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
-            Utils.postDelayed(mLoadNext, 5_000);
+            scheduleNextVideoTimer(5_000);
         } else if (formatInfo.containsDashVideoInfo() && acceptDashVideoInfo(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
@@ -353,24 +352,33 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             getPlayer().openUrlList(applyFix(formatInfo.createUrlList()));
         } else {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
-            scheduleReloadVideoTimer(30 * 1_000);
+            getPlayer().setTitle(formatInfo.getPlayabilityStatus());
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
+            scheduleReloadVideoTimer(30 * 1_000);
         }
 
-        getPlayer().showBackground(bgImageUrl);
+        getPlayer().showBackground(bgImageUrl); // remove bg (null) or set new one
 
-        if (bgImageUrl != null && getPlayer().containsMedia()) {
-            // Make background visible
-            getPlayer().restartEngine();
-        }
+        //if (bgImageUrl != null && getPlayer().containsMedia()) {
+        //    // Make background visible
+        //    getPlayer().restartEngine();
+        //}
     }
 
-    private void scheduleReloadVideoTimer(int reloadIntervalMs) {
+    private void scheduleReloadVideoTimer(int delayMs) {
         if (getPlayer().isEngineInitialized()) {
             Log.d(TAG, "Starting check for the future stream...");
             getPlayer().showOverlay(true);
-            Utils.postDelayed(mReloadVideo, reloadIntervalMs);
+            Utils.postDelayed(mReloadVideo, delayMs);
+        }
+    }
+
+    private void scheduleNextVideoTimer(int delayMs) {
+        if (getPlayer().isEngineInitialized()) {
+            Log.d(TAG, "Starting next video after delay...");
+            getPlayer().showOverlay(true);
+            Utils.postDelayed(mLoadNext, delayMs);
         }
     }
 

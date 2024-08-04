@@ -204,9 +204,16 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata, Video video) {
-        if (getPlayer().containsMedia()) {
-            video.isUpcoming = false; // live stream started
+        //if (getPlayer().containsMedia()) {
+        //    video.isUpcoming = false; // live stream started
+        //}
+
+        // NOTE: Skip upcoming or unplayable (no media) because default title more informative (e.g. has scheduled time).
+        // NOTE: Upcoming videos metadata wrongly reported as live
+        if (!getPlayer().containsMedia()) {
+            return;
         }
+
         video.sync(mediaItemMetadata);
         getPlayer().setVideo(video);
 
