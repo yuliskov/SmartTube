@@ -661,4 +661,5 @@
     <string name="calm_msg">Мы решаем проблему. Время от времени проверяйте обновления</string>
     <string name="without_picture">Без изображения</string>
     <string name="video_disabled">Видео отключено</string>
+    <string name="applying_fix">Не закрывайте плеер. Применение исправления...</string>
 </resources>

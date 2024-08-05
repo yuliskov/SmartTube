@@ -668,4 +668,5 @@
     <string name="calm_msg">We are fixing the issue. Check for updates from time to time</string>
     <string name="without_picture">Without picture</string>
     <string name="video_disabled">Video disabled</string>
+    <string name="applying_fix">Don\'t close the player. Applying the fix...</string>
 </resources>
