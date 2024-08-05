@@ -668,4 +668,5 @@
   <string name="calm_msg">Estamos solucionando el problema. Compruebe las actualizaciones de vez en cuando</string>
   <string name="without_picture">Sin imagen</string>
   <string name="video_disabled">Vídeo desactivado</string>
+  <string name="applying_fix">No cierres el reproductor. Aplicando la solución...</string>
 </resources>
