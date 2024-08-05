@@ -434,7 +434,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
         applyGenericErrorAction(type, rendererIndex, error);
 
-        YouTubeServiceManager.instance().invalidatePlaybackCache();
+        //YouTubeServiceManager.instance().invalidatePlaybackCache();
 
         restartEngine();
     }
@@ -494,15 +494,14 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             } else {
                 mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
             }
-        } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE &&
-                (rendererIndex == PlayerEventListener.RENDERER_INDEX_VIDEO ||
-                rendererIndex == PlayerEventListener.RENDERER_INDEX_AUDIO)) {
+        } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
+            // NOTE: 403 error and others has unknown renderer (-1)
             // "Unable to connect to", "Invalid NAL length", "Response code: 421",
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
             // "Response code: 403" (url deciphered incorrectly)
             YouTubeServiceManager.instance().applyNoPlaybackFix();
-        } else if (rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
+        } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 500"
             if (mLastVideo != null) {
                 mPlayerData.disableSubtitlesPerChannel(mLastVideo.channelId);
