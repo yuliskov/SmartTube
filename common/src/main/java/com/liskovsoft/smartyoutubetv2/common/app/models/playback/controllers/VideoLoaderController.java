@@ -488,7 +488,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             return;
         }
 
-        if (error instanceof OutOfMemoryError) {
+        if (Helpers.containsAny(error.getMessage(), "Exception in CronetUrlRequest")) {
+            mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
+        } else if (error instanceof OutOfMemoryError) {
             if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
                 mPlayerTweaksData.enableSectionPlaylist(false);
             } else {
