@@ -500,6 +500,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
     private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
         mChapters = mediaItemMetadata.getChapters();
+        // Reset chapter title
+        getPlayer().setSeekPreviewTitle(mChapters != null ? "..." : null); // add placeholder to fix control panel animation on the first run
 
         addChapterMarkersIfNeeded();
         appendChapterSuggestionsIfNeeded();
@@ -527,9 +529,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void focusCurrentChapter() {
-        // Reset chapter title
-        getPlayer().setSeekPreviewTitle(mChapters != null ? "..." : null); // add placeholder to fix control panel animation on the first run
-
         if (!getPlayer().isControlsShown()) {
             return;
         }
