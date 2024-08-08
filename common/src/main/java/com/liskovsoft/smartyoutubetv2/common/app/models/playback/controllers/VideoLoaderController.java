@@ -412,83 +412,22 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
     @SuppressLint("StringFormatMatches")
     private void runErrorAction(int type, int rendererIndex, Throwable error) {
-        String message = error != null ? error.getMessage() : null;
-
-        switch (type) {
-            // Some ciphered data could be outdated.
-            // Might happen when the app wasn't used quite a long time.
-            case PlayerEventListener.ERROR_TYPE_SOURCE:
-                showSourceError(rendererIndex, error);
-                break;
-            case PlayerEventListener.ERROR_TYPE_RENDERER:
-                showRendererError(rendererIndex, error);
-                break;
-            // Hide unknown error on all devices
-            case PlayerEventListener.ERROR_TYPE_UNEXPECTED:
-                // NOP
-                break;
-            default:
-                MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.msg_player_error, type) + "\n" + message);
-                break;
-        }
-
         applyGenericErrorAction(type, rendererIndex, error);
-
-        //YouTubeServiceManager.instance().invalidatePlaybackCache();
 
         restartEngine();
     }
 
-    private void showSourceError(int rendererIndex, Throwable error) {
-        String message = error != null ? error.getMessage() : null;
-        int msgResId;
-
-        switch (rendererIndex) {
-            case PlayerEventListener.RENDERER_INDEX_VIDEO:
-                msgResId = R.string.msg_player_error_video_source;
-                break;
-            case PlayerEventListener.RENDERER_INDEX_AUDIO:
-                msgResId = R.string.msg_player_error_audio_source;
-                break;
-            case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
-                msgResId = R.string.msg_player_error_subtitle_source;
-                break;
-            default:
-                msgResId = R.string.unknown_source_error;
-        }
-
-        MessageHelpers.showLongMessage(getContext(), getContext().getString(msgResId) + "\n" + message);
-    }
-
-    private void showRendererError(int rendererIndex, Throwable error) {
-        String message = error != null ? error.getMessage() : null;
-        int msgResId;
-
-        switch (rendererIndex) {
-            case PlayerEventListener.RENDERER_INDEX_VIDEO:
-                msgResId = R.string.msg_player_error_video_renderer;
-                break;
-            case PlayerEventListener.RENDERER_INDEX_AUDIO:
-                msgResId = R.string.msg_player_error_audio_renderer;
-                break;
-            case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
-                msgResId = R.string.msg_player_error_subtitle_renderer;
-                break;
-            default:
-                msgResId = R.string.unknown_renderer_error;
-        }
-
-        MessageHelpers.showLongMessage(getContext(), getContext().getString(msgResId) + "\n" + message);
-    }
-
     private void applyGenericErrorAction(int type, int rendererIndex, Throwable error) {
-        if (Helpers.startsWithAny(error.getMessage(),
-                "Unable to connect to")) {
+        String message = error != null ? error.getMessage() : null;
+        String errorTitle = getErrorTitle(type, rendererIndex);
+
+        if (Helpers.startsWithAny(message, "Unable to connect to")) {
             // No internet connection
+            MessageHelpers.showLongMessage(getContext(), errorTitle + "\n" + message);
             return;
         }
 
-        if (Helpers.containsAny(error.getMessage(), "Exception in CronetUrlRequest")) {
+        if (Helpers.containsAny(message, "Exception in CronetUrlRequest")) {
             mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
         } else if (error instanceof OutOfMemoryError) {
             if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
@@ -518,6 +457,62 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_AUDIO) {
             mPlayerData.setFormat(mPlayerData.getDefaultAudioFormat());
         }
+
+        // Hide unknown errors on all devices
+        if (type != PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
+            MessageHelpers.showLongMessage(getContext(), errorTitle + "\n" + message + "\n" + getContext().getString(R.string.applying_fix));
+        }
+    }
+
+    @SuppressLint("StringFormatMatches")
+    private String getErrorTitle(int type, int rendererIndex) {
+        String errorTitle;
+        int msgResId;
+
+        switch (type) {
+            // Some ciphered data could be outdated.
+            // Might happen when the app wasn't used quite a long time.
+            case PlayerEventListener.ERROR_TYPE_SOURCE:
+                switch (rendererIndex) {
+                    case PlayerEventListener.RENDERER_INDEX_VIDEO:
+                        msgResId = R.string.msg_player_error_video_source;
+                        break;
+                    case PlayerEventListener.RENDERER_INDEX_AUDIO:
+                        msgResId = R.string.msg_player_error_audio_source;
+                        break;
+                    case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
+                        msgResId = R.string.msg_player_error_subtitle_source;
+                        break;
+                    default:
+                        msgResId = R.string.unknown_source_error;
+                }
+                errorTitle = getContext().getString(msgResId);
+                break;
+            case PlayerEventListener.ERROR_TYPE_RENDERER:
+                switch (rendererIndex) {
+                    case PlayerEventListener.RENDERER_INDEX_VIDEO:
+                        msgResId = R.string.msg_player_error_video_renderer;
+                        break;
+                    case PlayerEventListener.RENDERER_INDEX_AUDIO:
+                        msgResId = R.string.msg_player_error_audio_renderer;
+                        break;
+                    case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
+                        msgResId = R.string.msg_player_error_subtitle_renderer;
+                        break;
+                    default:
+                        msgResId = R.string.unknown_renderer_error;
+                }
+                errorTitle = getContext().getString(msgResId);
+                break;
+            case PlayerEventListener.ERROR_TYPE_UNEXPECTED:
+                errorTitle = getContext().getString(R.string.msg_player_error_unexpected);
+                break;
+            default:
+                errorTitle = getContext().getString(R.string.msg_player_error, type);
+                break;
+        }
+
+        return errorTitle;
     }
 
     private void restartEngine() {
