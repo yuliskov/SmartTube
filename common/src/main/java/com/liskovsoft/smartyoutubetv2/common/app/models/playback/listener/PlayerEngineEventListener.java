@@ -26,6 +26,7 @@ public interface PlayerEngineEventListener {
      * The error was an {@link OutOfMemoryError}.
      */
     int ERROR_TYPE_OUT_OF_MEMORY = ExoPlaybackException.TYPE_OUT_OF_MEMORY;
+    int RENDERER_INDEX_UNKNOWN = TrackSelectorManager.RENDERER_INDEX_UNKNOWN;
     int RENDERER_INDEX_VIDEO = TrackSelectorManager.RENDERER_INDEX_VIDEO;
     int RENDERER_INDEX_AUDIO = TrackSelectorManager.RENDERER_INDEX_AUDIO;
     int RENDERER_INDEX_SUBTITLE = TrackSelectorManager.RENDERER_INDEX_SUBTITLE;

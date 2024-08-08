@@ -669,4 +669,6 @@
     <string name="repeat_mode_reverse_list">Çalma listesini ters sırayla çal</string>
     <string name="calm_msg">Sorunu düzeltiyoruz. Zaman zaman güncellemeleri kontrol edin</string>
     <string name="without_picture">Resimsiz</string>
+    <string name="video_disabled">Video devre dışı</string>
+    <string name="applying_fix">Oynatıcıyı kapatmayın. Düzeltme uygulanıyor...</string>
 </resources>

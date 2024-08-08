@@ -656,4 +656,16 @@
   <string name="device_specific_backup">גיבוי למכשיר זה בלבד</string>
   <string name="local_backup">גיבוי מקומי</string>
   <string name="auto_backup">גיבוי אוטומטי (פעם ביום)</string>
+  <string name="open_playlist">פתח רשימת השמעה</string>
+  <string name="not_recommend_channel">אל תמליץ על ערוץ</string>
+  <string name="you_wont_see_this_channel">ערוץ זה לא יופיע תחת המלצות</string>
+  <string name="unknown_source_error">שגיאת מקור לא מוכרת</string>
+  <string name="unknown_renderer_error">שגיאת מעבד לא מוכרת</string>
+  <string name="player_quick_skip_videos">דלג על סרטונים עם לחצני שמאל/ימין</string>
+  <string name="repeat_mode_reverse_list">נגן את רשימת ההשמעה או סרטוני הערוץ בסדר הפוך</string>
+  <string name="calm_msg">אנו מטפלים בבעיה. בדוק עדכונים מפעם לפעם</string>
+  <string name="without_picture">ללא תמונה</string>
+  <string name="video_disabled">וידאו מבוטל</string>
+  <string name="playback_queue_category_title">תור השמעה</string>
+  <string name="video_buffer_size_none">ללא</string>
 </resources>

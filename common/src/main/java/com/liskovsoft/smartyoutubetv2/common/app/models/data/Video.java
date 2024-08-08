@@ -585,17 +585,25 @@ public final class Video {
             return;
         }
 
+        //// NOTE: Skip upcoming (no media) because default title more informative (e.g. has scheduled time).
+        //// NOTE: Upcoming videos metadata wrongly reported as live
+        //if (!isUpcoming) {
+        //    metadataTitle = metadata.getTitle();
+        //
+        //    metadataSecondTitle = metadata.getSecondTitle();
+        //
+        //    // NOTE: Upcoming videos metadata wrongly reported as live (live == true, upcoming == false)
+        //    isLive = metadata.isLive();
+        //    isUpcoming = metadata.isUpcoming();
+        //}
+
         // NOTE: Skip upcoming (no media) because default title more informative (e.g. has scheduled time).
         // NOTE: Upcoming videos metadata wrongly reported as live
-        if (!isUpcoming) {
-            metadataTitle = metadata.getTitle();
-
-            metadataSecondTitle = metadata.getSecondTitle();
-
-            // NOTE: Upcoming videos metadata wrongly reported as live (live == true, upcoming == false)
-            isLive = metadata.isLive();
-            isUpcoming = metadata.isUpcoming();
-        }
+        metadataTitle = metadata.getTitle();
+        metadataSecondTitle = metadata.getSecondTitle();
+        // NOTE: Upcoming videos metadata wrongly reported as live (live == true, upcoming == false)
+        isLive = metadata.isLive();
+        isUpcoming = metadata.isUpcoming();
 
         // No checks. This data wasn't existed before sync.
         if (metadata.getDescription() != null) {

@@ -667,4 +667,6 @@
     <string name="repeat_mode_reverse_list">Wiedergabeliste oder Kanalvideos in umgekehrter Reihenfolge abspielen</string>
     <string name="calm_msg">Wir arbeiten an der Lösung des Problems. Prüfen Sie gelegentlich, ob Updates verfügbar sind</string>
     <string name="without_picture">Ohne Bild</string>
+    <string name="video_disabled">Video deaktiviert</string>
+    <string name="applying_fix">Schließen Sie den Player nicht. Anwenden der Lösung...</string>
 </resources>

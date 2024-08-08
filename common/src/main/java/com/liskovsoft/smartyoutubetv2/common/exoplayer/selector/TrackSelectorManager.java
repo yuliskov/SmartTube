@@ -37,6 +37,7 @@ import java.util.TreeSet;
 
 public class TrackSelectorManager implements TrackSelectorCallback {
     private final Context mContext;
+    public static final int RENDERER_INDEX_UNKNOWN = -1;
     public static final int RENDERER_INDEX_VIDEO = 0;
     public static final int RENDERER_INDEX_AUDIO = 1;
     public static final int RENDERER_INDEX_SUBTITLE = 2;
