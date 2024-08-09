@@ -608,9 +608,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             return false;
         }
 
-        if (mPlayerData.isLegacyCodecsForced()) {
-            return false;
-        }
+        //if (mPlayerData.isLegacyCodecsForced()) {
+        //    return false;
+        //}
 
         return true;
     }
@@ -620,9 +620,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             return false;
         }
 
-        if (mPlayerData.isLegacyCodecsForced()) {
-            return false;
-        }
+        //if (mPlayerData.isLegacyCodecsForced()) {
+        //    return false;
+        //}
 
         return true;
     }

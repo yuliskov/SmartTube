@@ -73,7 +73,7 @@ public class TrackSelectorUtil {
         }
 
         // Unicode chars: https://symbl.cc/en/search/?q=mark
-        return format.containerMimeType == null ? HIGH_BITRATE_MARK : "";
+        return format.containerMimeType == null && format.height >= 1080 ? HIGH_BITRATE_MARK : "";
     }
 
     public static String buildHDRString(Format format) {

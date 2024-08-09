@@ -82,13 +82,16 @@ public class SubtitleTrack extends MediaTrack {
             return null;
         }
 
-        return trimAuto(Helpers.replace(language, TRIM_PATTERN, "")); // english - us bla -> english
+        return trimMarker(Helpers.replace(language, TRIM_PATTERN, "")); // english - us bla -> english
     }
 
     public static String trimIfAuto(String language) {
         return isAuto(language) ? trim(language) : language;
     }
 
+    /**
+     * NOTE: Breaks Portuguese (Portugal) but fixes other similar languages
+     */
     private static String trimAuto(String language) {
         if (language == null) {
             return null;
