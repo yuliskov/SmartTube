@@ -458,7 +458,6 @@
   <string name="playback_starts_shortly">스트리밍이 준비되면 재생이 자동으로 시작됩니다.</string>
   <string name="starting_stream">스트리밍 시작 중...</string>
   <string name="action_playlist_remove">재생목록에서 삭제</string>
-  <!-- BEGIN Moved strings -->
   <string name="signin_view_title">사용자 코드 불러오는 중...</string>
   <string name="signin_view_description">로그인하려면 %s페이지에 이 코드를 입력하세요.\n참고. 파이어폭스 또는 크롬 브라우저에서만 작동합니다.</string>
   <string name="signin_view_action_text">완료</string>
@@ -473,7 +472,6 @@
   <string name="playback_controls_repeat_list">반복 목록</string>
   <string name="action_subscribe_off">구독 해제</string>
   <string name="action_subscribe_on">구독하기</string>
-  <!-- END Moved strings -->
   <string name="skip_24_rate">24fps 형식 건너뛰기 (실제 시네마 모드 수정\?)</string>
   <string name="skip_shorts">쇼츠 스킵</string>
   <string name="player_disable_suggestions">제안 비활성화</string>
@@ -658,4 +656,17 @@
   <string name="prefer_ipv4">IPv4 DNS 선호</string>
   <string name="prefer_ipv4_desc">앱이 전혀 작동하지 않는 상황을 고칠 수 있습니다.\n주의. 멈춤 및 충돌이 발생할 수 있습니다 (특히 Android 8 기기 또는 Dune HD에서)</string>
   <string name="long_press_for_settings">길게 눌러서 설정 열기</string>
+  <string name="speech_engine">음성 검색 엔진</string>
+  <string name="unknown_source_error">알 수 없는 소스 오류</string>
+  <string name="unknown_renderer_error">알 수 없는 렌더러 오류</string>
+  <string name="player_quick_skip_videos">왼쪽/오른쪽 버튼으로 일반 동영상 건너뛰기</string>
+  <string name="long_press_for_options">길게 눌러서 옵션 열기</string>
+  <string name="device_specific_backup">이 기기에 대한 백업만</string>
+  <string name="local_backup">로컬 백업</string>
+  <string name="auto_backup">자동 백업 (하루에 한 번)</string>
+  <string name="repeat_mode_reverse_list">재생목록 또는 채널 비디오를 역순으로 재생</string>
+  <string name="calm_msg">문제를 해결하고 있습니다. 수시로 업데이트 확인</string>
+  <string name="without_picture">사진 없음</string>
+  <string name="video_disabled">비디오 비활성화</string>
+  <string name="applying_fix">플레이어를 닫지 마세요. 수정 사항을 적용하는 중...</string>
 </resources>
