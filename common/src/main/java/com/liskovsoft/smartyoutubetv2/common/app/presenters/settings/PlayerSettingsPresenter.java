@@ -263,8 +263,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 mPlayerTweaksData.isTextureViewEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.unlock_high_bitrate_formats) + " " + TrackSelectorUtil.HIGH_BITRATE_MARK,
-                option -> mPlayerTweaksData.unlockHighBitrateFormats(option.isSelected()),
-                mPlayerTweaksData.isHighBitrateFormatsUnlocked()));
+                option -> mPlayerTweaksData.enableHighBitrateFormats(option.isSelected()),
+                mPlayerTweaksData.isHighBitrateFormatsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.unlock_high_bitrate_audio_formats),
                 option -> mPlayerTweaksData.enableUnsafeAudioFormats(option.isSelected()),

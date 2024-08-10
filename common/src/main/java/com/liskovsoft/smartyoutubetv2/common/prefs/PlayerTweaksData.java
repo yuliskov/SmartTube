@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build.VERSION;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -556,16 +557,21 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsQuickSkipVideosEnabled;
     }
 
-    public void unlockHighBitrateFormats(boolean enable) {
+    public void enableHighBitrateFormats(boolean enable) {
         if (enable) {
-            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED);
+            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS);
         } else {
-            MediaServiceData.instance().disableFormat(MediaServiceData.FORMATS_EXTENDED);
+            MediaServiceData.instance().disableFormat(MediaServiceData.FORMATS_EXTENDED_HLS);
         }
     }
 
-    public boolean isHighBitrateFormatsUnlocked() {
-        return MediaServiceData.instance().isFormatEnabled(MediaServiceData.FORMATS_EXTENDED);
+    public boolean isHighBitrateFormatsEnabled() {
+        if (GlobalPreferences.sInstance.isExtendedHlsFormatsEnabled()) { // backward compatibility
+            GlobalPreferences.sInstance.enableExtendedHlsFormats(false);
+            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS);
+        }
+
+        return MediaServiceData.instance().isFormatEnabled(MediaServiceData.FORMATS_EXTENDED_HLS);
     }
 
     private void restoreData() {
@@ -665,7 +671,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
 
         if (mIsHighBitrateFormatsUnlocked) {
             mIsHighBitrateFormatsUnlocked = false;
-            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED);
+            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS);
         }
     }
 

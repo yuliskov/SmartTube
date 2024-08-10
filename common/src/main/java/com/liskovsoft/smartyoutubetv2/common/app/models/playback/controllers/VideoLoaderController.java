@@ -334,7 +334,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
                     .subscribe(
                             dashManifest -> {
-                                if (mPlayerTweaksData.isHighBitrateFormatsUnlocked() && formatInfo.hasExtendedHlsFormats()) {
+                                if (mPlayerTweaksData.isHighBitrateFormatsEnabled() && formatInfo.hasExtendedHlsFormats()) {
                                     getPlayer().openMerged(dashManifest, formatInfo.getHlsManifestUrl());
                                 } else {
                                     getPlayer().openDash(dashManifest);

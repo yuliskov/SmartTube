@@ -523,7 +523,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
                     int bounds = originTrack.inBounds(mediaTrack);
 
-                    // Multiple ru track fix
+                    // Multiple ru track fix (same id!)
                     if (bounds == 0 && MediaTrack.bitrateEquals(originTrack, mediaTrack)) {
                         result = mediaTrack;
                         break outerloop;
