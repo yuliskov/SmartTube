@@ -665,4 +665,8 @@
     <string name="local_backup">Místní záloha</string>
     <string name="auto_backup">Automatická záloha (1x denně)</string>
     <string name="repeat_mode_reverse_list">Přehraj playlist nebo kanálová videa v opačném pořadí</string>
+    <string name="calm_msg">Pracujeme na řešení problému. Zkontrolujte čas od času aktualizace.</string>
+    <string name="without_picture">Bez obrazu</string>
+    <string name="video_disabled">Video zakázáno</string>
+    <string name="applying_fix">Nezavírejte přehrávač. Aplikuje se oprava...</string>
 </resources>
