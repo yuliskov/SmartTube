@@ -542,7 +542,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         //    }
                         //}
 
-                        if (compare == 0) {
+                        if (compare == 0 && MediaTrack.preferByDrc(originTrack, result, mediaTrack)) {
                             if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
                                 result = mediaTrack;
                             } else if (!MediaTrack.codecEquals(result, originTrack) &&
