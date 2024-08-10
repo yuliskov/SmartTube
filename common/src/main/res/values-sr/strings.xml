@@ -461,7 +461,7 @@
   <string name="playback_controls_repeat_list">Понови листу</string>
   <string name="action_subscribe_off">Претплата искљ.</string>
   <string name="action_subscribe_on">Претплата укљ.</string>
-  <string name="skip_24_rate">Прескочи формате  са 24 кадра</string>
+  <string name="skip_24_rate">Прескочи формате са 24 кадра</string>
   <string name="prefer_avc_over_vp9">Избор кодека: „avc“ пре „vp9“</string>
   <string name="use_alt_speech_recognizer">Алтернативно препознавање гласа</string>
   <string name="use_alt_speech_recognizer_desc">Озбиљно проблематично. Користите само ако имате проблем са подразумеваним.</string>
