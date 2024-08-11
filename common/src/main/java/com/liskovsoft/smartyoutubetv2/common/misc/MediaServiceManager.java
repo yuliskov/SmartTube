@@ -48,6 +48,7 @@ public class MediaServiceManager {
     private Disposable mPlaylistGroupAction;
     private Disposable mAccountListAction;
     private Disposable mPlaylistInfosAction;
+    private Disposable mHistoryAction;
     private static final int MIN_GRID_GROUP_SIZE = 13;
     private static final int MIN_ROW_GROUP_SIZE = 5;
     private static final int MIN_SCALED_GRID_GROUP_SIZE = 35;
@@ -381,6 +382,8 @@ public class MediaServiceManager {
             return;
         }
 
+        RxHelper.disposeActions(mHistoryAction);
+
         Observable<Void> historyObservable;
 
         if (video.mediaItem != null) {
@@ -389,7 +392,7 @@ public class MediaServiceManager {
             historyObservable = mItemService.updateHistoryPositionObserve(video.videoId, positionMs / 1_000f);
         }
 
-        RxHelper.execute(historyObservable);
+        mHistoryAction = RxHelper.execute(historyObservable);
     }
 
     public void hideNotification(Video item) {
