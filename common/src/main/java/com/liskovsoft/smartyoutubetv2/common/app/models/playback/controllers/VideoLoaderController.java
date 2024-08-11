@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import android.annotation.SuppressLint;
+import android.util.Pair;
 
 import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
@@ -38,7 +39,7 @@ import java.util.List;
 public class VideoLoaderController extends PlayerEventListenerHelper implements OnDataChange {
     private static final String TAG = VideoLoaderController.class.getSimpleName();
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
-    private static final long LONG_BUFFERING_THRESHOLD_MS = 10_000;
+    private static final long LONG_BUFFERING_THRESHOLD_MS = 5_000;
     private final Playlist mPlaylist;
     private final UniqueRandom mRandom;
     private Video mLastVideo;
@@ -63,6 +64,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     };
     private final Runnable mLoadRandomNext = this::loadRandomNext;
     private final Runnable mOnLongBuffering = this::onLongBuffering;
+    private Pair<Integer, Long> mBufferingCount;
 
     public VideoLoaderController() {
         mPlaylist = Playlist.instance();
@@ -108,6 +110,8 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     }
 
     private void onLongBuffering() {
+        updateBufferingCount();
+
         if (mLastVideo == null) {
             return;
         }
@@ -116,7 +120,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         if ((!mLastVideo.isLive || mLastVideo.isLiveEnd) &&
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
-        } else {
+        } else if (isBufferingRepeating()) {
             // Switch between network engines in hope that one of them fixes the error
             // Cronet engine do less buffering
             //mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
@@ -678,5 +682,28 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         int currentEngine = mPlayerTweaksData.getPlayerDataSource();
         int[] engineList = { PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET, PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP };
         return Helpers.getNextValue(currentEngine, engineList);
+    }
+
+    private void updateBufferingCount() {
+        long currentTimeMs = System.currentTimeMillis();
+        int bufferingCount = 0;
+        long previousTimeMs = 0;
+
+        if (mBufferingCount != null) {
+            bufferingCount = mBufferingCount.first;
+            previousTimeMs = mBufferingCount.second;
+        }
+
+        if (currentTimeMs - previousTimeMs < 30_000) {
+            bufferingCount++;
+        } else {
+            bufferingCount = 1;
+        }
+
+        mBufferingCount = new Pair<>(bufferingCount, currentTimeMs);
+    }
+
+    private boolean isBufferingRepeating() {
+        return mBufferingCount != null && mBufferingCount.first > 3;
     }
 }
