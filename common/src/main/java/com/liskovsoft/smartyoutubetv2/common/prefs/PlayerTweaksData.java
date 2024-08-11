@@ -94,7 +94,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsPlayerAutoVolumeEnabled;
     private boolean mIsPlayerGlobalFocusEnabled;
     private boolean mIsUnsafeAudioFormatsEnabled;
-    private boolean mIsHighBitrateFormatsUnlocked;
+    private boolean mIsHighBitrateFormatsEnabled;
     private boolean mIsLoopShortsEnabled;
     private boolean mIsQuickSkipShortsEnabled;
     private boolean mIsQuickSkipVideosEnabled;
@@ -566,11 +566,6 @@ public class PlayerTweaksData implements ProfileChangeListener {
     }
 
     public boolean isHighBitrateFormatsEnabled() {
-        if (GlobalPreferences.sInstance.isExtendedHlsFormatsEnabled()) { // backward compatibility
-            GlobalPreferences.sInstance.enableExtendedHlsFormats(false);
-            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS);
-        }
-
         return MediaServiceData.instance().isFormatEnabled(MediaServiceData.FORMATS_EXTENDED_HLS);
     }
 
@@ -626,7 +621,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsPlayerAutoVolumeEnabled = Helpers.parseBoolean(split, 40, true);
         mIsPlayerGlobalFocusEnabled = Helpers.parseBoolean(split, 41, true);
         mIsUnsafeAudioFormatsEnabled = Helpers.parseBoolean(split, 42, true);
-        mIsHighBitrateFormatsUnlocked = Helpers.parseBoolean(split, 43, false);
+        mIsHighBitrateFormatsEnabled = Helpers.parseBoolean(split, 43, false);
         mIsLoopShortsEnabled = Helpers.parseBoolean(split, 44, true);
         mIsQuickSkipShortsEnabled = Helpers.parseBoolean(split, 45, true);
         mIsRememberPositionOfLiveVideosEnabled = Helpers.parseBoolean(split, 46, false);
@@ -652,7 +647,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
-                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
+                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsEnabled, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled
                 ));
     }
@@ -669,8 +664,13 @@ public class PlayerTweaksData implements ProfileChangeListener {
             enablePlayerButton(PLAYER_BUTTON_SCREEN_OFF_TIMEOUT);
         }
 
-        if (mIsHighBitrateFormatsUnlocked) {
-            mIsHighBitrateFormatsUnlocked = false;
+        if (mIsHighBitrateFormatsEnabled) {
+            mIsHighBitrateFormatsEnabled = false;
+            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS);
+        }
+
+        if (GlobalPreferences.sInstance.isExtendedHlsFormatsEnabled()) {
+            GlobalPreferences.sInstance.enableExtendedHlsFormats(false);
             MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS);
         }
     }
