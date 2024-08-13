@@ -706,6 +706,12 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     }
 
     private boolean isBufferingRepeated() {
-        return mBufferingCount != null && mBufferingCount.first > 3;
+        boolean result = mBufferingCount != null && mBufferingCount.first > 1;
+
+        if (result) {
+            mBufferingCount = null;
+        }
+
+        return result;
     }
 }
