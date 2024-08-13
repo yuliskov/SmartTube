@@ -120,7 +120,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         if ((!mLastVideo.isLive || mLastVideo.isLiveEnd) &&
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
-        } else if (isBufferingRepeated()) {
+        } else if (isBufferingRecurrent()) {
             MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
 
             // Switch between network engines in hope that one of them fixes the error
@@ -411,6 +411,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     }
 
     private void disposeActions() {
+        mBufferingCount = null;
         MediaServiceManager.instance().disposeActions();
         RxHelper.disposeActions(mFormatInfoAction, mMpdStreamAction);
         Utils.removeCallbacks(mReloadVideo, mLoadNext, mRestartEngine, mMetadataSync);
@@ -705,13 +706,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         mBufferingCount = new Pair<>(bufferingCount, currentTimeMs);
     }
 
-    private boolean isBufferingRepeated() {
-        boolean result = mBufferingCount != null && mBufferingCount.first > 1;
-
-        if (result) {
-            mBufferingCount = null;
-        }
-
-        return result;
+    private boolean isBufferingRecurrent() {
+        return mBufferingCount != null && mBufferingCount.first > 2;
     }
 }
