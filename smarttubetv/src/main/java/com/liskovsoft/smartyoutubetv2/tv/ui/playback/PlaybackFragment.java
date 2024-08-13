@@ -324,6 +324,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         releasePlayer();
+        // Memory optimization???
+        Runtime.getRuntime().gc();
         initializePlayer();
     }
 
