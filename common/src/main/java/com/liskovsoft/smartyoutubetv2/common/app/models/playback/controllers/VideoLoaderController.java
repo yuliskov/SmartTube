@@ -437,6 +437,9 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
         if (Helpers.containsAny(message, "Exception in CronetUrlRequest")) {
             mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
+        } else if (Helpers.startsWithAny(message, "Response code: 403")) {
+            // "Response code: 403" (url deciphered incorrectly)
+            YouTubeServiceManager.instance().applyNoPlaybackFix();
         } else if (error instanceof OutOfMemoryError) {
             if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
                 mPlayerTweaksData.enableSectionPlaylist(false);
@@ -444,12 +447,13 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
                 mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
             }
         } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
-            // NOTE: 403 error and others has unknown renderer (-1)
+            // NOTE: Fixing too many requests or network issues
+            // NOTE: All these errors have unknown renderer (-1)
             // "Unable to connect to", "Invalid NAL length", "Response code: 421",
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
             // "Response code: 403" (url deciphered incorrectly)
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
+            mPlayerTweaksData.setPlayerDataSource(getNextEngine());
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 500"
             if (mLastVideo != null) {
