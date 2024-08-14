@@ -282,13 +282,8 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     }
 
     public void forceLegacyCodecs(boolean enable) {
-        if (enable) {
-            MediaServiceData.instance().disableFormat(MediaServiceData.FORMATS_DASH);
-            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_URL);
-        } else {
-            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_DASH);
-            MediaServiceData.instance().disableFormat(MediaServiceData.FORMATS_URL);
-        }
+        MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_URL, enable);
+        MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_DASH, !enable);
     }
 
     public boolean isAfrEnabled() {

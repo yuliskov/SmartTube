@@ -324,8 +324,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         releasePlayer();
-        // Memory optimization???
-        Runtime.getRuntime().gc();
         initializePlayer();
     }
 
@@ -375,6 +373,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             Log.d(TAG, "releasePlayer: Start releasing player engine...");
             mEventListener.onEngineReleased();
             destroyPlayerObjects();
+            // Improve memory usage???
+            Runtime.getRuntime().gc();
         }
     }
 

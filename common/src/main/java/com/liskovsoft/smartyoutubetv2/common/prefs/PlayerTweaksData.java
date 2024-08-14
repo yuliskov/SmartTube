@@ -558,11 +558,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     }
 
     public void enableHighBitrateFormats(boolean enable) {
-        if (enable) {
-            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS);
-        } else {
-            MediaServiceData.instance().disableFormat(MediaServiceData.FORMATS_EXTENDED_HLS);
-        }
+        MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS, enable);
     }
 
     public boolean isHighBitrateFormatsEnabled() {
@@ -666,12 +662,12 @@ public class PlayerTweaksData implements ProfileChangeListener {
 
         if (mIsHighBitrateFormatsEnabled) {
             mIsHighBitrateFormatsEnabled = false;
-            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS);
+            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS, true);
         }
 
         if (GlobalPreferences.sInstance.isExtendedHlsFormatsEnabled()) {
             GlobalPreferences.sInstance.enableExtendedHlsFormats(false);
-            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS);
+            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS, true);
         }
     }
 

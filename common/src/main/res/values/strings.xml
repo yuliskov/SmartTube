@@ -669,4 +669,5 @@
     <string name="without_picture">Without picture</string>
     <string name="video_disabled">Video disabled</string>
     <string name="applying_fix">Don\'t close the player. Applying the fix...</string>
+    <string name="hide_mixes">Hide Mixes</string>
 </resources>

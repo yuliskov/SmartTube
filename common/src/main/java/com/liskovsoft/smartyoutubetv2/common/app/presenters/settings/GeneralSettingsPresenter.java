@@ -28,6 +28,7 @@ import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.proxy.WebProxyDialog;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
+import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -106,6 +107,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
     private void appendHideUnwantedContent(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_mixes),
+                option -> MediaServiceData.instance().enableContent(MediaServiceData.CONTENT_MIXES, !option.isSelected()),
+                !MediaServiceData.instance().isContentEnabled(MediaServiceData.CONTENT_MIXES)));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_watched_from_watch_later),
                 option -> mGeneralData.hideWatchedFromWatchLater(option.isSelected()),
