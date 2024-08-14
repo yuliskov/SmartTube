@@ -612,8 +612,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                         if (option.isSelected()) {
                             settingsPresenter.closeDialog();
                         }
-
-                        ExoMediaSourceFactory.unhold(); // reset data source
+                        
                         OkHttpManager.unhold();
                     },
                     mGeneralData.isProxyEnabled()));

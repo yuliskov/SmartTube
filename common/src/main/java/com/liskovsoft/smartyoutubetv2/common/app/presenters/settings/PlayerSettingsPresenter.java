@@ -484,7 +484,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.default_stack_desc),
                 option -> {
                     mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
-                    ExoMediaSourceFactory.unhold();
                 },
                 mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT));
 
@@ -492,7 +491,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.cronet_desc),
                 option -> {
                     mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
-                    ExoMediaSourceFactory.unhold();
                 },
                 mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET));
 
@@ -500,7 +498,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.okhttp_desc),
                 option -> {
                     mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
-                    ExoMediaSourceFactory.unhold();
                 },
                 mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP));
 

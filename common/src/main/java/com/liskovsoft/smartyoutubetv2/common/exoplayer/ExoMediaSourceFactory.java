@@ -61,23 +61,23 @@ public class ExoMediaSourceFactory {
     private static final String DASH_MANIFEST_EXTENSION = "mpd";
     private static final String HLS_PLAYLIST_EXTENSION = "m3u8";
     private static final boolean USE_BANDWIDTH_METER = false;
+    private final int mDataSource;
     private TrackErrorFixer mTrackErrorFixer;
 
-    private ExoMediaSourceFactory(Context context) {
+    private ExoMediaSourceFactory(Context context, int dataSource) {
         mContext = context;
+        mDataSource = dataSource;
         mMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER);
     }
 
     public static ExoMediaSourceFactory instance(Context context) {
-        if (sInstance == null) {
-            sInstance = new ExoMediaSourceFactory(context.getApplicationContext());
+        PlayerTweaksData tweaksData = PlayerTweaksData.instance(context);
+        int dataSource = tweaksData.getPlayerDataSource();
+        if (sInstance == null || dataSource != sInstance.mDataSource) {
+            sInstance = new ExoMediaSourceFactory(context.getApplicationContext(), dataSource);
         }
 
         return sInstance;
-    }
-
-    public static void unhold() {
-        sInstance = null;
     }
 
     public MediaSource fromDashManifest(InputStream dashManifest) {
@@ -123,11 +123,9 @@ public class ExoMediaSourceFactory {
      * @return A new HttpDataSource factory.
      */
     private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
-        PlayerTweaksData tweaksData = PlayerTweaksData.instance(mContext);
-        int source = tweaksData.getPlayerDataSource();
         DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
-        return source == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? buildOkHttpDataSourceFactory(bandwidthMeter) :
-                        source == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET && CronetManager.getEngine(mContext) != null ? buildCronetDataSourceFactory(bandwidthMeter) :
+        return mDataSource == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? buildOkHttpDataSourceFactory(bandwidthMeter) :
+                        mDataSource == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET && CronetManager.getEngine(mContext) != null ? buildCronetDataSourceFactory(bandwidthMeter) :
                                 buildDefaultHttpDataSourceFactory(bandwidthMeter);
     }
 

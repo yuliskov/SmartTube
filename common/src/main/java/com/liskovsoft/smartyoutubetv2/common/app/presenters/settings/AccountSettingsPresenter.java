@@ -167,7 +167,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
     private void removeAccount(Account account) {
         mMediaServiceManager.getSingInService().removeAccount(account);
-        ExoMediaSourceFactory.unhold();
         BrowsePresenter.instance(getContext()).refresh(false);
     }
 
