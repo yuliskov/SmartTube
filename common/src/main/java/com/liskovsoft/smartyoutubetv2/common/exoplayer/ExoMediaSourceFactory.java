@@ -50,35 +50,34 @@ import java.util.concurrent.Executors;
 public class ExoMediaSourceFactory {
     private static final String TAG = ExoMediaSourceFactory.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
-    private static ExoMediaSourceFactory sInstance;
+    //private static ExoMediaSourceFactory sInstance;
     private static final int MAX_SEGMENTS_PER_LOAD = 1;
     private static final String USER_AGENT = DefaultHeaders.APP_USER_AGENT;
     @SuppressLint("StaticFieldLeak")
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-    private final Factory mMediaDataSourceFactory;
     private final Context mContext;
     private static final Uri DASH_MANIFEST_URI = Uri.parse("https://example.com/test.mpd");
     private static final String DASH_MANIFEST_EXTENSION = "mpd";
     private static final String HLS_PLAYLIST_EXTENSION = "m3u8";
     private static final boolean USE_BANDWIDTH_METER = false;
-    private final int mDataSource;
     private TrackErrorFixer mTrackErrorFixer;
+    private Factory mMediaDataSourceFactory;
 
-    private ExoMediaSourceFactory(Context context, int dataSource) {
+    public ExoMediaSourceFactory(Context context) {
         mContext = context;
-        mDataSource = dataSource;
-        mMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER);
     }
 
-    public static ExoMediaSourceFactory instance(Context context) {
-        PlayerTweaksData tweaksData = PlayerTweaksData.instance(context);
-        int dataSource = tweaksData.getPlayerDataSource();
-        if (sInstance == null || dataSource != sInstance.mDataSource) {
-            sInstance = new ExoMediaSourceFactory(context.getApplicationContext(), dataSource);
-        }
-
-        return sInstance;
-    }
+    //public static ExoMediaSourceFactory instance(Context context) {
+    //    if (sInstance == null) {
+    //        sInstance = new ExoMediaSourceFactory(context.getApplicationContext());
+    //    }
+    //
+    //    return sInstance;
+    //}
+    //
+    //public static void unhold() {
+    //    sInstance = null;
+    //}
 
     public MediaSource fromDashManifest(InputStream dashManifest) {
         return buildMPDMediaSource(DASH_MANIFEST_URI, dashManifest);
@@ -123,9 +122,11 @@ public class ExoMediaSourceFactory {
      * @return A new HttpDataSource factory.
      */
     private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
+        PlayerTweaksData tweaksData = PlayerTweaksData.instance(mContext);
+        int source = tweaksData.getPlayerDataSource();
         DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
-        return mDataSource == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? buildOkHttpDataSourceFactory(bandwidthMeter) :
-                        mDataSource == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET && CronetManager.getEngine(mContext) != null ? buildCronetDataSourceFactory(bandwidthMeter) :
+        return source == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? buildOkHttpDataSourceFactory(bandwidthMeter) :
+                        source == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET && CronetManager.getEngine(mContext) != null ? buildCronetDataSourceFactory(bandwidthMeter) :
                                 buildDefaultHttpDataSourceFactory(bandwidthMeter);
     }
 
@@ -310,6 +311,10 @@ public class ExoMediaSourceFactory {
         mTrackErrorFixer = trackErrorFixer;
     }
 
+    public void release() {
+        mMediaDataSourceFactory = null;
+    }
+
     @NonNull
     private DefaultSsChunkSource.Factory getSsChunkSourceFactory() {
         return new DefaultSsChunkSource.Factory(getMediaDataSourceFactory());
@@ -321,8 +326,11 @@ public class ExoMediaSourceFactory {
     }
 
     private Factory getMediaDataSourceFactory() {
+        if (mMediaDataSourceFactory == null) {
+            mMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER);
+        }
+
         return mMediaDataSourceFactory;
-        //return buildDataSourceFactory(USE_BANDWIDTH_METER);
     }
 
     // EXO: 2.10 - 2.12

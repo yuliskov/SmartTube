@@ -57,7 +57,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public ExoPlayerController(Context context) {
         PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
         mContext = context.getApplicationContext();
-        mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
+        mMediaSourceFactory = new ExoMediaSourceFactory(context);
         mTrackSelectorManager = new TrackSelectorManager(context);
         mTrackFormatter = new TrackInfoFormatter2();
         mTrackFormatter.enableBitrate(PlayerTweaksData.instance(context).isQualityInfoBitrateEnabled());
@@ -189,6 +189,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public void release() {
         mTrackSelectorManager.release();
+        mMediaSourceFactory.release();
 
         if (mPlayer != null) {
             mPlayer.removeListener(this);
