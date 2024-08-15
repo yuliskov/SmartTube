@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import androidx.core.content.ContextCompat;
+
+import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.DislikeData;
@@ -36,6 +38,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
     private MediaItemService mMediaItemService;
+    private ContentService mContentService;
     private DeArrowProcessor mDeArrowProcessor;
     private Video mNextVideo;
     private int mFocusCount;
@@ -58,6 +61,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
         mDeArrowProcessor = new DeArrowProcessor(getContext(), PlaybackPresenter.instance(getContext())::syncItem);
         mMediaItemService = YouTubeServiceManager.instance().getMediaItemService();
+        mContentService = YouTubeServiceManager.instance().getContentService();
     }
 
     @Override
@@ -175,7 +179,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        Disposable continueAction = mMediaItemService.continueGroupObserve(mediaGroup)
+        Disposable continueAction = mContentService.continueGroupObserve(mediaGroup)
                 .subscribe(
                         continueMediaGroup -> {
                             getPlayer().showProgressBar(false);

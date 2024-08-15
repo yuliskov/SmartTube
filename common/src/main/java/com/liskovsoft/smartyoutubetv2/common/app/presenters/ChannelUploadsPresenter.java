@@ -203,11 +203,13 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         Observable<MediaGroup> continuation;
 
-        if (mediaGroup.getType() == MediaGroup.TYPE_SUGGESTIONS) {
-            continuation = mItemManager.continueGroupObserve(mediaGroup);
-        } else {
-            continuation = mContentService.continueGroupObserve(mediaGroup);
-        }
+        //if (mediaGroup.getType() == MediaGroup.TYPE_SUGGESTIONS) {
+        //    continuation = mItemManager.continueGroupObserve(mediaGroup);
+        //} else {
+        //    continuation = mContentService.continueGroupObserve(mediaGroup);
+        //}
+
+        continuation = mContentService.continueGroupObserve(mediaGroup);
 
         mScrollAction = continuation
                 .subscribe(
