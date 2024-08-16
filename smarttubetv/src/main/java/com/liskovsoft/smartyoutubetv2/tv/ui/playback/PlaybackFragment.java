@@ -120,6 +120,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private MediaSessionConnector mMediaSessionConnector;
     private Boolean mIsControlsShownPreviously;
     private Video mPendingFocus;
+    private long mProgressShowTimeMs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -881,9 +882,20 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         if (show) {
             getProgressBarManager().show();
+            mProgressShowTimeMs = System.currentTimeMillis();
         } else {
             getProgressBarManager().hide();
         }
+    }
+
+    @Override
+    protected void onBufferingStateChanged(boolean start) {
+        // Fix progress stop when playing videos non-stop (stop buffer event from previous video called)
+        if (!start && System.currentTimeMillis() - mProgressShowTimeMs < 100) {
+            return;
+        }
+
+        super.onBufferingStateChanged(start);
     }
 
     @Override
