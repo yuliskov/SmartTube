@@ -301,6 +301,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
     }
 
     private void loadFormatInfo(Video video) {
+        getPlayer().showProgressBar(true);
         disposeActions();
 
         ServiceManager service = YouTubeServiceManager.instance();
@@ -308,6 +309,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribe(this::processFormatInfo,
                            error -> {
+                               getPlayer().showProgressBar(false);
                                String message = error.getMessage();
                                Log.e(TAG, "loadFormatInfo error: %s", message);
                                if (!Helpers.containsAny(message, "fromNullable result is null")) {
@@ -331,6 +333,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
 
         if (formatInfo.isUnplayable()) {
             getPlayer().setTitle(formatInfo.getPlayabilityStatus());
+            getPlayer().showProgressBar(false);
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
             scheduleNextVideoTimer(5_000);
@@ -360,6 +363,7 @@ public class VideoLoaderController extends PlayerEventListenerHelper implements 
         } else {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
             getPlayer().setTitle(formatInfo.getPlayabilityStatus());
+            getPlayer().showProgressBar(false);
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
             scheduleReloadVideoTimer(30 * 1_000);
