@@ -43,6 +43,8 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.BaseInputConnection;
+
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
@@ -708,6 +710,14 @@ public class Utils {
             // Injecting to another application requires INJECT_EVENTS permission
             e.printStackTrace();
         }
+    }
+
+    public static void sendKey(Activity activity, int keyCode) {
+        BaseInputConnection  inputConnection = new BaseInputConnection(activity.getWindow().getDecorView().getRootView(), true);
+        KeyEvent kd = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
+        KeyEvent ku = new KeyEvent(KeyEvent.ACTION_UP, keyCode);
+        inputConnection.sendKeyEvent(kd);
+        inputConnection.sendKeyEvent(ku);
     }
 
     public static void showNotCompatibleMessage(Context context, int msgResId) {
