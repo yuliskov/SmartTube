@@ -691,7 +691,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     private int getNextEngine() {
         int currentEngine = mPlayerTweaksData.getPlayerDataSource();
-        int[] engineList = { PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET, PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP };
+        int[] engineList = Utils.skipCronet() ?
+                new int[] { PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP } :
+                new int[] { PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET, PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP };
         return Helpers.getNextValue(currentEngine, engineList);
     }
 
