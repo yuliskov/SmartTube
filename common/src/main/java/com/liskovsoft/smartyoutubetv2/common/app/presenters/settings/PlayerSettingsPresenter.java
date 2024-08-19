@@ -478,30 +478,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendNetworkEngineCategory(AppDialogPresenter settingsPresenter) {
-        List<OptionItem> options = new ArrayList<>();
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.default_lang),
-                getContext().getString(R.string.default_stack_desc),
-                option -> {
-                    mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
-                },
-                mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT));
-
-        options.add(UiOptionItem.from("Cronet",
-                getContext().getString(R.string.cronet_desc),
-                option -> {
-                    mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
-                },
-                mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET));
-
-        options.add(UiOptionItem.from("OkHttp",
-                getContext().getString(R.string.okhttp_desc),
-                option -> {
-                    mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
-                },
-                mPlayerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP));
-
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_network_stack), options);
+        OptionCategory category = AppDialogUtil.createNetworkEngineCategory(getContext(), mPlayerTweaksData);
+        settingsPresenter.appendCategory(category);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {

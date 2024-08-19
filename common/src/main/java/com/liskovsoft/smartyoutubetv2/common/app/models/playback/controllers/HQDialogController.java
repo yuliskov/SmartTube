@@ -9,6 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
 import java.util.HashSet;
@@ -27,11 +28,13 @@ public class HQDialogController extends BasePlayerController {
     private final Set<Runnable> mHideListeners = new HashSet<>();
     private VideoStateController mStateUpdater;
     private PlayerData mPlayerData;
+    private PlayerTweaksData mPlayerTweaksData;
     private AppDialogPresenter mAppDialogPresenter;
 
     @Override
     public void onInit() {
         mPlayerData = PlayerData.instance(getContext());
+        mPlayerTweaksData = PlayerTweaksData.instance(getContext());
         mAppDialogPresenter = AppDialogPresenter.instance(getContext());
         mStateUpdater = getController(VideoStateController.class);
     }
@@ -44,6 +47,7 @@ public class HQDialogController extends BasePlayerController {
     @Override
     public void onHighQualityClicked() {
         addQualityCategories();
+        addNetworkEngine();
         addVideoBufferCategory();
         addPresetsCategory();
         addAudioLanguage();
@@ -124,6 +128,11 @@ public class HQDialogController extends BasePlayerController {
 
     private void addAudioLanguage() {
         addCategoryInt(AppDialogUtil.createAudioLanguageCategory(getContext(), mPlayerData,
+                () -> getPlayer().restartEngine()));
+    }
+
+    private void addNetworkEngine() {
+        addCategoryInt(AppDialogUtil.createNetworkEngineCategory(getContext(), mPlayerTweaksData,
                 () -> getPlayer().restartEngine()));
     }
 

@@ -64,6 +64,7 @@ public class AppDialogUtil {
     private static final int PITCH_EFFECT_ID = 144;
     private static final int AUDIO_VOLUME_ID = 145;
     private static final int PLAYER_REPEAT_ID = 146;
+    private static final int PLAYER_ENGINE_ID = 147;
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
@@ -762,6 +763,45 @@ public class AppDialogUtil {
                 PLAYER_REPEAT_ID,
                 OptionCategory.TYPE_RADIO_LIST,
                 context.getString(R.string.action_repeat_mode),
+                options
+        );
+    }
+
+    public static OptionCategory createNetworkEngineCategory(Context context, PlayerTweaksData playerTweaksData) {
+        return createNetworkEngineCategory(context, playerTweaksData, () -> {});
+    }
+
+    public static OptionCategory createNetworkEngineCategory(Context context, PlayerTweaksData playerTweaksData, Runnable onModeSelected) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(context.getString(R.string.default_lang),
+                context.getString(R.string.default_stack_desc),
+                option -> {
+                    playerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
+                    onModeSelected.run();
+                },
+                playerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT));
+
+        options.add(UiOptionItem.from("Cronet",
+                context.getString(R.string.cronet_desc),
+                option -> {
+                    playerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
+                    onModeSelected.run();
+                },
+                playerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET));
+
+        options.add(UiOptionItem.from("OkHttp",
+                context.getString(R.string.okhttp_desc),
+                option -> {
+                    playerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
+                    onModeSelected.run();
+                },
+                playerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP));
+
+        return OptionCategory.from(
+                PLAYER_ENGINE_ID,
+                OptionCategory.TYPE_RADIO_LIST,
+                context.getString(R.string.player_network_stack),
                 options
         );
     }
