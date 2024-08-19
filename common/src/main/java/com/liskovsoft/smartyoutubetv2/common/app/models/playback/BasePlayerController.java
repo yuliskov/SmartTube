@@ -9,7 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerM
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 
-public abstract class PlayerEventListenerHelper implements PlayerEventListener {
+public abstract class BasePlayerController implements PlayerEventListener {
     private MainPlayerController mMainController;
     private Context mContext;
 

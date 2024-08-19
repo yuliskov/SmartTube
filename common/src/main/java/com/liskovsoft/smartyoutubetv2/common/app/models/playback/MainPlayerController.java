@@ -23,6 +23,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.Vid
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoStateController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils.ChainProcessor;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils.Processor;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -33,7 +36,7 @@ public class MainPlayerController implements PlayerEventListener {
     private final List<PlayerEventListener> mEventListeners = new CopyOnWriteArrayList<PlayerEventListener>() {
         @Override
         public boolean add(PlayerEventListener listener) {
-            ((PlayerEventListenerHelper) listener).setMainController(MainPlayerController.this);
+            ((BasePlayerController) listener).setMainController(MainPlayerController.this);
 
             return super.add(listener);
         }
@@ -147,32 +150,12 @@ public class MainPlayerController implements PlayerEventListener {
 
     // Helpers
 
-    private boolean chainProcess(ChainProcessor processor) {
-        boolean result = false;
-
-        for (PlayerEventListener listener : mEventListeners) {
-            result = processor.process(listener);
-
-            if (result) {
-                break;
-            }
-        }
-
-        return result;
+    private boolean chainProcess(ChainProcessor<PlayerEventListener> processor) {
+        return Utils.chainProcess(mEventListeners, processor);
     }
 
-    private interface ChainProcessor {
-        boolean process(PlayerEventListener listener);
-    }
-
-    private void process(Processor processor) {
-        for (PlayerEventListener listener : mEventListeners) {
-            processor.process(listener);
-        }
-    }
-
-    private interface Processor {
-        void process(PlayerEventListener listener);
+    private void process(Processor<PlayerEventListener> processor) {
+        Utils.process(mEventListeners, processor);
     }
 
     // End Helpers
