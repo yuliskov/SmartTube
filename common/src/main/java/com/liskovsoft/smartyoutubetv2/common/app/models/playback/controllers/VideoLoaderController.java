@@ -110,7 +110,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     }
 
     private void onLongBuffering() {
-        updateBufferingCount();
+        //updateBufferingCount();
 
         if (mLastVideo == null) {
             return;
@@ -120,18 +120,21 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         if ((!mLastVideo.isLive || mLastVideo.isLiveEnd) &&
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
-        } else if (isBufferingRecurrent()) {
-            MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
-
-            // Switch between network engines in hope that one of them fixes the error
-            // Cronet engine do less buffering
-            //mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
-            mPlayerTweaksData.setPlayerDataSource(getNextEngine());
-
-            //YouTubeServiceManager.instance().applyNoPlaybackFix();
-
-            restartEngine();
         }
+
+        // NOTE: useless fixes. Won't fix the buffering actually.
+        //else if (isBufferingRecurrent()) {
+        //    MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
+        //
+        //    // Switch between network engines in hope that one of them fixes the error
+        //    // Cronet engine do less buffering
+        //    //mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
+        //    mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+        //
+        //    //YouTubeServiceManager.instance().applyNoPlaybackFix();
+        //
+        //    restartEngine();
+        //}
     }
 
     @Override
