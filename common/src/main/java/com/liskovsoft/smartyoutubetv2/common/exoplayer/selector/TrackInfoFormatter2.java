@@ -43,8 +43,6 @@ public class TrackInfoFormatter2 {
         mHdrStr = TrackSelectorUtil.buildHDRString(format);
 
         mHighBitrateStr = TrackSelectorUtil.buildHighBitrateMark(format);
-
-        mDrcStr = TrackSelectorUtil.buildDrcMark(format);
     }
 
     public void setAudioFormat(Format format) {
@@ -53,6 +51,8 @@ public class TrackInfoFormatter2 {
         }
 
         mChannelsStr = TrackSelectorUtil.buildChannels(format);
+
+        mDrcStr = TrackSelectorUtil.buildDrcMark(format);
     }
 
     public void setSpeed(float speed) {
