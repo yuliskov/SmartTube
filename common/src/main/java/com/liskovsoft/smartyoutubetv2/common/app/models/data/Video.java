@@ -653,8 +653,10 @@ public final class Video {
 
         String likeCountNew = dislikeData.getLikeCount();
         String dislikeCountNew = dislikeData.getDislikeCount();
-        likeCount = likeCountNew != null ? likeCountNew : likeCount;
-        dislikeCount = dislikeCountNew != null ? dislikeCountNew : dislikeCount;
+        if (likeCountNew != null && dislikeCountNew != null) {
+            likeCount = likeCountNew;
+            dislikeCount = dislikeCountNew;
+        }
     }
 
     /**
