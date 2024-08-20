@@ -17,6 +17,7 @@ import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.liskovsoft.youtubeapi.service.data.YouTubeMediaItem;
 
@@ -765,5 +766,10 @@ public final class Video {
         if (state != null) {
             percentWatched = state.positionMs / (state.durationMs / 100f);
         }
+    }
+
+    public boolean isSectionPlaylistEnabled(Context context) {
+        return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && hasVideo() && getGroup() != null &&
+                (playlistId == null || nextMediaItem == null || belongsToSearch()) && (!isRemote || remotePlaylistId == null);
     }
 }

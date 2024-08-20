@@ -514,7 +514,7 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void appendSectionPlaylistIfNeeded(Video video) {
-        if (!isSectionPlaylistEnabled(video)) {
+        if (!video.isSectionPlaylistEnabled(getContext())) {
             // Important fix. Gives priority to playlist or suggestion.
             mNextVideo = null;
             return;
@@ -615,7 +615,7 @@ public class SuggestionsController extends BasePlayerController {
         if (index >= 0) { // continuation group starts with zero index
             Log.d(TAG, "Found current video index: %s", index);
             Video found = group.getVideos().get(index);
-            if (!found.isMix() || isSectionPlaylistEnabled(video)) {
+            if (!found.isMix() || video.isSectionPlaylistEnabled(getContext())) {
                 getPlayer().focusSuggestedItem(found);
             }
             mFocusCount = 0; // Stop the continuation loop
@@ -632,7 +632,7 @@ public class SuggestionsController extends BasePlayerController {
     private void appendNextSectionVideoIfNeeded(Video video) {
         mNextVideo = null;
 
-        if (!isSectionPlaylistEnabled(video)) {
+        if (!video.isSectionPlaylistEnabled(getContext())) {
             return;
         }
 
@@ -744,11 +744,6 @@ public class SuggestionsController extends BasePlayerController {
     private void disposeActions() {
         RxHelper.disposeActions(mActions);
         mChapters = null;
-    }
-
-    private boolean isSectionPlaylistEnabled(Video video) {
-        return mPlayerTweaksData.isSectionPlaylistEnabled() && video != null && video.getGroup() != null &&
-                (video.playlistId == null || video.nextMediaItem == null || video.belongsToSearch()) && (!video.isRemote || video.remotePlaylistId == null);
     }
 
     private void appendDislikes(Video video) {

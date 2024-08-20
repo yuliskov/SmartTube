@@ -656,7 +656,7 @@ public class Utils {
                     ChannelUploadsPresenter.instance(context).clear();
                     ViewManager.instance(context).startView(ChannelUploadsView.class);
                 }
-                ChannelUploadsPresenter.instance(context).updateGrid(group.get(0));
+                ChannelUploadsPresenter.instance(context).update(group.get(0));
             } else if (type == MediaGroup.TYPE_CHANNEL) {
                 if (atomicIndex.incrementAndGet() == 1) {
                     ChannelPresenter.instance(context).clear();

@@ -338,7 +338,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 LoadingManager.showLoading(getContext(), true);
                 // Maybe this is subscribed items view
                 ChannelUploadsPresenter.instance(getContext())
-                        .obtainVideoGroup(item, group -> {
+                        .obtainGroup(item, group -> {
                             LoadingManager.showLoading(getContext(), false);
                             // Some uploads groups doesn't contain channel button.
                             // Use data from first item instead.
