@@ -442,17 +442,18 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             return;
         }
 
-        if (Helpers.containsAny(message, "Exception in CronetUrlRequest")) {
-            mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
-        } else if (Helpers.startsWithAny(message, "Response code: 403")) {
-            // "Response code: 403" (url deciphered incorrectly)
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
-        } else if (error instanceof OutOfMemoryError) {
+        if (error instanceof OutOfMemoryError) {
             if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
                 mPlayerTweaksData.enableSectionPlaylist(false);
             } else {
                 mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
             }
+        } else if (Helpers.containsAny(message, "Exception in CronetUrlRequest")) {
+            mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
+        } else if (Helpers.startsWithAny(message, "Response code: 403", "Response code: 404")) {
+            // "Response code: 403" (url deciphered incorrectly)
+            // "Response code: 404" (not sure whether below helps)
+            YouTubeServiceManager.instance().applyNoPlaybackFix();
         } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
             // NOTE: Fixing too many requests or network issues
             // NOTE: All these errors have unknown renderer (-1)
