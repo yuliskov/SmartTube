@@ -48,13 +48,13 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private final TrackErrorFixer mTrackErrorFixer;
     private boolean mOnSourceChanged;
     private Video mVideo;
-    private PlayerEventListener mEventListener;
+    private final PlayerEventListener mEventListener;
     private SimpleExoPlayer mPlayer;
     private PlayerView mPlayerView;
     private VolumeBooster mVolumeBooster;
     private boolean mIsEnded;
 
-    public ExoPlayerController(Context context) {
+    public ExoPlayerController(Context context, PlayerEventListener eventListener) {
         PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
         mContext = context.getApplicationContext();
         mMediaSourceFactory = new ExoMediaSourceFactory(context);
@@ -64,6 +64,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mTrackErrorFixer = new TrackErrorFixer(mTrackSelectorManager);
 
         mMediaSourceFactory.setTrackErrorFixer(mTrackErrorFixer);
+        mEventListener = eventListener;
 
         // Shield 720p fix???
         initFormats();
@@ -210,10 +211,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         player.addListener(this);
     }
 
-    @Override
-    public void setEventListener(PlayerEventListener eventListener) {
-        mEventListener = eventListener;
-    }
+    //@Override
+    //public void setEventListener(PlayerEventListener eventListener) {
+    //    mEventListener = eventListener;
+    //}
 
     @Override
     public void setPlayerView(PlayerView playerView) {

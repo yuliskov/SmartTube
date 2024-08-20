@@ -125,11 +125,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mBackgroundManager = getLeanbackActivity().getBackgroundManager();
         mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.player_background));
         mPlayerInitializer = new ExoPlayerInitializer(getContext());
-        mExoPlayerController = new ExoPlayerController(getContext());
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.setView(this);
-        //mExoPlayerController.setEventListener(mPlaybackPresenter);
+        mExoPlayerController = new ExoPlayerController(getContext(), mPlaybackPresenter);
 
         initPresenters();
         setupEventListeners();
@@ -428,7 +427,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void createPlayer() {
-        mExoPlayerController.setEventListener(mPlaybackPresenter);
+        //mExoPlayerController.setEventListener(mPlaybackPresenter);
 
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
         DefaultTrackSelector trackSelector = new RestoreTrackSelector(new AdaptiveTrackSelection.Factory());
