@@ -723,7 +723,7 @@ public class Utils {
     public static void showPlayerControls(Context context, boolean show) {
         PlaybackView view = PlaybackPresenter.instance(context).getView();
         if (view != null) {
-            view.getPlayer().showOverlay(show);
+            view.showOverlay(show);
         }
     }
 

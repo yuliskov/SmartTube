@@ -7,30 +7,31 @@ import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 
 public abstract class BasePlayerController implements PlayerEventListener {
-    private MainPlayerController mMainController;
+    private PlaybackPresenter mMainController;
     private Context mContext;
 
-    public void setMainController(MainPlayerController mainController) {
+    public void setMainController(PlaybackPresenter mainController) {
         mMainController = mainController;
+    }
+
+    protected PlaybackPresenter getMainController() {
+        return mMainController;
     }
 
     protected void setAltContext(Context context) {
         mContext = context;
     }
 
-    protected MainPlayerController getMainController() {
-        return mMainController;
-    }
-
     protected <T extends PlayerEventListener> T getController(Class<T> clazz) {
-        return getMainController().getController(clazz);
+        return mMainController != null ? mMainController.getController(clazz) : null;
     }
 
     public PlayerManager getPlayer() {
-        return mMainController != null ? mMainController.getPlayer() : null;
+        return mMainController != null ? mMainController.getView() : null;
     }
 
     public Context getContext() {

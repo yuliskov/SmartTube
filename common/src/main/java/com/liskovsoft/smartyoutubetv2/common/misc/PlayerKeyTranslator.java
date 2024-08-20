@@ -5,7 +5,6 @@ import android.view.KeyEvent;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -18,20 +17,20 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
     private final GeneralData mGeneralData;
     private final Context mContext;
     private final Runnable likeAction = () -> {
-        PlaybackView playbackView = getPlaybackView();
-        if (playbackView != null && playbackView.getEventListener() != null) {
-            playbackView.getEventListener().onLikeClicked(true);
-            playbackView.getPlayer().setLikeButtonState(true);
-            playbackView.getPlayer().setDislikeButtonState(false);
+        PlaybackPresenter playbackPresenter = getPlaybackPresenter();
+        if (playbackPresenter != null && playbackPresenter.getView() != null) {
+            playbackPresenter.onLikeClicked(true);
+            playbackPresenter.getView().setLikeButtonState(true);
+            playbackPresenter.getView().setDislikeButtonState(false);
             MessageHelpers.showMessage(getContext(), R.string.action_like);
         }
     };
     private final Runnable dislikeAction = () -> {
-        PlaybackView playbackView = getPlaybackView();
-        if (playbackView != null && playbackView.getEventListener() != null) {
-            playbackView.getEventListener().onDislikeClicked(true);
-            playbackView.getPlayer().setLikeButtonState(false);
-            playbackView.getPlayer().setDislikeButtonState(true);
+        PlaybackPresenter playbackPresenter = getPlaybackPresenter();
+        if (playbackPresenter != null && playbackPresenter.getView() != null) {
+            playbackPresenter.onDislikeClicked(true);
+            playbackPresenter.getView().setLikeButtonState(false);
+            playbackPresenter.getView().setDislikeButtonState(true);
             MessageHelpers.showMessage(getContext(), R.string.action_dislike);
         }
     };
@@ -162,10 +161,10 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
         float[] speedSteps = data.isLongSpeedListEnabled() ? Utils.SPEED_LIST_LONG :
                 data.isExtraLongSpeedListEnabled() ? Utils.SPEED_LIST_EXTRA_LONG : Utils.SPEED_LIST_SHORT;
 
-        PlaybackView playbackView = getPlaybackView();
+        PlaybackPresenter playbackPresenter = getPlaybackPresenter();
 
-        if (playbackView != null && playbackView.getPlayer() != null) {
-            float currentSpeed = playbackView.getPlayer().getSpeed();
+        if (playbackPresenter != null && playbackPresenter.getView() != null) {
+            float currentSpeed = playbackPresenter.getView().getSpeed();
             int currentIndex = Arrays.binarySearch(speedSteps, currentSpeed);
 
             if (currentIndex < 0) {
@@ -177,21 +176,21 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             float speed = newIndex >= 0 && newIndex < speedSteps.length ? speedSteps[newIndex] : speedSteps[currentIndex];
 
             PlayerData.instance(mContext).setSpeed(speed);
-            playbackView.getPlayer().setSpeed(speed);
+            playbackPresenter.getView().setSpeed(speed);
             MessageHelpers.showMessage(mContext, String.format("%sx", speed));
         }
     }
 
     private void volumeUp(boolean up) {
-        PlaybackView playbackView = getPlaybackView();
+        PlaybackPresenter playbackPresenter = getPlaybackPresenter();
 
-        if (playbackView != null) {
-            Utils.volumeUp(mContext, playbackView.getPlayer(), up);
+        if (playbackPresenter != null && playbackPresenter.getView() != null) {
+            Utils.volumeUp(mContext, playbackPresenter.getView(), up);
         }
     }
 
-    private PlaybackView getPlaybackView() {
-        return PlaybackPresenter.instance(mContext).getView();
+    private PlaybackPresenter getPlaybackPresenter() {
+        return PlaybackPresenter.instance(mContext);
     }
 
     private Context getContext() {

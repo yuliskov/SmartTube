@@ -1,68 +1,60 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
+package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+
 import androidx.fragment.app.Fragment;
 
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerUiEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.ViewEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.AutoFrameRateController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.ChatController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.CommentsController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.ContentBlockController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.HQDialogController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.ChatController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.PlayerUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.RemoteController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoLoaderController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoStateController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerUiEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.ViewEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils.ChainProcessor;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils.Processor;
+import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class MainPlayerController implements PlayerEventListener {
-    private static final String TAG = MainPlayerController.class.getSimpleName();
+public class PlaybackPresenter extends BasePresenter<PlaybackView> implements PlayerEventListener {
+    private static final String TAG = PlaybackPresenter.class.getSimpleName();
+    @SuppressLint("StaticFieldLeak")
+    private static PlaybackPresenter sInstance;
+    private final ViewManager mViewManager;
     private final List<PlayerEventListener> mEventListeners = new CopyOnWriteArrayList<PlayerEventListener>() {
         @Override
         public boolean add(PlayerEventListener listener) {
-            ((BasePlayerController) listener).setMainController(MainPlayerController.this);
+            ((BasePlayerController) listener).setMainController(PlaybackPresenter.this);
 
             return super.add(listener);
         }
     };
-    @SuppressLint("StaticFieldLeak")
-    private static MainPlayerController sInstance;
-    private WeakReference<PlayerManager> mPlayer = new WeakReference<>(null);
-    private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private Video mPendingVideo;
 
-    private MainPlayerController(Context context) {
-        if (context instanceof Activity) {
-            mActivity = new WeakReference<>((Activity) context);
-        }
+    private PlaybackPresenter(Context context) {
+        super(context);
 
-        // NOTE: position matters!!!
-        //mEventListeners.add(new AutoFrameRateController());
-        //mEventListeners.add(new PlayerUIController());
-        //mEventListeners.add(new HQDialogController());
-        //mEventListeners.add(new VideoStateController());
-        //mEventListeners.add(new SuggestionsController());
-        //mEventListeners.add(new VideoLoaderController());
-        //mEventListeners.add(new RemoteController(context));
-        //mEventListeners.add(new ContentBlockController());
-        //mEventListeners.add(new ChatController());
-        //mEventListeners.add(new CommentsController());
+        mViewManager = ViewManager.instance(context);
 
         // NOTE: position matters!!!
         mEventListeners.add(new VideoStateController());
@@ -77,21 +69,120 @@ public class MainPlayerController implements PlayerEventListener {
         mEventListeners.add(new CommentsController());
     }
 
-    public static MainPlayerController instance(Context context) {
+    public static PlaybackPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new MainPlayerController(context);
+            sInstance = new PlaybackPresenter(context);
         }
+
+        sInstance.setContext(context);
 
         return sInstance;
     }
-    
-    public void setPlayer(PlayerManager player) {
-        if (player != null) {
-            if (mPlayer.get() != player) { // Be ready to re-init after app exit
-                mPlayer = new WeakReference<>(player);
-                mActivity = new WeakReference<>(((Fragment) player).getActivity());
-                process(PlayerEventListener::onInit);
+
+    @Override
+    public void onViewInitialized() {
+        super.onViewInitialized();
+
+        initControllers(getView());
+    }
+
+    /**
+     * Opens video item from splash view
+     */
+    public void openVideo(String videoId, boolean finishOnEnded, long timeMs) {
+        if (videoId == null) {
+            return;
+        }
+
+        Video video = Video.from(videoId);
+        video.finishOnEnded = finishOnEnded;
+        video.pendingPosMs = timeMs;
+        openVideo(video);
+    }
+
+    ///**
+    // * Opens video item from browser, search or channel views<br/>
+    // * Also prepares and start the playback view.
+    // */
+    //public void openVideo(Video item) {
+    //    if (item == null) {
+    //        return;
+    //    }
+    //
+    //    mMainController.openVideo(item);
+    //
+    //    mViewManager.startView(PlaybackView.class);
+    //}
+
+    public Video getVideo() {
+        if (getView() == null || getView() == null) {
+            return null;
+        }
+
+        return getView().getVideo();
+    }
+
+    public boolean isRunningInBackground() {
+        return getView() != null &&
+                getView().isEngineBlocked() &&
+                //getView().getBackgroundMode() != PlayerEngine.BACKGROUND_MODE_DEFAULT &&
+                getView().isEngineInitialized() &&
+                !ViewManager.instance(getContext()).isPlayerInForeground() &&
+                getContext() instanceof Activity && Utils.checkActivity((Activity) getContext()); // Check that activity is not in Finishing state
+    }
+
+    public boolean isInPipMode() {
+        return getView() != null && getView().isInPIPMode();
+    }
+
+    public boolean isOverlayShown() {
+        return getView() != null && getView().isOverlayShown();
+    }
+
+    public boolean isPlaying() {
+        return getView() != null && getView().isPlaying();
+    }
+
+    public boolean isEngineBlocked() {
+        return getView() != null && getView().isEngineBlocked();
+    }
+
+    //public int getBackgroundMode() {
+    //    return getView() != null ? getView().getBackgroundMode() : -1;
+    //}
+
+    public void forceFinish() {
+        if (getView() != null) {
+            getView().finishReally();
+        }
+    }
+
+    public void setPosition(String timeCode) {
+        setPosition(ServiceHelper.timeTextToMillis(timeCode));
+    }
+
+    public void setPosition(long positionMs) {
+        // Check that the user isn't open context menu on suggestion item
+        // if (Utils.isPlayerInForeground(getContext()) && getView() != null && !getView().getController().isSuggestionsShown()) {
+        if (ViewManager.instance(getContext()).isPlayerInForeground() && getView() != null) {
+            getView().setPositionMs(positionMs);
+            getView().setPlayWhenReady(true);
+            getView().showOverlay(false);
+        } else {
+            Video video = VideoMenuPresenter.sVideoHolder.get();
+            if (video != null) {
+                video.pendingPosMs = positionMs;
+                openVideo(video);
             }
+        }
+    }
+
+    // Controller methods
+
+    private void initControllers(PlaybackView playbackView) {
+        if (playbackView != null) {
+            // Re-init after app exit
+            process(PlayerEventListener::onInit);
 
             if (mPendingVideo != null) {
                 openVideo(mPendingVideo);
@@ -100,12 +191,8 @@ public class MainPlayerController implements PlayerEventListener {
         }
     }
 
-    public PlayerManager getPlayer() {
-        return mPlayer.get();
-    }
-
     public Activity getActivity() {
-        return mActivity.get();
+        return getContext() instanceof Activity ? (Activity) getContext() : null;
     }
 
     @SuppressWarnings("unchecked")
@@ -123,12 +210,17 @@ public class MainPlayerController implements PlayerEventListener {
 
     @Override
     public void openVideo(Video video) {
-        if (mPlayer.get() == null) {
-            mPendingVideo = video;
+        if (video == null) {
             return;
         }
 
-        process(listener -> listener.openVideo(video));
+        if (getView() == null) {
+            mPendingVideo = video;
+        } else {
+            process(listener -> listener.openVideo(video));
+        }
+
+        mViewManager.startView(PlaybackView.class);
     }
 
     @Override
@@ -229,7 +321,7 @@ public class MainPlayerController implements PlayerEventListener {
     public void onPauseClicked() {
         process(PlayerEventListener::onPauseClicked);
     }
-    
+
     @Override
     public void onSeekEnd() {
         process(PlayerEventListener::onSeekEnd);

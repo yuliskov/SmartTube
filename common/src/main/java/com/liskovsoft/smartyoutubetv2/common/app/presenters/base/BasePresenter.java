@@ -205,7 +205,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         } else if (view instanceof SearchView) {
             ((SearchView) view).updateSearch(group);
         } else if (view instanceof PlaybackView) {
-            ((PlaybackView) view).getPlayer().updateSuggestions(group);
+            ((PlaybackView) view).updateSuggestions(group);
         } else {
             return false;
         }
