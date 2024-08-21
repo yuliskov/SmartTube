@@ -31,7 +31,7 @@ public abstract class BasePlayerController implements PlayerEventListener {
     }
 
     public PlayerManager getPlayer() {
-        return mMainController != null ? mMainController.getView() : null;
+        return mMainController != null ? mMainController.getPlayer() : null;
     }
 
     public Context getContext() {
