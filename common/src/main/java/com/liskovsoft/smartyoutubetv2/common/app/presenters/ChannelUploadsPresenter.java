@@ -8,6 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -225,7 +226,8 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     private void update(Video item) {
-        if (item.isSectionPlaylistEnabled(getContext())) {
+        // Enable for liked music (behavior with other playlists is buggy)
+        if (item.isSectionPlaylistEnabled(getContext()) && Helpers.equals(item.playlistId, "LM")) {
             update(item.getGroup());
         } else {
             update(obtainUploadsObservable(item));

@@ -773,7 +773,7 @@ public final class Video {
     }
 
     public boolean isSectionPlaylistEnabled(Context context) {
-        return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && hasVideo() && getGroup() != null &&
+        return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && getGroup() != null &&
                 (playlistId == null || nextMediaItem == null || belongsToSearch()) && (!isRemote || remotePlaylistId == null);
     }
 }
