@@ -23,6 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,7 +148,10 @@ public class MotherActivity extends FragmentActivity {
 
     public void finishReally() {
         try {
-            super.finish();
+            // Fix extensive garbage collector on some devices (view deleted immediately)
+            // (PlaybackPresenter -> getView == null)
+            Utils.postDelayed(super::finish, 0);
+            //super.finish();
         } catch (Exception e) {
             // TextView not attached to window manager (IllegalArgumentException)
         }
