@@ -226,8 +226,8 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     private void update(Video item) {
-        // Enable for liked music (behavior with other playlists is buggy)
-        if (item.isSectionPlaylistEnabled(getContext()) && Helpers.equals(item.playlistId, "LM")) {
+        // Liked music fix - not all videos displayed. The behavior with other playlists is buggy.
+        if (Helpers.equals(item.playlistId, "LM")) {
             update(item.getGroup());
         } else {
             update(obtainUploadsObservable(item));
