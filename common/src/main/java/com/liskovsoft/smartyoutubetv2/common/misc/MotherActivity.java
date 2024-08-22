@@ -148,10 +148,7 @@ public class MotherActivity extends FragmentActivity {
 
     public void finishReally() {
         try {
-            // Fix extensive garbage collector on some devices (view deleted immediately)
-            // (PlaybackPresenter -> getView == null)
-            Utils.postDelayed(super::finish, 0);
-            //super.finish();
+            super.finish();
         } catch (Exception e) {
             // TextView not attached to window manager (IllegalArgumentException)
         }

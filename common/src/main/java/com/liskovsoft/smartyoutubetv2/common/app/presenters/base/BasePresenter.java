@@ -43,15 +43,18 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void setView(T view) {
-        if (checkView(view)) {
-            mView = new WeakReference<>(view);
-        }
+        //if (checkView(view)) {
+        //    mView = new WeakReference<>(view);
+        //}
+
+        mView = new WeakReference<>(view);
     }
 
     @Override
     public T getView() {
         T view = mView.get();
-        return checkView(view) ? view : null;
+        //return checkView(view) ? view : null;
+        return view;
     }
 
     @Override

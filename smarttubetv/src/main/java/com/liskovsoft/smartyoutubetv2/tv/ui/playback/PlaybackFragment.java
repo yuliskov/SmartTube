@@ -369,8 +369,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             Log.d(TAG, "releasePlayer: Start releasing player engine...");
             mPlaybackPresenter.onEngineReleased();
             destroyPlayerObjects();
-            // Improve memory usage???
-            Runtime.getRuntime().gc();
+            // Improve memory usage??? May cause early view destroy on some devices.
+            //Runtime.getRuntime().gc();
         }
     }
 
@@ -1124,7 +1124,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mPlaybackPresenter.onViewDestroyed();
+        //mPlaybackPresenter.onViewDestroyed();
     }
 
     @Override
