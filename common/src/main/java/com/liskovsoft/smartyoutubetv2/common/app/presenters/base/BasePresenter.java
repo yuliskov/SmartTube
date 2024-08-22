@@ -43,6 +43,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void setView(T view) {
+        // NOTE: sometimes the view is useful even after destroy (e.g. PlaybackPresenter and NPE)
         //if (checkView(view)) {
         //    mView = new WeakReference<>(view);
         //}
@@ -52,8 +53,10 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public T getView() {
-        T view = mView.get();
+        // NOTE: sometimes the view is useful even after destroy (e.g. PlaybackPresenter and NPE)
         //return checkView(view) ? view : null;
+        T view = mView.get();
+
         return view;
     }
 
