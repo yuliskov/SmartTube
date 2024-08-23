@@ -2,26 +2,21 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.base;
 
 import android.app.Activity;
 import android.content.Context;
+
 import androidx.fragment.app.Fragment;
-import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
+
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
-import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.lang.ref.WeakReference;
@@ -34,8 +29,6 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private WeakReference<Context> mApplicationContext = new WeakReference<>(null);
     private Runnable mOnDone;
-    //private static boolean sRunOnce;
-    private long mUpdateCheckMs;
 
     public BasePresenter(Context context) {
         setContext(context);
@@ -43,21 +36,16 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void setView(T view) {
-        // NOTE: sometimes the view is useful even after destroy (e.g. PlaybackPresenter and NPE)
-        //if (checkView(view)) {
-        //    mView = new WeakReference<>(view);
-        //}
-
-        mView = new WeakReference<>(view);
+        if (checkView(view)) {
+            mView = new WeakReference<>(view);
+        }
     }
 
     @Override
     public T getView() {
-        // NOTE: sometimes the view is useful even after destroy (e.g. PlaybackPresenter and NPE)
-        //return checkView(view) ? view : null;
         T view = mView.get();
 
-        return view;
+        return checkView(view) ? view : null;
     }
 
     @Override
@@ -73,12 +61,6 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
         // In case view was disposed like SplashView does
         mApplicationContext = new WeakReference<>(context.getApplicationContext());
-
-        //if (!sRunOnce) {
-        //    sRunOnce = true;
-        //    // Init shared prefs used inside remote control service.
-        //    initGlobalData();
-        //}
     }
 
     @Override
@@ -224,46 +206,6 @@ public abstract class BasePresenter<T> implements Presenter<T> {
             Playlist.instance().onNewSession();
         }
     }
-
-    //private void showBootDialogs() {
-    //    if (this instanceof BrowsePresenter) {
-    //        long currentTimeMs = System.currentTimeMillis();
-    //
-    //        if (currentTimeMs - mUpdateCheckMs > 60 * 60 * 1_000) {
-    //            BootDialogPresenter updatePresenter = BootDialogPresenter.instance(getContext());
-    //            updatePresenter.start();
-    //            updatePresenter.unhold();
-    //            Utils.updateRemoteControlService(getContext());
-    //            mUpdateCheckMs = currentTimeMs;
-    //        }
-    //    }
-    //}
-
-    ///**
-    // * Need to be the first line and executed on earliest stage once.<br/>
-    // * Inits media service language and context.<br/>
-    // * NOTE: this command should run before using any of the media service api.
-    // */
-    //private void initGlobalData() {
-    //    Log.d(TAG, "initGlobalData called...");
-    //
-    //    if (getContext() == null) {
-    //        return;
-    //    }
-    //
-    //    // 1) Auth token storage init
-    //    // 2) Media service language setup (I assume that context has proper language)
-    //    GlobalPreferences.instance(getContext());
-    //
-    //    // Apply proxy config after global prefs but before starting networking.
-    //    if (GeneralData.instance(getContext()).isProxyEnabled()) {
-    //        new ProxyManager(getContext()).configureSystemProxy();
-    //    }
-    //
-    //    // 1) Remove downloaded apks
-    //    // 2) Setup language
-    //    //ViewManager.instance(getContext()).clearCaches();
-    //}
 
     /**
      * Check that view's activity is alive

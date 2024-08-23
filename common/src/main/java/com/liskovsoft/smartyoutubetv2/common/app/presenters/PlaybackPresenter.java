@@ -52,8 +52,8 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         }
     };
     private Video mPendingVideo;
-    //private Activity mActivity; // prevent from GC till onViewDestroyed call
-    //private PlaybackView mPlayer; // prevent from GC till onViewDestroyed call
+    // Fix for using destroyed view
+    private WeakReference<PlaybackView> mPlayer;
 
     private PlaybackPresenter(Context context) {
         super(context);
@@ -87,7 +87,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     public void onViewInitialized() {
         super.onViewInitialized();
         
-        initControllers(getView());
+        initControllers();
     }
 
     /**
@@ -183,32 +183,29 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
 
     // Controller methods
 
-    private void initControllers(PlaybackView player) {
-        if (player != null) {
-            // Re-init after app exit
-            process(PlayerEventListener::onInit);
+    @Override
+    public void setView(PlaybackView view) {
+        super.setView(view);
+        mPlayer = new WeakReference<>(view);
+    }
 
-            //if (mPlayer != player) { // Be ready to re-init after app exit
-            //    mPlayer = player;
-            //    mActivity = ((Fragment) player).getActivity();
-            //    process(PlayerEventListener::onInit);
-            //}
+    private void initControllers() {
+        // Re-init after app exit
+        process(PlayerEventListener::onInit);
 
-            if (mPendingVideo != null) {
-                openVideo(mPendingVideo);
-                mPendingVideo = null;
-            }
+        if (mPendingVideo != null) {
+            openVideo(mPendingVideo);
+            mPendingVideo = null;
         }
     }
 
     public PlaybackView getPlayer() {
-        return getView();
-        //return mPlayer;
+        //return getView();
+        return mPlayer.get();
     }
 
     public Activity getActivity() {
         return getContext() instanceof Activity ? (Activity) getContext() : null;
-        //return mActivity;
     }
 
     @SuppressWarnings("unchecked")
