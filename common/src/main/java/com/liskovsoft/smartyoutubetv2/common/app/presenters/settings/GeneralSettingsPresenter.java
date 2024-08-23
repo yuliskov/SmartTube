@@ -16,7 +16,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -62,7 +61,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBootToSection(settingsPresenter);
         appendEnabledSections(settingsPresenter);
         appendContextMenuItemsCategory(settingsPresenter);
-        appendVariousButtonsCategory(settingsPresenter);
+        //appendTopButtonsCategory(settingsPresenter);
         appendHideUnwantedContent(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
@@ -232,24 +231,24 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         dialog.showDialog();
     }
 
-    private void appendVariousButtonsCategory(AppDialogPresenter settingsPresenter) {
-        List<OptionItem> options = new ArrayList<>();
-
-        for (int[] pair : new int[][] {
-                {R.string.settings_search, MainUIData.TOP_BUTTON_SEARCH},
-                {R.string.settings_language_country, MainUIData.TOP_BUTTON_CHANGE_LANGUAGE},
-                {R.string.settings_accounts, MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS}}) {
-            options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
-                if (optionItem.isSelected()) {
-                    mMainUIData.enableTopButton(pair[1]);
-                } else {
-                    mMainUIData.disableTopButton(pair[1]);
-                }
-            }, mMainUIData.isTopButtonEnabled(pair[1])));
-        }
-
-        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.various_buttons), options);
-    }
+    //private void appendTopButtonsCategory(AppDialogPresenter settingsPresenter) {
+    //    List<OptionItem> options = new ArrayList<>();
+    //
+    //    for (int[] pair : new int[][] {
+    //            {R.string.settings_search, MainUIData.TOP_BUTTON_SEARCH},
+    //            {R.string.settings_language_country, MainUIData.TOP_BUTTON_CHANGE_LANGUAGE},
+    //            {R.string.settings_accounts, MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS}}) {
+    //        options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
+    //            if (optionItem.isSelected()) {
+    //                mMainUIData.enableTopButton(pair[1]);
+    //            } else {
+    //                mMainUIData.disableTopButton(pair[1]);
+    //            }
+    //        }, mMainUIData.isTopButtonEnabled(pair[1])));
+    //    }
+    //
+    //    settingsPresenter.appendCheckedCategory(getContext().getString(R.string.various_buttons), options);
+    //}
 
     private void appendBootToSection(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
@@ -521,41 +520,41 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.getMasterPassword() != null));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.app_corner_clock),
-                option -> {
-                    mGeneralData.enableGlobalClock(option.isSelected());
-                    mRestartApp = true;
-                },
-                mGeneralData.isGlobalClockEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_clock),
-                option -> mPlayerData.enableGlobalClock(option.isSelected()),
-                mPlayerData.isGlobalClockEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_ending_time),
-                option -> mPlayerData.enableGlobalEndingTime(option.isSelected()),
-                mPlayerData.isGlobalEndingTimeEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.old_home_look),
-                option -> {
-                    mGeneralData.enableOldHomeLook(option.isSelected());
-                    mRestartApp = true;
-                },
-                mGeneralData.isOldHomeLookEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.old_channel_look),
-                option -> {
-                    mGeneralData.enableOldChannelLook(option.isSelected());
-                    mMainUIData.enableChannelSearchBar(!option.isSelected());
-                },
-                mGeneralData.isOldChannelLookEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.fullscreen_mode),
-                option -> {
-                    mGeneralData.enableFullscreenMode(option.isSelected());
-                    mRestartApp = true;
-                },
-                mGeneralData.isFullscreenModeEnabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.app_corner_clock),
+        //        option -> {
+        //            mGeneralData.enableGlobalClock(option.isSelected());
+        //            mRestartApp = true;
+        //        },
+        //        mGeneralData.isGlobalClockEnabled()));
+        //
+        //options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_clock),
+        //        option -> mPlayerData.enableGlobalClock(option.isSelected()),
+        //        mPlayerData.isGlobalClockEnabled()));
+        //
+        //options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_ending_time),
+        //        option -> mPlayerData.enableGlobalEndingTime(option.isSelected()),
+        //        mPlayerData.isGlobalEndingTimeEnabled()));
+        //
+        //options.add(UiOptionItem.from(getContext().getString(R.string.old_home_look),
+        //        option -> {
+        //            mGeneralData.enableOldHomeLook(option.isSelected());
+        //            mRestartApp = true;
+        //        },
+        //        mGeneralData.isOldHomeLookEnabled()));
+        //
+        //options.add(UiOptionItem.from(getContext().getString(R.string.old_channel_look),
+        //        option -> {
+        //            mGeneralData.enableOldChannelLook(option.isSelected());
+        //            mMainUIData.enableChannelSearchBar(!option.isSelected());
+        //        },
+        //        mGeneralData.isOldChannelLookEnabled()));
+        //
+        //options.add(UiOptionItem.from(getContext().getString(R.string.fullscreen_mode),
+        //        option -> {
+        //            mGeneralData.enableFullscreenMode(option.isSelected());
+        //            mRestartApp = true;
+        //        },
+        //        mGeneralData.isFullscreenModeEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_subscriptions),
                 option -> mGeneralData.rememberSubscriptionsPosition(option.isSelected()),
