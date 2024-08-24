@@ -53,6 +53,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         if (Build.VERSION.SDK_INT > 19) {
             appendVideoGridScale(settingsPresenter);
         }
+        appendTimeFormatCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
@@ -228,6 +229,28 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.video_grid_scale), options);
+    }
+
+    private void appendTimeFormatCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.time_format_24),
+                option -> {
+                    mGeneralData.setTimeFormat(GeneralData.TIME_FORMAT_24);
+                    mRestartApp = true;
+                },
+                mGeneralData.getTimeFormat() == GeneralData.TIME_FORMAT_24));
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.time_format_12),
+                option -> {
+                    mGeneralData.setTimeFormat(GeneralData.TIME_FORMAT_12);
+                    mRestartApp = true;
+                },
+                mGeneralData.getTimeFormat() == GeneralData.TIME_FORMAT_12));
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.time_format), options);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {

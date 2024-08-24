@@ -68,7 +68,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         //appendBackgroundPlaybackActivationCategory(settingsPresenter);
         appendScreensaverDimmingCategory(settingsPresenter);
         appendScreensaverTimeoutCategory(settingsPresenter);
-        appendTimeFormatCategory(settingsPresenter);
+        //appendTimeFormatCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
         //appendAppBackupCategory(settingsPresenter);
         appendInternetCensorship(settingsPresenter);
@@ -433,27 +433,27 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.screensaver_timout), options);
     }
 
-    private void appendTimeFormatCategory(AppDialogPresenter settingsPresenter) {
-        List<OptionItem> options = new ArrayList<>();
-
-        options.add(UiOptionItem.from(
-                getContext().getString(R.string.time_format_24),
-                option -> {
-                    mGeneralData.setTimeFormat(GeneralData.TIME_FORMAT_24);
-                    mRestartApp = true;
-                },
-                mGeneralData.getTimeFormat() == GeneralData.TIME_FORMAT_24));
-
-        options.add(UiOptionItem.from(
-                getContext().getString(R.string.time_format_12),
-                option -> {
-                    mGeneralData.setTimeFormat(GeneralData.TIME_FORMAT_12);
-                    mRestartApp = true;
-                },
-                mGeneralData.getTimeFormat() == GeneralData.TIME_FORMAT_12));
-
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.time_format), options);
-    }
+    //private void appendTimeFormatCategory(AppDialogPresenter settingsPresenter) {
+    //    List<OptionItem> options = new ArrayList<>();
+    //
+    //    options.add(UiOptionItem.from(
+    //            getContext().getString(R.string.time_format_24),
+    //            option -> {
+    //                mGeneralData.setTimeFormat(GeneralData.TIME_FORMAT_24);
+    //                mRestartApp = true;
+    //            },
+    //            mGeneralData.getTimeFormat() == GeneralData.TIME_FORMAT_24));
+    //
+    //    options.add(UiOptionItem.from(
+    //            getContext().getString(R.string.time_format_12),
+    //            option -> {
+    //                mGeneralData.setTimeFormat(GeneralData.TIME_FORMAT_12);
+    //                mRestartApp = true;
+    //            },
+    //            mGeneralData.getTimeFormat() == GeneralData.TIME_FORMAT_12));
+    //
+    //    settingsPresenter.appendRadioCategory(getContext().getString(R.string.time_format), options);
+    //}
 
     private void appendHistoryCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
