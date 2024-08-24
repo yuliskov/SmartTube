@@ -53,7 +53,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     };
     private Video mPendingVideo;
     // Fix for using destroyed view
-    private WeakReference<PlaybackView> mPlayer;
+    private WeakReference<PlaybackView> mPlayer = new WeakReference<>(null);
 
     private PlaybackPresenter(Context context) {
         super(context);
