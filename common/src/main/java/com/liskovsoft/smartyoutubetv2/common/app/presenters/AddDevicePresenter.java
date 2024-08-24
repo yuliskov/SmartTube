@@ -51,7 +51,9 @@ public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
     }
 
     public void onActionClicked() {
-        getView().close();
+        if (getView() != null) {
+            getView().close();
+        }
     }
 
     private void updateDeviceCode() {
