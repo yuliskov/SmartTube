@@ -669,4 +669,5 @@
     <string name="without_picture">Senza immagine</string>
     <string name="video_disabled">Video disabilitato</string>
     <string name="applying_fix">Non chiudere il lettore. Applicazione della correzione...</string>
+    <string name="hide_mixes">Nascondi i mix</string>
 </resources>
