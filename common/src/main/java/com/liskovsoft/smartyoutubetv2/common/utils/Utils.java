@@ -86,10 +86,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 
 import java.io.UnsupportedEncodingException;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -110,34 +107,6 @@ public class Utils {
     public static final float[] SPEED_LIST_SHORT =
             new float[] {0.25f, 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 2.25f, 2.5f, 2.75f, 3.0f, 3.25f, 3.5f, 3.75f, 4.0f};
     private static boolean sIsGlobalVolumeFixed;
-
-    /**
-     * Limit the maximum size of a Map by removing oldest entries when limit reached
-     */
-    public static <K, V> Map<K, V> createLRUMap(final int maxEntries) {
-        return new LinkedHashMap<K, V>(maxEntries + 1, 0.75f, true) {
-            @Override
-            protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
-                return size() > maxEntries;
-            }
-        };
-    }
-
-    /**
-     * Trim playlist if one exceeds max size
-     */
-    public static <T> List<T> createLRUList(final int maxEntries) {
-        return new LinkedList<T>() {
-            @Override
-            public boolean add(T t) {
-                if (size() > maxEntries) {
-                    removeFirst();
-                }
-
-                return super.add(t);
-            }
-        };
-    }
 
     @TargetApi(17)
     public static void displayShareVideoDialog(Context context, String videoId) {

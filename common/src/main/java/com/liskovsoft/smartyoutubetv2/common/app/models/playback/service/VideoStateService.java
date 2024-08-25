@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.Map;
 
@@ -16,7 +15,7 @@ public class VideoStateService implements ProfileChangeListener {
     private static final int MAX_PERSISTENT_STATE_SIZE = 100;
     // Don't store state inside Video object.
     // As one video might correspond to multiple Video objects.
-    private final Map<String, State> mStates = Utils.createLRUMap(MAX_PERSISTENT_STATE_SIZE);
+    private final Map<String, State> mStates = Helpers.createLRUMap(MAX_PERSISTENT_STATE_SIZE);
     private final AppPrefs mPrefs;
 
     private VideoStateService(Context context) {
