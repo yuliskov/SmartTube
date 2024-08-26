@@ -273,7 +273,8 @@ public final class Video {
             return author;
         }
 
-        return extractAuthor(metadataSecondTitle != null ? metadataSecondTitle : secondTitle); // BAD idea
+        String subtitle = metadataSecondTitle != null ? metadataSecondTitle : secondTitle;
+        return hasVideo() ? extractAuthor(subtitle) : subtitle; // BAD idea
     }
 
     public VideoGroup getGroup() {
@@ -446,7 +447,7 @@ public final class Video {
     }
 
     public boolean isChannel() {
-        return videoId == null && channelId != null;
+        return videoId == null && playlistId == null && channelId != null;
     }
 
     /**
