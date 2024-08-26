@@ -258,6 +258,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         if (getView() == null) { // starting from outside (e.g. MediaServiceManager)
             mVideoItem = null;
             mRootGroup = mediaGroup; // start loading from this group
+            ViewManager.instance(getContext()).startView(ChannelUploadsView.class);
             return;
         }
 
@@ -286,9 +287,10 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         disposeActions();
 
-        Observable<MediaGroup> group = mContentService.getGroupObserve(mediaItem);
+        //Observable<MediaGroup> group = mContentService.getGroupObserve(mediaItem);
 
-        mUpdateAction = group
+        //mUpdateAction = group
+        mUpdateAction = obtainUploadsObservable(Video.from(mediaItem))
                 .subscribe(
                         callback::onGroup,
                         error -> Log.e(TAG, "obtainGroup error: %s", error.getMessage())
