@@ -221,7 +221,7 @@ public class SuggestionsController extends BasePlayerController {
         video.sync(mediaItemMetadata);
         getPlayer().setVideo(video);
 
-        getPlayer().setNextTitle(getNext() != null ? getNext().getTitle() : null);
+        getPlayer().setNextTitle(getNext());
 
         appendDislikes(video);
     }

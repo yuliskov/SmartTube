@@ -857,6 +857,16 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         return result;
     }
 
+    private CharSequence createNextTitle(Video video) {
+        CharSequence result = null;
+
+        if (video != null) {
+            result = TextUtils.concat(video.getTitle(), " ", Video.TERTIARY_TEXT_DELIM, " ", video.getAuthor());
+        }
+
+        return result;
+    }
+
     @Override
     public void loadStoryboard() {
         if (mPlayerGlue.getSeekProvider() instanceof StoryboardSeekDataProvider) {
@@ -1333,9 +1343,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setNextTitle(String title) {
+    public void setNextTitle(Video nextVideo) {
         if (mPlayerGlue != null) {
-            mPlayerGlue.setNextTitle(title);
+            mPlayerGlue.setNextTitle(createNextTitle(nextVideo));
         }
     }
 

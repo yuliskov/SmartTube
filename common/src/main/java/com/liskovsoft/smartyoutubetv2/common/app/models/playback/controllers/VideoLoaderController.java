@@ -685,11 +685,11 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                 }
 
                 mLastVideo.nextMediaItem = SampleMediaItem.from(randomMetadata);
-                getPlayer().setNextTitle(mLastVideo.nextMediaItem.getTitle());
+                getPlayer().setNextTitle(Video.from(mLastVideo.nextMediaItem));
             });
         } else if (mLastVideo.nextMediaItemBackup != null) {
             mLastVideo.nextMediaItem = mLastVideo.nextMediaItemBackup;
-            getPlayer().setNextTitle(mLastVideo.nextMediaItem.getTitle());
+            getPlayer().setNextTitle(Video.from(mLastVideo.nextMediaItem));
         }
     }
 

@@ -347,7 +347,7 @@ public class PlayerUIController extends BasePlayerController {
                     group.setAction(VideoGroup.ACTION_PREPEND);
                 }
                 getPlayer().updateSuggestions(group);
-                getPlayer().setNextTitle(mSuggestionsController.getNext() != null ? mSuggestionsController.getNext().getTitle() : null);
+                getPlayer().setNextTitle(mSuggestionsController.getNext());
             }
         });
     }

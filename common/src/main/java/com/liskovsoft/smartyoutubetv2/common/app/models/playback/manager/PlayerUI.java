@@ -35,7 +35,7 @@ public interface PlayerUI {
     void setButtonState(int buttonId, int buttonState);
     void setChannelIcon(String iconUrl);
     void setSeekPreviewTitle(String title);
-    void setNextTitle(String title);
+    void setNextTitle(Video nextVideo);
     void setDebugButtonState(boolean show);
     void showDebugInfo(boolean show);
     void showSubtitles(boolean show);
