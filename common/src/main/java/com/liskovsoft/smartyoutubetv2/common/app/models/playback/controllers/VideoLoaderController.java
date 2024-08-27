@@ -443,8 +443,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
 
         if (error instanceof OutOfMemoryError) {
-            if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
+            if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_NONE) {
                 mPlayerTweaksData.enableSectionPlaylist(false);
+            } else if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
+                mPlayerData.setVideoBufferType(PlayerData.BUFFER_NONE);
             } else {
                 mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
             }
@@ -619,7 +621,8 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
 
         // Live dash url doesn't work with None buffer
-        if (formatInfo.isLive() && (mPlayerTweaksData.isDashUrlStreamsForced() || mPlayerData.getVideoBufferType() == PlayerData.BUFFER_NONE)) {
+        //if (formatInfo.isLive() && (mPlayerTweaksData.isDashUrlStreamsForced() || mPlayerData.getVideoBufferType() == PlayerData.BUFFER_NONE)) {
+        if (formatInfo.isLive() && mPlayerTweaksData.isDashUrlStreamsForced()) {
             return false;
         }
 

@@ -121,7 +121,7 @@ public class ExoPlayerInitializer {
                 minBufferMs = 1_000;
                 maxBufferMs = 1_000;
                 bufferForPlaybackMs = 1_000;
-                bufferForPlaybackAfterRebufferMs = 0;
+                bufferForPlaybackAfterRebufferMs = 1_000;
                 break;
         }
 
