@@ -17,6 +17,8 @@ package com.google.android.exoplayer2.text.webvtt;
 
 import android.graphics.Typeface;
 import androidx.annotation.NonNull;
+import androidx.core.text.HtmlCompat;
+
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -157,6 +159,9 @@ public final class WebvttCueParser {
    */
   /* package */ static void parseCueText(String id, String markup, WebvttCue.Builder builder,
       List<WebvttCssStyle> styles) {
+    // MOD: Fix embedded styles by decoding html entities
+    markup = HtmlCompat.fromHtml(markup, HtmlCompat.FROM_HTML_MODE_LEGACY).toString();
+
     SpannableStringBuilder spannedText = new SpannableStringBuilder();
     ArrayDeque<StartTag> startTagStack = new ArrayDeque<>();
     List<StyleMatch> scratchStyleMatches = new ArrayList<>();
