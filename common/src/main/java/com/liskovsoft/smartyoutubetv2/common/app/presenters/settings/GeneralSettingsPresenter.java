@@ -62,7 +62,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendEnabledSections(settingsPresenter);
         //appendContextMenuItemsCategory(settingsPresenter);
         //appendTopButtonsCategory(settingsPresenter);
-        appendHideUnwantedContent(settingsPresenter);
+        // appendHideUnwantedContent(settingsPresenter);
         //appendAppExitCategory(settingsPresenter);
         //appendBackgroundPlaybackCategory(settingsPresenter);
         //appendBackgroundPlaybackActivationCategory(settingsPresenter);

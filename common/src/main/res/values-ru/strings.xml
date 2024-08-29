@@ -373,7 +373,7 @@
     <string name="openvpn_application_aborted">Пожалуйста, сначала исправьте настройки OpenVPN.</string>
     <string name="openvpn_test_aborted">Тест прерван, сначала исправьте настройки OpenVPN.</string>
     <string name="openvpn_address_invalid">Адрес файла конфигурации не задан.</string>
-    <string name="internet_censorship">Интернет-цензура</string>
+    <string name="internet_censorship">Настройки сети</string>
     <string name="rename_section">Переименовать этот раздел</string>
     <string name="simple_edit_value_hint">Введите значение</string>
     <string name="seek_interval">Интервал перемотки</string>
