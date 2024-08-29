@@ -14,13 +14,13 @@ import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
+import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +70,6 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     private String mAudioLanguage;
     private String mSubtitleLanguage;
     private boolean mIsAllSpeedEnabled;
-    private boolean mIsLegacyCodecsForced;
     private int mRepeatMode;
     private boolean mIsSonyTimerFixEnabled;
     private boolean mIsQualityInfoEnabled;
@@ -279,12 +278,12 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     }
 
     public boolean isLegacyCodecsForced() {
-        return mIsLegacyCodecsForced;
+        return MediaServiceData.instance().isFormatEnabled(MediaServiceData.FORMATS_URL) && !MediaServiceData.instance().isFormatEnabled(MediaServiceData.FORMATS_DASH);
     }
 
     public void forceLegacyCodecs(boolean enable) {
-        mIsLegacyCodecsForced = enable;
-        persistState();
+        MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_URL, enable);
+        MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_DASH, !enable);
     }
 
     public boolean isAfrEnabled() {
@@ -770,7 +769,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         mIsAllSpeedEnabled = Helpers.parseBoolean(split, 21, false);
         // repeat mode was here
         // didn't remember what was there
-        mIsLegacyCodecsForced = Build.VERSION.SDK_INT <= 19;
+        // mIsLegacyCodecsForced
         mIsSonyTimerFixEnabled = Helpers.parseBoolean(split, 25, false);
         // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
@@ -826,8 +825,8 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
                 mVideoFormat, mAudioFormat, mSubtitleFormat,
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
-                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs, mIsAllSpeedEnabled, null, null, // didn't remember what was there
-                mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
+                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs, mIsAllSpeedEnabled, null, null,
+                null, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsSpeedPerVideoEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,

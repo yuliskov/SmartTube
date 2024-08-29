@@ -109,7 +109,7 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
                 UiOptionItem.from(getContext().getString(R.string.unsubscribe_from_channel), optionItem -> {
                     // Maybe this is subscribed items view
                     ChannelUploadsPresenter.instance(getContext())
-                            .obtainVideoGroup(mVideo, group -> {
+                            .obtainGroup(mVideo, group -> {
                                 // Some uploads groups doesn't contain channel button.
                                 // Use data from first item instead.
                                 if (group.getChannelId() == null) {

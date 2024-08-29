@@ -186,7 +186,7 @@ public class GDriveBackupManager {
     }
 
     private boolean checkFileName(String name) {
-        return Helpers.endsWith(name, mBackupNames);
+        return Helpers.endsWithAny(name, mBackupNames);
     }
 
     private String fixAltPackageName(String name) {

@@ -520,7 +520,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void appendMarkAsWatchedButton() {
-        if (mVideo == null || !mIsMarkAsWatchedButtonEnabled) {
+        if (mVideo == null || !mVideo.hasVideo() || !mIsMarkAsWatchedButtonEnabled) {
             return;
         }
 

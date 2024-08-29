@@ -669,4 +669,5 @@
   <string name="without_picture">Sin imagen</string>
   <string name="video_disabled">Vídeo desactivado</string>
   <string name="applying_fix">No cierres el reproductor. Aplicando la solución...</string>
+  <string name="hide_mixes">Ocultar Mixes</string>
 </resources>

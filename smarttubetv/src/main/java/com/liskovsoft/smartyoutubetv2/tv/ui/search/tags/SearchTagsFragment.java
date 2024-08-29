@@ -262,7 +262,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
             // Show suggested videos on empty search
             loadSearchResult("");
 
-            if (enableRecognition && SpeechRecognizer.isRecognitionAvailable(getContext())) {
+            if (enableRecognition && isRecognitionAvailable()) {
                 startRecognition();
             } else {
                 focusOnSearchField();
@@ -272,6 +272,15 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         if (getRowsSupportFragment() != null) {
             // Move selection to the top
             getRowsSupportFragment().setSelectedPosition(0);
+        }
+    }
+
+    private boolean isRecognitionAvailable() {
+        try {
+            return SpeechRecognizer.isRecognitionAvailable(getContext());
+        } catch (NullPointerException e) {
+            // Attempt to invoke virtual method 'android.content.pm.PackageManager android.content.Context.getPackageManager()' on a null object reference
+            return false;
         }
     }
 

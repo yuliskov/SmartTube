@@ -374,7 +374,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
                 });
     }
 
-    public void setNextTitle(String title) {
+    public void setNextTitle(CharSequence title) {
         mSkipNextAction.setLabel1(title != null ? title : getContext().getString(R.string.lb_playback_controls_skip_next));
         invalidateUi(mSkipNextAction);
     }

@@ -1,12 +1,11 @@
-package com.liskovsoft.smartyoutubetv2.common.app.presenters;
+package com.liskovsoft.smartyoutubetv2.common.app.presenters.browse;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
-import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.yt.NotificationsService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
@@ -25,20 +24,19 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyErro
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.PasswordError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.browse.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.ChannelUploadsMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.SectionMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.SectionPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -56,11 +54,9 @@ import java.util.concurrent.Callable;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
-public class BrowsePresenter extends BasePresenter<BrowseView> implements SectionPresenter, VideoGroupPresenter, AccountChangeListener {
-    private static final String TAG = BrowsePresenter.class.getSimpleName();
+public class SectionsPresenter extends BaseBrowsePresenter {
+    private static final String TAG = SectionsPresenter.class.getSimpleName();
     private static final long HEADER_REFRESH_PERIOD_MS = 120 * 60 * 1_000;
-    @SuppressLint("StaticFieldLeak")
-    private static BrowsePresenter sInstance;
     private final MainUIData mMainUIData;
     private final GeneralData mGeneralData;
     private final List<BrowseSection> mSections;
@@ -78,13 +74,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final List<Disposable> mActions;
     private final Runnable mRefreshSection = this::refresh;
     private BrowseSection mCurrentSection;
-    private Video mCurrentVideo;
     private long mLastUpdateTimeMs;
     private int mBootSectionIndex;
     private int mBootstrapSectionId = -1;
 
-    private BrowsePresenter(Context context) {
-        super(context);
+    public SectionsPresenter(BrowsePresenter root) {
+        super(root);
         mDataSourcePresenter = AppDataSourceManager.instance();
         mSections = new ArrayList<>();
         mErrorSections = new ArrayList<>();
@@ -92,10 +87,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mRowMapping = new HashMap<>();
         mSettingsGridMapping = new HashMap<>();
         mSectionsMapping = new HashMap<>();
-        mMainUIData = MainUIData.instance(context);
-        mGeneralData = GeneralData.instance(context);
+        mMainUIData = MainUIData.instance(getContext());
+        mGeneralData = GeneralData.instance(getContext());
         MediaServiceManager.instance().addAccountListener(this);
-        ScreenHelper.updateScreenInfo(context);
+        ScreenHelper.updateScreenInfo(getContext());
 
         ServiceManager service = YouTubeServiceManager.instance();
         mContentService = service.getContentService();
@@ -106,20 +101,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mActions = new ArrayList<>();
 
         initSections();
-    }
-
-    public static BrowsePresenter instance(Context context) {
-        if (sInstance == null) {
-            sInstance = new BrowsePresenter(context);
-        }
-
-        sInstance.setContext(context);
-
-        return sInstance;
-    }
-
-    public static void unhold() {
-        sInstance = null;
     }
 
     @Override
@@ -150,13 +131,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private void saveSelectedItems() {
         // Fix position reset when jumping between sections
-        if (mCurrentVideo != null && mCurrentVideo.getPositionInsideGroup() == 0 && (System.currentTimeMillis() - mCurrentVideo.timestamp) < 10_000) {
+        if (getCurrentVideo() != null && getCurrentVideo().getPositionInsideGroup() == 0 && (System.currentTimeMillis() - getCurrentVideo().timestamp) < 10_000) {
             return;
         }
 
         if ((isSubscriptionsSection() && mGeneralData.isRememberSubscriptionsPositionEnabled()) ||
                 (isPinnedSection() && mGeneralData.isRememberPinnedPositionEnabled())) {
-            mGeneralData.setSelectedItem(mCurrentSection.getId(), mCurrentVideo);
+            mGeneralData.setSelectedItem(mCurrentSection.getId(), getCurrentVideo());
         }
     }
 
@@ -252,6 +233,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mSettingsGridMapping.put(MediaGroup.TYPE_SETTINGS, () -> mDataSourcePresenter.getSettingItems(getContext()));
     }
 
+    @Override
     public void updateSections() {
         if (getView() == null) {
             return;
@@ -298,6 +280,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         });
     }
 
+    @Override
     public void updateChannelSorting() {
         int sortingType = mMainUIData.getChannelCategorySorting();
 
@@ -320,6 +303,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
     }
 
+    @Override
     public void updatePlaylistsStyle() {
         int playlistsStyle = mMainUIData.getPlaylistsStyle();
 
@@ -376,8 +360,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 updateChannelUploadsMultiGrid(null); // clear
             }
         }
-
-        mCurrentVideo = item;
     }
 
     @Override
@@ -414,7 +396,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                     action == VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST) {
                     removeItem(videoItem);
                 } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isMultiGridChannelUploadsSection()) {
-                    removeItem(mCurrentVideo);
+                    removeItem(getCurrentVideo());
                     VideoMenuPresenter.instance(getContext()).closeDialog();
                 } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isSubscriptionsSection()) {
                     removeItemAuthor(videoItem);
@@ -442,7 +424,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void onSectionFocused(int sectionId) {
         saveSelectedItems(); // save previous state
         mCurrentSection = findSectionById(sectionId);
-        mCurrentVideo = null; // fast scroll through the sections (fix empty selected item)
         updateCurrentSection();
     }
 
@@ -456,30 +437,35 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return RxHelper.isAnyActionRunning(mActions);
     }
 
+    @Override
     public boolean isItemPinned(Video item) {
         Collection<Video> items = mGeneralData.getPinnedItems();
 
         return items.contains(item);
     }
 
+    @Override
     public void moveSectionUp(BrowseSection section) {
         mCurrentSection = section; // move current focus
         mGeneralData.moveSectionUp(section.getId());
         updateSections();
     }
 
+    @Override
     public void moveSectionDown(BrowseSection section) {
         mCurrentSection = section; // move current focus
         mGeneralData.moveSectionDown(section.getId());
         updateSections();
     }
 
+    @Override
     public void renameSection(BrowseSection section) {
         mCurrentSection = section; // move current focus
         mGeneralData.renameSection(section.getId(), section.getTitle());
         updateSections();
     }
 
+    @Override
     public void enableAllSections(boolean enable) {
         enableSection(MediaGroup.TYPE_HISTORY, enable);
         enableSection(MediaGroup.TYPE_USER_PLAYLISTS, enable);
@@ -493,6 +479,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         enableSection(MediaGroup.TYPE_SHORTS, enable);
     }
 
+    @Override
     public void enableSection(int sectionId, boolean enable) {
         mGeneralData.enableSection(sectionId, enable);
 
@@ -503,6 +490,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateSections();
     }
 
+    @Override
     public void pinItem(Video item) {
         if (getView() == null) {
             return;
@@ -518,6 +506,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         getView().addSection(-1, newSection);
     }
 
+    @Override
     public void pinItem(String title, int resId, ErrorFragmentData data) {
         if (getView() == null) {
             return;
@@ -535,6 +524,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mSections.add(new BrowseSection(id, title, BrowseSection.TYPE_ERROR, resId, false, data));
     }
 
+    @Override
     public void unpinItem(Video item) {
         mGeneralData.removePinnedItem(item);
         mGeneralData.removeSelectedItem(item.hashCode());
@@ -562,10 +552,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
     }
 
+    @Override
     public void refresh() {
         refresh(true);
     }
 
+    @Override
     public void refresh(boolean focusOnContent) {
         updateCurrentSection();
         if (focusOnContent && getView() != null) {
@@ -981,30 +973,37 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     /**
      * Is Channels new look enabled?
      */
+    @Override
     public boolean isMultiGridChannelUploadsSection() {
         return mCurrentSection != null && mCurrentSection.getType() == BrowseSection.TYPE_MULTI_GRID && mCurrentSection.getId() == MediaGroup.TYPE_CHANNEL_UPLOADS;
     }
 
+    @Override
     public boolean isSettingsSection() {
         return isSection(MediaGroup.TYPE_SETTINGS);
     }
 
+    @Override
     public boolean isPlaylistsSection() {
         return isSection(MediaGroup.TYPE_USER_PLAYLISTS);
     }
 
+    @Override
     public boolean isHomeSection() {
         return isSection(MediaGroup.TYPE_HOME);
     }
 
+    @Override
     public boolean isHistorySection() {
         return isSection(MediaGroup.TYPE_HISTORY);
     }
 
+    @Override
     public boolean isSubscriptionsSection() {
         return isSection(MediaGroup.TYPE_SUBSCRIPTIONS);
     }
 
+    @Override
     public boolean isPinnedSection() {
         return mCurrentSection != null && isPinnedId(mCurrentSection.getId());
     }
@@ -1017,6 +1016,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return mCurrentSection != null && mCurrentSection.getId() == sectionId;
     }
 
+    @Override
     public void selectSection(int sectionId) {
         ViewManager.instance(getContext()).startView(BrowseView.class); // focus view
 
@@ -1038,6 +1038,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
     }
 
+    @Override
     public boolean inForeground() {
         return ViewManager.instance(getContext()).getTopView() == BrowseView.class;
     }
@@ -1057,9 +1058,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateSections();
     }
 
-    public Video getCurrentVideo() {
-        return mCurrentVideo;
-    }
+    //@Override
+    //public Video getCurrentVideo() {
+    //    return mCurrentVideo;
+    //}
 
     private void initPasswordSection() {
         AccountsData accountsData = AccountsData.instance(getContext());

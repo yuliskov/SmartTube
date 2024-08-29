@@ -196,7 +196,7 @@ public class IntentExtractor {
     public static boolean isRootUrl(Intent intent) {
         return intent != null
                 && extractUri(intent) != null
-                && (extractUri(intent).toString().endsWith(".com/") || extractUri(intent).toString().endsWith(".com"));
+                && Helpers.endsWithAny(extractUri(intent).toString(), ".com/", ".com", ".com/launch=remote");
     }
 
     public static boolean isStartVoiceCommand(Intent intent) {

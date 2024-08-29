@@ -662,4 +662,5 @@
     <string name="without_picture">Без зображення</string>
     <string name="video_disabled">Відео вимкнено</string>
     <string name="applying_fix">Не закривайте плеєр. Застосування виправлення...</string>
+    <string name="hide_mixes">Приховувати Мікси</string>
 </resources>

@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import androidx.core.content.ContextCompat;
+
+import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.DislikeData;
@@ -13,7 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -31,11 +33,12 @@ import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SuggestionsController extends PlayerEventListenerHelper {
+public class SuggestionsController extends BasePlayerController {
     private static final String TAG = SuggestionsController.class.getSimpleName();
     private final List<Disposable> mActions = new ArrayList<>();
     private PlayerTweaksData mPlayerTweaksData;
     private MediaItemService mMediaItemService;
+    private ContentService mContentService;
     private DeArrowProcessor mDeArrowProcessor;
     private Video mNextVideo;
     private int mFocusCount;
@@ -58,6 +61,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
         mDeArrowProcessor = new DeArrowProcessor(getContext(), PlaybackPresenter.instance(getContext())::syncItem);
         mMediaItemService = YouTubeServiceManager.instance().getMediaItemService();
+        mContentService = YouTubeServiceManager.instance().getContentService();
     }
 
     @Override
@@ -175,7 +179,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        Disposable continueAction = mMediaItemService.continueGroupObserve(mediaGroup)
+        Disposable continueAction = mContentService.continueGroupObserve(mediaGroup)
                 .subscribe(
                         continueMediaGroup -> {
                             getPlayer().showProgressBar(false);
@@ -217,7 +221,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         video.sync(mediaItemMetadata);
         getPlayer().setVideo(video);
 
-        getPlayer().setNextTitle(getNext() != null ? getNext().getTitle() : null);
+        getPlayer().setNextTitle(getNext());
 
         appendDislikes(video);
     }
@@ -500,6 +504,8 @@ public class SuggestionsController extends PlayerEventListenerHelper {
 
     private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
         mChapters = mediaItemMetadata.getChapters();
+        // Reset chapter title
+        getPlayer().setSeekPreviewTitle(mChapters != null ? "..." : null); // add placeholder to fix control panel animation on the first run
 
         addChapterMarkersIfNeeded();
         appendChapterSuggestionsIfNeeded();
@@ -508,7 +514,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void appendSectionPlaylistIfNeeded(Video video) {
-        if (!isSectionPlaylistEnabled(video)) {
+        if (!video.isSectionPlaylistEnabled(getContext())) {
             // Important fix. Gives priority to playlist or suggestion.
             mNextVideo = null;
             return;
@@ -527,9 +533,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     }
 
     private void focusCurrentChapter() {
-        // Reset chapter title
-        getPlayer().setSeekPreviewTitle(mChapters != null ? "..." : null); // add placeholder to fix control panel animation on the first run
-
         if (!getPlayer().isControlsShown()) {
             return;
         }
@@ -612,7 +615,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
         if (index >= 0) { // continuation group starts with zero index
             Log.d(TAG, "Found current video index: %s", index);
             Video found = group.getVideos().get(index);
-            if (!found.isMix() || isSectionPlaylistEnabled(video)) {
+            if (!found.isMix() || video.isSectionPlaylistEnabled(getContext())) {
                 getPlayer().focusSuggestedItem(found);
             }
             mFocusCount = 0; // Stop the continuation loop
@@ -629,7 +632,7 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private void appendNextSectionVideoIfNeeded(Video video) {
         mNextVideo = null;
 
-        if (!isSectionPlaylistEnabled(video)) {
+        if (!video.isSectionPlaylistEnabled(getContext())) {
             return;
         }
 
@@ -741,11 +744,6 @@ public class SuggestionsController extends PlayerEventListenerHelper {
     private void disposeActions() {
         RxHelper.disposeActions(mActions);
         mChapters = null;
-    }
-
-    private boolean isSectionPlaylistEnabled(Video video) {
-        return mPlayerTweaksData.isSectionPlaylistEnabled() && video != null && video.getGroup() != null &&
-                (video.playlistId == null || video.nextMediaItem == null || video.belongsToSearch()) && (!video.isRemote || video.remotePlaylistId == null);
     }
 
     private void appendDislikes(Video video) {

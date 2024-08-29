@@ -10,8 +10,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData.ColorScheme;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 
 import java.util.ArrayList;
@@ -19,11 +21,15 @@ import java.util.List;
 
 public class MainUISettingsPresenter extends BasePresenter<Void> {
     private final MainUIData mMainUIData;
+    private final GeneralData mGeneralData;
+    private final PlayerData mPlayerData;
     private boolean mRestartApp;
 
     private MainUISettingsPresenter(Context context) {
         super(context);
         mMainUIData = MainUIData.instance(context);
+        mGeneralData = GeneralData.instance(context);
+        mPlayerData = PlayerData.instance(context);
     }
 
     public static MainUISettingsPresenter instance(Context context) {
@@ -33,8 +39,10 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
+        //appendTopButtonsCategory(settingsPresenter);
         appendColorScheme(settingsPresenter);
-//        appendCardsStyle(settingsPresenter);
+        //appendCardStyle(settingsPresenter);
+        //appendThumbSource(settingsPresenter);
         //appendCardTitleLines(settingsPresenter);
 //        appendCardTextScrollSpeed(settingsPresenter);
 //        appendChannelSortingCategory(settingsPresenter);
@@ -43,7 +51,8 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         if (Build.VERSION.SDK_INT > 19) {
             appendVideoGridScale(settingsPresenter);
         }
-//        appendMiscCategory(settingsPresenter);
+        appendTimeFormatCategory(settingsPresenter);
+        //appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
             if (mRestartApp) {
@@ -51,6 +60,47 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
             }
         });
+    }
+
+    private void appendTopButtonsCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.settings_search, MainUIData.TOP_BUTTON_SEARCH},
+                {R.string.settings_language_country, MainUIData.TOP_BUTTON_CHANGE_LANGUAGE},
+                {R.string.settings_accounts, MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
+                if (optionItem.isSelected()) {
+                    mMainUIData.enableTopButton(pair[1]);
+                } else {
+                    mMainUIData.disableTopButton(pair[1]);
+                }
+            }, mMainUIData.isTopButtonEnabled(pair[1])));
+        }
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.various_buttons), options);
+    }
+
+    private void appendColorScheme(AppDialogPresenter settingsPresenter) {
+        List<ColorScheme> colorSchemes = mMainUIData.getColorSchemes();
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.color_scheme), fromColorSchemes(colorSchemes));
+    }
+
+    private List<OptionItem> fromColorSchemes(List<ColorScheme> colorSchemes) {
+        List<OptionItem> styleOptions = new ArrayList<>();
+
+        for (ColorScheme colorScheme : colorSchemes) {
+            styleOptions.add(UiOptionItem.from(
+                    getContext().getString(colorScheme.nameResId),
+                    option -> {
+                        mMainUIData.setColorScheme(colorScheme);
+                        mRestartApp = true;
+                    },
+                    colorScheme.equals(mMainUIData.getColorScheme())));
+        }
+
+        return styleOptions;
     }
 
     private void appendCardStyle(AppDialogPresenter settingsPresenter) {
@@ -90,7 +140,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.card_title_lines_num), options);
     }
 
-    private void appendThumbQuality(AppDialogPresenter settingsPresenter) {
+    private void appendThumbSource(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
@@ -140,28 +190,6 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.playlists_style), options);
     }
 
-    private void appendColorScheme(AppDialogPresenter settingsPresenter) {
-        List<ColorScheme> colorSchemes = mMainUIData.getColorSchemes();
-
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.color_scheme), fromColorSchemes(colorSchemes));
-    }
-
-    private List<OptionItem> fromColorSchemes(List<ColorScheme> colorSchemes) {
-        List<OptionItem> styleOptions = new ArrayList<>();
-
-        for (ColorScheme colorScheme : colorSchemes) {
-            styleOptions.add(UiOptionItem.from(
-                    getContext().getString(colorScheme.nameResId),
-                    option -> {
-                        mMainUIData.setColorScheme(colorScheme);
-                        mRestartApp = true;
-                    },
-                    colorScheme.equals(mMainUIData.getColorScheme())));
-        }
-
-        return styleOptions;
-    }
-
     private void appendScaleUI(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
@@ -201,8 +229,66 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.video_grid_scale), options);
     }
 
+    private void appendTimeFormatCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.time_format_24),
+                option -> {
+                    mGeneralData.setTimeFormat(GeneralData.TIME_FORMAT_24);
+                    mRestartApp = true;
+                },
+                mGeneralData.getTimeFormat() == GeneralData.TIME_FORMAT_24));
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.time_format_12),
+                option -> {
+                    mGeneralData.setTimeFormat(GeneralData.TIME_FORMAT_12);
+                    mRestartApp = true;
+                },
+                mGeneralData.getTimeFormat() == GeneralData.TIME_FORMAT_12));
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.time_format), options);
+    }
+
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.app_corner_clock),
+                option -> {
+                    mGeneralData.enableGlobalClock(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.isGlobalClockEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_clock),
+                option -> mPlayerData.enableGlobalClock(option.isSelected()),
+                mPlayerData.isGlobalClockEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_ending_time),
+                option -> mPlayerData.enableGlobalEndingTime(option.isSelected()),
+                mPlayerData.isGlobalEndingTimeEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.old_home_look),
+                option -> {
+                    mGeneralData.enableOldHomeLook(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.isOldHomeLookEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.old_channel_look),
+                option -> {
+                    mGeneralData.enableOldChannelLook(option.isSelected());
+                    mMainUIData.enableChannelSearchBar(!option.isSelected());
+                },
+                mGeneralData.isOldChannelLookEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.fullscreen_mode),
+                option -> {
+                    mGeneralData.enableFullscreenMode(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.isFullscreenModeEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.pinned_channel_rows),
                 optionItem -> {

@@ -666,4 +666,8 @@
   <string name="unknown_renderer_error">Gabim i panjohur i pasqyruesit</string>
   <string name="player_quick_skip_videos">Kapërce videot e zakonshme me butonat majtas/djathtas</string>
   <string name="calm_msg">Po e rregullojmë problemin. Kontrollo për përditësime herë pas here</string>
+  <string name="without_picture">Pa figurë</string>
+  <string name="video_disabled">Video e çaktivizuar</string>
+  <string name="applying_fix">Mos mbyll luajtësin. Duke zbatuar rregullimin...</string>
+  <string name="hide_mixes">Fshih Përzjerjet</string>
 </resources>

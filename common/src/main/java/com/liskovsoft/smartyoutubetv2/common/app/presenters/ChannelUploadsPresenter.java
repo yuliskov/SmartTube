@@ -8,6 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -143,15 +144,15 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         if (getView() != null) {
             mVideoItem = null;
             getView().clear();
-            updateGrid(item);
+            update(item);
         } else {
             mVideoItem = item;
         }
     }
 
-    public void obtainVideoGroup(Video item, VideoGroupCallback callback) {
+    public void obtainGroup(Video item, VideoGroupCallback callback) {
         if (item != null && item.mediaItem != null) {
-            updateVideoGrid(item.mediaItem, callback);
+            obtainGroup(item.mediaItem, callback);
         }
     }
 
@@ -172,10 +173,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
                mContentService.getGroupObserve(item.getReloadPageKey()) :
                mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0, item.playlistParams)
                        .flatMap(mediaItemMetadata -> Observable.just(findPlaylistRow(mediaItemMetadata)));
-    }
-
-    private void updateGrid(Video item) {
-        updateVideoGrid(obtainUploadsObservable(item));
     }
 
     private void disposeActions() {
@@ -203,11 +200,13 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         Observable<MediaGroup> continuation;
 
-        if (mediaGroup.getType() == MediaGroup.TYPE_SUGGESTIONS) {
-            continuation = mItemManager.continueGroupObserve(mediaGroup);
-        } else {
-            continuation = mContentService.continueGroupObserve(mediaGroup);
-        }
+        //if (mediaGroup.getType() == MediaGroup.TYPE_SUGGESTIONS) {
+        //    continuation = mItemManager.continueGroupObserve(mediaGroup);
+        //} else {
+        //    continuation = mContentService.continueGroupObserve(mediaGroup);
+        //}
+
+        continuation = mContentService.continueGroupObserve(mediaGroup);
 
         mScrollAction = continuation
                 .subscribe(
@@ -226,8 +225,17 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
                 );
     }
 
-    private void updateVideoGrid(Observable<MediaGroup> group) {
-        Log.d(TAG, "updateVideoGrid: Start loading group...");
+    private void update(Video item) {
+        // Liked music fix - not all videos displayed. The behavior with other playlists is buggy.
+        if (Helpers.equals(item.playlistId, "LM")) {
+            update(item.getGroup());
+        } else {
+            update(obtainUploadsObservable(item));
+        }
+    }
+
+    private void update(Observable<MediaGroup> group) {
+        Log.d(TAG, "update: Start loading a group...");
 
         disposeActions();
 
@@ -235,44 +243,57 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         mUpdateAction = group
                 .subscribe(
-                        this::updateGrid,
+                        this::update,
                         error -> {
-                            Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
+                            Log.e(TAG, "update error: %s", error.getMessage());
                             getView().showProgressBar(false);
                         },
                         () -> getView().showProgressBar(false)
                 );
     }
 
-    public void updateGrid(MediaGroup mediaGroup) {
+    public void update(MediaGroup mediaGroup) {
+        disposeActions();
+
         if (getView() == null) { // starting from outside (e.g. MediaServiceManager)
-            disposeActions();
             mVideoItem = null;
-            mRootGroup = mediaGroup;
+            mRootGroup = mediaGroup; // start loading from this group
+            ViewManager.instance(getContext()).startView(ChannelUploadsView.class);
             return;
         }
 
         VideoGroup group = VideoGroup.from(mediaGroup);
+        update(group);
+    }
+
+    private void update(VideoGroup group) {
+        disposeActions();
+
+        if (getView() == null) {
+            return;
+        }
+
         getView().update(group);
         mDeArrowProcessor.process(group);
 
         // Hide loading as long as first group received
-        if (mediaGroup.getMediaItems() != null) {
+        if (!group.isEmpty()) {
             getView().showProgressBar(false);
         }
     }
 
-    private void updateVideoGrid(MediaItem mediaItem, VideoGroupCallback callback) {
-        Log.d(TAG, "updateVideoGrid: Start loading group...");
+    private void obtainGroup(MediaItem mediaItem, VideoGroupCallback callback) {
+        Log.d(TAG, "obtainGroup: Start loading group...");
 
         disposeActions();
 
-        Observable<MediaGroup> group = mContentService.getGroupObserve(mediaItem);
+        //Observable<MediaGroup> group = mContentService.getGroupObserve(mediaItem);
 
-        mUpdateAction = group
+        //mUpdateAction = group
+        mUpdateAction = obtainUploadsObservable(Video.from(mediaItem))
                 .subscribe(
                         callback::onGroup,
-                        error -> Log.e(TAG, "updateVideoGrid error: %s", error.getMessage())
+                        error -> Log.e(TAG, "obtainGroup error: %s", error.getMessage())
                 );
     }
 
@@ -312,10 +333,10 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         if (mVideoItem != null) {
             getView().clear();
-            updateGrid(mVideoItem);
+            update(mVideoItem);
         } else if (mRootGroup != null) {
             getView().clear();
-            updateGrid(mRootGroup);
+            update(mRootGroup);
         }
     }
 }

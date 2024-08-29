@@ -251,7 +251,7 @@ public class ScreensaverManager {
         }
 
         PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
-        return playbackView != null && playbackView.getPlayer().isPlaying();
+        return playbackView != null && playbackView.isPlaying();
     }
 
     private long getPosition() {
@@ -263,7 +263,7 @@ public class ScreensaverManager {
 
         PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
         // Fix screen off before the video started
-        return playbackView != null ? playbackView.getPlayer().getPositionMs() : 0;
+        return playbackView != null ? playbackView.getPositionMs() : 0;
     }
 
     private boolean isSigning() {
@@ -286,7 +286,7 @@ public class ScreensaverManager {
         PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
 
         if (playbackView != null) {
-            playbackView.getPlayer().showOverlay(false);
+            playbackView.showOverlay(false);
         }
     }
 

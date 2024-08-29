@@ -17,7 +17,7 @@ import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
@@ -47,7 +47,7 @@ import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerUIController extends PlayerEventListenerHelper {
+public class PlayerUIController extends BasePlayerController {
     private static final String TAG = PlayerUIController.class.getSimpleName();
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private final Handler mHandler;
@@ -347,7 +347,7 @@ public class PlayerUIController extends PlayerEventListenerHelper {
                     group.setAction(VideoGroup.ACTION_PREPEND);
                 }
                 getPlayer().updateSuggestions(group);
-                getPlayer().setNextTitle(mSuggestionsController.getNext() != null ? mSuggestionsController.getNext().getTitle() : null);
+                getPlayer().setNextTitle(mSuggestionsController.getNext());
             }
         });
     }

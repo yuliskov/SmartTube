@@ -8,6 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorMan
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
 public abstract class MediaTrack {
+    private static final int BITRATE_DIFF_PERCENTS = 5;
     private static final int VP9_WEIGHT = 31;
     private static final int AVC_WEIGHT = 28;
     private static final int AV1_WEIGHT = 14;
@@ -60,7 +61,7 @@ public abstract class MediaTrack {
             return true;
         }
 
-        return bitrate1 <= bitrate2;
+        return bitrate1 <= bitrate2 || bitrateAlmostEquals(bitrate1, bitrate2);
     }
 
     private static boolean codecEquals(String codecs1, String codecs2) {
@@ -85,6 +86,10 @@ public abstract class MediaTrack {
         }
 
         return format1.bitrate == format2.bitrate;
+    }
+
+    private static boolean bitrateAlmostEquals(int bitrate1, int bitrate2) {
+        return bitrate1 == bitrate2 || Math.abs(bitrate2 - bitrate1) < (bitrate2 / 100 * BITRATE_DIFF_PERCENTS);
     }
 
     private static boolean preferByBitrate(Format format1, Format format2) {
@@ -146,6 +151,18 @@ public abstract class MediaTrack {
     public static void preferAvcOverVp9(boolean prefer) {
         sAVCWeight = prefer ? VP9_WEIGHT : AVC_WEIGHT;
         sVP9Weight = prefer ? AVC_WEIGHT : VP9_WEIGHT;
+    }
+
+    public static boolean preferByDrc(MediaTrack origin, MediaTrack prevTrack, MediaTrack nextTrack) {
+        if (!(origin instanceof AudioTrack)) {
+            return true;
+        }
+
+        boolean isDrcOrigin = TrackSelectorUtil.isDrc(origin.format);
+        boolean isDrcPrev = TrackSelectorUtil.isDrc(prevTrack.format);
+        boolean isDrcNext = TrackSelectorUtil.isDrc(nextTrack.format);
+        boolean preferByDrc = (isDrcOrigin == isDrcNext) || (isDrcPrev == isDrcNext);
+        return preferByDrc;
     }
 
     public boolean isVP9Codec() {

@@ -555,7 +555,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
                     int bounds = originTrack.inBounds(mediaTrack);
 
-                    // Multiple ru track fix
+                    // Multiple ru track fix (same id!) Example: https://www.youtube.com/watch?v=l3htINlc2ic
                     if (bounds == 0 && MediaTrack.bitrateEquals(originTrack, mediaTrack)) {
                         result = mediaTrack;
                         break outerloop;
@@ -574,7 +574,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         //    }
                         //}
 
-                        if (compare == 0) {
+                        if (compare == 0 && MediaTrack.preferByDrc(originTrack, result, mediaTrack)) {
                             if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
                                 result = mediaTrack;
                             } else if (!MediaTrack.codecEquals(result, originTrack) &&

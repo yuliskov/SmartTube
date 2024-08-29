@@ -662,5 +662,6 @@
     <string name="without_picture">Без изображения</string>
     <string name="video_disabled">Видео отключено</string>
     <string name="applying_fix">Не закрывайте плеер. Применение исправления...</string>
+    <string name="hide_mixes">Скрывать Миксы</string>
     <string name="cancel">Отмена</string>
 </resources>

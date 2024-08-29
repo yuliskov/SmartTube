@@ -21,6 +21,10 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
+
+        // More info: http://myhexaville.com/2017/03/10/android-multidex/
+        // Additionally, you should extend your application from MultiDexApplication
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -52,7 +56,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:' + appCompatXLibraryVersion
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion
-    androidTestImplementation 'androidx.test.ext:junit:' + testXSupportLibraryVersion
 
     implementation project(':sharedutils')
     implementation project(':fragment-1.1.0')

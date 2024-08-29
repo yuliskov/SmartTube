@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
@@ -68,6 +69,15 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
             // Remote link depends on background service
             mRemoteControlData.enableDeviceLink(optionItem.isSelected());
             Utils.updateRemoteControlService(getContext());
+
+            // Background playback on Android 10 and above
+            // Shows overlay dialog if needed (alive activity required)
+            if (optionItem.isSelected() && !PermissionHelpers.hasOverlayPermissions(getContext())) {
+                AppDialogUtil.showConfirmationDialog(
+                        getContext(), getContext().getString(R.string.remote_control_permission),
+                        () -> PermissionHelpers.verifyOverlayPermissions(getContext())
+                );
+            }
         }, mRemoteControlData.isDeviceLinkEnabled()));
     }
 
@@ -77,9 +87,19 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
                     mRemoteControlData.enableDeviceLink(true);
                     Utils.updateRemoteControlService(getContext());
 
-                    if (!PermissionHelpers.hasOverlayPermissions(getContext()) && getContext() instanceof MotherActivity) {
-                        ((MotherActivity) getContext()).addOnResult(
-                                (requestCode, resultCode, data) -> AddDevicePresenter.instance(getContext()).start()
+                    // Background playback on Android 10 and above
+                    // Shows overlay dialog if needed (alive activity required)
+                    if (!PermissionHelpers.hasOverlayPermissions(getContext())) {
+                        AppDialogUtil.showConfirmationDialog(
+                                getContext(), getContext().getString(R.string.remote_control_permission), () -> {
+                                    PermissionHelpers.verifyOverlayPermissions(getContext());
+                                    // Service that prevents the app from destroying
+                                    if (getContext() instanceof MotherActivity) {
+                                        ((MotherActivity) getContext()).addOnResult(
+                                                (request, response, data) -> AddDevicePresenter.instance(getContext()).start()
+                                        );
+                                    }
+                                }, () -> AddDevicePresenter.instance(getContext()).start()
                         );
                     } else {
                         AddDevicePresenter.instance(getContext()).start();

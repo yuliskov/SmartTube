@@ -8,6 +8,7 @@ import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 public class PlayerTweaksData implements ProfileChangeListener {
     private static final String VIDEO_PLAYER_TWEAKS_DATA = "video_player_tweaks_data";
@@ -93,7 +94,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsPlayerAutoVolumeEnabled;
     private boolean mIsPlayerGlobalFocusEnabled;
     private boolean mIsUnsafeAudioFormatsEnabled;
-    private boolean mIsHighBitrateFormatsUnlocked;
+    private boolean mIsHighBitrateFormatsEnabled;
     private boolean mIsLoopShortsEnabled;
     private boolean mIsQuickSkipShortsEnabled;
     private boolean mIsQuickSkipVideosEnabled;
@@ -556,12 +557,12 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsQuickSkipVideosEnabled;
     }
 
-    public void unlockHighBitrateFormats(boolean enable) {
-        GlobalPreferences.sInstance.enableExtendedHlsFormats(enable);
+    public void enableHighBitrateFormats(boolean enable) {
+        MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS, enable);
     }
 
-    public boolean isHighBitrateFormatsUnlocked() {
-        return GlobalPreferences.sInstance.isExtendedHlsFormatsEnabled();
+    public boolean isHighBitrateFormatsEnabled() {
+        return MediaServiceData.instance().isFormatEnabled(MediaServiceData.FORMATS_EXTENDED_HLS);
     }
 
     private void restoreData() {
@@ -596,9 +597,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsSpeedButtonOldBehaviorEnabled = Helpers.parseBoolean(split, 23, false);
         mIsButtonLongClickEnabled = Helpers.parseBoolean(split, 24, true);
         mIsLongSpeedListEnabled = Helpers.parseBoolean(split, 25, true);
-        // Android 6 and below may crash running Cronet???
-        mPlayerDataSource = Helpers.parseInt(split, 26, VERSION.SDK_INT <= 23 || Helpers.equals(BuildConfig.FLAVOR, "strtarmenia") ?
-                 PLAYER_DATA_SOURCE_DEFAULT : PLAYER_DATA_SOURCE_CRONET);
+        mPlayerDataSource = Helpers.parseInt(split, 26, Utils.skipCronet() ? PLAYER_DATA_SOURCE_DEFAULT : PLAYER_DATA_SOURCE_CRONET);
         mUnlockAllFormats = Helpers.parseBoolean(split, 27, false);
         mIsDashUrlStreamsForced = Helpers.parseBoolean(split, 28, false);
         mIsSonyFrameDropFixEnabled = Helpers.parseBoolean(split, 29, false);
@@ -616,7 +615,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsPlayerAutoVolumeEnabled = Helpers.parseBoolean(split, 40, true);
         mIsPlayerGlobalFocusEnabled = Helpers.parseBoolean(split, 41, true);
         mIsUnsafeAudioFormatsEnabled = Helpers.parseBoolean(split, 42, true);
-        mIsHighBitrateFormatsUnlocked = Helpers.parseBoolean(split, 43, false);
+        mIsHighBitrateFormatsEnabled = Helpers.parseBoolean(split, 43, false);
         mIsLoopShortsEnabled = Helpers.parseBoolean(split, 44, true);
         mIsQuickSkipShortsEnabled = Helpers.parseBoolean(split, 45, true);
         mIsRememberPositionOfLiveVideosEnabled = Helpers.parseBoolean(split, 46, false);
@@ -642,7 +641,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
-                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsUnlocked, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
+                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsEnabled, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled
                 ));
     }
@@ -659,9 +658,14 @@ public class PlayerTweaksData implements ProfileChangeListener {
             enablePlayerButton(PLAYER_BUTTON_SCREEN_OFF_TIMEOUT);
         }
 
-        if (mIsHighBitrateFormatsUnlocked) {
-            mIsHighBitrateFormatsUnlocked = false;
-            GlobalPreferences.sInstance.enableExtendedHlsFormats(true);
+        if (mIsHighBitrateFormatsEnabled) {
+            mIsHighBitrateFormatsEnabled = false;
+            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS, true);
+        }
+
+        if (GlobalPreferences.sInstance.isExtendedHlsFormatsEnabled()) {
+            GlobalPreferences.sInstance.enableExtendedHlsFormats(false);
+            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS, true);
         }
     }
 

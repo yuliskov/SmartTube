@@ -17,6 +17,7 @@ import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.liskovsoft.youtubeapi.service.data.YouTubeMediaItem;
 
@@ -272,7 +273,8 @@ public final class Video {
             return author;
         }
 
-        return extractAuthor(metadataSecondTitle != null ? metadataSecondTitle : secondTitle); // BAD idea
+        String subtitle = metadataSecondTitle != null ? metadataSecondTitle : secondTitle;
+        return hasVideo() ? extractAuthor(subtitle) : subtitle; // BAD idea
     }
 
     public VideoGroup getGroup() {
@@ -445,7 +447,7 @@ public final class Video {
     }
 
     public boolean isChannel() {
-        return videoId == null && channelId != null;
+        return videoId == null && playlistId == null && channelId != null;
     }
 
     /**
@@ -652,8 +654,12 @@ public final class Video {
 
         String likeCountNew = dislikeData.getLikeCount();
         String dislikeCountNew = dislikeData.getDislikeCount();
-        likeCount = likeCountNew != null ? likeCountNew : likeCount;
-        dislikeCount = dislikeCountNew != null ? dislikeCountNew : dislikeCount;
+        if (likeCountNew != null) {
+            likeCount = likeCountNew;
+        }
+        if (dislikeCountNew != null) {
+            dislikeCount = dislikeCountNew;
+        }
     }
 
     /**
@@ -765,5 +771,10 @@ public final class Video {
         if (state != null) {
             percentWatched = state.positionMs / (state.durationMs / 100f);
         }
+    }
+
+    public boolean isSectionPlaylistEnabled(Context context) {
+        return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && getGroup() != null &&
+                (playlistId == null || nextMediaItem == null || belongsToSearch()) && (!isRemote || remotePlaylistId == null);
     }
 }

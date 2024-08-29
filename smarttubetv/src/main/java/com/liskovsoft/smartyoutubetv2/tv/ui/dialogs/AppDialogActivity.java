@@ -72,7 +72,7 @@ public class AppDialogActivity extends MotherActivity {
             finish();
             PlaybackView view = PlaybackPresenter.instance(this).getView();
             if (view != null) {
-                view.getPlayer().showControls(true);
+                view.showControls(true);
             }
         }
 
@@ -81,7 +81,7 @@ public class AppDialogActivity extends MotherActivity {
         //    finish();
         //    PlaybackView view = PlaybackPresenter.instance(this).getView();
         //    if (view != null) {
-        //        view.getPlayer().finish();
+        //        view.finish();
         //    }
         //}
 

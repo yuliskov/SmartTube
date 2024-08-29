@@ -4,8 +4,6 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
 public class AudioTrack extends MediaTrack {
-    private static final int BITRATE_DIFF_PERCENTS = 5;
-
     public AudioTrack(int rendererIndex) {
         super(rendererIndex);
     }
@@ -71,8 +69,7 @@ public class AudioTrack extends MediaTrack {
             result = 0;
         } else if (Helpers.equals(format.id, track2.format.id)) {
             result = 1;
-        } else if (!codecEquals(this, track2) || format.bitrate >= track2.format.bitrate ||
-                Math.abs(format.bitrate - track2.format.bitrate) < (format.bitrate / 100 * BITRATE_DIFF_PERCENTS)) {
+        } else if (!codecEquals(this, track2) || bitrateLessOrEquals(track2.format.bitrate, format.bitrate)) {
             result = 0;
         }
 

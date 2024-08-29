@@ -81,7 +81,9 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
 
     @Override
     public void close() {
-        getActivity().finish();
+        if (getActivity() != null) {
+            getActivity().finish();
+        }
     }
 
     @Override

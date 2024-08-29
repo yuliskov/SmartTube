@@ -6,7 +6,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
@@ -21,13 +21,14 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
-public class VideoStateController extends PlayerEventListenerHelper {
+public class VideoStateController extends BasePlayerController {
     private static final String TAG = VideoStateController.class.getSimpleName();
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 90_000; // should be greater than the live buffer
     private static final long LIVE_BUFFER_MS = 60_000;
     private static final long SHORT_LIVE_BUFFER_MS = 0; // Note, on buffer lower than the 60sec you'll notice segment skip
     private static final long BEGIN_THRESHOLD_MS = 10_000;
+    private static final int HISTORY_UPDATE_INTERVAL_MINUTES = 5; // Sync history every five minutes
     private boolean mIsPlayEnabled;
     private Video mVideo = new Video();
     private PlayerData mPlayerData;
@@ -38,6 +39,7 @@ public class VideoStateController extends PlayerEventListenerHelper {
     private boolean mIsPlayBlocked;
     private int mTickleLeft;
     private boolean mIncognito;
+    private final Runnable mUpdateHistory = this::updateHistory;
 
     @Override
     public void onInit() { // called each time a video opened from the browser
@@ -144,8 +146,7 @@ public class VideoStateController extends PlayerEventListenerHelper {
             return;
         }
 
-        // Sync history every five minutes
-        if (++mTickleLeft > 5 && getPlayer().isPlaying()) {
+        if (++mTickleLeft > HISTORY_UPDATE_INTERVAL_MINUTES && getPlayer().isPlaying()) {
             mTickleLeft = 0;
             updateHistory();
         }
@@ -156,7 +157,7 @@ public class VideoStateController extends PlayerEventListenerHelper {
 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
-        updateHistory();
+        updateHistory(); // start watching?
 
         // Channel info should be loaded at this point
         restoreSubtitleFormat();
@@ -199,13 +200,16 @@ public class VideoStateController extends PlayerEventListenerHelper {
     public void onPlay() {
         setPlayEnabled(true);
         showHideScreensaver(false);
+        // throttle seeking calls
+        Utils.removeCallbacks(mUpdateHistory);
     }
 
     @Override
     public void onPause() {
         setPlayEnabled(false);
-        //saveState();
         showHideScreensaver(true);
+        // throttle seeking calls
+        Utils.postDelayed(mUpdateHistory, 10_000);
     }
 
     @Override
@@ -402,7 +406,7 @@ public class VideoStateController extends PlayerEventListenerHelper {
         savePosition();
         updateHistory();
         //persistState(); // persist the state if the device reboots accidentally
-        hideWatchedContent();
+        syncWithPlaylists();
     }
 
     private void savePosition() {
@@ -605,18 +609,18 @@ public class VideoStateController extends PlayerEventListenerHelper {
         return (posPercents2 != 0 && Math.abs(posPercents1 - posPercents2) > 3) && state.timestamp < item.timestamp;
     }
 
-    private void hideWatchedContent() {
+    private void syncWithPlaylists() {
         Video video = getVideo();
 
         if (video == null) {
             return;
         }
 
-        if (mGeneralData.isHideWatchedFromWatchLaterEnabled() && video.percentWatched > 95) {
+        if (mGeneralData.isHideWatchedFromWatchLaterEnabled() && video.percentWatched > 95) { // remove fully watched
             AppDialogUtil.removeFromWatchLaterPlaylist(getContext(), video);
         }
 
-        if (mGeneralData.isHideWatchedFromNotificationsEnabled()) {
+        if (mGeneralData.isHideWatchedFromNotificationsEnabled()) { // remove any watched length
             MediaServiceManager.instance().hideNotification(video);
         }
     }

@@ -346,11 +346,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             options.add(UiOptionItem.from(getContext().getString(pair[0]),
                     optionItem -> {
                         mUploadDateOptions = pair[1];
-                        String searchText = getView().getSearchText();
-
-                        if (searchText != null && !searchText.isEmpty()) {
-                            loadSearchResultAlt(searchText);
-                        }
+                        loadSearchResult();
                     },
                     mUploadDateOptions == pair[1]));
         }
@@ -369,11 +365,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             options.add(UiOptionItem.from(getContext().getString(pair[0]),
                     optionItem -> {
                         mDurationOptions = pair[1];
-                        String searchText = getView().getSearchText();
-
-                        if (searchText != null && !searchText.isEmpty()) {
-                            loadSearchResultAlt(searchText);
-                        }
+                        loadSearchResult();
                     },
                     mDurationOptions == pair[1]));
         }
@@ -393,11 +385,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             options.add(UiOptionItem.from(getContext().getString(pair[0]),
                     optionItem -> {
                         mTypeOptions = pair[1];
-                        String searchText = getView().getSearchText();
-
-                        if (searchText != null && !searchText.isEmpty()) {
-                            loadSearchResultAlt(searchText);
-                        }
+                        loadSearchResult();
                     },
                     mTypeOptions == pair[1]));
         }
@@ -415,11 +403,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             options.add(UiOptionItem.from(getContext().getString(pair[0]),
                     optionItem -> {
                         mFeatureOptions = optionItem.isSelected() ? mFeatureOptions | pair[1] : mFeatureOptions & ~pair[1];
-                        String searchText = getView().getSearchText();
-
-                        if (searchText != null && !searchText.isEmpty()) {
-                            loadSearchResultAlt(searchText);
-                        }
+                        loadSearchResult();
                     },
                     (mFeatureOptions & pair[1]) == pair[1]));
         }
@@ -438,11 +422,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             options.add(UiOptionItem.from(getContext().getString(pair[0]),
                     optionItem -> {
                         mSortingOptions = pair[1];
-                        String searchText = getView().getSearchText();
-
-                        if (searchText != null && !searchText.isEmpty()) {
-                            loadSearchResultAlt(searchText);
-                        }
+                        loadSearchResult();
                     },
                     mSortingOptions == pair[1]));
         }
@@ -468,6 +448,18 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                 PlaybackPresenter.instance(getContext()).openVideo(video);
                 break;
             }
+        }
+    }
+
+    private void loadSearchResult() {
+        if (getView() == null) {
+            return;
+        }
+
+        String searchText = getView().getSearchText();
+
+        if (searchText != null && !searchText.isEmpty()) {
+            loadSearchResultAlt(searchText);
         }
     }
 }

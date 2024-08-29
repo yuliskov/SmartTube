@@ -135,7 +135,6 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
 
     public void selectAccount(Account account) {
         mSignInService.selectAccount(account);
-        ExoMediaSourceFactory.unhold();
         BrowsePresenter.instance(getContext()).refresh(false);
         Utils.updateChannels(getContext());
         //BrowsePresenter.instance(getContext()).onViewInitialized(); // reset state

@@ -48,22 +48,23 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private final TrackErrorFixer mTrackErrorFixer;
     private boolean mOnSourceChanged;
     private Video mVideo;
-    private PlayerEventListener mEventListener;
+    private final PlayerEventListener mEventListener;
     private SimpleExoPlayer mPlayer;
     private PlayerView mPlayerView;
     private VolumeBooster mVolumeBooster;
     private boolean mIsEnded;
 
-    public ExoPlayerController(Context context) {
+    public ExoPlayerController(Context context, PlayerEventListener eventListener) {
         PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
         mContext = context.getApplicationContext();
-        mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
+        mMediaSourceFactory = new ExoMediaSourceFactory(context);
         mTrackSelectorManager = new TrackSelectorManager(context);
         mTrackFormatter = new TrackInfoFormatter2();
         mTrackFormatter.enableBitrate(PlayerTweaksData.instance(context).isQualityInfoBitrateEnabled());
         mTrackErrorFixer = new TrackErrorFixer(mTrackSelectorManager);
 
         mMediaSourceFactory.setTrackErrorFixer(mTrackErrorFixer);
+        mEventListener = eventListener;
 
         // Shield 720p fix???
         initFormats();
@@ -189,6 +190,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public void release() {
         mTrackSelectorManager.release();
+        mMediaSourceFactory.release();
 
         if (mPlayer != null) {
             mPlayer.removeListener(this);
@@ -209,10 +211,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         player.addListener(this);
     }
 
-    @Override
-    public void setEventListener(PlayerEventListener eventListener) {
-        mEventListener = eventListener;
-    }
+    //@Override
+    //public void setEventListener(PlayerEventListener eventListener) {
+    //    mEventListener = eventListener;
+    //}
 
     @Override
     public void setPlayerView(PlayerView playerView) {

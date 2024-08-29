@@ -2,13 +2,14 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
 import java.util.HashSet;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class HQDialogController extends PlayerEventListenerHelper {
+public class HQDialogController extends BasePlayerController {
     private static final String TAG = HQDialogController.class.getSimpleName();
     private static final int VIDEO_FORMATS_ID = 132;
     private static final int AUDIO_FORMATS_ID = 133;
@@ -27,11 +28,13 @@ public class HQDialogController extends PlayerEventListenerHelper {
     private final Set<Runnable> mHideListeners = new HashSet<>();
     private VideoStateController mStateUpdater;
     private PlayerData mPlayerData;
+    private PlayerTweaksData mPlayerTweaksData;
     private AppDialogPresenter mAppDialogPresenter;
 
     @Override
     public void onInit() {
         mPlayerData = PlayerData.instance(getContext());
+        mPlayerTweaksData = PlayerTweaksData.instance(getContext());
         mAppDialogPresenter = AppDialogPresenter.instance(getContext());
         mStateUpdater = getController(VideoStateController.class);
     }
@@ -44,6 +47,7 @@ public class HQDialogController extends PlayerEventListenerHelper {
     @Override
     public void onHighQualityClicked() {
         addQualityCategories();
+        addNetworkEngine();
         addVideoBufferCategory();
         addPresetsCategory();
         //addAudioLanguage();
@@ -124,6 +128,11 @@ public class HQDialogController extends PlayerEventListenerHelper {
 
     private void addAudioLanguage() {
         addCategoryInt(AppDialogUtil.createAudioLanguageCategory(getContext(), mPlayerData,
+                () -> getPlayer().restartEngine()));
+    }
+
+    private void addNetworkEngine() {
+        addCategoryInt(AppDialogUtil.createNetworkEngineCategory(getContext(), mPlayerTweaksData,
                 () -> getPlayer().restartEngine()));
     }
 
