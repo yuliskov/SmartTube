@@ -435,6 +435,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     private void applyGenericErrorAction(int type, int rendererIndex, Throwable error) {
         String message = error != null ? error.getMessage() : null;
         String errorTitle = getErrorTitle(type, rendererIndex);
+        String fullErrorMsg = errorTitle + "\n" + message + "\n" + getContext().getString(R.string.applying_fix);
 
         if (Helpers.startsWithAny(message, "Unable to connect to")) {
             // No internet connection
@@ -456,7 +457,8 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // "Response code: 403" (url deciphered incorrectly)
             // "Response code: 404" (not sure whether below helps)
             YouTubeServiceManager.instance().applyNoPlaybackFix();
-        } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
+        } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN &&
+                !mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
             // NOTE: Fixing too many requests or network issues
             // NOTE: All these errors have unknown renderer (-1)
             // "Unable to connect to", "Invalid NAL length", "Response code: 421",
@@ -478,11 +480,13 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             mPlayerTweaksData.forceSWDecoder(false);
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_AUDIO) {
             mPlayerData.setFormat(mPlayerData.getDefaultAudioFormat());
+        } else {
+            fullErrorMsg = errorTitle + "\n" + message;
         }
 
         // Hide unknown errors on all devices
         if (type != PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
-            MessageHelpers.showLongMessage(getContext(), errorTitle + "\n" + message + "\n" + getContext().getString(R.string.applying_fix));
+            MessageHelpers.showLongMessage(getContext(), fullErrorMsg);
         }
     }
 

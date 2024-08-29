@@ -673,4 +673,6 @@
     <string name="applying_fix">Oynatıcıyı kapatmayın. Düzeltme uygulanıyor...</string>
     <string name="hide_mixes">Karışımları Mixes</string>
     <string name="player_global_focus_desc">Bu özellik, oynatıcı düğmeleri sıraları arasında gezinirken hangi oynatıcı düğmesinin odaklanacağını etkiler</string>
+    <string name="disable_network_error_fixing">Otomatik ağ hatası düzeltmeyi devre dışı bırak</string>
+    <string name="disable_network_error_fixing_desc">Bir VPN kullanıyorsanız muhtemelen bu seçeneği etkinleştirmeniz gerekir</string>
 </resources>

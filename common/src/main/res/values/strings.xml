@@ -671,4 +671,6 @@
     <string name="applying_fix">Don\'t close the player. Applying the fix...</string>
     <string name="hide_mixes">Hide Mixes</string>
     <string name="player_global_focus_desc">This feature affects which player button will receive focus when navigating between player button rows</string>
+    <string name="disable_network_error_fixing">Disable automatic network error fixing</string>
+    <string name="disable_network_error_fixing_desc">You probably need to enable this option if you\'re using a VPN</string>
 </resources>
