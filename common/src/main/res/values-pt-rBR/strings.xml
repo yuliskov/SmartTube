@@ -665,4 +665,9 @@
   <string name="speech_engine">Engine de pesquisa por voz</string>
   <string name="header_shorts">Shorts</string>
   <string name="long_press_for_options">Mantenha pressionado para opções</string>
+  <string name="hide_mixes">Oculta Misturas</string>
+  <string name="applying_fix">Não feche o Tocador. Aplicando as correções...</string>
+  <string name="video_disabled">Video Deshabilitado</string>
+  <string name="without_picture">Sem Imagem:*(</string>
+  <string name="calm_msg">Nós estamos corrigindo as mudanças. Verifique pelas próximas atualizações</string>
 </resources>
