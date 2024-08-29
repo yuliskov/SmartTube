@@ -514,6 +514,57 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableLoopShorts(option.isSelected()),
                 mPlayerTweaksData.isLoopShortsEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.place_chat_left),
+                option -> mPlayerTweaksData.placeChatLeft(option.isSelected()),
+                mPlayerTweaksData.isChatPlacedLeft()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_disable_suggestions),
+                option -> mPlayerTweaksData.disableSuggestions(option.isSelected()),
+                mPlayerTweaksData.isSuggestionsDisabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_number_key_seek),
+                option -> mPlayerData.enableNumberKeySeek(option.isSelected()),
+                mPlayerData.isNumberKeySeekEnabled()));
+
+        //options.add(UiOptionItem.from(getContext().getString(R.string.app_corner_clock),
+        //        option -> {
+        //            mGeneralData.enableGlobalClock(option.isSelected());
+        //            mRestartApp = true;
+        //        },
+        //        mGeneralData.isGlobalClockEnabled()));
+        //
+        //options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_clock),
+        //        option -> mPlayerData.enableGlobalClock(option.isSelected()),
+        //        mPlayerData.isGlobalClockEnabled()));
+        //
+        //options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_ending_time),
+        //        option -> mPlayerData.enableGlobalEndingTime(option.isSelected()),
+        //        mPlayerData.isGlobalEndingTimeEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_of_live_videos),
+                option -> mPlayerTweaksData.enableRememberPositionOfLiveVideos(option.isSelected()),
+                mPlayerTweaksData.isRememberPositionOfLiveVideosEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_of_short_videos),
+                option -> mPlayerTweaksData.enableRememberPositionOfShortVideos(option.isSelected()),
+                mPlayerTweaksData.isRememberPositionOfShortVideosEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_speed_button_old_behavior),
+                option -> mPlayerTweaksData.enableSpeedButtonOldBehavior(option.isSelected()),
+                mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_clock),
+                option -> mPlayerData.enableClock(option.isSelected()),
+                mPlayerData.isClockEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info),
+                option -> mPlayerData.enableQualityInfo(option.isSelected()),
+                mPlayerData.isQualityInfoEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info_bitrate),
+                option -> mPlayerTweaksData.enableQualityInfoBitrate(option.isSelected()),
+                mPlayerTweaksData.isQualityInfoBitrateEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_global_focus),
                 getContext().getString(R.string.player_global_focus_desc),
                 option -> mPlayerTweaksData.enablePlayerGlobalFocus(option.isSelected()),
@@ -530,10 +581,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_likes_count),
                 option -> mPlayerTweaksData.enableLikesCounter(option.isSelected()),
                 mPlayerTweaksData.isLikesCounterEnabled()));
-
-        //options.add(UiOptionItem.from(getContext().getString(R.string.player_long_speed_list),
-        //        option -> mPlayerTweaksData.enableLongSpeedList(option.isSelected()),
-        //        mPlayerTweaksData.isLongSpeedListEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_tooltips),
                 option -> mPlayerData.enableTooltips(option.isSelected()),
@@ -553,57 +600,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.real_channel_icon),
                 option -> mPlayerTweaksData.enableRealChannelIcon(option.isSelected()),
                 mPlayerTweaksData.isRealChannelIconEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.place_chat_left),
-                option -> mPlayerTweaksData.placeChatLeft(option.isSelected()),
-                mPlayerTweaksData.isChatPlacedLeft()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_disable_suggestions),
-                option -> mPlayerTweaksData.disableSuggestions(option.isSelected()),
-                mPlayerTweaksData.isSuggestionsDisabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_number_key_seek),
-                option -> mPlayerData.enableNumberKeySeek(option.isSelected()),
-                mPlayerData.isNumberKeySeekEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_clock),
-                option -> mPlayerData.enableClock(option.isSelected()),
-                mPlayerData.isClockEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info),
-                option -> mPlayerData.enableQualityInfo(option.isSelected()),
-                mPlayerData.isQualityInfoEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info_bitrate),
-                option -> mPlayerTweaksData.enableQualityInfoBitrate(option.isSelected()),
-                mPlayerTweaksData.isQualityInfoBitrateEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.app_corner_clock),
-                option -> {
-                    mGeneralData.enableGlobalClock(option.isSelected());
-                    mRestartApp = true;
-                },
-                mGeneralData.isGlobalClockEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_clock),
-                option -> mPlayerData.enableGlobalClock(option.isSelected()),
-                mPlayerData.isGlobalClockEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_ending_time),
-                option -> mPlayerData.enableGlobalEndingTime(option.isSelected()),
-                mPlayerData.isGlobalEndingTimeEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_of_live_videos),
-                option -> mPlayerTweaksData.enableRememberPositionOfLiveVideos(option.isSelected()),
-                mPlayerTweaksData.isRememberPositionOfLiveVideosEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_of_short_videos),
-                option -> mPlayerTweaksData.enableRememberPositionOfShortVideos(option.isSelected()),
-                mPlayerTweaksData.isRememberPositionOfShortVideosEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_speed_button_old_behavior),
-                option -> mPlayerTweaksData.enableSpeedButtonOldBehavior(option.isSelected()),
-                mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
