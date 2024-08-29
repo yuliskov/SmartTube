@@ -670,4 +670,5 @@
     <string name="video_disabled">Video disabled</string>
     <string name="applying_fix">Don\'t close the player. Applying the fix...</string>
     <string name="hide_mixes">Hide Mixes</string>
+    <string name="player_global_focus_desc">This feature affects which player button will receive focus when navigating between player button rows</string>
 </resources>

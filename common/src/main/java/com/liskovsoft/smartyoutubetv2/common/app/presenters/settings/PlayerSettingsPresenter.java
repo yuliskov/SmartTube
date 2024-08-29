@@ -515,6 +515,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 mPlayerTweaksData.isLoopShortsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_global_focus),
+                getContext().getString(R.string.player_global_focus_desc),
                 option -> mPlayerTweaksData.enablePlayerGlobalFocus(option.isSelected()),
                 mPlayerTweaksData.isPlayerGlobalFocusEnabled()));
 

@@ -663,4 +663,5 @@
     <string name="video_disabled">Видео отключено</string>
     <string name="applying_fix">Не закрывайте плеер. Применение исправления...</string>
     <string name="hide_mixes">Скрывать Миксы</string>
+    <string name="player_global_focus_desc">Эта функция влияет на то, какая кнопка проигрывателя получит фокус при навигации между рядами кнопок проигрывателя</string>
 </resources>
