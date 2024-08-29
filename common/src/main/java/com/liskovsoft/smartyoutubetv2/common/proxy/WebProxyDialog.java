@@ -167,9 +167,9 @@ public class WebProxyDialog {
         );
 
         if (mProxyManager.getProxyType() == Proxy.Type.DIRECT) {
-            ((EditText) contentView.findViewById(R.id.proxy_host)).setText("");
-            ((EditText) contentView.findViewById(R.id.proxy_port)).setText("");
-            ((RadioGroup) contentView.findViewById(R.id.proxy_type)).clearCheck();
+            ((EditText) contentView.findViewById(R.id.proxy_host)).setText("127.0.0.1");
+            ((EditText) contentView.findViewById(R.id.proxy_port)).setText("1080");
+            ((RadioGroup) contentView.findViewById(R.id.proxy_type)).check(R.id.proxy_type_socks);
         } else {
             ((EditText) contentView.findViewById(R.id.proxy_host)).setText(mProxyManager.getProxyHost());
             ((EditText) contentView.findViewById(R.id.proxy_port)).setText(String.valueOf(mProxyManager.getProxyPort()));

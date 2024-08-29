@@ -71,7 +71,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         //appendTimeFormatCategory(settingsPresenter);
         //appendKeyRemappingCategory(settingsPresenter);
         //appendAppBackupCategory(settingsPresenter);
-        //appendInternetCensorship(settingsPresenter);
+        appendInternetCensorship(settingsPresenter);
         //appendHistoryCategory(settingsPresenter);
         //appendMiscCategory(settingsPresenter);
 

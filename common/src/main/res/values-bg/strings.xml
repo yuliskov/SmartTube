@@ -367,7 +367,7 @@
   <string name="openvpn_application_aborted">Моля, първо коригирайте настройките на OpenVPN.</string>
   <string name="openvpn_test_aborted">Тестът е прекъснат, моля, първо коригирайте настройките на OpenVPN.</string>
   <string name="openvpn_address_invalid">Адресът за конфигуриране на OpenVPN не е зададен.</string>
-  <string name="internet_censorship">Интернет цензура</string>
+  <string name="internet_censorship">Настройки сети</string>
   <string name="rename_section">Преименуване на този раздел</string>
   <string name="simple_edit_value_hint">Въведете стойност</string>
   <string name="seek_interval">Интервал на търсене</string>
