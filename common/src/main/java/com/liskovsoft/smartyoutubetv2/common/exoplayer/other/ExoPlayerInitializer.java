@@ -120,8 +120,8 @@ public class ExoPlayerInitializer {
             case PlayerData.BUFFER_NONE:
                 minBufferMs = 5_000; // LIVE fix
                 maxBufferMs = 5_000; // LIVE fix
-                bufferForPlaybackMs = 1_000;
-                bufferForPlaybackAfterRebufferMs = 1_000;
+                //bufferForPlaybackMs = 1_000;
+                //bufferForPlaybackAfterRebufferMs = 1_000;
                 break;
         }
 
