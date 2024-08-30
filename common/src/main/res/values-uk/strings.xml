@@ -35,6 +35,7 @@
     <string name="resolution_switch">Перемикати роздільну здатність</string>
     <string name="video_buffer">Відеобуфер</string>
     <string name="video_buffer_size_none">Немає</string>
+    <string name="video_buffer_size_lowest">Найнижчий</string>
     <string name="video_buffer_size_low">Низький</string>
     <string name="video_buffer_size_med">Середній</string>
     <string name="video_buffer_size_high">Високий</string>

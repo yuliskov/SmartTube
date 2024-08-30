@@ -14,7 +14,7 @@ public interface PlayerEngineConstants {
     int BACKGROUND_MODE_SOUND = 1;
     int BACKGROUND_MODE_PIP = 2;
     int BACKGROUND_MODE_PLAY_BEHIND = 3;
-    int BUFFER_NONE = 3;
+    int BUFFER_LOWEST = 3;
     int BUFFER_LOW = 0;
     int BUFFER_MEDIUM = 1;
     int BUFFER_HIGH = 2;

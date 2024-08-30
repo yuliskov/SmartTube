@@ -35,6 +35,7 @@
     <string name="resolution_switch">Çözünürlüğü değiştir</string>
     <string name="video_buffer">Video arabelleği</string>
     <string name="video_buffer_size_none">Hiçbiri</string>
+    <string name="video_buffer_size_lowest">En düşük</string>
     <string name="video_buffer_size_low">Düşük</string>
     <string name="video_buffer_size_med">Orta</string>
     <string name="video_buffer_size_high">Yüksek</string>

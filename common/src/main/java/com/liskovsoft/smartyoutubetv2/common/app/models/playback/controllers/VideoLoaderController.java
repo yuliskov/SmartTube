@@ -444,10 +444,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
 
         if (error instanceof OutOfMemoryError) {
-            if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_NONE) {
+            if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOWEST) {
                 mPlayerTweaksData.enableSectionPlaylist(false);
             } else if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
-                mPlayerData.setVideoBufferType(PlayerData.BUFFER_NONE);
+                mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOWEST);
             } else {
                 mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
             }

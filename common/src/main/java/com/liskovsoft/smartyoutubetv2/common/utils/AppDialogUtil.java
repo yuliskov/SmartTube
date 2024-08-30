@@ -307,7 +307,7 @@ public class AppDialogUtil {
     public static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData, Runnable onBufferSelected) {
         String videoBufferTitle = context.getString(R.string.video_buffer);
         List<OptionItem> optionItems = new ArrayList<>();
-        optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_none, PlayerData.BUFFER_NONE, onBufferSelected));
+        optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_lowest, PlayerData.BUFFER_LOWEST, onBufferSelected));
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_low, PlayerData.BUFFER_LOW, onBufferSelected));
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_med, PlayerData.BUFFER_MEDIUM, onBufferSelected));
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_high, PlayerData.BUFFER_HIGH, onBufferSelected));
