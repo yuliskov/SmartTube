@@ -35,7 +35,7 @@
     <string name="resolution_switch">Auflösung umschalten</string>
     <string name="video_buffer">Video-Puffer</string>
     <string name="video_buffer_size_none">Keiner</string>
-    <string name="video_buffer_size_lowest">Sehr Niedrig</string>
+    <string name="video_buffer_size_lowest">Sehr niedrig</string>
     <string name="video_buffer_size_low">Niedrig</string>
     <string name="video_buffer_size_med">Mittel</string>
     <string name="video_buffer_size_high">Hoch</string>
