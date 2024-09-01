@@ -163,7 +163,11 @@ public class MotherActivity extends FragmentActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
+        try {
+            super.onResume();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
 
         // 4K fix with AFR
         applyCustomConfig();

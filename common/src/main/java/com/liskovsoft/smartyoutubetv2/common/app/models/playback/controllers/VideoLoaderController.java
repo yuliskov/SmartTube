@@ -453,9 +453,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             }
         } else if (Helpers.containsAny(message, "Exception in CronetUrlRequest")) {
             mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
-        } else if (Helpers.startsWithAny(message, "Response code: 403", "Response code: 404")) {
+        } else if (Helpers.startsWithAny(message, "Response code: 403")) {
             // "Response code: 403" (url deciphered incorrectly)
             // "Response code: 404" (not sure whether below helps)
+            // "Response code: 503" (not sure whether below helps)
             YouTubeServiceManager.instance().applyNoPlaybackFix();
         } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN &&
                 !mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
