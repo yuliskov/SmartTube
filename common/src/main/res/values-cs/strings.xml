@@ -35,6 +35,7 @@
     <string name="resolution_switch">Přepnout rozlišení</string>
     <string name="video_buffer">Vyrovnávací paměť videa</string>
     <string name="video_buffer_size_none">Žádná</string>
+    <string name="video_buffer_size_lowest">Nejnižší</string>
     <string name="video_buffer_size_low">Nízká</string>
     <string name="video_buffer_size_med">Střední</string>
     <string name="video_buffer_size_high">Vysoká</string>
@@ -669,4 +670,8 @@
     <string name="without_picture">Bez obrazu</string>
     <string name="video_disabled">Video zakázáno</string>
     <string name="applying_fix">Nezavírejte přehrávač. Aplikuje se oprava...</string>
+    <string name="hide_mixes">Skrýt Mixy</string>
+    <string name="player_global_focus_desc">Tato funkce ovlivňuje, které tlačítko přehrávače bude aktivní při procházení mezi řádky tlačítek přehrávače</string>
+    <string name="disable_network_error_fixing">Zakázat automatickou opravu chyby sítě</string>
+    <string name="disable_network_error_fixing_desc">Pravděpodobně musíte tuto možnost zapnout, pokud používáte VPN</string>
 </resources>
