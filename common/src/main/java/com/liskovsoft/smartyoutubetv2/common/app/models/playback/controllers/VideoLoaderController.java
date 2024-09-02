@@ -340,7 +340,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
             scheduleNextVideoTimer(5_000);
-            YouTubeServiceManager.instance().invalidateCache();
+            YouTubeServiceManager.instance().invalidatePlaybackCache();
         } else if (formatInfo.containsDashVideoInfo() && acceptDashVideoInfo(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
