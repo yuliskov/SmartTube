@@ -64,6 +64,11 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     };
     private final Runnable mLoadRandomNext = this::loadRandomNext;
     private final Runnable mOnLongBuffering = this::onLongBuffering;
+    private final Runnable mRebootApp = () -> {
+        if (mLastVideo != null && mLastVideo.hasVideo()) {
+            Utils.restartTheApp(getContext(), mLastVideo.videoId);
+        }
+    };
     private Pair<Integer, Long> mBufferingCount;
 
     public VideoLoaderController() {
@@ -339,8 +344,11 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             getPlayer().showProgressBar(false);
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
-            scheduleNextVideoTimer(5_000);
-            YouTubeServiceManager.instance().invalidatePlaybackCache();
+            if (formatInfo.isAgeRestricted()) {
+                scheduleNextVideoTimer(5_000);
+            } else {
+                scheduleRebootVideoTimer(5_000);
+            }
         } else if (formatInfo.containsDashVideoInfo() && acceptDashVideoInfo(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
@@ -397,6 +405,14 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
     }
 
+    private void scheduleRebootVideoTimer(int delayMs) {
+        if (getPlayer() != null) {
+            Log.d(TAG, "Rebooting the app...");
+            getPlayer().showOverlay(true);
+            Utils.postDelayed(mRebootApp, delayMs);
+        }
+    }
+
     private void openVideoInt(Video item) {
         if (item == null) {
             return;
@@ -422,8 +438,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         mBufferingCount = null;
         MediaServiceManager.instance().disposeActions();
         RxHelper.disposeActions(mFormatInfoAction, mMpdStreamAction);
-        Utils.removeCallbacks(mReloadVideo, mLoadNext, mRestartEngine, mMetadataSync);
-        Utils.removeCallbacks(mOnLongBuffering);
+        Utils.removeCallbacks(mReloadVideo, mLoadNext, mRestartEngine, mMetadataSync, mOnLongBuffering, mRebootApp);
     }
 
     @SuppressLint("StringFormatMatches")

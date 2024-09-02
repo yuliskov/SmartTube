@@ -69,8 +69,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresen
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.WebBrowserPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
@@ -831,7 +829,11 @@ public class Utils {
     }
 
     public static void restartTheApp(Context context) {
-        restartTheApp(context, BOOTSTRAP_ACTIVITY_CLASS_NAME);
+        restartTheAppInt(context, BOOTSTRAP_ACTIVITY_CLASS_NAME);
+    }
+
+    public static void restartTheApp(Context context, String videoId) {
+        restartTheAppInt(context, BOOTSTRAP_ACTIVITY_CLASS_NAME, videoId);
     }
 
     /**
@@ -849,9 +851,18 @@ public class Utils {
         startReceiver(context, REMOTE_CONTROL_RECEIVER_CLASS_NAME);
     }
 
-    private static void restartTheApp(Context context, String bootActivityClassName) {
+    private static void restartTheAppInt(Context context, String bootActivityClassName) {
         try {
             ProcessPhoenix.triggerRebirth(context, new Intent(context, Class.forName(bootActivityClassName)));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void restartTheAppInt(Context context, String bootActivityClassName, String videoId) {
+        try {
+            ProcessPhoenix.triggerRebirth(context, new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.youtube.com/watch?v=" + videoId), context, Class.forName(bootActivityClassName)));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
