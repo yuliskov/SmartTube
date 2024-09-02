@@ -55,6 +55,7 @@ import androidx.work.WorkManager;
 
 import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
+import com.liskovsoft.sharedutils.GlobalConstants;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -853,7 +854,9 @@ public class Utils {
 
     private static void restartTheAppInt(Context context, String bootActivityClassName) {
         try {
-            ProcessPhoenix.triggerRebirth(context, new Intent(context, Class.forName(bootActivityClassName)));
+            Intent intent = new Intent(context, Class.forName(bootActivityClassName));
+            intent.putExtra(GlobalConstants.INTERNAL_INTENT, true);
+            ProcessPhoenix.triggerRebirth(context, intent);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -861,8 +864,14 @@ public class Utils {
 
     private static void restartTheAppInt(Context context, String bootActivityClassName, String videoId) {
         try {
-            ProcessPhoenix.triggerRebirth(context, new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://www.youtube.com/watch?v=" + videoId), context, Class.forName(bootActivityClassName)));
+            Intent intent = new Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://www.youtube.com/watch?v=" + videoId),
+                    context,
+                    Class.forName(bootActivityClassName)
+            );
+            intent.putExtra(GlobalConstants.INTERNAL_INTENT, true);
+            ProcessPhoenix.triggerRebirth(context, intent);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
