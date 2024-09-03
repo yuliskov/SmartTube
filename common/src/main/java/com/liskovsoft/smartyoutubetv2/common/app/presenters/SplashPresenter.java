@@ -365,6 +365,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
         boolean isInternalIntent = intent.getBooleanExtra(GlobalConstants.INTERNAL_INTENT, false);
 
-        viewManager.enablePlayerOnlyMode(!isInternalIntent || GeneralData.instance(getContext()).isReturnToLauncherEnabled());
+        viewManager.enablePlayerOnlyMode(!isInternalIntent && GeneralData.instance(getContext()).isReturnToLauncherEnabled());
     }
 }
