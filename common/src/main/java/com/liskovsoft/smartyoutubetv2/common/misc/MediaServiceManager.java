@@ -366,7 +366,9 @@ public class MediaServiceManager {
     }
 
     public void enableHistory(boolean enable) {
-        RxHelper.runAsyncUser(() -> mContentService.enableHistory(enable));
+        if (enable) { // don't disable history for other clients
+            RxHelper.runAsyncUser(() -> mContentService.enableHistory(true));
+        }
     }
 
     public void clearHistory() {

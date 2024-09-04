@@ -344,10 +344,11 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             getPlayer().showProgressBar(false);
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
-            if (formatInfo.isAgeRestricted()) {
-                scheduleNextVideoTimer(5_000);
+            if (formatInfo.isEmbedRestricted()) { // temp fix (not work as expected)
+                //YouTubeServiceManager.instance().invalidateCache();
+                scheduleRebootAppTimer(5_000);
             } else {
-                scheduleRebootVideoTimer(5_000);
+                scheduleNextVideoTimer(5_000);
             }
         } else if (formatInfo.containsDashVideoInfo() && acceptDashVideoInfo(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
@@ -405,7 +406,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
     }
 
-    private void scheduleRebootVideoTimer(int delayMs) {
+    private void scheduleRebootAppTimer(int delayMs) {
         if (getPlayer() != null) {
             Log.d(TAG, "Rebooting the app...");
             getPlayer().showOverlay(true);

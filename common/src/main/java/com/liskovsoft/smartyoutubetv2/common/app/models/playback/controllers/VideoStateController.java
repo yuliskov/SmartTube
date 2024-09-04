@@ -478,7 +478,8 @@ public class VideoStateController extends BasePlayerController {
         Video video = getVideo();
 
         if (video == null || (video.isShorts && mGeneralData.isHideShortsFromHistoryEnabled()) ||
-                mIncognito || getPlayer() == null || !getPlayer().containsMedia() || (video.isRemote && mRemoteControlData.isRemoteHistoryDisabled())) {
+                mIncognito || getPlayer() == null || !getPlayer().containsMedia() ||
+                (video.isRemote && mRemoteControlData.isRemoteHistoryDisabled()) || mGeneralData.getHistoryState() == GeneralData.HISTORY_DISABLED) {
             return;
         }
 
