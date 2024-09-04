@@ -829,14 +829,6 @@ public class Utils {
         //forceFinishTheApp();
     }
 
-    public static void restartTheApp(Context context) {
-        restartTheAppInt(context, BOOTSTRAP_ACTIVITY_CLASS_NAME);
-    }
-
-    public static void restartTheApp(Context context, String videoId) {
-        restartTheAppInt(context, BOOTSTRAP_ACTIVITY_CLASS_NAME, videoId);
-    }
-
     /**
      * Simply kills the app.
      */
@@ -852,9 +844,9 @@ public class Utils {
         startReceiver(context, REMOTE_CONTROL_RECEIVER_CLASS_NAME);
     }
 
-    private static void restartTheAppInt(Context context, String bootActivityClassName) {
+    public static void restartTheApp(Context context) {
         try {
-            Intent intent = new Intent(context, Class.forName(bootActivityClassName));
+            Intent intent = new Intent(context, Class.forName(BOOTSTRAP_ACTIVITY_CLASS_NAME));
             intent.putExtra(GlobalConstants.INTERNAL_INTENT, true);
             ProcessPhoenix.triggerRebirth(context, intent);
         } catch (ClassNotFoundException e) {
@@ -862,13 +854,13 @@ public class Utils {
         }
     }
 
-    private static void restartTheAppInt(Context context, String bootActivityClassName, String videoId) {
+    public static void restartTheApp(Context context, String videoId) {
         try {
             Intent intent = new Intent(
                     Intent.ACTION_VIEW,
                     Uri.parse("https://www.youtube.com/watch?v=" + videoId),
                     context,
-                    Class.forName(bootActivityClassName)
+                    Class.forName(BOOTSTRAP_ACTIVITY_CLASS_NAME)
             );
             intent.putExtra(GlobalConstants.INTERNAL_INTENT, true);
             ProcessPhoenix.triggerRebirth(context, intent);
