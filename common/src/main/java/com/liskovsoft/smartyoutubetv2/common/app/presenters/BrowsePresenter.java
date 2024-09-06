@@ -24,6 +24,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyErro
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.PasswordError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.ChannelUploadsMenuPresenter;
@@ -708,6 +710,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             }
 
                             VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, column);
+                            appendLocalHistory(videoGroup);
                             getView().updateSection(videoGroup);
                             mDeArrowProcessor.process(videoGroup);
 
@@ -1072,6 +1075,29 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         if (isHomeSection()) { // maybe the history turned off?
             MediaServiceManager.instance().enableHistory(true);
             mGeneralData.enableHistory(true);
+        }
+    }
+
+    private void appendLocalHistory(VideoGroup videoGroup) {
+        if (!isHistorySection()) {
+            return;
+        }
+
+        VideoStateService stateService = VideoStateService.instance(getContext());
+
+        if (stateService.isEmpty()) {
+            return;
+        }
+
+        Video firstInGroup = videoGroup.isEmpty() ? null : videoGroup.get(0);
+        Video lastInState = stateService.getStates().get(stateService.getStates().size() - 1).video;
+
+        if (firstInGroup != null && Helpers.equals(firstInGroup, lastInState)) {
+            return;
+        }
+
+        for (State state : stateService.getStates()) {
+            videoGroup.getVideos().add(0, state.video);
         }
     }
 }

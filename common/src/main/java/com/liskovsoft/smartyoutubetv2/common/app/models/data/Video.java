@@ -119,6 +119,10 @@ public final class Video {
     }
 
     public static Video from(MediaItem item) {
+        if (item == null) {
+            return null;
+        }
+
         Video video = new Video();
 
         video.id = item.getId();
@@ -354,7 +358,15 @@ public final class Video {
             split = Helpers.appendArray(split, new String[]{"-1"});
         }
 
-        if (split.length != 14) {
+        if (split.length == 14) {
+            split = Helpers.appendArray(split, new String[]{null});
+        }
+
+        if (split.length == 15) {
+            split = Helpers.appendArray(split, new String[]{null});
+        }
+
+        if (split.length != 16) {
             return null;
         }
 
@@ -369,36 +381,30 @@ public final class Video {
         result.channelId = Helpers.parseStr(split[6]);
         result.bgImageUrl = Helpers.parseStr(split[7]);
         result.cardImageUrl = Helpers.parseStr(split[8]);
-        result.mediaItem = YouTubeMediaItem.deserializeMediaItem(Helpers.parseStr(split[9]));
+        //result.mediaItem = YouTubeMediaItem.deserializeMediaItem(Helpers.parseStr(split[9]));
         result.playlistParams = Helpers.parseStr(split[10]);
         result.sectionId = Helpers.parseInt(split[11]);
         result.reloadPageKey = Helpers.parseStr(split[12]);
         result.itemType = Helpers.parseInt(split[13]);
+        result.secondTitle = Helpers.parseStr(split[14]);
+        result.previewUrl = Helpers.parseStr(split[15]);
 
         return result;
     }
+
+    //@NonNull
+    //@Override
+    //public String toString() {
+    //    return Helpers.mergeObj(id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl,
+    //            YouTubeMediaItem.serializeMediaItem(mediaItem), playlistParams, sectionId, getReloadPageKey(), itemType);
+    //}
 
     @NonNull
     @Override
     public String toString() {
         return Helpers.mergeObj(id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl,
-                YouTubeMediaItem.serializeMediaItem(mediaItem), playlistParams, sectionId, getReloadPageKey(), itemType);
+                null, playlistParams, sectionId, getReloadPageKey(), itemType, secondTitle, previewUrl);
     }
-
-    //@Override
-    //public String toString() {
-    //    String s = "Video{";
-    //    s += "id=" + id;
-    //    s += ", category='" + category + "'";
-    //    s += ", title='" + title + "'";
-    //    s += ", videoId='" + videoId + "'";
-    //    s += ", videoUrl='" + videoUrl + "'";
-    //    s += ", bgImageUrl='" + bgImageUrl + "'";
-    //    s += ", cardImageUrl='" + cardImageUrl + "'";
-    //    s += ", studio='" + cardImageUrl + "'";
-    //    s += "}";
-    //    return s;
-    //}
 
     public boolean hasVideo() {
         return videoId != null;

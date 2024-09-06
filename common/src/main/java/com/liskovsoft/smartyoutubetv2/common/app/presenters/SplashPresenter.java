@@ -108,7 +108,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             RxHelper.setupGlobalErrorHandler();
             initGlobalData();
             initProxy();
-            initVideoStateService();
+            //initVideoStateService(); // NOTE: early init break state orders!!!
             initStreamReminderService();
         }
     }

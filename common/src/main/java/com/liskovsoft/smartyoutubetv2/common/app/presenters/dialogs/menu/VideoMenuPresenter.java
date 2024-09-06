@@ -528,7 +528,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 UiOptionItem.from(getContext().getString(R.string.mark_as_watched), optionItem -> {
                     MediaServiceManager.instance().updateHistory(mVideo, 0);
                     mVideo.markFullyViewed();
-                    VideoStateService.instance(getContext()).save(new State(mVideo.videoId, mVideo.getDurationMs()));
+                    VideoStateService.instance(getContext()).save(new State(mVideo, mVideo.getDurationMs()));
                     Playlist.instance().sync(mVideo);
                     mDialogPresenter.closeDialog();
                 }));

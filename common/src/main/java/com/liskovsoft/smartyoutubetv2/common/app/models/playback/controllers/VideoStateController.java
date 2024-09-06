@@ -276,7 +276,7 @@ public class VideoStateController extends BasePlayerController {
         State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
         if (state != null && mPlayerData.isSpeedPerVideoEnabled()) {
             lastSpeed = !Helpers.floatEquals(1.0f, state.speed) ? state.speed : lastSpeed;
-            mStateService.save(new State(state.videoId, state.positionMs, state.durationMs, enabled ? 1.0f : lastSpeed));
+            mStateService.save(new State(state.video, state.positionMs, state.durationMs, enabled ? 1.0f : lastSpeed));
         }
 
         if (Helpers.floatEquals(lastSpeed, 1.0f) || mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()) {
@@ -300,7 +300,7 @@ public class VideoStateController extends BasePlayerController {
         settingsPresenter.showDialog(getContext().getString(R.string.video_speed), () -> {
             State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
             if (state != null && mPlayerData.isSpeedPerVideoEnabled()) {
-                mStateService.save(new State(state.videoId, state.positionMs, state.durationMs, mPlayerData.getSpeed(getVideo().channelId)));
+                mStateService.save(new State(state.video, state.positionMs, state.durationMs, mPlayerData.getSpeed(getVideo().channelId)));
             }
         });
     }
@@ -312,7 +312,7 @@ public class VideoStateController extends BasePlayerController {
 
     private void clearStateOfNextVideo() {
         if (getVideo() != null && getVideo().nextMediaItem != null) {
-            resetPosition(getVideo().nextMediaItem.getVideoId());
+            resetPosition(Video.from(getVideo().nextMediaItem));
         }
     }
 
@@ -343,18 +343,18 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void resetPosition(Video video) {
-        video.markNotViewed();
-        resetPosition(video.videoId);
-    }
+        if (video == null) {
+            return;
+        }
 
-    private void resetPosition(String videoId) {
-        State state = mStateService.getByVideoId(videoId);
+        video.markNotViewed();
+        State state = mStateService.getByVideoId(video.videoId);
 
         if (state != null) {
             if (mPlayerData.isSpeedPerVideoEnabled()) {
-                mStateService.save(new State(videoId, 0, state.durationMs, state.speed));
+                mStateService.save(new State(video, 0, state.durationMs, state.speed));
             } else {
-                mStateService.removeByVideoId(videoId);
+                mStateService.removeByVideoId(video.videoId);
             }
         }
     }
@@ -425,13 +425,13 @@ public class VideoStateController extends BasePlayerController {
         long remainsMs = durationMs - positionMs;
         boolean isPositionActual = remainsMs > 1_000;
         if (isPositionActual) { // partially viewed
-            State state = new State(video.videoId, positionMs, durationMs, getPlayer().getSpeed());
+            State state = new State(video, positionMs, durationMs, getPlayer().getSpeed());
             mStateService.save(state);
             // Sync video. You could safely use it later to restore state.
             video.sync(state);
         } else { // fully viewed
             // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
-            mStateService.save(new State(video.videoId, durationMs, durationMs, getPlayer().getSpeed()));
+            mStateService.save(new State(video, durationMs, durationMs, getPlayer().getSpeed()));
             video.markFullyViewed();
         }
 
@@ -448,7 +448,7 @@ public class VideoStateController extends BasePlayerController {
             // Web state is buggy on short videos (e.g. video clips)
             boolean isLongVideo = getPlayer().getDurationMs() > MUSIC_VIDEO_MAX_DURATION_MS;
             if (isLongVideo) {
-                state = new State(item.videoId, item.getPositionMs());
+                state = new State(item, item.getPositionMs());
             }
         }
 
@@ -461,7 +461,7 @@ public class VideoStateController extends BasePlayerController {
         if ((state == null || state.durationMs - state.positionMs < LIVE_THRESHOLD_MS) && item.isLive) {
             // Add buffer. Should I take into account segment offset???
             long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? SHORT_LIVE_BUFFER_MS : LIVE_BUFFER_MS;
-            state = new State(item.videoId, getPlayer().getDurationMs() - buffer);
+            state = new State(item, getPlayer().getDurationMs() - buffer);
         }
 
         // Do I need to check that item isn't live? (state != null && !item.isLive)
