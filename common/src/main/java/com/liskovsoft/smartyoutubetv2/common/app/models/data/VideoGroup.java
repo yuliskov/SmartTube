@@ -364,7 +364,7 @@ public class VideoGroup {
 
     public void add(Video video) {
         int size = getSize();
-        add(size > 0 ? (size - 1) : 0, video);
+        add(size != -1 ? size : 0, video);
     }
 
     public void add(int idx, Video video) {
