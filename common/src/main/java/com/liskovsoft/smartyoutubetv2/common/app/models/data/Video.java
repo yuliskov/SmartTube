@@ -487,6 +487,10 @@ public final class Video {
     }
 
     public boolean isEmpty() {
+        if (isChapter) {
+            return false;
+        }
+
         // NOTE: Movies labeled as "Free with Ads" not supported yet
         return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId) || isMovie;
     }
