@@ -191,14 +191,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void release() {
         mTrackSelectorManager.release();
         mMediaSourceFactory.release();
-
-        if (mPlayer != null) {
-            mPlayer.removeListener(this);
-            mPlayer.stop(true);
-            mPlayer.release();
-            mPlayer = null;
-        }
-
+        releasePlayer();
         mPlayerView = null;
         mVideo = null;
         // Don't destroy it (needed inside bridge)!
@@ -483,5 +476,18 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         }
 
         return false;
+    }
+
+    private void releasePlayer() {
+        try {
+            if (mPlayer != null) {
+                mPlayer.removeListener(this);
+                mPlayer.stop(true);
+                mPlayer.release();
+                mPlayer = null;
+            }
+        } catch (ArrayIndexOutOfBoundsException e) { // thrown on stop()
+            e.printStackTrace();
+        }
     }
 }

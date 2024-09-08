@@ -128,6 +128,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         if ((!mLastVideo.isLive || mLastVideo.isLiveEnd) &&
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
+        } else if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
+            mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
+            MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
         }
 
         // NOTE: useless fixes. Won't fix the buffering actually.
@@ -461,9 +464,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
         if (Helpers.startsWithAny(message, "Unable to connect to")) {
             // No internet connection
-            if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
-                mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
-            }
             MessageHelpers.showLongMessage(getContext(), errorTitle + "\n" + message);
             return;
         }

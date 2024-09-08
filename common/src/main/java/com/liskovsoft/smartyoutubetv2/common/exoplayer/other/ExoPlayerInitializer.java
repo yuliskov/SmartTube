@@ -75,7 +75,15 @@ public class ExoPlayerInitializer {
                     .setContentType(C.CONTENT_TYPE_MOVIE)
                     .build();
 
+            setAudioAttributes(player, audioAttributes, enable);
+        }
+    }
+
+    private static void setAudioAttributes(SimpleExoPlayer player, AudioAttributes audioAttributes, boolean enable) {
+        try {
             player.setAudioAttributes(audioAttributes, enable);
+        } catch (SecurityException e) { // uid 10390 not allowed to perform TAKE_AUDIO_FOCUS
+            e.printStackTrace();
         }
     }
 
