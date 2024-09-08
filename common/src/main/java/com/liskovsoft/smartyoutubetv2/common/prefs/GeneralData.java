@@ -100,6 +100,7 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsFirstUseTooltipEnabled;
     private boolean mIsDeviceSpecificBackupEnabled;
     private boolean mIsAutoBackupEnabled;
+    private boolean mIsHistoryBroken;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -955,6 +956,19 @@ public class GeneralData implements ProfileChangeListener {
         return mIsAutoBackupEnabled;
     }
 
+    public void setHistoryBroken(boolean isBroken) {
+        if (mIsHistoryBroken == isBroken) {
+            return;
+        }
+
+        mIsHistoryBroken = isBroken;
+        persistState();
+    }
+
+    public boolean isHistoryBroken() {
+        return mIsHistoryBroken;
+    }
+
     private void initSections() {
         mDefaultSections.put(R.string.header_notifications, MediaGroup.TYPE_NOTIFICATIONS);
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
@@ -1066,6 +1080,7 @@ public class GeneralData implements ProfileChangeListener {
         mIsDeviceSpecificBackupEnabled = Helpers.parseBoolean(split, 65, false);
         mIsAutoBackupEnabled = Helpers.parseBoolean(split, 66, false);
         mIsRemapPageDownToSpeedEnabled = Helpers.parseBoolean(split, 67, false);
+        mIsHistoryBroken = Helpers.parseBoolean(split, 68, false);
 
         if (mPinnedItems.isEmpty()) {
             initPinnedItems();
@@ -1085,7 +1100,8 @@ public class GeneralData implements ProfileChangeListener {
 
     private void persistState() {
         // Zero index is skipped. Selected sections were there.
-        mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeData(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut, mIsReturnToLauncherEnabled, mBackgroundShortcut, mPinnedItems, mIsHideShortsFromSubscriptionsEnabled,
+        mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeData(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut, mIsReturnToLauncherEnabled,
+                mBackgroundShortcut, mPinnedItems, mIsHideShortsFromSubscriptionsEnabled,
                 mIsRemapFastForwardToNextEnabled, null, mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
@@ -1097,7 +1113,8 @@ public class GeneralData implements ProfileChangeListener {
                 mHistoryState, mRememberSubscriptionsPosition, null, mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled,
                 mIsRemapDpadUpToVolumeEnabled, mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled,
                 mChangelog, mPlayerExitShortcut, mIsOldChannelLookEnabled, mIsFullscreenModeEnabled, mIsHideWatchedFromWatchLaterEnabled,
-                mRememberPinnedPosition, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, mIsAutoBackupEnabled, mIsRemapPageDownToSpeedEnabled));
+                mRememberPinnedPosition, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, mIsAutoBackupEnabled,
+                mIsRemapPageDownToSpeedEnabled, mIsHistoryBroken));
     }
 
     private int getSectionId(Video item) {

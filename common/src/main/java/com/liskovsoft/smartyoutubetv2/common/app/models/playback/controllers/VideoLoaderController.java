@@ -47,6 +47,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     private SuggestionsController mSuggestionsController;
     private PlayerData mPlayerData;
     private PlayerTweaksData mPlayerTweaksData;
+    private GeneralData mGeneralData;
     private long mSleepTimerStartMs;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
@@ -83,6 +84,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         mPlayerData.setOnChange(this);
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
         mSleepTimerStartMs = System.currentTimeMillis();
+        mGeneralData = GeneralData.instance(getContext());
     }
 
     @Override
@@ -338,6 +340,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         String bgImageUrl = null;
 
         mLastVideo.sync(formatInfo);
+        mGeneralData.setHistoryBroken(formatInfo.isHistoryBroken());
 
         if (formatInfo.isUnplayable()) {
             getPlayer().setTitle(formatInfo.getPlayabilityStatus());
