@@ -79,6 +79,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             return;
         }
 
+        if (ViewManager.instance(getContext()).isFinished()) {
+            Utils.restartTheApp(getContext());
+            return;
+        }
+
         applyRunPerInstanceTasks();
         applyRunOnceTasks();
 
@@ -108,7 +113,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             RxHelper.setupGlobalErrorHandler();
             initGlobalData();
             initProxy();
-            //initVideoStateService(); // NOTE: early init break state orders!!!
+            initVideoStateService();
             initStreamReminderService();
         }
     }

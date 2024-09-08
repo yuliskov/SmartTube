@@ -344,6 +344,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             getPlayer().showProgressBar(false);
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
+            //scheduleNextVideoTimer(5_000);
             if (formatInfo.isEmbedRestricted()) { // temp fix (not work as expected)
                 //YouTubeServiceManager.instance().invalidateCache();
                 scheduleRebootAppTimer(5_000);
@@ -456,6 +457,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
         if (Helpers.startsWithAny(message, "Unable to connect to")) {
             // No internet connection
+            if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
+                mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
+            }
             MessageHelpers.showLongMessage(getContext(), errorTitle + "\n" + message);
             return;
         }
@@ -475,15 +479,16 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // "Response code: 404" (not sure whether below helps)
             // "Response code: 503" (not sure whether below helps)
             YouTubeServiceManager.instance().applyNoPlaybackFix();
-        } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN &&
-                !mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
+        } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
             // NOTE: Fixing too many requests or network issues
             // NOTE: All these errors have unknown renderer (-1)
             // "Unable to connect to", "Invalid NAL length", "Response code: 421",
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
             // "Response code: 403" (url deciphered incorrectly)
-            mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+            if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
+                mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+            }
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 500"
             if (mLastVideo != null) {

@@ -40,7 +40,7 @@ public class ViewManager {
     private Class<? extends Activity> mDefaultTop;
     private long mPrevThrottleTimeMS;
     private boolean mIsMoveToBackEnabled;
-    private boolean mIsFinishing;
+    private boolean mIsFinished;
     private boolean mIsPlayerOnlyModeEnabled;
     private long mPendingActivityMs;
     private Class<?> mPendingActivityClass;
@@ -305,7 +305,7 @@ public class ViewManager {
         if (activity instanceof MotherActivity) {
             Log.d(TAG, "Trying finish the app...");
             mIsMoveToBackEnabled = true; // close all activities below current one
-            mIsFinishing = true;
+            mIsFinished = true;
 
             mActivityStack.clear();
 
@@ -323,7 +323,6 @@ public class ViewManager {
                 AppUpdatePresenter.unhold();
                 MotherActivity.invalidate();
                 mIsMoveToBackEnabled = false;
-                mIsFinishing = false;
             }, 1_000);
         }
     }
@@ -364,6 +363,8 @@ public class ViewManager {
      * Small delay to fix PIP transition bug (UI become unresponsive)
      */
     private void safeStartActivity(Context context, Intent intent) {
+        mIsFinished = false;
+
         //if (PlaybackPresenter.instance(mContext).isInPipMode()) {
         //if (PlaybackPresenter.instance(mContext).getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_PIP) {
         if (PlaybackPresenter.instance(mContext).isEngineBlocked()) {
@@ -386,8 +387,8 @@ public class ViewManager {
         }
     }
 
-    public boolean isFinishing() {
-        return mIsFinishing;
+    public boolean isFinished() {
+        return mIsFinished;
     }
 
     //public void enableMoveToBack(boolean enable) {

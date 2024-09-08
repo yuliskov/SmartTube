@@ -366,7 +366,19 @@ public final class Video {
             split = Helpers.appendArray(split, new String[]{null});
         }
 
-        if (split.length != 16) {
+        if (split.length == 16) {
+            split = Helpers.appendArray(split, new String[]{"-1"});
+        }
+
+        if (split.length == 17) {
+            split = Helpers.appendArray(split, new String[]{null});
+        }
+
+        if (split.length == 18) {
+            split = Helpers.appendArray(split, new String[]{null});
+        }
+
+        if (split.length != 19) {
             return null;
         }
 
@@ -388,6 +400,9 @@ public final class Video {
         result.itemType = Helpers.parseInt(split[13]);
         result.secondTitle = Helpers.parseStr(split[14]);
         result.previewUrl = Helpers.parseStr(split[15]);
+        result.percentWatched = Helpers.parseFloat(split[16]);
+        result.metadataTitle = Helpers.parseStr(split[17]);
+        result.metadataSecondTitle = Helpers.parseStr(split[18]);
 
         return result;
     }
@@ -403,7 +418,7 @@ public final class Video {
     @Override
     public String toString() {
         return Helpers.mergeObj(id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl,
-                null, playlistParams, sectionId, getReloadPageKey(), itemType, secondTitle, previewUrl);
+                null, playlistParams, sectionId, getReloadPageKey(), itemType, secondTitle, previewUrl, percentWatched, metadataTitle, metadataSecondTitle);
     }
 
     public boolean hasVideo() {

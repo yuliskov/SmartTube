@@ -710,7 +710,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             }
 
                             VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, column);
-                            appendLocalHistory(videoGroup);
+                            //appendLocalHistory(videoGroup);
                             getView().updateSection(videoGroup);
                             mDeArrowProcessor.process(videoGroup);
 
