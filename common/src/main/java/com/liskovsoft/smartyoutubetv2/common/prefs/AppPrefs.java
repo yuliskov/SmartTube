@@ -45,9 +45,11 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
 
     @Override
     public void onAccountChanged(Account account) {
-        if (isMultiProfilesEnabled()) {
-            selectAccount(account);
-        }
+        //if (isMultiProfilesEnabled()) {
+        //    selectAccount(account);
+        //}
+
+        selectAccount(account);
     }
 
     public static AppPrefs instance(Context context) {
@@ -60,7 +62,7 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
 
     public void enableMultiProfiles(boolean enabled) {
         putBoolean(MULTI_PROFILES, enabled);
-        selectAccount(enabled ? MediaServiceManager.instance().getSelectedAccount() : null);
+        //selectAccount(enabled ? MediaServiceManager.instance().getSelectedAccount() : null);
     }
 
     public boolean isMultiProfilesEnabled() {
@@ -75,31 +77,27 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         return mBootResolution;
     }
 
-    //public String getStateUpdaterData() {
-    //    return getString(STATE_UPDATER_DATA, null);
-    //}
-    //
-    //public void setStateUpdaterData(String data) {
-    //    putString(STATE_UPDATER_DATA, data);
-    //}
-
     public String getStateUpdaterData() {
-        return getProfileData(STATE_UPDATER_DATA);
+        // Always use multiple profiles for the history
+        return getData(getProfileKey(STATE_UPDATER_DATA, true));
     }
 
     public void setStateUpdaterData(String data) {
-        setProfileData(STATE_UPDATER_DATA, data);
+        // Always use multiple profiles for the history
+        setData(getProfileKey(STATE_UPDATER_DATA, true), data);
     }
 
     public void setProfileData(String key, String data) {
-        setData(getProfileKey(key), data);
+        setData(getProfileKey(key, isMultiProfilesEnabled()), data);
     }
 
     public String getProfileData(String key) {
-        String data = getData(getProfileKey(key));
+        //String data = getData(getProfileKey(key, isMultiProfilesEnabled()));
 
         // Fallback to non-profile settings
-        return data != null ? data : getData(key);
+        //return data != null ? data : getData(key);
+
+        return getData(getProfileKey(key, isMultiProfilesEnabled()));
     }
 
     public void setData(String key, String data) {
@@ -142,7 +140,11 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
     }
 
     private void selectProfile(String profileName) {
-        if (isMultiProfilesEnabled() && profileName == null) {
+        //if (isMultiProfilesEnabled() && profileName == null) {
+        //    profileName = ANONYMOUS_PROFILE_NAME;
+        //}
+
+        if (profileName == null) {
             profileName = ANONYMOUS_PROFILE_NAME;
         }
 
@@ -187,9 +189,18 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         return true;
     }
 
-    private String getProfileKey(String key) {
+    //private String getProfileKey(String key) {
+    //    String profileName = getProfileName();
+    //    if (!TextUtils.isEmpty(profileName)) {
+    //        key = profileName + "_" + key;
+    //    }
+    //
+    //    return key;
+    //}
+
+    private String getProfileKey(String key, boolean isMultiProfilesEnabled) {
         String profileName = getProfileName();
-        if (!TextUtils.isEmpty(profileName)) {
+        if (!TextUtils.isEmpty(profileName) && isMultiProfilesEnabled) {
             key = profileName + "_" + key;
         }
 

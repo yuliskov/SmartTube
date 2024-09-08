@@ -84,6 +84,7 @@ public class VideoGroup {
         VideoGroup videoGroup = new VideoGroup();
         videoGroup.mSection = section;
         videoGroup.mPosition = groupPosition;
+        videoGroup.mVideos = new ArrayList<>();
 
         if (mediaGroup == null) {
             return videoGroup;
@@ -99,7 +100,6 @@ public class VideoGroup {
         videoGroup.mMediaGroup = mediaGroup;
         videoGroup.mTitle = mediaGroup.getTitle() != null ? mediaGroup.getTitle() : sectionTitle;
         videoGroup.mId = videoGroup.hashCode();
-        videoGroup.mVideos = new ArrayList<>();
 
         if (mediaGroup.getMediaItems() == null) {
             Log.e(TAG, "MediaGroup doesn't contain media items. Title: " + mediaGroup.getTitle());

@@ -100,7 +100,6 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsFirstUseTooltipEnabled;
     private boolean mIsDeviceSpecificBackupEnabled;
     private boolean mIsAutoBackupEnabled;
-    private boolean mIsHistoryBroken;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -956,19 +955,6 @@ public class GeneralData implements ProfileChangeListener {
         return mIsAutoBackupEnabled;
     }
 
-    public void setHistoryBroken(boolean isBroken) {
-        if (mIsHistoryBroken == isBroken) {
-            return;
-        }
-
-        mIsHistoryBroken = isBroken;
-        persistState();
-    }
-
-    public boolean isHistoryBroken() {
-        return mIsHistoryBroken;
-    }
-
     private void initSections() {
         mDefaultSections.put(R.string.header_notifications, MediaGroup.TYPE_NOTIFICATIONS);
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
@@ -1080,7 +1066,6 @@ public class GeneralData implements ProfileChangeListener {
         mIsDeviceSpecificBackupEnabled = Helpers.parseBoolean(split, 65, false);
         mIsAutoBackupEnabled = Helpers.parseBoolean(split, 66, false);
         mIsRemapPageDownToSpeedEnabled = Helpers.parseBoolean(split, 67, false);
-        mIsHistoryBroken = Helpers.parseBoolean(split, 68, false);
 
         if (mPinnedItems.isEmpty()) {
             initPinnedItems();
@@ -1114,7 +1099,7 @@ public class GeneralData implements ProfileChangeListener {
                 mIsRemapDpadUpToVolumeEnabled, mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled,
                 mChangelog, mPlayerExitShortcut, mIsOldChannelLookEnabled, mIsFullscreenModeEnabled, mIsHideWatchedFromWatchLaterEnabled,
                 mRememberPinnedPosition, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, mIsAutoBackupEnabled,
-                mIsRemapPageDownToSpeedEnabled, mIsHistoryBroken));
+                mIsRemapPageDownToSpeedEnabled));
     }
 
     private int getSectionId(Video item) {

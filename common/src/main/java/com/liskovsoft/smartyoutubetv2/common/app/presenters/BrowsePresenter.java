@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.yt.NotificationsService;
 import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
@@ -189,7 +191,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mSectionsMapping.put(MediaGroup.TYPE_MUSIC, new BrowseSection(MediaGroup.TYPE_MUSIC, getContext().getString(R.string.header_music), BrowseSection.TYPE_ROW, R.drawable.icon_music));
         mSectionsMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, new BrowseSection(MediaGroup.TYPE_CHANNEL_UPLOADS, getContext().getString(R.string.header_channels), uploadsType, R.drawable.icon_channels, true));
         mSectionsMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, new BrowseSection(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), BrowseSection.TYPE_GRID, R.drawable.icon_subscriptions, true));
-        mSectionsMapping.put(MediaGroup.TYPE_HISTORY, new BrowseSection(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), BrowseSection.TYPE_GRID, R.drawable.icon_history, true));
+        mSectionsMapping.put(MediaGroup.TYPE_HISTORY, new BrowseSection(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), BrowseSection.TYPE_GRID, R.drawable.icon_history, false));
         mSectionsMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, new BrowseSection(MediaGroup.TYPE_USER_PLAYLISTS, getContext().getString(R.string.header_playlists), BrowseSection.TYPE_ROW, R.drawable.icon_playlist, true));
         mSectionsMapping.put(MediaGroup.TYPE_NOTIFICATIONS, new BrowseSection(MediaGroup.TYPE_NOTIFICATIONS, getContext().getString(R.string.header_notifications), BrowseSection.TYPE_GRID, R.drawable.icon_notification, true));
 
@@ -718,6 +720,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         },
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
+                            VideoGroup videoGroup = VideoGroup.from(null, section, column);
+                            appendLocalHistory(videoGroup);
+                            getView().updateSection(videoGroup);
                             handleLoadError();
                         });
 
@@ -1078,12 +1083,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
     }
 
-    private void appendLocalHistory(VideoGroup videoGroup) {
-        if (!isHistorySection() || !mGeneralData.isHistoryBroken()) {
+    private void appendLocalHistory(@NonNull VideoGroup videoGroup) {
+        VideoStateService stateService = VideoStateService.instance(getContext());
+
+        if (!isHistorySection() || (!stateService.isHistoryBroken() && !videoGroup.isEmpty())) {
             return;
         }
-
-        VideoStateService stateService = VideoStateService.instance(getContext());
 
         if (stateService.isEmpty()) {
             return;

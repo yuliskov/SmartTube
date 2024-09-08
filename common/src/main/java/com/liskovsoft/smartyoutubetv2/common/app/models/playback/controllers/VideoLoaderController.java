@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
@@ -47,7 +48,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     private SuggestionsController mSuggestionsController;
     private PlayerData mPlayerData;
     private PlayerTweaksData mPlayerTweaksData;
-    private GeneralData mGeneralData;
+    private VideoStateService mStateService;
     private long mSleepTimerStartMs;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
@@ -84,7 +85,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         mPlayerData.setOnChange(this);
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
         mSleepTimerStartMs = System.currentTimeMillis();
-        mGeneralData = GeneralData.instance(getContext());
+        mStateService = VideoStateService.instance(getContext());
     }
 
     @Override
@@ -340,7 +341,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         String bgImageUrl = null;
 
         mLastVideo.sync(formatInfo);
-        mGeneralData.setHistoryBroken(formatInfo.isHistoryBroken());
+        mStateService.setHistoryBroken(formatInfo.isHistoryBroken());
 
         if (formatInfo.isUnplayable()) {
             getPlayer().setTitle(formatInfo.getPlayabilityStatus());

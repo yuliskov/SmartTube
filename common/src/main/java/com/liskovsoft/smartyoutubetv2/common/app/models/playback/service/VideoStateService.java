@@ -22,6 +22,7 @@ public class VideoStateService implements ProfileChangeListener {
     private final List<State> mStates = Helpers.createLRUList(MAX_PERSISTENT_STATE_SIZE);
     private final AppPrefs mPrefs;
     private static final String DELIM = "&si;";
+    private boolean mIsHistoryBroken;
 
     private VideoStateService(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -68,40 +69,26 @@ public class VideoStateService implements ProfileChangeListener {
         persistState();
     }
 
+    public void setHistoryBroken(boolean isBroken) {
+        mIsHistoryBroken = isBroken;
+    }
+
+    public boolean isHistoryBroken() {
+        return mIsHistoryBroken;
+    }
+
     private void restoreState() {
         mStates.clear();
         String data = mPrefs.getStateUpdaterData();
 
-        if (data != null) {
-            String[] split = Helpers.split(DELIM, data);
+        String[] split = Helpers.splitData(data);
 
-            for (String spec : split) {
-                State state = State.from(spec);
-
-                if (state != null) {
-                    mStates.add(state);
-                }
-            }
-        }
+        setStateData(Helpers.parseStr(split, 0));
+        mIsHistoryBroken = Helpers.parseBoolean(split, 1);
     }
 
     public void persistState() {
-        StringBuilder sb = new StringBuilder();
-
-        for (State state : mStates) {
-            // NOTE: Storage optimization!!!
-            //if (state.lengthMs <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEachEnabled()) {
-            //    continue;
-            //}
-
-            if (sb.length() != 0) {
-                sb.append(DELIM);
-            }
-
-            sb.append(state);
-        }
-
-        mPrefs.setStateUpdaterData(sb.toString());
+        mPrefs.setStateUpdaterData(Helpers.mergeData(getStateData(), mIsHistoryBroken));
     }
 
     public static class State {
@@ -175,5 +162,38 @@ public class VideoStateService implements ProfileChangeListener {
     @Override
     public void onProfileChanged() {
         restoreState();
+    }
+
+    private void setStateData(String data) {
+        if (data != null) {
+            String[] split = Helpers.split(DELIM, data);
+
+            for (String spec : split) {
+                State state = State.from(spec);
+
+                if (state != null) {
+                    mStates.add(state);
+                }
+            }
+        }
+    }
+
+    private String getStateData() {
+        StringBuilder sb = new StringBuilder();
+
+        for (State state : mStates) {
+            // NOTE: Storage optimization!!!
+            //if (state.lengthMs <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEachEnabled()) {
+            //    continue;
+            //}
+
+            if (sb.length() != 0) {
+                sb.append(DELIM);
+            }
+
+            sb.append(state);
+        }
+
+        return sb.toString();
     }
 }
