@@ -588,7 +588,7 @@ public final class Video {
     }
 
     private boolean belongsToGroup(int groupId) {
-        return getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getType() == groupId;
+        return getGroup() != null && getGroup().getType() == groupId;
     }
 
     public boolean belongsToSection() {

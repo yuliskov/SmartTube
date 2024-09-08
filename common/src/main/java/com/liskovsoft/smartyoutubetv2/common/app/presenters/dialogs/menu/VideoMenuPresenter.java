@@ -444,11 +444,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void appendRemoveFromHistoryButton() {
-        if (mVideo == null || mVideo.mediaItem == null || mVideo.mediaItem.getFeedbackToken() == null) {
-            return;
-        }
-
-        if (!mVideo.belongsToHistory() || !mIsRemoveFromHistoryButtonEnabled) {
+        if (mVideo == null || !mVideo.belongsToHistory() || !mIsRemoveFromHistoryButtonEnabled) {
             return;
         }
 
@@ -456,21 +452,29 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.remove_from_history), optionItem -> {
-                    mNotInterestedAction = mMediaItemService.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken())
-                            .subscribe(
-                                    var -> {},
-                                    error -> Log.e(TAG, "Remove from history error: %s", error.getMessage()),
-                                    () -> {
-                                        if (mCallback != null) {
-                                            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
-                                        } else {
-                                            MessageHelpers.showMessage(getContext(), R.string.removed_from_history);
-                                        }
-                                        VideoStateService.instance(getContext()).removeByVideoId(mVideo.videoId);
-                                    }
-                            );
+                    if (mVideo.mediaItem == null || mVideo.mediaItem.getFeedbackToken() == null) {
+                        onRemoveFromHistoryDone();
+                    } else {
+                        mNotInterestedAction = mMediaItemService.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken())
+                                .subscribe(
+                                        var -> {},
+                                        error -> Log.e(TAG, "Remove from history error: %s", error.getMessage()),
+                                        this::onRemoveFromHistoryDone
+                                );
+                    }
                     mDialogPresenter.closeDialog();
                 }));
+    }
+
+    private void onRemoveFromHistoryDone() {
+        if (mCallback != null) {
+            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+        } else {
+            MessageHelpers.showMessage(getContext(), R.string.removed_from_history);
+        }
+        VideoStateService stateService = VideoStateService.instance(getContext());
+        stateService.removeByVideoId(mVideo.videoId);
+        stateService.persistState();
     }
 
     private void appendRemoveFromSubscriptionsButton() {
@@ -924,7 +928,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mMenuMapping.put(MainUIData.MENU_ITEM_PLAY_VIDEO, new MenuAction(this::appendPlayVideoButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_PLAY_VIDEO_INCOGNITO, new MenuAction(this::appendPlayVideoIncognitoButton, false));
-        mMenuMapping.put(MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY, new MenuAction(this::appendRemoveFromHistoryButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY, new MenuAction(this::appendRemoveFromHistoryButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_STREAM_REMINDER, new MenuAction(this::appendStreamReminderButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_RECENT_PLAYLIST, new MenuAction(this::appendAddToRecentPlaylistButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_ADD_TO_PLAYLIST, new MenuAction(this::appendAddToPlaylistButton, true));
