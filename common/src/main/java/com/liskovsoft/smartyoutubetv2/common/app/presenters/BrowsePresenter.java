@@ -720,10 +720,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         },
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
-                            VideoGroup videoGroup = VideoGroup.from(null, section, column);
-                            videoGroup.setType(MediaGroup.TYPE_HISTORY);
-                            appendLocalHistory(videoGroup);
-                            getView().updateSection(videoGroup);
+                            if (getView() != null && isHistorySection()) {
+                                VideoGroup videoGroup = VideoGroup.from(null, section, column);
+                                videoGroup.setType(MediaGroup.TYPE_HISTORY);
+                                appendLocalHistory(videoGroup);
+                                getView().updateSection(videoGroup);
+                            }
                             handleLoadError();
                         });
 
