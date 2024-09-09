@@ -344,7 +344,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         String bgImageUrl = null;
 
         mLastVideo.sync(formatInfo);
-        mStateService.setHistoryBroken(formatInfo.isHistoryBroken());
+
+        if (formatInfo.containsMedia()) {
+            mStateService.setHistoryBroken(formatInfo.isHistoryBroken());
+        }
 
         if (formatInfo.isUnplayable()) {
             getPlayer().setTitle(formatInfo.getPlayabilityStatus());
@@ -352,13 +355,13 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
             //scheduleNextVideoTimer(5_000);
-            if (formatInfo.isEmbedRestricted()) { // temp fix (not work as expected)
+            if (formatInfo.isEmbedRestricted() && formatInfo.isHistoryBroken()) { // temp fix (not work as expected)
                 //YouTubeServiceManager.instance().invalidateCache();
                 scheduleRebootAppTimer(5_000);
             } else {
                 scheduleNextVideoTimer(5_000);
             }
-        } else if (formatInfo.containsDashVideoInfo() && acceptDashVideoInfo(formatInfo)) {
+        } else if (formatInfo.containsDashVideoFormats() && acceptDashVideoFormats(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
@@ -378,7 +381,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         } else if (formatInfo.isLive() && formatInfo.containsHlsUrl()) {
             Log.d(TAG, "Found live video (current or past live stream) in hls format. Loading...");
             getPlayer().openHlsUrl(formatInfo.getHlsManifestUrl());
-        } else if (formatInfo.containsUrlListInfo()) {
+        } else if (formatInfo.containsUrlFormats()) {
             Log.d(TAG, "Found url list video. This is always LQ. Loading...");
             getPlayer().openUrlList(applyFix(formatInfo.createUrlList()));
         } else {
@@ -645,7 +648,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
     }
 
-    private boolean acceptDashVideoInfo(MediaItemFormatInfo formatInfo) {
+    private boolean acceptDashVideoFormats(MediaItemFormatInfo formatInfo) {
         // Not enough info for full length live streams
         if (formatInfo.isLive() && formatInfo.getStartTimeMs() == 0) {
             return false;
