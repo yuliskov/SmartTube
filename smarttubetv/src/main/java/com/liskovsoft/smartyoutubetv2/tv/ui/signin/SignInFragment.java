@@ -67,7 +67,9 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
 
         Glide.with(getContext())
                 .load(Utils.toQrCodeLink(mFullSignInUrl))
-                .apply(ViewUtil.glideOptions()).error(ContextCompat.getDrawable(getContext(), R.drawable.activate_account_qrcode))
+                .placeholder(R.drawable.activate_account_qrcode)
+                .apply(ViewUtil.glideOptions())
+                .error(R.drawable.activate_account_qrcode)
                 .listener(mErrorListener)
                 .into(getGuidanceStylist().getIconView());
 
