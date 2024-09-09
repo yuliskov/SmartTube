@@ -381,7 +381,8 @@ public class ViewManager {
     private void safeStartActivityInt(Context context, Intent intent) {
         try {
             context.startActivity(intent);
-        } catch (IllegalArgumentException | ActivityNotFoundException | IndexOutOfBoundsException e) {
+        } catch (IllegalArgumentException | ActivityNotFoundException | IndexOutOfBoundsException | NullPointerException e) {
+            // NPE: Attempt to write to field 'boolean com.android.server.am.ActivityStack.mConfigWillChange' on a null object reference
             Log.e(TAG, "Error when starting activity: %s", e.getMessage());
             MessageHelpers.showLongMessage(context, e.getLocalizedMessage());
         }

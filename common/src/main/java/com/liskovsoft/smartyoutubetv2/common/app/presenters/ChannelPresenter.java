@@ -373,13 +373,15 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                             //dialogPresenter.closeDialog();
                             Observable<MediaGroup> continuation = mService.getContentService().continueGroupObserve(group);
                             Disposable result2 = continuation.subscribe(mediaGroup -> {
-                                VideoGroup replace = VideoGroup.from(mediaGroup);
-                                replace.setId(144);
-                                replace.setPosition(0);
-                                replace.setAction(VideoGroup.ACTION_REPLACE);
-                                getView().update(replace);
-                                //getView().setPosition(1);
-                                mSortIdx = tempIdx;
+                                if (getView() != null) {
+                                    VideoGroup replace = VideoGroup.from(mediaGroup);
+                                    replace.setId(144);
+                                    replace.setPosition(0);
+                                    replace.setAction(VideoGroup.ACTION_REPLACE);
+                                    getView().update(replace);
+                                    //getView().setPosition(1);
+                                    mSortIdx = tempIdx;
+                                }
                             });
                         }, mSortIdx == idx));
                         idx++;
