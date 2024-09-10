@@ -844,6 +844,10 @@ public class Utils {
         startReceiver(context, REMOTE_CONTROL_RECEIVER_CLASS_NAME);
     }
 
+    public static void restartTheApp(Context context, Intent intent) {
+        ProcessPhoenix.triggerRebirth(context, intent);
+    }
+
     public static void restartTheApp(Context context) {
         try {
             Intent intent = new Intent(context, Class.forName(BOOTSTRAP_ACTIVITY_CLASS_NAME));

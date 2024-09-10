@@ -80,7 +80,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
 
         if (ViewManager.instance(getContext()).isFinished()) {
-            Utils.restartTheApp(getContext());
+            Utils.restartTheApp(getContext(), getView().getNewIntent());
             return;
         }
 
