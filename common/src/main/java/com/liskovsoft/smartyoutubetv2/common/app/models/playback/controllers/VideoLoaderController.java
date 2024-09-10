@@ -467,6 +467,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
         if (Helpers.startsWithAny(message, "Unable to connect to")) {
             // No internet connection
+            if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
+                mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
+            }
             MessageHelpers.showLongMessage(getContext(), errorTitle + "\n" + message);
             return;
         }
