@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 
@@ -13,7 +14,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class MainUIData extends DataChangeBase {
+public class MainUIData extends DataChangeBase implements ProfileChangeListener {
     private static final String MAIN_UI_DATA = "main_ui_data2";
     public static final int CHANNEL_SORTING_NEW_CONTENT = 0;
     public static final int CHANNEL_SORTING_NAME = 1;
@@ -104,6 +105,7 @@ public class MainUIData extends DataChangeBase {
     private MainUIData(Context context) {
         mContext = context;
         mPrefs = AppPrefs.instance(context);
+        mPrefs.addListener(this);
         initColorSchemes();
         restoreState();
     }
@@ -453,5 +455,10 @@ public class MainUIData extends DataChangeBase {
     private void cleanupItems() {
         List<Long> defaultOrder = Arrays.asList(MENU_ITEM_DEFAULT_ORDER);
         Helpers.removeIf(mMenuItemsOrdered, item -> !defaultOrder.contains(item));
+    }
+
+    @Override
+    public void onProfileChanged() {
+        restoreState();
     }
 }
