@@ -506,13 +506,15 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                 mPlayerData.setFormat(mPlayerData.getDefaultSubtitleFormat());
             }
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_VIDEO) {
-            FormatItem videoFormat = mPlayerData.getFormat(FormatItem.TYPE_VIDEO);
-            if (!videoFormat.isPreset()) {
-                mPlayerData.setFormat(mPlayerData.getDefaultVideoFormat());
-            }
+            //FormatItem videoFormat = mPlayerData.getFormat(FormatItem.TYPE_VIDEO);
+            //if (!videoFormat.isPreset()) {
+            //    mPlayerData.setFormat(mPlayerData.getDefaultVideoFormat());
+            //}
+            mPlayerData.setFormat(FormatItem.VIDEO_FHD_AVC_30);
             mPlayerTweaksData.forceSWDecoder(false);
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_AUDIO) {
-            mPlayerData.setFormat(mPlayerData.getDefaultAudioFormat());
+            //mPlayerData.setFormat(mPlayerData.getDefaultAudioFormat());
+            mPlayerData.setFormat(FormatItem.AUDIO_HQ_MP4A);
         } else {
             fullErrorMsg = errorTitle + "\n" + message;
         }
