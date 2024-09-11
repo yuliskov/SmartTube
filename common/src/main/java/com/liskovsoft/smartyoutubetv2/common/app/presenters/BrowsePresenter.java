@@ -1080,10 +1080,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             getView().showError(new CategoryEmptyError(getContext()));
             Utils.postDelayed(mRefreshSection, 30_000);
         }
-        if (isHomeSection()) { // maybe the history turned off?
-            MediaServiceManager.instance().enableHistory(true);
-            mGeneralData.enableHistory(true);
-        }
+        //if (isHomeSection()) { // maybe the history turned off?
+        //    MediaServiceManager.instance().enableHistory(true);
+        //    mGeneralData.enableHistory(true);
+        //}
     }
 
     private void appendLocalHistory(@NonNull VideoGroup videoGroup) {
