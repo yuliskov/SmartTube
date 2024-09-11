@@ -378,7 +378,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     }
 
     private void restoreState() {
-        String data = mPrefs.getData(MAIN_UI_DATA);
+        String data = mPrefs.getProfileData(MAIN_UI_DATA);
 
         String[] split = Helpers.splitData(data);
 
@@ -416,7 +416,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
 
     @Override
     protected void persistState() {
-        mPrefs.setData(MAIN_UI_DATA, Helpers.mergeData(mIsCardAnimatedPreviewsEnabled,
+        mPrefs.setProfileData(MAIN_UI_DATA, Helpers.mergeData(mIsCardAnimatedPreviewsEnabled,
                 mVideoGridScale, mUIScale, mColorSchemeIndex, mIsCardMultilineTitleEnabled,
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
                 mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,
