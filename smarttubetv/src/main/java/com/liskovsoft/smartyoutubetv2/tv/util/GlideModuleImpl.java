@@ -12,13 +12,14 @@ import com.bumptech.glide.module.AppGlideModule;
  * https://stackoverflow.com/questions/46108915/how-to-increase-the-cache-size-in-glide-android
  */
 @GlideModule
-public class CacheGlideModule extends AppGlideModule {
+public class GlideModuleImpl extends AppGlideModule {
     private final static long CACHE_SIZE = 1024 * 1024 * 5; // 5 MB
 
     @Override
     public void applyOptions(Context context, GlideBuilder builder) {
         //if (MyApplication.from(context).isTest())
         //    return; // NOTE: StatFs will crash on robolectric.
+        // Limit cache size
         builder.setDiskCache(new InternalCacheDiskCacheFactory(context, CACHE_SIZE));
     }
 }
