@@ -146,7 +146,7 @@ public class VideoCardPresenter extends LongClickPresenter {
                 .apply(ViewUtil.glideOptions())
                 // improve image compression on low end devices
                 .override(mWidth, mHeight)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.ALL) // com.liskovsoft.smartyoutubetv2.tv.util.CacheGlideModule
                 .listener(mErrorListener)
                 .error(
                     // Updated thumbnail url not found
