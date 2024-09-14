@@ -670,4 +670,7 @@
   <string name="video_disabled">Vídeo desactivado</string>
   <string name="applying_fix">No cierres el reproductor. Aplicando la solución...</string>
   <string name="hide_mixes">Ocultar Mixes</string>
+  <string name="disable_network_error_fixing_desc">Probablemente necesites activar esta opción si utilizas una VPN</string>
+  <string name="disable_network_error_fixing">Desactivar la corrección automática de errores de red</string>
+  <string name="player_global_focus_desc">Esta función afecta a qué botón del reproductor recibirá atención al navegar entre las filas de botones del reproductor</string>
 </resources>
