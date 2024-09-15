@@ -478,7 +478,7 @@
     <string name="time_format_12">12 jam (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Serius rusak. Gunakan hanya jika kamu memiliki masalah dengan pengenal default.</string>
     <string name="speech_recognizer">Pengenal ucapan</string>
-	<string name="speech_engine">Mesin pencari suara</string>
+    <string name="speech_engine">Mesin pencari suara</string>
     <string name="speech_recognizer_system">Sistem (lebih utama)</string>
     <string name="speech_recognizer_external_1">Eksternal 1 (serius rusak, agar berfungsi, kamu perlu menonaktifkan akses ke mikrofon)</string>
     <string name="speech_recognizer_external_2">Eksternal 2 (serius rusak)</string>
@@ -635,14 +635,14 @@
     <string name="crowdsourced_thumbnails">Thumbnails dari Crowdsourced</string>
     <string name="crowdsoursed_titles">Judul dari Crowdsourced</string>
     <string name="dearrow_not_submitted_thumbs">Sumber gambar mini (jika tidak ada kiriman DeArrow)</string>
-	<string name="pitch_effect">Efek nada</string>												 
+    <string name="pitch_effect">Efek nada</string>												 
     <string name="fullscreen_mode">Mode layar penuh (tanpa bar sistem)</string>
     <string name="player_only_mode">Hanya menampilkan pemutar jika vidio dibuka di luar aplikasi</string>
     <string name="pinned_channel_rows">Menampilkan channel yang disematkan sebagai baris</string>
     <string name="prefer_ipv4">Lebih memilih DNS IPv4</string>
     <string name="prefer_ipv4_desc">Dapat memperbaiki situasi ketika aplikasi tidak berfungsi sama sekali.\nCatatan. Dapat menyebabkan hang dan crash (terutama pada perangkat Android 8 atau Dune HD)</string>
     <string name="long_press_for_settings">TEKAN LAMA UNTUK PENGATURAN</string>
-	<string name="long_press_for_options">TEKAN LAMA UNTUK OPSI</string>
+    <string name="long_press_for_options">TEKAN LAMA UNTUK OPSI</string>
     <string name="device_specific_backup">Pencadangan hanya untuk perangkat ini</string>
     <string name="local_backup">Pencadangan lokal</string>
     <string name="auto_backup">Pencadangan otomatis (sekali sehari)</string>
@@ -655,4 +655,5 @@
     <string name="player_global_focus_desc">Fitur ini memengaruhi tombol pemutar mana yang akan menerima fokus ketika menavigasi di antara barisan tombol pemutar</string>
     <string name="disable_network_error_fixing">Menonaktifkan perbaikan kesalahan jaringan otomatis</string>
     <string name="disable_network_error_fixing_desc">Kamu mungkin perlu mengaktifkan opsi ini jika kamu menggunakan VPN</string>
+    <string name="recommended">Disarankan</string>
 </resources>
