@@ -8,6 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.yt.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.DislikeData;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -374,6 +375,10 @@ public class SuggestionsController extends BasePlayerController {
 
             if (group != null && !group.isEmpty()) {
                 VideoGroup videoGroup = VideoGroup.from(group);
+
+                if (Helpers.equals(videoGroup.getTitle(), " ")) {
+                    videoGroup.setTitle(getContext().getString(R.string.recommended));
+                }
 
                 //if (groupIndex == 0) {
                 //    mergeRemoteAndUserQueueIfNeeded(video, videoGroup);

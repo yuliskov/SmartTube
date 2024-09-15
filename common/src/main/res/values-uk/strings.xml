@@ -667,4 +667,5 @@
     <string name="player_global_focus_desc">Ця функція впливає на те, яка кнопка плеєру отримає фокус під час навігації між рядками його кнопок</string>
     <string name="disable_network_error_fixing">Вимкнути автоматичне виправлення мережевих помилок</string>
     <string name="disable_network_error_fixing_desc">Можливо, вам потрібно увімкнути цю опцію, якщо ви використовуєте VPN</string>
+    <string name="recommended">Рекомендовані відео</string>
 </resources>
