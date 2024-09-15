@@ -96,7 +96,7 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     @Override
-    public void openVideo(Video item) {
+    public void onNewVideo(Video item) {
         enableUiAutoHideTimeout();
 
         if (item != null && getPlayer() != null && !item.equals(getPlayer().getVideo())) {

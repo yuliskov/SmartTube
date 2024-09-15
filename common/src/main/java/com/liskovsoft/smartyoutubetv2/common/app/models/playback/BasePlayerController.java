@@ -18,12 +18,8 @@ public abstract class BasePlayerController implements PlayerEventListener {
         mMainController = mainController;
     }
 
-    protected PlaybackPresenter getMainController() {
+    protected PlayerEventListener getMainController() {
         return mMainController;
-    }
-
-    protected void setAltContext(Context context) {
-        mContext = context;
     }
 
     protected <T extends PlayerEventListener> T getController(Class<T> clazz) {
@@ -32,6 +28,10 @@ public abstract class BasePlayerController implements PlayerEventListener {
 
     public PlayerManager getPlayer() {
         return mMainController != null ? mMainController.getPlayer() : null;
+    }
+
+    protected void setAltContext(Context context) {
+        mContext = context;
     }
 
     public Context getContext() {
@@ -48,7 +48,7 @@ public abstract class BasePlayerController implements PlayerEventListener {
     }
 
     @Override
-    public void openVideo(Video item) {
+    public void onNewVideo(Video item) {
         // NOP
     }
 

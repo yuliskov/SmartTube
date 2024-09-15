@@ -89,7 +89,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     }
 
     @Override
-    public void openVideo(Video item) {
+    public void onNewVideo(Video item) {
         if (item == null) {
             return;
         }
@@ -435,7 +435,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         if (item.hasVideo()) {
             // NOTE: Next clicked: instant playback even a mix
             // NOTE: Bypass PIP fullscreen on next caused by startView
-            getMainController().openVideo(item);
+            getMainController().onNewVideo(item);
             //getPlayer().showOverlay(true);
         } else {
             VideoActionPresenter.instance(getContext()).apply(item);

@@ -66,7 +66,7 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     @Override
-    public void openVideo(Video video) {
+    public void onNewVideo(Video video) {
         // Remote control fix. Slow network fix. Suggestions may still be loading.
         // This could lead to changing current video info (title, id etc) to wrong one.
         disposeActions();

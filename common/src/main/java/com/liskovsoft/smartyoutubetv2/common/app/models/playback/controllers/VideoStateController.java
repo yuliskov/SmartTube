@@ -55,7 +55,7 @@ public class VideoStateController extends BasePlayerController {
      * or video is opened from the intent
      */
     @Override
-    public void openVideo(Video item) {
+    public void onNewVideo(Video item) {
         // Ensure that we aren't running on presenter init stage
         if (getPlayer() != null) {
             if (!item.equals(getVideo())) { // video might be opened twice (when remote connection enabled). Fix for that.

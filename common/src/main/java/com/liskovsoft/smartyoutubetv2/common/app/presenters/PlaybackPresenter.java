@@ -4,9 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
@@ -88,6 +85,30 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         super.onViewInitialized();
         
         initControllers();
+    }
+
+    private void initControllers() {
+        // Re-init after app exit
+        process(PlayerEventListener::onInit);
+
+        if (mPendingVideo != null) {
+            onNewVideo(mPendingVideo);
+            mPendingVideo = null;
+        }
+    }
+
+    public void openVideo(Video video) {
+        if (video == null) {
+            return;
+        }
+
+        if (getView() == null) {
+            mPendingVideo = video;
+        } else {
+            onNewVideo(video);
+        }
+
+        mViewManager.startView(PlaybackView.class);
     }
 
     /**
@@ -189,16 +210,6 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         mPlayer = new WeakReference<>(view);
     }
 
-    private void initControllers() {
-        // Re-init after app exit
-        process(PlayerEventListener::onInit);
-
-        if (mPendingVideo != null) {
-            openVideo(mPendingVideo);
-            mPendingVideo = null;
-        }
-    }
-
     public PlaybackView getPlayer() {
         //return getView();
         return mPlayer.get();
@@ -222,18 +233,8 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     // Core events
 
     @Override
-    public void openVideo(Video video) {
-        if (video == null) {
-            return;
-        }
-
-        if (getView() == null) {
-            mPendingVideo = video;
-        } else {
-            process(listener -> listener.openVideo(video));
-        }
-
-        mViewManager.startView(PlaybackView.class);
+    public void onNewVideo(Video video) {
+        process(listener -> listener.onNewVideo(video));
     }
 
     @Override

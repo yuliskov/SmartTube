@@ -87,7 +87,7 @@ public class ContentBlockController extends BasePlayerController {
     }
 
     @Override
-    public void openVideo(Video item) {
+    public void onNewVideo(Video item) {
         mSkipExclude = false;
         if (getPlayer() != null) {
             getPlayer().setSeekBarSegments(null); // reset colors

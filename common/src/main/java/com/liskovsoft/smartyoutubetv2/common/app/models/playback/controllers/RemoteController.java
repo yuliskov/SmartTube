@@ -54,7 +54,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     @Override
-    public void openVideo(Video item) {
+    public void onNewVideo(Video item) {
         if (item != null) {
             Log.d(TAG, "Open video. Is remote connected: %s", mConnected);
             item.isRemote = mConnected;
