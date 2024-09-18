@@ -1026,4 +1026,8 @@ public class Utils {
         // Android 6 and below may crash running Cronet???
         return VERSION.SDK_INT <= 23 || Helpers.equals(BuildConfig.FLAVOR, "strtarmenia");
     }
+
+    public static boolean isEnoughRam(Context context) {
+        return VERSION.SDK_INT > 21 && Helpers.getDeviceRam(context) > 1_300_000_000; // 1.3 GB
+    }
 }

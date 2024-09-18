@@ -9,17 +9,19 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.List;
 
 public class VideoStateService implements ProfileChangeListener {
     @SuppressLint("StaticFieldLeak")
     private static VideoStateService sInstance;
-    private static final int MAX_PERSISTENT_STATE_SIZE = 200;
+    private static final int MIN_PERSISTENT_STATE_SIZE = 50;
+    private static final int MAX_PERSISTENT_STATE_SIZE = 300;
     // Don't store state inside Video object.
     // As one video might correspond to multiple Video objects.
     //private final Map<String, State> mStates = Helpers.createLRUMap(MAX_PERSISTENT_STATE_SIZE);
-    private final List<State> mStates = Helpers.createLRUList(MAX_PERSISTENT_STATE_SIZE);
+    private final List<State> mStates;
     private final AppPrefs mPrefs;
     private static final String DELIM = "&si;";
     private boolean mIsHistoryBroken;
@@ -27,6 +29,8 @@ public class VideoStateService implements ProfileChangeListener {
     private VideoStateService(Context context) {
         mPrefs = AppPrefs.instance(context);
         mPrefs.addListener(this);
+        mStates = Helpers.createLRUList(
+                Utils.isEnoughRam(mPrefs.getContext()) ? MAX_PERSISTENT_STATE_SIZE : MIN_PERSISTENT_STATE_SIZE);
         restoreState();
     }
 
