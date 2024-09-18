@@ -354,10 +354,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             getPlayer().showProgressBar(false);
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
-            //scheduleNextVideoTimer(5_000);
-            if (formatInfo.isEmbedRestricted() && formatInfo.isHistoryBroken()) { // temp fix (not work as expected)
-                //YouTubeServiceManager.instance().invalidateCache();
-                scheduleRebootAppTimer(5_000);
+            if (formatInfo.isHistoryBroken()) { // temp fix (not work as expected)
+                YouTubeServiceManager.instance().applyNoPlaybackFix();
+                scheduleRestartEngineTimer(5_000);
             } else {
                 scheduleNextVideoTimer(5_000);
             }
@@ -422,6 +421,14 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             Log.d(TAG, "Rebooting the app...");
             getPlayer().showOverlay(true);
             Utils.postDelayed(mRebootApp, delayMs);
+        }
+    }
+
+    private void scheduleRestartEngineTimer(int delayMs) {
+        if (getPlayer() != null) {
+            Log.d(TAG, "Rebooting the app...");
+            getPlayer().showOverlay(true);
+            Utils.postDelayed(mRestartEngine, delayMs);
         }
     }
 
