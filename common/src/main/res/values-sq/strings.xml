@@ -100,7 +100,7 @@
   <string name="player_full_date">Data e saktë në përshkrim</string>
   <string name="open_channel">Hap kanalin</string>
   <string name="open_playlist">Hap listën e luajtjes</string>
-  <string name="not_interested">I painteresuar</string>
+  <string name="not_interested">Nuk më intereson</string>
   <string name="not_recommend_channel">Mos e këshillo kanalin</string>
   <string name="you_wont_see_this_video">Videoja është hequr nga këshillimet</string>
   <string name="you_wont_see_this_channel">Nuk do ta shohësh këtë kanal në këshillimet</string>
@@ -213,7 +213,7 @@
   <string name="msg_player_error_renderer">Formati i zgjedhur nuk mbështetet nga programi.\nProvo të zgjidhësh një format tjetër.\nNëse kjo nuk punon, provo të nisësh përsëri pajisjen.</string>
   <string name="msg_player_error_video_renderer">Formati i VIDEOS i zgjedhur nuk mbështetet nga programi.\nProvo të zgjidhësh një tjetër duke shtypur butonin HQ në luajtësin.\nNëse kjo nuk punon, provo të nisësh përsëri pajisjen.</string>
   <string name="msg_player_error_audio_renderer">Formati i TINGULLIT i zgjedhur nuk mbështetet nga programi.\nProvo të zgjidhësh një tjetër duke shtypur butonin HQ në luajtësin.\nNëse kjo nuk punon, provo të nisësh përsëri pajisjen.</string>
-  <string name="msg_player_error_subtitle_renderer">Formati i zgjedhur i TITRAVE nuk mbështetet nga programi.\nProvo të zgjidhësh një tjetër duke shtypur gjatë butonin CC në luajtësin.\nNëse kjo nuk punon, provo të nisësh përsëri pajisjen.</string>
+  <string name="msg_player_error_subtitle_renderer">Formati i zgjedhur i TITRAVE nuk mbështetet nga programi.\nProvo të zgjidhësh një tjetër duke mbajtur shtypur butonin CC në luajtësin.\nNëse kjo nuk punon, provo të nisësh përsëri pajisjen.</string>
   <string name="msg_player_error_unexpected">Gabim i panjohur i deshifruesit të videos</string>
   <string name="video_aspect">Përpjesëtimi</string>
   <string name="player_tweaks">Rregullimet për zhvilluesit</string>
@@ -655,10 +655,10 @@
   <string name="pinned_channel_rows">Paraqit kanalet e gozhduara si rreshta</string>
   <string name="prefer_ipv4">Parapëlqe DNS IPv4</string>
   <string name="prefer_ipv4_desc">Mund të zgjidhë situatat kur aplikacioni nuk punon fare.\nShënim: Mund të shkaktojë ngrirje dhe rënie (veçanërisht në pajisjet Android 8 ose Dune HD)</string>
-  <string name="long_press_for_settings">SHTYP GJATË PËR CILËSIMET</string>
+  <string name="long_press_for_settings">MBAJ SHTYPUR PËR CILËSIMET</string>
   <string name="device_specific_backup">Kopja rezervë vetëm për këtë pajisje</string>
   <string name="local_backup">Kopje rezervë lokale</string>
-  <string name="long_press_for_options">SHTYP GJATË PËR RREGULLIMET</string>
+  <string name="long_press_for_options">MBAJ SHTYPUR PËR RREGULLIMET</string>
   <string name="speech_engine">Motori i kërkimit me zë</string>
   <string name="auto_backup">Kopje rezervë automatike (një herë në ditë)</string>
   <string name="repeat_mode_reverse_list">Luaj listën e luajtjes ose videot e kanalit në rend të kundërt</string>
@@ -670,4 +670,9 @@
   <string name="video_disabled">Video e çaktivizuar</string>
   <string name="applying_fix">Mos mbyll luajtësin. Duke zbatuar rregullimin...</string>
   <string name="hide_mixes">Fshih Përzjerjet</string>
+  <string name="player_global_focus_desc">Kjo veçori ndikon në se cilin buton të luajtësit do të marrë përqëndrimin kur lundron midis rreshtave të butonave të luajtësit</string>
+  <string name="video_buffer_size_lowest">Më i ulëti</string>
+  <string name="disable_network_error_fixing">Çaktivizo rregullimin automatik të gabimeve të rrjetit</string>
+  <string name="disable_network_error_fixing_desc">Ndoshta duhet ta aktivizosh këtë rregullim nëse je duke përdorur një VPN</string>
+  <string name="recommended">Të këshilluara</string>
 </resources>
