@@ -355,8 +355,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
             if (formatInfo.isHistoryBroken()) { // temp fix (not work as expected)
-                YouTubeServiceManager.instance().applyNoPlaybackFix();
-                scheduleRestartEngineTimer(5_000);
+                //YouTubeServiceManager.instance().applyNoPlaybackFix();
+                //scheduleRestartEngineTimer(5_000);
+                scheduleRebootAppTimer(5_000);
             } else {
                 scheduleNextVideoTimer(5_000);
             }
