@@ -199,6 +199,11 @@ public final class SampleMediaItem implements MediaItem {
     }
 
     @Override
+    public long getPublishedDate() {
+        return 0;
+    }
+
+    @Override
     public String getCardImageUrl() {
         return mCardImageUrl;
     }
