@@ -24,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -81,6 +82,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         // Otherwise keep the cache to easily restore in case activity is killed by the system.
         mVideoItem = null;
         mRootGroup = null;
+        disposeActions();
     }
 
     @Override
@@ -177,6 +179,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     private void disposeActions() {
         RxHelper.disposeActions(mUpdateAction, mScrollAction);
+        MediaServiceManager.instance().disposeActions();
     }
 
     private void continueGroup(VideoGroup group) {

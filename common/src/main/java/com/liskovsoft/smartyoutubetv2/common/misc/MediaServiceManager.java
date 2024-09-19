@@ -298,7 +298,7 @@ public class MediaServiceManager {
     }
 
     public void disposeActions() {
-        RxHelper.disposeActions(mMetadataAction, mUploadsAction, mSignCheckAction);
+        RxHelper.disposeActions(mMetadataAction, mUploadsAction, mSignCheckAction, mRowsAction, mSubscribedChannelsAction);
     }
 
     /**

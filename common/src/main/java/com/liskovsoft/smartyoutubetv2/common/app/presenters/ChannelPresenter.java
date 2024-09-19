@@ -101,6 +101,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         // Otherwise keep the cache to easily restore in case activity is killed by the system.
         mChannelId = null;
         mPendingGroups.clear();
+        disposeActions();
     }
 
     @Override

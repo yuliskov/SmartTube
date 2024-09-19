@@ -622,14 +622,12 @@ public class Utils {
             if (type == MediaGroup.TYPE_CHANNEL_UPLOADS) {
                 if (atomicIndex.incrementAndGet() == 1) {
                     ChannelUploadsPresenter.instance(context).clear();
-                    //ViewManager.instance(context).startView(ChannelUploadsView.class);
                 }
                 ChannelUploadsPresenter.instance(context).update(group.get(0));
             } else if (type == MediaGroup.TYPE_CHANNEL) {
                 if (atomicIndex.incrementAndGet() == 1) {
                     ChannelPresenter.instance(context).clear();
                     ChannelPresenter.instance(context).setChannel(item);
-                    //ViewManager.instance(context).startView(ChannelView.class);
                 }
                 ChannelPresenter.instance(context).updateRows(group);
             } else {
