@@ -91,6 +91,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     public void onViewDestroyed() {
         super.onViewDestroyed();
         disposeActions();
+        mServiceManager.disposeActions();
     }
 
     @Override
@@ -102,6 +103,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         mChannelId = null;
         mPendingGroups.clear();
         disposeActions();
+        mServiceManager.disposeActions();
     }
 
     @Override
@@ -193,7 +195,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     private void disposeActions() {
         RxHelper.disposeActions(mUpdateAction, mScrollAction);
-        mServiceManager.disposeActions();
         mSortIdx = 0;
     }
 
@@ -224,6 +225,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     public void updateRows(List<MediaGroup> mediaGroups) {
+        disposeActions();
+
         if (getView() == null) { // starting from outside (e.g. MediaServiceManager)
             mChannelId = null;
             mPendingGroups.add(mediaGroups);
