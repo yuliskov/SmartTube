@@ -12,7 +12,7 @@ import com.bumptech.glide.module.AppGlideModule;
  * https://stackoverflow.com/questions/46108915/how-to-increase-the-cache-size-in-glide-android
  */
 @GlideModule
-public class CacheGlideModule extends AppGlideModule {
+public class GlideCachingModule extends AppGlideModule {
     private final static long CACHE_SIZE = 10 * 1024 * 1024; // 10 MB
 
     @Override
