@@ -72,7 +72,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     public void onViewDestroyed() {
         super.onViewDestroyed();
         disposeActions();
-        MediaServiceManager.instance().disposeActions();
     }
 
     @Override
@@ -84,7 +83,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         mVideoItem = null;
         mRootGroup = null;
         disposeActions();
-        MediaServiceManager.instance().disposeActions();
     }
 
     @Override
@@ -181,6 +179,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     private void disposeActions() {
         RxHelper.disposeActions(mUpdateAction, mScrollAction);
+        MediaServiceManager.instance().disposeActions();
     }
 
     private void continueGroup(VideoGroup group) {
@@ -257,8 +256,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     public void update(MediaGroup mediaGroup) {
-        disposeActions();
-
         if (getView() == null) { // starting from outside (e.g. MediaServiceManager)
             mVideoItem = null;
             mRootGroup = mediaGroup; // start loading from this group

@@ -77,7 +77,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         if (mChannelId != null) {
             getView().clear();
-            updateRows(mChannelId);
+            updateRows(obtainChannelObservable(mChannelId));
         } else if (!mPendingGroups.isEmpty()) {
             getView().clear();
             for (List<MediaGroup> group : mPendingGroups) {
@@ -91,7 +91,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     public void onViewDestroyed() {
         super.onViewDestroyed();
         disposeActions();
-        mServiceManager.disposeActions();
     }
 
     @Override
@@ -103,7 +102,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         mChannelId = null;
         mPendingGroups.clear();
         disposeActions();
-        mServiceManager.disposeActions();
     }
 
     @Override
@@ -169,7 +167,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         if (getView() != null) {
             getView().clear();
-            updateRows(channelId);
+            updateRows(obtainChannelObservable(channelId));
             // Fix double results. Prevent from doing the same in onViewInitialized()
             mChannelId = null;
         }
@@ -195,21 +193,18 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     private void disposeActions() {
         RxHelper.disposeActions(mUpdateAction, mScrollAction);
+        mServiceManager.disposeActions();
         mSortIdx = 0;
     }
 
-    private void updateRows(String channelId) {
-        if (channelId == null) {
-            return;
-        }
-
+    private void updateRows(Observable<List<MediaGroup>> group) {
         Log.d(TAG, "updateRows: Start loading...");
+
+        disposeActions();
 
         getView().showProgressBar(true);
 
-        Observable<List<MediaGroup>> channelObserve = obtainChannelObservable(channelId);
-
-        mUpdateAction = channelObserve
+        mUpdateAction = group
                 .subscribe(
                         this::updateRows,
                         error -> {
@@ -225,8 +220,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     public void updateRows(List<MediaGroup> mediaGroups) {
-        disposeActions();
-
         if (getView() == null) { // starting from outside (e.g. MediaServiceManager)
             mChannelId = null;
             mPendingGroups.add(mediaGroups);
