@@ -256,8 +256,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     public void update(MediaGroup mediaGroup) {
-        disposeActions();
-
         if (getView() == null) { // starting from outside (e.g. MediaServiceManager)
             mVideoItem = null;
             mRootGroup = mediaGroup; // start loading from this group

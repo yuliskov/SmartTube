@@ -225,7 +225,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     public void updateRows(List<MediaGroup> mediaGroups) {
         if (getView() == null) { // starting from outside (e.g. MediaServiceManager)
-            disposeActions();
             mChannelId = null;
             mPendingGroups.add(mediaGroups);
             ViewManager.instance(getContext()).startView(ChannelView.class);
