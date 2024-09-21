@@ -669,4 +669,5 @@
     <string name="disable_network_error_fixing_desc">Возможно, вам нужно включить эту опцию, если вы используете VPN</string>
     <string name="recommended">Рекомендуемые видео</string>
     <string name="add_to_subscriptions_group">Добавить/удалить канал из группы подписок</string>
+    <string name="new_subscriptions_group">Новая группа</string>
 </resources>

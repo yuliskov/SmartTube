@@ -678,4 +678,5 @@
     <string name="disable_network_error_fixing_desc">Bir VPN kullanıyorsanız muhtemelen bu seçeneği etkinleştirmeniz gerekir</string>
     <string name="recommended">Önerilen Videolar</string>
     <string name="add_to_subscriptions_group">Abonelik grubuna kanal ekle/kaldır</string>
+    <string name="new_subscriptions_group">Yeni grup</string>
 </resources>

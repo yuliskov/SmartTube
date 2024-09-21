@@ -676,4 +676,5 @@
     <string name="disable_network_error_fixing_desc">You probably need to enable this option if you\'re using a VPN</string>
     <string name="recommended">Recommended</string>
     <string name="add_to_subscriptions_group">Add/Remove channel from a subscriptions group</string>
+    <string name="new_subscriptions_group">New group</string>
 </resources>
