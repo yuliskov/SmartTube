@@ -668,4 +668,5 @@
     <string name="disable_network_error_fixing">Отключить автоматическое исправление сетевых ошибок</string>
     <string name="disable_network_error_fixing_desc">Возможно, вам нужно включить эту опцию, если вы используете VPN</string>
     <string name="recommended">Рекомендуемые видео</string>
+    <string name="add_to_subscriptions_group">Добавить/удалить канал из группы подписок</string>
 </resources>

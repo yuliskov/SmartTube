@@ -231,6 +231,14 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        // Oculus Quest fix: back button not closing the activity
+        options.add(UiOptionItem.from("Oculus Quest fix",
+                option -> {
+                    mPlayerTweaksData.enableOculusQuestFix(option.isSelected());
+                    mRestartApp = true;
+                },
+                mPlayerTweaksData.isOculusQuestFixEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_network_error_fixing),
                 getContext().getString(R.string.disable_network_error_fixing_desc),
                 option -> mPlayerTweaksData.disableNetworkErrorFixing(option.isSelected()),
@@ -373,14 +381,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                     mRestartApp = true;
                 },
                 !mGeneralData.isSettingsSectionEnabled()));
-
-        // Oculus Quest fix: back button not closing the activity
-        //options.add(UiOptionItem.from("Oculus Quest fix",
-        //        option -> {
-        //            mPlayerTweaksData.enableOculusQuestFix(option.isSelected());
-        //            mRestartApp = true;
-        //        },
-        //        mPlayerTweaksData.isOculusQuestFixEnabled()));
 
         // Disabled inside RetrofitHelper
         //options.add(UiOptionItem.from("Prefer IPv4 DNS",
