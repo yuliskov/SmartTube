@@ -177,7 +177,7 @@ You can report in our Telegram group or via [issue tracker on Github](https://gi
 
 > **Telegram group (international)**: [@SmartTubeEN](http://t.me/SmartTubeEN)  
 > **Telegram group (RU/UA)**: [@SmartTubeUA](http://t.me/SmartTubeUA)  
-> **Email**: first.hash at gmail dot com
+> **Email**: firsth<!-- abc@def -->ash@gmai<!-- @abc.com -->l.com
 
 The international group is in **English only**. But don't worry if your English is not perfect, we have a friendly international community.
 
