@@ -665,4 +665,16 @@
   <string name="local_backup">本機備份</string>
   <string name="auto_backup">自動備份（每天一次）</string>
   <string name="repeat_mode_reverse_list">反向播放播放列表或頻道影片</string>
+  <string name="video_buffer_size_lowest">最低</string>
+  <string name="calm_msg">我們正在修復此問題。請不時檢查更新</string>
+  <string name="without_picture">無圖片</string>
+  <string name="video_disabled">影片已停用</string>
+  <string name="applying_fix">請勿關閉播放器，正在套用修復...</string>
+  <string name="hide_mixes">隱藏混合</string>
+  <string name="player_global_focus_desc">此功能影響在播放器按鈕列之間導航時，哪個播放器按鈕會獲得焦點</string>
+  <string name="disable_network_error_fixing">停用自動修復網路錯誤</string>
+  <string name="disable_network_error_fixing_desc">如果你使用 VPN，可能需要啟用此選項</string>
+  <string name="recommended">推薦</string>
+  <string name="add_to_subscriptions_group">將頻道新增/移除到訂閱群組</string>
+  <string name="new_subscriptions_group">新群組</string>
 </resources>
