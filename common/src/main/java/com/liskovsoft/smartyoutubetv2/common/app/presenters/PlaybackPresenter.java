@@ -125,6 +125,10 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         openVideo(video);
     }
 
+    public void openVideo(String videoId) {
+        openVideo(videoId, false, -1);
+    }
+
     ///**
     // * Opens video item from browser, search or channel views<br/>
     // * Also prepares and start the playback view.

@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
@@ -45,8 +46,6 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -93,6 +92,7 @@ import java.util.Map;
 @RequiresApi(19)
 public class PlaybackFragment extends SeekModePlaybackFragment implements PlaybackView {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
+    private static final String SELECTED_VIDEO_ID = "SelectedVideoId";
     private static final int UPDATE_DELAY_MS = 100;
     private static final int SUGGESTIONS_START_INDEX = 1;
     private VideoPlayerGlue mPlayerGlue;
@@ -116,11 +116,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private Boolean mIsControlsShownPreviously;
     private Video mPendingFocus;
     private long mProgressShowTimeMs;
+    private String mSelectedVideoId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(null); // trying to fix bug with presets
 
+        mSelectedVideoId = savedInstanceState != null ? savedInstanceState.getString(SELECTED_VIDEO_ID, null) : null;
         mMediaGroupAdapters = new HashMap<>();
         mBackgroundManager = getLeanbackActivity().getBackgroundManager();
         mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.player_background));
@@ -139,6 +141,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         super.onActivityCreated(savedInstanceState);
 
         mPlaybackPresenter.onViewInitialized();
+
+        if (mSelectedVideoId != null) {
+            mPlaybackPresenter.openVideo(mSelectedVideoId);
+        }
     }
 
     @Override
@@ -150,6 +156,14 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         ProgressBarManager.setup(getProgressBarManager(), (ViewGroup) root);
 
         return root;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Store position in case activity is crashed
+        outState.putString(SELECTED_VIDEO_ID, getVideo() != null ? getVideo().videoId : null);
     }
 
     /**

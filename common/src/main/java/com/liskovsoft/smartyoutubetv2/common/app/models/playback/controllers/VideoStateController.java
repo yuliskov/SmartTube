@@ -137,6 +137,7 @@ public class VideoStateController extends BasePlayerController {
         if (getPlayer().containsMedia()) {
             setPlayEnabled(getPlayer().getPlayWhenReady());
             saveState();
+            persistState();
         }
     }
 
@@ -257,10 +258,12 @@ public class VideoStateController extends BasePlayerController {
         restoreFormats();
     }
 
-    @Override
-    public void onViewPaused() {
-        persistState();
-    }
+    //@Override
+    //public void onViewPaused() {
+    //    if (!AppDialogPresenter.instance(getContext()).isDialogShown()) {
+    //        persistState();
+    //    }
+    //}
 
     @Override
     public void onSpeedChanged(float speed) {
@@ -373,10 +376,6 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void persistState() {
-        if (AppDialogPresenter.instance(getContext()).isDialogShown()) {
-            return;
-        }
-
         mStateService.persistState();
     }
 
