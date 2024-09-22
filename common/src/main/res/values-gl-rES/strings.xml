@@ -669,4 +669,9 @@
   <string name="without_picture">Sen imaxe</string>
   <string name="video_disabled">Vídeo desactivado</string>
   <string name="applying_fix">Non peche o reprodutor. Aplicando a corrección...</string>
+  <string name="hide_mixes">Ocultar misturas</string>
+  <string name="player_global_focus_desc">Esta función afecta a que botón do reprodutor recibirá o foco ao navegar entre filas de botóns do reprodutor</string>
+  <string name="disable_network_error_fixing">Desactivar a corrección automática de erros de rede</string>
+  <string name="disable_network_error_fixing_desc">Probablemente precises activar esta opción se estás a usar unha VPN</string>
+  <string name="recommended">Recomendado</string>
 </resources>
