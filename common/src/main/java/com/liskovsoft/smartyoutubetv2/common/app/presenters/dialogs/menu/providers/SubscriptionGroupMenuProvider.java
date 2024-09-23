@@ -6,6 +6,13 @@ import androidx.annotation.NonNull;
 
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 class SubscriptionGroupMenuProvider extends ContextMenuProvider {
     private final Context mContext;
@@ -21,13 +28,29 @@ class SubscriptionGroupMenuProvider extends ContextMenuProvider {
     }
 
     @Override
-    public void onClicked() {
-        // Show dialog
-        // - New group
-        // - Group name 1
-        // - Group name 2
+    public void onClicked(Video item) {
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(mContext);
 
-        // class SubscriptionGroup(groupName, groupIcon, list of channel ids)
+        List<SubscriptionGroup> groups = MainUIData.instance(mContext).getSubscriptionGroups();
+
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(mContext.getString(R.string.new_subscriptions_group), optionItem -> {
+            // Show new group dialog (create and add item)
+        }, false));
+
+        for (SubscriptionGroup group : groups) {
+            options.add(UiOptionItem.from(group.groupTitle, optionItem -> {
+                if (optionItem.isSelected()) {
+                    group.add(item.channelId);
+                } else {
+                    group.remove(item.channelId);
+                }
+            }, group.contains(item.channelId)));
+        }
+
+        dialogPresenter.appendCheckedCategory(mContext.getString(getTitleResId()), options);
+        dialogPresenter.showDialog(mContext.getString(getTitleResId()));
     }
 
     @Override

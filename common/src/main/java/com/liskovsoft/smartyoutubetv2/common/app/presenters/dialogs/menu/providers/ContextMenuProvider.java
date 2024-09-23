@@ -11,7 +11,7 @@ public abstract class ContextMenuProvider {
     }
 
     public abstract int getTitleResId();
-    public abstract void onClicked();
+    public abstract void onClicked(Video item);
     public abstract boolean isEnabled(Video item);
 
     public final long getId() {

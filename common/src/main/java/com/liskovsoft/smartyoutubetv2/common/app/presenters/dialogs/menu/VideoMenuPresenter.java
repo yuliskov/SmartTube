@@ -969,7 +969,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         MainUIData mainUIData = MainUIData.instance(getContext());
         if (mainUIData.isMenuItemEnabled(provider.getId()) && provider.isEnabled(getVideo())) {
             mDialogPresenter.appendSingleButton(
-                    UiOptionItem.from(getContext().getString(provider.getTitleResId()), optionItem -> provider.onClicked())
+                    UiOptionItem.from(getContext().getString(provider.getTitleResId()), optionItem -> provider.onClicked(getVideo()))
             );
         }
     }
