@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="header_home">Home</string>
-    <string name="title_search">Cerca</string>
+    <string name="title_search">Ricerca</string>
     <string name="header_subscriptions">Iscrizioni</string>
     <string name="header_history">Cronologia</string>
     <string name="header_music">Musica</string>
@@ -35,6 +35,7 @@
     <string name="resolution_switch">Cambia risoluzione</string>
     <string name="video_buffer">Buffer video</string>
     <string name="video_buffer_size_none">Nessuno</string>
+    <string name="video_buffer_size_lowest">Più basso</string>
     <string name="video_buffer_size_low">Basso</string>
     <string name="video_buffer_size_med">Medio</string>
     <string name="video_buffer_size_high">Alto</string>
@@ -670,4 +671,10 @@
     <string name="video_disabled">Video disabilitato</string>
     <string name="applying_fix">Non chiudere il lettore. Applicazione della correzione...</string>
     <string name="hide_mixes">Nascondi i mix</string>
+    <string name="player_global_focus_desc">Questa funzione determina quale pulsante del lettore riceverà la messa a fuoco durante la navigazione tra le righe dei pulsanti del lettore</string>
+    <string name="disable_network_error_fixing">Disabilita la correzione automatica degli errori di rete</string>
+    <string name="disable_network_error_fixing_desc">Probabilmente dovrai abilitare questa opzione se stai utilizzando una VPN</string>
+    <string name="recommended">Raccomandato</string>
+    <string name="add_to_subscriptions_group">Aggiungi/Rimuovi canale da un gruppo di iscrizioni</string>
+    <string name="new_subscriptions_group">Nuovo gruppo</string>
 </resources>
