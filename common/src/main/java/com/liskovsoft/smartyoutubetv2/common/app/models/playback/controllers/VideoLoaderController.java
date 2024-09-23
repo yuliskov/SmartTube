@@ -129,8 +129,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
         } else if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
-            mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
             MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
+            mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
+            restartEngine();
         }
 
         // NOTE: useless fixes. Won't fix the buffering actually.
