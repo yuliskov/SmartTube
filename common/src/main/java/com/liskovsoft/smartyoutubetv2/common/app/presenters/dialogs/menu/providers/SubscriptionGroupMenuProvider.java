@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 
 public class SubscriptionGroupMenuProvider extends ContextMenuProvider {
     private final Context mContext;
@@ -27,5 +28,10 @@ public class SubscriptionGroupMenuProvider extends ContextMenuProvider {
         // - Group name 2
 
         // class SubscriptionGroup(groupName, groupIcon, list of channel ids)
+    }
+
+    @Override
+    public boolean isEnabled(Video item) {
+        return item != null && item.channelId != null;
     }
 }
