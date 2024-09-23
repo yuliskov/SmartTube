@@ -51,7 +51,7 @@ public class SimpleEditDialog {
         }
         KeyHelpers.fixShowKeyboard(editField);
 
-        editField.setText(defaultValue);
+        editField.setHint(defaultValue);
 
         // keep empty, will override below.
         // https://stackoverflow.com/a/15619098/5379584
