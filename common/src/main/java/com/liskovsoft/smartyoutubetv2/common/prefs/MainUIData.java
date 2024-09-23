@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Build;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuManager;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
@@ -410,7 +412,12 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
             }
         }
 
-        cleanupItems();
+        for (ContextMenuProvider provider : new ContextMenuManager(mContext).getProviders()) {
+            if (!mMenuItemsOrdered.contains(provider.getId())) {
+                mMenuItemsOrdered.add(provider.getId());
+            }
+        }
+        
         updateDefaultValues();
     }
 
@@ -450,11 +457,6 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
             int bits = 32 - 27;
             mMenuItems = mMenuItems << bits >>> bits; // remove auto enabled bits
         }
-    }
-
-    private void cleanupItems() {
-        List<Long> defaultOrder = Arrays.asList(MENU_ITEM_DEFAULT_ORDER);
-        Helpers.removeIf(mMenuItemsOrdered, item -> !defaultOrder.contains(item));
     }
 
     @Override

@@ -10,7 +10,7 @@ public abstract class ContextMenuProvider {
         mId = START_ID << pos;
     }
 
-    public abstract String getTitle();
+    public abstract int getTitleResId();
     public abstract void onClicked();
     public abstract boolean isEnabled(Video item);
 

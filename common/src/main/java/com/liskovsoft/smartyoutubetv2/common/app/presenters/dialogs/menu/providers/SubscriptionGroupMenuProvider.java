@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 
-public class SubscriptionGroupMenuProvider extends ContextMenuProvider {
+class SubscriptionGroupMenuProvider extends ContextMenuProvider {
     private final Context mContext;
 
     public SubscriptionGroupMenuProvider(@NonNull Context context, int pos) {
@@ -16,8 +16,8 @@ public class SubscriptionGroupMenuProvider extends ContextMenuProvider {
     }
 
     @Override
-    public String getTitle() {
-        return mContext.getString(R.string.add_to_subscriptions_group);
+    public int getTitleResId() {
+        return R.string.add_to_subscriptions_group;
     }
 
     @Override
