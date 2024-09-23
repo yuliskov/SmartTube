@@ -53,7 +53,12 @@ class SubscriptionGroupMenuProvider extends ContextMenuProvider {
                 } else {
                     group.remove(item.channelId);
                 }
-                MainUIData.instance(mContext).addSubscriptionGroup(group);
+
+                if (!group.isEmpty()) {
+                    MainUIData.instance(mContext).addSubscriptionGroup(group);
+                } else {
+                    MainUIData.instance(mContext).removeSubscriptionGroup(group);
+                }
             }, group.contains(item.channelId)));
         }
 

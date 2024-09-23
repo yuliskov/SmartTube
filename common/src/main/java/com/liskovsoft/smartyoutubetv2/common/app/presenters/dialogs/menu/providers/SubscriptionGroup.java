@@ -32,6 +32,10 @@ public class SubscriptionGroup {
         return channelIds != null && channelIds.contains(channelId);
     }
 
+    public boolean isEmpty() {
+        return channelIds == null || channelIds.isEmpty();
+    }
+
     public void add(String channelId) {
         if (channelIds != null && !channelIds.contains(channelId)) {
             channelIds.add(channelId);

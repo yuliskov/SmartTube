@@ -340,10 +340,9 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     }
 
     public void addSubscriptionGroup(SubscriptionGroup group) {
-        if (!mSubscriptionGroups.contains(group)) {
-            mSubscriptionGroups.add(group);
-            persistState();
-        }
+        removeSubscriptionGroup(group);
+        mSubscriptionGroups.add(group);
+        persistState();
     }
 
     public void removeSubscriptionGroup(SubscriptionGroup group) {
