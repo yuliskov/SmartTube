@@ -342,11 +342,15 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     public void addSubscriptionGroup(SubscriptionGroup group) {
         if (!mSubscriptionGroups.contains(group)) {
             mSubscriptionGroups.add(group);
+            persistState();
         }
     }
 
     public void removeSubscriptionGroup(SubscriptionGroup group) {
-        mSubscriptionGroups.remove(group);
+        if (mSubscriptionGroups.contains(group)) {
+            mSubscriptionGroups.remove(group);
+            persistState();
+        }
     }
 
     private void initColorSchemes() {

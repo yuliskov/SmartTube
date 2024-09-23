@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ class SubscriptionGroupMenuProvider extends ContextMenuProvider {
 
     public SubscriptionGroupMenuProvider(@NonNull Context context, int pos) {
         super(pos);
-        mContext = context.getApplicationContext();
+        mContext = context;
     }
 
     @Override
@@ -36,16 +37,23 @@ class SubscriptionGroupMenuProvider extends ContextMenuProvider {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(mContext.getString(R.string.new_subscriptions_group), optionItem -> {
-            // Show new group dialog (create and add item)
+            dialogPresenter.closeDialog();
+            SimpleEditDialog.show(mContext, mContext.getString(R.string.new_subscriptions_group), newValue -> {
+                // TODO: if channelId == null delay saving
+                MainUIData.instance(mContext).addSubscriptionGroup(new SubscriptionGroup(newValue, null, item.channelId));
+                return true;
+            }, mContext.getString(R.string.new_subscriptions_group), true);
         }, false));
 
         for (SubscriptionGroup group : groups) {
-            options.add(UiOptionItem.from(group.groupTitle, optionItem -> {
+            options.add(UiOptionItem.from(group.title, optionItem -> {
+                // TODO: if channelId == null delay saving
                 if (optionItem.isSelected()) {
                     group.add(item.channelId);
                 } else {
                     group.remove(item.channelId);
                 }
+                MainUIData.instance(mContext).addSubscriptionGroup(group);
             }, group.contains(item.channelId)));
         }
 
@@ -55,6 +63,6 @@ class SubscriptionGroupMenuProvider extends ContextMenuProvider {
 
     @Override
     public boolean isEnabled(Video item) {
-        return item != null && item.channelId != null;
+        return item != null && (item.channelId != null || item.videoId != null);
     }
 }
