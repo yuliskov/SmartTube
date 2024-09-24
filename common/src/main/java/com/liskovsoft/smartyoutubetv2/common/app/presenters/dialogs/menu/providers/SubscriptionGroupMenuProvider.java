@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ChannelGroup.Channel;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
@@ -56,30 +57,32 @@ class SubscriptionGroupMenuProvider extends ContextMenuProvider {
     private void showGroupDialog(Video item) {
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(mContext);
 
-        List<SubscriptionGroup> groups = MainUIData.instance(mContext).getSubscriptionGroups();
+        List<ChannelGroup> groups = MainUIData.instance(mContext).getChannelGroups();
 
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(mContext.getString(R.string.new_subscriptions_group), optionItem -> {
             dialogPresenter.closeDialog();
             SimpleEditDialog.show(mContext, mContext.getString(R.string.new_subscriptions_group), newValue -> {
-                MainUIData.instance(mContext).addSubscriptionGroup(new SubscriptionGroup(newValue, null, item.channelId));
+                MainUIData.instance(mContext).addChannelGroup(
+                        new ChannelGroup(newValue, null, new Channel(item.getAuthor(), item.cardImageUrl, item.channelId))
+                );
                 return true;
             }, mContext.getString(R.string.new_subscriptions_group), true);
         }, false));
 
-        for (SubscriptionGroup group : groups) {
+        for (ChannelGroup group : groups) {
             options.add(UiOptionItem.from(group.title, optionItem -> {
                 if (optionItem.isSelected()) {
-                    group.add(item.channelId);
+                    group.add(new Channel(item.getAuthor(), item.cardImageUrl, item.channelId));
                 } else {
                     group.remove(item.channelId);
                 }
 
                 if (!group.isEmpty()) {
-                    MainUIData.instance(mContext).addSubscriptionGroup(group);
+                    MainUIData.instance(mContext).addChannelGroup(group);
                 } else {
-                    MainUIData.instance(mContext).removeSubscriptionGroup(group);
+                    MainUIData.instance(mContext).removeChannelGroup(group);
                 }
             }, group.contains(item.channelId)));
         }
