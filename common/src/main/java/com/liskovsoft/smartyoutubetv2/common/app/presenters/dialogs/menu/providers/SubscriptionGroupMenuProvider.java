@@ -4,11 +4,13 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 
@@ -30,6 +32,28 @@ class SubscriptionGroupMenuProvider extends ContextMenuProvider {
 
     @Override
     public void onClicked(Video item) {
+        showGroupDialogAndFetchChannel(item);
+    }
+
+    @Override
+    public boolean isEnabled(Video item) {
+        return item != null && (item.channelId != null || item.videoId != null);
+    }
+
+    private void showGroupDialogAndFetchChannel(Video item) {
+        if (item.hasChannel()) {
+            showGroupDialog(item);
+        } else {
+            MessageHelpers.showMessage(mContext, R.string.wait_data_loading);
+
+            MediaServiceManager.instance().loadMetadata(item, metadata -> {
+                item.sync(metadata);
+                showGroupDialog(item);
+            });
+        }
+    }
+
+    private void showGroupDialog(Video item) {
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(mContext);
 
         List<SubscriptionGroup> groups = MainUIData.instance(mContext).getSubscriptionGroups();
@@ -39,7 +63,6 @@ class SubscriptionGroupMenuProvider extends ContextMenuProvider {
         options.add(UiOptionItem.from(mContext.getString(R.string.new_subscriptions_group), optionItem -> {
             dialogPresenter.closeDialog();
             SimpleEditDialog.show(mContext, mContext.getString(R.string.new_subscriptions_group), newValue -> {
-                // TODO: if channelId == null delay saving
                 MainUIData.instance(mContext).addSubscriptionGroup(new SubscriptionGroup(newValue, null, item.channelId));
                 return true;
             }, mContext.getString(R.string.new_subscriptions_group), true);
@@ -47,7 +70,6 @@ class SubscriptionGroupMenuProvider extends ContextMenuProvider {
 
         for (SubscriptionGroup group : groups) {
             options.add(UiOptionItem.from(group.title, optionItem -> {
-                // TODO: if channelId == null delay saving
                 if (optionItem.isSelected()) {
                     group.add(item.channelId);
                 } else {
@@ -64,10 +86,5 @@ class SubscriptionGroupMenuProvider extends ContextMenuProvider {
 
         dialogPresenter.appendCheckedCategory(mContext.getString(getTitleResId()), options);
         dialogPresenter.showDialog(mContext.getString(getTitleResId()));
-    }
-
-    @Override
-    public boolean isEnabled(Video item) {
-        return item != null && (item.channelId != null || item.videoId != null);
     }
 }
