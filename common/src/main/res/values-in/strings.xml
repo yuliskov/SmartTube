@@ -656,4 +656,6 @@
     <string name="disable_network_error_fixing">Menonaktifkan perbaikan kesalahan jaringan otomatis</string>
     <string name="disable_network_error_fixing_desc">Kamu mungkin perlu mengaktifkan opsi ini jika kamu menggunakan VPN</string>
     <string name="recommended">Disarankan</string>
+    <string name="add_to_subscriptions_group">Menambah/Menghapus saluran dari grup langganan</string>
+    <string name="new_subscriptions_group">Grup baru</string>
 </resources>
