@@ -675,4 +675,6 @@
     <string name="disable_network_error_fixing">Automatische Netzwerk-Fehlerbehebung deaktivieren</string>
     <string name="disable_network_error_fixing_desc">Sie müssen diese Option wahrscheinlich aktivieren, wenn Sie einen VPN verwenden.</string>
     <string name="recommended">Empfohlen</string>
+    <string name="add_to_subscriptions_group">Kanal zur Abo-Gruppe hinzufügen/entfernen</string>
+    <string name="new_subscriptions_group">Neue Gruppe</string>
 </resources>
