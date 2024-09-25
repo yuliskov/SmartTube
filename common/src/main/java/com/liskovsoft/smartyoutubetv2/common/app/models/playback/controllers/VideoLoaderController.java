@@ -470,10 +470,16 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
 
         if (error instanceof OutOfMemoryError) {
-            if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOWEST) {
+            //if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOWEST) {
+            //    mPlayerTweaksData.enableSectionPlaylist(false);
+            //} else if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
+            //    mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOWEST);
+            //} else {
+            //    mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
+            //}
+
+            if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW || mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOWEST) {
                 mPlayerTweaksData.enableSectionPlaylist(false);
-            } else if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
-                mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOWEST);
             } else {
                 mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
             }

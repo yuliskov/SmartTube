@@ -17,6 +17,7 @@ import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ChannelGroup;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.liskovsoft.youtubeapi.service.data.YouTubeMediaItem;
@@ -76,6 +77,7 @@ public final class Video {
     public boolean isSynced;
     public final long timestamp = System.currentTimeMillis();
     public int sectionId = -1;
+    public int channelGroupId = -1;
     public long startTimeMs;
     public long pendingPosMs;
     public boolean fromQueue;
@@ -199,6 +201,14 @@ public final class Video {
         video.cardImageUrl = chapter.getCardImageUrl();
         video.startTimeMs = chapter.getStartTimeMs();
         video.badge = ServiceHelper.millisToTimeText(chapter.getStartTimeMs());
+        return video;
+    }
+
+    public static Video from(ChannelGroup group) {
+        Video video = new Video();
+        video.title = group.title;
+        video.cardImageUrl = group.iconUrl;
+        video.channelGroupId = group.id;
         return video;
     }
 

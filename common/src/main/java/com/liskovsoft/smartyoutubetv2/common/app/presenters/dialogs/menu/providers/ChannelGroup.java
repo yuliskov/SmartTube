@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChannelGroup {
+    public final int id;
     public final String title;
     public final String iconUrl;
     public final List<Channel> channels;
@@ -50,17 +51,20 @@ public class ChannelGroup {
     }
 
     public ChannelGroup(String title, String iconUrl, Channel channel) {
-        List<Channel> channels = new ArrayList<>();
-        channels.add(channel);
+        this(title, iconUrl, createChannels(channel));
+    }
+
+    public ChannelGroup(String title, String iconUrl, List<Channel> channels) {
+        this.id = Helpers.getRandomIndex(Integer.MAX_VALUE);
         this.title = title;
         this.iconUrl = iconUrl;
         this.channels = channels;
     }
 
-    public ChannelGroup(String title, String iconUrl, List<Channel> channels) {
-        this.title = title;
-        this.iconUrl = iconUrl;
-        this.channels = channels;
+    private static @NonNull List<Channel> createChannels(Channel channel) {
+        List<Channel> channels = new ArrayList<>();
+        channels.add(channel);
+        return channels;
     }
 
     public boolean contains(String channelId) {

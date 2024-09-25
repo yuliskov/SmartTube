@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ChannelGroup.Channel;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -81,8 +82,10 @@ class SubscriptionGroupMenuProvider extends ContextMenuProvider {
 
                 if (!group.isEmpty()) {
                     MainUIData.instance(mContext).addChannelGroup(group);
+                    BrowsePresenter.instance(mContext).pinItem(Video.from(group));
                 } else {
                     MainUIData.instance(mContext).removeChannelGroup(group);
+                    BrowsePresenter.instance(mContext).unpinItem(Video.from(group));
                 }
             }, group.contains(item.channelId)));
         }
