@@ -285,6 +285,13 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.isOldChannelLookEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.channels_old_look),
+                optionItem -> {
+                    mMainUIData.enableUploadsOldLook(optionItem.isSelected());
+                    mRestartApp = true;
+                },
+                mMainUIData.isUploadsOldLookEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.fullscreen_mode),
                 option -> {
                     mGeneralData.enableFullscreenMode(option.isSelected());
@@ -306,13 +313,6 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.channel_search_bar),
                 optionItem -> mMainUIData.enableChannelSearchBar(optionItem.isSelected()),
                 mMainUIData.isChannelSearchBarEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.channels_old_look),
-                optionItem -> {
-                    mMainUIData.enableUploadsOldLook(optionItem.isSelected());
-                    mRestartApp = true;
-                },
-                mMainUIData.isUploadsOldLookEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.channels_auto_load),
                 optionItem -> mMainUIData.enableUploadsAutoLoad(optionItem.isSelected()),

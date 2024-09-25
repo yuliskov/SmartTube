@@ -226,7 +226,7 @@
     <string name="player_corner_ending_time">Player: top right corner ending time</string>
     <string name="uploads_old_look">Revert old look of Uploads section</string>
     <string name="background_playback_activation">Background playback (activation)</string>
-    <string name="channels_old_look">Revert old look of Channels section</string>
+    <string name="channels_old_look">Old look of Channels section</string>
     <string name="channels_auto_load">Auto load Channels section content</string>
     <string name="return_to_background_video">Return to video running in background</string>
     <string name="pin_unpin_from_sidebar">Add/Remove from sidebar</string>
