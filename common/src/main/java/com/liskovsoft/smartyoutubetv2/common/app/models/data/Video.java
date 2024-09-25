@@ -242,7 +242,7 @@ public final class Video {
      */
     @Override
     public int hashCode() {
-        int hashCode = Helpers.hashCodeAny(videoId, playlistId, reloadPageKey, playlistParams, channelId, mediaItem, sectionId);
+        int hashCode = Helpers.hashCodeAny(videoId, playlistId, reloadPageKey, playlistParams, channelId, mediaItem, sectionId, channelGroupId);
         return hashCode != -1 ? hashCode : super.hashCode();
     }
 
@@ -396,7 +396,11 @@ public final class Video {
             split = Helpers.appendArray(split, new String[]{"false"});
         }
 
-        if (split.length != 21) {
+        if (split.length == 21) {
+            split = Helpers.appendArray(split, new String[]{"-1"});
+        }
+
+        if (split.length != 22) {
             return null;
         }
 
@@ -423,6 +427,7 @@ public final class Video {
         result.metadataSecondTitle = Helpers.parseStr(split[18]);
         result.badge = Helpers.parseStr(split[19]);
         result.isLive = Helpers.parseBoolean(split[20]);
+        result.channelGroupId = Helpers.parseInt(split[21]);
 
         return result;
     }
@@ -439,7 +444,7 @@ public final class Video {
     public String toString() {
         return Helpers.mergeObj(id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl,
                 null, playlistParams, sectionId, getReloadPageKey(), itemType, secondTitle, previewUrl, percentWatched,
-                metadataTitle, metadataSecondTitle, badge, isLive);
+                metadataTitle, metadataSecondTitle, badge, isLive, channelGroupId);
     }
 
     public boolean hasVideo() {

@@ -65,9 +65,9 @@ class SubscriptionGroupMenuProvider extends ContextMenuProvider {
         options.add(UiOptionItem.from(mContext.getString(R.string.new_subscriptions_group), optionItem -> {
             dialogPresenter.closeDialog();
             SimpleEditDialog.show(mContext, mContext.getString(R.string.new_subscriptions_group), newValue -> {
-                MainUIData.instance(mContext).addChannelGroup(
-                        new ChannelGroup(newValue, null, new Channel(item.getAuthor(), item.cardImageUrl, item.channelId))
-                );
+                ChannelGroup group = new ChannelGroup(newValue, null, new Channel(item.getAuthor(), item.cardImageUrl, item.channelId));
+                MainUIData.instance(mContext).addChannelGroup(group);
+                BrowsePresenter.instance(mContext).pinItem(Video.from(group));
                 return true;
             }, mContext.getString(R.string.new_subscriptions_group), true);
         }, false));

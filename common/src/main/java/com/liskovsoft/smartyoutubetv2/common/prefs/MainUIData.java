@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ChannelGroup.Channel;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ChannelGroup;
@@ -351,6 +352,31 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
             mChannelGroups.remove(group);
             persistState();
         }
+    }
+
+    public String[] getChannelGroupIds(int channelGroupId) {
+        if (channelGroupId == -1) {
+            return null;
+        }
+
+        List<String> result = new ArrayList<>();
+
+        ChannelGroup channelGroup = null;
+
+        for (ChannelGroup group : getChannelGroups()) {
+            if (group.id == channelGroupId) {
+                channelGroup = group;
+                break;
+            }
+        }
+
+        if (channelGroup != null) {
+            for (Channel channel : channelGroup.channels) {
+                result.add(channel.channelId);
+            }
+        }
+
+        return result.toArray(new String[]{});
     }
 
     private void initColorSchemes() {

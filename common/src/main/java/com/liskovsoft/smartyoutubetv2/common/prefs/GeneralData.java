@@ -981,7 +981,7 @@ public class GeneralData implements ProfileChangeListener {
             }
 
             value.videoId = null;
-            return !value.hasPlaylist() && value.channelId == null && value.sectionId == -1 && !value.hasReloadPageKey();
+            return !value.hasPlaylist() && value.channelId == null && value.sectionId == -1 && value.channelGroupId == -1 && !value.hasReloadPageKey();
         });
     }
 

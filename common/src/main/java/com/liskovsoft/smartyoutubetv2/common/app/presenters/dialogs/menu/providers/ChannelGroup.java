@@ -55,7 +55,11 @@ public class ChannelGroup {
     }
 
     public ChannelGroup(String title, String iconUrl, List<Channel> channels) {
-        this.id = Helpers.getRandomIndex(Integer.MAX_VALUE);
+        this(Helpers.getRandomIndex(Integer.MAX_VALUE), title, iconUrl, channels);
+    }
+
+    private ChannelGroup(int id, String title, String iconUrl, List<Channel> channels) {
+        this.id = id;
         this.title = title;
         this.iconUrl = iconUrl;
         this.channels = channels;
@@ -90,16 +94,17 @@ public class ChannelGroup {
     public static ChannelGroup fromString(String spec) {
         String[] split = Helpers.split(ITEM_DELIM, spec);
 
-        String title = Helpers.parseStr(split, 0);
-        String groupIconUrl = Helpers.parseStr(split, 1);
-        List<Channel> channels = Helpers.parseList(split, 2, LIST_DELIM, Channel::fromString);
+        int id = Helpers.parseInt(split, 0);
+        String title = Helpers.parseStr(split, 1);
+        String groupIconUrl = Helpers.parseStr(split, 2);
+        List<Channel> channels = Helpers.parseList(split, 3, LIST_DELIM, Channel::fromString);
 
-        return new ChannelGroup(title, groupIconUrl, channels);
+        return new ChannelGroup(id, title, groupIconUrl, channels);
     }
 
     @NonNull
     @Override
     public String toString() {
-        return Helpers.merge(ITEM_DELIM, title, iconUrl, Helpers.mergeList(LIST_DELIM, channels));
+        return Helpers.merge(ITEM_DELIM, id, title, iconUrl, Helpers.mergeList(LIST_DELIM, channels));
     }
 }
