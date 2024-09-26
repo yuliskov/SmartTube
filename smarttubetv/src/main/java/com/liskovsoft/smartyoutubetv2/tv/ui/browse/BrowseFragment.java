@@ -277,7 +277,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             return;
         }
 
-        if (mSections.get(section.getId()) != null && indexOf(section.getId()) == index) {
+        if (mSections.get(section.getId()) != null && (index == -1 || indexOf(section.getId()) == index)) {
             return;
         }
 

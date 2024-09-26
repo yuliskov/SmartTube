@@ -513,8 +513,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         createPinnedMapping(item);
 
         BrowseSection newSection = createPinnedSection(item);
-        Helpers.removeIf(mSections, section -> section.getId() == newSection.getId());
-        mSections.add(newSection);
+        //Helpers.removeIf(mSections, section -> section.getId() == newSection.getId());
+        if (!mSections.contains(newSection)) {
+            mSections.add(newSection);
+        }
         getView().addSection(-1, newSection);
     }
 
