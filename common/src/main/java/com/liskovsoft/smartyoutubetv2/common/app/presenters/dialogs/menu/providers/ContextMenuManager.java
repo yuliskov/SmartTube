@@ -14,6 +14,7 @@ public class ContextMenuManager {
         mContext = context;
         mProviders = new ArrayList<>();
         mProviders.add(new SubscriptionGroupMenuProvider(context, 0));
+        mProviders.add(new RemoveGroupMenuProvider(context, 1));
     }
 
     public List<ContextMenuProvider> getProviders() {

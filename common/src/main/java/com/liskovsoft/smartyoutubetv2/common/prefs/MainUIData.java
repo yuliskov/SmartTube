@@ -104,7 +104,6 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     private boolean mIsChannelsFilterEnabled;
     private boolean mIsChannelSearchBarEnabled;
     private boolean mIsPinnedChannelRowsEnabled;
-    private List<ChannelGroup> mChannelGroups;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -336,49 +335,6 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return (mTopButtons & button) == button;
     }
 
-    public List<ChannelGroup> getChannelGroups() {
-        return mChannelGroups;
-    }
-
-    public void addChannelGroup(ChannelGroup group) {
-        if (!mChannelGroups.contains(group)) {
-            mChannelGroups.add(group);
-        }
-        persistState();
-    }
-
-    public void removeChannelGroup(ChannelGroup group) {
-        if (mChannelGroups.contains(group)) {
-            mChannelGroups.remove(group);
-            persistState();
-        }
-    }
-
-    public String[] getChannelGroupIds(int channelGroupId) {
-        if (channelGroupId == -1) {
-            return null;
-        }
-
-        List<String> result = new ArrayList<>();
-
-        ChannelGroup channelGroup = null;
-
-        for (ChannelGroup group : getChannelGroups()) {
-            if (group.id == channelGroupId) {
-                channelGroup = group;
-                break;
-            }
-        }
-
-        if (channelGroup != null) {
-            for (Channel channel : channelGroup.channels) {
-                result.add(channel.channelId);
-            }
-        }
-
-        return result.toArray(new String[]{});
-    }
-
     private void initColorSchemes() {
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_teal,
@@ -450,7 +406,6 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         mIsChannelsFilterEnabled = Helpers.parseBoolean(split, 18, true);
         mIsChannelSearchBarEnabled = Helpers.parseBoolean(split, 19, true);
         mIsPinnedChannelRowsEnabled = Helpers.parseBoolean(split, 20, true);
-        mChannelGroups = Helpers.parseList(split, 21, ChannelGroup::fromString);
 
         for (Long menuItem : MENU_ITEM_DEFAULT_ORDER) {
             if (!mMenuItemsOrdered.contains(menuItem)) {
@@ -474,7 +429,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
                 mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,
                 null, mThumbQuality, mIsCardMultilineSubtitleEnabled, Helpers.mergeList(mMenuItemsOrdered),
-                mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled, mIsPinnedChannelRowsEnabled, mChannelGroups));
+                mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled, mIsPinnedChannelRowsEnabled));
 
         super.persistState();
     }

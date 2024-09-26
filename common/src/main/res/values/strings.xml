@@ -229,13 +229,14 @@
     <string name="channels_old_look">Old look of Channels section</string>
     <string name="channels_auto_load">Auto load Channels section content</string>
     <string name="return_to_background_video">Return to video running in background</string>
-    <string name="pin_unpin_from_sidebar">Add/Remove from sidebar</string>
-    <string name="pin_unpin_playlist">Add/Remove playlist from sidebar</string>
-    <string name="pin_unpin_channel">Add/Remove channel from sidebar</string>
+    <string name="pin_unpin_from_sidebar">Add/Remove from the sidebar</string>
+    <string name="pin_unpin_playlist">Add/Remove playlist from the sidebar</string>
+    <string name="pin_unpin_channel">Add/Remove channel from the sidebar</string>
     <string name="pin_playlist">Add playlist to the sidebar</string>
     <string name="pin_channel">Add channel to the sidebar</string>
     <string name="pinned_to_sidebar">Added to the sidebar</string>
     <string name="unpin_from_sidebar">Remove from the sidebar</string>
+    <string name="unpin_group_from_sidebar">Remove the group from the sidebar</string>
     <string name="unpinned_from_sidebar">Removed from the sidebar</string>
     <string name="dialog_select_country">Country</string>
     <string name="settings_language_country">Language/Country</string>

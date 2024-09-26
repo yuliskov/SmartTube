@@ -956,7 +956,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private Observable<MediaGroup> createPinnedGridAction(Video item) {
         if (item.channelGroupId != -1) {
-            return mContentService.getSubscriptionsObserve(mMainUIData.getChannelGroupIds(item.channelGroupId));
+            return mContentService.getSubscriptionsObserve(mGeneralData.getChannelGroupIds(item.channelGroupId));
         }
 
         return ChannelUploadsPresenter.instance(getContext()).obtainUploadsObservable(item);

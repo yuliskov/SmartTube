@@ -90,7 +90,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         void onItemAction(Video videoItem, int action);
     }
 
-    private static class MenuAction {
+    public static class MenuAction {
         private final Runnable mAction;
         private final boolean mIsAuth;
 
@@ -961,6 +961,9 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_COMMENTS, new MenuAction(this::appendOpenCommentsButton, false));
 
         for (ContextMenuProvider provider : new ContextMenuManager(getContext()).getProviders()) {
+            if (provider.getMenuType() != ContextMenuProvider.MENU_TYPE_VIDEO) {
+                continue;
+            }
             mMenuMapping.put(provider.getId(), new MenuAction(() -> appendContextMenuItem(provider), false));
         }
     }

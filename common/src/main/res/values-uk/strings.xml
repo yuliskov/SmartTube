@@ -236,6 +236,7 @@
     <string name="pin_channel">Додати канал на бічну панель</string>
     <string name="pinned_to_sidebar">Додано на бічну панель</string>
     <string name="unpin_from_sidebar">Видалити з бічної панелі</string>
+    <string name="unpin_group_from_sidebar">Видалити групу з бічної панелі</string>
     <string name="unpinned_from_sidebar">Видалено з бічної панелі</string>
     <string name="dialog_select_country">Країна</string>
     <string name="settings_language_country">Мова/Країна</string>
