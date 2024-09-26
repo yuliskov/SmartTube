@@ -43,7 +43,7 @@ public class SimpleEditDialog {
         KeyHelpers.fixShowKeyboard(editField);
 
         editField.setText(defaultValue);
-        editField.setHint(R.string.enter_value);
+        editField.setHint(dialogTitle);
 
         // keep empty, will override below.
         // https://stackoverflow.com/a/15619098/5379584
@@ -70,6 +70,7 @@ public class SimpleEditDialog {
 
             if (newValue.isEmpty()) {
                 // Empty fields not allowed
+                editField.setHint(R.string.enter_value);
                 return;
             }
 
