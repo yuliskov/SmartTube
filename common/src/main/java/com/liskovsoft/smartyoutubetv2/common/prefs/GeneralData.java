@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
+import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
@@ -684,7 +685,8 @@ public class GeneralData implements ProfileChangeListener {
     }
 
     public int getTimeFormat() {
-        return mTimeFormat != -1 ? mTimeFormat : LocaleUtility.is24HourLocale(mContext) ? TIME_FORMAT_24 : TIME_FORMAT_12;
+        //return mTimeFormat != -1 ? mTimeFormat : LocaleUtility.is24HourLocale(mContext) ? TIME_FORMAT_24 : TIME_FORMAT_12;
+        return mTimeFormat != -1 ? mTimeFormat : DateHelper.is24HourLocale(LocaleUtility.getCurrentLocale(mContext)) ? TIME_FORMAT_24 : TIME_FORMAT_12;
     }
 
     public void enableProxy(boolean enable) {
