@@ -21,10 +21,12 @@ import java.util.List;
 
 class SubscriptionGroupMenuProvider extends ContextMenuProvider {
     private final Context mContext;
+    private final ChannelGroupService mService;
 
     public SubscriptionGroupMenuProvider(@NonNull Context context, int idx) {
         super(idx);
         mContext = context;
+        mService = ChannelGroupService.instance(context);
     }
 
     @Override
@@ -63,7 +65,7 @@ class SubscriptionGroupMenuProvider extends ContextMenuProvider {
     private void showGroupDialog(Video item) {
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(mContext);
 
-        List<ChannelGroup> groups = GeneralData.instance(mContext).getChannelGroups();
+        List<ChannelGroup> groups = mService.getChannelGroups();
 
         List<OptionItem> options = new ArrayList<>();
 
@@ -73,12 +75,12 @@ class SubscriptionGroupMenuProvider extends ContextMenuProvider {
                     mContext.getString(R.string.new_subscriptions_group),
                     null,
                     newValue -> {
-                        if (GeneralData.instance(mContext).findChannelGroup(newValue) != null) {
+                        if (mService.findChannelGroup(newValue) != null) {
                             return false;
                         }
 
                         ChannelGroup group = new ChannelGroup(newValue, null, new Channel(item.getAuthor(), item.cardImageUrl, item.channelId));
-                        GeneralData.instance(mContext).addChannelGroup(group);
+                        mService.addChannelGroup(group);
                         BrowsePresenter.instance(mContext).pinItem(Video.from(group));
                         return true;
                     });
@@ -93,10 +95,10 @@ class SubscriptionGroupMenuProvider extends ContextMenuProvider {
                 }
 
                 if (!group.isEmpty()) {
-                    GeneralData.instance(mContext).addChannelGroup(group);
+                    mService.addChannelGroup(group);
                     BrowsePresenter.instance(mContext).pinItem(Video.from(group));
                 } else {
-                    GeneralData.instance(mContext).removeChannelGroup(group);
+                    mService.removeChannelGroup(group);
                     BrowsePresenter.instance(mContext).unpinItem(Video.from(group));
                 }
             }, group.contains(item.channelId)));

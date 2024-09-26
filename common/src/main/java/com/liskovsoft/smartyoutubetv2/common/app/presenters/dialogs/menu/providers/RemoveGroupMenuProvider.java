@@ -22,10 +22,12 @@ import java.util.List;
 
 class RemoveGroupMenuProvider extends ContextMenuProvider {
     private final Context mContext;
+    private final ChannelGroupService mService;
 
     public RemoveGroupMenuProvider(@NonNull Context context, int idx) {
         super(idx);
         mContext = context;
+        mService = ChannelGroupService.instance(context);
     }
 
     @Override
@@ -36,8 +38,8 @@ class RemoveGroupMenuProvider extends ContextMenuProvider {
     @Override
     public void onClicked(Video item) {
         AppDialogUtil.showConfirmationDialog(mContext, mContext.getString(R.string.unpin_group_from_sidebar), () -> {
-            GeneralData.instance(mContext).removeChannelGroup(
-                    GeneralData.instance(mContext).findChannelGroup(item.channelGroupId)
+            mService.removeChannelGroup(
+                    mService.findChannelGroup(item.channelGroupId)
             );
             BrowsePresenter.instance(mContext).unpinItem(item);
             AppDialogPresenter.instance(mContext).closeDialog();
