@@ -12,7 +12,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.YTSignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
@@ -174,15 +173,14 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.closeDialog();
         SimpleEditDialog.showPassword(
                 getContext(),
-                "", newValue -> {
+                getContext().getString(R.string.enter_account_password),
+                null,
+                newValue -> {
                     AccountsData.instance(getContext()).setAccountPassword(newValue);
                     BrowsePresenter.instance(getContext()).updateSections();
                     //onSuccess.run();
                     return true;
-                },
-                getContext().getString(R.string.enter_account_password),
-                true
-        );
+                });
     }
 
     private void showRemovePasswordDialog(AppDialogPresenter settingsPresenter) {
@@ -195,7 +193,9 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.closeDialog();
         SimpleEditDialog.showPassword(
                 getContext(),
-                "", newValue -> {
+                getContext().getString(R.string.enter_account_password),
+                null,
+                newValue -> {
                     if (password.equals(newValue)) {
                         AccountsData.instance(getContext()).setAccountPassword(null);
                         BrowsePresenter.instance(getContext()).updateSections();
@@ -203,10 +203,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                         return true;
                     }
                     return false;
-                },
-                getContext().getString(R.string.enter_account_password),
-                true
-        );
+                });
     }
 
     public void showCheckPasswordDialog() {
@@ -218,7 +215,9 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
         SimpleEditDialog.showPassword(
                 getContext(),
-                "", newValue -> {
+                getContext().getString(R.string.enter_account_password),
+                null,
+                newValue -> {
                     if (password.equals(newValue)) {
                         AccountsData.instance(getContext()).setPasswordAccepted(true);
                         BrowsePresenter.instance(getContext()).updateSections();
@@ -226,9 +225,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                         return true;
                     }
                     return false;
-                },
-                getContext().getString(R.string.enter_account_password),
-                true
-        );
+                });
     }
 }

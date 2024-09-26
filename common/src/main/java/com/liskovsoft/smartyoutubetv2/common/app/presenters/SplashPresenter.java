@@ -350,7 +350,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         } else {
             SimpleEditDialog.showPassword(
                     getContext(),
-                    "", newValue -> {
+                    getContext().getString(R.string.enter_master_password),
+                    null,
+                    newValue -> {
                         if (password.equals(newValue)) {
                             onSuccess.run();
                             return true;
@@ -358,8 +360,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
                         return false;
                     },
-                    getContext().getString(R.string.enter_master_password),
-                    true,
                     () -> getView().finishView() // critical part, fix black screen on app exit
             );
         }

@@ -126,16 +126,15 @@ public class SettingsGridFragment extends GridFragment implements SettingsSectio
                 } else {
                     SimpleEditDialog.show(
                             getContext(),
-                            "", newValue -> {
+                            getContext().getString(R.string.enter_settings_password),
+                            null,
+                            newValue -> {
                                 if (password.equals(newValue)) {
                                     ((SettingsItem) item).onClick.run();
                                     return true;
                                 }
                                 return false;
-                            },
-                            getContext().getString(R.string.enter_settings_password),
-                            true
-                    );
+                            });
                 }
 
                 // Close PIP inside Settings section

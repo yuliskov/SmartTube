@@ -8,7 +8,6 @@ import android.view.WindowManager.BadTokenException;
 import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 
 public class SimpleEditDialog {
@@ -16,31 +15,23 @@ public class SimpleEditDialog {
         boolean onChange(String newValue);
     }
 
-    public static void show(Context context, String defaultValue, OnChange onChange, String dialogTitle) {
-        show(context, defaultValue, onChange, dialogTitle, false);
+    public static void show(Context context, String dialogTitle, String defaultValue, OnChange onChange) {
+        show(context, dialogTitle, defaultValue, onChange, null);
     }
 
-    public static void show(Context context, String defaultValue, OnChange onChange, String dialogTitle, boolean emptyValueCheck) {
-        show(context, defaultValue, onChange, dialogTitle, emptyValueCheck, null);
+    public static void show(Context context, String dialogTitle, String defaultValue, OnChange onChange, Runnable onDismiss) {
+        show(context, dialogTitle, defaultValue, onChange, onDismiss, false);
     }
 
-    public static void show(Context context, String defaultValue, OnChange onChange, String dialogTitle, boolean emptyValueCheck, Runnable onDismiss) {
-        show(context, defaultValue, onChange, dialogTitle, emptyValueCheck, onDismiss, false);
+    public static void showPassword(Context context, String dialogTitle, String defaultValue, OnChange onChange) {
+        showPassword(context, dialogTitle, defaultValue, onChange, null);
     }
 
-    public static void showPassword(Context context, String defaultValue, OnChange onChange, String dialogTitle) {
-        showPassword(context, defaultValue, onChange, dialogTitle, false);
+    public static void showPassword(Context context, String dialogTitle, String defaultValue, OnChange onChange, Runnable onDismiss) {
+        show(context, dialogTitle, defaultValue, onChange, onDismiss, true);
     }
 
-    public static void showPassword(Context context, String defaultValue, OnChange onChange, String dialogTitle, boolean emptyValueCheck) {
-        showPassword(context, defaultValue, onChange, dialogTitle, emptyValueCheck, null);
-    }
-
-    public static void showPassword(Context context, String defaultValue, OnChange onChange, String dialogTitle, boolean emptyValueCheck, Runnable onDismiss) {
-        show(context, defaultValue, onChange, dialogTitle, emptyValueCheck, onDismiss, true);
-    }
-
-    private static void show(Context context, String defaultValue, OnChange onChange, String dialogTitle, boolean emptyValueCheck, Runnable onDismiss, boolean isPassword) {
+    private static void show(Context context, String dialogTitle, String defaultValue, OnChange onChange, Runnable onDismiss, boolean isPassword) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppDialog);
         LayoutInflater inflater = LayoutInflater.from(context);
         View contentView = inflater.inflate(R.layout.simple_edit_dialog, null);
@@ -51,7 +42,8 @@ public class SimpleEditDialog {
         }
         KeyHelpers.fixShowKeyboard(editField);
 
-        editField.setHint(defaultValue);
+        editField.setText(defaultValue);
+        editField.setHint(R.string.enter_value);
 
         // keep empty, will override below.
         // https://stackoverflow.com/a/15619098/5379584
@@ -76,9 +68,8 @@ public class SimpleEditDialog {
         configDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((view) -> {
             String newValue = editField.getText().toString();
 
-            if (emptyValueCheck && newValue.isEmpty()) {
-                editField.setHint(R.string.enter_value);
-                //MessageHelpers.showMessage(context, R.string.enter_value);
+            if (newValue.isEmpty()) {
+                // Empty fields not allowed
                 return;
             }
 

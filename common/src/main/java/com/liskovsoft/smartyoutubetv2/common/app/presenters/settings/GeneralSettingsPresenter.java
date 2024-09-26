@@ -675,16 +675,15 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.closeDialog();
         SimpleEditDialog.showPassword(
                 getContext(),
-                "", newValue -> {
+                getContext().getString(R.string.protect_settings_with_password),
+                null,
+                newValue -> {
                     mGeneralData.setSettingsPassword(newValue);
                     if (onSuccess != null) {
                         onSuccess.run();
                     }
                     return true;
-                },
-                getContext().getString(R.string.protect_settings_with_password),
-                true
-        );
+                });
     }
 
     private void showMasterPasswordDialog(AppDialogPresenter settingsPresenter, Runnable onSuccess) {
@@ -698,16 +697,15 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.closeDialog();
         SimpleEditDialog.showPassword(
                 getContext(),
-                "", newValue -> {
+                getContext().getString(R.string.enable_master_password),
+                null,
+                newValue -> {
                     mGeneralData.setMasterPassword(newValue);
                     if (onSuccess != null) {
                         onSuccess.run();
                     }
                     return true;
-                },
-                getContext().getString(R.string.enable_master_password),
-                true
-        );
+                });
     }
 
     private Map<Long, Integer> getMenuNames() {

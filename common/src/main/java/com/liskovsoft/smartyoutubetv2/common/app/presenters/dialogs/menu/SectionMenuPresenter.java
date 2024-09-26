@@ -199,14 +199,13 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
                     mDialogPresenter.closeDialog();
                     SimpleEditDialog.show(
                             getContext(),
+                            getContext().getString(R.string.rename_section),
                             mSection.getTitle(),
                             newValue -> {
                                 mSection.setTitle(newValue);
                                 BrowsePresenter.instance(getContext()).renameSection(mSection);
                                 return true;
-                            },
-                            getContext().getString(R.string.rename_section)
-                    );
+                            });
                 }));
     }
 
