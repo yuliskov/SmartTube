@@ -77,7 +77,8 @@ public class SimpleEditDialog {
             String newValue = editField.getText().toString();
 
             if (emptyValueCheck && newValue.isEmpty()) {
-                MessageHelpers.showMessage(context, R.string.enter_value);
+                editField.setHint(R.string.enter_value);
+                //MessageHelpers.showMessage(context, R.string.enter_value);
                 return;
             }
 

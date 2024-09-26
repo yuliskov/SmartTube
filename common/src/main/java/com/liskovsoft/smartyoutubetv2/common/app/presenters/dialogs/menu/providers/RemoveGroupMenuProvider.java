@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ChannelGroup.Channel;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 
 import java.util.ArrayList;
@@ -34,8 +35,13 @@ class RemoveGroupMenuProvider extends ContextMenuProvider {
 
     @Override
     public void onClicked(Video item) {
-        //GeneralData.instance(mContext).removeChannelGroup(group);
-        BrowsePresenter.instance(mContext).unpinItem(item);
+        AppDialogUtil.showConfirmationDialog(mContext, mContext.getString(R.string.unpin_group_from_sidebar), () -> {
+            GeneralData.instance(mContext).removeChannelGroup(
+                    GeneralData.instance(mContext).findChannelGroup(item.channelGroupId)
+            );
+            BrowsePresenter.instance(mContext).unpinItem(item);
+            AppDialogPresenter.instance(mContext).closeDialog();
+        });
     }
 
     @Override

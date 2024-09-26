@@ -126,6 +126,10 @@ public class GeneralData implements ProfileChangeListener {
     }
 
     public void addPinnedItem(Video item) {
+        if (mPinnedItems.contains(item)) {
+            return;
+        }
+
         mPinnedItems.add(item);
         persistState();
     }
@@ -1000,6 +1004,34 @@ public class GeneralData implements ProfileChangeListener {
         }
 
         return result.toArray(new String[]{});
+    }
+
+    public ChannelGroup findChannelGroup(int channelGroupId) {
+        if (channelGroupId == -1) {
+            return null;
+        }
+
+        for (ChannelGroup group : getChannelGroups()) {
+            if (group.id == channelGroupId) {
+                return group;
+            }
+        }
+
+        return null;
+    }
+
+    public ChannelGroup findChannelGroup(String title) {
+        if (title == null) {
+            return null;
+        }
+
+        for (ChannelGroup group : getChannelGroups()) {
+            if (Helpers.equals(group.title, title)) {
+                return group;
+            }
+        }
+
+        return null;
     }
 
     private void initSections() {
