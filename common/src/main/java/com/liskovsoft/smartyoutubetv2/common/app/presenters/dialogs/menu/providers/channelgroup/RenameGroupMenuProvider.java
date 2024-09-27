@@ -41,6 +41,7 @@ public class RenameGroupMenuProvider extends ContextMenuProvider {
 
                     if (channelGroup != null) {
                         channelGroup.title = newValue;
+                        mService.addChannelGroup(channelGroup);
                     }
 
                     return true;
