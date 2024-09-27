@@ -545,18 +545,18 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     public void unpinItem(Video item) {
         mGeneralData.removePinnedItem(item);
-        mGeneralData.removeSelectedItem(item.hashCode());
+        mGeneralData.removeSelectedItem(item.getId());
 
         BrowseSection section = null;
 
         for (BrowseSection cat : mSections) {
-            if (cat.getId() == item.hashCode()) {
+            if (cat.getId() == item.getId()) {
                 section = cat;
                 break;
             }
         }
 
-        mGridMapping.remove(item.hashCode());
+        mGridMapping.remove(item.getId());
 
         if (getView() != null) {
             getView().removeSection(section);
@@ -1069,9 +1069,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private void createPinnedMapping(Video item) {
         if (enableRows(item)) {
-            mRowMapping.put(item.hashCode(), createPinnedRowAction(item));
+            mRowMapping.put(item.getId(), createPinnedRowAction(item));
         } else {
-            mGridMapping.put(item.hashCode(), createPinnedGridAction(item));
+            mGridMapping.put(item.getId(), createPinnedGridAction(item));
         }
     }
 

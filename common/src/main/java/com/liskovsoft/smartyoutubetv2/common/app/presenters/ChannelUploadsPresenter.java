@@ -170,7 +170,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         disposeActions();
 
         return item.hasNestedItems() || item.isChannel() ?
-               mContentService.getGroupObserve(item.mediaItem) :
+               mContentService.getGroupObserve(item.mediaItem != null ? item.mediaItem : SampleMediaItem.from(item)) :
                item.hasReloadPageKey() ?
                mContentService.getGroupObserve(item.getReloadPageKey()) :
                mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0, item.playlistParams)

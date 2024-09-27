@@ -1112,7 +1112,7 @@ public class GeneralData implements ProfileChangeListener {
             return -1;
         }
 
-        return item.sectionId == -1 ? item.hashCode() : item.sectionId;
+        return item.sectionId == -1 ? item.getId() : item.sectionId;
     }
 
     @Override

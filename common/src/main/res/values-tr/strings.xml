@@ -236,7 +236,7 @@
     <string name="pin_channel">Kanalı kenar çubuğuna ekle</string>
     <string name="pinned_to_sidebar">Kenar çubuğuna eklendi</string>
     <string name="unpin_from_sidebar">Kenar çubuğundan kaldır</string>
-    <string name="unpin_group_from_sidebar">Grubu kenar çubuğundan kaldır</string>
+    <string name="unpin_group_from_sidebar">Abonelik grubunun kaldır</string>
     <string name="unpinned_from_sidebar">Kenar çubuğundan kaldırıldı</string>
     <string name="dialog_select_country">Ülke</string>
     <string name="settings_language_country">Dil/Ülke</string>
@@ -680,5 +680,5 @@
     <string name="recommended">Önerilen Videolar</string>
     <string name="add_to_subscriptions_group">Abonelik grubuna kanal ekle/kaldır</string>
     <string name="new_subscriptions_group">Yeni grup</string>
-    <string name="rename_group">Grup yeniden adlandır</string>
+    <string name="rename_group">Abonelik grubunun yeniden adlandır</string>
 </resources>
