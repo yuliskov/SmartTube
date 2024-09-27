@@ -8,6 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
@@ -27,7 +28,7 @@ public class RemoveGroupMenuProvider extends ContextMenuProvider {
     }
 
     @Override
-    public void onClicked(Video item) {
+    public void onClicked(Video item, VideoMenuCallback callback) {
         AppDialogUtil.showConfirmationDialog(mContext, mContext.getString(R.string.unpin_group_from_sidebar), () -> {
             mService.removeChannelGroup(
                     mService.findChannelGroup(item.channelGroupId)

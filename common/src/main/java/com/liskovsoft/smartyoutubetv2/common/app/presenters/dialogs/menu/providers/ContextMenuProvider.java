@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 
 public abstract class ContextMenuProvider {
     public static int MENU_TYPE_ANY = 0;
@@ -14,7 +15,7 @@ public abstract class ContextMenuProvider {
     }
 
     public abstract int getTitleResId();
-    public abstract void onClicked(Video item);
+    public abstract void onClicked(Video item, VideoMenuCallback callback);
     public abstract boolean isEnabled(Video item);
     public abstract int getMenuType();
 

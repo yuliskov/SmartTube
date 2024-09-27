@@ -420,6 +420,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isSubscriptionsSection()) {
                     removeItemAuthor(videoItem);
                     VideoMenuPresenter.instance(getContext()).closeDialog();
+                } else if (action == VideoMenuCallback.ACTION_REMOVE_AUTHOR) {
+                    removeItemAuthor(videoItem);
                 }
             });
         }
@@ -859,6 +861,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private boolean belongsToChannelUploads(Video item) {
         return item.belongsToChannelUploads() && !item.hasVideo();
+    }
+
+    public BrowseSection getCurrentSection() {
+        return mCurrentSection;
     }
 
     private BrowseSection findSectionById(int sectionId) {

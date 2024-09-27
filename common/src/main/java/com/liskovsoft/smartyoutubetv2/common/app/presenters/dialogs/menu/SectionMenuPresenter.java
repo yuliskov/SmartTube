@@ -299,7 +299,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         MainUIData mainUIData = MainUIData.instance(getContext());
         if (mainUIData.isMenuItemEnabled(provider.getId()) && provider.isEnabled(getVideo())) {
             mDialogPresenter.appendSingleButton(
-                    UiOptionItem.from(getContext().getString(provider.getTitleResId()), optionItem -> provider.onClicked(getVideo()))
+                    UiOptionItem.from(getContext().getString(provider.getTitleResId()), optionItem -> provider.onClicked(getVideo(), getCallback()))
             );
         }
     }
