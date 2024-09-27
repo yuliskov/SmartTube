@@ -34,7 +34,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.Channel
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.SectionMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ChannelGroupService;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroupService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.SectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
@@ -477,6 +477,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     public void renameSection(BrowseSection section) {
         mCurrentSection = section; // move current focus
+        mGeneralData.renameSection(section.getId(), section.getTitle());
+        updateSections();
+    }
+
+    public void renameSection(Video section) {
         mGeneralData.renameSection(section.getId(), section.getTitle());
         updateSections();
     }
@@ -1072,7 +1077,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private BrowseSection createPinnedSection(Video item) {
         return new BrowseSection(
-                item.hashCode(), item.getTitle(), enableRows(item) ? BrowseSection.TYPE_ROW : BrowseSection.TYPE_GRID, item.getCardImageUrl(), false, item);
+                item.getId(), item.getTitle(), enableRows(item) ? BrowseSection.TYPE_ROW : BrowseSection.TYPE_GRID, item.getCardImageUrl(), false, item);
     }
 
     private boolean enableRows(Video item) {

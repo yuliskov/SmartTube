@@ -190,7 +190,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mSection == null || mSection.isDefault()) {
+        if (mSection == null || mSection.isDefault() || (!getVideo().hasPlaylist() && !getVideo().hasReloadPageKey() && !getVideo().hasChannel())) {
             return;
         }
 

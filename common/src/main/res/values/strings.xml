@@ -236,7 +236,7 @@
     <string name="pin_channel">Add channel to the sidebar</string>
     <string name="pinned_to_sidebar">Added to the sidebar</string>
     <string name="unpin_from_sidebar">Remove from the sidebar</string>
-    <string name="unpin_group_from_sidebar">Remove the group from the sidebar</string>
+    <string name="unpin_group_from_sidebar">Remove the group</string>
     <string name="unpinned_from_sidebar">Removed from the sidebar</string>
     <string name="dialog_select_country">Country</string>
     <string name="settings_language_country">Language/Country</string>
@@ -678,4 +678,5 @@
     <string name="recommended">Recommended</string>
     <string name="add_to_subscriptions_group">Add/Remove channel from subscription group</string>
     <string name="new_subscriptions_group">New group</string>
+    <string name="rename_group">Rename the group</string>
 </resources>

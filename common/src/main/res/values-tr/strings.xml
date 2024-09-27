@@ -680,4 +680,5 @@
     <string name="recommended">Önerilen Videolar</string>
     <string name="add_to_subscriptions_group">Abonelik grubuna kanal ekle/kaldır</string>
     <string name="new_subscriptions_group">Yeni grup</string>
+    <string name="rename_group">Grup yeniden adlandır</string>
 </resources>

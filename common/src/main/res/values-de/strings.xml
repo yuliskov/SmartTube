@@ -236,7 +236,7 @@
     <string name="pin_channel">Kanal zur Seitenleiste hinzufügen</string>
     <string name="pinned_to_sidebar">Zur Seitenleiste hinzugefügt</string>
     <string name="unpin_from_sidebar">Entfernen aus Seitenleiste</string>
-    <string name="unpin_group_from_sidebar">Gruppe aus Seitenleiste entfernen</string>
+    <string name="unpin_group_from_sidebar">Gruppe entfernen</string>
     <string name="unpinned_from_sidebar">Aus Seitenleiste entfernt</string>
     <string name="dialog_select_country">Land</string>
     <string name="settings_language_country">Sprache/Land</string>

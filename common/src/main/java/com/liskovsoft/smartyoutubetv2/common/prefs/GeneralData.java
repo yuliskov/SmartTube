@@ -10,12 +10,8 @@ import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ChannelGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ChannelGroup.Channel;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;

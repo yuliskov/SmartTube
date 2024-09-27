@@ -17,10 +17,9 @@ import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ChannelGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroup;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
-import com.liskovsoft.youtubeapi.service.data.YouTubeMediaItem;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ public final class Video {
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     private static final String BLACK_PLACEHOLDER_URL = "https://via.placeholder.com/1280x720/000000/000000";
     private static final float RESTORE_POSITION_PERCENTS = 10; // min value for immediately closed videos
-    public long id;
+    public int id;
     public String title;
     public String altTitle;
     public String secondTitle;
@@ -100,7 +99,7 @@ public final class Video {
     }
 
     private Video(
-            final long id,
+            final int id,
             final String category,
             final String title,
             final String desc,
@@ -265,6 +264,14 @@ public final class Video {
         return video == null || video.videoId == null;
     }
 
+    public int getId() {
+        if (id == 0 || id == -1) {
+            id = hashCode();
+        }
+
+        return id;
+    }
+
     public String getTitle() {
         return altTitle != null ? altTitle : metadataTitle != null ? metadataTitle : title;
     }
@@ -406,7 +413,7 @@ public final class Video {
 
         Video result = new Video();
 
-        result.id = Helpers.parseLong(split[0]);
+        result.id = Helpers.parseInt(split[0]);
         result.category = Helpers.parseStr(split[1]);
         result.title = Helpers.parseStr(split[2]);
         result.videoId = Helpers.parseStr(split[3]);
