@@ -96,7 +96,8 @@ public class SubscriptionGroupMenuProvider extends ContextMenuProvider {
                     group.add(new Channel(item.getAuthor(), item.cardImageUrl, item.channelId));
                 } else {
                     group.remove(item.channelId);
-                    if (callback != null && ((Video) presenter.getCurrentSection().getData()).channelGroupId == group.id) {
+                    Object data = presenter.getCurrentSection().getData();
+                    if (callback != null && (data instanceof Video) && ((Video) data).channelGroupId == group.id) {
                         callback.onItemAction(item, VideoMenuCallback.ACTION_REMOVE_AUTHOR);
                     }
                 }
