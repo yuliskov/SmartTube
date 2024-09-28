@@ -674,4 +674,6 @@
   <string name="player_global_focus_desc">Esta función afecta a qué botón del reproductor recibirá atención al navegar entre las filas de botones del reproductor</string>
   <string name="disable_network_error_fixing">Desactivar la corrección automática de errores de red</string>
   <string name="recommended">Recomendados</string>
+  <string name="new_subscriptions_group">Nuevo grupo</string>
+  <string name="add_to_subscriptions_group">Añadir/quitar canal del grupo de suscripción</string>
 </resources>
