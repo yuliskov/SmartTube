@@ -1083,7 +1083,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private BrowseSection createPinnedSection(Video item) {
         return new BrowseSection(
-                item.getId(), item.getTitle(), enableRows(item) ? BrowseSection.TYPE_ROW : BrowseSection.TYPE_GRID, item.getCardImageUrl(), false, item);
+                item.getId(), item.getTitle(), enableRows(item) ? BrowseSection.TYPE_ROW : BrowseSection.TYPE_GRID, R.drawable.icon_pin, item.getCardImageUrl(), false, item);
     }
 
     private boolean enableRows(Video item) {

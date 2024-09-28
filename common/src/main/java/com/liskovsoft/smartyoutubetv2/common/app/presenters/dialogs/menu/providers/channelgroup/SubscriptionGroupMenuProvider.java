@@ -83,6 +83,7 @@ public class SubscriptionGroupMenuProvider extends ContextMenuProvider {
                         ChannelGroup group = new ChannelGroup(newValue, null, new Channel(item.getAuthor(), item.cardImageUrl, item.channelId));
                         mService.addChannelGroup(group);
                         BrowsePresenter.instance(mContext).pinItem(Video.from(group));
+                        MessageHelpers.showMessage(mContext, mContext.getString(R.string.pinned_to_sidebar));
                         return true;
                     });
         }, false));
