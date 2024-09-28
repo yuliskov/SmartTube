@@ -40,7 +40,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
+import com.liskovsoft.smartyoutubetv2.common.misc.BrowseProcessorManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
@@ -76,7 +76,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final ContentService mContentService;
     private final SignInService mSignInService;
     private final NotificationsService mNotificationsService;
-    private final DeArrowProcessor mDeArrowProcessor;
+    private final BrowseProcessorManager mBrowseProcessorManager;
     private final List<Disposable> mActions;
     private final Runnable mRefreshSection = this::refresh;
     private BrowseSection mCurrentSection;
@@ -103,7 +103,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mContentService = service.getContentService();
         mSignInService = service.getSignInService();
         mNotificationsService = service.getNotificationsService();
-        mDeArrowProcessor = new DeArrowProcessor(getContext(), this::syncItem);
+        mBrowseProcessorManager = new BrowseProcessorManager(getContext(), this::syncItem);
         mActions = new ArrayList<>();
 
         initSections();
@@ -672,7 +672,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 VideoGroup videoGroup = VideoGroup.from(mediaGroup, section);
 
                                 getView().updateSection(videoGroup);
-                                mDeArrowProcessor.process(videoGroup);
+                                mBrowseProcessorManager.process(videoGroup);
 
                                 continueGroupIfNeeded(videoGroup, false);
                             }
@@ -724,7 +724,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, column);
                             appendLocalHistory(videoGroup);
                             getView().updateSection(videoGroup);
-                            mDeArrowProcessor.process(videoGroup);
+                            mBrowseProcessorManager.process(videoGroup);
 
                             continueGroupIfNeeded(videoGroup);
                         },
@@ -783,7 +783,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
                             VideoGroup videoGroup = VideoGroup.from(group, continueGroup);
                             getView().updateSection(videoGroup);
-                            mDeArrowProcessor.process(videoGroup);
+                            mBrowseProcessorManager.process(videoGroup);
 
                             continueGroupIfNeeded(videoGroup, showLoading);
                         },

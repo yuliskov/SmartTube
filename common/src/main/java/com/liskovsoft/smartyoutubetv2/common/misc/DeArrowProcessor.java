@@ -16,17 +16,13 @@ import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
-public class DeArrowProcessor implements OnDataChange {
+public class DeArrowProcessor implements OnDataChange, BrowseProcessor {
     private static final String TAG = DeArrowProcessor.class.getSimpleName();
     private final OnItemReady mOnItemReady;
     private final MediaItemService mItemService;
     private final DeArrowData mDeArrowData;
     private boolean mIsReplaceTitlesEnabled;
     private boolean mIsReplaceThumbnailsEnabled;
-
-    public interface OnItemReady {
-        void onItemReady(Video video);
-    }
 
     public DeArrowProcessor(Context context, OnItemReady onItemReady) {
         mOnItemReady = onItemReady;
@@ -47,6 +43,7 @@ public class DeArrowProcessor implements OnDataChange {
         mIsReplaceThumbnailsEnabled = mDeArrowData.isReplaceThumbnailsEnabled();
     }
 
+    @Override
     public void process(VideoGroup videoGroup) {
         if ((!mIsReplaceTitlesEnabled && !mIsReplaceThumbnailsEnabled) || videoGroup == null || videoGroup.isEmpty()) {
             return;
