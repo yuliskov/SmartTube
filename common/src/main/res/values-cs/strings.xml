@@ -226,7 +226,7 @@
     <string name="player_corner_ending_time">Přehrávač: čas ukončení v pravém horním rohu</string>
     <string name="uploads_old_look">Vrátit zpět starý vzhled sekce Nahraná videa</string>
     <string name="background_playback_activation">Přehrávání na pozadí (aktivace)</string>
-    <string name="channels_old_look">Vrátit zpět starý vzhled sekce Kanály</string>
+    <string name="channels_old_look">Starý vzhled sekce Kanály</string>
     <string name="channels_auto_load">Automaticky načíst obsah sekce Kanály</string>
     <string name="return_to_background_video">Zpět na video běžící na pozadí</string>
     <string name="pin_unpin_from_sidebar">Přidat/Odebrat k postrannímu panelu</string>
@@ -236,6 +236,7 @@
     <string name="pin_channel">Přidat kanál na postranní panel</string>
     <string name="pinned_to_sidebar">Přidáno na postranní panel</string>
     <string name="unpin_from_sidebar">Odebrat z postranního panelu</string>
+    <string name="unpin_group_from_sidebar">Odebrat skupinu odběrů</string>
     <string name="unpinned_from_sidebar">Odebráno z postranního panelu</string>
     <string name="dialog_select_country">Země</string>
     <string name="settings_language_country">Jazyk/Země</string>
@@ -674,4 +675,8 @@
     <string name="player_global_focus_desc">Tato funkce ovlivňuje, které tlačítko přehrávače bude aktivní při procházení mezi řádky tlačítek přehrávače</string>
     <string name="disable_network_error_fixing">Zakázat automatickou opravu chyby sítě</string>
     <string name="disable_network_error_fixing_desc">Pravděpodobně musíte tuto možnost zapnout, pokud používáte VPN</string>
+    <string name="recommended">Doporučeno</string>
+    <string name="add_to_subscriptions_group">Přidat/Odebrat kanál ze skupiny odběrů</string>
+    <string name="new_subscriptions_group">Nová skupina</string>
+    <string name="rename_group">Přejmenovat skupinu odběrů</string>
 </resources>
