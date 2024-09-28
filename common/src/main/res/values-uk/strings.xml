@@ -669,7 +669,7 @@
     <string name="disable_network_error_fixing">Вимкнути автоматичне виправлення мережевих помилок</string>
     <string name="disable_network_error_fixing_desc">Можливо, вам потрібно увімкнути цю опцію, якщо ви використовуєте VPN</string>
     <string name="recommended">Рекомендовані відео</string>
-    <string name="add_to_subscriptions_group">Додати/видалити канал із групи підписок</string>
+    <string name="add_to_subscriptions_group">Додати/видалити із групи підписок</string>
     <string name="new_subscriptions_group">Нова група</string>
     <string name="rename_group">Перейменувати групу підписок</string>
 </resources>
