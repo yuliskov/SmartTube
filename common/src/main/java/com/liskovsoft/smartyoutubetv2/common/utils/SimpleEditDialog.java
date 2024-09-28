@@ -45,6 +45,10 @@ public class SimpleEditDialog {
         editField.setText(defaultValue);
         editField.setHint(dialogTitle);
 
+        if (defaultValue != null) { // move cursor to the end
+            editField.setSelection(defaultValue.length());
+        }
+
         // keep empty, will override below.
         // https://stackoverflow.com/a/15619098/5379584
         AlertDialog configDialog = builder
