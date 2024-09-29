@@ -334,6 +334,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         releasePlayer();
+        // Improve memory usage??? Player may hangs on a second after close
+        Runtime.getRuntime().gc();
         initializePlayer();
     }
 
@@ -383,8 +385,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             Log.d(TAG, "releasePlayer: Start releasing player engine...");
             mPlaybackPresenter.onEngineReleased();
             destroyPlayerObjects();
-            // Improve memory usage??? May cause early view destroy on some devices???
-            Runtime.getRuntime().gc();
+            // Improve memory usage??? Player may hangs on a second after close
+            //Runtime.getRuntime().gc();
         }
     }
 
