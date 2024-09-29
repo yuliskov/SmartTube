@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChannelGroupMenuProvider extends ContextMenuProvider {
-    private static final int SUBSCRIPTION_GROUP_ID = 1_000;
     private final Context mContext;
     private final ChannelGroupService mService;
 
@@ -115,25 +114,5 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
 
         dialogPresenter.appendCheckedCategory(mContext.getString(getTitleResId()), options);
         dialogPresenter.showDialog(mContext.getString(getTitleResId()));
-    }
-
-    public void subscribe(Video item, boolean subscribe) {
-        ChannelGroup group = mService.findChannelGroup(SUBSCRIPTION_GROUP_ID);
-
-        if (group == null) {
-            group = new ChannelGroup(SUBSCRIPTION_GROUP_ID, mContext.getString(R.string.header_subscriptions), null, new ArrayList<>());
-        }
-
-        if (subscribe) {
-            group.add(new Channel(item.getAuthor(), item.cardImageUrl, item.channelId));
-        } else {
-            group.remove(item.channelId);
-        }
-    }
-
-    public boolean isSubscribed(String channelId) {
-        ChannelGroup group = mService.findChannelGroup(SUBSCRIPTION_GROUP_ID);
-
-        return group != null && group.contains(channelId);
     }
 }

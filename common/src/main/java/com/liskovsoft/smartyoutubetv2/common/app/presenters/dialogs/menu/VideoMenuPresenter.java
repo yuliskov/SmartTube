@@ -22,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresen
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroupService;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -661,11 +662,15 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        mVideo.isSubscribed = mVideo.isSubscribed || mVideo.belongsToSubscriptions() || mVideo.belongsToChannelUploads();
+        if (!mServiceManager.isSigned() && mVideo.channelId != null) {
+            mVideo.isSubscribed = ChannelGroupService.instance(getContext()).isSubscribed(mVideo.channelId);
+        } else {
+            mVideo.isSubscribed = mVideo.isSubscribed || mVideo.belongsToSubscriptions() || mVideo.belongsToChannelUploads();
+        }
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
-                        mVideo.isSynced || mVideo.isSubscribed ? mVideo.isSubscribed ?
+                        mVideo.isSynced || mVideo.isSubscribed || (!mServiceManager.isSigned() && mVideo.channelId != null) ? mVideo.isSubscribed ?
                                 R.string.unsubscribe_from_channel : R.string.subscribe_to_channel : R.string.subscribe_unsubscribe_from_channel),
                         optionItem -> toggleSubscribe()));
     }
@@ -861,7 +866,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         // Until synced we won't really know weather we subscribed to a channel.
         // Exclusion: channel item (can't be synced)
         // Note, regular items (from subscribed section etc) aren't contain channel id
-        if (mVideo.isSynced || mVideo.isChannel()) {
+        if (mVideo.isSynced || mVideo.isChannel() || (!mServiceManager.isSigned() && mVideo.channelId != null)) {
             toggleSubscribe(mVideo);
         } else {
             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
@@ -880,10 +885,14 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         RxHelper.disposeActions(mSubscribeAction);
 
-        Observable<Void> observable = video.isSubscribed ?
-                mMediaItemService.unsubscribeObserve(video.channelId) : mMediaItemService.subscribeObserve(video.channelId);
+        if (mServiceManager.isSigned()) {
+            Observable<Void> observable = video.isSubscribed ?
+                    mMediaItemService.unsubscribeObserve(video.channelId) : mMediaItemService.subscribeObserve(video.channelId);
 
-        mSubscribeAction = RxHelper.execute(observable);
+            mSubscribeAction = RxHelper.execute(observable);
+        } else {
+            ChannelGroupService.instance(getContext()).subscribe(video, !video.isSubscribed);
+        }
 
         video.isSubscribed = !video.isSubscribed;
 
@@ -948,7 +957,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.put(MainUIData.MENU_ITEM_SHOW_QUEUE, new MenuAction(this::appendShowPlaybackQueueButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_CHANNEL, new MenuAction(this::appendOpenChannelButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_PLAYLIST, new MenuAction(this::appendOpenPlaylistButton, false));
-        mMenuMapping.put(MainUIData.MENU_ITEM_SUBSCRIBE, new MenuAction(this::appendSubscribeButton, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_SUBSCRIBE, new MenuAction(this::appendSubscribeButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK, new MenuAction(this::appendToggleExcludeFromContentBlockButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR, new MenuAction(this::appendTogglePinVideoToSidebarButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_SAVE_REMOVE_PLAYLIST, new MenuAction(this::appendSaveRemovePlaylistButton, true));

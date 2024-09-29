@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -27,6 +28,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private final PlayerTweaksData mPlayerTweaksData;
     private final SearchData mSearchData;
     private final GeneralData mGeneralData;
+    private final SidebarService mSidebarService;
     private boolean mRestartApp;
 
     private PlayerSettingsPresenter(Context context) {
@@ -35,6 +37,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         mPlayerTweaksData = PlayerTweaksData.instance(context);
         mSearchData = SearchData.instance(context);
         mGeneralData = GeneralData.instance(context);
+        mSidebarService = SidebarService.instance(context);
     }
 
     public static PlayerSettingsPresenter instance(Context context) {
@@ -377,10 +380,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_settings_section),
                 option -> {
-                    mGeneralData.enableSettingsSection(!option.isSelected());
+                    mSidebarService.enableSettingsSection(!option.isSelected());
                     mRestartApp = true;
                 },
-                !mGeneralData.isSettingsSectionEnabled()));
+                !mSidebarService.isSettingsSectionEnabled()));
 
         // Disabled inside RetrofitHelper
         //options.add(UiOptionItem.from("Prefer IPv4 DNS",

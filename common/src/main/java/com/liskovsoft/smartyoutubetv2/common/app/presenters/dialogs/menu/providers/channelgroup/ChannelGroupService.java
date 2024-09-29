@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroup.Channel;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -15,6 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class ChannelGroupService implements ProfileChangeListener {
+    public static final int SUBSCRIPTION_GROUP_ID = 1_000;
     @SuppressLint("StaticFieldLeak")
     private static ChannelGroupService sInstance;
     private final Context mContext;
@@ -107,6 +110,32 @@ public class ChannelGroupService implements ProfileChangeListener {
         return null;
     }
 
+    public void subscribe(Video item, boolean subscribe) {
+        ChannelGroup group = findChannelGroup(SUBSCRIPTION_GROUP_ID);
+
+        if (group == null) {
+            group = new ChannelGroup(SUBSCRIPTION_GROUP_ID, mContext.getString(R.string.header_subscriptions), null, new ArrayList<>());
+        }
+
+        if (subscribe) {
+            group.add(new Channel(item.getAuthor(), item.cardImageUrl, item.channelId));
+        } else {
+            group.remove(item.channelId);
+        }
+
+        if (!group.isEmpty()) {
+            addChannelGroup(group);
+        } else {
+            removeChannelGroup(group);
+        }
+    }
+
+    public boolean isSubscribed(String channelId) {
+        ChannelGroup group = findChannelGroup(SUBSCRIPTION_GROUP_ID);
+
+        return group != null && group.contains(channelId);
+    }
+
     private void restoreState() {
         String data = mPrefs.getChannelGroupData();
 
@@ -127,7 +156,7 @@ public class ChannelGroupService implements ProfileChangeListener {
     }
 
     private void cleanupChannelGroups() {
-        Collection<Video> pinnedItems = GeneralData.instance(mContext).getPinnedItems();
+        Collection<Video> pinnedItems = SidebarService.instance(mContext).getPinnedItems();
 
         Helpers.removeIf(mChannelGroups, value -> !pinnedItems.contains(Video.from(value)));
     }

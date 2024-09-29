@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -43,6 +44,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private final PlayerData mPlayerData;
     private final PlayerTweaksData mPlayerTweaksData;
     private final MainUIData mMainUIData;
+    private final SidebarService mSidebarService;
     private boolean mRestartApp;
 
     private GeneralSettingsPresenter(Context context) {
@@ -51,6 +53,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         mPlayerData = PlayerData.instance(context);
         mPlayerTweaksData = PlayerTweaksData.instance(context);
         mMainUIData = MainUIData.instance(context);
+        mSidebarService = SidebarService.instance(context);
     }
 
     public static GeneralSettingsPresenter instance(Context context) {
@@ -88,7 +91,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendEnabledSections(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Map<Integer, Integer> sections = mGeneralData.getDefaultSections();
+        Map<Integer, Integer> sections = mSidebarService.getDefaultSections();
 
         for (Entry<Integer, Integer> section : sections.entrySet()) {
             int sectionResId = section.getKey();
@@ -100,7 +103,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
             options.add(UiOptionItem.from(getContext().getString(sectionResId), optionItem -> {
                 BrowsePresenter.instance(getContext()).enableSection(sectionId, optionItem.isSelected());
-            }, mGeneralData.isSectionPinned(sectionId)));
+            }, mSidebarService.isSectionPinned(sectionId)));
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.side_panel_sections), options);
@@ -255,27 +258,27 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendBootToSection(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Map<Integer, Integer> sections = mGeneralData.getDefaultSections();
+        Map<Integer, Integer> sections = mSidebarService.getDefaultSections();
 
         for (Entry<Integer, Integer> section : sections.entrySet()) {
             options.add(
                     UiOptionItem.from(
                             getContext().getString(section.getKey()),
-                            optionItem -> mGeneralData.setBootSectionId(section.getValue()),
-                            section.getValue().equals(mGeneralData.getBootSectionId())
+                            optionItem -> mSidebarService.setBootSectionId(section.getValue()),
+                            section.getValue().equals(mSidebarService.getBootSectionId())
                     )
             );
         }
 
-        Collection<Video> pinnedItems = mGeneralData.getPinnedItems();
+        Collection<Video> pinnedItems = mSidebarService.getPinnedItems();
 
         for (Video item : pinnedItems) {
             if (item != null && item.getTitle() != null) {
                 options.add(
                         UiOptionItem.from(
                                 item.getTitle(),
-                                optionItem -> mGeneralData.setBootSectionId(item.hashCode()),
-                                item.hashCode() == mGeneralData.getBootSectionId()
+                                optionItem -> mSidebarService.setBootSectionId(item.hashCode()),
+                                item.hashCode() == mSidebarService.getBootSectionId()
                         )
                 );
             }

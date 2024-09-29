@@ -92,7 +92,7 @@ public class MediaServiceManager {
         mNotificationsService = service.getNotificationsService();
 
         mSingInService.setOnChange(
-                () -> onAccountChanged(YouTubeSignInService.instance().getSelectedAccount())
+                () -> onAccountChanged(mSingInService.getSelectedAccount())
         );
     }
 
@@ -423,7 +423,11 @@ public class MediaServiceManager {
     }
 
     public Account getSelectedAccount() {
-        return YouTubeSignInService.instance().getSelectedAccount();
+        return mSingInService.getSelectedAccount();
+    }
+
+    public boolean isSigned() {
+        return mSingInService.isSigned();
     }
 
     private void onAccountChanged(Account account) {

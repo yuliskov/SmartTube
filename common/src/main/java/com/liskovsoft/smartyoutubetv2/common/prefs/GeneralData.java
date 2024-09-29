@@ -36,8 +36,6 @@ public class GeneralData implements ProfileChangeListener {
     private static GeneralData sInstance;
     private final Context mContext;
     private final AppPrefs mPrefs;
-    private boolean mIsSettingsSectionEnabled;
-    private int mBootSectionId;
     private int mAppExitShortcut;
     private int mPlayerExitShortcut;
     private boolean mIsReturnToLauncherEnabled;
@@ -92,20 +90,18 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsHideWatchedFromWatchLaterEnabled;
     private List<String> mChangelog;
     private Map<String, Integer> mPlaylistOrder;
-    private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
-    private List<Video> mPinnedItems;
     private List<Video> mPendingStreams;
     private boolean mIsFullscreenModeEnabled;
     private Map<Integer, Video> mSelectedItems;
     private boolean mIsFirstUseTooltipEnabled;
     private boolean mIsDeviceSpecificBackupEnabled;
     private boolean mIsAutoBackupEnabled;
+    private List<Video> mOldPinnedItems;
 
     private GeneralData(Context context) {
         mContext = context;
         mPrefs = AppPrefs.instance(context);
         mPrefs.addListener(this);
-        initSections();
         restoreState();
     }
 
@@ -115,170 +111,6 @@ public class GeneralData implements ProfileChangeListener {
         }
 
         return sInstance;
-    }
-
-    public Collection<Video> getPinnedItems() {
-        return Collections.unmodifiableList(mPinnedItems);
-    }
-
-    public void addPinnedItem(Video item) {
-        if (mPinnedItems.contains(item)) {
-            return;
-        }
-
-        mPinnedItems.add(item);
-        persistState();
-    }
-
-    public void removePinnedItem(Video item) {
-        mPinnedItems.remove(item);
-        persistState();
-    }
-
-    public Map<Integer, Integer> getDefaultSections() {
-        return mDefaultSections;
-    }
-
-    public void enableSection(int sectionId, boolean enabled) {
-        if (enabled) {
-            if (sectionId == MediaGroup.TYPE_SETTINGS) {
-                mIsSettingsSectionEnabled = true; // prevent Settings lock
-            }
-
-            Video item = new Video();
-            item.sectionId = sectionId;
-
-            if (mPinnedItems.contains(item)) { // don't reorder if item already exists
-                return;
-            }
-
-            int index = getDefaultSectionIndex(sectionId);
-
-            if (index == -1 || index > mPinnedItems.size()) {
-                mPinnedItems.add(item);
-            } else {
-                mPinnedItems.add(index, item);
-            }
-        } else {
-            Helpers.removeIf(mPinnedItems, value -> value.sectionId == sectionId);
-        }
-
-        persistState();
-    }
-
-    private int getDefaultSectionIndex(int sectionId) {
-        int index = -1;
-
-        Collection<Integer> values = mDefaultSections.values();
-
-        for (int item : values) {
-            index++;
-            if (item == sectionId) {
-                break;
-            }
-        }
-
-        return index;
-    }
-
-    /**
-     * Contains sections and pinned items!
-     */
-    public boolean isSectionPinned(int sectionId) {
-        Video section = Helpers.findFirst(mPinnedItems, item -> getSectionId(item) == sectionId);
-        return section != null; // by default enable all pinned items
-    }
-
-    public int getSectionIndex(int sectionId) {
-        // 1) Distinguish section from pinned item
-        // 2) Add pinned items after the sections
-
-        int index = findPinnedItemIndex(sectionId);
-
-        return index;
-    }
-
-    public void renameSection(int sectionId, String newTitle) {
-        int index = findPinnedItemIndex(sectionId);
-        Video video = mPinnedItems.get(index);
-        video.title = newTitle;
-        persistState();
-    }
-
-    public void moveSectionUp(int sectionId) {
-        shiftSection(sectionId, -1);
-    }
-
-    public void moveSectionDown(int sectionId) {
-        shiftSection(sectionId, 1);
-    }
-
-    public boolean canMoveSectionUp(int sectionId) {
-        return canShiftSection(sectionId, -1);
-    }
-
-    public boolean canMoveSectionDown(int sectionId) {
-        return canShiftSection(sectionId, 1);
-    }
-
-    private boolean canShiftSection(int sectionId, int shift) {
-        int index = findPinnedItemIndex(sectionId);
-
-        if (index != -1) {
-            return  index + shift >= 0 && index + shift < mPinnedItems.size();
-        }
-
-        return false;
-    }
-
-    private void shiftSection(int sectionId, int shift) {
-        if (!canShiftSection(sectionId, shift)) {
-            return;
-        }
-
-        int index = findPinnedItemIndex(sectionId);
-
-        if (index != -1) {
-            Video current = mPinnedItems.get(index);
-            mPinnedItems.remove(current);
-
-            mPinnedItems.add(index + shift, current);
-            persistState();
-        }
-    }
-
-    private int findPinnedItemIndex(int sectionId) {
-        int index = -1;
-
-        for (Video item : mPinnedItems) {
-            // Distinguish pinned items by hashCode or extra field (default section)!
-            if (getSectionId(item) == sectionId) {
-                index = mPinnedItems.indexOf(item);
-                break;
-            }
-        }
-
-        return index;
-    }
-
-    public void setBootSectionId(int sectionId) {
-        mBootSectionId = sectionId;
-
-        persistState();
-    }
-
-    public int getBootSectionId() {
-        return mBootSectionId;
-    }
-
-    public void enableSettingsSection(boolean enabled) {
-        mIsSettingsSectionEnabled = enabled;
-
-        persistState();
-    }
-
-    public boolean isSettingsSectionEnabled() {
-        return mIsSettingsSectionEnabled;
     }
 
     public int getAppExitShortcut() {
@@ -315,6 +147,10 @@ public class GeneralData implements ProfileChangeListener {
     public void setBackgroundPlaybackShortcut(int type) {
         mBackgroundShortcut = type;
         persistState();
+    }
+
+    public List<Video> getOldPinnedItems() {
+        return mOldPinnedItems;
     }
 
     public void hideShortsFromSubscriptions(boolean enable) {
@@ -960,36 +796,6 @@ public class GeneralData implements ProfileChangeListener {
         return mIsAutoBackupEnabled;
     }
 
-    private void initSections() {
-        mDefaultSections.put(R.string.header_notifications, MediaGroup.TYPE_NOTIFICATIONS);
-        mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
-        mDefaultSections.put(R.string.header_shorts, MediaGroup.TYPE_SHORTS);
-        mDefaultSections.put(R.string.header_trending, MediaGroup.TYPE_TRENDING);
-        mDefaultSections.put(R.string.header_kids_home, MediaGroup.TYPE_KIDS_HOME);
-        mDefaultSections.put(R.string.header_sports, MediaGroup.TYPE_SPORTS);
-        mDefaultSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
-        mDefaultSections.put(R.string.header_news, MediaGroup.TYPE_NEWS);
-        mDefaultSections.put(R.string.header_music, MediaGroup.TYPE_MUSIC);
-        mDefaultSections.put(R.string.header_channels, MediaGroup.TYPE_CHANNEL_UPLOADS);
-        mDefaultSections.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
-        mDefaultSections.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
-        mDefaultSections.put(R.string.header_playlists, MediaGroup.TYPE_USER_PLAYLISTS);
-        mDefaultSections.put(R.string.header_settings, MediaGroup.TYPE_SETTINGS);
-    }
-
-    private void cleanupPinnedItems() {
-        Helpers.removeDuplicates(mPinnedItems);
-
-        Helpers.removeIf(mPinnedItems, value -> {
-            if (value == null) {
-                return true;
-            }
-
-            value.videoId = null;
-            return !value.hasPlaylist() && value.channelId == null && value.sectionId == -1 && value.channelGroupId == -1 && !value.hasReloadPageKey();
-        });
-    }
-
     /**
      * Fixed ConcurrentModificationException after onProfileChanged()<br/>
      * Happened inside cleanupPinnedItems()
@@ -1000,13 +806,12 @@ public class GeneralData implements ProfileChangeListener {
         String[] split = Helpers.splitData(data);
 
         // Zero index is skipped. Selected sections were there.
-        mBootSectionId = Helpers.parseInt(split, 1, MediaGroup.TYPE_HOME);
-        mIsSettingsSectionEnabled = Helpers.parseBoolean(split, 2, true);
+        //mBootSectionId = Helpers.parseInt(split, 1, MediaGroup.TYPE_HOME);
+        //mIsSettingsSectionEnabled = Helpers.parseBoolean(split, 2, true);
         mAppExitShortcut = Helpers.parseInt(split, 3, EXIT_DOUBLE_BACK);
         mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 4, false);
         mBackgroundShortcut = Helpers.parseInt(split, 5, BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
-        //String pinnedItems = Helpers.parseStr(split, 6);
-        mPinnedItems = Helpers.parseList(split, 6, Video::fromString);
+        mOldPinnedItems = Helpers.parseList(split, 6, Video::fromString);
         mIsHideShortsFromSubscriptionsEnabled = Helpers.parseBoolean(split, 7, false);
         mIsRemapFastForwardToNextEnabled = Helpers.parseBoolean(split, 8, false);
         //mScreenDimmingTimeoutMs = Helpers.parseInt(split, 9, 1);
@@ -1071,27 +876,12 @@ public class GeneralData implements ProfileChangeListener {
         mIsDeviceSpecificBackupEnabled = Helpers.parseBoolean(split, 65, false);
         mIsAutoBackupEnabled = Helpers.parseBoolean(split, 66, false);
         mIsRemapPageDownToSpeedEnabled = Helpers.parseBoolean(split, 67, false);
-
-        if (mPinnedItems.isEmpty()) {
-            initPinnedItems();
-        }
-
-        // Backward compatibility
-        enableSection(MediaGroup.TYPE_SETTINGS, true);
-
-        cleanupPinnedItems();
-    }
-
-    private void initPinnedItems() {
-        for (int sectionId : mDefaultSections.values()) {
-            enableSection(sectionId, true);
-        }
     }
 
     private void persistState() {
         // Zero index is skipped. Selected sections were there.
-        mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeData(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut, mIsReturnToLauncherEnabled,
-                mBackgroundShortcut, mPinnedItems, mIsHideShortsFromSubscriptionsEnabled,
+        mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeData(null, null, null, mAppExitShortcut, mIsReturnToLauncherEnabled,
+                mBackgroundShortcut, mOldPinnedItems, mIsHideShortsFromSubscriptionsEnabled,
                 mIsRemapFastForwardToNextEnabled, null, mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
@@ -1105,14 +895,6 @@ public class GeneralData implements ProfileChangeListener {
                 mChangelog, mPlayerExitShortcut, mIsOldChannelLookEnabled, mIsFullscreenModeEnabled, mIsHideWatchedFromWatchLaterEnabled,
                 mRememberPinnedPosition, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, mIsAutoBackupEnabled,
                 mIsRemapPageDownToSpeedEnabled));
-    }
-
-    private int getSectionId(Video item) {
-        if (item == null) {
-            return -1;
-        }
-
-        return item.sectionId == -1 ? item.getId() : item.sectionId;
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.GoogleSignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.GDriveBackupManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.GDriveBackupWorker;
@@ -33,6 +34,7 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
     private final GoogleSignInService mSignInService;
     private final GDriveBackupManager mGDriveBackupManager;
     private final GeneralData mGeneralData;
+    private final SidebarService mSidebarService;
     private Disposable mAccountListAction;
 
     private BackupSettingsPresenter(Context context) {
@@ -40,6 +42,7 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
         mSignInService = GoogleSignInService.instance();
         mGDriveBackupManager = GDriveBackupManager.instance(context);
         mGeneralData = GeneralData.instance(context);
+        mSidebarService = SidebarService.instance(context);
     }
 
     public static BackupSettingsPresenter instance(Context context) {
@@ -127,7 +130,7 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
                 String.format("%s:\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
                 option -> {
                     AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_backup), () -> {
-                        mGeneralData.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
+                        mSidebarService.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
                         backupManager.checkPermAndBackup();
                         MessageHelpers.showMessage(getContext(), R.string.msg_done);
                     });
