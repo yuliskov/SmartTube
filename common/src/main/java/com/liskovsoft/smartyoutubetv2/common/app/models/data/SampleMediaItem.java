@@ -50,7 +50,7 @@ public final class SampleMediaItem implements MediaItem {
     public static MediaItem from(Video video) {
         SampleMediaItem mediaItem = new SampleMediaItem();
 
-        mediaItem.mId = (int) video.id;
+        mediaItem.mId = video.id;
         mediaItem.mTitle = video.getTitle();
         mediaItem.mSecondTitle = video.getSecondTitle();
         mediaItem.mContentType = video.category;

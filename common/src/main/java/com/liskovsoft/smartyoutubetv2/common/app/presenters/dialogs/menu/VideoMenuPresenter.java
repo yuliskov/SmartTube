@@ -87,6 +87,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         int ACTION_REMOVE_FROM_QUEUE = 4;
         int ACTION_ADD_TO_QUEUE = 5;
         int ACTION_PLAY_NEXT = 6;
+        int ACTION_REMOVE_AUTHOR = 7;
         void onItemAction(Video videoItem, int action);
     }
 
@@ -972,7 +973,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         MainUIData mainUIData = MainUIData.instance(getContext());
         if (mainUIData.isMenuItemEnabled(provider.getId()) && provider.isEnabled(getVideo())) {
             mDialogPresenter.appendSingleButton(
-                    UiOptionItem.from(getContext().getString(provider.getTitleResId()), optionItem -> provider.onClicked(getVideo()))
+                    UiOptionItem.from(getContext().getString(provider.getTitleResId()), optionItem -> provider.onClicked(getVideo(), getCallback()))
             );
         }
     }

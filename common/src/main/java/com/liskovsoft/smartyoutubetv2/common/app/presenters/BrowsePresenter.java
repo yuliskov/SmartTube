@@ -34,13 +34,13 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.Channel
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.SectionMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ChannelGroupService;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroupService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.SectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
+import com.liskovsoft.smartyoutubetv2.common.misc.BrowseProcessorManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
@@ -76,7 +76,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final ContentService mContentService;
     private final SignInService mSignInService;
     private final NotificationsService mNotificationsService;
-    private final DeArrowProcessor mDeArrowProcessor;
+    private final BrowseProcessorManager mBrowseProcessorManager;
     private final List<Disposable> mActions;
     private final Runnable mRefreshSection = this::refresh;
     private BrowseSection mCurrentSection;
@@ -103,7 +103,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mContentService = service.getContentService();
         mSignInService = service.getSignInService();
         mNotificationsService = service.getNotificationsService();
-        mDeArrowProcessor = new DeArrowProcessor(getContext(), this::syncItem);
+        mBrowseProcessorManager = new BrowseProcessorManager(getContext(), this::syncItem);
         mActions = new ArrayList<>();
 
         initSections();
@@ -420,6 +420,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isSubscriptionsSection()) {
                     removeItemAuthor(videoItem);
                     VideoMenuPresenter.instance(getContext()).closeDialog();
+                } else if (action == VideoMenuCallback.ACTION_REMOVE_AUTHOR) {
+                    removeItemAuthor(videoItem);
                 }
             });
         }
@@ -477,6 +479,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     public void renameSection(BrowseSection section) {
         mCurrentSection = section; // move current focus
+        mGeneralData.renameSection(section.getId(), section.getTitle());
+        updateSections();
+    }
+
+    public void renameSection(Video section) {
         mGeneralData.renameSection(section.getId(), section.getTitle());
         updateSections();
     }
@@ -540,18 +547,18 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     public void unpinItem(Video item) {
         mGeneralData.removePinnedItem(item);
-        mGeneralData.removeSelectedItem(item.hashCode());
+        mGeneralData.removeSelectedItem(item.getId());
 
         BrowseSection section = null;
 
         for (BrowseSection cat : mSections) {
-            if (cat.getId() == item.hashCode()) {
+            if (cat.getId() == item.getId()) {
                 section = cat;
                 break;
             }
         }
 
-        mGridMapping.remove(item.hashCode());
+        mGridMapping.remove(item.getId());
 
         if (getView() != null) {
             getView().removeSection(section);
@@ -665,7 +672,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 VideoGroup videoGroup = VideoGroup.from(mediaGroup, section);
 
                                 getView().updateSection(videoGroup);
-                                mDeArrowProcessor.process(videoGroup);
+                                mBrowseProcessorManager.process(videoGroup);
 
                                 continueGroupIfNeeded(videoGroup, false);
                             }
@@ -717,7 +724,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, column);
                             appendLocalHistory(videoGroup);
                             getView().updateSection(videoGroup);
-                            mDeArrowProcessor.process(videoGroup);
+                            mBrowseProcessorManager.process(videoGroup);
 
                             continueGroupIfNeeded(videoGroup);
                         },
@@ -776,7 +783,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
                             VideoGroup videoGroup = VideoGroup.from(group, continueGroup);
                             getView().updateSection(videoGroup);
-                            mDeArrowProcessor.process(videoGroup);
+                            mBrowseProcessorManager.process(videoGroup);
 
                             continueGroupIfNeeded(videoGroup, showLoading);
                         },
@@ -854,6 +861,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private boolean belongsToChannelUploads(Video item) {
         return item.belongsToChannelUploads() && !item.hasVideo();
+    }
+
+    public BrowseSection getCurrentSection() {
+        return mCurrentSection;
     }
 
     private BrowseSection findSectionById(int sectionId) {
@@ -1064,15 +1075,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private void createPinnedMapping(Video item) {
         if (enableRows(item)) {
-            mRowMapping.put(item.hashCode(), createPinnedRowAction(item));
+            mRowMapping.put(item.getId(), createPinnedRowAction(item));
         } else {
-            mGridMapping.put(item.hashCode(), createPinnedGridAction(item));
+            mGridMapping.put(item.getId(), createPinnedGridAction(item));
         }
     }
 
     private BrowseSection createPinnedSection(Video item) {
         return new BrowseSection(
-                item.hashCode(), item.getTitle(), enableRows(item) ? BrowseSection.TYPE_ROW : BrowseSection.TYPE_GRID, item.getCardImageUrl(), false, item);
+                item.getId(), item.getTitle(), enableRows(item) ? BrowseSection.TYPE_ROW : BrowseSection.TYPE_GRID, R.drawable.icon_pin, item.getCardImageUrl(), false, item);
     }
 
     private boolean enableRows(Video item) {

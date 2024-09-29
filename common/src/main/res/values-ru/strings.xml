@@ -236,7 +236,7 @@
     <string name="pin_channel">Добавить канал на боковую панель</string>
     <string name="pinned_to_sidebar">Добавлено на боковую панель</string>
     <string name="unpin_from_sidebar">Удалить из боковой панели</string>
-    <string name="unpin_group_from_sidebar">Удалить группу из боковой панели</string>
+    <string name="unpin_group_from_sidebar">Удалить группу подписок</string>
     <string name="unpinned_from_sidebar">Удалено из боковой панели</string>
     <string name="dialog_select_country">Страна</string>
     <string name="settings_language_country">Язык/Страна</string>
@@ -669,6 +669,7 @@
     <string name="disable_network_error_fixing">Отключить автоматическое исправление сетевых ошибок</string>
     <string name="disable_network_error_fixing_desc">Возможно, вам нужно включить эту опцию, если вы используете VPN</string>
     <string name="recommended">Рекомендуемые видео</string>
-    <string name="add_to_subscriptions_group">Добавить/удалить канал из группы подписок</string>
+    <string name="add_to_subscriptions_group">Добавить/удалить из группы подписок</string>
     <string name="new_subscriptions_group">Новая группа</string>
+    <string name="rename_group">Переименовать группу подписок</string>
 </resources>

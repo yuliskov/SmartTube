@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers;
+package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,8 +10,8 @@ import java.util.List;
 
 public class ChannelGroup {
     public final int id;
-    public final String title;
-    public final String iconUrl;
+    public String title;
+    public String iconUrl;
     public final List<Channel> channels;
     private static final String ITEM_DELIM = "&sgi;";
     private static final String LIST_DELIM = "&sga;";
