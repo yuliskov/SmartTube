@@ -676,4 +676,5 @@
   <string name="recommended">Recomendados</string>
   <string name="new_subscriptions_group">Nuevo grupo</string>
   <string name="add_to_subscriptions_group">Añadir/quitar canal del grupo de suscripción</string>
+  <string name="rename_group">Renombrar el grupo de suscripción</string>
 </resources>
