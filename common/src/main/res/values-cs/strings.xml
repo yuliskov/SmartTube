@@ -676,7 +676,7 @@
     <string name="disable_network_error_fixing">Zakázat automatickou opravu chyby sítě</string>
     <string name="disable_network_error_fixing_desc">Pravděpodobně musíte tuto možnost zapnout, pokud používáte VPN</string>
     <string name="recommended">Doporučeno</string>
-    <string name="add_to_subscriptions_group">Přidat/Odebrat kanál ze skupiny odběrů</string>
+    <string name="add_to_subscriptions_group">Přidat/Odebrat ze skupiny odběrů</string>
     <string name="new_subscriptions_group">Nová skupina</string>
     <string name="rename_group">Přejmenovat skupinu odběrů</string>
 </resources>
