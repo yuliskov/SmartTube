@@ -41,9 +41,9 @@ public class ChannelGroupService implements ProfileChangeListener {
     }
 
     public void addChannelGroup(ChannelGroup group) {
-        if (!mChannelGroups.contains(group)) {
-            mChannelGroups.add(group);
-        }
+        // Move to the top
+        mChannelGroups.remove(group);
+        mChannelGroups.add(0, group);
         persistState();
     }
 
