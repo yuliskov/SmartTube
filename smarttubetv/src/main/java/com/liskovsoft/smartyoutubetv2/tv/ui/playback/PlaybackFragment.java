@@ -383,8 +383,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             Log.d(TAG, "releasePlayer: Start releasing player engine...");
             mPlaybackPresenter.onEngineReleased();
             destroyPlayerObjects();
-            // Improve memory usage??? May cause early view destroy on some devices.
-            //Runtime.getRuntime().gc();
+            // Improve memory usage??? May cause early view destroy on some devices???
+            Runtime.getRuntime().gc();
         }
     }
 
@@ -407,6 +407,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
         if (mMediaSession != null) {
             mMediaSession.release();
+        }
+        if (mRowsAdapter != null) {
+            mRowsAdapter.clear();
         }
         setAdapter(null); // PlayerGlue->LeanbackPlayerAdapter->Context memory leak fix
         mPlayer = null;
