@@ -58,7 +58,7 @@ public class ChannelGroup {
         this(Helpers.getRandomIndex(Integer.MAX_VALUE), title, iconUrl, channels);
     }
 
-    private ChannelGroup(int id, String title, String iconUrl, List<Channel> channels) {
+    public ChannelGroup(int id, String title, String iconUrl, List<Channel> channels) {
         this.id = id;
         this.title = title;
         this.iconUrl = iconUrl;
