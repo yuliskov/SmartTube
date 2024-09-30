@@ -34,6 +34,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.Channel
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.SectionMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroup.Channel;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroupService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.SectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
@@ -195,7 +197,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mSectionsMapping.put(MediaGroup.TYPE_MUSIC, new BrowseSection(MediaGroup.TYPE_MUSIC, getContext().getString(R.string.header_music), BrowseSection.TYPE_ROW, R.drawable.icon_music));
         mSectionsMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, new BrowseSection(MediaGroup.TYPE_CHANNEL_UPLOADS, getContext().getString(R.string.header_channels), uploadsType, R.drawable.icon_channels, true));
         mSectionsMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, new BrowseSection(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), BrowseSection.TYPE_GRID, R.drawable.icon_subscriptions, true));
-        mSectionsMapping.put(MediaGroup.TYPE_HISTORY, new BrowseSection(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), BrowseSection.TYPE_GRID, R.drawable.icon_history, false));
+        mSectionsMapping.put(MediaGroup.TYPE_HISTORY, new BrowseSection(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), BrowseSection.TYPE_GRID, R.drawable.icon_history, true));
         mSectionsMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, new BrowseSection(MediaGroup.TYPE_USER_PLAYLISTS, getContext().getString(R.string.header_playlists), BrowseSection.TYPE_ROW, R.drawable.icon_playlist, true));
         mSectionsMapping.put(MediaGroup.TYPE_NOTIFICATIONS, new BrowseSection(MediaGroup.TYPE_NOTIFICATIONS, getContext().getString(R.string.header_notifications), BrowseSection.TYPE_GRID, R.drawable.icon_notification, true));
 
@@ -733,12 +735,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         },
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
-                            if (getView() != null && isHistorySection()) {
-                                VideoGroup videoGroup = VideoGroup.from(null, section, column);
-                                videoGroup.setType(MediaGroup.TYPE_HISTORY);
-                                appendLocalHistory(videoGroup);
-                                getView().updateSection(videoGroup);
-                            }
                             handleLoadError();
                         });
 
@@ -815,10 +811,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             if (isSigned) {
                                 callback.run();
                             } else {
-                                if (isSubscriptionsSection()) {
-                                    updateVideoGrid(getCurrentSection(),
-                                            mContentService.getSubscriptionsObserve(
-                                                    ChannelGroupService.instance(getContext()).getChannelGroupIds(ChannelGroupService.SUBSCRIPTION_GROUP_ID)), -1);
+                                if (getView() != null && isHistorySection()) {
+                                    VideoGroup videoGroup = VideoGroup.from(null, getCurrentSection(), -1);
+                                    videoGroup.setType(MediaGroup.TYPE_HISTORY);
+                                    appendLocalHistory(videoGroup);
+                                    getView().updateSection(videoGroup);
+                                } else if (isSubscriptionsSection()) {
+                                    appendLocalSubscriptions();
+                                } else if (getView() != null && isMultiGridChannelUploadsSection()) {
+                                    getView().showProgressBar(false);
+                                    appendLocalChannels();
                                 } else if (getView().isProgressBarShowing()) {
                                     getView().showProgressBar(false);
                                     getView().showError(new SignInError(getContext()));
@@ -858,8 +860,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        updateVideoGrid(mCurrentSection, ChannelUploadsPresenter.instance(getContext()).obtainUploadsObservable(item), 1, true);
-        //ChannelPresenter.instance(getContext()).obtainUploadsRowObservable(item, row -> updateVideoGrid(mCurrentSection, row, 1, true));
+        updateVideoGrid(mCurrentSection, ChannelUploadsPresenter.instance(getContext()).obtainUploadsObservable(item), 1, false);
     }
 
     private boolean belongsToChannelUploadsMultiGrid(Video item) {
@@ -1131,6 +1132,25 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         for (State state : stateService.getStates()) {
             videoGroup.add(0, state.video);
+        }
+    }
+
+    private void appendLocalSubscriptions() {
+        updateVideoGrid(getCurrentSection(),
+                mContentService.getSubscriptionsObserve(
+                        ChannelGroupService.instance(getContext()).getChannelGroupIds(ChannelGroupService.SUBSCRIPTION_GROUP_ID)), -1);
+    }
+
+    private void appendLocalChannels() {
+        ChannelGroup subscriptions = ChannelGroupService.instance(getContext()).findChannelGroup(ChannelGroupService.SUBSCRIPTION_GROUP_ID);
+        if (subscriptions != null) {
+            List<Video> channels = new ArrayList<>();
+            for (Channel channel : subscriptions.channels) {
+                channels.add(Video.from(channel));
+            }
+            VideoGroup group = VideoGroup.from(channels, 0);
+            group.setType(MediaGroup.TYPE_CHANNEL_UPLOADS);
+            getView().updateSection(group);
         }
     }
 }

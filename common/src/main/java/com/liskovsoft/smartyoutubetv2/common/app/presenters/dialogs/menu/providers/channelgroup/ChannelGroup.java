@@ -81,13 +81,13 @@ public class ChannelGroup {
 
     public void add(Channel channel) {
         if (channels != null && !channels.contains(channel)) {
-            channels.add(channel);
+            channels.add(0, channel);
         }
     }
 
     public void remove(String channelId) {
         if (channels != null) {
-            Helpers.removeIf(channels, value -> Helpers.equals(value.channelId, channelId));
+            Helpers.removeIf(channels, channel -> Helpers.equals(channel.channelId, channelId));
         }
     }
 

@@ -18,6 +18,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroup.Channel;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 
@@ -208,6 +209,14 @@ public final class Video {
         video.title = group.title;
         video.cardImageUrl = group.iconUrl;
         video.channelGroupId = group.id;
+        return video;
+    }
+
+    public static Video from(Channel channel) {
+        Video video = new Video();
+        video.title = channel.title;
+        video.cardImageUrl = channel.iconUrl;
+        video.channelId = channel.channelId;
         return video;
     }
 
