@@ -478,10 +478,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             //    mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
             //}
 
-            if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW || mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOWEST) {
+            if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_MEDIUM || mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
                 mPlayerTweaksData.enableSectionPlaylist(false);
             } else {
-                mPlayerData.setVideoBufferType(PlayerData.BUFFER_LOW);
+                mPlayerData.setVideoBufferType(PlayerData.BUFFER_MEDIUM);
             }
         } else if (Helpers.containsAny(message, "Exception in CronetUrlRequest")) {
             if (mLastVideo != null && !mLastVideo.isLive) { // Finished live stream may provoke errors in Cronet

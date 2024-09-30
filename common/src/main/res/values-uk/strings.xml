@@ -39,6 +39,7 @@
     <string name="video_buffer_size_low">Низький</string>
     <string name="video_buffer_size_med">Середній</string>
     <string name="video_buffer_size_high">Високий</string>
+    <string name="video_buffer_size_highest">Найвищий</string>
     <string name="update_changelog">Зміни</string>
     <string name="install_update">Встановити оновлення</string>
     <string name="section_is_empty">Тут нічого немає</string>

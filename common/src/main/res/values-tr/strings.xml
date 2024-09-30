@@ -39,6 +39,7 @@
     <string name="video_buffer_size_low">Düşük</string>
     <string name="video_buffer_size_med">Orta</string>
     <string name="video_buffer_size_high">Yüksek</string>
+    <string name="video_buffer_size_highest">En yüksek</string>
     <string name="update_changelog">Değişim günlüğü</string>
     <string name="install_update">Güncellemeyi yükle</string>
     <string name="section_is_empty">Hata! Burada hiçbir şey yok.</string>
