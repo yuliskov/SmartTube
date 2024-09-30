@@ -79,6 +79,7 @@ public class VideoGroup {
         videoGroup.mPosition = groupPosition;
 
         for (Video item : items) {
+            // Section as playlist fix. Don't change the root.
             if (item.getGroup() == null) {
                 item.setGroup(videoGroup);
             }
