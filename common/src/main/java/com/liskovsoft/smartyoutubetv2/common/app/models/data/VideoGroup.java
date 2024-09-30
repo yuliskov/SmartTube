@@ -79,7 +79,9 @@ public class VideoGroup {
         videoGroup.mPosition = groupPosition;
 
         for (Video item : items) {
-            item.setGroup(videoGroup);
+            if (item.getGroup() == null) {
+                item.setGroup(videoGroup);
+            }
         }
 
         return videoGroup;
