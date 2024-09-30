@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 
@@ -190,6 +191,8 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         if (!mListeners.contains(listener)) {
             if (listener instanceof GeneralData) {
                 mListeners.add(0, listener); // data classes should be called before regular listeners
+            } else if (listener instanceof SidebarService) {
+                mListeners.add(mListeners.isEmpty() ? 0 : 1, listener); // data classes should be called before regular listeners
             } else {
                 mListeners.add(listener);
             }

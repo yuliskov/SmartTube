@@ -158,6 +158,8 @@ public class ChannelGroupService implements ProfileChangeListener {
     private void cleanupChannelGroups() {
         Collection<Video> pinnedItems = SidebarService.instance(mContext).getPinnedItems();
 
-        Helpers.removeIf(mChannelGroups, value -> !pinnedItems.contains(Video.from(value)));
+        Helpers.removeIf(mChannelGroups, value -> {
+            return value.id != SUBSCRIPTION_GROUP_ID && !pinnedItems.contains(Video.from(value));
+        });
     }
 }
