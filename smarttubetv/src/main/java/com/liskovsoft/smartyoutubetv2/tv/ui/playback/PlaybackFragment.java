@@ -79,6 +79,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.previewtimebar.StoryboardSe
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.LiveChatView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.EndingTimeView;
+import com.liskovsoft.youtubeapi.common.helpers.YouTubeHelper;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -880,7 +881,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         CharSequence result = null;
 
         if (video != null) {
-            result = TextUtils.concat(video.getTitle(), " ", Video.TERTIARY_TEXT_DELIM, " ", video.getAuthor());
+            result = YouTubeHelper.createInfo(video.getTitle(), video.getAuthor());
         }
 
         return result;
