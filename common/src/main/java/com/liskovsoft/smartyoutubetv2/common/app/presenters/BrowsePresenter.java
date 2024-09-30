@@ -812,6 +812,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 callback.run();
                             } else {
                                 if (getView() != null && isHistorySection()) {
+                                    getView().showProgressBar(false);
                                     VideoGroup videoGroup = VideoGroup.from(null, getCurrentSection(), -1);
                                     videoGroup.setType(MediaGroup.TYPE_HISTORY);
                                     appendLocalHistory(videoGroup);
