@@ -39,6 +39,7 @@
     <string name="video_buffer_size_low">Niedrig</string>
     <string name="video_buffer_size_med">Mittel</string>
     <string name="video_buffer_size_high">Hoch</string>
+    <string name="video_buffer_size_highest">Sehr hoch</string>
     <string name="update_changelog">Änderungsprotokoll</string>
     <string name="install_update">Update installieren</string>
     <string name="section_is_empty">Hier ist nichts drin</string>
