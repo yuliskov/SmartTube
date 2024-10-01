@@ -39,6 +39,7 @@
     <string name="video_buffer_size_low">Basso</string>
     <string name="video_buffer_size_med">Medio</string>
     <string name="video_buffer_size_high">Alto</string>
+    <string name="video_buffer_size_highest">Più alto</string>
     <string name="update_changelog">Registro modifiche</string>
     <string name="install_update">Installa aggiornamento</string>
     <string name="section_is_empty">Ops! Non c\'è niente qui dentro</string>
@@ -79,7 +80,7 @@
     <string name="player_ui_and_pause">Interfaccia utente e pausa</string>
     <string name="player_only_pause">Fai solo una pausa</string>
     <string name="check_for_updates">Controlla aggiornamenti</string>
-    <string name="update_not_found">Stai utilizzando l\'ultima versione</string>
+    <string name="update_not_found">Stai usando l\'ultima versione</string>
     <string name="update_in_progress">Attesa…</string>
     <string name="player_ui_hide_behavior">Nascondi automaticamente l\'interfaccia utente</string>
     <string name="option_never">Mai</string>
@@ -226,7 +227,7 @@
     <string name="player_corner_ending_time">Lettore: ora di fine nell\'angolo in alto a destra</string>
     <string name="uploads_old_look">Ripristina il vecchio aspetto della sezione Caricamenti</string>
     <string name="background_playback_activation">Riproduzione in background (attivazione)</string>
-    <string name="channels_old_look">Ripristina il vecchio aspetto della sezione Canali</string>
+    <string name="channels_old_look">Vecchio aspetto della sezione Canali</string>
     <string name="channels_auto_load">Carica automaticamente il contenuto della sezione Canali</string>
     <string name="return_to_background_video">Torna al video in esecuzione in background</string>
     <string name="pin_unpin_from_sidebar">Aggiungi/Rimuovi dalla barra laterale</string>
@@ -236,6 +237,7 @@
     <string name="pin_channel">Aggiungi canale alla barra laterale</string>
     <string name="pinned_to_sidebar">Aggiunto alla barra laterale</string>
     <string name="unpin_from_sidebar">Rimuovi dalla barra laterale</string>
+    <string name="unpin_group_from_sidebar">Rimuovi il gruppo di iscrizioni</string>
     <string name="unpinned_from_sidebar">Rimosso dalla barra laterale</string>
     <string name="dialog_select_country">Paese</string>
     <string name="settings_language_country">Lingua/Paese</string>
@@ -436,8 +438,8 @@
     <string name="lb_playback_controls_skip_previous">Salta al precedente o ritorna alla posizione di partenza</string>
     <string name="alt_presets_behavior">Comportamento preset alternativi (limita la larghezza di banda)</string>
     <string name="alt_presets_behavior_desc">L\'app cercherà di mantenere la larghezza di banda corrispondente al preset selezionato invece di corrispondere tra risoluzione, fps e codec.</string>
-    <string name="sleep_timer">Timer di spegnimento (se il telecomando non viene utilizzato per un\'ora)</string>
-    <string name="sleep_timer_desc">Metti in pausa la riproduzione se l\'utente non ha utilizzato il telecomando per un\'ora</string>
+    <string name="sleep_timer">Timer di spegnimento (se il telecomando non viene usato per un\'ora)</string>
+    <string name="sleep_timer_desc">Metti in pausa la riproduzione se l\'utente non ha usato il telecomando per un\'ora</string>
     <string name="disable_vsync">Disabilita lo snap a vsync</string>
     <string name="disable_vsync_desc">Questa opzione disabilita l\'allineamento dei fotogrammi con il segnale di sincronizzazione verticale del display. Questo potrebbe migliorare le prestazioni sui dispositivi di fascia bassa rilasciando risorse della CPU.</string>
     <string name="skip_codec_profile_check">Salta il controllo del livello del profilo del codec</string>
@@ -515,7 +517,7 @@
     <string name="protect_settings_with_password">Proteggi tutte le Impostazioni con una password</string>
     <string name="enter_settings_password">Immetti password per le Impostazioni</string>
     <string name="child_mode">Modalità bambino</string>
-    <string name="child_mode_desc">In questa modalità, l\'utente non può utilizzare la ricerca o visualizzare alcun contenuto suggerito. La pagina delle impostazioni sarà protetta da password.</string>
+    <string name="child_mode_desc">In questa modalità, l\'utente non può usare la ricerca o visualizzare alcun contenuto suggerito. La pagina delle impostazioni sarà protetta da password.</string>
     <string name="lost_setting_warning">Le impostazioni dell\'app verranno modificate. Assicurati di aver creato un backup delle impostazioni.</string>
     <string name="player_button_long_click">Premi a lungo questo pulsante per ulteriori opzioni</string>
     <string name="pause_history">Metti in pausa la Cronologia</string>
@@ -578,7 +580,7 @@
     <string name="volume_boost_warning">Qualsiasi impostazione oltre il limite può potenzialmente danneggiare gli altoparlanti</string>
     <string name="play_video_incognito">Riproduci in incognito</string>
     <string name="header_kids_home">Ragazzi</string>
-    <string name="player_section_playlist">Utilizza i contenuti della sezione attuale come una playlist</string>
+    <string name="player_section_playlist">Usa i contenuti della sezione attuale come una playlist</string>
     <string name="header_trending">Tendenze</string>
     <string name="screensaver">Screensaver</string>
     <string name="player_screen_off_timeout">Timeout di spegnimento dello schermo</string>
@@ -605,7 +607,7 @@
     <string name="player_auto_volume">Regolazione automatica del volume</string>
     <string name="header_shorts">Video brevi</string>
     <string name="player_global_focus">Navigazione senza interruzioni tra le righe dei pulsanti del lettore</string>
-    <string name="auto_history">Automatico (utilizza impostazioni dell\'account)</string>
+    <string name="auto_history">Automatico (usa impostazioni dell\'account)</string>
     <string name="remember_position_subscriptions">Ricorda l\'ultima posizione visualizzata nelle Iscrizioni</string>
     <string name="remember_position_pinned">Ricorda l\'ultima posizione visualizzata nelle playlist appuntate</string>
     <string name="msg_player_unknown_error">Errore sconosciuto</string>
@@ -632,7 +634,7 @@
     <string name="hide_watched_from_watch_later">Nascondi i video già visti dalla playlist Guarda più tardi</string>
     <string name="remote_control_permission">Il controllo remoto in background richiede l\'autorizzazione alla sovrapposizione</string>
     <string name="login_from_browser">Accedi dal browser</string>
-    <string name="disable_remote_history">Disabilita la Cronologia quando si utilizza il controllo remoto</string>
+    <string name="disable_remote_history">Disabilita la Cronologia quando si usa il controllo remoto</string>
     <string name="keyboard_fix">Impedisci al pulsante OK di aprire la tastiera (G20 e altri)</string>
     <string name="nothing_found">Nessun risultato trovato</string>
     <string name="auto_frame_rate_desc">Questa opzione rimuove il tremolio nelle scene in cui la telecamera si muove velocemente, ad esempio nello sport</string>
@@ -673,8 +675,9 @@
     <string name="hide_mixes">Nascondi i mix</string>
     <string name="player_global_focus_desc">Questa funzione determina quale pulsante del lettore riceverà la messa a fuoco durante la navigazione tra le righe dei pulsanti del lettore</string>
     <string name="disable_network_error_fixing">Disabilita la correzione automatica degli errori di rete</string>
-    <string name="disable_network_error_fixing_desc">Probabilmente dovrai abilitare questa opzione se stai utilizzando una VPN</string>
+    <string name="disable_network_error_fixing_desc">Probabilmente dovrai abilitare questa opzione se stai usando una VPN</string>
     <string name="recommended">Raccomandato</string>
-    <string name="add_to_subscriptions_group">Aggiungi/Rimuovi canale da un gruppo di iscrizioni</string>
+    <string name="add_to_subscriptions_group">Aggiungi/Rimuovi dal gruppo di iscrizioni</string>
     <string name="new_subscriptions_group">Nuovo gruppo</string>
+    <string name="rename_group">Rinominare il gruppo di iscrizioni</string>
 </resources>
