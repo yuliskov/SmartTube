@@ -269,7 +269,7 @@ public class SidebarService implements ProfileChangeListener {
         // Backward compatibility
         enableSection(MediaGroup.TYPE_SETTINGS, true);
 
-        cleanupPinnedItems();
+        //cleanupPinnedItems();
     }
 
     private void transferOldPinnedItems() {

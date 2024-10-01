@@ -5,7 +5,7 @@
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:windowFullscreen">false</item>
     </style>
-    <style name="DoNotFitSystemWindows" parent="TransparentStatus">
+    <style name="BehindSystemWindows" parent="TransparentStatus">
         <item name="android:fitsSystemWindows">false</item>
         <item name="android:windowFullscreen">false</item>
     </style>
