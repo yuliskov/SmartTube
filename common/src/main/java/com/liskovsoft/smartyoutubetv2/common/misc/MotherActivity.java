@@ -72,15 +72,16 @@ public class MotherActivity extends FragmentActivity {
         initDpi();
         initTheme();
 
+        // Search Fullscreen routine inside onPause() method
         if (!mIsFullscreenModeEnabled) {
             // There's no way to do this programmatically!
-            setTheme(R.style.DoNotFitSystemWindows);
+            setTheme(R.style.FitSystemWindows);
 
             // totally disabling the translucency or any color placed on the status bar and navigation bar
-            if (Build.VERSION.SDK_INT >= 19) {
-                Window w = getWindow();
-                w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-            }
+            //if (Build.VERSION.SDK_INT >= 19) {
+            //    Window w = getWindow();
+            //    w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            //}
         }
 
         if (mIsOculusQuestFixEnabled) {

@@ -250,7 +250,7 @@ public final class Video {
      */
     @Override
     public int hashCode() {
-        int hashCode = Helpers.hashCodeAny(videoId, playlistId, reloadPageKey, playlistParams, channelId, mediaItem, sectionId, channelGroupId);
+        int hashCode = Helpers.hashCode(videoId, playlistId, reloadPageKey, playlistParams, channelId, mediaItem, sectionId, channelGroupId);
         return hashCode != -1 ? hashCode : super.hashCode();
     }
 
