@@ -67,12 +67,21 @@ public class SidebarService implements ProfileChangeListener {
                 mIsSettingsSectionEnabled = true; // prevent Settings lock
             }
 
-            Video item = new Video();
-            item.sectionId = sectionId;
+            //Video item = new Video();
+            //item.sectionId = sectionId;
+            //
+            //if (mPinnedItems.contains(item)) { // don't reorder if item already exists
+            //    return;
+            //}
 
-            if (mPinnedItems.contains(item)) { // don't reorder if item already exists
+            Video section = Helpers.findFirst(mPinnedItems, item -> item.sectionId == sectionId);
+
+            if (section != null) { // don't reorder if item already exists
                 return;
             }
+
+            Video item = new Video();
+            item.sectionId = sectionId;
 
             int index = getDefaultSectionIndex(sectionId);
 
@@ -82,7 +91,7 @@ public class SidebarService implements ProfileChangeListener {
                 mPinnedItems.add(index, item);
             }
         } else {
-            Helpers.removeIf(mPinnedItems, value -> value.sectionId == sectionId);
+            Helpers.removeIf(mPinnedItems, item -> item.sectionId == sectionId);
         }
 
         persistState();
@@ -269,7 +278,7 @@ public class SidebarService implements ProfileChangeListener {
         // Backward compatibility
         enableSection(MediaGroup.TYPE_SETTINGS, true);
 
-        //cleanupPinnedItems();
+        cleanupPinnedItems();
     }
 
     private void transferOldPinnedItems() {
