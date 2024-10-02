@@ -74,7 +74,7 @@ public class SidebarService implements ProfileChangeListener {
             //    return;
             //}
 
-            Video section = Helpers.findFirst(mPinnedItems, item -> item.sectionId == sectionId);
+            Video section = Helpers.findFirst(mPinnedItems, item -> item != null && item.sectionId == sectionId);
 
             if (section != null) { // don't reorder if item already exists
                 return;
