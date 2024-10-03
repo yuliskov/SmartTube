@@ -250,13 +250,24 @@ public class SidebarService implements ProfileChangeListener {
     private void cleanupPinnedItems() {
         Helpers.removeDuplicates(mPinnedItems);
 
-        Helpers.removeIf(mPinnedItems, value -> {
-            if (value == null) {
+        Helpers.removeIf(mPinnedItems, item -> {
+            if (item == null) {
                 return true;
             }
 
-            value.videoId = null;
-            return !value.hasPlaylist() && value.channelId == null && value.sectionId == -1 && value.channelGroupId == -1 && !value.hasReloadPageKey();
+            item.videoId = null;
+
+            // Fix id collision between pinned and default sections
+            if (item.channelGroupId != -1 && item.channelGroupId < 1_000) {
+                item.channelGroupId += 1_000;
+            }
+
+            // Fix id collision between pinned and default sections
+            if (item.getId() < 100 && item.getId() >= -1 && item.sectionId == -1) {
+                return true;
+            }
+
+            return !item.hasPlaylist() && item.channelId == null && item.sectionId == -1 && item.channelGroupId == -1 && !item.hasReloadPageKey();
         });
     }
 
