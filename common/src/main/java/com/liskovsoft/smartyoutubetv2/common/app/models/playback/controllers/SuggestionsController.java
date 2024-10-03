@@ -71,7 +71,7 @@ public class SuggestionsController extends BasePlayerController {
         // This could lead to changing current video info (title, id etc) to wrong one.
         disposeActions();
         //mCurrentGroup = video.getGroup(); // disable garbage collected
-        appendNextSectionVideoIfNeeded(video);
+        //appendNextSectionVideoIfNeeded(video); // ConcurrentModificationException error
     }
 
     /**
@@ -526,7 +526,7 @@ public class SuggestionsController extends BasePlayerController {
         }
 
         getPlayer().updateSuggestions(video.getGroup());
-        focusAndContinueIfNeeded(video.getGroup());
+        focusAndContinueIfNeeded(video.getGroup(), () -> appendNextSectionVideoIfNeeded(video));
     }
 
     private void markAsQueueIfNeeded(Video item) {
@@ -609,6 +609,10 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void focusAndContinueIfNeeded(VideoGroup group) {
+       focusAndContinueIfNeeded(group, () -> {});
+    }
+
+    private void focusAndContinueIfNeeded(VideoGroup group, Runnable onDone) {
         Video video = getPlayer().getVideo();
 
         if (group == null || group.isEmpty() || video == null || !video.hasVideo()) {
@@ -624,12 +628,14 @@ public class SuggestionsController extends BasePlayerController {
                 getPlayer().focusSuggestedItem(found);
             }
             mFocusCount = 0; // Stop the continuation loop
+            onDone.run();
         } else if (mFocusCount > MAX_PLAYLIST_CONTINUATIONS || !video.hasPlaylist()) {
             // Stop the continuation loop. Maybe the video isn't there.
             mFocusCount = 0;
+            onDone.run();
         } else {
             // load more and repeat
-            continueGroup(group, this::focusAndContinueIfNeeded, getPlayer().isSuggestionsShown());
+            continueGroup(group, newGroup -> focusAndContinueIfNeeded(newGroup, onDone), getPlayer().isSuggestionsShown());
             mFocusCount++;
         }
     }
