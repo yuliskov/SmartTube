@@ -258,7 +258,7 @@ public class SidebarService implements ProfileChangeListener {
             item.videoId = null;
 
             // Fix id collision between pinned and default sections
-            if (item.channelGroupId != -1 && item.channelGroupId < 1_000) {
+            if (item.channelGroupId != -1 && item.channelGroupId < 1_000 && item.channelGroupId >= -1) {
                 item.channelGroupId += 1_000;
             }
 
