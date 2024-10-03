@@ -55,7 +55,7 @@ public class ChannelGroup {
     }
 
     public ChannelGroup(String title, String iconUrl, List<Channel> channels) {
-        this(Helpers.getRandomNumber(1_000, Integer.MAX_VALUE), title, iconUrl, channels);
+        this(Helpers.getRandomNumber(ChannelGroupService.SUBSCRIPTION_GROUP_ID + 100, Integer.MAX_VALUE), title, iconUrl, channels);
     }
 
     public ChannelGroup(int id, String title, String iconUrl, List<Channel> channels) {
