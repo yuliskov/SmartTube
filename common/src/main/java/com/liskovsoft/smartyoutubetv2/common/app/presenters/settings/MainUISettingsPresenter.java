@@ -237,18 +237,18 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.time_format_24),
                 option -> {
-                    mGeneralData.setTimeFormat(GeneralData.TIME_FORMAT_24);
+                    mGeneralData.enable24HourLocale(true);
                     mRestartApp = true;
                 },
-                mGeneralData.getTimeFormat() == GeneralData.TIME_FORMAT_24));
+                mGeneralData.is24HourLocaleEnabled()));
 
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.time_format_12),
                 option -> {
-                    mGeneralData.setTimeFormat(GeneralData.TIME_FORMAT_12);
+                    mGeneralData.enable24HourLocale(false);
                     mRestartApp = true;
                 },
-                mGeneralData.getTimeFormat() == GeneralData.TIME_FORMAT_12));
+                !mGeneralData.is24HourLocaleEnabled()));
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.time_format), options);
     }

@@ -27,8 +27,6 @@ public class GeneralData implements ProfileChangeListener {
     public static final int BACKGROUND_PLAYBACK_SHORTCUT_HOME = 0;
     public static final int BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK = 1;
     public static final int BACKGROUND_PLAYBACK_SHORTCUT_BACK = 2;
-    public static final int TIME_FORMAT_24 = 0;
-    public static final int TIME_FORMAT_12 = 1;
     public static final int HISTORY_AUTO = 0;
     public static final int HISTORY_ENABLED = 1;
     public static final int HISTORY_DISABLED = 2;
@@ -45,7 +43,6 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsRemapFastForwardToNextEnabled;
     private int mScreensaverTimeoutMs;
     private int mScreensaverDimmingPercents;
-    private int mTimeFormat;
     private boolean mIsProxyEnabled;
     private boolean mIsBridgeCheckEnabled;
     private boolean mIsOkButtonLongPressDisabled;
@@ -511,14 +508,12 @@ public class GeneralData implements ProfileChangeListener {
         return mScreensaverDimmingPercents;
     }
 
-    public void setTimeFormat(int format) {
-        mTimeFormat = format;
-        persistState();
+    public boolean is24HourLocaleEnabled() {
+        return GlobalPreferences.sInstance.is24HourLocaleEnabled();
     }
 
-    public int getTimeFormat() {
-        //return mTimeFormat != -1 ? mTimeFormat : LocaleUtility.is24HourLocale(mContext) ? TIME_FORMAT_24 : TIME_FORMAT_12;
-        return mTimeFormat != -1 ? mTimeFormat : DateHelper.is24HourLocale(LocaleUtility.getCurrentLocale(mContext)) ? TIME_FORMAT_24 : TIME_FORMAT_12;
+    public void enable24HourLocale(boolean enable) {
+        GlobalPreferences.sInstance.enable24HourLocale(enable);
     }
 
     public void enableProxy(boolean enable) {
@@ -838,7 +833,7 @@ public class GeneralData implements ProfileChangeListener {
         //String pendingStreams = Helpers.parseStr(split, 30);
         mPendingStreams = Helpers.parseList(split, 30, Video::fromString);
         mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, true);
-        mTimeFormat = Helpers.parseInt(split, 32, -1);
+        //mTimeFormat = Helpers.parseInt(split, 32, -1);
         mSettingsPassword = Helpers.parseStr(split, 33);
         mIsChildModeEnabled = Helpers.parseBoolean(split, 34, false);
         mIsHistoryEnabled = Helpers.parseBoolean(split, 35, true);
@@ -887,7 +882,7 @@ public class GeneralData implements ProfileChangeListener {
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
-                mPlaylistOrder, mPendingStreams, mIsGlobalClockEnabled, mTimeFormat, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
+                mPlaylistOrder, mPendingStreams, mIsGlobalClockEnabled, null, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
                 mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextToSpeedEnabled, mIsRemapPlayToOKEnabled,
                 mHistoryState, mRememberSubscriptionsPosition, null, mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled,

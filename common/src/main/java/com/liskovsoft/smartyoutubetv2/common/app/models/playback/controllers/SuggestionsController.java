@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
+import android.util.Pair;
+
 import androidx.core.content.ContextCompat;
 
 import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
@@ -510,7 +512,8 @@ public class SuggestionsController extends BasePlayerController {
     private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
         mChapters = mediaItemMetadata.getChapters();
         // Reset chapter title
-        getPlayer().setSeekPreviewTitle(mChapters != null ? "..." : null); // add placeholder to fix control panel animation on the first run
+        Pair<String, Integer> index = findCurrentChapter();
+        getPlayer().setSeekPreviewTitle(index != null ? index.first : null); // add placeholder to fix control panel animation on the first run
 
         addChapterMarkersIfNeeded();
         appendChapterSuggestionsIfNeeded();
@@ -544,17 +547,24 @@ public class SuggestionsController extends BasePlayerController {
 
         VideoGroup group = getPlayer().getSuggestionsByIndex(0);
 
-        if (group == null || group.getVideos() == null) {
+        if (group == null || group.isEmpty() || !group.getVideos().get(0).isChapter) {
             return;
         }
 
-        int index = findCurrentChapterIndex(group.getVideos());
+        Pair<String, Integer> index = findCurrentChapter();
 
-        if (index != -1) {
-            String title = group.getVideos().get(index).getTitle();
-            getPlayer().focusSuggestedItem(index);
-            getPlayer().setSeekPreviewTitle(title);
+        if (index != null) {
+            getPlayer().focusSuggestedItem(index.second);
+            getPlayer().setSeekPreviewTitle(index.first);
         }
+
+        //int index = findCurrentChapterIndex(group.getVideos());
+        //
+        //if (index != -1) {
+        //    String title = group.getVideos().get(index).getTitle();
+        //    getPlayer().focusSuggestedItem(index);
+        //    getPlayer().setSeekPreviewTitle(title);
+        //}
     }
 
     private int findCurrentChapterIndex(List<Video> videos) {
@@ -572,6 +582,25 @@ public class SuggestionsController extends BasePlayerController {
         }
 
         return currentChapter;
+    }
+
+    private Pair<String, Integer> findCurrentChapter() {
+        if (mChapters == null || mChapters.isEmpty()) {
+            return null;
+        }
+
+        int idx = -1;
+        ChapterItem result = null;
+        long positionMs = getPlayer().getPositionMs();
+        for (ChapterItem chapter : mChapters) {
+            if (chapter.getStartTimeMs() > positionMs) {
+                break;
+            }
+            idx++;
+            result = chapter;
+        }
+
+        return result != null ? new Pair<>(result.getTitle(), idx) : null;
     }
 
     private List<SeekBarSegment> toSeekBarSegments(List<ChapterItem> chapters) {

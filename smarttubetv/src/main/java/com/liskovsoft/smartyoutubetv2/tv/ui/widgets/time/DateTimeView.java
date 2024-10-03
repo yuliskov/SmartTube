@@ -5,9 +5,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
+
+import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
-import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 
 /**
  * Note, same view is used inside player and in as global time view
@@ -59,11 +60,11 @@ public class DateTimeView extends TextView implements TickleListener {
             String time;
 
             if (mIsDateEnabled && !mIsTimeEnabled) {
-                time = DateFormatter.getCurrentDateShort(getContext());
+                time = DateHelper.getCurrentDateShort();
             } else if (!mIsDateEnabled && mIsTimeEnabled) {
-                time = DateFormatter.getCurrentTimeShort(getContext());
+                time = DateHelper.getCurrentTimeShort();
             } else {
-                time = DateFormatter.getCurrentDateTimeShort(getContext());
+                time = DateHelper.getCurrentDateTimeShort();
             }
 
             // https://stackoverflow.com/questions/5437674/what-unicode-characters-represent-time/9454080
