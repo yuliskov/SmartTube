@@ -641,11 +641,11 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void appendNextSectionVideoIfNeeded(Video video) {
-        mNextVideo = null;
-
         if (!video.isSectionPlaylistEnabled(getContext())) {
             return;
         }
+
+        mNextVideo = null;
 
         VideoGroup group = video.getGroup();
 
@@ -660,6 +660,7 @@ public class SuggestionsController extends BasePlayerController {
             if (found && current.hasVideo() && !current.isUpcoming) {
                 mNextRetryCount = 0;
                 mNextVideo = current;
+                getPlayer().setNextTitle(mNextVideo);
                 return;
             }
 
@@ -755,6 +756,7 @@ public class SuggestionsController extends BasePlayerController {
     private void disposeActions() {
         RxHelper.disposeActions(mActions);
         mChapters = null;
+        mNextVideo = null;
     }
 
     private void appendDislikes(Video video) {
