@@ -26,7 +26,7 @@ public class VideoStateController extends BasePlayerController {
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 90_000; // should be greater than the live buffer
     private static final long LIVE_BUFFER_MS = 60_000;
-    private static final long SHORT_LIVE_BUFFER_MS = 20_000; // Note, on buffer lower than the 60sec you'll notice segment skip
+    private static final long SHORT_LIVE_BUFFER_MS = 15_000; // Note, on buffer lower than the 60sec you'll notice segment skip
     private static final long BEGIN_THRESHOLD_MS = 10_000;
     private static final int HISTORY_UPDATE_INTERVAL_MINUTES = 5; // Sync history every five minutes
     private boolean mIsPlayEnabled;
