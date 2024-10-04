@@ -11,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoSt
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class VideoGroup {
     /**
@@ -93,7 +94,7 @@ public class VideoGroup {
         videoGroup.mSection = section;
         videoGroup.mPosition = groupPosition;
         videoGroup.mId = videoGroup.hashCode();
-        videoGroup.mVideos = new ArrayList<>();
+        videoGroup.mVideos = new CopyOnWriteArrayList<>();
         videoGroup.mMediaGroup = mediaGroup;
         videoGroup.mTitle = mediaGroup != null && mediaGroup.getTitle() != null ?
                 mediaGroup.getTitle() : section != null ? section.getTitle() : null;
@@ -357,7 +358,7 @@ public class VideoGroup {
         return mVideos.get(idx);
     }
 
-    public synchronized void remove(Video video) {
+    public void remove(Video video) {
         if (mVideos == null) {
             return;
         }
