@@ -494,7 +494,8 @@ public class SuggestionsController extends BasePlayerController {
     private void startChapterNotificationServiceIfNeededInt() {
         Utils.removeCallbacks(mChapterHandler);
 
-        showChapterDialog(getCurrentChapter());
+        Pair<ChapterItem, Integer> currentChapter = getCurrentChapter();
+        showChapterDialog(currentChapter != null ? currentChapter.first : null);
 
         if (mChapters == null) {
             return;
@@ -512,8 +513,8 @@ public class SuggestionsController extends BasePlayerController {
     private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
         mChapters = mediaItemMetadata.getChapters();
         // Reset chapter title
-        Pair<String, Integer> index = findCurrentChapter();
-        getPlayer().setSeekPreviewTitle(index != null ? index.first : null); // add placeholder to fix control panel animation on the first run
+        Pair<ChapterItem, Integer> currentChapter = getCurrentChapter();
+        getPlayer().setSeekPreviewTitle(currentChapter != null ? currentChapter.first.getTitle() : null); // add placeholder to fix control panel animation on the first run
 
         addChapterMarkersIfNeeded();
         appendChapterSuggestionsIfNeeded();
@@ -551,11 +552,11 @@ public class SuggestionsController extends BasePlayerController {
             return;
         }
 
-        Pair<String, Integer> index = findCurrentChapter();
+        Pair<ChapterItem, Integer> currentChapter = getCurrentChapter();
 
-        if (index != null) {
-            getPlayer().focusSuggestedItem(index.second);
-            getPlayer().setSeekPreviewTitle(index.first);
+        if (currentChapter != null) {
+            getPlayer().focusSuggestedItem(currentChapter.second);
+            getPlayer().setSeekPreviewTitle(currentChapter.first.getTitle());
         }
 
         //int index = findCurrentChapterIndex(group.getVideos());
@@ -567,41 +568,22 @@ public class SuggestionsController extends BasePlayerController {
         //}
     }
 
-    private int findCurrentChapterIndex(List<Video> videos) {
-        if (videos == null || !videos.get(0).isChapter) {
-            return -1;
-        }
-
-        int currentChapter = -1;
-        long positionMs = getPlayer().getPositionMs();
-        for (Video chapter : videos) {
-            if (chapter.startTimeMs > positionMs) {
-                break;
-            }
-            currentChapter++;
-        }
-
-        return currentChapter;
-    }
-
-    private Pair<String, Integer> findCurrentChapter() {
-        if (mChapters == null || mChapters.isEmpty()) {
-            return null;
-        }
-
-        int idx = -1;
-        ChapterItem result = null;
-        long positionMs = getPlayer().getPositionMs();
-        for (ChapterItem chapter : mChapters) {
-            if (chapter.getStartTimeMs() > positionMs) {
-                break;
-            }
-            idx++;
-            result = chapter;
-        }
-
-        return result != null ? new Pair<>(result.getTitle(), idx) : null;
-    }
+    //private int findCurrentChapterIndex(List<Video> videos) {
+    //    if (videos == null || !videos.get(0).isChapter) {
+    //        return -1;
+    //    }
+    //
+    //    int currentChapter = -1;
+    //    long positionMs = getPlayer().getPositionMs();
+    //    for (Video chapter : videos) {
+    //        if (chapter.startTimeMs > positionMs) {
+    //            break;
+    //        }
+    //        currentChapter++;
+    //    }
+    //
+    //    return currentChapter;
+    //}
 
     private List<SeekBarSegment> toSeekBarSegments(List<ChapterItem> chapters) {
         if (chapters == null) {
@@ -758,22 +740,24 @@ public class SuggestionsController extends BasePlayerController {
         return null;
     }
 
-    private ChapterItem getCurrentChapter() {
+    private Pair<ChapterItem, Integer> getCurrentChapter() {
         if (mChapters == null) {
             return null;
         }
 
         long positionMs = getPlayer().getPositionMs();
         ChapterItem currentChapter = null;
+        int idx = -1;
 
         for (ChapterItem chapter : mChapters) {
             if (chapter.getStartTimeMs() > (positionMs + 3_000)) {
                 break;
             }
             currentChapter = chapter;
+            idx++;
         }
 
-        return currentChapter;
+        return currentChapter != null ? new Pair<>(currentChapter, idx) : null;
     }
 
     private void callListener(MediaItemMetadata mediaItemMetadata) {
