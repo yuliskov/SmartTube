@@ -304,6 +304,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isDashUrlStreamsForced()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_stream_buffer),
+                getContext().getString(R.string.disable_stream_buffer_desc),
+                option -> mPlayerTweaksData.disableBufferOnStreams(option.isSelected()),
+                mPlayerTweaksData.isBufferOnStreamsDisabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.playback_notifications_fix),
                 getContext().getString(R.string.playback_notifications_fix_desc),
                 option -> mPlayerTweaksData.disablePlaybackNotifications(option.isSelected()),
@@ -364,11 +369,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.amazon_frame_drop_fix_desc),
                 option -> mPlayerTweaksData.enableAmazonFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isAmazonFrameDropFixEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.disable_stream_buffer),
-                getContext().getString(R.string.disable_stream_buffer_desc),
-                option -> mPlayerTweaksData.disableBufferOnStreams(option.isSelected()),
-                mPlayerTweaksData.isBufferOnStreamsDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.keep_finished_activities),
                 option -> mPlayerTweaksData.enableKeepFinishedActivity(option.isSelected()),
