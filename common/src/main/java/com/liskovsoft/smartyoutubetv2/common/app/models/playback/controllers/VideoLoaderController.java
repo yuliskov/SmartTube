@@ -484,8 +484,8 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                 mPlayerData.setVideoBufferType(PlayerData.BUFFER_MEDIUM);
             }
         } else if (Helpers.containsAny(message, "Exception in CronetUrlRequest")) {
-            if (mLastVideo != null && !mLastVideo.isLive) { // Finished live stream may provoke errors in Cronet
-                mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
+            if (mLastVideo != null && !mLastVideo.isLive && !mPlayerTweaksData.isNetworkErrorFixingDisabled()) { // Finished live stream may provoke errors in Cronet
+                mPlayerTweaksData.setPlayerDataSource(getNextEngine());
             }
         } else if (Helpers.startsWithAny(message, "Response code: 403", "Response code: 404", "Response code: 503")) {
             // "Response code: 403" (url deciphered incorrectly)

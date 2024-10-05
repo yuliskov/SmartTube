@@ -800,6 +800,7 @@ public final class Video {
 
         // Disable updates if stream ended while watching
         if (!isLive) {
+            // TODO: obtain duration from metadata somehow
             return liveDurationMs;
         }
 
