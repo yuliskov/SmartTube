@@ -682,4 +682,6 @@
     <string name="add_to_subscriptions_group">Abonelik grubuna kanal ekle/kaldır</string>
     <string name="new_subscriptions_group">Yeni grup</string>
     <string name="rename_group">Abonelik grubunun yeniden adlandır</string>
+    <string name="screen_dimming_amount">Ekran karartma miktarı</string>
+    <string name="screen_dimming_timeout">Ekran karartma zaman aşımı</string>
 </resources>

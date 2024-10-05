@@ -357,13 +357,15 @@ public class VideoGroup {
         return mVideos.get(idx);
     }
 
-    public synchronized void remove(Video video) {
+    public void remove(Video video) {
         if (mVideos == null) {
             return;
         }
 
         try {
-            mVideos.remove(video);
+            // ConcurrentModificationException fix
+            Helpers.removeIf(mVideos, item -> Helpers.equals(item, video));
+            //mVideos.remove(video);
         } catch (UnsupportedOperationException e) { // read only collection
             e.printStackTrace();
         }

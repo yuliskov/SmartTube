@@ -673,4 +673,6 @@
     <string name="add_to_subscriptions_group">Додати/видалити із групи підписок</string>
     <string name="new_subscriptions_group">Нова група</string>
     <string name="rename_group">Перейменувати групу підписок</string>
+    <string name="screen_dimming_amount">Величина затемнення екрана</string>
+    <string name="screen_dimming_timeout">Тайм-аут затемнення екрана</string>
 </resources>

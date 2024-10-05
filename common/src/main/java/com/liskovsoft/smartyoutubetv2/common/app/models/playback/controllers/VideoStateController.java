@@ -25,8 +25,10 @@ public class VideoStateController extends BasePlayerController {
     private static final String TAG = VideoStateController.class.getSimpleName();
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
     private static final long LIVE_THRESHOLD_MS = 90_000; // should be greater than the live buffer
-    private static final long LIVE_BUFFER_MS = 60_000;
-    private static final long SHORT_LIVE_BUFFER_MS = 15_000; // Note, on buffer lower than the 60sec you'll notice segment skip
+    private static final long DEFAULT_LIVE_BUFFER_MS = 60_000; // Minimum issues
+    private static final long OFFICIAL_LIVE_BUFFER_MS = 15_000; // Official app buffer
+    private static final long LIVE_BUFFER_MS = OFFICIAL_LIVE_BUFFER_MS;
+    private static final long DISABLED_LIVE_BUFFER_MS = 0; // Note, on buffer lower than the 60sec you'll notice segment skip
     private static final long BEGIN_THRESHOLD_MS = 10_000;
     private static final int HISTORY_UPDATE_INTERVAL_MINUTES = 5; // Sync history every five minutes
     private boolean mIsPlayEnabled;
@@ -95,7 +97,7 @@ public class VideoStateController extends BasePlayerController {
     public boolean onNextClicked() {
         // Seek to the actual live position on next
         if (getVideo() != null && getVideo().isLive && (getPlayer().getDurationMs() - getPlayer().getPositionMs() > LIVE_THRESHOLD_MS)) {
-            long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? SHORT_LIVE_BUFFER_MS : LIVE_BUFFER_MS;
+            long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? DISABLED_LIVE_BUFFER_MS : LIVE_BUFFER_MS;
             getPlayer().setPositionMs(getPlayer().getDurationMs() - buffer);
             return true;
         }
@@ -459,7 +461,7 @@ public class VideoStateController extends BasePlayerController {
         // Set actual position for live videos with uncommon length
         if ((state == null || state.durationMs - state.positionMs < LIVE_THRESHOLD_MS) && item.isLive) {
             // Add buffer. Should I take into account segment offset???
-            long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? SHORT_LIVE_BUFFER_MS : LIVE_BUFFER_MS;
+            long buffer = mPlayerTweaksData.isBufferOnStreamsDisabled() ? DISABLED_LIVE_BUFFER_MS : LIVE_BUFFER_MS;
             state = new State(item, getPlayer().getDurationMs() - buffer);
         }
 

@@ -25,6 +25,7 @@ public class VideoStateService implements ProfileChangeListener {
     private final AppPrefs mPrefs;
     private static final String DELIM = "&si;";
     private boolean mIsHistoryBroken;
+    private final Runnable mPersistStateReal = this::persistStateReal;
 
     private VideoStateService(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -92,6 +93,12 @@ public class VideoStateService implements ProfileChangeListener {
     }
 
     public void persistState() {
+        // Improve memory usage
+        Utils.postDelayed(mPersistStateReal, 1_000);
+        //mPrefs.setStateUpdaterData(Helpers.mergeData(getStateData(), mIsHistoryBroken));
+    }
+
+    private void persistStateReal() {
         mPrefs.setStateUpdaterData(Helpers.mergeData(getStateData(), mIsHistoryBroken));
     }
 
