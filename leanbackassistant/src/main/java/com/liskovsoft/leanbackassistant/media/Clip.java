@@ -39,7 +39,7 @@ public class Clip implements Parcelable {
     private final String mContentId;
     private final String mTitle;
     private final String mDescription;
-    private final int mDurationMs;
+    private final long mDurationMs;
     private final String mBgImageUrl;
     private final String mCardImageUrl;
     private final String mVideoUrl;
@@ -51,7 +51,7 @@ public class Clip implements Parcelable {
     private long mProgramId = -1;
     private int mViewCount;
 
-    Clip(String title, String description, int durationMs, String bgImageUrl, String cardImageUrl,
+    Clip(String title, String description, long durationMs, String bgImageUrl, String cardImageUrl,
             String videoUrl, String previewVideoUrl, boolean isVideoProtected, boolean isLive, String category,
             String clipId, String contentId, int aspectRatio) {
         mClipId = clipId;
@@ -74,7 +74,7 @@ public class Clip implements Parcelable {
         mContentId = in.readString();
         mTitle = in.readString();
         mDescription = in.readString();
-        mDurationMs = in.readInt();
+        mDurationMs = in.readLong();
         mBgImageUrl = in.readString();
         mCardImageUrl = in.readString();
         mVideoUrl = in.readString();
@@ -110,7 +110,7 @@ public class Clip implements Parcelable {
         return mDescription;
     }
 
-    public int getDurationMs() {
+    public long getDurationMs() {
         return mDurationMs;
     }
 
@@ -178,7 +178,7 @@ public class Clip implements Parcelable {
         dest.writeString(mContentId);
         dest.writeString(mTitle);
         dest.writeString(mDescription);
-        dest.writeInt(mDurationMs);
+        dest.writeLong(mDurationMs);
         dest.writeString(mBgImageUrl);
         dest.writeString(mCardImageUrl);
         dest.writeString(mVideoUrl);

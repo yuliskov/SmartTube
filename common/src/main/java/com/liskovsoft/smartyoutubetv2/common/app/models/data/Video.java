@@ -91,7 +91,8 @@ public final class Video {
     public boolean deArrowProcessed;
     public boolean isLiveEnd;
     private int startSegmentNum;
-    private long liveDurationMs;
+    private long liveDurationMs = -1;
+    private long durationMs = -1;
     private WeakReference<VideoGroup> group; // Memory leak fix. Used to get next page when scrolling.
     public List<NotificationState> notificationStates;
 
@@ -152,6 +153,7 @@ public final class Video {
         video.isShorts = item.isShorts();
         video.isMovie = item.isMovie();
         video.clickTrackingParams = item.getClickTrackingParams();
+        video.durationMs = item.getDurationMs();
         video.mediaItem = item;
 
         return video;
@@ -526,7 +528,7 @@ public final class Video {
     }
 
     public boolean isMix() {
-        return !isLive && badge != null && mediaItem != null && mediaItem.getDurationMs() <= 0 && (hasPlaylist() || hasChannel() || hasNestedItems());
+        return !isLive && badge != null && durationMs <= 0 && (hasPlaylist() || hasChannel() || hasNestedItems());
     }
 
     public boolean isEmpty() {
@@ -688,6 +690,7 @@ public final class Video {
         subscriberCount = metadata.getSubscriberCount();
         notificationStates = metadata.getNotificationStates();
         author = metadata.getAuthor();
+        durationMs = metadata.getDurationMs();
         isSynced = true;
 
         if (mediaItem != null) {
@@ -800,8 +803,8 @@ public final class Video {
 
         // Disable updates if stream ended while watching
         if (!isLive) {
-            // TODO: obtain duration from metadata somehow
-            return liveDurationMs;
+            // Stream ended. We can use real duration now.
+            return durationMs > 0 ? durationMs : liveDurationMs;
         }
 
         // Is stream real length may exceeds calculated length???
@@ -810,7 +813,7 @@ public final class Video {
     }
 
     public long getDurationMs() {
-        return mediaItem != null ? mediaItem.getDurationMs() : -1;
+        return durationMs;
     }
 
     public long getPositionMs() {
@@ -820,12 +823,12 @@ public final class Video {
 
     private long getPositionFromPercentWatched() {
         // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
-        if (mediaItem == null || percentWatched <= RESTORE_POSITION_PERCENTS || percentWatched >= 100) {
+        if (percentWatched <= RESTORE_POSITION_PERCENTS || percentWatched >= 100) {
             return 0;
         }
 
-        long posMs = (long) (mediaItem.getDurationMs() / 100 * percentWatched);
-        return posMs > 0 && posMs < mediaItem.getDurationMs() ? posMs : 0;
+        long posMs = (long) (durationMs / 100f * percentWatched);
+        return posMs > 0 && posMs < durationMs ? posMs : 0;
     }
 
     private long getPositionFromStartPosition() {

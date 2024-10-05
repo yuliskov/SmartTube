@@ -184,7 +184,7 @@ public final class SampleMediaItem implements MediaItem {
     }
 
     @Override
-    public int getDurationMs() {
+    public long getDurationMs() {
         return 0;
     }
 
