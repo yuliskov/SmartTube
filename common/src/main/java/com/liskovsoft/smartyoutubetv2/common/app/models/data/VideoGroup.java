@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoSt
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 public class VideoGroup {
@@ -363,10 +364,9 @@ public class VideoGroup {
         }
 
         try {
-            // ConcurrentModificationException fix
-            Helpers.removeIf(mVideos, item -> Helpers.equals(item, video));
-            //mVideos.remove(video);
-        } catch (UnsupportedOperationException e) { // read only collection
+            // ConcurrentModificationException fix?
+            mVideos.remove(video);
+        } catch (UnsupportedOperationException | ConcurrentModificationException e) { // read only collection
             e.printStackTrace();
         }
     }
