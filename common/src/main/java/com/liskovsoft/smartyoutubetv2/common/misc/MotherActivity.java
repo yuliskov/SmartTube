@@ -166,8 +166,12 @@ public class MotherActivity extends FragmentActivity {
     }
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        Context contextWrapper = LocaleContextWrapper.wrap(newBase, LocaleUpdater.getSavedLocale(newBase));
+    protected void attachBaseContext(Context context) {
+        Context contextWrapper = null;
+
+        if (context != null) {
+            contextWrapper = LocaleContextWrapper.wrap(context, LocaleUpdater.getSavedLocale(context));
+        }
 
         super.attachBaseContext(contextWrapper);
     }
