@@ -319,7 +319,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
                                if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument")) { // temporal fix
                                    YouTubeServiceManager.instance().applyNoPlaybackFix();
-                                   restartEngine();
+                                   reloadVideo();
                                } else {
                                    Log.e(TAG, "Probably no internet connection");
                                    scheduleReloadVideoTimer(1_000);
@@ -343,7 +343,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             bgImageUrl = mLastVideo.getBackgroundUrl();
             if (formatInfo.isHistoryBroken()) { // temp fix (not work as expected)
                 //YouTubeServiceManager.instance().applyNoPlaybackFix();
-                //scheduleRestartEngineTimer(5_000);
+                //scheduleReloadVideoTimer(5_000);
                 scheduleRebootAppTimer(5_000);
             } else {
                 scheduleNextVideoTimer(5_000);
@@ -450,12 +450,17 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     @SuppressLint("StringFormatMatches")
     private void runErrorAction(int type, int rendererIndex, Throwable error) {
-        applyGenericErrorAction(type, rendererIndex, error);
+        boolean restart = applyGenericErrorAction(type, rendererIndex, error);
 
-        restartEngine();
+        if (restart) {
+            restartEngine();
+        } else {
+            reloadVideo();
+        }
     }
 
-    private void applyGenericErrorAction(int type, int rendererIndex, Throwable error) {
+    private boolean applyGenericErrorAction(int type, int rendererIndex, Throwable error) {
+        boolean restartEngine = true;
         String message = error != null ? error.getMessage() : null;
         String errorTitle = getErrorTitle(type, rendererIndex);
         String fullErrorMsg = errorTitle + "\n" + message + "\n" + getContext().getString(R.string.applying_fix);
@@ -466,7 +471,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                 mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
             }
             MessageHelpers.showLongMessage(getContext(), errorTitle + "\n" + message);
-            return;
+            return restartEngine;
         }
 
         if (error instanceof OutOfMemoryError) {
@@ -492,6 +497,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // "Response code: 404" (not sure whether below helps)
             // "Response code: 503" (not sure whether below helps)
             YouTubeServiceManager.instance().applyNoPlaybackFix();
+            restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
             // NOTE: Fixing too many requests or network issues
             // NOTE: All these errors have unknown renderer (-1)
@@ -526,6 +532,8 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         if (type != PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
             MessageHelpers.showLongMessage(getContext(), fullErrorMsg);
         }
+
+        return restartEngine;
     }
 
     @SuppressLint("StringFormatMatches")
@@ -582,6 +590,11 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     private void restartEngine() {
         // Give a time to user to do something
         Utils.postDelayed(mRestartEngine, 1_000);
+    }
+
+    private void reloadVideo() {
+        // Give a time to user to do something
+        Utils.postDelayed(mReloadVideo, 1_000);
     }
 
     private List<String> applyFix(List<String> urlList) {
