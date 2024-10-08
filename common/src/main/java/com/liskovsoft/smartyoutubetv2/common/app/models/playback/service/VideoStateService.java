@@ -89,7 +89,7 @@ public class VideoStateService implements ProfileChangeListener {
 
         String[] split = Helpers.splitData(data);
 
-        setStateData(Helpers.parseStr(split, 0));
+        setStateDataSafe(Helpers.parseStr(split, 0));
         mIsHistoryBroken = Helpers.parseBoolean(split, 1);
     }
 
@@ -176,6 +176,14 @@ public class VideoStateService implements ProfileChangeListener {
         restoreState();
     }
 
+    private void setStateDataSafe(String data) {
+        try {
+            setStateData(data);
+        } catch (ArrayIndexOutOfBoundsException e) { // weird issue (NVidia Shield)
+            e.printStackTrace();
+        }
+    }
+
     private void setStateData(String data) {
         if (data != null) {
             String[] split = Helpers.split(DELIM, data);
@@ -194,11 +202,6 @@ public class VideoStateService implements ProfileChangeListener {
         StringBuilder sb = new StringBuilder();
 
         for (State state : mStates) {
-            // NOTE: Storage optimization!!!
-            //if (state.lengthMs <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEachEnabled()) {
-            //    continue;
-            //}
-
             if (sb.length() != 0) {
                 sb.append(DELIM);
             }
