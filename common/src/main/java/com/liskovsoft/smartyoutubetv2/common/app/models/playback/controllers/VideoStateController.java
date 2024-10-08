@@ -24,7 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 public class VideoStateController extends BasePlayerController {
     private static final String TAG = VideoStateController.class.getSimpleName();
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
-    //private static final long LIVE_THRESHOLD_MS = 90_000; // should be greater than the live buffer
+    private static final long LIVE_SPEED_THRESHOLD_MS = 90_000; // should be greater than the live buffer
     private static final long DEFAULT_LIVE_BUFFER_MS = 60_000; // Minimum issues
     private static final long OFFICIAL_LIVE_BUFFER_MS = 15_000; // Official app buffer
     private static final long LIVE_BUFFER_MS = OFFICIAL_LIVE_BUFFER_MS;
@@ -503,7 +503,7 @@ public class VideoStateController extends BasePlayerController {
     private void restoreSpeed() {
         Video item = getVideo();
 
-        if (isLiveThreshold() || isMusicVideo()) {
+        if (isLiveSpeedThreshold() || isMusicVideo()) {
             getPlayer().setSpeed(1.0f);
         } else {
             State state = mStateService.getByVideoId(item.videoId);
@@ -577,16 +577,6 @@ public class VideoStateController extends BasePlayerController {
         return mVideo;
     }
 
-    private boolean isLiveThreshold() {
-        if (getPlayer() == null) {
-            return false;
-        }
-
-        Video item = getVideo();
-        boolean isLiveThreshold = getPlayer().getDurationMs() - getPlayer().getPositionMs() < getLiveThreshold();
-        return item.isLive && isLiveThreshold;
-    }
-
     private boolean isMusicVideo() {
         Video item = getVideo();
         return item.belongsToMusic();
@@ -624,6 +614,16 @@ public class VideoStateController extends BasePlayerController {
         if (mGeneralData.isHideWatchedFromNotificationsEnabled()) { // remove any watched length
             MediaServiceManager.instance().hideNotification(video);
         }
+    }
+
+    private boolean isLiveSpeedThreshold() {
+        if (getPlayer() == null) {
+            return false;
+        }
+
+        Video item = getVideo();
+        boolean isLiveThreshold = getPlayer().getDurationMs() - getPlayer().getPositionMs() < LIVE_SPEED_THRESHOLD_MS;
+        return item.isLive && isLiveThreshold;
     }
 
     private long getLiveThreshold() {
