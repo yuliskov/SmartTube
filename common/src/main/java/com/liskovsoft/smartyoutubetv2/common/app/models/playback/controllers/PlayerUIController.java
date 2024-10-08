@@ -299,7 +299,7 @@ public class PlayerUIController extends BasePlayerController {
         getPlayer().setPlaylistAddButtonState(false);
         getPlayer().setSubtitleButtonState(false);
         getPlayer().setSpeedButtonState(false);
-        getPlayer().setChatButtonState(false);
+        getPlayer().setButtonState(R.id.action_chat, PlayerUI.BUTTON_OFF);
         getPlayer().setButtonState(R.id.action_subscribe, PlayerUI.BUTTON_OFF);
     }
 

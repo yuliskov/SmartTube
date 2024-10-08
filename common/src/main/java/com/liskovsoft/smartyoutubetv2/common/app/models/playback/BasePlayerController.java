@@ -241,16 +241,6 @@ public abstract class BasePlayerController implements PlayerEventListener {
     }
 
     @Override
-    public void onChatClicked(boolean enabled) {
-        // NOP
-    }
-
-    @Override
-    public void onChatLongClicked(boolean enabled) {
-        // NOP
-    }
-
-    @Override
     public void onVideoInfoClicked() {
         // NOP
     }

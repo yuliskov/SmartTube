@@ -472,16 +472,6 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     }
 
     @Override
-    public void onChatClicked(boolean enabled) {
-        process(listener -> listener.onChatClicked(enabled));
-    }
-
-    @Override
-    public void onChatLongClicked(boolean enabled) {
-        process(listener -> listener.onChatLongClicked(enabled));
-    }
-
-    @Override
     public void onVideoInfoClicked() {
         process(PlayerUiEventListener::onVideoInfoClicked);
     }

@@ -118,13 +118,15 @@ public class CommentsController extends BasePlayerController {
     }
 
     @Override
-    public void onChatClicked(boolean enabled) {
-        if (mCommentsKey != null && mLiveChatKey == null) {
-            openCommentsDialog();
-        }
+    public void onButtonClicked(int buttonId, int buttonState) {
+        if (buttonId == R.id.action_chat) {
+            if (mCommentsKey != null && mLiveChatKey == null) {
+                openCommentsDialog();
+            }
 
-        if (mCommentsKey == null && mLiveChatKey == null) {
-            MessageHelpers.showMessage(getContext(), R.string.section_is_empty);
+            if (mCommentsKey == null && mLiveChatKey == null) {
+                MessageHelpers.showMessage(getContext(), R.string.section_is_empty);
+            }
         }
     }
 

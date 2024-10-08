@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.CommentsController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -613,7 +614,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
                             mServiceManager.loadMetadata(mVideo, metadata -> {
                                 CommentsController controller = new CommentsController(getContext(), metadata);
-                                controller.onChatClicked(true);
+                                controller.onButtonClicked(R.id.action_chat, PlayerUI.BUTTON_ON);
                             });
                         }
                 ));

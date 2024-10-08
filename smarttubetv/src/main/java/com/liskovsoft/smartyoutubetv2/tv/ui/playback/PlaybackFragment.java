@@ -771,16 +771,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onChat(boolean enabled) {
-            mPlaybackPresenter.onChatClicked(enabled);
-        }
-
-        @Override
-        public void onChatLongPress(boolean enabled) {
-            mPlaybackPresenter.onChatLongClicked(enabled);
-        }
-
-        @Override
         public void onVideoInfo() {
             mPlaybackPresenter.onVideoInfoClicked();
         }
@@ -1330,13 +1320,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void setSpeedButtonState(boolean selected) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setSpeedButtonState(selected);
-        }
-    }
-
-    @Override
-    public void setChatButtonState(boolean selected) {
-        if (mPlayerGlue != null) {
-            mPlayerGlue.setChatButtonState(selected);
         }
     }
 
