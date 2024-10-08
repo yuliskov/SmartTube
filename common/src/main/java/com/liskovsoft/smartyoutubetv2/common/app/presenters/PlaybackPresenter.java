@@ -60,11 +60,11 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         // NOTE: position matters!!!
         mEventListeners.add(new VideoStateController());
         mEventListeners.add(new SuggestionsController());
+        mEventListeners.add(new PlayerUIController());
         mEventListeners.add(new VideoLoaderController());
         mEventListeners.add(new RemoteController(context));
         mEventListeners.add(new ContentBlockController());
         mEventListeners.add(new AutoFrameRateController());
-        mEventListeners.add(new PlayerUIController());
         mEventListeners.add(new HQDialogController());
         mEventListeners.add(new ChatController());
         mEventListeners.add(new CommentsController());
