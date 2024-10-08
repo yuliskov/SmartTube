@@ -54,8 +54,8 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
         appendSelectAccountSection(accounts, settingsPresenter);
-        appendAddAccountButton(settingsPresenter);
-        appendRemoveAccountSection(accounts, settingsPresenter);
+        appendSignInButton(settingsPresenter);
+        appendSignOutSection(accounts, settingsPresenter);
         appendProtectAccountWithPassword(settingsPresenter);
         appendSeparateSettings(settingsPresenter);
         appendSelectAccountOnBoot(settingsPresenter);
@@ -96,7 +96,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.dialog_account_list) + accountName, optionItems);
     }
 
-    private void appendRemoveAccountSection(List<Account> accounts, AppDialogPresenter settingsPresenter) {
+    private void appendSignOutSection(List<Account> accounts, AppDialogPresenter settingsPresenter) {
         if (accounts == null || accounts.isEmpty()) {
             return;
         }
@@ -118,7 +118,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.dialog_remove_account), optionItems);
     }
 
-    private void appendAddAccountButton(AppDialogPresenter settingsPresenter) {
+    private void appendSignInButton(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(
                 getContext().getString(R.string.dialog_add_account), option -> YTSignInPresenter.instance(getContext()).start()));
     }

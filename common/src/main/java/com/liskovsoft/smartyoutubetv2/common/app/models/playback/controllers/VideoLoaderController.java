@@ -469,6 +469,8 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // No internet connection
             if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
                 mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
+            } else {
+                restartEngine = false;
             }
             MessageHelpers.showLongMessage(getContext(), errorTitle + "\n" + message);
             return restartEngine;
@@ -485,12 +487,15 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
             if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_MEDIUM || mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
                 mPlayerTweaksData.enableSectionPlaylist(false);
+                restartEngine = false;
             } else {
                 mPlayerData.setVideoBufferType(PlayerData.BUFFER_MEDIUM);
             }
         } else if (Helpers.containsAny(message, "Exception in CronetUrlRequest")) {
             if (mLastVideo != null && !mLastVideo.isLive && !mPlayerTweaksData.isNetworkErrorFixingDisabled()) { // Finished live stream may provoke errors in Cronet
                 mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+            } else {
+                restartEngine = false;
             }
         } else if (Helpers.startsWithAny(message, "Response code: 403", "Response code: 404", "Response code: 503")) {
             // "Response code: 403" (url deciphered incorrectly)
@@ -507,6 +512,8 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // "Response code: 403" (url deciphered incorrectly)
             if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
                 mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+            } else {
+                restartEngine = false;
             }
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 500"
@@ -514,16 +521,22 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                 mPlayerData.disableSubtitlesPerChannel(mLastVideo.channelId);
                 mPlayerData.setFormat(mPlayerData.getDefaultSubtitleFormat());
             }
+            restartEngine = false; // ???
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_VIDEO) {
             //FormatItem videoFormat = mPlayerData.getFormat(FormatItem.TYPE_VIDEO);
             //if (!videoFormat.isPreset()) {
             //    mPlayerData.setFormat(mPlayerData.getDefaultVideoFormat());
             //}
             mPlayerData.setFormat(FormatItem.VIDEO_FHD_AVC_30);
-            mPlayerTweaksData.forceSWDecoder(false);
+            if (mPlayerTweaksData.isSWDecoderForced()) {
+                mPlayerTweaksData.forceSWDecoder(false);
+            } else {
+                restartEngine = false;
+            }
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_AUDIO) {
             //mPlayerData.setFormat(mPlayerData.getDefaultAudioFormat());
             mPlayerData.setFormat(FormatItem.AUDIO_HQ_MP4A);
+            restartEngine = false;
         } else {
             fullErrorMsg = errorTitle + "\n" + message;
         }
