@@ -96,7 +96,7 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
                     group.add(new Channel(item.getAuthor(), item.cardImageUrl, item.channelId));
                 } else {
                     group.remove(item.channelId);
-                    Object data = presenter.getCurrentSection().getData();
+                    Object data = presenter.getCurrentSection() != null ? presenter.getCurrentSection().getData() : null;
                     if (callback != null && (data instanceof Video) && ((Video) data).channelGroupId == group.id) {
                         callback.onItemAction(item, VideoMenuCallback.ACTION_REMOVE_AUTHOR);
                     }
