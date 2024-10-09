@@ -185,10 +185,6 @@ public class VideoGroup {
         return mSection;
     }
 
-    public boolean isEmpty() {
-        return mVideos == null || mVideos.isEmpty();
-    }
-
     public boolean isShorts() {
         if (isEmpty()) {
             return false;
@@ -369,6 +365,16 @@ public class VideoGroup {
         } catch (UnsupportedOperationException | ConcurrentModificationException e) { // read only collection
             e.printStackTrace();
         }
+    }
+
+    public boolean isEmpty() {
+        try {
+            return mVideos == null || mVideos.isEmpty();
+        } catch (ConcurrentModificationException e) {
+            e.printStackTrace();
+        }
+
+        return true;
     }
 
     public void add(Video video) {
