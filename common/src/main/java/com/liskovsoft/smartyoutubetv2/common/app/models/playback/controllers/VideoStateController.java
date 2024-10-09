@@ -65,6 +65,7 @@ public class VideoStateController extends BasePlayerController {
                 mTickleLeft = 0;
                 // Save state of the previous video.
                 // In case video opened from phone and other stuff.
+                removeFromHistoryIfNeeded();
                 saveState();
             }
         }
@@ -312,6 +313,7 @@ public class VideoStateController extends BasePlayerController {
     @Override
     public void onFinish() {
         mIncognito = false;
+        removeFromHistoryIfNeeded();
     }
 
     private void clearStateOfNextVideo() {
@@ -632,5 +634,14 @@ public class VideoStateController extends BasePlayerController {
 
     private long getLiveBuffer() {
         return mPlayerTweaksData.isBufferOnStreamsDisabled() ? SHORT_LIVE_BUFFER_MS : LIVE_BUFFER_MS;
+    }
+
+    private void removeFromHistoryIfNeeded() {
+        if (mGeneralData.getHistoryState() == GeneralData.HISTORY_DISABLED) {
+            Video video = getVideo();
+            if (video != null) {
+                mStateService.removeByVideoId(video.videoId);
+            }
+        }
     }
 }
