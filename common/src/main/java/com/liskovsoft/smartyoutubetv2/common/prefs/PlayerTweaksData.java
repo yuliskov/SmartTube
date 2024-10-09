@@ -72,6 +72,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsSuggestionsDisabled;
     private boolean mIsAvcOverVp9Preferred;
     private boolean mIsChatPlacedLeft;
+    private boolean mIsCommentsPlacedLeft;
     private boolean mIsRealChannelIconEnabled;
     private float mPixelRatio;
     private boolean mIsQualityInfoBitrateEnabled;
@@ -336,6 +337,15 @@ public class PlayerTweaksData implements ProfileChangeListener {
 
     public void placeChatLeft(boolean left) {
         mIsChatPlacedLeft = left;
+        persistData();
+    }
+
+    public boolean isCommentsPlacedLeft() {
+        return mIsCommentsPlacedLeft;
+    }
+
+    public void placeCommentsLeft(boolean left) {
+        mIsCommentsPlacedLeft = left;
         persistData();
     }
 
@@ -636,6 +646,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsExtraLongSpeedListEnabled = Helpers.parseBoolean(split, 49, false);
         mIsQuickSkipVideosEnabled = Helpers.parseBoolean(split, 50, false);
         mIsNetworkErrorFixingDisabled = Helpers.parseBoolean(split, 51, false);
+        mIsCommentsPlacedLeft = Helpers.parseBoolean(split, 52, false);
 
         updateDefaultValues();
     }
@@ -653,7 +664,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
                 mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsEnabled, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
-                mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled
+                mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft
                 ));
     }
 

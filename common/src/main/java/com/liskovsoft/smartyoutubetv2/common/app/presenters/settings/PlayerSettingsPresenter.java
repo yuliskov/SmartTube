@@ -525,6 +525,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.placeChatLeft(option.isSelected()),
                 mPlayerTweaksData.isChatPlacedLeft()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.place_comments_left),
+                option -> mPlayerTweaksData.placeCommentsLeft(option.isSelected()),
+                mPlayerTweaksData.isCommentsPlacedLeft()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_disable_suggestions),
                 option -> mPlayerTweaksData.disableSuggestions(option.isSelected()),
                 mPlayerTweaksData.isSuggestionsDisabled()));

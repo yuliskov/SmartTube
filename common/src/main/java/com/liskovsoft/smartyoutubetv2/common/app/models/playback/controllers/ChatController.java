@@ -106,19 +106,19 @@ public class ChatController extends BasePlayerController {
 
             options.add(UiOptionItem.from(getContext().getString(R.string.chat_left),
                     optionItem -> {
-                        mPlayerTweaksData.placeChatLeft(true);
+                        placeChatLeft(true);
                         enableLiveChat(true);
                         settingsPresenter.closeDialog();
                     },
-                    mPlayerData.isLiveChatEnabled() && mPlayerTweaksData.isChatPlacedLeft()));
+                    mPlayerData.isLiveChatEnabled() && isChatPlacedLeft()));
 
             options.add(UiOptionItem.from(getContext().getString(R.string.chat_right),
                     optionItem -> {
-                        mPlayerTweaksData.placeChatLeft(false);
+                        placeChatLeft(false);
                         enableLiveChat(true);
                         settingsPresenter.closeDialog();
                     },
-                    mPlayerData.isLiveChatEnabled() && !mPlayerTweaksData.isChatPlacedLeft()));
+                    mPlayerData.isLiveChatEnabled() && !isChatPlacedLeft()));
 
             settingsPresenter.appendRadioCategory(chatCategoryTitle, options);
 
@@ -170,5 +170,17 @@ public class ChatController extends BasePlayerController {
         if (mLiveChatKey != null) {
             getPlayer().setButtonState(R.id.action_chat, enabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
+    }
+
+    private void placeChatLeft(boolean left) {
+        if (mLiveChatKey != null) {
+            mPlayerTweaksData.placeChatLeft(left);
+        } else {
+            mPlayerTweaksData.placeCommentsLeft(left);
+        }
+    }
+
+    private boolean isChatPlacedLeft() {
+        return mLiveChatKey != null ? mPlayerTweaksData.isChatPlacedLeft() : mPlayerTweaksData.isCommentsPlacedLeft();
     }
 }

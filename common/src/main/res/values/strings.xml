@@ -485,6 +485,7 @@
     <string name="open_chat">Chat/Comments</string>
     <string name="open_comments">Open comments</string>
     <string name="place_chat_left">Place chat to the left</string>
+    <string name="place_comments_left">Place comments to the left</string>
     <string name="use_alt_speech_recognizer">Alt speech recognizer</string>
     <string name="time_format">Time format</string>
     <string name="time_format_24">24 hours</string>
