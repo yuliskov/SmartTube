@@ -585,6 +585,14 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsNetworkErrorFixingDisabled;
     }
 
+    public void preferIPv4Dns(boolean prefer) {
+        GlobalPreferences.instance(mPrefs.getContext()).preferIPv4Dns(prefer);
+    }
+
+    public boolean isIPv4DnsPreferred() {
+        return GlobalPreferences.instance(mPrefs.getContext()).isIPv4DnsPreferred();
+    }
+
     private void restoreData() {
         String data = mPrefs.getProfileData(VIDEO_PLAYER_TWEAKS_DATA);
 
