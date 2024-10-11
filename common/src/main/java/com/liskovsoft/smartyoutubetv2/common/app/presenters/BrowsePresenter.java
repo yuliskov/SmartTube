@@ -684,7 +684,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         },
                         error -> {
                             Log.e(TAG, "updateRowsHeader error: %s", error.getMessage());
-                            handleLoadError();
+                            handleLoadError(error);
                         });
 
         mActions.add(updateAction);
@@ -735,7 +735,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         },
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
-                            handleLoadError();
+                            handleLoadError(error);
                         });
 
         mActions.add(updateAction);
@@ -1099,12 +1099,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return mMainUIData.isPinnedChannelRowsEnabled() && item.hasChannel() && !item.isPlaylistAsChannel();
     }
 
-    private void handleLoadError() {
+    private void handleLoadError(Throwable error) {
         if (getView() != null) {
             getView().showProgressBar(false);
         }
         if (getView() != null && getView().isEmpty()) {
-            getView().showError(new CategoryEmptyError(getContext()));
+            getView().showError(new CategoryEmptyError(getContext(), error));
             Utils.postDelayed(mRefreshSection, 30_000);
         }
         //if (isHomeSection()) { // maybe the history turned off?
