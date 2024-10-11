@@ -24,7 +24,6 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 public class VideoStateController extends BasePlayerController {
     private static final String TAG = VideoStateController.class.getSimpleName();
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
-    private static final long LIVE_SPEED_THRESHOLD_MS = 90_000; // should be greater than the live buffer
     private static final long DEFAULT_LIVE_BUFFER_MS = 60_000; // Minimum issues
     private static final long OFFICIAL_LIVE_BUFFER_MS = 15_000; // Official app buffer
     private static final long LIVE_BUFFER_MS = OFFICIAL_LIVE_BUFFER_MS;
@@ -153,9 +152,6 @@ public class VideoStateController extends BasePlayerController {
             mTickleLeft = 0;
             updateHistory();
         }
-
-        // Restore speed on LIVE end
-        restoreSpeed();
     }
 
     @Override
@@ -166,7 +162,7 @@ public class VideoStateController extends BasePlayerController {
         restoreSubtitleFormat();
 
         // Need to contain channel id
-        restoreSpeed();
+        restoreSpeedIfNeeded();
     }
 
     @Override
@@ -248,7 +244,8 @@ public class VideoStateController extends BasePlayerController {
     @Override
     public void onBuffering() {
         // Restore speed on LIVE end or after seek
-        restoreSpeed();
+        restoreSpeedIfNeeded();
+        restoreLivePositionIfNeeded();
 
         // Live stream starts to buffer after the end
         showHideScreensaver(true);
@@ -502,10 +499,10 @@ public class VideoStateController extends BasePlayerController {
         }
     }
 
-    private void restoreSpeed() {
+    private void restoreSpeedIfNeeded() {
         Video item = getVideo();
 
-        if (isLiveSpeedThreshold() || isMusicVideo()) {
+        if (isLiveThreshold() || isMusicVideo()) {
             getPlayer().setSpeed(1.0f);
         } else {
             State state = mStateService.getByVideoId(item.videoId);
@@ -514,6 +511,12 @@ public class VideoStateController extends BasePlayerController {
                     state != null && mPlayerData.isSpeedPerVideoEnabled() ? state.speed :
                             mPlayerData.isAllSpeedEnabled() || item.channelId != null ? speed : 1.0f
             );
+        }
+    }
+
+    private void restoreLivePositionIfNeeded() {
+        if (isLiveThreshold()) {
+            getPlayer().setPositionMs(getPlayer().getDurationMs() - getLiveBuffer());
         }
     }
 
@@ -618,14 +621,12 @@ public class VideoStateController extends BasePlayerController {
         }
     }
 
-    private boolean isLiveSpeedThreshold() {
-        if (getPlayer() == null) {
+    private boolean isLiveThreshold() {
+        if (getPlayer() == null || getVideo() == null || !getVideo().isLive) {
             return false;
         }
 
-        Video item = getVideo();
-        boolean isLiveThreshold = getPlayer().getDurationMs() - getPlayer().getPositionMs() < LIVE_SPEED_THRESHOLD_MS;
-        return item.isLive && isLiveThreshold;
+        return getPlayer().getDurationMs() - getPlayer().getPositionMs() < getLiveThreshold();
     }
 
     private long getLiveThreshold() {
