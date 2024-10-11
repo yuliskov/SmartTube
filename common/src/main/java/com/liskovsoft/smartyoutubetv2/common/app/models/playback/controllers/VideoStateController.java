@@ -502,7 +502,7 @@ public class VideoStateController extends BasePlayerController {
     private void restoreSpeedIfNeeded() {
         Video item = getVideo();
 
-        if (isLiveThreshold() || isMusicVideo()) {
+        if (isLiveEnd() || isMusicVideo()) {
             getPlayer().setSpeed(1.0f);
         } else {
             State state = mStateService.getByVideoId(item.videoId);
@@ -515,7 +515,7 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void restoreLivePositionIfNeeded() {
-        if (isLiveThreshold()) {
+        if (isLiveEnd()) {
             getPlayer().setPositionMs(getPlayer().getDurationMs() - getLiveBuffer());
         }
     }
@@ -621,12 +621,12 @@ public class VideoStateController extends BasePlayerController {
         }
     }
 
-    private boolean isLiveThreshold() {
+    private boolean isLiveEnd() {
         if (getPlayer() == null || getVideo() == null || !getVideo().isLive) {
             return false;
         }
 
-        return getPlayer().getDurationMs() - getPlayer().getPositionMs() < getLiveThreshold();
+        return getPlayer().getDurationMs() - getPlayer().getPositionMs() <= 0;
     }
 
     private long getLiveThreshold() {
