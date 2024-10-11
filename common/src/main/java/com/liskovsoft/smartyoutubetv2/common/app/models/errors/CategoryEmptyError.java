@@ -24,7 +24,7 @@ public class CategoryEmptyError implements ErrorFragmentData {
     public String getMessage() {
         String result = mContext.getString(R.string.msg_cant_load_content);
         if (!Helpers.containsAny(mError.getMessage(), "fromNullable result is null")) {
-            result = mError.getMessage() + "\n" + result;
+            result = mError.getMessage();
         }
         return result;
     }
