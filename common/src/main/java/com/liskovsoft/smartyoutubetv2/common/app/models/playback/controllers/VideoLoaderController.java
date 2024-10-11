@@ -341,7 +341,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             getPlayer().showProgressBar(false);
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
-            if (formatInfo.isHistoryBroken()) { // temp fix (not work as expected)
+            if (mStateService.isHistoryBroken()) { // temp fix (not work as expected)
                 //YouTubeServiceManager.instance().applyNoPlaybackFix();
                 //scheduleReloadVideoTimer(5_000);
                 scheduleRebootAppTimer(5_000);
