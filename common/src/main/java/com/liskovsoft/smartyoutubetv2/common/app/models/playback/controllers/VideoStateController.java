@@ -626,7 +626,7 @@ public class VideoStateController extends BasePlayerController {
             return false;
         }
 
-        return getPlayer().getDurationMs() - getPlayer().getPositionMs() <= 0;
+        return getPlayer().getDurationMs() - getPlayer().getPositionMs() <= 5_000;
     }
 
     private long getLiveThreshold() {
