@@ -679,4 +679,8 @@
   <string name="new_subscriptions_group">Nouveau groupe</string>
   <string name="rename_group">Renommer le groupe d\'abonnement</string>
   <string name="unpin_group_from_sidebar">Supprimer le groupe d\'abonnement</string>
+  <string name="screen_dimming_amount">Quantité d\'assombrissement de l\'écran</string>
+  <string name="screen_dimming_timeout">Délai d\'assombrissement de l\'écran</string>
+  <string name="video_buffer_size_highest">Maximum</string>
+  <string name="place_comments_left">Placer les commentaires à gauche</string>
 </resources>
