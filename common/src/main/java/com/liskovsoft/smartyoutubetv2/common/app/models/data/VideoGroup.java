@@ -155,7 +155,9 @@ public class VideoGroup {
     }
 
     public List<Video> getVideos() {
-        return Collections.unmodifiableList(mVideos);
+        // NOTE: Don't make the collection read only
+        // The collection will be filtered inside VideoGroupObjectAdapter
+        return mVideos;
     }
 
     public String getTitle() {
