@@ -163,6 +163,10 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     private void postPlay(boolean isPlaying) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         postState(getPlayer().getPositionMs(), getPlayer().getDurationMs(), isPlaying);
     }
 
