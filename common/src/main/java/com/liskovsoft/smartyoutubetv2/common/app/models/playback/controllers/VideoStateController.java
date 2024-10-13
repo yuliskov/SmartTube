@@ -25,7 +25,7 @@ public class VideoStateController extends BasePlayerController {
     private static final String TAG = VideoStateController.class.getSimpleName();
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
     private static final long DEFAULT_LIVE_BUFFER_MS = 60_000; // Minimum issues
-    private static final long OFFICIAL_LIVE_BUFFER_MS = 20_000; // Official app buffer
+    private static final long OFFICIAL_LIVE_BUFFER_MS = 15_000; // Official app buffer
     private static final long LIVE_BUFFER_MS = OFFICIAL_LIVE_BUFFER_MS;
     private static final long SHORT_LIVE_BUFFER_MS = 0; // Note, on buffer lower than the 60sec you'll notice segment skip
     private static final long BEGIN_THRESHOLD_MS = 10_000;
