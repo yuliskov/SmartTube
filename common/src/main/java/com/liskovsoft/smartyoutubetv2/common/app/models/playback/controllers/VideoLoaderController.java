@@ -130,7 +130,8 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             getMainController().onPlayEnd();
         } else if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
             MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
-            mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
+            //mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
+            mPlayerTweaksData.setPlayerDataSource(Utils.skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET); // ???
             restartEngine();
         }
     }
@@ -463,7 +464,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         boolean restartEngine = true;
         String message = error != null ? error.getMessage() : null;
         String errorTitle = getErrorTitle(type, rendererIndex);
-        String fullErrorMsg = errorTitle + "\n" + message + "\n" + getContext().getString(R.string.applying_fix);
+        String shortErrorMsg = errorTitle + "\n" + message;
+        String fullErrorMsg = shortErrorMsg + "\n" + getContext().getString(R.string.applying_fix);
+        String resultMsg = fullErrorMsg;
 
         if (Helpers.startsWithAny(message, "Unable to connect to")) {
             // No internet connection
@@ -472,7 +475,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             } else {
                 restartEngine = false;
             }
-            MessageHelpers.showLongMessage(getContext(), errorTitle + "\n" + message);
+            MessageHelpers.showLongMessage(getContext(), shortErrorMsg);
             return restartEngine;
         }
 
@@ -540,12 +543,12 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             mPlayerData.setFormat(FormatItem.AUDIO_HQ_MP4A);
             restartEngine = false;
         } else {
-            fullErrorMsg = errorTitle + "\n" + message;
+            resultMsg = shortErrorMsg;
         }
 
         // Hide unknown errors on all devices
         if (type != PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
-            MessageHelpers.showLongMessage(getContext(), fullErrorMsg);
+            MessageHelpers.showLongMessage(getContext(), resultMsg);
         }
 
         return restartEngine;
