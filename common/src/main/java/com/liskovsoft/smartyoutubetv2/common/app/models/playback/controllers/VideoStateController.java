@@ -162,7 +162,7 @@ public class VideoStateController extends BasePlayerController {
         restoreSubtitleFormat();
 
         // Need to contain channel id
-        restoreSpeedIfNeeded();
+        restoreSpeedAndPositionIfNeeded();
     }
 
     @Override
@@ -244,8 +244,7 @@ public class VideoStateController extends BasePlayerController {
     @Override
     public void onBuffering() {
         // Restore speed on LIVE end or after seek
-        restoreSpeedIfNeeded();
-        restoreLivePositionIfNeeded();
+        restoreSpeedAndPositionIfNeeded();
 
         // Live stream starts to buffer after the end
         showHideScreensaver(true);
@@ -499,10 +498,18 @@ public class VideoStateController extends BasePlayerController {
         }
     }
 
-    private void restoreSpeedIfNeeded() {
+    private void restoreSpeedAndPositionIfNeeded() {
         Video item = getVideo();
 
-        if (isLiveEnd() || isMusicVideo()) {
+        boolean liveEnd = isLiveEnd();
+
+        // Position
+        if (liveEnd) {
+            getPlayer().setPositionMs(getPlayer().getDurationMs() - getLiveBuffer());
+        }
+
+        // Speed
+        if (liveEnd || isMusicVideo()) {
             getPlayer().setSpeed(1.0f);
         } else {
             State state = mStateService.getByVideoId(item.videoId);
@@ -511,12 +518,6 @@ public class VideoStateController extends BasePlayerController {
                     state != null && mPlayerData.isSpeedPerVideoEnabled() ? state.speed :
                             mPlayerData.isAllSpeedEnabled() || item.channelId != null ? speed : 1.0f
             );
-        }
-    }
-
-    private void restoreLivePositionIfNeeded() {
-        if (isLiveEnd()) {
-            getPlayer().setPositionMs(getPlayer().getDurationMs() - getLiveBuffer());
         }
     }
 
