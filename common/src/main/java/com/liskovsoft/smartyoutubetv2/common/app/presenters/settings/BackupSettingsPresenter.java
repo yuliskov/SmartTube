@@ -3,12 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import com.liskovsoft.googleapi.oauth2.impl.GoogleSignInService;
-import com.liskovsoft.mediaserviceinterfaces.google.data.Account;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
-import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -25,21 +21,16 @@ import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.disposables.Disposable;
-
 public class BackupSettingsPresenter extends BasePresenter<Void> {
     private static final String TAG = BackupSettingsPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static BackupSettingsPresenter sInstance;
-    private final GoogleSignInService mSignInService;
     private final GDriveBackupManager mGDriveBackupManager;
     private final GeneralData mGeneralData;
     private final SidebarService mSidebarService;
-    private Disposable mAccountListAction;
 
     private BackupSettingsPresenter(Context context) {
         super(context);
-        mSignInService = GoogleSignInService.instance();
         mGDriveBackupManager = GDriveBackupManager.instance(context);
         mGeneralData = GeneralData.instance(context);
         mSidebarService = SidebarService.instance(context);
@@ -60,16 +51,10 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
     }
 
     public void show() {
-        RxHelper.disposeActions(mAccountListAction);
-
-        mAccountListAction = mSignInService.getAccountsObserve()
-                .subscribe(
-                        this::createAndShowDialog,
-                        error -> Log.e(TAG, "Get signed accounts error: %s", error.getMessage())
-                );
+        createAndShowDialog();
     }
 
-    private void createAndShowDialog(List<Account> accounts) {
+    private void createAndShowDialog() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
         settingsPresenter.appendSingleButton(UiOptionItem.from("Google Drive", optionItem -> {
