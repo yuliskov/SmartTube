@@ -485,6 +485,7 @@
     <string name="open_chat">Chat/Commenti</string>
     <string name="open_comments">Apri i commenti</string>
     <string name="place_chat_left">Posiziona la chat a sinistra</string>
+    <string name="place_comments_left">Posiziona i commenti a sinistra</string>
     <string name="use_alt_speech_recognizer">Metodo alternativo per riconoscimento vocale</string>
     <string name="time_format">Formato orario</string>
     <string name="time_format_24">24 ore</string>
@@ -679,5 +680,7 @@
     <string name="recommended">Raccomandato</string>
     <string name="add_to_subscriptions_group">Aggiungi/Rimuovi dal gruppo di iscrizioni</string>
     <string name="new_subscriptions_group">Nuovo gruppo</string>
-    <string name="rename_group">Rinominare il gruppo di iscrizioni</string>
+    <string name="rename_group">Rinomina il gruppo di iscrizioni</string>
+    <string name="screen_dimming_amount">Quantità oscuramento schermo</string>
+    <string name="screen_dimming_timeout">Timeout oscuramento schermo</string>
 </resources>
