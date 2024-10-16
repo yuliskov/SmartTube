@@ -301,8 +301,8 @@
   <string name="ui_hide_timeout_sec">%s secunde</string>
   <string name="screen_dimming_timeout_min">%s minute</string>
   <string name="mark_all_channels_watched">Marcați toate canalele ca vizionate</string>
-  <string name="move_section_up">Mutați secțiunea în jos</string>
-  <string name="move_section_down">Mutați secțiunea în sus</string>
+  <string name="move_section_up">Mutați secțiunea în sus</string>
+  <string name="move_section_down">Mutați secțiunea în jos</string>
   <string name="player_buttons">Configurați butoanele playerului</string>
   <string name="action_playlist_add">Adaugă în lista de redare</string>
   <string name="action_video_stats">Statistici video</string>
