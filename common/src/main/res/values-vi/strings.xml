@@ -655,4 +655,9 @@
   <string name="without_picture">Không có hình ảnh</string>
   <string name="default_stack_desc">Động cơ mạng tích hợp. Động cơ này có thể có độ ổn định tốt hơn trong một số tình huống nhất định.</string>
   <string name="player_screen_off_dimming">Mờ lượng màn hình tắt</string>
+  <string name="auto_backup">Sao lưu tự động (một lần một ngày)</string>
+  <string name="disable_remote_history">Vô hiệu hóa lịch sử khi sử dụng điều khiển từ xa</string>
+  <string name="nothing_found">Không tìm thấy gì</string>
+  <string name="channel_filter_hint">Lọc kênh</string>
+  <string name="place_comments_left">Đặt bình luận ở bên trái</string>
 </resources>
