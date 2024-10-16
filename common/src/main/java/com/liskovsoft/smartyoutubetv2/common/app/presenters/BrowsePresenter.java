@@ -810,16 +810,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         isSigned -> {
                             if (isSigned) {
                                 callback.run();
-                            } else {
-                                if (getView() != null && isHistorySection()) {
+                            } else if (getView() != null) {
+                                if (isHistorySection() && !VideoStateService.instance(getContext()).isEmpty()) {
                                     getView().showProgressBar(false);
                                     VideoGroup videoGroup = VideoGroup.from(null, getCurrentSection(), -1);
                                     videoGroup.setType(MediaGroup.TYPE_HISTORY);
                                     appendLocalHistory(videoGroup);
                                     getView().updateSection(videoGroup);
-                                } else if (isSubscriptionsSection()) {
+                                } else if (isSubscriptionsSection() && !ChannelGroupService.instance(getContext()).isEmpty()) {
                                     appendLocalSubscriptions();
-                                } else if (getView() != null && isMultiGridChannelUploadsSection()) {
+                                } else if (isMultiGridChannelUploadsSection() && !ChannelGroupService.instance(getContext()).isEmpty()) {
                                     getView().showProgressBar(false);
                                     appendLocalChannels();
                                 } else if (getView().isProgressBarShowing()) {

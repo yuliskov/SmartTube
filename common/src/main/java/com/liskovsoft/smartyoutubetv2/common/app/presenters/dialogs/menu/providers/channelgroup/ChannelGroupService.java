@@ -136,6 +136,10 @@ public class ChannelGroupService implements ProfileChangeListener {
         return group != null && group.contains(channelId);
     }
 
+    public boolean isEmpty() {
+        return mChannelGroups == null || mChannelGroups.isEmpty();
+    }
+
     private void restoreState() {
         String data = mPrefs.getChannelGroupData();
 
