@@ -485,6 +485,7 @@
     <string name="open_chat">Chat/Kommentare</string>
     <string name="open_comments">Kommentare öffnen</string>
     <string name="place_chat_left">Chat auf linker Seite platzieren</string>
+    <string name="place_comments_left">Kommentare auf linker Seite platzieren</string>
     <string name="use_alt_speech_recognizer">Alternative Spracherkennung</string>
     <string name="time_format">Stunden-Format</string>
     <string name="time_format_24">24 Stunden</string>
