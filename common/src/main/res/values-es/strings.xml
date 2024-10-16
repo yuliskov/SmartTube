@@ -457,7 +457,7 @@
   <string name="releases">Publicaciones</string>
   <string name="prefer_avc_over_vp9">Selección de códecs: prefiero avc a vp9</string>
   <string name="open_chat">Chat/Comentarios</string>
-  <string name="place_chat_left">Colocar chat en la izquierda</string>
+  <string name="place_chat_left">Colocar chat a la izquierda</string>
   <string name="use_alt_speech_recognizer">Reconocimiento de voz alternativo</string>
   <string name="time_format">Modo tiempo</string>
   <string name="time_format_24">24 horas</string>
@@ -679,4 +679,7 @@
   <string name="rename_group">Renombrar el grupo de suscripción</string>
   <string name="screen_dimming_amount">Cantidad de atenuación de la pantalla</string>
   <string name="screen_dimming_timeout">Tiempo de atenuación de la pantalla</string>
+  <string name="place_comments_left">Colocar comentarios a la izquierda</string>
+  <string name="video_buffer_size_lowest">Más bajo</string>
+  <string name="video_buffer_size_highest">Más alto</string>
 </resources>
