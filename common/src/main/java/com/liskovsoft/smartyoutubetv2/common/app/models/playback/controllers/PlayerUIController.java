@@ -148,12 +148,21 @@ public class PlayerUIController extends BasePlayerController {
             return;
         }
 
+        FormatItem matchedFormat = null;
+
+        for (FormatItem item : mPlayerData.getLastSubtitleFormats()) {
+            if (getPlayer().getSubtitleFormats().contains(item)) {
+                matchedFormat = item;
+                break;
+            }
+        }
+
         // Match found
-        if (getPlayer().getSubtitleFormats().contains(mPlayerData.getLastSubtitleFormat())) {
-            FormatItem format = enabled ? FormatItem.SUBTITLE_NONE : mPlayerData.getLastSubtitleFormat();
+        if (matchedFormat != null) {
+            FormatItem format = enabled ? FormatItem.SUBTITLE_NONE : matchedFormat;
             getPlayer().setFormat(format);
             mPlayerData.setFormat(format);
-            getPlayer().setSubtitleButtonState(!FormatItem.SUBTITLE_NONE.equals(mPlayerData.getLastSubtitleFormat()) && !enabled);
+            getPlayer().setSubtitleButtonState(!FormatItem.SUBTITLE_NONE.equals(matchedFormat) && !enabled);
             enableSubtitleForChannel(!enabled);
         } else {
             // Match not found
@@ -895,13 +904,15 @@ public class PlayerUIController extends BasePlayerController {
         }
 
         // Move last format to the top
-        int index = 0;
         int begin = subtitleFormats.get(0).isDefault() ? 1 : 0;
         List<FormatItem> topSubtitles = new ArrayList<>();
-        while (index != -1) {
-            index = subtitleFormats.indexOf(mPlayerData.getLastSubtitleFormat());
-            if (index != -1) {
-                topSubtitles.add(subtitleFormats.remove(index));
+        for (FormatItem item : mPlayerData.getLastSubtitleFormats()) {
+            int index = 0;
+            while (index != -1) {
+                index = subtitleFormats.indexOf(item);
+                if (index != -1) {
+                    topSubtitles.add(subtitleFormats.remove(index));
+                }
             }
         }
         subtitleFormats.addAll(subtitleFormats.size() < begin ? 0 : begin, topSubtitles);
