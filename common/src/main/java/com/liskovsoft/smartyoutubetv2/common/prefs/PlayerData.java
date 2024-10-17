@@ -403,7 +403,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     }
 
     public FormatItem getLastSubtitleFormat() {
-        return !mLastSubtitleFormats.isEmpty() ? mLastSubtitleFormats.get(0) : null;
+        return !mLastSubtitleFormats.isEmpty() ? mLastSubtitleFormats.get(0) : FormatItem.SUBTITLE_NONE;
     }
 
     public List<FormatItem> getLastSubtitleFormats() {
@@ -819,10 +819,6 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
                 SpeedItem item = SpeedItem.fromString(speedSpec);
                 mSpeeds.put(item.channelId, item);
             }
-        }
-
-        if (mLastSubtitleFormats.isEmpty()) {
-            mLastSubtitleFormats.add(FormatItem.SUBTITLE_NONE);
         }
 
         if (!mIsAllSpeedEnabled) {
