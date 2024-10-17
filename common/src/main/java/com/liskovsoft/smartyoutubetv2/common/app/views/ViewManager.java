@@ -354,7 +354,8 @@ public class ViewManager {
     private void safeMoveTaskToBack(Activity activity) {
         try {
             activity.moveTaskToBack(true);
-        } catch (NullPointerException | IllegalArgumentException e) {
+        } catch (NullPointerException | IllegalArgumentException | IllegalStateException e) {
+            // Pinned stack isn't top stack (IllegalStateException)
             Log.e(TAG, "Error when moving task to back: %s", e.getMessage());
         }
     }
