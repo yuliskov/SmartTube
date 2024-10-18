@@ -500,10 +500,11 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             } else {
                 restartEngine = false;
             }
-        } else if (Helpers.startsWithAny(message, "Response code: 403", "Response code: 404", "Response code: 503")) {
+        } else if (Helpers.startsWithAny(message, "Response code: 403", "Response code: 404", "Response code: 503", "Response code: 400")) {
             // "Response code: 403" (url deciphered incorrectly)
             // "Response code: 404" (not sure whether below helps)
             // "Response code: 503" (not sure whether below helps)
+            // "Response code: 400" (not sure whether below helps)
             YouTubeServiceManager.instance().applyNoPlaybackFix();
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
