@@ -23,7 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
-import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
+
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -241,7 +241,7 @@ public class MediaServiceManager {
 
         RxHelper.disposeActions(mPlaylistGroupAction);
 
-        Observable<MediaGroup> observable = mContentService.getEmptyPlaylistsObserve();
+        Observable<MediaGroup> observable = mContentService.getPlaylistsObserve();
 
         mPlaylistGroupAction = observable
                 .subscribe(

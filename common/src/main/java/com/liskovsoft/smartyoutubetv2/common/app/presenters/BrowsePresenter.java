@@ -214,7 +214,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mRowMapping.put(MediaGroup.TYPE_NEWS, mContentService.getNewsObserve());
         mRowMapping.put(MediaGroup.TYPE_MUSIC, mContentService.getMusicObserve());
         mRowMapping.put(MediaGroup.TYPE_GAMING, mContentService.getGamingObserve());
-        mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mContentService.getPlaylistsObserve());
+        mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mContentService.getPlaylistRowsObserve());
 
         mGridMapping.put(MediaGroup.TYPE_SHORTS, mContentService.getShortsObserve());
         mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mContentService.getSubscriptionsObserve());
@@ -332,12 +332,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         switch (playlistsStyle) {
             case MainUIData.PLAYLISTS_STYLE_GRID:
                 mRowMapping.remove(MediaGroup.TYPE_USER_PLAYLISTS);
-                mGridMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mContentService.getEmptyPlaylistsObserve());
+                mGridMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mContentService.getPlaylistsObserve());
                 updateCategoryType(MediaGroup.TYPE_USER_PLAYLISTS, BrowseSection.TYPE_GRID);
                 break;
             case MainUIData.PLAYLISTS_STYLE_ROWS:
                 mGridMapping.remove(MediaGroup.TYPE_USER_PLAYLISTS);
-                mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mContentService.getPlaylistsObserve());
+                mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mContentService.getPlaylistRowsObserve());
                 updateCategoryType(MediaGroup.TYPE_USER_PLAYLISTS, BrowseSection.TYPE_ROW);
                 break;
         }
