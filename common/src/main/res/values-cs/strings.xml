@@ -39,6 +39,7 @@
     <string name="video_buffer_size_low">Nízká</string>
     <string name="video_buffer_size_med">Střední</string>
     <string name="video_buffer_size_high">Vysoká</string>
+    <string name="video_buffer_size_highest">Nejvyšší</string>
     <string name="update_changelog">Seznam změn</string>
     <string name="install_update">Instalovat aktualizace</string>
     <string name="section_is_empty">Tady nic není</string>
@@ -484,6 +485,7 @@
     <string name="open_chat">Chat/Komentáře</string>
     <string name="open_comments">Otevřít komentáře</string>
     <string name="place_chat_left">Umístit chat na levou stranu</string>
+    <string name="place_comments_left">Umístit komentáře na levou stranu</string>
     <string name="use_alt_speech_recognizer">Alternativní rozpoznávač řeči</string>
     <string name="time_format">Časový režim</string>
     <string name="time_format_24">24 hodin</string>
@@ -679,4 +681,6 @@
     <string name="add_to_subscriptions_group">Přidat/Odebrat ze skupiny odběrů</string>
     <string name="new_subscriptions_group">Nová skupina</string>
     <string name="rename_group">Přejmenovat skupinu odběrů</string>
+    <string name="screen_dimming_amount">Míra ztmavení obrazovky</string>
+    <string name="screen_dimming_timeout">Časový limit ztmavení obrazovky</string>
 </resources>
