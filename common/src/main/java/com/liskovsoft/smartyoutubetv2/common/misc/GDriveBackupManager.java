@@ -155,8 +155,7 @@ public class GDriveBackupManager {
     }
 
     private void startRestore() {
-        String backupDir = getBackupDir();
-        startRestore(backupDir, mDataDir, () -> startRestore(applyAltPackageName(backupDir), mDataDir, null));
+        startRestore(getBackupDir(), mDataDir, () -> startRestore(getAltBackupDir(), mDataDir, null));
     }
 
     private void startRestore(String backupDir, String dataDir, Runnable onError) {
@@ -164,6 +163,9 @@ public class GDriveBackupManager {
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io()) // run subscribe on separate thread
                 .subscribe(names -> {
+                    // remove old data
+                    FileHelpers.delete(dataDir);
+
                     for (String name : names) {
                         if (checkFileName(name)) {
                             MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_restore) + "\n" + name);
@@ -194,11 +196,6 @@ public class GDriveBackupManager {
         return name.replace(altPackageName, mContext.getPackageName());
     }
 
-    private String applyAltPackageName(String name) {
-        String altPackageName = getAltPackageName();
-        return name.replace(mContext.getPackageName(), altPackageName);
-    }
-
     private String getAltPackageName() {
         String[] altPackages = new String[] {"com.liskovsoft.smarttubetv.beta", "com.teamsmart.videomanager.tv"};
         return mContext.getPackageName().equals(altPackages[0]) ? altPackages[1] : altPackages[0];
@@ -206,6 +203,12 @@ public class GDriveBackupManager {
 
     private String getDeviceSuffix() {
         return mGeneralData.isDeviceSpecificBackupEnabled() ? "_" + Build.MODEL.replace(" ", "_") : "";
+    }
+
+    private String getAltBackupDir() {
+        String backupDir = getBackupDir();
+        String altPackageName = getAltPackageName();
+        return backupDir.replace(mContext.getPackageName(), altPackageName);
     }
 
     public String getBackupDir() {
