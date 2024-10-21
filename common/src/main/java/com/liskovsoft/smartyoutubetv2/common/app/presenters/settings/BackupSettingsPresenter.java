@@ -72,11 +72,17 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendGDriveRestoreSettings(AppDialogPresenter settingsPresenter) {
-        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.app_restore), optionItem -> mGDriveBackupManager.restore()));
+        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.app_restore), optionItem -> {
+            mGDriveBackupManager.restore();
+            settingsPresenter.closeDialog();
+        }));
     }
 
     private void appendGDriveBackupSettings(AppDialogPresenter settingsPresenter) {
-        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.app_backup), optionItem -> mGDriveBackupManager.backup()));
+        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.app_backup), optionItem -> {
+            mGDriveBackupManager.backup();
+            settingsPresenter.closeDialog();
+        }));
     }
 
     private void appendGDriveMiscButton(AppDialogPresenter settingsPresenter) {

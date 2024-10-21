@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.Collection;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -32,6 +33,7 @@ public class GDriveBackupManager {
     private static GDriveBackupManager sInstance;
     private final Context mContext;
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
+    private static final String BACKUP_NAME = "backup.zip";
     private final GoogleSignInService mSignInService;
     private final DriveService mDriveService;
     private final String mDataDir;
@@ -175,6 +177,45 @@ public class GDriveBackupManager {
                         }
                     }
                     
+                    Utils.restartTheApp(mContext);
+                }, error -> {
+                    if (onError != null)
+                        onError.run();
+                    else MessageHelpers.showLongMessage(mContext, R.string.nothing_found);
+                });
+    }
+
+
+    private void startBackup2(String backupDir, String dataDir) {
+        File source = new File(dataDir);
+        File zipFile = new File(mContext.getCacheDir(), BACKUP_NAME);
+        ZipHelper.zipFolder(source, zipFile);
+
+        Observable<Void> uploadFile = mDriveService.uploadFile(zipFile, Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)));
+
+        if (mIsBlocking) {
+            RxHelper.runBlocking(uploadFile);
+        } else {
+            mBackupAction = uploadFile
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(unused -> {}, error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
+        }
+    }
+
+    private void startRestore2(String backupDir, String dataDir, Runnable onError) {
+        mRestoreAction = mDriveService.getFile(Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(inputStream -> {
+                    File zipFile = new File(mContext.getCacheDir(), BACKUP_NAME);
+                    FileHelpers.copy(inputStream, zipFile);
+
+                    // remove old data
+                    File out = new File(dataDir);
+                    FileHelpers.delete(out);
+                    ZipHelper.unzipToFolder(zipFile, out);
+
                     Utils.restartTheApp(mContext);
                 }, error -> {
                     if (onError != null)
