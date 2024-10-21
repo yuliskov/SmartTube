@@ -128,6 +128,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         appendAccountSelectionButton();
         appendMoveSectionButton();
         appendRenameSectionButton();
+        appendClearHistoryButton();
 
         for (Long menuItem : MainUIData.instance(getContext()).getMenuItemsOrdered()) {
             MenuAction menuAction = mMenuMapping.get(menuItem);
