@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.prefs.common;
 
-import com.liskovsoft.smartyoutubetv2.common.utils.WeakHashSet;
+import com.liskovsoft.sharedutils.misc.WeakHashSet;
 
 public abstract class DataChangeBase {
     public interface OnDataChange {

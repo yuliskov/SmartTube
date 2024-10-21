@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.smartyoutubetv2.common.utils.WeakHashSet;
+import com.liskovsoft.sharedutils.misc.WeakHashSet;
 
 public class TickleManager {
     private static final String TAG = TickleManager.class.getSimpleName();

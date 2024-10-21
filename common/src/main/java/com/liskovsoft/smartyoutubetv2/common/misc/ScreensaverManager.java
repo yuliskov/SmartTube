@@ -17,7 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.smartyoutubetv2.common.utils.WeakHashSet;
+import com.liskovsoft.sharedutils.misc.WeakHashSet;
 
 import java.lang.ref.WeakReference;
 
