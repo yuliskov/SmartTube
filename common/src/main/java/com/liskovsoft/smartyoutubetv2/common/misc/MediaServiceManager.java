@@ -91,9 +91,7 @@ public class MediaServiceManager {
         mSingInService = service.getSignInService();
         mNotificationsService = service.getNotificationsService();
 
-        mSingInService.setOnChange(
-                () -> onAccountChanged(mSingInService.getSelectedAccount())
-        );
+        mSingInService.addOnAccountChange(this::onAccountChanged);
     }
 
     public static MediaServiceManager instance() {
