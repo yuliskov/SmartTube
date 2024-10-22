@@ -17,7 +17,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.GoogleSignInPresente
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 
 import java.io.File;
 import java.util.Collection;
@@ -81,10 +80,6 @@ public class GDriveBackupManager {
     }
 
     private void backupInt() {
-        if (!YouTubeSignInService.instance().isSigned()) {
-            return;
-        }
-
         if (mIsBlocking && !mSignInService.isSigned()) {
             return;
         }
