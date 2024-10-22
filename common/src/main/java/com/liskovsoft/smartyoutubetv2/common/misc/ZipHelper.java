@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.misc;
 
+import com.liskovsoft.sharedutils.helpers.Helpers;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -11,9 +13,9 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class ZipHelper {
-    public static boolean zipFolder(File sourceFolder, File zipFile) {
+    public static boolean zipFolder(File sourceFolder, File zipFile, String[] backupPatterns) {
         try (ZipOutputStream zipOut = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipFile)))) {
-            zipFolderRecursive(sourceFolder, sourceFolder, zipOut);
+            zipFolderRecursive(sourceFolder, sourceFolder, zipOut, backupPatterns);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -21,7 +23,7 @@ public class ZipHelper {
         }
     }
 
-    private static void zipFolderRecursive(File rootFolder, File currentFile, ZipOutputStream zipOut) throws IOException {
+    private static void zipFolderRecursive(File rootFolder, File currentFile, ZipOutputStream zipOut, String[] backupPatterns) throws IOException {
         String entryName = rootFolder.toURI().relativize(currentFile.toURI()).getPath();
 
         if (currentFile.isDirectory()) {
@@ -32,7 +34,8 @@ public class ZipHelper {
             File[] children = currentFile.listFiles();
             if (children != null) {
                 for (File child : children) {
-                    zipFolderRecursive(rootFolder, child, zipOut);
+                    if (Helpers.endsWithAny(child.getName(), backupPatterns))
+                        zipFolderRecursive(rootFolder, child, zipOut, backupPatterns);
                 }
             }
         } else {

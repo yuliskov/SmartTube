@@ -125,7 +125,7 @@ public class GDriveBackupManager {
 
     private void startBackup() {
         String backupDir = getBackupDir();
-        startBackup(backupDir, mDataDir);
+        startBackup2(backupDir, mDataDir);
     }
 
     private void startBackup(String backupDir, String dataDir) {
@@ -152,12 +152,36 @@ public class GDriveBackupManager {
         }
     }
 
+    private void startBackup2(String backupDir, String dataDir) {
+        File source = new File(dataDir);
+        File zipFile = new File(mContext.getCacheDir(), BACKUP_NAME);
+        ZipHelper.zipFolder(source, zipFile, mBackupNames);
+
+        Observable<Void> uploadFile = mDriveService.uploadFile(zipFile, Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)));
+
+        if (mIsBlocking) {
+            RxHelper.runBlocking(uploadFile);
+        } else {
+            mBackupAction = uploadFile
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            unused -> {},
+                            error -> MessageHelpers.showLongMessage(mContext, error.getMessage()),
+                            () -> MessageHelpers.showMessage(mContext, mContext.getString(R.string.app_backup) + "\n" + BACKUP_NAME)
+                    );
+        }
+    }
+
     private void startRestoreConfirm() {
         AppDialogUtil.showConfirmationDialog(mContext, mContext.getString(R.string.app_restore), this::startRestore);
     }
 
     private void startRestore() {
-        startRestore(getBackupDir(), mDataDir, () -> startRestore(getAltBackupDir(), mDataDir, null));
+        startRestore2(getBackupDir(), mDataDir,
+                () -> startRestore2(getAltBackupDir(), mDataDir,
+                        () -> startRestore(getBackupDir(), mDataDir,
+                                () -> startRestore(getAltBackupDir(), mDataDir, null))));
     }
 
     private void startRestore(String backupDir, String dataDir, Runnable onError) {
@@ -185,24 +209,6 @@ public class GDriveBackupManager {
                 });
     }
 
-
-    private void startBackup2(String backupDir, String dataDir) {
-        File source = new File(dataDir);
-        File zipFile = new File(mContext.getCacheDir(), BACKUP_NAME);
-        ZipHelper.zipFolder(source, zipFile);
-
-        Observable<Void> uploadFile = mDriveService.uploadFile(zipFile, Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)));
-
-        if (mIsBlocking) {
-            RxHelper.runBlocking(uploadFile);
-        } else {
-            mBackupAction = uploadFile
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(unused -> {}, error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
-        }
-    }
-
     private void startRestore2(String backupDir, String dataDir, Runnable onError) {
         mRestoreAction = mDriveService.getFile(Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)))
                 .subscribeOn(Schedulers.io())
@@ -215,13 +221,14 @@ public class GDriveBackupManager {
                     File out = new File(dataDir);
                     FileHelpers.delete(out);
                     ZipHelper.unzipToFolder(zipFile, out);
+                    fixFileNames(out);
 
                     Utils.restartTheApp(mContext);
                 }, error -> {
                     if (onError != null)
                         onError.run();
                     else MessageHelpers.showLongMessage(mContext, R.string.nothing_found);
-                });
+                }, () -> MessageHelpers.showMessage(mContext, mContext.getString(R.string.app_restore) + "\n" + BACKUP_NAME));
     }
 
     private void logIn(Runnable onDone) {
@@ -254,5 +261,22 @@ public class GDriveBackupManager {
 
     public String getBackupDir() {
         return mBackupDir + getDeviceSuffix();
+    }
+
+    /**
+     * Fix file names from other app versions
+     */
+    private void fixFileNames(File dataDir) {
+        Collection<File> files = FileHelpers.listFileTree(dataDir);
+
+        String suffix = "_preferences.xml";
+        String targetName = mContext.getPackageName() + suffix;
+
+        for (File file : files) {
+            if (file.getName().endsWith(suffix) && !file.getName().endsWith(targetName)) {
+                FileHelpers.copy(file, new File(file.getParentFile(), targetName));
+                FileHelpers.delete(file);
+            }
+        }
     }
 }
