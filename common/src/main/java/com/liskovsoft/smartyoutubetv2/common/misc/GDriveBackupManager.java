@@ -162,7 +162,7 @@ public class GDriveBackupManager {
         if (mIsBlocking) {
             RxHelper.runBlocking(uploadFile);
         } else {
-            MessageHelpers.showMessage(mContext, mContext.getString(R.string.app_backup) + "\n" + BACKUP_NAME);
+            MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_backup));
             mBackupAction = uploadFile
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -211,12 +211,11 @@ public class GDriveBackupManager {
     }
 
     private void startRestore2(String backupDir, String dataDir, Runnable onError) {
+        MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_restore));
         mRestoreAction = mDriveService.getFile(Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(inputStream -> {
-                    MessageHelpers.showMessage(mContext, mContext.getString(R.string.app_restore) + "\n" + BACKUP_NAME);
-
                     File zipFile = new File(mContext.getCacheDir(), BACKUP_NAME);
                     FileHelpers.copy(inputStream, zipFile);
 
