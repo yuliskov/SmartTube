@@ -647,7 +647,7 @@
   <string name="dearrow_not_submitted_thumbs">Nguồn hình thu nhỏ (nếu không có đệ trình DeArrow)</string>
   <string name="player_quick_shorts_skip">Bỏ qua Shorts với nút trái/phải</string>
   <string name="player_quick_skip_videos">Bỏ qua video thường xuyên với nút trái/phải</string>
-  <string name="channels_filter"></string>
+  <string name="channels_filter">Hiển thị trường kênh lọc bên trong phần Kênh</string>
   <string name="channel_search_bar">Thanh tìm kiếm bên trong trang Kênh</string>
   <string name="keep_finished_activities">Giữ lại các hoạt động đã hoàn thành</string>
   <string name="login_from_browser">Đăng nhập từ trình duyệt</string>
@@ -660,4 +660,7 @@
   <string name="nothing_found">Không tìm thấy gì</string>
   <string name="channel_filter_hint">Lọc kênh</string>
   <string name="place_comments_left">Đặt bình luận ở bên trái</string>
+  <string name="prefer_ipv4">Ưu tiên IPv4 DNS</string>
+  <string name="disable_network_error_fixing">Vô hiệu hóa chức năng tự động sửa lỗi mạng</string>
+  <string name="disable_network_error_fixing_desc">Bạn có thể cần phải bật tùy chọn này nếu bạn đang sử dụng VPN</string>
 </resources>
