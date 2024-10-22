@@ -162,13 +162,14 @@ public class GDriveBackupManager {
         if (mIsBlocking) {
             RxHelper.runBlocking(uploadFile);
         } else {
+            MessageHelpers.showMessage(mContext, mContext.getString(R.string.app_backup) + "\n" + BACKUP_NAME);
             mBackupAction = uploadFile
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             unused -> {},
                             error -> MessageHelpers.showLongMessage(mContext, error.getMessage()),
-                            () -> MessageHelpers.showMessage(mContext, mContext.getString(R.string.app_backup) + "\n" + BACKUP_NAME)
+                            () -> MessageHelpers.showMessage(mContext, R.string.msg_done)
                     );
         }
     }
@@ -214,11 +215,13 @@ public class GDriveBackupManager {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(inputStream -> {
+                    MessageHelpers.showMessage(mContext, mContext.getString(R.string.app_restore) + "\n" + BACKUP_NAME);
+
                     File zipFile = new File(mContext.getCacheDir(), BACKUP_NAME);
                     FileHelpers.copy(inputStream, zipFile);
 
-                    // remove old data
                     File out = new File(dataDir);
+                    // remove old data
                     FileHelpers.delete(out);
                     ZipHelper.unzipToFolder(zipFile, out);
                     fixFileNames(out);
@@ -228,7 +231,7 @@ public class GDriveBackupManager {
                     if (onError != null)
                         onError.run();
                     else MessageHelpers.showLongMessage(mContext, R.string.nothing_found);
-                }, () -> MessageHelpers.showMessage(mContext, mContext.getString(R.string.app_restore) + "\n" + BACKUP_NAME));
+                }, () -> MessageHelpers.showMessage(mContext, R.string.msg_done));
     }
 
     private void logIn(Runnable onDone) {
