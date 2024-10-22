@@ -315,7 +315,7 @@
   <string name="player_seek_confirmation_pause">Vahvistuksella (tauko etsimisen aikana)</string>
   <string name="player_seek_confirmation_play">Vahvistuksella (toista kun etsitään)</string>
   <string name="hide_shorts_from_home">Piilota Shorts-videot Koti-näkymästä</string>
-  <string name="finish_on_disconnect">Lopeta sovellus kun puhelin irroitetaan</string>
+  <string name="finish_on_disconnect">Lopeta sovellus kun laite irroitetaan</string>
   <string name="update_error">Päivitys ei onnistunut</string>
   <string name="unpin_from_sidebar">Poista sivuvalikosta</string>
   <string name="player_show_ending_time">Näytä loppuaika</string>
@@ -343,7 +343,7 @@
   <string name="openvpn_application_aborted">Korjaa OpenVPN asetuksia</string>
   <string name="openvpn_test_aborted">Testi keskeytetty, korjaa ensin OpenVPN asetukset.</string>
   <string name="openvpn_address_invalid">OpenVPN-asetukset asettamatta</string>
-  <string name="internet_censorship">Internet sensuuri</string>
+  <string name="internet_censorship">Internetsensuuri</string>
   <string name="rename_section">Nimeä tämä osio uudelleen</string>
   <string name="simple_edit_value_hint">Uusi arvo</string>
   <string name="seek_interval">Hakuväli</string>
@@ -623,7 +623,7 @@
   <string name="share_qr_link">Jaa linkki (QR-koodi)</string>
   <string name="hide_upcoming_channel">Piilota tulevat kanavalta</string>
   <string name="hide_upcoming_home">Piilota tulevat koti-näkymästä</string>
-  <string name="hide_shorts_from_trending">Piilota sShorts-videot Trendaavista</string>
+  <string name="hide_shorts_from_trending">Piilota Shorts-videot trendaavista</string>
   <string name="player_exit_shortcut">Poistu soittimesta</string>
   <string name="action_sound_off">Ääni pois</string>
   <string name="remember_position_of_live_videos">Muista livestriimin kohta</string>
@@ -673,4 +673,13 @@
   <string name="disable_network_error_fixing">Poista automaattinen verkkovirheiden korjaus käytöstä</string>
   <string name="disable_network_error_fixing_desc">Sinun on luultavasti otettava tämä vaihtoehto käyttöön, jos käytät VPN:ää.</string>
   <string name="video_buffer_size_lowest">Matalin</string>
+  <string name="recommended">Suositeltu</string>
+  <string name="add_to_subscriptions_group">Lisää/poista tilausryhmästä</string>
+  <string name="new_subscriptions_group">Uusi ryhmä</string>
+  <string name="rename_group">Nimeä tilausryhmä uudelleen</string>
+  <string name="screen_dimming_amount">Näytön himmennyksen määrä</string>
+  <string name="screen_dimming_timeout">Näytön himmennyksen aikakatkaisu</string>
+  <string name="place_comments_left">Aseta kommentit vasemmalle</string>
+  <string name="video_buffer_size_highest">Korkein</string>
+  <string name="unpin_group_from_sidebar">Poista tilausryhmä</string>
 </resources>
