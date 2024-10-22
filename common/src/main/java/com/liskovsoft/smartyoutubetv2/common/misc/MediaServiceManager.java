@@ -8,6 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.NotificationsService;
 import com.liskovsoft.mediaserviceinterfaces.yt.SignInService;
+import com.liskovsoft.mediaserviceinterfaces.yt.SignInService.OnAccountChange;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
@@ -32,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MediaServiceManager {
+public class MediaServiceManager implements OnAccountChange {
     private static final String TAG = SettingsManager.class.getSimpleName();
     private static MediaServiceManager sInstance;
     private final MediaItemService mItemService;
@@ -91,7 +92,7 @@ public class MediaServiceManager {
         mSingInService = service.getSignInService();
         mNotificationsService = service.getNotificationsService();
 
-        mSingInService.addOnAccountChange(this::onAccountChanged);
+        mSingInService.addOnAccountChange(this);
     }
 
     public static MediaServiceManager instance() {
@@ -428,7 +429,8 @@ public class MediaServiceManager {
         return mSingInService.isSigned();
     }
 
-    private void onAccountChanged(Account account) {
+    @Override
+    public void onAccountChanged(Account account) {
         for (AccountChangeListener listener : mAccountListeners) {
             listener.onAccountChanged(account);
         }
