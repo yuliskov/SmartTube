@@ -646,7 +646,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsHighBitrateFormatsEnabled = Helpers.parseBoolean(split, 43, false);
         mIsLoopShortsEnabled = Helpers.parseBoolean(split, 44, true);
         mIsQuickSkipShortsEnabled = Helpers.parseBoolean(split, 45, true);
-        mIsRememberPositionOfLiveVideosEnabled = Helpers.parseBoolean(split, 46, false);
+        mIsRememberPositionOfLiveVideosEnabled = Helpers.parseBoolean(split, 46, true);
         mIsOculusQuestFixEnabled = Helpers.parseBoolean(split, 47, Utils.isOculusQuest());
         // mPlayerDataSource was here
         // Cronet is buffering too, unfortunately, so leave the default as a safest method (e.g. for "strtarmenia")

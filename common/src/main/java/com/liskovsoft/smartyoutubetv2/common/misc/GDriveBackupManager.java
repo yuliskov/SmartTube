@@ -51,6 +51,7 @@ public class GDriveBackupManager {
         mSignInService = GoogleSignInService.instance();
         mDriveService = GDriveService.instance();
         mBackupNames = new String[] {
+                "search_tag_storage.xml",
                 "com.liskovsoft.appupdatechecker2.preferences.xml",
                 "com.liskovsoft.sharedutils.prefs.GlobalPreferences.xml",
                 "_preferences.xml" // before _ should be the app package name

@@ -531,6 +531,10 @@ public final class Video {
         return !isLive && badge != null && durationMs <= 0 && (hasPlaylist() || hasChannel() || hasNestedItems());
     }
 
+    public boolean isFullLive() {
+        return isLive && startSegmentNum == 0;
+    }
+
     public boolean isEmpty() {
         if (isChapter) {
             return false;

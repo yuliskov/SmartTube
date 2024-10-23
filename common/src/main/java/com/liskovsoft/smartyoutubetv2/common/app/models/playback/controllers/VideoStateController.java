@@ -332,7 +332,11 @@ public class VideoStateController extends BasePlayerController {
         // Reset position of music videos
         boolean isShort = state != null && state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled();
         boolean isVideoEnded = state != null && state.durationMs - state.positionMs < 3_000;
-        boolean isLive = item.isLive && !mPlayerTweaksData.isRememberPositionOfLiveVideosEnabled();
+        boolean isLive = item.isLive;
+
+        if (mPlayerTweaksData.isRememberPositionOfLiveVideosEnabled() && item.isFullLive()) {
+            isLive = false;
+        }
 
         if (isShort || isVideoEnded || isLive) {
             resetPosition(item);
