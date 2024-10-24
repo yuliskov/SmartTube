@@ -313,6 +313,8 @@ public class ViewManager {
 
             PlaybackPresenter.instance(activity).forceFinish();
 
+            exitToHomeScreen(); // fix open another app from the history stack
+
             // Fix: can't start finished app activity from history.
             // Do reset state because the app should continue to run in the background.
             // NOTE: Don't rely on MotherActivity.onDestroy() because activity can be killed silently.
@@ -325,6 +327,13 @@ public class ViewManager {
                 mIsMoveToBackEnabled = false;
             }, 1_000);
         }
+    }
+
+    private void exitToHomeScreen() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        safeStartActivity(mContext, intent);
     }
 
     public Class<?> getTopView() {
