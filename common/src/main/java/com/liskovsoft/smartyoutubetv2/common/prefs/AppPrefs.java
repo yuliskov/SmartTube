@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
+import com.liskovsoft.sharedutils.misc.WeakHashSet;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
@@ -30,7 +31,7 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
     private static final String LAST_PROFILE_NAME = "last_profile_name";
     private String mBootResolution;
     private final Map<String, Integer> mDataHashes = new HashMap<>();
-    private final List<ProfileChangeListener> mListeners = new CopyOnWriteArrayList<>();
+    private final WeakHashSet<ProfileChangeListener> mListeners = new WeakHashSet<>();
 
     public interface ProfileChangeListener {
         void onProfileChanged();
@@ -48,11 +49,8 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
 
     @Override
     public void onAccountChanged(Account account) {
-        //if (isMultiProfilesEnabled()) {
-        //    selectAccount(account);
-        //}
-
         selectAccount(account);
+        onProfileChanged();
     }
 
     public static AppPrefs instance(Context context) {
@@ -168,23 +166,15 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
     }
 
     private void selectProfile(String profileName) {
-        //if (isMultiProfilesEnabled() && profileName == null) {
-        //    profileName = ANONYMOUS_PROFILE_NAME;
-        //}
-
         if (profileName == null) {
             profileName = ANONYMOUS_PROFILE_NAME;
         }
 
         setProfileName(profileName);
-
-        onProfileChanged();
     }
 
     private void onProfileChanged() {
-        for (ProfileChangeListener listener : mListeners) {
-            listener.onProfileChanged();
-        }
+        mListeners.forEach(ProfileChangeListener::onProfileChanged);
     }
 
     public void addListener(ProfileChangeListener listener) {
