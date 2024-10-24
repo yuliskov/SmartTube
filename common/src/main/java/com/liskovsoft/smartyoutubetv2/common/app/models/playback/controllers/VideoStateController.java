@@ -447,17 +447,12 @@ public class VideoStateController extends BasePlayerController {
         State state = mStateService.getByVideoId(item.videoId);
 
         boolean stateIsOutdated = isStateOutdated(state, item);
-        if (item.getPositionMs() > 0 && stateIsOutdated) { // check that the user logged in
+        if (stateIsOutdated) { // check that the user logged in
             // Web state is buggy on short videos (e.g. video clips)
             boolean isLongVideo = getPlayer().getDurationMs() > MUSIC_VIDEO_MAX_DURATION_MS;
             if (isLongVideo) {
                 state = new State(item, item.getPositionMs());
             }
-        }
-
-        // Web live position is broken. Ignore it.
-        if (stateIsOutdated && item.isLive) {
-            state = null;
         }
 
         // Set actual position for live videos with uncommon length
@@ -603,6 +598,11 @@ public class VideoStateController extends BasePlayerController {
     private boolean isStateOutdated(State state, Video item) {
         if (state == null) {
             return true;
+        }
+
+        // Web live position is broken. Ignore it.
+        if (item.isLive || item.getPositionMs() <= 0) {
+            return false;
         }
 
         float posPercents1 = state.positionMs * 100f / state.durationMs;

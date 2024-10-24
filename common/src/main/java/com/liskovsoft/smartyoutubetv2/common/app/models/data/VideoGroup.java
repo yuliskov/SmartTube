@@ -398,7 +398,7 @@ public class VideoGroup {
         video.setGroup(this);
 
         VideoStateService stateService = VideoStateService.instance(null);
-        if (stateService != null && video.percentWatched == -1) {
+        if (stateService != null && (video.percentWatched == -1 || video.isLive)) {
             State state = stateService.getByVideoId(video.videoId);
             video.sync(state);
         }
