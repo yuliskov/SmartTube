@@ -313,7 +313,7 @@ public class ViewManager {
 
             PlaybackPresenter.instance(activity).forceFinish();
 
-            // NOTE: The device may hung
+            // NOTE: The device may hung (SecurityException: requires android.permission.BIND_ACCESSIBILITY_SERVICE)
             //exitToHomeScreen(); // fix open another app from the history stack
 
             // Fix: can't start finished app activity from history.
@@ -330,6 +330,9 @@ public class ViewManager {
         }
     }
 
+    /**
+     * SecurityException: requires android.permission.BIND_ACCESSIBILITY_SERVICE
+     */
     private void exitToHomeScreen() {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
@@ -392,7 +395,7 @@ public class ViewManager {
     private void safeStartActivityInt(Context context, Intent intent) {
         try {
             context.startActivity(intent);
-        } catch (IllegalArgumentException | ActivityNotFoundException | IndexOutOfBoundsException | NullPointerException e) {
+        } catch (IllegalArgumentException | ActivityNotFoundException | IndexOutOfBoundsException | NullPointerException | SecurityException e) {
             // NPE: Attempt to write to field 'boolean com.android.server.am.ActivityStack.mConfigWillChange' on a null object reference
             Log.e(TAG, "Error when starting activity: %s", e.getMessage());
             MessageHelpers.showLongMessage(context, e.getLocalizedMessage());
