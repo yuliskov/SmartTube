@@ -973,6 +973,10 @@ public class AppDialogUtil {
             showPlaylistOrderDialog(context, video.playlistId, onClose);
         } else if (video.belongsToUserPlaylists()) {
             MediaServiceManager.instance().loadChannelUploads(video, group -> {
+                if (group.getMediaItems() == null || group.getMediaItems().isEmpty()) {
+                    return;
+                }
+
                 MediaItem first = group.getMediaItems().get(0);
                 String playlistId = first.getPlaylistId();
 

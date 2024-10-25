@@ -110,8 +110,9 @@ public class MotherActivity extends FragmentActivity {
 
         try {
             return super.dispatchTouchEvent(event);
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | SecurityException e) {
             // Attempt to invoke interface method 'boolean android.app.trust.ITrustManager.isDeviceLocked(int)' on a null object reference
+            // Permission Denial: starting Intent
             e.printStackTrace();
             return false;
         }
