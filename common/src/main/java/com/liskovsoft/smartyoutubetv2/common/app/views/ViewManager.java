@@ -313,7 +313,8 @@ public class ViewManager {
 
             PlaybackPresenter.instance(activity).forceFinish();
 
-            exitToHomeScreen(); // fix open another app from the history stack
+            // NOTE: The device may hung
+            //exitToHomeScreen(); // fix open another app from the history stack
 
             // Fix: can't start finished app activity from history.
             // Do reset state because the app should continue to run in the background.
