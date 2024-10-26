@@ -86,7 +86,14 @@ public class IntentExtractor {
         }
 
         // Don't Uri directly or you might get UnsupportedOperationException on some urls.
-        UrlQueryString parser = UrlQueryStringFactory.parse(extractUri(intent));
+        UrlQueryString parser;
+        try {
+            parser = UrlQueryStringFactory.parse(extractUri(intent));
+        } catch (IllegalArgumentException e) {
+            // URLDecoder: Illegal hex characters in escape (%) pattern : % T
+            e.printStackTrace();
+            return null;
+        }
 
         for (String searchKey : SEARCH_KEYS) {
             String searchText = parser.get(searchKey);
