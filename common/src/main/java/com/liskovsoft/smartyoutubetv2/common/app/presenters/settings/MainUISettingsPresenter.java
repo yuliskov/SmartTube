@@ -53,7 +53,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         if (Build.VERSION.SDK_INT > 19) {
             appendVideoGridScale(settingsPresenter);
         }
-        appendTimeFormatCategory(settingsPresenter);
+        //appendTimeFormatCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
@@ -255,6 +255,13 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.time_format_24) + " " + getContext().getString(R.string.time_format),
+                option -> {
+                    mGeneralData.enable24HourLocale(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.is24HourLocaleEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.app_corner_clock),
                 option -> {
