@@ -48,7 +48,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
             appendCardTextScrollSpeed(settingsPresenter);
         }
         appendChannelSortingCategory(settingsPresenter);
-        appendPlaylistsCategoryStyle(settingsPresenter);
+        //appendPlaylistsCategoryStyle(settingsPresenter);
         appendScaleUI(settingsPresenter);
         if (Build.VERSION.SDK_INT > 19) {
             appendVideoGridScale(settingsPresenter);
@@ -305,6 +305,13 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                     mRestartApp = true;
                 },
                 mMainUIData.isPinnedChannelRowsEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.playlists_rows),
+                optionItem -> {
+                    mMainUIData.setPlaylistsStyle(optionItem.isSelected() ? MainUIData.PLAYLISTS_STYLE_ROWS : MainUIData.PLAYLISTS_STYLE_GRID);
+                    BrowsePresenter.instance(getContext()).updatePlaylistsStyle();
+                },
+                mMainUIData.getPlaylistsStyle() == MainUIData.PLAYLISTS_STYLE_ROWS));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.channels_filter),
                 optionItem -> mMainUIData.enableChannelsFilter(optionItem.isSelected()),

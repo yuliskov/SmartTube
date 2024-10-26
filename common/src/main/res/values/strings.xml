@@ -269,7 +269,7 @@
     <string name="skip_each_segment_once">Don\'t skip segments again</string>
     <string name="disable_ok_long_press">Disable OK button long press</string>
     <string name="disable_ok_long_press_desc">Intended for buggy controllers where OK button does not function properly</string>
-    <string name="player_time_correction">Display the time with respect of speed</string>
+    <string name="player_time_correction">Show the time with speed correction</string>
     <string name="sponsor_color_markers">Color markers on progress bar</string>
     <string name="refresh_section">Refresh section</string>
     <string name="option_disabled">Disabled</string>
@@ -660,7 +660,7 @@
     <string name="pitch_effect">Pitch effect</string>
     <string name="fullscreen_mode">Fullscreen mode (without system bars)</string>
     <string name="player_only_mode">Show only the player if the video is opened outside of the app</string>
-    <string name="pinned_channel_rows">Display pinned channel as rows</string>
+    <string name="pinned_channel_rows">Show pinned channel as rows</string>
     <string name="prefer_ipv4">Prefer IPv4 DNS</string>
     <string name="prefer_ipv4_desc">Could fix situations when the app isn\'t working at all.\nNote. May cause hangs and crashes (especially on Android 8 devices or Dune HD)</string>
     <string name="long_press_for_settings">LONG PRESS FOR SETTINGS</string>
@@ -683,4 +683,5 @@
     <string name="rename_group">Rename the subscription group</string>
     <string name="screen_dimming_amount">Screen dimming amount</string>
     <string name="screen_dimming_timeout">Screen dimming timeout</string>
+    <string name="playlists_rows">Show Playlists section as rows</string>
 </resources>
