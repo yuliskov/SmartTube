@@ -683,4 +683,5 @@
     <string name="rename_group">Abo-Gruppe umbenennen</string>
     <string name="screen_dimming_amount">Wert für Bildschirm dimmen</string>
     <string name="screen_dimming_timeout">Zeit für Bildschirm dimmen</string>
+    <string name="playlists_rows">Wiedergabelisten-Kategorie als Reihen anzeigen</string>
 </resources>
