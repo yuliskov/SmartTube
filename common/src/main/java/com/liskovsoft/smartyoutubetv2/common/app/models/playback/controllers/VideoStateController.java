@@ -20,6 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 public class VideoStateController extends BasePlayerController {
     private static final String TAG = VideoStateController.class.getSimpleName();
@@ -618,8 +619,8 @@ public class VideoStateController extends BasePlayerController {
             return;
         }
 
-        if (mGeneralData.isHideWatchedFromWatchLaterEnabled() && video.percentWatched > 95) { // remove fully watched
-            AppDialogUtil.removeFromWatchLaterPlaylist(getContext(), video);
+        if (MediaServiceData.instance().isContentHidden(MediaServiceData.CONTENT_WATCHED_WATCH_LATER) && video.percentWatched > 95) { // remove fully watched
+            MediaServiceManager.instance().removeFromWatchLaterPlaylist(video);
         }
 
         if (mGeneralData.isHideWatchedFromNotificationsEnabled()) { // remove any watched length

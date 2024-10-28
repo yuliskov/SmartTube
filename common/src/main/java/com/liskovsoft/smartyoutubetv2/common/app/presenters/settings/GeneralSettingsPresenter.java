@@ -114,12 +114,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_mixes),
-                option -> MediaServiceData.instance().enableContent(MediaServiceData.CONTENT_MIXES, !option.isSelected()),
-                !MediaServiceData.instance().isContentEnabled(MediaServiceData.CONTENT_MIXES)));
+                option -> MediaServiceData.instance().hideContent(MediaServiceData.CONTENT_MIXES, option.isSelected()),
+                MediaServiceData.instance().isContentHidden(MediaServiceData.CONTENT_MIXES)));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_watched_from_watch_later),
-                option -> mGeneralData.hideWatchedFromWatchLater(option.isSelected()),
-                mGeneralData.isHideWatchedFromWatchLaterEnabled()));
+                option -> MediaServiceData.instance().hideContent(MediaServiceData.CONTENT_WATCHED_WATCH_LATER, option.isSelected()),
+                MediaServiceData.instance().isContentHidden(MediaServiceData.CONTENT_WATCHED_WATCH_LATER)));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_watched_from_home),
                 option -> mGeneralData.hideWatchedFromHome(option.isSelected()),

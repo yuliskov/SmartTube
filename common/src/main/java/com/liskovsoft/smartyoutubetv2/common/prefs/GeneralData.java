@@ -84,7 +84,6 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsRemapDpadUpToVolumeEnabled;
     private boolean mIsRemapDpadLeftToVolumeEnabled;
     private boolean mIsHideWatchedFromNotificationsEnabled;
-    private boolean mIsHideWatchedFromWatchLaterEnabled;
     private List<String> mChangelog;
     private Map<String, Integer> mPlaylistOrder;
     private List<Video> mPendingStreams;
@@ -211,15 +210,6 @@ public class GeneralData implements ProfileChangeListener {
 
     public boolean isHideWatchedFromNotificationsEnabled() {
         return mIsHideWatchedFromNotificationsEnabled;
-    }
-
-    public void hideWatchedFromWatchLater(boolean enable) {
-        mIsHideWatchedFromWatchLaterEnabled = enable;
-        persistState();
-    }
-
-    public boolean isHideWatchedFromWatchLaterEnabled() {
-        return mIsHideWatchedFromWatchLaterEnabled;
     }
 
     public boolean isHideStreamsFromSubscriptionsEnabled() {
@@ -864,7 +854,7 @@ public class GeneralData implements ProfileChangeListener {
         // StackOverflow on old devices?
         mIsOldChannelLookEnabled = Helpers.parseBoolean(split, 59, Build.VERSION.SDK_INT <= 19);
         mIsFullscreenModeEnabled = Helpers.parseBoolean(split, 60, true);
-        mIsHideWatchedFromWatchLaterEnabled = Helpers.parseBoolean(split, 61, false);
+        //mIsHideWatchedFromWatchLaterEnabled = Helpers.parseBoolean(split, 61, false);
         mRememberPinnedPosition = Helpers.parseBoolean(split, 62, false);
         mSelectedItems = Helpers.parseMap(split, 63, Helpers::parseInt, Video::fromString);
         mIsFirstUseTooltipEnabled = Helpers.parseBoolean(split, 64, true);
@@ -887,7 +877,7 @@ public class GeneralData implements ProfileChangeListener {
                 mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextToSpeedEnabled, mIsRemapPlayToOKEnabled,
                 mHistoryState, mRememberSubscriptionsPosition, null, mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled,
                 mIsRemapDpadUpToVolumeEnabled, mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled,
-                mChangelog, mPlayerExitShortcut, mIsOldChannelLookEnabled, mIsFullscreenModeEnabled, mIsHideWatchedFromWatchLaterEnabled,
+                mChangelog, mPlayerExitShortcut, mIsOldChannelLookEnabled, mIsFullscreenModeEnabled, null,
                 mRememberPinnedPosition, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, mIsAutoBackupEnabled,
                 mIsRemapPageDownToSpeedEnabled));
     }

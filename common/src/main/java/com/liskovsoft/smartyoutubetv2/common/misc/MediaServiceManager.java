@@ -406,6 +406,37 @@ public class MediaServiceManager implements OnAccountChange {
         RxHelper.execute(mNotificationsService.setNotificationStateObserve(state));
     }
 
+    public void removeFromWatchLaterPlaylist(Video video) {
+        removeFromWatchLaterPlaylist(video, null);
+    }
+
+    public void removeFromWatchLaterPlaylist(Video video, Runnable onSuccess) {
+        if (video == null || !mSingInService.isSigned()) {
+            return;
+        }
+
+        Disposable playlistsInfoAction = mItemService.getPlaylistsInfoObserve(video.videoId)
+                .subscribe(
+                        videoPlaylistInfos -> {
+                            PlaylistInfo watchLater = videoPlaylistInfos.get(0);
+
+                            if (watchLater.isSelected()) {
+                                Observable<Void> editObserve = mItemService.removeFromPlaylistObserve(watchLater.getPlaylistId(), video.videoId);
+
+                                RxHelper.execute(editObserve, () -> {
+                                    if (onSuccess != null) {
+                                        onSuccess.run();
+                                    }
+                                });
+                            }
+                        },
+                        error -> {
+                            // Fallback to something on error
+                            Log.e(TAG, "Get playlists error: %s", error.getMessage());
+                        }
+                );
+    }
+
     public void addAccountListener(AccountChangeListener listener) {
         if (!mAccountListeners.contains(listener)) {
             if (listener instanceof AccountsData ||
