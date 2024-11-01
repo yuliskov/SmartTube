@@ -663,4 +663,5 @@
   <string name="prefer_ipv4">Ưu tiên IPv4 DNS</string>
   <string name="disable_network_error_fixing">Vô hiệu hóa chức năng tự động sửa lỗi mạng</string>
   <string name="disable_network_error_fixing_desc">Bạn có thể cần phải bật tùy chọn này nếu bạn đang sử dụng VPN</string>
+  <string name="playlists_rows">Hiển thị danh sách phát được dưới dạng hàng</string>
 </resources>
