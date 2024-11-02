@@ -416,7 +416,6 @@
   <string name="subtitle_position">Ondertitel positie</string>
   <string name="pressing_home">door op HOME te drukken</string>
   <string name="pressing_home_back">door op HOME of BACK te drukken</string>
-  <string name="pressing_back">door op BACK te drukken</string>
   <string name="player_number_key_seek">Zoeken met cijfertoetsen</string>
   <string name="save_remove_playlist">Afspeellijst toevoegen/verwijderen uit het gedeelte Afspeellijsten</string>
   <string name="save_playlist">Afspeellijst toevoegen aan Afspeellijsten gedeelte</string>
