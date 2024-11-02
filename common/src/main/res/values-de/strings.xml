@@ -487,7 +487,7 @@
     <string name="place_chat_left">Chat auf linker Seite platzieren</string>
     <string name="place_comments_left">Kommentare auf linker Seite platzieren</string>
     <string name="use_alt_speech_recognizer">Alternative Spracherkennung</string>
-    <string name="time_format">Stunden-Format</string>
+    <string name="time_format">Zeit-Format</string>
     <string name="time_format_24">24 Stunden</string>
     <string name="time_format_12">12 Stunden (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Funktioniert nicht gut. Verwenden Sie es nur, wenn Sie Probleme mit der Standard-Spracherkennung haben.</string>
