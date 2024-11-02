@@ -42,7 +42,7 @@ public class ChatController extends BasePlayerController {
 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
-        mLiveChatKey = metadata != null && metadata.getLiveChatKey() != null ? metadata.getLiveChatKey() : null;
+        mLiveChatKey = metadata != null ? metadata.getLiveChatKey() : null;
 
         if (mLiveChatKey != null) {
             getPlayer().setButtonState(R.id.action_chat, mPlayerData.isLiveChatEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
