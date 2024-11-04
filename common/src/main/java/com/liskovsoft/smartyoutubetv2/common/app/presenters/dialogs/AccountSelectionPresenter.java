@@ -135,7 +135,7 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
 
     public void selectAccount(Account account) {
         mSignInService.selectAccount(account);
-        BrowsePresenter.instance(getContext()).refresh(false);
+        //BrowsePresenter.instance(getContext()).refresh(false);
         Utils.updateChannels(getContext());
         //BrowsePresenter.instance(getContext()).onViewInitialized(); // reset state
 
