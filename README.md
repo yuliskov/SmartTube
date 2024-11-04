@@ -16,7 +16,7 @@ stability, voice search and casting support **might** be worse than in the offic
 
 ## Device support
 
-![:white_check_mark: supported: all Android TVs and TV boxes (incl. FireTV & NVIDIA Shield), even older ones with Android 4.3 (Kitkat). :x: not supported: Smartphones, non-Android plattforms like Samsung Tizen, LG webOS, iOS, etc.
+![:white_check_mark: supported: all Android TVs and TV boxes (incl. FireTV & NVIDIA Shield), even older ones with Android 4.3 (Kitkat). :x: not supported: Smartphones, non-Android platforms like Samsung Tizen, LG webOS, iOS, etc.
 ](images/new/upload_f6ab10668ea7793f099108f2b2230406.png)
 
 
@@ -295,7 +295,7 @@ A: It can be, but it takes someone to do it, similar to the above FAQ-entry. Sma
 
 ### Q: Can I install this on a Samsung Tizen TV / LG webOS TV / Roku / iOS / toaster?
 
-A: No, this only works on **Android** devices. If you look at an Android TV's product page, it usually says clearly that it's based on Android. The app **cannot** easily be ported over to other plattforms and we have no plans to even try. **Please do not ask**. Instead, you can connect a separate TV stick or TV box to your TV.
+A: No, this only works on **Android** devices. If you look at an Android TV's product page, it usually says clearly that it's based on Android. The app **cannot** easily be ported over to other platforms and we have no plans to even try. **Please do not ask**. Instead, you can connect a separate TV stick or TV box to your TV.
 
 
 ### Q: Can I install this on a smartphone? / Can you add portrait mode? / Scrolling doesn't work.
