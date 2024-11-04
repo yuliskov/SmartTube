@@ -30,9 +30,13 @@ public class UpdateChannelsTask {
     private void updateChannels() {
         if (Helpers.isATVChannelsSupported(mContext)) {
             try {
-                updateOrPublishChannel(mService.getSubscriptionsPlaylist());
-                updateOrPublishChannel(mService.getRecommendedPlaylist());
-                updateOrPublishChannel(mService.getHistoryPlaylist());
+                if (Helpers.isGoogleTVLauncher(mContext)) {
+                    updateOrPublishChannel(getSinglePreferredPlaylist());
+                } else {
+                    updateOrPublishChannel(mService.getSubscriptionsPlaylist());
+                    updateOrPublishChannel(mService.getRecommendedPlaylist());
+                    updateOrPublishChannel(mService.getHistoryPlaylist());
+                }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
                 e.printStackTrace();
@@ -43,25 +47,30 @@ public class UpdateChannelsTask {
     private void updateRecommendations() {
         if (Helpers.isATVRecommendationsSupported(mContext)) {
             try {
-                Playlist playlist = null;
-                switch (mPrefs.getRecommendedPlaylistType()) {
-                    case GlobalPreferences.PLAYLIST_TYPE_RECOMMENDATIONS:
-                        playlist = mService.getRecommendedPlaylist();
-                        break;
-                    case GlobalPreferences.PLAYLIST_TYPE_SUBSCRIPTIONS:
-                        playlist = mService.getSubscriptionsPlaylist();
-                        break;
-                    case GlobalPreferences.PLAYLIST_TYPE_HISTORY:
-                        playlist = mService.getHistoryPlaylist();
-                        break;
-                }
-
-                updateOrPublishRecommendations(playlist);
+                updateOrPublishRecommendations(getSinglePreferredPlaylist());
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
                 e.printStackTrace();
             }
         }
+    }
+
+    private Playlist getSinglePreferredPlaylist() {
+        Playlist playlist = null;
+
+        switch (mPrefs.getRecommendedPlaylistType()) {
+            case GlobalPreferences.PLAYLIST_TYPE_RECOMMENDATIONS:
+                playlist = mService.getRecommendedPlaylist();
+                break;
+            case GlobalPreferences.PLAYLIST_TYPE_SUBSCRIPTIONS:
+                playlist = mService.getSubscriptionsPlaylist();
+                break;
+            case GlobalPreferences.PLAYLIST_TYPE_HISTORY:
+                playlist = mService.getHistoryPlaylist();
+                break;
+        }
+
+        return playlist;
     }
 
     private void updateOrPublishRecommendations(Playlist playlist) {

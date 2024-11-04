@@ -31,6 +31,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+@SuppressWarnings("RestrictedApi")
 public class ChannelsProvider {
     private static final String TAG = ChannelsProvider.class.getSimpleName();
     private static final String SCHEME = "tvhomescreenchannels";
