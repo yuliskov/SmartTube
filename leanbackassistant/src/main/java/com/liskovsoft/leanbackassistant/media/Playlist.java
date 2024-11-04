@@ -14,6 +14,16 @@
 
 package com.liskovsoft.leanbackassistant.media;
 
+import androidx.tvprovider.media.tv.TvContractCompat;
+
+import com.liskovsoft.leanbackassistant.media.ClipService.GroupCallback;
+import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
+import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,24 +43,27 @@ public final class Playlist {
     private String mProgramsKey;
     private String mPlaylistUrl;
     private int mLogoResId = -1;
+    private final GroupCallback mCallback;
     private final boolean mIsDefault;
+    private static final int MIN_PLAYLIST_SIZE = 40;
 
-    public Playlist(String name, String playlistId) {
-        this(name, Collections.emptyList(), playlistId, false);
+    public Playlist(String name, String playlistId, GroupCallback callback) {
+        this(name, playlistId, callback, false);
     }
 
-    public Playlist(String name, String playlistId, boolean isDefault) {
-        this(name, Collections.emptyList(), playlistId, isDefault);
+    public Playlist(String name, String playlistId, GroupCallback callback, boolean isDefault) {
+        this(name, Collections.emptyList(), playlistId, callback, isDefault);
     }
 
-    public Playlist(String name, List<Clip> clip, String playlistId, boolean isDefault) {
+    public Playlist(String name, List<Clip> clips, String playlistId, GroupCallback callback, boolean isDefault) {
         mName = name;
         mTitle = "playlist title";
         mDescription = "playlist description";
         mVideoUri = "dsf";
         mBgImage = "asdf";
-        mClips = clip;
+        mClips = clips;
         mPlaylistId = playlistId;
+        mCallback = callback;
         mIsDefault = isDefault;
     }
 
@@ -58,11 +71,11 @@ public final class Playlist {
         return mName;
     }
 
-    public void setClips(List<Clip> clips) {
-        mClips = clips;
-    }
-
     public List<Clip> getClips() {
+        if (mClips == null || mClips.isEmpty()) {
+            mClips = createClips();
+        }
+
         return mClips;
     }
 
@@ -153,6 +166,74 @@ public final class Playlist {
                 }
             }
         }
+    }
+
+    private List<Clip> createClips() {
+        if (mCallback == null) {
+            return null;
+        }
+
+        ServiceManager service = YouTubeServiceManager.instance();
+        ContentService contentService = service.getContentService();
+        MediaGroup selectedGroup = mCallback.call(contentService);
+
+        if (selectedGroup != null) {
+            List<MediaItem> mediaItems = selectedGroup.getMediaItems();
+            List<Clip> clips;
+
+            if (mediaItems != null && !mediaItems.isEmpty()) {
+                for (int i = 0; i < 3; i++) {
+                    if (mediaItems.size() >= MIN_PLAYLIST_SIZE) {
+                        break;
+                    }
+
+                    MediaGroup mediaGroup = contentService.continueGroup(selectedGroup);
+                    if (mediaGroup == null) {
+                        break;
+                    }
+                    mediaItems.addAll(mediaGroup.getMediaItems());
+                }
+
+                // Fix duplicated items inside ATV channels???
+                Helpers.removeDuplicates(mediaItems);
+
+                clips = convertToClips(mediaItems);
+            } else {
+                clips = new ArrayList<>();
+            }
+
+            return clips;
+        }
+
+        return null;
+    }
+
+    @SuppressWarnings("RestrictedApi")
+    private List<Clip> convertToClips(List<MediaItem> videos) {
+        if (videos != null) {
+            List<Clip> clips = new ArrayList<>();
+
+            for (MediaItem v : videos) {
+                clips.add(new Clip(
+                        v.getTitle(),
+                        v.getSecondTitle(),
+                        v.getDurationMs(),
+                        v.getBackgroundImageUrl(),
+                        v.getCardImageUrl(),
+                        v.getVideoUrl(),
+                        null,
+                        false,
+                        v.isLive(),
+                        null,
+                        Integer.toString(v.getId()),
+                        null,
+                        TvContractCompat.PreviewProgramColumns.ASPECT_RATIO_16_9));
+            }
+
+            return clips;
+        }
+
+        return null;
     }
 
     public void setChannelKey(String key) {

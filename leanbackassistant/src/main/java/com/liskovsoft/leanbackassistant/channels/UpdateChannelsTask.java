@@ -74,20 +74,30 @@ public class UpdateChannelsTask {
     }
 
     private void updateOrPublishRecommendations(Playlist playlist) {
-        if (checkPlaylist(playlist)) {
-            Log.d(TAG, "Syncing recommended: " + playlist.getName() + ", items num: " + playlist.getClips().size());
-            RecommendationsProvider.createOrUpdateRecommendations(mContext, playlist);
-        }
+        Log.d(TAG, "Syncing recommended: " + playlist.getName());
+        RecommendationsProvider.createOrUpdateRecommendations(mContext, playlist);
     }
 
     private void updateOrPublishChannel(Playlist playlist) {
-        if (checkPlaylist(playlist)) {
-            Log.d(TAG, "Syncing channel: " + playlist.getName() + ", items num: " + playlist.getClips().size());
-            ChannelsProvider.createOrUpdateChannel(mContext, playlist);
-        }
+        Log.d(TAG, "Syncing channel: " + playlist.getName());
+        ChannelsProvider.createOrUpdateChannel(mContext, playlist);
     }
 
-    private boolean checkPlaylist(Playlist playlist) {
-        return playlist != null && playlist.getClips() != null;
-    }
+    //private void updateOrPublishRecommendations(Playlist playlist) {
+    //    if (checkPlaylist(playlist)) {
+    //        Log.d(TAG, "Syncing recommended: " + playlist.getName());
+    //        RecommendationsProvider.createOrUpdateRecommendations(mContext, playlist);
+    //    }
+    //}
+    //
+    //private void updateOrPublishChannel(Playlist playlist) {
+    //    if (checkPlaylist(playlist)) {
+    //        Log.d(TAG, "Syncing channel: " + playlist.getName());
+    //        ChannelsProvider.createOrUpdateChannel(mContext, playlist);
+    //    }
+    //}
+
+    //private boolean checkPlaylist(Playlist playlist) {
+    //    return playlist != null && playlist.getClips() != null;
+    //}
 }

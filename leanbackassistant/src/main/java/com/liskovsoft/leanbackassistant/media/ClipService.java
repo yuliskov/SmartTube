@@ -27,7 +27,6 @@ public class ClipService {
     private static final String SUBSCRIPTIONS_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEsubscriptions&resume";
     private static final String HISTORY_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEmy_youtube&resume";
     private static final String RECOMMENDED_URL = "https://www.youtube.com/tv#/zylon-surface?c=default&resume";
-    private static final int MIN_PLAYLIST_SIZE = 40;
     @SuppressLint("StaticFieldLeak")
     private static ClipService mInstance;
     private final Context mContext;
@@ -87,75 +86,17 @@ public class ClipService {
         Playlist playlist = new Playlist(
                 mContext.getResources().getString(titleResId),
                 Integer.toString(id),
+                callback,
                 isDefault);
         playlist.setChannelKey(channelId);
         playlist.setProgramsKey(programId);
         playlist.setPlaylistUrl(recommendedUrl);
         playlist.setLogoResId(logoResId);
 
-        ServiceManager service = YouTubeServiceManager.instance();
-        ContentService contentService = service.getContentService();
-        MediaGroup selectedGroup = callback.call(contentService);
-
-        if (selectedGroup != null) {
-            List<MediaItem> mediaItems = selectedGroup.getMediaItems();
-            List<Clip> clips;
-
-            if (mediaItems != null && !mediaItems.isEmpty()) {
-                for (int i = 0; i < 3; i++) {
-                    if (mediaItems.size() >= MIN_PLAYLIST_SIZE) {
-                        break;
-                    }
-
-                    MediaGroup mediaGroup = contentService.continueGroup(selectedGroup);
-                    if (mediaGroup == null) {
-                        break;
-                    }
-                    mediaItems.addAll(mediaGroup.getMediaItems());
-                }
-
-                // Fix duplicated items inside ATV channels???
-                Helpers.removeDuplicates(mediaItems);
-
-                clips = convertToClips(mediaItems);
-            } else {
-                clips = new ArrayList<>();
-            }
-
-            playlist.setClips(clips);
-        }
-
         return playlist;
     }
 
-    private List<Clip> convertToClips(List<MediaItem> videos) {
-        if (videos != null) {
-            List<Clip> clips = new ArrayList<>();
-
-            for (MediaItem v : videos) {
-                clips.add(new Clip(
-                        v.getTitle(),
-                        v.getSecondTitle(),
-                        v.getDurationMs(),
-                        v.getBackgroundImageUrl(),
-                        v.getCardImageUrl(),
-                        v.getVideoUrl(),
-                        null,
-                        false,
-                        v.isLive(),
-                        null,
-                        Integer.toString(v.getId()),
-                        null,
-                        TvContractCompat.PreviewProgramColumns.ASPECT_RATIO_16_9));
-            }
-
-            return clips;
-        }
-
-        return null;
-    }
-
-    private interface GroupCallback {
+    public interface GroupCallback {
         MediaGroup call(ContentService mediaTabManager);
     }
 }
