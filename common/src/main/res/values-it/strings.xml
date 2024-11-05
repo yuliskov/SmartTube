@@ -269,7 +269,7 @@
     <string name="skip_each_segment_once">Non saltare di nuovo i segmenti</string>
     <string name="disable_ok_long_press">Disabilita pressione prolungata del pulsante OK</string>
     <string name="disable_ok_long_press_desc">Destinato a controller difettosi in cui il pulsante OK non funziona correttamente</string>
-    <string name="player_time_correction">Visualizza la durata in base alla velocità</string>
+    <string name="player_time_correction">Mostra la durata con correzione della velocità</string>
     <string name="sponsor_color_markers">Indicatori colorati sulla barra di avanzamento</string>
     <string name="refresh_section">Aggiorna sezione</string>
     <string name="option_disabled">Disabilitato</string>
@@ -337,7 +337,7 @@
     <string name="msg_player_error_source2">L\'URL non funziona o l\'ora del dispositivo non è corretta.\nDi solito si tratta di un bug nell\'app.</string>
     <string name="msg_player_error_video_source">L\'URL VIDEO non funziona o l\'ora del dispositivo non è corretta.\nDi solito si tratta di un bug nell\'app.</string>
     <string name="msg_player_error_audio_source">L\'URL AUDIO non funziona o l\'ora del dispositivo non è corretta.\nDi solito si tratta di un bug nell\'app.</string>
-    <string name="msg_player_error_subtitle_source">L\'URL SUBTITLE non funziona o l\'ora del dispositivo non è corretta.\nDi solito si tratta di un bug nell\'app.</string>	
+    <string name="msg_player_error_subtitle_source">L\'URL SUBTITLE non funziona o l\'ora del dispositivo non è corretta.\nDi solito si tratta di un bug nell\'app.</string>
     <string name="hide_upcoming">Nascondi in arrivo dalle Iscrizioni</string>
     <string name="hide_upcoming_channel">Nascondi in arrivo dal canale</string>
     <string name="hide_upcoming_home">Nascondi in arrivo dalla Home</string>
@@ -660,7 +660,7 @@
     <string name="pitch_effect">Effetto pitch</string>
     <string name="fullscreen_mode">Modalità a schermo intero (senza barre di sistema)</string>
     <string name="player_only_mode">Mostra solo il lettore se il video viene aperto all\'esterno dell\'app</string>
-    <string name="pinned_channel_rows">Visualizza il canale bloccato come righe</string>
+    <string name="pinned_channel_rows">Mostra il canale bloccato come righe</string>
     <string name="prefer_ipv4">Preferisci DNS IPv4</string>
     <string name="prefer_ipv4_desc">Potrebbe risolvere situazioni in cui l\'app non funziona affatto.\nNota: potrebbe causare blocchi e arresti anomali (specialmente su dispositivi Android 8 o Dune HD)</string>
     <string name="long_press_for_settings">PREMI A LUNGO PER LE IMPOSTAZIONI</string>
@@ -683,4 +683,5 @@
     <string name="rename_group">Rinomina il gruppo di iscrizioni</string>
     <string name="screen_dimming_amount">Quantità oscuramento schermo</string>
     <string name="screen_dimming_timeout">Timeout oscuramento schermo</string>
+    <string name="playlists_rows">Mostra la sezione Playlist come righe</string>
 </resources>
