@@ -250,8 +250,8 @@ public class ChannelsProvider {
         long channelId = createChannel(context, playlist);
 
         // The channels are disabled by default (don't populate to save resources)
-        addClipsToChannel(context, channelId, Collections.emptyList());
-        //addClipsToChannel(context, channelId, playlist.getClips());
+        //addClipsToChannel(context, channelId, Collections.emptyList());
+        addClipsToChannel(context, channelId, playlist.getClips());
 
         //return channelId;
     }

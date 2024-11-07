@@ -131,6 +131,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         } else if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
             MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
             //mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
+            mPlayerTweaksData.enableHighBitrateFormats(false);
             mPlayerTweaksData.setPlayerDataSource(Utils.skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET); // ???
             restartEngine();
         }
