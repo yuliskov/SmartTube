@@ -224,25 +224,25 @@ public class ChannelsProvider {
 
     @WorkerThread
     public static void createOrUpdateChannel(Context context, Playlist playlist) {
-        long oldChannelId = playlist.getPublishedId();
+        long publishedId = playlist.getPublishedId();
+
+        if (publishedId != -1) {
+            Log.d(TAG, "Oops: channel already published. Doing update instead... publishedId: " + publishedId);
+            updateChannel(context, playlist);
+            //addClipsToChannel(context, publishedId, Helpers.isGoogleTVLauncher(context) || channel.isBrowsable() ? playlist.getClips() : Collections.emptyList());
+            addClipsToChannel(context, publishedId, playlist.getClips());
+            return;
+        }
 
         Channel channel = findChannelByProviderId(context, playlist.getPlaylistId());
-
-        if (oldChannelId != -1) {
-            Log.d(TAG, "Oops: channel already published. Doing update instead... oldChannelId: " + oldChannelId);
-            updateChannel(context, playlist);
-            addClipsToChannel(context, oldChannelId, Helpers.isGoogleTVLauncher(context) || channel.isBrowsable() ? playlist.getClips() : Collections.emptyList());
-            return;
-            //return oldChannelId;
-        }
 
         if (channel != null) {
             Log.d(TAG, "Oops: channel already published but not memorized by the app. Doing update instead... foundId: " + channel.getId());
             playlist.setPublishedId(channel.getId());
             updateChannel(context, playlist);
-            addClipsToChannel(context, channel.getId(), Helpers.isGoogleTVLauncher(context) || channel.isBrowsable() ? playlist.getClips() : Collections.emptyList());
+            //addClipsToChannel(context, channel.getId(), Helpers.isGoogleTVLauncher(context) || channel.isBrowsable() ? playlist.getClips() : Collections.emptyList());
+            addClipsToChannel(context, channel.getId(), playlist.getClips());
             return;
-            //return channel.getId();
         }
 
         Log.d(TAG, "Creating channel: " + playlist.getName());
@@ -252,8 +252,6 @@ public class ChannelsProvider {
         // The channels are disabled by default (don't populate to save resources)
         //addClipsToChannel(context, channelId, Collections.emptyList());
         addClipsToChannel(context, channelId, playlist.getClips());
-
-        //return channelId;
     }
 
     private static long createChannel(Context context, Playlist playlist) {
