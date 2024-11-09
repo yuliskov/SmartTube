@@ -664,4 +664,5 @@
   <string name="disable_network_error_fixing">Vô hiệu hóa chức năng tự động sửa lỗi mạng</string>
   <string name="disable_network_error_fixing_desc">Bạn có thể cần phải bật tùy chọn này nếu bạn đang sử dụng VPN</string>
   <string name="playlists_rows">Hiển thị danh sách phát được dưới dạng hàng</string>
+  <string name="remember_position_of_live_videos">Nhớ vị trí phát trực tiếp</string>
 </resources>
