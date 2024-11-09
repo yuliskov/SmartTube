@@ -269,7 +269,7 @@
     <string name="skip_each_segment_once">Znovu nepřeskakovat segmenty</string>
     <string name="disable_ok_long_press">Deaktivovat dlouhé stisknutí tlačítka OK</string>
     <string name="disable_ok_long_press_desc">Určeno pro zabugované ovladače, kde tlačítko OK nefunguje správně</string>
-    <string name="player_time_correction">Zobrazit čas s ohledem na rychlost</string>
+    <string name="player_time_correction">Zobrazit čas s korekcí rychlosti</string>
     <string name="sponsor_color_markers">Barevné značky na ukazateli průběhu</string>
     <string name="refresh_section">Aktualizovat sekci</string>
     <string name="option_disabled">Zakázáno</string>
@@ -683,4 +683,5 @@
     <string name="rename_group">Přejmenovat skupinu odběrů</string>
     <string name="screen_dimming_amount">Míra ztmavení obrazovky</string>
     <string name="screen_dimming_timeout">Časový limit ztmavení obrazovky</string>
+    <string name="playlists_rows">Zobrazit sekci Playlisty jako řádky</string>
 </resources>
