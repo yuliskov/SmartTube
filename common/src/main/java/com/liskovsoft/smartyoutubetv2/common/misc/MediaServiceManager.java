@@ -85,6 +85,10 @@ public class MediaServiceManager implements OnAccountChange {
         void onAccountChanged(Account account);
     }
 
+    public interface OnError {
+        void onError(Throwable error);
+    }
+
     private MediaServiceManager() {
         ServiceManager service = YouTubeServiceManager.instance();
         mItemService = service.getMediaItemService();
@@ -402,8 +406,8 @@ public class MediaServiceManager implements OnAccountChange {
         }
     }
 
-    public void setNotificationState(NotificationState state) {
-        RxHelper.execute(mNotificationsService.setNotificationStateObserve(state));
+    public void setNotificationState(NotificationState state, OnError onError) {
+        RxHelper.execute(mNotificationsService.setNotificationStateObserve(state), onError::onError);
     }
 
     public void removeFromWatchLaterPlaylist(Video video) {

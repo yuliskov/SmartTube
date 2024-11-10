@@ -930,7 +930,7 @@ public class PlayerUIController extends BasePlayerController {
         for (NotificationState item : getPlayer().getVideo().notificationStates) {
             items.add(UiOptionItem.from(item.getTitle(), optionItem -> {
                 if (optionItem.isSelected()) {
-                    MediaServiceManager.instance().setNotificationState(item);
+                    MediaServiceManager.instance().setNotificationState(item, error -> MessageHelpers.showMessage(getContext(), error.getLocalizedMessage()));
                     getPlayer().getVideo().isSubscribed = true;
                     getPlayer().setButtonState(R.id.action_subscribe, PlayerUI.BUTTON_ON);
                 }
