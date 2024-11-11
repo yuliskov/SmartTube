@@ -97,6 +97,10 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         }
     }
 
+    public boolean hasPendingVideo() {
+        return mPendingVideo != null;
+    }
+
     public void openVideo(Video video) {
         if (video == null) {
             return;

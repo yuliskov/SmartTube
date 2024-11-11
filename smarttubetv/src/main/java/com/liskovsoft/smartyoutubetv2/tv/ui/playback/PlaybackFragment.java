@@ -133,6 +133,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mPlaybackPresenter.setView(this);
         mExoPlayerController = new ExoPlayerController(getContext(), mPlaybackPresenter);
 
+        // Fix open previous video
+        if (mPlaybackPresenter.hasPendingVideo()) {
+            mSelectedVideoId = null;
+        }
+
         initPresenters();
         setupEventListeners();
     }
