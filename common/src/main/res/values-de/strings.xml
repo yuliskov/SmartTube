@@ -575,7 +575,7 @@
     <string name="sony_frame_drop_fix_desc">Behebt Verzögerungen/Lags auf Sony-TV und einigen anderen Geräten. Hinweis: Mögliche Probleme mit der Audio-Synchronisation.</string>
     <string name="audio_language">Audio-Sprache</string>
     <string name="old_home_look">Altes Aussehen der Startseite</string>
-    <string name="old_channel_look">Altes Aussehen der Kanäle-Kategorie</string>
+    <string name="old_channel_look">Altes Aussehen der Kanalseite</string>
     <string name="hide_shorts_everywhere">Shorts überall ausblenden</string>
     <string name="update_found">Update</string>
     <string name="volume_boost_warning">Einstellungen über dem Grenzwert können die Lautsprecher möglicherweise beschädigen</string>
