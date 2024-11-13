@@ -31,7 +31,6 @@ public class CategoryEmptyError implements ErrorFragmentData {
 
     @Override
     public String getActionText() {
-        //return mContext.getString(R.string.action_signin);
-        return null;
+        return mContext.getString(R.string.action_signin);
     }
 }
