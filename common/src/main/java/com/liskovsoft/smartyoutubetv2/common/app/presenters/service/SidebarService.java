@@ -245,7 +245,9 @@ public class SidebarService implements ProfileChangeListener {
 
     private void initPinnedItems() {
         for (int sectionId : mDefaultSections.values()) {
-            enableSection(sectionId, true);
+            // Notifications is broken
+            enableSection(sectionId, sectionId != MediaGroup.TYPE_NOTIFICATIONS);
+            //enableSection(sectionId, true);
         }
     }
 
