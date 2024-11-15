@@ -35,9 +35,11 @@
     <string name="resolution_switch">Çözünürlüğü değiştir</string>
     <string name="video_buffer">Video arabelleği</string>
     <string name="video_buffer_size_none">Hiçbiri</string>
+    <string name="video_buffer_size_lowest">En düşük</string>
     <string name="video_buffer_size_low">Düşük</string>
     <string name="video_buffer_size_med">Orta</string>
     <string name="video_buffer_size_high">Yüksek</string>
+    <string name="video_buffer_size_highest">En yüksek</string>
     <string name="update_changelog">Değişim günlüğü</string>
     <string name="install_update">Güncellemeyi yükle</string>
     <string name="section_is_empty">Hata! Burada hiçbir şey yok.</string>
@@ -235,6 +237,7 @@
     <string name="pin_channel">Kanalı kenar çubuğuna ekle</string>
     <string name="pinned_to_sidebar">Kenar çubuğuna eklendi</string>
     <string name="unpin_from_sidebar">Kenar çubuğundan kaldır</string>
+    <string name="unpin_group_from_sidebar">Abonelik grubunun kaldır</string>
     <string name="unpinned_from_sidebar">Kenar çubuğundan kaldırıldı</string>
     <string name="dialog_select_country">Ülke</string>
     <string name="settings_language_country">Dil/Ülke</string>
@@ -484,6 +487,7 @@
     <string name="open_chat">Sohbet/Yorumlar</string>
     <string name="open_comments">Yorumları aç</string>
     <string name="place_chat_left">Sohbeti sola yerleştir</string>
+    <string name="place_comments_left">Yorumları sola yerleştir</string>
     <string name="use_alt_speech_recognizer">Alternatif konuşma tanıyıcı</string>
     <string name="time_format">Saat modu</string>
     <string name="time_format_24">24 saat</string>
@@ -671,5 +675,15 @@
     <string name="without_picture">Resimsiz</string>
     <string name="video_disabled">Video devre dışı</string>
     <string name="applying_fix">Oynatıcıyı kapatmayın. Düzeltme uygulanıyor...</string>
-    <string name="hide_mixes">Karışımları Mixes</string>
+    <string name="hide_mixes">Karışımları gizle</string>
+    <string name="player_global_focus_desc">Bu özellik, oynatıcı düğmeleri sıraları arasında gezinirken hangi oynatıcı düğmesinin odaklanacağını etkiler</string>
+    <string name="disable_network_error_fixing">Otomatik ağ hatası düzeltmeyi devre dışı bırak</string>
+    <string name="disable_network_error_fixing_desc">Bir VPN kullanıyorsanız muhtemelen bu seçeneği etkinleştirmeniz gerekir</string>
+    <string name="recommended">Önerilen Videolar</string>
+    <string name="add_to_subscriptions_group">Abonelik grubuna kanal ekle/kaldır</string>
+    <string name="new_subscriptions_group">Yeni grup</string>
+    <string name="rename_group">Abonelik grubunun yeniden adlandır</string>
+    <string name="screen_dimming_amount">Ekran karartma miktarı</string>
+    <string name="screen_dimming_timeout">Ekran karartma zaman aşımı</string>
+    <string name="playlists_rows">Oynatma listelerini satır olarak göster</string>
 </resources>

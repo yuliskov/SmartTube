@@ -29,7 +29,7 @@ public class VolumeBooster implements AudioListener {
             mBooster = new LoudnessEnhancer(audioSessionId);
             mBooster.setEnabled(mEnabled);
             mBooster.setTargetGain((int) (1000 * mVolume));
-        } catch (RuntimeException | UnsatisfiedLinkError | NoClassDefFoundError e) { // Cannot initialize effect engine
+        } catch (RuntimeException | UnsatisfiedLinkError | NoClassDefFoundError | NoSuchFieldError e) { // Cannot initialize effect engine
             e.printStackTrace();
         }
     }

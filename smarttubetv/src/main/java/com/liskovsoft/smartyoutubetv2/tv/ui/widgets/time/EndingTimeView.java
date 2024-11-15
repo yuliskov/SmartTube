@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
+
+import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -15,7 +17,6 @@ import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 @SuppressLint("AppCompatCustomView")
@@ -125,7 +126,7 @@ public class EndingTimeView extends TextView implements TickleListener, OnDataCh
             return null;
         }
 
-        return DateFormatter.formatTimeShort(getContext(), System.currentTimeMillis() + remainingTimeMs);
+        return DateHelper.toShortTime(System.currentTimeMillis() + remainingTimeMs);
     }
 
     private long applySpeedCorrection(long timeMs) {

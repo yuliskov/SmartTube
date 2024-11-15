@@ -35,9 +35,11 @@
     <string name="resolution_switch">Перемикати роздільну здатність</string>
     <string name="video_buffer">Відеобуфер</string>
     <string name="video_buffer_size_none">Немає</string>
+    <string name="video_buffer_size_lowest">Найнижчий</string>
     <string name="video_buffer_size_low">Низький</string>
     <string name="video_buffer_size_med">Середній</string>
     <string name="video_buffer_size_high">Високий</string>
+    <string name="video_buffer_size_highest">Найвищий</string>
     <string name="update_changelog">Зміни</string>
     <string name="install_update">Встановити оновлення</string>
     <string name="section_is_empty">Тут нічого немає</string>
@@ -235,6 +237,7 @@
     <string name="pin_channel">Додати канал на бічну панель</string>
     <string name="pinned_to_sidebar">Додано на бічну панель</string>
     <string name="unpin_from_sidebar">Видалити з бічної панелі</string>
+    <string name="unpin_group_from_sidebar">Видалити групу підписок</string>
     <string name="unpinned_from_sidebar">Видалено з бічної панелі</string>
     <string name="dialog_select_country">Країна</string>
     <string name="settings_language_country">Мова/Країна</string>
@@ -476,6 +479,7 @@
     <string name="open_chat">Чат/Коментарі</string>
     <string name="open_comments">Відкрити коментарі</string>
     <string name="place_chat_left">Розмістити чат ліворуч</string>
+    <string name="place_comments_left">Розмістити коментарі ліворуч</string>
     <string name="use_alt_speech_recognizer">Альтернативний розпізнавач мови</string>
     <string name="time_format">Формат часу</string>
     <string name="time_format_24">24 години</string>
@@ -663,4 +667,14 @@
     <string name="video_disabled">Відео вимкнено</string>
     <string name="applying_fix">Не закривайте плеєр. Застосування виправлення...</string>
     <string name="hide_mixes">Приховувати Мікси</string>
+    <string name="player_global_focus_desc">Ця функція впливає на те, яка кнопка плеєру отримає фокус під час навігації між рядками його кнопок</string>
+    <string name="disable_network_error_fixing">Вимкнути автоматичне виправлення мережевих помилок</string>
+    <string name="disable_network_error_fixing_desc">Можливо, вам потрібно увімкнути цю опцію, якщо ви використовуєте VPN</string>
+    <string name="recommended">Рекомендовані відео</string>
+    <string name="add_to_subscriptions_group">Додати/видалити із групи підписок</string>
+    <string name="new_subscriptions_group">Нова група</string>
+    <string name="rename_group">Перейменувати групу підписок</string>
+    <string name="screen_dimming_amount">Величина затемнення екрана</string>
+    <string name="screen_dimming_timeout">Тайм-аут затемнення екрана</string>
+    <string name="playlists_rows">Відображати розділ Плейлисти у вигляді рядків</string>
 </resources>

@@ -6,15 +6,17 @@ import android.os.Build;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuManager;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class MainUIData extends DataChangeBase {
+public class MainUIData extends DataChangeBase implements ProfileChangeListener {
     private static final String MAIN_UI_DATA = "main_ui_data2";
     public static final int CHANNEL_SORTING_NEW_CONTENT = 0;
     public static final int CHANNEL_SORTING_NAME = 1;
@@ -66,7 +68,7 @@ public class MainUIData extends DataChangeBase {
             MENU_ITEM_MOVE_SECTION_UP | MENU_ITEM_MOVE_SECTION_DOWN | MENU_ITEM_RENAME_SECTION | MENU_ITEM_SAVE_REMOVE_PLAYLIST |
             MENU_ITEM_ADD_TO_PLAYLIST | MENU_ITEM_CREATE_PLAYLIST | MENU_ITEM_RENAME_PLAYLIST | MENU_ITEM_ADD_TO_NEW_PLAYLIST |
             MENU_ITEM_STREAM_REMINDER | MENU_ITEM_PLAYLIST_ORDER | MENU_ITEM_OPEN_CHANNEL | MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS |
-            MENU_ITEM_PLAY_NEXT | MENU_ITEM_OPEN_PLAYLIST | MENU_ITEM_SUBSCRIBE;
+            MENU_ITEM_PLAY_NEXT | MENU_ITEM_OPEN_PLAYLIST | MENU_ITEM_SUBSCRIBE | MENU_ITEM_CLEAR_HISTORY;
     private static final Long[] MENU_ITEM_DEFAULT_ORDER = {
             MENU_ITEM_EXIT_FROM_PIP, MENU_ITEM_PLAY_VIDEO, MENU_ITEM_PLAY_VIDEO_INCOGNITO, MENU_ITEM_REMOVE_FROM_HISTORY,
             MENU_ITEM_STREAM_REMINDER, MENU_ITEM_RECENT_PLAYLIST, MENU_ITEM_ADD_TO_PLAYLIST, MENU_ITEM_CREATE_PLAYLIST, MENU_ITEM_RENAME_PLAYLIST,
@@ -105,6 +107,7 @@ public class MainUIData extends DataChangeBase {
     private MainUIData(Context context) {
         mContext = context;
         mPrefs = AppPrefs.instance(context);
+        mPrefs.addListener(this);
         initColorSchemes();
         restoreState();
     }
@@ -377,7 +380,7 @@ public class MainUIData extends DataChangeBase {
     }
 
     private void restoreState() {
-        String data = mPrefs.getData(MAIN_UI_DATA);
+        String data = mPrefs.getProfileData(MAIN_UI_DATA);
 
         String[] split = Helpers.splitData(data);
 
@@ -409,13 +412,18 @@ public class MainUIData extends DataChangeBase {
             }
         }
 
-        cleanupItems();
+        for (ContextMenuProvider provider : new ContextMenuManager(mContext).getProviders()) {
+            if (!mMenuItemsOrdered.contains(provider.getId())) {
+                mMenuItemsOrdered.add(provider.getId());
+            }
+        }
+        
         updateDefaultValues();
     }
 
     @Override
     protected void persistState() {
-        mPrefs.setData(MAIN_UI_DATA, Helpers.mergeData(mIsCardAnimatedPreviewsEnabled,
+        mPrefs.setProfileData(MAIN_UI_DATA, Helpers.mergeData(mIsCardAnimatedPreviewsEnabled,
                 mVideoGridScale, mUIScale, mColorSchemeIndex, mIsCardMultilineTitleEnabled,
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
                 mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,
@@ -451,8 +459,8 @@ public class MainUIData extends DataChangeBase {
         }
     }
 
-    private void cleanupItems() {
-        List<Long> defaultOrder = Arrays.asList(MENU_ITEM_DEFAULT_ORDER);
-        Helpers.removeIf(mMenuItemsOrdered, item -> !defaultOrder.contains(item));
+    @Override
+    public void onProfileChanged() {
+        restoreState();
     }
 }

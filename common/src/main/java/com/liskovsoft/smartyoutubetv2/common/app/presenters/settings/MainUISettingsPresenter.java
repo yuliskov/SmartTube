@@ -51,7 +51,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         if (Build.VERSION.SDK_INT > 19) {
             appendVideoGridScale(settingsPresenter);
         }
-        appendTimeFormatCategory(settingsPresenter);
+        //appendTimeFormatCategory(settingsPresenter);
         //appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
@@ -235,24 +235,31 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.time_format_24),
                 option -> {
-                    mGeneralData.setTimeFormat(GeneralData.TIME_FORMAT_24);
+                    mGeneralData.enable24HourLocale(true);
                     mRestartApp = true;
                 },
-                mGeneralData.getTimeFormat() == GeneralData.TIME_FORMAT_24));
+                mGeneralData.is24HourLocaleEnabled()));
 
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.time_format_12),
                 option -> {
-                    mGeneralData.setTimeFormat(GeneralData.TIME_FORMAT_12);
+                    mGeneralData.enable24HourLocale(false);
                     mRestartApp = true;
                 },
-                mGeneralData.getTimeFormat() == GeneralData.TIME_FORMAT_12));
+                !mGeneralData.is24HourLocaleEnabled()));
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.time_format), options);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.time_format_24) + " " + getContext().getString(R.string.time_format),
+                option -> {
+                    mGeneralData.enable24HourLocale(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.is24HourLocaleEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.app_corner_clock),
                 option -> {
@@ -283,6 +290,13 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.isOldChannelLookEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.channels_old_look),
+                optionItem -> {
+                    mMainUIData.enableUploadsOldLook(optionItem.isSelected());
+                    mRestartApp = true;
+                },
+                mMainUIData.isUploadsOldLookEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.fullscreen_mode),
                 option -> {
                     mGeneralData.enableFullscreenMode(option.isSelected());
@@ -297,6 +311,13 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 },
                 mMainUIData.isPinnedChannelRowsEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.playlists_rows),
+                optionItem -> {
+                    mMainUIData.setPlaylistsStyle(optionItem.isSelected() ? MainUIData.PLAYLISTS_STYLE_ROWS : MainUIData.PLAYLISTS_STYLE_GRID);
+                    BrowsePresenter.instance(getContext()).updatePlaylistsStyle();
+                },
+                mMainUIData.getPlaylistsStyle() == MainUIData.PLAYLISTS_STYLE_ROWS));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.channels_filter),
                 optionItem -> mMainUIData.enableChannelsFilter(optionItem.isSelected()),
                 mMainUIData.isChannelsFilterEnabled()));
@@ -304,13 +325,6 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.channel_search_bar),
                 optionItem -> mMainUIData.enableChannelSearchBar(optionItem.isSelected()),
                 mMainUIData.isChannelSearchBarEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.channels_old_look),
-                optionItem -> {
-                    mMainUIData.enableUploadsOldLook(optionItem.isSelected());
-                    mRestartApp = true;
-                },
-                mMainUIData.isUploadsOldLookEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.channels_auto_load),
                 optionItem -> mMainUIData.enableUploadsAutoLoad(optionItem.isSelected()),

@@ -35,9 +35,11 @@
     <string name="resolution_switch">Přepnout rozlišení</string>
     <string name="video_buffer">Vyrovnávací paměť videa</string>
     <string name="video_buffer_size_none">Žádná</string>
+    <string name="video_buffer_size_lowest">Nejnižší</string>
     <string name="video_buffer_size_low">Nízká</string>
     <string name="video_buffer_size_med">Střední</string>
     <string name="video_buffer_size_high">Vysoká</string>
+    <string name="video_buffer_size_highest">Nejvyšší</string>
     <string name="update_changelog">Seznam změn</string>
     <string name="install_update">Instalovat aktualizace</string>
     <string name="section_is_empty">Tady nic není</string>
@@ -225,7 +227,7 @@
     <string name="player_corner_ending_time">Přehrávač: čas ukončení v pravém horním rohu</string>
     <string name="uploads_old_look">Vrátit zpět starý vzhled sekce Nahraná videa</string>
     <string name="background_playback_activation">Přehrávání na pozadí (aktivace)</string>
-    <string name="channels_old_look">Vrátit zpět starý vzhled sekce Kanály</string>
+    <string name="channels_old_look">Starý vzhled sekce Kanály</string>
     <string name="channels_auto_load">Automaticky načíst obsah sekce Kanály</string>
     <string name="return_to_background_video">Zpět na video běžící na pozadí</string>
     <string name="pin_unpin_from_sidebar">Přidat/Odebrat k postrannímu panelu</string>
@@ -235,6 +237,7 @@
     <string name="pin_channel">Přidat kanál na postranní panel</string>
     <string name="pinned_to_sidebar">Přidáno na postranní panel</string>
     <string name="unpin_from_sidebar">Odebrat z postranního panelu</string>
+    <string name="unpin_group_from_sidebar">Odebrat skupinu odběrů</string>
     <string name="unpinned_from_sidebar">Odebráno z postranního panelu</string>
     <string name="dialog_select_country">Země</string>
     <string name="settings_language_country">Jazyk/Země</string>
@@ -266,7 +269,7 @@
     <string name="skip_each_segment_once">Znovu nepřeskakovat segmenty</string>
     <string name="disable_ok_long_press">Deaktivovat dlouhé stisknutí tlačítka OK</string>
     <string name="disable_ok_long_press_desc">Určeno pro zabugované ovladače, kde tlačítko OK nefunguje správně</string>
-    <string name="player_time_correction">Zobrazit čas s ohledem na rychlost</string>
+    <string name="player_time_correction">Zobrazit čas s korekcí rychlosti</string>
     <string name="sponsor_color_markers">Barevné značky na ukazateli průběhu</string>
     <string name="refresh_section">Aktualizovat sekci</string>
     <string name="option_disabled">Zakázáno</string>
@@ -482,6 +485,7 @@
     <string name="open_chat">Chat/Komentáře</string>
     <string name="open_comments">Otevřít komentáře</string>
     <string name="place_chat_left">Umístit chat na levou stranu</string>
+    <string name="place_comments_left">Umístit komentáře na levou stranu</string>
     <string name="use_alt_speech_recognizer">Alternativní rozpoznávač řeči</string>
     <string name="time_format">Časový režim</string>
     <string name="time_format_24">24 hodin</string>
@@ -669,4 +673,15 @@
     <string name="without_picture">Bez obrazu</string>
     <string name="video_disabled">Video zakázáno</string>
     <string name="applying_fix">Nezavírejte přehrávač. Aplikuje se oprava...</string>
+    <string name="hide_mixes">Skrýt Mixy</string>
+    <string name="player_global_focus_desc">Tato funkce ovlivňuje, které tlačítko přehrávače bude aktivní při procházení mezi řádky tlačítek přehrávače</string>
+    <string name="disable_network_error_fixing">Zakázat automatickou opravu chyby sítě</string>
+    <string name="disable_network_error_fixing_desc">Pravděpodobně musíte tuto možnost zapnout, pokud používáte VPN</string>
+    <string name="recommended">Doporučeno</string>
+    <string name="add_to_subscriptions_group">Přidat/Odebrat ze skupiny odběrů</string>
+    <string name="new_subscriptions_group">Nová skupina</string>
+    <string name="rename_group">Přejmenovat skupinu odběrů</string>
+    <string name="screen_dimming_amount">Míra ztmavení obrazovky</string>
+    <string name="screen_dimming_timeout">Časový limit ztmavení obrazovky</string>
+    <string name="playlists_rows">Zobrazit sekci Playlisty jako řádky</string>
 </resources>

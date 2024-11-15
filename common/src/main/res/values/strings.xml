@@ -35,9 +35,11 @@
     <string name="resolution_switch">Switch resolution</string>
     <string name="video_buffer">Video buffer</string>
     <string name="video_buffer_size_none">None</string>
+    <string name="video_buffer_size_lowest">Lowest</string>
     <string name="video_buffer_size_low">Low</string>
     <string name="video_buffer_size_med">Medium</string>
     <string name="video_buffer_size_high">High</string>
+    <string name="video_buffer_size_highest">Highest</string>
     <string name="update_changelog">Changelog</string>
     <string name="install_update">Install update</string>
     <string name="section_is_empty">Oops! There is nothing in here</string>
@@ -225,16 +227,17 @@
     <string name="player_corner_ending_time">Player: top right corner ending time</string>
     <string name="uploads_old_look">Revert old look of Uploads section</string>
     <string name="background_playback_activation">Background playback (activation)</string>
-    <string name="channels_old_look">Revert old look of Channels section</string>
+    <string name="channels_old_look">Old look of Channels section</string>
     <string name="channels_auto_load">Auto load Channels section content</string>
     <string name="return_to_background_video">Return to video running in background</string>
-    <string name="pin_unpin_from_sidebar">Add/Remove from sidebar</string>
-    <string name="pin_unpin_playlist">Add/Remove playlist from sidebar</string>
-    <string name="pin_unpin_channel">Add/Remove channel from sidebar</string>
+    <string name="pin_unpin_from_sidebar">Add/Remove from the sidebar</string>
+    <string name="pin_unpin_playlist">Add/Remove playlist from the sidebar</string>
+    <string name="pin_unpin_channel">Add/Remove channel from the sidebar</string>
     <string name="pin_playlist">Add playlist to the sidebar</string>
     <string name="pin_channel">Add channel to the sidebar</string>
     <string name="pinned_to_sidebar">Added to the sidebar</string>
     <string name="unpin_from_sidebar">Remove from the sidebar</string>
+    <string name="unpin_group_from_sidebar">Remove the subscription group</string>
     <string name="unpinned_from_sidebar">Removed from the sidebar</string>
     <string name="dialog_select_country">Country</string>
     <string name="settings_language_country">Language/Country</string>
@@ -266,7 +269,7 @@
     <string name="skip_each_segment_once">Don\'t skip segments again</string>
     <string name="disable_ok_long_press">Disable OK button long press</string>
     <string name="disable_ok_long_press_desc">Intended for buggy controllers where OK button does not function properly</string>
-    <string name="player_time_correction">Display the time with respect of speed</string>
+    <string name="player_time_correction">Show the time with speed correction</string>
     <string name="sponsor_color_markers">Color markers on progress bar</string>
     <string name="refresh_section">Refresh section</string>
     <string name="option_disabled">Disabled</string>
@@ -482,6 +485,7 @@
     <string name="open_chat">Chat/Comments</string>
     <string name="open_comments">Open comments</string>
     <string name="place_chat_left">Place chat to the left</string>
+    <string name="place_comments_left">Place comments to the left</string>
     <string name="use_alt_speech_recognizer">Alt speech recognizer</string>
     <string name="time_format">Time format</string>
     <string name="time_format_24">24 hours</string>
@@ -656,7 +660,7 @@
     <string name="pitch_effect">Pitch effect</string>
     <string name="fullscreen_mode">Fullscreen mode (without system bars)</string>
     <string name="player_only_mode">Show only the player if the video is opened outside of the app</string>
-    <string name="pinned_channel_rows">Display pinned channel as rows</string>
+    <string name="pinned_channel_rows">Show pinned channel as rows</string>
     <string name="prefer_ipv4">Prefer IPv4 DNS</string>
     <string name="prefer_ipv4_desc">Could fix situations when the app isn\'t working at all.\nNote. May cause hangs and crashes (especially on Android 8 devices or Dune HD)</string>
     <string name="long_press_for_settings">LONG PRESS FOR SETTINGS</string>
@@ -670,5 +674,15 @@
     <string name="video_disabled">Video disabled</string>
     <string name="applying_fix">Don\'t close the player. Applying the fix...</string>
     <string name="hide_mixes">Hide Mixes</string>
+    <string name="player_global_focus_desc">This feature affects which player button will receive focus when navigating between player button rows</string>
+    <string name="disable_network_error_fixing">Disable automatic network error fixing</string>
+    <string name="disable_network_error_fixing_desc">You probably need to enable this option if you\'re using a VPN</string>
+    <string name="recommended">Recommended</string>
+    <string name="add_to_subscriptions_group">Add/Remove from subscription group</string>
+    <string name="new_subscriptions_group">New group</string>
+    <string name="rename_group">Rename the subscription group</string>
+    <string name="screen_dimming_amount">Screen dimming amount</string>
+    <string name="screen_dimming_timeout">Screen dimming timeout</string>
+    <string name="playlists_rows">Show Playlists section as rows</string>
     <string name="cancel">Cancel</string>
 </resources>

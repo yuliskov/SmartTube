@@ -21,8 +21,6 @@ public interface PlayerUiEventListener {
     void onSpeedClicked(boolean enabled);
     void onSpeedLongClicked(boolean enabled);
     void onSeekIntervalClicked();
-    void onChatClicked(boolean enabled);
-    void onChatLongClicked(boolean enabled);
     void onVideoInfoClicked();
     void onShareLinkClicked();
     void onSearchClicked();

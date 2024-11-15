@@ -666,4 +666,21 @@
   <string name="unknown_source_error">Erreur de source inconnue</string>
   <string name="unknown_renderer_error">Erreur de rendu inconnue</string>
   <string name="calm_msg">Nous sommes en train de résoudre le problème. Vérifiez les mises à jour de temps à autre</string>
+  <string name="without_picture">Sans image</string>
+  <string name="video_disabled">Vidéo désactivée</string>
+  <string name="applying_fix">Ne fermez pas le lecteur. Application du correctif...</string>
+  <string name="hide_mixes">Masquer les mixes</string>
+  <string name="player_global_focus_desc">Cette fonctionnalité affecte le bouton du lecteur qui recevra le focus lors de la navigation entre les rangées de boutons du lecteur</string>
+  <string name="disable_network_error_fixing">Désactiver la correction automatique des erreurs réseau</string>
+  <string name="disable_network_error_fixing_desc">Vous devrez probablement activer cette option si vous utilisez un VPN</string>
+  <string name="video_buffer_size_lowest">Au plus bas</string>
+  <string name="recommended">Recommandé</string>
+  <string name="add_to_subscriptions_group">Ajouter/Supprimer du groupe d\'abonnement</string>
+  <string name="new_subscriptions_group">Nouveau groupe</string>
+  <string name="rename_group">Renommer le groupe d\'abonnement</string>
+  <string name="unpin_group_from_sidebar">Supprimer le groupe d\'abonnement</string>
+  <string name="screen_dimming_amount">Quantité d\'assombrissement de l\'écran</string>
+  <string name="screen_dimming_timeout">Délai d\'assombrissement de l\'écran</string>
+  <string name="video_buffer_size_highest">Maximum</string>
+  <string name="place_comments_left">Placer les commentaires à gauche</string>
 </resources>

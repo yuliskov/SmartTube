@@ -13,9 +13,9 @@ import io.reactivex.disposables.Disposable;
 
 public class YTSignInPresenter extends SignInPresenter {
     private static final String TAG = YTSignInPresenter.class.getSimpleName();
-    //private static final String SIGN_IN_URL_SHORT = "https://yt.be/activate"; // doesn't support query params, no search history
-    //private static final String SIGN_IN_URL_FULL = "https://youtube.com/tv/activate"; // support query params, no search history
-    private static final String SIGN_IN_URL = "https://youtube.com/activate"; // supports search history
+    private static final String SIGN_IN_URL = "https://yt.be/activate"; // 18+, no search history
+    //private static final String SIGN_IN_URL = "https://youtube.com/tv/activate"; // 18+, no search history
+    //private static final String SIGN_IN_URL = "https://youtube.com/activate"; // age restricted, supports search history
     @SuppressLint("StaticFieldLeak")
     private static YTSignInPresenter sInstance;
     private final ServiceManager mService;

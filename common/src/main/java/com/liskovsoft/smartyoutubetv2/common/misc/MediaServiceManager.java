@@ -7,6 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.yt.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.NotificationsService;
 import com.liskovsoft.mediaserviceinterfaces.yt.SignInService;
+import com.liskovsoft.mediaserviceinterfaces.yt.SignInService.OnAccountChange;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
@@ -22,7 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
-import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
+
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -31,7 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MediaServiceManager {
+public class MediaServiceManager implements OnAccountChange {
     private static final String TAG = MediaServiceManager.class.getSimpleName();
     private static MediaServiceManager sInstance;
     private final MediaItemService mItemService;
@@ -83,6 +84,10 @@ public class MediaServiceManager {
         void onAccountChanged(Account account);
     }
 
+    public interface OnError {
+        void onError(Throwable error);
+    }
+
     private MediaServiceManager() {
         ServiceManager service = YouTubeServiceManager.instance();
         mItemService = service.getMediaItemService();
@@ -90,9 +95,7 @@ public class MediaServiceManager {
         mSingInService = service.getSignInService();
         mNotificationsService = service.getNotificationsService();
 
-        mSingInService.setOnChange(
-                () -> onAccountChanged(YouTubeSignInService.instance().getSelectedAccount())
-        );
+        mSingInService.addOnAccountChange(this);
     }
 
     public static MediaServiceManager instance() {
@@ -240,7 +243,7 @@ public class MediaServiceManager {
 
         RxHelper.disposeActions(mPlaylistGroupAction);
 
-        Observable<MediaGroup> observable = mContentService.getEmptyPlaylistsObserve();
+        Observable<MediaGroup> observable = mContentService.getPlaylistsObserve();
 
         mPlaylistGroupAction = observable
                 .subscribe(
@@ -297,7 +300,7 @@ public class MediaServiceManager {
     }
 
     public void disposeActions() {
-        RxHelper.disposeActions(mMetadataAction, mUploadsAction, mSignCheckAction);
+        RxHelper.disposeActions(mMetadataAction, mUploadsAction, mSignCheckAction, mRowsAction, mSubscribedChannelsAction);
     }
 
     /**
@@ -365,7 +368,9 @@ public class MediaServiceManager {
     }
 
     public void enableHistory(boolean enable) {
-        RxHelper.runAsyncUser(() -> mContentService.enableHistory(enable));
+        if (enable) { // don't disable history for other clients
+            RxHelper.runAsyncUser(() -> mContentService.enableHistory(true));
+        }
     }
 
     public void clearHistory() {
@@ -400,8 +405,39 @@ public class MediaServiceManager {
         }
     }
 
-    public void setNotificationState(NotificationState state) {
-        RxHelper.execute(mNotificationsService.setNotificationStateObserve(state));
+    public void setNotificationState(NotificationState state, OnError onError) {
+        RxHelper.execute(mNotificationsService.setNotificationStateObserve(state), onError::onError);
+    }
+
+    public void removeFromWatchLaterPlaylist(Video video) {
+        removeFromWatchLaterPlaylist(video, null);
+    }
+
+    public void removeFromWatchLaterPlaylist(Video video, Runnable onSuccess) {
+        if (video == null || !mSingInService.isSigned()) {
+            return;
+        }
+
+        Disposable playlistsInfoAction = mItemService.getPlaylistsInfoObserve(video.videoId)
+                .subscribe(
+                        videoPlaylistInfos -> {
+                            PlaylistInfo watchLater = videoPlaylistInfos.get(0);
+
+                            if (watchLater.isSelected()) {
+                                Observable<Void> editObserve = mItemService.removeFromPlaylistObserve(watchLater.getPlaylistId(), video.videoId);
+
+                                RxHelper.execute(editObserve, () -> {
+                                    if (onSuccess != null) {
+                                        onSuccess.run();
+                                    }
+                                });
+                            }
+                        },
+                        error -> {
+                            // Fallback to something on error
+                            Log.e(TAG, "Get playlists error: %s", error.getMessage());
+                        }
+                );
     }
 
     public void addAccountListener(AccountChangeListener listener) {
@@ -420,10 +456,15 @@ public class MediaServiceManager {
     }
 
     public Account getSelectedAccount() {
-        return YouTubeSignInService.instance().getSelectedAccount();
+        return mSingInService.getSelectedAccount();
     }
 
-    private void onAccountChanged(Account account) {
+    public boolean isSigned() {
+        return mSingInService.isSigned();
+    }
+
+    @Override
+    public void onAccountChanged(Account account) {
         for (AccountChangeListener listener : mAccountListeners) {
             listener.onAccountChanged(account);
         }

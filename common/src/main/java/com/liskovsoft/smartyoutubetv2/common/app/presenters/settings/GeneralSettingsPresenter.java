@@ -16,6 +16,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuManager;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -41,6 +44,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private final PlayerData mPlayerData;
     private final PlayerTweaksData mPlayerTweaksData;
     private final MainUIData mMainUIData;
+    private final SidebarService mSidebarService;
     private boolean mRestartApp;
 
     private GeneralSettingsPresenter(Context context) {
@@ -49,6 +53,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         mPlayerData = PlayerData.instance(context);
         mPlayerTweaksData = PlayerTweaksData.instance(context);
         mMainUIData = MainUIData.instance(context);
+        mSidebarService = SidebarService.instance(context);
     }
 
     public static GeneralSettingsPresenter instance(Context context) {
@@ -66,8 +71,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         //appendAppExitCategory(settingsPresenter);
         //appendBackgroundPlaybackCategory(settingsPresenter);
         //appendBackgroundPlaybackActivationCategory(settingsPresenter);
-        //appendScreensaverDimmingCategory(settingsPresenter);
-        //appendScreensaverTimeoutCategory(settingsPresenter);
+        //appendScreenDimmingCategory(settingsPresenter);
+        //appendScreenDimmingAmountCategory(settingsPresenter);
+        //appendScreenDimmingTimeoutCategory(settingsPresenter);
         //appendTimeFormatCategory(settingsPresenter);
         //appendKeyRemappingCategory(settingsPresenter);
         //appendAppBackupCategory(settingsPresenter);
@@ -86,7 +92,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendEnabledSections(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Map<Integer, Integer> sections = mGeneralData.getDefaultSections();
+        Map<Integer, Integer> sections = mSidebarService.getDefaultSections();
 
         for (Entry<Integer, Integer> section : sections.entrySet()) {
             int sectionResId = section.getKey();
@@ -98,7 +104,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
             options.add(UiOptionItem.from(getContext().getString(sectionResId), optionItem -> {
                 BrowsePresenter.instance(getContext()).enableSection(sectionId, optionItem.isSelected());
-            }, mGeneralData.isSectionPinned(sectionId)));
+            }, mSidebarService.isSectionPinned(sectionId)));
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.side_panel_sections), options);
@@ -108,12 +114,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_mixes),
-                option -> MediaServiceData.instance().enableContent(MediaServiceData.CONTENT_MIXES, !option.isSelected()),
-                !MediaServiceData.instance().isContentEnabled(MediaServiceData.CONTENT_MIXES)));
+                option -> MediaServiceData.instance().hideContent(MediaServiceData.CONTENT_MIXES, option.isSelected()),
+                MediaServiceData.instance().isContentHidden(MediaServiceData.CONTENT_MIXES)));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_watched_from_watch_later),
-                option -> mGeneralData.hideWatchedFromWatchLater(option.isSelected()),
-                mGeneralData.isHideWatchedFromWatchLaterEnabled()));
+                option -> MediaServiceData.instance().hideContent(MediaServiceData.CONTENT_WATCHED_WATCH_LATER, option.isSelected()),
+                MediaServiceData.instance().isContentHidden(MediaServiceData.CONTENT_WATCHED_WATCH_LATER)));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_watched_from_home),
                 option -> mGeneralData.hideWatchedFromHome(option.isSelected()),
@@ -253,27 +259,27 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendBootToSection(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Map<Integer, Integer> sections = mGeneralData.getDefaultSections();
+        Map<Integer, Integer> sections = mSidebarService.getDefaultSections();
 
         for (Entry<Integer, Integer> section : sections.entrySet()) {
             options.add(
                     UiOptionItem.from(
                             getContext().getString(section.getKey()),
-                            optionItem -> mGeneralData.setBootSectionId(section.getValue()),
-                            section.getValue().equals(mGeneralData.getBootSectionId())
+                            optionItem -> mSidebarService.setBootSectionId(section.getValue()),
+                            section.getValue().equals(mSidebarService.getBootSectionId())
                     )
             );
         }
 
-        Collection<Video> pinnedItems = mGeneralData.getPinnedItems();
+        Collection<Video> pinnedItems = mSidebarService.getPinnedItems();
 
         for (Video item : pinnedItems) {
             if (item != null && item.getTitle() != null) {
                 options.add(
                         UiOptionItem.from(
                                 item.getTitle(),
-                                optionItem -> mGeneralData.setBootSectionId(item.hashCode()),
-                                item.hashCode() == mGeneralData.getBootSectionId()
+                                optionItem -> mSidebarService.setBootSectionId(item.hashCode()),
+                                item.hashCode() == mSidebarService.getBootSectionId()
                         )
                 );
             }
@@ -388,7 +394,16 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.key_remapping), options);
     }
 
-    private void appendScreensaverDimmingCategory(AppDialogPresenter settingsPresenter) {
+    private void appendScreenDimmingCategory(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.screen_dimming), optionItem -> {
+            AppDialogPresenter presenter = AppDialogPresenter.instance(getContext());
+            appendScreenDimmingAmountCategory(presenter);
+            appendScreenDimmingTimeoutCategory(presenter);
+            presenter.showDialog(getContext().getString(R.string.screen_dimming));
+        }));
+    }
+
+    private void appendScreenDimmingAmountCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         int activeMode = mGeneralData.getScreensaverDimmingPercents();
@@ -400,11 +415,11 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     activeMode == dimPercents));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.screensaver_dimming), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.screen_dimming_amount), options);
     }
 
     @SuppressLint("StringFormatMatches")
-    private void appendScreensaverTimeoutCategory(AppDialogPresenter settingsPresenter) {
+    private void appendScreenDimmingTimeoutCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         int screensaverTimeoutMs = mGeneralData.getScreensaverTimeoutMs();
@@ -430,7 +445,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     screensaverTimeoutMs == timeoutMs));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.screensaver_timout), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.screen_dimming_timeout), options);
     }
 
     //private void appendTimeFormatCategory(AppDialogPresenter settingsPresenter) {
@@ -673,16 +688,15 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.closeDialog();
         SimpleEditDialog.showPassword(
                 getContext(),
-                "", newValue -> {
+                getContext().getString(R.string.protect_settings_with_password),
+                null,
+                newValue -> {
                     mGeneralData.setSettingsPassword(newValue);
                     if (onSuccess != null) {
                         onSuccess.run();
                     }
                     return true;
-                },
-                getContext().getString(R.string.protect_settings_with_password),
-                true
-        );
+                });
     }
 
     private void showMasterPasswordDialog(AppDialogPresenter settingsPresenter, Runnable onSuccess) {
@@ -696,16 +710,15 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.closeDialog();
         SimpleEditDialog.showPassword(
                 getContext(),
-                "", newValue -> {
+                getContext().getString(R.string.enable_master_password),
+                null,
+                newValue -> {
                     mGeneralData.setMasterPassword(newValue);
                     if (onSuccess != null) {
                         onSuccess.run();
                     }
                     return true;
-                },
-                getContext().getString(R.string.enable_master_password),
-                true
-        );
+                });
     }
 
     private Map<Long, Integer> getMenuNames() {
@@ -745,6 +758,11 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         menuNames.put(MainUIData.MENU_ITEM_OPEN_DESCRIPTION, R.string.action_video_info);
         menuNames.put(MainUIData.MENU_ITEM_OPEN_COMMENTS, R.string.open_comments);
         menuNames.put(MainUIData.MENU_ITEM_OPEN_PLAYLIST, R.string.open_playlist);
+
+        for (ContextMenuProvider provider : new ContextMenuManager(getContext()).getProviders()) {
+            menuNames.put(provider.getId(), provider.getTitleResId());
+        }
+
         return menuNames;
     }
 }

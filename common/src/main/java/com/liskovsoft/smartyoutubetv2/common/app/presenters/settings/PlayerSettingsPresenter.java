@@ -12,7 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -28,6 +28,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private final PlayerTweaksData mPlayerTweaksData;
     private final SearchData mSearchData;
     private final GeneralData mGeneralData;
+    private final SidebarService mSidebarService;
     private boolean mRestartApp;
 
     private PlayerSettingsPresenter(Context context) {
@@ -36,6 +37,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         mPlayerTweaksData = PlayerTweaksData.instance(context);
         mSearchData = SearchData.instance(context);
         mGeneralData = GeneralData.instance(context);
+        mSidebarService = SidebarService.instance(context);
     }
 
     public static PlayerSettingsPresenter instance(Context context) {
@@ -232,13 +234,26 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        // Oculus Quest fix: back button not closing the activity
+        options.add(UiOptionItem.from("Oculus Quest fix",
+                option -> {
+                    mPlayerTweaksData.enableOculusQuestFix(option.isSelected());
+                    mRestartApp = true;
+                },
+                mPlayerTweaksData.isOculusQuestFixEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_network_error_fixing),
+                getContext().getString(R.string.disable_network_error_fixing_desc),
+                option -> mPlayerTweaksData.disableNetworkErrorFixing(option.isSelected()),
+                mPlayerTweaksData.isNetworkErrorFixingDisabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.prefer_ipv4),
                 getContext().getString(R.string.prefer_ipv4_desc),
                 option -> {
-                    GlobalPreferences.instance(getContext()).preferIPv4Dns(option.isSelected());
+                    mPlayerTweaksData.preferIPv4Dns(option.isSelected());
                     mRestartApp = true;
                 },
-                GlobalPreferences.instance(getContext()).isIPv4DnsPreferred()));
+                mPlayerTweaksData.isIPv4DnsPreferred()));
 
         // Disable long press on buggy controllers.
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
@@ -288,6 +303,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                     mPlayerTweaksData.forceDashUrlStreams(option.isSelected());
                 },
                 mPlayerTweaksData.isDashUrlStreamsForced()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_stream_buffer),
+                getContext().getString(R.string.disable_stream_buffer_desc),
+                option -> mPlayerTweaksData.disableBufferOnStreams(option.isSelected()),
+                mPlayerTweaksData.isBufferOnStreamsDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.playback_notifications_fix),
                 getContext().getString(R.string.playback_notifications_fix_desc),
@@ -350,11 +370,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableAmazonFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isAmazonFrameDropFixEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.disable_stream_buffer),
-                getContext().getString(R.string.disable_stream_buffer_desc),
-                option -> mPlayerTweaksData.disableBufferOnStreams(option.isSelected()),
-                mPlayerTweaksData.isBufferOnStreamsDisabled()));
-
         options.add(UiOptionItem.from(getContext().getString(R.string.keep_finished_activities),
                 option -> mPlayerTweaksData.enableKeepFinishedActivity(option.isSelected()),
                 mPlayerTweaksData.isKeepFinishedActivityEnabled()));
@@ -365,18 +380,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_settings_section),
                 option -> {
-                    mGeneralData.enableSettingsSection(!option.isSelected());
+                    mSidebarService.enableSettingsSection(!option.isSelected());
                     mRestartApp = true;
                 },
-                !mGeneralData.isSettingsSectionEnabled()));
-
-        // Oculus Quest fix: back button not closing the activity
-        options.add(UiOptionItem.from("Oculus Quest fix",
-                option -> {
-                    mPlayerTweaksData.enableOculusQuestFix(option.isSelected());
-                    mRestartApp = true;
-                },
-                mPlayerTweaksData.isOculusQuestFixEnabled()));
+                !mSidebarService.isSettingsSectionEnabled()));
 
         // Disabled inside RetrofitHelper
         //options.add(UiOptionItem.from("Prefer IPv4 DNS",
@@ -514,7 +521,63 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableLoopShorts(option.isSelected()),
                 mPlayerTweaksData.isLoopShortsEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.place_chat_left),
+                option -> mPlayerTweaksData.placeChatLeft(option.isSelected()),
+                mPlayerTweaksData.isChatPlacedLeft()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.place_comments_left),
+                option -> mPlayerTweaksData.placeCommentsLeft(option.isSelected()),
+                mPlayerTweaksData.isCommentsPlacedLeft()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_disable_suggestions),
+                option -> mPlayerTweaksData.disableSuggestions(option.isSelected()),
+                mPlayerTweaksData.isSuggestionsDisabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_number_key_seek),
+                option -> mPlayerData.enableNumberKeySeek(option.isSelected()),
+                mPlayerData.isNumberKeySeekEnabled()));
+
+        //options.add(UiOptionItem.from(getContext().getString(R.string.app_corner_clock),
+        //        option -> {
+        //            mGeneralData.enableGlobalClock(option.isSelected());
+        //            mRestartApp = true;
+        //        },
+        //        mGeneralData.isGlobalClockEnabled()));
+        //
+        //options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_clock),
+        //        option -> mPlayerData.enableGlobalClock(option.isSelected()),
+        //        mPlayerData.isGlobalClockEnabled()));
+        //
+        //options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_ending_time),
+        //        option -> mPlayerData.enableGlobalEndingTime(option.isSelected()),
+        //        mPlayerData.isGlobalEndingTimeEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_of_live_videos),
+                option -> mPlayerTweaksData.enableRememberPositionOfLiveVideos(option.isSelected()),
+                mPlayerTweaksData.isRememberPositionOfLiveVideosEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_of_short_videos),
+                option -> mPlayerTweaksData.enableRememberPositionOfShortVideos(option.isSelected()),
+                mPlayerTweaksData.isRememberPositionOfShortVideosEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_speed_button_old_behavior),
+                option -> mPlayerTweaksData.enableSpeedButtonOldBehavior(option.isSelected()),
+                mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_clock),
+                option -> mPlayerData.enableClock(option.isSelected()),
+                mPlayerData.isClockEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info),
+                option -> mPlayerData.enableQualityInfo(option.isSelected()),
+                mPlayerData.isQualityInfoEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info_bitrate),
+                option -> mPlayerTweaksData.enableQualityInfoBitrate(option.isSelected()),
+                mPlayerTweaksData.isQualityInfoBitrateEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_global_focus),
+                getContext().getString(R.string.player_global_focus_desc),
                 option -> mPlayerTweaksData.enablePlayerGlobalFocus(option.isSelected()),
                 mPlayerTweaksData.isPlayerGlobalFocusEnabled()));
 
@@ -529,10 +592,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_likes_count),
                 option -> mPlayerTweaksData.enableLikesCounter(option.isSelected()),
                 mPlayerTweaksData.isLikesCounterEnabled()));
-
-        //options.add(UiOptionItem.from(getContext().getString(R.string.player_long_speed_list),
-        //        option -> mPlayerTweaksData.enableLongSpeedList(option.isSelected()),
-        //        mPlayerTweaksData.isLongSpeedListEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_tooltips),
                 option -> mPlayerData.enableTooltips(option.isSelected()),
@@ -552,57 +611,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.real_channel_icon),
                 option -> mPlayerTweaksData.enableRealChannelIcon(option.isSelected()),
                 mPlayerTweaksData.isRealChannelIconEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.place_chat_left),
-                option -> mPlayerTweaksData.placeChatLeft(option.isSelected()),
-                mPlayerTweaksData.isChatPlacedLeft()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_disable_suggestions),
-                option -> mPlayerTweaksData.disableSuggestions(option.isSelected()),
-                mPlayerTweaksData.isSuggestionsDisabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_number_key_seek),
-                option -> mPlayerData.enableNumberKeySeek(option.isSelected()),
-                mPlayerData.isNumberKeySeekEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_clock),
-                option -> mPlayerData.enableClock(option.isSelected()),
-                mPlayerData.isClockEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info),
-                option -> mPlayerData.enableQualityInfo(option.isSelected()),
-                mPlayerData.isQualityInfoEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info_bitrate),
-                option -> mPlayerTweaksData.enableQualityInfoBitrate(option.isSelected()),
-                mPlayerTweaksData.isQualityInfoBitrateEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.app_corner_clock),
-                option -> {
-                    mGeneralData.enableGlobalClock(option.isSelected());
-                    mRestartApp = true;
-                },
-                mGeneralData.isGlobalClockEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_clock),
-                option -> mPlayerData.enableGlobalClock(option.isSelected()),
-                mPlayerData.isGlobalClockEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_ending_time),
-                option -> mPlayerData.enableGlobalEndingTime(option.isSelected()),
-                mPlayerData.isGlobalEndingTimeEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_of_live_videos),
-                option -> mPlayerTweaksData.enableRememberPositionOfLiveVideos(option.isSelected()),
-                mPlayerTweaksData.isRememberPositionOfLiveVideosEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_of_short_videos),
-                option -> mPlayerTweaksData.enableRememberPositionOfShortVideos(option.isSelected()),
-                mPlayerTweaksData.isRememberPositionOfShortVideosEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_speed_button_old_behavior),
-                option -> mPlayerTweaksData.enableSpeedButtonOldBehavior(option.isSelected()),
-                mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }

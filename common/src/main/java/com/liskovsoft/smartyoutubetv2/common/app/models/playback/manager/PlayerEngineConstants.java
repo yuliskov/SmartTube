@@ -14,10 +14,10 @@ public interface PlayerEngineConstants {
     int BACKGROUND_MODE_SOUND = 1;
     int BACKGROUND_MODE_PIP = 2;
     int BACKGROUND_MODE_PLAY_BEHIND = 3;
-    int BUFFER_NONE = 3;
-    int BUFFER_LOW = 0;
-    int BUFFER_MEDIUM = 1;
-    int BUFFER_HIGH = 2;
+    int BUFFER_LOW = 3;
+    int BUFFER_MEDIUM = 0;
+    int BUFFER_HIGH = 1;
+    int BUFFER_HIGHEST = 2;
     int ZOOM_MODE_DEFAULT = AspectRatioFrameLayout.RESIZE_MODE_FIT;
     int ZOOM_MODE_FIT_WIDTH = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH;
     int ZOOM_MODE_FIT_HEIGHT = AspectRatioFrameLayout.RESIZE_MODE_FIXED_HEIGHT;

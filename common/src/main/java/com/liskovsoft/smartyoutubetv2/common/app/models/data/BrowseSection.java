@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
+import androidx.annotation.Nullable;
+
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class BrowseSection {
@@ -102,5 +104,10 @@ public class BrowseSection {
      */
     public boolean isDefault() {
         return mId < 30;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj instanceof BrowseSection && ((BrowseSection) obj).getId() == getId();
     }
 }

@@ -24,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -81,6 +82,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         // Otherwise keep the cache to easily restore in case activity is killed by the system.
         mVideoItem = null;
         mRootGroup = null;
+        disposeActions();
     }
 
     @Override
@@ -168,7 +170,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         disposeActions();
 
         return item.hasNestedItems() || item.isChannel() ?
-               mContentService.getGroupObserve(item.mediaItem) :
+               mContentService.getGroupObserve(item.mediaItem != null ? item.mediaItem : SampleMediaItem.from(item)) :
                item.hasReloadPageKey() ?
                mContentService.getGroupObserve(item.getReloadPageKey()) :
                mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0, item.playlistParams)
@@ -177,6 +179,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     private void disposeActions() {
         RxHelper.disposeActions(mUpdateAction, mScrollAction);
+        MediaServiceManager.instance().disposeActions();
     }
 
     private void continueGroup(VideoGroup group) {
@@ -253,8 +256,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     public void update(MediaGroup mediaGroup) {
-        disposeActions();
-
         if (getView() == null) { // starting from outside (e.g. MediaServiceManager)
             mVideoItem = null;
             mRootGroup = mediaGroup; // start loading from this group

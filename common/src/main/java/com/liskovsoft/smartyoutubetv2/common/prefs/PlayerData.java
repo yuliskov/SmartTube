@@ -88,7 +88,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     private boolean mIsSkip24RateEnabled;
     private boolean mIsSkipShortsEnabled;
     private boolean mIsLiveChatEnabled;
-    private FormatItem mLastSubtitleFormat;
+    private List<FormatItem> mLastSubtitleFormats;
     private List<String> mEnabledSubtitlesPerChannel;
     private boolean mIsSubtitlesPerChannelEnabled;
     private boolean mIsSpeedPerChannelEnabled;
@@ -403,15 +403,26 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     }
 
     public FormatItem getLastSubtitleFormat() {
-        return mLastSubtitleFormat;
+        return !mLastSubtitleFormats.isEmpty() ? mLastSubtitleFormats.get(0) : FormatItem.SUBTITLE_NONE;
+    }
+
+    public List<FormatItem> getLastSubtitleFormats() {
+        return mLastSubtitleFormats;
     }
 
     private void setLastSubtitleFormat(FormatItem format) {
         if (format != null && !format.isDefault()) {
-            mLastSubtitleFormat = format;
+            mLastSubtitleFormats.remove(format);
+            mLastSubtitleFormats.add(0, format);
         } else if (mSubtitleFormat != null && !mSubtitleFormat.isDefault()) {
-            mLastSubtitleFormat = mSubtitleFormat;
+            mLastSubtitleFormats.remove(mSubtitleFormat);
+            mLastSubtitleFormats.add(0, mSubtitleFormat);
         }
+
+        // Limit max size
+        //if (mLastSubtitleFormats.size() > 3) {
+        //    mLastSubtitleFormats.subList(3, mLastSubtitleFormats.size()).clear();
+        //}
     }
 
     public void enableSubtitlesPerChannel(String channelId) {
@@ -757,7 +768,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         }
         mAudioFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 10)), getDefaultAudioFormat());
         mSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 11)), getDefaultSubtitleFormat());
-        mVideoBufferType = Helpers.parseInt(split, 12, PlayerEngine.BUFFER_LOW);
+        mVideoBufferType = Helpers.parseInt(split, 12, PlayerEngine.BUFFER_MEDIUM);
         mSubtitleStyleIndex = Helpers.parseInt(split, 13, 4); // yellow on semi bg
         mVideoZoomMode = Helpers.parseInt(split, 14, PlayerEngine.ZOOM_MODE_DEFAULT);
         mSpeed = Helpers.parseFloat(split, 15, 1.0f);
@@ -791,7 +802,8 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         mIsSkip24RateEnabled = Helpers.parseBoolean(split, 44, false);
         mAfrPauseMs = Helpers.parseInt(split, 45, 0);
         mIsLiveChatEnabled = Helpers.parseBoolean(split, 46, false);
-        mLastSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 47)), FormatItem.SUBTITLE_NONE);
+        mLastSubtitleFormats = Helpers.parseList(split, 47, ExoFormatItem::from);
+        //mLastSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 47)), FormatItem.SUBTITLE_NONE);
         mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
         mVideoRotation = Helpers.parseInt(split, 49, 0);
         mVideoZoom = Helpers.parseInt(split, 50, -1);
@@ -830,7 +842,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
                 mIsQualityInfoEnabled, mIsSpeedPerVideoEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
-                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormat, mLastSpeed, mVideoRotation,
+                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mVideoRotation,
                 mVideoZoom, mRepeatMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled
         ));

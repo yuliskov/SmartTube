@@ -384,7 +384,8 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         closeDialog();
         SimpleEditDialog.show(
                 getContext(),
-                "",
+                getContext().getString(R.string.create_playlist),
+                null,
                 newValue -> {
                     MediaItemService manager = YouTubeMediaItemService.instance();
                     Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
@@ -400,10 +401,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                             }
                     );
                     return true;
-                },
-                getContext().getString(R.string.create_playlist),
-                true
-        );
+                });
     }
 
     protected void appendRenamePlaylistButton() {
@@ -446,6 +444,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
                     SimpleEditDialog.show(
                             getContext(),
+                            getContext().getString(R.string.rename_playlist),
                             video.getTitle(),
                             newValue -> {
                                 MediaItemService manager = YouTubeMediaItemService.instance();
@@ -459,10 +458,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                         }
                                 );
                                 return true;
-                            },
-                            getContext().getString(R.string.rename_playlist),
-                            true
-                    );
+                            });
                 }
         );
     }

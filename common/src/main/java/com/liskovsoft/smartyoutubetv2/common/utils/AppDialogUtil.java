@@ -307,10 +307,10 @@ public class AppDialogUtil {
     public static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData, Runnable onBufferSelected) {
         String videoBufferTitle = context.getString(R.string.video_buffer);
         List<OptionItem> optionItems = new ArrayList<>();
-        optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_none, PlayerData.BUFFER_NONE, onBufferSelected));
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_low, PlayerData.BUFFER_LOW, onBufferSelected));
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_med, PlayerData.BUFFER_MEDIUM, onBufferSelected));
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_high, PlayerData.BUFFER_HIGH, onBufferSelected));
+        optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_highest, PlayerData.BUFFER_HIGHEST, onBufferSelected));
         return OptionCategory.from(VIDEO_BUFFER_ID, OptionCategory.TYPE_RADIO_LIST, videoBufferTitle, optionItems);
     }
 
@@ -852,39 +852,6 @@ public class AppDialogUtil {
         dialogPresenter.appendRadioCategory(context.getString(R.string.seek_interval), options);
     }
 
-    public static void removeFromWatchLaterPlaylist(Context context, Video video) {
-        removeFromWatchLaterPlaylist(context, video, null);
-    }
-
-    public static void removeFromWatchLaterPlaylist(Context context, Video video, Runnable onSuccess) {
-        if (video == null || !YouTubeSignInService.instance().isSigned()) {
-            return;
-        }
-
-        MediaItemService itemManager = YouTubeMediaItemService.instance();
-
-        Disposable playlistsInfoAction = itemManager.getPlaylistsInfoObserve(video.videoId)
-                .subscribe(
-                        videoPlaylistInfos -> {
-                            PlaylistInfo watchLater = videoPlaylistInfos.get(0);
-
-                            if (watchLater.isSelected()) {
-                                Observable<Void> editObserve = itemManager.removeFromPlaylistObserve(watchLater.getPlaylistId(), video.videoId);
-
-                                RxHelper.execute(editObserve, () -> {
-                                    if (onSuccess != null) {
-                                        onSuccess.run();
-                                    }
-                                });
-                            }
-                        },
-                        error -> {
-                            // Fallback to something on error
-                            Log.e(TAG, "Get playlists error: %s", error.getMessage());
-                        }
-                );
-    }
-
     public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback) {
         if (!YouTubeSignInService.instance().isSigned()) {
             MessageHelpers.showMessage(context, R.string.msg_signed_users_only);
@@ -973,6 +940,10 @@ public class AppDialogUtil {
             showPlaylistOrderDialog(context, video.playlistId, onClose);
         } else if (video.belongsToUserPlaylists()) {
             MediaServiceManager.instance().loadChannelUploads(video, group -> {
+                if (group.getMediaItems() == null || group.getMediaItems().isEmpty()) {
+                    return;
+                }
+
                 MediaItem first = group.getMediaItems().get(0);
                 String playlistId = first.getPlaylistId();
 

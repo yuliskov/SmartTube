@@ -99,7 +99,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     private final VideoInfoAction mVideoInfoAction;
     private final ShareAction mShareAction;
     private final SeekIntervalAction mSeekIntervalAction;
-    private final ChatAction mChatAction;
     private final Map<Integer, Action> mActions = new HashMap<>();
     private final OnActionClickedListener mActionListener;
     private final PlayerTweaksData mPlayerTweaksData;
@@ -140,7 +139,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         mVideoInfoAction = new VideoInfoAction(context);
         mShareAction = new ShareAction(context);
         mSeekIntervalAction = new SeekIntervalAction(context);
-        mChatAction = new ChatAction(context);
 
         putAction(new RotateAction(context));
         putAction(new ContentBlockAction(context));
@@ -151,6 +149,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         putAction(new AFRAction(context));
         putAction(new RepeatAction(context));
         putAction(new ChannelAction(context));
+        putAction(new ChatAction(context));
     }
 
     @Override
@@ -187,7 +186,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         //    adapter.add(mActions.get(R.id.action_screen_off_timeout));
         //}
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_CHAT)) {
-            adapter.add(mChatAction);
+            adapter.add(mActions.get(R.id.action_chat));
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SEARCH)) {
             adapter.add(mSearchAction);
@@ -330,11 +329,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     public void setClosedCaptionsButtonState(boolean selected) {
         mClosedCaptioningAction.setIndex(selected ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
         invalidateUi(mClosedCaptioningAction);
-    }
-
-    public void setChatButtonState(boolean selected) {
-        mChatAction.setIndex(selected ? TwoStateAction.INDEX_ON : TwoStateAction.INDEX_OFF);
-        invalidateUi(mChatAction);
     }
 
     public void setButtonState(int buttonId, int buttonState) {
@@ -487,9 +481,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         } else if (action == mSeekIntervalAction) {
             mActionListener.onSeekInterval();
             handled = true;
-        } else if (action == mChatAction) {
-            mActionListener.onChat(getActionIndex(action) == TwoStateAction.INDEX_ON);
-            handled = true;
         } else if (mActions.containsKey((int) action.getId())) {
             mActionListener.onAction((int) action.getId(), getActionIndex(action));
             handled = true;
@@ -519,9 +510,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
 
         if (action == mClosedCaptioningAction) {
             mActionListener.onClosedCaptionsLongPress(getActionIndex(action) == TwoStateAction.INDEX_ON);
-            handled = true;
-        } else if (action == mChatAction) {
-            mActionListener.onChatLongPress(getActionIndex(action) == TwoStateAction.INDEX_ON);
             handled = true;
         } else if (action == mVideoSpeedAction) {
             mActionListener.onVideoSpeedLongPress(getActionIndex(action) == TwoStateAction.INDEX_ON);
@@ -664,7 +652,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
             return false;
         }
 
-        return action == mChatAction;
+        return action.getId() == R.id.action_chat;
     }
 
     @Override
@@ -710,10 +698,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         void onVideoSpeedLongPress(boolean enabled);
 
         void onSeekInterval();
-
-        void onChat(boolean enabled);
-
-        void onChatLongPress(boolean enabled);
 
         void onVideoInfo();
 

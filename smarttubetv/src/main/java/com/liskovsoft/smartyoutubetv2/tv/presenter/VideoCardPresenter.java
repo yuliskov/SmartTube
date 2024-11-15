@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build.VERSION;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,7 +147,9 @@ public class VideoCardPresenter extends LongClickPresenter {
                 .apply(ViewUtil.glideOptions())
                 // improve image compression on low end devices
                 .override(mWidth, mHeight)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                // com.liskovsoft.smartyoutubetv2.tv.util.CacheGlideModule
+                // Cache makes app crashing on old android versions
+                .diskCacheStrategy(VERSION.SDK_INT > 21 ? DiskCacheStrategy.ALL : DiskCacheStrategy.NONE)
                 .listener(mErrorListener)
                 .error(
                     // Updated thumbnail url not found

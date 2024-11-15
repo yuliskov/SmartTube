@@ -2,8 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.errors;
 
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.YTSignInPresenter;
 
 public class SignInError implements ErrorFragmentData {
     private final Context mContext;
@@ -14,7 +13,7 @@ public class SignInError implements ErrorFragmentData {
 
     @Override
     public void onAction() {
-        ViewManager.instance(mContext).startView(SignInView.class);
+        YTSignInPresenter.instance(mContext).start();
     }
 
     @Override

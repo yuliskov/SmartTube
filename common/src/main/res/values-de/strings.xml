@@ -35,9 +35,11 @@
     <string name="resolution_switch">Auflösung umschalten</string>
     <string name="video_buffer">Video-Puffer</string>
     <string name="video_buffer_size_none">Keiner</string>
+    <string name="video_buffer_size_lowest">Sehr niedrig</string>
     <string name="video_buffer_size_low">Niedrig</string>
     <string name="video_buffer_size_med">Mittel</string>
     <string name="video_buffer_size_high">Hoch</string>
+    <string name="video_buffer_size_highest">Sehr hoch</string>
     <string name="update_changelog">Änderungsprotokoll</string>
     <string name="install_update">Update installieren</string>
     <string name="section_is_empty">Hier ist nichts drin</string>
@@ -235,6 +237,7 @@
     <string name="pin_channel">Kanal zur Seitenleiste hinzufügen</string>
     <string name="pinned_to_sidebar">Zur Seitenleiste hinzugefügt</string>
     <string name="unpin_from_sidebar">Entfernen aus Seitenleiste</string>
+    <string name="unpin_group_from_sidebar">Abo-Gruppe entfernen</string>
     <string name="unpinned_from_sidebar">Aus Seitenleiste entfernt</string>
     <string name="dialog_select_country">Land</string>
     <string name="settings_language_country">Sprache/Land</string>
@@ -482,8 +485,9 @@
     <string name="open_chat">Chat/Kommentare</string>
     <string name="open_comments">Kommentare öffnen</string>
     <string name="place_chat_left">Chat auf linker Seite platzieren</string>
+    <string name="place_comments_left">Kommentare auf linker Seite platzieren</string>
     <string name="use_alt_speech_recognizer">Alternative Spracherkennung</string>
-    <string name="time_format">Stunden-Format</string>
+    <string name="time_format">Zeit-Format</string>
     <string name="time_format_24">24 Stunden</string>
     <string name="time_format_12">12 Stunden (AM/PM)</string>
     <string name="use_alt_speech_recognizer_desc">Funktioniert nicht gut. Verwenden Sie es nur, wenn Sie Probleme mit der Standard-Spracherkennung haben.</string>
@@ -571,7 +575,7 @@
     <string name="sony_frame_drop_fix_desc">Behebt Verzögerungen/Lags auf Sony-TV und einigen anderen Geräten. Hinweis: Mögliche Probleme mit der Audio-Synchronisation.</string>
     <string name="audio_language">Audio-Sprache</string>
     <string name="old_home_look">Altes Aussehen der Startseite</string>
-    <string name="old_channel_look">Altes Aussehen der Kanäle-Kategorie</string>
+    <string name="old_channel_look">Altes Aussehen der Kanalseite</string>
     <string name="hide_shorts_everywhere">Shorts überall ausblenden</string>
     <string name="update_found">Update</string>
     <string name="volume_boost_warning">Einstellungen über dem Grenzwert können die Lautsprecher möglicherweise beschädigen</string>
@@ -670,4 +674,14 @@
     <string name="video_disabled">Video deaktiviert</string>
     <string name="applying_fix">Player nicht schließen. Fix wird angewendet...</string>
     <string name="hide_mixes">Mix-Wiedergabelisten ausblenden</string>
+    <string name="player_global_focus_desc">Diese Funktion beeinflusst, welche Player-Schaltfläche den Fokus erhält, wenn Sie zwischen Player-Schaltflächenreihen navigieren</string>
+    <string name="disable_network_error_fixing">Automatische Netzwerk-Fehlerbehebung deaktivieren</string>
+    <string name="disable_network_error_fixing_desc">Sie müssen diese Option wahrscheinlich aktivieren, wenn Sie einen VPN verwenden.</string>
+    <string name="recommended">Empfohlen</string>
+    <string name="add_to_subscriptions_group">Hinzufügen/Entfernen aus Abo-Gruppe</string>
+    <string name="new_subscriptions_group">Neue Gruppe</string>
+    <string name="rename_group">Abo-Gruppe umbenennen</string>
+    <string name="screen_dimming_amount">Wert für Bildschirm dimmen</string>
+    <string name="screen_dimming_timeout">Zeit für Bildschirm dimmen</string>
+    <string name="playlists_rows">Wiedergabelisten-Kategorie als Reihen anzeigen</string>
 </resources>

@@ -46,7 +46,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private final List<IntentProcessor> mIntentChain = new ArrayList<>();
     private Disposable mRefreshCachePeriodicAction;
     private String mBridgePackageName;
-    private final Runnable mRunBackgroundTasks = this::runBackgroundTasks;
+    private final Runnable mRunRemoteTasks = this::runRemoteTasks;
 
     private interface IntentProcessor {
         boolean process(Intent intent);
@@ -68,7 +68,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     public static void unhold() {
         if (sInstance != null) {
-            Utils.removeCallbacks(sInstance.mRunBackgroundTasks);
+            Utils.removeCallbacks(sInstance.mRunRemoteTasks);
         }
         sInstance = null;
     }
@@ -76,6 +76,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     @Override
     public void onViewInitialized() {
         if (getView() == null) {
+            return;
+        }
+
+        if (ViewManager.instance(getContext()).isFinished()) {
+            Utils.restartTheApp(getContext(), getView().getNewIntent());
             return;
         }
 
@@ -95,11 +100,18 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         if (!mRunPerInstance) {
             mRunPerInstance = true;
             //clearCache();
-            Utils.postDelayed(mRunBackgroundTasks, APP_INIT_DELAY_MS);
+            Utils.postDelayed(mRunRemoteTasks, APP_INIT_DELAY_MS);
             initIntentChain();
             // Fake service to prevent the app destroying?
             //runRemoteControlFakeTask();
         }
+    }
+
+    private void runRemoteTasks() {
+        YouTubeServiceManager.instance().refreshCacheIfNeeded(); // warm up player engine
+        enableHistoryIfNeeded();
+        Utils.updateChannels(getContext());
+        GDriveBackupWorker.schedule(getContext());
     }
 
     private void applyRunOnceTasks() {
@@ -111,13 +123,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             initVideoStateService();
             initStreamReminderService();
         }
-    }
-
-    private void runBackgroundTasks() {
-        YouTubeServiceManager.instance().refreshCacheIfNeeded(); // decrease player first start
-        enableHistoryIfNeeded();
-        Utils.updateChannels(getContext());
-        GDriveBackupWorker.schedule(getContext());
     }
 
     private void showAccountSelectionIfNeeded() {
@@ -345,7 +350,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         } else {
             SimpleEditDialog.showPassword(
                     getContext(),
-                    "", newValue -> {
+                    getContext().getString(R.string.enter_master_password),
+                    null,
+                    newValue -> {
                         if (password.equals(newValue)) {
                             onSuccess.run();
                             return true;
@@ -353,8 +360,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
                         return false;
                     },
-                    getContext().getString(R.string.enter_master_password),
-                    true,
                     () -> getView().finishView() // critical part, fix black screen on app exit
             );
         }
@@ -365,6 +370,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
         boolean isInternalIntent = intent.getBooleanExtra(GlobalConstants.INTERNAL_INTENT, false);
 
-        viewManager.enablePlayerOnlyMode(!isInternalIntent || GeneralData.instance(getContext()).isReturnToLauncherEnabled());
+        viewManager.enablePlayerOnlyMode(!isInternalIntent && GeneralData.instance(getContext()).isReturnToLauncherEnabled());
     }
 }

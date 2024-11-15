@@ -50,7 +50,7 @@ public final class SampleMediaItem implements MediaItem {
     public static MediaItem from(Video video) {
         SampleMediaItem mediaItem = new SampleMediaItem();
 
-        mediaItem.mId = (int) video.id;
+        mediaItem.mId = video.id;
         mediaItem.mTitle = video.getTitle();
         mediaItem.mSecondTitle = video.getSecondTitle();
         mediaItem.mContentType = video.category;
@@ -184,7 +184,7 @@ public final class SampleMediaItem implements MediaItem {
     }
 
     @Override
-    public int getDurationMs() {
+    public long getDurationMs() {
         return 0;
     }
 
@@ -196,6 +196,11 @@ public final class SampleMediaItem implements MediaItem {
     @Override
     public String getProductionDate() {
         return null;
+    }
+
+    @Override
+    public long getPublishedDate() {
+        return 0;
     }
 
     @Override

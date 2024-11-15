@@ -26,11 +26,16 @@ import com.liskovsoft.leanbackassistant.media.Clip;
 import com.liskovsoft.leanbackassistant.media.Playlist;
 import com.liskovsoft.leanbackassistant.media.scheduler.ClipData;
 import com.liskovsoft.leanbackassistant.utils.AppUtil;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
+@SuppressWarnings("RestrictedApi")
 public class ChannelsProvider {
     private static final String TAG = ChannelsProvider.class.getSimpleName();
     private static final String SCHEME = "tvhomescreenchannels";
@@ -218,33 +223,35 @@ public class ChannelsProvider {
     }
 
     @WorkerThread
-    public static long createOrUpdateChannel(Context context, Playlist playlist) {
-        long oldChannelId = playlist.getPublishedId();
+    public static void createOrUpdateChannel(Context context, Playlist playlist) {
+        long publishedId = playlist.getPublishedId();
 
-        if (oldChannelId != -1) {
-            Log.d(TAG, "Oops: channel already published. Doing update instead... oldChannelId: " + oldChannelId);
+        if (publishedId != -1) {
+            Log.d(TAG, "Oops: channel already published. Doing update instead... publishedId: " + publishedId);
             updateChannel(context, playlist);
-            addClipsToChannel(context, oldChannelId, playlist.getClips());
-            return oldChannelId;
+            //addClipsToChannel(context, publishedId, Helpers.isGoogleTVLauncher(context) || channel.isBrowsable() ? playlist.getClips() : Collections.emptyList());
+            addClipsToChannel(context, publishedId, playlist.getClips());
+            return;
         }
-        
-        long foundId = findChannelByProviderId(context, playlist.getPlaylistId());
 
-        if (foundId != -1) {
-            Log.d(TAG, "Oops: channel already published but not memorized by the app. Doing update instead... foundId: " + foundId);
-            playlist.setPublishedId(foundId);
+        Channel channel = findChannelByProviderId(context, playlist.getPlaylistId());
+
+        if (channel != null) {
+            Log.d(TAG, "Oops: channel already published but not memorized by the app. Doing update instead... foundId: " + channel.getId());
+            playlist.setPublishedId(channel.getId());
             updateChannel(context, playlist);
-            addClipsToChannel(context, foundId, playlist.getClips());
-            return foundId;
+            //addClipsToChannel(context, channel.getId(), Helpers.isGoogleTVLauncher(context) || channel.isBrowsable() ? playlist.getClips() : Collections.emptyList());
+            addClipsToChannel(context, channel.getId(), playlist.getClips());
+            return;
         }
 
         Log.d(TAG, "Creating channel: " + playlist.getName());
 
         long channelId = createChannel(context, playlist);
 
+        // The channels are disabled by default (don't populate to save resources)
+        //addClipsToChannel(context, channelId, Collections.emptyList());
         addClipsToChannel(context, channelId, playlist.getClips());
-
-        return channelId;
     }
 
     private static long createChannel(Context context, Playlist playlist) {
@@ -441,7 +448,7 @@ public class ChannelsProvider {
         baseBuilder
             .setTitle(clip.getTitle())
             .setDescription(clip.getDescription())
-            .setDurationMillis(clip.getDurationMs())
+            .setDurationMillis((int) clip.getDurationMs())
             .setLive(clip.isLive())
             .setPosterArtUri(cardUri)
             .setIntent(AppUtil.getInstance(context).createAppIntent(clip.getVideoUrl()))
@@ -491,14 +498,14 @@ public class ChannelsProvider {
         return channelId.get();
     }
 
-    private static long findChannelByProviderId(Context context, String providerId) {
-        final AtomicLong channelId = new AtomicLong(-1);
+    private static Channel findChannelByProviderId(Context context, String providerId) {
+        final AtomicReference<Channel> myChannel = new AtomicReference<>(null);
 
         visitChannels(context, (Channel channel) -> {
             if (providerId.equals(channel.getInternalProviderId())) {
-                if (channelId.get() == -1) {
+                if (myChannel.get() == null) {
                     Log.d(TAG, "Channel found. ProviderId: " + providerId);
-                    channelId.set(channel.getId());
+                    myChannel.set(channel);
                 } else {
                     Log.d(TAG, "Duplicate channel deleted. ProviderId: " + providerId);
                     deleteChannel(context, channel.getId());
@@ -508,7 +515,7 @@ public class ChannelsProvider {
             return true; // continue visiting
         });
 
-        return channelId.get();
+        return myChannel.get();
     }
 
     private static long findChannelByChannelKey(Context context, String channelKey) {

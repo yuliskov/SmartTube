@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoSt
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 public class VideoGroup {
@@ -36,6 +37,7 @@ public class VideoGroup {
     private BrowseSection mSection;
     private int mPosition = -1;
     private int mAction;
+    private int mType = -1;
     public boolean isQueue;
 
     public static VideoGroup from(BrowseSection category) {
@@ -77,6 +79,13 @@ public class VideoGroup {
         videoGroup.mVideos = items;
         videoGroup.mPosition = groupPosition;
 
+        for (Video item : items) {
+            // Section as playlist fix. Don't change the root.
+            if (item.getGroup() == null) {
+                item.setGroup(videoGroup);
+            }
+        }
+
         return videoGroup;
     }
 
@@ -84,45 +93,25 @@ public class VideoGroup {
         VideoGroup videoGroup = new VideoGroup();
         videoGroup.mSection = section;
         videoGroup.mPosition = groupPosition;
+        videoGroup.mId = videoGroup.hashCode();
+        videoGroup.mVideos = new ArrayList<>();
+        videoGroup.mMediaGroup = mediaGroup;
+        videoGroup.mTitle = mediaGroup != null && mediaGroup.getTitle() != null ?
+                mediaGroup.getTitle() : section != null ? section.getTitle() : null;
 
         if (mediaGroup == null) {
             return videoGroup;
         }
-
-        String sectionTitle = null;
-
-        // Set the title for the current section playlist
-        if (section != null) {
-            sectionTitle = section.getTitle();
-        }
-
-        videoGroup.mMediaGroup = mediaGroup;
-        videoGroup.mTitle = mediaGroup.getTitle() != null ? mediaGroup.getTitle() : sectionTitle;
-        videoGroup.mId = videoGroup.hashCode();
-        videoGroup.mVideos = new ArrayList<>();
 
         if (mediaGroup.getMediaItems() == null) {
             Log.e(TAG, "MediaGroup doesn't contain media items. Title: " + mediaGroup.getTitle());
             return videoGroup;
         }
 
-        VideoStateService stateService = VideoStateService.instance(null);
-
         for (MediaItem item : mediaGroup.getMediaItems()) {
             Video video = Video.from(item);
 
-            if (video.isEmpty()) {
-                continue;
-            }
-
-            // Group position in multi-grid fragments
-            video.groupPosition = videoGroup.mPosition;
-            video.setGroup(videoGroup);
-            if (stateService != null && video.percentWatched == -1) {
-                State state = stateService.getByVideoId(video.videoId);
-                video.sync(state);
-            }
-            videoGroup.mVideos.add(video);
+            videoGroup.add(video);
         }
 
         return videoGroup;
@@ -140,23 +129,10 @@ public class VideoGroup {
             return baseGroup;
         }
 
-        VideoStateService stateService = VideoStateService.instance(null);
-
         for (MediaItem item : mediaGroup.getMediaItems()) {
             Video video = Video.from(item);
 
-            if (video.isEmpty()) {
-                continue;
-            }
-
-            // Group position in multi-grid fragments
-            video.groupPosition = baseGroup.mPosition;
-            video.setGroup(baseGroup);
-            if (stateService != null && video.percentWatched == -1) {
-                State state = stateService.getByVideoId(video.videoId);
-                video.sync(state);
-            }
-            baseGroup.mVideos.add(video);
+            baseGroup.add(video);
         }
 
         baseGroup.mAction = ACTION_APPEND;
@@ -171,14 +147,16 @@ public class VideoGroup {
 
         for (ChapterItem chapter : chapters) {
             Video video = Video.from(chapter);
-            video.setGroup(videoGroup);
-            videoGroup.mVideos.add(video);
+
+            videoGroup.add(video);
         }
 
         return videoGroup;
     }
 
     public List<Video> getVideos() {
+        // NOTE: Don't make the collection read only
+        // The collection will be filtered inside VideoGroupObjectAdapter
         return mVideos;
     }
 
@@ -207,10 +185,6 @@ public class VideoGroup {
 
     public BrowseSection getSection() {
         return mSection;
-    }
-
-    public boolean isEmpty() {
-        return mVideos == null || mVideos.isEmpty();
     }
 
     public boolean isShorts() {
@@ -243,6 +217,14 @@ public class VideoGroup {
         if (action == ACTION_PREPEND) {
             mPosition = 0;
         }
+    }
+
+    public int getType() {
+        return mType != -1 ? mType : getMediaGroup() != null ? getMediaGroup().getType() : -1;
+    }
+
+    public void setType(int type) {
+        mType = type;
     }
 
     /**
@@ -380,9 +362,47 @@ public class VideoGroup {
         }
 
         try {
+            // ConcurrentModificationException fix?
             mVideos.remove(video);
-        } catch (UnsupportedOperationException e) { // read only collection
+        } catch (UnsupportedOperationException | ConcurrentModificationException e) { // read only collection
             e.printStackTrace();
         }
+    }
+
+    public boolean isEmpty() {
+        try {
+            return mVideos == null || mVideos.isEmpty();
+        } catch (ConcurrentModificationException e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
+    public void add(Video video) {
+        int size = getSize();
+        add(size != -1 ? size : 0, video);
+    }
+
+    public void add(int idx, Video video) {
+        if (video == null || video.isEmpty()) {
+            return;
+        }
+
+        if (mVideos == null) {
+            mVideos = new ArrayList<>();
+        }
+
+        // Group position in multi-grid fragments
+        video.groupPosition = mPosition;
+        video.setGroup(this);
+
+        VideoStateService stateService = VideoStateService.instance(null);
+        if (stateService != null && (video.percentWatched == -1 || video.percentWatched == 100)) {
+            State state = stateService.getByVideoId(video.videoId);
+            video.sync(state);
+        }
+
+        mVideos.add(idx, video);
     }
 }

@@ -11,14 +11,19 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.MenuAction;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuManager;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class SectionMenuPresenter extends BaseMenuPresenter {
     private static final String TAG = SectionMenuPresenter.class.getSimpleName();
@@ -30,10 +35,13 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
     private boolean mIsRefreshEnabled;
     private boolean mIsMoveSectionEnabled;
     private boolean mIsRenameSectionEnabled;
+    private final Map<Long, MenuAction> mMenuMapping = new HashMap<>();
 
     private SectionMenuPresenter(Context context) {
         super(context);
         mDialogPresenter = AppDialogPresenter.instance(context);
+
+        initMenuMapping();
     }
 
     public static SectionMenuPresenter instance(Context context) {
@@ -95,6 +103,13 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         appendClearHistoryButton();
         appendUpdateCheckButton();
 
+        for (Long menuItem : MainUIData.instance(getContext()).getMenuItemsOrdered()) {
+            MenuAction menuAction = mMenuMapping.get(menuItem);
+            if (menuAction != null) {
+                menuAction.run();
+            }
+        }
+
         if (!mDialogPresenter.isEmpty()) {
             String title = mSection != null ? mSection.getTitle() : null;
             mDialogPresenter.showDialog(title, this::disposeActions);
@@ -113,6 +128,14 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         appendAccountSelectionButton();
         appendMoveSectionButton();
         appendRenameSectionButton();
+        appendClearHistoryButton();
+
+        for (Long menuItem : MainUIData.instance(getContext()).getMenuItemsOrdered()) {
+            MenuAction menuAction = mMenuMapping.get(menuItem);
+            if (menuAction != null && !menuAction.isAuth()) {
+                menuAction.run();
+            }
+        }
 
         if (mDialogPresenter.isEmpty()) {
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
@@ -168,7 +191,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mSection == null || mSection.isDefault()) {
+        if (mSection == null || mSection.isDefault() || (!getVideo().hasPlaylist() && !getVideo().hasReloadPageKey() && !getVideo().hasChannel())) {
             return;
         }
 
@@ -177,14 +200,13 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
                     mDialogPresenter.closeDialog();
                     SimpleEditDialog.show(
                             getContext(),
+                            getContext().getString(R.string.rename_section),
                             mSection.getTitle(),
                             newValue -> {
                                 mSection.setTitle(newValue);
                                 BrowsePresenter.instance(getContext()).renameSection(mSection);
                                 return true;
-                            },
-                            getContext().getString(R.string.rename_section)
-                    );
+                            });
                 }));
     }
 
@@ -261,5 +283,25 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         mIsMoveSectionEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_MOVE_SECTION_UP);
         mIsMoveSectionEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_MOVE_SECTION_DOWN);
         mIsRenameSectionEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_RENAME_SECTION);
+    }
+
+    private void initMenuMapping() {
+        mMenuMapping.clear();
+
+        for (ContextMenuProvider provider : new ContextMenuManager(getContext()).getProviders()) {
+            if (provider.getMenuType() != ContextMenuProvider.MENU_TYPE_SECTION) {
+                continue;
+            }
+            mMenuMapping.put(provider.getId(), new MenuAction(() -> appendContextMenuItem(provider), false));
+        }
+    }
+
+    private void appendContextMenuItem(ContextMenuProvider provider) {
+        MainUIData mainUIData = MainUIData.instance(getContext());
+        if (mainUIData.isMenuItemEnabled(provider.getId()) && provider.isEnabled(getVideo())) {
+            mDialogPresenter.appendSingleButton(
+                    UiOptionItem.from(getContext().getString(provider.getTitleResId()), optionItem -> provider.onClicked(getVideo(), getCallback()))
+            );
+        }
     }
 }

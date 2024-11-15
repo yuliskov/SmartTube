@@ -40,7 +40,7 @@ public class ViewManager {
     private Class<? extends Activity> mDefaultTop;
     private long mPrevThrottleTimeMS;
     private boolean mIsMoveToBackEnabled;
-    private boolean mIsFinishing;
+    private boolean mIsFinished;
     private boolean mIsPlayerOnlyModeEnabled;
     private long mPendingActivityMs;
     private Class<?> mPendingActivityClass;
@@ -305,13 +305,16 @@ public class ViewManager {
         if (activity instanceof MotherActivity) {
             Log.d(TAG, "Trying finish the app...");
             mIsMoveToBackEnabled = true; // close all activities below current one
-            mIsFinishing = true;
+            mIsFinished = true;
 
             mActivityStack.clear();
 
             ((MotherActivity) activity).finishReally();
 
             PlaybackPresenter.instance(activity).forceFinish();
+
+            // NOTE: The device may hung (SecurityException: requires android.permission.BIND_ACCESSIBILITY_SERVICE)
+            //exitToHomeScreen(); // fix open another app from the history stack
 
             // Fix: can't start finished app activity from history.
             // Do reset state because the app should continue to run in the background.
@@ -323,9 +326,18 @@ public class ViewManager {
 //                AppUpdatePresenter.unhold();
                 MotherActivity.invalidate();
                 mIsMoveToBackEnabled = false;
-                mIsFinishing = false;
             }, 1_000);
         }
+    }
+
+    /**
+     * SecurityException: requires android.permission.BIND_ACCESSIBILITY_SERVICE
+     */
+    private void exitToHomeScreen() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        safeStartActivity(mContext, intent);
     }
 
     public Class<?> getTopView() {
@@ -355,7 +367,8 @@ public class ViewManager {
     private void safeMoveTaskToBack(Activity activity) {
         try {
             activity.moveTaskToBack(true);
-        } catch (NullPointerException | IllegalArgumentException e) {
+        } catch (NullPointerException | IllegalArgumentException | IllegalStateException e) {
+            // Pinned stack isn't top stack (IllegalStateException)
             Log.e(TAG, "Error when moving task to back: %s", e.getMessage());
         }
     }
@@ -364,6 +377,8 @@ public class ViewManager {
      * Small delay to fix PIP transition bug (UI become unresponsive)
      */
     private void safeStartActivity(Context context, Intent intent) {
+        mIsFinished = false;
+
         //if (PlaybackPresenter.instance(mContext).isInPipMode()) {
         //if (PlaybackPresenter.instance(mContext).getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_PIP) {
         if (PlaybackPresenter.instance(mContext).isEngineBlocked()) {
@@ -380,14 +395,15 @@ public class ViewManager {
     private void safeStartActivityInt(Context context, Intent intent) {
         try {
             context.startActivity(intent);
-        } catch (IllegalArgumentException | ActivityNotFoundException | IndexOutOfBoundsException e) {
+        } catch (IllegalArgumentException | ActivityNotFoundException | IndexOutOfBoundsException | NullPointerException | SecurityException e) {
+            // NPE: Attempt to write to field 'boolean com.android.server.am.ActivityStack.mConfigWillChange' on a null object reference
             Log.e(TAG, "Error when starting activity: %s", e.getMessage());
             MessageHelpers.showLongMessage(context, e.getLocalizedMessage());
         }
     }
 
-    public boolean isFinishing() {
-        return mIsFinishing;
+    public boolean isFinished() {
+        return mIsFinished;
     }
 
     //public void enableMoveToBack(boolean enable) {

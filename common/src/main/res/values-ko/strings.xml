@@ -669,4 +669,19 @@
   <string name="without_picture">사진 없음</string>
   <string name="video_disabled">비디오 비활성화</string>
   <string name="applying_fix">플레이어를 닫지 마세요. 수정 사항을 적용하는 중...</string>
+  <string name="video_buffer_size_lowest">매우 낮음</string>
+  <string name="hide_mixes">믹스 숨기기</string>
+  <string name="player_global_focus_desc">이 기능은 플레이어 버튼 행 사이를 이동할 때 어떤 플레이어 버튼이 초점을 받을지 영향을 줌</string>
+  <string name="disable_network_error_fixing">자동 네트워크 오류 수정 비활성화</string>
+  <string name="disable_network_error_fixing_desc">VPN을 사용하는 경우 이 옵션을 활성화해야 할 수도 있음</string>
+  <string name="recommended">추천</string>
+  <string name="video_buffer_size_highest">가장 높음</string>
+  <string name="unpin_group_from_sidebar">구독 그룹 제거</string>
+  <string name="place_comments_left">왼쪽에 댓글 배치</string>
+  <string name="add_to_subscriptions_group">구독 그룹 추가/제거</string>
+  <string name="new_subscriptions_group">새 그룹</string>
+  <string name="rename_group">구독 그룹 이름 바꾸기</string>
+  <string name="screen_dimming_amount">화면 어둡기 양</string>
+  <string name="screen_dimming_timeout">화면 어둡기 시간 초과</string>
+  <string name="playlists_rows">재생목록 섹션을 행으로 표시</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
+import android.util.Pair;
+
 import androidx.core.content.ContextCompat;
 
 import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
@@ -8,6 +10,7 @@ import com.liskovsoft.mediaserviceinterfaces.yt.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.DislikeData;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -65,12 +68,12 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     @Override
-    public void openVideo(Video video) {
+    public void onNewVideo(Video video) {
         // Remote control fix. Slow network fix. Suggestions may still be loading.
         // This could lead to changing current video info (title, id etc) to wrong one.
         disposeActions();
         //mCurrentGroup = video.getGroup(); // disable garbage collected
-        appendNextSectionVideoIfNeeded(video);
+        //appendNextSectionVideoIfNeeded(video); // ConcurrentModificationException error
     }
 
     /**
@@ -375,6 +378,10 @@ public class SuggestionsController extends BasePlayerController {
             if (group != null && !group.isEmpty()) {
                 VideoGroup videoGroup = VideoGroup.from(group);
 
+                if (Helpers.equals(videoGroup.getTitle(), " ")) {
+                    videoGroup.setTitle(getContext().getString(R.string.recommended));
+                }
+
                 //if (groupIndex == 0) {
                 //    mergeRemoteAndUserQueueIfNeeded(video, videoGroup);
                 //}
@@ -487,7 +494,8 @@ public class SuggestionsController extends BasePlayerController {
     private void startChapterNotificationServiceIfNeededInt() {
         Utils.removeCallbacks(mChapterHandler);
 
-        showChapterDialog(getCurrentChapter());
+        Pair<ChapterItem, Integer> currentChapter = getCurrentChapter();
+        showChapterDialog(currentChapter != null ? currentChapter.first : null);
 
         if (mChapters == null) {
             return;
@@ -505,7 +513,8 @@ public class SuggestionsController extends BasePlayerController {
     private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
         mChapters = mediaItemMetadata.getChapters();
         // Reset chapter title
-        getPlayer().setSeekPreviewTitle(mChapters != null ? "..." : null); // add placeholder to fix control panel animation on the first run
+        Pair<ChapterItem, Integer> currentChapter = getCurrentChapter();
+        getPlayer().setSeekPreviewTitle(currentChapter != null ? currentChapter.first.getTitle() : null); // add placeholder to fix control panel animation on the first run
 
         addChapterMarkersIfNeeded();
         appendChapterSuggestionsIfNeeded();
@@ -521,7 +530,7 @@ public class SuggestionsController extends BasePlayerController {
         }
 
         getPlayer().updateSuggestions(video.getGroup());
-        focusAndContinueIfNeeded(video.getGroup());
+        focusAndContinueIfNeeded(video.getGroup(), () -> appendNextSectionVideoIfNeeded(video));
     }
 
     private void markAsQueueIfNeeded(Video item) {
@@ -539,35 +548,42 @@ public class SuggestionsController extends BasePlayerController {
 
         VideoGroup group = getPlayer().getSuggestionsByIndex(0);
 
-        if (group == null || group.getVideos() == null) {
+        if (group == null || group.isEmpty() || !group.getVideos().get(0).isChapter) {
             return;
         }
 
-        int index = findCurrentChapterIndex(group.getVideos());
+        Pair<ChapterItem, Integer> currentChapter = getCurrentChapter();
 
-        if (index != -1) {
-            String title = group.getVideos().get(index).getTitle();
-            getPlayer().focusSuggestedItem(index);
-            getPlayer().setSeekPreviewTitle(title);
+        if (currentChapter != null) {
+            getPlayer().focusSuggestedItem(currentChapter.second);
+            getPlayer().setSeekPreviewTitle(currentChapter.first.getTitle());
         }
+
+        //int index = findCurrentChapterIndex(group.getVideos());
+        //
+        //if (index != -1) {
+        //    String title = group.getVideos().get(index).getTitle();
+        //    getPlayer().focusSuggestedItem(index);
+        //    getPlayer().setSeekPreviewTitle(title);
+        //}
     }
 
-    private int findCurrentChapterIndex(List<Video> videos) {
-        if (videos == null || !videos.get(0).isChapter) {
-            return -1;
-        }
-
-        int currentChapter = -1;
-        long positionMs = getPlayer().getPositionMs();
-        for (Video chapter : videos) {
-            if (chapter.startTimeMs > positionMs) {
-                break;
-            }
-            currentChapter++;
-        }
-
-        return currentChapter;
-    }
+    //private int findCurrentChapterIndex(List<Video> videos) {
+    //    if (videos == null || !videos.get(0).isChapter) {
+    //        return -1;
+    //    }
+    //
+    //    int currentChapter = -1;
+    //    long positionMs = getPlayer().getPositionMs();
+    //    for (Video chapter : videos) {
+    //        if (chapter.startTimeMs > positionMs) {
+    //            break;
+    //        }
+    //        currentChapter++;
+    //    }
+    //
+    //    return currentChapter;
+    //}
 
     private List<SeekBarSegment> toSeekBarSegments(List<ChapterItem> chapters) {
         if (chapters == null) {
@@ -604,6 +620,10 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void focusAndContinueIfNeeded(VideoGroup group) {
+       focusAndContinueIfNeeded(group, () -> {});
+    }
+
+    private void focusAndContinueIfNeeded(VideoGroup group, Runnable onDone) {
         Video video = getPlayer().getVideo();
 
         if (group == null || group.isEmpty() || video == null || !video.hasVideo()) {
@@ -619,22 +639,24 @@ public class SuggestionsController extends BasePlayerController {
                 getPlayer().focusSuggestedItem(found);
             }
             mFocusCount = 0; // Stop the continuation loop
+            onDone.run();
         } else if (mFocusCount > MAX_PLAYLIST_CONTINUATIONS || !video.hasPlaylist()) {
             // Stop the continuation loop. Maybe the video isn't there.
             mFocusCount = 0;
+            onDone.run();
         } else {
             // load more and repeat
-            continueGroup(group, this::focusAndContinueIfNeeded, getPlayer().isSuggestionsShown());
+            continueGroup(group, newGroup -> focusAndContinueIfNeeded(newGroup, onDone), getPlayer().isSuggestionsShown());
             mFocusCount++;
         }
     }
 
     private void appendNextSectionVideoIfNeeded(Video video) {
-        mNextVideo = null;
-
         if (!video.isSectionPlaylistEnabled(getContext())) {
             return;
         }
+
+        mNextVideo = null;
 
         VideoGroup group = video.getGroup();
 
@@ -649,6 +671,7 @@ public class SuggestionsController extends BasePlayerController {
             if (found && current.hasVideo() && !current.isUpcoming) {
                 mNextRetryCount = 0;
                 mNextVideo = current;
+                getPlayer().setNextTitle(mNextVideo);
                 return;
             }
 
@@ -717,22 +740,24 @@ public class SuggestionsController extends BasePlayerController {
         return null;
     }
 
-    private ChapterItem getCurrentChapter() {
+    private Pair<ChapterItem, Integer> getCurrentChapter() {
         if (mChapters == null) {
             return null;
         }
 
         long positionMs = getPlayer().getPositionMs();
         ChapterItem currentChapter = null;
+        int idx = -1;
 
         for (ChapterItem chapter : mChapters) {
             if (chapter.getStartTimeMs() > (positionMs + 3_000)) {
                 break;
             }
             currentChapter = chapter;
+            idx++;
         }
 
-        return currentChapter;
+        return currentChapter != null ? new Pair<>(currentChapter, idx) : null;
     }
 
     private void callListener(MediaItemMetadata mediaItemMetadata) {
@@ -744,6 +769,7 @@ public class SuggestionsController extends BasePlayerController {
     private void disposeActions() {
         RxHelper.disposeActions(mActions);
         mChapters = null;
+        mNextVideo = null;
     }
 
     private void appendDislikes(Video video) {

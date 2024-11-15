@@ -10,6 +10,11 @@ public class WebBrowserActivity extends LeanbackActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_webbrowser);
+        try {
+            setContentView(R.layout.fragment_webbrowser);
+        } catch (ClassCastException e) { // WebBrowserFragment is not a Fragment
+            e.printStackTrace();
+            finishReally();
+        }
     }
 }

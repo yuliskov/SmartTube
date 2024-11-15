@@ -34,9 +34,11 @@
     <string name="resolution_switch">Переключать разрешение</string>
     <string name="video_buffer">Видеобуфер</string>
     <string name="video_buffer_size_none">Нет</string>
+    <string name="video_buffer_size_lowest">Самый низкий</string>
     <string name="video_buffer_size_low">Низкий</string>
     <string name="video_buffer_size_med">Средний</string>
     <string name="video_buffer_size_high">Высокий</string>
+    <string name="video_buffer_size_highest">Самый высокий</string>
     <string name="update_changelog">Изменения</string>
     <string name="install_update">Установить обновление</string>
     <string name="section_is_empty">Здесь ничего нет</string>
@@ -235,6 +237,7 @@
     <string name="pin_channel">Добавить канал на боковую панель</string>
     <string name="pinned_to_sidebar">Добавлено на боковую панель</string>
     <string name="unpin_from_sidebar">Удалить из боковой панели</string>
+    <string name="unpin_group_from_sidebar">Удалить группу подписок</string>
     <string name="unpinned_from_sidebar">Удалено из боковой панели</string>
     <string name="dialog_select_country">Страна</string>
     <string name="settings_language_country">Язык/Страна</string>
@@ -476,6 +479,7 @@
     <string name="open_chat">Чат/Комментарии</string>
     <string name="open_comments">Открыть комментарии</string>
     <string name="place_chat_left">Разместить чат слева</string>
+    <string name="place_comments_left">Разместить комментарии слева</string>
     <string name="use_alt_speech_recognizer">Альтернативный распознаватель речи</string>
     <string name="time_format">Формат времени</string>
     <string name="time_format_24">24 часа</string>
@@ -663,5 +667,15 @@
     <string name="video_disabled">Видео отключено</string>
     <string name="applying_fix">Не закрывайте плеер. Применение исправления...</string>
     <string name="hide_mixes">Скрывать Миксы</string>
+    <string name="player_global_focus_desc">Эта функция влияет на то, какая кнопка проигрывателя получит фокус при навигации между рядами кнопок проигрывателя</string>
+    <string name="disable_network_error_fixing">Отключить автоматическое исправление сетевых ошибок</string>
+    <string name="disable_network_error_fixing_desc">Возможно, вам нужно включить эту опцию, если вы используете VPN</string>
+    <string name="recommended">Рекомендуемые видео</string>
+    <string name="add_to_subscriptions_group">Добавить/удалить из группы подписок</string>
+    <string name="new_subscriptions_group">Новая группа</string>
+    <string name="rename_group">Переименовать группу подписок</string>
+    <string name="screen_dimming_amount">Степень затемнения экрана</string>
+    <string name="screen_dimming_timeout">Тайм-аут затемнения экрана</string>
+    <string name="playlists_rows">Отображать раздел Плейлисты в виде строк</string>
     <string name="cancel">Отмена</string>
 </resources>

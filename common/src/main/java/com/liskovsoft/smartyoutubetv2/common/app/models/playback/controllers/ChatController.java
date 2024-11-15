@@ -7,6 +7,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiverImpl;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -41,10 +42,10 @@ public class ChatController extends BasePlayerController {
 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
-        mLiveChatKey = metadata != null && metadata.getLiveChatKey() != null ? metadata.getLiveChatKey() : null;
+        mLiveChatKey = metadata != null ? metadata.getLiveChatKey() : null;
 
         if (mLiveChatKey != null) {
-            getPlayer().setChatButtonState(mPlayerData.isLiveChatEnabled());
+            getPlayer().setButtonState(R.id.action_chat, mPlayerData.isLiveChatEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
 
         if (mPlayerData.isLiveChatEnabled()) {
@@ -79,46 +80,50 @@ public class ChatController extends BasePlayerController {
     }
 
     @Override
-    public void onChatClicked(boolean enabled) {
-        if (mLiveChatKey != null) {
-            enableLiveChat(!enabled);
+    public void onButtonClicked(int buttonId, int buttonState) {
+        if (buttonId == R.id.action_chat) {
+            if (mLiveChatKey != null) {
+                enableLiveChat(buttonState != PlayerUI.BUTTON_ON);
+            }
         }
     }
 
     @Override
-    public void onChatLongClicked(boolean enabled) {
-        String chatCategoryTitle = getContext().getString(R.string.open_chat);
+    public void onButtonLongClicked(int buttonId, int buttonState) {
+        if (buttonId == R.id.action_chat) {
+            String chatCategoryTitle = getContext().getString(R.string.open_chat);
 
-        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+            AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
-        List<OptionItem> options = new ArrayList<>();
+            List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.option_disabled),
-                optionItem -> {
-                    enableLiveChat(false);
-                    settingsPresenter.closeDialog();
-                },
-                !mPlayerData.isLiveChatEnabled()));
+            options.add(UiOptionItem.from(getContext().getString(R.string.option_disabled),
+                    optionItem -> {
+                        enableLiveChat(false);
+                        settingsPresenter.closeDialog();
+                    },
+                    !mPlayerData.isLiveChatEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.chat_left),
-                optionItem -> {
-                    mPlayerTweaksData.placeChatLeft(true);
-                    enableLiveChat(true);
-                    settingsPresenter.closeDialog();
-                },
-                mPlayerData.isLiveChatEnabled() && mPlayerTweaksData.isChatPlacedLeft()));
+            options.add(UiOptionItem.from(getContext().getString(R.string.chat_left),
+                    optionItem -> {
+                        placeChatLeft(true);
+                        enableLiveChat(true);
+                        settingsPresenter.closeDialog();
+                    },
+                    mPlayerData.isLiveChatEnabled() && isChatPlacedLeft()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.chat_right),
-                optionItem -> {
-                    mPlayerTweaksData.placeChatLeft(false);
-                    enableLiveChat(true);
-                    settingsPresenter.closeDialog();
-                },
-                mPlayerData.isLiveChatEnabled() && !mPlayerTweaksData.isChatPlacedLeft()));
+            options.add(UiOptionItem.from(getContext().getString(R.string.chat_right),
+                    optionItem -> {
+                        placeChatLeft(false);
+                        enableLiveChat(true);
+                        settingsPresenter.closeDialog();
+                    },
+                    mPlayerData.isLiveChatEnabled() && !isChatPlacedLeft()));
 
-        settingsPresenter.appendRadioCategory(chatCategoryTitle, options);
+            settingsPresenter.appendRadioCategory(chatCategoryTitle, options);
 
-        settingsPresenter.showDialog(chatCategoryTitle);
+            settingsPresenter.showDialog(chatCategoryTitle);
+        }
     }
 
     @Override
@@ -163,7 +168,19 @@ public class ChatController extends BasePlayerController {
         mPlayerData.enableLiveChat(enabled);
 
         if (mLiveChatKey != null) {
-            getPlayer().setChatButtonState(enabled);
+            getPlayer().setButtonState(R.id.action_chat, enabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
+    }
+
+    private void placeChatLeft(boolean left) {
+        if (mLiveChatKey != null) {
+            mPlayerTweaksData.placeChatLeft(left);
+        } else {
+            mPlayerTweaksData.placeCommentsLeft(left);
+        }
+    }
+
+    private boolean isChatPlacedLeft() {
+        return mLiveChatKey != null ? mPlayerTweaksData.isChatPlacedLeft() : mPlayerTweaksData.isCommentsPlacedLeft();
     }
 }

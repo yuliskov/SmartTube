@@ -30,9 +30,13 @@ public class UpdateChannelsTask {
     private void updateChannels() {
         if (Helpers.isATVChannelsSupported(mContext)) {
             try {
-                updateOrPublishChannel(mService.getSubscriptionsPlaylist());
-                updateOrPublishChannel(mService.getRecommendedPlaylist());
-                updateOrPublishChannel(mService.getHistoryPlaylist());
+                if (Helpers.isGoogleTVLauncher(mContext)) {
+                    updateOrPublishChannel(getSinglePreferredPlaylist());
+                } else {
+                    updateOrPublishChannel(mService.getSubscriptionsPlaylist());
+                    updateOrPublishChannel(mService.getRecommendedPlaylist());
+                    updateOrPublishChannel(mService.getHistoryPlaylist());
+                }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
                 e.printStackTrace();
@@ -43,20 +47,7 @@ public class UpdateChannelsTask {
     private void updateRecommendations() {
         if (Helpers.isATVRecommendationsSupported(mContext)) {
             try {
-                Playlist playlist = null;
-                switch (mPrefs.getRecommendedPlaylistType()) {
-                    case GlobalPreferences.PLAYLIST_TYPE_RECOMMENDATIONS:
-                        playlist = mService.getRecommendedPlaylist();
-                        break;
-                    case GlobalPreferences.PLAYLIST_TYPE_SUBSCRIPTIONS:
-                        playlist = mService.getSubscriptionsPlaylist();
-                        break;
-                    case GlobalPreferences.PLAYLIST_TYPE_HISTORY:
-                        playlist = mService.getHistoryPlaylist();
-                        break;
-                }
-
-                updateOrPublishRecommendations(playlist);
+                updateOrPublishRecommendations(getSinglePreferredPlaylist());
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
                 e.printStackTrace();
@@ -64,21 +55,49 @@ public class UpdateChannelsTask {
         }
     }
 
-    private void updateOrPublishRecommendations(Playlist playlist) {
-        if (checkPlaylist(playlist)) {
-            Log.d(TAG, "Syncing recommended: " + playlist.getName() + ", items num: " + playlist.getClips().size());
-            RecommendationsProvider.createOrUpdateRecommendations(mContext, playlist);
+    private Playlist getSinglePreferredPlaylist() {
+        Playlist playlist = null;
+
+        switch (mPrefs.getRecommendedPlaylistType()) {
+            case GlobalPreferences.PLAYLIST_TYPE_RECOMMENDATIONS:
+                playlist = mService.getRecommendedPlaylist();
+                break;
+            case GlobalPreferences.PLAYLIST_TYPE_SUBSCRIPTIONS:
+                playlist = mService.getSubscriptionsPlaylist();
+                break;
+            case GlobalPreferences.PLAYLIST_TYPE_HISTORY:
+                playlist = mService.getHistoryPlaylist();
+                break;
         }
+
+        return playlist;
+    }
+
+    private void updateOrPublishRecommendations(Playlist playlist) {
+        Log.d(TAG, "Syncing recommended: " + playlist.getName());
+        RecommendationsProvider.createOrUpdateRecommendations(mContext, playlist);
     }
 
     private void updateOrPublishChannel(Playlist playlist) {
-        if (checkPlaylist(playlist)) {
-            Log.d(TAG, "Syncing channel: " + playlist.getName() + ", items num: " + playlist.getClips().size());
-            ChannelsProvider.createOrUpdateChannel(mContext, playlist);
-        }
+        Log.d(TAG, "Syncing channel: " + playlist.getName());
+        ChannelsProvider.createOrUpdateChannel(mContext, playlist);
     }
 
-    private boolean checkPlaylist(Playlist playlist) {
-        return playlist != null && playlist.getClips() != null;
-    }
+    //private void updateOrPublishRecommendations(Playlist playlist) {
+    //    if (checkPlaylist(playlist)) {
+    //        Log.d(TAG, "Syncing recommended: " + playlist.getName());
+    //        RecommendationsProvider.createOrUpdateRecommendations(mContext, playlist);
+    //    }
+    //}
+    //
+    //private void updateOrPublishChannel(Playlist playlist) {
+    //    if (checkPlaylist(playlist)) {
+    //        Log.d(TAG, "Syncing channel: " + playlist.getName());
+    //        ChannelsProvider.createOrUpdateChannel(mContext, playlist);
+    //    }
+    //}
+
+    //private boolean checkPlaylist(Playlist playlist) {
+    //    return playlist != null && playlist.getClips() != null;
+    //}
 }

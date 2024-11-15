@@ -55,6 +55,7 @@ import androidx.work.WorkManager;
 
 import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
+import com.liskovsoft.sharedutils.GlobalConstants;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -69,8 +70,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresen
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.WebBrowserPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
@@ -623,14 +622,12 @@ public class Utils {
             if (type == MediaGroup.TYPE_CHANNEL_UPLOADS) {
                 if (atomicIndex.incrementAndGet() == 1) {
                     ChannelUploadsPresenter.instance(context).clear();
-                    //ViewManager.instance(context).startView(ChannelUploadsView.class);
                 }
                 ChannelUploadsPresenter.instance(context).update(group.get(0));
             } else if (type == MediaGroup.TYPE_CHANNEL) {
                 if (atomicIndex.incrementAndGet() == 1) {
                     ChannelPresenter.instance(context).clear();
                     ChannelPresenter.instance(context).setChannel(item);
-                    //ViewManager.instance(context).startView(ChannelView.class);
                 }
                 ChannelPresenter.instance(context).updateRows(group);
             } else {
@@ -830,10 +827,6 @@ public class Utils {
         //forceFinishTheApp();
     }
 
-    public static void restartTheApp(Context context) {
-        restartTheApp(context, BOOTSTRAP_ACTIVITY_CLASS_NAME);
-    }
-
     /**
      * Simply kills the app.
      */
@@ -849,9 +842,30 @@ public class Utils {
         startReceiver(context, REMOTE_CONTROL_RECEIVER_CLASS_NAME);
     }
 
-    private static void restartTheApp(Context context, String bootActivityClassName) {
+    public static void restartTheApp(Context context, Intent intent) {
+        ProcessPhoenix.triggerRebirth(context, intent);
+    }
+
+    public static void restartTheApp(Context context) {
         try {
-            ProcessPhoenix.triggerRebirth(context, new Intent(context, Class.forName(bootActivityClassName)));
+            Intent intent = new Intent(context, Class.forName(BOOTSTRAP_ACTIVITY_CLASS_NAME));
+            intent.putExtra(GlobalConstants.INTERNAL_INTENT, true);
+            ProcessPhoenix.triggerRebirth(context, intent);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void restartTheApp(Context context, String videoId) {
+        try {
+            Intent intent = new Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://www.youtube.com/watch?v=" + videoId),
+                    context,
+                    Class.forName(BOOTSTRAP_ACTIVITY_CLASS_NAME)
+            );
+            intent.putExtra(GlobalConstants.INTERNAL_INTENT, true);
+            ProcessPhoenix.triggerRebirth(context, intent);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -1009,5 +1023,9 @@ public class Utils {
     public static boolean skipCronet() {
         // Android 6 and below may crash running Cronet???
         return VERSION.SDK_INT <= 23 || Helpers.equals(BuildConfig.FLAVOR, "strtarmenia");
+    }
+
+    public static boolean isEnoughRam(Context context) {
+        return VERSION.SDK_INT > 21 && Helpers.getDeviceRam(context) > 1_300_000_000; // 1.3 GB
     }
 }

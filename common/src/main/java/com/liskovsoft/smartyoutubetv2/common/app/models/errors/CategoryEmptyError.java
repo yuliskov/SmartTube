@@ -1,25 +1,32 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.errors;
 
 import android.content.Context;
+
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.YTSignInPresenter;
 
 public class CategoryEmptyError implements ErrorFragmentData {
     private final Context mContext;
+    private final Throwable mError;
 
-    public CategoryEmptyError(Context context) {
+    public CategoryEmptyError(Context context, Throwable error) {
         mContext = context;
+        mError = error;
     }
 
     @Override
     public void onAction() {
-        ViewManager.instance(mContext).startView(SignInView.class);
+        YTSignInPresenter.instance(mContext).start();
     }
 
     @Override
     public String getMessage() {
-        return mContext.getString(R.string.msg_cant_load_content);
+        String result = mContext.getString(R.string.msg_cant_load_content);
+        if (!Helpers.containsAny(mError.getMessage(), "fromNullable result is null")) {
+            result = mError.getMessage();
+        }
+        return result;
     }
 
     @Override

@@ -92,7 +92,7 @@
   <string name="color_scheme_dark_grey">Sötétszürke</string>
   <string name="disable_update_check">Frissítés ellenőrzésének kikapcsolása</string>
   <string name="show_again">Újra</string>
-  <string name="check_updates_auto">Automatikus frissítés</string>
+  <string name="check_updates_auto">Új verzió automatikus ellenőrzése</string>
   <string name="select_account_on_boot">Fiókválasztás induláskor</string>
   <string name="player_other">Egyéb beállítások</string>
   <string name="player_full_date">Pontos dátum a leírásban</string>
@@ -665,4 +665,20 @@
   <string name="local_backup">Helyi biztonsági mentés</string>
   <string name="auto_backup">Automatikus biztonsági mentés (naponta egyszer)</string>
   <string name="repeat_mode_reverse_list">Játssza le a lejátszási listát vagy a csatornavideókat fordított sorrendben</string>
+  <string name="unpin_group_from_sidebar">A csoport eltávolítása</string>
+  <string name="calm_msg">Rendbe hozzuk a problémát. Időnként ellenőrizze a frissítéseket</string>
+  <string name="without_picture">Kép nélkül</string>
+  <string name="video_disabled">Videó letiltva</string>
+  <string name="applying_fix">Ne lépjen ki. A javítás alkalmazása...</string>
+  <string name="hide_mixes">Keverékek elrejtése</string>
+  <string name="player_global_focus_desc">Ez a funkció befolyásolja, hogy melyik lejátszó gomb kap fókuszt a lejátszó gombsorai közötti navigálás során</string>
+  <string name="disable_network_error_fixing">Az automatikus hálózati hibajavítás letiltása</string>
+  <string name="disable_network_error_fixing_desc">Valószínűleg engedélyeznie kell ezt az opciót, ha VPN-t használ</string>
+  <string name="recommended">Ajánlott</string>
+  <string name="add_to_subscriptions_group">Csatorna hozzáadása/eltávolítása a csoportokhoz</string>
+  <string name="new_subscriptions_group">Új csoport</string>
+  <string name="rename_group">A csoport átnevezése</string>
+  <string name="screen_dimming_amount">Képernyő elsötétítése</string>
+  <string name="screen_dimming_timeout">Képernyő elsötétítési ideje</string>
+  <string name="playlists_rows">Lejátszási listák szakasz megjelenítése sorokként</string>
 </resources>

@@ -8,7 +8,7 @@
   <string name="header_news">Noticias</string>
   <string name="header_gaming">Xogos</string>
   <string name="header_playlists">Listaxes de reprodución</string>
-  <string name="header_settings">axustes</string>
+  <string name="header_settings">Axustes</string>
   <string name="header_channels">Canles</string>
   <string name="subscriptions_signin_title">Consulta as novidades das canles que che gustan</string>
   <string name="subscriptions_signin_subtitle">Inicia sesión para ver as túas subscricións</string>
@@ -17,7 +17,7 @@
   <string name="library_signin_subtitle">Comeza sesión para ver a túa biblioteca</string>
   <string name="action_signin">COMEZAR SESIÓN</string>
   <string name="title_video_formats">Formatos de vídeo</string>
-  <string name="title_audio_formats">Formatos de audio</string>
+  <string name="title_audio_formats">Formatos de son</string>
   <string name="subtitle_category_title">Subtítulos</string>
   <string name="playback_queue_category_title">Cola de reprodución</string>
   <string name="video_max_quality">Automático (calidade máxima)</string>
@@ -29,7 +29,7 @@
   <string name="not_implemented">Non implementado</string>
   <string name="option_background_playback_off">Desactivado</string>
   <string name="option_background_playback_pip">Imaxe na imaxe</string>
-  <string name="option_background_playback_only_audio">Só audio</string>
+  <string name="option_background_playback_only_audio">Só son</string>
   <string name="playback_settings">Axustes de calidade de reprodución</string>
   <string name="video_speed">Velocidade do vídeo</string>
   <string name="resolution_switch">Trocar resolución</string>
@@ -38,7 +38,7 @@
   <string name="video_buffer_size_low">Baixa</string>
   <string name="video_buffer_size_med">Media</string>
   <string name="video_buffer_size_high">Alta</string>
-  <string name="update_changelog">Rexistro de cambios</string>
+  <string name="update_changelog">Rexistro de ´trocos</string>
   <string name="install_update">Instalar actualización</string>
   <string name="section_is_empty">Vaia! Non hai nada aquí</string>
   <string name="dialog_add_to_playlist">Engadir/Eliminar da lista de reprodución</string>
@@ -161,9 +161,9 @@
   <string name="share_qr_link">Compartir ligazón (código QR)</string>
   <string name="subscribe_to_channel">Subscríbete a canle</string>
   <string name="wait_data_loading">Agarde mentres se cargan os datos...</string>
-  <string name="auto_frame_rate_pause">Velocidade de fotogramas automática (pausa ao cambiar)</string>
+  <string name="auto_frame_rate_pause">Velocidade de fotogramas automática (pausa ao trocar)</string>
   <string name="auto_frame_rate_applying">Aplicando a velocidade de fotogramas automática %sx%s\@%s</string>
-  <string name="audio_shift">desfase de audio</string>
+  <string name="audio_shift">desfase de son</string>
   <string name="player_remember_speed">Lembra a velocidade</string>
   <string name="mark_channel_as_watched">Marcar como visto</string>
   <string name="channel_marked_as_watched">A canle marcouse como vista</string>
@@ -199,7 +199,7 @@
   <string name="btn_confirm">Confirmar</string>
   <string name="player_low_video_quality">Baixa calidade de vídeo</string>
   <string name="remote_session_closed">Pechouse a sesión remota</string>
-  <string name="msg_mode_switch_error">Non se pode cambiar o modo de visualización a \"%s</string>
+  <string name="msg_mode_switch_error">Non se pode trocar o modo de visualización a \"%s</string>
   <string name="msg_player_error">Produciuse un erro do reprodutor %s. Reiniciando a reprodución...</string>
   <string name="video_preset_disabled">Sen predefinido</string>
   <string name="video_preset_enabled">O formato do seguinte vídeo establecerase segundo o preestablecido</string>
@@ -384,8 +384,8 @@
   <string name="seek_interval_sec">%s seg</string>
   <string name="subtitle_system">Estilo do sistema (Configuración de Android &gt; Accesibilidade)</string>
   <string name="subtitle_scale">Escala de subtítulos</string>
-  <string name="audio_sync_fix_desc">Unha forma alternativa de sincronizar audio/vídeo. Considérase obsoleto, pero nalgúns casos pode axudar.</string>
-  <string name="audio_sync_fix">Corrección de sincronización de audio</string>
+  <string name="audio_sync_fix_desc">Unha forma alternativa de sincronizar son/vídeo. Considérase obsoleto, pero nalgúns casos pode axudar.</string>
+  <string name="audio_sync_fix">Corrección de sincronización de son</string>
   <string name="ambilight_ratio_fix_desc">Corrixe a iluminación polar ausente. Corrixe a relación de aspecto ou a escala de vídeo incorrectas. Corrixe as capturas de pantalla en branco. Afecta o rendemento!</string>
   <string name="ambilight_ratio_fix">Ambilight/Relación de aspecto/Escala de vídeo/Corrección de capturas de pantalla</string>
   <string name="force_legacy_codecs_desc">Mellora significativamente o rendemento en dispositivos de gama baixa. A resolución máxima é de 720p.</string>
@@ -394,11 +394,11 @@
   <string name="live_stream_fix_4k_desc">Aviso, este axuste desactiva o rebobinado dos fluxos. Mellora significativamente o rendemento da emisión en directo. A resolución máxima é de 4K.</string>
   <string name="live_stream_fix">Corrección da emisión en directo (1080p)</string>
   <string name="live_stream_fix_4k">Corrección da emisión en directo (4K)</string>
-  <string name="playback_notifications_fix_desc">Oculta as notificacións de cambio de pista. Podería ser útil no firmware baseado en AOSP.</string>
+  <string name="playback_notifications_fix_desc">Oculta as notificacións de troco de pista. Podería ser útil no firmware baseado en AOSP.</string>
   <string name="playback_notifications_fix">Desactiva as notificacións de reprodución</string>
   <string name="amlogic_fix_desc">Corrección de caída de fotogramas en dispositivos baseados en Amlogic.</string>
   <string name="amlogic_fix">Corrección de Amlogic 1080p\@60fps</string>
-  <string name="tunneled_video_playback_desc">NOTA: é posible que a pausa non funcione correctamente! A reprodución de vídeo tunelado promete vantaxes como unha mellor sincronización de audio/vídeo (sincronización AV) e unha reprodución máis fluida. Requírese Android 5+</string>
+  <string name="tunneled_video_playback_desc">NOTA: é posible que a pausa non funcione correctamente! A reprodución de vídeo tunelado promete vantaxes como unha mellor sincronización de son/vídeo (sincronización AV) e unha reprodución máis fluida. Requírese Android 5+</string>
   <string name="tunneled_video_playback">Reproducción de vídeo tunelizado (Android 5+)</string>
   <string name="master_volume">Volume mestre</string>
   <string name="volume_limit">Límite de volume</string>
@@ -426,8 +426,8 @@
   <string name="cant_delete_empty_playlist">Non se pode eliminar a lista de reprodución baleira</string>
   <string name="playlist">Lista de reprodución</string>
   <string name="rename_playlist">Cambiar o nome da lista de reprodución</string>
-  <string name="cant_rename_empty_playlist">Non se pode cambiar o nome da lista de reprodución baleira</string>
-  <string name="cant_rename_foreign_playlist">Non se pode cambiar o nome da lista de reprodución estranxeira</string>
+  <string name="cant_rename_empty_playlist">Non se pode trocar o nome da lista de reprodución baleira</string>
+  <string name="cant_rename_foreign_playlist">Non se pode trocar o nome da lista de reprodución estranxeira</string>
   <string name="cant_save_playlist">Non se pode engadir esta lista de reprodución</string>
   <string name="enter_value">Introduza calquera valor que non estea baleiro</string>
   <string name="dialog_add_remove_from">Engadir/Eliminar de %s</string>
@@ -568,8 +568,8 @@
   <string name="disable_stream_buffer">Desactiva o búfer nas emisións</string>
   <string name="disable_stream_buffer_desc">Soluciona situacións nas que o fluxo está demasiado atrás. Nota: o fluxo pode comezar a atrasar.</string>
   <string name="sony_frame_drop_fix">Corrección de caída de fotogramas #1</string>
-  <string name="sony_frame_drop_fix_desc">Corrixir atrasos na TV Sony e nalgúns outros dispositivos. Nota: posibles problemas coa sincronización de audio.</string>
-  <string name="audio_language">Linguaxe do audio</string>
+  <string name="sony_frame_drop_fix_desc">Corrixir atrasos na TV Sony e nalgúns outros dispositivos. Nota: posibles problemas coa sincronización de son.</string>
+  <string name="audio_language">Linguaxe do son</string>
   <string name="old_home_look">Aspecto antigo da sección Inicio</string>
   <string name="old_channel_look">Aspecto antigo da páxina da Canle</string>
   <string name="hide_shorts_everywhere">Oculta pantalóns curtos en todas partes</string>
@@ -599,7 +599,7 @@
   <string name="player_screen_off_dimming">Cantidade de escurecemento da pantalla</string>
   <string name="screensaver_timout">Tempo de espera do salvapantallas</string>
   <string name="screensaver_dimming">Cantidade de atenuación do protector de pantalla</string>
-  <string name="player_ui_on_next">Amosar a interface de usuario do reprodutor ao cambiar ao seguinte vídeo</string>
+  <string name="player_ui_on_next">Amosar a interface de usuario do reprodutor ao trocar ao seguinte vídeo</string>
   <string name="autogenerated">autoxerado</string>
   <string name="player_auto_volume">Axuste automático de volume</string>
   <string name="header_shorts">Curtos</string>
@@ -669,4 +669,19 @@
   <string name="without_picture">Sen imaxe</string>
   <string name="video_disabled">Vídeo desactivado</string>
   <string name="applying_fix">Non peche o reprodutor. Aplicando a corrección...</string>
+  <string name="hide_mixes">Ocultar misturas</string>
+  <string name="player_global_focus_desc">Esta función afecta a que botón do reprodutor recibirá o foco ao navegar entre filas de botóns do reprodutor</string>
+  <string name="disable_network_error_fixing">Desactivar a corrección automática de erros de rede</string>
+  <string name="disable_network_error_fixing_desc">Probablemente precises activar esta opción se estás a usar unha VPN</string>
+  <string name="recommended">Recomendado</string>
+  <string name="video_buffer_size_lowest">A máis baixa</string>
+  <string name="video_buffer_size_highest">A máis alta </string>
+  <string name="unpin_group_from_sidebar">Eliminar o grupo de subscrición</string>
+  <string name="place_comments_left">Coloca os comentarios á esquerda</string>
+  <string name="add_to_subscriptions_group">Engadir/Eliminar do grupo de subscrición</string>
+  <string name="new_subscriptions_group">Novo grupo</string>
+  <string name="rename_group">Renomear o grupo de subscrición</string>
+  <string name="screen_dimming_amount">Cantidade de atenuación da pantalla</string>
+  <string name="screen_dimming_timeout">Tempo de espera para a atenuación da pantalla</string>
+  <string name="playlists_rows">Amosar a sección de listas de reprodución como filas</string>
 </resources>

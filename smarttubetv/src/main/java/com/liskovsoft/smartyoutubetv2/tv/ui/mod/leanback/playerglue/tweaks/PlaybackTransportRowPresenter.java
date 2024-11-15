@@ -38,10 +38,11 @@ import androidx.leanback.widget.PlaybackSeekDataProvider;
 import androidx.leanback.widget.PlaybackSeekUi;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.RowPresenter;
+
+import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
-import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.ControlButtonPresenterSelector;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlClickedListener;
@@ -772,7 +773,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     mEndingTime.setVisibility(View.VISIBLE);
                 } else if (mPlayerData.isEndingTimeEnabled()) {
                     mEndingTime.setText(String.format(mEndingTimeFormat,
-                            DateFormatter.formatTimeShort(mEndingTime.getContext(), System.currentTimeMillis() + remainingTimeMs)));
+                            DateHelper.toShortTime(System.currentTimeMillis() + remainingTimeMs)));
                     mEndingTime.setVisibility(View.VISIBLE);
                 } else {
                     mEndingTime.setVisibility(View.GONE);
