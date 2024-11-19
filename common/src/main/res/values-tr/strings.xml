@@ -480,6 +480,7 @@
     <string name="skip_24_rate">24 fps biçimlerini atla (gerçek sinema modu düzeltmesi\?)</string>
     <string name="skip_shorts">Shortsları atla</string>
     <string name="player_disable_suggestions">Önerileri devre dışı bırak</string>
+    <string name="suggestions">Önerileri</string>
     <string name="feedback">Geri bildirim</string>
     <string name="sources">Kaynaklar</string>
     <string name="releases">Sürümler</string>

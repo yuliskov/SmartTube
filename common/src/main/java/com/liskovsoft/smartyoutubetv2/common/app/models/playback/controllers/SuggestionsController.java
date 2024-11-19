@@ -379,7 +379,7 @@ public class SuggestionsController extends BasePlayerController {
                 VideoGroup videoGroup = VideoGroup.from(group);
 
                 if (Helpers.equals(videoGroup.getTitle(), " ")) {
-                    videoGroup.setTitle(getContext().getString(R.string.recommended));
+                    videoGroup.setTitle(getContext().getString(R.string.suggestions));
                 }
 
                 //if (groupIndex == 0) {

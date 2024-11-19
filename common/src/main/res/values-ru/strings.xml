@@ -472,6 +472,7 @@
     <string name="skip_24_rate">Пропускать 24fps форматы (исправление для режима real cinema?)</string>
     <string name="skip_shorts">Пропускать Shorts</string>
     <string name="player_disable_suggestions">Отключить рекомендации</string>
+    <string name="suggestions">Рекомендации</string>
     <string name="feedback">Обратная связь</string>
     <string name="sources">Исходники</string>
     <string name="releases">Релизы</string>
