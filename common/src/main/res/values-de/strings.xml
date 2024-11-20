@@ -56,7 +56,7 @@
     <string name="settings_linked_devices">Verbundene Geräte</string>
     <string name="settings_about">Über</string>
     <string name="dialog_account_list">Konto auswählen</string>
-    <string name="dialog_account_none">Kein Konto</string>
+    <string name="dialog_account_none">Keine</string>
     <string name="dialog_remove_account">Abmelden</string>
     <string name="dialog_add_account">Anmelden</string>
     <string name="default_lang">Standard</string>
