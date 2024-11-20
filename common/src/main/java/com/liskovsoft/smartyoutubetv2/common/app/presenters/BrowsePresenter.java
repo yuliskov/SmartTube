@@ -207,7 +207,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void initSectionCallbacks() {
-        mRowMapping.put(MediaGroup.TYPE_HOME, mGeneralData.isOldHomeLookEnabled() ? mContentService.getHomeV1Observe() : mContentService.getHomeObserve());
+        mRowMapping.put(MediaGroup.TYPE_HOME, mContentService.getHomeObserve());
         mRowMapping.put(MediaGroup.TYPE_TRENDING, mContentService.getTrendingObserve());
         mRowMapping.put(MediaGroup.TYPE_KIDS_HOME, mContentService.getKidsHomeObserve());
         mRowMapping.put(MediaGroup.TYPE_SPORTS, mContentService.getSportsObserve());

@@ -496,8 +496,13 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                 mPlayerData.setVideoBufferType(PlayerData.BUFFER_MEDIUM);
             }
         } else if (Helpers.containsAny(message, "Exception in CronetUrlRequest")) {
-            if (mLastVideo != null && !mLastVideo.isLive && !mPlayerTweaksData.isNetworkErrorFixingDisabled()) { // Finished live stream may provoke errors in Cronet
-                mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+            //if (mLastVideo != null && !mLastVideo.isLive && !mPlayerTweaksData.isNetworkErrorFixingDisabled()) { // Finished live stream may provoke errors in Cronet
+            //    mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+            //} else {
+            //    restartEngine = false;
+            //}
+            if (mLastVideo != null && !mLastVideo.isLive) { // Finished live stream may provoke errors in Cronet
+                mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
             } else {
                 restartEngine = false;
             }

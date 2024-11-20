@@ -278,12 +278,12 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableGlobalEndingTime(option.isSelected()),
                 mPlayerData.isGlobalEndingTimeEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.old_home_look),
-                option -> {
-                    mGeneralData.enableOldHomeLook(option.isSelected());
-                    mRestartApp = true;
-                },
-                mGeneralData.isOldHomeLookEnabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.old_home_look),
+        //        option -> {
+        //            mGeneralData.enableOldHomeLook(option.isSelected());
+        //            mRestartApp = true;
+        //        },
+        //        mGeneralData.isOldHomeLookEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.old_channel_look),
                 option -> {
