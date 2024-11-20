@@ -466,6 +466,7 @@
     <string name="skip_24_rate">Lewati format 24fps (perbaikan mode real cinema\?)</string>
     <string name="skip_shorts">Lewati vidio pendenk</string>
     <string name="player_disable_suggestions">Nonaktifkan saran</string>
+    <string name="suggestions">Saran</string>
     <string name="feedback">Masukan</string>
     <string name="sources">Sumber</string>
     <string name="releases">Rilis</string>
