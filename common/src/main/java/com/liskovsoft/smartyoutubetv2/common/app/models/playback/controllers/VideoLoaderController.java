@@ -130,6 +130,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             getMainController().onPlayEnd();
         } else if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
             MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
+            YouTubeServiceManager.instance().applyAntiBotFix(); // bot check error?
             //mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
             mPlayerTweaksData.enableHighBitrateFormats(false);
             mPlayerTweaksData.setPlayerDataSource(Utils.skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET); // ???
@@ -344,7 +345,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
             if (mStateService.isHistoryBroken()) { // temp fix (not work as expected)
-                //YouTubeServiceManager.instance().applyNoPlaybackFix();
+                YouTubeServiceManager.instance().applyAntiBotFix(); // bot check error?
                 //scheduleReloadVideoTimer(5_000);
                 scheduleRebootAppTimer(5_000);
             } else {
@@ -512,6 +513,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // "Response code: 503" (not sure whether below helps)
             // "Response code: 400" (not sure whether below helps)
             YouTubeServiceManager.instance().applyNoPlaybackFix();
+            restartEngine = false;
+        } else if (Helpers.startsWithAny(message, "Response code: 429")) {
+            YouTubeServiceManager.instance().applyAntiBotFix();
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
             // NOTE: Fixing too many requests or network issues
