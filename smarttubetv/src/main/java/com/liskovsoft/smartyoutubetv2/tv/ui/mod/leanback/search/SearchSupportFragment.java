@@ -37,6 +37,7 @@ import androidx.leanback.widget.SpeechRecognitionCallback;
 import androidx.leanback.widget.VerticalGridView;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
@@ -249,6 +250,8 @@ public class SearchSupportFragment extends Fragment {
             if (permissions[0].equals(Manifest.permission.RECORD_AUDIO)
                     && grantResults[0] == PERMISSION_GRANTED) {
                 startRecognition();
+            } else {
+                MessageHelpers.showMessage(getContext(), com.liskovsoft.smartyoutubetv2.common.R.string.not_supported_by_device);
             }
         }
     }

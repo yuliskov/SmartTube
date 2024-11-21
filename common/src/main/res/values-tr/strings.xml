@@ -27,6 +27,7 @@
     <string name="frame_rate_correction">Fps düzeltme:\n%s</string>
     <string name="category_background_playback">Arka planda oynatma</string>
     <string name="not_implemented">Uygulanmadı</string>
+    <string name="not_supported_by_device">Cihaz bu özelliği desteklemiyor</string>
     <string name="option_background_playback_off">Devre dışı</string>
     <string name="option_background_playback_pip">Resim içinde resim</string>
     <string name="option_background_playback_only_audio">Sadece ses</string>
