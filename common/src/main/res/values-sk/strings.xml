@@ -27,6 +27,7 @@
     <string name="frame_rate_correction">Opraviť fps: \n%s</string>
     <string name="category_background_playback">Prehrávanie na pozadí</string>
     <string name="not_implemented">Neimplementované</string>
+    <string name="not_supported_by_device">Zariadenie nepodporuje túto funkciu</string>
     <string name="option_background_playback_off">Vypnuté</string>
     <string name="option_background_playback_pip">Obraz v obraze</string>
     <string name="option_background_playback_only_audio">Iba audio</string>
@@ -39,6 +40,7 @@
     <string name="video_buffer_size_lowest">Najnižšia</string>
     <string name="video_buffer_size_med">Stredná</string>
     <string name="video_buffer_size_high">Vysoká</string>
+    <string name="video_buffer_size_highest">Najvyššia</string>
     <string name="update_changelog">Zoznam zmien</string>
     <string name="install_update">Inštalovať aktualizáciu</string>
     <string name="section_is_empty">Hups! Žiadne videá</string>
@@ -226,7 +228,7 @@
     <string name="player_corner_ending_time">Prehrávač: čas ukončenia v pravom hornom rohu</string>
     <string name="uploads_old_look">Vrátiť späť starý vzhľad sekcie Nahraté videá</string>
     <string name="background_playback_activation">Prehrávanie na pozadí (aktivácia)</string>
-    <string name="channels_old_look">Vrátiť späť starý vzhľad sekcie Kanály</string>
+    <string name="channels_old_look">Starý vzhľad sekcie Kanály</string>
     <string name="channels_auto_load">Automaticky načítať obsah sekcie Kanály</string>
     <string name="return_to_background_video">Späť na video bežiace na pozadí</string>
     <string name="pin_unpin_from_sidebar">Pridať/Odstrániť na postranný panel</string>
@@ -236,6 +238,7 @@
     <string name="pin_channel">Pridať kanál na postranný panel</string>
     <string name="pin_to_sidebar">Pridať na postranný panel</string>
     <string name="unpin_from_sidebar">Odstrániť z postranného panela</string>
+    <string name="unpin_group_from_sidebar">Odstrániť skupinu z Odberov</string>
     <string name="unpinned_from_sidebar">Odstránené z postranného panela</string>
     <string name="dialog_select_country">Krajina</string>
     <string name="settings_language_country">Jazyk/Krajina</string>
@@ -267,7 +270,7 @@
     <string name="skip_each_segment_once">Už viac nepreskakovať segmenty</string>
     <string name="disable_ok_long_press">Vypnúť dlhé stlačenie tlačidla OK</string>
     <string name="disable_ok_long_press_desc">Určené pre chybné ovládače, kde tlačidlo OK nefunguje správne</string>
-    <string name="player_time_correction">Zobraziť čas vzhľadom na rýchlosť</string>
+    <string name="player_time_correction">Zobraziť čas s korekciou rýchlosti</string>
     <string name="sponsor_color_markers">Farebné značky na ukazovateli priebehu</string>
     <string name="refresh_section">Aktualizovať sekciu</string>
     <string name="option_disabled">Vypnuté</string>
@@ -476,6 +479,7 @@
     <string name="skip_24_rate">Preskočiť formáty s 24fps (oprava pre režim Real Cinema\?)</string>
     <string name="skip_shorts">Preskočiť Shorts</string>
     <string name="player_disable_suggestions">Vypnúť návrhy</string>
+    <string name="suggestions">Návrhy</string>
     <string name="feedback">Spätná väzba</string>
     <string name="sources">Zdroje</string>
     <string name="releases">Vydané verzie</string>
@@ -483,6 +487,7 @@
     <string name="open_comments">Otvoriť komentáre</string>
     <string name="open_chat">Chat</string>
     <string name="place_chat_left">Zobraziť chat na ľavej strane</string>
+    <string name="place_comments_left">Umiestniť komentáre vľavo</string>
     <string name="use_alt_speech_recognizer">Alternatívne rozpoznávanie jazyka</string>
     <string name="time_format">Formát času</string>
     <string name="time_format_24">24 hodín</string>
@@ -674,4 +679,11 @@
     <string name="player_global_focus_desc">Táto funkcia ovplyvňuje, ktoré tlačidlo prehrávača bude aktívne pri prechádzaní medzi riadkami tlačidiel prehrávača</string>
     <string name="disable_network_error_fixing">Zakázať automatickú opravu chýb siete</string>
     <string name="disable_network_error_fixing_desc">Ak používate sieť VPN, pravdepodobne budete musieť povoliť túto možnosť</string>
+    <string name="recommended">Odporúčané</string>
+    <string name="add_to_subscriptions_group">Pridať/Odstrániť zo skupiny Odberov</string>
+    <string name="new_subscriptions_group">Nová skupina</string>
+    <string name="rename_group">Premenovať skupinu odberov</string>
+    <string name="screen_dimming_amount">Miera stmavenia obrazovky</string>
+    <string name="screen_dimming_timeout">Časový limit stmievania obrazovky</string>
+    <string name="playlists_rows">Zobrazenie sekciu Playlisty ako riadky</string>
 </resources>
