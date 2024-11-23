@@ -526,11 +526,12 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
             // "Response code: 403" (url deciphered incorrectly)
             YouTubeServiceManager.instance().applyAntiBotFix();
-            if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
-                mPlayerTweaksData.setPlayerDataSource(getNextEngine());
-            } else {
-                restartEngine = false;
-            }
+            restartEngine = false;
+            //if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
+            //    mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+            //} else {
+            //    restartEngine = false;
+            //}
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 500"
             if (mLastVideo != null) {
