@@ -472,11 +472,12 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
         if (Helpers.startsWithAny(message, "Unable to connect to")) {
             // No internet connection
-            if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
-                mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
-            } else {
-                restartEngine = false;
-            }
+            //if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
+            //    mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
+            //} else {
+            //    restartEngine = false;
+            //}
+            restartEngine = false;
             MessageHelpers.showLongMessage(getContext(), shortErrorMsg);
             return restartEngine;
         }
@@ -524,6 +525,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
             // "Response code: 403" (url deciphered incorrectly)
+            YouTubeServiceManager.instance().applyAntiBotFix();
             if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
                 mPlayerTweaksData.setPlayerDataSource(getNextEngine());
             } else {
