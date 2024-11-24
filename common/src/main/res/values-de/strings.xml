@@ -27,6 +27,7 @@
     <string name="frame_rate_correction">Bildrate korrigieren:\n%s</string>
     <string name="category_background_playback">Hintergrund-Wiedergabe</string>
     <string name="not_implemented">Nicht implementiert</string>
+    <string name="not_supported_by_device">Das Gerät unterstützt diese Funktion nicht</string>
     <string name="option_background_playback_off">Deaktiviert</string>
     <string name="option_background_playback_pip">Bild in Bild</string>
     <string name="option_background_playback_only_audio">Nur Audio</string>
@@ -478,6 +479,7 @@
     <string name="skip_24_rate">24fps-Formate überspringen (Echter-Kinomodus-Fix\?)</string>
     <string name="skip_shorts">Shorts überspringen</string>
     <string name="player_disable_suggestions">Vorschläge deaktivieren</string>
+    <string name="suggestions">Vorschläge</string>
     <string name="feedback">Feedback</string>
     <string name="sources">Quellen</string>
     <string name="releases">Versionen</string>
