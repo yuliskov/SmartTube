@@ -303,7 +303,7 @@
   <string name="mark_all_channels_watched">Shëno të gjitha kanalet si të shikuara</string>
   <string name="move_section_up">Zhvendos seksionin lart</string>
   <string name="move_section_down">Zhvendos seksionin poshtë</string>
-  <string name="player_buttons">Formëso butonët e luajtësit</string>
+  <string name="player_buttons">Konfiguro butonët e luajtësit</string>
   <string name="action_playlist_add">Shto në listën e luajtjes</string>
   <string name="action_video_stats">Statistikat e videos</string>
   <string name="action_subscribe">Abonohu</string>
@@ -371,12 +371,12 @@
   <string name="proxy_test_start">Prova #%d: %s …</string>
   <string name="proxy_test_error">Gabimi #%d: %s</string>
   <string name="proxy_test_status">Gjendja #%d: %s %d %s</string>
-  <string name="openvpn_config_address_hint">Adresa e skedarit të formësimit (*.ovpn)</string>
+  <string name="openvpn_config_address_hint">Adresa e skedarit të konfigurimit(*.ovpn)</string>
   <string name="enable_openvpn">Përdor OpenVPN</string>
   <string name="openvpn_settings_title">Cilësimet e OpenVPN</string>
   <string name="openvpn_application_aborted">Të lutem, së pari rregullo cilësimet e OpenVPN.</string>
   <string name="openvpn_test_aborted">Prova u ndërpre, të lutem së pari rregullo cilësimet e OpenVPN.</string>
-  <string name="openvpn_address_invalid">Adresa e formësimit të OpenVPN nuk është caktuar.</string>
+  <string name="openvpn_address_invalid">Adresa e konfigurimit të OpenVPN nuk është caktuar.</string>
   <string name="internet_censorship">Censura në Internet</string>
   <string name="rename_section">Riemërto këtë seksion</string>
   <string name="simple_edit_value_hint">Fut vlerën</string>
@@ -663,7 +663,7 @@
   <string name="auto_backup">Kopje rezervë automatike (një herë në ditë)</string>
   <string name="repeat_mode_reverse_list">Luaj listën e luajtjes ose videot e kanalit në rend të kundërt</string>
   <string name="unknown_source_error">Gabim i panjohur i burimit</string>
-  <string name="unknown_renderer_error">Gabim i panjohur i pasqyruesit</string>
+  <string name="unknown_renderer_error">Gabim i panjohur i paraqitësit</string>
   <string name="player_quick_skip_videos">Kapërce videot e zakonshme me butonat majtas/djathtas</string>
   <string name="calm_msg">Po e rregullojmë problemin. Kontrollo për përditësime herë pas here</string>
   <string name="without_picture">Pa figurë</string>
@@ -682,4 +682,8 @@
   <string name="video_buffer_size_highest">Më i larti</string>
   <string name="screen_dimming_amount">Niveli i zbehjes së ekranit</string>
   <string name="screen_dimming_timeout">Koha për nisjen e zbehjes së ekranit</string>
+  <string name="place_comments_left">Vendos komentet në të majtë</string>
+  <string name="suggestions">Sugjerime</string>
+  <string name="playlists_rows">Shfaq Listat e Luajtjes si rreshta</string>
+  <string name="not_supported_by_device">Pajisja nuk mbështet këtë veçori</string>
 </resources>
