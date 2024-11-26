@@ -128,14 +128,17 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         if ((!mLastVideo.isLive || mLastVideo.isLiveEnd) &&
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
-        } else if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
+        } else {
             MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
             YouTubeServiceManager.instance().applyAntiBotFix(); // bot check error?
-            //mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
-            mPlayerTweaksData.enableHighBitrateFormats(false);
-            mPlayerTweaksData.setPlayerDataSource(Utils.skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET); // ???
-            restartEngine();
+            reloadVideo();
         }
+        //} else if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
+        //    MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
+        //    mPlayerTweaksData.enableHighBitrateFormats(false);
+        //    mPlayerTweaksData.setPlayerDataSource(Utils.skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET); // ???
+        //    restartEngine();
+        //}
     }
 
     @Override

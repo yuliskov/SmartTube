@@ -391,7 +391,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                     Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
                     RxHelper.execute(
                             action,
-                            (error) -> MessageHelpers.showMessage(getContext(), getContext().getString(R.string.cant_save_playlist)),
+                            (error) -> MessageHelpers.showMessage(getContext(), error.getLocalizedMessage()),
                             () -> {
                                 if (!video.hasVideo()) { // Playlists section
                                     BrowsePresenter.instance(getContext()).refresh();
