@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.ShortsCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -32,6 +33,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     private String mSearchQuery;
     private String mNewQuery;
     private VideoCardPresenter mCardPresenter;
+    private ShortsCardPresenter mShortsPresenter;
     private SearchData mSearchData;
     private boolean mIsFragmentCreated;
 
@@ -43,6 +45,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         mSearchPresenter = SearchPresenter.instance(getContext());
         mSearchPresenter.setView(this);
         mCardPresenter = new VideoCardPresenter();
+        mShortsPresenter = new ShortsCardPresenter();
         mSearchGroupAdapters = new HashMap<>();
         mSearchData = SearchData.instance(getContext());
 
@@ -54,6 +57,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     private void setupEventListeners() {
         ItemViewLongPressedListener listener = new ItemViewLongPressedListener();
         mCardPresenter.setOnItemViewLongPressedListener(listener);
+        mShortsPresenter.setOnItemViewLongPressedListener(listener);
         setSearchTagsLongPressListener(listener);
     }
 
@@ -307,7 +311,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         VideoGroupObjectAdapter existingAdapter = mSearchGroupAdapters.get(mediaGroupId);
 
         if (existingAdapter == null) {
-            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group, mCardPresenter);
+            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group, group.isShorts() ? mShortsPresenter : mCardPresenter);
 
             mSearchGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
             
