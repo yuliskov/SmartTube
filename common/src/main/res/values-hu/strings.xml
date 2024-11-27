@@ -544,7 +544,7 @@
   <string name="play_video_incognito">Lejátszás inkognitó módban</string>
   <string name="header_kids_home">Gyermekvideók</string>
   <string name="player_section_playlist">Az aktuális kategória tartalmának használata lejátszási listaként</string>
-  <string name="not_recommend_channel">Nem ajánlom a csatornát</string>
+  <string name="not_recommend_channel">Ne ajánl csatornát</string>
   <string name="you_wont_see_this_channel">Ez a csatorna nem jelenik meg az ajánlások között</string>
   <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
   <string name="header_trending">Felkapott</string>
@@ -681,4 +681,9 @@
   <string name="screen_dimming_amount">Képernyő elsötétítése</string>
   <string name="screen_dimming_timeout">Képernyő elsötétítési ideje</string>
   <string name="playlists_rows">Lejátszási listák szakasz megjelenítése sorokként</string>
+  <string name="not_supported_by_device">A készülék nem támogatja ezt a funkciót</string>
+  <string name="video_buffer_size_lowest">Legalacsonyabb</string>
+  <string name="video_buffer_size_highest">Legmagasabb</string>
+  <string name="suggestions">Javaslatok</string>
+  <string name="place_comments_left">Helyezze a megjegyzéseket balra</string>
 </resources>
