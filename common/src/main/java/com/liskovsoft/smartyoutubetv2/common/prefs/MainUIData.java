@@ -456,6 +456,18 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
             int bits = 32 - 27;
             mMenuItems = mMenuItems << bits >>> bits; // remove auto enabled bits
         }
+
+        if (mChannelCategorySorting == CHANNEL_SORTING_NAME2) {
+            mChannelCategorySorting = CHANNEL_SORTING_NAME;
+        }
+
+        if (mChannelCategorySorting == CHANNEL_SORTING_DEFAULT) {
+            mChannelCategorySorting = CHANNEL_SORTING_LAST_VIEWED;
+        }
+
+        if (mChannelCategorySorting == CHANNEL_SORTING_NEW_CONTENT) {
+            mChannelCategorySorting = CHANNEL_SORTING_LAST_VIEWED;
+        }
     }
 
     @Override

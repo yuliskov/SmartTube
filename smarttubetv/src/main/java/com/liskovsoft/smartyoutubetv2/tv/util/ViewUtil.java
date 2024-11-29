@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.os.Build.VERSION;
-import android.text.BidiFormatter;
 import android.text.Layout;
 import android.text.TextUtils.TruncateAt;
 import android.view.Gravity;
@@ -22,6 +21,7 @@ import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.VerticalGridView;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.MarqueeTextView;
@@ -101,11 +101,19 @@ public class ViewUtil {
     }
 
     public static void applyMarqueeRtlParams(TextView textView, boolean scroll) {
-        if (VERSION.SDK_INT <= 17) {
-            return;
-        }
+        //if (VERSION.SDK_INT <= 17) {
+        //    return;
+        //}
 
-        if (!BidiFormatter.getInstance().isRtlContext()) {
+        //if (!BidiFormatter.getInstance().isRtlContext()) {
+        //    return;
+        //}
+
+        if (!Helpers.isTextRTL(textView.getText())) {
+            // TextView may be reused from rtl context. Do reset.
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+            textView.setTextDirection(TextView.TEXT_DIRECTION_FIRST_STRONG);
+            textView.setGravity(Gravity.TOP | Gravity.START);
             return;
         }
 

@@ -312,8 +312,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_NAME2:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByName2Observe());
-                break;
             case MainUIData.CHANNEL_SORTING_NAME:
                 mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByNameObserve());
                 break;
@@ -321,7 +319,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByUpdateObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_LAST_VIEWED:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByViewedObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByLastViewedObserve());
                 break;
         }
     }
