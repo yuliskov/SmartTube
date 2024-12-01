@@ -2,10 +2,9 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build.VERSION;
+
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
-import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
@@ -100,6 +99,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsQuickSkipShortsEnabled;
     private boolean mIsQuickSkipVideosEnabled;
     private boolean mIsOculusQuestFixEnabled;
+    private boolean mIsPlaybackErrorsFixEnabled;
     private boolean mIsNetworkErrorFixingDisabled;
 
     private PlayerTweaksData(Context context) {
@@ -394,6 +394,15 @@ public class PlayerTweaksData implements ProfileChangeListener {
         persistData();
     }
 
+    public boolean isPlaybackErrorsFixEnabled() {
+        return mIsPlaybackErrorsFixEnabled;
+    }
+
+    public void enablePlaybackErrorsFix(boolean enable) {
+        mIsPlaybackErrorsFixEnabled = enable;
+        persistData();
+    }
+
     public void enableButtonLongClick(boolean enable) {
         mIsButtonLongClickEnabled = enable;
         persistData();
@@ -655,6 +664,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsQuickSkipVideosEnabled = Helpers.parseBoolean(split, 50, false);
         mIsNetworkErrorFixingDisabled = Helpers.parseBoolean(split, 51, false);
         mIsCommentsPlacedLeft = Helpers.parseBoolean(split, 52, false);
+        mIsPlaybackErrorsFixEnabled = Helpers.parseBoolean(split, 53, false);
 
         updateDefaultValues();
     }
@@ -672,7 +682,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
                 mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsEnabled, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
-                mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft
+                mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
+                mIsPlaybackErrorsFixEnabled
                 ));
     }
 
