@@ -165,8 +165,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         for (int[] pair : new int[][] {
                 {R.string.sorting_last_viewed, MainUIData.CHANNEL_SORTING_LAST_VIEWED},
                 {R.string.sorting_alphabetically, MainUIData.CHANNEL_SORTING_NAME},
-                //{R.string.sorting_by_new_content, MainUIData.CHANNEL_SORTING_NEW_CONTENT},
-                }) {
+                {R.string.sorting_by_new_content, MainUIData.CHANNEL_SORTING_NEW_CONTENT}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 mMainUIData.setChannelCategorySorting(pair[1]);
                 BrowsePresenter.instance(getContext()).updateChannelSorting();

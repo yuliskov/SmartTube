@@ -388,7 +388,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         mUIScale = Helpers.parseFloat(split, 2, 1.0f);
         mColorSchemeIndex = Helpers.parseInt(split, 3, 1);
         mIsCardMultilineTitleEnabled = Helpers.parseBoolean(split, 4, true);
-        mChannelCategorySorting = Helpers.parseInt(split, 5, CHANNEL_SORTING_NEW_CONTENT);
+        mChannelCategorySorting = Helpers.parseInt(split, 5, CHANNEL_SORTING_LAST_VIEWED);
         mPlaylistsStyle = Helpers.parseInt(split, 6, PLAYLISTS_STYLE_GRID);
         mCardTitleLinesNum = Helpers.parseInt(split, 7, 1);
         mIsCardTextAutoScrollEnabled = Helpers.parseBoolean(split, 8, true);
@@ -462,10 +462,6 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         }
 
         if (mChannelCategorySorting == CHANNEL_SORTING_DEFAULT) {
-            mChannelCategorySorting = CHANNEL_SORTING_LAST_VIEWED;
-        }
-
-        if (mChannelCategorySorting == CHANNEL_SORTING_NEW_CONTENT) {
             mChannelCategorySorting = CHANNEL_SORTING_LAST_VIEWED;
         }
     }
