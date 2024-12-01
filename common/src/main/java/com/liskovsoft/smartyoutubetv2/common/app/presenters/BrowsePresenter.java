@@ -683,7 +683,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         error -> {
                             Log.e(TAG, "updateRowsHeader error: %s", error.getMessage());
                             handleLoadError(error);
-                        });
+                        },
+                        () -> getView().showProgressBar(false));
 
         mActions.add(updateAction);
     }
@@ -734,7 +735,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
                             handleLoadError(error);
-                        });
+                        },
+                        () -> getView().showProgressBar(false));
 
         mActions.add(updateAction);
     }
