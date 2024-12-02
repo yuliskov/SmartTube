@@ -347,6 +347,7 @@
     <string name="hide_shorts_from_home">Приховувати короткі відео з Головної</string>
     <string name="finish_on_disconnect">Завершувати застосунок після відключення телефону/планшету</string>
     <string name="update_error">Помилка оновлення</string>
+    <string name="hide_shorts_from_search">Приховувати короткі відео з Пошуку</string>
     <string name="hide_shorts_from_history">Приховувати короткі відео з Історії</string>
     <string name="hide_shorts_from_trending">Приховувати короткі відео з Трендів</string>
     <string name="disable_screensaver">Вимкнути скрінсейвер</string>

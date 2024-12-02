@@ -351,6 +351,7 @@
     <string name="hide_shorts_from_home">Hide shorts from Home</string>
     <string name="finish_on_disconnect">Close the app after disconnecting the phone/tablet</string>
     <string name="update_error">Update error</string>
+    <string name="hide_shorts_from_search">Hide shorts from Search</string>
     <string name="hide_shorts_from_history">Hide shorts from History</string>
     <string name="hide_shorts_from_trending">Hide shorts from Trending</string>
     <string name="disable_screensaver">Disable screensaver</string>

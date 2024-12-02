@@ -351,6 +351,7 @@
     <string name="hide_shorts_from_home">Shortsları Ana Sayfa\'da gizle</string>
     <string name="finish_on_disconnect">Telefon bağlantısı kesildiğinde uygulamayı sonlandır</string>
     <string name="update_error">Güncelleme hatası</string>
+    <string name="hide_shorts_from_search">Shortsları Arama\'te gizle</string>
     <string name="hide_shorts_from_history">Shortsları Geçmiş\'te gizle</string>
     <string name="hide_shorts_from_trending">Shortsları Trendler\'de gizle</string>
     <string name="disable_screensaver">Ekran koruyucuyu devre dışı bırak</string>

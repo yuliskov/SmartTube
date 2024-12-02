@@ -347,6 +347,7 @@
     <string name="hide_shorts_from_home">Скрывать короткие видео с Главной</string>
     <string name="finish_on_disconnect">Завершать приложение после отключения телефона/планшета</string>
     <string name="update_error">Ошибка обновления</string>
+    <string name="hide_shorts_from_search">Скрывать короткие видео из Поиска</string>
     <string name="hide_shorts_from_history">Скрывать короткие видео из Истории</string>
     <string name="hide_shorts_from_trending">Скрывать короткие видео из Трендов</string>
     <string name="disable_screensaver">Отключить скринсейвер</string>
