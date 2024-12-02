@@ -907,6 +907,9 @@ public class PlayerUIController extends BasePlayerController {
         int begin = subtitleFormats.get(0).isDefault() ? 1 : 0;
         List<FormatItem> topSubtitles = new ArrayList<>();
         for (FormatItem item : mPlayerData.getLastSubtitleFormats()) {
+            if (item == null || item.getLanguage() == null) { // skip empty formats
+                continue;
+            }
             int index = 0;
             while (index != -1) {
                 index = subtitleFormats.indexOf(item);
