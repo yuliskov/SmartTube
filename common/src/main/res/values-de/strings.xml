@@ -351,8 +351,8 @@
     <string name="hide_shorts_from_home">Shorts in Start ausblenden</string>
     <string name="finish_on_disconnect">App nach dem Trennen des Telefons/Tablets beenden</string>
     <string name="update_error">Update-Fehler</string>
-    <string name="hide_shorts_from_search">Shorts in Suchergebnissen ausblenden</string>
-    <string name="hide_shorts_from_history">Shorts in Verlauf ausblenden</string>
+    <string name="hide_shorts_from_search">Shorts im Suchergebnis ausblenden</string>
+    <string name="hide_shorts_from_history">Shorts im Verlauf ausblenden</string>
     <string name="hide_shorts_from_trending">Shorts in Trends ausblenden</string>
     <string name="disable_screensaver">Bildschirmschoner deaktivieren</string>
     <string name="description_not_found">Beschreibung nicht gefunden</string>
