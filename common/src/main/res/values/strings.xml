@@ -176,7 +176,7 @@
     <string name="device_connected">Device \"%s\" has been connected</string>
     <string name="device_disconnected">Device \"%s\" has been disconnected</string>
     <string name="settings_ui_scale">UI scale</string>
-    <string name="msg_restart_app">Please restart the app to apply this settings</string>
+    <string name="msg_restart_app">Please restart the app to apply these settings</string>
     <string name="settings_block">Content blocking</string>
     <string name="msg_applying">Applying %s…</string>
     <string name="msg_done">Done</string>
