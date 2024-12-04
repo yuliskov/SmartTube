@@ -111,9 +111,10 @@ public class ViewUtil {
 
         if (!Helpers.isTextRTL(textView.getText())) {
             // TextView may be reused from rtl context. Do reset.
-            textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+            // NOTE: don't enable commented options because Setting item's text won't be centered.
+            //textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
             textView.setTextDirection(TextView.TEXT_DIRECTION_FIRST_STRONG);
-            textView.setGravity(Gravity.TOP | Gravity.START);
+            //textView.setGravity(Gravity.TOP | Gravity.START);
             return;
         }
 
