@@ -529,7 +529,7 @@ public final class Video {
     }
 
     public boolean isMix() {
-        return !isLive && badge != null && durationMs <= 0 && (hasPlaylist() || hasChannel() || hasNestedItems());
+        return !isLive && badge != null && !Helpers.hasDigits(badge) && durationMs <= 0 && (hasPlaylist() || hasChannel() || hasNestedItems());
     }
 
     public boolean isFullLive() {
