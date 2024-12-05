@@ -27,6 +27,7 @@
     <string name="frame_rate_correction">Correggi fps:\n%s</string>
     <string name="category_background_playback">Riproduzione in background</string>
     <string name="not_implemented">Non implementato</string>
+    <string name="not_supported_by_device">Il dispositivo non supporta questa funzionalità</string>
     <string name="option_background_playback_off">Disabilitato</string>
     <string name="option_background_playback_pip">Immagine nell\'immagine</string>
     <string name="option_background_playback_only_audio">Solo audio</string>
@@ -350,6 +351,7 @@
     <string name="hide_shorts_from_home">Nascondi i video brevi dalla Home</string>
     <string name="finish_on_disconnect">Chiudi l\'app dopo aver scollegato il telefono/tablet</string>
     <string name="update_error">Errore di aggiornamento</string>
+    <string name="hide_shorts_from_search">Nascondi i video brevi dal risultato della ricerca</string>
     <string name="hide_shorts_from_history">Nascondi i video brevi dalla Cronologia</string>
     <string name="hide_shorts_from_trending">Nascondi i video brevi dalle Tendenze</string>
     <string name="disable_screensaver">Disabilita lo screensaver</string>
@@ -478,6 +480,7 @@
     <string name="skip_24_rate">Salta i formati a 24 fps (correzione per la modalità cinema reale\?)</string>
     <string name="skip_shorts">Salta i video brevi</string>
     <string name="player_disable_suggestions">Disabilita suggerimenti</string>
+    <string name="suggestions">Suggerimenti</string>
     <string name="feedback">Feedback</string>
     <string name="sources">Sorgenti</string>
     <string name="releases">Rilasci</string>
