@@ -61,27 +61,27 @@ public class VerticalGridPresenter extends Presenter {
                     }
                 });
 
-                // MOD: Open a video from a single tap
-                itemView.setOnTouchListener(new OnTouchListener() {
-                    private long downTimeMs;
-
-                    @SuppressLint("ClickableViewAccessibility")
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        // Handle UP instead of DOWN to give enough time to move a focus to the touched item
-                        // Skip long touch (only open context menu)
-                        if (event.getAction() == MotionEvent.ACTION_UP && System.currentTimeMillis() - downTimeMs < 500) {
-                            if (getOnItemViewClickedListener() != null) {
-                                // Row is always null
-                                getOnItemViewClickedListener().onItemClicked(
-                                        itemViewHolder.mHolder, itemViewHolder.mItem, null, null);
-                            }
-                        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                            downTimeMs = System.currentTimeMillis();
-                        }
-                        return false;
-                    }
-                });
+                //// MOD: Open a video from a single tap
+                //itemView.setOnTouchListener(new OnTouchListener() {
+                //    private long downTimeMs;
+                //
+                //    @SuppressLint("ClickableViewAccessibility")
+                //    @Override
+                //    public boolean onTouch(View v, MotionEvent event) {
+                //        // Handle UP instead of DOWN to give enough time to move a focus to the touched item
+                //        // Skip long touch (only open context menu)
+                //        if (event.getAction() == MotionEvent.ACTION_UP && System.currentTimeMillis() - downTimeMs < 500) {
+                //            if (getOnItemViewClickedListener() != null) {
+                //                // Row is always null
+                //                getOnItemViewClickedListener().onItemClicked(
+                //                        itemViewHolder.mHolder, itemViewHolder.mItem, null, null);
+                //            }
+                //        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                //            downTimeMs = System.currentTimeMillis();
+                //        }
+                //        return false;
+                //    }
+                //});
             }
         }
 

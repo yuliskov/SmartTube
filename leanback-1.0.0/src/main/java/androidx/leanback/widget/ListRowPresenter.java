@@ -263,28 +263,28 @@ public class ListRowPresenter extends RowPresenter {
                     }
                 });
 
-                // MOD: Open a video from a single tap
-                viewHolder.mHolder.view.setOnTouchListener(new OnTouchListener() {
-                    private long downTimeMs;
-
-                    @SuppressLint("ClickableViewAccessibility")
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        // Handle UP instead of DOWN to give enough time to move a focus to the touched item
-                        // Skip long touch (only open context menu)
-                        if (event.getAction() == MotionEvent.ACTION_UP && System.currentTimeMillis() - downTimeMs < 500) {
-                            ItemBridgeAdapter.ViewHolder ibh = (ItemBridgeAdapter.ViewHolder)
-                                    mRowViewHolder.mGridView.getChildViewHolder(viewHolder.itemView);
-                            if (mRowViewHolder.getOnItemViewClickedListener() != null) {
-                                mRowViewHolder.getOnItemViewClickedListener().onItemClicked(viewHolder.mHolder,
-                                        ibh.mItem, mRowViewHolder, (ListRow) mRowViewHolder.mRow);
-                            }
-                        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                            downTimeMs = System.currentTimeMillis();
-                        }
-                        return false;
-                    }
-                });
+                //// MOD: Open a video from a single tap
+                //viewHolder.mHolder.view.setOnTouchListener(new OnTouchListener() {
+                //    private long downTimeMs;
+                //
+                //    @SuppressLint("ClickableViewAccessibility")
+                //    @Override
+                //    public boolean onTouch(View v, MotionEvent event) {
+                //        // Handle UP instead of DOWN to give enough time to move a focus to the touched item
+                //        // Skip long touch (only open context menu)
+                //        if (event.getAction() == MotionEvent.ACTION_UP && System.currentTimeMillis() - downTimeMs < 500) {
+                //            ItemBridgeAdapter.ViewHolder ibh = (ItemBridgeAdapter.ViewHolder)
+                //                    mRowViewHolder.mGridView.getChildViewHolder(viewHolder.itemView);
+                //            if (mRowViewHolder.getOnItemViewClickedListener() != null) {
+                //                mRowViewHolder.getOnItemViewClickedListener().onItemClicked(viewHolder.mHolder,
+                //                        ibh.mItem, mRowViewHolder, (ListRow) mRowViewHolder.mRow);
+                //            }
+                //        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                //            downTimeMs = System.currentTimeMillis();
+                //        }
+                //        return false;
+                //    }
+                //});
             }
         }
 
