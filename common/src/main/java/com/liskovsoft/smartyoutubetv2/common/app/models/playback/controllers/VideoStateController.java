@@ -645,7 +645,8 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void removeFromHistoryIfNeeded() {
-        if (mGeneralData.getHistoryState() == GeneralData.HISTORY_DISABLED) {
+        // Maintain history to keep video progress
+        if (mGeneralData.getHistoryState() == GeneralData.HISTORY_DISABLED && mStateService.isHistoryBroken()) {
             Video video = getVideo();
             if (video != null) {
                 mStateService.removeByVideoId(video.videoId);
