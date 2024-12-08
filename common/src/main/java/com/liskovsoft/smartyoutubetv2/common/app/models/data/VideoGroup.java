@@ -192,7 +192,12 @@ public class VideoGroup {
             return false;
         }
 
-        return mVideos.get(0).isShorts;
+        for (int i = 0; i < Math.min(8, mVideos.size()); i++) {
+             if (!mVideos.get(i).isShorts)
+                 return false;
+        }
+
+        return true;
     }
 
     /**

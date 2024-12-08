@@ -234,7 +234,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from("Playback errors fix",
+        options.add(UiOptionItem.from("Playback buffering fix",
                 option -> {
                     mPlayerTweaksData.enablePlaybackErrorsFix(option.isSelected());
                     mRestartApp = true;
