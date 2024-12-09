@@ -7,7 +7,7 @@
   <string name="header_music">Musique</string>
   <string name="header_news">Actualités</string>
   <string name="header_gaming">Jeux vidéo</string>
-  <string name="header_playlists">Bibliothèque</string>
+  <string name="header_playlists">Playlists</string>
   <string name="header_settings">Paramètres</string>
   <string name="header_channels">Chaînes</string>
   <string name="subscriptions_signin_title">Découvrir les nouveautés de vos chaînes préférées</string>
@@ -123,12 +123,12 @@
   <string name="subtitle_white_black">Texte blanc sur fond noir</string>
   <string name="player_seek_preview">Aperçu pendant la navigation vidéo</string>
   <string name="color_scheme_dark_grey_oled">Gris foncé (OLED)</string>
-  <string name="channels_section_sorting">Ordre d\'affichage des chaînes dans la bibliothèque</string>
+  <string name="channels_section_sorting">Tri des sections de chaînes</string>
   <string name="sorting_by_new_content">Nouveau contenu</string>
   <string name="sorting_alphabetically">Ordre alphabétique</string>
   <string name="sorting_last_viewed">Dernier visionnage</string>
   <string name="player_pause_when_seek">Mettre en pause pendant la navigation vidéo</string>
-  <string name="playlists_style">Style de la bibliothèque</string>
+  <string name="playlists_style">Style des playlists</string>
   <string name="playlists_style_grid">Grille</string>
   <string name="playlists_style_rows">Lignes</string>
   <string name="player_show_clock">Afficher la date et l\'heure</string>
@@ -192,7 +192,7 @@
   <string name="content_block_notify_none">Sans notification</string>
   <string name="content_block_notify_toast">Bulle de notification</string>
   <string name="content_block_notify_dialog">Dialogue de confirmation</string>
-  <string name="return_to_launcher">Revenir au lanceur à partir des canaux ATV ou de la recherche</string>
+  <string name="return_to_launcher">Revenir au lanceur à partir des chaines ATV ou de la recherche</string>
   <string name="intent_force_close">Fermeture forcée si la vidéo a été ouverte à partir d\'une source externe</string>
   <string name="btn_confirm">Confirmer</string>
   <string name="player_low_video_quality">Faible qualité vidéo</string>
@@ -542,7 +542,7 @@
   <string name="unlock_all_formats">Déverrouiller tous les formats vidéo</string>
   <string name="unlock_all_formats_desc">Sur certains appareils, le micrologiciel signale à tort certains formats comme non pris en charge.\n        (par exemple, les téléviseurs intelligents 1080p ont tendance à signaler le format 4K comme non pris en charge).</string>
   <string name="okhttp_desc">Cette pile réseau est la plus lente mais apporte une bonne stabilité.</string>
-  <string name="select_channel_section">Ouvrir la section correspondante lorsque l\'application est lancée depuis les canaux ATV</string>
+  <string name="select_channel_section">Ouvrir la section correspondante lorsque l\'application est lancée depuis les chaînes ATV</string>
   <string name="enable_voice_search_desc">L\'application officielle sera remplacée par une \"passerelle\". Un pont permet de transférer les demandes de recherche globales vers notre application.</string>
   <string name="enable_master_password">Protéger l\'application avec un mot de passe</string>
   <string name="enter_master_password">Veuillez entrer le mot de passe</string>
@@ -557,7 +557,7 @@
   <string name="volume_boost_warning">Les réglages dépassant la limite peuvent potentiellement endommager les haut-parleurs</string>
   <string name="play_video_incognito">Lire en mode navigation privée</string>
   <string name="header_kids_home">Enfants</string>
-  <string name="player_section_playlist">Utiliser le contenu de la section actuelle comme liste de lecture</string>
+  <string name="player_section_playlist">Utiliser le contenu de la section actuelle comme playlist</string>
   <string name="header_trending">Tendances</string>
   <string name="screensaver">Économiseur d\'écran</string>
   <string name="player_screen_off_timeout">Délai avant extinction de l\'écran</string>
@@ -619,7 +619,7 @@
   <string name="keyboard_fix">Correction de l’affichage du clavier par la pression de la touche OK (G20s et autres)</string>
   <string name="nothing_found">Rien n’a été trouvé</string>
   <string name="auto_frame_rate_desc">Cette option supprime les tremblements sur les scènes où la caméra se déplace rapidement, par exemple le streaming sportif</string>
-  <string name="channel_filter_hint">Filtrer les chaines</string>
+  <string name="channel_filter_hint">Filtrer les chaînes</string>
   <string name="player_loop_shorts">Short en boucle</string>
   <string name="hide_watched_from_notifications">Masquer les vidéos regardées dans les notifications</string>
   <string name="remember_position_of_live_videos">Mémoriser la position de la diffusion en direct</string>
@@ -645,7 +645,7 @@
   <string name="hide_watched_from_watch_later">Masquer les vidéos regardées de la playlist À regarder plus tard</string>
   <string name="fullscreen_mode">Mode plein écran (sans barres système)</string>
   <string name="player_only_mode">Afficher uniquement le lecteur si la vidéo est ouverte en dehors de l’application</string>
-  <string name="pinned_channel_rows">Afficher le canal épinglé sous forme de lignes</string>
+  <string name="pinned_channel_rows">Afficher la chaîne épinglé sous forme de lignes</string>
   <string name="prefer_ipv4">Privilégiez le DNS IPv4</string>
   <string name="prefer_ipv4_desc">Peut résoudre les situations où l’application ne fonctionne pas du tout.\nRemarque. Peut provoquer des blocages et des plantages (en particulier sur les appareils Android 8 ou Dune HD)</string>
   <string name="long_press_for_settings">APPUYEZ LONGUEMENT POUR OUVRIR LES PARAMÈTRES</string>
@@ -683,4 +683,8 @@
   <string name="screen_dimming_timeout">Délai d\'assombrissement de l\'écran</string>
   <string name="video_buffer_size_highest">Maximum</string>
   <string name="place_comments_left">Placer les commentaires à gauche</string>
+  <string name="playlists_rows">Afficher la section Playlists sous forme de lignes</string>
+  <string name="not_supported_by_device">L\'appareil ne prend pas en charge cette fonctionnalité</string>
+  <string name="hide_shorts_from_search">Masquer les shorts dans les résultats de recherche</string>
+  <string name="suggestions">Suggestions</string>
 </resources>
