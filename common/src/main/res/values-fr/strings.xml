@@ -192,7 +192,7 @@
   <string name="content_block_notify_none">Sans notification</string>
   <string name="content_block_notify_toast">Bulle de notification</string>
   <string name="content_block_notify_dialog">Dialogue de confirmation</string>
-  <string name="return_to_launcher">Revenir au lanceur à partir des chaines ATV ou de la recherche</string>
+  <string name="return_to_launcher">Revenir au lanceur à partir des chaînes ATV ou de la recherche</string>
   <string name="intent_force_close">Fermeture forcée si la vidéo a été ouverte à partir d\'une source externe</string>
   <string name="btn_confirm">Confirmer</string>
   <string name="player_low_video_quality">Faible qualité vidéo</string>
