@@ -687,4 +687,5 @@
   <string name="not_supported_by_device">L\'appareil ne prend pas en charge cette fonctionnalité</string>
   <string name="hide_shorts_from_search">Masquer les shorts dans les résultats de recherche</string>
   <string name="suggestions">Suggestions</string>
+  <string name="original_language">Langue originale</string>
 </resources>

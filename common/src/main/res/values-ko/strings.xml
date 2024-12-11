@@ -686,4 +686,5 @@
   <string name="playlists_rows">재생목록 섹션을 행으로 표시</string>
   <string name="not_supported_by_device">해당 장치는 이 기능을 지원하지 않음</string>
   <string name="suggestions">제안</string>
+    <string name="original_language">원래 언어</string>
 </resources>

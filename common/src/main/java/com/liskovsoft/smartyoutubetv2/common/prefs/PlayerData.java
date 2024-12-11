@@ -37,6 +37,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     public static final int SEEK_PREVIEW_SINGLE = 1;
     public static final int SEEK_PREVIEW_CAROUSEL_SLOW = 2;
     public static final int SEEK_PREVIEW_CAROUSEL_FAST = 3;
+    public static final String ORIGINAL_LANGUAGE = "original_language";
     @SuppressLint("StaticFieldLeak")
     private static PlayerData sInstance;
     private final AppPrefs mPrefs;

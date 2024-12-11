@@ -687,4 +687,5 @@
     <string name="screen_dimming_amount">Quantità oscuramento schermo</string>
     <string name="screen_dimming_timeout">Timeout oscuramento schermo</string>
     <string name="playlists_rows">Mostra la sezione Playlist come righe</string>
+    <string name="original_language">Lingua originale</string>
 </resources>

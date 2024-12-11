@@ -570,4 +570,5 @@
   <string name="header_shorts">शॉर्ट्स</string>
   <string name="unlock_high_bitrate_formats">उच्च बिटरेट 1080p VP9 प्रारूप अनलॉक करें</string>
   <string name="unlock_high_bitrate_audio_formats">उच्च बिटरेट mp4a प्रारूप अनलॉक करें</string>
+    <string name="original_language">मूल भाषा</string>
 </resources>

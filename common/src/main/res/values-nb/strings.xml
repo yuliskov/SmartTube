@@ -155,4 +155,5 @@
     <string name="move_section_down">Flytt seksjon ned</string>
     <string name="rename_section">Gi nytt navn til seksjon</string>
     <string name="action_video_info">Videobeskrivelse</string>
+    <string name="original_language">মূল ভাষা</string>
 </resources>

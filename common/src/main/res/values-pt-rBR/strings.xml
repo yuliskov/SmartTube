@@ -673,4 +673,5 @@
   <string name="applying_fix">Não feche o Tocador. Aplicando as correções...</string>
   <string name="video_disabled">Video Desabilitado</string>
   <string name="calm_msg">Nós estamos corrigindo as mudanças. Verifique pelas próximas atualizações</string>
+    <string name="original_language">Idioma original</string>
 </resources>

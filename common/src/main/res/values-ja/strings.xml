@@ -684,4 +684,5 @@
     <string name="rename_group">登録チャンネルグループの名前を変更</string>
     <string name="screen_dimming_amount">画面の減光量</string>
     <string name="screen_dimming_timeout">画面減光のタイムアウト</string>
+    <string name="original_language">元の言語</string>
 </resources>

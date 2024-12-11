@@ -684,4 +684,5 @@
   <string name="video_buffer_size_highest">Más alto</string>
   <string name="unpin_group_from_sidebar">Eliminar el grupo de suscripción</string>
   <string name="playlists_rows">Mostrar la sección de listas de reproducción como filas</string>
+    <string name="original_language">Idioma original</string>
 </resources>

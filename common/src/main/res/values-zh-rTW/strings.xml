@@ -677,4 +677,5 @@
   <string name="recommended">推薦</string>
   <string name="add_to_subscriptions_group">將頻道新增/移除到訂閱群組</string>
   <string name="new_subscriptions_group">新群組</string>
+    <string name="original_language">原始語言</string>
 </resources>
