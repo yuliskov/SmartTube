@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="header_home">Startpagina</string>
+  <string name="header_home">Startscherm</string>
   <string name="title_search">Zoeken</string>
   <string name="header_subscriptions">Abonnementen</string>
   <string name="header_history">Geschiedenis</string>
@@ -80,7 +80,7 @@
   <string name="player_ui_and_pause">Speler weergeven en pauzeren</string>
   <string name="player_only_pause">Speler pauzeren</string>
   <string name="check_for_updates">Controleren op update</string>
-  <string name="update_not_found">Je beschikt al over de nieuwste versie.</string>
+  <string name="update_not_found">Geen update beschikbaar.</string>
   <string name="update_in_progress">Even geduld…</string>
   <string name="player_ui_hide_behavior">Speler verbergen</string>
   <string name="option_never">Nooit</string>
@@ -93,7 +93,7 @@
   <string name="color_scheme_default">Standaard</string>
   <string name="color_scheme_red_grey">Rood-grijs</string>
   <string name="color_scheme_red">Rood</string>
-  <string name="color_scheme_dark_grey">Donker</string>
+  <string name="color_scheme_dark_grey">Donkergrijs</string>
   <string name="disable_update_check">Niet automatisch updaten</string>
   <string name="show_again">Altijd weergeven</string>
   <string name="check_updates_auto">Melding over nieuwe update</string>
@@ -124,7 +124,7 @@
   <string name="subtitle_white_transparent">Wit op transparante achtergrond</string>
   <string name="subtitle_white_black">Zwarte achtergrond</string>
   <string name="player_seek_preview">Voorvertoning weergeven tijdens snelzoeken</string>
-  <string name="color_scheme_dark_grey_oled">Donker (OLED)</string>
+  <string name="color_scheme_dark_grey_oled">Donkergrijs (OLED)</string>
   <string name="channels_section_sorting">Kanalen sorteren</string>
   <string name="sorting_by_new_content">Nieuwe video\'s</string>
   <string name="sorting_alphabetically">Alfabetisch</string>
@@ -222,9 +222,9 @@
   <string name="header_uploads">Kanalen/Uploads</string>
   <string name="player_show_global_clock">Klok op videobeeld weergeven</string>
   <string name="player_show_global_ending_time">Eindtijd altijd op het scherm weergeven</string>
-  <string name="app_corner_clock">Home: top right corner clock</string>
-  <string name="player_corner_clock">Player: top right corner clock</string>
-  <string name="player_corner_ending_time">Player: top right corner ending time</string>
+  <string name="app_corner_clock">Home: klok rechtsboven</string>
+  <string name="player_corner_clock">Speler: klok rechtsboven</string>
+  <string name="player_corner_ending_time">Speler: eindtijd rechtsboven</string>
   <string name="uploads_old_look">Oude kanaal-/uploadindeling</string>
   <string name="background_playback_activation">Afspelen op achtergrond (toets)</string>
   <string name="channels_old_look">Oude kanaalindeling</string>
@@ -244,8 +244,8 @@
   <string name="share_embed_link">Insluitlink delen</string>
   <string name="card_text_scroll_factor">Scrollsnelheid van tekst</string>
   <string name="preferred_update_source">Updatebron kiezen</string>
-  <string name="hide_shorts">YouTube Shorts verbergen op abonnementenlijst</string>
-  <string name="hide_shorts_channel">YouTube Shorts vam kanaal verbergen</string>
+  <string name="hide_shorts">Shorts verbergen op abonnementenlijst</string>
+  <string name="hide_shorts_channel">Shorts verbergen op kanaal</string>
   <string name="key_remapping">Toetstoewijzingen</string>
   <string name="screen_dimming">Scherm dimmen</string>
   <string name="removed_from_playback_queue">De video is verwijderd uit de afspeelwachtrij</string>
@@ -338,16 +338,16 @@
   <string name="msg_player_error_video_source">VIDEO URL werkt niet of incorrect apparaat tijd.\nVaak een bug in de app.</string>
   <string name="msg_player_error_audio_source">AUDIO URL werkt niet of incorrect apparaat tijd.\nVaak een bug in de app.</string>
   <string name="msg_player_error_subtitle_source">ONDERTITELING URL werkt niet of incorrect apparaat tijd.\nVaak een bug in de app.</string>
-  <string name="hide_upcoming">Aankomende verbergen voor abonnementen</string>
-  <string name="hide_upcoming_channel">Aankomende verbergen voor kanaal</string>
-  <string name="hide_upcoming_home">Aankomende verbergen voor home</string>
-  <string name="search_background_playback">Voer PIP in bij het zoeken vanaf speler</string>
+  <string name="hide_upcoming">Aankomende verbergen van abonnementen</string>
+  <string name="hide_upcoming_channel">Aankomende verbergen van kanaal</string>
+  <string name="hide_upcoming_home">Aankomende verbergen van startscherm</string>
+  <string name="search_background_playback">PIP tijdens het zoeken/browsen van een kanaal</string>
   <string name="trending_row_name">Trending</string>
   <string name="player_seek_type">Zoek gedrag</string>
   <string name="player_seek_regular">Normaal</string>
   <string name="player_seek_confirmation_pause">Met bevestiging (pauze tijdens zoeken)</string>
   <string name="player_seek_confirmation_play">Met bevestiging (spelen tijdens het zoeken)</string>
-  <string name="hide_shorts_from_home">Shorts verbergen op startpagina</string>
+  <string name="hide_shorts_from_home">Shorts verbergen op Startscherm</string>
   <string name="finish_on_disconnect">Voltooi de app nadat de telefoon/tablet is losgekoppeld</string>
   <string name="update_error">Update fout</string>
   <string name="hide_shorts_from_history">Shorts verbergen bij geschiedenis</string>
@@ -485,7 +485,7 @@
   <string name="place_chat_left">Chat aan de linkerkant plaatsen</string>
   <string name="place_comments_left">Opmerkingen aan de linkerkant plaatsen</string>
   <string name="use_alt_speech_recognizer">Alt-spraakherkenning</string>
-  <string name="time_format">Tijd formaat</string>
+  <string name="time_format">Tijdformaat</string>
   <string name="time_format_24">24 uur</string>
   <string name="time_format_12">12 uur (AM/PM)</string>
   <string name="use_alt_speech_recognizer_desc">Zeer bug gevoelig. Gebruik alleen als je problemen hebt met de standaard spraakherkenner.</string>
@@ -552,7 +552,7 @@
   <string name="clear_search_history">Verwijder zoekgeschiedenis</string>
   <string name="not_supported_by_device">Het apparaat ondersteunt deze functie niet</string>
   <string name="live_stream_fix_4k_desc">Waarschuwing, deze tweak schakelt het terugspoelen van streams uit. Verbetert de livestreamprestaties aanzienlijk. Maximale resolutie is 4K.</string>
-  <string name="hide_shorts_from_search">Verberg shorts in de zoekresultaten</string>
+  <string name="hide_shorts_from_search">Shorts verbergen in zoekresultaten</string>
   <string name="suggestions">Suggesties</string>
   <string name="speech_engine">Stemzoekmachine</string>
   <string name="dearrow_status">Controleer de DeArrow-serverstatus</string>
@@ -640,7 +640,7 @@
   <string name="nothing_found">Niets gevonden</string>
   <string name="auto_frame_rate_desc">Met deze optie verwijdert u trillingen in scènes waarin de camera snel beweegt, bijvoorbeeld bij het streamen van sportwedstrijden.</string>
   <string name="channel_filter_hint">Kanalen filteren</string>
-  <string name="player_quick_shorts_skip">Skip Shorts met linker-/rechterknopen</string>
+  <string name="player_quick_shorts_skip">Skip Shorts met linker-/rechterknop</string>
   <string name="player_quick_skip_videos">Sla normale video\'s over met de linker-/rechterknoppen</string>
   <string name="channels_filter">Filterkanalenveld weergeven in het gedeelte Kanalen</string>
   <string name="channel_search_bar">Zoekbalk op de kanaalpagina</string>
@@ -668,7 +668,7 @@
   <string name="auto_backup">Automatische back-up (één keer per dag)</string>
   <string name="repeat_mode_reverse_list">Speel de afspeellijst of kanaalvideo\'s in omgekeerde volgorde af</string>
   <string name="calm_msg">We lossen het probleem op. Controleer van tijd tot tijd op updates</string>
-  <string name="without_picture"></string>
+  <string name="without_picture">Zonder beeld</string>
   <string name="video_disabled">Video uitgeschakeld</string>
   <string name="applying_fix">Sluit de speler niet. De oplossing toepassen...</string>
   <string name="hide_mixes">Verberg mixen</string>
@@ -682,4 +682,7 @@
   <string name="screen_dimming_amount">Hoeveelheid schermverduistering</string>
   <string name="screen_dimming_timeout">Time-out voor schermdimmen</string>
   <string name="playlists_rows">Sectie Afspeellijsten weergeven als rijen</string>
+  <string name="unlock_all_formats_desc">Op sommige apparaten meldt de firmware ten onrechte dat bepaalde formaten niet worden ondersteund, ook al zijn ze dat wel.\n(Bijvoorbeeld: 1080p smart-tv\'s melden 4k vaak als niet ondersteund.)</string>
+  <string name="prefer_ipv4_desc">Kan situaties oplossen waarin de app helemaal niet werkt.\nLet op. Kan vastlopen en crashen veroorzaken (vooral op Android 8-apparaten of Dune HD)</string>
+  <string name="player_loop_shorts">Short herhaald afspelen ipv doorlopend</string>
 </resources>
