@@ -680,7 +680,9 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             }
         }
 
-        if (resultTracks != null && !resultTracks.isEmpty()) {
+        boolean useOriginalLanguage = PlayerData.ORIGINAL_LANGUAGE.equals(audioLanguage);
+
+        if (!useOriginalLanguage && resultTracks != null && !resultTracks.isEmpty()) {
             return resultTracks.toArray(new MediaTrack[0][]);
         }
 

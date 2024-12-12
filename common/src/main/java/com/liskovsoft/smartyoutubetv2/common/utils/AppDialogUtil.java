@@ -362,6 +362,13 @@ public class AppDialogUtil {
                 },
                 "".equals(playerData.getAudioLanguage())));
 
+        options.add(1, UiOptionItem.from(context.getString(R.string.original_language),
+                optionItem -> {
+                    playerData.setAudioLanguage(PlayerData.ORIGINAL_LANGUAGE);
+                    onSetCallback.run();
+                },
+                PlayerData.ORIGINAL_LANGUAGE.equals(playerData.getAudioLanguage())));
+
         return OptionCategory.from(AUDIO_LANGUAGE_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
