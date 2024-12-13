@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="header_home">Startscherm</string>
+  <string name="header_home">Home</string>
   <string name="title_search">Zoeken</string>
   <string name="header_subscriptions">Abonnementen</string>
   <string name="header_history">Geschiedenis</string>
@@ -196,7 +196,7 @@
   <string name="content_block_notify_none">Geen melding weergeven</string>
   <string name="content_block_notify_toast">Melding weergeven</string>
   <string name="content_block_notify_dialog">Om bevestiging vragen</string>
-  <string name="return_to_launcher">Terug naar Android TV-startscherm/zoeken</string>
+  <string name="return_to_launcher">Terug naar Android TV-Home/zoeken</string>
   <string name="intent_force_close">Video van externe bron geforceerd afsluiten</string>
   <string name="btn_confirm">Bevestigen</string>
   <string name="player_low_video_quality">Lage videokwaliteit</string>
@@ -340,14 +340,14 @@
   <string name="msg_player_error_subtitle_source">ONDERTITELING URL werkt niet of incorrect apparaat tijd.\nVaak een bug in de app.</string>
   <string name="hide_upcoming">Aankomende verbergen van abonnementen</string>
   <string name="hide_upcoming_channel">Aankomende verbergen van kanaal</string>
-  <string name="hide_upcoming_home">Aankomende verbergen van startscherm</string>
+  <string name="hide_upcoming_home">Aankomende verbergen van Home</string>
   <string name="search_background_playback">PIP tijdens het zoeken/browsen van een kanaal</string>
   <string name="trending_row_name">Trending</string>
   <string name="player_seek_type">Zoek gedrag</string>
   <string name="player_seek_regular">Normaal</string>
   <string name="player_seek_confirmation_pause">Met bevestiging (pauze tijdens zoeken)</string>
   <string name="player_seek_confirmation_play">Met bevestiging (spelen tijdens het zoeken)</string>
-  <string name="hide_shorts_from_home">Shorts verbergen op Startscherm</string>
+  <string name="hide_shorts_from_home">Shorts verbergen op Home</string>
   <string name="finish_on_disconnect">Voltooi de app nadat de telefoon/tablet is losgekoppeld</string>
   <string name="update_error">Update fout</string>
   <string name="hide_shorts_from_history">Shorts verbergen bij geschiedenis</string>
@@ -631,7 +631,7 @@
   <string name="hide_watched_from_subscriptions">Verberg bekeken video\'s van Abonnementen</string>
   <string name="hide_watched_from_notifications">Verberg bekeken video\'s van Meldingen</string>
   <string name="hide_unwanted_content">Ongewenste inhoud verbergen</string>
-  <string name="hide_watched_from_home">Verberg bekeken video\'s van Startscherm</string>
+  <string name="hide_watched_from_home">Verberg bekeken video\'s van Home</string>
   <string name="hide_watched_from_watch_later">Verberg bekeken video\'s van de afspeellijst Later bekijken</string>
   <string name="remote_control_permission">Achtergrond Afstandsbediening vereist Overlay-machtiging</string>
   <string name="login_from_browser">Inloggen via browser</string>
