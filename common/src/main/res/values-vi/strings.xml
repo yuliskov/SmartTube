@@ -466,8 +466,8 @@
   <string name="you_wont_see_this_channel">Chúng tôi sẽ không đề xuất kênh này cho bạn nữa</string>
   <string name="share_qr_link">Chia sẻ liên kết (Mã QR)</string>
   <string name="msg_player_error_video_renderer">Định dạng VIDEO không được hỗ trợ.\nHãy thử chọn một định dạng khác bằng cách bấm nút HQ trong trình phát.\nNếu vẫn không được thì hãy thử khởi động lại thiết bị của bạn.</string>
-  <string name="msg_player_error_audio_renderer">Định dạng ÂM THANH không được hỗ trợ.\nHãy thử chọn một định dạng khác bằng cách bấm nút HQ trong trình phát.\nNếu vẫn không được thì hãy thử khởi động lại thiết bị</string>
-  <string name="msg_player_error_subtitle_renderer">Định dạng PHỤ ĐỀ không được hỗ trợ.\nHãy thử chọn một định dạng khác bằng cách bấm nút CC trong trình phát.\nNếu vẫn không được thì hãy thử khởi động lại thiết bị</string>
+  <string name="msg_player_error_audio_renderer">Định dạng ÂM THANH không được hỗ trợ.\nHãy thử chọn một định dạng khác bằng cách bấm nút HQ trong trình phát.\nNếu vẫn không được thì hãy thử khởi động lại thiết bị của bạn.</string>
+  <string name="msg_player_error_subtitle_renderer">Định dạng PHỤ ĐỀ không được hỗ trợ.\nHãy thử chọn một định dạng khác bằng cách bấm nút CC trong trình phát.\nNếu vẫn không được thì hãy thử khởi động lại thiết bị của bạn.</string>
   <string name="disable_ok_long_press_desc">Dành cho bộ điều khiển có lỗi nút OK không hoạt động bình thường</string>
   <string name="msg_player_error_video_source">URL video không hoạt động hoặc thời gian của thiết bị không chính xác.\nThông thường thì đây là lỗi từ ứng dụng.</string>
   <string name="msg_player_error_audio_source">URL âm thanh không hoạt động hoặc thời gian của thiết bị không chính xác.\nThông thường thì đây là lỗi từ ứng dụng.</string>
