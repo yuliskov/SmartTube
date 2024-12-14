@@ -29,7 +29,7 @@
   <string name="option_background_playback_off">Tắt</string>
   <string name="option_background_playback_pip">Hình trong hình</string>
   <string name="option_background_playback_only_audio">Chỉ âm thanh</string>
-  <string name="playback_settings">Cài đặt phát lại</string>
+  <string name="playback_settings">Cài đặt trình phát</string>
   <string name="video_speed">Tốc độ video</string>
   <string name="resolution_switch">Chuyển đổi độ phân giải</string>
   <string name="video_buffer">Bộ đệm video</string>
@@ -72,8 +72,8 @@
   <string name="player_show_ui_on_pause">Hiện giao diện khi tạm dừng</string>
   <string name="player_pause_on_ok">Nhấn OK để tạm dừng phát lại</string>
   <string name="player_ok_button_behavior">Chức năng phím OK</string>
-  <string name="player_only_ui">Chỉ Giao diện</string>
-  <string name="player_ui_and_pause">Giao diện và tạm dừng</string>
+  <string name="player_only_ui">Chỉ mở giao diện</string>
+  <string name="player_ui_and_pause">Mở giao diện và tạm dừng</string>
   <string name="player_only_pause">Chỉ tạm dừng</string>
   <string name="check_for_updates">Kiểm tra bản cập nhật</string>
   <string name="update_not_found">Bạn đang sử dụng phiên bản mới nhất</string>
@@ -117,7 +117,7 @@
   <string name="subtitle_white_black">Chữ trắng trên nền đen</string>
   <string name="player_seek_preview">Xem trước trong khi tua</string>
   <string name="color_scheme_dark_grey_oled">Xám tối (OLED)</string>
-  <string name="channels_section_sorting">Phân loại thành phần kênh</string>
+  <string name="channels_section_sorting">Sắp xếp kênh</string>
   <string name="sorting_by_new_content">Nội dung mới</string>
   <string name="sorting_alphabetically">Theo bảng chữ cái</string>
   <string name="sorting_last_viewed">Xem lần cuối</string>
@@ -130,8 +130,8 @@
   <string name="open_channel_uploads">Mở video đã tải lên của kênh</string>
   <string name="app_exit_shortcut">Thoát khỏi ứng dụng</string>
   <string name="app_exit_none">Không thoát</string>
-  <string name="app_double_back_exit">Nhấn đúp để quay về</string>
-  <string name="app_single_back_exit">Nhấn 1 lần để quay về</string>
+  <string name="app_double_back_exit">Nhấn BACK 2 lần để</string>
+  <string name="app_single_back_exit">Nhấn BACK 1 lần để</string>
   <string name="action_video_zoom">Thu phóng video</string>
   <string name="video_zoom">Thu phóng video</string>
   <string name="video_zoom_default">Bình thường</string>
@@ -291,7 +291,7 @@
   <string name="live_stream_fix_desc">Vô hiệu hoá việc tua lùi video phát trực tiếp. Cải thiện đáng kể hiệu suất trên các thiết bị cấu hình thấp. Độ phân giải tối đa là 1080p.</string>
   <string name="simple_edit_value_hint">Giá trị mới</string>
   <string name="rename_section">Đổi tên mục</string>
-  <string name="internet_censorship">Cơ Quan Kiểm Duyệt Mạng</string>
+  <string name="internet_censorship">Kiểm Duyệt Mạng</string>
   <string name="openvpn_address_invalid">Địa chỉ cấu hình OpenVPN chưa được thiết lập.</string>
   <string name="action_dislike_unset">Đã xoá lượt không thích</string>
   <string name="cancel_dialog">Hủy bỏ</string>
@@ -410,7 +410,7 @@
   <string name="subtitle_system">Kiểu hệ thống (Cài đặt Android &gt; Trợ năng)</string>
   <string name="lb_playback_controls_skip_previous">Chuyển sang phần trước/Tua lại về vị trí bắt đầu</string>
   <string name="proxy_application_aborted">Vui lòng sửa lại cài đặt proxy trước.</string>
-  <string name="content_block_filler">Ngoài chủ đề (phụ)</string>
+  <string name="content_block_filler">Chủ đề ngoài lề</string>
   <string name="disable_vsync">Tắt V-Sync</string>
   <string name="add_to_playback_queue">Thêm vào hàng chờ phát lại</string>
   <string name="remove_from_playback_queue">Xoá khỏi hàng chờ phát lại</string>
@@ -452,7 +452,7 @@
   <string name="prefer_avc_over_vp9">Lựa chọn bộ giải mã: ưu tiên sử dụng avc thay cho vp9</string>
   <string name="place_chat_left">Đặt trò chuyện ở bên trái</string>
   <string name="use_alt_speech_recognizer">Trình nhận dạng giọng nói thay thế</string>
-  <string name="time_format">Định dạng thời gian</string>
+  <string name="time_format">định dạng thời gian</string>
   <string name="time_format_24">24 giờ</string>
   <string name="time_format_12">12 giờ (AM/PM)</string>
   <string name="use_alt_speech_recognizer_desc">Cực kỳ không ổn định. Chỉ sử dụng nó nếu bạn gặp sự cố với trình nhận dạng mặc định.</string>
@@ -460,7 +460,7 @@
   <string name="speech_recognizer_system">Theo hệ thống (Ưu tiên)</string>
   <string name="speech_recognizer_external_1">Bên ngoài 1 (cực kỳ không ổn định, để hoạt động, bạn cần tắt quyền truy cập vào micrô)</string>
   <string name="speech_recognizer_external_2">Bên ngoài 2 (cực kỳ không ổn định)</string>
-  <string name="real_channel_icon">Hiển thị biểu tượng thật trong nút kênh</string>
+  <string name="real_channel_icon">Hiển thị ảnh đại diện của kênh trong trình phát</string>
   <string name="video_buffer_size_none">Không có</string>
   <string name="not_recommend_channel">Không đề xuất kênh này</string>
   <string name="you_wont_see_this_channel">Chúng tôi sẽ không đề xuất kênh này cho bạn nữa</string>
@@ -468,7 +468,7 @@
   <string name="msg_player_error_video_renderer">Định dạng VIDEO không được hỗ trợ.\nHãy thử chọn một định dạng khác bằng cách bấm nút HQ trong trình phát.\nNếu vẫn không được thì hãy thử khởi động lại thiết bị của bạn.</string>
   <string name="msg_player_error_audio_renderer">Định dạng ÂM THANH không được hỗ trợ.\nHãy thử chọn một định dạng khác bằng cách bấm nút HQ trong trình phát.\nNếu vẫn không được thì hãy thử khởi động lại thiết bị của bạn.</string>
   <string name="msg_player_error_subtitle_renderer">Định dạng PHỤ ĐỀ không được hỗ trợ.\nHãy thử chọn một định dạng khác bằng cách bấm nút CC trong trình phát.\nNếu vẫn không được thì hãy thử khởi động lại thiết bị của bạn.</string>
-  <string name="disable_ok_long_press_desc">Dành cho bộ điều khiển có lỗi nút OK không hoạt động bình thường</string>
+  <string name="disable_ok_long_press_desc">Dành cho các điều khiển có lỗi nút OK không hoạt động bình thường</string>
   <string name="msg_player_error_video_source">URL video không hoạt động hoặc thời gian của thiết bị không chính xác.\nThông thường thì đây là lỗi từ ứng dụng.</string>
   <string name="msg_player_error_audio_source">URL âm thanh không hoạt động hoặc thời gian của thiết bị không chính xác.\nThông thường thì đây là lỗi từ ứng dụng.</string>
   <string name="msg_player_error_subtitle_source">URL phụ đề không hoạt động hoặc thời gian của thiết bị không chính xác.\nThông thường thì đây là lỗi từ ứng dụng.</string>
@@ -552,7 +552,7 @@
   <string name="protect_settings_with_password">Bảo vệ cài đặt bằng mật khẩu</string>
   <string name="enter_settings_password">Nhập mật khẩu cài đặt</string>
   <string name="child_mode">Chế độ trẻ em</string>
-  <string name="child_mode_desc">Trong chế độ này, người dùng không thể tìm hoặc xem nội dung đề xuất. Trang cài đặt sẽ được bảo vệ bằng mật khẩu.</string>
+  <string name="child_mode_desc">Trong chế độ này, người dùng không thể tìm kiếm hoặc xem nội dung đề xuất. Trang cài đặt sẽ được bảo vệ bằng mật khẩu.</string>
   <string name="player_button_long_click">Giữ nút này để mở thêm tuỳ chọn</string>
   <string name="video_rotate">Xoay</string>
   <string name="live_stream_fix_4k_desc">Vô hiệu hoá việc tua lùi video phát trực tiếp. Cải thiện đáng kể hiệu suất. Độ phân giải tối đa là 4K.</string>
@@ -632,7 +632,7 @@
   <string name="long_press_for_options">NHẤN GIỮ ĐỂ MỞ CÁC TÙY CHỌN</string>
   <string name="device_specific_backup">Chỉ sao lưu cho thiết bị này</string>
   <string name="local_backup">Sao lưu cục bộ</string>
-  <string name="video_disabled">Video đã bị vô hiệu hóa</string>
+  <string name="video_disabled">Video đã bị vô hiệu hoá</string>
   <string name="hide_mixes">Ẩn danh sách phát kết hợp</string>
   <string name="recommended">Đề xuất</string>
   <string name="new_subscriptions_group">Thêm nhóm</string>
