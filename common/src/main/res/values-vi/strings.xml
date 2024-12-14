@@ -111,8 +111,8 @@
   <string name="repeat_mode_pause">Tạm dừng phát lại sau mỗi video</string>
   <string name="repeat_mode_pause_alt">Chỉ phát liên tục các video trong danh sách phát</string>
   <string name="repeat_mode_none">Dừng phát lại sau một video</string>
-  <string name="subscribed_to_channel">Đăng ký kênh</string>
-  <string name="unsubscribed_from_channel">Hủy đăng ký kênh</string>
+  <string name="subscribed_to_channel">Huỷ đăng ký kênh</string>
+  <string name="unsubscribed_from_channel">Đăng ký kênh</string>
   <string name="subtitle_yellow_transparent">Chữ vàng trên nền trong suốt</string>
   <string name="subtitle_white_black">Chữ trắng trên nền đen</string>
   <string name="player_seek_preview">Xem trước trong khi tua</string>
