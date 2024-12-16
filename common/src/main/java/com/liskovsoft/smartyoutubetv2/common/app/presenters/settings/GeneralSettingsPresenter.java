@@ -133,6 +133,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.hideWatchedFromNotifications(option.isSelected()),
                 mGeneralData.isHideWatchedFromNotificationsEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_search),
+                option -> MediaServiceData.instance().hideContent(MediaServiceData.CONTENT_SHORTS_SEARCH, option.isSelected()),
+                MediaServiceData.instance().isContentHidden(MediaServiceData.CONTENT_SHORTS_SEARCH)));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_home),
                 option -> mGeneralData.hideShortsFromHome(option.isSelected()),
                 mGeneralData.isHideShortsFromHomeEnabled()));

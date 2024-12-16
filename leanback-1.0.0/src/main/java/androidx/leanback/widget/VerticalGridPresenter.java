@@ -13,10 +13,13 @@
  */
 package androidx.leanback.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 
 import androidx.leanback.R;
@@ -57,6 +60,28 @@ public class VerticalGridPresenter extends Presenter {
                         }
                     }
                 });
+
+                //// MOD: Open a video from a single tap
+                //itemView.setOnTouchListener(new OnTouchListener() {
+                //    private long downTimeMs;
+                //
+                //    @SuppressLint("ClickableViewAccessibility")
+                //    @Override
+                //    public boolean onTouch(View v, MotionEvent event) {
+                //        // Handle UP instead of DOWN to give enough time to move a focus to the touched item
+                //        // Skip long touch (only open context menu)
+                //        if (event.getAction() == MotionEvent.ACTION_UP && System.currentTimeMillis() - downTimeMs < 500) {
+                //            if (getOnItemViewClickedListener() != null) {
+                //                // Row is always null
+                //                getOnItemViewClickedListener().onItemClicked(
+                //                        itemViewHolder.mHolder, itemViewHolder.mItem, null, null);
+                //            }
+                //        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                //            downTimeMs = System.currentTimeMillis();
+                //        }
+                //        return false;
+                //    }
+                //});
             }
         }
 
@@ -64,6 +89,8 @@ public class VerticalGridPresenter extends Presenter {
         public void onUnbind(ItemBridgeAdapter.ViewHolder viewHolder) {
             if (getOnItemViewClickedListener() != null) {
                 viewHolder.mHolder.view.setOnClickListener(null);
+                // MOD: Open a video from a single tap
+                viewHolder.mHolder.view.setOnTouchListener(null);
             }
         }
 

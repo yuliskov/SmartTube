@@ -8,6 +8,7 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -254,8 +255,21 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void applyTickle(MotionEvent event) {
-        if (event.getAxisValue(MotionEvent.AXIS_X) < 100) { // reserve left area for the back gesture
+        int gestureAreaWidthPx = 100;
+
+        // Reserve left area for gestures
+        if (event.getAxisValue(MotionEvent.AXIS_X) < gestureAreaWidthPx) {
             return;
+        }
+
+        // Reserve right area for gestures
+        if (getActivity() != null) {
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+            if (event.getAxisValue(MotionEvent.AXIS_X) > (displayMetrics.widthPixels - gestureAreaWidthPx)) {
+                return;
+            }
         }
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {

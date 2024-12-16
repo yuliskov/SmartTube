@@ -25,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
@@ -46,7 +47,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private final List<IntentProcessor> mIntentChain = new ArrayList<>();
     private Disposable mRefreshCachePeriodicAction;
     private String mBridgePackageName;
-    private final Runnable mRunRemoteTasks = this::runRemoteTasks;
+    private final Runnable mRunBackgroundTasks = this::runBackgroundTasks;
 
     private interface IntentProcessor {
         boolean process(Intent intent);
@@ -68,7 +69,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     public static void unhold() {
         if (sInstance != null) {
-            Utils.removeCallbacks(sInstance.mRunRemoteTasks);
+            Utils.removeCallbacks(sInstance.mRunBackgroundTasks);
         }
         sInstance = null;
     }
@@ -100,15 +101,18 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         if (!mRunPerInstance) {
             mRunPerInstance = true;
             //clearCache();
-            Utils.postDelayed(mRunRemoteTasks, APP_INIT_DELAY_MS);
+            Utils.postDelayed(mRunBackgroundTasks, APP_INIT_DELAY_MS);
             initIntentChain();
             // Fake service to prevent the app destroying?
             //runRemoteControlFakeTask();
         }
     }
 
-    private void runRemoteTasks() {
+    private void runBackgroundTasks() {
         YouTubeServiceManager.instance().refreshCacheIfNeeded(); // warm up player engine
+        if (PlayerTweaksData.instance(getContext()).isPlaybackErrorsFixEnabled()) {
+            YouTubeServiceManager.instance().applyAntiBotFix();
+        }
         enableHistoryIfNeeded();
         Utils.updateChannels(getContext());
         GDriveBackupWorker.schedule(getContext());

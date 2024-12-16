@@ -27,6 +27,7 @@
     <string name="frame_rate_correction">Fix fps:\n%s</string>
     <string name="category_background_playback">Background playback</string>
     <string name="not_implemented">Not implemented</string>
+    <string name="not_supported_by_device">The device does not support this feature</string>
     <string name="option_background_playback_off">Disabled</string>
     <string name="option_background_playback_pip">Picture in picture</string>
     <string name="option_background_playback_only_audio">Only audio</string>
@@ -175,7 +176,7 @@
     <string name="device_connected">Device \"%s\" has been connected</string>
     <string name="device_disconnected">Device \"%s\" has been disconnected</string>
     <string name="settings_ui_scale">UI scale</string>
-    <string name="msg_restart_app">Please restart the app to apply this settings</string>
+    <string name="msg_restart_app">Please restart the app to apply these settings</string>
     <string name="settings_block">Content blocking</string>
     <string name="msg_applying">Applying %s…</string>
     <string name="msg_done">Done</string>
@@ -350,6 +351,7 @@
     <string name="hide_shorts_from_home">Hide shorts from Home</string>
     <string name="finish_on_disconnect">Close the app after disconnecting the phone/tablet</string>
     <string name="update_error">Update error</string>
+    <string name="hide_shorts_from_search">Hide shorts from the search result</string>
     <string name="hide_shorts_from_history">Hide shorts from History</string>
     <string name="hide_shorts_from_trending">Hide shorts from Trending</string>
     <string name="disable_screensaver">Disable screensaver</string>
@@ -478,6 +480,7 @@
     <string name="skip_24_rate">Skip 24fps formats (real cinema mode fix\?)</string>
     <string name="skip_shorts">Skip Shorts</string>
     <string name="player_disable_suggestions">Disable suggestions</string>
+    <string name="suggestions">Suggestions</string>
     <string name="feedback">Feedback</string>
     <string name="sources">Sources</string>
     <string name="releases">Releases</string>

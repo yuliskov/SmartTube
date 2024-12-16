@@ -161,11 +161,9 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
-                {R.string.sorting_default, MainUIData.CHANNEL_SORTING_DEFAULT},
-                {R.string.sorting_alphabetically2, MainUIData.CHANNEL_SORTING_NAME2},
+                {R.string.sorting_last_viewed, MainUIData.CHANNEL_SORTING_LAST_VIEWED},
                 {R.string.sorting_alphabetically, MainUIData.CHANNEL_SORTING_NAME},
-                {R.string.sorting_by_new_content, MainUIData.CHANNEL_SORTING_NEW_CONTENT},
-                {R.string.sorting_last_viewed, MainUIData.CHANNEL_SORTING_LAST_VIEWED}}) {
+                {R.string.sorting_by_new_content, MainUIData.CHANNEL_SORTING_NEW_CONTENT}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 mMainUIData.setChannelCategorySorting(pair[1]);
                 BrowsePresenter.instance(getContext()).updateChannelSorting();
@@ -276,19 +274,19 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableGlobalEndingTime(option.isSelected()),
                 mPlayerData.isGlobalEndingTimeEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.old_home_look),
-                option -> {
-                    mGeneralData.enableOldHomeLook(option.isSelected());
-                    mRestartApp = true;
-                },
-                mGeneralData.isOldHomeLookEnabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.old_home_look),
+        //        option -> {
+        //            mGeneralData.enableOldHomeLook(option.isSelected());
+        //            mRestartApp = true;
+        //        },
+        //        mGeneralData.isOldHomeLookEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.old_channel_look),
-                option -> {
-                    mGeneralData.enableOldChannelLook(option.isSelected());
-                    mMainUIData.enableChannelSearchBar(!option.isSelected());
-                },
-                mGeneralData.isOldChannelLookEnabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.old_channel_look),
+        //        option -> {
+        //            mGeneralData.enableOldChannelLook(option.isSelected());
+        //            mMainUIData.enableChannelSearchBar(!option.isSelected());
+        //        },
+        //        mGeneralData.isOldChannelLookEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.channels_old_look),
                 optionItem -> {

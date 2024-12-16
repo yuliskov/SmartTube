@@ -319,7 +319,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         Observable<Void> action = manager.removePlaylistObserve(video.playlistId);
         GeneralData.instance(getContext()).setPlaylistOrder(video.playlistId, -1);
         RxHelper.execute(action,
-                (error) -> MessageHelpers.showMessage(getContext(), getContext().getString(R.string.cant_delete_empty_playlist)),
+                (error) -> MessageHelpers.showMessage(getContext(), error.getLocalizedMessage()),
                 () -> MessageHelpers.showMessage(getContext(), getContext().getString(R.string.removed_from_playlists))
         );
     }
@@ -328,7 +328,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         MediaItemService manager = YouTubeMediaItemService.instance();
         Observable<Void> action = manager.savePlaylistObserve(video.playlistId);
         RxHelper.execute(action,
-                (error) -> MessageHelpers.showMessage(getContext(), getContext().getString(R.string.cant_save_playlist)),
+                (error) -> MessageHelpers.showMessage(getContext(), error.getLocalizedMessage()),
                 () -> MessageHelpers.showMessage(getContext(), getContext().getString(R.string.saved_to_playlists))
         );
     }
@@ -391,7 +391,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                     Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
                     RxHelper.execute(
                             action,
-                            (error) -> MessageHelpers.showMessage(getContext(), getContext().getString(R.string.cant_save_playlist)),
+                            (error) -> MessageHelpers.showMessage(getContext(), error.getLocalizedMessage()),
                             () -> {
                                 if (!video.hasVideo()) { // Playlists section
                                     BrowsePresenter.instance(getContext()).refresh();

@@ -215,8 +215,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     public Observable<List<MediaGroup>> obtainChannelObservable(String channelId) {
-        return GeneralData.instance(getContext()).isOldChannelLookEnabled() ?
-                mService.getContentService().getChannelV1Observe(channelId) :  mService.getContentService().getChannelObserve(channelId);
+        return mService.getContentService().getChannelObserve(channelId);
     }
 
     public void updateRows(List<MediaGroup> mediaGroups) {
@@ -227,9 +226,9 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             return;
         }
 
-        if (GeneralData.instance(getContext()).isOldChannelLookEnabled()) {
-            moveToTopIfNeeded(mediaGroups);
-        }
+        //if (GeneralData.instance(getContext()).isOldChannelLookEnabled()) {
+        //    moveToTopIfNeeded(mediaGroups);
+        //}
 
         for (MediaGroup mediaGroup : mediaGroups) {
             if (mediaGroup.getMediaItems() == null) {

@@ -27,6 +27,7 @@
     <string name="frame_rate_correction">Bildrate korrigieren:\n%s</string>
     <string name="category_background_playback">Hintergrund-Wiedergabe</string>
     <string name="not_implemented">Nicht implementiert</string>
+    <string name="not_supported_by_device">Das Gerät unterstützt diese Funktion nicht</string>
     <string name="option_background_playback_off">Deaktiviert</string>
     <string name="option_background_playback_pip">Bild in Bild</string>
     <string name="option_background_playback_only_audio">Nur Audio</string>
@@ -56,7 +57,7 @@
     <string name="settings_linked_devices">Verbundene Geräte</string>
     <string name="settings_about">Über</string>
     <string name="dialog_account_list">Konto auswählen</string>
-    <string name="dialog_account_none">Kein Konto</string>
+    <string name="dialog_account_none">Keine</string>
     <string name="dialog_remove_account">Abmelden</string>
     <string name="dialog_add_account">Anmelden</string>
     <string name="default_lang">Standard</string>
@@ -350,7 +351,8 @@
     <string name="hide_shorts_from_home">Shorts in Start ausblenden</string>
     <string name="finish_on_disconnect">App nach dem Trennen des Telefons/Tablets beenden</string>
     <string name="update_error">Update-Fehler</string>
-    <string name="hide_shorts_from_history">Shorts in Verlauf ausblenden</string>
+    <string name="hide_shorts_from_search">Shorts im Suchergebnis ausblenden</string>
+    <string name="hide_shorts_from_history">Shorts im Verlauf ausblenden</string>
     <string name="hide_shorts_from_trending">Shorts in Trends ausblenden</string>
     <string name="disable_screensaver">Bildschirmschoner deaktivieren</string>
     <string name="description_not_found">Beschreibung nicht gefunden</string>
@@ -478,6 +480,7 @@
     <string name="skip_24_rate">24fps-Formate überspringen (Echter-Kinomodus-Fix\?)</string>
     <string name="skip_shorts">Shorts überspringen</string>
     <string name="player_disable_suggestions">Vorschläge deaktivieren</string>
+    <string name="suggestions">Vorschläge</string>
     <string name="feedback">Feedback</string>
     <string name="sources">Quellen</string>
     <string name="releases">Versionen</string>

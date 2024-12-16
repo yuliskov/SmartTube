@@ -187,7 +187,7 @@ public class MediaServiceManager implements OnAccountChange {
     public void loadSubscribedChannels(OnMediaGroup onMediaGroup) {
         RxHelper.disposeActions(mSubscribedChannelsAction);
 
-        Observable<MediaGroup> observable = mContentService.getSubscribedChannelsByUpdateObserve();
+        Observable<MediaGroup> observable = mContentService.getSubscribedChannelsByNewContentObserve();
 
         mSubscribedChannelsAction = observable
                 .subscribe(

@@ -230,7 +230,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     private void update(Video item) {
         // Liked music fix - not all videos displayed. The behavior with other playlists is buggy.
-        if (Helpers.equals(item.playlistId, "LM")) {
+        if (Helpers.equals(item.playlistId, Video.PLAYLIST_LIKED_MUSIC)) {
             update(item.getGroup());
         } else {
             update(obtainUploadsObservable(item));

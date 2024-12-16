@@ -12,7 +12,7 @@
     <string name="subscriptions_signin_title">Смотрите новые видео с каналов, на которые вы подписаны</string>
     <string name="subscriptions_signin_subtitle">Для начала вам нужно войти в аккаунт.</string>
     <string name="subscriptions_signin_button_text">ВОЙТИ</string>
-    <string name="library_signin_to_show_more">Здесь хранятся понравившиеся, сохраненные и видео из подписок</string>
+    <string name="library_signin_to_show_more">Здесь находятся понравившиеся, сохраненные и видео из подписок</string>
     <string name="library_signin_subtitle">Чтобы увидеть их, войдите в аккаунт.</string>
     <string name="action_signin">ВОЙТИ</string>
     <string name="title_video_formats">Видеоформат</string>
@@ -26,6 +26,7 @@
     <string name="frame_rate_correction">Исправлять fps:\n%s</string>
     <string name="category_background_playback">Фоновое воспроизведение</string>
     <string name="not_implemented">Пока не готово</string>
+    <string name="not_supported_by_device">Устройство не поддерживает эту функцию</string>
     <string name="option_background_playback_off">Отключено</string>
     <string name="option_background_playback_pip">Картинка в картинке</string>
     <string name="option_background_playback_only_audio">Только аудио</string>
@@ -346,6 +347,7 @@
     <string name="hide_shorts_from_home">Скрывать короткие видео с Главной</string>
     <string name="finish_on_disconnect">Завершать приложение после отключения телефона/планшета</string>
     <string name="update_error">Ошибка обновления</string>
+    <string name="hide_shorts_from_search">Скрывать короткие видео из Поиска</string>
     <string name="hide_shorts_from_history">Скрывать короткие видео из Истории</string>
     <string name="hide_shorts_from_trending">Скрывать короткие видео из Трендов</string>
     <string name="disable_screensaver">Отключить скринсейвер</string>
@@ -472,6 +474,7 @@
     <string name="skip_24_rate">Пропускать 24fps форматы (исправление для режима real cinema?)</string>
     <string name="skip_shorts">Пропускать Shorts</string>
     <string name="player_disable_suggestions">Отключить рекомендации</string>
+    <string name="suggestions">Рекомендации</string>
     <string name="feedback">Обратная связь</string>
     <string name="sources">Исходники</string>
     <string name="releases">Релизы</string>

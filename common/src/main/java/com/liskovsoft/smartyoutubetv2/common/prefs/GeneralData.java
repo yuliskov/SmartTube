@@ -75,8 +75,6 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsAltAppIconEnabled;
     private int mVersionCode;
     private boolean mIsSelectChannelSectionEnabled;
-    private boolean mIsOldHomeLookEnabled;
-    private boolean mIsOldChannelLookEnabled;
     private boolean mIsOldUpdateNotificationsEnabled;
     private boolean mRememberSubscriptionsPosition;
     private boolean mRememberPinnedPosition;
@@ -691,24 +689,6 @@ public class GeneralData implements ProfileChangeListener {
         return mIsSelectChannelSectionEnabled;
     }
 
-    public void enableOldHomeLook(boolean enable) {
-        mIsOldHomeLookEnabled = enable;
-        persistState();
-    }
-
-    public boolean isOldHomeLookEnabled() {
-        return mIsOldHomeLookEnabled;
-    }
-
-    public void enableOldChannelLook(boolean enable) {
-        mIsOldChannelLookEnabled = enable;
-        persistState();
-    }
-
-    public boolean isOldChannelLookEnabled() {
-        return mIsOldChannelLookEnabled;
-    }
-
     public void enableOldUpdateNotifications(boolean enable) {
         mIsOldUpdateNotificationsEnabled = enable;
         persistState();
@@ -834,7 +814,7 @@ public class GeneralData implements ProfileChangeListener {
         mIsSelectChannelSectionEnabled = Helpers.parseBoolean(split, 40, true);
         mMasterPassword = Helpers.parseStr(split, 41);
         // StackOverflow on old devices?
-        mIsOldHomeLookEnabled = Helpers.parseBoolean(split, 42, Build.VERSION.SDK_INT <= 19);
+        //mIsOldHomeLookEnabled = Helpers.parseBoolean(split, 42, Build.VERSION.SDK_INT <= 19);
         mIsOldUpdateNotificationsEnabled = Helpers.parseBoolean(split, 43, false);
         mScreensaverDimmingPercents = Helpers.parseInt(split, 44, 80);
         mIsRemapNextToSpeedEnabled = Helpers.parseBoolean(split, 45, false);
@@ -852,7 +832,7 @@ public class GeneralData implements ProfileChangeListener {
         mChangelog = Helpers.parseStrList(split, 57);
         mPlayerExitShortcut = Helpers.parseInt(split, 58, EXIT_SINGLE_BACK);
         // StackOverflow on old devices?
-        mIsOldChannelLookEnabled = Helpers.parseBoolean(split, 59, Build.VERSION.SDK_INT <= 19);
+        //mIsOldChannelLookEnabled = Helpers.parseBoolean(split, 59, Build.VERSION.SDK_INT <= 19);
         mIsFullscreenModeEnabled = Helpers.parseBoolean(split, 60, true);
         //mIsHideWatchedFromWatchLaterEnabled = Helpers.parseBoolean(split, 61, false);
         mRememberPinnedPosition = Helpers.parseBoolean(split, 62, false);
@@ -874,10 +854,10 @@ public class GeneralData implements ProfileChangeListener {
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
                 mPlaylistOrder, mPendingStreams, mIsGlobalClockEnabled, null, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
-                mIsOldHomeLookEnabled, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextToSpeedEnabled, mIsRemapPlayToOKEnabled,
+                null, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextToSpeedEnabled, mIsRemapPlayToOKEnabled,
                 mHistoryState, mRememberSubscriptionsPosition, null, mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled,
                 mIsRemapDpadUpToVolumeEnabled, mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled,
-                mChangelog, mPlayerExitShortcut, mIsOldChannelLookEnabled, mIsFullscreenModeEnabled, null,
+                mChangelog, mPlayerExitShortcut, null, mIsFullscreenModeEnabled, null,
                 mRememberPinnedPosition, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, mIsAutoBackupEnabled,
                 mIsRemapPageDownToSpeedEnabled));
     }

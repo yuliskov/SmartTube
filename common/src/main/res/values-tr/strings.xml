@@ -27,6 +27,7 @@
     <string name="frame_rate_correction">Fps düzeltme:\n%s</string>
     <string name="category_background_playback">Arka planda oynatma</string>
     <string name="not_implemented">Uygulanmadı</string>
+    <string name="not_supported_by_device">Cihaz bu özelliği desteklemiyor</string>
     <string name="option_background_playback_off">Devre dışı</string>
     <string name="option_background_playback_pip">Resim içinde resim</string>
     <string name="option_background_playback_only_audio">Sadece ses</string>
@@ -350,6 +351,7 @@
     <string name="hide_shorts_from_home">Shortsları Ana Sayfa\'da gizle</string>
     <string name="finish_on_disconnect">Telefon bağlantısı kesildiğinde uygulamayı sonlandır</string>
     <string name="update_error">Güncelleme hatası</string>
+    <string name="hide_shorts_from_search">Shortsları Arama\'te gizle</string>
     <string name="hide_shorts_from_history">Shortsları Geçmiş\'te gizle</string>
     <string name="hide_shorts_from_trending">Shortsları Trendler\'de gizle</string>
     <string name="disable_screensaver">Ekran koruyucuyu devre dışı bırak</string>
@@ -480,6 +482,7 @@
     <string name="skip_24_rate">24 fps biçimlerini atla (gerçek sinema modu düzeltmesi\?)</string>
     <string name="skip_shorts">Shortsları atla</string>
     <string name="player_disable_suggestions">Önerileri devre dışı bırak</string>
+    <string name="suggestions">Önerileri</string>
     <string name="feedback">Geri bildirim</string>
     <string name="sources">Kaynaklar</string>
     <string name="releases">Sürümler</string>

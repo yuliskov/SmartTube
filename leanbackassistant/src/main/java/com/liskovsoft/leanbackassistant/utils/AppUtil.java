@@ -11,6 +11,7 @@ import android.os.Build;
 import com.liskovsoft.sharedutils.GlobalConstants;
 import com.liskovsoft.sharedutils.configparser.AssetPropertyParser2;
 import com.liskovsoft.sharedutils.configparser.ConfigParser;
+import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 
 public class AppUtil {
     private final Context mContext;
@@ -53,10 +54,16 @@ public class AppUtil {
             return null;
         }
 
+        String mainActivityName = AppInfoHelpers.getMainActivityName(mContext);
+
+        if (mainActivityName == null) {
+            return null;
+        }
+
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
-        intent.setClassName(getAppPackageName(), getBootstrapClassName());
+        intent.setClassName(mContext.getPackageName(), mainActivityName);
         //intent.putExtra(GlobalConstants.INTERNAL_INTENT, true);
 
         return intent;

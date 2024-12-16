@@ -185,7 +185,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         String country = LocaleUtility.getCurrentLocale(getContext()).getCountry();
         int uploadsType = mMainUIData.isUploadsOldLookEnabled() ? BrowseSection.TYPE_GRID : BrowseSection.TYPE_MULTI_GRID;
 
-        mSectionsMapping.put(MediaGroup.TYPE_HOME, new BrowseSection(MediaGroup.TYPE_HOME, getContext().getString(R.string.header_home), BrowseSection.TYPE_ROW, R.drawable.icon_home));
+        mSectionsMapping.put(MediaGroup.TYPE_HOME, new BrowseSection(MediaGroup.TYPE_HOME, getContext().getString(R.string.header_home), BrowseSection.TYPE_ROW, R.drawable.icon_home, false));
         mSectionsMapping.put(MediaGroup.TYPE_SHORTS, new BrowseSection(MediaGroup.TYPE_SHORTS, getContext().getString(R.string.header_shorts), BrowseSection.TYPE_SHORTS_GRID, R.drawable.icon_shorts));
         mSectionsMapping.put(MediaGroup.TYPE_TRENDING, new BrowseSection(MediaGroup.TYPE_TRENDING, getContext().getString(R.string.header_trending), BrowseSection.TYPE_ROW, R.drawable.icon_trending));
         mSectionsMapping.put(MediaGroup.TYPE_KIDS_HOME, new BrowseSection(MediaGroup.TYPE_KIDS_HOME, getContext().getString(R.string.header_kids_home), BrowseSection.TYPE_ROW, R.drawable.icon_kids_home));
@@ -207,7 +207,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void initSectionCallbacks() {
-        mRowMapping.put(MediaGroup.TYPE_HOME, mGeneralData.isOldHomeLookEnabled() ? mContentService.getHomeV1Observe() : mContentService.getHomeObserve());
+        mRowMapping.put(MediaGroup.TYPE_HOME, mContentService.getHomeObserve());
         mRowMapping.put(MediaGroup.TYPE_TRENDING, mContentService.getTrendingObserve());
         mRowMapping.put(MediaGroup.TYPE_KIDS_HOME, mContentService.getKidsHomeObserve());
         mRowMapping.put(MediaGroup.TYPE_SPORTS, mContentService.getSportsObserve());
@@ -219,7 +219,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mGridMapping.put(MediaGroup.TYPE_SHORTS, mContentService.getShortsObserve());
         mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mContentService.getSubscriptionsObserve());
         mGridMapping.put(MediaGroup.TYPE_HISTORY, mContentService.getHistoryObserve());
-        mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByUpdateObserve());
+        mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByNewContentObserve());
         mGridMapping.put(MediaGroup.TYPE_NOTIFICATIONS, mNotificationsService.getNotificationItemsObserve());
     }
 
@@ -312,16 +312,14 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_NAME2:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByName2Observe());
-                break;
             case MainUIData.CHANNEL_SORTING_NAME:
                 mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByNameObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_NEW_CONTENT:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByUpdateObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByNewContentObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_LAST_VIEWED:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByViewedObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mContentService.getSubscribedChannelsByLastViewedObserve());
                 break;
         }
     }
@@ -685,7 +683,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         error -> {
                             Log.e(TAG, "updateRowsHeader error: %s", error.getMessage());
                             handleLoadError(error);
-                        });
+                        },
+                        () -> getView().showProgressBar(false));
 
         mActions.add(updateAction);
     }
@@ -736,7 +735,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
                             handleLoadError(error);
-                        });
+                        },
+                        () -> getView().showProgressBar(false));
 
         mActions.add(updateAction);
     }
