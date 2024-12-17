@@ -355,7 +355,7 @@ public class AppDialogUtil {
         // Alphabetical order
         Collections.sort(options, (o1, o2) -> ((String) o1.getTitle()).compareTo((String) o2.getTitle()));
 
-        options.add(0, UiOptionItem.from(context.getString(R.string.dialog_account_none),
+        options.add(0, UiOptionItem.from(context.getString(R.string.default_lang),
                 optionItem -> {
                     playerData.setAudioLanguage("");
                     onSetCallback.run();

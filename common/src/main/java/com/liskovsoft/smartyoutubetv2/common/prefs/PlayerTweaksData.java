@@ -94,7 +94,6 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsPlayerAutoVolumeEnabled;
     private boolean mIsPlayerGlobalFocusEnabled;
     private boolean mIsUnsafeAudioFormatsEnabled;
-    private boolean mIsHighBitrateFormatsEnabled;
     private boolean mIsLoopShortsEnabled;
     private boolean mIsQuickSkipShortsEnabled;
     private boolean mIsQuickSkipVideosEnabled;
@@ -652,7 +651,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsPlayerAutoVolumeEnabled = Helpers.parseBoolean(split, 40, true);
         mIsPlayerGlobalFocusEnabled = Helpers.parseBoolean(split, 41, true);
         mIsUnsafeAudioFormatsEnabled = Helpers.parseBoolean(split, 42, true);
-        mIsHighBitrateFormatsEnabled = Helpers.parseBoolean(split, 43, false);
+        //mIsHighBitrateFormatsEnabled = Helpers.parseBoolean(split, 43, false);
         mIsLoopShortsEnabled = Helpers.parseBoolean(split, 44, true);
         mIsQuickSkipShortsEnabled = Helpers.parseBoolean(split, 45, true);
         mIsRememberPositionOfLiveVideosEnabled = Helpers.parseBoolean(split, 46, true);
@@ -681,7 +680,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
-                mIsUnsafeAudioFormatsEnabled, mIsHighBitrateFormatsEnabled, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
+                mIsUnsafeAudioFormatsEnabled, null, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
                 mIsPlaybackErrorsFixEnabled
                 ));
@@ -697,16 +696,6 @@ public class PlayerTweaksData implements ProfileChangeListener {
         // Replace old button with new one
         if (isPlayerButtonEnabled(PLAYER_BUTTON_SCREEN_OFF)) {
             enablePlayerButton(PLAYER_BUTTON_SCREEN_OFF_TIMEOUT);
-        }
-
-        if (mIsHighBitrateFormatsEnabled) {
-            mIsHighBitrateFormatsEnabled = false;
-            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS, true);
-        }
-
-        if (GlobalPreferences.sInstance.isExtendedHlsFormatsEnabled()) {
-            GlobalPreferences.sInstance.enableExtendedHlsFormats(false);
-            MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS, true);
         }
     }
 
