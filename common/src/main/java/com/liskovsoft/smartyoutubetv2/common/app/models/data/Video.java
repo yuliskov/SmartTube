@@ -242,7 +242,7 @@ public final class Video {
         if (obj instanceof Video) {
             Video video = (Video) obj;
 
-            return hashCode() == video.hashCode();
+            return hashCode() == video.hashCode() && isMix() == video.isMix();
         }
 
         return false;
