@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.util.SparseArray;
@@ -29,8 +30,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.LayoutRes;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.stfalcon.chatkit.R;
 import com.stfalcon.chatkit.commons.DebouncedOnClickListener;
 import com.stfalcon.chatkit.commons.ImageLoader;
@@ -766,7 +770,21 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
             // Change background of the focused message
             // NOTE: you can have only one focus listener
             View bubble = v.findViewById(R.id.bubble);
-            bubble.setBackgroundResource(hasFocus ? R.drawable.shape_incoming_message_focused : R.drawable.shape_incoming_message);
+            TextView text = v.findViewById(R.id.messageText);
+            //bubble.setBackgroundResource(hasFocus ? R.drawable.shape_incoming_message_focused : R.drawable.shape_incoming_message);
+
+            if (hasFocus) {
+                // Invert text and bg color
+                Drawable originalBackground = messagesListStyle.getIncomingBubbleDrawable();
+                DrawableCompat.setTint(originalBackground, messagesListStyle.getIncomingTextColor()); // keep original shape
+                bubble.setBackground(originalBackground);
+                text.setTextColor(Helpers.invertColor(messagesListStyle.getIncomingTextColor()));
+            } else {
+                // Revert to original
+                Drawable originalBackground = messagesListStyle.getIncomingBubbleDrawable();
+                bubble.setBackground(originalBackground);
+                text.setTextColor(messagesListStyle.getIncomingTextColor());
+            }
 
             if (hasFocus) {
                 notifyMessageViewFocused(v, wrapper.item);

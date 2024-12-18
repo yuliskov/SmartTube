@@ -59,6 +59,8 @@
         app:incomingBubblePaddingBottom="0sp"
         app:incomingAvatarWidth="30dp"
         app:incomingAvatarHeight="30dp"
+        app:incomingDefaultBubbleColor="@color/comments_bg"
+        app:incomingTextColor="@color/white"
         />
 
 </LinearLayout>
