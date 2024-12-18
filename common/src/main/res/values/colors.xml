@@ -19,7 +19,8 @@
     <color name="leanback">#0096A6</color>
     <color name="semi_transparent">#64000000</color>
     <color name="live_chat_bg">#90000000</color>
-    <color name="comments_bg">#904D4D4D</color>
+    <color name="comments_bg">#90303030</color>
+    <color name="comments_bg_pressed">#903E3E3E</color>
     <color name="semi_grey">#64282828</color>
     <color name="grey">#282828</color>
     <color name="dimming">#D0000000</color>

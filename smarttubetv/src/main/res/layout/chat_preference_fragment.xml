@@ -60,6 +60,7 @@
         app:incomingAvatarWidth="30dp"
         app:incomingAvatarHeight="30dp"
         app:incomingDefaultBubbleColor="@color/comments_bg"
+        app:incomingDefaultBubblePressedColor="@color/comments_bg_pressed"
         app:incomingTextColor="@color/white"
         />
 

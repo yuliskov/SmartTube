@@ -29,6 +29,6 @@
     <color name="dialog_date_text">@color/warm_grey_two</color>
     <color name="dialog_unread_text">@color/white</color>
     <color name="dialog_unread_bubble">@color/dark_mint</color>
-    <color name="tg_selected_bg">#c2dcf2</color>
+    <color name="tg_selected_bg">#1EC2DCF2</color>
 
 </resources>

@@ -21,6 +21,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.util.SparseArray;
@@ -30,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.LayoutRes;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -770,20 +772,17 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
             // Change background of the focused message
             // NOTE: you can have only one focus listener
             View bubble = v.findViewById(R.id.bubble);
-            TextView text = v.findViewById(R.id.messageText);
             //bubble.setBackgroundResource(hasFocus ? R.drawable.shape_incoming_message_focused : R.drawable.shape_incoming_message);
 
             if (hasFocus) {
                 // Invert text and bg color
                 Drawable originalBackground = messagesListStyle.getIncomingBubbleDrawable();
-                DrawableCompat.setTint(originalBackground, messagesListStyle.getIncomingTextColor()); // keep original shape
-                bubble.setBackground(originalBackground);
-                text.setTextColor(Helpers.invertColor(messagesListStyle.getIncomingTextColor()));
+                Drawable shapeBackground = ContextCompat.getDrawable(bubble.getContext(), R.drawable.shape_incoming_message_focused);
+                bubble.setBackground(new LayerDrawable(new Drawable[]{originalBackground, shapeBackground}));
             } else {
                 // Revert to original
                 Drawable originalBackground = messagesListStyle.getIncomingBubbleDrawable();
                 bubble.setBackground(originalBackground);
-                text.setTextColor(messagesListStyle.getIncomingTextColor());
             }
 
             if (hasFocus) {
