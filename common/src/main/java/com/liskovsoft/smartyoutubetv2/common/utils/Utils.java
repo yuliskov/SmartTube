@@ -1026,6 +1026,6 @@ public class Utils {
     }
 
     public static boolean isEnoughRam(Context context) {
-        return VERSION.SDK_INT > 21 && Helpers.getDeviceRam(context) > 1_300_000_000; // 1.3 GB
+        return VERSION.SDK_INT > 21 && Helpers.getDeviceRam(context) > 1_500_000_000; // 1.5 GB
     }
 }
