@@ -334,11 +334,12 @@ public class AppDialogUtil {
         List<OptionItem> options = new ArrayList<>();
 
         List<String> addedCodes = new ArrayList<>();
+        List<String> lastLanguages = playerData.getLastAudioLanguages();
 
         for (Locale locale : Locale.getAvailableLocales()) {
             String languageCode = locale.getLanguage().toLowerCase();
 
-            if (addedCodes.contains(languageCode)) {
+            if (addedCodes.contains(languageCode) || lastLanguages.contains(languageCode)) {
                 continue;
             }
 
@@ -354,6 +355,18 @@ public class AppDialogUtil {
         // NOTE: Comparator.comparing API >= 24
         // Alphabetical order
         Collections.sort(options, (o1, o2) -> ((String) o1.getTitle()).compareTo((String) o2.getTitle()));
+
+        for (int i = 0; i < lastLanguages.size(); i++) {
+            String languageCode = lastLanguages.get(i);
+            Locale locale = new Locale(languageCode);
+
+            options.add(i, UiOptionItem.from(locale.getDisplayLanguage(),
+                    optionItem -> {
+                        playerData.setAudioLanguage(languageCode);
+                        onSetCallback.run();
+                    },
+                    languageCode.equals(playerData.getAudioLanguage())));
+        }
 
         options.add(0, UiOptionItem.from(context.getString(R.string.default_lang),
                 optionItem -> {
