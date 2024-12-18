@@ -234,7 +234,7 @@
   <string name="pin_unpin_playlist">Vast-/Losmaken aan/van afspeellijst</string>
   <string name="pin_unpin_channel">Vast-/Losmaken aan/van kanaal</string>
   <string name="pin_playlist">Afspeellijst vastmaken aan de zijbalk</string>
-  <string name="pin_channel">Kanaak vastmaken aan de zijbalk</string>
+  <string name="pin_channel">Kanaal vastmaken aan de zijbalk</string>
   <string name="pinned_to_sidebar">Vastgemaakt aan de zijbalk</string>
   <string name="unpin_from_sidebar">Losmaken van zijbalk</string>
   <string name="unpin_group_from_sidebar">Verwijder de abonnementsgroep</string>
