@@ -38,7 +38,7 @@
   <string name="video_buffer_size_lowest">Laagste</string>
   <string name="video_buffer_size_low">Minimaal</string>
   <string name="video_buffer_size_med">Gemiddeld</string>
-  <string name="video_buffer_size_high">Maximaal</string>
+  <string name="video_buffer_size_high">Hoog</string>
   <string name="video_buffer_size_highest">Hoogste</string>
   <string name="update_changelog">Wijzigingslog</string>
   <string name="install_update">Update installeren</string>
@@ -577,7 +577,7 @@
   <string name="old_home_look">Oude look van de Home-sectie</string>
   <string name="old_channel_look">Oude look van de Kanaalpagina</string>
   <string name="hide_shorts_everywhere">Shorts overal verbergen</string>
-  <string name="update_found">Update beschikbaar</string>
+  <string name="update_found">Update</string>
   <string name="volume_boost_warning">Elke instelling boven de limiet kan potentieel schade aan de luidsprekers veroorzaken</string>
   <string name="play_video_incognito">Incognito afspelen</string>
   <string name="header_kids_home">Kinderen</string>
@@ -638,7 +638,7 @@
   <string name="disable_remote_history">Geschiedenis uitschakelen bij gebruik van afstandsbediening</string>
   <string name="keyboard_fix">Voorkom dat de OK-knop het toetsenbord opent (G20\'s en andere)</string>
   <string name="nothing_found">Niets gevonden</string>
-  <string name="auto_frame_rate_desc">Met deze optie verwijdert u trillingen in scènes waarin de camera snel beweegt, bijvoorbeeld bij het streamen van sportwedstrijden.</string>
+  <string name="auto_frame_rate_desc">Met deze optie verwijdert u haperingen in beeld waarin de camera snel beweegt, bijvoorbeeld bij het streamen van sportwedstrijden.</string>
   <string name="channel_filter_hint">Kanalen filteren</string>
   <string name="player_quick_shorts_skip">Skip Shorts met linker-/rechterknop</string>
   <string name="player_quick_skip_videos">Sla normale video\'s over met de linker-/rechterknoppen</string>
