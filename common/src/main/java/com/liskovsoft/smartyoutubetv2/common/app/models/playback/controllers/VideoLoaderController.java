@@ -481,11 +481,8 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             //    restartEngine = false;
             //}
             restartEngine = false;
-            MessageHelpers.showLongMessage(getContext(), shortErrorMsg);
-            return restartEngine;
-        }
-
-        if (error instanceof OutOfMemoryError) {
+            resultMsg = shortErrorMsg;
+        } else if (error instanceof OutOfMemoryError) {
             //if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOWEST) {
             //    mPlayerTweaksData.enableSectionPlaylist(false);
             //} else if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {

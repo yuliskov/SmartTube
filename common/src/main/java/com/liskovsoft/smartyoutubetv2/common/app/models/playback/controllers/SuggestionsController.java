@@ -252,10 +252,13 @@ public class SuggestionsController extends BasePlayerController {
                 .subscribe(
                         callback::onMetadata,
                         error -> {
-                            MessageHelpers.showLongMessage(getContext(), "loadSuggestions error: %s", error.getMessage());
-                            Log.e(TAG, "loadSuggestions error: %s", error.getMessage());
+                            // Usual errors here is something with title parsing
+                            String message = error.getMessage();
+                            Log.e(TAG, "loadSuggestions error: %s", message);
+                            if (!Helpers.containsAny(message, "fromNullable result is null")) {
+                                MessageHelpers.showLongMessage(getContext(), "loadSuggestions error: %s", message);
+                            }
                             error.printStackTrace();
-                            // Errors are usual here (something with title parsing)
                         }
                 );
 
