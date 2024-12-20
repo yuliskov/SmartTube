@@ -200,6 +200,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         //mLastVideo = null; // in case next video is the same as previous
 
         if (next != null) {
+            forceSectionPlaylistIfNeeded(getPlayer().getVideo(), next);
             openVideoInt(next);
         } else {
             waitMetadataSync(getPlayer().getVideo(), true);
@@ -810,5 +811,17 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     private boolean isBufferingRecurrent() {
         return mBufferingCount != null && mBufferingCount.first > 2;
+    }
+
+    private void forceSectionPlaylistIfNeeded(Video previous, Video next) {
+        if (previous == null || next == null) {
+            return;
+        }
+
+        // Force to all subsequent videos in section playlist row
+        if (previous.isSectionPlaylistEnabled(getContext())) {
+            previous.forceSectionPlaylist = false;
+            next.forceSectionPlaylist = true;
+        }
     }
 }

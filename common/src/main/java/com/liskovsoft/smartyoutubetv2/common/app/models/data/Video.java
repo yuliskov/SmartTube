@@ -91,6 +91,7 @@ public final class Video {
     public float volume = 1.0f;
     public boolean deArrowProcessed;
     public boolean isLiveEnd;
+    public boolean forceSectionPlaylist;
     private int startSegmentNum;
     private long liveDurationMs = -1;
     private long durationMs = -1;
@@ -852,7 +853,7 @@ public final class Video {
 
     public boolean isSectionPlaylistEnabled(Context context) {
         return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && getGroup() != null &&
-                (playlistId == null || PLAYLIST_LIKED_MUSIC.equals(playlistId) || nextMediaItem == null || belongsToSearch() || belongsToHome()) &&
+                (playlistId == null || PLAYLIST_LIKED_MUSIC.equals(playlistId) || nextMediaItem == null || forceSectionPlaylist) &&
                     (!isRemote || remotePlaylistId == null);
     }
 }
