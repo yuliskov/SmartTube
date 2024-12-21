@@ -27,6 +27,7 @@
     <string name="frame_rate_correction">Opravit fps: \n%s</string>
     <string name="category_background_playback">Přehrávání na pozadí</string>
     <string name="not_implemented">Není implementováno</string>
+    <string name="not_supported_by_device">Zařízení nepodporuje tuto funkci</string>
     <string name="option_background_playback_off">Zakázáno</string>
     <string name="option_background_playback_pip">Video a zvuk</string>
     <string name="option_background_playback_only_audio">Pouze zvuk</string>
@@ -350,6 +351,7 @@
     <string name="hide_shorts_from_home">Skrýt Shorts z nabídky Domů</string>
     <string name="finish_on_disconnect">Ukončit aplikaci, když se telefon/tablet odpojí</string>
     <string name="update_error">Chyba aktualizace</string>
+    <string name="hide_shorts_from_search">Skrýt Shorts z výsledků vyhledávání</string>
     <string name="hide_shorts_from_history">Skrýt Shorts z nabídky Historie</string>
     <string name="hide_shorts_from_trending">Skrýt Shorts z nabídky Trendy</string>
     <string name="disable_screensaver">Zakaž spořič obrazovky</string>
@@ -478,6 +480,7 @@
     <string name="skip_24_rate">Přeskakovat formáty s 24fps (oprava pro režim Real Cinema\?)</string>
     <string name="skip_shorts">Přeskočit Shorts</string>
     <string name="player_disable_suggestions">Zakázat návrhy</string>
+    <string name="suggestions">Návrhy</string>
     <string name="feedback">Zpětná vazba</string>
     <string name="sources">Zdroje</string>
     <string name="releases">Vydané verze</string>
