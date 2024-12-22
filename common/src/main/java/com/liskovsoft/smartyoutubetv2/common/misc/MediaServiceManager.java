@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MediaServiceManager implements OnAccountChange {
-    private static final String TAG = SettingsManager.class.getSimpleName();
+    private static final String TAG = MediaServiceManager.class.getSimpleName();
     private static MediaServiceManager sInstance;
     private final MediaItemService mItemService;
     private final ContentService mContentService;

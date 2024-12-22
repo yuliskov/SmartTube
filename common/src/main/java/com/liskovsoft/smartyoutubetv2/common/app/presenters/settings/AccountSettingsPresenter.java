@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -165,8 +166,9 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void removeAccount(Account account) {
-        mMediaServiceManager.getSingInService().removeAccount(account);
-        BrowsePresenter.instance(getContext()).refresh(false);
+        RxHelper.execute(mMediaServiceManager.getSingInService().removeAccount(account),
+                () -> BrowsePresenter.instance(getContext()).refresh(false)
+        );
     }
 
     private void showAddPasswordDialog(AppDialogPresenter settingsPresenter) {

@@ -134,16 +134,15 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
     }
 
     public void selectAccount(Account account) {
-        mSignInService.selectAccount(account);
-        //BrowsePresenter.instance(getContext()).refresh(false);
-        Utils.updateChannels(getContext());
-        //BrowsePresenter.instance(getContext()).onViewInitialized(); // reset state
+        RxHelper.execute(mSignInService.selectAccount(account), () -> {
+            Utils.updateChannels(getContext());
 
-        // Account history might be turned off (common issue).
-        GeneralData generalData = GeneralData.instance(getContext());
-        if (generalData.getHistoryState() != GeneralData.HISTORY_AUTO) {
-            MediaServiceManager.instance().enableHistory(generalData.isHistoryEnabled());
-        }
+            // Account history might be turned off (common issue).
+            GeneralData generalData = GeneralData.instance(getContext());
+            if (generalData.getHistoryState() != GeneralData.HISTORY_AUTO) {
+                MediaServiceManager.instance().enableHistory(generalData.isHistoryEnabled());
+            }
+        });
     }
 
     private String formatAccount(Account account) {
