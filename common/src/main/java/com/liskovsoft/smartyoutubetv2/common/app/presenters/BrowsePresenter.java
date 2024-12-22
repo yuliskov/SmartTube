@@ -682,11 +682,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         error -> {
                             Log.e(TAG, "updateRowsHeader error: %s", error.getMessage());
                             handleLoadError(error);
-                        },
-                        () -> {
-                            if (getView() != null)
-                                getView().showProgressBar(false);
-                        });
+                        }, this::handleEmptyResults);
 
         mActions.add(updateAction);
     }
@@ -737,11 +733,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
                             handleLoadError(error);
-                        },
-                        () -> {
-                            if (getView() != null)
-                                getView().showProgressBar(false);
-                        });
+                        }, this::handleEmptyResults);
 
         mActions.add(updateAction);
     }
@@ -1112,10 +1104,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             getView().showError(new CategoryEmptyError(getContext(), error));
             Utils.postDelayed(mRefreshSection, 30_000);
         }
-        //if (isHomeSection()) { // maybe the history turned off?
-        //    MediaServiceManager.instance().enableHistory(true);
-        //    mGeneralData.enableHistory(true);
-        //}
+    }
+
+    private void handleEmptyResults() {
+        if (getView() != null) {
+            getView().showProgressBar(false);
+        }
+        if (getView() != null && getView().isEmpty()) {
+            getView().showError(new SignInError(getContext()));
+            Utils.postDelayed(mRefreshSection, 30_000);
+        }
     }
 
     private void appendLocalHistory(@NonNull VideoGroup videoGroup) {
