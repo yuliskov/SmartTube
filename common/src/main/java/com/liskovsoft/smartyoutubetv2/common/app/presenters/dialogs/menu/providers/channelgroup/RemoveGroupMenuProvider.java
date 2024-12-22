@@ -14,12 +14,12 @@ import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
 public class RemoveGroupMenuProvider extends ContextMenuProvider {
     private final Context mContext;
-    private final ChannelGroupService mService;
+    private final ChannelGroupServiceWrapper mService;
 
     public RemoveGroupMenuProvider(@NonNull Context context, int idx) {
         super(idx);
         mContext = context;
-        mService = ChannelGroupService.instance(context);
+        mService = ChannelGroupServiceWrapper.instance(context);
     }
 
     @Override

@@ -28,7 +28,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroupService;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroupServiceWrapper;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AutoFrameRateSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
@@ -56,7 +56,6 @@ public class PlayerUIController extends BasePlayerController {
     private SuggestionsController mSuggestionsController;
     private PlayerData mPlayerData;
     private PlayerTweaksData mPlayerTweaksData;
-    private ChannelGroupService mChannelGroupService;
     private List<PlaylistInfo> mPlaylistInfos;
     private FormatItem mAudioFormat = FormatItem.AUDIO_HQ_MP4A;
     private boolean mEngineReady;
@@ -89,7 +88,6 @@ public class PlayerUIController extends BasePlayerController {
         mSuggestionsController = getController(SuggestionsController.class);
         mPlayerData = PlayerData.instance(getContext());
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
-        mChannelGroupService = ChannelGroupService.instance(getContext());
 
         // Could be set once per activity creation (view layout stuff)
         getPlayer().setVideoZoomMode(mPlayerData.getVideoZoomMode());
@@ -334,7 +332,7 @@ public class PlayerUIController extends BasePlayerController {
         setPlaylistAddButtonStateCached();
         setSubtitleButtonState();
         getPlayer().setButtonState(R.id.action_rotate, mPlayerData.getVideoRotation() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
-        getPlayer().setButtonState(R.id.action_subscribe, (metadata.isSubscribed() || mChannelGroupService.isSubscribed(metadata.getChannelId())) ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_subscribe, metadata.isSubscribed() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         getPlayer().setButtonState(R.id.action_afr, mPlayerData.isAfrEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
@@ -826,16 +824,6 @@ public class PlayerUIController extends BasePlayerController {
 
         if (!mIsMetadataLoaded) {
             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
-            return;
-        }
-
-        if (!YouTubeSignInService.instance().isSigned()) {
-            //MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
-
-            mChannelGroupService.subscribe(getPlayer().getVideo(), buttonState == PlayerUI.BUTTON_OFF);
-
-            getPlayer().getVideo().isSubscribed = buttonState == PlayerUI.BUTTON_OFF;
-            getPlayer().setButtonState(R.id.action_subscribe, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
             return;
         }
 

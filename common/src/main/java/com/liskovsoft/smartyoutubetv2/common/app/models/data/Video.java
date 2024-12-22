@@ -5,6 +5,8 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ChannelGroup;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.DislikeData;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
@@ -17,8 +19,6 @@ import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroup.Channel;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 
@@ -210,20 +210,19 @@ public final class Video {
 
     public static Video from(ChannelGroup group) {
         Video video = new Video();
-        video.title = group.title;
-        video.cardImageUrl = group.iconUrl;
-        video.channelGroupId = group.id;
+        video.title = group.getTitle();
+        video.cardImageUrl = group.getIconUrl();
+        video.channelGroupId = group.getId();
         return video;
     }
 
-    public static Video from(Channel channel) {
+    public static Video from(ChannelGroup.Channel channel) {
         Video video = new Video();
-        video.title = channel.title;
-        video.cardImageUrl = channel.iconUrl;
-        video.channelId = channel.channelId;
+        video.title = channel.getTitle();
+        video.cardImageUrl = channel.getIconUrl();
+        video.channelId = channel.getChannelId();
         return video;
     }
-
     ///**
     // * Don't change the logic from equality by reference!<br/>
     // * Or adapters won't work properly (same video may appear twice).

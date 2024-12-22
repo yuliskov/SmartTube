@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ChannelGroup;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -13,21 +14,21 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroup.Channel;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ChannelGroupMenuProvider extends ContextMenuProvider {
     private final Context mContext;
-    private final ChannelGroupService mService;
+    private final ChannelGroupServiceWrapper mService;
 
     public ChannelGroupMenuProvider(@NonNull Context context, int idx) {
         super(idx);
         mContext = context;
-        mService = ChannelGroupService.instance(context);
+        mService = ChannelGroupServiceWrapper.instance(context);
     }
 
     @Override
@@ -80,7 +81,9 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
                             return false;
                         }
 
-                        ChannelGroup group = new ChannelGroup(newValue, null, new Channel(item.getAuthor(), item.cardImageUrl, item.channelId));
+                        //ChannelGroup group = new ChannelGroup(newValue, null, new Channel(item.getAuthor(), item.cardImageUrl, item.channelId));
+                        ChannelGroup group = mService.createChannelGroup(newValue, null,
+                                Collections.singletonList(mService.createChannel(item.getAuthor(), item.cardImageUrl, item.channelId)));
                         mService.addChannelGroup(group);
                         BrowsePresenter.instance(mContext).pinItem(Video.from(group));
                         MessageHelpers.showMessage(mContext, mContext.getString(R.string.pinned_to_sidebar));
@@ -89,15 +92,15 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
         }, false));
 
         for (ChannelGroup group : groups) {
-            options.add(UiOptionItem.from(group.title, optionItem -> {
+            options.add(UiOptionItem.from(group.getTitle(), optionItem -> {
                 BrowsePresenter presenter = BrowsePresenter.instance(mContext);
 
                 if (optionItem.isSelected()) {
-                    group.add(new Channel(item.getAuthor(), item.cardImageUrl, item.channelId));
+                    group.add(mService.createChannel(item.getAuthor(), item.cardImageUrl, item.channelId));
                 } else {
                     group.remove(item.channelId);
                     Object data = presenter.getCurrentSection() != null ? presenter.getCurrentSection().getData() : null;
-                    if (callback != null && (data instanceof Video) && ((Video) data).channelGroupId == group.id) {
+                    if (callback != null && (data instanceof Video) && ((Video) data).channelGroupId == group.getId()) {
                         callback.onItemAction(item, VideoMenuCallback.ACTION_REMOVE_AUTHOR);
                     }
                 }

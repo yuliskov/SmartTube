@@ -23,7 +23,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresen
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroupService;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -663,11 +662,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (!mServiceManager.isSigned() && mVideo.channelId != null) {
-            mVideo.isSubscribed = ChannelGroupService.instance(getContext()).isSubscribed(mVideo.channelId);
-        } else {
-            mVideo.isSubscribed = mVideo.isSubscribed || mVideo.belongsToSubscriptions() || mVideo.belongsToChannelUploads();
-        }
+        mVideo.isSubscribed = mVideo.isSubscribed || mVideo.belongsToSubscriptions() || mVideo.belongsToChannelUploads();
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
@@ -886,14 +881,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         RxHelper.disposeActions(mSubscribeAction);
 
-        if (mServiceManager.isSigned()) {
-            Observable<Void> observable = video.isSubscribed ?
-                    mMediaItemService.unsubscribeObserve(video.channelId) : mMediaItemService.subscribeObserve(video.channelId);
+        Observable<Void> observable = video.isSubscribed ?
+                mMediaItemService.unsubscribeObserve(video.channelId) : mMediaItemService.subscribeObserve(video.channelId);
 
-            mSubscribeAction = RxHelper.execute(observable);
-        } else {
-            ChannelGroupService.instance(getContext()).subscribe(video, !video.isSubscribed);
-        }
+        mSubscribeAction = RxHelper.execute(observable);
 
         video.isSubscribed = !video.isSubscribed;
 
