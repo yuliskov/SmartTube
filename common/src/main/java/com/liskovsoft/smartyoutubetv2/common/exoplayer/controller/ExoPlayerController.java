@@ -65,14 +65,13 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         mMediaSourceFactory.setTrackErrorFixer(mTrackErrorFixer);
         mEventListener = eventListener;
-
-        // Shield 720p fix???
-        initFormats();
+        
+        applyShield720pFix();
         VideoTrack.sIsNoFpsPresetsEnabled = playerTweaksData.isNoFpsPresetsEnabled();
         MediaTrack.preferAvcOverVp9(playerTweaksData.isAvcOverVp9Preferred());
     }
 
-    private void initFormats() {
+    private void applyShield720pFix() {
         PlayerData playerData = PlayerData.instance(mContext);
         mTrackSelectorManager.selectTrack(FormatItem.toMediaTrack(playerData.getFormat(FormatItem.TYPE_VIDEO)));
         mTrackSelectorManager.selectTrack(FormatItem.toMediaTrack(playerData.getFormat(FormatItem.TYPE_AUDIO)));

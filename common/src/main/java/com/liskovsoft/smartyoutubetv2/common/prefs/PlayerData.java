@@ -437,6 +437,10 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     }
 
     public boolean isSubtitlesPerChannelEnabled(String channelId) {
+        if (channelId == null) {
+            return false;
+        }
+
         return mEnabledSubtitlesPerChannel.contains(channelId);
     }
 
