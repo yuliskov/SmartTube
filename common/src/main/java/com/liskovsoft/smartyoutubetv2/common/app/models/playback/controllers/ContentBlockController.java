@@ -38,10 +38,10 @@ public class ContentBlockController extends BasePlayerController {
     private Video mVideo;
     private List<SponsorSegment> mOriginalSegments;
     private List<SponsorSegment> mActiveSegments;
-    private Disposable mProgressAction;
-    private Disposable mSegmentsAction;
     private long mLastSkipPosMs;
     private boolean mSkipExclude;
+    private Disposable mSegmentsAction;
+    private Observable<List<SponsorSegment>> mCachedSegmentsAction;
 
     public static class SegmentAction {
         public String segmentCategory;
@@ -133,24 +133,6 @@ public class ContentBlockController extends BasePlayerController {
                 setPositionMs(lastSegment.getEndMs());
                 return;
             }
-
-            //boolean enabled = buttonState == PlayerUI.BUTTON_ON;
-            //
-            //mSkipExclude = !enabled;
-            //
-            //Video video = getPlayer().getVideo();
-            //
-            //if (video != null && video.hasChannel()) {
-            //    if (enabled) {
-            //        mContentBlockData.excludeChannel(video.channelId);
-            //    } else {
-            //        mContentBlockData.stopExcludingChannel(video.channelId);
-            //    }
-            //} else {
-            //    mContentBlockData.enableSponsorBlock(!enabled);
-            //}
-            //
-            //onVideoLoaded(video);
         }
     }
 
@@ -167,35 +149,34 @@ public class ContentBlockController extends BasePlayerController {
     }
 
     private void updateSponsorSegmentsAndWatch(Video item) {
-        if (item == null || item.videoId == null || mContentBlockData.getEnabledCategories().isEmpty()) {
+        if (item == null || item.videoId == null || item.isLive || mContentBlockData.getEnabledCategories().isEmpty()) {
             mActiveSegments = mOriginalSegments = null;
+            mCachedSegmentsAction = null;
             return;
         }
 
-        if (item.equals(mVideo)) {
-            // Use cached data
-            startSponsorWatcher();
-            return;
+        if (!item.equals(mVideo) || mCachedSegmentsAction == null) {
+            // NOTE: SponsorBlock (when happened java.net.SocketTimeoutException) could block whole application with Schedulers.io()
+            // Because Schedulers.io() reuses blocked threads in RxJava 2: https://github.com/ReactiveX/RxJava/issues/6542
+            mCachedSegmentsAction = mMediaItemService.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getEnabledCategories())
+                    .cache();
+            mVideo = item;
         }
 
-        // NOTE: SponsorBlock (when happened java.net.SocketTimeoutException) could block whole application with Schedulers.io()
-        // Because Schedulers.io() reuses blocked threads in RxJava 2: https://github.com/ReactiveX/RxJava/issues/6542
-        mSegmentsAction = mMediaItemService.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getEnabledCategories())
+        mSegmentsAction = mCachedSegmentsAction
+                .flatMap(segments -> {
+                    mOriginalSegments = segments;
+                    return startSponsorWatcher();
+                })
                 .subscribe(
-                        segments -> {
-                            mVideo = item;
-                            mOriginalSegments = segments;
-                            startSponsorWatcher();
-                        },
-                        error -> {
-                            Log.d(TAG, "It's ok. Nothing to block in this video. Error msg: %s", error.getMessage());
-                        }
+                        this::skipSegment,
+                        error -> Log.d(TAG, "It's ok. Nothing to block in this video. Error msg: %s", error.getMessage())
                 );
     }
 
-    private void startSponsorWatcher() {
+    private Observable<Long> startSponsorWatcher() {
         if (mOriginalSegments == null || mOriginalSegments.isEmpty()) {
-            return;
+            return Observable.empty();
         }
 
         mActiveSegments = new ArrayList<>(mOriginalSegments);
@@ -204,25 +185,16 @@ public class ContentBlockController extends BasePlayerController {
             getPlayer().setSeekBarSegments(toSeekBarSegments(mOriginalSegments));
         }
         if (mContentBlockData.isActionsEnabled()) {
-            startPlaybackWatcher();
+            // Warn. Try to not access player object here.
+            // Or you'll get "Player is accessed on the wrong thread" error.
+            return RxHelper.interval(POLL_INTERVAL_MS, TimeUnit.MILLISECONDS);
+        } else {
+            return Observable.empty();
         }
     }
 
-    private void startPlaybackWatcher() {
-        // Warn. Try to not access player object here.
-        // Or you'll get "Player is accessed on the wrong thread" error.
-        Observable<Long> playbackProgressObservable =
-                RxHelper.interval(POLL_INTERVAL_MS, TimeUnit.MILLISECONDS);
-
-        mProgressAction = playbackProgressObservable
-                .subscribe(
-                        this::skipSegment,
-                        error -> Log.e(TAG, "startPlaybackWatcher error: %s", error.getMessage())
-                );
-    }
-
     private void disposeActions() {
-        RxHelper.disposeActions(mProgressAction, mSegmentsAction);
+        RxHelper.disposeActions(mSegmentsAction);
 
         // Note, removes all segments at once
         //getPlayer().setSeekBarSegments(null); // reset colors
