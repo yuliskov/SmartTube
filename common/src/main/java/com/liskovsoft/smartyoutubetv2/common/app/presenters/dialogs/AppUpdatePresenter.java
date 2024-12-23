@@ -89,7 +89,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
 
     private void showUpdateDialog(String versionName, List<String> changelog, String apkPath) {
         // Don't show update dialog if the player opened or the app is collapsed
-        if (getContext() == null || ViewManager.instance(getContext()).isPlayerInForeground() || !Utils.isAppInForeground()) {
+        if (getContext() == null || ViewManager.instance(getContext()).isPlayerInForeground() || !Utils.isAppInForegroundFixed()) {
             return;
         }
 

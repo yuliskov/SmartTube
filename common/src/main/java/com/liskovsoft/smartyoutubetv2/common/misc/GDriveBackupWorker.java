@@ -37,6 +37,7 @@ public class GDriveBackupWorker extends Worker {
     private static final String TAG = GDriveBackupWorker.class.getSimpleName();
     private static final String WORK_NAME = TAG;
     private static final String BLOCKED_FILE_NAME = "blocked";
+    private static final long REPEAT_INTERVAL_DAYS = 1;
     private static Disposable sAction;
     private final GDriveBackupManager mTask;
 
@@ -54,7 +55,7 @@ public class GDriveBackupWorker extends Worker {
             workManager.enqueueUniquePeriodicWork(
                     WORK_NAME,
                     ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (when old worker is running)
-                    new PeriodicWorkRequest.Builder(GDriveBackupWorker.class, 1, TimeUnit.DAYS).addTag(WORK_NAME).build()
+                    new PeriodicWorkRequest.Builder(GDriveBackupWorker.class, REPEAT_INTERVAL_DAYS, TimeUnit.DAYS).addTag(WORK_NAME).build()
             );
         }
     }

@@ -190,11 +190,9 @@ public class Utils {
         return Uri.parse(url);
     }
 
-    public static boolean isAppInForeground() {
-        ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
-        ActivityManager.getMyMemoryState(appProcessInfo);
-        // Skip situation when splash presenter still running
-        return appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && SplashPresenter.instance(null).getView() == null;
+    public static boolean isAppInForegroundFixed() {
+        // Skip situation when the splash presenter still running
+        return Helpers.isAppInForeground() && SplashPresenter.instance(null).getView() == null;
     }
 
     /**

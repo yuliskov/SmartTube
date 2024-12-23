@@ -10,6 +10,7 @@ import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class UpdateChannelsWorker extends Worker {
     private static final String TAG = UpdateChannelsWorker.class.getSimpleName();
     private static final String WORK_NAME = "Update channels";
+    private static final long REPEAT_INTERVAL_MINUTES = 15; // 15 - minimal interval
     private final UpdateChannelsTask mTask;
 
     public UpdateChannelsWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -43,7 +45,7 @@ public class UpdateChannelsWorker extends Worker {
             workManager.enqueueUniquePeriodicWork(
                     WORK_NAME,
                     ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (when old worker is running)
-                    new PeriodicWorkRequest.Builder(UpdateChannelsWorker.class, 20, TimeUnit.MINUTES).addTag(WORK_NAME).build()
+                    new PeriodicWorkRequest.Builder(UpdateChannelsWorker.class, REPEAT_INTERVAL_MINUTES, TimeUnit.MINUTES).addTag(WORK_NAME).build()
             );
         }
     }
@@ -62,7 +64,10 @@ public class UpdateChannelsWorker extends Worker {
     public Result doWork() {
         Log.d(TAG, "Starting worker %s...", this);
 
-        mTask.run();
+        // Improve performance. Run task when the app paused.
+        if (!Helpers.isAppInForeground()) {
+            mTask.run();
+        }
 
         return Result.success();
     }
