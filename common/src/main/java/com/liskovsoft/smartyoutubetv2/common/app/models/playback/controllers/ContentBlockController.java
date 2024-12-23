@@ -24,7 +24,6 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,26 +164,25 @@ public class ContentBlockController extends BasePlayerController {
         }
 
         mSegmentsAction = mCachedSegmentsAction
-                .subscribeOn(Schedulers.io())
-                .flatMap(segments -> {
-                    mOriginalSegments = segments;
-                    return startSponsorWatcher();
-                })
+                .flatMap(this::startSponsorWatcher)
                 .subscribe(
                         this::skipSegment,
                         error -> Log.d(TAG, "It's ok. Nothing to block in this video. Error msg: %s", error.getMessage())
                 );
     }
 
-    private Observable<Long> startSponsorWatcher() {
-        if (mOriginalSegments == null || mOriginalSegments.isEmpty()) {
+    private Observable<Long> startSponsorWatcher(List<SponsorSegment> segments) {
+        if (segments == null || segments.isEmpty()) {
+            mActiveSegments = mOriginalSegments = null;
             return Observable.empty();
         }
 
-        mActiveSegments = new ArrayList<>(mOriginalSegments);
+        mOriginalSegments = segments;
+
+        mActiveSegments = new ArrayList<>(segments);
 
         if (mContentBlockData.isColorMarkersEnabled()) {
-            getPlayer().setSeekBarSegments(toSeekBarSegments(mOriginalSegments));
+            getPlayer().setSeekBarSegments(toSeekBarSegments(segments));
         }
         if (mContentBlockData.isActionsEnabled()) {
             // Warn. Try to not access player object here.
