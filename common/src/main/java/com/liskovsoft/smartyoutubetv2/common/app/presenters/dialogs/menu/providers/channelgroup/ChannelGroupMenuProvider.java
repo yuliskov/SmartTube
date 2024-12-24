@@ -71,10 +71,11 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
 
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(mContext.getString(R.string.new_subscriptions_group), optionItem -> {
+        String grayJayBackupUrl = "/GrayJay/PocketTube URL";
+        options.add(UiOptionItem.from(mContext.getString(R.string.new_subscriptions_group) + grayJayBackupUrl, optionItem -> {
             dialogPresenter.closeDialog();
             SimpleEditDialog.show(mContext,
-                    mContext.getString(R.string.new_subscriptions_group),
+                    mContext.getString(R.string.new_subscriptions_group) + grayJayBackupUrl,
                     null,
                     newValue -> {
                         if (mService.findChannelGroup(newValue) != null) {
