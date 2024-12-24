@@ -12,10 +12,8 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -32,7 +30,6 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
     @SuppressLint("StaticFieldLeak")
     private static AccountSelectionPresenter sInstance;
     private final SignInService mSignInService;
-    private Disposable mAccountsAction;
 
     public AccountSelectionPresenter(Context context) {
         super(context);
@@ -60,11 +57,7 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
             return;
         }
 
-        mAccountsAction = mSignInService.getAccountsObserve()
-                .subscribe(
-                        accounts -> createAndShowDialog(accounts, force),
-                        error -> Log.e(TAG, "Get accounts error: %s", error.getMessage())
-                );
+        createAndShowDialog(mSignInService.getAccounts(), force);
     }
 
     public void nextAccountOrDialog() {
@@ -72,7 +65,6 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
     }
 
     public void unhold() {
-        RxHelper.disposeActions(mAccountsAction);
         sInstance = null;
     }
 
@@ -134,15 +126,14 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
     }
 
     public void selectAccount(Account account) {
-        RxHelper.execute(mSignInService.selectAccount(account), () -> {
-            Utils.updateChannels(getContext());
+        mSignInService.selectAccount(account);
+        Utils.updateChannels(getContext());
 
-            // Account history might be turned off (common issue).
-            GeneralData generalData = GeneralData.instance(getContext());
-            if (generalData.getHistoryState() != GeneralData.HISTORY_AUTO) {
-                MediaServiceManager.instance().enableHistory(generalData.isHistoryEnabled());
-            }
-        });
+        // Account history might be turned off (common issue).
+        GeneralData generalData = GeneralData.instance(getContext());
+        if (generalData.getHistoryState() != GeneralData.HISTORY_AUTO) {
+            MediaServiceManager.instance().enableHistory(generalData.isHistoryEnabled());
+        }
     }
 
     private String formatAccount(Account account) {

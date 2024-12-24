@@ -802,33 +802,25 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         getView().showProgressBar(true);
 
-        Disposable signCheckAction = mSignInService.isSignedObserve()
-                .subscribe(
-                        isSigned -> {
-                            if (isSigned) {
-                                callback.run();
-                            } else if (getView() != null) {
-                                if (isHistorySection() && !VideoStateService.instance(getContext()).isEmpty()) {
-                                    getView().showProgressBar(false);
-                                    VideoGroup videoGroup = VideoGroup.from(null, getCurrentSection(), -1);
-                                    videoGroup.setType(MediaGroup.TYPE_HISTORY);
-                                    appendLocalHistory(videoGroup);
-                                    getView().updateSection(videoGroup);
-                                } else if (isSubscriptionsSection() && !ChannelGroupServiceWrapper.instance(getContext()).isEmpty()) {
-                                    appendLocalSubscriptions();
-                                } else if (isMultiGridChannelUploadsSection() && !ChannelGroupServiceWrapper.instance(getContext()).isEmpty()) {
-                                    getView().showProgressBar(false);
-                                    appendLocalChannels();
-                                } else if (getView().isProgressBarShowing()) {
-                                    getView().showProgressBar(false);
-                                    getView().showError(new SignInError(getContext()));
-                                }
-                            }
-                        },
-                        error -> Log.e(TAG, "authCheck error: %s", error.getMessage())
-                );
-
-        mActions.add(signCheckAction);
+        if (mSignInService.isSigned()) {
+            callback.run();
+        } else if (getView() != null) {
+            if (isHistorySection() && !VideoStateService.instance(getContext()).isEmpty()) {
+                getView().showProgressBar(false);
+                VideoGroup videoGroup = VideoGroup.from(null, getCurrentSection(), -1);
+                videoGroup.setType(MediaGroup.TYPE_HISTORY);
+                appendLocalHistory(videoGroup);
+                getView().updateSection(videoGroup);
+            } else if (isSubscriptionsSection() && !ChannelGroupServiceWrapper.instance(getContext()).isEmpty()) {
+                appendLocalSubscriptions();
+            } else if (isMultiGridChannelUploadsSection() && !ChannelGroupServiceWrapper.instance(getContext()).isEmpty()) {
+                getView().showProgressBar(false);
+                appendLocalChannels();
+            } else if (getView().isProgressBarShowing()) {
+                getView().showProgressBar(false);
+                getView().showError(new SignInError(getContext()));
+            }
+        }
     }
 
     /**

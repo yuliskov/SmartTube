@@ -42,12 +42,10 @@ public class MediaServiceManager implements OnAccountChange {
     private final NotificationsService mNotificationsService;
     private Disposable mMetadataAction;
     private Disposable mUploadsAction;
-    private Disposable mSignCheckAction;
     private Disposable mRowsAction;
     private Disposable mSubscribedChannelsAction;
     private Disposable mFormatInfoAction;
     private Disposable mPlaylistGroupAction;
-    private Disposable mAccountListAction;
     private Disposable mPlaylistInfosAction;
     private Disposable mHistoryAction;
     private static final int MIN_GRID_GROUP_SIZE = 13;
@@ -266,13 +264,7 @@ public class MediaServiceManager implements OnAccountChange {
     }
 
     public void loadAccounts(OnAccountList onAccountList) {
-        RxHelper.disposeActions(mAccountListAction);
-
-        mAccountListAction = mSingInService.getAccountsObserve()
-                .subscribe(
-                        onAccountList::onAccountList,
-                        error -> Log.e(TAG, "Get signed accounts error: %s", error.getMessage())
-                );
+        onAccountList.onAccountList(mSingInService.getAccounts());
     }
 
     public void authCheck(Runnable onSuccess, Runnable onError) {
@@ -280,28 +272,19 @@ public class MediaServiceManager implements OnAccountChange {
             return;
         }
 
-        RxHelper.disposeActions(mSignCheckAction);
-
-        mSignCheckAction = mSingInService.isSignedObserve()
-                .subscribe(
-                        isSigned -> {
-                            if (isSigned) {
-                                if (onSuccess != null) {
-                                    onSuccess.run();
-                                }
-                            } else {
-                                if (onError != null) {
-                                    onError.run();
-                                }
-                            }
-                        },
-                        error -> Log.e(TAG, "Sign check error: %s", error.getMessage())
-                );
-
+        if (mSingInService.isSigned()) {
+            if (onSuccess != null) {
+                onSuccess.run();
+            }
+        } else {
+            if (onError != null) {
+                onError.run();
+            }
+        }
     }
 
     public void disposeActions() {
-        RxHelper.disposeActions(mMetadataAction, mUploadsAction, mSignCheckAction, mRowsAction, mSubscribedChannelsAction);
+        RxHelper.disposeActions(mMetadataAction, mUploadsAction, mRowsAction, mSubscribedChannelsAction);
     }
 
     /**

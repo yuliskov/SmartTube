@@ -30,13 +30,16 @@ public class UpdateChannelsTask {
     private void updateChannels() {
         if (Helpers.isATVChannelsSupported(mContext)) {
             try {
-                if (Helpers.isGoogleTVLauncher(mContext)) {
-                    updateOrPublishChannel(getSinglePreferredPlaylist());
-                } else {
-                    updateOrPublishChannel(mService.getSubscriptionsPlaylist());
-                    updateOrPublishChannel(mService.getRecommendedPlaylist());
-                    updateOrPublishChannel(mService.getHistoryPlaylist());
-                }
+                //if (Helpers.isGoogleTVLauncher(mContext)) {
+                //    updateOrPublishChannel(getSinglePreferredPlaylist());
+                //} else {
+                //    updateOrPublishChannel(mService.getSubscriptionsPlaylist());
+                //    updateOrPublishChannel(mService.getRecommendedPlaylist());
+                //    updateOrPublishChannel(mService.getHistoryPlaylist());
+                //}
+                updateOrPublishChannel(mService.getSubscriptionsPlaylist());
+                updateOrPublishChannel(mService.getRecommendedPlaylist());
+                updateOrPublishChannel(mService.getHistoryPlaylist());
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
                 e.printStackTrace();

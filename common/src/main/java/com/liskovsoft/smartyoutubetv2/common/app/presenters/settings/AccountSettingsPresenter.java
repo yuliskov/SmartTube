@@ -166,9 +166,8 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void removeAccount(Account account) {
-        RxHelper.execute(mMediaServiceManager.getSingInService().removeAccount(account),
-                () -> BrowsePresenter.instance(getContext()).refresh(false)
-        );
+        mMediaServiceManager.getSingInService().removeAccount(account);
+        BrowsePresenter.instance(getContext()).refresh(false);
     }
 
     private void showAddPasswordDialog(AppDialogPresenter settingsPresenter) {
