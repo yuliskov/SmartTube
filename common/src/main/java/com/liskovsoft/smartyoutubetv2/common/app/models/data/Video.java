@@ -529,7 +529,7 @@ public final class Video {
     }
 
     public boolean isMix() {
-        return !isLive && badge != null && !Helpers.hasDigits(badge) && (durationMs <= 0 || isSynced) && (hasPlaylist() || hasChannel() || hasNestedItems());
+        return !isLive && Helpers.hasWords(badge) && (durationMs <= 0 || isSynced) && (hasPlaylist() || hasChannel() || hasNestedItems());
     }
 
     public boolean isFullLive() {
@@ -852,7 +852,8 @@ public final class Video {
 
     public boolean isSectionPlaylistEnabled(Context context) {
         return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && getGroup() != null &&
-                (playlistId == null || PLAYLIST_LIKED_MUSIC.equals(playlistId) || nextMediaItem == null || forceSectionPlaylist) &&
+                (playlistId == null || PLAYLIST_LIKED_MUSIC.equals(playlistId) || nextMediaItem == null || forceSectionPlaylist ||
+                        (!isMix() && !belongsToSamePlaylistGroup())) && // skip hidden playlists (music videos usually)
                     (!isRemote || remotePlaylistId == null);
     }
 }
