@@ -1,11 +1,14 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup;
 
 import android.content.Context;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
 import com.liskovsoft.mediaserviceinterfaces.yt.data.ChannelGroup;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -82,12 +85,29 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
                             return false;
                         }
 
-                        //ChannelGroup group = new ChannelGroup(newValue, null, new Channel(item.getAuthor(), item.cardImageUrl, item.channelId));
-                        ChannelGroup group = mService.createChannelGroup(newValue, null,
-                                Collections.singletonList(mService.createChannel(item.getAuthor(), item.cardImageUrl, item.channelId)));
-                        mService.addChannelGroup(group);
-                        BrowsePresenter.instance(mContext).pinItem(Video.from(group));
-                        MessageHelpers.showMessage(mContext, mContext.getString(R.string.pinned_to_sidebar));
+                        if (Helpers.isInteger(newValue)) {
+                            newValue = String.format("https://aftv.news/%s", newValue);
+                        }
+
+                        if (Helpers.contains(newValue, "/") && !Helpers.startsWith(newValue, "http")) {
+                            newValue = String.format("https://%s", newValue);
+                        }
+
+                        if (Helpers.startsWith(newValue, "http")) {
+                            RxHelper.execute(mService.importGroupsObserve(Uri.parse(newValue)), (newGroups) -> {
+                                for (ChannelGroup group : newGroups) {
+                                    BrowsePresenter.instance(mContext).pinItem(Video.from(group));
+                                }
+                                MessageHelpers.showMessage(mContext, mContext.getString(R.string.pinned_to_sidebar));
+                            }, error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
+                        } else {
+                            //ChannelGroup group = new ChannelGroup(newValue, null, new Channel(item.getAuthor(), item.cardImageUrl, item.channelId));
+                            ChannelGroup group = mService.createChannelGroup(newValue, null,
+                                    Collections.singletonList(mService.createChannel(item.getAuthor(), item.cardImageUrl, item.channelId)));
+                            mService.addChannelGroup(group);
+                            BrowsePresenter.instance(mContext).pinItem(Video.from(group));
+                            MessageHelpers.showMessage(mContext, mContext.getString(R.string.pinned_to_sidebar));
+                        }
                         return true;
                     });
         }, false));

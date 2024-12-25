@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.provid
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.Uri;
 
 import com.liskovsoft.mediaserviceinterfaces.yt.ChannelGroupService;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.ChannelGroup;
@@ -12,6 +13,8 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListene
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import java.util.List;
+
+import io.reactivex.Observable;
 
 public class ChannelGroupServiceWrapper implements ProfileChangeListener {
     public static final int SUBSCRIPTION_GROUP_ID = 1_000;
@@ -71,6 +74,10 @@ public class ChannelGroupServiceWrapper implements ProfileChangeListener {
 
     public void renameChannelGroup(ChannelGroup channelGroup, String title) {
         mService.renameChannelGroup(channelGroup, title);
+    }
+
+    public Observable<List<ChannelGroup>> importGroupsObserve(Uri uri) {
+        return mService.importGroupsObserve(uri);
     }
 
     public boolean isEmpty() {
