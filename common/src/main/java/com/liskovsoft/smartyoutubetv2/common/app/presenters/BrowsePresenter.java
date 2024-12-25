@@ -682,7 +682,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         error -> {
                             Log.e(TAG, "updateRowsHeader error: %s", error.getMessage());
                             handleLoadError(error);
-                        }, this::handleEmptyResults);
+                        }, () -> handleLoadError(null));
 
         mActions.add(updateAction);
     }
@@ -733,7 +733,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
                             handleLoadError(error);
-                        }, this::handleEmptyResults);
+                        }, () -> handleLoadError(null));
 
         mActions.add(updateAction);
     }
@@ -1089,21 +1089,23 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void handleLoadError(Throwable error) {
-        if (getView() != null) {
-            getView().showProgressBar(false);
+        if (getView() == null) {
+            return;
         }
-        if (getView() != null && getView().isEmpty()) {
-            getView().showError(new CategoryEmptyError(getContext(), error));
-            Utils.postDelayed(mRefreshSection, 30_000);
-        }
-    }
 
-    private void handleEmptyResults() {
-        if (getView() != null) {
-            getView().showProgressBar(false);
-        }
-        if (getView() != null && getView().isEmpty()) {
-            getView().showError(new SignInError(getContext()));
+        getView().showProgressBar(false);
+
+        if (getView().isEmpty()) {
+            ErrorFragmentData errorFragmentData;
+            if (error != null) {
+                errorFragmentData = new CategoryEmptyError(getContext(), error);
+            } else if (mSignInService.isSigned()) {
+                errorFragmentData = new CategoryEmptyError(getContext(), null);
+            } else {
+                errorFragmentData = new SignInError(getContext());
+            }
+
+            getView().showError(errorFragmentData);
             Utils.postDelayed(mRefreshSection, 30_000);
         }
     }
