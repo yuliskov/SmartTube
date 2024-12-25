@@ -2,6 +2,7 @@
 <resources>
     <string-array name="feedback">
         <item>Telegram|https://t.me/SmartTubeEN</item>
+        <item>Discord|https://discord.gg/GNX8S9zND3</item>
         <!--<item>Email|firsthash@gmail.com</item>-->
     </string-array>
 </resources>
