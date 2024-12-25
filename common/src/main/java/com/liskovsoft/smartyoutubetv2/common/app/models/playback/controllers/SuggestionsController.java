@@ -545,7 +545,7 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void focusCurrentChapter() {
-        if (!getPlayer().isControlsShown()) {
+        if (getPlayer() == null || !getPlayer().isControlsShown()) {
             return;
         }
 

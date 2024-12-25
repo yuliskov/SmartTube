@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 import android.app.Activity;
 import android.content.Context;
 
+import androidx.annotation.Nullable;
+
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
@@ -26,6 +28,7 @@ public abstract class BasePlayerController implements PlayerEventListener {
         return mMainController != null ? mMainController.getController(clazz) : null;
     }
 
+    @Nullable
     public PlayerManager getPlayer() {
         return mMainController != null ? mMainController.getPlayer() : null;
     }
