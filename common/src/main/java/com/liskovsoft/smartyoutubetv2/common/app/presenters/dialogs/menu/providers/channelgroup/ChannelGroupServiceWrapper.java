@@ -54,12 +54,12 @@ public class ChannelGroupServiceWrapper implements ProfileChangeListener {
         return mService.findChannelIdsForGroup(channelGroupId);
     }
 
-    public String[] findSubscribedChannelIds() {
-        return mService.findSubscribedChannelIds();
+    public String[] getSubscribedChannelIds() {
+        return mService.getSubscribedChannelIds();
     }
 
-    public ChannelGroup findSubscribedChannelGroup() {
-        return mService.findSubscribedChannelGroup();
+    public ChannelGroup getSubscribedChannelGroup() {
+        return mService.getSubscribedChannelGroup();
     }
 
     public ChannelGroup findChannelGroup(int channelGroupId) {

@@ -1136,11 +1136,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private void appendLocalSubscriptions() {
         updateVideoGrid(getCurrentSection(),
                 mContentService.getSubscriptionsObserve(
-                        ChannelGroupServiceWrapper.instance(getContext()).findSubscribedChannelIds()), -1);
+                        ChannelGroupServiceWrapper.instance(getContext()).getSubscribedChannelIds()), -1);
     }
 
     private void appendLocalChannels() {
-        ChannelGroup subscriptions = ChannelGroupServiceWrapper.instance(getContext()).findSubscribedChannelGroup();
+        ChannelGroup subscriptions = ChannelGroupServiceWrapper.instance(getContext()).getSubscribedChannelGroup();
         if (subscriptions != null) {
             List<Video> channels = new ArrayList<>();
             for (ChannelGroup.Channel channel : subscriptions.getChannels()) {
