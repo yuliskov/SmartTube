@@ -198,7 +198,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mSectionsMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, new BrowseSection(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), BrowseSection.TYPE_GRID, R.drawable.icon_subscriptions, true));
         mSectionsMapping.put(MediaGroup.TYPE_HISTORY, new BrowseSection(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), BrowseSection.TYPE_GRID, R.drawable.icon_history, true));
         mSectionsMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, new BrowseSection(MediaGroup.TYPE_USER_PLAYLISTS, getContext().getString(R.string.header_playlists), BrowseSection.TYPE_ROW, R.drawable.icon_playlist, true));
-        mSectionsMapping.put(MediaGroup.TYPE_NOTIFICATIONS, new BrowseSection(MediaGroup.TYPE_NOTIFICATIONS, getContext().getString(R.string.header_notifications), BrowseSection.TYPE_GRID, R.drawable.icon_notification, true));
+        mSectionsMapping.put(MediaGroup.TYPE_NOTIFICATIONS, new BrowseSection(MediaGroup.TYPE_NOTIFICATIONS, getContext().getString(R.string.header_notifications), BrowseSection.TYPE_GRID, R.drawable.icon_notification, false));
 
         if (mSidebarService.isSettingsSectionEnabled()) {
             mSectionsMapping.put(MediaGroup.TYPE_SETTINGS, new BrowseSection(MediaGroup.TYPE_SETTINGS, getContext().getString(R.string.header_settings), BrowseSection.TYPE_SETTINGS_GRID, R.drawable.icon_settings));
@@ -968,7 +968,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private Observable<MediaGroup> createPinnedGridAction(Video item) {
         if (item.channelGroupId != -1) {
-            return mContentService.getSubscriptionsObserve(ChannelGroupServiceWrapper.instance(getContext()).getChannelGroupIds(item.channelGroupId));
+            return mContentService.getSubscriptionsObserve(ChannelGroupServiceWrapper.instance(getContext()).findChannelIdsForGroup(item.channelGroupId));
         }
 
         return ChannelUploadsPresenter.instance(getContext()).obtainUploadsObservable(item);
@@ -1136,17 +1136,18 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private void appendLocalSubscriptions() {
         updateVideoGrid(getCurrentSection(),
                 mContentService.getSubscriptionsObserve(
-                        ChannelGroupServiceWrapper.instance(getContext()).getChannelGroupIds(ChannelGroupServiceWrapper.SUBSCRIPTION_GROUP_ID)), -1);
+                        ChannelGroupServiceWrapper.instance(getContext()).findSubscribedChannelIds()), -1);
     }
 
     private void appendLocalChannels() {
-        ChannelGroup subscriptions = ChannelGroupServiceWrapper.instance(getContext()).findChannelGroup(ChannelGroupServiceWrapper.SUBSCRIPTION_GROUP_ID);
+        ChannelGroup subscriptions = ChannelGroupServiceWrapper.instance(getContext()).findSubscribedChannelGroup();
         if (subscriptions != null) {
             List<Video> channels = new ArrayList<>();
             for (ChannelGroup.Channel channel : subscriptions.getChannels()) {
                 channels.add(Video.from(channel));
             }
             VideoGroup group = VideoGroup.from(channels, 0);
+            //group.setAction(VideoGroup.ACTION_REPLACE);
             group.setType(MediaGroup.TYPE_CHANNEL_UPLOADS);
             getView().updateSection(group);
         }

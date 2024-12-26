@@ -7,7 +7,6 @@ import android.net.Uri;
 import com.liskovsoft.mediaserviceinterfaces.yt.ChannelGroupService;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.ChannelGroup;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.ChannelGroup.Channel;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
@@ -17,7 +16,6 @@ import java.util.List;
 import io.reactivex.Observable;
 
 public class ChannelGroupServiceWrapper implements ProfileChangeListener {
-    public static final int SUBSCRIPTION_GROUP_ID = 1_000;
     @SuppressLint("StaticFieldLeak")
     private static ChannelGroupServiceWrapper sInstance;
     private final Context mContext;
@@ -52,8 +50,16 @@ public class ChannelGroupServiceWrapper implements ProfileChangeListener {
         mService.removeChannelGroup(group);
     }
 
-    public String[] getChannelGroupIds(int channelGroupId) {
-        return mService.getChannelGroupIds(channelGroupId);
+    public String[] findChannelIdsForGroup(int channelGroupId) {
+        return mService.findChannelIdsForGroup(channelGroupId);
+    }
+
+    public String[] findSubscribedChannelIds() {
+        return mService.findSubscribedChannelIds();
+    }
+
+    public ChannelGroup findSubscribedChannelGroup() {
+        return mService.findSubscribedChannelGroup();
     }
 
     public ChannelGroup findChannelGroup(int channelGroupId) {
