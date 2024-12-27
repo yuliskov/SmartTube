@@ -122,7 +122,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         if (!sRunOnce) {
             sRunOnce = true;
             RxHelper.setupGlobalErrorHandler();
-            initGlobalData();
+            initGlobalPrefs();
             initProxy();
             initVideoStateService();
             initStreamReminderService();
@@ -174,7 +174,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
      * Inits media service language and context.<br/>
      * NOTE: this command should run before using any of the media service api.
      */
-    private void initGlobalData() {
+    private void initGlobalPrefs() {
         Log.d(TAG, "initGlobalData called...");
 
         if (getContext() != null) {

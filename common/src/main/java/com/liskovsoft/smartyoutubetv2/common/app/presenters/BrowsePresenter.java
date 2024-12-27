@@ -3,8 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-
 import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.yt.NotificationsService;
 import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
@@ -1110,7 +1108,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
     }
 
-    private void appendLocalHistory(@NonNull VideoGroup videoGroup) {
+    private void appendLocalHistory(VideoGroup videoGroup) {
         VideoStateService stateService = VideoStateService.instance(getContext());
 
         if (!isHistorySection() || (!stateService.isHistoryBroken() && !videoGroup.isEmpty())) {
