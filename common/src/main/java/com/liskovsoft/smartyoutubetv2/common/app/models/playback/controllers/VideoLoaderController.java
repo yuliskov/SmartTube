@@ -188,7 +188,8 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     @Override
     public void onFinish() {
-        mPlaylist.clearPosition();
+        // ???
+        //mPlaylist.clearPosition();
     }
 
     public void loadPrevious() {
