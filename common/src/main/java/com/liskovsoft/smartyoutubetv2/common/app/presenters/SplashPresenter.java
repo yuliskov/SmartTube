@@ -85,8 +85,8 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             return;
         }
 
-        applyRunPerInstanceTasks();
         applyRunOnceTasks();
+        applyRunPerInstanceTasks();
 
         //runRefreshCachePeriodicTask();
         showAccountSelectionIfNeeded();
