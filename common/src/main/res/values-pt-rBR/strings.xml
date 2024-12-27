@@ -148,12 +148,12 @@
   <string name="player_show_ending_time">Mostrar tempo de término na barra de controles</string>
   <string name="open_channel_uploads">Abrir os carregamentos (uploads) do canal</string>
   <string name="dialog_remove_account">Sair</string>
-  <string name="app_exit_shortcut">\"Sair do aplicativo\"</string>
+  <string name="app_exit_shortcut">Sair do aplicativo</string>
   <string name="app_exit_none">Não sair</string>
   <string name="msg_press_again_to_exit">Pressione novamente para sair</string>
-  <string name="app_double_back_exit">Toque duplo no botão Voltar:</string>
-  <string name="app_single_back_exit">Toque único no botão Voltar:</string>
-  <string name="player_exit_shortcut">\"Sair do reprodutor (player) de vídeos\"</string>
+  <string name="app_double_back_exit">Toque duplo no botão Voltar</string>
+  <string name="app_single_back_exit">Toque único no botão Voltar</string>
+  <string name="player_exit_shortcut">efetua a saída do reprodutor (player) de vídeos</string>
   <string name="cant_delete_empty_playlist">Não é possível excluir uma lista de reprodução (playlist) vazia</string>
   <string name="action_video_zoom">Zoom do vídeo</string>
   <string name="video_zoom">Zoom do vídeo</string>
@@ -229,7 +229,7 @@
   <string name="settings_language_country">Idioma/País</string>
   <string name="card_text_scroll_factor">Velocidade de rolagem do texto da miniatura</string>
   <string name="preferred_update_source">Selecionar a fonte de atualização</string>
-  <string name="hide_shorts">Ocultar os Shorts (vídeos curtos) nas suas inscrições</string>
+  <string name="hide_shorts">Ocultar os shorts (vídeos curtos) nas suas inscrições</string>
   <string name="key_remapping">Remapeamento de botões</string>
   <string name="screen_dimming">Escurecer a tela</string>
   <string name="removed_from_playback_queue">Removido da fila de reprodução (playback)</string>
@@ -313,7 +313,7 @@
   <string name="player_seek_regular">Normal</string>
   <string name="player_seek_confirmation_pause">Com confirmação (pausa enquanto avança/retrocede)</string>
   <string name="player_seek_confirmation_play">Com confirmação (reproduz enquanto avança/retrocede)</string>
-  <string name="hide_shorts_from_home">Ocultar shorts (vídeos curtos) na seção \"Início\"</string>
+  <string name="hide_shorts_from_home">Ocultar os shorts (vídeos curtos) na seção \"Início\"</string>
   <string name="finish_on_disconnect">Fechar o aplicativo após desconectar o telefone/tablet</string>
   <string name="update_error">Erro de atualização</string>
   <string name="hide_shorts_from_history">Ocultar os shorts (vídeos curtos) na seção \"Histórico\"</string>
@@ -424,7 +424,7 @@
   <string name="action_subscribe_off">Desabilitar inscrições</string>
   <string name="playback_controls_repeat_list">Repetir lista</string>
   <string name="playback_controls_repeat_pause">Repetir pausa</string>
-  <string name="badge_live">Ao Vivo</string>
+  <string name="badge_live">Ao vivo</string>
   <string name="badge_new_content">Novo Conteúdo</string>
   <string name="player_disable_suggestions">Desabilitar sugestões</string>
   <string name="skip_24_rate">Pular formatos de 24fps (correção real do modo cinema\?)</string>
@@ -448,8 +448,8 @@
   <string name="use_alt_speech_recognizer_desc">Pode causar sérios problemas. Utilize apenas se estiver tendo problemas com o reconhecimento padrão.</string>
   <string name="speech_recognizer">Reconhecimento de voz</string>
   <string name="speech_recognizer_system">Sistema (recomendado)</string>
-  <string name="speech_recognizer_external_1">Externo 1 (pode causar sérios problemas; para funcionar é necessário desabilitar o acesso ao microfone)</string>
-  <string name="speech_recognizer_external_2">Externo 2 (pode causar sérios problemas)</string>
+  <string name="speech_recognizer_external_1">Externo #1 (pode causar sérios problemas; para funcionar é necessário desabilitar o acesso ao microfone)</string>
+  <string name="speech_recognizer_external_2">Externo #2 (pode causar sérios problemas)</string>
   <string name="real_channel_icon">Mostrar ícone no botão do canal</string>
   <string name="player_pixel_ratio">Relação de pixels (proporção de tela)</string>
   <string name="color_scheme_dark_grey_monochrome">Cinza escuro (monocromático)</string>
@@ -464,7 +464,7 @@
   <string name="thumb_quality_middle">No meio do vídeo</string>
   <string name="thumb_quality_end">No final do vídeo</string>
   <string name="content_block_status">Verificar o status do SponsorBlock</string>
-  <string name="skip_shorts">Ignorar Shorts (vídeos curtos)</string>
+  <string name="skip_shorts">Ignorar shorts (vídeos curtos)</string>
   <string name="content_block_preview_recap">Prévia/Recapitulação do vídeo</string>
   <string name="content_block_sponsor">Patrocinador</string>
   <string name="content_block_highlight">Destaques (Às vezes não funciona!)</string>
@@ -627,7 +627,7 @@
   <string name="app_corner_clock">Início: relógio no canto superior direito</string>
   <string name="player_corner_clock">Reprodutor (player): relógio no canto superior direito</string>
   <string name="player_corner_ending_time">Reprodutor (player): hora de término no canto superior direito</string>
-  <string name="hide_shorts_channel">Ocultar os Shorts (vídeos curtos) nos canais</string>
+  <string name="hide_shorts_channel">Ocultar os shorts (vídeos curtos) nos canais</string>
   <string name="nothing_found">Nada encontrado</string>
   <string name="channel_filter_hint">Filtrar canais</string>
   <string name="player_quick_shorts_skip">Passar os shorts (vídeos curtos) com os botões direito/esquerdo</string>
@@ -645,7 +645,7 @@
   <string name="more_info">Mais informações</string>
   <string name="enable">Habilitar</string>
   <string name="disable_network_error_fixing">Desativar correção automática de erros de rede</string>
-  <string name="remember_position_of_live_videos">Lembrar da posição assistida nas Lives (vídeos ao vivo)</string>
+  <string name="remember_position_of_live_videos">Lembrar da posição assistida nas lives (vídeos ao vivo)</string>
   <string name="save_playlist">Adicionar lista de reprodução (playlist) para seção de \"Listas de Reprodução (Playlists)\"</string>
   <string name="dearrow_not_submitted_thumbs">De onde obter as miniaturas não enviadas\?</string>
   <string name="fullscreen_mode">Modo tela cheia (sem barras do sistema)</string>
@@ -666,8 +666,8 @@
   <string name="player_quick_skip_videos">Passar os vídeos com botões direito/esquerdo</string>
   <string name="unknown_source_error">Erro de fonte desconhecido</string>
   <string name="unknown_renderer_error">Erro de renderizador desconhecido</string>
-  <string name="speech_engine">Engine de pesquisa por voz</string>
-  <string name="header_shorts">Shorts (vídeos curtos)</string>
+  <string name="speech_engine">Motor de pesquisa por voz</string>
+  <string name="header_shorts">Shorts</string>
   <string name="long_press_for_options">Mantenha pressionado para opções</string>
   <string name="hide_mixes">Ocultar Mixagens</string>
   <string name="applying_fix">Não feche o Tocador. Aplicando as correções...</string>
@@ -676,15 +676,15 @@
   <string name="not_supported_by_device">O dispositivo não suporta esse recurso</string>
   <string name="video_buffer_size_lowest">Mais baixo</string>
   <string name="video_buffer_size_highest">Mais alto</string>
-  <string name="unpin_group_from_sidebar">Remover assinatura de grupo</string>
-  <string name="add_to_subscriptions_group">Adicionar/Remover assinaturas do grupo</string>
+  <string name="unpin_group_from_sidebar">Remover inscrição do grupo</string>
+  <string name="add_to_subscriptions_group">Adicionar/Remover inscrição do grupo</string>
   <string name="new_subscriptions_group">Novo grupo</string>
   <string name="rename_group">Renomear grupo</string>
   <string name="screen_dimming_amount">Porcentagem de escurecimento de tela</string>
   <string name="screen_dimming_timeout">Tempo limite para o escurecimento de tela</string>
   <string name="playlists_rows">Mostrar seção \"Listas de Reprodução (Playlists)\" como linhas</string>
   <string name="recommended">Recomendados</string>
-  <string name="hide_shorts_from_search">Ocultar shorts (vídeos curtos) nos resultados da pesquisa</string>
+  <string name="hide_shorts_from_search">Ocultar os shorts (vídeos curtos) nos resultados da pesquisa</string>
   <string name="place_comments_left">Mover os comentários para a esquerda</string>
   <string name="suggestions">Sugestões</string>
 </resources>
