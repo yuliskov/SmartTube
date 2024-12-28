@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="empty_directory_hint">无可选文件</string>
+    <string name="action_close">关</string>
+    <string name="type_archive">压缩包</string>
+    <string name="type_certificate">证书</string>
+    <string name="type_directory">目录</string>
+    <string name="type_document">文件</string>
+    <string name="type_drawing">图片</string>
+    <string name="type_excel">EXCEL</string>
+    <string name="type_image">照片</string>
+    <string name="type_music">音乐</string>
+    <string name="type_pdf">PDF</string>
+    <string name="type_power_point">PPT</string>
+    <string name="type_word">WORD</string>
+    <string name="type_video">视频</string>
+</resources>

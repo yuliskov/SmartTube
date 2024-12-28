@@ -1,0 +1,21 @@
+<resources>
+
+    <style name="MaterialFileTheme" parent="MaterialFileTheme.Base">
+        <!-- StatusBarColor -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
+        <!-- Status Bar Icons Light Active -->
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- NavigationBarColor -->
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+
+        <!-- NavigationBar Icons Light Active -->
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <!-- Flag indicating whether this Window is responsible for drawing the background -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
+    </style>
+
+</resources>

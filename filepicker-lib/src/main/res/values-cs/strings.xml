@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="empty_directory_hint">Prázdná složka</string>
+    <string name="action_close">Zavřít</string>
+    <string name="type_archive">Archiv</string>
+    <string name="type_certificate">Certifikát</string>
+    <string name="type_directory">Složka</string>
+    <string name="type_document">Soubor</string>
+    <string name="type_drawing">Kresba</string>
+    <string name="type_excel">Tabulka</string>
+    <string name="type_image">Obrázek</string>
+    <string name="type_music">Skladba</string>
+    <string name="type_video">Video</string>
+    <string name="type_pdf">PDF dokument</string>
+    <string name="type_power_point">Prezentace</string>
+    <string name="type_word">Dokument</string>
+</resources>

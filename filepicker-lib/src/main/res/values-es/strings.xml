@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="type_certificate">Certificado</string>
+    <string name="action_close">Cerrar</string>
+    <string name="type_archive">Archivo</string>
+    <string name="empty_directory_hint">Carpeta vacía</string>
+    <string name="type_directory">Carpeta</string>
+    <string name="type_document">Archivo</string>
+    <string name="type_drawing">Foto</string>
+    <string name="type_excel">Excel</string>
+    <string name="type_image">Imagen</string>
+    <string name="type_music">Música</string>
+    <string name="type_pdf">Documento PDF</string>
+    <string name="type_power_point">Powerpoint</string>
+    <string name="type_video">Vídeo</string>
+    <string name="type_word">Documento Word</string>
+</resources>

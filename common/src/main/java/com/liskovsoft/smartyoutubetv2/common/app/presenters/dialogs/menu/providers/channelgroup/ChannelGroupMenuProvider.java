@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.provid
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Environment;
 
 import androidx.annotation.NonNull;
 
@@ -18,11 +19,14 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import arte.programar.materialfile.MaterialFilePicker;
 
 public class ChannelGroupMenuProvider extends ContextMenuProvider {
     private final Context mContext;
@@ -110,6 +114,16 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
                         }
                         return true;
                     });
+        }, false));
+
+        options.add(UiOptionItem.from(mContext.getString(R.string.import_subscriptions_group), optionItem -> {
+            dialogPresenter.closeDialog();
+            // Show file picker
+            new MaterialFilePicker()
+                    .withActivity((MotherActivity) mContext)
+                    .withRootPath(Environment.getExternalStorageDirectory().getPath())
+                    //.withActivityResultApi(((MotherActivity) mContext).mRegisterOnResult)
+                    .start();
         }, false));
 
         for (ChannelGroup group : groups) {

@@ -680,4 +680,5 @@
     <string name="screen_dimming_amount">Величина затемнення екрана</string>
     <string name="screen_dimming_timeout">Тайм-аут затемнення екрана</string>
     <string name="playlists_rows">Відображати розділ Плейлисти у вигляді рядків</string>
+    <string name="import_subscriptions_group">Імпорт файлу</string>
 </resources>

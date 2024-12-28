@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="empty_directory_hint">Leeres Verzeichnis</string>
+    <string name="action_close">Schließen</string>
+    <string name="type_archive">Archiv</string>
+    <string name="type_certificate">Zertifikat</string>
+    <string name="type_directory">Verzeichnis</string>
+    <string name="type_document">Dokument</string>
+    <string name="type_drawing">Bild</string>
+    <string name="type_excel">Excel Tabelle</string>
+    <string name="type_image">Bild</string>
+    <string name="type_music">Musik</string>
+    <string name="type_video">Video</string>
+    <string name="type_pdf">PDF Dokument</string>
+    <string name="type_power_point">Presentation</string>
+    <string name="type_word">Dokument</string>
+</resources>

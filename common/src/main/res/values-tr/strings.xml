@@ -689,4 +689,5 @@
     <string name="screen_dimming_amount">Ekran karartma miktarı</string>
     <string name="screen_dimming_timeout">Ekran karartma zaman aşımı</string>
     <string name="playlists_rows">Oynatma listelerini satır olarak göster</string>
+    <string name="import_subscriptions_group">Dosyayı içe aktar</string>
 </resources>

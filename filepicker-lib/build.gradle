@@ -1,0 +1,58 @@
+apply from: gradle.ext.sharedModulesConstants
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+
+def _group = 'arte.programar'
+def _version = '3.0.1'
+def _versioncode = 19
+def _artifact = 'materialfile'
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = _group
+                artifactId = _artifact
+                version = _version
+            }
+        }
+    }
+}
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier 'sources'
+}
+
+android {
+    compileSdkVersion project.properties.compileSdkVersion
+    buildToolsVersion project.properties.buildToolsVersion
+    defaultConfig {
+        minSdkVersion project.properties.minSdkVersion
+        targetSdkVersion project.properties.targetSdkVersion
+        versionCode _versioncode
+        versionName _version
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXLibraryVersion
+    implementation 'com.google.android.material:material:' + materialVersion
+    //implementation 'androidx.activity:activity:1.0.0'
+    implementation 'androidx.fragment:fragment:' + annotationXLibraryVersion
+
+    implementation project(':fragment-1.1.0')
+}

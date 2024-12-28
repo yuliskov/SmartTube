@@ -1,4 +1,4 @@
-include ':smarttubetv', ':common', ':chatkit', ':leanbackassistant', ':leanback-1.0.0', ':fragment-1.1.0'
+include ':smarttubetv', ':common', ':chatkit', ':leanbackassistant', ':leanback-1.0.0', ':fragment-1.1.0', ':filepicker-lib'
 
 def rootDir = settingsDir
 
