@@ -687,4 +687,7 @@
   <string name="hide_shorts_from_search">Ocultar os shorts (vídeos curtos) nos resultados da pesquisa</string>
   <string name="place_comments_left">Mover os comentários para a esquerda</string>
   <string name="suggestions">Sugestões</string>
+  <string name="import_subscriptions_group">Importar arquivo</string>
+  <string name="lb_playback_controls_closed_captioning_disable">Desabilitar legendas</string>
+  <string name="lb_playback_controls_closed_captioning_enable">Habilitar legendas</string>
 </resources>
