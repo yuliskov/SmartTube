@@ -11,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
+import java.io.File;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -84,6 +85,10 @@ public class ChannelGroupServiceWrapper implements ProfileChangeListener {
 
     public Observable<List<ChannelGroup>> importGroupsObserve(Uri uri) {
         return mService.importGroupsObserve(uri);
+    }
+
+    public Observable<List<ChannelGroup>> importGroupsObserve(File file) {
+        return mService.importGroupsObserve(file);
     }
 
     public boolean isEmpty() {

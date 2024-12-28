@@ -157,9 +157,9 @@ public class MaterialFilePicker {
      * @see MaterialFilePicker#withFragment(Fragment)
      * @see MaterialFilePicker#withSupportFragment(androidx.fragment.app.Fragment)
      */
-    public void start() {
+    public void start(int requestCode) {
         //mStartForResultFiles.launch(getIntent());
-        mActivity.startActivityForResult(getIntent(), 11);
+        mActivity.startActivityForResult(getIntent(), requestCode);
     }
 
     // Public because of https://github.com/nbsp-team/MaterialFilePicker/issues/113

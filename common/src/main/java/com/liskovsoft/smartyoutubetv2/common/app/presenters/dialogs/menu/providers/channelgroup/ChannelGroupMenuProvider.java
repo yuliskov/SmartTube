@@ -1,14 +1,16 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Environment;
 
 import androidx.annotation.NonNull;
 
 import com.liskovsoft.mediaserviceinterfaces.yt.data.ChannelGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -22,15 +24,19 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import arte.programar.materialfile.MaterialFilePicker;
+import arte.programar.materialfile.ui.FilePickerActivity;
+import arte.programar.materialfile.utils.FileUtils;
 
 public class ChannelGroupMenuProvider extends ContextMenuProvider {
     private final Context mContext;
     private final ChannelGroupServiceWrapper mService;
+    private static final int FILE_PICKER_REQUEST_CODE = 205;
 
     public ChannelGroupMenuProvider(@NonNull Context context, int idx) {
         super(idx);
@@ -77,20 +83,15 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
         List<ChannelGroup> groups = mService.getChannelGroups();
 
         List<OptionItem> options = new ArrayList<>();
-
-        String grayJayBackupUrl = "/GrayJay/PocketTube URL";
-        options.add(UiOptionItem.from(mContext.getString(R.string.new_subscriptions_group) + grayJayBackupUrl, optionItem -> {
+        
+        String editDialogTitle = mContext.getString(R.string.new_subscriptions_group) + "/GrayJay/PocketTube URL";
+        options.add(UiOptionItem.from(editDialogTitle, optionItem -> {
             dialogPresenter.closeDialog();
-            SimpleEditDialog.show(mContext,
-                    mContext.getString(R.string.new_subscriptions_group) + grayJayBackupUrl,
+            SimpleEditDialog.show(mContext, editDialogTitle,
                     null,
                     newValue -> {
                         if (mService.findChannelGroup(newValue) != null) {
                             return false;
-                        }
-
-                        if (Helpers.isInteger(newValue)) {
-                            newValue = String.format("https://aftv.news/%s", newValue);
                         }
 
                         if (Helpers.contains(newValue, "/") && !Helpers.startsWith(newValue, "http")) {
@@ -98,14 +99,9 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
                         }
 
                         if (Helpers.startsWith(newValue, "http")) {
-                            RxHelper.execute(mService.importGroupsObserve(Uri.parse(newValue)), (newGroups) -> {
-                                for (ChannelGroup group : newGroups) {
-                                    BrowsePresenter.instance(mContext).pinItem(Video.from(group));
-                                }
-                                MessageHelpers.showMessage(mContext, mContext.getString(R.string.pinned_to_sidebar));
-                            }, error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
+                            RxHelper.execute(mService.importGroupsObserve(Uri.parse(newValue)), this::pinGroups,
+                                    error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
                         } else {
-                            //ChannelGroup group = new ChannelGroup(newValue, null, new Channel(item.getAuthor(), item.cardImageUrl, item.channelId));
                             ChannelGroup group = mService.createChannelGroup(newValue, null,
                                     Collections.singletonList(mService.createChannel(item.getAuthor(), item.cardImageUrl, item.channelId)));
                             mService.addChannelGroup(group);
@@ -115,15 +111,25 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
                         return true;
                     });
         }, false));
-
-        options.add(UiOptionItem.from(mContext.getString(R.string.import_subscriptions_group), optionItem -> {
+        
+        String filePickerTitle = mContext.getString(R.string.import_subscriptions_group) + " (GrayJay/PocketTube)";
+        options.add(UiOptionItem.from(filePickerTitle, optionItem -> {
             dialogPresenter.closeDialog();
-            // Show file picker
-            new MaterialFilePicker()
-                    .withActivity((MotherActivity) mContext)
-                    .withRootPath(Environment.getExternalStorageDirectory().getPath())
-                    //.withActivityResultApi(((MotherActivity) mContext).mRegisterOnResult)
-                    .start();
+
+            MotherActivity activity = getMotherActivity();
+
+            if (PermissionHelpers.hasStoragePermissions(activity)) {
+                runFilePicker(activity, filePickerTitle);
+            } else {
+                activity.addOnPermissions((requestCode, permissions, grantResults) -> {
+                    if (requestCode == PermissionHelpers.REQUEST_EXTERNAL_STORAGE) {
+                        if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                            runFilePicker(activity, filePickerTitle);
+                        }
+                    }
+                });
+                PermissionHelpers.verifyStoragePermissions(activity);
+            }
         }, false));
 
         for (ChannelGroup group : groups) {
@@ -152,5 +158,33 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
 
         dialogPresenter.appendCheckedCategory(mContext.getString(getTitleResId()), options);
         dialogPresenter.showDialog(mContext.getString(getTitleResId()));
+    }
+
+    private void runFilePicker(Activity activity, String title) {
+        new MaterialFilePicker()
+                .withActivity(activity)
+                .withTitle(title)
+                .withRootPath(FileUtils.getFile(mContext, null).getAbsolutePath())
+                .start(FILE_PICKER_REQUEST_CODE);
+    }
+
+    @NonNull
+    private MotherActivity getMotherActivity() {
+        MotherActivity activity = (MotherActivity) mContext;
+        activity.addOnResult((requestCode, resultCode, data) -> {
+            if (FILE_PICKER_REQUEST_CODE == requestCode && resultCode == Activity.RESULT_OK) {
+                String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+                RxHelper.execute(mService.importGroupsObserve(new File(filePath)), this::pinGroups,
+                        error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
+            }
+        });
+        return activity;
+    }
+
+    private void pinGroups(@NonNull List<ChannelGroup> newGroups) {
+        for (ChannelGroup group : newGroups) {
+            BrowsePresenter.instance(mContext).pinItem(Video.from(group));
+        }
+        MessageHelpers.showMessage(mContext, mContext.getString(R.string.pinned_to_sidebar));
     }
 }
