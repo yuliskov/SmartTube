@@ -687,4 +687,7 @@
     <string name="screen_dimming_amount">Míra ztmavení obrazovky</string>
     <string name="screen_dimming_timeout">Časový limit ztmavení obrazovky</string>
     <string name="playlists_rows">Zobrazit sekci Playlisty jako řádky</string>
+    <string name="import_subscriptions_group">Importovat soubor</string>
+    <string name="lb_playback_controls_closed_captioning_disable">Zakázat titulky</string>
+    <string name="lb_playback_controls_closed_captioning_enable">Povolit titulky</string>
 </resources>
