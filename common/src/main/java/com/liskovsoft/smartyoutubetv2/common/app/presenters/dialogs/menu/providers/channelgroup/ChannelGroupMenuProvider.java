@@ -84,7 +84,7 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
 
         List<OptionItem> options = new ArrayList<>();
         
-        String editDialogTitle = mContext.getString(R.string.new_subscriptions_group) + "/GrayJay/PocketTube URL";
+        String editDialogTitle = mContext.getString(R.string.new_subscriptions_group);
         options.add(UiOptionItem.from(editDialogTitle, optionItem -> {
             dialogPresenter.closeDialog();
             SimpleEditDialog.show(mContext, editDialogTitle,

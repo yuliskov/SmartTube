@@ -3229,6 +3229,8 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
         final boolean isScroll = mBaseGridView.getScrollState() != RecyclerView.SCROLL_STATE_IDLE;
         if (movement == NEXT_ITEM) {
             if (isScroll || (mFlag & PF_FOCUS_OUT_END) == 0) {
+                // MOD: dialog loop navigation (not good, too fast scrolling)
+                //result = mBaseGridView.getChildAt(0);
                 result = focused;
             }
             if ((mFlag & PF_SCROLL_ENABLED) != 0 && !hasCreatedLastItem()) {
@@ -3237,6 +3239,8 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
             }
         } else if (movement == PREV_ITEM) {
             if (isScroll || (mFlag & PF_FOCUS_OUT_FRONT) == 0) {
+                // MOD: dialog loop navigation (not good, too fast scrolling)
+                //result = mBaseGridView.getChildAt(mBaseGridView.getChildCount() - 1);
                 result = focused;
             }
             if ((mFlag & PF_SCROLL_ENABLED) != 0 && !hasCreatedFirstItem()) {
