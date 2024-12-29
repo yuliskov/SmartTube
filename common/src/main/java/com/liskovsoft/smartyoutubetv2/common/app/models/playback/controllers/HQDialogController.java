@@ -26,7 +26,6 @@ public class HQDialogController extends BasePlayerController {
     private final Map<Integer, OptionCategory> mCategories = new LinkedHashMap<>();
     private final Map<Integer, OptionCategory> mCategoriesInt = new LinkedHashMap<>();
     private final Set<Runnable> mHideListeners = new HashSet<>();
-    private VideoStateController mStateUpdater;
     private PlayerData mPlayerData;
     private PlayerTweaksData mPlayerTweaksData;
     private AppDialogPresenter mAppDialogPresenter;
@@ -36,7 +35,6 @@ public class HQDialogController extends BasePlayerController {
         mPlayerData = PlayerData.instance(getContext());
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
         mAppDialogPresenter = AppDialogPresenter.instance(getContext());
-        mStateUpdater = getController(VideoStateController.class);
     }
 
     @Override

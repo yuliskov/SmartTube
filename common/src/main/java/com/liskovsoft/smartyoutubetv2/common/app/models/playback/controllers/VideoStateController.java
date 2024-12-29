@@ -406,7 +406,7 @@ public class VideoStateController extends BasePlayerController {
         getPlayer().setFormat(result);
     }
 
-    private void saveState() {
+    public void saveState() {
         savePosition();
         updateHistory();
         //persistState(); // persist the state if the device reboots accidentally

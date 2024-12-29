@@ -52,7 +52,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     private long mSleepTimerStartMs;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
-    private final Runnable mReloadVideo = () -> loadVideo(mLastVideo);
+    private final Runnable mReloadVideo = () -> {
+        getController(VideoStateController.class).saveState();
+        loadVideo(mLastVideo);
+    };
     private final Runnable mLoadNext = this::loadNext;
     private final Runnable mMetadataSync = () -> {
         if (getPlayer() != null) {
