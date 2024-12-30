@@ -47,15 +47,15 @@ public abstract class Style {
     }
 
     protected final int getSystemAccentColor() {
-        return getSystemColor(R.attr.colorAccent);
+        return getSystemColor(android.R.attr.colorAccent);
     }
 
     protected final int getSystemPrimaryColor() {
-        return getSystemColor(R.attr.colorPrimary);
+        return getSystemColor(android.R.attr.colorPrimary);
     }
 
     protected final int getSystemPrimaryDarkColor() {
-        return getSystemColor(R.attr.colorPrimaryDark);
+        return getSystemColor(android.R.attr.colorPrimaryDark);
     }
 
     protected final int getSystemPrimaryTextColor() {
@@ -70,7 +70,8 @@ public abstract class Style {
         TypedValue typedValue = new TypedValue();
 
         TypedArray a = context.obtainStyledAttributes(typedValue.data, new int[]{attr});
-        int color = a.getColor(0, 0);
+        // MOD: Invisible link fix on old devices (provide the default color)
+        int color = a.getColor(0, getColor(R.color.dark_red));
         a.recycle();
 
         return color;

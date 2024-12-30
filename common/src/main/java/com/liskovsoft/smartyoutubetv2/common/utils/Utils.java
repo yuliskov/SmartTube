@@ -731,19 +731,6 @@ public class Utils {
         return true;
     }
 
-    public static int getThemeColor(Context context, int attrId, int defaultColorResId) {
-        int themeResId = getThemeResId(context, attrId);
-        return ContextCompat.getColor(context, themeResId != -1 ? themeResId : defaultColorResId);
-    }
-
-    public static int getThemeResId(Context context, int attrId) {
-        TypedValue outValue = new TypedValue();
-        if (context.getTheme().resolveAttribute(attrId, outValue, true)) {
-            return outValue.resourceId;
-        }
-        return -1;
-    }
-
     public static void enableScreensaver(Context activity, boolean enable) {
         if (activity instanceof MotherActivity) {
             ScreensaverManager screensaver = ((MotherActivity) activity).getScreensaverManager();

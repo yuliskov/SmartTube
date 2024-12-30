@@ -112,16 +112,10 @@ class MessagesListStyle extends Style {
 
         style.textAutoLinkMask = typedArray.getInt(R.styleable.MessagesList_textAutoLink, 0);
 
-        //style.incomingTextLinkColor = typedArray.getColor(R.styleable.MessagesList_incomingTextLinkColor,
-        //        style.getSystemAccentColor());
-        //style.outcomingTextLinkColor = typedArray.getColor(R.styleable.MessagesList_outcomingTextLinkColor,
-        //        style.getSystemAccentColor());
-
-        // Invisible link fix
         style.incomingTextLinkColor = typedArray.getColor(R.styleable.MessagesList_incomingTextLinkColor,
-                style.getColor(R.color.dark_red));
+                style.getSystemAccentColor());
         style.outcomingTextLinkColor = typedArray.getColor(R.styleable.MessagesList_outcomingTextLinkColor,
-                style.getColor(R.color.dark_red));
+                style.getSystemAccentColor());
 
         style.incomingAvatarWidth = typedArray.getDimensionPixelSize(R.styleable.MessagesList_incomingAvatarWidth,
                 style.getDimension(R.dimen.message_avatar_width));
