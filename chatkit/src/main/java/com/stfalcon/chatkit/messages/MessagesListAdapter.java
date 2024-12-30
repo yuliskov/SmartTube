@@ -774,6 +774,12 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
             View bubble = v.findViewById(R.id.bubble);
             //bubble.setBackgroundResource(hasFocus ? R.drawable.shape_incoming_message_focused : R.drawable.shape_incoming_message);
 
+            // Save the current padding (API 19 fix)
+            int paddingLeft = bubble.getPaddingLeft();
+            int paddingTop = bubble.getPaddingTop();
+            int paddingRight = bubble.getPaddingRight();
+            int paddingBottom = bubble.getPaddingBottom();
+
             if (hasFocus) {
                 // Invert text and bg color
                 Drawable originalBackground = messagesListStyle.getIncomingBubbleDrawable();
@@ -784,6 +790,9 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
                 Drawable originalBackground = messagesListStyle.getIncomingBubbleDrawable();
                 bubble.setBackground(originalBackground);
             }
+
+            // Restore the padding (API 19 fix)
+            bubble.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
 
             if (hasFocus) {
                 notifyMessageViewFocused(v, wrapper.item);
