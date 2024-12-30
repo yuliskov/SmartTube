@@ -622,7 +622,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             return trackGroupList;
         }
 
-        String audioLanguage = PlayerData.instance(mContext).getAudioLanguage();
+        String audioLanguage = fixLangCode(PlayerData.instance(mContext).getAudioLanguage());
 
         String resultLanguage = null;
         String originLanguage = null;
@@ -839,5 +839,18 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
     private boolean isUnsafeFormat(MediaTrack mediaTrack) {
         return mediaTrack.isMP4ACodec() && mediaTrack.format.bitrate >= 195_000;
+    }
+
+    private String fixLangCode(String langCode) {
+        if (langCode == null) {
+            return null;
+        }
+
+        switch (langCode) {
+            case "in": // Wrong Indonesian
+                return "id"; // Correct Indonesian
+            default:
+                return langCode;
+        }
     }
 }

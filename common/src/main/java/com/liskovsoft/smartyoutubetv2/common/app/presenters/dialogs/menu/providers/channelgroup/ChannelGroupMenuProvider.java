@@ -83,7 +83,8 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
         List<ChannelGroup> groups = mService.getChannelGroups();
 
         List<OptionItem> options = new ArrayList<>();
-        
+
+        // Create new group or enter url
         String editDialogTitle = mContext.getString(R.string.new_subscriptions_group);
         options.add(UiOptionItem.from(editDialogTitle, optionItem -> {
             dialogPresenter.closeDialog();
@@ -111,8 +112,9 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
                         return true;
                     });
         }, false));
-        
-        String filePickerTitle = mContext.getString(R.string.import_subscriptions_group) + " (GrayJay/PocketTube)";
+
+        // Import from the file
+        String filePickerTitle = mContext.getString(R.string.import_subscriptions_group) + " (GrayJay/PocketTube/NewPipe)";
         options.add(UiOptionItem.from(filePickerTitle, optionItem -> {
             dialogPresenter.closeDialog();
 
