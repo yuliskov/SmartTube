@@ -687,7 +687,7 @@
     <string name="screen_dimming_amount">Wert für Bildschirm dimmen</string>
     <string name="screen_dimming_timeout">Zeit für Bildschirm dimmen</string>
     <string name="playlists_rows">Wiedergabelisten-Kategorie als Reihen anzeigen</string>
-    <string name="import_subscriptions_group">Datei importieren</string>
+    <string name="import_subscriptions_group">Importieren</string>
     <string name="lb_playback_controls_closed_captioning_disable">Untertitel deaktivieren</string>
     <string name="lb_playback_controls_closed_captioning_enable">Untertitel aktivieren</string>
 </resources>
