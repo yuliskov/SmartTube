@@ -39,7 +39,6 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
@@ -105,7 +104,6 @@ public class Utils {
     public static final float[] SPEED_LIST_EXTRA_LONG = Helpers.range(0.05f, 4f, 0.05f);
     public static final float[] SPEED_LIST_SHORT =
             new float[] {0.25f, 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 2.25f, 2.5f, 2.75f, 3.0f, 3.25f, 3.5f, 3.75f, 4.0f};
-    private static boolean sIsGlobalVolumeFixed;
 
     @TargetApi(17)
     public static void displayShareVideoDialog(Context context, String videoId) {
@@ -266,8 +264,6 @@ public class Utils {
                 }
             }
         }
-
-        sIsGlobalVolumeFixed = getGlobalVolume(context, normalize) != volume;
     }
 
     /**
@@ -291,8 +287,8 @@ public class Utils {
         return 100;
     }
 
-    private static boolean isGlobalVolumeFixed() {
-        return sIsGlobalVolumeFixed;
+    private static boolean isGlobalVolumeFixed(Context context) {
+        return getGlobalVolume(context, false) == 100;
     }
 
     public static int getVolume(Context context, PlayerManager player) {
@@ -304,7 +300,7 @@ public class Utils {
      */
     public static int getVolume(Context context, PlayerManager player, boolean normalize) {
         if (context != null) {
-            return Utils.isGlobalVolumeFixed() ? (int)(player.getVolume() * 100) : Utils.getGlobalVolume(context, normalize);
+            return Utils.isGlobalVolumeFixed(context) ? (int)(player.getVolume() * 100) : Utils.getGlobalVolume(context, normalize);
         }
 
         return 100;
@@ -320,7 +316,7 @@ public class Utils {
     @SuppressLint("StringFormatMatches")
     public static void setVolume(Context context, PlayerManager player, int volume, boolean normalize) {
         if (context != null) {
-            if (Utils.isGlobalVolumeFixed()) {
+            if (Utils.isGlobalVolumeFixed(context)) {
                 player.setVolume(volume / 100f);
             } else {
                 Utils.setGlobalVolume(context, volume, normalize);
