@@ -18,15 +18,16 @@
     <string name="action_signin">DAXİL OL</string>
     <string name="title_video_formats">Video formatları</string>
     <string name="title_audio_formats">Audio formatları</string>
-    <string name="subtitle_category_title">Subtitrlar</string>
+    <string name="subtitle_category_title">Subtitrlər</string>
     <string name="playback_queue_category_title">Oxutma növbəsi</string>
     <string name="video_max_quality">Avto (maks keyfiyyət)</string>
     <string name="audio_max_quality">Avto (maks keyfiyyət)</string>
-    <string name="subtitles_disabled">Subtitrlar söndürülüb</string>
+    <string name="subtitles_disabled">Subtitrlər söndürülüb</string>
     <string name="auto_frame_rate">Auto Frame Rate</string>
     <string name="frame_rate_correction">Fps düzəltmək:\n%s</string>
     <string name="category_background_playback">Arxa fonda oxutma</string>
     <string name="not_implemented">Tətbiq olunmayıb</string>
+    <string name="not_supported_by_device">Cihaz bu funksiyanı dəstəkləmir</string>
     <string name="option_background_playback_off">Qeyri-aktivdir</string>
     <string name="option_background_playback_pip">Şəkil içində şəkil</string>
     <string name="option_background_playback_only_audio">Yalnız audio</string>
@@ -35,9 +36,11 @@
     <string name="resolution_switch">Görüntü imkanını dəyiş</string>
     <string name="video_buffer">Video bufer</string>
     <string name="video_buffer_size_none">Heç biri</string>
+    <string name="video_buffer_size_lowest">Ən aşağı</string>
     <string name="video_buffer_size_low">Aşağı</string>
     <string name="video_buffer_size_med">Orta</string>
     <string name="video_buffer_size_high">Yüksək</string>
+    <string name="video_buffer_size_highest">Ən yüksək</string>
     <string name="update_changelog">Dəyişiklik jurnalı</string>
     <string name="install_update">Yeniləməni quraşdırın</string>
     <string name="section_is_empty">Ups! Burada heç nə yoxdur</string>
@@ -61,8 +64,8 @@
     <string name="dialog_select_language">Dil</string>
     <string name="subtitle_default">Defolt</string>
     <string name="subtitle_white_semi_transparent">Yarımşəffaf fonda ağ</string>
-    <string name="subtitle_style">Subtitrın üslubu</string>
-    <string name="subtitle_language">Subtitrın dili</string>
+    <string name="subtitle_style">Subtitrin üslubu</string>
+    <string name="subtitle_language">Subtitrin dili</string>
     <string name="action_search">Axtarış</string>
     <string name="settings_main_ui">İstifadəçi interfeysi</string>
     <string name="dialog_main_ui">İstifadəçi interfeysi</string>
@@ -235,6 +238,7 @@
     <string name="pin_channel">Yan panelə kanal əlavə edin</string>
     <string name="pinned_to_sidebar">Yan panelə əlavə edildi</string>
     <string name="unpin_from_sidebar">Yan paneldən çıxarın</string>
+    <string name="unpin_group_from_sidebar">Abunəlik qrupunu silin</string>
     <string name="unpinned_from_sidebar">Yan paneldən silindi</string>
     <string name="dialog_select_country">Ölkə</string>
     <string name="settings_language_country">Dil/Ölkə</string>
@@ -314,7 +318,7 @@
     <string name="action_sound_off">Səsi söndürmək</string>
     <string name="action_playback_queue">Oxutma növbəsi</string>
     <string name="action_video_speed">Videonun sürəti</string>
-    <string name="action_subtitles">Subtitrlar</string>
+    <string name="action_subtitles">Subtitrlər</string>
     <string name="action_like">Bəyənirəm</string>
     <string name="action_dislike">Bəyənmirəm</string>
     <string name="action_play_pause">Oxut/Fasilə</string>
@@ -347,6 +351,7 @@
     <string name="hide_shorts_from_home">Shortları Evdən gizlədin</string>
     <string name="finish_on_disconnect">Telefonu/planşeti ayırdıqdan sonra proqramı bitirin</string>
     <string name="update_error">Yeniləmə xətası</string>
+    <string name="hide_shorts_from_search">Shortları axtarış nəticəsindən gizlədin</string>
     <string name="hide_shorts_from_history">Shortları Tarixçədən gizlədin</string>
     <string name="hide_shorts_from_trending">Shortları Trenddən gizlədin</string>
     <string name="disable_screensaver">Ekran qoruyucusunu gizlədin</string>
@@ -477,6 +482,7 @@
     <string name="skip_24_rate">24 kadr formatlarını ötürün (real kino rejimi düzəldildi?)</string>
     <string name="skip_shorts">Shortları ötürün</string>
     <string name="player_disable_suggestions">Təklifləri deaktiv edin</string>
+    <string name="suggestions">Təkliflər</string>
     <string name="feedback">Rəy</string>
     <string name="sources">Mənbələr</string>
     <string name="releases">Relizlər</string>
@@ -484,6 +490,7 @@
     <string name="open_chat">Çat/Rəylər</string>
     <string name="open_comments">Rəyləri aç</string>
     <string name="place_chat_left">Çatı solda yerləşdir</string>
+    <string name="place_comments_left">Şərhləri sola yerləşdirin</string>
     <string name="use_alt_speech_recognizer">Alternativ nitq tanıyıcı</string>
     <string name="time_format">Vaxt formatı</string>
     <string name="time_format_24">24 saat</string>
@@ -525,7 +532,7 @@
     <string name="enable_history">Tarixçəni qoşun</string>
     <string name="clear_history">Tarixçəni təmizləyin</string>
     <string name="chapters">Fəsillər</string>
-    <string name="card_multiline_subtitle">Çoxsətirli subtitrlar</string>
+    <string name="card_multiline_subtitle">Çoxsətirli subtitrlər</string>
     <string name="auto_frame_rate_modes">Dəstəklənən rejimlər</string>
     <string name="loading">Yuklənir…</string>
     <string name="hide_streams">Abunəliklərdən canlı yayımları gizlət</string>
@@ -639,7 +646,8 @@
     <string name="auto_frame_rate_desc">Bu seçim kameranın sürətlə hərəkət etdiyi səhnələrdə titrəməni aradan qaldırır, məsələn. idman yayımı</string>
     <string name="channel_filter_hint">Kanalları filterlə</string>
     <string name="player_loop_shorts">Shortları təkrarla</string>
-    <string name="player_quick_shorts_skip">Shortları sol/sağ düymələr ilə ötür</string>
+    <string name="player_quick_shorts_skip">Shortları sol/sağ düymələr ilə ötürün</string>
+    <string name="player_quick_skip_videos">Sol/sağ düymələr ilə adi videoları ötürün</string>
     <string name="channels_filter">Kanallar bölməsindəki kanallar siyahısını filtrləyin</string>
     <string name="channel_search_bar">Kanal səhifəsindəki axtarış çubuğu</string>
     <string name="header_sports">İdman</string>
@@ -675,4 +683,13 @@
     <string name="disable_network_error_fixing">Şəbəkə xətalarının avtomatik həllini deaktiv edin</string>
     <string name="disable_network_error_fixing_desc">Əgər VPN istifadə edirsinizsə, bu seçimi aktivləşdirin</string>
     <string name="recommended">Tövsiyyə olunan</string>
+    <string name="add_to_subscriptions_group">Abunəlik qrupuna əlavə et/çıxar</string>
+    <string name="new_subscriptions_group">Yeni qrup</string>
+    <string name="rename_group">Abunəlik qrupunun adını dəyişin</string>
+    <string name="screen_dimming_amount">Ekranın qaralma miqdarı</string>
+    <string name="screen_dimming_timeout">Ekranın qaralma vaxtı</string>
+    <string name="playlists_rows">Pleylistlər bölməsini sətirlər kimi göstərin</string>
+    <string name="import_subscriptions_group">Daxil et</string>
+    <string name="lb_playback_controls_closed_captioning_disable">Qapalı Altyazıları deaktiv edin</string>
+    <string name="lb_playback_controls_closed_captioning_enable">Qapalı Altyazıları aktivləşdirin</string>
 </resources>
