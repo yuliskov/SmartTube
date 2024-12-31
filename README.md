@@ -176,7 +176,7 @@ If you want to support my developments you are welcome to buy me a cup of coffee
 You can report in our Telegram group or via [issue tracker on Github](https://github.com/yuliskov/SmartTube/issues) (account required).
 
 > **Telegram group (international)**: [@SmartTubeEN](http://t.me/SmartTubeEN)  
-> **Discord group (international)**: [@SmartTube Official](https://discord.gg/Wt8HDDej5z)  
+> **Discord group (international)**: [SmartTube Official](https://discord.gg/Wt8HDDej5z)  
 > **Telegram group (RU/UA)**: [@SmartTubeUA](http://t.me/SmartTubeUA)  
 > **Email**: firsth<!-- abc@def -->ash@gmai<!-- @abc.com -->l.com
 
