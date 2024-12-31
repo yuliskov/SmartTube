@@ -687,4 +687,7 @@
     <string name="screen_dimming_amount">Quantità oscuramento schermo</string>
     <string name="screen_dimming_timeout">Timeout oscuramento schermo</string>
     <string name="playlists_rows">Mostra la sezione Playlist come righe</string>
+    <string name="import_subscriptions_group">Importa</string>
+    <string name="lb_playback_controls_closed_captioning_disable">Disabilita i sottotitoli per non udenti</string>
+    <string name="lb_playback_controls_closed_captioning_enable">Abilita i sottotitoli per non udenti</string>
 </resources>
