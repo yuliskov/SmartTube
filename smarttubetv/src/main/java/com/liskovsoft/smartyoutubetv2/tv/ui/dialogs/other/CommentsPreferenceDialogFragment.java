@@ -151,6 +151,9 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
         }
 
         if (mIsTransparent) {
+            // Enable transparent shadow outline on parent (R.id.settings_preference_fragment_container)
+            ViewUtil.enableTransparentDialog(getActivity(), getParentFragment().getView());
+            // Enable transparency on child fragment itself (isn't attached to parent yet)
             ViewUtil.enableTransparentDialog(getActivity(), view);
         }
 
