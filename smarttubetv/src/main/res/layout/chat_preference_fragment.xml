@@ -60,7 +60,8 @@
         app:incomingAvatarWidth="30dp"
         app:incomingAvatarHeight="30dp"
         app:incomingDefaultBubbleColor="@color/live_chat_bg"
-        app:incomingDefaultBubblePressedColor="@color/live_chat_bg_pressed"
+        app:incomingDefaultBubbleSelectedColor="@color/live_chat_bg_pressed"
+        app:incomingDefaultBubblePressedColor="@color/comments_bg_pressed"
         app:incomingTextColor="@color/white"
         />
 

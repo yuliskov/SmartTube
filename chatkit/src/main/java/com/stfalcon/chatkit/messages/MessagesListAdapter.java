@@ -783,7 +783,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
             if (hasFocus) {
                 // Invert text and bg color
                 Drawable originalBackground = messagesListStyle.getIncomingBubbleDrawable();
-                Drawable shapeBackground = ContextCompat.getDrawable(bubble.getContext(), R.drawable.shape_incoming_message_focused);
+                Drawable shapeBackground = messagesListStyle.getIncomingBubbleSelectedDrawable();
                 bubble.setBackground(new LayerDrawable(new Drawable[]{originalBackground, shapeBackground}));
             } else {
                 // Revert to original

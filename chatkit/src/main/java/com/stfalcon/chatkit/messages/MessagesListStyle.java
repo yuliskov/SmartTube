@@ -420,6 +420,11 @@ class MessagesListStyle extends Style {
         }
     }
 
+    protected Drawable getIncomingBubbleSelectedDrawable() {
+        return getMessageSelector(incomingDefaultBubbleSelectedColor, incomingDefaultBubbleSelectedColor,
+                incomingDefaultBubblePressedColor, R.drawable.shape_incoming_message);
+    }
+
     protected Drawable getIncomingImageOverlayDrawable() {
         if (incomingImageOverlayDrawable == -1) {
             return getMessageSelector(Color.TRANSPARENT, incomingDefaultImageOverlaySelectedColor,
