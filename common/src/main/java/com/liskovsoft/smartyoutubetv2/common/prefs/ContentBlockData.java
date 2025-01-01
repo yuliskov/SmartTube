@@ -226,7 +226,7 @@ public class ContentBlockData {
         // colorMarkers: index 4
         String actions = Helpers.parseStr(split, 6);
         String colorCategories = Helpers.parseStr(split, 7);
-        mIsDontSkipSegmentAgainEnabled = Helpers.parseBoolean(split, 8, true);
+        mIsDontSkipSegmentAgainEnabled = Helpers.parseBoolean(split, 8, false);
         String excludedChannels = Helpers.parseStr(split, 9);
 
         if (colorCategories != null) {
