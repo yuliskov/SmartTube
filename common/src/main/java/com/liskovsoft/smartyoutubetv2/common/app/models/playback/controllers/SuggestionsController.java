@@ -723,6 +723,7 @@ public class SuggestionsController extends BasePlayerController {
         dialogPresenter.appendSingleButton(acceptOption);
 
         dialogPresenter.enableTransparent(true);
+        dialogPresenter.enableOverlay(true);
         dialogPresenter.enableExpandable(false);
         dialogPresenter.setId(CHAPTER_NOTIFICATION_Id);
         dialogPresenter.showDialog();

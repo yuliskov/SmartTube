@@ -63,12 +63,12 @@ public class AppDialogActivity extends MotherActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (!mFragment.isTransparent() && KeyHelpers.isMenuKey(keyCode)) { // toggle dialog with menu key
+        if (!mFragment.isOverlay() && KeyHelpers.isMenuKey(keyCode)) { // toggle dialog with menu key
             finish();
         }
 
         // Notification dialog type. Imitate notification behavior.
-        if (mFragment.isTransparent() && (KeyHelpers.isNavigationKey(keyCode) || KeyHelpers.isMenuKey(keyCode))) {
+        if (mFragment.isOverlay() && (KeyHelpers.isNavigationKey(keyCode) || KeyHelpers.isMenuKey(keyCode))) {
             finish();
             PlaybackView view = PlaybackPresenter.instance(this).getView();
             if (view != null) {

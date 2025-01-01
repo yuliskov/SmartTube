@@ -22,6 +22,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     private String mTitle;
     private long mTimeoutMs;
     private boolean mIsTransparent;
+    private boolean mIsOverlay;
     private List<OptionCategory> mCategories;
     private boolean mIsExpandable = true;
     private int mId;
@@ -30,6 +31,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     private List<OptionCategory> mBackupCategories;
     private int mBackupId;
     private boolean mBackupIsTransparent;
+    private boolean mBackupIsOverlay;
     private boolean mBackupIsExpandable;
 
     public AppDialogPresenter(Context context) {
@@ -80,19 +82,21 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         mBackupId = mId;
         mBackupIsExpandable = mIsExpandable;
         mBackupIsTransparent = mIsTransparent;
+        mBackupIsOverlay = mIsOverlay;
     }
 
     private void resetData() {
         mCategories = new ArrayList<>();
         mIsExpandable = true;
         mIsTransparent = false;
+        mIsOverlay = false;
         mId = 0;
         mTitle = null;
     }
 
     @Override
     public void onViewInitialized() {
-        getView().show(mBackupCategories, mBackupTitle, mBackupIsExpandable, mBackupIsTransparent, mBackupId);
+        getView().show(mBackupCategories, mBackupTitle, mBackupIsExpandable, mBackupIsTransparent, mBackupIsOverlay, mBackupId);
     }
 
     /**
@@ -212,10 +216,24 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         mIsTransparent = enable;
     }
 
+    /**
+     * Close the dialog on movements keys
+     */
+    public void enableOverlay(boolean enable) {
+        mIsOverlay = enable;
+    }
+
     public boolean isTransparent() {
         return getView() != null && getView().isTransparent();
     }
 
+    public boolean isOverlay() {
+        return getView() != null && getView().isOverlay();
+    }
+
+    /**
+     * Show a category contents instead of title if a single category has been added
+     */
     public void enableExpandable(boolean enable) {
         mIsExpandable = enable;
     }

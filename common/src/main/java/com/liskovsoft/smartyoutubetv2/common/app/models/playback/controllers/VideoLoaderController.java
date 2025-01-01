@@ -671,7 +671,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                     loadNext();
                 } else {
                     AppDialogPresenter dialog = AppDialogPresenter.instance(getContext());
-                    if (!getPlayer().isSuggestionsShown() && (!dialog.isDialogShown() || dialog.isTransparent())) {
+                    if (!getPlayer().isSuggestionsShown() && (!dialog.isDialogShown() || dialog.isOverlay())) {
                         dialog.closeDialog();
                         getPlayer().finishReally();
                     }

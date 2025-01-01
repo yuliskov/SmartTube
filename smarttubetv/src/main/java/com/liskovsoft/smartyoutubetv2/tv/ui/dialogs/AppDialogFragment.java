@@ -41,6 +41,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     private AppDialogPresenter mPresenter;
     private AppPreferenceManager mManager;
     private boolean mIsTransparent;
+    private boolean mIsOverlay;
     private boolean mIsPaused;
     private int mId;
 
@@ -121,7 +122,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     }
 
     @Override
-    public void show(List<OptionCategory> categories, String title, boolean isExpandable, boolean isTransparent, int id) {
+    public void show(List<OptionCategory> categories, String title, boolean isExpandable, boolean isTransparent, boolean isOverlay, int id) {
         if (!Utils.checkActivity(getActivity())) {
             return;
         }
@@ -129,6 +130,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
         // Only root fragment could make other fragments in the stack transparent
         boolean stackIsEmpty = getChildFragmentManager() != null && getChildFragmentManager().getBackStackEntryCount() == 0;
         mIsTransparent = stackIsEmpty ? isTransparent : mIsTransparent;
+        mIsOverlay = isOverlay;
         mId = id;
 
         AppPreferenceFragment fragment = buildPreferenceFragment(categories, title);
@@ -266,6 +268,11 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     @Override
     public boolean isTransparent() {
         return mIsTransparent;
+    }
+
+    @Override
+    public boolean isOverlay() {
+        return mIsOverlay;
     }
 
     @Override

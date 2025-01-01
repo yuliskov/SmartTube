@@ -230,7 +230,7 @@ public class ContentBlockController extends BasePlayerController {
         // NOTE: in case of using Player.setSeekParameters (inaccurate seeking) increase sponsor segment window
         // int seekShift = 1_000;
         // return positionMs >= (segment.getStartMs() - seekShift) && positionMs <= (segment.getEndMs() + seekShift);
-        return positionMs >= segment.getStartMs() && positionMs <= segment.getEndMs();
+        return positionMs >= segment.getStartMs() && positionMs <= Math.min(segment.getStartMs() + 1_000, segment.getEndMs());
     }
 
     private void simpleSkip(long skipPosMs) {
@@ -280,6 +280,7 @@ public class ContentBlockController extends BasePlayerController {
         dialogPresenter.setCloseTimeoutMs((long) ((skipPosMs - getPlayer().getPositionMs()) * getPlayer().getSpeed()));
 
         dialogPresenter.enableTransparent(true);
+        dialogPresenter.enableOverlay(true);
         dialogPresenter.enableExpandable(false);
         dialogPresenter.setId(CONTENT_BLOCK_ID);
         dialogPresenter.showDialog(getContext().getString(R.string.content_block_provider));

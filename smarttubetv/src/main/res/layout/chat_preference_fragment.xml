@@ -59,7 +59,7 @@
         app:incomingBubblePaddingBottom="0sp"
         app:incomingAvatarWidth="30dp"
         app:incomingAvatarHeight="30dp"
-        app:incomingDefaultBubbleColor="@color/comments_bg"
+        app:incomingDefaultBubbleColor="@color/live_chat_bg"
         app:incomingDefaultBubblePressedColor="@color/comments_bg_pressed"
         app:incomingTextColor="@color/white"
         />
