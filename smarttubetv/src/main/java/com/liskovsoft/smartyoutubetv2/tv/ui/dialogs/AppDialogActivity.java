@@ -58,26 +58,31 @@ public class AppDialogActivity extends MotherActivity {
 
         //return mGlobalKeyTranslator.translate(event) || super.dispatchKeyEvent(event);
         KeyEvent newEvent = mGlobalKeyTranslator.translateAlt(event);
-        return super.dispatchKeyEvent(newEvent);
+        return handleNavigation(newEvent) || super.dispatchKeyEvent(newEvent);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    private boolean handleNavigation(KeyEvent event) {
         // Toggle dialog
-        if (!mFragment.isOverlay() && (KeyHelpers.isLeftRightKey(keyCode) || KeyHelpers.isMenuKey(keyCode))) {
-            finish();
+        if (!mFragment.isOverlay() && (KeyHelpers.isLeftRightKey(event.getKeyCode()) || KeyHelpers.isMenuKey(event.getKeyCode()))) {
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                finish();
+            }
+            return true;
         }
 
         // Notification dialog type. Imitate notification behavior.
-        if (mFragment.isOverlay() && (KeyHelpers.isNavigationKey(keyCode) || KeyHelpers.isMenuKey(keyCode))) {
-            finish();
-            PlaybackView view = PlaybackPresenter.instance(this).getView();
-            if (view != null) {
-                view.showControls(true);
+        if (mFragment.isOverlay() && (KeyHelpers.isNavigationKey(event.getKeyCode()) || KeyHelpers.isMenuKey(event.getKeyCode()))) {
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                finish();
+                PlaybackView view = PlaybackPresenter.instance(this).getView();
+                if (view != null) {
+                    view.showControls(true);
+                }
             }
+            return true;
         }
 
-        return super.onKeyDown(keyCode, event);
+        return false;
     }
 
     @Override
