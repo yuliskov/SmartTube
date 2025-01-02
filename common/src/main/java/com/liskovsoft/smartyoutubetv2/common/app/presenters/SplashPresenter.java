@@ -80,21 +80,27 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             return;
         }
 
-        //if (ViewManager.instance(getContext()).isFinished()) {
-        //    Utils.restartTheApp(getContext(), getView().getNewIntent());
-        //    return;
-        //}
-
         applyRunOnceTasks();
         applyRunPerInstanceTasks();
 
         //runRefreshCachePeriodicTask();
-        showAccountSelectionIfNeeded();
 
         checkMasterPassword(() -> applyNewIntent(getView().getNewIntent()));
 
+        showAccountSelectionIfNeeded(); // should be placed after Intent chain
         checkAccountPassword();
         showUpdateNotification();
+    }
+
+    private void applyRunOnceTasks() {
+        if (!sRunOnce) {
+            sRunOnce = true;
+            RxHelper.setupGlobalErrorHandler();
+            initGlobalPrefs();
+            initProxy();
+            initVideoStateService();
+            initStreamReminderService();
+        }
     }
 
     private void applyRunPerInstanceTasks() {
@@ -116,17 +122,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         enableHistoryIfNeeded();
         Utils.updateChannels(getContext());
         GDriveBackupWorker.schedule(getContext());
-    }
-
-    private void applyRunOnceTasks() {
-        if (!sRunOnce) {
-            sRunOnce = true;
-            RxHelper.setupGlobalErrorHandler();
-            initGlobalPrefs();
-            initProxy();
-            initVideoStateService();
-            initStreamReminderService();
-        }
     }
 
     private void showAccountSelectionIfNeeded() {
