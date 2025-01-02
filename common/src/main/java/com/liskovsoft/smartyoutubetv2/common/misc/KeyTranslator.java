@@ -20,7 +20,7 @@ public abstract class KeyTranslator {
     /**
      * NOTE: 'sendKey' won't work with Android 13
      */
-    public final boolean translate(KeyEvent event) {
+    public final boolean translateOld(KeyEvent event) {
         boolean handled = false;
 
         Runnable action = mActionMapping.get(event.getKeyCode());
@@ -43,7 +43,7 @@ public abstract class KeyTranslator {
         return handled;
     }
 
-    public final KeyEvent translateAlt(KeyEvent event) {
+    public final KeyEvent translate(KeyEvent event) {
         Runnable action = mActionMapping.get(event.getKeyCode());
         if (action != null && checkEvent(event)) {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {

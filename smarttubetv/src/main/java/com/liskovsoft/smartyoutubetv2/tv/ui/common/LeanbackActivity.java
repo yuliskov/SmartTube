@@ -57,7 +57,7 @@ public abstract class LeanbackActivity extends MotherActivity {
     public boolean dispatchKeyEvent(KeyEvent event) {
         Log.d(TAG, event);
 
-        KeyEvent newEvent = mGlobalKeyTranslator.translateAlt(event);
+        KeyEvent newEvent = mGlobalKeyTranslator.translate(event);
         return super.dispatchKeyEvent(newEvent);
     }
 
