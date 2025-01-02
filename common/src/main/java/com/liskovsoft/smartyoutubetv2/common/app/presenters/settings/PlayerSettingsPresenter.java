@@ -249,10 +249,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isOculusQuestFixEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.disable_network_error_fixing),
-                getContext().getString(R.string.disable_network_error_fixing_desc),
-                option -> mPlayerTweaksData.disableNetworkErrorFixing(option.isSelected()),
-                mPlayerTweaksData.isNetworkErrorFixingDisabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.disable_network_error_fixing),
+        //        getContext().getString(R.string.disable_network_error_fixing_desc),
+        //        option -> mPlayerTweaksData.disableNetworkErrorFixing(option.isSelected()),
+        //        mPlayerTweaksData.isNetworkErrorFixingDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.prefer_ipv4),
                 getContext().getString(R.string.prefer_ipv4_desc),

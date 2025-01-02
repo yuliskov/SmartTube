@@ -136,12 +136,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             YouTubeServiceManager.instance().applyAntiBotFix(); // bot check error?
             reloadVideo();
         }
-        //} else if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
-        //    MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
-        //    mPlayerTweaksData.enableHighBitrateFormats(false);
-        //    mPlayerTweaksData.setPlayerDataSource(Utils.skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET); // ???
-        //    restartEngine();
-        //}
     }
 
     @Override
@@ -480,11 +474,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
         if (Helpers.startsWithAny(message, "Unable to connect to")) {
             // No internet connection
-            //if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
-            //    mPlayerTweaksData.setPlayerDataSource(getNextEngine()); // ???
-            //} else {
-            //    restartEngine = false;
-            //}
             restartEngine = false;
             resultMsg = shortErrorMsg;
         } else if (error instanceof OutOfMemoryError) {
@@ -498,16 +487,12 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
             if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_MEDIUM || mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
                 mPlayerTweaksData.enableSectionPlaylist(false);
+                mPlayerTweaksData.enableHighBitrateFormats(false);
                 restartEngine = false;
             } else {
                 mPlayerData.setVideoBufferType(PlayerData.BUFFER_MEDIUM);
             }
         } else if (Helpers.containsAny(message, "Exception in CronetUrlRequest")) {
-            //if (mLastVideo != null && !mLastVideo.isLive && !mPlayerTweaksData.isNetworkErrorFixingDisabled()) { // Finished live stream may provoke errors in Cronet
-            //    mPlayerTweaksData.setPlayerDataSource(getNextEngine());
-            //} else {
-            //    restartEngine = false;
-            //}
             if (mLastVideo != null && !mLastVideo.isLive) { // Finished live stream may provoke errors in Cronet
                 mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
             } else {
@@ -532,11 +517,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // "Response code: 403" (url deciphered incorrectly)
             YouTubeServiceManager.instance().applyAntiBotFix();
             restartEngine = false;
-            //if (!mPlayerTweaksData.isNetworkErrorFixingDisabled()) {
-            //    mPlayerTweaksData.setPlayerDataSource(getNextEngine());
-            //} else {
-            //    restartEngine = false;
-            //}
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 500"
             if (mLastVideo != null) {

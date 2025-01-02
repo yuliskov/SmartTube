@@ -99,7 +99,6 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsQuickSkipVideosEnabled;
     private boolean mIsOculusQuestFixEnabled;
     private boolean mIsPlaybackErrorsFixEnabled;
-    private boolean mIsNetworkErrorFixingDisabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -584,15 +583,6 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return MediaServiceData.instance().isFormatEnabled(MediaServiceData.FORMATS_EXTENDED_HLS);
     }
 
-    public void disableNetworkErrorFixing(boolean disable) {
-        mIsNetworkErrorFixingDisabled = disable;
-        persistData();
-    }
-
-    public boolean isNetworkErrorFixingDisabled() {
-        return mIsNetworkErrorFixingDisabled;
-    }
-
     public void preferIPv4Dns(boolean prefer) {
         GlobalPreferences.instance(mPrefs.getContext()).preferIPv4Dns(prefer);
     }
@@ -662,7 +652,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         // mPlayerDataSource = Helpers.parseInt(split, 48, PLAYER_DATA_SOURCE_DEFAULT);
         mIsExtraLongSpeedListEnabled = Helpers.parseBoolean(split, 49, false);
         mIsQuickSkipVideosEnabled = Helpers.parseBoolean(split, 50, false);
-        mIsNetworkErrorFixingDisabled = Helpers.parseBoolean(split, 51, false);
+        //mIsNetworkErrorFixingDisabled = Helpers.parseBoolean(split, 51, false);
         mIsCommentsPlacedLeft = Helpers.parseBoolean(split, 52, false);
         mIsPlaybackErrorsFixEnabled = Helpers.parseBoolean(split, 53, false);
 
@@ -682,7 +672,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
                 mIsUnsafeAudioFormatsEnabled, null, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
-                mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
+                mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, null, mIsCommentsPlacedLeft,
                 mIsPlaybackErrorsFixEnabled
                 ));
     }
