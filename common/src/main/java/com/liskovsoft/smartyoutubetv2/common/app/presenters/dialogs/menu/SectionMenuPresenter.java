@@ -1,6 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
+
+import androidx.annotation.Nullable;
+
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -49,7 +52,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
     }
 
     @Override
-    protected Video getVideo() {
+    protected @Nullable Video getVideo() {
         return mVideo;
     }
 
@@ -191,7 +194,8 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mSection == null || mSection.isDefault() || (!getVideo().hasPlaylist() && !getVideo().hasReloadPageKey() && !getVideo().hasChannel())) {
+        if (mSection == null || mSection.isDefault() || getVideo() == null ||
+                (!getVideo().hasPlaylist() && !getVideo().hasReloadPageKey() && !getVideo().hasChannel())) {
             return;
         }
 
