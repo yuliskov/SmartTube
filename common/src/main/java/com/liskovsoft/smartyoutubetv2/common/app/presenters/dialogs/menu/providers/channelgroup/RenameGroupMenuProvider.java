@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.liskovsoft.mediaserviceinterfaces.yt.data.ChannelGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ItemGroup;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
@@ -39,7 +39,7 @@ public class RenameGroupMenuProvider extends ContextMenuProvider {
                     item.title = newValue;
                     BrowsePresenter.instance(mContext).renameSection(item);
 
-                    ChannelGroup channelGroup = mService.findChannelGroup(item.channelGroupId);
+                    ItemGroup channelGroup = mService.findChannelGroup(item.channelGroupId);
 
                     if (channelGroup != null) {
                         //channelGroup.title = newValue;

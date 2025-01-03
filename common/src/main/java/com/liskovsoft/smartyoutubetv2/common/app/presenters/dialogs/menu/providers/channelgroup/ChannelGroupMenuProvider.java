@@ -7,7 +7,7 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
-import com.liskovsoft.mediaserviceinterfaces.yt.data.ChannelGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ItemGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
@@ -80,7 +80,7 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
     private void showGroupDialog(Video item, VideoMenuCallback callback) {
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(mContext);
 
-        List<ChannelGroup> groups = mService.getChannelGroups();
+        List<ItemGroup> groups = mService.getChannelGroups();
 
         List<OptionItem> options = new ArrayList<>();
 
@@ -103,7 +103,7 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
                             RxHelper.execute(mService.importGroupsObserve(Uri.parse(newValue)), this::pinGroups,
                                     error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
                         } else {
-                            ChannelGroup group = mService.createChannelGroup(newValue, null,
+                            ItemGroup group = mService.createChannelGroup(newValue, null,
                                     Collections.singletonList(mService.createChannel(item.getAuthor(), item.cardImageUrl, item.channelId)));
                             mService.addChannelGroup(group);
                             BrowsePresenter.instance(mContext).pinItem(Video.from(group));
@@ -134,7 +134,7 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
             }
         }, false));
 
-        for (ChannelGroup group : groups) {
+        for (ItemGroup group : groups) {
             options.add(UiOptionItem.from(group.getTitle(), optionItem -> {
                 BrowsePresenter presenter = BrowsePresenter.instance(mContext);
 
@@ -183,8 +183,8 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
         return activity;
     }
 
-    private void pinGroups(@NonNull List<ChannelGroup> newGroups) {
-        for (ChannelGroup group : newGroups) {
+    private void pinGroups(@NonNull List<ItemGroup> newGroups) {
+        for (ItemGroup group : newGroups) {
             BrowsePresenter.instance(mContext).pinItem(Video.from(group));
         }
         MessageHelpers.showMessage(mContext, mContext.getString(R.string.pinned_to_sidebar));

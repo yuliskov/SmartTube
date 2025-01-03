@@ -5,8 +5,8 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.liskovsoft.mediaserviceinterfaces.yt.ChannelGroupService;
-import com.liskovsoft.mediaserviceinterfaces.yt.data.ChannelGroup;
-import com.liskovsoft.mediaserviceinterfaces.yt.data.ChannelGroup.Channel;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ItemGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ItemGroup.Item;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
@@ -39,15 +39,15 @@ public class ChannelGroupServiceWrapper implements ProfileChangeListener {
         return sInstance;
     }
 
-    public List<ChannelGroup> getChannelGroups() {
+    public List<ItemGroup> getChannelGroups() {
         return mService.getChannelGroups();
     }
 
-    public void addChannelGroup(ChannelGroup group) {
+    public void addChannelGroup(ItemGroup group) {
         mService.addChannelGroup(group);
     }
 
-    public void removeChannelGroup(ChannelGroup group) {
+    public void removeChannelGroup(ItemGroup group) {
         mService.removeChannelGroup(group);
     }
 
@@ -59,35 +59,35 @@ public class ChannelGroupServiceWrapper implements ProfileChangeListener {
         return mService.getSubscribedChannelIds();
     }
 
-    public ChannelGroup getSubscribedChannelGroup() {
+    public ItemGroup getSubscribedChannelGroup() {
         return mService.getSubscribedChannelGroup();
     }
 
-    public ChannelGroup findChannelGroup(int channelGroupId) {
+    public ItemGroup findChannelGroup(int channelGroupId) {
         return mService.findChannelGroup(channelGroupId);
     }
 
-    public ChannelGroup findChannelGroup(String title) {
+    public ItemGroup findChannelGroup(String title) {
         return mService.findChannelGroup(title);
     }
 
-    public ChannelGroup createChannelGroup(String title, String iconUrl, List<Channel> channels) {
+    public ItemGroup createChannelGroup(String title, String iconUrl, List<Item> channels) {
         return mService.createChannelGroup(title, iconUrl, channels);
     }
 
-    public Channel createChannel(String title, String iconUrl, String channelId) {
+    public Item createChannel(String title, String iconUrl, String channelId) {
         return mService.createChannel(title, iconUrl, channelId);
     }
 
-    public void renameChannelGroup(ChannelGroup channelGroup, String title) {
+    public void renameChannelGroup(ItemGroup channelGroup, String title) {
         mService.renameChannelGroup(channelGroup, title);
     }
 
-    public Observable<List<ChannelGroup>> importGroupsObserve(Uri uri) {
+    public Observable<List<ItemGroup>> importGroupsObserve(Uri uri) {
         return mService.importGroupsObserve(uri);
     }
 
-    public Observable<List<ChannelGroup>> importGroupsObserve(File file) {
+    public Observable<List<ItemGroup>> importGroupsObserve(File file) {
         return mService.importGroupsObserve(file);
     }
 

@@ -8,8 +8,9 @@ import com.liskovsoft.mediaserviceinterfaces.yt.NotificationsService;
 import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.yt.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
-import com.liskovsoft.mediaserviceinterfaces.yt.data.ChannelGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ItemGroup;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ItemGroup.Item;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.ScreenHelper;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
@@ -1138,10 +1139,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void appendLocalChannels() {
-        ChannelGroup subscriptions = ChannelGroupServiceWrapper.instance(getContext()).getSubscribedChannelGroup();
+        ItemGroup subscriptions = ChannelGroupServiceWrapper.instance(getContext()).getSubscribedChannelGroup();
         if (subscriptions != null) {
             List<Video> channels = new ArrayList<>();
-            for (ChannelGroup.Channel channel : subscriptions.getChannels()) {
+            for (Item channel : subscriptions.getItems()) {
                 channels.add(Video.from(channel));
             }
             VideoGroup group = VideoGroup.from(channels, 0);

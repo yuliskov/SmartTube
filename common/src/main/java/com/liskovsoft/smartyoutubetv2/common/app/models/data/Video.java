@@ -6,12 +6,13 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.liskovsoft.mediaserviceinterfaces.yt.data.ChannelGroup;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ItemGroup;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.DislikeData;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemFormatInfo;
+import com.liskovsoft.mediaserviceinterfaces.yt.data.ItemGroup.Item;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.NotificationState;
 import com.liskovsoft.mediaserviceinterfaces.yt.data.PlaylistInfo;
@@ -208,7 +209,7 @@ public final class Video {
         return video;
     }
 
-    public static Video from(ChannelGroup group) {
+    public static Video from(ItemGroup group) {
         Video video = new Video();
         video.title = group.getTitle();
         video.cardImageUrl = group.getIconUrl();
@@ -216,7 +217,7 @@ public final class Video {
         return video;
     }
 
-    public static Video from(ChannelGroup.Channel channel) {
+    public static Video from(Item channel) {
         Video video = new Video();
         video.title = channel.getTitle();
         video.cardImageUrl = channel.getIconUrl();
