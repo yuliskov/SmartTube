@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Build.VERSION;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
@@ -47,15 +48,15 @@ public abstract class Style {
     }
 
     protected final int getSystemAccentColor() {
-        return getSystemColor(android.R.attr.colorAccent);
+        return getSystemColor(VERSION.SDK_INT >= 21 ? android.R.attr.colorAccent : R.attr.colorAccent);
     }
 
     protected final int getSystemPrimaryColor() {
-        return getSystemColor(android.R.attr.colorPrimary);
+        return getSystemColor(VERSION.SDK_INT >= 21 ? android.R.attr.colorPrimary : R.attr.colorPrimary);
     }
 
     protected final int getSystemPrimaryDarkColor() {
-        return getSystemColor(android.R.attr.colorPrimaryDark);
+        return getSystemColor(VERSION.SDK_INT >= 21 ? android.R.attr.colorPrimaryDark : R.attr.colorPrimaryDark);
     }
 
     protected final int getSystemPrimaryTextColor() {

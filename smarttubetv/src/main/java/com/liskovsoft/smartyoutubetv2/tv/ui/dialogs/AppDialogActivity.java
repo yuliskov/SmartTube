@@ -66,6 +66,10 @@ public class AppDialogActivity extends MotherActivity {
     }
     
     private boolean handleNavigation(KeyEvent event) {
+        if (event == null) {
+            return false;
+        }
+
         // Toggle dialog
         if (!mFragment.isOverlay() && (KeyHelpers.isLeftRightKey(event.getKeyCode()) || KeyHelpers.isMenuKey(event.getKeyCode()))) {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
