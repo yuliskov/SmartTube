@@ -162,7 +162,7 @@ public class CommentsController extends BasePlayerController {
         AppDialogPresenter appDialogPresenter = AppDialogPresenter.instance(getContext());
 
         appDialogPresenter.appendCommentsCategory(title, UiOptionItem.from(title, receiver));
-        appDialogPresenter.enableTransparent(true);
+        //appDialogPresenter.enableTransparent(true);
         appDialogPresenter.showDialog();
     }
 }

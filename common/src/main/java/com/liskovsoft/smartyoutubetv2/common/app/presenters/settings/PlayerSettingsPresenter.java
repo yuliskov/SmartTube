@@ -236,10 +236,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from("Playback buffering fix",
                 option -> {
-                    mPlayerTweaksData.enablePlaybackErrorsFix(option.isSelected());
+                    mPlayerTweaksData.enablePersistentAntiBotFix(option.isSelected());
                     mRestartApp = true;
                 },
-                mPlayerTweaksData.isPlaybackErrorsFixEnabled()));
+                mPlayerTweaksData.isPersistentAntiBotFixEnabled()));
 
         // Oculus Quest fix: back button not closing the activity
         options.add(UiOptionItem.from("Oculus Quest fix",

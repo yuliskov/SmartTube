@@ -134,6 +134,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         } else {
             //MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
             YouTubeServiceManager.instance().applyAntiBotFix(); // bot check error?
+            mPlayerTweaksData.enablePersistentAntiBotFix(true);
             reloadVideo();
         }
     }
@@ -348,6 +349,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             bgImageUrl = mLastVideo.getBackgroundUrl();
             if (mStateService.isHistoryBroken()) { // temp fix (not work as expected)
                 YouTubeServiceManager.instance().applyAntiBotFix(); // bot check error?
+                mPlayerTweaksData.enablePersistentAntiBotFix(true);
                 //scheduleReloadVideoTimer(5_000);
                 scheduleRebootAppTimer(5_000);
             } else {
@@ -507,6 +509,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             restartEngine = false;
         } else if (Helpers.startsWithAny(message, "Response code: 429", "Response code: 400")) {
             YouTubeServiceManager.instance().applyAntiBotFix();
+            mPlayerTweaksData.enablePersistentAntiBotFix(true);
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
             // NOTE: Fixing too many requests or network issues
@@ -516,6 +519,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
             // "Response code: 403" (url deciphered incorrectly)
             YouTubeServiceManager.instance().applyAntiBotFix();
+            mPlayerTweaksData.enablePersistentAntiBotFix(true);
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 500"

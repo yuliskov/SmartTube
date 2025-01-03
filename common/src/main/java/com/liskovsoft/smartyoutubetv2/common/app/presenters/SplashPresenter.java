@@ -116,7 +116,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private void runBackgroundTasks() {
         YouTubeServiceManager.instance().refreshCacheIfNeeded(); // warm up player engine
-        if (PlayerTweaksData.instance(getContext()).isPlaybackErrorsFixEnabled()) {
+        if (PlayerTweaksData.instance(getContext()).isPersistentAntiBotFixEnabled()) {
             YouTubeServiceManager.instance().applyAntiBotFix();
         }
         enableHistoryIfNeeded();
