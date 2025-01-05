@@ -27,6 +27,7 @@ import io.reactivex.disposables.Disposable;
 
 public class RemoteController extends BasePlayerController implements OnDataChange {
     private static final String TAG = RemoteController.class.getSimpleName();
+    private static final boolean NORMALIZE = false;
     private final RemoteControlService mRemoteControlService;
     private final RemoteControlData mRemoteControlData;
     private Disposable mListeningAction;
@@ -323,10 +324,10 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                 break;
             case Command.TYPE_VOLUME:
                 //Utils.setGlobalVolume(getActivity(), command.getVolume());
-                Utils.setVolume(getContext(), getPlayer(), command.getVolume(), true);
+                Utils.setVolume(getContext(), getPlayer(), command.getVolume(), NORMALIZE);
 
                 //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-                postVolumeChange(Utils.getVolume(getContext(), getPlayer(), true)); // Just in case volume cannot be changed (e.g. Fire TV stick)
+                postVolumeChange(Utils.getVolume(getContext(), getPlayer(), NORMALIZE)); // Just in case volume cannot be changed (e.g. Fire TV stick)
                 break;
             case Command.TYPE_STOP:
                 // Close player
@@ -414,7 +415,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     @Override
     public boolean onKeyDown(int keyCode) {
         //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-        postVolumeChange(Utils.getVolume(getContext(), getPlayer(), true));
+        postVolumeChange(Utils.getVolume(getContext(), getPlayer(), NORMALIZE));
 
         return false;
     }
