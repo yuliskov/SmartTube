@@ -80,6 +80,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
         }
 
         postStartPlaying(item, getPlayer().getPlayWhenReady());
+        postVolumeChange(Utils.getVolume(getContext(), getPlayer(), NORMALIZE));
         mVideo = item;
     }
 

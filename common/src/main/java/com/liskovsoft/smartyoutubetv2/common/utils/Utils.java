@@ -288,7 +288,8 @@ public class Utils {
     }
 
     private static boolean isGlobalVolumeFixed(Context context) {
-        return getGlobalVolume(context, false) == 100;
+        //return getGlobalVolume(context, false) == 100;
+        return Helpers.isAmazonFireTVDevice();
     }
 
     public static int getVolume(Context context, PlayerManager player) {
