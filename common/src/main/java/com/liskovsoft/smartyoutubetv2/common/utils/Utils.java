@@ -22,6 +22,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
+import android.database.ContentObserver;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -367,6 +368,27 @@ public class Utils {
             // Because global value may not be supported (see FireTV Stick).
             MessageHelpers.showMessage(context, context.getString(R.string.volume, (int) (player.getVolume() * 100)));
         }
+    }
+
+    public static void showSystemVolumeUI(Context context) {
+        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager != null) {
+            // Show the system volume bar without changing the volume
+            audioManager.adjustStreamVolume(
+                    AudioManager.STREAM_MUSIC, // Target the music stream
+                    AudioManager.ADJUST_SAME, // No actual adjustment
+                    AudioManager.FLAG_SHOW_UI // This flag displays the volume UI
+            );
+        }
+    }
+
+    public static void registerAudioObserver(Context context, ContentObserver observer) {
+        context.getApplicationContext().getContentResolver()
+                .registerContentObserver(android.provider.Settings.System.CONTENT_URI, true, observer);
+    }
+
+    public static void unregisterAudioObserver(Context context, ContentObserver observer) {
+        context.getApplicationContext().getContentResolver().unregisterContentObserver(observer);
     }
 
     /**
