@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
 
 public class RemoteControlData extends DataChangeBase {
@@ -16,6 +17,7 @@ public class RemoteControlData extends DataChangeBase {
     private boolean mIsFinishOnDisconnectEnabled;
     private boolean mIsConnectMessagesEnabled;
     private boolean mIsRemoteHistoryDisabled;
+    private Video mLastVideo;
 
     private RemoteControlData(Context context) {
         mContext = context;
@@ -68,6 +70,15 @@ public class RemoteControlData extends DataChangeBase {
         return mIsRemoteHistoryDisabled;
     }
 
+    public Video getLastVideo() {
+        return mLastVideo;
+    }
+
+    public void setLastVideo(Video video) {
+        mLastVideo = video;
+        persistState();
+    }
+
     private void restoreState() {
         String data = mAppPrefs.getData(DEVICE_LINK_DATA);
 
@@ -79,11 +90,12 @@ public class RemoteControlData extends DataChangeBase {
         mIsFinishOnDisconnectEnabled = Helpers.parseBoolean(split, 3, false);
         mIsConnectMessagesEnabled = Helpers.parseBoolean(split, 4, false);
         mIsRemoteHistoryDisabled = Helpers.parseBoolean(split, 5, false);
+        mLastVideo = Helpers.parseItem(split, 6, Video::fromString);
     }
 
     protected void persistState() {
         mAppPrefs.setData(DEVICE_LINK_DATA, Helpers.mergeData(
-                null, null, mIsDeviceLinkEnabled, mIsFinishOnDisconnectEnabled, mIsConnectMessagesEnabled, mIsRemoteHistoryDisabled
+                null, null, mIsDeviceLinkEnabled, mIsFinishOnDisconnectEnabled, mIsConnectMessagesEnabled, mIsRemoteHistoryDisabled, mLastVideo
         ));
 
         super.persistState();
