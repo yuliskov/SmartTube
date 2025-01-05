@@ -83,7 +83,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
 
         postStartPlaying(item, getPlayer().getPlayWhenReady());
         mVideo = item;
-        if (RxHelper.isAnyActionRunning(mListeningAction)) {
+        if (mConnected) {
             mRemoteControlData.setLastVideo(mVideo);
         }
     }
