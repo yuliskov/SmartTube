@@ -111,10 +111,10 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
                     if (ChatItemMessage.shouldSplit(commentItem)) {
                         List<ChatItemMessage> split = ChatItemMessage.fromSplit(commentItem);
                         for (ChatItemMessage splitItem : split) {
-                            renderMessage(adapter, splitItem);
+                            appendMessage(adapter, splitItem);
                         }
                     } else {
-                        renderMessage(adapter, ChatItemMessage.from(commentItem));
+                        appendMessage(adapter, ChatItemMessage.from(commentItem));
                     }
                 }
                 if (adapter.getMessagesCount() == 0) { // No comments under the video
@@ -139,6 +139,9 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
                 mCurrentGroup = ((CommentsBackup) backup).currentGroup;
                 adapter.addToEnd(mBackupMessages, false);
                 adapter.setFocusedMessage(mFocusedMessage);
+                if (adapter.getMessagesCount() == 0) { // No comments under the video
+                    adapter.setLoadingMessage(mCommentsReceiver.getErrorMessage());
+                }
                 adapter.scrollToPosition(adapter.getMessagePosition(mFocusedMessage));
             }
         });
@@ -164,7 +167,7 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
         return view;
     }
 
-    private void renderMessage(MessagesListAdapter<ChatItemMessage> adapter, ChatItemMessage message) {
+    private void appendMessage(MessagesListAdapter<ChatItemMessage> adapter, ChatItemMessage message) {
         adapter.addToStart(message, false);
 
         if (mFocusedMessage == null && IMessage.checkMessage(message)) {
@@ -186,7 +189,7 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mCommentsReceiver != null) {
+        if (mCommentsReceiver != null && mFocusedMessage != null) {
             mCommentsReceiver.onFinish(new CommentsBackup(mBackupMessages, mFocusedMessage, mCurrentGroup));
         }
     }
