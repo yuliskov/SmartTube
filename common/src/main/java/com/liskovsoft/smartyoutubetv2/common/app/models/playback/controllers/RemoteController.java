@@ -128,7 +128,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     private void postStartPlaying(@Nullable Video item, boolean isPlaying) {
-        if (!mRemoteControlData.isDeviceLinkEnabled()) {
+        if (!mRemoteControlData.isDeviceLinkEnabled() || !isConnectedBefore()) {
             return;
         }
 
@@ -146,7 +146,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     private void postStartPlaying(String videoId, long positionMs, long durationMs, boolean isPlaying) {
-        if (!mRemoteControlData.isDeviceLinkEnabled()) {
+        if (!mRemoteControlData.isDeviceLinkEnabled() || !isConnectedBefore()) {
             return;
         }
 
@@ -158,7 +158,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     private void postState(long positionMs, long durationMs, boolean isPlaying) {
-        if (!mRemoteControlData.isDeviceLinkEnabled()) {
+        if (!mRemoteControlData.isDeviceLinkEnabled() || !isConnectedBefore()) {
             return;
         }
 
@@ -170,7 +170,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     private void postVolumeChange(int volume) {
-        if (!mRemoteControlData.isDeviceLinkEnabled()) {
+        if (!mRemoteControlData.isDeviceLinkEnabled() || !isConnectedBefore()) {
             return;
         }
 
@@ -376,7 +376,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                 break;
             case Command.TYPE_IDLE:
                 // Already connected
-                if (mConnected || mRemoteControlData.isConnectedBefore()) {
+                if (isConnectedBefore()) {
                     registerVolumeObserver();
                 }
                 break;
@@ -477,5 +477,9 @@ public class RemoteController extends BasePlayerController implements OnDataChan
             Utils.unregisterAudioObserver(getContext(), mVolumeObserver);
             mVolumeObserver = null;
         }
+    }
+
+    private boolean isConnectedBefore() {
+        return mConnected || mRemoteControlData.isConnectedBefore();
     }
 }
