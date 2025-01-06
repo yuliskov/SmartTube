@@ -297,6 +297,7 @@
     <string name="upload_date_last_hour">Son bir saat</string>
     <string name="focus_on_search_results">Arama sonuçlarına otomatik odaklan</string>
     <string name="context_menu">İçerik menüsü</string>
+    <string name="context_menu_sorting">İçerik menüsü sıralama</string>
     <string name="add_remove_from_recent_playlist">Son oynatma listesine Ekle/Kaldır</string>
     <string name="hide_settings_section">Ayarlar bölümünü gizle (tehlikeli!)</string>
     <string name="volume">Ses %s%%</string>

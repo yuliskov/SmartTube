@@ -297,6 +297,7 @@
     <string name="upload_date_last_hour">Последний час</string>
     <string name="focus_on_search_results">Автофокусировка на результатах поиска</string>
     <string name="context_menu">Контекстное меню</string>
+    <string name="context_menu_sorting">Сортировка контекстного меню</string>
     <string name="add_remove_from_recent_playlist">Добавить/Удалить из недавнего плейлиста</string>
     <string name="hide_settings_section">Прятать раздел Настройки (опасно!)</string>
     <string name="volume">Громкость %s%%</string>

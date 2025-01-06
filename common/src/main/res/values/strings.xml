@@ -297,6 +297,7 @@
     <string name="upload_date_last_hour">Last hour</string>
     <string name="focus_on_search_results">Autofocus on search results</string>
     <string name="context_menu">Context menu</string>
+    <string name="context_menu_sorting">Context menu sorting</string>
     <string name="add_remove_from_recent_playlist">Add/Remove from recent playlist</string>
     <string name="hide_settings_section">Hide Settings section (dangerous!)</string>
     <string name="volume">Volume %s%%</string>

@@ -66,6 +66,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBootToSection(settingsPresenter);
         appendEnabledSections(settingsPresenter);
         appendContextMenuItemsCategory(settingsPresenter);
+        //appendContextMenuSortingCategory(settingsPresenter);
         //appendTopButtonsCategory(settingsPresenter);
         appendHideUnwantedContent(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
@@ -197,6 +198,25 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.context_menu), options);
     }
 
+    private void appendContextMenuSortingCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        Map<Long, Integer> menuNames = getMenuNames();
+
+        for (Long menuItem : mMainUIData.getMenuItemsOrdered()) {
+            Integer nameResId = menuNames.get(menuItem);
+
+            if (nameResId == null || !mMainUIData.isMenuItemEnabled(menuItem)) {
+                continue;
+            }
+
+            options.add(UiOptionItem.from(getContext().getString(nameResId), optionItem ->
+                    showMenuItemOrderDialog(menuItem), false));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.context_menu_sorting), options);
+    }
+
     private void showMenuItemOrderDialog(Long menuItem) {
         AppDialogPresenter dialog = AppDialogPresenter.instance(getContext());
 
@@ -213,26 +233,24 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<Long> menuItemsOrdered = mMainUIData.getMenuItemsOrdered();
         int size = menuItemsOrdered.size();
         int currentIndex = mMainUIData.getMenuItemIndex(menuItem);
+        int counter = 0;
 
         for (int i = 0; i < size; i++) {
-            Integer nameResId = menuNames.get(menuItemsOrdered.get(i));
+            Long item = menuItemsOrdered.get(i);
+            Integer nameResId = menuNames.get(item);
 
-            if (nameResId == null) {
+            if (nameResId == null || !mMainUIData.isMenuItemEnabled(item)) {
                 continue;
             }
 
             final int index = i;
-            options.add(UiOptionItem.from((i + 1) + " " + getContext().getString(nameResId), optionItem -> {
+            options.add(UiOptionItem.from((counter + 1) + " " + getContext().getString(nameResId), optionItem -> {
                 if (optionItem.isSelected()) {
                     mMainUIData.setMenuItemIndex(index, menuItem);
                     dialog.goBack();
-
-                    //AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-                    //settingsPresenter.clearBackstack();
-                    //appendContextMenuItemsCategory(settingsPresenter);
-                    //settingsPresenter.showDialog();
                 }
             }, currentIndex == i));
+            counter++;
         }
 
         String itemName = getContext().getString(currentNameResId);
@@ -240,25 +258,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         dialog.showDialog();
     }
-
-    //private void appendTopButtonsCategory(AppDialogPresenter settingsPresenter) {
-    //    List<OptionItem> options = new ArrayList<>();
-    //
-    //    for (int[] pair : new int[][] {
-    //            {R.string.settings_search, MainUIData.TOP_BUTTON_SEARCH},
-    //            {R.string.settings_language_country, MainUIData.TOP_BUTTON_CHANGE_LANGUAGE},
-    //            {R.string.settings_accounts, MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS}}) {
-    //        options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
-    //            if (optionItem.isSelected()) {
-    //                mMainUIData.enableTopButton(pair[1]);
-    //            } else {
-    //                mMainUIData.disableTopButton(pair[1]);
-    //            }
-    //        }, mMainUIData.isTopButtonEnabled(pair[1])));
-    //    }
-    //
-    //    settingsPresenter.appendCheckedCategory(getContext().getString(R.string.various_buttons), options);
-    //}
 
     private void appendBootToSection(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
