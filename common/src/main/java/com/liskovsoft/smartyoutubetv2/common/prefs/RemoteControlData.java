@@ -18,6 +18,7 @@ public class RemoteControlData extends DataChangeBase {
     private boolean mIsConnectMessagesEnabled;
     private boolean mIsRemoteHistoryDisabled;
     private Video mLastVideo;
+    private boolean mIsConnectedBefore;
 
     private RemoteControlData(Context context) {
         mContext = context;
@@ -79,6 +80,15 @@ public class RemoteControlData extends DataChangeBase {
         persistState();
     }
 
+    public void setConnectedBefore(boolean connected) {
+        mIsConnectedBefore = connected;
+        persistState();
+    }
+
+    public boolean isConnectedBefore() {
+        return mIsConnectedBefore;
+    }
+
     private void restoreState() {
         String data = mAppPrefs.getData(DEVICE_LINK_DATA);
 
@@ -91,11 +101,13 @@ public class RemoteControlData extends DataChangeBase {
         mIsConnectMessagesEnabled = Helpers.parseBoolean(split, 4, false);
         mIsRemoteHistoryDisabled = Helpers.parseBoolean(split, 5, false);
         mLastVideo = Helpers.parseItem(split, 6, Video::fromString);
+        mIsConnectedBefore = Helpers.parseBoolean(split, 7, false);
     }
 
     protected void persistState() {
         mAppPrefs.setData(DEVICE_LINK_DATA, Helpers.mergeData(
-                null, null, mIsDeviceLinkEnabled, mIsFinishOnDisconnectEnabled, mIsConnectMessagesEnabled, mIsRemoteHistoryDisabled, mLastVideo
+                null, null, mIsDeviceLinkEnabled, mIsFinishOnDisconnectEnabled, mIsConnectMessagesEnabled,
+                mIsRemoteHistoryDisabled, mLastVideo, mIsConnectedBefore
         ));
 
         super.persistState();

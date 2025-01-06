@@ -41,6 +41,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     private Disposable mActionDown;
     private Disposable mActionUp;
     private ContentObserver mVolumeObserver;
+    private long mVolumeSelfChangeMs;
 
     public RemoteController(Context context) {
         // Start receiving a commands as early as possible
@@ -331,6 +332,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                 break;
             case Command.TYPE_VOLUME:
                 Utils.setVolume(getContext(), getPlayer(), command.getVolume(), NORMALIZE);
+                mVolumeSelfChangeMs = System.currentTimeMillis();
 
                 //postVolumeChange(Utils.getVolume(getContext(), getPlayer(), NORMALIZE)); // Just in case volume cannot be changed (e.g. Fire TV stick)
                 break;
@@ -356,6 +358,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                 //    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
                 //}
                 registerVolumeObserver();
+                mRemoteControlData.setConnectedBefore(true);
                 break;
             case Command.TYPE_DISCONNECTED:
                 // NOTE: there are possible false calls when mobile client unloaded from the memory.
@@ -368,10 +371,13 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                 //    MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.device_disconnected, command.getDeviceName()));
                 //}
                 unregisterVolumeObserver();
+                mRemoteControlData.setConnectedBefore(false);
                 break;
             case Command.TYPE_IDLE:
                 // Already connected
-                registerVolumeObserver();
+                if (mConnected || mRemoteControlData.isConnectedBefore()) {
+                    registerVolumeObserver();
+                }
                 break;
             case Command.TYPE_DPAD:
                 int key = KeyEvent.KEYCODE_UNKNOWN;
@@ -455,7 +461,9 @@ public class RemoteController extends BasePlayerController implements OnDataChan
         mVolumeObserver = new ContentObserver(Utils.sHandler) {
             @Override
             public void onChange(boolean selfChange) {
-                postVolumeChange(Utils.getVolume(getContext(), getPlayer(), NORMALIZE));
+                if (System.currentTimeMillis() - mVolumeSelfChangeMs > 1_000) {
+                    postVolumeChange(Utils.getVolume(getContext(), getPlayer(), NORMALIZE));
+                }
             }
         };
         Utils.registerAudioObserver(getContext(), mVolumeObserver);
