@@ -121,8 +121,8 @@ public class RemoteController extends BasePlayerController implements OnDataChan
 
     @Override
     public void onFinish() {
-        // User action detected. Stop remote session.
-        //mConnected = false;
+        // User action detected. Hide remote playlist.
+        mConnected = false;
         mVideo = null;
     }
 
