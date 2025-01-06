@@ -291,7 +291,8 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                     //postStartPlaying(getController().getVideo(), true);
                     postPlay(true);
                 } else {
-                    openNewVideo(mVideo);
+                    // Already connected
+                    openNewVideo(mVideo != null ? mVideo : mRemoteControlData.getLastVideo());
                 }
                 break;
             case Command.TYPE_PAUSE:
