@@ -122,7 +122,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     @Override
     public void onFinish() {
         // User action detected. Stop remote session.
-        mConnected = false;
+        //mConnected = false;
         mVideo = null;
     }
 
@@ -168,6 +168,18 @@ public class RemoteController extends BasePlayerController implements OnDataChan
         );
     }
 
+    private void postVolumeChange(int volume) {
+        if (!mRemoteControlData.isDeviceLinkEnabled()) {
+            return;
+        }
+
+        RxHelper.disposeActions(mPostVolumeAction);
+
+        mPostVolumeAction = RxHelper.execute(
+                mRemoteControlService.postVolumeChangeObserve(volume)
+        );
+    }
+
     private void postPlay(boolean isPlaying) {
         if (getPlayer() == null) {
             return;
@@ -182,18 +194,6 @@ public class RemoteController extends BasePlayerController implements OnDataChan
 
     private void postIdle() {
         postState(-1, -1, false);
-    }
-
-    private void postVolumeChange(int volume) {
-        if (!mRemoteControlData.isDeviceLinkEnabled()) {
-            return;
-        }
-
-        RxHelper.disposeActions(mPostVolumeAction);
-
-        mPostVolumeAction = RxHelper.execute(
-                mRemoteControlService.postVolumeChangeObserve(volume)
-        );
     }
 
     private void tryListening() {
@@ -330,11 +330,9 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                 }
                 break;
             case Command.TYPE_VOLUME:
-                //Utils.setGlobalVolume(getActivity(), command.getVolume());
                 Utils.setVolume(getContext(), getPlayer(), command.getVolume(), NORMALIZE);
 
-                //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-                postVolumeChange(Utils.getVolume(getContext(), getPlayer(), NORMALIZE)); // Just in case volume cannot be changed (e.g. Fire TV stick)
+                //postVolumeChange(Utils.getVolume(getContext(), getPlayer(), NORMALIZE)); // Just in case volume cannot be changed (e.g. Fire TV stick)
                 break;
             case Command.TYPE_STOP:
                 // Close player
