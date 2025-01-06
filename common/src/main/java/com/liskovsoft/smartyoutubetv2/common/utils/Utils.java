@@ -288,6 +288,9 @@ public class Utils {
         return 100;
     }
 
+    /**
+     * Global volume may not be supported (see FireTV Stick)
+     */
     private static boolean isGlobalVolumeFixed(Context context) {
         //return getGlobalVolume(context, false) == 100;
         return Helpers.isAmazonFireTVDevice();
@@ -302,7 +305,14 @@ public class Utils {
      */
     public static int getVolume(Context context, PlayerManager player, boolean normalize) {
         if (context != null) {
-            return Utils.isGlobalVolumeFixed(context) ? (int)(player.getVolume() * 100) : Utils.getGlobalVolume(context, normalize);
+            if (Utils.isGlobalVolumeFixed(context)) {
+                if (player == null) {
+                    return -1;
+                }
+                return (int)(player.getVolume() * 100);
+            } else {
+                return Utils.getGlobalVolume(context, normalize);
+            }
         }
 
         return 100;
@@ -319,13 +329,15 @@ public class Utils {
     public static void setVolume(Context context, PlayerManager player, int volume, boolean normalize) {
         if (context != null) {
             if (Utils.isGlobalVolumeFixed(context)) {
+                if (player == null) {
+                    return;
+                }
                 player.setVolume(volume / 100f);
+                MessageHelpers.showMessage(context, context.getString(R.string.volume, getVolume(context, player, normalize)));
             } else {
                 Utils.setGlobalVolume(context, volume, normalize);
+                showSystemVolumeUI(context);
             }
-            // Check that volume is set.
-            // Because global value may not be supported (see FireTV Stick).
-            MessageHelpers.showMessage(context, context.getString(R.string.volume, getVolume(context, player, normalize)));
         }
     }
 
