@@ -126,7 +126,7 @@ public class ContentBlockController extends BasePlayerController {
     @Override
     public void onButtonClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_content_block) {
-            List<SponsorSegment> foundSegments = findMatchedSegments(getPlayer().getPositionMs(), mOriginalSegments);
+            List<SponsorSegment> foundSegments = findMatchedSegments(getPlayer().getPositionMs(), mOriginalSegments, true);
 
             if (foundSegments != null) {
                 SponsorSegment lastSegment = foundSegments.get(foundSegments.size() - 1);
@@ -216,7 +216,7 @@ public class ContentBlockController extends BasePlayerController {
 
         long positionMs = getPlayer().getPositionMs();
 
-        List<SponsorSegment> foundSegments = findMatchedSegments(positionMs, mActiveSegments);
+        List<SponsorSegment> foundSegments = findMatchedSegments(positionMs, mActiveSegments, false);
 
         applyActions(foundSegments);
 
@@ -226,11 +226,16 @@ public class ContentBlockController extends BasePlayerController {
         }
     }
 
-    private boolean isPositionInsideSegment(long positionMs, SponsorSegment segment) {
+    private boolean isPositionInsideSegment(long positionMs, SponsorSegment segment, boolean fullMatch) {
         // NOTE: in case of using Player.setSeekParameters (inaccurate seeking) increase sponsor segment window
         // int seekShift = 1_000;
         // return positionMs >= (segment.getStartMs() - seekShift) && positionMs <= (segment.getEndMs() + seekShift);
-        return positionMs >= segment.getStartMs() && positionMs <= Math.min(segment.getStartMs() + 1_000, segment.getEndMs());
+
+        if (fullMatch) {
+            return positionMs >= segment.getStartMs() && positionMs <= segment.getEndMs();
+        } else {
+            return positionMs >= segment.getStartMs() && positionMs <= Math.min(segment.getStartMs() + 1_000, segment.getEndMs());
+        }
     }
 
     private void simpleSkip(long skipPosMs) {
@@ -320,7 +325,10 @@ public class ContentBlockController extends BasePlayerController {
         getPlayer().setPositionMs(Math.min(positionMs, durationMs));
     }
 
-    private List<SponsorSegment> findMatchedSegments(long positionMs, List<SponsorSegment> segments) {
+    /**
+     * @param fullMatch Match only the beginning or the full segment length
+     */
+    private List<SponsorSegment> findMatchedSegments(long positionMs, List<SponsorSegment> segments, boolean fullMatch) {
         if (segments == null) {
             return null;
         }
@@ -332,7 +340,7 @@ public class ContentBlockController extends BasePlayerController {
             boolean isSkipAction = action == ContentBlockData.ACTION_SKIP_ONLY ||
                     action == ContentBlockData.ACTION_SKIP_WITH_TOAST;
             if (foundSegment == null) {
-                if (isPositionInsideSegment(positionMs, segment)) {
+                if (isPositionInsideSegment(positionMs, segment, fullMatch)) {
                     foundSegment = new ArrayList<>();
                     foundSegment.add(segment);
 
@@ -343,7 +351,7 @@ public class ContentBlockController extends BasePlayerController {
                 }
             } else {
                 SponsorSegment lastSegment = foundSegment.get(foundSegment.size() - 1);
-                if (isSkipAction && isPositionInsideSegment(lastSegment.getEndMs() + 3_000, segment)) {
+                if (isSkipAction && isPositionInsideSegment(lastSegment.getEndMs() + 3_000, segment, fullMatch)) {
                     foundSegment.add(segment);
                 }
             }
