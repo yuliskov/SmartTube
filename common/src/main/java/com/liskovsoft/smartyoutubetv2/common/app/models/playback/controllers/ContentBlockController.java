@@ -139,7 +139,11 @@ public class ContentBlockController extends BasePlayerController {
     @Override
     public void onButtonLongClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_content_block) {
-            ContentBlockSettingsPresenter.instance(getContext()).show(() -> onVideoLoaded(getPlayer().getVideo()));
+            ContentBlockSettingsPresenter.instance(getContext()).show(() -> {
+                if (getPlayer() != null) {
+                    onVideoLoaded(getPlayer().getVideo());
+                }
+            });
         }
     }
 

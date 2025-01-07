@@ -225,13 +225,17 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
 
         if (GeneralData.instance(getContext()).isGlobalClockEnabled()) {
             mGlobalClock = (DateTimeView) findViewById(R.id.global_time);
-            mGlobalClock.showDate(false);
-            mGlobalClock.setVisibility(View.VISIBLE);
+            if (mGlobalClock != null) {
+                mGlobalClock.showDate(false);
+                mGlobalClock.setVisibility(View.VISIBLE);
+            }
 
             mGlobalDate = (DateTimeView) findViewById(R.id.global_date);
-            mGlobalDate.showTime(false);
-            mGlobalDate.showDate(true);
-            mGlobalDate.setVisibility(View.VISIBLE);
+            if (mGlobalDate != null) {
+                mGlobalDate.showTime(false);
+                mGlobalDate.showDate(true);
+                mGlobalDate.setVisibility(View.VISIBLE);
+            }
         }
     }
 
