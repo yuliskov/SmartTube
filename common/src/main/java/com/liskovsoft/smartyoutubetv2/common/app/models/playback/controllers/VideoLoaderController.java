@@ -489,7 +489,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
             if (mPlayerData.getVideoBufferType() == PlayerData.BUFFER_MEDIUM || mPlayerData.getVideoBufferType() == PlayerData.BUFFER_LOW) {
                 mPlayerTweaksData.enableSectionPlaylist(false);
-                mPlayerTweaksData.enableHighBitrateFormats(false);
+                //mPlayerTweaksData.enableHighBitrateFormats(false);
                 restartEngine = false;
             } else {
                 mPlayerData.setVideoBufferType(PlayerData.BUFFER_MEDIUM);
