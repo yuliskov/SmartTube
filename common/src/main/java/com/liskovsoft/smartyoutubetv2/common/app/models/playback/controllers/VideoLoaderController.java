@@ -350,9 +350,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             if (mStateService.isHistoryBroken()) { // temp fix (not work as expected)
                 YouTubeServiceManager.instance().applyAntiBotFix(); // bot check error?
                 mPlayerTweaksData.enablePersistentAntiBotFix(true);
-                //scheduleReloadVideoTimer(5_000);
                 scheduleRebootAppTimer(5_000);
             } else {
+                YouTubeServiceManager.instance().applyAntiBotFix(); // bot check error?
                 scheduleNextVideoTimer(5_000);
             }
         } else if (formatInfo.containsDashVideoFormats() && acceptDashVideoFormats(formatInfo)) {
