@@ -1359,8 +1359,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void setSeekPreviewTitle(String title) {
         if (mPlayerGlue != null) {
-            mPlayerGlue.setSeekPreviewTitle(title);
-            mPlayerGlue.setBody(title);
+            mPlayerGlue.setSeekPreviewTitle(title); // seeking ui
+            // NOTE: setBody re-renders ui on change
+            //mPlayerGlue.setBody(title); // full ui
         }
     }
 

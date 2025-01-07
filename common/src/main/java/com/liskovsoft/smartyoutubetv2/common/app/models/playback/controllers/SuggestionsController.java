@@ -120,8 +120,7 @@ public class SuggestionsController extends BasePlayerController {
     @Override
     public void onControlsShown(boolean shown) {
         if (shown) {
-            //focusCurrentChapter();
-            Utils.postDelayed(this::focusCurrentChapter, 0); // fix ui jump when shown
+            focusCurrentChapter();
         } else {
             startChapterNotificationServiceIfNeeded();
         }

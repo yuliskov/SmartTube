@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import androidx.leanback.media.PlayerAdapter;
@@ -24,7 +25,8 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         extends PlaybackTransportControlGlue<T> implements TopEdgeFocusListener, PlayerView {
     private String mQualityInfo;
     private Video mVideo;
-    private WeakReference<PlaybackTransportRowPresenter.ViewHolder> mViewHolder;
+    private WeakReference<PlaybackTransportRowPresenter.ViewHolder> mTransportViewHolder;
+    private WeakReference<AbstractDetailsDescriptionPresenter.ViewHolder> mDescriptionViewHolder;
 
     /**
      * Constructor for the glue.
@@ -42,6 +44,8 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                 new AbstractDetailsDescriptionPresenter() {
                     @Override
                     protected void onBindDescription(ViewHolder viewHolder, Object obj) {
+                        mDescriptionViewHolder = new WeakReference<>(viewHolder);
+
                         fixClippedTitle(viewHolder);
                         //fixOverlappedTitle(viewHolder);
                         fixThumbOverlapping(viewHolder);
@@ -86,7 +90,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                 vh.setOnKeyListener(MaxControlsVideoPlayerGlue.this);
 
                 ViewHolder viewHolder = (ViewHolder) vh;
-                mViewHolder = new WeakReference<>(viewHolder);
+                mTransportViewHolder = new WeakReference<>(viewHolder);
 
                 viewHolder.setTopEdgeFocusListener(MaxControlsVideoPlayerGlue.this);
                 viewHolder.setQualityInfo(mQualityInfo);
@@ -111,8 +115,8 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     public void setControlsVisibility(boolean show) {
         super.setControlsVisibility(show);
 
-        if (getViewHolder() != null) {
-            getViewHolder().setDateVisibility(show);
+        if (getTransportViewHolder() != null) {
+            getTransportViewHolder().setDateVisibility(show);
         }
     }
 
@@ -120,8 +124,8 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     public void setQualityInfo(String info) {
         mQualityInfo = info;
 
-        if (getViewHolder() != null) {
-            getViewHolder().setQualityInfo(info);
+        if (getTransportViewHolder() != null) {
+            getTransportViewHolder().setQualityInfo(info);
         }
     }
 
@@ -134,8 +138,8 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     public void play() {
         super.play();
 
-        if (getViewHolder() != null) {
-            getViewHolder().setPlay(true);
+        if (getTransportViewHolder() != null) {
+            getTransportViewHolder().setPlay(true);
         }
     }
 
@@ -143,8 +147,8 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     public void pause() {
         super.pause();
 
-        if (getViewHolder() != null) {
-            getViewHolder().setPlay(false);
+        if (getTransportViewHolder() != null) {
+            getTransportViewHolder().setPlay(false);
         }
     }
 
@@ -167,14 +171,22 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     }
 
     public void setSeekPreviewTitle(String title) {
-        if (getViewHolder() != null) {
-            getViewHolder().setSeekPreviewTitle(title);
+        if (getTransportViewHolder() != null) { // the chapter title when show seeking ui
+            getTransportViewHolder().setSeekPreviewTitle(title);
+        }
+        if (getDescriptionViewHolder() != null) { // the chapter title when show full ui
+            if (title != null) {
+                getDescriptionViewHolder().getBody().setText(title);
+                getDescriptionViewHolder().getBody().setVisibility(View.VISIBLE);
+            } else {
+                getDescriptionViewHolder().getBody().setVisibility(View.GONE);
+            }
         }
     }
 
     public void setSeekBarSegments(List<SeekBarSegment> segments) {
-        if (getViewHolder() != null) {
-            getViewHolder().setSeekBarSegments(segments);
+        if (getTransportViewHolder() != null) {
+            getTransportViewHolder().setSeekBarSegments(segments);
         }
     }
 
@@ -203,8 +215,12 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         }
     }
 
-    private ViewHolder getViewHolder() {
-        return mViewHolder != null ? mViewHolder.get() : null;
+    private ViewHolder getTransportViewHolder() {
+        return mTransportViewHolder != null ? mTransportViewHolder.get() : null;
+    }
+
+    private AbstractDetailsDescriptionPresenter.ViewHolder getDescriptionViewHolder() {
+        return mDescriptionViewHolder != null ? mDescriptionViewHolder.get() : null;
     }
 
     public abstract void onTopEdgeFocused();
