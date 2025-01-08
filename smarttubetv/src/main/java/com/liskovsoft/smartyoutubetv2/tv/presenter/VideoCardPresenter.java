@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.util.Pair;
@@ -39,7 +38,6 @@ public class VideoCardPresenter extends LongClickPresenter {
     private int mDefaultTextColor = -1;
     private int mSelectedBackgroundColor = -1;
     private int mSelectedTextColor = -1;
-    private Drawable mDefaultCardImage;
     private boolean mIsAnimatedPreviewsEnabled;
     private int mThumbQuality;
     private int mWidth;
@@ -57,7 +55,6 @@ public class VideoCardPresenter extends LongClickPresenter {
                 ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardSelectedBackground));
         mSelectedTextColor =
                 ContextCompat.getColor(context, R.color.card_selected_text_grey);
-        mDefaultCardImage = new ColorDrawable(ContextCompat.getColor(context, R.color.lb_grey));
 
         mIsAnimatedPreviewsEnabled = isCardAnimatedPreviewsEnabled(context);
         mThumbQuality = getThumbQuality(context);
@@ -146,7 +143,7 @@ public class VideoCardPresenter extends LongClickPresenter {
                 //.placeholder(mDefaultCardImage)
                 .apply(ViewUtil.glideOptions())
                 // improve image compression on low end devices
-                .override(mWidth, mHeight)
+                //.override(mWidth, mHeight)
                 // com.liskovsoft.smartyoutubetv2.tv.util.CacheGlideModule
                 // Cache makes app crashing on old android versions
                 .diskCacheStrategy(VERSION.SDK_INT > 21 ? DiskCacheStrategy.ALL : DiskCacheStrategy.NONE)
@@ -158,7 +155,7 @@ public class VideoCardPresenter extends LongClickPresenter {
                         //.placeholder(mDefaultCardImage)
                         .apply(ViewUtil.glideOptions())
                         .listener(mErrorListener)
-                        .error(mDefaultCardImage)
+                        .error(R.drawable.card_placeholder) // R.color.lb_grey
                 )
                 .into(cardView.getMainImageView());
     }

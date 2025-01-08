@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -32,7 +31,6 @@ public class ChannelCardPresenter extends LongClickPresenter {
     private int mSelectedBackgroundColor;
     private int mNewContentBackgroundColor;
     private int mSelectedTextColor;
-    private Drawable mDefaultCardImage;
     private int mWidth;
     private int mHeight;
 
@@ -50,7 +48,6 @@ public class ChannelCardPresenter extends LongClickPresenter {
                 ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardSelectedBackground));
         mSelectedTextColor =
                 ContextCompat.getColor(context, R.color.card_selected_text_grey);
-        mDefaultCardImage = new ColorDrawable(ContextCompat.getColor(context, R.color.lb_grey));
 
         updateDimensions(context);
 
@@ -101,7 +98,7 @@ public class ChannelCardPresenter extends LongClickPresenter {
 
         Glide.with(context)
                 .load(video.cardImageUrl)
-                .apply(ViewUtil.glideOptions().error(mDefaultCardImage))
+                .apply(ViewUtil.glideOptions().error(R.drawable.card_placeholder)) // R.color.lb_grey
                 .listener(mErrorListener)
                 .into(imageView);
     }
