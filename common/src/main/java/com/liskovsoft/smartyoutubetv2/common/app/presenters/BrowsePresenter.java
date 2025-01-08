@@ -1091,7 +1091,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         if (getView().isEmpty()) {
             ErrorFragmentData errorFragmentData;
-            if (error != null) {
+            if (error != null && !Helpers.containsAny(error.getMessage(), "fromNullable result is null")) {
                 errorFragmentData = new CategoryEmptyError(getContext(), error);
             } else if (mSignInService.isSigned()) {
                 errorFragmentData = new CategoryEmptyError(getContext(), null);
