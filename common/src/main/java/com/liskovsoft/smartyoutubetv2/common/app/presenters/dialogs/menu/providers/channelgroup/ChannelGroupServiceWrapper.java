@@ -55,14 +55,6 @@ public class ChannelGroupServiceWrapper implements ProfileChangeListener {
         return mService.findChannelIdsForGroup(channelGroupId);
     }
 
-    public String[] getSubscribedChannelIds() {
-        return mService.getSubscribedChannelIds();
-    }
-
-    public ItemGroup getSubscribedChannelGroup() {
-        return mService.getSubscribedChannelGroup();
-    }
-
     public ItemGroup findChannelGroup(int channelGroupId) {
         return mService.findChannelGroup(channelGroupId);
     }

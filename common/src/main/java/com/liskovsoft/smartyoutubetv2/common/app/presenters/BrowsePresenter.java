@@ -193,8 +193,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             mSectionsMapping.put(MediaGroup.TYPE_NEWS, new BrowseSection(MediaGroup.TYPE_NEWS, getContext().getString(R.string.header_news), BrowseSection.TYPE_ROW, R.drawable.icon_news));
         }
         mSectionsMapping.put(MediaGroup.TYPE_MUSIC, new BrowseSection(MediaGroup.TYPE_MUSIC, getContext().getString(R.string.header_music), BrowseSection.TYPE_ROW, R.drawable.icon_music));
-        mSectionsMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, new BrowseSection(MediaGroup.TYPE_CHANNEL_UPLOADS, getContext().getString(R.string.header_channels), uploadsType, R.drawable.icon_channels, true));
-        mSectionsMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, new BrowseSection(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), BrowseSection.TYPE_GRID, R.drawable.icon_subscriptions, true));
+        mSectionsMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, new BrowseSection(MediaGroup.TYPE_CHANNEL_UPLOADS, getContext().getString(R.string.header_channels), uploadsType, R.drawable.icon_channels, false));
+        mSectionsMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, new BrowseSection(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), BrowseSection.TYPE_GRID, R.drawable.icon_subscriptions, false));
         mSectionsMapping.put(MediaGroup.TYPE_HISTORY, new BrowseSection(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), BrowseSection.TYPE_GRID, R.drawable.icon_history, true));
         mSectionsMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, new BrowseSection(MediaGroup.TYPE_USER_PLAYLISTS, getContext().getString(R.string.header_playlists), BrowseSection.TYPE_ROW, R.drawable.icon_playlist, true));
         mSectionsMapping.put(MediaGroup.TYPE_NOTIFICATIONS, new BrowseSection(MediaGroup.TYPE_NOTIFICATIONS, getContext().getString(R.string.header_notifications), BrowseSection.TYPE_GRID, R.drawable.icon_notification, false));
@@ -810,11 +810,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 videoGroup.setType(MediaGroup.TYPE_HISTORY);
                 appendLocalHistory(videoGroup);
                 getView().updateSection(videoGroup);
-            } else if (isSubscriptionsSection() && !ChannelGroupServiceWrapper.instance(getContext()).isEmpty()) {
-                appendLocalSubscriptions();
-            } else if (isMultiGridChannelUploadsSection() && !ChannelGroupServiceWrapper.instance(getContext()).isEmpty()) {
-                getView().showProgressBar(false);
-                appendLocalChannels();
             } else if (getView().isProgressBarShowing()) {
                 getView().showProgressBar(false);
                 getView().showError(new SignInError(getContext()));
@@ -1129,26 +1124,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         for (State state : stateService.getStates()) {
             videoGroup.add(0, state.video);
-        }
-    }
-
-    private void appendLocalSubscriptions() {
-        updateVideoGrid(getCurrentSection(),
-                mContentService.getSubscriptionsObserve(
-                        ChannelGroupServiceWrapper.instance(getContext()).getSubscribedChannelIds()), -1);
-    }
-
-    private void appendLocalChannels() {
-        ItemGroup subscriptions = ChannelGroupServiceWrapper.instance(getContext()).getSubscribedChannelGroup();
-        if (subscriptions != null) {
-            List<Video> channels = new ArrayList<>();
-            for (Item channel : subscriptions.getItems()) {
-                channels.add(Video.from(channel));
-            }
-            VideoGroup group = VideoGroup.from(channels, 0);
-            //group.setAction(VideoGroup.ACTION_REPLACE);
-            group.setType(MediaGroup.TYPE_CHANNEL_UPLOADS);
-            getView().updateSection(group);
         }
     }
 }
