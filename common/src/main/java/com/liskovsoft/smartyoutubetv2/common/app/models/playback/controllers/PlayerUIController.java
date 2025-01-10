@@ -208,15 +208,15 @@ public class PlayerUIController extends BasePlayerController {
             settingsPresenter.showDialog();
         }));
 
-        settingsPresenter.appendSingleSwitch(AppDialogUtil.createSubtitleChannelOption(getContext(), mPlayerData));
+        settingsPresenter.appendSingleSwitch(AppDialogUtil.createSubtitleChannelOption(getContext()));
 
-        OptionCategory stylesCategory = AppDialogUtil.createSubtitleStylesCategory(getContext(), mPlayerData);
+        OptionCategory stylesCategory = AppDialogUtil.createSubtitleStylesCategory(getContext());
         settingsPresenter.appendRadioCategory(stylesCategory.title, stylesCategory.options);
 
-        OptionCategory sizeCategory = AppDialogUtil.createSubtitleSizeCategory(getContext(), mPlayerData);
+        OptionCategory sizeCategory = AppDialogUtil.createSubtitleSizeCategory(getContext());
         settingsPresenter.appendRadioCategory(sizeCategory.title, sizeCategory.options);
 
-        OptionCategory positionCategory = AppDialogUtil.createSubtitlePositionCategory(getContext(), mPlayerData);
+        OptionCategory positionCategory = AppDialogUtil.createSubtitlePositionCategory(getContext());
         settingsPresenter.appendRadioCategory(positionCategory.title, positionCategory.options);
 
         settingsPresenter.showDialog(subtitlesOrigCategoryTitle, this::setSubtitleButtonState);

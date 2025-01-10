@@ -448,15 +448,17 @@ public class AppDialogUtil {
         return OptionCategory.from(PITCH_EFFECT_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
-    public static OptionCategory createSubtitleStylesCategory(Context context, PlayerData playerData) {
+    public static OptionCategory createSubtitleStylesCategory(Context context) {
+        PlayerData playerData = PlayerData.instance(context);
         List<SubtitleStyle> subtitleStyles = playerData.getSubtitleStyles();
 
         String subtitleStyleTitle = context.getString(R.string.subtitle_style);
 
-        return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO_LIST, subtitleStyleTitle, fromSubtitleStyles(context, playerData, subtitleStyles));
+        return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO_LIST, subtitleStyleTitle, fromSubtitleStyles(context, subtitleStyles));
     }
 
-    public static OptionItem createSubtitleChannelOption(Context context, PlayerData playerData) {
+    public static OptionItem createSubtitleChannelOption(Context context) {
+        PlayerData playerData = PlayerData.instance(context);
         return UiOptionItem.from(context.getString(R.string.subtitle_remember),
                 optionItem -> playerData.enableSubtitlesPerChannel(optionItem.isSelected()),
                 playerData.isSubtitlesPerChannelEnabled()
@@ -464,7 +466,8 @@ public class AppDialogUtil {
     }
 
     @TargetApi(19)
-    private static List<OptionItem> fromSubtitleStyles(Context context, PlayerData playerData, List<SubtitleStyle> subtitleStyles) {
+    private static List<OptionItem> fromSubtitleStyles(Context context, List<SubtitleStyle> subtitleStyles) {
+        PlayerData playerData = PlayerData.instance(context);
         List<OptionItem> styleOptions = new ArrayList<>();
 
         for (SubtitleStyle subtitleStyle : subtitleStyles) {
@@ -480,7 +483,8 @@ public class AppDialogUtil {
         return styleOptions;
     }
 
-    public static OptionCategory createSubtitleSizeCategory(Context context, PlayerData playerData) {
+    public static OptionCategory createSubtitleSizeCategory(Context context) {
+        PlayerData playerData = PlayerData.instance(context);
         List<OptionItem> options = new ArrayList<>();
 
         for (int scalePercent : Helpers.range(10, 200, 10)) {
@@ -496,7 +500,8 @@ public class AppDialogUtil {
         return OptionCategory.from(SUBTITLE_SIZE_ID, OptionCategory.TYPE_RADIO_LIST, context.getString(R.string.subtitle_scale), options);
     }
 
-    public static OptionCategory createSubtitlePositionCategory(Context context, PlayerData playerData) {
+    public static OptionCategory createSubtitlePositionCategory(Context context) {
+        PlayerData playerData = PlayerData.instance(context);
         List<OptionItem> options = new ArrayList<>();
 
         for (int positionPercent : Helpers.range(0, 100, 5)) {
