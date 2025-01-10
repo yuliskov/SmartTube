@@ -449,12 +449,9 @@ public class AppDialogUtil {
     }
 
     public static OptionCategory createSubtitleStylesCategory(Context context) {
-        PlayerData playerData = PlayerData.instance(context);
-        List<SubtitleStyle> subtitleStyles = playerData.getSubtitleStyles();
-
         String subtitleStyleTitle = context.getString(R.string.subtitle_style);
 
-        return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO_LIST, subtitleStyleTitle, fromSubtitleStyles(context, subtitleStyles));
+        return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO_LIST, subtitleStyleTitle, createSubtitleStyles(context));
     }
 
     public static OptionItem createSubtitleChannelOption(Context context) {
@@ -466,8 +463,9 @@ public class AppDialogUtil {
     }
 
     @TargetApi(19)
-    private static List<OptionItem> fromSubtitleStyles(Context context, List<SubtitleStyle> subtitleStyles) {
+    private static List<OptionItem> createSubtitleStyles(Context context) {
         PlayerData playerData = PlayerData.instance(context);
+        List<SubtitleStyle> subtitleStyles = playerData.getSubtitleStyles();
         List<OptionItem> styleOptions = new ArrayList<>();
 
         for (SubtitleStyle subtitleStyle : subtitleStyles) {
