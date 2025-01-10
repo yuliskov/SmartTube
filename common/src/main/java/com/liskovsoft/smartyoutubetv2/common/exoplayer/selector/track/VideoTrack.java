@@ -125,15 +125,19 @@ public class VideoTrack extends MediaTrack {
         int size1;
         int size2;
 
-        // Proper non-widescreen (4:3) format handling.
-        // 4:3 example: https://www.youtube.com/watch?v=m8nsUcAwkj8&t=1042s
-        if (isWideScreen(format) && isWideScreen(track2.format)) {
-            size1 = format.width;
-            size2 = track2.format.width;
-        } else {
-            size1 = format.height;
-            size2 = track2.format.height;
-        }
+        //// Proper non-widescreen (4:3) format handling.
+        //// 4:3 example: https://www.youtube.com/watch?v=m8nsUcAwkj8&t=1042s
+        //if (isWideScreen(format) && isWideScreen(track2.format)) {
+        //    size1 = format.width;
+        //    size2 = track2.format.width;
+        //} else {
+        //    size1 = format.height;
+        //    size2 = track2.format.height;
+        //}
+
+        // MOD: Mimic official behavior (handle low res shorts etc)
+        size1 = isWideScreenMod(format) ? format.height : format.width;
+        size2 = isWideScreenMod(track2.format) ? track2.format.height : track2.format.width;
 
         String id1 = format.id;
         String id2 = track2.format.id;
@@ -290,5 +294,16 @@ public class VideoTrack extends MediaTrack {
         }
 
         return format.width / (float) format.height >= 1.77;
+    }
+
+    /**
+     * MOD: Mimic official behavior (handle low res shorts etc)
+     */
+    private boolean isWideScreenMod(Format format) {
+        if (format == null) {
+            return false;
+        }
+
+        return format.width / (float) format.height > 1;
     }
 }
