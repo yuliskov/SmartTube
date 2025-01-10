@@ -474,7 +474,7 @@ public class PlayerUIController extends BasePlayerController {
     @Override
     public void onVideoZoomClicked() {
         OptionCategory videoZoomCategory = AppDialogUtil.createVideoZoomCategory(
-                getContext(), mPlayerData, () -> {
+                getContext(), () -> {
                     getPlayer().setVideoZoomMode(mPlayerData.getVideoZoomMode());
                     getPlayer().setVideoZoom(mPlayerData.getVideoZoom());
                     getPlayer().showControls(false);
@@ -869,7 +869,7 @@ public class PlayerUIController extends BasePlayerController {
 
     private void showRepeatModeDialog(int buttonState) {
         OptionCategory category = AppDialogUtil.createPlaybackModeCategory(
-                getContext(), mPlayerData, () -> {
+                getContext(), () -> {
                     getPlayer().setButtonState(R.id.action_repeat, mPlayerData.getRepeatMode());
                 });
 
@@ -934,12 +934,12 @@ public class PlayerUIController extends BasePlayerController {
     private void showScreenOffDialog() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         OptionCategory dimmingCategory =
-                AppDialogUtil.createPlayerScreenOffDimmingCategory(getContext(), mPlayerTweaksData, () -> {
+                AppDialogUtil.createPlayerScreenOffDimmingCategory(getContext(), () -> {
                     prepareScreenOff();
                     applyScreenOff(PlayerUI.BUTTON_OFF);
                 });
         OptionCategory category =
-                AppDialogUtil.createPlayerScreenOffTimeoutCategory(getContext(), mPlayerTweaksData, () -> {
+                AppDialogUtil.createPlayerScreenOffTimeoutCategory(getContext(), () -> {
                     prepareScreenOff();
                     applyScreenOffTimeout(PlayerUI.BUTTON_OFF);
                 });
@@ -950,7 +950,7 @@ public class PlayerUIController extends BasePlayerController {
 
     private void showSoundOffDialog() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-        OptionCategory audioVolumeCategory = AppDialogUtil.createAudioVolumeCategory(getContext(), mPlayerData, () -> {
+        OptionCategory audioVolumeCategory = AppDialogUtil.createAudioVolumeCategory(getContext(), () -> {
             applySoundOff(mPlayerData.getPlayerVolume() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
             getPlayer().setVolume(mPlayerData.getPlayerVolume());
         });

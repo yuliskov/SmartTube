@@ -295,7 +295,7 @@ public class VideoStateController extends BasePlayerController {
 
         // suppose live stream if buffering near the end
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
-        settingsPresenter.appendCategory(AppDialogUtil.createSpeedListCategory(getContext(), getPlayer(), mPlayerData));
+        settingsPresenter.appendCategory(AppDialogUtil.createSpeedListCategory(getContext(), getPlayer()));
 
         //settingsPresenter.appendCategory(AppDialogUtil.createRememberSpeedCategory(getContext(), mPlayerData));
         //settingsPresenter.appendCategory(AppDialogUtil.createSpeedMiscCategory(getContext(), mPlayerTweaksData));

@@ -120,7 +120,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendVideoBufferCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AppDialogUtil.createVideoBufferCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createVideoBufferCategory(getContext());
         settingsPresenter.appendCategory(category);
     }
 
@@ -130,22 +130,22 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendVideoZoomCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AppDialogUtil.createVideoZoomCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createVideoZoomCategory(getContext());
         settingsPresenter.appendCategory(category);
     }
 
     private void appendAudioLanguageCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AppDialogUtil.createAudioLanguageCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createAudioLanguageCategory(getContext());
         settingsPresenter.appendCategory(category);
     }
 
     private void appendAudioShiftCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AppDialogUtil.createAudioShiftCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createAudioShiftCategory(getContext());
         settingsPresenter.appendCategory(category);
     }
 
     private void appendMasterVolumeCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AppDialogUtil.createAudioVolumeCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createAudioVolumeCategory(getContext());
         settingsPresenter.appendCategory(category);
     }
 
@@ -166,7 +166,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendRememberSpeedCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AppDialogUtil.createRememberSpeedCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createRememberSpeedCategory(getContext());
 
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
@@ -174,15 +174,15 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendVideoSpeedCategory(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.video_speed), optionItem -> {
             AppDialogPresenter settingsPresenter2 = AppDialogPresenter.instance(getContext());
-            settingsPresenter2.appendCategory(AppDialogUtil.createSpeedListCategory(getContext(), null, mPlayerData));
-            settingsPresenter2.appendCategory(AppDialogUtil.createRememberSpeedCategory(getContext(), mPlayerData));
-            settingsPresenter2.appendCategory(AppDialogUtil.createSpeedMiscCategory(getContext(), mPlayerTweaksData));
+            settingsPresenter2.appendCategory(AppDialogUtil.createSpeedListCategory(getContext(), null));
+            settingsPresenter2.appendCategory(AppDialogUtil.createRememberSpeedCategory(getContext()));
+            settingsPresenter2.appendCategory(AppDialogUtil.createSpeedMiscCategory(getContext()));
             settingsPresenter2.showDialog(getContext().getString(R.string.video_speed));
         }));
     }
 
     private void appendScreenOffTimeoutCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AppDialogUtil.createPlayerScreenOffTimeoutCategory(getContext(), mPlayerTweaksData, null);
+        OptionCategory category = AppDialogUtil.createPlayerScreenOffTimeoutCategory(getContext(), null);
 
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
@@ -487,12 +487,12 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendPlaybackModeCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AppDialogUtil.createPlaybackModeCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createPlaybackModeCategory(getContext());
         settingsPresenter.appendCategory(category);
     }
 
     private void appendNetworkEngineCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AppDialogUtil.createNetworkEngineCategory(getContext(), mPlayerTweaksData);
+        OptionCategory category = AppDialogUtil.createNetworkEngineCategory(getContext());
         settingsPresenter.appendCategory(category);
     }
 

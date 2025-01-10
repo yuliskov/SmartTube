@@ -292,8 +292,8 @@ public class AppDialogUtil {
         return result;
     }
 
-    public static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData) {
-        return createVideoBufferCategory(context, playerData, () -> {});
+    public static OptionCategory createVideoBufferCategory(Context context) {
+        return createVideoBufferCategory(context, () -> {});
     }
 
     private static void setFormat(FormatItem formatItem, PlayerData playerData, Runnable onFormatSelected) {
@@ -304,7 +304,8 @@ public class AppDialogUtil {
         onFormatSelected.run();
     }
 
-    public static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData, Runnable onBufferSelected) {
+    public static OptionCategory createVideoBufferCategory(Context context, Runnable onBufferSelected) {
+        PlayerData playerData = PlayerData.instance(context);
         String videoBufferTitle = context.getString(R.string.video_buffer);
         List<OptionItem> optionItems = new ArrayList<>();
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_low, PlayerData.BUFFER_LOW, onBufferSelected));
@@ -324,11 +325,12 @@ public class AppDialogUtil {
                 playerData.getVideoBufferType() == type);
     }
 
-    public static OptionCategory createAudioLanguageCategory(Context context, PlayerData playerData) {
-        return createAudioLanguageCategory(context, playerData, () -> {});
+    public static OptionCategory createAudioLanguageCategory(Context context) {
+        return createAudioLanguageCategory(context, () -> {});
     }
 
-    public static OptionCategory createAudioLanguageCategory(Context context, PlayerData playerData, Runnable onSetCallback) {
+    public static OptionCategory createAudioLanguageCategory(Context context, Runnable onSetCallback) {
+        PlayerData playerData = PlayerData.instance(context);
         String title = context.getString(R.string.audio_language);
 
         List<OptionItem> options = new ArrayList<>();
@@ -378,11 +380,12 @@ public class AppDialogUtil {
         return OptionCategory.from(AUDIO_LANGUAGE_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
-    public static OptionCategory createAudioShiftCategory(Context context, PlayerData playerData) {
-        return createAudioShiftCategory(context, playerData, () -> {});
+    public static OptionCategory createAudioShiftCategory(Context context) {
+        return createAudioShiftCategory(context, () -> {});
     }
 
-    public static OptionCategory createAudioShiftCategory(Context context, PlayerData playerData, Runnable onSetCallback) {
+    public static OptionCategory createAudioShiftCategory(Context context, Runnable onSetCallback) {
+        PlayerData playerData = PlayerData.instance(context);
         String title = context.getString(R.string.audio_shift);
 
         List<OptionItem> options = new ArrayList<>();
@@ -399,11 +402,12 @@ public class AppDialogUtil {
         return OptionCategory.from(AUDIO_DELAY_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
-    public static OptionCategory createAudioVolumeCategory(Context context, PlayerData playerData) {
-        return createAudioVolumeCategory(context, playerData, () -> {});
+    public static OptionCategory createAudioVolumeCategory(Context context) {
+        return createAudioVolumeCategory(context, () -> {});
     }
 
-    public static OptionCategory createAudioVolumeCategory(Context context, PlayerData playerData, Runnable onSetCallback) {
+    public static OptionCategory createAudioVolumeCategory(Context context, Runnable onSetCallback) {
+        PlayerData playerData = PlayerData.instance(context);
         String title = context.getString(R.string.player_volume);
 
         List<OptionItem> options = new ArrayList<>();
@@ -508,11 +512,12 @@ public class AppDialogUtil {
         return OptionCategory.from(SUBTITLE_POSITION_ID, OptionCategory.TYPE_RADIO_LIST, context.getString(R.string.subtitle_position), options);
     }
 
-    public static OptionCategory createVideoZoomCategory(Context context, PlayerData playerData) {
-        return createVideoZoomCategory(context, playerData, () -> {});
+    public static OptionCategory createVideoZoomCategory(Context context) {
+        return createVideoZoomCategory(context, () -> {});
     }
 
-    public static OptionCategory createVideoZoomCategory(Context context, PlayerData playerData, Runnable onSelectZoomMode) {
+    public static OptionCategory createVideoZoomCategory(Context context, Runnable onSelectZoomMode) {
+        PlayerData playerData = PlayerData.instance(context);
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
@@ -599,18 +604,19 @@ public class AppDialogUtil {
         return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO_LIST, videoRotateTitle, options);
     }
 
-    public static OptionCategory createPlayerScreenOffDimmingCategory(Context context, PlayerTweaksData data, Runnable onApply) {
+    public static OptionCategory createPlayerScreenOffDimmingCategory(Context context, Runnable onApply) {
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
         List<OptionItem> options = new ArrayList<>();
 
         for (int dimPercents : Helpers.range(10, 100, 10)) {
             options.add(UiOptionItem.from(dimPercents + "%",
                     optionItem -> {
-                        data.setScreenOffDimmingPercents(dimPercents);
+                        playerTweaksData.setScreenOffDimmingPercents(dimPercents);
                         if (onApply != null) {
                             onApply.run();
                         }
                     },
-                    data.getScreenOffDimmingPercents() == dimPercents));
+                    playerTweaksData.getScreenOffDimmingPercents() == dimPercents));
         }
 
         String title = context.getString(R.string.player_screen_off_dimming);
@@ -619,18 +625,19 @@ public class AppDialogUtil {
     }
 
     @SuppressLint("StringFormatMatches")
-    public static OptionCategory createPlayerScreenOffTimeoutCategory(Context context, PlayerTweaksData data, Runnable onApply) {
+    public static OptionCategory createPlayerScreenOffTimeoutCategory(Context context, Runnable onApply) {
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
         List<OptionItem> options = new ArrayList<>();
 
         for (int timeoutSec : Helpers.range(0, 10, 1)) {
             options.add(UiOptionItem.from(timeoutSec == 0 ? context.getString(R.string.option_never) : context.getString(R.string.ui_hide_timeout_sec, timeoutSec),
                     optionItem -> {
-                        data.setScreenOffTimeoutSec(timeoutSec);
+                        playerTweaksData.setScreenOffTimeoutSec(timeoutSec);
                         if (onApply != null) {
                             onApply.run();
                         }
                     },
-                    data.getScreenOffTimeoutSec() == timeoutSec));
+                    playerTweaksData.getScreenOffTimeoutSec() == timeoutSec));
         }
 
         for (int min : Helpers.range(30, 180, 30)) {
@@ -638,12 +645,12 @@ public class AppDialogUtil {
             options.add(UiOptionItem.from(
                     context.getString(R.string.screen_dimming_timeout_min, min),
                     option -> {
-                        data.setScreenOffTimeoutSec(timeoutSec);
+                        playerTweaksData.setScreenOffTimeoutSec(timeoutSec);
                         if (onApply != null) {
                             onApply.run();
                         }
                     },
-                    data.getScreenOffTimeoutSec() == timeoutSec));
+                    playerTweaksData.getScreenOffTimeoutSec() == timeoutSec));
         }
 
         String title = context.getString(R.string.player_screen_off_timeout);
@@ -681,7 +688,8 @@ public class AppDialogUtil {
                 });
     }
 
-    public static OptionCategory createSpeedListCategory(Context context, PlayerManager playbackController, PlayerData playerData) {
+    public static OptionCategory createSpeedListCategory(Context context, PlayerManager playbackController) {
+        PlayerData playerData = PlayerData.instance(context);
         List<OptionItem> items = new ArrayList<>();
 
         PlayerTweaksData data = PlayerTweaksData.instance(context);
@@ -703,7 +711,8 @@ public class AppDialogUtil {
         return OptionCategory.from(PLAYER_SPEED_LIST_ID, OptionCategory.TYPE_RADIO_LIST, context.getString(R.string.video_speed), items);
     }
 
-    public static OptionCategory createRememberSpeedCategory(Context context, PlayerData playerData) {
+    public static OptionCategory createRememberSpeedCategory(Context context) {
+        PlayerData playerData = PlayerData.instance(context);
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(context.getString(R.string.player_remember_speed_none),
@@ -731,7 +740,8 @@ public class AppDialogUtil {
         return OptionCategory.from(PLAYER_REMEMBER_SPEED_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
-    public static OptionCategory createSpeedMiscCategory(Context context, PlayerTweaksData playerTweaksData) {
+    public static OptionCategory createSpeedMiscCategory(Context context) {
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(context.getString(R.string.player_long_speed_list),
@@ -747,11 +757,12 @@ public class AppDialogUtil {
         return OptionCategory.from(PLAYER_SPEED_MISC_ID, OptionCategory.TYPE_CHECKBOX_LIST, title, options);
     }
 
-    public static OptionCategory createPlaybackModeCategory(Context context, PlayerData playerData) {
-        return createPlaybackModeCategory(context, playerData, () -> {});
+    public static OptionCategory createPlaybackModeCategory(Context context) {
+        return createPlaybackModeCategory(context, () -> {});
     }
 
-    public static OptionCategory createPlaybackModeCategory(Context context, PlayerData playerData, Runnable onModeSelected) {
+    public static OptionCategory createPlaybackModeCategory(Context context, Runnable onModeSelected) {
+        PlayerData playerData = PlayerData.instance(context);
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
@@ -780,11 +791,12 @@ public class AppDialogUtil {
         );
     }
 
-    public static OptionCategory createNetworkEngineCategory(Context context, PlayerTweaksData playerTweaksData) {
-        return createNetworkEngineCategory(context, playerTweaksData, () -> {});
+    public static OptionCategory createNetworkEngineCategory(Context context) {
+        return createNetworkEngineCategory(context, () -> {});
     }
 
-    public static OptionCategory createNetworkEngineCategory(Context context, PlayerTweaksData playerTweaksData, Runnable onModeSelected) {
+    public static OptionCategory createNetworkEngineCategory(Context context, Runnable onModeSelected) {
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(context.getString(R.string.default_lang),

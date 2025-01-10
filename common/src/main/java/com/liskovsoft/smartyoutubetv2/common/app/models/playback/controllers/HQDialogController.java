@@ -45,10 +45,11 @@ public class HQDialogController extends BasePlayerController {
     @Override
     public void onHighQualityClicked() {
         addQualityCategories();
-        addNetworkEngine();
-        addVideoBufferCategory();
         addPresetsCategory();
         addAudioLanguage();
+        addVideoZoomCategory();
+        addNetworkEngine();
+        addVideoBufferCategory();
         addAudioDelayCategory();
         addPitchEffectCategory();
         //addBackgroundPlaybackCategory();
@@ -111,12 +112,12 @@ public class HQDialogController extends BasePlayerController {
     }
 
     private void addVideoBufferCategory() {
-        addCategoryInt(AppDialogUtil.createVideoBufferCategory(getContext(), mPlayerData,
+        addCategoryInt(AppDialogUtil.createVideoBufferCategory(getContext(),
                 () -> getPlayer().restartEngine()));
     }
 
     private void addAudioDelayCategory() {
-        addCategoryInt(AppDialogUtil.createAudioShiftCategory(getContext(), mPlayerData,
+        addCategoryInt(AppDialogUtil.createAudioShiftCategory(getContext(),
                 () -> getPlayer().restartEngine()));
     }
 
@@ -125,12 +126,12 @@ public class HQDialogController extends BasePlayerController {
     }
 
     private void addAudioLanguage() {
-        addCategoryInt(AppDialogUtil.createAudioLanguageCategory(getContext(), mPlayerData,
+        addCategoryInt(AppDialogUtil.createAudioLanguageCategory(getContext(),
                 () -> getPlayer().restartEngine()));
     }
 
     private void addNetworkEngine() {
-        addCategoryInt(AppDialogUtil.createNetworkEngineCategory(getContext(), mPlayerTweaksData,
+        addCategoryInt(AppDialogUtil.createNetworkEngineCategory(getContext(),
                 () -> getPlayer().restartEngine()));
     }
 
@@ -175,6 +176,17 @@ public class HQDialogController extends BasePlayerController {
                     getPlayer().showOverlay(false);
                 }
         ));
+    }
+
+    private void addVideoZoomCategory() {
+        addCategoryInt(AppDialogUtil.createVideoZoomCategory(
+                getContext(), () -> {
+                    getPlayer().setVideoZoomMode(mPlayerData.getVideoZoomMode());
+                    getPlayer().setVideoZoom(mPlayerData.getVideoZoom());
+
+                    // Make result easily be spotted by the user
+                    getPlayer().showOverlay(false);
+                }));
     }
 
     private void removeCategoryInt(int id) {
