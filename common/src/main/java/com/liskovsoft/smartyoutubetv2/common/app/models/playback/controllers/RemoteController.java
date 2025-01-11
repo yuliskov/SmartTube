@@ -28,7 +28,9 @@ import io.reactivex.disposables.Disposable;
 
 public class RemoteController extends BasePlayerController implements OnDataChange {
     private static final String TAG = RemoteController.class.getSimpleName();
+    private static final long APP_INIT_DELAY_MS = 10_000;
     private static final boolean NORMALIZE = false;
+    private final Runnable mStartListeningInt = this::startListeningInt;
     private final RemoteControlService mRemoteControlService;
     private final RemoteControlData mRemoteControlData;
     private Disposable mListeningAction;
@@ -206,6 +208,14 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     private void startListening() {
+        if (mListeningAction != null && !mListeningAction.isDisposed()) {
+            return;
+        }
+
+        Utils.postDelayed(mStartListeningInt, APP_INIT_DELAY_MS);
+    }
+
+    private void startListeningInt() {
         if (mListeningAction != null && !mListeningAction.isDisposed()) {
             return;
         }

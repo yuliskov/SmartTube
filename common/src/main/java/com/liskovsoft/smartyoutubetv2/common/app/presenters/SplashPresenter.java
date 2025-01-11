@@ -48,6 +48,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private Disposable mRefreshCachePeriodicAction;
     private String mBridgePackageName;
     private final Runnable mRunBackgroundTasks = this::runBackgroundTasks;
+    private final Runnable mCheckForUpdates = this::checkForUpdates;
 
     private interface IntentProcessor {
         boolean process(Intent intent);
@@ -82,6 +83,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
         applyRunOnceTasks();
         applyRunPerInstanceTasks();
+        Utils.postDelayed(mCheckForUpdates, APP_INIT_DELAY_MS);
 
         //runRefreshCachePeriodicTask();
 
@@ -89,7 +91,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
         showAccountSelectionIfNeeded(); // should be placed after Intent chain
         checkAccountPassword();
-        showUpdateNotification();
     }
 
     private void applyRunOnceTasks() {
@@ -106,7 +107,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private void applyRunPerInstanceTasks() {
         if (!mRunPerInstance) {
             mRunPerInstance = true;
-            //clearCache();
             Utils.postDelayed(mRunBackgroundTasks, APP_INIT_DELAY_MS);
             initIntentChain();
             // Fake service to prevent the app destroying?
@@ -138,7 +138,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
     }
 
-    private void showUpdateNotification() {
+    private void checkForUpdates() {
         BootDialogPresenter updatePresenter = BootDialogPresenter.instance(getContext());
         updatePresenter.start();
         //updatePresenter.unhold();
