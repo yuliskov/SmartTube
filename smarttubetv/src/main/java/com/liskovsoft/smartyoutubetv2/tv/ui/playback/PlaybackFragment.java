@@ -306,6 +306,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
     }
 
+    @Override
+    protected void onSeekPositionChanged(long positionMs) {
+        mPlaybackPresenter.onSeekPositionChanged(positionMs);
+    }
+
     public void skipToNext() {
         if (mPlayerGlue != null) {
             mPlayerGlue.next();

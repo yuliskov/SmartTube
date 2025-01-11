@@ -158,6 +158,11 @@ public abstract class BasePlayerController implements PlayerEventListener {
     }
 
     @Override
+    public void onSeekPositionChanged(long positionMs) {
+        // NOP
+    }
+
+    @Override
     public void onSpeedChanged(float speed) {
         // NOP
     }

@@ -352,6 +352,11 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     }
 
     @Override
+    public void onSeekPositionChanged(long positionMs) {
+        process(listener -> listener.onSeekPositionChanged(positionMs));
+    }
+
+    @Override
     public void onSpeedChanged(float speed) {
         process(listener -> listener.onSpeedChanged(speed));
     }

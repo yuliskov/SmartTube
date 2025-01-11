@@ -136,6 +136,13 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     @Override
+    public void onSeekPositionChanged(long positionMs) {
+        if (getPlayer().isControlsShown()) {
+            updateSeekPreviewTitle(positionMs);
+        }
+    }
+
+    @Override
     public void onTickle() {
         updateLiveDescription();
     }
@@ -561,32 +568,19 @@ public class SuggestionsController extends BasePlayerController {
             getPlayer().focusSuggestedItem(currentChapter.second);
             getPlayer().setSeekPreviewTitle(currentChapter.first.getTitle());
         }
-
-        //int index = findCurrentChapterIndex(group.getVideos());
-        //
-        //if (index != -1) {
-        //    String title = group.getVideos().get(index).getTitle();
-        //    getPlayer().focusSuggestedItem(index);
-        //    getPlayer().setSeekPreviewTitle(title);
-        //}
     }
 
-    //private int findCurrentChapterIndex(List<Video> videos) {
-    //    if (videos == null || !videos.get(0).isChapter) {
-    //        return -1;
-    //    }
-    //
-    //    int currentChapter = -1;
-    //    long positionMs = getPlayer().getPositionMs();
-    //    for (Video chapter : videos) {
-    //        if (chapter.startTimeMs > positionMs) {
-    //            break;
-    //        }
-    //        currentChapter++;
-    //    }
-    //
-    //    return currentChapter;
-    //}
+    private void updateSeekPreviewTitle(long positionMs) {
+        if (getPlayer() == null || !getPlayer().isControlsShown()) {
+            return;
+        }
+
+        Pair<ChapterItem, Integer> currentChapter = getCurrentChapter(positionMs);
+
+        if (currentChapter != null) {
+            getPlayer().setSeekPreviewTitle(currentChapter.first.getTitle());
+        }
+    }
 
     private List<SeekBarSegment> toSeekBarSegments(List<ChapterItem> chapters) {
         if (chapters == null) {
@@ -730,7 +724,7 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private ChapterItem getNextChapter() {
-        if (mChapters == null) {
+        if (getPlayer() == null || mChapters == null) {
             return null;
         }
 
@@ -745,11 +739,18 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private Pair<ChapterItem, Integer> getCurrentChapter() {
+        if (getPlayer() == null || mChapters == null) {
+            return null;
+        }
+
+        return getCurrentChapter(getPlayer().getPositionMs());
+    }
+
+    private Pair<ChapterItem, Integer> getCurrentChapter(long positionMs) {
         if (mChapters == null) {
             return null;
         }
 
-        long positionMs = getPlayer().getPositionMs();
         ChapterItem currentChapter = null;
         int idx = -1;
 
