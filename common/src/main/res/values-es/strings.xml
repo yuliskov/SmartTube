@@ -684,4 +684,7 @@
   <string name="video_buffer_size_highest">Más alto</string>
   <string name="unpin_group_from_sidebar">Eliminar el grupo de suscripción</string>
   <string name="playlists_rows">Mostrar la sección de listas de reproducción como filas</string>
+  <string name="import_subscriptions_group">Importar</string>
+  <string name="hide_shorts_from_search">Ocultar Shorts del resultado de búsqueda</string>
+  <string name="not_supported_by_device">El dispositivo no es compatible con esta función</string>
 </resources>
