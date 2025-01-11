@@ -297,6 +297,7 @@
     <string name="upload_date_last_hour">Za poslednú hodinu</string>
     <string name="focus_on_search_results">Automatické zameranie na výsledky vyhľadávania</string>
     <string name="context_menu">Kontextové menu</string>
+    <string name="context_menu_sorting">Radenie kontextového menu</string>
     <string name="add_remove_from_recent_playlist">Pridať/Odobrať z nedávneho zoznamu</string>
     <string name="hide_settings_section">Skryť sekciu Nastavenia (nebezpečné!)</string>
     <string name="volume">Hlasitosť %s%%</string>
@@ -351,6 +352,7 @@
     <string name="hide_shorts_from_home">Skryť Shorts z Domov</string>
     <string name="finish_on_disconnect">Ukončiť aplikáciu po odpojení telefónu/tabletu</string>
     <string name="update_error">Chyba aktualizácie</string>
+    <string name="hide_shorts_from_search">Skryť Shorts z výsledkov vyhľadávania</string>
     <string name="hide_shorts_from_history">Skryť Shorts z Histórie</string>
     <string name="hide_shorts_from_trending">Skryť Shorts z Trendy</string>
     <string name="disable_screensaver">Vypnúť šetrič obrazovky</string>
@@ -686,4 +688,7 @@
     <string name="screen_dimming_amount">Miera stmavenia obrazovky</string>
     <string name="screen_dimming_timeout">Časový limit stmievania obrazovky</string>
     <string name="playlists_rows">Zobrazenie sekciu Playlisty ako riadky</string>
+    <string name="import_subscriptions_group">Importovať</string>
+    <string name="lb_playback_controls_closed_captioning_disable">Vypnúť skryté titulky</string>
+    <string name="lb_playback_controls_closed_captioning_enable">Zapnúť skryté titulky</string>
 </resources>
