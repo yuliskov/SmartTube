@@ -46,7 +46,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private String mBridgePackageName;
     private final Runnable mRunBackgroundTasks = this::runBackgroundTasks;
     private final Runnable mCheckForUpdates = this::checkForUpdates;
-    private final Runnable mRemoteControlService = () -> Utils.updateRemoteControlService(getContext());;
 
     private interface IntentProcessor {
         boolean process(Intent intent);
@@ -82,7 +81,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         applyRunOnceTasks();
         applyRunPerInstanceTasks();
         Utils.postDelayed(mCheckForUpdates, APP_INIT_DELAY_MS);
-        Utils.postDelayed(mRemoteControlService, APP_INIT_DELAY_MS);
+        Utils.updateRemoteControlService(getContext());
 
         //runRefreshCachePeriodicTask();
 
