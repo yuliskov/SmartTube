@@ -169,7 +169,7 @@ If you want to support my developments you are welcome to buy me a cup of coffee
 - **USDT (TRC20)**: TJNPY794aSGZf3WGHTna2VCWm2G5Yua7E8  
 - **USDT (BEP20)**: 0x64B28da787BE6ac5889D276A5638d4f077840eC5  
 - **USDT (ERC20)**: 0xe455e21a085ae195a097cd4f456051a9916a5064   
-- **TON**: UQD2qJr68p9jv6oFoD1lKc4e1lcLIQPZfjqR0Xr3YDfus_DJ  
+- **TON**: UQAc9zgnnzwS8yb5wxAu5CB0RddmjPBjWI-n46oQ7XfCQrgI  
 - **XMR**: 48QsMjqfkeW54vkgKyRnjodtYxdmLk6HXfTWPSZoaFPEDpoHDwFUciGCe1QC9VAeGrgGw4PKNAksX9RW7myFqYJQDN5cHGT    
 
 
