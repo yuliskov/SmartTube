@@ -240,6 +240,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     private void stopListening() {
         RxHelper.disposeActions(mListeningAction, mPostStartPlayAction, mPostStateAction, mPostVolumeAction);
         unregisterVolumeObserver();
+        Utils.removeCallbacks(mStartListeningInt);
     }
 
     private void processCommand(Command command) {
