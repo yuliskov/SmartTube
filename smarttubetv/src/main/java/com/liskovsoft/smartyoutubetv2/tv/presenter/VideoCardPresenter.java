@@ -143,7 +143,7 @@ public class VideoCardPresenter extends LongClickPresenter {
                 //.placeholder(mDefaultCardImage)
                 .apply(ViewUtil.glideOptions())
                 // improve image compression on low end devices
-                //.override(mWidth, mHeight)
+                .override(mWidth, mHeight)
                 // com.liskovsoft.smartyoutubetv2.tv.util.CacheGlideModule
                 // Cache makes app crashing on old android versions
                 .diskCacheStrategy(VERSION.SDK_INT > 21 ? DiskCacheStrategy.ALL : DiskCacheStrategy.NONE)
