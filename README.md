@@ -158,19 +158,19 @@ To enable global voice search, an additional app must be installed alongside Sma
 
 If you want to support my developments you are welcome to buy me a cup of coffee :)
 
-> [**Patreon (Visa, Mastercard, PayPal)**](https://www.patreon.com/smarttube)  
-> **PayPal**: firsth<!-- abc@def -->ash@gmai<!-- @abc.com -->l.com  
+- [**Patreon (Visa, Mastercard, PayPal)**](https://www.patreon.com/smarttube)  
+- **PayPal**: firsth<!-- abc@def -->ash@gmai<!-- @abc.com -->l.com  
 <!-- > [**Buy me a coffee**](https://www.buymeacoffee.com/stube) -->  
-> **BTC**: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx  
-> **LTC**: ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw  
-> **ETH**: 0xe455E21a085ae195a097cd4F456051A9916A5064  
-> **ETC**: 0x209eCd33Fa61fA92167595eB3Aea92EE1905c815  
-> **TRX**: TJNPY794aSGZf3WGHTna2VCWm2G5Yua7E8  
-> **USDT (TRC20)**: TJNPY794aSGZf3WGHTna2VCWm2G5Yua7E8  
-> **USDT (BEP20)**: 0x64B28da787BE6ac5889D276A5638d4f077840eC5  
-> **USDT (ERC20)**: 0xe455e21a085ae195a097cd4f456051a9916a5064   
-> **TON**: UQD2qJr68p9jv6oFoD1lKc4e1lcLIQPZfjqR0Xr3YDfus_DJ  
-> **XMR**: 48QsMjqfkeW54vkgKyRnjodtYxdmLk6HXfTWPSZoaFPEDpoHDwFUciGCe1QC9VAeGrgGw4PKNAksX9RW7myFqYJQDN5cHGT    
+- **BTC**: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx  
+- **LTC**: ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw  
+- **ETH**: 0xe455E21a085ae195a097cd4F456051A9916A5064  
+- **ETC**: 0x209eCd33Fa61fA92167595eB3Aea92EE1905c815  
+- **TRX**: TJNPY794aSGZf3WGHTna2VCWm2G5Yua7E8  
+- **USDT (TRC20)**: TJNPY794aSGZf3WGHTna2VCWm2G5Yua7E8  
+- **USDT (BEP20)**: 0x64B28da787BE6ac5889D276A5638d4f077840eC5  
+- **USDT (ERC20)**: 0xe455e21a085ae195a097cd4f456051a9916a5064   
+- **TON**: UQD2qJr68p9jv6oFoD1lKc4e1lcLIQPZfjqR0Xr3YDfus_DJ  
+- **XMR**: 48QsMjqfkeW54vkgKyRnjodtYxdmLk6HXfTWPSZoaFPEDpoHDwFUciGCe1QC9VAeGrgGw4PKNAksX9RW7myFqYJQDN5cHGT    
 
 
 ## Support
