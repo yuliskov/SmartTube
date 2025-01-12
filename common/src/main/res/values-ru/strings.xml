@@ -587,7 +587,7 @@
     <string name="old_update_notifications">Старый вид уведомлений о доступном обновлении</string>
     <string name="dialog_notification">Уведомлять про обновление всплывающим диалогом</string>
     <string name="mark_as_watched">Отметить как просмотренное</string>
-    <string name="player_ui_animations">Включить анимацию панели управления</string>
+    <string name="player_ui_animations">Включить анимацию интерфейса плеера</string>
     <string name="player_likes_count">Отображать количество лайков/дислайков</string>
     <string name="sorting_alphabetically2">По алфавиту (быстро, анимированные превью)</string>
     <string name="sorting_default">По умолчанию (быстро, анимированные превью)</string>
