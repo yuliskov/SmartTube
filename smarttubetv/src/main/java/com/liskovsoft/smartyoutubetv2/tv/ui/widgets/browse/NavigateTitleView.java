@@ -198,12 +198,14 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
 
         if (mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS)) {
             mAccountView = (LongClickSearchOrbView) findViewById(R.id.account_orb);
-            mAccountView.setOnOrbClickedListener(v -> AccountSelectionPresenter.instance(getContext()).nextAccountOrDialog());
-            mAccountView.setOnOrbLongClickedListener(v -> {
-                AccountSettingsPresenter.instance(getContext()).show();
-                return true;
-            });
-            TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
+            if (mAccountView != null) {
+                mAccountView.setOnOrbClickedListener(v -> AccountSelectionPresenter.instance(getContext()).nextAccountOrDialog());
+                mAccountView.setOnOrbLongClickedListener(v -> {
+                    AccountSettingsPresenter.instance(getContext()).show();
+                    return true;
+                });
+                TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
+            }
 
             updateAccountIcon();
         }
