@@ -722,7 +722,7 @@ public class PlaybackSupportFragment extends Fragment {
             reverseFirstOrStartSecond(mOtherRowFadeOutAnimator, mOtherRowFadeInAnimator, animation);
         } else {
             // MOD: properly reset ui position in touch mode (see BaseGridView.dispatchKeyEvent)
-            if (getVerticalGridView() != null) {
+            if (getVerticalGridView() != null && getVerticalGridView().getFocusScrollStrategy() != VerticalGridView.FOCUS_SCROLL_ALIGNED) {
                 getVerticalGridView().setFocusScrollStrategy(VerticalGridView.FOCUS_SCROLL_ALIGNED);
             }
 
