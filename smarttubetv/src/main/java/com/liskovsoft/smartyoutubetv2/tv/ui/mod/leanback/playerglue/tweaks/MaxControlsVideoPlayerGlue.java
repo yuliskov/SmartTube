@@ -175,12 +175,8 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
             getTransportViewHolder().setSeekPreviewTitle(title);
         }
         if (getDescriptionViewHolder() != null) { // the chapter title when show full ui
-            if (title != null) {
-                getDescriptionViewHolder().getBody().setText(title);
-                getDescriptionViewHolder().getBody().setVisibility(View.VISIBLE);
-            } else {
-                getDescriptionViewHolder().getBody().setVisibility(View.GONE);
-            }
+            getDescriptionViewHolder().getBody().setText(title);
+            getDescriptionViewHolder().getBody().setVisibility(title != null ? View.VISIBLE: View.GONE);
         }
     }
 
