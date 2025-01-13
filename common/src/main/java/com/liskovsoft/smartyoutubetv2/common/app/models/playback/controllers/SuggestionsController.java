@@ -522,10 +522,7 @@ public class SuggestionsController extends BasePlayerController {
 
     private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {
         mChapters = mediaItemMetadata.getChapters();
-        // Reset chapter title
-        Pair<ChapterItem, Integer> currentChapter = getCurrentChapter();
-        getPlayer().setSeekPreviewTitle(currentChapter != null ? currentChapter.first.getTitle() : null); // add placeholder to fix control panel animation on the first run
-
+        
         addChapterMarkersIfNeeded();
         appendChapterSuggestionsIfNeeded();
         startChapterNotificationServiceIfNeeded();
