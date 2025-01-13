@@ -54,7 +54,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                         viewHolder.getTitle().setText(glue.getTitle());
                         viewHolder.getSubtitle().setText(glue.getSubtitle());
                         // MOD: add extra title line
-                        viewHolder.getBody().setText(glue.getBody());
+                        //viewHolder.getBody().setText(glue.getBody());
                     }
 
                     private void fixOverlappedTitle(ViewHolder viewHolder) {
