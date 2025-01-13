@@ -81,16 +81,16 @@ public class TwoStateAction extends MultiAction {
         mBoundAction = boundAction;
     }
 
-    @Override
-    public void setLabels(String[] labels) {
-        if (mEnableLongPressMsg) {
-            for (int i = 0; i < labels.length; i++) {
-                if (labels[i] != null) {
-                    labels[i] = Utils.updateTooltip(mContext, labels[i]);
-                }
-            }
-        }
-
-        super.setLabels(labels);
-    }
+    //@Override
+    //public void setLabels(String[] labels) {
+    //    if (mEnableLongPressMsg) {
+    //        for (int i = 0; i < labels.length; i++) {
+    //            if (labels[i] != null) {
+    //                labels[i] = Utils.updateTooltip(mContext, labels[i]);
+    //            }
+    //        }
+    //    }
+    //
+    //    super.setLabels(labels);
+    //}
 }

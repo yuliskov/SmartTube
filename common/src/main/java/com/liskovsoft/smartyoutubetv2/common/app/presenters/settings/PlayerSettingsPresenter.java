@@ -604,12 +604,13 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableTooltips(option.isSelected()),
                 mPlayerData.isTooltipsEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_tooltips) + ": " + getContext().getString(R.string.long_press_for_options),
-                option -> {
-                    mGeneralData.enableFirstUseTooltip(option.isSelected());
-                    mRestartApp = true;
-                },
-                mGeneralData.isFirstUseTooltipEnabled()));
+        // See: Utils.updateTooltip
+        //options.add(UiOptionItem.from(getContext().getString(R.string.player_show_tooltips) + ": " + getContext().getString(R.string.long_press_for_options),
+        //        option -> {
+        //            mGeneralData.enableFirstUseTooltip(option.isSelected());
+        //            mRestartApp = true;
+        //        },
+        //        mGeneralData.isFirstUseTooltipEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_button_long_click),
                 option -> mPlayerTweaksData.enableButtonLongClick(option.isSelected()),
