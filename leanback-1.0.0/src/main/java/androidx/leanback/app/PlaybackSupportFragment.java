@@ -723,7 +723,7 @@ public class PlaybackSupportFragment extends Fragment {
         } else {
             // MOD: properly reset ui position in touch mode (see BaseGridView.dispatchKeyEvent)
             if (getVerticalGridView() != null) {
-                getVerticalGridView().setFocusScrollStrategy(VerticalGridView.FOCUS_SCROLL_ALIGNED);
+                getVerticalGridView().fixTouchLayout();
             }
 
             reverseFirstOrStartSecond(mBgFadeInAnimator, mBgFadeOutAnimator, animation);

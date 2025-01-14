@@ -1022,7 +1022,16 @@ public abstract class BaseGridView extends RecyclerView {
         return mOnUnhandledKeyListener != null && mOnUnhandledKeyListener.onUnhandledKey(event);
     }
 
-    private int mPrevAction;
+    private int mPrevAction; // Enable clicks on cards
+    private boolean mSkipFirstTouch = true; // Fix ui position before real touches
+
+    /**
+     * MOD: Properly reset ui position in touch mode (see BaseGridView.dispatchKeyEvent)
+     */
+    public void fixTouchLayout() {
+        mSkipFirstTouch = true;
+        setFocusScrollStrategy(FOCUS_SCROLL_ALIGNED);
+    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -1030,8 +1039,9 @@ public abstract class BaseGridView extends RecyclerView {
         // Force enable touch mode (FOCUS_SCROLL_PAGE)
         // Also, exclude clicks to avoid miss focus.
         boolean isClick = event.getAction() == MotionEvent.ACTION_UP && mPrevAction == MotionEvent.ACTION_DOWN;
-        mLayoutManager.setFocusScrollStrategy(isClick ? BaseGridView.FOCUS_SCROLL_ALIGNED : BaseGridView.FOCUS_SCROLL_PAGE);
+        mLayoutManager.setFocusScrollStrategy(isClick || mSkipFirstTouch ? FOCUS_SCROLL_ALIGNED : FOCUS_SCROLL_PAGE);
         mPrevAction = event.getAction();
+        mSkipFirstTouch = false;
 
         if (mOnTouchInterceptListener != null) {
             if (mOnTouchInterceptListener.onInterceptTouchEvent(event)) {
