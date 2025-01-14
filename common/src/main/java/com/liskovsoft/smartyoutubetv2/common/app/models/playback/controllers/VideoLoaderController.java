@@ -217,7 +217,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         Video video = getPlayer().getVideo();
         if (video != null && video.finishOnEnded) {
             repeatMode = PlayerEngineConstants.REPEAT_MODE_CLOSE;
-        } else if (video != null && video.isShorts && mPlayerTweaksData.isLoopShortsEnabled()) {
+        } else if (video != null && video.belongsToShortsGroup() && mPlayerTweaksData.isLoopShortsEnabled()) {
             repeatMode = PlayerEngineConstants.REPEAT_MODE_ONE;
         }
 

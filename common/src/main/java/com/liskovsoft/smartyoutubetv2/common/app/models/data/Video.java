@@ -634,6 +634,10 @@ public final class Video {
         return belongsToGroup(MediaGroup.TYPE_SHORTS);
     }
 
+    public boolean belongsToShortsGroup() {
+        return isShorts && (belongsToShorts() || belongsToHome());
+    }
+
     public boolean belongsToSearch() {
         return belongsToGroup(MediaGroup.TYPE_SEARCH);
     }
