@@ -4,9 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 
-import com.liskovsoft.mediaserviceinterfaces.yt.ChannelGroupService;
-import com.liskovsoft.mediaserviceinterfaces.yt.data.ItemGroup;
-import com.liskovsoft.mediaserviceinterfaces.yt.data.ItemGroup.Item;
+import com.liskovsoft.mediaserviceinterfaces.ChannelGroupService;
+import com.liskovsoft.mediaserviceinterfaces.data.ItemGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.ItemGroup.Item;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;

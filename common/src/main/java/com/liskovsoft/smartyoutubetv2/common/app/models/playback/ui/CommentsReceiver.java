@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui;
 
-import com.liskovsoft.mediaserviceinterfaces.yt.data.CommentGroup;
-import com.liskovsoft.mediaserviceinterfaces.yt.data.CommentItem;
+import com.liskovsoft.mediaserviceinterfaces.data.CommentGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
 
 public interface CommentsReceiver {
     interface Callback {

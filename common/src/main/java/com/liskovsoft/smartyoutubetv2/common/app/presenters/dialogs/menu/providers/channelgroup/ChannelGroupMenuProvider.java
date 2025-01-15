@@ -7,7 +7,7 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
-import com.liskovsoft.mediaserviceinterfaces.yt.data.ItemGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.ItemGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers;

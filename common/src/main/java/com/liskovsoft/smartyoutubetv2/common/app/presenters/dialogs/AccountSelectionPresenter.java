@@ -3,11 +3,9 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
-import com.liskovsoft.mediaserviceinterfaces.yt.SignInService;
-import com.liskovsoft.mediaserviceinterfaces.yt.data.Account;
-import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.SignInService;
+import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -22,8 +20,6 @@ import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.disposables.Disposable;
 
 public class AccountSelectionPresenter extends BasePresenter<Void> {
     private static final String TAG = AccountSelectionPresenter.class.getSimpleName();

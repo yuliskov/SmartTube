@@ -7,7 +7,6 @@ import android.os.Build;
 
 import com.liskovsoft.googleapi.drive3.impl.GDriveService;
 import com.liskovsoft.googleapi.oauth2.impl.GoogleSignInService;
-import com.liskovsoft.mediaserviceinterfaces.google.DriveService;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -34,7 +33,7 @@ public class GDriveBackupManager {
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
     private static final String BACKUP_NAME = "backup.zip";
     private final GoogleSignInService mSignInService;
-    private final DriveService mDriveService;
+    private final GDriveService mDriveService;
     private final String mDataDir;
     private final String mBackupDir;
     private final GeneralData mGeneralData;

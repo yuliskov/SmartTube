@@ -3,10 +3,10 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 import android.content.Context;
 import android.util.Pair;
 
-import com.liskovsoft.mediaserviceinterfaces.yt.CommentsService;
-import com.liskovsoft.mediaserviceinterfaces.yt.data.CommentGroup;
-import com.liskovsoft.mediaserviceinterfaces.yt.data.CommentItem;
-import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItemMetadata;
+import com.liskovsoft.mediaserviceinterfaces.CommentsService;
+import com.liskovsoft.mediaserviceinterfaces.data.CommentGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.liskovsoft.mediaserviceinterfaces.yt.data.ItemGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.ItemGroup;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;

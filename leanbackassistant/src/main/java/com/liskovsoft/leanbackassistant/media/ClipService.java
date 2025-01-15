@@ -2,17 +2,10 @@ package com.liskovsoft.leanbackassistant.media;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.tvprovider.media.tv.TvContractCompat;
-import com.liskovsoft.leanbackassistant.R;
-import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaItem;
-import com.liskovsoft.mediaserviceinterfaces.yt.ServiceManager;
-import com.liskovsoft.mediaserviceinterfaces.yt.data.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.yt.ContentService;
-import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.liskovsoft.leanbackassistant.R;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.ContentService;
 
 public class ClipService {
     private static final int SUBSCRIPTIONS_ID = 1;
