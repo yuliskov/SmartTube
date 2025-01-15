@@ -36,6 +36,7 @@ public class VideoStateController extends BasePlayerController {
     private Video mVideo = new Video();
     private PlayerData mPlayerData;
     private GeneralData mGeneralData;
+    private MediaServiceData mMediaServiceData;
     private PlayerTweaksData mPlayerTweaksData;
     private RemoteControlData mRemoteControlData;
     private VideoStateService mStateService;
@@ -49,6 +50,7 @@ public class VideoStateController extends BasePlayerController {
     public void onInit() { // called each time a video opened from the browser
         mPlayerData = PlayerData.instance(getContext());
         mGeneralData = GeneralData.instance(getContext());
+        mMediaServiceData = MediaServiceData.instance();
         mPlayerTweaksData = PlayerTweaksData.instance(getContext());
         mRemoteControlData = RemoteControlData.instance(getContext());
         mStateService = VideoStateService.instance(getContext());
@@ -476,7 +478,7 @@ public class VideoStateController extends BasePlayerController {
     private void updateHistory() {
         Video video = getVideo();
 
-        if (video == null || (video.isShorts && mGeneralData.isHideShortsFromHistoryEnabled()) ||
+        if (video == null || (video.isShorts && mMediaServiceData.isContentHidden(MediaServiceData.CONTENT_SHORTS_HISTORY)) ||
                 mIncognito || getPlayer() == null || !getPlayer().containsMedia() ||
                 (video.isRemote && mRemoteControlData.isRemoteHistoryDisabled()) ||
                 mGeneralData.getHistoryState() == GeneralData.HISTORY_DISABLED || mStateService.isHistoryBroken()) {
