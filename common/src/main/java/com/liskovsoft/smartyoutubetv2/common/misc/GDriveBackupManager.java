@@ -5,7 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 
-import com.liskovsoft.googleapi.drive3.impl.GDriveService;
+import com.liskovsoft.googleapi.service.DriveService;
 import com.liskovsoft.googleapi.oauth2.impl.GoogleSignInService;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -33,7 +33,6 @@ public class GDriveBackupManager {
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
     private static final String BACKUP_NAME = "backup.zip";
     private final GoogleSignInService mSignInService;
-    private final GDriveService mDriveService;
     private final String mDataDir;
     private final String mBackupDir;
     private final GeneralData mGeneralData;
@@ -48,7 +47,6 @@ public class GDriveBackupManager {
         mDataDir = String.format("%s/%s", mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR);
         mBackupDir = String.format("SmartTubeBackup/%s", context.getPackageName());
         mSignInService = GoogleSignInService.instance();
-        mDriveService = GDriveService.instance();
         mBackupNames = new String[] {
                 "yt_service_prefs.xml",
                 "com.liskovsoft.appupdatechecker2.preferences.xml",
@@ -131,7 +129,7 @@ public class GDriveBackupManager {
                 if (checkFileName(file.getName())) {
                     if (!mIsBlocking) MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_backup) + "\n" + file.getName());
 
-                    RxHelper.runBlocking(mDriveService.uploadFile(file, Uri.parse(String.format("%s%s", backupDir, file.getAbsolutePath().replace(dataDir, "")))));
+                    RxHelper.runBlocking(DriveService.uploadFile(file, Uri.parse(String.format("%s%s", backupDir, file.getAbsolutePath().replace(dataDir, "")))));
                 }
             }
         };
@@ -152,7 +150,7 @@ public class GDriveBackupManager {
         File zipFile = new File(mContext.getCacheDir(), BACKUP_NAME);
         ZipHelper.zipFolder(source, zipFile, mBackupNames);
 
-        Observable<Void> uploadFile = mDriveService.uploadFile(zipFile, Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)));
+        Observable<Void> uploadFile = DriveService.uploadFile(zipFile, Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)));
 
         if (mIsBlocking) {
             RxHelper.runBlocking(uploadFile);
@@ -181,7 +179,7 @@ public class GDriveBackupManager {
     }
 
     private void startRestore(String backupDir, String dataDir, Runnable onError) {
-        mRestoreAction = mDriveService.getList(Uri.parse(backupDir))
+        mRestoreAction = DriveService.getList(Uri.parse(backupDir))
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io()) // run subscribe on separate thread
                 .subscribe(names -> {
@@ -192,7 +190,7 @@ public class GDriveBackupManager {
                         if (checkFileName(name)) {
                             MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_restore) + "\n" + name);
 
-                            mDriveService.getFile(Uri.parse(String.format("%s/%s", backupDir, name)))
+                            DriveService.getFile(Uri.parse(String.format("%s/%s", backupDir, name)))
                                     .blockingSubscribe(inputStream -> FileHelpers.copy(inputStream, new File(dataDir, fixAltPackageName(name))));
                         }
                     }
@@ -207,7 +205,7 @@ public class GDriveBackupManager {
 
     private void startRestore2(String backupDir, String dataDir, Runnable onError) {
         MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_restore));
-        mRestoreAction = mDriveService.getFile(Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)))
+        mRestoreAction = DriveService.getFile(Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(inputStream -> {
