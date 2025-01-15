@@ -306,16 +306,25 @@ public class Utils {
     public static int getVolume(Context context, PlayerManager player, boolean normalize) {
         if (context != null) {
             if (Utils.isGlobalVolumeFixed(context)) {
-                if (player == null) {
-                    return -1;
-                }
-                return (int)(player.getVolume() * 100);
+                return getPlayerVolume(player);
             } else {
-                return Utils.getGlobalVolume(context, normalize);
+                try {
+                    return Utils.getGlobalVolume(context, normalize);
+                } catch (SecurityException e) {
+                    // Permission denial: writing to settings requires:android.permission.WRITE_SECURE_SETTINGS
+                    return getPlayerVolume(player);
+                }
             }
         }
 
         return 100;
+    }
+
+    private static int getPlayerVolume(PlayerManager player) {
+        if (player == null) {
+            return -1;
+        }
+        return (int)(player.getVolume() * 100);
     }
 
     public static void setVolume(Context context, PlayerManager player, int volume) {
@@ -325,20 +334,29 @@ public class Utils {
     /**
      * Volume: 0 - 100
      */
-    @SuppressLint("StringFormatMatches")
     public static void setVolume(Context context, PlayerManager player, int volume, boolean normalize) {
         if (context != null) {
             if (Utils.isGlobalVolumeFixed(context)) {
-                if (player == null) {
-                    return;
-                }
-                player.setVolume(volume / 100f);
-                MessageHelpers.showMessage(context, context.getString(R.string.volume, getVolume(context, player, normalize)));
+                setPlayerVolume(context, player, volume);
             } else {
-                Utils.setGlobalVolume(context, volume, normalize);
-                showSystemVolumeUI(context);
+                try {
+                    Utils.setGlobalVolume(context, volume, normalize);
+                    showSystemVolumeUI(context);
+                } catch (SecurityException e) {
+                    // Permission denial: writing to settings requires:android.permission.WRITE_SECURE_SETTINGS
+                    setPlayerVolume(context, player, volume);
+                }
             }
         }
+    }
+
+    @SuppressLint("StringFormatMatches")
+    private static void setPlayerVolume(Context context, PlayerManager player, int volume) {
+        if (player == null) {
+            return;
+        }
+        player.setVolume(volume / 100f);
+        MessageHelpers.showMessage(context, context.getString(R.string.volume, getPlayerVolume(player)));
     }
 
     public static void volumeUp(Context context, PlayerManager player, boolean up) {
