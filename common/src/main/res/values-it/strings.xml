@@ -297,6 +297,7 @@
     <string name="upload_date_last_hour">Ultima ora</string>
     <string name="focus_on_search_results">Messa a fuoco automatica sui risultati della ricerca</string>
     <string name="context_menu">Menu contestuale</string>
+    <string name="context_menu_sorting">Ordinamento del menu contestuale</string>
     <string name="add_remove_from_recent_playlist">Aggiungi/Rimuovi dalla playlist recente</string>
     <string name="hide_settings_section">Nascondi la sezione Impostazioni (pericoloso!)</string>
     <string name="volume">Volume %s%%</string>
@@ -591,7 +592,7 @@
     <string name="old_update_notifications">Il vecchio aspetto delle notifiche di aggiornamento</string>
     <string name="dialog_notification">Notifica aggiornamenti con una finestra di dialogo pop-up</string>
     <string name="mark_as_watched">Contrassegna come già visto</string>
-    <string name="player_ui_animations">Abilita le animazioni del pannello di controllo</string>
+    <string name="player_ui_animations">Abilita le animazioni dell\'interfaccia utente del lettore</string>
     <string name="player_likes_count">Mostra il conteggio dei Mi piace/Non mi piace</string>
     <string name="sorting_alphabetically2">In ordine alfabetico (anteprime veloci e animate)</string>
     <string name="sorting_default">Predefinito (anteprime veloci e animate)</string>
