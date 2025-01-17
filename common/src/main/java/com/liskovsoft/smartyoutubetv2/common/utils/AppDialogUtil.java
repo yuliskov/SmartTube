@@ -37,7 +37,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
 import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
-import com.liskovsoft.youtubeapi.service.data.YouTubePlaylistInfo;
+import com.liskovsoft.youtubeapi.playlist.impl.YouTubePlaylistInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;

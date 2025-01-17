@@ -425,42 +425,55 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     private void showRenamePlaylistDialog(Video video) {
+        if (video.hasPlaylist()) {
+            showRenamePlaylistDialogSimple(video);
+        } else {
+            showRenamePlaylistDialogUploads(video);
+        }
+    }
+
+    private void showRenamePlaylistDialogUploads(Video video) {
         MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
         mServiceManager.loadChannelUploads(
                 video,
                 mediaGroup -> {
-                    closeDialog();
-
                     if (mediaGroup == null) { // crash fix
                         return;
                     }
 
                     MediaItem firstItem = mediaGroup.getMediaItems().get(0);
+                    video.playlistId = firstItem.getPlaylistId();
 
-                    if (firstItem.getPlaylistId() == null) {
-                        MessageHelpers.showMessage(getContext(), R.string.cant_rename_empty_playlist);
-                        return;
-                    }
-
-                    SimpleEditDialog.show(
-                            getContext(),
-                            getContext().getString(R.string.rename_playlist),
-                            video.getTitle(),
-                            newValue -> {
-                                MediaItemService manager = YouTubeMediaItemService.instance();
-                                Observable<Void> action = manager.renamePlaylistObserve(firstItem.getPlaylistId(), newValue);
-                                RxHelper.execute(
-                                        action,
-                                        (error) -> MessageHelpers.showMessage(getContext(), R.string.owned_playlist_warning),
-                                        () -> {
-                                            video.title = newValue;
-                                            BrowsePresenter.instance(getContext()).syncItem(video);
-                                        }
-                                );
-                                return true;
-                            });
+                    showRenamePlaylistDialogSimple(video);
                 }
         );
+    }
+
+    private void showRenamePlaylistDialogSimple(Video video) {
+        if (video.getPlaylistId() == null) {
+            MessageHelpers.showMessage(getContext(), R.string.cant_rename_empty_playlist);
+            return;
+        }
+
+        closeDialog();
+
+        SimpleEditDialog.show(
+                getContext(),
+                getContext().getString(R.string.rename_playlist),
+                video.getTitle(),
+                newValue -> {
+                    MediaItemService manager = YouTubeMediaItemService.instance();
+                    Observable<Void> action = manager.renamePlaylistObserve(video.getPlaylistId(), newValue);
+                    RxHelper.execute(
+                            action,
+                            (error) -> MessageHelpers.showMessage(getContext(), R.string.owned_playlist_warning),
+                            () -> {
+                                video.title = newValue;
+                                BrowsePresenter.instance(getContext()).syncItem(video);
+                            }
+                    );
+                    return true;
+                });
     }
 
     protected void appendToggleHistoryButton() {
