@@ -881,10 +881,10 @@ public class AppDialogUtil {
     }
 
     public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback) {
-        if (!YouTubeSignInService.instance().isSigned()) {
-            MessageHelpers.showMessage(context, R.string.msg_signed_users_only);
-            return;
-        }
+        //if (!YouTubeSignInService.instance().isSigned()) {
+        //    MessageHelpers.showMessage(context, R.string.msg_signed_users_only);
+        //    return;
+        //}
 
         if (video == null) {
             return;
