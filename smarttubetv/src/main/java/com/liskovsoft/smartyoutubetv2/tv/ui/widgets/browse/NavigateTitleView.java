@@ -67,6 +67,10 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
     private int mFlags = FULL_VIEW_VISIBLE;
     private int mIconWidth;
     private int mIconHeight;
+    private boolean mIsSearchOrbEnabled;
+    private boolean mIsAccountViewEnabled;
+    private boolean mIsLanguageViewEnabled;
+    private boolean mIsGlobalClockEnabled;
 
     public NavigateTitleView(Context context) {
         super(context);
@@ -146,15 +150,15 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         mBrandingVisibility = (flags & BRANDING_VIEW_VISIBLE) == BRANDING_VIEW_VISIBLE
                 ? View.VISIBLE : View.INVISIBLE;
 
-        if (mSearchOrbView != null) {
+        if (mIsSearchOrbEnabled) {
             mSearchOrbView.setVisibility(View.GONE);
         }
 
-        if (mAccountView != null) {
+        if (mIsAccountViewEnabled) {
             mAccountView.setVisibility(mSearchVisibility);
         }
 
-        if (mLanguageView != null) {
+        if (mIsLanguageViewEnabled) {
             mLanguageView.setVisibility(mSearchVisibility);
         }
 
@@ -163,11 +167,11 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
             mPipTitle.setVisibility(mSearchVisibility);
         }
 
-        if (mGlobalClock != null) {
+        if (mIsGlobalClockEnabled) {
             mGlobalClock.setVisibility(mBrandingVisibility);
         }
 
-        if (mGlobalDate != null) {
+        if (mIsGlobalClockEnabled) {
             mGlobalDate.setVisibility(mBrandingVisibility);
         }
     }
@@ -188,80 +192,55 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
     }
 
     private void setupButtons() {
-        cleanup();
-
         MainUIData mainUIData = MainUIData.instance(getContext());
 
-        if (!mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_SEARCH)) {
-            mSearchOrbView = (SearchOrbView) findViewById(R.id.title_orb);
-        }
+        mSearchOrbView = findViewById(R.id.title_orb);
 
-        if (mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS)) {
-            mAccountView = (LongClickSearchOrbView) findViewById(R.id.account_orb);
-            if (mAccountView != null) {
-                mAccountView.setOnOrbClickedListener(v -> AccountSelectionPresenter.instance(getContext()).nextAccountOrDialog());
-                mAccountView.setOnOrbLongClickedListener(v -> {
-                    AccountSettingsPresenter.instance(getContext()).show();
-                    return true;
-                });
-                TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
-            }
+        mAccountView = findViewById(R.id.account_orb);
+        mAccountView.setOnOrbClickedListener(v -> AccountSelectionPresenter.instance(getContext()).nextAccountOrDialog());
+        mAccountView.setOnOrbLongClickedListener(v -> {
+            AccountSettingsPresenter.instance(getContext()).show();
+            return true;
+        });
+        TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
 
-            updateAccountIcon();
-        }
+        mLanguageView = findViewById(R.id.language_orb);
+        mLanguageView.setOnOrbClickedListener(v -> LanguageSettingsPresenter.instance(getContext()).show());
+        TooltipCompatHandler.setTooltipText(mLanguageView, getContext().getString(R.string.settings_language_country));
 
-        if (mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_CHANGE_LANGUAGE)) {
-            mLanguageView = (SearchOrbView) findViewById(R.id.language_orb);
-            mLanguageView.setOnOrbClickedListener(v -> LanguageSettingsPresenter.instance(getContext()).show());
-            TooltipCompatHandler.setTooltipText(mLanguageView, getContext().getString(R.string.settings_language_country));
-
-            updateLanguageIcon();
-        }
-
-        mExitPip = (SearchOrbView) findViewById(R.id.exit_pip);
-        mPipTitle = (TextView) findViewById(R.id.pip_title);
+        mExitPip = findViewById(R.id.exit_pip);
+        mPipTitle = findViewById(R.id.pip_title);
         mExitPip.setOnOrbClickedListener(v -> ViewManager.instance(getContext()).startView(PlaybackView.class));
         ViewUtil.enableMarquee(mPipTitle);
         ViewUtil.setTextScrollSpeed(mPipTitle, mainUIData.getCardTextScrollSpeed());
         TooltipCompatHandler.setTooltipText(mExitPip, getContext().getString(R.string.return_to_background_video));
 
-        if (GeneralData.instance(getContext()).isGlobalClockEnabled()) {
-            mGlobalClock = (DateTimeView) findViewById(R.id.global_time);
-            if (mGlobalClock != null) {
-                mGlobalClock.showDate(false);
-                mGlobalClock.setVisibility(View.VISIBLE);
-            }
+        mGlobalClock = findViewById(R.id.global_time);
+        mGlobalClock.showDate(false);
 
-            mGlobalDate = (DateTimeView) findViewById(R.id.global_date);
-            if (mGlobalDate != null) {
-                mGlobalDate.showTime(false);
-                mGlobalDate.showDate(true);
-                mGlobalDate.setVisibility(View.VISIBLE);
-            }
-        }
+        mGlobalDate = findViewById(R.id.global_date);
+        mGlobalDate.showTime(false);
+        mGlobalDate.showDate(true);
+
+        updateButtonsVisibility();
     }
 
-    private void cleanup() {
-        if (mSearchOrbView != null) {
-            mSearchOrbView.setVisibility(View.GONE);
-            mSearchOrbView = null;
-        }
-        if (mAccountView != null) {
-            mAccountView.setVisibility(View.GONE);
-            mAccountView = null;
-        }
-        if (mLanguageView != null) {
-            mLanguageView.setVisibility(View.GONE);
-            mLanguageView = null;
-        }
-        if (mGlobalClock != null) {
-            mGlobalClock.setVisibility(View.GONE);
-            mGlobalClock = null;
-        }
-        if (mGlobalDate != null) {
-            mGlobalDate.setVisibility(View.GONE);
-            mGlobalDate = null;
-        }
+    private void updateButtonsVisibility() {
+        MainUIData mainUIData = MainUIData.instance(getContext());
+
+        mIsSearchOrbEnabled = !mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_SEARCH);
+        mIsAccountViewEnabled = mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS);
+        mIsLanguageViewEnabled = mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_CHANGE_LANGUAGE);
+        mIsGlobalClockEnabled = GeneralData.instance(getContext()).isGlobalClockEnabled();
+
+        mSearchOrbView.setVisibility(mIsSearchOrbEnabled ? View.VISIBLE : View.GONE);
+        mAccountView.setVisibility(mIsAccountViewEnabled ? View.VISIBLE : View.GONE);
+        mLanguageView.setVisibility(mIsLanguageViewEnabled ? View.VISIBLE : View.GONE);
+        mGlobalClock.setVisibility(mIsGlobalClockEnabled ? View.VISIBLE : View.GONE);
+        mGlobalDate.setVisibility(mIsGlobalClockEnabled ? View.VISIBLE : View.GONE);
+
+        updateAccountIcon();
+        updateLanguageIcon();
     }
 
     @Override
@@ -301,7 +280,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
     }
 
     private void updateAccountIcon() {
-        if (mAccountView == null) {
+        if (!mIsAccountViewEnabled) {
             return;
         }
 
@@ -321,12 +300,12 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
     }
 
     private void updateLanguageIcon() {
-        if (mLanguageView == null) {
+        if (!mIsLanguageViewEnabled) {
             return;
         }
 
         // Use delay to fix icon initialization on app boot
-        new Handler(Looper.myLooper()).postDelayed(() -> {
+        Utils.postDelayed(() -> {
             Locale locale = LocaleUtility.getCurrentLocale(getContext());
             loadIcon(mLanguageView, Utils.getCountryFlagUrl(locale.getCountry()), true); // flag server could be down
             TooltipCompatHandler.setTooltipText(mLanguageView, String.format("%s (%s)", locale.getDisplayCountry(), locale.getDisplayLanguage()));
@@ -383,7 +362,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
     @Override
     public void onDataChange() {
         try {
-            setupButtons();
+            updateButtonsVisibility();
             updateComponentsVisibility(mFlags);
         } catch (IllegalStateException e) {
             // Fragment BrowseFragment has not been attached yet.

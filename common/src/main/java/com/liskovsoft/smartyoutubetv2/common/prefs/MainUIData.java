@@ -419,9 +419,8 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         
         updateDefaultValues();
     }
-
-    @Override
-    protected void persistState() {
+    
+    private void persistState() {
         mPrefs.setProfileData(MAIN_UI_DATA, Helpers.mergeData(mIsCardAnimatedPreviewsEnabled,
                 mVideoGridScale, mUIScale, mColorSchemeIndex, mIsCardMultilineTitleEnabled,
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
@@ -429,7 +428,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
                 null, mThumbQuality, mIsCardMultilineSubtitleEnabled, Helpers.mergeList(mMenuItemsOrdered),
                 mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled, mIsPinnedChannelRowsEnabled));
 
-        super.persistState();
+        onDataChange();
     }
 
     public static class ColorScheme {
@@ -469,5 +468,6 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     @Override
     public void onProfileChanged() {
         restoreState();
+        onDataChange();
     }
 }

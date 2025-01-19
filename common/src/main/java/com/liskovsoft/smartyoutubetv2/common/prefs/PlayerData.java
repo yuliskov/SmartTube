@@ -842,8 +842,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         }
     }
 
-    @Override
-    protected void persistState() {
+    private void persistState() {
         mPrefs.setProfileData(VIDEO_PLAYER_DATA, Helpers.mergeData(mOKButtonBehavior, mUiHideTimeoutSec, null,
                 mSeekPreviewMode, mIsSeekConfirmPauseEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
@@ -859,7 +858,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages
         ));
 
-        super.persistState();
+        onDataChange();
     }
 
     @Override

@@ -9,15 +9,15 @@ public abstract class DataChangeBase {
 
     private final WeakHashSet<OnDataChange> mOnChangeList = new WeakHashSet<>();
 
-    public void setOnChange(OnDataChange callback) {
+    public final void setOnChange(OnDataChange callback) {
         mOnChangeList.add(callback);
     }
 
-    public void removeOnChange(OnDataChange callback) {
+    public final void removeOnChange(OnDataChange callback) {
         mOnChangeList.remove(callback);
     }
 
-    protected void persistState() {
+    public final void onDataChange() {
         mOnChangeList.forEach(OnDataChange::onDataChange);
     }
 }

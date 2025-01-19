@@ -104,12 +104,12 @@ public class RemoteControlData extends DataChangeBase {
         mIsConnectedBefore = Helpers.parseBoolean(split, 7, false);
     }
 
-    protected void persistState() {
+    private void persistState() {
         mAppPrefs.setData(DEVICE_LINK_DATA, Helpers.mergeData(
                 null, null, mIsDeviceLinkEnabled, mIsFinishOnDisconnectEnabled, mIsConnectMessagesEnabled,
                 mIsRemoteHistoryDisabled, mLastVideo, mIsConnectedBefore
         ));
 
-        super.persistState();
+        onDataChange();
     }
 }

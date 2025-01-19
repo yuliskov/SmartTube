@@ -68,11 +68,10 @@ public abstract class DataSaverBase extends DataChangeBase {
         }
     }
 
-    @Override
-    protected void persistState() {
-        super.persistState();
+    private void persistState() {
         mAppPrefs.setData(mDataKey, Helpers.mergeData(
                 mValues.toArray()
         ));
+        onDataChange();
     }
 }
