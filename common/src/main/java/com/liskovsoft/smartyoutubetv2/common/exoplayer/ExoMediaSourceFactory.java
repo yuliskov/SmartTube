@@ -67,18 +67,6 @@ public class ExoMediaSourceFactory {
         mContext = context;
     }
 
-    //public static ExoMediaSourceFactory instance(Context context) {
-    //    if (sInstance == null) {
-    //        sInstance = new ExoMediaSourceFactory(context.getApplicationContext());
-    //    }
-    //
-    //    return sInstance;
-    //}
-    //
-    //public static void unhold() {
-    //    sInstance = null;
-    //}
-
     public MediaSource fromDashManifest(InputStream dashManifest) {
         return buildMPDMediaSource(DASH_MANIFEST_URI, dashManifest);
     }

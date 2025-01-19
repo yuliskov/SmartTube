@@ -121,7 +121,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     }
 
     private void onLongBuffering() {
-        //updateBufferingCount();
+        updateBufferingCount();
 
         if (mLastVideo == null) {
             return;
@@ -131,8 +131,11 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         if ((!mLastVideo.isLive || mLastVideo.isLiveEnd) &&
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
+        } else if (isBufferingRecurrent()) {
+            MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
+            mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+            restartEngine();
         } else {
-            //MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
             YouTubeServiceManager.instance().applyAntiBotFix(); // bot check error?
             mPlayerTweaksData.enablePersistentAntiBotFix(true);
             reloadVideo();
