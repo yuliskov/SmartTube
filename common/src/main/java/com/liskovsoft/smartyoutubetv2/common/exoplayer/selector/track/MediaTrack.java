@@ -8,7 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorMan
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
 public abstract class MediaTrack {
-    private static final int BITRATE_DIFF_PERCENTS = 5;
+    private static final int BITRATE_DIFF_PERCENTS = 7;
     private static final int VP9_WEIGHT = 31;
     private static final int AVC_WEIGHT = 28;
     private static final int AV1_WEIGHT = 14;

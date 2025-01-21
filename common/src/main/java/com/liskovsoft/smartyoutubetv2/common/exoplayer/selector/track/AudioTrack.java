@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track;
 
+import com.google.android.exoplayer2.Format;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
@@ -69,7 +70,7 @@ public class AudioTrack extends MediaTrack {
             result = 0;
         } else if (Helpers.equals(format.id, track2.format.id)) {
             result = 1;
-        } else if (!codecEquals(this, track2) || bitrateLessOrEquals(track2.format.bitrate, format.bitrate)) {
+        } else if (!codecEquals(this, track2) || !drcEquals(format, track2.format) || bitrateLessOrEquals(track2.format.bitrate, format.bitrate)) {
             result = 0;
         }
 
@@ -78,5 +79,13 @@ public class AudioTrack extends MediaTrack {
 
     private boolean sameLanguage(String language1, String language2) {
         return Helpers.equals(language1, language2) || (language1 == null || language2 == null);
+    }
+
+    private static boolean drcEquals(Format format1, Format format2) {
+        if (format1 == null || format2 == null) {
+            return false;
+        }
+
+        return TrackSelectorUtil.isDrc(format1) == TrackSelectorUtil.isDrc(format2);
     }
 }
