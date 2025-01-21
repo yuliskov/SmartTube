@@ -266,7 +266,7 @@ public class SidebarService implements ProfileChangeListener {
                 return true;
             }
 
-            return !item.hasPlaylist() && item.channelId == null && item.sectionId == -1 && item.channelGroupId == -1 && !item.hasReloadPageKey();
+            return !item.hasPlaylist() && item.channelId == null && item.sectionId == -1 && item.channelGroupId == null && !item.hasReloadPageKey();
         });
     }
 

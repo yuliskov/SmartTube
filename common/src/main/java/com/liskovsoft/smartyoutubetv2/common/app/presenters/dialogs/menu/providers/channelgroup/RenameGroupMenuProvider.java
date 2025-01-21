@@ -39,7 +39,7 @@ public class RenameGroupMenuProvider extends ContextMenuProvider {
                     item.title = newValue;
                     BrowsePresenter.instance(mContext).renameSection(item);
 
-                    ItemGroup channelGroup = mService.findChannelGroup(item.channelGroupId);
+                    ItemGroup channelGroup = mService.findChannelGroupById(item.channelGroupId);
 
                     if (channelGroup != null) {
                         //channelGroup.title = newValue;
@@ -53,7 +53,7 @@ public class RenameGroupMenuProvider extends ContextMenuProvider {
 
     @Override
     public boolean isEnabled(Video item) {
-        return item != null && item.channelGroupId != -1;
+        return item != null && item.channelGroupId != null;
     }
 
     @Override

@@ -958,7 +958,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private Observable<MediaGroup> createPinnedGridAction(Video item) {
-        if (item.channelGroupId != -1) {
+        if (item.channelGroupId != null) {
             return mContentService.getSubscriptionsObserve(ChannelGroupServiceWrapper.instance(getContext()).findChannelIdsForGroup(item.channelGroupId));
         }
 

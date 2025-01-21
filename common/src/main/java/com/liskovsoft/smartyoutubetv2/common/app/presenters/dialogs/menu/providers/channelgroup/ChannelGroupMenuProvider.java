@@ -91,7 +91,7 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
             SimpleEditDialog.show(mContext, editDialogTitle,
                     null,
                     newValue -> {
-                        if (mService.findChannelGroup(newValue) != null) {
+                        if (mService.findChannelGroupByTitle(newValue) != null) {
                             return false;
                         }
 

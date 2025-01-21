@@ -79,7 +79,7 @@ public final class Video {
     public boolean isSynced;
     public final long timestamp = System.currentTimeMillis();
     public int sectionId = -1;
-    public int channelGroupId = -1;
+    public String channelGroupId;
     public long startTimeMs;
     public long pendingPosMs;
     public boolean fromQueue;
@@ -448,7 +448,12 @@ public final class Video {
         result.metadataSecondTitle = Helpers.parseStr(split[18]);
         result.badge = Helpers.parseStr(split[19]);
         result.isLive = Helpers.parseBoolean(split[20]);
-        result.channelGroupId = Helpers.parseInt(split[21]);
+        result.channelGroupId = Helpers.parseStr(split[21]);
+
+        // Reset old type (int)
+        if (Helpers.equals(result.channelGroupId, "-1")) {
+            result.channelGroupId = null;
+        }
 
         return result;
     }
