@@ -353,7 +353,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // Sign in error (bot check error?)
             YouTubeServiceManager.instance().applyAntiBotFix();
             mPlayerTweaksData.enablePersistentAntiBotFix(true);
-            scheduleRebootAppTimer(5_000);
+            scheduleNextVideoTimer(5_000);
         } else if (formatInfo.containsDashVideoFormats() && acceptDashVideoFormats(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
