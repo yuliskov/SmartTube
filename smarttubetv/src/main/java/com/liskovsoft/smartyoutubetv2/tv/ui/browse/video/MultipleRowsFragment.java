@@ -299,6 +299,8 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             if (item instanceof Video) {
                 mBackgroundManager.setBackgroundFrom((Video) item);
 
+                mMainPresenter.onVideoItemSelected((Video) item);
+
                 checkScrollEnd((Video)item);
             }
         }

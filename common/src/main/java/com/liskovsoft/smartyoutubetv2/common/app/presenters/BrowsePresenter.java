@@ -142,32 +142,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, true);
     }
 
-    @Override
-    public void onViewPaused() {
-        super.onViewPaused();
-
-        saveSelectedItems();
-    }
-
-    private void saveSelectedItems() {
-        // Fix position reset when jumping between sections
-        if (mCurrentVideo != null && mCurrentVideo.getPositionInsideGroup() == 0 && (System.currentTimeMillis() - mCurrentVideo.timestamp) < 10_000) {
-            return;
-        }
-
-        if ((isSubscriptionsSection() && mGeneralData.isRememberSubscriptionsPositionEnabled()) ||
-                (isPinnedSection() && mGeneralData.isRememberPinnedPositionEnabled())) {
-            mGeneralData.setSelectedItem(mCurrentSection.getId(), mCurrentVideo);
-        }
-    }
-
-    private void restoreSelectedItems() {
-        if ((isSubscriptionsSection() && mGeneralData.isRememberSubscriptionsPositionEnabled()) ||
-                (isPinnedSection() && mGeneralData.isRememberPinnedPositionEnabled())) {
-            getView().selectSectionItem(mGeneralData.getSelectedItem(mCurrentSection.getId()));
-        }
-    }
-
     private void initSections() {
         initSectionMapping();
 
@@ -359,7 +333,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void onViewDestroyed() {
         super.onViewDestroyed();
         disposeActions();
-        saveSelectedItems();
     }
 
     @Override
@@ -441,7 +414,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public void onSectionFocused(int sectionId) {
-        saveSelectedItems(); // save previous state
         mCurrentSection = findSectionById(sectionId);
         mCurrentVideo = null; // fast scroll through the sections (fix empty selected item)
         updateCurrentSection();
@@ -545,7 +517,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     public void unpinItem(Video item) {
         mSidebarService.removePinnedItem(item);
-        mGeneralData.removeSelectedItem(item.getId());
 
         BrowseSection section = null;
 
@@ -705,8 +676,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             getView().showProgressBar(false);
             return;
         }
-
-        restoreSelectedItems();
 
         Disposable updateAction = group
                 .subscribe(

@@ -26,6 +26,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
@@ -46,6 +47,7 @@ import java.util.Map;
 public class BrowseFragment extends BrowseSupportFragment implements BrowseView {
     private static final String TAG = BrowseFragment.class.getSimpleName();
     private static final String SELECTED_HEADER_INDEX = "SelectedHeaderIndex";
+    private static final String SELECTED_VIDEO = "SelectedVideo";
     private ArrayObjectAdapter mSectionRowAdapter;
     private BrowsePresenter mBrowsePresenter;
     private Map<Integer, BrowseSection> mSections;
@@ -55,6 +57,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private NavigateTitleView mTitleView;
     private boolean mIsFragmentCreated;
     private int mRestoredHeaderIndex = -1;
+    private Video mRestoredVideo;
     private boolean mFocusOnContent;
 
     @Override
@@ -62,6 +65,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         super.onCreate(null);
 
         mRestoredHeaderIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_HEADER_INDEX, -1) : -1;
+        mRestoredVideo = savedInstanceState != null ? Video.fromString(savedInstanceState.getString(SELECTED_VIDEO)) : null;
         mIsFragmentCreated = true;
 
         mSections = new HashMap<>();
@@ -83,6 +87,9 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         // Store position in case activity is crashed
         outState.putInt(SELECTED_HEADER_INDEX, getSelectedPosition());
+        if (mBrowsePresenter.getCurrentVideo() != null) {
+            outState.putString(SELECTED_VIDEO, mBrowsePresenter.getCurrentVideo().toString());
+        }
     }
 
     @Override
@@ -111,7 +118,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             mRestoredHeaderIndex = -1;
 
             // Restore state after crash
-            selectSectionItem(mBrowsePresenter.getCurrentVideo());
+            selectSectionItem(mRestoredVideo);
+            PlaybackPresenter.instance(getContext()).openVideo(mRestoredVideo);
         }
     }
 

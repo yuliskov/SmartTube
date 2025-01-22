@@ -80,7 +80,6 @@ public class GeneralData implements ProfileChangeListener {
     private Map<String, Integer> mPlaylistOrder;
     private List<Video> mPendingStreams;
     private boolean mIsFullscreenModeEnabled;
-    private Map<Integer, Video> mSelectedItems;
     private boolean mIsFirstUseTooltipEnabled;
     private boolean mIsDeviceSpecificBackupEnabled;
     private boolean mIsAutoBackupEnabled;
@@ -613,24 +612,6 @@ public class GeneralData implements ProfileChangeListener {
         return mIsFullscreenModeEnabled;
     }
 
-    public void setSelectedItem(int sectionId, Video item) {
-        if (item == null) {
-            return;
-        }
-
-        mSelectedItems.put(sectionId, item);
-
-        persistState();
-    }
-
-    public Video getSelectedItem(int sectionId) {
-        return mSelectedItems.get(sectionId);
-    }
-
-    public void removeSelectedItem(int sectionId) {
-        mSelectedItems.remove(sectionId);
-    }
-
     public void setChangelog(List<String> changelog) {
         mChangelog = changelog;
         persistState();
@@ -742,7 +723,7 @@ public class GeneralData implements ProfileChangeListener {
         mIsFullscreenModeEnabled = Helpers.parseBoolean(split, 60, true);
         //mIsHideWatchedFromWatchLaterEnabled = Helpers.parseBoolean(split, 61, false);
         mRememberPinnedPosition = Helpers.parseBoolean(split, 62, false);
-        mSelectedItems = Helpers.parseMap(split, 63, Helpers::parseInt, Video::fromString);
+        //mSelectedItems = Helpers.parseMap(split, 63, Helpers::parseInt, Video::fromString);
         mIsFirstUseTooltipEnabled = Helpers.parseBoolean(split, 64, true);
         mIsDeviceSpecificBackupEnabled = Helpers.parseBoolean(split, 65, false);
         mIsAutoBackupEnabled = Helpers.parseBoolean(split, 66, false);
@@ -764,7 +745,7 @@ public class GeneralData implements ProfileChangeListener {
                 mHistoryState, mRememberSubscriptionsPosition, null, mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled, mIsRemapChannelUpToVolumeEnabled,
                 mIsRemapDpadUpToVolumeEnabled, mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled, mIsHideWatchedFromNotificationsEnabled,
                 mChangelog, mPlayerExitShortcut, null, mIsFullscreenModeEnabled, null,
-                mRememberPinnedPosition, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, mIsAutoBackupEnabled,
+                mRememberPinnedPosition, null, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, mIsAutoBackupEnabled,
                 mIsRemapPageDownToSpeedEnabled));
     }
 
