@@ -197,6 +197,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         //appendPlayerWindowIndex();
         appendVersion();
         appendDeviceNameSDKCache();
+        appendMemoryInfo();
 
         // Schedule next update
         mDebugViewGroup.removeCallbacks(this);
@@ -366,6 +367,13 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
                 (FileHelpers.getDirSize(FileHelpers.getInternalCacheDir(mContext)) + FileHelpers.getDirSize(FileHelpers.getExternalCacheDir(mContext)))
                         / 1024 / 1024
         ));
+    }
+
+    private void appendMemoryInfo() {
+        long maxMemory = Runtime.getRuntime().maxMemory();
+        long allocatedMemory = Runtime.getRuntime().totalMemory();
+        appendRow("Max Memory (MB)", (int)(maxMemory / (1024 * 1024))); // Growth Limit
+        appendRow("Allocated Memory (MB)", (int)(allocatedMemory / (1024 * 1024)));
     }
 
     private void appendRow(String name, boolean val) {
