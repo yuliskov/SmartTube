@@ -444,6 +444,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         saveSelectedItems(); // save previous state
         mCurrentSection = findSectionById(sectionId);
         mCurrentVideo = null; // fast scroll through the sections (fix empty selected item)
+        restoreSelectedItems();
         updateCurrentSection();
     }
 
@@ -706,7 +707,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        restoreSelectedItems();
+        //restoreSelectedItems();
 
         Disposable updateAction = group
                 .subscribe(
