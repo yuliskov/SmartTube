@@ -28,10 +28,10 @@ import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MediaServiceManager implements OnAccountChange {
     private static final String TAG = MediaServiceManager.class.getSimpleName();
@@ -53,7 +53,7 @@ public class MediaServiceManager implements OnAccountChange {
     private static final int MIN_SCALED_GRID_GROUP_SIZE = 35;
     private static final int MIN_SCALED_ROW_GROUP_SIZE = 10;
     private final Map<Integer, Pair<Integer, Long>> mContinuations = new HashMap<>();
-    private final List<AccountChangeListener> mAccountListeners = new ArrayList<>();
+    private final List<AccountChangeListener> mAccountListeners = new CopyOnWriteArrayList<>();
 
     public interface OnMetadata {
         void onMetadata(MediaItemMetadata metadata);
