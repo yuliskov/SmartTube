@@ -29,7 +29,6 @@ import io.reactivex.disposables.Disposable;
 public class RemoteController extends BasePlayerController implements OnDataChange {
     private static final String TAG = RemoteController.class.getSimpleName();
     private static final long APP_INIT_DELAY_MS = 10_000;
-    private static final boolean NORMALIZE = false;
     private final Runnable mStartListeningInt = this::startListeningInt;
     private final RemoteControlService mRemoteControlService;
     private final RemoteControlData mRemoteControlData;
@@ -343,7 +342,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                 }
                 break;
             case Command.TYPE_VOLUME:
-                Utils.setVolume(getContext(), getPlayer(), command.getVolume(), NORMALIZE);
+                Utils.setVolume(getContext(), getPlayer(), command.getVolume());
                 mVolumeSelfChangeMs = System.currentTimeMillis();
 
                 //postVolumeChange(Utils.getVolume(getContext(), getPlayer(), NORMALIZE)); // Just in case volume cannot be changed (e.g. Fire TV stick)
@@ -474,13 +473,13 @@ public class RemoteController extends BasePlayerController implements OnDataChan
             @Override
             public void onChange(boolean selfChange) {
                 if (System.currentTimeMillis() - mVolumeSelfChangeMs > 1_000) {
-                    postVolumeChange(Utils.getVolume(getContext(), getPlayer(), NORMALIZE));
+                    postVolumeChange(Utils.getVolume(getContext(), getPlayer()));
                 }
             }
         };
         Utils.registerAudioObserver(getContext(), mVolumeObserver);
 
-        postVolumeChange(Utils.getVolume(getContext(), getPlayer(), NORMALIZE));
+        postVolumeChange(Utils.getVolume(getContext(), getPlayer()));
     }
 
     private void unregisterVolumeObserver() {

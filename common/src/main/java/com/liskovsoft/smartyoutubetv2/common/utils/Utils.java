@@ -105,6 +105,7 @@ public class Utils {
     public static final float[] SPEED_LIST_EXTRA_LONG = Helpers.range(0.05f, 4f, 0.05f);
     public static final float[] SPEED_LIST_SHORT =
             new float[] {0.25f, 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 2.25f, 2.5f, 2.75f, 3.0f, 3.25f, 3.5f, 3.75f, 4.0f};
+    private static Boolean sGlobalVolumeFixed;
 
     @TargetApi(17)
     public static void displayShareVideoDialog(Context context, String videoId) {
@@ -248,15 +249,11 @@ public class Utils {
     /**
      * Volume: 0 - 100
      */
-    private static void setGlobalVolume(Context context, int volume, boolean normalize) {
+    private static void setGlobalVolume(Context context, int volume) {
         if (context != null) {
             AudioManager audioManager = (AudioManager) context.getSystemService(GLOBAL_VOLUME_SERVICE);
             if (audioManager != null) {
-                //int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE) / 2; // max volume is too loud
                 int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE);
-                if (normalize) {
-                    streamMaxVolume /= 2; // max volume is too loud
-                }
                 try {
                     audioManager.setStreamVolume(GLOBAL_VOLUME_TYPE, (int) Math.ceil(streamMaxVolume / 100f * volume), 0);
                 } catch (SecurityException e) {
@@ -270,15 +267,11 @@ public class Utils {
     /**
      * Volume: 0 - 100
      */
-    private static int getGlobalVolume(Context context, boolean normalize) {
+    private static int getGlobalVolume(Context context) {
         if (context != null) {
             AudioManager audioManager = (AudioManager) context.getSystemService(GLOBAL_VOLUME_SERVICE);
             if (audioManager != null) {
-                //int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE) / 2; // max volume is too loud
                 int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE);
-                if (normalize) {
-                    streamMaxVolume /= 2; // max volume is too loud
-                }
                 int streamVolume = audioManager.getStreamVolume(GLOBAL_VOLUME_TYPE);
 
                 return (int) Math.ceil(streamVolume / (streamMaxVolume / 100f));
@@ -292,24 +285,27 @@ public class Utils {
      * Global volume may not be supported (see FireTV Stick)
      */
     private static boolean isGlobalVolumeFixed(Context context) {
-        //return getGlobalVolume(context, false) == 100;
-        return Helpers.isAmazonFireTVDevice();
-    }
+        if (sGlobalVolumeFixed != null) {
+            return sGlobalVolumeFixed;
+        }
 
-    public static int getVolume(Context context, PlayerManager player) {
-        return getVolume(context, player, false);
+        int globalVolume = getGlobalVolume(context);
+        setGlobalVolume(context, globalVolume - 10);
+        sGlobalVolumeFixed = globalVolume == getGlobalVolume(context);
+        setGlobalVolume(context, globalVolume);
+        return sGlobalVolumeFixed;
     }
 
     /**
      * Volume: 0 - 100
      */
-    public static int getVolume(Context context, PlayerManager player, boolean normalize) {
+    public static int getVolume(Context context, PlayerManager player) {
         if (context != null) {
-            if (Utils.isGlobalVolumeFixed(context)) {
+            if (isGlobalVolumeFixed(context)) {
                 return getPlayerVolume(player);
             } else {
                 try {
-                    return Utils.getGlobalVolume(context, normalize);
+                    return getGlobalVolume(context);
                 } catch (SecurityException e) {
                     // Permission denial: writing to settings requires:android.permission.WRITE_SECURE_SETTINGS
                     return getPlayerVolume(player);
@@ -327,20 +323,16 @@ public class Utils {
         return (int)(player.getVolume() * 100);
     }
 
-    public static void setVolume(Context context, PlayerManager player, int volume) {
-        setVolume(context, player, volume, false);
-    }
-
     /**
      * Volume: 0 - 100
      */
-    public static void setVolume(Context context, PlayerManager player, int volume, boolean normalize) {
+    public static void setVolume(Context context, PlayerManager player, int volume) {
         if (context != null) {
-            if (Utils.isGlobalVolumeFixed(context)) {
+            if (isGlobalVolumeFixed(context)) {
                 setPlayerVolume(context, player, volume);
             } else {
                 try {
-                    Utils.setGlobalVolume(context, volume, normalize);
+                    setGlobalVolume(context, volume);
                     showSystemVolumeUI(context);
                 } catch (SecurityException e) {
                     // Permission denial: writing to settings requires:android.permission.WRITE_SECURE_SETTINGS
@@ -361,13 +353,13 @@ public class Utils {
 
     public static void volumeUp(Context context, PlayerManager player, boolean up) {
         if (player != null) {
-            int volume = Utils.getVolume(context, player);
+            int volume = getVolume(context, player);
             final int delta = 10; // volume step
 
             if (up) {
-                Utils.setVolume(context, player, Math.min(volume + delta, 100));
+                setVolume(context, player, Math.min(volume + delta, 100));
             } else {
-                Utils.setVolume(context, player, Math.max(volume - delta, 0));
+                setVolume(context, player, Math.max(volume - delta, 0));
             }
         }
     }
