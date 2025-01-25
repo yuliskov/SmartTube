@@ -136,8 +136,9 @@ public class VideoTrack extends MediaTrack {
         //}
 
         // MOD: Mimic official behavior (handle low res shorts etc)
+        boolean exceedLimit = (type == COMPARE_TYPE_IN_BOUNDS_PRESET || type == COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS) && track2.format.height > 2160;
         size1 = isWideScreenMod(format) ? format.height : format.width;
-        size2 = isWideScreenMod(track2.format) ? track2.format.height : track2.format.width;
+        size2 = isWideScreenMod(track2.format) || exceedLimit ? track2.format.height : track2.format.width;
 
         String id1 = format.id;
         String id2 = track2.format.id;
