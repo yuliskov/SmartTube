@@ -186,39 +186,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             }
         }
 
-        //appendReturnToBackgroundVideoButton();
-        //appendPlayVideoButton();
-        //appendPlayVideoIncognitoButton();
-        ////appendNotInterestedButton();
-        ////appendRemoveFromSubscriptionsButton();
-        //appendRemoveFromHistoryButton();
-        //appendStreamReminderButton();
-        //appendAddToRecentPlaylistButton();
-        //appendAddToPlaylistButton();
-        //appendCreatePlaylistButton();
-        //appendAddToNewPlaylistButton();
-        //appendNotInterestedButton();
-        //appendNotRecommendChannelButton();
-        //appendRemoveFromSubscriptionsButton();
-        //appendMarkAsWatchedButton();
-        //appendRenamePlaylistButton();
-        //appendPlaylistOrderButton();
-        //appendAddToPlaybackQueueButton();
-        //appendShowPlaybackQueueButton();
-        //appendOpenChannelButton();
-        ////appendOpenChannelUploadsButton();
-        //appendOpenPlaylistButton();
-        //appendSubscribeButton();
-        //appendToggleExcludeFromContentBlockButton();
-        //appendTogglePinVideoToSidebarButton();
-        //appendSaveRemovePlaylistButton();
-        //appendOpenDescriptionButton();
-        //appendShareLinkButton();
-        //appendShareEmbedLinkButton();
-        //appendAccountSelectionButton();
-        //appendToggleHistoryButton();
-        //appendClearHistoryButton();
-
         if (!mDialogPresenter.isEmpty()) {
             String title = mVideo != null ? mVideo.getTitle() : null;
             // No need to add author because: 1) This could be a channel card. 2) This info isn't so important.
@@ -240,25 +207,9 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             }
         }
 
-        //appendReturnToBackgroundVideoButton();
-        //appendPlayVideoButton();
-        //appendPlayVideoIncognitoButton();
-        //appendMarkAsWatchedButton();
-        //appendAddToPlaybackQueueButton();
-        //appendShowPlaybackQueueButton();
-        //appendOpenChannelButton();
-        //appendOpenPlaylistButton();
-        //appendToggleExcludeFromContentBlockButton();
-        //appendTogglePinVideoToSidebarButton();
-        //appendOpenDescriptionButton();
-        //appendShareLinkButton();
-        //appendShareEmbedLinkButton();
-        //appendAccountSelectionButton();
-
-        if (mDialogPresenter.isEmpty()) {
-            MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
-        } else {
-            mDialogPresenter.showDialog(mVideo.getTitle());
+        if (!mDialogPresenter.isEmpty()) {
+            String title = mVideo != null ? mVideo.getTitle() : null;
+            mDialogPresenter.showDialog(title);
         }
     }
 
