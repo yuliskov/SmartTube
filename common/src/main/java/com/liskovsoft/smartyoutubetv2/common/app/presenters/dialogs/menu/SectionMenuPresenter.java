@@ -140,9 +140,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
             }
         }
 
-        if (mDialogPresenter.isEmpty()) {
-            MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
-        } else {
+        if (!mDialogPresenter.isEmpty()) {
             String title = mSection != null ? mSection.getTitle() : null;
             mDialogPresenter.showDialog(title, this::disposeActions);
         }
