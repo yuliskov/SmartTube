@@ -5,6 +5,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager.BadTokenException;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
@@ -61,6 +62,18 @@ public class SimpleEditDialog {
         if (onDismiss != null) {
             configDialog.setOnDismissListener(dialog -> onDismiss.run());
         }
+
+        editField.setOnEditorActionListener((v, actionId, event) -> {
+            switch (actionId) {
+                case EditorInfo.IME_ACTION_NEXT:
+                    configDialog.getButton(AlertDialog.BUTTON_POSITIVE).requestFocus();
+                    return true;
+                case EditorInfo.IME_ACTION_DONE:
+                    configDialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
+                    return true;
+            }
+            return false;
+        });
 
         try {
             configDialog.show();
