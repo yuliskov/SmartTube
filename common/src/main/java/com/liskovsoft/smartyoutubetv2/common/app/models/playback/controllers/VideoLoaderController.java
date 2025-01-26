@@ -133,7 +133,8 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             getMainController().onPlayEnd();
         } else if (isBufferingRecurrent()) {
             MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
-            mPlayerTweaksData.setPlayerDataSource(getNextEngine());
+            mPlayerTweaksData.setPlayerDataSource(
+                    Utils.skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
             restartEngine();
         } else {
             YouTubeServiceManager.instance().applyAntiBotFix(); // bot check error?
