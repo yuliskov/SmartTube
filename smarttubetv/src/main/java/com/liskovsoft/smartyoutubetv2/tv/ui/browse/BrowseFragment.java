@@ -119,7 +119,9 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
             // Restore state after crash
             selectSectionItem(mRestoredVideo);
-            PlaybackPresenter.instance(getContext()).openVideo(mRestoredVideo);
+            if (PlaybackPresenter.instance(getContext()).getPlayer() == null) {
+                PlaybackPresenter.instance(getContext()).openVideo(mRestoredVideo);
+            }
             mRestoredVideo = null;
         }
     }
