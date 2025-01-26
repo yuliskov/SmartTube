@@ -220,7 +220,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
 
     public PlaybackView getPlayer() {
         //return getView();
-        return mPlayer.get();
+        return mPlayer.get(); // return view even if the one is destroyed
     }
 
     public Activity getActivity() {
