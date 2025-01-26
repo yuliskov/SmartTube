@@ -238,7 +238,8 @@ public class ContentBlockController extends BasePlayerController {
         if (fullMatch) {
             return positionMs >= segment.getStartMs() && positionMs <= segment.getEndMs();
         } else {
-            return positionMs >= segment.getStartMs() && positionMs <= Math.min(segment.getStartMs() + 1_000, segment.getEndMs());
+            long windowSizeMs = (long) (1_000 * getPlayer().getSpeed());
+            return positionMs >= segment.getStartMs() && positionMs <= Math.min(segment.getStartMs() + windowSizeMs, segment.getEndMs());
         }
     }
 
