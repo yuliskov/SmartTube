@@ -41,7 +41,7 @@
   <string name="update_changelog">Lista zmian</string>
   <string name="install_update">Zainstaluj aktualizację</string>
   <string name="section_is_empty">Niestety, nic tu nie ma.</string>
-  <string name="dialog_add_to_playlist">Lodaj/Usuń z Listy odtwarzania</string>
+  <string name="dialog_add_to_playlist">Dodaj/Usuń z Listy odtwarzania</string>
   <string name="msg_signed_users_only">Tylko zalogowani użytkownicy</string>
   <string name="msg_cant_load_content">Nie można załadować zawartości.\n1) Włącz historię oglądania.\n2) Sprawdź datę i godzinę na urządzeniu.\n3) Sprawdź połączenie sieciowe.\n4) Sprawdź ustawienia proxy.\n5) Spróbuj zalogować się na swoje konto.\n6) Może nic tu nie ma.</string>
   <string name="title_video_presets">Ustawienia wideo</string>
