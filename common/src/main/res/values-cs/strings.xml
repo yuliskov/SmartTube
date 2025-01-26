@@ -297,6 +297,7 @@
     <string name="upload_date_last_hour">Za poslední hodinu</string>
     <string name="focus_on_search_results">Automatické zaměření na výsledek vyhledávání</string>
     <string name="context_menu">Kontextová nabídka</string>
+    <string name="context_menu_sorting">Řazení kontextové nabídky</string>
     <string name="add_remove_from_recent_playlist">Přidat/odebrat z nedávného playlistu</string>
     <string name="hide_settings_section">Skrýt sekci Nastavení (nebezpečné!)</string>
     <string name="volume">Hlasitost %s%%</string>
@@ -591,7 +592,7 @@
     <string name="old_update_notifications">Původní vzhled upozornění na aktualizace</string>
     <string name="dialog_notification">Upozornit na aktualizaci pomocí vyskakovacího dialogu</string>
     <string name="mark_as_watched">Označit jako zhlédnuté</string>
-    <string name="player_ui_animations">Povolit animace ovládacího panelu</string>
+    <string name="player_ui_animations">Povolit animaci rozhraní přehrávače</string>
     <string name="player_likes_count">Zobrazit počet Líbí/Nelíbí</string>
     <string name="sorting_alphabetically2">Abecedně (rychle, animované náhledy)</string>
     <string name="sorting_default">Výchozí (rychle, animované náhledy)</string>
@@ -687,7 +688,7 @@
     <string name="screen_dimming_amount">Míra ztmavení obrazovky</string>
     <string name="screen_dimming_timeout">Časový limit ztmavení obrazovky</string>
     <string name="playlists_rows">Zobrazit sekci Playlisty jako řádky</string>
-    <string name="import_subscriptions_group">Importovat soubor</string>
+    <string name="import_subscriptions_group">Import</string>
     <string name="lb_playback_controls_closed_captioning_disable">Zakázat titulky</string>
     <string name="lb_playback_controls_closed_captioning_enable">Povolit titulky</string>
 </resources>
