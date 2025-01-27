@@ -751,7 +751,13 @@ public class SearchBar extends RelativeLayout {
         });
 
         mListening = true;
-        mSpeechRecognizer.startListening(recognizerIntent);
+        try {
+            mSpeechRecognizer.startListening(recognizerIntent);
+        } catch (SecurityException e) {
+            // MOD: Swallow the exception
+            // Not allowed to bind to service Intent { act=android.speech.RecognitionService cmp=com.touchtype.swiftkey/com.swiftkey.microsoftspeechservice.MicrosoftSpeechRecognitionService }
+            e.printStackTrace();
+        }
     }
 
     void updateUi(boolean hasFocus) {
