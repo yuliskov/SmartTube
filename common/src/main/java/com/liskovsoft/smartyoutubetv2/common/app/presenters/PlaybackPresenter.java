@@ -50,7 +50,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     };
     private Video mPendingVideo;
     // Fix for using destroyed view
-    private WeakReference<PlaybackView> mPlayer = new WeakReference<>(null);
+    //private WeakReference<PlaybackView> mPlayer = new WeakReference<>(null);
 
     private PlaybackPresenter(Context context) {
         super(context);
@@ -212,15 +212,15 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
 
     // Controller methods
 
-    @Override
-    public void setView(PlaybackView view) {
-        super.setView(view);
-        mPlayer = new WeakReference<>(view);
-    }
+    //@Override
+    //public void setView(PlaybackView view) {
+    //    super.setView(view);
+    //    mPlayer = new WeakReference<>(view);
+    //}
 
     public PlaybackView getPlayer() {
-        //return getView();
-        return mPlayer.get(); // return view even if the one is destroyed
+        //return mPlayer.get(); // return view even if the one is destroyed
+        return getView();
     }
 
     public Activity getActivity() {
