@@ -307,6 +307,7 @@ public class VideoTrack extends MediaTrack {
         return format.width / (float) format.height > 1;
     }
 
+    // Shorts fix
     private boolean exceedHeightLimit(Format format) {
         return format.height > 1080;
     }
