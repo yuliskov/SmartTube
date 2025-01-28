@@ -287,11 +287,11 @@ public final class Video {
     }
 
     public String getTitle() {
-        return deArrowTitle != null ? deArrowTitle : title != null ? title : metadataTitle;
+        return deArrowTitle != null ? deArrowTitle : title;
     }
 
     public String getSecondTitle() {
-        return secondTitle != null ? secondTitle : metadataSecondTitle;
+        return secondTitle;
     }
 
     public String getPlayerTitle() {
