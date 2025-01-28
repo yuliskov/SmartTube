@@ -39,8 +39,9 @@ public class MotherActivity extends FragmentActivity {
     private static DisplayMetrics sCachedDisplayMetrics;
     protected static boolean sIsInPipMode;
     private ScreensaverManager mScreensaverManager;
-    private List<OnPermissions> mOnPermissions;
-    private List<OnResult> mOnResults;
+    // Make static in case Don't keep activities enabled in Developer settings
+    private static List<OnPermissions> mOnPermissions;
+    private static List<OnResult> mOnResults;
     private long mLastKeyDownTime;
     private boolean mEnableThrottleKeyDown;
     private boolean mIsOculusQuestFixEnabled;
