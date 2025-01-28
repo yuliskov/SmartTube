@@ -143,7 +143,7 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
                 } else {
                     group.remove(item.channelId);
                     Object data = presenter.getCurrentSection() != null ? presenter.getCurrentSection().getData() : null;
-                    if (callback != null && (data instanceof Video) && ((Video) data).channelGroupId == group.getId()) {
+                    if (callback != null && (data instanceof Video) && Helpers.equals(((Video) data).channelGroupId, group.getId())) {
                         callback.onItemAction(item, VideoMenuCallback.ACTION_REMOVE_AUTHOR);
                     }
                 }
