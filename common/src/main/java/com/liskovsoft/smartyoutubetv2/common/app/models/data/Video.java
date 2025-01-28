@@ -39,7 +39,7 @@ public final class Video {
     private static final float RESTORE_POSITION_PERCENTS = 10; // min value for immediately closed videos
     public int id;
     public String title;
-    public String altTitle;
+    public String deArrowTitle;
     public String secondTitle;
     private String metadataTitle;
     private String metadataSecondTitle;
@@ -287,10 +287,18 @@ public final class Video {
     }
 
     public String getTitle() {
-        return altTitle != null ? altTitle : metadataTitle != null ? metadataTitle : title;
+        return deArrowTitle != null ? deArrowTitle : title != null ? title : metadataTitle;
     }
 
     public String getSecondTitle() {
+        return secondTitle != null ? secondTitle : metadataSecondTitle;
+    }
+
+    public String getPlayerTitle() {
+        return deArrowTitle != null ? deArrowTitle : metadataTitle != null ? metadataTitle : title;
+    }
+
+    public String getPlayerSubtitle() {
         // Don't sync future translation because of not precise info
         return metadataSecondTitle != null && !isUpcoming ? metadataSecondTitle : secondTitle;
     }

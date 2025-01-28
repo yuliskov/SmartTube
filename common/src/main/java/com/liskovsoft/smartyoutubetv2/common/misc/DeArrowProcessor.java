@@ -54,7 +54,7 @@ public class DeArrowProcessor implements OnDataChange, BrowseProcessor {
                 .subscribe(deArrowData -> {
                     Video video = videoGroup.findVideoById(deArrowData.getVideoId());
                     if (mIsReplaceTitlesEnabled) {
-                        video.altTitle = deArrowData.getTitle();
+                        video.deArrowTitle = deArrowData.getTitle();
                     }
                     if (mIsReplaceThumbnailsEnabled) {
                         video.altCardImageUrl = deArrowData.getThumbnailUrl();

@@ -45,8 +45,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     public T getView() {
         T view = mView.get();
 
-        //return checkView(view) ? view : null;
-        return view; // Fix for using destroyed view data
+        return checkView(view) ? view : null;
     }
 
     @Override
