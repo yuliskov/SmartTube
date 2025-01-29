@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -233,6 +234,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
     private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from("Unlock more subtitles",
+                option -> MediaServiceData.instance().unlockMoreSubtitles(option.isSelected()),
+                MediaServiceData.instance().isMoreSubtitlesUnlocked()));
 
         options.add(UiOptionItem.from("Playback buffering fix",
                 option -> {
