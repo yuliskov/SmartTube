@@ -44,7 +44,7 @@ public class VideoStateController extends BasePlayerController {
     private int mTickleLeft;
     private boolean mIncognito;
     //private final Runnable mUpdateHistory = this::updateHistory;
-    private final Runnable mUpdateHistory = () -> {updateHistory(); persistState();};
+    private final Runnable mUpdateHistory = () -> { updateHistory(); persistState(); };
 
     @Override
     public void onInit() { // called each time a video opened from the browser

@@ -271,14 +271,17 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             getView().addSection(index++, section);
         }
 
+        // Empty Home on first run fix. Switch Trending temporarily.
+        int bootSectionId = !mSignInService.isSigned() && VideoStateService.instance(getContext()).isEmpty() ?
+                MediaGroup.TYPE_TRENDING : mSidebarService.getBootSectionId();
+
         for (BrowseSection section : mSections) { // contains sections and pinned items!
             if (section.getId() == MediaGroup.TYPE_SETTINGS) {
                 section.setEnabled(true);
             }
-            //section.setEnabled(section.getId() == MediaGroup.TYPE_SETTINGS || mGeneralData.isSectionPinned(section.getId()));
 
             if (section.isEnabled()) {
-                if (section.getId() == mSidebarService.getBootSectionId()) {
+                if (section.getId() == bootSectionId) {
                     mBootSectionIndex = index;
                 }
                 getView().addSection(index++, section);
@@ -808,7 +811,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 videoGroup.setType(MediaGroup.TYPE_HISTORY);
                 appendLocalHistory(videoGroup);
                 getView().updateSection(videoGroup);
-            } else if (getView().isProgressBarShowing()) {
+            } else {
                 getView().showProgressBar(false);
                 getView().showError(new SignInError(getContext()));
             }
