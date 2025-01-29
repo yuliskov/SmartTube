@@ -184,6 +184,10 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
     }
 
     private void pinGroups(@NonNull List<ItemGroup> newGroups) {
+        if (newGroups.isEmpty()) {
+            return;
+        }
+
         for (ItemGroup group : newGroups) {
             BrowsePresenter.instance(mContext).pinItem(Video.from(group));
         }
