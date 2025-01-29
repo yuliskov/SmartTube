@@ -235,6 +235,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from("Premium fix (format list is not full)",
+                option -> MediaServiceData.instance().enablePremiumFix(option.isSelected()),
+                MediaServiceData.instance().isPremiumFixEnabled()));
+
         options.add(UiOptionItem.from("Unlock more subtitles",
                 option -> MediaServiceData.instance().unlockMoreSubtitles(option.isSelected()),
                 MediaServiceData.instance().isMoreSubtitlesUnlocked()));
