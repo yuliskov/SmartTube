@@ -448,6 +448,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mCurrentSection = findSectionById(sectionId);
         mCurrentVideo = null; // fast scroll through the sections (fix empty selected item)
         updateCurrentSection();
+        restoreSelectedItems(); // Don't place anywhere else
     }
 
     @Override
@@ -663,7 +664,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        restoreSelectedItems(); // Don't place anywhere else
+        //restoreSelectedItems(); // Don't place anywhere else
 
         Disposable updateAction = groups
                 .subscribe(
@@ -717,7 +718,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        restoreSelectedItems(); // Don't place anywhere else
+        //restoreSelectedItems(); // Don't place anywhere else
 
         Disposable updateAction = group
                 .subscribe(
