@@ -258,6 +258,14 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
+        int bootSectionId = mSidebarService.getBootSectionId();
+
+        // Empty Home on first run fix. Switch Trending temporarily.
+        if (!mSignInService.isSigned() && VideoStateService.instance(getContext()).isEmpty()) {
+            bootSectionId = MediaGroup.TYPE_TRENDING;
+            mSidebarService.enableSection(bootSectionId, true);
+        }
+
         // clean up (profile changed etc)
         getView().removeAllSections();
 
@@ -270,10 +278,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         for (BrowseSection section : mErrorSections) {
             getView().addSection(index++, section);
         }
-
-        // Empty Home on first run fix. Switch Trending temporarily.
-        int bootSectionId = !mSignInService.isSigned() && VideoStateService.instance(getContext()).isEmpty() ?
-                MediaGroup.TYPE_TRENDING : mSidebarService.getBootSectionId();
 
         for (BrowseSection section : mSections) { // contains sections and pinned items!
             if (section.getId() == MediaGroup.TYPE_SETTINGS) {
