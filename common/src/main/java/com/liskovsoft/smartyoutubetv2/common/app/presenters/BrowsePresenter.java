@@ -447,7 +447,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         saveSelectedItems(); // save previous state
         mCurrentSection = findSectionById(sectionId);
         mCurrentVideo = null; // fast scroll through the sections (fix empty selected item)
-        restoreSelectedItems();
         updateCurrentSection();
     }
 
@@ -658,6 +657,14 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         firstGroup.setAction(VideoGroup.ACTION_REPLACE);
         getView().updateSection(firstGroup);
 
+        if (groups == null) {
+            // No group. Maybe just clear.
+            getView().showProgressBar(false);
+            return;
+        }
+
+        restoreSelectedItems(); // Don't place anywhere else
+
         Disposable updateAction = groups
                 .subscribe(
                         mediaGroups -> {
@@ -710,7 +717,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        //restoreSelectedItems();
+        restoreSelectedItems(); // Don't place anywhere else
 
         Disposable updateAction = group
                 .subscribe(
