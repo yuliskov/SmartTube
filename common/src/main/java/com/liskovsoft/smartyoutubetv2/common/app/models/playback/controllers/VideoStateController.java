@@ -44,7 +44,7 @@ public class VideoStateController extends BasePlayerController {
     private int mTickleLeft;
     private boolean mIncognito;
     //private final Runnable mUpdateHistory = this::updateHistory;
-    private final Runnable mUpdateHistory = () -> { updateHistory(); persistState(); };
+    private final Runnable mUpdateHistory = () -> { saveState(); persistState(); };
 
     @Override
     public void onInit() { // called each time a video opened from the browser
@@ -155,13 +155,15 @@ public class VideoStateController extends BasePlayerController {
 
         if (++mTickleLeft > HISTORY_UPDATE_INTERVAL_MINUTES && getPlayer().isPlaying()) {
             mTickleLeft = 0;
-            updateHistory();
+            saveState();
+            persistState(); // ???
         }
     }
 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
-        updateHistory(); // start watching?
+        saveState(); // start watching?
+        persistState(); // ???
 
         // Channel info should be loaded at this point
         restoreSubtitleFormat();
@@ -383,10 +385,6 @@ public class VideoStateController extends BasePlayerController {
         }
     }
 
-    private void persistState() {
-        mStateService.persistState();
-    }
-
     private void restoreVideoFormat() {
         if (mPlayerData.getTempVideoFormat() != null) {
             getPlayer().setFormat(mPlayerData.getTempVideoFormat());
@@ -414,6 +412,10 @@ public class VideoStateController extends BasePlayerController {
         updateHistory();
         //persistState(); // persist the state if the device reboots accidentally
         syncWithPlaylists();
+    }
+
+    private void persistState() {
+        mStateService.persistState();
     }
 
     private void savePosition() {

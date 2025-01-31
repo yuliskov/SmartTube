@@ -48,6 +48,14 @@ public class VideoStateService implements ProfileChangeListener {
         return mStates;
     }
 
+    public @Nullable State getLastState() {
+        if (isEmpty()) {
+            return null;
+        }
+
+        return mStates.get(mStates.size() - 1);
+    }
+
     public State getByVideoId(String videoId) {
         for (State state : mStates) {
             if (Helpers.equals(videoId, state.video.videoId)) {
@@ -94,9 +102,8 @@ public class VideoStateService implements ProfileChangeListener {
     }
 
     public void persistState() {
-        // Improve memory usage
+        // Improve memory and disc usage
         Utils.postDelayed(mPersistStateReal, PERSIST_DELAY_MS);
-        //mPrefs.setStateUpdaterData(Helpers.mergeData(getStateData(), mIsHistoryBroken));
     }
 
     private void persistStateReal() {
@@ -133,14 +140,10 @@ public class VideoStateService implements ProfileChangeListener {
 
             String[] split = Helpers.split(DELIM, spec);
 
-            if (split.length != 4) {
-                return null;
-            }
-
-            String videoId = split[0];
-            long positionMs = Helpers.parseLong(split[1]);
-            long lengthMs = Helpers.parseLong(split[2]);
-            float speed = Helpers.parseFloat(split[3]);
+            String videoId = Helpers.parseStr(split, 0);
+            long positionMs = Helpers.parseLong(split, 1);
+            long lengthMs = Helpers.parseLong(split, 2);
+            float speed = Helpers.parseFloat(split, 3);
 
             Video video = Video.fromString(videoId);
 

@@ -25,6 +25,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
@@ -127,7 +129,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             // Restore state after crash
             selectSectionItem(mRestoredVideo);
             if (PlaybackPresenter.instance(getContext()).getPlayer() == null && mRestoredInForeground) {
-                PlaybackPresenter.instance(getContext()).openVideo(mRestoredVideo);
+                State lastState = VideoStateService.instance(getContext()).getLastState();
+                PlaybackPresenter.instance(getContext()).openVideo(lastState != null ? lastState.video : mRestoredVideo);
             }
             mRestoredVideo = null;
         }
