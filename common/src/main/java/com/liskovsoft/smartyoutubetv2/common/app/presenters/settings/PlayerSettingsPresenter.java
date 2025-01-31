@@ -235,7 +235,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from("Fix for Premium users with incomplete video format list",
+        options.add(UiOptionItem.from("Premium users only. Fix for incomplete video format list",
                 option -> MediaServiceData.instance().enablePremiumFix(option.isSelected()),
                 MediaServiceData.instance().isPremiumFixEnabled()));
 

@@ -68,7 +68,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
     };
     private final Runnable mLoadRandomNext = this::loadRandomNext;
-    private final Runnable mOnLongBuffering = this::onLongBuffering;
+    private final Runnable mOnLongBuffering = () -> {
+        updateBufferingCount();
+        onLongBuffering(isBufferingRecurrent());
+    };
     private final Runnable mRebootApp = () -> {
         if (mLastVideo != null && mLastVideo.hasVideo()) {
             Utils.restartTheApp(getContext(), mLastVideo.videoId);
@@ -120,9 +123,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         Utils.postDelayed(mOnLongBuffering, LONG_BUFFERING_THRESHOLD_MS);
     }
 
-    private void onLongBuffering() {
-        updateBufferingCount();
-
+    private void onLongBuffering(boolean isRecurrent) {
         if (mLastVideo == null) {
             return;
         }
@@ -131,10 +132,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         if ((!mLastVideo.isLive || mLastVideo.isLiveEnd) &&
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
-        } else if (isBufferingRecurrent()) {
+        } else if (isRecurrent) {
             MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
-            mPlayerTweaksData.setPlayerDataSource(
-                    Utils.skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
+            enableFasterDataSource();
             restartEngine();
         } else {
             YouTubeServiceManager.instance().applyAntiBotFix(); // bot check error?
@@ -505,8 +505,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // "Response code: 404" (not sure whether below helps)
             // "Response code: 503" (not sure whether below helps)
             // "Response code: 400" (not sure whether below helps)
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
-            restartEngine = false;
+            if (!enableFasterDataSource()) {
+                YouTubeServiceManager.instance().applyNoPlaybackFix();
+                restartEngine = false;
+            }
         } else if (Helpers.startsWithAny(message, "Response code: 429", "Response code: 400")) {
             YouTubeServiceManager.instance().applyAntiBotFix();
             mPlayerTweaksData.enablePersistentAntiBotFix(true);
@@ -811,5 +813,14 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             previous.forceSectionPlaylist = false;
             next.forceSectionPlaylist = true;
         }
+    }
+
+    private boolean enableFasterDataSource() {
+        int dataSource = Utils.skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET;
+        if (mPlayerTweaksData.getPlayerDataSource() != dataSource) {
+            mPlayerTweaksData.setPlayerDataSource(dataSource);
+            return true;
+        }
+        return false;
     }
 }
