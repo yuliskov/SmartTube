@@ -302,10 +302,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 } else {
                     AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.remove_playlist), () -> {
                         removePlaylist(video);
-                        if (getCallback() != null) {
-                            getCallback().onItemAction(getVideo(), VideoMenuCallback.ACTION_REMOVE);
-                            closeDialog();
-                        }
+                        closeDialog();
                     });
                 }
             } else {
@@ -317,10 +314,15 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private void removePlaylist(Video video) {
         MediaItemService manager = YouTubeMediaItemService.instance();
         Observable<Void> action = manager.removePlaylistObserve(video.playlistId);
-        GeneralData.instance(getContext()).setPlaylistOrder(video.playlistId, -1);
         RxHelper.execute(action,
                 (error) -> MessageHelpers.showMessage(getContext(), error.getLocalizedMessage()),
-                () -> MessageHelpers.showMessage(getContext(), getContext().getString(R.string.removed_from_playlists))
+                () -> {
+                    if (getCallback() != null) {
+                        getCallback().onItemAction(getVideo(), VideoMenuCallback.ACTION_REMOVE);
+                    }
+                    GeneralData.instance(getContext()).setPlaylistOrder(video.playlistId, -1);
+                    MessageHelpers.showMessage(getContext(), getContext().getString(R.string.removed_from_playlists));
+                }
         );
     }
 
