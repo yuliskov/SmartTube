@@ -691,4 +691,6 @@
     <string name="screen_dimming_timeout">Ekran karartma zaman aşımı</string>
     <string name="playlists_rows">Oynatma listelerini satır olarak göster</string>
     <string name="import_subscriptions_group">Içe aktar</string>
+    <string name="lb_playback_controls_closed_captioning_disable">Altyazıyı Devre Dışı Bırak</string>
+    <string name="lb_playback_controls_closed_captioning_enable">Altyazıyı Aktifleştir</string>
 </resources>
