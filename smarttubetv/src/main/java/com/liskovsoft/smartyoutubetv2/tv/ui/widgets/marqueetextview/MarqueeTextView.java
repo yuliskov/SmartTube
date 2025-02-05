@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build.VERSION;
 import android.util.AttributeSet;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
+@SuppressLint("AppCompatCustomView")
 public class MarqueeTextView extends TextView implements View.OnLayoutChangeListener {
     private float mDefaultMarqueeSpeed;
     private float mMarqueeSpeedFactor = 2.0f;

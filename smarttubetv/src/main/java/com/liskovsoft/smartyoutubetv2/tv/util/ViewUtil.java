@@ -25,6 +25,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.MarqueeTextView;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.speedmarquee.SpeedMarquee;
 
 public class ViewUtil {
     /**
@@ -137,6 +138,8 @@ public class ViewUtil {
 
         if (textView instanceof MarqueeTextView) {
             ((MarqueeTextView) textView).setMarqueeSpeedFactor(speed);
+        } else if (textView instanceof SpeedMarquee) {
+            ((SpeedMarquee) textView).setSpeed(speed);
         }
     }
 
