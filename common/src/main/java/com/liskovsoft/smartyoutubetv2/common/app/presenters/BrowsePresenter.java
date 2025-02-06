@@ -185,6 +185,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mSectionsMapping.put(MediaGroup.TYPE_TRENDING, new BrowseSection(MediaGroup.TYPE_TRENDING, getContext().getString(R.string.header_trending), BrowseSection.TYPE_ROW, R.drawable.icon_trending));
         mSectionsMapping.put(MediaGroup.TYPE_KIDS_HOME, new BrowseSection(MediaGroup.TYPE_KIDS_HOME, getContext().getString(R.string.header_kids_home), BrowseSection.TYPE_ROW, R.drawable.icon_kids_home));
         mSectionsMapping.put(MediaGroup.TYPE_SPORTS, new BrowseSection(MediaGroup.TYPE_SPORTS, getContext().getString(R.string.header_sports), BrowseSection.TYPE_ROW, R.drawable.icon_sports));
+        mSectionsMapping.put(MediaGroup.TYPE_LIVE, new BrowseSection(MediaGroup.TYPE_LIVE, getContext().getString(R.string.badge_live), BrowseSection.TYPE_ROW, R.drawable.icon_live));
         mSectionsMapping.put(MediaGroup.TYPE_GAMING, new BrowseSection(MediaGroup.TYPE_GAMING, getContext().getString(R.string.header_gaming), BrowseSection.TYPE_ROW, R.drawable.icon_gaming));
         if (!Helpers.equalsAny(country, "RU", "BY")) {
             mSectionsMapping.put(MediaGroup.TYPE_NEWS, new BrowseSection(MediaGroup.TYPE_NEWS, getContext().getString(R.string.header_news), BrowseSection.TYPE_ROW, R.drawable.icon_news));
@@ -206,6 +207,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mRowMapping.put(MediaGroup.TYPE_TRENDING, mContentService.getTrendingObserve());
         mRowMapping.put(MediaGroup.TYPE_KIDS_HOME, mContentService.getKidsHomeObserve());
         mRowMapping.put(MediaGroup.TYPE_SPORTS, mContentService.getSportsObserve());
+        mRowMapping.put(MediaGroup.TYPE_LIVE, mContentService.getLiveObserve());
         mRowMapping.put(MediaGroup.TYPE_NEWS, mContentService.getNewsObserve());
         mRowMapping.put(MediaGroup.TYPE_MUSIC, mContentService.getMusicObserve());
         mRowMapping.put(MediaGroup.TYPE_GAMING, mContentService.getGamingObserve());
