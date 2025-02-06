@@ -682,4 +682,5 @@
     <string name="screen_dimming_timeout">Тайм-аут затемнения экрана</string>
     <string name="playlists_rows">Отображать раздел Плейлисты в виде строк</string>
     <string name="import_subscriptions_group">Импортировать</string>
+    <string name="my_videos">Ваши видео</string>
 </resources>
