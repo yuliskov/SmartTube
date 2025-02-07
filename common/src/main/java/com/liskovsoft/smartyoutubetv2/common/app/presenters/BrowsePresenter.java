@@ -267,7 +267,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         // Empty Home on first run fix. Switch Trending temporarily.
         if (!mSignInService.isSigned() && VideoStateService.instance(getContext()).isEmpty()) {
             bootSectionId = MediaGroup.TYPE_TRENDING;
-            mSidebarService.enableSection(bootSectionId, true);
+            //mSidebarService.enableSection(bootSectionId, true);
         }
 
         // clean up (profile changed etc)
