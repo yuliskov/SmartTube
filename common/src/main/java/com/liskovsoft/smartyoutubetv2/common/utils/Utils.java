@@ -254,8 +254,15 @@ public class Utils {
             AudioManager audioManager = (AudioManager) context.getSystemService(GLOBAL_VOLUME_SERVICE);
             if (audioManager != null) {
                 int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE);
+                int currentVolume = audioManager.getStreamVolume(GLOBAL_VOLUME_TYPE);
+                double newVolume = streamMaxVolume / 100d * volume;
+                if (currentVolume < newVolume) {
+                    newVolume = Math.ceil(newVolume);
+                } else {
+                    newVolume = Math.floor(newVolume);
+                }
                 try {
-                    audioManager.setStreamVolume(GLOBAL_VOLUME_TYPE, (int) Math.ceil(streamMaxVolume / 100f * volume), 0);
+                    audioManager.setStreamVolume(GLOBAL_VOLUME_TYPE, (int) newVolume, 0);
                 } catch (SecurityException e) {
                     // Not allowed to change Do Not Disturb state
                     e.printStackTrace();
@@ -354,7 +361,7 @@ public class Utils {
     public static void volumeUp(Context context, PlayerManager player, boolean up) {
         if (player != null) {
             int volume = getVolume(context, player);
-            final int delta = 10; // volume step
+            final int delta = 1; // volume step
 
             if (up) {
                 setVolume(context, player, Math.min(volume + delta, 100));
