@@ -691,4 +691,5 @@
     <string name="import_subscriptions_group">Import</string>
     <string name="lb_playback_controls_closed_captioning_disable">Zakázat titulky</string>
     <string name="lb_playback_controls_closed_captioning_enable">Povolit titulky</string>
+    <string name="my_videos">Moje videa</string>
 </resources>
