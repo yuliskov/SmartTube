@@ -465,8 +465,8 @@
   <string name="msg_press_again_to_exit">Naciśnij ponownie, aby wyjść</string>
   <string name="player_remaining_time">Pozostały: %s</string>
   <string name="player_ending_time">Kończy się o %s</string>
-  <string name="badge_new_content">NOWA TREŚĆ</string>
-  <string name="badge_live">NA ŻYWO</string>
+  <string name="badge_new_content">Nowa treść</string>
+  <string name="badge_live">Na żywo</string>
   <string name="add_device_view_description">Aby powiązać urządzenie, wpisz na nim podany kod w aplikacji YouTube w sekcji Ustawienia/Oglądaj na TV\nUWAGA: działa tylko z klawiaturą Gboard.</string>
   <string name="playback_controls_repeat_pause">Powtarzaj pauzę</string>
   <string name="playback_controls_repeat_list">Powtórz listę</string>
