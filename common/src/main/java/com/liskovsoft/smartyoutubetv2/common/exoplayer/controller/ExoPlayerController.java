@@ -295,9 +295,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         
         setQualityInfo(mTrackFormatter.getQualityLabel());
 
-        // Manage audio focus. E.g. use Spotify when audio is disabled.
-        MediaTrack audioTrack = mTrackSelectorManager.getAudioTrack();
-        ExoPlayerInitializer.enableAudioFocus(mPlayer, audioTrack != null && !audioTrack.isEmpty());
+        // Manage audio focus. E.g. use Spotify when audio is disabled. (NOT NEEDED!!!)
+        //MediaTrack audioTrack = mTrackSelectorManager.getAudioTrack();
+        //ExoPlayerInitializer.enableAudioFocus(mPlayer, audioTrack != null && !audioTrack.isEmpty());
     }
 
     private void notifyOnVideoLoad() {

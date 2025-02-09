@@ -27,6 +27,7 @@ import java.util.UUID;
 public class ExoPlayerInitializer {
     private final int mMaxBufferBytes;
     private final PlayerData mPlayerData;
+    private static AudioAttributes sAudioAttributes;
 
     public ExoPlayerInitializer(Context context) {
         mPlayerData = PlayerData.instance(context);
@@ -70,13 +71,19 @@ public class ExoPlayerInitializer {
      */
     public static void enableAudioFocus(SimpleExoPlayer player, boolean enable) {
         if (player != null) {
-            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+            setAudioAttributes(player, getAudioAttributes(), enable);
+        }
+    }
+
+    private static AudioAttributes getAudioAttributes() {
+        if (sAudioAttributes == null) {
+            sAudioAttributes = new AudioAttributes.Builder()
                     .setUsage(C.USAGE_MEDIA)
                     .setContentType(C.CONTENT_TYPE_MOVIE)
                     .build();
-
-            setAudioAttributes(player, audioAttributes, enable);
         }
+
+        return sAudioAttributes;
     }
 
     private static void setAudioAttributes(SimpleExoPlayer player, AudioAttributes audioAttributes, boolean enable) {
