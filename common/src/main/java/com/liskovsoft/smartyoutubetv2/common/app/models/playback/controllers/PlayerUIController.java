@@ -603,6 +603,10 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private boolean handleMenuKey(int keyCode) {
+        if (getPlayer() == null) {
+            return false;
+        }
+
         boolean controlsShown = getPlayer().isOverlayShown();
         boolean suggestionsShown = getPlayer().isSuggestionsShown();
 

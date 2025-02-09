@@ -243,7 +243,13 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         });
 
         mIntentChain.add(intent -> {
-            String channelId = IntentExtractor.extractChannelId(intent);
+            String channelId = null;
+
+            try {
+                channelId = IntentExtractor.extractChannelId(intent);
+            } catch (IllegalArgumentException e) {
+                MessageHelpers.showLongMessage(getContext(), e.getMessage());
+            }
 
             if (channelId != null) {
                 ChannelPresenter channelPresenter = ChannelPresenter.instance(getContext());
