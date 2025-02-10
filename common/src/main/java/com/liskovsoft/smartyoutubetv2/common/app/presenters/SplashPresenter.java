@@ -99,6 +99,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             initProxy();
             initVideoStateService();
             initStreamReminderService();
+            Utils.initVolume(getContext());
         }
     }
 

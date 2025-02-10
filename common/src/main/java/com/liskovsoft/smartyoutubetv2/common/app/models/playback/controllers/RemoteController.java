@@ -342,10 +342,18 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                 }
                 break;
             case Command.TYPE_VOLUME:
-                Utils.setVolume(getContext(), getPlayer(), command.getVolume());
+                int volume = command.getVolume();
+
+                if (command.getDelta() != -1) { // using phone volume sliders
+                    volume = Utils.getVolume(getContext(), getPlayer()) + command.getDelta();
+                }
+
+                Utils.setVolume(getContext(), getPlayer(), volume);
                 mVolumeSelfChangeMs = System.currentTimeMillis();
 
-                //postVolumeChange(Utils.getVolume(getContext(), getPlayer(), NORMALIZE)); // Just in case volume cannot be changed (e.g. Fire TV stick)
+                if (command.getDelta() != -1) { // using phone volume sliders
+                    postVolumeChange(Utils.getVolume(getContext(), getPlayer()));
+                }
                 break;
             case Command.TYPE_STOP:
                 // Close player
