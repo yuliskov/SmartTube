@@ -353,6 +353,8 @@ public class RemoteController extends BasePlayerController implements OnDataChan
 
                 if (command.getDelta() != -1) { // using phone volume sliders
                     postVolumeChange(Utils.getVolume(getContext(), getPlayer()));
+                } else {
+                    postVolumeChange(volume);
                 }
                 break;
             case Command.TYPE_STOP:

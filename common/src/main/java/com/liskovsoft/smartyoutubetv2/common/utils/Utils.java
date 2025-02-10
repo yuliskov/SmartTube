@@ -702,12 +702,14 @@ public class Utils {
      * java.lang.SecurityException: Injecting input events requires the caller (or the source of the instrumentation, if any) to have the INJECT_EVENTS permission.
      */
     public static void sendKey(int key) {
-        try {
-            Instrumentation instrumentation = new Instrumentation();
-            instrumentation.sendKeyDownUpSync(key);
-        } catch (SecurityException e) {
-            // Injecting to another application requires INJECT_EVENTS permission
-            e.printStackTrace();
+        if (VERSION.SDK_INT < 33) {
+            try {
+                Instrumentation instrumentation = new Instrumentation();
+                instrumentation.sendKeyDownUpSync(key);
+            } catch (SecurityException e) {
+                // Injecting to another application requires INJECT_EVENTS permission
+                e.printStackTrace();
+            }
         }
     }
 
@@ -716,12 +718,14 @@ public class Utils {
      * java.lang.SecurityException: Injecting input events requires the caller (or the source of the instrumentation, if any) to have the INJECT_EVENTS permission.
      */
     public static void sendKey(KeyEvent keyEvent) {
-        try {
-            Instrumentation instrumentation = new Instrumentation();
-            instrumentation.sendKeySync(keyEvent);
-        } catch (SecurityException e) {
-            // Injecting to another application requires INJECT_EVENTS permission
-            e.printStackTrace();
+        if (VERSION.SDK_INT < 33) {
+            try {
+                Instrumentation instrumentation = new Instrumentation();
+                instrumentation.sendKeySync(keyEvent);
+            } catch (SecurityException e) {
+                // Injecting to another application requires INJECT_EVENTS permission
+                e.printStackTrace();
+            }
         }
     }
 
