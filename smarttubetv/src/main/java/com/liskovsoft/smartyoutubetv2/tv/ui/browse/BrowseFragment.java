@@ -52,6 +52,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private static final String SELECTED_HEADER_INDEX = "SelectedHeaderIndex";
     private static final String SELECTED_VIDEO = "SelectedVideo";
     private static final String IS_PLAYER_IN_FOREGROUND = "IsPlayerInForeground";
+    private static final String TIMESTAMP = "Timestamp";
     private ArrayObjectAdapter mSectionRowAdapter;
     private BrowsePresenter mBrowsePresenter;
     private Map<Integer, BrowseSection> mSections;
@@ -63,6 +64,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private int mRestoredHeaderIndex = -1;
     private Video mRestoredVideo;
     private boolean mRestoredInForeground;
+    private long mRestoredTimestamp;
     private boolean mFocusOnContent;
 
     @Override
@@ -73,6 +75,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             mRestoredHeaderIndex = savedInstanceState.getInt(SELECTED_HEADER_INDEX, -1);
             mRestoredVideo = Video.fromString(savedInstanceState.getString(SELECTED_VIDEO));
             mRestoredInForeground = savedInstanceState.getBoolean(IS_PLAYER_IN_FOREGROUND, false);
+            mRestoredTimestamp = savedInstanceState.getLong(TIMESTAMP, -1);
         }
         mIsFragmentCreated = true;
 
@@ -98,6 +101,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         if (mBrowsePresenter.getCurrentVideo() != null) {
             outState.putString(SELECTED_VIDEO, mBrowsePresenter.getCurrentVideo().toString());
             outState.putBoolean(IS_PLAYER_IN_FOREGROUND, ViewManager.instance(getContext()).isPlayerInForeground());
+            outState.putLong(TIMESTAMP, System.currentTimeMillis());
         }
     }
 
@@ -130,7 +134,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             selectSectionItem(mRestoredVideo);
             if (PlaybackPresenter.instance(getContext()).getPlayer() == null && mRestoredInForeground) {
                 State lastState = VideoStateService.instance(getContext()).getLastState();
-                PlaybackPresenter.instance(getContext()).openVideo(lastState != null ? lastState.video : mRestoredVideo);
+                PlaybackPresenter.instance(getContext()).openVideo(lastState != null && lastState.timestamp > mRestoredTimestamp ? lastState.video : mRestoredVideo);
             }
             mRestoredVideo = null;
         }
