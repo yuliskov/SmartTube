@@ -263,6 +263,7 @@ public class Utils {
                 }
                 try {
                     audioManager.setStreamVolume(GLOBAL_VOLUME_TYPE, (int) newVolume, 0);
+                    sCurrentVolume = volume;
                 } catch (SecurityException e) {
                     // Not allowed to change Do Not Disturb state
                     e.printStackTrace();
@@ -281,7 +282,8 @@ public class Utils {
                 int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE);
                 int streamVolume = audioManager.getStreamVolume(GLOBAL_VOLUME_TYPE);
 
-                return (int) Math.ceil(streamVolume / (streamMaxVolume / 100f));
+                int volume = (int) Math.ceil(streamVolume / (streamMaxVolume / 100f));
+                return Math.abs(sCurrentVolume - volume) == 1 ? sCurrentVolume : volume; // fix small steps (1). volume should be precise.
             }
         }
 
@@ -360,7 +362,6 @@ public class Utils {
                     setPlayerVolume(context, player, volume);
                 }
             }
-            sCurrentVolume = volume;
         }
     }
 
