@@ -295,6 +295,11 @@ public class Utils {
             return;
         }
 
+        if ("D2150 (Nebula-Cosmos-Max)".equals(Helpers.getDeviceName())) { // A projector
+            sGlobalVolumeFixed = true;
+            return;
+        }
+
         int volume = getGlobalVolume(context);
         setGlobalVolume(context, volume > 50 ? volume - 10 : volume + 10);
         sGlobalVolumeFixed = volume == getGlobalVolume(context);
