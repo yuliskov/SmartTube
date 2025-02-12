@@ -264,7 +264,7 @@ public class Utils {
                 try {
                     audioManager.setStreamVolume(GLOBAL_VOLUME_TYPE, (int) newVolume, 0);
                     sCurrentVolume = volume;
-                } catch (SecurityException e) {
+                } catch (SecurityException | IllegalArgumentException e) {
                     // Not allowed to change Do Not Disturb state
                     e.printStackTrace();
                 }
