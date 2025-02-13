@@ -57,6 +57,16 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
     private void createAndShowDialog() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
+        appendLocalBackupCategory(settingsPresenter);
+
+        appendDriveBackupCategory(settingsPresenter);
+
+        appendSubscriptionsBackupButton(settingsPresenter);
+
+        settingsPresenter.showDialog(getContext().getString(R.string.app_backup_restore), this::unhold);
+    }
+
+    private void appendDriveBackupCategory(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from("Google Drive", optionItem -> {
             AppDialogPresenter settingsPresenter2 = AppDialogPresenter.instance(getContext());
             appendGDriveBackupSettings(settingsPresenter2);
@@ -65,10 +75,6 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
             appendGDriveMiscButton(settingsPresenter2);
             settingsPresenter2.showDialog("Google Drive");
         }));
-
-        appendLocalBackupCategory(settingsPresenter);
-
-        settingsPresenter.showDialog(getContext().getString(R.string.app_backup_restore), this::unhold);
     }
 
     private void appendGDriveRestoreSettings(AppDialogPresenter settingsPresenter) {
@@ -129,6 +135,10 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
                 }));
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.local_backup), options);
+    }
+
+    private void appendSubscriptionsBackupButton(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleButton(AppDialogUtil.createSubscriptionsBackupButton(getContext()));
     }
 
     private void showLocalRestoreDialog(BackupAndRestoreManager backupManager, List<String> backups) {
