@@ -946,7 +946,8 @@ public class AppDialogUtil {
         MediaItemService itemManager = YouTubeMediaItemService.instance();
 
         if (add) {
-            editObserve = itemManager.addToPlaylistObserve(playlistId, video.videoId);
+            editObserve = video.mediaItem != null ?
+                    itemManager.addToPlaylistObserve(playlistId, video.mediaItem) : itemManager.addToPlaylistObserve(playlistId, video.videoId);
         } else {
             // Check that the current video belongs to the right section
             if (callback != null && Helpers.equals(video.playlistId, playlistId)) {

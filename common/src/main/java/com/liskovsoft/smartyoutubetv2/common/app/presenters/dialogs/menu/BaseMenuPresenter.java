@@ -390,7 +390,9 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 null,
                 newValue -> {
                     MediaItemService manager = YouTubeMediaItemService.instance();
-                    Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
+                    Observable<Void> action = video.mediaItem != null ?
+                            manager.createPlaylistObserve(newValue, video.hasVideo() ? video.mediaItem : null) :
+                            manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
                     RxHelper.execute(
                             action,
                             (error) -> MessageHelpers.showMessage(getContext(), error.getLocalizedMessage()),
