@@ -328,7 +328,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
     private void savePlaylist(Video video) {
         MediaItemService manager = YouTubeMediaItemService.instance();
-        Observable<Void> action = manager.savePlaylistObserve(video.playlistId);
+        Observable<Void> action = video.mediaItem != null ? manager.savePlaylistObserve(video.mediaItem) : manager.savePlaylistObserve(video.playlistId);
         RxHelper.execute(action,
                 (error) -> MessageHelpers.showMessage(getContext(), error.getLocalizedMessage()),
                 () -> MessageHelpers.showMessage(getContext(), getContext().getString(R.string.saved_to_playlists))
