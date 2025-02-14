@@ -592,7 +592,7 @@
     <string name="old_update_notifications">Starý vzhľad notifikácií o aktualizáciách</string>
     <string name="dialog_notification">Upozorniť na aktualizáciu pomocou vyskakovacieho okna</string>
     <string name="mark_as_watched">Označiť ako videné</string>
-    <string name="player_ui_animations">Povoliť animácie ovládacieho panela</string>
+    <string name="player_ui_animations">Povoliť animácie rozhrania prehrávača</string>
     <string name="player_likes_count">Zobraziť počet Páči sa/Nepáči sa</string>
     <string name="sorting_alphabetically2">Abecedne (rýchlo, animované ukážky)</string>
     <string name="sorting_default">Predvolené (rýchle, animované ukážky)</string>
@@ -691,4 +691,5 @@
     <string name="import_subscriptions_group">Importovať</string>
     <string name="lb_playback_controls_closed_captioning_disable">Vypnúť skryté titulky</string>
     <string name="lb_playback_controls_closed_captioning_enable">Zapnúť skryté titulky</string>
+    <string name="my_videos">Moje videá</string>
 </resources>
