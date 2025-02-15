@@ -32,6 +32,8 @@ import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.UniqueRandom;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
+import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
+
 import io.reactivex.disposables.Disposable;
 
 import java.util.Collections;
@@ -505,7 +507,12 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // "Response code: 404" (not sure whether below helps)
             // "Response code: 503" (not sure whether below helps)
             // "Response code: 400" (not sure whether below helps)
-            if (!enableFasterDataSource()) {
+            if (!isFasterDataSourceEnabled()) {
+                enableFasterDataSource();
+            } else if (!MediaServiceData.instance().isPremiumFixEnabled()) {
+                MediaServiceData.instance().enablePremiumFix(true);
+                restartEngine = false;
+            } else {
                 YouTubeServiceManager.instance().applyNoPlaybackFix();
                 restartEngine = false;
             }
@@ -815,12 +822,19 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
     }
 
-    private boolean enableFasterDataSource() {
-        int dataSource = Utils.skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET;
-        if (mPlayerTweaksData.getPlayerDataSource() != dataSource) {
-            mPlayerTweaksData.setPlayerDataSource(dataSource);
-            return true;
+    private static int getFasterDataSource() {
+        return Utils.skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET;
+    }
+
+    private void enableFasterDataSource() {
+        int fasterDataSource = getFasterDataSource();
+        if (mPlayerTweaksData.getPlayerDataSource() != fasterDataSource) {
+            mPlayerTweaksData.setPlayerDataSource(fasterDataSource);
         }
-        return false;
+    }
+
+    private boolean isFasterDataSourceEnabled() {
+        int fasterDataSource = getFasterDataSource();
+        return mPlayerTweaksData.getPlayerDataSource() == fasterDataSource;
     }
 }
