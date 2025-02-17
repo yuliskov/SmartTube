@@ -187,26 +187,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
     }
 
-    private void clearCache2() {
-        if (getContext() != null) {
-            // 1) Remove downloaded apks
-            // 2) Setup language
-            ViewManager.instance(getContext()).clearCaches();
-        }
-    }
-
-    private void clearCache() {
-        if (getContext() != null) {
-            int versionCode = AppInfoHelpers.getAppVersionCode(getContext());
-            if (GeneralData.instance(getContext()).getVersionCode() != versionCode) {
-                GeneralData.instance(getContext()).setVersionCode(versionCode);
-
-                //FileHelpers.deleteCache(getContext());
-                ViewManager.instance(getContext()).clearCaches();
-            }
-        }
-    }
-
     private void enableHistoryIfNeeded() {
         // Account history might be turned off (common issue).
         GeneralData generalData = GeneralData.instance(getContext());

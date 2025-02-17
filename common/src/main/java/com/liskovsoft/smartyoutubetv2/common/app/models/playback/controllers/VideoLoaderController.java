@@ -32,7 +32,6 @@ import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.UniqueRandom;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
-import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import io.reactivex.disposables.Disposable;
 
@@ -354,6 +353,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
             // Sign in error (bot check error?)
+            //YouTubeServiceManager.instance().applyNoPlaybackFix();
             YouTubeServiceManager.instance().applyAntiBotFix();
             mPlayerTweaksData.enablePersistentAntiBotFix(true);
             scheduleNextVideoTimer(5_000);
@@ -509,9 +509,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // "Response code: 400" (not sure whether below helps)
             if (!isFasterDataSourceEnabled()) {
                 enableFasterDataSource();
-            } else if (!MediaServiceData.instance().isPremiumFixEnabled()) {
-                MediaServiceData.instance().enablePremiumFix(true);
-                restartEngine = false;
             } else {
                 YouTubeServiceManager.instance().applyNoPlaybackFix();
                 restartEngine = false;
