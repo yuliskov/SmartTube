@@ -208,7 +208,8 @@ public class PlayerUIController extends BasePlayerController {
             settingsPresenter.showDialog();
         }));
 
-        settingsPresenter.appendSingleSwitch(AppDialogUtil.createSubtitleChannelOption(getContext()));
+        OptionCategory rememberCategory = AppDialogUtil.createSubtitlesRememberCategory(getContext());
+        settingsPresenter.appendRadioCategory(rememberCategory.title, rememberCategory.options);
 
         OptionCategory stylesCategory = AppDialogUtil.createSubtitleStylesCategory(getContext());
         settingsPresenter.appendRadioCategory(stylesCategory.title, stylesCategory.options);
@@ -761,11 +762,14 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private boolean isSubtitleEnabled() {
-        return !mPlayerData.isSubtitlesPerChannelEnabled() || mPlayerData.isSubtitlesPerChannelEnabled(getChannelId());
+        return (
+                mPlayerData.getSubtitleRemember() == PlayerData.SUBTITLES_REMEMBER_PER_CHANNEL && mPlayerData.isSubtitlesPerChannelEnabled(getChannelId()) ||
+                        mPlayerData.getSubtitleRemember() == PlayerData.SUBTITLES_REMEMBER_GLOBAL
+        );
     }
 
     private void enableSubtitleForChannel(boolean enable) {
-        if (getPlayer() == null || !mPlayerData.isSubtitlesPerChannelEnabled()) {
+        if (getPlayer() == null || mPlayerData.getSubtitleRemember() != PlayerData.SUBTITLES_REMEMBER_PER_CHANNEL) {
             return;
         }
 

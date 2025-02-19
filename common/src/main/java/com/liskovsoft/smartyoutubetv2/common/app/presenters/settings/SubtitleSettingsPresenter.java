@@ -26,10 +26,10 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
-        settingsPresenter.appendSingleSwitch(AppDialogUtil.createSubtitleChannelOption(getContext()));
         // Can't work properly. There is no robust language detection.
         //appendSubtitleLanguageCategory(settingsPresenter);
         appendMoreSubtitlesSwitch(settingsPresenter);
+        appendSubtitlesRememberCategory(settingsPresenter);
         appendSubtitleStyleCategory(settingsPresenter);
         appendSubtitleSizeCategory(settingsPresenter);
         appendSubtitlePositionCategory(settingsPresenter);
@@ -64,6 +64,11 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
     //
     //    settingsPresenter.appendRadioCategory(subtitleLanguageTitle, options);
     //}
+
+    private void appendSubtitlesRememberCategory(AppDialogPresenter settingsPresenter) {
+        OptionCategory category = AppDialogUtil.createSubtitlesRememberCategory(getContext());
+        settingsPresenter.appendRadioCategory(category.title, category.options);
+    }
 
     private void appendSubtitleStyleCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = AppDialogUtil.createSubtitleStylesCategory(getContext());

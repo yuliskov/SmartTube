@@ -400,7 +400,7 @@ public class VideoStateController extends BasePlayerController {
     private void restoreSubtitleFormat() {
         FormatItem result = mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE);
 
-        if (mPlayerData.isSubtitlesPerChannelEnabled()) {
+        if (mPlayerData.getSubtitleRemember() == PlayerData.SUBTITLES_REMEMBER_PER_CHANNEL) {
             result = mPlayerData.isSubtitlesPerChannelEnabled(getPlayer().getVideo().channelId) ? mPlayerData.getLastSubtitleFormat() : FormatItem.SUBTITLE_NONE;
         }
 
