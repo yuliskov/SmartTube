@@ -714,6 +714,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             openVideoInt(firstVideo);
         } else {
             Log.e(TAG, "VideoGroup is null or empty. Can't restart playlist.");
+            getPlayer().setPositionMs(getPlayer().getDurationMs());
+            getPlayer().setPlayWhenReady(false);
+            getPlayer().showSuggestions(true);
         }
 
     private boolean acceptDashVideoFormats(MediaItemFormatInfo formatInfo) {
