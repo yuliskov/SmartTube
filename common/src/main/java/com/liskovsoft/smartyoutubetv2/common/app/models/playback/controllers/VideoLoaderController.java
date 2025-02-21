@@ -679,13 +679,12 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                 }
                 break;
             case PlayerEngineConstants.REPEAT_MODE_LIST:
-                // stop player (if not playing playlist)
+                // if video has a playlist loadnext or restart playlist
                 if (video.hasNextPlaylist() || mPlaylist.getNext() != null) {
                     loadNext();
-                } else {
-                    getPlayer().setPositionMs(getPlayer().getDurationMs());
-                    getPlayer().setPlayWhenReady(false);
-                    getPlayer().showSuggestions(true);
+                }
+                else {
+                    restartPlaylist();
                 }
                 break;
             default:
@@ -693,6 +692,29 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                 break;
         }
     }
+
+    private void restartPlaylist() {
+        Video currentVideo = getPlayer().getVideo();
+        VideoGroup group = currentVideo.getGroup(); // Get the VideoGroup (playlist)
+
+        if (group != null && !group.getVideos().isEmpty()) {
+            // Clear current playlist
+            Playlist.instance().clear();
+
+            // Add all videos from VideoGroup
+            Playlist.instance().addAll(group.getVideos());
+            
+            getPlayer().resetPlayerState();
+            Video firstVideo = group.getVideos().get(0);
+            Playlist.instance().setCurrent(firstVideo);
+            loadFormatInfo(firstVideo);
+            getPlayer().setNextTitle(firstVideo);
+            // Start playing the first video
+            getPlayer().setVideo(firstVideo);
+            openVideoInt(firstVideo);
+        } else {
+            Log.e(TAG, "VideoGroup is null or empty. Can't restart playlist.");
+        }
 
     private boolean acceptDashVideoFormats(MediaItemFormatInfo formatInfo) {
         // Not enough info for full length live streams
