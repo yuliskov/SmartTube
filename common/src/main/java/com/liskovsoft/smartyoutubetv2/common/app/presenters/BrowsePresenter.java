@@ -162,6 +162,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void restoreSelectedItems() {
+        if (getView() == null) {
+            return;
+        }
+
         if ((isSubscriptionsSection() && mGeneralData.isRememberSubscriptionsPositionEnabled()) ||
                 (isPinnedSection() && mGeneralData.isRememberPinnedPositionEnabled())) {
             getView().selectSectionItem(mGeneralData.getSelectedItem(mCurrentSection.getId()));
