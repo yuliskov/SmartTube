@@ -25,6 +25,7 @@ import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
+import com.liskovsoft.sharedutils.helpers.DeviceHelpers;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -198,6 +199,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendVersion();
         appendDeviceNameSDKCache();
         appendMemoryInfo();
+        appendWebViewInfo();
 
         // Schedule next update
         mDebugViewGroup.removeCallbacks(this);
@@ -374,6 +376,10 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         long allocatedMemory = Runtime.getRuntime().totalMemory();
         appendRow("Memory Limit (MB)", (int)(maxMemory / (1024 * 1024))); // Growth Limit
         appendRow("Allocated Memory (MB)", (int)(allocatedMemory / (1024 * 1024)));
+    }
+
+    private void appendWebViewInfo() {
+        appendRow("WebView supported", DeviceHelpers.supportsWebView());
     }
 
     private void appendRow(String name, boolean val) {
