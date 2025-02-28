@@ -347,6 +347,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             mStateService.setHistoryBroken(formatInfo.isHistoryBroken());
         }
 
+        if (formatInfo.getPaidContentText() != null) {
+            MessageHelpers.showMessage(getContext(), formatInfo.getPaidContentText());
+        }
+
         if (formatInfo.isUnplayable()) {
             getPlayer().setTitle(formatInfo.getPlayabilityStatus());
             getPlayer().showProgressBar(false);
