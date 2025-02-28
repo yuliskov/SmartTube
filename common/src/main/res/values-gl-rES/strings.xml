@@ -684,4 +684,12 @@
   <string name="screen_dimming_amount">Cantidade de atenuación da pantalla</string>
   <string name="screen_dimming_timeout">Tempo de espera para a atenuación da pantalla</string>
   <string name="playlists_rows">Amosar a sección de listas de reprodución como filas</string>
+  <string name="not_supported_by_device">O dispositivo non soporta esta función</string>
+  <string name="context_menu_sorting">Ordenación do menú contextual</string>
+  <string name="hide_shorts_from_search">Ocultar vídeos curtos nos resultados de busca</string>
+  <string name="suggestions">Suxestións</string>
+  <string name="import_subscriptions_group">Importar</string>
+  <string name="lb_playback_controls_closed_captioning_disable">Desactivar os subtítulos</string>
+  <string name="lb_playback_controls_closed_captioning_enable">Activar os subtítulos</string>
+  <string name="my_videos">Os meus vídeos</string>
 </resources>
