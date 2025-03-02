@@ -225,6 +225,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         showHideWidgets(true); // PIP mode fix
         blockEngine(false); // reset bg mode
+        ExoPlayerInitializer.enableAudioFocus(mPlayer, true); // Restore focus after PIP
     }
 
     @Override
@@ -239,6 +240,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         showHideWidgets(false); // PIP mode fix
+        ExoPlayerInitializer.enableAudioFocus(mPlayer, false); // Disable focus in PIP
     }
 
     public void onDispatchKeyEvent(KeyEvent event) {
