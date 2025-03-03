@@ -239,7 +239,8 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         mGlobalClock.setVisibility(mIsGlobalClockEnabled ? View.VISIBLE : View.GONE);
         mGlobalDate.setVisibility(mIsGlobalClockEnabled ? View.VISIBLE : View.GONE);
 
-        updateAccountIcon();
+        Utils.postDelayed(this::updateAccountIcon, 1_000); // give a time to engine to fetch an updated icon url
+        //updateAccountIcon();
         updateLanguageIcon();
     }
 
