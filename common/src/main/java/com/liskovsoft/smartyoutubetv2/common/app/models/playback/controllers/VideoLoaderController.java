@@ -842,6 +842,8 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     private boolean isFasterDataSourceEnabled() {
         if (GeneralData.instance(getContext()).isProxyEnabled()) {
+            // Disable auto switch for proxies.
+            // Current source may have better compatibility with proxies than fastest one.
             return true;
         }
 
