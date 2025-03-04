@@ -92,13 +92,14 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsChapterNotificationEnabled;
     private boolean mIsPlayerUiOnNextEnabled;
     private boolean mIsPlayerAutoVolumeEnabled;
-    private boolean mIsPlayerGlobalFocusEnabled;
+    private boolean mIsSimplePlayerNavigationEnabled;
     private boolean mIsUnsafeAudioFormatsEnabled;
     private boolean mIsLoopShortsEnabled;
     private boolean mIsQuickSkipShortsEnabled;
     private boolean mIsQuickSkipVideosEnabled;
     private boolean mIsOculusQuestFixEnabled;
     private boolean mIsPersistentAntiBotFixEnabled;
+    private boolean mIsAudioFocusEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -539,13 +540,22 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsPlayerAutoVolumeEnabled;
     }
 
-    public void enablePlayerGlobalFocus(boolean enable) {
-        mIsPlayerGlobalFocusEnabled = enable;
+    public void enableAudioFocus(boolean enable) {
+        mIsAudioFocusEnabled = enable;
         persistData();
     }
 
-    public boolean isPlayerGlobalFocusEnabled() {
-        return mIsPlayerGlobalFocusEnabled;
+    public boolean isAudioFocusEnabled() {
+        return mIsAudioFocusEnabled;
+    }
+
+    public void enableSimplePlayerNavigation(boolean enable) {
+        mIsSimplePlayerNavigationEnabled = enable;
+        persistData();
+    }
+
+    public boolean isSimplePlayerNavigationEnabled() {
+        return mIsSimplePlayerNavigationEnabled;
     }
 
     public void enableLoopShorts(boolean enable) {
@@ -640,7 +650,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsBootScreenOffEnabled = Helpers.parseBoolean(split, 38, false);
         mIsPlayerUiOnNextEnabled = Helpers.parseBoolean(split, 39, false);
         mIsPlayerAutoVolumeEnabled = Helpers.parseBoolean(split, 40, true);
-        mIsPlayerGlobalFocusEnabled = Helpers.parseBoolean(split, 41, true);
+        mIsSimplePlayerNavigationEnabled = Helpers.parseBoolean(split, 41, true);
         mIsUnsafeAudioFormatsEnabled = Helpers.parseBoolean(split, 42, true);
         //mIsHighBitrateFormatsEnabled = Helpers.parseBoolean(split, 43, false);
         mIsLoopShortsEnabled = Helpers.parseBoolean(split, 44, true);
@@ -655,6 +665,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         //mIsNetworkErrorFixingDisabled = Helpers.parseBoolean(split, 51, false);
         mIsCommentsPlacedLeft = Helpers.parseBoolean(split, 52, false);
         mIsPersistentAntiBotFixEnabled = Helpers.parseBoolean(split, 53, false);
+        mIsAudioFocusEnabled = Helpers.parseBoolean(split, 54, true);
 
         updateDefaultValues();
     }
@@ -670,9 +681,10 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
-                mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsPlayerGlobalFocusEnabled,
+                mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsSimplePlayerNavigationEnabled,
                 mIsUnsafeAudioFormatsEnabled, null, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
-                mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, null, mIsCommentsPlacedLeft, mIsPersistentAntiBotFixEnabled
+                mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, null, mIsCommentsPlacedLeft,
+                mIsPersistentAntiBotFixEnabled, mIsAudioFocusEnabled
                 ));
     }
 

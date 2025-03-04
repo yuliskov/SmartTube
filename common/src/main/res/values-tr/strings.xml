@@ -694,4 +694,5 @@
     <string name="lb_playback_controls_closed_captioning_disable">Altyazıyı Devre Dışı Bırak</string>
     <string name="lb_playback_controls_closed_captioning_enable">Altyazıyı Aktifleştir</string>
     <string name="my_videos">Videolarım</string>
+    <string name="player_audio_focus">Ses odaklama (diğer video oynatıcılar algılanırsa duraklatma)</string>
 </resources>

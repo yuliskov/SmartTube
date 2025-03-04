@@ -515,13 +515,17 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_section_playlist),
-                option -> mPlayerTweaksData.enableSectionPlaylist(option.isSelected()),
-                mPlayerTweaksData.isSectionPlaylistEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_audio_focus),
+                option -> mPlayerTweaksData.enableAudioFocus(option.isSelected()),
+                mPlayerTweaksData.isAudioFocusEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_auto_volume),
                 option -> mPlayerTweaksData.enablePlayerAutoVolume(option.isSelected()),
                 mPlayerTweaksData.isPlayerAutoVolumeEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_section_playlist),
+                option -> mPlayerTweaksData.enableSectionPlaylist(option.isSelected()),
+                mPlayerTweaksData.isSectionPlaylistEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_chapter_notification),
                 option -> mPlayerTweaksData.enableChapterNotification(option.isSelected()),
@@ -601,8 +605,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_global_focus),
                 getContext().getString(R.string.player_global_focus_desc),
-                option -> mPlayerTweaksData.enablePlayerGlobalFocus(option.isSelected()),
-                mPlayerTweaksData.isPlayerGlobalFocusEnabled()));
+                option -> mPlayerTweaksData.enableSimplePlayerNavigation(option.isSelected()),
+                mPlayerTweaksData.isSimplePlayerNavigationEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_ui_on_next),
                 option -> mPlayerTweaksData.enablePlayerUiOnNext(option.isSelected()),
