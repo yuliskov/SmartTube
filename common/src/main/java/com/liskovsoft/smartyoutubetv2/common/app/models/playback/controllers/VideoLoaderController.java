@@ -833,13 +833,18 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     }
 
     private void enableFasterDataSource() {
-        int fasterDataSource = getFasterDataSource();
-        if (mPlayerTweaksData.getPlayerDataSource() != fasterDataSource) {
-            mPlayerTweaksData.setPlayerDataSource(fasterDataSource);
+        if (isFasterDataSourceEnabled()) {
+            return;
         }
+
+        mPlayerTweaksData.setPlayerDataSource(getFasterDataSource());
     }
 
     private boolean isFasterDataSourceEnabled() {
+        if (GeneralData.instance(getContext()).isProxyEnabled()) {
+            return true;
+        }
+
         int fasterDataSource = getFasterDataSource();
         return mPlayerTweaksData.getPlayerDataSource() == fasterDataSource;
     }
