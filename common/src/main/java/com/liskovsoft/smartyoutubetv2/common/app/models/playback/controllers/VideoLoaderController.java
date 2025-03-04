@@ -24,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -347,7 +348,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             mStateService.setHistoryBroken(formatInfo.isHistoryBroken());
         }
 
-        if (formatInfo.getPaidContentText() != null) {
+        if (formatInfo.getPaidContentText() != null && ContentBlockData.instance(getContext()).isPaidContentNotificationEnabled()) {
             MessageHelpers.showMessage(getContext(), formatInfo.getPaidContentText());
         }
 

@@ -693,4 +693,5 @@
     <string name="lb_playback_controls_closed_captioning_enable">Enable Closed Captioning</string>
     <string name="my_videos">My videos</string>
     <string name="player_audio_focus">Audio focus (pause if other players detected)</string>
+    <string name="paid_content_notification">Paid content notification</string>
 </resources>

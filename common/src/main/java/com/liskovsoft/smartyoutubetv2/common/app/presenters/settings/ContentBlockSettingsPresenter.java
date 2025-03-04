@@ -139,6 +139,10 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscSection(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.paid_content_notification),
+                optionItem -> mContentBlockData.enablePaidContentNotification(optionItem.isSelected()),
+                mContentBlockData.isPaidContentNotificationEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.skip_each_segment_once),
                 optionItem -> mContentBlockData.enableDontSkipSegmentAgain(optionItem.isSelected()),
                 mContentBlockData.isDontSkipSegmentAgainEnabled()));

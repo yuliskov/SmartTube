@@ -684,4 +684,5 @@
     <string name="import_subscriptions_group">Імпорт</string>
     <string name="my_videos">Мої відео</string>
     <string name="player_audio_focus">Аудіо фокус (пауза, якщо виявлено інші плеєри)</string>
+    <string name="paid_content_notification">Повідомлення про платний вміст</string>
 </resources>
