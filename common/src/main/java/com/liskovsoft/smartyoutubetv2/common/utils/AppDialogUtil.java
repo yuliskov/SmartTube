@@ -81,6 +81,7 @@ public class AppDialogUtil {
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
+    private static final int SUBTITLE_REMEMBER_ID = 48;
     private static final int FILE_PICKER_REQUEST_CODE = 205;
 
     /**
@@ -461,18 +462,32 @@ public class AppDialogUtil {
         return OptionCategory.from(PITCH_EFFECT_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
+    public static OptionCategory createSubtitlesRememberCategory(Context context) {
+        PlayerData playerData = PlayerData.instance(context);
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(context.getString(R.string.subtitle_remember_dont),
+                optionItem -> playerData.setSubtitleRemember(PlayerData.SUBTITLES_REMEMBER_DONT),
+                playerData.getSubtitleRemember() == PlayerData.SUBTITLES_REMEMBER_DONT
+        ));
+
+        options.add(UiOptionItem.from(context.getString(R.string.subtitle_remember_per_channel),
+                optionItem -> playerData.setSubtitleRemember(PlayerData.SUBTITLES_REMEMBER_PER_CHANNEL),
+                playerData.getSubtitleRemember() == PlayerData.SUBTITLES_REMEMBER_PER_CHANNEL
+        ));
+
+        options.add(UiOptionItem.from(context.getString(R.string.subtitle_remember_global),
+                optionItem -> playerData.setSubtitleRemember(PlayerData.SUBTITLES_REMEMBER_GLOBAL),
+                playerData.getSubtitleRemember() == PlayerData.SUBTITLES_REMEMBER_GLOBAL
+        ));
+
+        return OptionCategory.from(SUBTITLE_REMEMBER_ID, OptionCategory.TYPE_RADIO_LIST, context.getString(R.string.subtitle_remember_title), options);
+    }
+
     public static OptionCategory createSubtitleStylesCategory(Context context) {
         String subtitleStyleTitle = context.getString(R.string.subtitle_style);
 
         return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO_LIST, subtitleStyleTitle, createSubtitleStyles(context));
-    }
-
-    public static OptionItem createSubtitleChannelOption(Context context) {
-        PlayerData playerData = PlayerData.instance(context);
-        return UiOptionItem.from(context.getString(R.string.subtitle_remember),
-                optionItem -> playerData.enableSubtitlesPerChannel(optionItem.isSelected()),
-                playerData.isSubtitlesPerChannelEnabled()
-        );
     }
 
     @TargetApi(19)
