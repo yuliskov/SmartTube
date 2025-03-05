@@ -534,7 +534,14 @@ public class Utils {
         return spannable;
     }
 
+    /**
+     * NOTE: Android 5.1: Italic cause crashes with Arabic fonts
+     */
     public static CharSequence italic(CharSequence string) {
+        if (Build.VERSION.SDK_INT <= 22) {
+            return string;
+        }
+
         SpannableString spannable = new SpannableString(string);
         spannable.setSpan(new StyleSpan(Typeface.ITALIC), 0, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannable;
