@@ -685,4 +685,10 @@
   <string name="unlock_all_formats_desc">Op sommige apparaten meldt de firmware ten onrechte dat bepaalde formaten niet worden ondersteund, ook al zijn ze dat wel.\n(Bijvoorbeeld: 1080p smart-tv\'s melden 4k vaak als niet ondersteund.)</string>
   <string name="prefer_ipv4_desc">Kan situaties oplossen waarin de app helemaal niet werkt.\nLet op. Kan vastlopen en crashen veroorzaken (vooral op Android 8-apparaten of Dune HD)</string>
   <string name="player_loop_shorts">Short herhaald afspelen ipv doorlopend</string>
+  <string name="import_subscriptions_group">Importeren</string>
+  <string name="lb_playback_controls_closed_captioning_disable">Ondertiteling uitschakelen</string>
+  <string name="lb_playback_controls_closed_captioning_enable">Ondertiteling inschakelen</string>
+  <string name="my_videos">Mijn video\'s</string>
+  <string name="player_audio_focus">Audiofocus (pauzeren als andere spelers gedetecteerd worden)</string>
+  <string name="paid_content_notification">Melding betaalde content</string>
 </resources>

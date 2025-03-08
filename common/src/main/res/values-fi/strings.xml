@@ -685,4 +685,10 @@
   <string name="playlists_rows">Näytä soittolistojen osio riveinä</string>
   <string name="suggestions">Ehdotukset</string>
   <string name="not_supported_by_device">Laite ei tue tätä toimintoa</string>
+  <string name="import_subscriptions_group">Tuo tilaukset</string>
+  <string name="lb_playback_controls_closed_captioning_disable">Poista suljetut tekstitykset käytöstä</string>
+  <string name="lb_playback_controls_closed_captioning_enable">Ota käyttöön suljettu tekstitykset</string>
+  <string name="my_videos">Omat videoni</string>
+  <string name="player_audio_focus">Äänen tarkennus (tauko, jos muita soittimia havaitaan)</string>
+  <string name="paid_content_notification">Maksullista sisältöä koskeva ilmoitus</string>
 </resources>
