@@ -508,6 +508,8 @@ public class PlayerUIController extends BasePlayerController {
     public void onButtonClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_rotate) {
             onRotate();
+        } else if (buttonId == R.id.action_flip) {
+            onFlip();
         } else if (buttonId == R.id.action_screen_off || buttonId == R.id.action_screen_off_timeout) {
             prepareScreenOff();
             applyScreenOff(buttonState);
@@ -818,6 +820,14 @@ public class PlayerUIController extends BasePlayerController {
         getPlayer().setVideoRotation(rotation);
         getPlayer().setButtonState(R.id.action_rotate, rotation == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
         mPlayerData.setVideoRotation(rotation);
+    }
+
+    private void onFlip() {
+        boolean oldFlipState = mPlayerData.getVideoFlipState();
+        boolean newFlipState = !oldFlipState;
+        getPlayer().setVideoFlipState(newFlipState);
+        getPlayer().setButtonState(R.id.action_flip, newFlipState ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        mPlayerData.setVideoFlipState(newFlipState);
     }
 
     private void onSubscribe(int buttonState) {
