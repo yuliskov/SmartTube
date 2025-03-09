@@ -692,4 +692,6 @@
     <string name="lb_playback_controls_closed_captioning_disable">Untertitel deaktivieren</string>
     <string name="lb_playback_controls_closed_captioning_enable">Untertitel aktivieren</string>
     <string name="my_videos">Meine Videos</string>
+    <string name="player_audio_focus">Audio-Fokus (Pause, wenn andere Player erkannt werden)</string>
+    <string name="paid_content_notification">Benachrichtigung über bezahlte Inhalte</string>
 </resources>
