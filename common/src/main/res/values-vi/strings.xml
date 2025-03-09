@@ -691,4 +691,5 @@
   <string name="lb_playback_controls_closed_captioning_enable">Tắt phụ đề</string>
   <string name="import_subscriptions_group">Nhập</string>
   <string name="my_videos">Video của bạn</string>
+  <string name="paid_content_notification">Thông báo nội dung trả tiền</string>  
 </resources>
