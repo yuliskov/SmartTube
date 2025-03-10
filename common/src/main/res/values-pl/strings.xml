@@ -691,5 +691,7 @@
   <string name="import_subscriptions_group">Importuj</string>
   <string name="lb_playback_controls_closed_captioning_disable">Wyłącz napisy wkodowane</string>
   <string name="lb_playback_controls_closed_captioning_enable">Włącz napisy wkodowane</string>
-   <string name="my_videos">Moje wideo</string>
+  <string name="my_videos">Moje wideo</string>
+  <string name="player_audio_focus">Automatyzacja audio (pauza w przypadku wykrycia innych odtwarzaczy)</string>
+  <string name="paid_content_notification">Powiadomienia o płatnych treściach</string>
 </resources>
