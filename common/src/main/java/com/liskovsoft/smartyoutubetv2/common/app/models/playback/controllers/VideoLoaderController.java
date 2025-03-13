@@ -357,15 +357,15 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             getPlayer().showProgressBar(false);
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
+
             if (formatInfo.isHistoryBroken()) {
                 // Sign in error (bot check error?)
                 YouTubeServiceManager.instance().applyNoPlaybackFix();
                 YouTubeServiceManager.instance().applyAntiBotFix();
                 mPlayerTweaksData.enablePersistentAntiBotFix(true);
-                scheduleReloadVideoTimer(5_000);
-            } else {
-                scheduleNextVideoTimer(5_000);
             }
+
+            scheduleNextVideoTimer(5_000);
         } else if (formatInfo.containsDashVideoFormats() && acceptDashVideoFormats(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 

@@ -81,7 +81,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final Runnable mRefreshSection = this::refresh;
     private BrowseSection mCurrentSection;
     private Video mCurrentVideo;
-    private long mLastUpdateTimeMs;
+    private long mLastUpdateTimeMs = -1;
     private int mBootSectionIndex;
     private int mBootstrapSectionId = -1;
 
@@ -147,6 +147,21 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         super.onViewPaused();
 
         saveSelectedItems();
+    }
+
+    @Override
+    public void onViewResumed() {
+        super.onViewResumed();
+
+        refreshIfNeeded();
+    }
+
+    private void refreshIfNeeded() {
+        if (getView() == null || !isHomeSection() || mLastUpdateTimeMs == -1 || System.currentTimeMillis() - mLastUpdateTimeMs < 60 * 60 * 1_000) {
+            return;
+        }
+
+        refresh(false);
     }
 
     private void saveSelectedItems() {
@@ -406,8 +421,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         } else {
             VideoActionPresenter.instance(getContext()).apply(item);
         }
-
-        updateRefreshTime();
     }
 
     @Override
@@ -438,8 +451,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 }
             });
         }
-
-        updateRefreshTime();
     }
 
     @Override
@@ -857,7 +868,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private void disposeActions() {
         RxHelper.disposeActions(mActions);
         Utils.removeCallbacks(mRefreshSection);
-        mLastUpdateTimeMs = 0;
+        mLastUpdateTimeMs = -1;
     }
 
     private void updateChannelUploadsMultiGrid(Video item) {

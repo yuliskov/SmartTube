@@ -82,10 +82,7 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
 
     private void appendMoreSubtitlesSwitch(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from("Unlock more subtitles",
-                option -> {
-                    MediaServiceData.instance().unlockMoreSubtitles(option.isSelected());
-                    YouTubeMediaItemService.instance().invalidateCache(); // Remove current cached video
-                },
+                option -> MediaServiceData.instance().unlockMoreSubtitles(option.isSelected()),
                 MediaServiceData.instance().isMoreSubtitlesUnlocked()));
     }
 }

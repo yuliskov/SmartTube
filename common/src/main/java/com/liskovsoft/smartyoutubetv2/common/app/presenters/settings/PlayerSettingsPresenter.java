@@ -237,17 +237,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from("Premium users only. Fix for incomplete video format list",
-                option -> {
-                    MediaServiceData.instance().enablePremiumFix(option.isSelected());
-                    mRestartApp = true;
-                },
+                option -> MediaServiceData.instance().enablePremiumFix(option.isSelected()),
                 MediaServiceData.instance().isPremiumFixEnabled()));
 
         options.add(UiOptionItem.from("Unlock more subtitles",
-                option -> {
-                    MediaServiceData.instance().unlockMoreSubtitles(option.isSelected());
-                    YouTubeMediaItemService.instance().invalidateCache(); // Remove current cached video
-                },
+                option -> MediaServiceData.instance().unlockMoreSubtitles(option.isSelected()),
                 MediaServiceData.instance().isMoreSubtitlesUnlocked()));
 
         options.add(UiOptionItem.from("Playback buffering fix",
