@@ -71,7 +71,6 @@ public class VideoStateController extends BasePlayerController {
                 // In case video opened from phone and other stuff.
                 removeFromHistoryIfNeeded();
                 saveState();
-                persistState(); // ???
             }
         }
 
@@ -164,7 +163,7 @@ public class VideoStateController extends BasePlayerController {
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
         saveState(); // start watching?
-        //persistState(); // ???
+        persistState(); // ???
 
         // Channel info should be loaded at this point
         restoreSubtitleFormat();
