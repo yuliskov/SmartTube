@@ -37,6 +37,9 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     public static final int SEEK_PREVIEW_SINGLE = 1;
     public static final int SEEK_PREVIEW_CAROUSEL_SLOW = 2;
     public static final int SEEK_PREVIEW_CAROUSEL_FAST = 3;
+    public static final int SUBTITLES_REMEMBER_DONT = 0;
+    public static final int SUBTITLES_REMEMBER_PER_CHANNEL = 1;
+    public static final int SUBTITLES_REMEMBER_GLOBAL = 2;
     @SuppressLint("StaticFieldLeak")
     private static PlayerData sInstance;
     private final AppPrefs mPrefs;
@@ -90,7 +93,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     private boolean mIsLiveChatEnabled;
     private List<FormatItem> mLastSubtitleFormats;
     private List<String> mEnabledSubtitlesPerChannel;
-    private boolean mIsSubtitlesPerChannelEnabled;
+    private int mSubtitlesRemember;
     private boolean mIsSpeedPerChannelEnabled;
     private final Map<String, SpeedItem> mSpeeds = new HashMap<>();
     private float mPitch;
@@ -444,15 +447,6 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         return mEnabledSubtitlesPerChannel.contains(channelId);
     }
 
-    public void enableSubtitlesPerChannel(boolean enable) {
-        mIsSubtitlesPerChannelEnabled = enable;
-        persistState();
-    }
-
-    public boolean isSubtitlesPerChannelEnabled() {
-        return mIsSubtitlesPerChannelEnabled;
-    }
-
     public void setVideoBufferType(int type) {
         mVideoBufferType = type;
         persistState();
@@ -490,6 +484,13 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
 
     public void setSubtitlePosition(float position) {
         mSubtitlePosition = position;
+        persistState();
+    }
+
+    public int getSubtitleRemember() { return mSubtitlesRemember; }
+
+    public void setSubtitleRemember(int mode) {
+        mSubtitlesRemember = mode;
         persistState();
     }
 
@@ -823,12 +824,12 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         mSubtitleLanguage = Helpers.parseStr(split, 53, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
         //String enabledSubtitles = Helpers.parseStr(split, 54);
         mEnabledSubtitlesPerChannel = Helpers.parseStrList(split, 54);
-        mIsSubtitlesPerChannelEnabled = Helpers.parseBoolean(split, 55, true);
         mIsSpeedPerChannelEnabled = Helpers.parseBoolean(split, 56, true);
         String[] speeds = Helpers.parseArray(split, 57);
         mPitch = Helpers.parseFloat(split, 58, 1.0f);
         mIsSkipShortsEnabled = Helpers.parseBoolean(split, 59, false);
         mLastAudioLanguages = Helpers.parseStrList(split, 60);
+        mSubtitlesRemember = Helpers.parseInt(split, 61, SUBTITLES_REMEMBER_DONT);
 
         if (speeds != null) {
             for (String speedSpec : speeds) {
@@ -854,8 +855,8 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
                 mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mVideoRotation,
-                mVideoZoom, mRepeatMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
-                mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages
+                mVideoZoom, mRepeatMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSpeedPerChannelEnabled,
+                Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages, mSubtitlesRemember
         ));
 
         onDataChange();
