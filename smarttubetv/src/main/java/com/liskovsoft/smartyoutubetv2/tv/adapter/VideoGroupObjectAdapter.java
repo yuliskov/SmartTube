@@ -23,8 +23,12 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
             // Duplicated items suddenly appeared in Home, Subscriptions and History.
 
             // Another alt method.
-            if (size() > 0 && size() < CHECK_MAX_SIZE) {
-                Helpers.removeIf(c, this::contains);
+            int size = size();
+            if (size > 0) {
+                if (size < CHECK_MAX_SIZE)
+                    Helpers.removeIf(c, this::contains);
+            } else {
+                Helpers.removeDuplicates(c);
             }
 
             return super.addAll(c);
