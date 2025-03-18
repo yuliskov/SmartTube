@@ -1169,6 +1169,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         setRotation(angle);
     }
 
+    @Override
+    public void setVideoFlipState(boolean state) {
+        setFlipState(state);
+    }
+
     // End Engine Events
 
     @Override
