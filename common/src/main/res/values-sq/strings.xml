@@ -583,7 +583,7 @@
   <string name="old_update_notifications">Pamja e vjetër e njoftimeve të përditësimit</string>
   <string name="dialog_notification">Njoftohu për përditësimet me një dialog flluskë</string>
   <string name="mark_as_watched">Shëno si të shikuar</string>
-  <string name="player_ui_animations">Aktivizo animacionet e panelit të kontrollit</string>
+  <string name="player_ui_animations">Aktivizo animacionet e ndërfaqes të luajtësit</string>
   <string name="player_likes_count">Trego numrin e pëlqimeve/mospëlqimeve</string>
   <string name="sorting_alphabetically2">Sipas rendit alfabetik (pamje paraprake të shpejta dhe të animuara)</string>
   <string name="sorting_default">Paracaktuar (pamje paraprake të shpejta dhe të animuara)</string>
@@ -691,4 +691,7 @@
   <string name="lb_playback_controls_closed_captioning_disable">Çaktivizo Titrat</string>
   <string name="lb_playback_controls_closed_captioning_enable">Aktivizo Titrat</string>
   <string name="context_menu_sorting">Renditja e menysë së kontekstit</string>
+  <string name="my_videos">Videot e mia</string>
+  <string name="paid_content_notification">Njoftim për përmbajtje me pagesë</string>
+  <string name="player_audio_focus">Përqendrimi i zërit (pezullo nëse zbulohen luajtës të tjerë)</string>
 </resources>
