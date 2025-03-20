@@ -691,4 +691,7 @@
     <string name="import_subscriptions_group">Importa</string>
     <string name="lb_playback_controls_closed_captioning_disable">Disabilita i sottotitoli per non udenti</string>
     <string name="lb_playback_controls_closed_captioning_enable">Abilita i sottotitoli per non udenti</string>
+    <string name="my_videos">I miei video</string>
+    <string name="player_audio_focus">Messa a fuoco audio (pausa se vengono rilevati altri lettori)</string>
+    <string name="paid_content_notification">Notifica di contenuti a pagamento</string>
 </resources>
