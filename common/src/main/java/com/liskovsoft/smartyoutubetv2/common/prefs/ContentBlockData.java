@@ -238,7 +238,7 @@ public class ContentBlockData {
         String colorCategories = Helpers.parseStr(split, 7);
         mIsDontSkipSegmentAgainEnabled = Helpers.parseBoolean(split, 8, false);
         String excludedChannels = Helpers.parseStr(split, 9);
-        mIsPaidContentNotificationEnabled = Helpers.parseBoolean(split, 10, true);
+        mIsPaidContentNotificationEnabled = Helpers.parseBoolean(split, 10, false);
 
         if (colorCategories != null) {
             String[] categoriesArr = Helpers.splitArray(colorCategories);
