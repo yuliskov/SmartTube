@@ -705,20 +705,15 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         Video currentVideo = getPlayer().getVideo();
         VideoGroup group = currentVideo.getGroup(); // Get the VideoGroup (playlist)
 
-        if (group != null && !group.getVideos().isEmpty()) {
+        if (group != null && !group.isEmpty()) {
             // Clear current playlist
-            Playlist.instance().clear();
+            mPlaylist.clear();
 
             // Add all videos from VideoGroup
-            Playlist.instance().addAll(group.getVideos());
+            mPlaylist.addAll(group.getVideos());
             
-            getPlayer().resetPlayerState();
-            Video firstVideo = group.getVideos().get(0);
-            Playlist.instance().setCurrent(firstVideo);
-            loadFormatInfo(firstVideo);
-            getPlayer().setNextTitle(firstVideo);
-            // Start playing the first video
-            getPlayer().setVideo(firstVideo);
+            Video firstVideo = group.get(0);
+            mPlaylist.setCurrent(firstVideo);
             openVideoInt(firstVideo);
         } else {
             Log.e(TAG, "VideoGroup is null or empty. Can't restart playlist.");
