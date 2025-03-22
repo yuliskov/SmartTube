@@ -688,11 +688,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                 }
                 break;
             case PlayerEngineConstants.REPEAT_MODE_LIST:
-                // if video has a playlist loadnext or restart playlist
+                // if video has a playlist load next or restart playlist
                 if (video.hasNextPlaylist() || mPlaylist.getNext() != null) {
                     loadNext();
-                }
-                else {
+                } else {
                     restartPlaylist();
                 }
                 break;
@@ -727,6 +726,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             getPlayer().setPlayWhenReady(false);
             getPlayer().showSuggestions(true);
         }
+    }
 
     private boolean acceptDashVideoFormats(MediaItemFormatInfo formatInfo) {
         // Not enough info for full length live streams
