@@ -110,8 +110,8 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         }
     }
 
-    protected void setFlipState(boolean state) {
-        float scaleX = state ? -1f : 1f;
+    protected void setFlipEnabled(boolean enabled) {
+        float scaleX = enabled ? -1f : 1f;
 
         if (Helpers.floatEquals(mVideoSurfaceRoot.getScaleX(), scaleX) || mVideoSurfaceWrapper == null) {
             return;

@@ -823,11 +823,11 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void onFlip() {
-        boolean oldFlipState = mPlayerData.getVideoFlipState();
-        boolean newFlipState = !oldFlipState;
-        getPlayer().setVideoFlipState(newFlipState);
-        getPlayer().setButtonState(R.id.action_flip, newFlipState ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-        mPlayerData.setVideoFlipState(newFlipState);
+        boolean flipEnabled = mPlayerData.isVideoFlipEnabled();
+        boolean newFlipEnabled = !flipEnabled;
+        getPlayer().setVideoFlipEnabled(newFlipEnabled);
+        getPlayer().setButtonState(R.id.action_flip, newFlipEnabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        mPlayerData.setVideoFlipEnabled(newFlipEnabled);
     }
 
     private void onSubscribe(int buttonState) {

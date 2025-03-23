@@ -59,7 +59,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     private int mVideoZoom;
     private float mVideoAspectRatio;
     private int mVideoRotation;
-    private boolean mVideoFlipState;
+    private boolean mIsVideoFlipEnabled;
     private int mSeekPreviewMode;
     private float mSpeed;
     private float mLastSpeed;
@@ -539,13 +539,13 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         return mVideoRotation;
     }
 
-    public void setVideoFlipState(boolean state) {
-        mVideoFlipState = state;
+    public void setVideoFlipEnabled(boolean enabled) {
+        mIsVideoFlipEnabled = enabled;
         persistState();
     }
 
-    public boolean getVideoFlipState() {
-        return mVideoFlipState;
+    public boolean isVideoFlipEnabled() {
+        return mIsVideoFlipEnabled;
     }
 
     public void setSpeed(float speed) {
@@ -839,6 +839,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         mPitch = Helpers.parseFloat(split, 58, 1.0f);
         mIsSkipShortsEnabled = Helpers.parseBoolean(split, 59, false);
         mLastAudioLanguages = Helpers.parseStrList(split, 60);
+        mIsVideoFlipEnabled = Helpers.parseBoolean(split, 61, false);
 
         if (speeds != null) {
             for (String speedSpec : speeds) {
@@ -865,7 +866,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
                 mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mVideoRotation,
                 mVideoZoom, mRepeatMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
-                mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages
+                mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages, mIsVideoFlipEnabled
         ));
 
         onDataChange();
