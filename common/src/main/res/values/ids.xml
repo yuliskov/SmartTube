@@ -20,6 +20,7 @@
     <item name="action_seek_interval" type="id"/>
     <item name="action_content_block" type="id"/>
     <item name="action_rotate" type="id"/>
+    <item name="action_flip" type="id"/>
     <item name="action_screen_off_timeout" type="id"/>
     <item name="action_afr" type="id"/>
     <item name="channel_new_content" type="id"/>

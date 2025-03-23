@@ -59,6 +59,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     private int mVideoZoom;
     private float mVideoAspectRatio;
     private int mVideoRotation;
+    private boolean mVideoFlipState;
     private int mSeekPreviewMode;
     private float mSpeed;
     private float mLastSpeed;
@@ -536,6 +537,15 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
 
     public int getVideoRotation() {
         return mVideoRotation;
+    }
+
+    public void setVideoFlipState(boolean state) {
+        mVideoFlipState = state;
+        persistState();
+    }
+
+    public boolean getVideoFlipState() {
+        return mVideoFlipState;
     }
 
     public void setSpeed(float speed) {

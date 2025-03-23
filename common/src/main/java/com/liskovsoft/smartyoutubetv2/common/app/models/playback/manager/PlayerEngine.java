@@ -44,4 +44,5 @@ public interface PlayerEngine extends PlayerEngineConstants {
     int getVideoZoomMode();
     void setVideoAspectRatio(float mode);
     void setVideoRotation(int angle);
+    void setVideoFlipState(boolean enabled);
 }
