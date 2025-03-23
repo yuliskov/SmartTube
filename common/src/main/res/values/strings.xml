@@ -600,6 +600,10 @@
     <string name="content_block_stop_excluding_channel">Stop excluding this channel from SponsorBlock</string>
     <string name="player_chapter_notification">Quick advance through the chapters using the popup notification</string>
     <string name="subtitle_remember">Remember enabled subtitles per each channel</string>
+    <string name="subtitle_remember_title">Remember enabled subtitles</string>
+    <string name="subtitle_remember_dont">Do not remember</string>
+    <string name="subtitle_remember_per_channel">Remember for each channel</string>
+    <string name="subtitle_remember_global">Remember globally</string>
     <string name="amazon_frame_drop_fix">Frame drop fix #2</string>
     <string name="amazon_frame_drop_fix_desc">Intended for Amazon Stick devices. May work on other devices too.</string>
     <string name="default_stack_desc">Built-in network engine. This engine may have better stability in certain situations.</string>
