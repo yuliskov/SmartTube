@@ -110,6 +110,25 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         }
     }
 
+    protected void setFlipState(boolean state) {
+        float scaleX = state ? -1f : 1f;
+
+        if (Helpers.floatEquals(mVideoSurfaceRoot.getScaleX(), scaleX) || mVideoSurfaceWrapper == null) {
+            return;
+        }
+
+        if (mVideoSurfaceWrapper instanceof TextureViewWrapper) {
+            mVideoSurfaceRoot.setScaleX(scaleX);
+        } else {
+            mVideoSurfaceRoot.removeView(mVideoSurfaceWrapper.getSurfaceView());
+            mVideoSurfaceWrapper = new TextureViewWrapper(getContext(), (ViewGroup) getView());
+            mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
+            mVideoSurfaceRoot.setScaleX(scaleX);
+
+            ((PlayerEngine) this).restartEngine();
+        }
+    }
+
     private void scaleIfNeeded() {
         if (!(mVideoSurfaceWrapper instanceof TextureViewWrapper)) {
             return;
