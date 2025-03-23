@@ -530,6 +530,7 @@
     <string name="loading">Завантаження…</string>
     <string name="hide_streams">Приховувати прямі трансляції з Підписок</string>
     <string name="video_rotate">Обертати</string>
+    <string name="video_flip">Віддзеркалити</string>
     <string name="trending_searches">Популярні пошукові запити</string>
     <string name="video_duration_any">Будь-яка</string>
     <string name="video_duration">Тривалість</string>

@@ -538,6 +538,7 @@
     <string name="loading">Yükleniyor…</string>
     <string name="hide_streams">Canlı yayınları Abonelikler\'de gizle</string>
     <string name="video_rotate">Döndür</string>
+    <string name="video_flip">Ayna</string>
     <string name="trending_searches">Trend olan aramalar</string>
     <string name="video_duration_any">Herhangi biri</string>
     <string name="video_duration">Süre</string>
