@@ -34,6 +34,8 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
+
 import org.chromium.net.ApiVersion;
 
 import java.util.ArrayList;
@@ -200,6 +202,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendDeviceNameSDKCache();
         appendMemoryInfo();
         appendWebViewInfo();
+        appendVideoInfoType();
 
         // Schedule next update
         mDebugViewGroup.removeCallbacks(this);
@@ -380,6 +383,11 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
     private void appendWebViewInfo() {
         appendRow("WebView supported", DeviceHelpers.supportsWebView());
+    }
+
+    private void appendVideoInfoType() {
+        Pair<Integer, Boolean> videoInfoType = MediaServiceData.instance().getVideoInfoType();
+        appendRow("Video info type", videoInfoType != null ? videoInfoType.first : -1);
     }
 
     private void appendRow(String name, boolean val) {
