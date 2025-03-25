@@ -664,7 +664,7 @@
   <string name="repeat_mode_reverse_list">Reproducir la lista de reproducción o los vídeos del canal en orden inverso</string>
   <string name="unknown_source_error">Error de fuente desconocida</string>
   <string name="unknown_renderer_error">Error de renderizado desconocido</string>
-  <string name="skip_shorts">Saltar Cortos</string>
+  <string name="skip_shorts">Saltar Shorts</string>
   <string name="player_quick_skip_videos">Saltar los vídeos normales con los botones izquierda/derecha</string>
   <string name="calm_msg">Estamos solucionando el problema. Compruebe las actualizaciones de vez en cuando</string>
   <string name="without_picture">Sin imagen</string>
