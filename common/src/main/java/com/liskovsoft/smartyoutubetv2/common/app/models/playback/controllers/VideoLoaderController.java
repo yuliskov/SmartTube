@@ -692,7 +692,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                 if (video.hasNextPlaylist() || mPlaylist.getNext() != null) {
                     loadNext();
                 } else {
-                    restartPlaylist();
+                    //restartPlaylist(); // stop instead of loop
+                    getPlayer().setPositionMs(getPlayer().getDurationMs());
+                    getPlayer().setPlayWhenReady(false);
+                    getPlayer().showSuggestions(true);
                 }
                 break;
             default:
