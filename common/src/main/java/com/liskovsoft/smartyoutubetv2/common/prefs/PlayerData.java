@@ -828,7 +828,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
         mVideoRotation = Helpers.parseInt(split, 49, 0);
         mVideoZoom = Helpers.parseInt(split, 50, -1);
-        mRepeatMode = Helpers.parseInt(split, 51, PlayerEngineConstants.REPEAT_MODE_ALL);
+        mRepeatMode = Helpers.parseInt(split, 51, PlayerEngineConstants.PLAYBACK_MODE_ALL);
         mAudioLanguage = Helpers.parseStr(split, 52, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
         mSubtitleLanguage = Helpers.parseStr(split, 53, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
         //String enabledSubtitles = Helpers.parseStr(split, 54);

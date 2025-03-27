@@ -103,12 +103,12 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     @Override
     public void onPlayEnd() {
         switch (PlayerData.instance(getContext()).getRepeatMode()) {
-            case PlayerEngineConstants.REPEAT_MODE_CLOSE:
-            case PlayerEngineConstants.REPEAT_MODE_PAUSE:
-            case PlayerEngineConstants.REPEAT_MODE_ALL:
+            case PlayerEngineConstants.PLAYBACK_MODE_CLOSE:
+            case PlayerEngineConstants.PLAYBACK_MODE_PAUSE:
+            case PlayerEngineConstants.PLAYBACK_MODE_ALL:
                 postPlay(false);
                 break;
-            case PlayerEngineConstants.REPEAT_MODE_ONE:
+            case PlayerEngineConstants.PLAYBACK_MODE_ONE:
                 postStartPlaying(getPlayer().getVideo(), true);
                 break;
         }

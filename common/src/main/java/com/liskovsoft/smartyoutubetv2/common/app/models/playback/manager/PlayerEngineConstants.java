@@ -3,13 +3,14 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
 public interface PlayerEngineConstants {
-    int REPEAT_MODE_PAUSE = 0;
-    int REPEAT_MODE_CLOSE = 1;
-    int REPEAT_MODE_ALL = 2;
-    int REPEAT_MODE_ONE = 3;
-    int REPEAT_MODE_SHUFFLE = 4;
-    int REPEAT_MODE_LIST = 5;
-    int REPEAT_MODE_REVERSE_LIST = 6;
+    int PLAYBACK_MODE_PAUSE = 0;
+    int PLAYBACK_MODE_CLOSE = 1;
+    int PLAYBACK_MODE_ALL = 2;
+    int PLAYBACK_MODE_ONE = 3;
+    int PLAYBACK_MODE_SHUFFLE = 4;
+    int PLAYBACK_MODE_LIST = 5;
+    int PLAYBACK_MODE_REVERSE_LIST = 6;
+    int PLAYBACK_MODE_LOOP_LIST = 7;
     int BACKGROUND_MODE_DEFAULT = 0;
     int BACKGROUND_MODE_SOUND = 1;
     int BACKGROUND_MODE_PIP = 2;

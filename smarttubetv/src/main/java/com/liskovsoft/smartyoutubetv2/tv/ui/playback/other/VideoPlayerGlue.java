@@ -44,7 +44,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoInfoAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PipAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaybackQueueAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaylistAddAction;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.RepeatAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaybackModeAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ScreenOffAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SearchAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SubscribeAction;
@@ -147,7 +147,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         putAction(new SubscribeAction(context));
         putAction(new SoundOffAction(context));
         putAction(new AFRAction(context));
-        putAction(new RepeatAction(context));
+        putAction(new PlaybackModeAction(context));
         putAction(new ChannelAction(context));
         putAction(new ChatAction(context));
     }

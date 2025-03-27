@@ -652,19 +652,19 @@ public class Utils {
 
     public static void showRepeatInfo(Context context, int modeIndex) {
         switch (modeIndex) {
-            case PlayerEngineConstants.REPEAT_MODE_ALL:
+            case PlayerEngineConstants.PLAYBACK_MODE_ALL:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_all);
                 break;
-            case PlayerEngineConstants.REPEAT_MODE_ONE:
+            case PlayerEngineConstants.PLAYBACK_MODE_ONE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_one);
                 break;
-            case PlayerEngineConstants.REPEAT_MODE_PAUSE:
+            case PlayerEngineConstants.PLAYBACK_MODE_PAUSE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_pause);
                 break;
-            case PlayerEngineConstants.REPEAT_MODE_LIST:
+            case PlayerEngineConstants.PLAYBACK_MODE_LIST:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_pause_alt);
                 break;
-            case PlayerEngineConstants.REPEAT_MODE_CLOSE:
+            case PlayerEngineConstants.PLAYBACK_MODE_CLOSE:
                 MessageHelpers.showMessage(context, R.string.repeat_mode_none);
                 break;
         }

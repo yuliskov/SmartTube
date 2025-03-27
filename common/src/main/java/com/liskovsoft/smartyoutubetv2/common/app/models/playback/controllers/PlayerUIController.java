@@ -893,8 +893,8 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private int getNextRepeatMode(int buttonState) {
-        Integer[] modeList = {PlayerEngineConstants.REPEAT_MODE_ALL, PlayerEngineConstants.REPEAT_MODE_ONE, PlayerEngineConstants.REPEAT_MODE_SHUFFLE,
-                PlayerEngineConstants.REPEAT_MODE_LIST, PlayerEngineConstants.REPEAT_MODE_REVERSE_LIST, PlayerEngineConstants.REPEAT_MODE_PAUSE, PlayerEngineConstants.REPEAT_MODE_CLOSE};
+        Integer[] modeList = {PlayerEngineConstants.PLAYBACK_MODE_ALL, PlayerEngineConstants.PLAYBACK_MODE_ONE, PlayerEngineConstants.PLAYBACK_MODE_SHUFFLE,
+                PlayerEngineConstants.PLAYBACK_MODE_LIST, PlayerEngineConstants.PLAYBACK_MODE_REVERSE_LIST, PlayerEngineConstants.PLAYBACK_MODE_PAUSE, PlayerEngineConstants.PLAYBACK_MODE_CLOSE};
         int nextMode = Helpers.getNextValue(buttonState, modeList);
         return nextMode;
     }
