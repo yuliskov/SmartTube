@@ -61,7 +61,7 @@ public class VideoGroup {
     }
 
     public static VideoGroup from(Video item, int groupPosition) {
-        return from(Collections.singletonList(item), groupPosition);
+        return from(new ArrayList<>(Collections.singletonList(item)), groupPosition);
     }
 
     public static VideoGroup from(List<Video> items) {
