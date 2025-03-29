@@ -536,6 +536,7 @@
     <string name="loading">Wird geladen…</string>
     <string name="hide_streams">Streams in Abos ausblenden</string>
     <string name="video_rotate">Drehen</string>
+    <string name="video_flip">Spiegeln</string>
     <string name="trending_searches">Beliebte Suchen</string>
     <string name="video_duration_any">Beliebig</string>
     <string name="video_duration">Dauer</string>
