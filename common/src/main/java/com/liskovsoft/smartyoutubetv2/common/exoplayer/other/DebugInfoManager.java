@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.other;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Build.VERSION;
 import android.util.TypedValue;
 import android.view.Display;
@@ -28,12 +29,14 @@ import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.DeviceHelpers;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.querystringparser.UrlQueryStringFactory;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.youtubeapi.app.models.AppInfo;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import org.chromium.net.ApiVersion;
@@ -203,6 +206,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendMemoryInfo();
         appendWebViewInfo();
         appendVideoInfoType();
+        appendVideoInfoVersion();
 
         // Schedule next update
         mDebugViewGroup.removeCallbacks(this);
@@ -388,6 +392,11 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private void appendVideoInfoType() {
         Pair<Integer, Boolean> videoInfoType = MediaServiceData.instance().getVideoInfoType();
         appendRow("Video info type", videoInfoType != null ? videoInfoType.first : -1);
+    }
+
+    private void appendVideoInfoVersion() {
+        AppInfo appInfo = Helpers.firstNonNull(MediaServiceData.instance().getFailedAppInfo(), MediaServiceData.instance().getAppInfo());
+        appendRow("Video info version", appInfo != null ? UrlQueryStringFactory.parse(Uri.parse(appInfo.getPlayerUrl())).get("player") : null);
     }
 
     private void appendRow(String name, boolean val) {
