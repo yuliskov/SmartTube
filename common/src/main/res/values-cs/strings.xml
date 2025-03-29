@@ -536,6 +536,7 @@
     <string name="loading">Načítání…</string>
     <string name="hide_streams">Skrýt živá vysílání z Odběrů</string>
     <string name="video_rotate">Otočit</string>
+    <string name="video_flip">Překlopit (zrcadlově)</string>
     <string name="trending_searches">Vyhledávací trendy</string>
     <string name="video_duration_any">Vše</string>
     <string name="video_duration">Trvání</string>
