@@ -30,14 +30,14 @@ public class VideoActionPresenter extends BasePresenter<Void> {
         // Show playlist contents in channel instead of instant playback
         if (item.hasVideo() && !item.isPlaylistInChannel()) {
             PlaybackPresenter.instance(getContext()).openVideo(item);
+        } else if (item.hasChannel()) {
+            Utils.chooseChannelPresenter(getContext(), item);
         } else if (item.hasPlaylist() || item.hasNestedItems()) {
             if (item.belongsToMusic()) {
                 startFistPlaylistItem(item);
             } else {
                 ChannelUploadsPresenter.instance(getContext()).openChannel(item);
             }
-        } else if (item.hasChannel()) {
-            Utils.chooseChannelPresenter(getContext(), item);
         } else if (item.isChapter) {
             PlaybackPresenter.instance(getContext()).setPosition(item.startTimeMs);
         } else {
