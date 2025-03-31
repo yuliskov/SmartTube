@@ -381,7 +381,7 @@ public class ContentBlockController extends BasePlayerController {
         long skipPosMs = lastSegment.getEndMs();
         long skipDurationMs = Math.min(skipPosMs, getPlayer().getDurationMs()) - getPlayer().getPositionMs();
 
-        if (skipDurationMs > 6_000) {
+        if (skipDurationMs > 5_000) {
             if (type == ContentBlockData.ACTION_SKIP_ONLY || getPlayer().isInPIPMode() || Utils.isScreenOff(getContext())) {
                 simpleSkip(skipPosMs);
             } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
