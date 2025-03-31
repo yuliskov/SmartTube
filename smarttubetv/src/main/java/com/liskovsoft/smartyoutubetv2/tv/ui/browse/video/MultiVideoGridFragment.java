@@ -195,7 +195,8 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
 
         // Right grid of channel's content
         VerticalGridPresenter presenter2 = new CustomVerticalGridPresenter(R.layout.lb_vertical_grid2, R.id.browse_grid2);
-        presenter2.setNumberOfColumns(GridFragmentHelper.getMaxColsNum(getContext(), R.dimen.card_width, mVideoGridScale) - 1);
+        int maxColsNum = GridFragmentHelper.getMaxColsNum(getContext(), R.dimen.card_width, mVideoGridScale);
+        presenter2.setNumberOfColumns(Math.max(maxColsNum, 1) - 1);
 
         setGridPresenter1(presenter1);
         setGridPresenter2(presenter2);
