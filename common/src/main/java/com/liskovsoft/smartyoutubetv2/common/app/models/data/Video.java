@@ -22,6 +22,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
+import com.liskovsoft.youtubeapi.common.helpers.YouTubeHelper;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -316,8 +317,9 @@ public final class Video {
             return author;
         }
 
+        String mainTitle = metadataTitle != null ? metadataTitle : title;
         String subtitle = metadataSecondTitle != null ? metadataSecondTitle : secondTitle;
-        return hasVideo() ? extractAuthor(subtitle) : subtitle; // BAD idea
+        return hasVideo() ? extractAuthor(subtitle) : YouTubeHelper.createInfo(mainTitle, subtitle); // BAD idea
     }
 
     public VideoGroup getGroup() {
