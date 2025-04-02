@@ -70,6 +70,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresen
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.WebBrowserPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
@@ -684,26 +685,32 @@ public class Utils {
 
         AtomicInteger atomicIndex = new AtomicInteger(0);
 
-        MediaServiceManager.instance().loadChannelRows(item, group -> {
+        // Clear takes some time. Do not call it immediately before the add or you'll get an exception!
+        // IndexOutOfBoundsException: Invalid item position... GridLayoutManager.getViewForPosition
+        if (ViewManager.instance(context).getTopView() == ChannelUploadsView.class) {
+            ChannelUploadsPresenter.instance(context).clear();
+        }
+
+        MediaServiceManager.instance().loadChannelRows(item, groups -> {
             LoadingManager.showLoading(context, false);
 
-            if (group == null || group.size() == 0) {
+            if (groups == null || groups.isEmpty()) {
                 return;
             }
 
-            int type = group.get(0).getType();
+            int type = groups.get(0).getType();
 
             if (type == MediaGroup.TYPE_CHANNEL_UPLOADS) {
                 if (atomicIndex.incrementAndGet() == 1) {
                     ChannelUploadsPresenter.instance(context).clear();
                 }
-                ChannelUploadsPresenter.instance(context).update(group.get(0));
+                ChannelUploadsPresenter.instance(context).update(groups.get(0));
             } else if (type == MediaGroup.TYPE_CHANNEL) {
                 if (atomicIndex.incrementAndGet() == 1) {
                     ChannelPresenter.instance(context).clear();
                     ChannelPresenter.instance(context).setChannel(item);
                 }
-                ChannelPresenter.instance(context).updateRows(group);
+                ChannelPresenter.instance(context).updateRows(groups);
             } else {
                 MessageHelpers.showMessage(context, "Unknown type of channel");
             }
