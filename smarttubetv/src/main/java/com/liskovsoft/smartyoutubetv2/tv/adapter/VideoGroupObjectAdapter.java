@@ -176,8 +176,9 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         mVideoItems.clear();
         mVideoGroups.clear();
         if (itemCount != 0) {
+            // Crashes RecycleView IndexOutOfBoundsException when doing add immediately after clear
             //notifyItemRangeRemoved(0, itemCount);
-            notifyChanged(); // fix RecycleView IndexOutOfBoundsException when doing add immediately after clear
+            notifyChanged();
         }
     }
 
