@@ -16,13 +16,17 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.NotificationState;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import io.reactivex.Observable;
@@ -32,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MediaServiceManager implements OnAccountChange {
     private static final String TAG = MediaServiceManager.class.getSimpleName();
@@ -452,5 +457,51 @@ public class MediaServiceManager implements OnAccountChange {
         for (AccountChangeListener listener : mAccountListeners) {
             listener.onAccountChanged(account);
         }
+    }
+
+    /**
+     * Selecting right presenter for the channel.<br/>
+     * Channels could be of two types: regular (usr channel) and playlist channel (contains single row, try search: 'Mon mix')
+     */
+    public static void chooseChannelPresenter(Context context, Video item) {
+        if (item.hasVideo()) { // regular channel
+            ChannelPresenter.instance(context).openChannel(item);
+            return;
+        }
+
+        LoadingManager.showLoading(context, true);
+
+        AtomicInteger atomicIndex = new AtomicInteger(0);
+
+        // Clear takes some time. Do not call it immediately before the add or you'll get an exception!
+        // IndexOutOfBoundsException: Invalid item position... GridLayoutManager.getViewForPosition
+        //if (ViewManager.instance(context).getTopView() == ChannelUploadsView.class) {
+        //    ChannelUploadsPresenter.instance(context).clear();
+        //}
+
+        MediaServiceManager.instance().loadChannelRows(item, groups -> {
+            LoadingManager.showLoading(context, false);
+
+            if (groups == null || groups.isEmpty()) {
+                return;
+            }
+
+            int type = groups.get(0).getType();
+
+            if (type == MediaGroup.TYPE_CHANNEL_UPLOADS) {
+                if (atomicIndex.incrementAndGet() == 1) {
+                    ChannelUploadsPresenter.instance(context).clear();
+                }
+                ChannelUploadsPresenter.instance(context).update(groups.get(0));
+            } else if (type == MediaGroup.TYPE_CHANNEL) {
+                if (atomicIndex.incrementAndGet() == 1) {
+                    ChannelPresenter.instance(context).clear();
+                    ChannelPresenter.instance(context).setChannel(item);
+                }
+                ChannelPresenter.instance(context).updateRows(groups);
+            } else {
+                MessageHelpers.showMessage(context, "Unknown type of channel");
+            }
+        });
     }
 }

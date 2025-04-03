@@ -6,10 +6,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 public class VideoActionPresenter extends BasePresenter<Void> {
     private static final String TAG = VideoActionPresenter.class.getSimpleName();
@@ -31,7 +29,7 @@ public class VideoActionPresenter extends BasePresenter<Void> {
         if (item.hasVideo() && !item.isPlaylistInChannel()) {
             PlaybackPresenter.instance(getContext()).openVideo(item);
         } else if (item.hasChannel()) {
-            Utils.chooseChannelPresenter(getContext(), item);
+            MediaServiceManager.chooseChannelPresenter(getContext(), item);
         } else if (item.hasPlaylist() || item.hasNestedItems()) {
             if (item.belongsToMusic()) {
                 startFistPlaylistItem(item);

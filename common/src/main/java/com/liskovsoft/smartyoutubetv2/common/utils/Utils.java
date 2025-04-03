@@ -54,28 +54,22 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.jakewharton.processphoenix.ProcessPhoenix;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.GlobalConstants;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.WebBrowserPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
-import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
@@ -89,7 +83,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Utils {
     private static final String REMOTE_CONTROL_RECEIVER_CLASS_NAME = "com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlReceiver";
@@ -669,52 +662,6 @@ public class Utils {
                 MessageHelpers.showMessage(context, R.string.repeat_mode_none);
                 break;
         }
-    }
-
-    /**
-     * Selecting right presenter for the channel.<br/>
-     * Channels could be of two types: regular (usr channel) and playlist channel (contains single row, try search: 'Mon mix')
-     */
-    public static void chooseChannelPresenter(Context context, Video item) {
-        if (item.hasVideo()) { // regular channel
-            ChannelPresenter.instance(context).openChannel(item);
-            return;
-        }
-
-        LoadingManager.showLoading(context, true);
-
-        AtomicInteger atomicIndex = new AtomicInteger(0);
-
-        // Clear takes some time. Do not call it immediately before the add or you'll get an exception!
-        // IndexOutOfBoundsException: Invalid item position... GridLayoutManager.getViewForPosition
-        if (ViewManager.instance(context).getTopView() == ChannelUploadsView.class) {
-            ChannelUploadsPresenter.instance(context).clear();
-        }
-
-        MediaServiceManager.instance().loadChannelRows(item, groups -> {
-            LoadingManager.showLoading(context, false);
-
-            if (groups == null || groups.isEmpty()) {
-                return;
-            }
-
-            int type = groups.get(0).getType();
-
-            if (type == MediaGroup.TYPE_CHANNEL_UPLOADS) {
-                if (atomicIndex.incrementAndGet() == 1) {
-                    ChannelUploadsPresenter.instance(context).clear();
-                }
-                ChannelUploadsPresenter.instance(context).update(groups.get(0));
-            } else if (type == MediaGroup.TYPE_CHANNEL) {
-                if (atomicIndex.incrementAndGet() == 1) {
-                    ChannelPresenter.instance(context).clear();
-                    ChannelPresenter.instance(context).setChannel(item);
-                }
-                ChannelPresenter.instance(context).updateRows(groups);
-            } else {
-                MessageHelpers.showMessage(context, "Unknown type of channel");
-            }
-        });
     }
 
     /**

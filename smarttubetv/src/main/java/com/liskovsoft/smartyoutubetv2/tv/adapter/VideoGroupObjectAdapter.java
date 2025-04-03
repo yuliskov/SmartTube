@@ -167,12 +167,17 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         return -1;
     }
 
+    /**
+     * Clear takes some time. Do not call it immediately before the add or you'll get an exception!
+     * IndexOutOfBoundsException: Invalid item position... GridLayoutManager.getViewForPosition
+     */
     public void clear() {
         int itemCount = mVideoItems.size();
         mVideoItems.clear();
         mVideoGroups.clear();
         if (itemCount != 0) {
-            notifyItemRangeRemoved(0, itemCount);
+            //notifyItemRangeRemoved(0, itemCount);
+            notifyChanged(); // fix RecycleView IndexOutOfBoundsException when doing add immediately after clear
         }
     }
 
