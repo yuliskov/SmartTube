@@ -33,6 +33,7 @@ import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
+import net.gotev.speech.GoogleVoiceTypingDisabledException;
 import net.gotev.speech.Speech;
 import net.gotev.speech.SpeechDelegate;
 import net.gotev.speech.SpeechRecognitionNotAvailable;
@@ -323,7 +324,7 @@ public class ChannelHeaderPresenter extends RowPresenter {
                         showNotListening(mSpeechOrbView);
                     }
                 });
-            } catch (SpeechRecognitionNotAvailable exc) {
+            } catch (SpeechRecognitionNotAvailable | GoogleVoiceTypingDisabledException exc) {
                 com.liskovsoft.sharedutils.mylogger.Log.e(TAG, "Speech recognition is not available on this device!");
                 // You can prompt the user if he wants to install Google App to have
                 // speech recognition, and then you can simply call:

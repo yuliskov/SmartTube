@@ -30,6 +30,8 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListene
 import com.liskovsoft.smartyoutubetv2.tv.presenter.vineyard.TagPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.search.SearchSupportFragment;
+
+import net.gotev.speech.GoogleVoiceTypingDisabledException;
 import net.gotev.speech.Speech;
 import net.gotev.speech.SpeechDelegate;
 import net.gotev.speech.SpeechRecognitionNotAvailable;
@@ -339,7 +341,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                         showNotListening();
                     }
                 });
-            } catch (SpeechRecognitionNotAvailable exc) {
+            } catch (SpeechRecognitionNotAvailable | GoogleVoiceTypingDisabledException exc) {
                 Log.e(TAG, "Speech recognition is not available on this device!");
                 // You can prompt the user if he wants to install Google App to have
                 // speech recognition, and then you can simply call:
