@@ -396,7 +396,10 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
     private void appendVideoInfoVersion() {
         AppInfo appInfo = Helpers.firstNonNull(MediaServiceData.instance().getFailedAppInfo(), MediaServiceData.instance().getAppInfo());
-        appendRow("Video info version", appInfo != null ? UrlQueryStringFactory.parse(Uri.parse(appInfo.getPlayerUrl())).get("player") : null);
+        String playerUrl = appInfo != null ? appInfo.getPlayerUrl() : null;
+        if (playerUrl != null) {
+            appendRow("Video info version", UrlQueryStringFactory.parse(Uri.parse(playerUrl)).get("player"));
+        }
     }
 
     private void appendRow(String name, boolean val) {
