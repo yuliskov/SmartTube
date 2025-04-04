@@ -25,7 +25,6 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiresApi(19)
 public class SubtitleManager implements TextOutput, OnDataChange {
     private static final String TAG = SubtitleManager.class.getSimpleName();
     private final SubtitleView mSubtitleView;
@@ -123,7 +122,9 @@ public class SubtitleManager implements TextOutput, OnDataChange {
             SubtitleStyle subtitleStyle = getSubtitleStyle();
 
             if (subtitleStyle.isSystem()) {
-                applySystemStyle();
+                if (VERSION.SDK_INT >= 19) {
+                    applySystemStyle();
+                }
             } else {
                 applyStyle(subtitleStyle);
             }
@@ -148,6 +149,7 @@ public class SubtitleManager implements TextOutput, OnDataChange {
         mSubtitleView.setFixedTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
     }
 
+    @RequiresApi(19)
     private void applySystemStyle() {
         CaptioningManager captioningManager =
                 (CaptioningManager) mContext.getSystemService(Context.CAPTIONING_SERVICE);
