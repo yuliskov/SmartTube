@@ -31,7 +31,7 @@ public class VideoStateService implements ProfileChangeListener {
     private VideoStateService(Context context) {
         mPrefs = AppPrefs.instance(context);
         mPrefs.addListener(this);
-        mStates = Helpers.createLRUList(
+        mStates = Helpers.createSafeLRUList(
                 Utils.isEnoughRam(mPrefs.getContext()) ? MAX_PERSISTENT_STATE_SIZE : MIN_PERSISTENT_STATE_SIZE);
         restoreState();
     }
@@ -97,7 +97,7 @@ public class VideoStateService implements ProfileChangeListener {
 
         String[] split = Helpers.splitData(data);
 
-        setStateDataSafe(Helpers.parseStr(split, 0));
+        setStateData(Helpers.parseStr(split, 0));
         mIsHistoryBroken = Helpers.parseBoolean(split, 1);
     }
 
