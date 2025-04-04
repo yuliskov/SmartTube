@@ -279,7 +279,7 @@
   <string name="upload_date_this_year">Este año</string>
   <string name="double_refresh_rate">Doble tasa de refresco</string>
   <string name="upload_date_last_hour">Última hora</string>
-  <string name="focus_on_search_results">Autofocus en resultados de búsqueda</string>
+  <string name="focus_on_search_results">Enfoque automático en resultados de búsqueda</string>
   <string name="context_menu">Menú contextual</string>
   <string name="add_remove_from_recent_playlist">Añadir/Eliminar de lista reciente</string>
   <string name="hide_settings_section">Ocultar sección configuración (¡peligroso!)</string>
@@ -690,4 +690,7 @@
   <string name="not_supported_by_device">El dispositivo no es compatible con esta función</string>
   <string name="lb_playback_controls_closed_captioning_disable">Desactivar subtítulos</string>
   <string name="lb_playback_controls_closed_captioning_enable">Activar subtítulos</string>
+  <string name="my_videos">Mis vídeos</string>
+  <string name="player_audio_focus">Enfoque de audio (se pausa si detecta otros reproductores)</string>
+  <string name="paid_content_notification">Notificación de contenido de pago</string>
 </resources>
