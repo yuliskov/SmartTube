@@ -343,6 +343,9 @@ A: Right, that's currently a bug.
 
 A: Please read the [Casting](#casting) section.
 
+### Q: I get an error saying "Sign in to confirm you're not a bot"
+
+A: Your IP address range might be temporaily/permanently blocked by YouTube from watching videos if you not signed in to your account.
 
 ### Q: The video is buffering a lot
 
