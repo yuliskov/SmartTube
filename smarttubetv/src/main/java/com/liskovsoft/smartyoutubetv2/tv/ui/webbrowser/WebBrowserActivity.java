@@ -13,7 +13,7 @@ public class WebBrowserActivity extends LeanbackActivity {
         super.onCreate(savedInstanceState);
         try {
             setContentView(R.layout.fragment_webbrowser);
-        } catch (Fragment.InstantiationException e) { // WebBrowserFragment is not a Fragment
+        } catch (ClassCastException | Fragment.InstantiationException e) { // WebBrowserFragment is not a Fragment
             e.printStackTrace();
             finishReally();
         }
