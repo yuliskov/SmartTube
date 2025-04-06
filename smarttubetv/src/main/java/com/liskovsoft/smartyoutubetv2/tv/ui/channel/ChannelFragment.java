@@ -48,7 +48,7 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
                 @Override
                 public String getChannelTitle() {
                     if (mChannelPresenter.getChannel() == null) {
-                        return null;
+                        return Helpers.startsWith(mChannelPresenter.getChannelId(), "@") ? mChannelPresenter.getChannelId() : null;
                     }
 
                     String author = mChannelPresenter.getChannel().getAuthor();

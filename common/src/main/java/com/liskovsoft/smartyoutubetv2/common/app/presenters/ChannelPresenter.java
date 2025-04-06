@@ -168,7 +168,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             getView().clear();
             updateRows(obtainChannelObservable(channelId));
             // Fix double results. Prevent from doing the same in onViewInitialized()
-            mChannelId = null;
+            //mChannelId = null;
         }
 
         ViewManager.instance(getContext()).startView(ChannelView.class);
