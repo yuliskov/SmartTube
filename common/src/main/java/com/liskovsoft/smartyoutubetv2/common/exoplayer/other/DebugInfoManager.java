@@ -26,7 +26,6 @@ import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
-import com.liskovsoft.sharedutils.helpers.DeviceHelpers;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryStringFactory;
@@ -386,7 +385,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     }
 
     private void appendWebViewInfo() {
-        appendRow("WebView supported", DeviceHelpers.supportsWebView());
+        appendRow("WebView supported", MediaServiceData.instance().supportsWebView());
     }
 
     private void appendVideoInfoType() {

@@ -135,7 +135,7 @@ public class IntentExtractor {
             // https://www.youtube.com/@IngaMezerya
             String lastPathSegment = url.getLastPathSegment();
 
-            if (Helpers.startsWith(lastPathSegment, "@")) {
+            if (lastPathSegment != null) { // NOTE: The channel name not necessarily starts with @
                 channelId = lastPathSegment; // already contains the prefix
             }
         }
