@@ -198,6 +198,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     public void loadPrevious() {
         openVideoInt(mSuggestionsController.getPrevious());
+
+        if (mPlayerTweaksData.isPlayerUiOnNextEnabled()) {
+            getPlayer().showOverlay(true);
+        }
     }
 
     public void loadNext() {

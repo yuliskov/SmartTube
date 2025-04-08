@@ -135,7 +135,7 @@ public class IntentExtractor {
             // https://www.youtube.com/@IngaMezerya or https://youtu.be/builditbasement
             String lastPathSegment = url.getLastPathSegment();
 
-            if (lastPathSegment != null) {
+            if (Helpers.endsWithAny(url.toString(), lastPathSegment)) { // Exclude this case: https://www.youtube.com/watch?v=LxiZ7BFWQSQ
                 channelId = Helpers.startsWith(lastPathSegment, "@") ? lastPathSegment : "@" + lastPathSegment;
             }
         }
