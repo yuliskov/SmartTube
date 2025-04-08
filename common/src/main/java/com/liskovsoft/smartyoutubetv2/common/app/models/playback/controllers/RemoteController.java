@@ -260,7 +260,6 @@ public class RemoteController extends BasePlayerController implements OnDataChan
 
         switch (command.getType()) {
             case Command.TYPE_OPEN_VIDEO:
-            case Command.TYPE_SUBTITLES: // open same video fix
                 if (getPlayer() != null) {
                     getPlayer().showOverlay(false);
                 }
@@ -272,6 +271,41 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                 mNewVideoPositionMs = command.getCurrentTimeMs();
                 openNewVideo(newVideo);
                 break;
+            case Command.TYPE_SUBTITLES:
+                if (getPlayer() != null) {
+                    getPlayer().showOverlay(false);
+                }
+                movePlayerToForeground();
+                Video newVideo2 = Video.from(command.getVideoId());
+                newVideo2.remotePlaylistId = command.getPlaylistId();
+                newVideo2.playlistIndex = command.getPlaylistIndex();
+                newVideo2.isRemote = true;
+                mNewVideoPositionMs = command.getCurrentTimeMs();
+
+                String langCode = command.getSubLanguageCode();
+                if (langCode != null && !langCode.trim().isEmpty()) {
+                    List<FormatItem> subs = getPlayer().getSubtitleFormats();
+                    if (subs != null & langCode != null) {
+                        FormatItem selected = null;
+                        for (FormatItem item : subs) {
+                            if (item.getLanguage() != null && item.getLanguage().toLowerCase().startsWith(langCode.toLowerCase())) {
+                                selected = item;
+                                break;
+                            }
+                        }
+
+                        if (selected != null) {
+                            getPlayer().setFormat(selected);
+                        }
+                    }
+                    getPlayer().showSubtitles(true);
+                    getPlayer().setSubtitleButtonState(true);
+                 } else {
+                        getPlayer().showSubtitles(false);
+                        getPlayer().setSubtitleButtonState(false);
+                    }
+                 openNewVideo(newVideo2);
+                 break;
             case Command.TYPE_UPDATE_PLAYLIST:
                 if (getPlayer() != null && mConnected) {
                     Video video = getPlayer().getVideo();
