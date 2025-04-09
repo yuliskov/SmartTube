@@ -77,8 +77,10 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         }
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-            if (Helpers.equals(e.getMessage(), "parameter must be a descendant of this view")) {
-                e = new RuntimeException("Crash in the view " + ViewManager.instance(getApplicationContext()).getTopView().getSimpleName(), e);
+            if (Helpers.equalsAny(e.getMessage(),
+                    "parameter must be a descendant of this view",
+                    "Attempt to invoke virtual method 'android.view.ViewGroup$LayoutParams android.view.View.getLayoutParams()' on a null object reference")) {
+                e = new RuntimeException("A crash in the view " + ViewManager.instance(getApplicationContext()).getTopView().getSimpleName(), e);
             }
 
             defaultHandler.uncaughtException(t, e);
