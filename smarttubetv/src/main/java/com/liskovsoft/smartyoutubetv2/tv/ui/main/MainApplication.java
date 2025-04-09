@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 import androidx.multidex.MultiDexApplication;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AddDeviceView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
@@ -80,7 +82,14 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
             if (Helpers.equalsAny(e.getMessage(),
                     "parameter must be a descendant of this view",
                     "Attempt to invoke virtual method 'android.view.ViewGroup$LayoutParams android.view.View.getLayoutParams()' on a null object reference")) {
-                e = new RuntimeException("A crash in the view " + ViewManager.instance(getApplicationContext()).getTopView().getSimpleName(), e);
+                Class<?> view = ViewManager.instance(getApplicationContext()).getTopView();
+                BrowseSection section = null;
+
+                if (view == BrowseView.class) {
+                    section = BrowsePresenter.instance(getApplicationContext()).getCurrentSection();
+                }
+
+                e = new RuntimeException("A crash in the view " + view.getSimpleName() + ", section id " + (section != null ? section.getId() : "-1"), e);
             }
 
             defaultHandler.uncaughtException(t, e);
