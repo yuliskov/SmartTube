@@ -285,7 +285,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                 mNewVideoPositionMs = command.getCurrentTimeMs();
 
                 String langCode = command.getSubLanguageCode();
-                if (langCode != null && !langCode.trim().isEmpty()) {
+                if (langCode != null && !langCode.trim().isEmpty() && getPlayer() != null) {
                     List<FormatItem> subs = getPlayer().getSubtitleFormats();
                     if (subs != null) {
                         FormatItem selected = null;
@@ -302,7 +302,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                     }
                     getPlayer().showSubtitles(true);
                     getPlayer().setSubtitleButtonState(true);
-                 } else {
+                 } else if (getPlayer() != null) {
                     getPlayer().showSubtitles(false);
                     getPlayer().setSubtitleButtonState(false);
                  }
