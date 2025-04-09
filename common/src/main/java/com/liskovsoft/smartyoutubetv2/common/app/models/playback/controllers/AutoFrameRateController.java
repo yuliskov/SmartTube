@@ -82,7 +82,7 @@ public class AutoFrameRateController extends BasePlayerController implements Aut
 
     @Override
     public void onModeStart(Mode newMode) {
-        if (getContext() == null) {
+        if (getContext() == null || mPlayerData == null) {
             return;
         }
 
