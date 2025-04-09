@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
 import androidx.multidex.MultiDexApplication;
+
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AddDeviceView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
@@ -21,6 +23,8 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.webbrowser.WebBrowserActivity;
+
+import java.lang.Thread.UncaughtExceptionHandler;
 
 public class MainApplication extends MultiDexApplication { // fix: Didn't find class "com.google.firebase.provider.FirebaseInitProvider"
     static {
@@ -45,6 +49,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         //    Security.insertProviderAt(Conscrypt.newProvider(), 1);
         //}
 
+        setupGlobalExceptionHandler();
         setupViewManager();
     }
 
@@ -62,5 +67,21 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         viewManager.register(ChannelView.class, ChannelActivity.class, BrowseActivity.class);
         viewManager.register(ChannelUploadsView.class, ChannelUploadsActivity.class, BrowseActivity.class);
         viewManager.register(WebBrowserView.class, WebBrowserActivity.class, BrowseActivity.class);
+    }
+
+    private void setupGlobalExceptionHandler() {
+        UncaughtExceptionHandler defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+
+        if (defaultHandler == null) {
+            return;
+        }
+
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            if (Helpers.equals(e.getMessage(), "parameter must be a descendant of this view")) {
+                e = new RuntimeException("Crash in the view " + ViewManager.instance(getApplicationContext()).getTopView().getSimpleName(), e);
+            }
+
+            defaultHandler.uncaughtException(t, e);
+        });
     }
 }
