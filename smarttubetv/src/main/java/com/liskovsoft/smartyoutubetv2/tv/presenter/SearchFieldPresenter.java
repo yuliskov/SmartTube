@@ -47,17 +47,13 @@ public class SearchFieldPresenter extends Presenter {
         contentView.setOnFocusChangeListener((v, hasFocus) -> {
             Log.d(TAG, "On edit field focused");
             if (hasFocus) {
-                // Fix layout crashes?
-                //editField.requestFocus();
-                editField.post(editField::requestFocus);
+                editField.requestFocus();
             }
         });
 
         editField.setOnClickListener(v -> {
             Log.d(TAG, "On click");
-            // Fix layout crashes?
-            //Helpers.showKeyboardAlt(v.getContext(), v);
-            editField.post(() -> Helpers.showKeyboardAlt(v.getContext(), v));
+            Helpers.showKeyboardAlt(v.getContext(), v);
         });
 
         return new ViewHolder(contentView);
