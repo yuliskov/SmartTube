@@ -51,7 +51,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         //    Security.insertProviderAt(Conscrypt.newProvider(), 1);
         //}
 
-        setupGlobalExceptionHandler();
+        //setupGlobalExceptionHandler();
         setupViewManager();
     }
 
