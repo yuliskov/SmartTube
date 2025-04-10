@@ -617,8 +617,10 @@ public class SearchBar extends RelativeLayout {
                 mPermissionListener.requestAudioPermission();
                 return;
             } else {
-                throw new IllegalStateException(Manifest.permission.RECORD_AUDIO
-                        + " required for search");
+                // MOD: don't crash
+                //throw new IllegalStateException(Manifest.permission.RECORD_AUDIO
+                //        + " required for search");
+                return;
             }
         }
 
