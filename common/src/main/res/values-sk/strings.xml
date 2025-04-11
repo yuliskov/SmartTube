@@ -536,6 +536,7 @@
     <string name="loading">Načítavanie…</string>
     <string name="hide_streams">Skryť živé vysielanie z Odberov</string>
     <string name="video_rotate">Otočiť</string>
+    <string name="video_flip">Prevrátiť (zrkadliť)</string>
     <string name="trending_searches">Vyhľadávacie trendy</string>
     <string name="video_duration_any">Všetky</string>
     <string name="video_duration">Trvanie</string>
@@ -686,10 +687,12 @@
     <string name="new_subscriptions_group">Nová skupina</string>
     <string name="rename_group">Premenovať skupinu odberov</string>
     <string name="screen_dimming_amount">Miera stmavenia obrazovky</string>
-    <string name="screen_dimming_timeout">Časový limit stmievania obrazovky</string>
-    <string name="playlists_rows">Zobrazenie sekciu Playlisty ako riadky</string>
+    <string name="screen_dimming_timeout">Časový limit stmavenia obrazovky</string>
+    <string name="playlists_rows">Zobraziť sekciu Playlisty ako riadky</string>
     <string name="import_subscriptions_group">Importovať</string>
-    <string name="lb_playback_controls_closed_captioning_disable">Vypnúť skryté titulky</string>
-    <string name="lb_playback_controls_closed_captioning_enable">Zapnúť skryté titulky</string>
+    <string name="lb_playback_controls_closed_captioning_disable">Vypnúť titulky</string>
+    <string name="lb_playback_controls_closed_captioning_enable">Zapnúť titulky</string>
     <string name="my_videos">Moje videá</string>
+    <string name="player_audio_focus">Zameranie zvuku (pozastaviť ak boli detekované iné prehrávače)</string>
+    <string name="paid_content_notification">Upozornenie na platený obsah</string>
 </resources>
