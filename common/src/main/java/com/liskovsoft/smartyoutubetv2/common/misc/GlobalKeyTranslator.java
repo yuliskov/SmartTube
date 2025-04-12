@@ -9,12 +9,10 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import java.util.Map;
 
 public class GlobalKeyTranslator extends KeyTranslator {
-    private final GeneralData mGeneralData;
     private final Context mContext;
 
     public GlobalKeyTranslator(Context context) {
         mContext = context;
-        mGeneralData = GeneralData.instance(context);
     }
 
     @Override
@@ -33,7 +31,7 @@ public class GlobalKeyTranslator extends KeyTranslator {
         //globalKeyMapping.put(KeyEvent.KEYCODE_NUMPAD_ENTER, KeyEvent.KEYCODE_DPAD_CENTER); // G20s fix: show keyboard on textview click
 
         // May help on buggy firmwares (where Enter key is used as OK)
-        if (!PlaybackPresenter.instance(mContext).isInPipMode()) {
+        if (!getPlaybackPresenter().isInPipMode()) {
             globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_DPAD_CENTER);
         } else {
             globalKeyMapping.remove(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
@@ -52,15 +50,27 @@ public class GlobalKeyTranslator extends KeyTranslator {
     }
 
     private void addSearchAction() {
-        Runnable searchAction = () -> SearchPresenter.instance(mContext).startSearch(null);
+        Runnable searchAction = () -> getSearchPresenter().startSearch(null);
 
         Map<Integer, Runnable> actionMapping = getActionMapping();
 
         actionMapping.put(KeyEvent.KEYCODE_AT, searchAction);
 
-        if (mGeneralData.isRemapChannelUpToSearchEnabled()) {
+        if (getGeneralData().isRemapChannelUpToSearchEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, searchAction);
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, searchAction);
         }
+    }
+
+    private GeneralData getGeneralData() {
+        return GeneralData.instance(mContext);
+    }
+
+    private PlaybackPresenter getPlaybackPresenter() {
+        return PlaybackPresenter.instance(mContext);
+    }
+
+    private SearchPresenter getSearchPresenter() {
+        return SearchPresenter.instance(mContext);
     }
 }

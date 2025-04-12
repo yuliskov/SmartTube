@@ -27,23 +27,21 @@ public class ScreensaverManager {
     private static final int MODE_SCREEN_OFF = 1;
     private static final WeakHashSet<ScreensaverManager> sInstances = new WeakHashSet<>();
     private static boolean sLockInstance;
-    private WeakReference<Activity> mActivity;
+    private final WeakReference<Activity> mActivity;
     private final WeakReference<View> mDimContainer;
     private final Runnable mDimScreen = this::dimScreen;
     private final Runnable mUndimScreen = this::undimScreen;
     private final Runnable mUnlockInstance = () -> sLockInstance = false;
-    private final GeneralData mGeneralData;
-    private PlayerTweaksData mTweaksData;
     private int mMode = MODE_SCREENSAVER;
     private boolean mIsScreenOff;
     private boolean mIsBlocked;
     private final Runnable mTimeoutHandler = () -> {
         // Playing the video and dialog overlay isn't shown
-        if (ViewManager.instance(mActivity.get()).getTopView() != PlaybackView.class || !mTweaksData.isScreenOffTimeoutEnabled()) {
+        if (getViewManager().getTopView() != PlaybackView.class || !getTweaksData().isScreenOffTimeoutEnabled()) {
             return;
         }
 
-        if (!AppDialogPresenter.instance(mActivity.get()).isDialogShown()) {
+        if (!getAppDialogPresenter().isDialogShown()) {
             doScreenOff();
         } else {
             // showing dialog... or recheck...
@@ -54,8 +52,6 @@ public class ScreensaverManager {
     public ScreensaverManager(Activity activity) {
         mActivity = new WeakReference<>(activity);
         mDimContainer = new WeakReference<>(createDimContainer(activity));
-        mGeneralData = GeneralData.instance(activity);
-        mTweaksData = PlayerTweaksData.instance(activity);
         enable();
         addToRegistry();
     }
@@ -116,9 +112,9 @@ public class ScreensaverManager {
         Log.d(TAG, "Enable screensaver");
 
         disable();
-        int delayMs = mGeneralData.getScreensaverTimeoutMs() == GeneralData.SCREENSAVER_TIMEOUT_NEVER ?
+        int delayMs = getGeneralData().getScreensaverTimeoutMs() == GeneralData.SCREENSAVER_TIMEOUT_NEVER ?
                 10_000 :
-                mGeneralData.getScreensaverTimeoutMs();
+                getGeneralData().getScreensaverTimeoutMs();
         Utils.postDelayed(mDimScreen, delayMs);
     }
 
@@ -154,14 +150,14 @@ public class ScreensaverManager {
 
     private void enableTimeout() {
         // Playing the video and dialog overlay isn't shown
-        if (ViewManager.instance(mActivity.get()).getTopView() != PlaybackView.class || !mTweaksData.isScreenOffTimeoutEnabled()) {
+        if (getViewManager().getTopView() != PlaybackView.class || !getTweaksData().isScreenOffTimeoutEnabled()) {
             disableTimeout();
             return;
         }
 
         Log.d(TAG, "Starting auto hide ui timer...");
         disableTimeout();
-        Utils.postDelayed(mTimeoutHandler, mTweaksData.getScreenOffTimeoutSec() * 1_000L);
+        Utils.postDelayed(mTimeoutHandler, getTweaksData().getScreenOffTimeoutSec() * 1_000L);
     }
 
     private void disableTimeout() {
@@ -198,22 +194,22 @@ public class ScreensaverManager {
         if (show && mMode == MODE_SCREENSAVER &&
                 (       isPlaying() ||
                         isSigning() ||
-                        mGeneralData.getScreensaverTimeoutMs() == GeneralData.SCREENSAVER_TIMEOUT_NEVER
+                        getGeneralData().getScreensaverTimeoutMs() == GeneralData.SCREENSAVER_TIMEOUT_NEVER
                 )
         ) {
             return;
         }
 
-        int screenOffColor = Utils.getColor(activity, R.color.black, mTweaksData.getScreenOffDimmingPercents());
-        //int screenOffColorResId = mTweaksData.getScreenOffDimmingPercents() == 50 ? DIM_50 : DIM_100;
-        int screensaverColor = Utils.getColor(activity, R.color.black, mGeneralData.getScreensaverDimmingPercents());
-        //int screensaverColorResId = mGeneralData.getScreensaverMode() == GeneralData.SCREENSAVER_MODE_NORMAL ? DIM_50 : DIM_100;
+        int screenOffColor = Utils.getColor(activity, R.color.black, getTweaksData().getScreenOffDimmingPercents());
+        //int screenOffColorResId = getPlayerTweaksData().getScreenOffDimmingPercents() == 50 ? DIM_50 : DIM_100;
+        int screensaverColor = Utils.getColor(activity, R.color.black, getGeneralData().getScreensaverDimmingPercents());
+        //int screensaverColorResId = getGeneralData().getScreensaverMode() == GeneralData.SCREENSAVER_MODE_NORMAL ? DIM_50 : DIM_100;
 
         dimContainer.setBackgroundColor(mMode == MODE_SCREENSAVER ? screensaverColor : screenOffColor);
         //dimContainer.setBackgroundResource(mMode == MODE_SCREENSAVER ? screensaverColorResId : screenOffColorResId);
         dimContainer.setVisibility(show ? View.VISIBLE : View.GONE);
 
-        mIsScreenOff = mMode == MODE_SCREEN_OFF && mTweaksData.getScreenOffDimmingPercents() == 100 && show;
+        mIsScreenOff = mMode == MODE_SCREEN_OFF && getTweaksData().getScreenOffDimmingPercents() == 100 && show;
 
         if (mIsScreenOff) {
             hidePlayerOverlay();
@@ -231,7 +227,7 @@ public class ScreensaverManager {
 
         // Disable screensaver on certain circumstances
         // Fix screen off before the video started
-        if (show && (isPlaying() || isSigning() || mGeneralData.isScreensaverDisabled() || (mMode == MODE_SCREEN_OFF && getPosition() == 0))) {
+        if (show && (isPlaying() || isSigning() || getGeneralData().isScreensaverDisabled() || (mMode == MODE_SCREEN_OFF && getPosition() == 0))) {
             Helpers.disableScreensaver(activity);
             return;
         }
@@ -308,5 +304,21 @@ public class ScreensaverManager {
         });
 
         Utils.postDelayed(mUnlockInstance, 0);
+    }
+
+    private AppDialogPresenter getAppDialogPresenter() {
+        return AppDialogPresenter.instance(mActivity.get());
+    }
+
+    private ViewManager getViewManager() {
+        return ViewManager.instance(mActivity.get());
+    }
+
+    private PlayerTweaksData getTweaksData() {
+        return PlayerTweaksData.instance(mActivity.get());
+    }
+
+    private GeneralData getGeneralData() {
+        return GeneralData.instance(mActivity.get());
     }
 }
