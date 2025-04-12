@@ -24,8 +24,10 @@ import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -409,4 +411,20 @@ public class MotherActivity extends FragmentActivity {
     //        super.setTheme(R.style.FitSystemWindows);
     //    }
     //}
+
+    protected ViewManager getViewManager() {
+        return ViewManager.instance(this);
+    }
+
+    protected GeneralData getGeneralData() {
+        return GeneralData.instance(this);
+    }
+
+    protected PlayerTweaksData getPlayerTweaksData() {
+        return PlayerTweaksData.instance(this);
+    }
+
+    protected PlayerData getPlayerData() {
+        return PlayerData.instance(this);
+    }
 }

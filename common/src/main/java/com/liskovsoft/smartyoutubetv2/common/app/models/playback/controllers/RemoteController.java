@@ -371,7 +371,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                 break;
             case Command.TYPE_GET_STATE:
                 if (getPlayer() != null) {
-                    ViewManager.instance(getContext()).moveAppToForeground();
+                    getViewManager().moveAppToForeground();
                     postStartPlaying(getPlayer().getVideo(), getPlayer().isPlaying());
                 } else {
                     postStartPlaying(null, false);
@@ -487,7 +487,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     private void openNewVideo(Video newVideo) {
-        if (Video.equals(mVideo, newVideo) && ViewManager.instance(getContext()).isPlayerInForeground()) { // same video already playing
+        if (Video.equals(mVideo, newVideo) && getViewManager().isPlayerInForeground()) { // same video already playing
             //mVideo.playlistId = newVideo.playlistId;
             //mVideo.playlistIndex = newVideo.playlistIndex;
             //mVideo.playlistParams = newVideo.playlistParams;
@@ -503,10 +503,10 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     private void movePlayerToForeground() {
-        ViewManager.instance(getContext()).movePlayerToForeground();
+        getViewManager().movePlayerToForeground();
         // Device wake fix when player isn't started yet or been closed
         if (getPlayer() == null || !Utils.checkActivity(getActivity())) {
-            new Handler(Looper.myLooper()).postDelayed(() -> ViewManager.instance(getContext()).movePlayerToForeground(), 5_000);
+            new Handler(Looper.myLooper()).postDelayed(() -> getViewManager().movePlayerToForeground(), 5_000);
         }
     }
 

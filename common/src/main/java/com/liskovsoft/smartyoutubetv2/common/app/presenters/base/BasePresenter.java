@@ -5,19 +5,29 @@ import android.content.Context;
 
 import androidx.fragment.app.Fragment;
 
+import com.liskovsoft.mediaserviceinterfaces.ContentService;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
+import com.liskovsoft.mediaserviceinterfaces.NotificationsService;
+import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import java.lang.ref.WeakReference;
 import java.util.Collections;
@@ -116,9 +126,9 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void onFinish() {
-        if (SearchData.instance(getContext()).getTempBackgroundModeClass() == this.getClass() &&
-            PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
-            ViewManager.instance(getContext()).startView(PlaybackView.class);
+        if (getSearchData().getTempBackgroundModeClass() == this.getClass() &&
+            getPlaybackPresenter().isRunningInBackground()) {
+            getViewManager().startView(PlaybackView.class);
         }
 
         onDone();
@@ -227,5 +237,53 @@ public abstract class BasePresenter<T> implements Presenter<T> {
             activity = (Activity) view;
         }
         return activity;
+    }
+
+    protected MainUIData getMainUIData() {
+        return MainUIData.instance(getContext());
+    }
+
+    protected GeneralData getGeneralData() {
+        return GeneralData.instance(getContext());
+    }
+
+    protected SearchData getSearchData() {
+        return SearchData.instance(getContext());
+    }
+
+    protected SidebarService getSidebarService() {
+        return SidebarService.instance(getContext());
+    }
+
+    protected ContentService getContentService() {
+        return YouTubeServiceManager.instance().getContentService();
+    }
+
+    protected SignInService getSignInService() {
+        return YouTubeServiceManager.instance().getSignInService();
+    }
+
+    protected NotificationsService getNotificationsService() {
+        return YouTubeServiceManager.instance().getNotificationsService();
+    }
+
+    protected MediaItemService getMediaItemService() {
+        return YouTubeServiceManager.instance().getMediaItemService();
+    }
+
+    protected MediaServiceManager getServiceManager() {
+        return MediaServiceManager.instance();
+    }
+
+    protected ViewManager getViewManager() {
+        return ViewManager.instance(getContext());
+    }
+
+    protected TickleManager getTickleManager() {
+        return TickleManager.instance();
+    }
+
+    protected PlaybackPresenter getPlaybackPresenter() {
+        return PlaybackPresenter.instance(getContext());
     }
 }

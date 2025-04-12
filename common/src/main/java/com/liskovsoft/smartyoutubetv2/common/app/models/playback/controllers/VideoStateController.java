@@ -7,7 +7,6 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
@@ -15,9 +14,6 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
@@ -34,27 +30,11 @@ public class VideoStateController extends BasePlayerController {
     private static final int HISTORY_UPDATE_INTERVAL_MINUTES = 5; // Sync history every five minutes
     private boolean mIsPlayEnabled;
     private Video mVideo = new Video();
-    private PlayerData mPlayerData;
-    private GeneralData mGeneralData;
-    private MediaServiceData mMediaServiceData;
-    private PlayerTweaksData mPlayerTweaksData;
-    private RemoteControlData mRemoteControlData;
-    private VideoStateService mStateService;
     private boolean mIsPlayBlocked;
     private int mTickleLeft;
     private boolean mIncognito;
     //private final Runnable mUpdateHistory = this::updateHistory;
     private final Runnable mUpdateHistory = () -> { saveState(); persistState(); };
-
-    @Override
-    public void onInit() { // called each time a video opened from the browser
-        mPlayerData = PlayerData.instance(getContext());
-        mGeneralData = GeneralData.instance(getContext());
-        mMediaServiceData = MediaServiceData.instance();
-        mPlayerTweaksData = PlayerTweaksData.instance(getContext());
-        mRemoteControlData = RemoteControlData.instance(getContext());
-        mStateService = VideoStateService.instance(getContext());
-    }
 
     /**
      * Fired after user clicked on video in browse activity<br/>
@@ -76,7 +56,7 @@ public class VideoStateController extends BasePlayerController {
 
         setPlayEnabled(true); // video just added
 
-        mPlayerData.setTempVideoFormat(null);
+        getPlayerData().setTempVideoFormat(null);
 
         enableIncognitoIfNeeded(item);
 
@@ -222,20 +202,20 @@ public class VideoStateController extends BasePlayerController {
     public void onTrackSelected(FormatItem track) {
         //if (!getPlayer().isInPIPMode()) {
         //    if (track.getType() == FormatItem.TYPE_VIDEO) {
-        //        if (mPlayerData.getFormat(FormatItem.TYPE_VIDEO).isPreset()) {
+        //        if (getPlayerData().getFormat(FormatItem.TYPE_VIDEO).isPreset()) {
         //            mTempVideoFormat = track;
         //        } else {
         //            mTempVideoFormat = null;
-        //            mPlayerData.setFormat(track);
+        //            getPlayerData().setFormat(track);
         //        }
         //    } else {
-        //        mPlayerData.setFormat(track);
+        //        getPlayerData().setFormat(track);
         //    }
         //}
 
         //if (!getPlayer().isInPIPMode()) {
         //    if (track.getType() == FormatItem.TYPE_VIDEO) {
-        //        mTempVideoFormat = mPlayerData.getFormat(FormatItem.TYPE_VIDEO).isPreset() ? track : null;
+        //        mTempVideoFormat = getPlayerData().getFormat(FormatItem.TYPE_VIDEO).isPreset() ? track : null;
         //    }
         //}
     }
@@ -272,22 +252,22 @@ public class VideoStateController extends BasePlayerController {
 
     @Override
     public void onSpeedChanged(float speed) {
-        mPlayerData.setSpeed(getVideo().channelId, speed);
+        getPlayerData().setSpeed(getVideo().channelId, speed);
     }
 
     @Override
     public void onSpeedClicked(boolean enabled) {
-        float lastSpeed = mPlayerData.getSpeed(getVideo().channelId);
+        float lastSpeed = getPlayerData().getSpeed(getVideo().channelId);
         if (Helpers.floatEquals(lastSpeed, 1.0f)) {
-            lastSpeed = mPlayerData.getLastSpeed();
+            lastSpeed = getPlayerData().getLastSpeed();
         }
-        State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
-        if (state != null && mPlayerData.isSpeedPerVideoEnabled()) {
+        State state = getStateService().getByVideoId(getVideo() != null ? getVideo().videoId : null);
+        if (state != null && getPlayerData().isSpeedPerVideoEnabled()) {
             lastSpeed = !Helpers.floatEquals(1.0f, state.speed) ? state.speed : lastSpeed;
-            mStateService.save(new State(state.video, state.positionMs, state.durationMs, enabled ? 1.0f : lastSpeed));
+            getStateService().save(new State(state.video, state.positionMs, state.durationMs, enabled ? 1.0f : lastSpeed));
         }
 
-        if (Helpers.floatEquals(lastSpeed, 1.0f) || mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()) {
+        if (Helpers.floatEquals(lastSpeed, 1.0f) || getPlayerTweaksData().isSpeedButtonOldBehaviorEnabled()) {
             onSpeedLongClicked(enabled);
         } else {
             getPlayer().setSpeed(enabled ? 1.0f : lastSpeed);
@@ -302,13 +282,13 @@ public class VideoStateController extends BasePlayerController {
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
         settingsPresenter.appendCategory(AppDialogUtil.createSpeedListCategory(getContext(), getPlayer()));
 
-        //settingsPresenter.appendCategory(AppDialogUtil.createRememberSpeedCategory(getContext(), mPlayerData));
-        //settingsPresenter.appendCategory(AppDialogUtil.createSpeedMiscCategory(getContext(), mPlayerTweaksData));
+        //settingsPresenter.appendCategory(AppDialogUtil.createRememberSpeedCategory(getContext(), getPlayerData()));
+        //settingsPresenter.appendCategory(AppDialogUtil.createSpeedMiscCategory(getContext(), getPlayerTweaksData()));
 
         settingsPresenter.showDialog(getContext().getString(R.string.video_speed), () -> {
-            State state = mStateService.getByVideoId(getVideo() != null ? getVideo().videoId : null);
-            if (state != null && mPlayerData.isSpeedPerVideoEnabled()) {
-                mStateService.save(new State(state.video, state.positionMs, state.durationMs, mPlayerData.getSpeed(getVideo().channelId)));
+            State state = getStateService().getByVideoId(getVideo() != null ? getVideo().videoId : null);
+            if (state != null && getPlayerData().isSpeedPerVideoEnabled()) {
+                getStateService().save(new State(state.video, state.positionMs, state.durationMs, getPlayerData().getSpeed(getVideo().channelId)));
             }
         });
     }
@@ -329,18 +309,18 @@ public class VideoStateController extends BasePlayerController {
      * Reset position of currently opened music and live videos.
      */
     private void resetPositionIfNeeded(Video item) {
-        if (mStateService == null || item == null) {
+        if (getStateService() == null || item == null) {
             return;
         }
 
-        State state = mStateService.getByVideoId(item.videoId);
+        State state = getStateService().getByVideoId(item.videoId);
 
         // Reset position of music videos
-        boolean isShort = state != null && state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled();
+        boolean isShort = state != null && state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !getPlayerTweaksData().isRememberPositionOfShortVideosEnabled();
         boolean isVideoEnded = state != null && state.durationMs - state.positionMs < 3_000;
         boolean isLive = item.isLive;
 
-        if (mPlayerTweaksData.isRememberPositionOfLiveVideosEnabled() && item.isFullLive()) {
+        if (getPlayerTweaksData().isRememberPositionOfLiveVideosEnabled() && item.isFullLive()) {
             isLive = false;
         }
 
@@ -350,8 +330,8 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void resetGlobalSpeedIfNeeded() {
-        if (!mPlayerData.isAllSpeedEnabled()) {
-            mPlayerData.setSpeed(1.0f);
+        if (!getPlayerData().isAllSpeedEnabled()) {
+            getPlayerData().setSpeed(1.0f);
         }
     }
 
@@ -361,13 +341,13 @@ public class VideoStateController extends BasePlayerController {
         }
 
         video.markNotViewed();
-        State state = mStateService.getByVideoId(video.videoId);
+        State state = getStateService().getByVideoId(video.videoId);
 
         if (state != null) {
-            if (mPlayerData.isSpeedPerVideoEnabled()) {
-                mStateService.save(new State(video, 0, state.durationMs, state.speed));
+            if (getPlayerData().isSpeedPerVideoEnabled()) {
+                getStateService().save(new State(video, 0, state.durationMs, state.speed));
             } else {
-                mStateService.removeByVideoId(video.videoId);
+                getStateService().removeByVideoId(video.videoId);
             }
         }
     }
@@ -386,22 +366,22 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void restoreVideoFormat() {
-        if (mPlayerData.getTempVideoFormat() != null) {
-            getPlayer().setFormat(mPlayerData.getTempVideoFormat());
+        if (getPlayerData().getTempVideoFormat() != null) {
+            getPlayer().setFormat(getPlayerData().getTempVideoFormat());
         } else {
-            getPlayer().setFormat(mPlayerData.getFormat(FormatItem.TYPE_VIDEO));
+            getPlayer().setFormat(getPlayerData().getFormat(FormatItem.TYPE_VIDEO));
         }
     }
 
     private void restoreAudioFormat() {
-        getPlayer().setFormat(mPlayerData.getFormat(FormatItem.TYPE_AUDIO));
+        getPlayer().setFormat(getPlayerData().getFormat(FormatItem.TYPE_AUDIO));
     }
 
     private void restoreSubtitleFormat() {
-        FormatItem result = mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE);
+        FormatItem result = getPlayerData().getFormat(FormatItem.TYPE_SUBTITLE);
 
-        if (mPlayerData.isSubtitlesPerChannelEnabled()) {
-            result = mPlayerData.isSubtitlesPerChannelEnabled(getPlayer().getVideo().channelId) ? mPlayerData.getLastSubtitleFormat() : FormatItem.SUBTITLE_NONE;
+        if (getPlayerData().isSubtitlesPerChannelEnabled()) {
+            result = getPlayerData().isSubtitlesPerChannelEnabled(getPlayer().getVideo().channelId) ? getPlayerData().getLastSubtitleFormat() : FormatItem.SUBTITLE_NONE;
         }
 
         getPlayer().setFormat(result);
@@ -415,7 +395,7 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void persistState() {
-        mStateService.persistState();
+        getStateService().persistState();
     }
 
     private void savePosition() {
@@ -435,12 +415,12 @@ public class VideoStateController extends BasePlayerController {
         boolean isPositionActual = remainsMs > 1_000;
         if (isPositionActual) { // partially viewed
             State state = new State(video, positionMs, durationMs, getPlayer().getSpeed());
-            mStateService.save(state);
+            getStateService().save(state);
             // Sync video. You could safely use it later to restore state.
             video.sync(state);
         } else { // fully viewed
             // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
-            mStateService.save(new State(video, durationMs, durationMs, getPlayer().getSpeed()));
+            getStateService().save(new State(video, durationMs, durationMs, getPlayer().getSpeed()));
             video.markFullyViewed();
         }
 
@@ -450,7 +430,7 @@ public class VideoStateController extends BasePlayerController {
     private void restorePosition() {
         Video item = getVideo();
 
-        State state = mStateService.getByVideoId(item.videoId);
+        State state = getStateService().getByVideoId(item.videoId);
 
         boolean stateIsOutdated = isStateOutdated(state, item);
         if (stateIsOutdated) { // check that the user logged in
@@ -480,10 +460,10 @@ public class VideoStateController extends BasePlayerController {
     private void updateHistory() {
         Video video = getVideo();
 
-        if (video == null || (video.isShorts && mMediaServiceData.isContentHidden(MediaServiceData.CONTENT_SHORTS_HISTORY)) ||
+        if (video == null || (video.isShorts && getMediaServiceData().isContentHidden(MediaServiceData.CONTENT_SHORTS_HISTORY)) ||
                 mIncognito || getPlayer() == null || !getPlayer().containsMedia() ||
-                (video.isRemote && mRemoteControlData.isRemoteHistoryDisabled()) ||
-                mGeneralData.getHistoryState() == GeneralData.HISTORY_DISABLED || mStateService.isHistoryBroken()) {
+                (video.isRemote && getRemoteControlData().isRemoteHistoryDisabled()) ||
+                getGeneralData().getHistoryState() == GeneralData.HISTORY_DISABLED || getStateService().isHistoryBroken()) {
             return;
         }
 
@@ -518,11 +498,11 @@ public class VideoStateController extends BasePlayerController {
         if (liveEnd || isMusicVideo()) {
             getPlayer().setSpeed(1.0f);
         } else {
-            State state = mStateService.getByVideoId(item.videoId);
-            float speed = mPlayerData.getSpeed(item.channelId);
+            State state = getStateService().getByVideoId(item.videoId);
+            float speed = getPlayerData().getSpeed(item.channelId);
             getPlayer().setSpeed(
-                    state != null && mPlayerData.isSpeedPerVideoEnabled() ? state.speed :
-                            mPlayerData.isAllSpeedEnabled() || item.channelId != null ? speed : 1.0f
+                    state != null && getPlayerData().isSpeedPerVideoEnabled() ? state.speed :
+                            getPlayerData().isAllSpeedEnabled() || item.channelId != null ? speed : 1.0f
             );
         }
     }
@@ -541,9 +521,9 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void restoreVolume() {
-        float newVolume = mPlayerData.getPlayerVolume();
+        float newVolume = getPlayerData().getPlayerVolume();
 
-        if (mPlayerTweaksData.isPlayerAutoVolumeEnabled()) {
+        if (getPlayerTweaksData().isPlayerAutoVolumeEnabled()) {
             newVolume *= getVideo().volume;
         }
 
@@ -559,7 +539,7 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void restorePitch() {
-        getPlayer().setPitch(mPlayerData.getPitch());
+        getPlayer().setPitch(getPlayerData().getPitch());
     }
 
     private void restoreFormats() {
@@ -624,11 +604,11 @@ public class VideoStateController extends BasePlayerController {
             return;
         }
 
-        if (MediaServiceData.instance().isContentHidden(MediaServiceData.CONTENT_WATCHED_WATCH_LATER) && video.percentWatched > 95) { // remove fully watched
+        if (getMediaServiceData().isContentHidden(MediaServiceData.CONTENT_WATCHED_WATCH_LATER) && video.percentWatched > 95) { // remove fully watched
             MediaServiceManager.instance().removeFromWatchLaterPlaylist(video);
         }
 
-        if (mGeneralData.isHideWatchedFromNotificationsEnabled()) { // remove any watched length
+        if (getGeneralData().isHideWatchedFromNotificationsEnabled()) { // remove any watched length
             MediaServiceManager.instance().hideNotification(video);
         }
     }
@@ -646,15 +626,15 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private long getLiveBuffer() {
-        return mPlayerTweaksData.isBufferOnStreamsDisabled() ? SHORT_LIVE_BUFFER_MS : LIVE_BUFFER_MS;
+        return getPlayerTweaksData().isBufferOnStreamsDisabled() ? SHORT_LIVE_BUFFER_MS : LIVE_BUFFER_MS;
     }
 
     private void removeFromHistoryIfNeeded() {
         // Maintain history to keep video progress
-        if (mGeneralData.getHistoryState() == GeneralData.HISTORY_DISABLED && mStateService.isHistoryBroken()) {
+        if (getGeneralData().getHistoryState() == GeneralData.HISTORY_DISABLED && getStateService().isHistoryBroken()) {
             Video video = getVideo();
             if (video != null) {
-                mStateService.removeByVideoId(video.videoId);
+                getStateService().removeByVideoId(video.videoId);
             }
         }
     }

@@ -35,7 +35,6 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -53,8 +52,6 @@ public class PlayerUIController extends BasePlayerController {
     private final Handler mHandler;
     private final MediaItemService mMediaItemService;
     private SuggestionsController mSuggestionsController;
-    private PlayerData mPlayerData;
-    private PlayerTweaksData mPlayerTweaksData;
     private List<PlaylistInfo> mPlaylistInfos;
     private FormatItem mAudioFormat = FormatItem.AUDIO_HQ_MP4A;
     private boolean mEngineReady;
@@ -85,14 +82,12 @@ public class PlayerUIController extends BasePlayerController {
     @Override
     public void onInit() {
         mSuggestionsController = getController(SuggestionsController.class);
-        mPlayerData = PlayerData.instance(getContext());
-        mPlayerTweaksData = PlayerTweaksData.instance(getContext());
 
         // Could be set once per activity creation (view layout stuff)
-        getPlayer().setVideoZoomMode(mPlayerData.getVideoZoomMode());
-        getPlayer().setVideoZoom(mPlayerData.getVideoZoom());
-        getPlayer().setVideoAspectRatio(mPlayerData.getVideoAspectRatio());
-        getPlayer().setVideoRotation(mPlayerData.getVideoRotation());
+        getPlayer().setVideoZoomMode(getPlayerData().getVideoZoomMode());
+        getPlayer().setVideoZoom(getPlayerData().getVideoZoom());
+        getPlayer().setVideoAspectRatio(getPlayerData().getVideoAspectRatio());
+        getPlayer().setVideoRotation(getPlayerData().getVideoRotation());
     }
 
     @Override
@@ -135,7 +130,7 @@ public class PlayerUIController extends BasePlayerController {
     @Override
     public void onSubtitleClicked(boolean enabled) {
         // First run
-        if (FormatItem.SUBTITLE_NONE.equals(mPlayerData.getLastSubtitleFormat())) {
+        if (FormatItem.SUBTITLE_NONE.equals(getPlayerData().getLastSubtitleFormat())) {
             onSubtitleLongClicked(enabled);
             return;
         }
@@ -147,7 +142,7 @@ public class PlayerUIController extends BasePlayerController {
 
         FormatItem matchedFormat = null;
 
-        for (FormatItem item : mPlayerData.getLastSubtitleFormats()) {
+        for (FormatItem item : getPlayerData().getLastSubtitleFormats()) {
             if (getPlayer().getSubtitleFormats().contains(item)) {
                 matchedFormat = item;
                 break;
@@ -158,7 +153,7 @@ public class PlayerUIController extends BasePlayerController {
         if (matchedFormat != null) {
             FormatItem format = enabled ? FormatItem.SUBTITLE_NONE : matchedFormat;
             getPlayer().setFormat(format);
-            mPlayerData.setFormat(format);
+            getPlayerData().setFormat(format);
             getPlayer().setSubtitleButtonState(!FormatItem.SUBTITLE_NONE.equals(matchedFormat) && !enabled);
             enableSubtitleForChannel(!enabled);
         } else {
@@ -185,7 +180,7 @@ public class PlayerUIController extends BasePlayerController {
                                 FormatItem format = UiOptionItem.toFormat(option);
                                 enableSubtitleForChannel(!format.isDefault());
                                 getPlayer().setFormat(format);
-                                mPlayerData.setFormat(format);
+                                getPlayerData().setFormat(format);
                             },
                             getContext().getString(R.string.subtitles_disabled)));
             settingsPresenter.showDialog();
@@ -202,7 +197,7 @@ public class PlayerUIController extends BasePlayerController {
                                 FormatItem format = UiOptionItem.toFormat(option);
                                 enableSubtitleForChannel(!format.isDefault());
                                 getPlayer().setFormat(format);
-                                mPlayerData.setFormat(format);
+                                getPlayerData().setFormat(format);
                             },
                             getContext().getString(R.string.subtitles_disabled)));
             settingsPresenter.showDialog();
@@ -250,7 +245,7 @@ public class PlayerUIController extends BasePlayerController {
             getPlayer().setDebugButtonState(mDebugViewEnabled);
         }
         
-        if (mPlayerTweaksData.isScreenOffTimeoutEnabled() || mPlayerTweaksData.isBootScreenOffEnabled()) {
+        if (getPlayerTweaksData().isScreenOffTimeoutEnabled() || getPlayerTweaksData().isBootScreenOffEnabled()) {
             prepareScreenOff();
             applyScreenOff(PlayerUI.BUTTON_OFF);
             applyScreenOffTimeout(PlayerUI.BUTTON_OFF);
@@ -275,7 +270,7 @@ public class PlayerUIController extends BasePlayerController {
         }
 
         // Reset temp mode.
-        SearchData.instance(getContext()).setTempBackgroundModeClass(null);
+        getSearchData().setTempBackgroundModeClass(null);
 
         // Activate debug infos when restoring after PIP.
         getPlayer().showDebugInfo(mDebugViewEnabled);
@@ -320,19 +315,19 @@ public class PlayerUIController extends BasePlayerController {
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
         mIsMetadataLoaded = true;
-        if (mPlayerData.getSeekPreviewMode() != PlayerData.SEEK_PREVIEW_NONE) {
+        if (getPlayerData().getSeekPreviewMode() != PlayerData.SEEK_PREVIEW_NONE) {
             getPlayer().loadStoryboard();
         }
         getPlayer().setLikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE);
         getPlayer().setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
-        if (mPlayerTweaksData.isRealChannelIconEnabled()) {
+        if (getPlayerTweaksData().isRealChannelIconEnabled()) {
             getPlayer().setChannelIcon(metadata.getAuthorImageUrl());
         }
         setPlaylistAddButtonStateCached();
         setSubtitleButtonState();
-        getPlayer().setButtonState(R.id.action_rotate, mPlayerData.getVideoRotation() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
+        getPlayer().setButtonState(R.id.action_rotate, getPlayerData().getVideoRotation() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
         getPlayer().setButtonState(R.id.action_subscribe, metadata.isSubscribed() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-        getPlayer().setButtonState(R.id.action_afr, mPlayerData.isAfrEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_afr, getPlayerData().isAfrEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
     @Override
@@ -407,7 +402,7 @@ public class PlayerUIController extends BasePlayerController {
     public void onSeekIntervalClicked() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
-        AppDialogUtil.appendSeekIntervalDialogItems(getContext(), settingsPresenter, mPlayerData, true);
+        AppDialogUtil.appendSeekIntervalDialogItems(getContext(), settingsPresenter, getPlayerData(), true);
 
         settingsPresenter.showDialog();
     }
@@ -475,16 +470,16 @@ public class PlayerUIController extends BasePlayerController {
     public void onVideoZoomClicked() {
         OptionCategory videoZoomCategory = AppDialogUtil.createVideoZoomCategory(
                 getContext(), () -> {
-                    getPlayer().setVideoZoomMode(mPlayerData.getVideoZoomMode());
-                    getPlayer().setVideoZoom(mPlayerData.getVideoZoom());
+                    getPlayer().setVideoZoomMode(getPlayerData().getVideoZoomMode());
+                    getPlayer().setVideoZoom(getPlayerData().getVideoZoom());
                     getPlayer().showControls(false);
                 });
 
         OptionCategory videoAspectCategory = AppDialogUtil.createVideoAspectCategory(
-                getContext(), mPlayerData, () -> getPlayer().setVideoAspectRatio(mPlayerData.getVideoAspectRatio()));
+                getContext(), getPlayerData(), () -> getPlayer().setVideoAspectRatio(getPlayerData().getVideoAspectRatio()));
 
         OptionCategory videoRotateCategory = AppDialogUtil.createVideoRotateCategory(
-                getContext(), mPlayerData, () -> getPlayer().setVideoRotation(mPlayerData.getVideoRotation()));
+                getContext(), getPlayerData(), () -> getPlayer().setVideoRotation(getPlayerData().getVideoRotation()));
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.appendRadioCategory(videoAspectCategory.title, videoAspectCategory.options);
@@ -536,7 +531,7 @@ public class PlayerUIController extends BasePlayerController {
         } else if (buttonId == R.id.action_sound_off) {
             showSoundOffDialog();
         } else if (buttonId == R.id.action_afr) {
-            AutoFrameRateSettingsPresenter.instance(getContext()).show(() -> applyAfr(mPlayerData.isAfrEnabled() ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON));
+            AutoFrameRateSettingsPresenter.instance(getContext()).show(() -> applyAfr(getPlayerData().isAfrEnabled() ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON));
         } else if (buttonId == R.id.action_repeat) {
             showRepeatModeDialog(buttonState);
         }
@@ -550,8 +545,8 @@ public class PlayerUIController extends BasePlayerController {
     private void enableUiAutoHideTimeout() {
         Log.d(TAG, "Starting auto hide ui timer...");
         disableUiAutoHideTimeout();
-        if (mEngineReady && mPlayerData.getUiHideTimeoutSec() > 0) {
-            mHandler.postDelayed(mUiAutoHideHandler, mPlayerData.getUiHideTimeoutSec() * 1_000L);
+        if (mEngineReady && getPlayerData().getUiHideTimeoutSec() > 0) {
+            mHandler.postDelayed(mUiAutoHideHandler, getPlayerData().getUiHideTimeoutSec() * 1_000L);
         }
     }
 
@@ -627,7 +622,7 @@ public class PlayerUIController extends BasePlayerController {
         boolean controlsShown = getPlayer().isOverlayShown();
 
         if (KeyHelpers.isConfirmKey(keyCode) && !controlsShown) {
-            switch (mPlayerData.getOKButtonBehavior()) {
+            switch (getPlayerData().getOKButtonBehavior()) {
                 case PlayerData.ONLY_UI:
                     getPlayer().showOverlay(true);
                     return true; // don't show ui
@@ -653,7 +648,7 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private boolean handleNumKeys(int keyCode) {
-        if (mPlayerData.isNumberKeySeekEnabled() && keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9) {
+        if (getPlayerData().isNumberKeySeekEnabled() && keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9) {
             if (getPlayer() != null && getPlayer().getDurationMs() > 0) {
                 float seekPercent = (keyCode - KeyEvent.KEYCODE_0) / 10f;
                 getPlayer().setPositionMs((long)(getPlayer().getDurationMs() * seekPercent));
@@ -675,8 +670,8 @@ public class PlayerUIController extends BasePlayerController {
 
     private boolean handleLeftRightSkip(int keyCode) {
         if (getPlayer().isOverlayShown() || getPlayer().getVideo() == null ||
-                (getPlayer().getVideo().belongsToShortsGroup() && !mPlayerTweaksData.isQuickSkipShortsEnabled() ||
-                (!getPlayer().getVideo().belongsToShortsGroup() && !mPlayerTweaksData.isQuickSkipVideosEnabled()))) {
+                (getPlayer().getVideo().belongsToShortsGroup() && !getPlayerTweaksData().isQuickSkipShortsEnabled() ||
+                (!getPlayer().getVideo().belongsToShortsGroup() && !getPlayerTweaksData().isQuickSkipVideosEnabled()))) {
             return false;
         }
 
@@ -736,7 +731,7 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void startTempBackgroundMode(Class<?> clazz) {
-        SearchData searchData = SearchData.instance(getContext());
+        SearchData searchData = getSearchData();
         if (searchData.isTempBackgroundModeEnabled()) {
             searchData.setTempBackgroundModeClass(clazz);
             onPipClicked();
@@ -763,19 +758,19 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private boolean isSubtitleEnabled() {
-        return !mPlayerData.isSubtitlesPerChannelEnabled() || mPlayerData.isSubtitlesPerChannelEnabled(getChannelId());
+        return !getPlayerData().isSubtitlesPerChannelEnabled() || getPlayerData().isSubtitlesPerChannelEnabled(getChannelId());
     }
 
     private void enableSubtitleForChannel(boolean enable) {
-        if (getPlayer() == null || !mPlayerData.isSubtitlesPerChannelEnabled()) {
+        if (getPlayer() == null || !getPlayerData().isSubtitlesPerChannelEnabled()) {
             return;
         }
 
         String channelId = getChannelId();
         if (enable) {
-            mPlayerData.enableSubtitlesPerChannel(channelId);
+            getPlayerData().enableSubtitlesPerChannel(channelId);
         } else {
-            mPlayerData.disableSubtitlesPerChannel(channelId);
+            getPlayerData().disableSubtitlesPerChannel(channelId);
         }
     }
 
@@ -784,9 +779,9 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void applyScreenOff(int buttonState) {
-        if (mPlayerTweaksData.getScreenOffTimeoutSec() == 0) {
-            boolean isPartialDimming = mPlayerTweaksData.getScreenOffDimmingPercents() < 100;
-            mPlayerTweaksData.enableBootScreenOff(buttonState == PlayerUI.BUTTON_OFF && isPartialDimming);
+        if (getPlayerTweaksData().getScreenOffTimeoutSec() == 0) {
+            boolean isPartialDimming = getPlayerTweaksData().getScreenOffDimmingPercents() < 100;
+            getPlayerTweaksData().enableBootScreenOff(buttonState == PlayerUI.BUTTON_OFF && isPartialDimming);
             if (buttonState == PlayerUI.BUTTON_OFF) {
                 ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
                 manager.doScreenOff();
@@ -798,8 +793,8 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void applyScreenOffTimeout(int buttonState) {
-        if (mPlayerTweaksData.getScreenOffTimeoutSec() > 0) {
-            mPlayerTweaksData.enableScreenOffTimeout(buttonState == PlayerUI.BUTTON_OFF);
+        if (getPlayerTweaksData().getScreenOffTimeoutSec() > 0) {
+            getPlayerTweaksData().enableScreenOffTimeout(buttonState == PlayerUI.BUTTON_OFF);
             getPlayer().setButtonState(R.id.action_screen_off, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
             getPlayer().setButtonState(R.id.action_screen_off_timeout, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
@@ -815,19 +810,19 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void onRotate() {
-        int oldRotation = mPlayerData.getVideoRotation();
+        int oldRotation = getPlayerData().getVideoRotation();
         int rotation = oldRotation == 0 ? 90 : oldRotation == 90 ? 180 : oldRotation == 180 ? 270 : 0;
         getPlayer().setVideoRotation(rotation);
         getPlayer().setButtonState(R.id.action_rotate, rotation == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
-        mPlayerData.setVideoRotation(rotation);
+        getPlayerData().setVideoRotation(rotation);
     }
 
     private void onFlip() {
-        boolean flipEnabled = mPlayerData.isVideoFlipEnabled();
+        boolean flipEnabled = getPlayerData().isVideoFlipEnabled();
         boolean newFlipEnabled = !flipEnabled;
         getPlayer().setVideoFlipEnabled(newFlipEnabled);
         getPlayer().setButtonState(R.id.action_flip, newFlipEnabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-        mPlayerData.setVideoFlipEnabled(newFlipEnabled);
+        getPlayerData().setVideoFlipEnabled(newFlipEnabled);
     }
 
     private void onSubscribe(int buttonState) {
@@ -864,12 +859,12 @@ public class PlayerUIController extends BasePlayerController {
     private void applySoundOffButtonState() {
         if (getPlayer().getAudioFormat() != null) {
             getPlayer().setButtonState(R.id.action_sound_off,
-                    (getPlayer().getAudioFormat().isDefault() || mPlayerData.getPlayerVolume() == 0) ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+                    (getPlayer().getAudioFormat().isDefault() || getPlayerData().getPlayerVolume() == 0) ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
     }
 
     private void applyAfr(int buttonState) {
-        mPlayerData.setAfrEnabled(buttonState == PlayerUI.BUTTON_OFF);
+        getPlayerData().setAfrEnabled(buttonState == PlayerUI.BUTTON_OFF);
         getController(AutoFrameRateController.class).applyAfr();
         getPlayer().setButtonState(R.id.action_afr, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
@@ -877,14 +872,14 @@ public class PlayerUIController extends BasePlayerController {
     private void applyRepeatMode(int buttonState) {
         int nextMode = getNextRepeatMode(buttonState);
 
-        mPlayerData.setRepeatMode(nextMode);
+        getPlayerData().setRepeatMode(nextMode);
         getPlayer().setButtonState(R.id.action_repeat, nextMode);
     }
 
     private void showRepeatModeDialog(int buttonState) {
         OptionCategory category = AppDialogUtil.createPlaybackModeCategory(
                 getContext(), () -> {
-                    getPlayer().setButtonState(R.id.action_repeat, mPlayerData.getRepeatMode());
+                    getPlayer().setButtonState(R.id.action_repeat, getPlayerData().getRepeatMode());
                 });
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
@@ -900,14 +895,14 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void reorderSubtitles(List<FormatItem> subtitleFormats) {
-        if (subtitleFormats == null || subtitleFormats.isEmpty() || subtitleFormats.get(0).equals(mPlayerData.getLastSubtitleFormat())) {
+        if (subtitleFormats == null || subtitleFormats.isEmpty() || subtitleFormats.get(0).equals(getPlayerData().getLastSubtitleFormat())) {
             return;
         }
 
         // Move last format to the top
         int begin = subtitleFormats.get(0).isDefault() ? 1 : 0;
         List<FormatItem> topSubtitles = new ArrayList<>();
-        for (FormatItem item : mPlayerData.getLastSubtitleFormats()) {
+        for (FormatItem item : getPlayerData().getLastSubtitleFormats()) {
             if (item == null || item.getLanguage() == null) { // skip empty formats
                 continue;
             }
@@ -965,10 +960,10 @@ public class PlayerUIController extends BasePlayerController {
     private void showSoundOffDialog() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         OptionCategory audioVolumeCategory = AppDialogUtil.createAudioVolumeCategory(getContext(), () -> {
-            applySoundOff(mPlayerData.getPlayerVolume() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
-            getPlayer().setVolume(mPlayerData.getPlayerVolume());
+            applySoundOff(getPlayerData().getPlayerVolume() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
+            getPlayer().setVolume(getPlayerData().getPlayerVolume());
         });
-        OptionCategory pitchEffectCategory = AppDialogUtil.createPitchEffectCategory(getContext(), getPlayer(), mPlayerData);
+        OptionCategory pitchEffectCategory = AppDialogUtil.createPitchEffectCategory(getContext(), getPlayer(), getPlayerData());
         settingsPresenter.appendCategory(audioVolumeCategory);
         settingsPresenter.appendCategory(pitchEffectCategory);
         settingsPresenter.showDialog(getContext().getString(R.string.player_volume));

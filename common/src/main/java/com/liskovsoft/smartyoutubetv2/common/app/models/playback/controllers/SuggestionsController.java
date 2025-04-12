@@ -39,7 +39,6 @@ import java.util.List;
 public class SuggestionsController extends BasePlayerController {
     private static final String TAG = SuggestionsController.class.getSimpleName();
     private final List<Disposable> mActions = new ArrayList<>();
-    private PlayerTweaksData mPlayerTweaksData;
     private MediaItemService mMediaItemService;
     private ContentService mContentService;
     private DeArrowProcessor mDeArrowProcessor;
@@ -61,7 +60,6 @@ public class SuggestionsController extends BasePlayerController {
 
     @Override
     public void onInit() {
-        mPlayerTweaksData = PlayerTweaksData.instance(getContext());
         mDeArrowProcessor = new DeArrowProcessor(getContext(), PlaybackPresenter.instance(getContext())::syncItem);
         mMediaItemService = YouTubeServiceManager.instance().getMediaItemService();
         mContentService = YouTubeServiceManager.instance().getContentService();
@@ -374,7 +372,7 @@ public class SuggestionsController extends BasePlayerController {
         int groupIndex = -1;
         int suggestRows = -1;
 
-        if (GeneralData.instance(getContext()).isChildModeEnabled() || mPlayerTweaksData.isSuggestionsDisabled()) {
+        if (GeneralData.instance(getContext()).isChildModeEnabled() || getPlayerTweaksData().isSuggestionsDisabled()) {
             suggestRows = video.hasPlaylist() ? 1 : 0;
         }
 
@@ -496,7 +494,7 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void startChapterNotificationServiceIfNeeded() {
-        if (mPlayerTweaksData.isChapterNotificationEnabled()) {
+        if (getPlayerTweaksData().isChapterNotificationEnabled()) {
             Utils.postDelayed(mChapterHandler, 1_000); // small delay to give a chance to complete dialog transitions
         }
     }
@@ -779,7 +777,7 @@ public class SuggestionsController extends BasePlayerController {
             return;
         }
 
-        if (!mPlayerTweaksData.isLikesCounterEnabled()) {
+        if (!getPlayerTweaksData().isLikesCounterEnabled()) {
             video.likeCount = null;
             video.dislikeCount = null;
             getPlayer().setVideo(video);

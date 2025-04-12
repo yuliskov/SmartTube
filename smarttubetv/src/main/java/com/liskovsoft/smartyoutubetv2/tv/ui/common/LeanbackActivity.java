@@ -22,10 +22,8 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 public abstract class LeanbackActivity extends MotherActivity {
     private static final String TAG = LeanbackActivity.class.getSimpleName();
     private UriBackgroundManager mBackgroundManager;
-    private ViewManager mViewManager;
     private ModeSyncManager mModeSyncManager;
     private DoubleBackManager2 mDoubleBackManager;
-    private GeneralData mGeneralData;
     private GlobalKeyTranslator mGlobalKeyTranslator;
 
     @Override
@@ -36,10 +34,8 @@ public abstract class LeanbackActivity extends MotherActivity {
         //    finishTheApp();
         //}
         mBackgroundManager = new UriBackgroundManager(this);
-        mViewManager = ViewManager.instance(this);
         mModeSyncManager = ModeSyncManager.instance();
         mDoubleBackManager = new DoubleBackManager2(this);
-        mGeneralData = GeneralData.instance(this);
         mGlobalKeyTranslator = this instanceof PlaybackActivity ?
                 new PlayerKeyTranslator(this) :
                 new GlobalKeyTranslator(this);
@@ -82,7 +78,7 @@ public abstract class LeanbackActivity extends MotherActivity {
 
         mModeSyncManager.restore(this);
 
-        mViewManager.addTop(this);
+        getViewManager().addTop(this);
     }
 
     @Override
@@ -100,8 +96,8 @@ public abstract class LeanbackActivity extends MotherActivity {
     @Override
     public void finish() {
         // user pressed back key
-        if (!mViewManager.hasParentView(this)) {
-            switch (mGeneralData.getAppExitShortcut()) {
+        if (!getViewManager().hasParentView(this)) {
+            switch (getGeneralData().getAppExitShortcut()) {
                 case GeneralData.EXIT_DOUBLE_BACK:
                     mDoubleBackManager.enableDoubleBackExit(this::finishTheApp);
                     break;
@@ -110,7 +106,7 @@ public abstract class LeanbackActivity extends MotherActivity {
                     break;
             }
         } else if (this instanceof PlaybackActivity) {
-            switch (mGeneralData.getPlayerExitShortcut()) {
+            switch (getGeneralData().getPlayerExitShortcut()) {
                 case GeneralData.EXIT_DOUBLE_BACK:
                     mDoubleBackManager.enableDoubleBackExit(this::finishReally);
                     break;
@@ -126,7 +122,7 @@ public abstract class LeanbackActivity extends MotherActivity {
     @Override
     public void finishReally() {
         // Mandatory line. Fix un-proper view order (especially for playback view).
-        mViewManager.startParentView(this);
+        getViewManager().startParentView(this);
         super.finishReally();
     }
 

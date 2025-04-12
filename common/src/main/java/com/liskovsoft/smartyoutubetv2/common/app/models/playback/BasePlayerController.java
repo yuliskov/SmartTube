@@ -9,8 +9,18 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
+import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 public abstract class BasePlayerController implements PlayerEventListener {
     private PlaybackPresenter mMainController;
@@ -296,5 +306,45 @@ public abstract class BasePlayerController implements PlayerEventListener {
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
         // NOP
+    }
+
+    protected PlayerData getPlayerData() {
+        return PlayerData.instance(getContext());
+    }
+
+    protected GeneralData getGeneralData() {
+        return GeneralData.instance(getContext());
+    }
+
+    protected MediaServiceData getMediaServiceData() {
+        return MediaServiceData.instance();
+    }
+
+    protected PlayerTweaksData getPlayerTweaksData() {
+        return PlayerTweaksData.instance(getContext());
+    }
+
+    protected RemoteControlData getRemoteControlData() {
+        return RemoteControlData.instance(getContext());
+    }
+
+    protected VideoStateService getStateService() {
+        return VideoStateService.instance(getContext());
+    }
+
+    protected ContentBlockData getContentBlockData() {
+        return ContentBlockData.instance(getContext());
+    }
+
+    protected SearchData getSearchData() {
+        return SearchData.instance(getContext());
+    }
+
+    protected MediaServiceManager getServiceManager() {
+        return MediaServiceManager.instance();
+    }
+
+    protected ViewManager getViewManager() {
+        return ViewManager.instance(getContext());
     }
 }

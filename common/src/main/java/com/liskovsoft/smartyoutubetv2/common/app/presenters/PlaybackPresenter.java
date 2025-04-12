@@ -23,9 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.ViewEv
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
-import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils.ChainProcessor;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils.Processor;
@@ -39,7 +37,6 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     private static final String TAG = PlaybackPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static PlaybackPresenter sInstance;
-    private final ViewManager mViewManager;
     private final List<PlayerEventListener> mEventListeners = new CopyOnWriteArrayList<PlayerEventListener>() {
         @Override
         public boolean add(PlayerEventListener listener) {
@@ -54,8 +51,6 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
 
     private PlaybackPresenter(Context context) {
         super(context);
-
-        mViewManager = ViewManager.instance(context);
 
         // NOTE: position matters!!!
         mEventListeners.add(new VideoStateController());
@@ -112,7 +107,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
             onNewVideo(video);
         }
 
-        mViewManager.startView(PlaybackView.class);
+        getViewManager().startView(PlaybackView.class);
     }
 
     /**
@@ -160,7 +155,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
                 getView().isEngineBlocked() &&
                 //getView().getBackgroundMode() != PlayerEngine.BACKGROUND_MODE_DEFAULT &&
                 getView().isEngineInitialized() &&
-                !ViewManager.instance(getContext()).isPlayerInForeground() &&
+                !getViewManager().isPlayerInForeground() &&
                 getContext() instanceof Activity && Utils.checkActivity((Activity) getContext()); // Check that activity is not in Finishing state
     }
 
@@ -197,7 +192,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     public void setPosition(long positionMs) {
         // Check that the user isn't open context menu on suggestion item
         // if (Utils.isPlayerInForeground(getContext()) && getView() != null && !getView().getController().isSuggestionsShown()) {
-        if (ViewManager.instance(getContext()).isPlayerInForeground() && getView() != null) {
+        if (getViewManager().isPlayerInForeground() && getView() != null) {
             getView().setPositionMs(positionMs);
             getView().setPlayWhenReady(true);
             getView().showOverlay(false);
@@ -308,14 +303,14 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
 
     @Override
     public void onEngineInitialized() {
-        TickleManager.instance().addListener(this);
+        getTickleManager().addListener(this);
 
         process(PlayerEventListener::onEngineInitialized);
     }
 
     @Override
     public void onEngineReleased() {
-        TickleManager.instance().removeListener(this);
+        getTickleManager().removeListener(this);
 
         process(PlayerEventListener::onEngineReleased);
     }

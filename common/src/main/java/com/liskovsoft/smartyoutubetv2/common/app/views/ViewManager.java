@@ -425,7 +425,7 @@ public class ViewManager {
         }
     }
 
-    public static boolean isVisible(Object view) {
+    public boolean isVisible(Object view) {
         if (view instanceof Fragment) {
             return ((Fragment) view).isVisible();
         }

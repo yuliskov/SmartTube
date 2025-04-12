@@ -12,7 +12,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -89,7 +88,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
 
     private void showUpdateDialog(String versionName, List<String> changelog, String apkPath) {
         // Don't show update dialog if the player opened or the app is collapsed
-        if (getContext() == null || ViewManager.instance(getContext()).isPlayerInForeground() || !Utils.isAppInForegroundFixed()) {
+        if (getContext() == null || getViewManager().isPlayerInForeground() || !Utils.isAppInForegroundFixed()) {
             return;
         }
 

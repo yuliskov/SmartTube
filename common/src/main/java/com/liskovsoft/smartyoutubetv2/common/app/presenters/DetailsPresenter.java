@@ -10,12 +10,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 public class DetailsPresenter extends BasePresenter<DetailsView> {
     @SuppressLint("StaticFieldLeak")
     private static DetailsPresenter sInstance;
-    private final ViewManager mViewManager;
     private Video mVideo;
 
     private DetailsPresenter(Context context) {
         super(context);
-        mViewManager = ViewManager.instance(context);
     }
 
     public static DetailsPresenter instance(Context context) {
@@ -35,6 +33,6 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
 
     public void openVideo(Video item) {
         mVideo = item;
-        mViewManager.startView(DetailsView.class);
+        getViewManager().startView(DetailsView.class);
     }
 }

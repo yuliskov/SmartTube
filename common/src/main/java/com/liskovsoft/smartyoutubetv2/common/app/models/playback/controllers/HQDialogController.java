@@ -8,8 +8,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
 import java.util.HashSet;
@@ -26,14 +24,10 @@ public class HQDialogController extends BasePlayerController {
     private final Map<Integer, OptionCategory> mCategories = new LinkedHashMap<>();
     private final Map<Integer, OptionCategory> mCategoriesInt = new LinkedHashMap<>();
     private final Set<Runnable> mHideListeners = new HashSet<>();
-    private PlayerData mPlayerData;
-    private PlayerTweaksData mPlayerTweaksData;
     private AppDialogPresenter mAppDialogPresenter;
 
     @Override
     public void onInit() {
-        mPlayerData = PlayerData.instance(getContext());
-        mPlayerTweaksData = PlayerTweaksData.instance(getContext());
         mAppDialogPresenter = AppDialogPresenter.instance(getContext());
     }
 
@@ -84,7 +78,7 @@ public class HQDialogController extends BasePlayerController {
         getPlayer().setFormat(formatItem);
         persistFormat(formatItem);
 
-        if (mPlayerData.getFormat(formatItem.getType()).isPreset()) {
+        if (getPlayerData().getFormat(formatItem.getType()).isPreset()) {
             // Preset currently active. Show warning about format reset.
             MessageHelpers.showMessage(getContext(), R.string.video_preset_enabled);
         }
@@ -101,13 +95,13 @@ public class HQDialogController extends BasePlayerController {
 
     private void persistFormat(FormatItem formatItem) {
         if (formatItem.getType() == FormatItem.TYPE_VIDEO) {
-            if (!mPlayerData.getFormat(FormatItem.TYPE_VIDEO).isPreset()) {
-                mPlayerData.setFormat(formatItem);
+            if (!getPlayerData().getFormat(FormatItem.TYPE_VIDEO).isPreset()) {
+                getPlayerData().setFormat(formatItem);
             } else {
-                mPlayerData.setTempVideoFormat(formatItem);
+                getPlayerData().setTempVideoFormat(formatItem);
             }
         } else {
-            mPlayerData.setFormat(formatItem);
+            getPlayerData().setFormat(formatItem);
         }
     }
 
@@ -122,7 +116,7 @@ public class HQDialogController extends BasePlayerController {
     }
 
     private void addPitchEffectCategory() {
-        addCategoryInt(AppDialogUtil.createPitchEffectCategory(getContext(), getPlayer(), mPlayerData));
+        addCategoryInt(AppDialogUtil.createPitchEffectCategory(getContext(), getPlayer(), getPlayerData()));
     }
 
     private void addAudioLanguage() {
@@ -147,13 +141,13 @@ public class HQDialogController extends BasePlayerController {
     //    ViewManager.instance(getContext()).blockTop(null);
     //
     //    if (getPlayer() != null) {
-    //        getPlayer().setBackgroundMode(mPlayerData.getBackgroundMode());
+    //        getPlayer().setBackgroundMode(getPlayerData().getBackgroundMode());
     //    }
     //}
 
     //private void addBackgroundPlaybackCategory() {
     //    OptionCategory category =
-    //            AppDialogUtil.createBackgroundPlaybackCategory(getContext(), mPlayerData, GeneralData.instance(getContext()), this::updateBackgroundPlayback);
+    //            AppDialogUtil.createBackgroundPlaybackCategory(getContext(), getPlayerData(), GeneralData.instance(getContext()), this::updateBackgroundPlayback);
     //
     //    addCategoryInt(category);
     //}
@@ -165,7 +159,7 @@ public class HQDialogController extends BasePlayerController {
                         return;
                     }
 
-                    FormatItem format = mPlayerData.getFormat(FormatItem.TYPE_VIDEO);
+                    FormatItem format = getPlayerData().getFormat(FormatItem.TYPE_VIDEO);
                     getPlayer().setFormat(format);
 
                     if (!getPlayer().containsMedia()) {
@@ -181,8 +175,8 @@ public class HQDialogController extends BasePlayerController {
     private void addVideoZoomCategory() {
         addCategoryInt(AppDialogUtil.createVideoZoomCategory(
                 getContext(), () -> {
-                    getPlayer().setVideoZoomMode(mPlayerData.getVideoZoomMode());
-                    getPlayer().setVideoZoom(mPlayerData.getVideoZoom());
+                    getPlayer().setVideoZoomMode(getPlayerData().getVideoZoomMode());
+                    getPlayer().setVideoZoom(getPlayerData().getVideoZoom());
 
                     // Make result easily be spotted by the user
                     getPlayer().showOverlay(false);

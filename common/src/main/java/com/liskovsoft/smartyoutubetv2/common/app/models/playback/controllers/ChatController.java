@@ -28,16 +28,12 @@ public class ChatController extends BasePlayerController {
      */
     private static final String[] BLACK_LIST = {". XYZ", ". ХYZ", "⠄XYZ", "⠄ХYZ", "Ricardo Merlino", "⠄СОM", ".COM", ".СОM", ". COM"};
     private LiveChatService mChatService;
-    private PlayerData mPlayerData;
-    private PlayerTweaksData mPlayerTweaksData;
     private Disposable mChatAction;
     private String mLiveChatKey;
 
     @Override
     public void onInit() {
         mChatService = YouTubeServiceManager.instance().getLiveChatService();
-        mPlayerData = PlayerData.instance(getContext());
-        mPlayerTweaksData = PlayerTweaksData.instance(getContext());
     }
 
     @Override
@@ -45,10 +41,10 @@ public class ChatController extends BasePlayerController {
         mLiveChatKey = metadata != null ? metadata.getLiveChatKey() : null;
 
         if (mLiveChatKey != null) {
-            getPlayer().setButtonState(R.id.action_chat, mPlayerData.isLiveChatEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+            getPlayer().setButtonState(R.id.action_chat, getPlayerData().isLiveChatEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
 
-        if (mPlayerData.isLiveChatEnabled()) {
+        if (getPlayerData().isLiveChatEnabled()) {
             openLiveChat();
         }
     }
@@ -102,7 +98,7 @@ public class ChatController extends BasePlayerController {
                         enableLiveChat(false);
                         settingsPresenter.closeDialog();
                     },
-                    !mPlayerData.isLiveChatEnabled()));
+                    !getPlayerData().isLiveChatEnabled()));
 
             options.add(UiOptionItem.from(getContext().getString(R.string.chat_left),
                     optionItem -> {
@@ -110,7 +106,7 @@ public class ChatController extends BasePlayerController {
                         enableLiveChat(true);
                         settingsPresenter.closeDialog();
                     },
-                    mPlayerData.isLiveChatEnabled() && isChatPlacedLeft()));
+                    getPlayerData().isLiveChatEnabled() && isChatPlacedLeft()));
 
             options.add(UiOptionItem.from(getContext().getString(R.string.chat_right),
                     optionItem -> {
@@ -118,7 +114,7 @@ public class ChatController extends BasePlayerController {
                         enableLiveChat(true);
                         settingsPresenter.closeDialog();
                     },
-                    mPlayerData.isLiveChatEnabled() && !isChatPlacedLeft()));
+                    getPlayerData().isLiveChatEnabled() && !isChatPlacedLeft()));
 
             settingsPresenter.appendRadioCategory(chatCategoryTitle, options);
 
@@ -165,7 +161,7 @@ public class ChatController extends BasePlayerController {
         } else {
             disposeActions();
         }
-        mPlayerData.enableLiveChat(enabled);
+        getPlayerData().enableLiveChat(enabled);
 
         if (mLiveChatKey != null) {
             getPlayer().setButtonState(R.id.action_chat, enabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
@@ -174,13 +170,13 @@ public class ChatController extends BasePlayerController {
 
     private void placeChatLeft(boolean left) {
         if (mLiveChatKey != null) {
-            mPlayerTweaksData.placeChatLeft(left);
+            getPlayerTweaksData().placeChatLeft(left);
         } else {
-            mPlayerTweaksData.placeCommentsLeft(left);
+            getPlayerTweaksData().placeCommentsLeft(left);
         }
     }
 
     private boolean isChatPlacedLeft() {
-        return mLiveChatKey != null ? mPlayerTweaksData.isChatPlacedLeft() : mPlayerTweaksData.isCommentsPlacedLeft();
+        return mLiveChatKey != null ? getPlayerTweaksData().isChatPlacedLeft() : getPlayerTweaksData().isCommentsPlacedLeft();
     }
 }

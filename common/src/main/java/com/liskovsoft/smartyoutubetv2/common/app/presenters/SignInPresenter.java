@@ -5,7 +5,6 @@ import android.content.Context;
 
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
 public class SignInPresenter extends BasePresenter<SignInView> {
     private static final String TAG = SignInPresenter.class.getSimpleName();
@@ -75,7 +74,7 @@ public class SignInPresenter extends BasePresenter<SignInView> {
     }
 
     public void start() {
-        ViewManager.instance(getContext()).startView(SignInView.class);
+        getViewManager().startView(SignInView.class);
         doWait(true);
     }
 }
