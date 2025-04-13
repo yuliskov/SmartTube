@@ -15,6 +15,7 @@ public interface CommentsReceiver {
     void onLoadMore(CommentGroup commentGroup);
     void onStart();
     void onCommentClicked(CommentItem commentItem);
+    void onCommentLongClicked(CommentItem commentItem);
     void onFinish(Backup backup);
     String getLoadingMessage();
     String getErrorMessage();

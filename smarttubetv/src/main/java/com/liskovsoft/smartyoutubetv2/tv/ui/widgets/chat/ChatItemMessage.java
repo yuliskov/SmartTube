@@ -98,6 +98,11 @@ public class ChatItemMessage implements IMessage {
                     public String getReplyCount() {
                         return commentItem.getReplyCount();
                     }
+
+                    @Override
+                    public boolean isEmpty() {
+                        return commentItem.isEmpty();
+                    }
                 }));
             }
             return result;

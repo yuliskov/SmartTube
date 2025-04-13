@@ -43,6 +43,11 @@ public abstract class AbstractCommentsReceiver implements CommentsReceiver {
     }
 
     @Override
+    public void onCommentLongClicked(CommentItem commentItem) {
+        
+    }
+
+    @Override
     public void onFinish(Backup backup) {
         
     }

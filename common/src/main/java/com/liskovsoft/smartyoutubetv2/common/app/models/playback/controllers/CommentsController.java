@@ -23,7 +23,6 @@ import io.reactivex.disposables.Disposable;
 
 public class CommentsController extends BasePlayerController {
     private static final String TAG = CommentsController.class.getSimpleName();
-    private CommentsService mCommentsService;
     private Disposable mCommentsAction;
     private String mLiveChatKey;
     private String mCommentsKey;
@@ -37,11 +36,6 @@ public class CommentsController extends BasePlayerController {
         setAltContext(context);
         onInit();
         onMetadata(metadata);
-    }
-
-    @Override
-    public void onInit() {
-        mCommentsService = YouTubeServiceManager.instance().getCommentsService();
     }
 
     @Override
@@ -87,7 +81,7 @@ public class CommentsController extends BasePlayerController {
 
             @Override
             public void onCommentClicked(CommentItem commentItem) {
-                if (commentItem.getNestedCommentsKey() == null) {
+                if (commentItem.isEmpty()) {
                     return;
                 }
 
@@ -101,9 +95,19 @@ public class CommentsController extends BasePlayerController {
                     public void onStart() {
                         loadComments(this, commentItem.getNestedCommentsKey());
                     }
+
+                    @Override
+                    public void onCommentLongClicked(CommentItem commentItem) {
+                        toggleLike(commentItem);
+                    }
                 };
 
                 showDialog(nestedReceiver, title);
+            }
+
+            @Override
+            public void onCommentLongClicked(CommentItem commentItem) {
+                toggleLike(commentItem);
             }
 
             @Override
@@ -148,7 +152,7 @@ public class CommentsController extends BasePlayerController {
     private void loadComments(CommentsReceiver receiver, String commentsKey) {
         disposeActions();
 
-        mCommentsAction = mCommentsService.getCommentsObserve(commentsKey)
+        mCommentsAction = getCommentsService().getCommentsObserve(commentsKey)
                 .subscribe(
                         receiver::addCommentGroup,
                         error -> {
@@ -159,10 +163,20 @@ public class CommentsController extends BasePlayerController {
     }
 
     private void showDialog(CommentsReceiver receiver, String title) {
-        AppDialogPresenter appDialogPresenter = AppDialogPresenter.instance(getContext());
+        AppDialogPresenter appDialogPresenter = getAppDialogPresenter();
 
         appDialogPresenter.appendCommentsCategory(title, UiOptionItem.from(title, receiver));
         //appDialogPresenter.enableTransparent(true);
         appDialogPresenter.showDialog();
+    }
+
+    private void toggleLike(CommentItem commentItem) {
+        if (commentItem.isLiked()) {
+            MessageHelpers.showMessage(getContext(), "Like toggled");
+            return;
+        }
+
+        RxHelper.execute(
+                getCommentsService().toggleLikeObserve(commentItem.getNestedCommentsKey()), () -> MessageHelpers.showMessage(getContext(), "Like toggled"));
     }
 }

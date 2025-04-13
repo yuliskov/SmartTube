@@ -5,6 +5,7 @@ import android.content.Context;
 
 import androidx.fragment.app.Fragment;
 
+import com.liskovsoft.mediaserviceinterfaces.CommentsService;
 import com.liskovsoft.mediaserviceinterfaces.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.NotificationsService;
@@ -253,6 +254,10 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     protected SidebarService getSidebarService() {
         return SidebarService.instance(getContext());
+    }
+
+    protected CommentsService getCommentsService() {
+        return YouTubeServiceManager.instance().getCommentsService();
     }
 
     protected ContentService getContentService() {

@@ -93,6 +93,7 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
                     .into(imageView));
         adapter.setLoadMoreListener((page, totalItemsCount) -> mCommentsReceiver.onLoadMore(mCurrentGroup));
         adapter.setOnMessageViewClickListener((v, message) -> mCommentsReceiver.onCommentClicked(message.getCommentItem()));
+        adapter.setOnMessageViewLongClickListener((v, message) -> mCommentsReceiver.onCommentLongClicked(message.getCommentItem()));
         adapter.setOnMessageViewFocusListener((view1, message) -> mFocusedMessage = message);
         messagesList.setAdapter(adapter);
         messagesList.requestFocus(); // hold focus even when there's no messages
