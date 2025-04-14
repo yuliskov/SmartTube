@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager2;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity;
 
 /**
  * This parent class contains common methods that run in every activity such as search.
@@ -107,6 +108,15 @@ public abstract class LeanbackActivity extends MotherActivity {
             }
         } else if (this instanceof PlaybackActivity) {
             switch (getGeneralData().getPlayerExitShortcut()) {
+                case GeneralData.EXIT_DOUBLE_BACK:
+                    mDoubleBackManager.enableDoubleBackExit(this::finishReally);
+                    break;
+                case GeneralData.EXIT_SINGLE_BACK:
+                    finishReally();
+                    break;
+            }
+        } else if (this instanceof SearchTagsActivity) {
+            switch (getGeneralData().getSearchExitShortcut()) {
                 case GeneralData.EXIT_DOUBLE_BACK:
                     mDoubleBackManager.enableDoubleBackExit(this::finishReally);
                     break;

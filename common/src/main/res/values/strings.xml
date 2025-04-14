@@ -140,6 +140,7 @@
     <string name="open_channel_uploads">Open channel uploads</string>
     <string name="app_exit_shortcut">Exit from the app</string>
     <string name="player_exit_shortcut">Exit from the player</string>
+    <string name="search_exit_shortcut">Exit from the search</string>
     <string name="app_exit_none">Don\'t exit</string>
     <string name="app_double_back_exit">Double back</string>
     <string name="app_single_back_exit">Single back</string>

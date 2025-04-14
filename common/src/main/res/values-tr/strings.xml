@@ -140,6 +140,7 @@
     <string name="open_channel_uploads">Kanal yüklemelerini aç</string>
     <string name="app_exit_shortcut">Uygulamadan çıkış</string>
     <string name="player_exit_shortcut">Oynatıcıdan çıkış</string>
+    <string name="search_exit_shortcut">Aramadan çıkış</string>
     <string name="app_exit_none">Çıkış yapma</string>
     <string name="app_double_back_exit">Çift geri</string>
     <string name="app_single_back_exit">Tek geri</string>

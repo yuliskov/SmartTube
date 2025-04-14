@@ -140,6 +140,7 @@
     <string name="open_channel_uploads">Открыть загрузки</string>
     <string name="app_exit_shortcut">Выход из приложения</string>
     <string name="player_exit_shortcut">Выход из плеера</string>
+    <string name="search_exit_shortcut">Выход из поиска</string>
     <string name="app_exit_none">Не выходить</string>
     <string name="app_double_back_exit">Двойное назад</string>
     <string name="app_single_back_exit">Одинарное назад</string>

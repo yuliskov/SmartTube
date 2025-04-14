@@ -535,7 +535,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mSearchData.enableTempBackgroundMode(option.isSelected()),
                 mSearchData.isTempBackgroundModeEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.app_double_back_exit) + " " + getContext().getString(R.string.player_exit_shortcut),
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_exit_shortcut) + ": " + getContext().getString(R.string.app_double_back_exit),
                 option -> mGeneralData.setPlayerExitShortcut(option.isSelected() ? GeneralData.EXIT_DOUBLE_BACK : GeneralData.EXIT_SINGLE_BACK),
                 mGeneralData.getPlayerExitShortcut() == GeneralData.EXIT_DOUBLE_BACK));
 
