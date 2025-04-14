@@ -698,4 +698,5 @@
     <string name="my_videos">Videolarım</string>
     <string name="player_audio_focus">Ses odaklama (diğer video oynatıcılar algılanırsa duraklatma)</string>
     <string name="paid_content_notification">Ücretli içerik bildirimleri</string>
+    <string name="you_liked">sen beğendin</string>
 </resources>

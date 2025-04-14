@@ -678,7 +678,7 @@
     <string name="calm_msg">We are fixing the issue. Check for updates from time to time</string>
     <string name="without_picture">Without picture</string>
     <string name="video_disabled">Video disabled</string>
-    <string name="applying_fix">Don\'t close the player. Applying the fix...</string>
+    <string name="applying_fix">Don\'t close the player. Applying the fix…</string>
     <string name="hide_mixes">Hide Mixes</string>
     <string name="player_global_focus_desc">This feature affects which player button will receive focus when navigating between player button rows</string>
     <string name="disable_network_error_fixing">Disable automatic network error fixing</string>
@@ -696,4 +696,5 @@
     <string name="my_videos">My videos</string>
     <string name="player_audio_focus">Audio focus (pause if other players detected)</string>
     <string name="paid_content_notification">Paid content notification</string>
+    <string name="you_liked">you liked</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.liskovsoft.mediaserviceinterfaces.data.ChatItem;
@@ -7,6 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.stfalcon.chatkit.commons.models.IMessage;
 
@@ -35,16 +37,17 @@ public class ChatItemMessage implements IMessage {
         return message;
     }
 
-    public static ChatItemMessage from(CommentItem commentItem) {
+    public static ChatItemMessage from(Context context, CommentItem commentItem) {
         ChatItemMessage message = new ChatItemMessage();
         message.mId = commentItem.getId();
         if (commentItem.getMessage() != null && !commentItem.getMessage().trim().isEmpty()) {
             String header = ServiceHelper.combineItems(
                     " " + Video.TERTIARY_TEXT_DELIM + " ",
                     commentItem.getAuthorName(),
-                    commentItem.getLikeCount(),
+                    commentItem.getLikeCount() != null ? String.format("%s %s", commentItem.getLikeCount(), Helpers.THUMB_UP) : null,
                     commentItem.getPublishedDate(),
-                    commentItem.getReplyCount());
+                    commentItem.getReplyCount(),
+                    commentItem.isLiked() ? String.format("(%s)", context.getString(R.string.you_liked)) : null);
             message.mText = TextUtils.concat(Utils.bold(header), "\n", commentItem.getMessage());
         }
         message.mAuthor = ChatItemAuthor.from(commentItem);
@@ -54,7 +57,7 @@ public class ChatItemMessage implements IMessage {
         return message;
     }
 
-    public static List<ChatItemMessage> fromSplit(CommentItem commentItem) {
+    public static List<ChatItemMessage> fromSplit(Context context, CommentItem commentItem) {
         if (shouldSplit(commentItem)) {
             List<String> comments = Helpers.splitStringBySize(commentItem.getMessage(), MAX_LENGTH);
             List<ChatItemMessage> result = new ArrayList<>();
@@ -62,7 +65,7 @@ public class ChatItemMessage implements IMessage {
                 String prefix = i > 0 ? "..." : "";
                 String postfix = i < (comments.size() - 1) ? "..." : "";
                 String comment = prefix + comments.get(i) + postfix;
-                result.add(from(new CommentItem() {
+                result.add(from(context, new CommentItem() {
                     public String getId() {
                         return String.valueOf(comment.hashCode());
                     }
@@ -108,7 +111,7 @@ public class ChatItemMessage implements IMessage {
             return result;
         }
 
-        return Collections.singletonList(from(commentItem));
+        return Collections.singletonList(from(context, commentItem));
     }
 
     public static boolean shouldSplit(CommentItem commentItem) {
