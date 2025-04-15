@@ -11,6 +11,7 @@ import androidx.preference.DialogPreference;
 import com.bumptech.glide.Glide;
 import com.liskovsoft.mediaserviceinterfaces.data.CommentGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiver.Backup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiver.Callback;
@@ -184,6 +185,11 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
 
     private void syncMessage(MessagesListAdapter<ChatItemMessage> adapter, ChatItemMessage message) {
         adapter.update(message);
+
+        if ((mFocusedMessage == null || Helpers.equals(mFocusedMessage.getId(), message.getId())) && IMessage.checkMessage(message)) {
+            mFocusedMessage = message;
+            adapter.setFocusedMessage(message);
+        }
     }
 
     public void enableTransparent(boolean enable) {
