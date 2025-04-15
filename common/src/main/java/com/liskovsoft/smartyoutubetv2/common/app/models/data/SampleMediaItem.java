@@ -12,7 +12,7 @@ public final class SampleMediaItem implements MediaItem {
     private String mChannelId;
     private String mCardImageUrl;
     private String mParams;
-    private String mSecondTitle;
+    private CharSequence mSecondTitle;
     private String mContentType;
     private int mType;
     private String mVideoUrl;
@@ -164,7 +164,7 @@ public final class SampleMediaItem implements MediaItem {
     }
 
     @Override
-    public String getSecondTitle() {
+    public CharSequence getSecondTitle() {
         return mSecondTitle;
     }
 

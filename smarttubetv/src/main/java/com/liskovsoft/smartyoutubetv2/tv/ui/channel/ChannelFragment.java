@@ -55,7 +55,7 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
                     String title = mChannelPresenter.getChannel().getTitle();
                     String subs = mChannelPresenter.getChannel().subscriberCount;
 
-                    return YouTubeHelper.createInfo(Helpers.firstNonNull(author, title), subs);
+                    return Helpers.toString(YouTubeHelper.createInfo(Helpers.firstNonNull(author, title), subs));
                 }
             });
         }

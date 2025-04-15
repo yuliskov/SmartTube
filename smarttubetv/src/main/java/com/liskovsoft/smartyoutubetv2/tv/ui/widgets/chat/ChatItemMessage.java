@@ -41,7 +41,7 @@ public class ChatItemMessage implements IMessage {
         ChatItemMessage message = new ChatItemMessage();
         message.mId = commentItem.getId();
         if (commentItem.getMessage() != null && !commentItem.getMessage().trim().isEmpty()) {
-            String header = ServiceHelper.combineItems(
+            CharSequence header = ServiceHelper.combineItems(
                     " " + Video.TERTIARY_TEXT_DELIM + " ",
                     commentItem.getAuthorName(),
                     commentItem.getLikeCount() != null ? String.format("%s %s", commentItem.getLikeCount(), Helpers.THUMB_UP) : null,

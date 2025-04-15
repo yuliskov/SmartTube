@@ -6,6 +6,9 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import androidx.annotation.RequiresApi;
+
 import com.liskovsoft.leanbackassistant.R;
 import com.liskovsoft.leanbackassistant.media.Clip;
 import com.liskovsoft.leanbackassistant.media.Playlist;
@@ -14,7 +17,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import okhttp3.Response;
 
-@TargetApi(21)
+@RequiresApi(21)
 public class RecommendationsProvider {
     private static final String TAG = RecommendationsProvider.class.getSimpleName();
     private static final int MAX_RECOMMENDATIONS = 30;

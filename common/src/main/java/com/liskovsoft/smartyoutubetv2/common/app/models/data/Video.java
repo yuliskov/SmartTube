@@ -41,9 +41,9 @@ public final class Video {
     public int id;
     public String title;
     public String deArrowTitle;
-    public String secondTitle;
+    public CharSequence secondTitle;
     private String metadataTitle;
-    private String metadataSecondTitle;
+    private CharSequence metadataSecondTitle;
     public String description;
     public String category;
     public int itemType = -1;
@@ -291,7 +291,7 @@ public final class Video {
         return deArrowTitle != null ? deArrowTitle : title;
     }
 
-    public String getSecondTitle() {
+    public CharSequence getSecondTitle() {
         return secondTitle;
     }
 
@@ -299,7 +299,7 @@ public final class Video {
         return deArrowTitle != null ? deArrowTitle : metadataTitle != null ? metadataTitle : title;
     }
 
-    public String getPlayerSubtitle() {
+    public CharSequence getPlayerSubtitle() {
         // Don't sync future translation because of not precise info
         return metadataSecondTitle != null && !isUpcoming ? metadataSecondTitle : secondTitle;
     }
@@ -318,8 +318,8 @@ public final class Video {
         }
 
         String mainTitle = metadataTitle != null ? metadataTitle : title;
-        String subtitle = metadataSecondTitle != null ? metadataSecondTitle : secondTitle;
-        return hasVideo() ? extractAuthor(subtitle) : YouTubeHelper.createInfo(mainTitle, subtitle); // BAD idea
+        CharSequence subtitle = metadataSecondTitle != null ? metadataSecondTitle : secondTitle;
+        return hasVideo() ? extractAuthor(subtitle) : Helpers.toString(YouTubeHelper.createInfo(mainTitle, subtitle)); // BAD idea
     }
 
     public VideoGroup getGroup() {
@@ -332,6 +332,10 @@ public final class Video {
 
     public int getPositionInsideGroup() {
         return getGroup() != null && !getGroup().isEmpty() ? getGroup().getVideos().indexOf(this) : -1;
+    }
+
+    private static String extractAuthor(CharSequence secondTitle) {
+        return extractAuthor(Helpers.toString(secondTitle));
     }
 
     private static String extractAuthor(String secondTitle) {

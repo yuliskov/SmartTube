@@ -216,7 +216,7 @@ public final class Playlist {
             for (MediaItem v : videos) {
                 clips.add(new Clip(
                         v.getTitle(),
-                        v.getSecondTitle(),
+                        Helpers.toString(v.getSecondTitle()),
                         v.getDurationMs(),
                         v.getBackgroundImageUrl(),
                         v.getCardImageUrl(),
