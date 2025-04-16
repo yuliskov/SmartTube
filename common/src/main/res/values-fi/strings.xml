@@ -691,4 +691,5 @@
   <string name="my_videos">Omat videoni</string>
   <string name="player_audio_focus">Äänen tarkennus (tauko, jos muita soittimia havaitaan)</string>
   <string name="paid_content_notification">Maksullista sisältöä koskeva ilmoitus</string>
+  <string name="you_liked">Peukkua ylös</string>
 </resources>
