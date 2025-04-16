@@ -642,6 +642,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             return;
         }
 
+        if (AppDialogPresenter.instance(getContext()).isCommentsDialogShown()) {
+            repeatMode = PlayerEngineConstants.PLAYBACK_MODE_PAUSE;
+        }
+
         switch (repeatMode) {
             case PlayerEngineConstants.PLAYBACK_MODE_REVERSE_LIST:
                 if (video.hasPlaylist() || video.belongsToChannelUploads() || video.belongsToChannel()) {

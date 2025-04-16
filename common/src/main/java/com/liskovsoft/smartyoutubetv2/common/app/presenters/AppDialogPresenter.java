@@ -161,6 +161,10 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
                 getViewManager().isViewPending(AppDialogView.class);
     }
 
+    public boolean isCommentsDialogShown() {
+        return isDialogShown() && isTypeComments();
+    }
+
     public void appendCategory(OptionCategory category) {
         mCategories.add(category);
     }
@@ -255,5 +259,22 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         if (mTimeoutMs > 0) {
             mHandler.postDelayed(mCloseDialog, mTimeoutMs);
         }
+    }
+
+    private boolean isTypeComments() {
+        if (mBackupCategories == null) {
+            return false;
+        }
+
+        boolean isComments = false;
+
+        for (OptionCategory category : mBackupCategories) {
+            if (category.type == OptionCategory.TYPE_COMMENTS) {
+                isComments = true;
+                break;
+            }
+        }
+
+        return isComments;
     }
 }
