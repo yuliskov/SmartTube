@@ -241,9 +241,9 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> MediaServiceData.instance().enablePremiumFix(option.isSelected()),
                 MediaServiceData.instance().isPremiumFixEnabled()));
 
-        options.add(UiOptionItem.from("Unlock more subtitles",
-                option -> MediaServiceData.instance().unlockMoreSubtitles(option.isSelected()),
-                MediaServiceData.instance().isMoreSubtitlesUnlocked()));
+        //options.add(UiOptionItem.from("Unlock more subtitles",
+        //        option -> MediaServiceData.instance().unlockMoreSubtitles(option.isSelected()),
+        //        MediaServiceData.instance().isMoreSubtitlesUnlocked()));
 
         options.add(UiOptionItem.from("Playback buffering fix",
                 option -> {
