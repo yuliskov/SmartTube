@@ -140,6 +140,7 @@
     <string name="open_channel_uploads">Kanal-Videos öffnen</string>
     <string name="app_exit_shortcut">App beenden</string>
     <string name="player_exit_shortcut">Player beenden</string>
+    <string name="search_exit_shortcut">Suche beenden</string>
     <string name="app_exit_none">Nicht beenden</string>
     <string name="app_double_back_exit">2x Zurück-Taste</string>
     <string name="app_single_back_exit">1x Zurück-Taste</string>
@@ -677,7 +678,7 @@
     <string name="calm_msg">Wir arbeiten an der Lösung des Problems. Prüfen Sie gelegentlich, ob Updates verfügbar sind</string>
     <string name="without_picture">Ohne Bild</string>
     <string name="video_disabled">Video deaktiviert</string>
-    <string name="applying_fix">Player nicht schließen. Fix wird angewendet...</string>
+    <string name="applying_fix">Player nicht schließen. Fix wird angewendet…</string>
     <string name="hide_mixes">Mix-Wiedergabelisten ausblenden</string>
     <string name="player_global_focus_desc">Diese Funktion beeinflusst, welche Player-Schaltfläche den Fokus erhält, wenn Sie zwischen Player-Schaltflächenreihen navigieren</string>
     <string name="disable_network_error_fixing">Automatische Netzwerk-Fehlerbehebung deaktivieren</string>
@@ -695,4 +696,5 @@
     <string name="my_videos">Meine Videos</string>
     <string name="player_audio_focus">Audio-Fokus (Pause, wenn andere Player erkannt werden)</string>
     <string name="paid_content_notification">Benachrichtigung über bezahlte Inhalte</string>
+    <string name="you_liked">Mag ich</string>
 </resources>
