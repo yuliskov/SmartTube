@@ -693,4 +693,6 @@
   <string name="my_videos">Video của bạn</string>
   <string name="paid_content_notification">Thông báo nội dung trả tiền</string>
   <string name="context_menu_sorting">Sắp xếp danh mục</string>
+  <string name="you_liked">đã thích</string>
+  <string name="player_audio_focus">Lấy nét âm thanh (tạm dừng nếu trình phát khác đã phát hiện)</string>
 </resources>
