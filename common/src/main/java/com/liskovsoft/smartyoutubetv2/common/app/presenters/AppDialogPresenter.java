@@ -215,6 +215,12 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         mTimeoutMs = timeoutMs;
     }
 
+    public void setOnFinish(Runnable onFinish) {
+        if (!mOnFinish.contains(onFinish)) {
+            mOnFinish.add(onFinish);
+        }
+    }
+
     public void enableTransparent(boolean enable) {
         mIsTransparent = enable;
     }

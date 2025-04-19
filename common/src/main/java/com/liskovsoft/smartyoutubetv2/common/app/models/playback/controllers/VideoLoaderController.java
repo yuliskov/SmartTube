@@ -642,8 +642,14 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             return;
         }
 
-        if (AppDialogPresenter.instance(getContext()).isCommentsDialogShown() && repeatMode != PlayerEngineConstants.PLAYBACK_MODE_ONE) {
-            repeatMode = PlayerEngineConstants.PLAYBACK_MODE_PAUSE;
+        // Stop the playback if the user is browsing options or reading comments
+        if (getAppDialogPresenter().isDialogShown() && !getAppDialogPresenter().isOverlay()) {
+            getAppDialogPresenter().setOnFinish(() -> {
+                if (getPlayer() != null && getPlayer().getPositionMs() >= getPlayer().getDurationMs()) {
+                    applyRepeatMode(repeatMode);
+                }
+            });
+            return;
         }
 
         switch (repeatMode) {
@@ -668,7 +674,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                 if (mPlaylist.getNext() != null) {
                     loadNext();
                 } else {
-                    AppDialogPresenter dialog = AppDialogPresenter.instance(getContext());
+                    AppDialogPresenter dialog = getAppDialogPresenter();
                     if (!getPlayer().isSuggestionsShown() && (!dialog.isDialogShown() || dialog.isOverlay())) {
                         dialog.closeDialog();
                         getPlayer().finishReally();
