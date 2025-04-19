@@ -136,7 +136,7 @@
   <string name="player_show_ending_time">종료 시간 표시</string>
   <string name="open_channel_uploads">채널 업로드 열기</string>
   <string name="app_exit_shortcut">앱 종료</string>
-  <string name="player_exit_shortcut">플레이어에서 나가기</string>
+  <string name="player_exit_shortcut">플레이어 나가기</string>
   <string name="app_exit_none">종료하지 않기</string>
   <string name="app_double_back_exit">뒤로 버튼 두번</string>
   <string name="app_single_back_exit">뒤로 버튼 한번</string>
@@ -691,4 +691,10 @@
   <string name="import_subscriptions_group">가져오기</string>
   <string name="lb_playback_controls_closed_captioning_disable">폐쇄 자막 넣기 비활성화</string>
   <string name="lb_playback_controls_closed_captioning_enable">폐쇄 자막 넣기 활성화</string>
+  <string name="search_exit_shortcut">검색 나가기</string>
+  <string name="video_flip">뒤집기 (미러)</string>
+  <string name="my_videos">내 동영상</string>
+  <string name="player_audio_focus">오디오 포커스 (다른 플레이어가 감지되면 일시 중지)</string>
+  <string name="paid_content_notification">유료 콘텐츠 알림</string>
+  <string name="you_liked">좋아요</string>
 </resources>
