@@ -73,6 +73,11 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             Utils.restartTheApp(getContext(), mLastVideo.videoId);
         }
     };
+    private final Runnable mOnApplyRepeat = () -> {
+        if (getPlayer() != null && getPlayer().getPositionMs() >= getPlayer().getDurationMs()) {
+            applyRepeatMode(getRepeatMode());
+        }
+    };
     private Pair<Integer, Long> mBufferingCount;
 
     public VideoLoaderController() {
@@ -213,16 +218,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     @Override
     public void onPlayEnd() {
-        int repeatMode = getPlayerData().getRepeatMode();
-
-        Video video = getPlayer().getVideo();
-        if (video != null && video.finishOnEnded) {
-            repeatMode = PlayerEngineConstants.PLAYBACK_MODE_CLOSE;
-        } else if (video != null && video.belongsToShortsGroup() && getPlayerTweaksData().isLoopShortsEnabled()) {
-            repeatMode = PlayerEngineConstants.PLAYBACK_MODE_ONE;
-        }
-
-        applyRepeatMode(repeatMode);
+        applyRepeatMode(getRepeatMode());
     }
 
     @Override
@@ -644,11 +640,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
         // Stop the playback if the user is browsing options or reading comments
         if (getAppDialogPresenter().isDialogShown() && !getAppDialogPresenter().isOverlay()) {
-            getAppDialogPresenter().setOnFinish(() -> {
-                if (getPlayer() != null && getPlayer().getPositionMs() >= getPlayer().getDurationMs()) {
-                    applyRepeatMode(repeatMode);
-                }
-            });
+            getAppDialogPresenter().setOnFinish(mOnApplyRepeat);
             return;
         }
 
@@ -884,5 +876,17 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
         int fasterDataSource = getFasterDataSource();
         return getPlayerTweaksData().getPlayerDataSource() == fasterDataSource;
+    }
+
+    private int getRepeatMode() {
+        int repeatMode = getPlayerData().getRepeatMode();
+
+        Video video = getPlayer().getVideo();
+        if (video != null && video.finishOnEnded) {
+            repeatMode = PlayerEngineConstants.PLAYBACK_MODE_CLOSE;
+        } else if (video != null && video.belongsToShortsGroup() && getPlayerTweaksData().isLoopShortsEnabled()) {
+            repeatMode = PlayerEngineConstants.PLAYBACK_MODE_ONE;
+        }
+        return repeatMode;
     }
 }
