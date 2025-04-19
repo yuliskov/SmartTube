@@ -18,7 +18,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerContr
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -104,7 +103,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
 
     @Override
     public void onPlayEnd() {
-        switch (PlayerData.instance(getContext()).getRepeatMode()) {
+        switch (getPlayerData().getPlaybackMode()) {
             case PlayerEngineConstants.PLAYBACK_MODE_CLOSE:
             case PlayerEngineConstants.PLAYBACK_MODE_PAUSE:
             case PlayerEngineConstants.PLAYBACK_MODE_ALL:
@@ -478,9 +477,9 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                 break;
             case Command.TYPE_VOICE:
                 if (command.isVoiceStarted()) {
-                    SearchPresenter.instance(getContext()).startVoice();
+                    getSearchPresenter().startVoice();
                 } else {
-                    SearchPresenter.instance(getContext()).forceFinish();
+                    getSearchPresenter().forceFinish();
                 }
                 break;
         }
@@ -498,7 +497,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
             postStartPlaying(mVideo, getPlayer().isPlaying());
         } else if (newVideo != null) {
             newVideo.isRemote = true;
-            PlaybackPresenter.instance(getContext()).openVideo(newVideo);
+            getPlaybackPresenter().openVideo(newVideo);
         }
     }
 

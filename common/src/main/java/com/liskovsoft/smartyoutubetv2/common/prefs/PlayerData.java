@@ -71,7 +71,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     private String mAudioLanguage;
     private String mSubtitleLanguage;
     private boolean mIsAllSpeedEnabled;
-    private int mRepeatMode;
+    private int mPlaybackMode;
     private boolean mIsSonyTimerFixEnabled;
     private boolean mIsQualityInfoEnabled;
     private boolean mIsSpeedPerVideoEnabled;
@@ -248,13 +248,13 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         return mBackgroundMode;
     }
 
-    public void setRepeatMode(int mode) {
-        mRepeatMode = mode;
+    public void setPlaybackMode(int mode) {
+        mPlaybackMode = mode;
         persistState();
     }
 
-    public int getRepeatMode() {
-        return mRepeatMode;
+    public int getPlaybackMode() {
+        return mPlaybackMode;
     }
 
     public boolean isAllSpeedEnabled() {
@@ -828,7 +828,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
         mVideoRotation = Helpers.parseInt(split, 49, 0);
         mVideoZoom = Helpers.parseInt(split, 50, -1);
-        mRepeatMode = Helpers.parseInt(split, 51, PlayerEngineConstants.PLAYBACK_MODE_ALL);
+        mPlaybackMode = Helpers.parseInt(split, 51, PlayerEngineConstants.PLAYBACK_MODE_ALL);
         mAudioLanguage = Helpers.parseStr(split, 52, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
         mSubtitleLanguage = Helpers.parseStr(split, 53, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
         //String enabledSubtitles = Helpers.parseStr(split, 54);
@@ -865,7 +865,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
                 mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mVideoRotation,
-                mVideoZoom, mRepeatMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
+                mVideoZoom, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages, mIsVideoFlipEnabled
         ));
 

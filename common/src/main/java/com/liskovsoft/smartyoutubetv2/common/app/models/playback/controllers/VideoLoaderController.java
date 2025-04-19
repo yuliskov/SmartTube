@@ -73,9 +73,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             Utils.restartTheApp(getContext(), mLastVideo.videoId);
         }
     };
-    private final Runnable mOnApplyRepeat = () -> {
+    private final Runnable mOnApplyPlaybackMode = () -> {
         if (getPlayer() != null && getPlayer().getPositionMs() >= getPlayer().getDurationMs()) {
-            applyRepeatMode(getRepeatMode());
+            applyPlaybackMode(getPlaybackMode());
         }
     };
     private Pair<Integer, Long> mBufferingCount;
@@ -144,7 +144,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     @Override
     public void onEngineInitialized() {
         loadVideo(mLastVideo);
-        getPlayer().setButtonState(R.id.action_repeat, getPlayerData().getRepeatMode());
+        getPlayer().setButtonState(R.id.action_repeat, getPlayerData().getPlaybackMode());
         mSleepTimerStartMs = System.currentTimeMillis();
     }
 
@@ -165,7 +165,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     public void onVideoLoaded(Video video) {
         mLastErrorType = -1;
         Utils.removeCallbacks(mOnLongBuffering);
-        getPlayer().setButtonState(R.id.action_repeat, video.finishOnEnded ? PlayerEngineConstants.PLAYBACK_MODE_CLOSE : getPlayerData().getRepeatMode());
+        getPlayer().setButtonState(R.id.action_repeat, video.finishOnEnded ? PlayerEngineConstants.PLAYBACK_MODE_CLOSE : getPlayerData().getPlaybackMode());
     }
 
     @Override
@@ -218,7 +218,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     @Override
     public void onPlayEnd() {
-        applyRepeatMode(getRepeatMode());
+        applyPlaybackMode(getPlaybackMode());
     }
 
     @Override
@@ -631,7 +631,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         return urlList;
     }
 
-    private void applyRepeatMode(int repeatMode) {
+    private void applyPlaybackMode(int playbackMode) {
         Video video = getPlayer().getVideo();
         // Fix simultaneous videos loading (e.g. when playback ends and user opens new video)
         if (isActionsRunning() || video == null) {
@@ -640,11 +640,11 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
         // Stop the playback if the user is browsing options or reading comments
         if (getAppDialogPresenter().isDialogShown() && !getAppDialogPresenter().isOverlay()) {
-            getAppDialogPresenter().setOnFinish(mOnApplyRepeat);
+            getAppDialogPresenter().setOnFinish(mOnApplyPlaybackMode);
             return;
         }
 
-        switch (repeatMode) {
+        switch (playbackMode) {
             case PlayerEngineConstants.PLAYBACK_MODE_REVERSE_LIST:
                 if (video.hasPlaylist() || video.belongsToChannelUploads() || video.belongsToChannel()) {
                     VideoGroup group = video.getGroup();
@@ -703,7 +703,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                 }
                 break;
             default:
-                Log.e(TAG, "Undetected repeat mode " + repeatMode);
+                Log.e(TAG, "Undetected repeat mode " + playbackMode);
                 break;
         }
     }
@@ -787,7 +787,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             return;
         }
 
-        if (getPlayerData().getRepeatMode() == PlayerEngineConstants.PLAYBACK_MODE_SHUFFLE) {
+        if (getPlayerData().getPlaybackMode() == PlayerEngineConstants.PLAYBACK_MODE_SHUFFLE) {
             Video video = new Video();
             video.playlistId = mLastVideo.playlistId;
             VideoGroup topRow = getPlayer().getSuggestionsByIndex(0);
@@ -878,15 +878,15 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         return getPlayerTweaksData().getPlayerDataSource() == fasterDataSource;
     }
 
-    private int getRepeatMode() {
-        int repeatMode = getPlayerData().getRepeatMode();
+    private int getPlaybackMode() {
+        int playbackMode = getPlayerData().getPlaybackMode();
 
         Video video = getPlayer().getVideo();
         if (video != null && video.finishOnEnded) {
-            repeatMode = PlayerEngineConstants.PLAYBACK_MODE_CLOSE;
+            playbackMode = PlayerEngineConstants.PLAYBACK_MODE_CLOSE;
         } else if (video != null && video.belongsToShortsGroup() && getPlayerTweaksData().isLoopShortsEnabled()) {
-            repeatMode = PlayerEngineConstants.PLAYBACK_MODE_ONE;
+            playbackMode = PlayerEngineConstants.PLAYBACK_MODE_ONE;
         }
-        return repeatMode;
+        return playbackMode;
     }
 }

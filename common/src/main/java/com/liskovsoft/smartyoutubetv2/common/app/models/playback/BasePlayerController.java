@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.Player
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
@@ -377,5 +378,13 @@ public abstract class BasePlayerController implements PlayerEventListener {
 
     protected MediaItemService getMediaItemService() {
         return YouTubeServiceManager.instance().getMediaItemService();
+    }
+
+    protected SearchPresenter getSearchPresenter() {
+        return SearchPresenter.instance(getContext());
+    }
+
+    protected PlaybackPresenter getPlaybackPresenter() {
+        return PlaybackPresenter.instance(getContext());
     }
 }

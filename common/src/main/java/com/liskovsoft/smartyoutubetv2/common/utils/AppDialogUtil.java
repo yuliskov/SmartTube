@@ -792,10 +792,10 @@ public class AppDialogUtil {
         }) {
             options.add(UiOptionItem.from(context.getString(pair[0]),
                     optionItem -> {
-                        playerData.setRepeatMode(pair[1]);
+                        playerData.setPlaybackMode(pair[1]);
                         onModeSelected.run();
                     },
-                    playerData.getRepeatMode() == pair[1]
+                    playerData.getPlaybackMode() == pair[1]
             ));
         }
 
