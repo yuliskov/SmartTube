@@ -140,6 +140,7 @@
     <string name="open_channel_uploads">Otevřít videa kanálu</string>
     <string name="app_exit_shortcut">Ukončit aplikaci</string>
     <string name="player_exit_shortcut">Ukončit z přehrávače</string>
+    <string name="search_exit_shortcut">Ukončit z vyhledávání</string>
     <string name="app_exit_none">Neukončovat</string>
     <string name="app_double_back_exit">2x tlačítko Zpět</string>
     <string name="app_single_back_exit">1x tlačítko Zpět</string>
@@ -677,7 +678,7 @@
     <string name="calm_msg">Pracujeme na řešení problému. Zkontrolujte čas od času aktualizace.</string>
     <string name="without_picture">Bez obrazu</string>
     <string name="video_disabled">Video zakázáno</string>
-    <string name="applying_fix">Nezavírejte přehrávač. Aplikuje se oprava...</string>
+    <string name="applying_fix">Nezavírejte přehrávač. Aplikuje se oprava…</string>
     <string name="hide_mixes">Skrýt Mixy</string>
     <string name="player_global_focus_desc">Tato funkce ovlivňuje, které tlačítko přehrávače bude aktivní při procházení mezi řádky tlačítek přehrávače</string>
     <string name="disable_network_error_fixing">Zakázat automatickou opravu chyby sítě</string>
@@ -695,4 +696,5 @@
     <string name="my_videos">Moje videa</string>
     <string name="player_audio_focus">Audio fokus (pozastavit, pokud jsou detekovány jiné přehrávače)</string>
     <string name="paid_content_notification">Upozornění placeného obsahu</string>
+    <string name="you_liked">to se ti líbí</string>
 </resources>
