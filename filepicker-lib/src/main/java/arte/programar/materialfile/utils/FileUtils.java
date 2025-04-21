@@ -56,9 +56,16 @@ public class FileUtils {
         return false;
     }
 
+    @Nullable
     public static File getFile(Context context, String path) {
+        File filesDir = ContextCompat.getExternalFilesDirs(context, null)[0];
+
+        if (filesDir == null) { // storage device is unavailable
+            return null;
+        }
+
         String npath = path == null ? "" : path;
-        String absolutePath = ContextCompat.getExternalFilesDirs(context, null)[0].getPath();
+        String absolutePath = filesDir.getPath();
         if (absolutePath.contains("/Android/data")) {
             int index = absolutePath.indexOf("/Android/data");
             String storage = absolutePath.substring(0, index).concat(npath.length() > 0 ? FILE_PATH_SEPARATOR : "");
