@@ -27,8 +27,9 @@ import java.util.List;
 
 public class AutoFrameRateController extends BasePlayerController implements AutoFrameRateListener {
     private static final String TAG = AutoFrameRateController.class.getSimpleName();
+    private static final long AUTO_FRAME_RATE_DELAY_MS = 500;
     private static final int AUTO_FRAME_RATE_ID = 21;
-    private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
+    private static final int AUTO_FRAME_RATE_VIDEO_PAUSE_ID = 22;
     private static final int AUTO_FRAME_RATE_MODES_ID = 23;
     private static final long SHORTS_DURATION_MIN_MS = 30 * 1_000;
     private static final long SHORTS_DURATION_MAX_MS = 61 * 1_000;
@@ -159,7 +160,7 @@ public class AutoFrameRateController extends BasePlayerController implements Aut
      * Sometimes AFR is not working on activity startup. Trying to fix with delay.
      */
     private void applyAfrDelayed() {
-        Utils.postDelayed(mApplyAfr, 500);
+        Utils.postDelayed(mApplyAfr, AUTO_FRAME_RATE_DELAY_MS);
     }
 
     public void applyAfr() {
@@ -336,7 +337,7 @@ public class AutoFrameRateController extends BasePlayerController implements Aut
                     pauseMs == playerData.getAfrPauseMs()));
         }
 
-        return OptionCategory.from(AUTO_FRAME_RATE_DELAY_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
+        return OptionCategory.from(AUTO_FRAME_RATE_VIDEO_PAUSE_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
     public static OptionCategory createAutoFrameRateModesCategory(Context context) {
