@@ -61,24 +61,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     protected void appendTogglePinVideoToSidebarButton() {
-        appendTogglePinPlaylistButton();
         appendTogglePinChannelButton();
-    }
-
-    private void appendTogglePinPlaylistButton() {
-        if (!mIsPinToSidebarEnabled) {
-            return;
-        }
-
-        Video original = getVideo();
-
-        if (original == null || !original.hasPlaylist()) {
-            return;
-        }
-
-        getDialogPresenter().appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.pin_playlist),
-                        optionItem -> togglePinToSidebar(createPinnedPlaylist(original))));
     }
 
     private void appendTogglePinChannelButton() {
