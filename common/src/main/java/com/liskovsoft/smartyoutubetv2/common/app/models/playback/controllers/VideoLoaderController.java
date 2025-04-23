@@ -507,12 +507,8 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // "Response code: 404" (not sure whether below helps)
             // "Response code: 503" (not sure whether below helps)
             // "Response code: 400" (not sure whether below helps)
-            if (!isFasterDataSourceEnabled()) {
-                enableFasterDataSource();
-            } else {
-                YouTubeServiceManager.instance().applyNoPlaybackFix();
-                restartEngine = false;
-            }
+            YouTubeServiceManager.instance().applyNoPlaybackFix();
+            restartEngine = false;
         } else if (Helpers.startsWithAny(message, "Response code: 429", "Response code: 400")) {
             YouTubeServiceManager.instance().applyAntiBotFix();
             getPlayerTweaksData().enablePersistentAntiBotFix(true);
