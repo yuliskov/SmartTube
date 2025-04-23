@@ -144,6 +144,10 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
         return mCurrentFragment;
     }
 
+    public void cleanup() {
+        mCurrentFragment = null;
+    }
+
     public int getCurrentFragmentItemIndex() {
         if (mCurrentFragment instanceof VideoSection) {
             return ((VideoSection) mCurrentFragment).getPosition();

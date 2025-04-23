@@ -282,9 +282,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void replaceMainFragment(Fragment fragment) {
-        Object currentFragment = Helpers.getField(this,"mMainFragment");
+        //Object mainFragment = Helpers.getField(this,"mMainFragment");
+        Fragment mainFragment = getMainFragment();
 
-        if (currentFragment != null && fragment != null && currentFragment != fragment) {
+        if (mainFragment != null && fragment != null && mainFragment != fragment) {
             Helpers.setField(this, "mMainFragment", fragment);
 
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
@@ -419,11 +420,16 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         }
     }
 
+    /**
+     * Restore after the error fragment
+     */
     private void restoreMainFragment() {
-        Fragment currentFragment = mSectionFragmentFactory.getCurrentFragment();
+        if (getMainFragment() instanceof ErrorDialogFragment) {
+            Fragment currentFragment = mSectionFragmentFactory.getCurrentFragment();
 
-        if (currentFragment != null) {
-            replaceMainFragment(currentFragment);
+            if (currentFragment != null) {
+                replaceMainFragment(currentFragment);
+            }
         }
     }
 
@@ -456,6 +462,13 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public void clearSection(BrowseSection section) {
         mSectionFragmentFactory.clearCurrentFragment();
+    }
+
+    @Override
+    public void onDestroyView() {
+        mSectionFragmentFactory.cleanup();
+
+        super.onDestroyView();
     }
 
     @Override
