@@ -61,42 +61,24 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     protected void appendTogglePinVideoToSidebarButton() {
-        appendTogglePinPlaylistButton();
-        appendTogglePinChannelButton();
-    }
-
-    private void appendTogglePinPlaylistButton() {
         if (!mIsPinToSidebarEnabled) {
             return;
         }
 
         Video original = getVideo();
 
-        if (original == null || !original.hasPlaylist()) {
+        if (original == null || (!original.hasPlaylist() && !original.hasVideo() && !original.hasReloadPageKey() && !original.hasChannel())) {
             return;
         }
 
-        getDialogPresenter().appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.pin_playlist),
-                        optionItem -> togglePinToSidebar(createPinnedPlaylist(original))));
-    }
-
-    private void appendTogglePinChannelButton() {
-        if (!mIsPinToSidebarEnabled) {
-            return;
-        }
-
-        Video original = getVideo();
-
-        if (original == null || (!original.hasVideo() && !original.hasReloadPageKey() && !original.hasChannel())) {
-            return;
-        }
-
+        boolean isPlaylist = original.hasPlaylist() || original.isPlaylistAsChannel() || (original.hasNestedItems() && original.belongsToUserPlaylists());
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(original.isPlaylistAsChannel() || (original.hasNestedItems() && original.belongsToUserPlaylists()) ? R.string.pin_playlist : R.string.pin_channel),
+                        getContext().getString(isPlaylist ? R.string.pin_playlist : R.string.pin_channel),
                         optionItem -> {
-                            if (original.hasVideo()) {
+                            if (original.hasPlaylist()) {
+                                togglePinToSidebar(createPinnedPlaylist(original));
+                            } else if (original.hasVideo()) {
                                 MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
 
                                 mServiceManager.loadMetadata(
@@ -113,7 +95,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                         }));
     }
     
-    protected void togglePinToSidebar(Video section) {
+    private void togglePinToSidebar(Video section) {
         BrowsePresenter presenter = BrowsePresenter.instance(getContext());
 
         // Toggle between pin/unpin while dialog is opened
