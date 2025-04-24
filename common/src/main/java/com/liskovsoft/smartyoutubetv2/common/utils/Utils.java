@@ -493,11 +493,19 @@ public class Utils {
     }
 
     public static void postDelayed(Runnable callback, long delayMs) {
+        if (callback == null) {
+            return;
+        }
+
         sHandler.removeCallbacks(callback);
         sHandler.postDelayed(callback, delayMs);
     }
 
     public static void post(Runnable callback) {
+        if (callback == null) {
+            return;
+        }
+
         sHandler.removeCallbacks(callback);
         sHandler.post(callback);
     }
@@ -508,7 +516,9 @@ public class Utils {
         }
 
         for (Runnable callback : callbacks) {
-             sHandler.removeCallbacks(callback);
+            if (callback != null) {
+                sHandler.removeCallbacks(callback);
+            }
         }
     }
 

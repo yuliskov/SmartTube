@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.Section;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsSection;
@@ -27,6 +28,7 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
     private int mFragmentType = BrowseSection.TYPE_GRID;
     private int mSelectedItemIndex = -1;
     private Video mSelectedItem;
+    private Runnable mRunListeners;
 
     public interface OnSectionSelectedListener {
         void onSectionSelected(Row row);
@@ -82,11 +84,8 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
         if (fragment != null) {
             mCurrentFragment = fragment;
 
-            // give a chance to clear pending updates
-            if (mSectionSelectedListener != null) {
-                mSectionSelectedListener.onSectionSelected(row);
-            }
-            
+            runListeners(row);
+
             setCurrentFragmentItemIndex(mSelectedItemIndex);
             selectCurrentFragmentItem(mSelectedItem);
 
@@ -146,6 +145,7 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
 
     public void cleanup() {
         mCurrentFragment = null;
+        mRunListeners = null;
     }
 
     public int getCurrentFragmentItemIndex() {
@@ -198,5 +198,19 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
         } else {
             Log.e(TAG, "clearFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
         }
+    }
+
+    private void runListeners(Row row) {
+        Utils.removeCallbacks(mRunListeners);
+
+        // give a chance to clear pending updates
+        mRunListeners = () -> {
+            if (mSectionSelectedListener != null) {
+                mSectionSelectedListener.onSectionSelected(row);
+            }
+        };
+
+        // Wait till the main fragment changed
+        Utils.postDelayed(mRunListeners, 100);
     }
 }

@@ -424,12 +424,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
      * Restore after the error fragment
      */
     private void restoreMainFragment() {
-        if (getMainFragment() instanceof ErrorDialogFragment) {
-            Fragment currentFragment = mSectionFragmentFactory.getCurrentFragment();
+        Fragment currentFragment = mSectionFragmentFactory.getCurrentFragment();
 
-            if (currentFragment != null) {
-                replaceMainFragment(currentFragment);
-            }
+        if (currentFragment != null) {
+            replaceMainFragment(currentFragment);
         }
     }
 
