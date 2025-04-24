@@ -495,14 +495,14 @@ public class MediaServiceManager implements OnAccountChange {
                     ChannelUploadsPresenter.instance(context).clear();
                 }
                 // NOTE: Crashes RecycleView IndexOutOfBoundsException when doing add immediately after clear
-                Utils.postDelayed(() -> ChannelUploadsPresenter.instance(context).update(firstGroup), 200);
+                Utils.postDelayed(() -> ChannelUploadsPresenter.instance(context).update(firstGroup), 100);
             } else if (type == MediaGroup.TYPE_CHANNEL) {
                 if (atomicIndex.incrementAndGet() == 1) {
                     ChannelPresenter.instance(context).clear();
                     ChannelPresenter.instance(context).setChannel(item);
                 }
                 // NOTE: Crashes RecycleView IndexOutOfBoundsException when doing add immediately after clear
-                Utils.postDelayed(() -> ChannelPresenter.instance(context).updateRows(groups), 200);
+                Utils.postDelayed(() -> ChannelPresenter.instance(context).updateRows(groups), 100);
             } else {
                 MessageHelpers.showMessage(context, "Unknown type of channel");
             }
