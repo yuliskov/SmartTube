@@ -796,7 +796,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             return false;
         }
 
-        String hdrTag = TrackSelectorUtil.isHdrCodec(format.codecs) ? "hdr" : "";
+        String hdrTag = TrackSelectorUtil.isHdrFormat(format.id) ? "hdr" : "";
 
         String formatId = format.width + format.height + format.frameRate + format.sampleMimeType + hdrTag + format.language;
 

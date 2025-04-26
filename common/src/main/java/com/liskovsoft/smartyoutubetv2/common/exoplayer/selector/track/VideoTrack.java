@@ -174,9 +174,9 @@ public class VideoTrack extends MediaTrack {
             result = 0;
         //} else if (sizeLessOrEquals(size2, size1) && fpsLessOrEquals(frameRate2, frameRate1) && bitrateLessOrEquals(bitrate2, bitrate1)) {
         } else if (sizeLessOrEquals(size2, size1) && fpsLessOrEquals(frameRate2, frameRate1)) { // NOTE: Removed bitrate check to fix shorts?
-            if (TrackSelectorUtil.isHdrCodec(codecs1) == TrackSelectorUtil.isHdrCodec(codecs2)) {
+            if (TrackSelectorUtil.isHdrFormat(id1) == TrackSelectorUtil.isHdrFormat(id2)) {
                 result = 1;
-            } else if (TrackSelectorUtil.isHdrCodec(codecs1)) {
+            } else if (TrackSelectorUtil.isHdrFormat(id1)) {
                 result = 1;
             }
         }
@@ -190,7 +190,7 @@ public class VideoTrack extends MediaTrack {
             return 0;
         }
 
-        if (!TrackSelectorUtil.isHdrCodec(codecs1) && TrackSelectorUtil.isHdrCodec(codecs2)) {
+        if (!TrackSelectorUtil.isHdrFormat(id1) && TrackSelectorUtil.isHdrFormat(id2)) {
             return -1;
         }
 
@@ -243,9 +243,9 @@ public class VideoTrack extends MediaTrack {
         int leftScore = 0;
         int rightScore = 0;
 
-        if (TrackSelectorUtil.isHdrCodec(codecs1) && !TrackSelectorUtil.isHdrCodec(codecs2)) {
+        if (TrackSelectorUtil.isHdrFormat(id1) && !TrackSelectorUtil.isHdrFormat(id2)) {
             leftScore += 3;
-        } else if (TrackSelectorUtil.isHdrCodec(codecs2) && !TrackSelectorUtil.isHdrCodec(codecs1)) {
+        } else if (TrackSelectorUtil.isHdrFormat(id2) && !TrackSelectorUtil.isHdrFormat(id1)) {
             rightScore += 3;
         }
 
