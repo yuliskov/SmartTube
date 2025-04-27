@@ -206,7 +206,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
 
             ListRow row = new ListRow(rowHeader, mediaGroupAdapter);
 
-            if (group.getPosition() == -1) {
+            if (group.getPosition() == -1 || group.getPosition() > mRowsAdapter.size()) {
                 mRowsAdapter.add(row);
             } else {
                 mRowsAdapter.add(group.getPosition(), row);
