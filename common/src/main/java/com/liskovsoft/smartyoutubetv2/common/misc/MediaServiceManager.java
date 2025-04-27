@@ -474,12 +474,6 @@ public class MediaServiceManager implements OnAccountChange {
 
         AtomicInteger atomicIndex = new AtomicInteger(0);
 
-        // Clear takes some time. Do not call it immediately before the add or you'll get an exception!
-        // IndexOutOfBoundsException: Invalid item position... GridLayoutManager.getViewForPosition
-        //if (ViewManager.instance(context).getTopView() == ChannelUploadsView.class) {
-        //    ChannelUploadsPresenter.instance(context).clear();
-        //}
-
         MediaServiceManager.instance().loadChannelRows(item, groups -> {
             LoadingManager.showLoading(context, false);
 

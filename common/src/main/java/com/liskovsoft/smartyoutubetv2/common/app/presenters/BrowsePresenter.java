@@ -658,17 +658,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         VideoGroup firstGroup = VideoGroup.from(section);
         firstGroup.setAction(VideoGroup.ACTION_REPLACE);
-        // Fix IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
-        Utils.postDelayed(() -> getView().updateSection(firstGroup), 100);
-        //getView().updateSection(firstGroup);
+        getView().updateSection(firstGroup);
 
         if (groups == null) {
             // No group. Maybe just clear.
             getView().showProgressBar(false);
             return;
         }
-
-        //restoreSelectedItems(); // Don't place anywhere else
 
         Disposable updateAction = groups
                 .subscribe(
@@ -721,8 +717,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             getView().showProgressBar(false);
             return;
         }
-
-        //restoreSelectedItems(); // Don't place anywhere else
 
         Disposable updateAction = group
                 .subscribe(
