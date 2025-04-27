@@ -312,7 +312,7 @@ public class TrackSelectorUtil {
     /**
      * Get the height in terms like it's understandable by the codec.
      */
-    public static int getTotalHeight(Format format) {
+    public static int getRealHeight(Format format) {
         if (format == null) {
             return -1;
         }
@@ -349,7 +349,7 @@ public class TrackSelectorUtil {
     }
 
     private static Pair<String, String> getResolutionPrefixAndHeight(Format format) {
-        int originHeight = getTotalHeight(format);
+        int originHeight = getRealHeight(format);
 
         if (originHeight == -1) {
             return null;

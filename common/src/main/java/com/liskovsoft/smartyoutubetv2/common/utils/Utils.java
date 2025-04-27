@@ -759,11 +759,11 @@ public class Utils {
     }
 
     public static boolean isFormatSupported(MediaTrack mediaTrack) {
-        if (mediaTrack.isVP9Codec() && !Helpers.isVP9ResolutionSupported(TrackSelectorUtil.getTotalHeight(mediaTrack.format))) {
+        if (mediaTrack.isVP9Codec() && !Helpers.isVP9ResolutionSupported(TrackSelectorUtil.getRealHeight(mediaTrack.format))) {
             return false;
         }
 
-        if (mediaTrack.isAV1Codec() && !Helpers.isAV1ResolutionSupported(TrackSelectorUtil.getTotalHeight(mediaTrack.format))) {
+        if (mediaTrack.isAV1Codec() && !Helpers.isAV1ResolutionSupported(TrackSelectorUtil.getRealHeight(mediaTrack.format))) {
             return false;
         }
 
