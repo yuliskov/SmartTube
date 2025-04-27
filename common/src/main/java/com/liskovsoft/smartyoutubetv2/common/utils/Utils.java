@@ -69,6 +69,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.WebBrowserPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
@@ -758,11 +759,11 @@ public class Utils {
     }
 
     public static boolean isFormatSupported(MediaTrack mediaTrack) {
-        if (mediaTrack.isVP9Codec() && !Helpers.isVP9ResolutionSupported(mediaTrack.getHeight())) {
+        if (mediaTrack.isVP9Codec() && !Helpers.isVP9ResolutionSupported(TrackSelectorUtil.getTotalHeight(mediaTrack.format))) {
             return false;
         }
 
-        if (mediaTrack.isAV1Codec() && !Helpers.isAV1ResolutionSupported(mediaTrack.getHeight())) {
+        if (mediaTrack.isAV1Codec() && !Helpers.isAV1ResolutionSupported(TrackSelectorUtil.getTotalHeight(mediaTrack.format))) {
             return false;
         }
 

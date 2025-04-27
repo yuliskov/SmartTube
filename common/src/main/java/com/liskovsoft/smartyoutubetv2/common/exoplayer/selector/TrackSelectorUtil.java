@@ -309,6 +309,31 @@ public class TrackSelectorUtil {
         return originHeight;
     }
 
+    /**
+     * Get the height in terms like it's understandable by the codec.
+     */
+    public static int getTotalHeight(Format format) {
+        if (format == null) {
+            return -1;
+        }
+
+        int height = format.height;
+        int width = format.width;
+
+        if (width == Format.NO_VALUE || height == Format.NO_VALUE) {
+            return -1;
+        }
+
+        // Make resolution calculation of the vertical videos more closer to the official app.
+        boolean isUltraWide = (float) width/height >= 2.1; // maybe 2.3???
+        int originHeight = isUltraWide ? getHeightByWidth(width) : getOriginHeight(Math.min(height, width));
+
+        // Ignore vertical videos completely. Only height matters.
+        //int originHeight = getOriginHeight(height);
+
+        return originHeight;
+    }
+
     private static String getResolutionPrefix(int originHeight) {
         String prefix = null;
 
@@ -324,23 +349,11 @@ public class TrackSelectorUtil {
     }
 
     private static Pair<String, String> getResolutionPrefixAndHeight(Format format) {
-        if (format == null) {
+        int originHeight = getTotalHeight(format);
+
+        if (originHeight == -1) {
             return null;
         }
-
-        int height = format.height;
-        int width = format.width;
-
-        if (width == Format.NO_VALUE || height == Format.NO_VALUE) {
-            return null;
-        }
-
-        // Make resolution calculation of the vertical videos more closer to the official app.
-        boolean isUltraWide = (float) width/height >= 2.1; // maybe 2.3???
-        int originHeight = isUltraWide ? getHeightByWidth(width) : getOriginHeight(Math.min(height, width));
-
-        // Ignore vertical videos completely. Only height matters.
-        //int originHeight = getOriginHeight(height);
 
         String prefix = getResolutionPrefix(originHeight);
 
