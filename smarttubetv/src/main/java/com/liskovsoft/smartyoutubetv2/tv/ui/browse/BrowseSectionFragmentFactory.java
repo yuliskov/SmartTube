@@ -28,7 +28,7 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
     private int mFragmentType = BrowseSection.TYPE_GRID;
     private int mSelectedItemIndex = -1;
     private Video mSelectedItem;
-    private Runnable mRunListeners;
+    private Runnable mOnSectionSelected;
 
     public interface OnSectionSelectedListener {
         void onSectionSelected(Row row);
@@ -144,8 +144,9 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
     }
 
     public void cleanup() {
+        Utils.removeCallbacks(mOnSectionSelected);
         mCurrentFragment = null;
-        mRunListeners = null;
+        mOnSectionSelected = null;
     }
 
     public int getCurrentFragmentItemIndex() {
@@ -201,16 +202,16 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
     }
 
     private void runListeners(Row row) {
-        Utils.removeCallbacks(mRunListeners);
+        Utils.removeCallbacks(mOnSectionSelected);
 
         // give a chance to clear pending updates
-        mRunListeners = () -> {
+        mOnSectionSelected = () -> {
             if (mSectionSelectedListener != null) {
                 mSectionSelectedListener.onSectionSelected(row);
             }
         };
 
         // Wait till the main fragment changed
-        Utils.postDelayed(mRunListeners, 100);
+        Utils.postDelayed(mOnSectionSelected, 100);
     }
 }
