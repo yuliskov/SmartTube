@@ -156,13 +156,7 @@ public class SuggestionsController extends BasePlayerController {
             return;
         }
 
-        loadMetadata(video, metadata -> {
-            if (video.isLive != metadata.isLive()) {
-                video.isLiveEnd = true;
-            }
-
-            syncCurrentVideo(metadata, video);
-        });
+        loadMetadata(video, metadata -> syncCurrentVideo(metadata, video));
     }
 
     private void continueGroup(VideoGroup group) {

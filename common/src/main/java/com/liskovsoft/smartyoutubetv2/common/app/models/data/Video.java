@@ -686,6 +686,10 @@ public final class Video {
             return;
         }
 
+        if (isLive && !metadata.isLive()) {
+            isLiveEnd = true;
+        }
+
         //// NOTE: Skip upcoming (no media) because default title more informative (e.g. has scheduled time).
         //// NOTE: Upcoming videos metadata wrongly reported as live
         //if (!isUpcoming) {
