@@ -323,6 +323,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                                if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument")) { // temporal fix
                                    YouTubeServiceManager.instance().applyNoPlaybackFix();
                                    reloadVideo();
+                               } else if (Helpers.containsAny(message, "is not defined")) {
+                                   YouTubeServiceManager.instance().invalidateCache();
+                                   reloadVideo();
                                } else {
                                    Log.e(TAG, "Probably no internet connection");
                                    scheduleReloadVideoTimer(1_000);
