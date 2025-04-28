@@ -17,9 +17,9 @@ public class TrackSelectorUtil {
     private static final String CODEC_PREFIX_VP09 = "vp09";
     private static final String CODEC_PREFIX_MP4A = "mp4a";
     private static final String CODEC_PREFIX_VORBIS = "vorbis";
-    //private static final String CODEC_PREFIX_VP9_HDR = "vp9.2";
-    //private static final String CODEC_SUFFIX_AV1_HDR = "10.0.110.09.18.09.0";
-    //private static final String CODEC_SUFFIX_AV1_HDR2 = "10.0.110.09.16.09.0";
+    private static final String CODEC_PREFIX_VP9_HDR = "vp9.2";
+    private static final String CODEC_SUFFIX_AV1_HDR = "10.0.110.09.18.09.0";
+    private static final String CODEC_SUFFIX_AV1_HDR2 = "10.0.110.09.16.09.0";
     private static final String CODEC_SHORT_AV1 = "av1";
     private static final String HDR_PROFILE_ENDING = "hdr";
     private static final String SEPARATOR = ", ";
@@ -81,7 +81,7 @@ public class TrackSelectorUtil {
             return "";
         }
 
-        return isHdrFormat(format.id) ? "HDR" : "";
+        return isHdrFormat(format) ? "HDR" : "";
     }
 
     private static String buildFPSString(Format format) {
@@ -121,15 +121,27 @@ public class TrackSelectorUtil {
         return String.format("<font color=\"%s\">%s</font>", color, input);
     }
 
-    //public static boolean isHdrCodec(String codec) {
-    //    if (codec == null) {
-    //        return false;
-    //    }
-    //
-    //    return codec.equals(CODEC_PREFIX_VP9_HDR) || Helpers.endsWithAny(codec, CODEC_SUFFIX_AV1_HDR, CODEC_SUFFIX_AV1_HDR2, HDR_PROFILE_ENDING);
-    //}
+    public static boolean isHdrFormat(Format format) {
+        if (format == null) {
+            return false;
+        }
 
-    public static boolean isHdrFormat(String id) {
+        return isHdrFormat(format.id, format.codecs);
+    }
+
+    public static boolean isHdrFormat(String id, String codecs) {
+        return id != null ? isHdrFormat(id) : isHdrCodec(codecs);
+    }
+
+    private static boolean isHdrCodec(String codec) {
+        if (codec == null) {
+            return false;
+        }
+
+        return codec.equals(CODEC_PREFIX_VP9_HDR) || Helpers.endsWithAny(codec, CODEC_SUFFIX_AV1_HDR, CODEC_SUFFIX_AV1_HDR2, HDR_PROFILE_ENDING);
+    }
+
+    private static boolean isHdrFormat(String id) {
         if (id == null) {
             return false;
         }
