@@ -210,6 +210,8 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
             // Fix: Invalid item position -1(-1). Item count:84 androidx.leanback.widget.VerticalGridView
             freeze(true);
 
+            Utils.removeCallbacks(mClearGrid);
+
             // Attempt to fix: IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
             if (getBrowseGrid() != null && getBrowseGrid().isComputingLayout()) {
                 Utils.postDelayed(mClearGrid, 100);
