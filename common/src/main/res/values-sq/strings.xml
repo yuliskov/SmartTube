@@ -131,9 +131,9 @@
   <string name="playlists_style">Stili i kategorisë të listës së luajtjes</string>
   <string name="playlists_style_grid">Rrjetë</string>
   <string name="playlists_style_rows">Rreshtat</string>
-  <string name="player_show_clock">Trego orën në shiritin e kontrollit</string>
-  <string name="player_show_remaining_time">Trego kohën e mbetur në shiritin e kontrollit</string>
-  <string name="player_show_ending_time">Trego orën e përfundimit në shiritin e kontrollit</string>
+  <string name="player_show_clock">Shfaq orën në shiritin e kontrollit</string>
+  <string name="player_show_remaining_time">Shfaq kohën e mbetur në shiritin e kontrollit</string>
+  <string name="player_show_ending_time">Shfaq orën e përfundimit në shiritin e kontrollit</string>
   <string name="open_channel_uploads">Hap ngarkimet e kanalit</string>
   <string name="app_exit_shortcut">Dil nga aplikacioni</string>
   <string name="player_exit_shortcut">Dil nga luajtësi</string>
@@ -204,7 +204,7 @@
   <string name="video_preset_disabled">Pa paracaktim</string>
   <string name="video_preset_enabled">Formati i videos së ardhshme do të vendoset sipas paracaktimit</string>
   <string name="player_sleep_timer">Kohëmatës për gjumë</string>
-  <string name="player_show_quality_info">Trego informacionin e cilësisë në shiritin e kontrollit</string>
+  <string name="player_show_quality_info">Shfaq informacionin e cilësisë në shiritin e kontrollit</string>
   <string name="player_remember_each_speed">Mbaj mend shpejtësinë e çdo videoje</string>
   <string name="player_remember_speed_none">Asnje</string>
   <string name="player_remember_speed_all">E njëjta në të gjitha videot</string>
@@ -218,8 +218,8 @@
   <string name="video_aspect">Përpjesëtimi</string>
   <string name="player_tweaks">Rregullimet për zhvilluesit</string>
   <string name="header_uploads">Ngarkimet</string>
-  <string name="player_show_global_clock">Trego gjithmonë orën në ekran</string>
-  <string name="player_show_global_ending_time">Trego gjithmonë kohën e përfundimit në ekran</string>
+  <string name="player_show_global_clock">Shfaq gjithmonë orën në ekran</string>
+  <string name="player_show_global_ending_time">Shfaq gjithmonë kohën e përfundimit në ekran</string>
   <string name="app_corner_clock">Kryefaqja: Ora në këndin e sipërm djathtas</string>
   <string name="player_corner_clock">Luajtësi: Ora në këndin e sipërm djathtas</string>
   <string name="player_corner_ending_time">Luajtësi: Koha e përfundimit në këndin e sipërm djathtas</string>
@@ -266,7 +266,7 @@
   <string name="skip_each_segment_once">Mos i kapërce përsëri pjesët</string>
   <string name="disable_ok_long_press">Çaktivizo shtypjen e gjatë të butonit OK</string>
   <string name="disable_ok_long_press_desc">I menduar për telekomandat me defekt ku butoni OK nuk punon siç duhet</string>
-  <string name="player_time_correction">Trego kohëzgjatjen bazuar në shpejtësinë</string>
+  <string name="player_time_correction">Shfaq kohëzgjatjen bazuar në shpejtësinë</string>
   <string name="sponsor_color_markers">Shënjuesit me ngjyra në shiritin e përparimit</string>
   <string name="refresh_section">Përditëso seksionin</string>
   <string name="option_disabled">Çaktivizuar</string>
@@ -584,7 +584,7 @@
   <string name="dialog_notification">Njoftohu për përditësimet me një dialog flluskë</string>
   <string name="mark_as_watched">Shëno si të shikuar</string>
   <string name="player_ui_animations">Aktivizo animacionet e ndërfaqes të luajtësit</string>
-  <string name="player_likes_count">Trego numrin e pëlqimeve/mospëlqimeve</string>
+  <string name="player_likes_count">Shfaq numrin e pëlqimeve/mospëlqimeve</string>
   <string name="sorting_alphabetically2">Sipas rendit alfabetik (pamje paraprake të shpejta dhe të animuara)</string>
   <string name="sorting_default">Paracaktuar (pamje paraprake të shpejta dhe të animuara)</string>
   <string name="content_block_exclude_channel">Përjashto këtë kanal nga SponsorBlock</string>
@@ -618,7 +618,7 @@
   <string name="multi_profiles">Përdor cilësime të veçanta për secilën llogari</string>
   <string name="protect_account_with_password">Mbro këtë llogari me një fjalëkalim</string>
   <string name="enter_account_password">Fut fjalëkalimin e llogarisë</string>
-  <string name="show_connect_messages">Trego mesazhet e lidhjes</string>
+  <string name="show_connect_messages">Shfaq mesazhet e lidhjes</string>
   <string name="prefer_avc_over_vp9_desc">KUJDES: maksimumi 1080p</string>
   <string name="play_next">Luaj më pas</string>
   <string name="hide_watched_from_subscriptions">Fshih videot e shikuara nga Abonimet</string>
@@ -651,7 +651,7 @@
   <string name="dearrow_not_submitted_thumbs">Burimi i miniaturave (nëse nuk ka paraqitje në DeArrow)</string>
   <string name="pitch_effect">Efekti i tonit</string>
   <string name="fullscreen_mode">Mënyra e ekranit të plotë (pa shirita të sistemit)</string>
-  <string name="player_only_mode">Trego vetëm luajtësin nëse videoja hapet jashtë aplikacionit</string>
+  <string name="player_only_mode">Shfaq vetëm luajtësin nëse videoja hapet jashtë aplikacionit</string>
   <string name="pinned_channel_rows">Paraqit kanalet e gozhduara si rreshta</string>
   <string name="prefer_ipv4">Parapëlqe DNS IPv4</string>
   <string name="prefer_ipv4_desc">Mund të zgjidhë situatat kur aplikacioni nuk punon fare.\nShënim: Mund të shkaktojë ngrirje dhe rënie (veçanërisht në pajisjet Android 8 ose Dune HD)</string>
@@ -694,4 +694,7 @@
   <string name="my_videos">Videot e mia</string>
   <string name="paid_content_notification">Njoftim për përmbajtje me pagesë</string>
   <string name="player_audio_focus">Përqendrimi i zërit (pezullo nëse zbulohen luajtës të tjerë)</string>
+  <string name="you_liked">E pëlqeve</string>
+  <string name="video_flip">Pasqyro</string>
+  <string name="search_exit_shortcut">Dil nga kërkimi</string>
 </resources>
