@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
@@ -42,6 +43,11 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
     private Video mSelectedItem;
     private float mVideoGridScale;
     private final Runnable mRestoreTask = this::restorePosition;
+    private final Runnable mClearGrid = () -> {
+        if (mGridAdapter != null) {
+            mGridAdapter.clear();
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -204,7 +210,12 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
             // Fix: Invalid item position -1(-1). Item count:84 androidx.leanback.widget.VerticalGridView
             freeze(true);
 
-            mGridAdapter.clear();
+            // Attempt to fix: IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
+            if (getBrowseGrid() != null && getBrowseGrid().isComputingLayout()) {
+                Utils.postDelayed(mClearGrid, 100);
+            } else {
+                mGridAdapter.clear();
+            }
         }
     }
 
