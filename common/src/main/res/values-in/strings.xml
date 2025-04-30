@@ -677,4 +677,7 @@
     <string name="player_audio_focus">Fokus audio (jeda jika pemutar lain terdeteksi)</string>
     <string name="paid_content_notification">Notifikasi konten berbayar</string>
     <string name="you_liked">Anda menyukai</string>
+    <string name="premium_users_only">Hanya untuk pengguna premium. Perbaikan untuk daftar format video yang tidak lengkap</string>
+    <string name="playback_buffering_fix">Perbaikan buffering pemutaran</string>
+    <string name="oculus_quest_fix">Perbaikan Oculus Quest</string>
 </resources>
