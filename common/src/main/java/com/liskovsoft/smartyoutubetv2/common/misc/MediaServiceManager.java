@@ -372,7 +372,7 @@ public class MediaServiceManager implements OnAccountChange {
     }
 
     public void updateHistory(Video video, long positionMs) {
-        if (video == null) {
+        if (video == null || RxHelper.isAnyActionRunning(mHistoryAction)) {
             return;
         }
 

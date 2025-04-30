@@ -279,19 +279,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     public void onFinish() {
-        //// Fix background play when playing trailers from NUM
-        //// On API > 23 onStop not immediately occurred after onPause
-        //if (getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_DEFAULT) {
-        //    if (Util.SDK_INT > 23) {
-        //        maybeReleasePlayer();
-        //    }
-        //
-        //    // Bug: history not updated on Android 6.0.1
-        //    // Remote control fix
-        //    // Assuming that user wants to close the player
-        //    // setVideo(null);
-        //}
-
         if (Util.SDK_INT > 23) {
             maybeReleasePlayer();
         }
@@ -381,27 +368,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        //if (AppDialogPresenter.instance(getContext()).isDialogShown() ||
-        //        isEngineBlocked()) {
-        //    Log.d(TAG, "releasePlayer: Playback activity is blocked. Exiting...");
-        //    return;
-        //}
-
-        //// Inside dialogs we could change engine settings on fly
-        //if (AppDialogPresenter.instance(getContext()).isDialogShown() ||
-        //        (getBackgroundMode() != PlayerEngine.BACKGROUND_MODE_DEFAULT && Utils.isHardScreenOff(getContext()))) {
-        //    Log.d(TAG, "releasePlayer: Engine release is blocked by dialog or the screen is off. Exiting...");
-        //    return;
-        //}
-        //
-        //// Ensure to continue playback in audio mode (activity should be blocked)
-        //if (getBackgroundMode() == PlayerEngine.BACKGROUND_MODE_SOUND &&
-        //        ViewManager.instance(getContext()).getBlockedTop() == PlaybackActivity.class &&
-        //        !isInPIPMode()) {
-        //    Log.d(TAG, "releasePlayer: Playback activity is blocked. Exiting...");
-        //    return;
-        //}
-
         releasePlayer();
     }
 
@@ -410,8 +376,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             Log.d(TAG, "releasePlayer: Start releasing player engine...");
             mPlaybackPresenter.onEngineReleased();
             destroyPlayerObjects();
-            // Improve memory usage??? Player may hangs on a second after close
-            //Runtime.getRuntime().gc();
         }
     }
 
@@ -1082,17 +1046,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         return mIsEngineBlocked;
     }
 
-    //@Override
-    //public void setBackgroundMode(int type) {
-    //    Log.d(TAG, "Setting engine block type to %s...", type);
-    //    mPlaybackMode = type;
-    //}
-    //
-    //@Override
-    //public int getBackgroundMode() {
-    //    return mPlaybackMode;
-    //}
-
     @Override
     public boolean isInPIPMode() {
         PlaybackActivity playbackActivity = (PlaybackActivity) getActivity();
@@ -1173,12 +1126,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     // End Engine Events
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        //mPlaybackPresenter.onViewDestroyed();
-    }
 
     @Override
     public void onDestroy() {

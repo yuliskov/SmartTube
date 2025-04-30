@@ -278,8 +278,6 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     @Override
     public void onViewDestroyed() {
         process(ViewEventListener::onViewDestroyed);
-        //mPlayer = null;
-        //mActivity = null;
     }
 
     @Override
