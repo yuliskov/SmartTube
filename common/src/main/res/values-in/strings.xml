@@ -27,6 +27,7 @@
     <string name="frame_rate_correction">Perbaiki fps:\n%s</string>
     <string name="category_background_playback">Pemutaran latar belakang</string>
     <string name="not_implemented">Tidak diimplementasikan</string>
+    <string name="not_supported_by_device">Perangkat tidak mendukung fitur ini</string>
     <string name="option_background_playback_off">Dimatikan</string>
     <string name="option_background_playback_pip">Gambar di dalam gambar</string>
     <string name="option_background_playback_only_audio">Hanya suara</string>
@@ -138,6 +139,7 @@
     <string name="open_channel_uploads">Buka upload channel</string>
     <string name="app_exit_shortcut">Keluar dari aplikasi</string>
     <string name="player_exit_shortcut">Keluar dari pemutar</string>
+    <string name="search_exit_shortcut">Keluar dari pencarian</string>
     <string name="app_exit_none">Jangan keluar</string>
     <string name="app_double_back_exit">Tekan BACK 2X </string>
     <string name="app_single_back_exit">Tekan BACK sekali</string>
@@ -293,6 +295,7 @@
     <string name="upload_date_last_hour">Jam terakhir</string>
     <string name="focus_on_search_results">Fokus otomatis pada hasil pencarian</string>
     <string name="context_menu">Menu konteks</string>
+    <string name="context_menu_sorting">Pengurutan menu konteks</string>
     <string name="add_remove_from_recent_playlist">Tambah/Hapus dari daftar putar terbaru</string>
     <string name="hide_settings_section">Sembunyikan bagian Pengaturan (berbahaya!)</string>    
     <string name="auto_frame_rate_sec">%s detik</string>
@@ -345,6 +348,7 @@
     <string name="hide_shorts_from_home">Sembunyikan vidio pendek dari Beranda</string>
     <string name="finish_on_disconnect">Menutup aplikasi setelah melepaskan ponsel/tablet</string>
     <string name="update_error">Pembaharuan error</string>
+    <string name="hide_shorts_from_search">Sembunyikan vidio pendek dari hasil pencarian</string>
     <string name="hide_shorts_from_history">Sembunyikan vidio pendek dari Riwayat</string>
     <string name="hide_shorts_from_trending">Sembunyikan vidio pendek dari Trending</string>
     <string name="disable_screensaver">Nonaktifkan screensaver</string>
@@ -518,6 +522,7 @@
     <string name="auto_frame_rate_modes">Mode yang didukung</string>
     <string name="hide_streams">Sembunyikan stream dari Langganan</string>
     <string name="video_rotate">Berputar</string>
+    <string name="video_flip">Balikkan (cermin)</string>
     <string name="trending_searches">Penelusuran yang sedang tren</string>
     <string name="video_duration_any">Apa saja</string>
     <string name="video_duration">Durasi</string>
@@ -569,7 +574,7 @@
     <string name="old_update_notifications">Tampilan lama dari notifikasi pembaruan</string>
     <string name="dialog_notification">Memberitahukan tentang pembaruan dengan dialog pop-up</string>
     <string name="mark_as_watched">Tandai sebagai telah ditonton</string>
-    <string name="player_ui_animations">Aktifkan animasi panel kontrol</string>
+    <string name="player_ui_animations">Mengaktifkan animasi UI pemutar</string>
     <string name="player_likes_count">Tampilkan jumlah suka/tidak suka</string>
     <string name="sorting_alphabetically2">Berdasarkan abjad (cepat, pratinjau animasi)</string>
     <string name="sorting_default">Standar (cepat, pratinjau animasi)</string>
@@ -653,7 +658,7 @@
     <string name="calm_msg">Kami sedang memperbaiki masalah ini. Periksa pembaruan dari waktu ke waktu</string>
     <string name="without_picture">Tanpa gambar</string>
     <string name="video_disabled">Vidio dinonaktifkan</string>
-    <string name="applying_fix">Jangan tutup pemutar. Menerapkan perbaikan...</string>
+    <string name="applying_fix">Jangan tutup pemutar. Menerapkan perbaikan…</string>
     <string name="hide_mixes">Sembunyikan Campuran</string>
     <string name="player_global_focus_desc">Fitur ini memengaruhi tombol pemutar mana yang akan menerima fokus ketika menavigasi di antara barisan tombol pemutar</string>
     <string name="disable_network_error_fixing">Menonaktifkan perbaikan kesalahan jaringan otomatis</string>
@@ -665,4 +670,14 @@
     <string name="screen_dimming_amount">Jumlah peredupan layar</string>
     <string name="screen_dimming_timeout">Batas waktu peredupan layar</string>
     <string name="playlists_rows">Tampilkan bagian Daftar Putar sebagai baris</string>
+    <string name="import_subscriptions_group">Impor</string>
+    <string name="lb_playback_controls_closed_captioning_disable">Nonaktifkan Teks Tertutup</string>
+    <string name="lb_playback_controls_closed_captioning_enable">Aktifkan Teks Tertutup</string>
+    <string name="my_videos">Vidio saya</string>
+    <string name="player_audio_focus">Fokus audio (jeda jika pemutar lain terdeteksi)</string>
+    <string name="paid_content_notification">Notifikasi konten berbayar</string>
+    <string name="you_liked">Anda menyukai</string>
+    <string name="premium_users_only">Hanya untuk pengguna premium. Perbaikan untuk daftar format video yang tidak lengkap</string>
+    <string name="playback_buffering_fix">Perbaikan buffering pemutaran</string>
+    <string name="oculus_quest_fix">Perbaikan Oculus Quest</string>
 </resources>
