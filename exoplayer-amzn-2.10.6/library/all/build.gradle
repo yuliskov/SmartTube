@@ -15,6 +15,12 @@ apply from: '../../constants.gradle'
 apply plugin: 'com.android.library'
 
 android {
+    // MOD: FIX warning: source value 7 is obsolete and will be removed in a future release
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     compileSdkVersion project.ext.compileSdkVersion
 
     defaultConfig {
