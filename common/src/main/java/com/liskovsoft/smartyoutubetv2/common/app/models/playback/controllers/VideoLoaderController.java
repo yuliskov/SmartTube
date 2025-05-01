@@ -315,12 +315,14 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                            error -> {
                                getPlayer().showProgressBar(false);
                                String message = error.getMessage();
+                               String className = error.getClass().getSimpleName();
                                Log.e(TAG, "loadFormatInfo error: %s", message);
                                if (!Helpers.containsAny(message, "fromNullable result is null")) {
-                                   MessageHelpers.showLongMessage(getContext(), message);
+                                   MessageHelpers.showLongMessage(getContext(), "%s: %s", className, message);
                                }
 
-                               if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument")) { // temporal fix
+                               if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument") || // temporal fix
+                                       Helpers.equalsAny(className, "PoTokenException")) {
                                    YouTubeServiceManager.instance().applyNoPlaybackFix();
                                    reloadVideo();
                                } else if (Helpers.containsAny(message, "is not defined")) {
