@@ -26,6 +26,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.disposables.Disposable;
 import java.util.List;
+import java.util.Locale;
 
 public class RemoteController extends BasePlayerController implements OnDataChange {
     private static final String TAG = RemoteController.class.getSimpleName();
@@ -289,7 +290,9 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                     if (subs != null) {
                         FormatItem selected = null;
                         for (FormatItem item : subs) {
-                            if (item.getLanguage() != null && item.getLanguage().toLowerCase().startsWith(langCode.toLowerCase())) {
+                            Locale languageLocale = new Locale(langCode);
+                            String currentLocale = languageLocale.getDisplayLanguage().toLowerCase();
+                            if (item.getLanguage() != null && item.getLanguage().toLowerCase().contains(currentLocale)) {
                                 selected = item;
                                 break;
                             }
