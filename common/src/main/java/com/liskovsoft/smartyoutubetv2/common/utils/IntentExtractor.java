@@ -232,6 +232,14 @@ public class IntentExtractor {
         return parseTimeStr(time);
     }
 
+    public static String extractAccountName(Intent intent) {
+        if (intent == null) {
+            return null;
+        }
+
+        return intent.getStringExtra("account_name");
+    }
+
     /**
      * Example: https://www.youtube.com/tv?voice={"youtubeAssistantRequest":{"query":"Russian YouTube","queryIntent":"CgxTZWFyY2hJbnRlbnQSFAoFcXVlcnkSCxoJCgdSdXNzaWFuEiYKCGRvY190eXBlEhoaGAoWWU9VVFVCRV9ET0NfVFlQRV9WSURFTw==","youtubeAssistantParams":{"personalDataParams":{"showPersonalData":false}},"enablePrefetchLogging":true},"updateYoutubeSettings":{"enableSafetyMode":false,"enablePersonalResults":false},"hasEntityBar":false}&command_id=CWGIYL6nN8Gi3AP_5Y6wAQ&launch=voice&vq=Russian%20YouTube
      */

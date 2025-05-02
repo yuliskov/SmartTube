@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
+import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.GlobalConstants;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -206,6 +207,22 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     private void initIntentChain() {
+        mIntentChain.add(intent -> {
+            String accountName = IntentExtractor.extractAccountName(intent);
+
+            if (accountName != null) {
+                List<Account> accounts = getSignInService().getAccounts();
+                for (Account account : accounts) {
+                    if (Helpers.equals(account.getName(), accountName)) {
+                        AccountSelectionPresenter.instance(getContext()).selectAccount(account);
+                        break;
+                    }
+                }
+            }
+
+            return false;
+        });
+
         mIntentChain.add(intent -> {
             String searchText = IntentExtractor.extractSearchText(intent);
 
