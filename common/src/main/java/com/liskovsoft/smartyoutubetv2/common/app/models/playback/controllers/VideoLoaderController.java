@@ -346,10 +346,13 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         mLastVideo.sync(formatInfo);
 
         // Fix stretched video for a couple milliseconds (before the onVideoSizeChanged gets called)
-        if (formatInfo.containsDashFormats() && getPlayerData().getAspectRatio() == PlayerData.ASPECT_RATIO_DEFAULT) {
+        if (formatInfo.containsDashFormats()) {
             MediaFormat format = formatInfo.getDashFormats().get(0);
-            if (format.getWidth() > 0 && format.getHeight() > 0) {
-                getPlayer().setAspectRatio((float) format.getWidth() / format.getHeight());
+            int width = format.getWidth();
+            int height = format.getHeight();
+            boolean isShorts = width < height;
+            if (width > 0 && height > 0 && (getPlayerData().getAspectRatio() == PlayerData.ASPECT_RATIO_DEFAULT || isShorts)) {
+                getPlayer().setAspectRatio((float) width / height);
             }
         }
 
