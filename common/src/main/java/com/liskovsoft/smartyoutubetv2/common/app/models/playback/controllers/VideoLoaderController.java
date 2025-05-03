@@ -137,7 +137,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             restartEngine();
         } else {
             YouTubeServiceManager.instance().applyAntiBotFix(); // bot check error?
-            getPlayerTweaksData().enablePersistentAntiBotFix(true);
             reloadVideo();
         }
     }
@@ -373,11 +372,11 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             if (formatInfo.isHistoryBroken()) {
                 // Sign in error (bot check error?)
                 YouTubeServiceManager.instance().applyNoPlaybackFix();
-                YouTubeServiceManager.instance().applyAntiBotFix();
-                getPlayerTweaksData().enablePersistentAntiBotFix(true);
+                //YouTubeServiceManager.instance().applyAntiBotFix();
+                scheduleRebootAppTimer(5_000);
+            } else {
+                scheduleNextVideoTimer(5_000);
             }
-
-            scheduleNextVideoTimer(5_000);
         } else if (formatInfo.containsDashVideoFormats() && acceptDashVideoFormats(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
@@ -532,7 +531,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             restartEngine = false;
         } else if (Helpers.startsWithAny(message, "Response code: 429", "Response code: 400")) {
             YouTubeServiceManager.instance().applyAntiBotFix();
-            getPlayerTweaksData().enablePersistentAntiBotFix(true);
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
             // NOTE: Fixing too many requests or network issues
@@ -542,7 +540,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
             // "Response code: 403" (url deciphered incorrectly)
             YouTubeServiceManager.instance().applyAntiBotFix();
-            getPlayerTweaksData().enablePersistentAntiBotFix(true);
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 500"

@@ -31,6 +31,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private final SearchData mSearchData;
     private final GeneralData mGeneralData;
     private final SidebarService mSidebarService;
+    private final MediaServiceData mMediaServiceData;
     private boolean mRestartApp;
 
     private PlayerSettingsPresenter(Context context) {
@@ -40,6 +41,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         mSearchData = SearchData.instance(context);
         mGeneralData = GeneralData.instance(context);
         mSidebarService = SidebarService.instance(context);
+        mMediaServiceData = MediaServiceData.instance();
     }
 
     public static PlayerSettingsPresenter instance(Context context) {
@@ -237,16 +239,16 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.premium_users_only),
-                option -> MediaServiceData.instance().enablePremiumFix(option.isSelected()),
-                MediaServiceData.instance().isPremiumFixEnabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.premium_users_only),
+        //        option -> mMediaServiceData.enablePremiumFix(option.isSelected()),
+        //        mMediaServiceData.isPremiumFixEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.playback_buffering_fix),
-                option -> {
-                    mPlayerTweaksData.enablePersistentAntiBotFix(option.isSelected());
-                    mRestartApp = true;
-                },
-                mPlayerTweaksData.isPersistentAntiBotFixEnabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.playback_buffering_fix),
+        //        option -> {
+        //            mPlayerTweaksData.enablePersistentAntiBotFix(option.isSelected());
+        //            mRestartApp = true;
+        //        },
+        //        mPlayerTweaksData.isPersistentAntiBotFixEnabled()));
 
         // Oculus Quest fix: back button not closing the activity
         options.add(UiOptionItem.from(getContext().getString(R.string.oculus_quest_fix),
