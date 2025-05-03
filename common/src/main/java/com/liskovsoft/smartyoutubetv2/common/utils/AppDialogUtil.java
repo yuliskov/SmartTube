@@ -21,7 +21,7 @@ import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -537,18 +537,18 @@ public class AppDialogUtil {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
-                {R.string.video_zoom_default, PlayerData.ZOOM_MODE_DEFAULT},
-                {R.string.video_zoom_fit_width, PlayerData.ZOOM_MODE_FIT_WIDTH},
-                {R.string.video_zoom_fit_height, PlayerData.ZOOM_MODE_FIT_HEIGHT},
-                {R.string.video_zoom_fit_both, PlayerData.ZOOM_MODE_FIT_BOTH},
-                {R.string.video_zoom_stretch, PlayerData.ZOOM_MODE_STRETCH}}) {
+                {R.string.video_zoom_default, PlayerData.RESIZE_MODE_DEFAULT},
+                {R.string.video_zoom_fit_width, PlayerData.RESIZE_MODE_FIT_WIDTH},
+                {R.string.video_zoom_fit_height, PlayerData.RESIZE_MODE_FIT_HEIGHT},
+                {R.string.video_zoom_fit_both, PlayerData.RESIZE_MODE_FIT_BOTH},
+                {R.string.video_zoom_stretch, PlayerData.RESIZE_MODE_STRETCH}}) {
             options.add(UiOptionItem.from(context.getString(pair[0]),
                     optionItem -> {
-                        playerData.setVideoZoomMode(pair[1]);
-                        playerData.setVideoZoom(-1);
+                        playerData.setResizeMode(pair[1]);
+                        playerData.setZoomPercents(-1);
                         onSelectZoomMode.run();
                     },
-                    playerData.getVideoZoomMode() == pair[1] && playerData.getVideoZoom() == -1));
+                    playerData.getResizeMode() == pair[1] && playerData.getZoomPercents() == -1));
         }
 
         // Zoom above 100% has centering problems with 2K-4K videos
@@ -562,11 +562,11 @@ public class AppDialogUtil {
             for (int zoomPercents : zoomRange) {
                 options.add(UiOptionItem.from(String.format("%s%%", zoomPercents),
                         optionItem -> {
-                            playerData.setVideoZoom(zoomPercents);
-                            playerData.setVideoZoomMode(PlayerData.ZOOM_MODE_DEFAULT);
+                            playerData.setZoomPercents(zoomPercents);
+                            playerData.setResizeMode(PlayerData.RESIZE_MODE_DEFAULT);
                             onSelectZoomMode.run();
                         },
-                        playerData.getVideoZoom() == zoomPercents));
+                        playerData.getZoomPercents() == zoomPercents));
             }
         }
 
@@ -594,9 +594,9 @@ public class AppDialogUtil {
         for (Entry<String, Float> entry: pairs.entrySet()) {
             options.add(UiOptionItem.from(entry.getKey(),
                     optionItem -> {
-                        playerData.setVideoAspectRatio(entry.getValue());
+                        playerData.setAspectRatio(entry.getValue());
                         onSelectAspectMode.run();
-                    }, Helpers.floatEquals(playerData.getVideoAspectRatio(), entry.getValue())));
+                    }, Helpers.floatEquals(playerData.getAspectRatio(), entry.getValue())));
         }
 
         String videoZoomTitle = context.getString(R.string.video_aspect);
@@ -610,9 +610,9 @@ public class AppDialogUtil {
         for (int angle : new int[] {0, 90, 180, 270}) {
             options.add(UiOptionItem.from(String.valueOf(angle),
                     optionItem -> {
-                        playerData.setVideoRotation(angle);
+                        playerData.setRotationAngle(angle);
                         onRotate.run();
-                    }, playerData.getVideoRotation() == angle));
+                    }, playerData.getRotationAngle() == angle));
         }
 
         String videoRotateTitle = context.getString(R.string.video_rotate);
@@ -782,13 +782,13 @@ public class AppDialogUtil {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
-                {R.string.repeat_mode_all, PlayerEngineConstants.PLAYBACK_MODE_ALL},
-                {R.string.repeat_mode_one, PlayerEngineConstants.PLAYBACK_MODE_ONE},
-                {R.string.repeat_mode_shuffle, PlayerEngineConstants.PLAYBACK_MODE_SHUFFLE},
-                {R.string.repeat_mode_pause_alt, PlayerEngineConstants.PLAYBACK_MODE_LIST},
-                {R.string.repeat_mode_reverse_list, PlayerEngineConstants.PLAYBACK_MODE_REVERSE_LIST},
-                {R.string.repeat_mode_pause, PlayerEngineConstants.PLAYBACK_MODE_PAUSE},
-                {R.string.repeat_mode_none, PlayerEngineConstants.PLAYBACK_MODE_CLOSE}
+                {R.string.repeat_mode_all, PlayerConstants.PLAYBACK_MODE_ALL},
+                {R.string.repeat_mode_one, PlayerConstants.PLAYBACK_MODE_ONE},
+                {R.string.repeat_mode_shuffle, PlayerConstants.PLAYBACK_MODE_SHUFFLE},
+                {R.string.repeat_mode_pause_alt, PlayerConstants.PLAYBACK_MODE_LIST},
+                {R.string.repeat_mode_reverse_list, PlayerConstants.PLAYBACK_MODE_REVERSE_LIST},
+                {R.string.repeat_mode_pause, PlayerConstants.PLAYBACK_MODE_PAUSE},
+                {R.string.repeat_mode_none, PlayerConstants.PLAYBACK_MODE_CLOSE}
         }) {
             options.add(UiOptionItem.from(context.getString(pair[0]),
                     optionItem -> {

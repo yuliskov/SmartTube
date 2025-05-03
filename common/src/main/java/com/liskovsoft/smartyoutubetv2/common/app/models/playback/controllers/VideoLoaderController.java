@@ -5,6 +5,7 @@ import android.util.Pair;
 
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaFormat;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -18,7 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
@@ -165,7 +166,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     public void onVideoLoaded(Video video) {
         mLastErrorType = -1;
         Utils.removeCallbacks(mOnLongBuffering);
-        getPlayer().setButtonState(R.id.action_repeat, video.finishOnEnded ? PlayerEngineConstants.PLAYBACK_MODE_CLOSE : getPlayerData().getPlaybackMode());
+        getPlayer().setButtonState(R.id.action_repeat, video.finishOnEnded ? PlayerConstants.PLAYBACK_MODE_CLOSE : getPlayerData().getPlaybackMode());
     }
 
     @Override
@@ -336,9 +337,21 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     }
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         String bgImageUrl = null;
 
         mLastVideo.sync(formatInfo);
+
+        // Fix stretched video for a couple milliseconds (before the onVideoSizeChanged gets called)
+        if (formatInfo.containsDashFormats() && getPlayerData().getAspectRatio() == PlayerData.ASPECT_RATIO_DEFAULT) {
+            MediaFormat format = formatInfo.getDashFormats().get(0);
+            if (format.getWidth() > 0 && format.getHeight() > 0) {
+                getPlayer().setAspectRatio((float) format.getWidth() / format.getHeight());
+            }
+        }
 
         if (formatInfo.containsMedia()) {
             getStateService().setHistoryBroken(formatInfo.isHistoryBroken());
@@ -646,7 +659,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
 
         switch (playbackMode) {
-            case PlayerEngineConstants.PLAYBACK_MODE_REVERSE_LIST:
+            case PlayerConstants.PLAYBACK_MODE_REVERSE_LIST:
                 if (video.hasPlaylist() || video.belongsToChannelUploads() || video.belongsToChannel()) {
                     VideoGroup group = video.getGroup();
                     if (group != null && group.indexOf(video) != 0) { // stop after first
@@ -654,14 +667,14 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                     }
                     break;
                 }
-            case PlayerEngineConstants.PLAYBACK_MODE_ALL:
-            case PlayerEngineConstants.PLAYBACK_MODE_SHUFFLE:
+            case PlayerConstants.PLAYBACK_MODE_ALL:
+            case PlayerConstants.PLAYBACK_MODE_SHUFFLE:
                 loadNext();
                 break;
-            case PlayerEngineConstants.PLAYBACK_MODE_ONE:
+            case PlayerConstants.PLAYBACK_MODE_ONE:
                 getPlayer().setPositionMs(100); // fix frozen image on Android 4?
                 break;
-            case PlayerEngineConstants.PLAYBACK_MODE_CLOSE:
+            case PlayerConstants.PLAYBACK_MODE_CLOSE:
                 // Close player if suggestions not shown
                 // Except when playing from queue
                 if (mPlaylist.getNext() != null) {
@@ -674,7 +687,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                     }
                 }
                 break;
-            case PlayerEngineConstants.PLAYBACK_MODE_PAUSE:
+            case PlayerConstants.PLAYBACK_MODE_PAUSE:
                 // Stop player after each video.
                 // Except when playing from queue
                 if (mPlaylist.getNext() != null) {
@@ -685,7 +698,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                     getPlayer().showSuggestions(true);
                 }
                 break;
-            case PlayerEngineConstants.PLAYBACK_MODE_LIST:
+            case PlayerConstants.PLAYBACK_MODE_LIST:
                 // if video has a playlist load next or restart playlist
                 if (video.hasNextPlaylist() || mPlaylist.getNext() != null) {
                     loadNext();
@@ -695,7 +708,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                     getPlayer().showSuggestions(true);
                 }
                 break;
-            case PlayerEngineConstants.PLAYBACK_MODE_LOOP_LIST:
+            case PlayerConstants.PLAYBACK_MODE_LOOP_LIST:
                 // if video has a playlist load next or restart playlist
                 if (video.hasNextPlaylist() || mPlaylist.getNext() != null) {
                     loadNext();
@@ -788,7 +801,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             return;
         }
 
-        if (getPlayerData().getPlaybackMode() == PlayerEngineConstants.PLAYBACK_MODE_SHUFFLE) {
+        if (getPlayerData().getPlaybackMode() == PlayerConstants.PLAYBACK_MODE_SHUFFLE) {
             Video video = new Video();
             video.playlistId = mLastVideo.playlistId;
             VideoGroup topRow = getPlayer().getSuggestionsByIndex(0);
@@ -884,9 +897,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
         Video video = getPlayer().getVideo();
         if (video != null && video.finishOnEnded) {
-            playbackMode = PlayerEngineConstants.PLAYBACK_MODE_CLOSE;
+            playbackMode = PlayerConstants.PLAYBACK_MODE_CLOSE;
         } else if (video != null && video.belongsToShortsGroup() && getPlayerTweaksData().isLoopShortsEnabled()) {
-            playbackMode = PlayerEngineConstants.PLAYBACK_MODE_ONE;
+            playbackMode = PlayerConstants.PLAYBACK_MODE_ONE;
         }
         return playbackMode;
     }

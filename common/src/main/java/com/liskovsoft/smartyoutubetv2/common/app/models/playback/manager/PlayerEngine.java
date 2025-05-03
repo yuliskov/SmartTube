@@ -5,7 +5,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import java.io.InputStream;
 import java.util.List;
 
-public interface PlayerEngine extends PlayerEngineConstants {
+public interface PlayerEngine extends PlayerConstants {
     void openDash(InputStream dashManifest);
     void openDashUrl(String dashManifestUrl);
     void openHlsUrl(String hlsPlaylistUrl);
@@ -39,10 +39,10 @@ public interface PlayerEngine extends PlayerEngineConstants {
     float getPitch();
     void setVolume(float volume);
     float getVolume();
-    void setVideoZoomMode(int mode);
-    void setVideoZoom(int percents);
-    int getVideoZoomMode();
-    void setVideoAspectRatio(float mode);
-    void setVideoRotation(int angle);
+    void setResizeMode(int mode);
+    int getResizeMode();
+    void setZoomPercents(int percents);
+    void setAspectRatio(float ratio);
+    void setRotationAngle(int angle);
     void setVideoFlipEnabled(boolean enabled);
 }

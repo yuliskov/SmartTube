@@ -13,7 +13,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PlayerData extends DataChangeBase implements PlayerEngineConstants, ProfileChangeListener {
+public class PlayerData extends DataChangeBase implements PlayerConstants, ProfileChangeListener {
     private static final String VIDEO_PLAYER_DATA = "video_player_data";
     public static final int ONLY_UI = 0;
     public static final int UI_AND_PAUSE = 1;
@@ -55,10 +55,10 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     private final List<SubtitleStyle> mSubtitleStyles = new ArrayList<>();
     private final Map<String, FormatItem> mDefaultVideoFormats = new HashMap<>();
     private int mSubtitleStyleIndex;
-    private int mVideoZoomMode;
-    private int mVideoZoom;
-    private float mVideoAspectRatio;
-    private int mVideoRotation;
+    private int mResizeMode;
+    private int mZoomPercents;
+    private float mAspectRatio;
+    private int mRotationAngle;
     private boolean mIsVideoFlipEnabled;
     private int mSeekPreviewMode;
     private float mSpeed;
@@ -503,40 +503,40 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         persistState();
     }
 
-    public void setVideoZoomMode(int mode) {
-        mVideoZoomMode = mode;
+    public void setResizeMode(int mode) {
+        mResizeMode = mode;
         persistState();
     }
 
-    public int getVideoZoomMode() {
-        return mVideoZoomMode;
+    public int getResizeMode() {
+        return mResizeMode;
     }
 
-    public void setVideoZoom(int percents) {
-        mVideoZoom = percents;
+    public void setZoomPercents(int percents) {
+        mZoomPercents = percents;
         persistState();
     }
 
-    public int getVideoZoom() {
-        return mVideoZoom;
+    public int getZoomPercents() {
+        return mZoomPercents;
     }
 
-    public void setVideoAspectRatio(float ratio) {
-        mVideoAspectRatio = ratio;
+    public void setAspectRatio(float ratio) {
+        mAspectRatio = ratio;
         persistState();
     }
 
-    public float getVideoAspectRatio() {
-        return mVideoAspectRatio;
+    public float getAspectRatio() {
+        return mAspectRatio;
     }
 
-    public void setVideoRotation(int angle) {
-        mVideoRotation = angle;
+    public void setRotationAngle(int angle) {
+        mRotationAngle = angle;
         persistState();
     }
 
-    public int getVideoRotation() {
-        return mVideoRotation;
+    public int getRotationAngle() {
+        return mRotationAngle;
     }
 
     public void setVideoFlipEnabled(boolean enabled) {
@@ -791,7 +791,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         mSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 11)), getDefaultSubtitleFormat());
         mVideoBufferType = Helpers.parseInt(split, 12, PlayerEngine.BUFFER_MEDIUM);
         mSubtitleStyleIndex = Helpers.parseInt(split, 13, 4); // yellow on semi bg
-        mVideoZoomMode = Helpers.parseInt(split, 14, PlayerEngine.ZOOM_MODE_DEFAULT);
+        mResizeMode = Helpers.parseInt(split, 14, PlayerEngine.RESIZE_MODE_DEFAULT);
         mSpeed = Helpers.parseFloat(split, 15, 1.0f);
         mIsAfrEnabled = Helpers.parseBoolean(split, 16, false);
         mIsAfrFpsCorrectionEnabled = Helpers.parseBoolean(split, 17, true);
@@ -806,7 +806,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
         mIsSpeedPerVideoEnabled = Helpers.parseBoolean(split, 29, false);
-        mVideoAspectRatio = Helpers.parseFloat(split, 30, PlayerEngine.ASPECT_RATIO_DEFAULT);
+        mAspectRatio = Helpers.parseFloat(split, 30, PlayerEngine.ASPECT_RATIO_DEFAULT);
         mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, false);
         mIsTimeCorrectionEnabled = Helpers.parseBoolean(split, 32, true);
         mIsGlobalEndingTimeEnabled = Helpers.parseBoolean(split, 33, false);
@@ -826,9 +826,9 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         mLastSubtitleFormats = Helpers.parseList(split, 47, ExoFormatItem::from);
         //mLastSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 47)), FormatItem.SUBTITLE_NONE);
         mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
-        mVideoRotation = Helpers.parseInt(split, 49, 0);
-        mVideoZoom = Helpers.parseInt(split, 50, -1);
-        mPlaybackMode = Helpers.parseInt(split, 51, PlayerEngineConstants.PLAYBACK_MODE_ALL);
+        mRotationAngle = Helpers.parseInt(split, 49, 0);
+        mZoomPercents = Helpers.parseInt(split, 50, -1);
+        mPlaybackMode = Helpers.parseInt(split, 51, PlayerConstants.PLAYBACK_MODE_ALL);
         mAudioLanguage = Helpers.parseStr(split, 52, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
         mSubtitleLanguage = Helpers.parseStr(split, 53, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
         //String enabledSubtitles = Helpers.parseStr(split, 54);
@@ -858,14 +858,13 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
                 mSeekPreviewMode, mIsSeekConfirmPauseEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
                 mVideoFormat, mAudioFormat, mSubtitleFormat,
-                mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
+                mVideoBufferType, mSubtitleStyleIndex, mResizeMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs, mIsAllSpeedEnabled, null, null,
                 null, mIsSonyTimerFixEnabled, null, null, // old player tweaks
-                mIsQualityInfoEnabled, mIsSpeedPerVideoEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
+                mIsQualityInfoEnabled, mIsSpeedPerVideoEnabled, mAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
-                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mVideoRotation,
-                mVideoZoom, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
+                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle, mZoomPercents, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages, mIsVideoFlipEnabled
         ));
 

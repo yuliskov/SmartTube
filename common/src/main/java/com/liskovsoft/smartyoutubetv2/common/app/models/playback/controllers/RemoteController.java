@@ -15,12 +15,9 @@ import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase.OnDataChange;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
@@ -105,12 +102,12 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     @Override
     public void onPlayEnd() {
         switch (getPlayerData().getPlaybackMode()) {
-            case PlayerEngineConstants.PLAYBACK_MODE_CLOSE:
-            case PlayerEngineConstants.PLAYBACK_MODE_PAUSE:
-            case PlayerEngineConstants.PLAYBACK_MODE_ALL:
+            case PlayerConstants.PLAYBACK_MODE_CLOSE:
+            case PlayerConstants.PLAYBACK_MODE_PAUSE:
+            case PlayerConstants.PLAYBACK_MODE_ALL:
                 postPlay(false);
                 break;
-            case PlayerEngineConstants.PLAYBACK_MODE_ONE:
+            case PlayerConstants.PLAYBACK_MODE_ONE:
                 postStartPlaying(getPlayer().getVideo(), true);
                 break;
         }

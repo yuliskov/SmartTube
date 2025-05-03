@@ -18,7 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -84,10 +84,10 @@ public class PlayerUIController extends BasePlayerController {
         mSuggestionsController = getController(SuggestionsController.class);
 
         // Could be set once per activity creation (view layout stuff)
-        getPlayer().setVideoZoomMode(getPlayerData().getVideoZoomMode());
-        getPlayer().setVideoZoom(getPlayerData().getVideoZoom());
-        getPlayer().setVideoAspectRatio(getPlayerData().getVideoAspectRatio());
-        getPlayer().setVideoRotation(getPlayerData().getVideoRotation());
+        getPlayer().setResizeMode(getPlayerData().getResizeMode());
+        getPlayer().setZoomPercents(getPlayerData().getZoomPercents());
+        getPlayer().setAspectRatio(getPlayerData().getAspectRatio());
+        getPlayer().setRotationAngle(getPlayerData().getRotationAngle());
     }
 
     @Override
@@ -325,7 +325,7 @@ public class PlayerUIController extends BasePlayerController {
         }
         setPlaylistAddButtonStateCached();
         setSubtitleButtonState();
-        getPlayer().setButtonState(R.id.action_rotate, getPlayerData().getVideoRotation() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
+        getPlayer().setButtonState(R.id.action_rotate, getPlayerData().getRotationAngle() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
         getPlayer().setButtonState(R.id.action_subscribe, metadata.isSubscribed() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         getPlayer().setButtonState(R.id.action_afr, getPlayerData().isAfrEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
@@ -470,16 +470,16 @@ public class PlayerUIController extends BasePlayerController {
     public void onVideoZoomClicked() {
         OptionCategory videoZoomCategory = AppDialogUtil.createVideoZoomCategory(
                 getContext(), () -> {
-                    getPlayer().setVideoZoomMode(getPlayerData().getVideoZoomMode());
-                    getPlayer().setVideoZoom(getPlayerData().getVideoZoom());
+                    getPlayer().setResizeMode(getPlayerData().getResizeMode());
+                    getPlayer().setZoomPercents(getPlayerData().getZoomPercents());
                     getPlayer().showControls(false);
                 });
 
         OptionCategory videoAspectCategory = AppDialogUtil.createVideoAspectCategory(
-                getContext(), getPlayerData(), () -> getPlayer().setVideoAspectRatio(getPlayerData().getVideoAspectRatio()));
+                getContext(), getPlayerData(), () -> getPlayer().setAspectRatio(getPlayerData().getAspectRatio()));
 
         OptionCategory videoRotateCategory = AppDialogUtil.createVideoRotateCategory(
-                getContext(), getPlayerData(), () -> getPlayer().setVideoRotation(getPlayerData().getVideoRotation()));
+                getContext(), getPlayerData(), () -> getPlayer().setRotationAngle(getPlayerData().getRotationAngle()));
 
         AppDialogPresenter settingsPresenter = getAppDialogPresenter();
         settingsPresenter.appendRadioCategory(videoAspectCategory.title, videoAspectCategory.options);
@@ -814,11 +814,11 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void onRotate() {
-        int oldRotation = getPlayerData().getVideoRotation();
+        int oldRotation = getPlayerData().getRotationAngle();
         int rotation = oldRotation == 0 ? 90 : oldRotation == 90 ? 180 : oldRotation == 180 ? 270 : 0;
-        getPlayer().setVideoRotation(rotation);
+        getPlayer().setRotationAngle(rotation);
         getPlayer().setButtonState(R.id.action_rotate, rotation == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
-        getPlayerData().setVideoRotation(rotation);
+        getPlayerData().setRotationAngle(rotation);
     }
 
     private void onFlip() {
@@ -892,8 +892,8 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private int getNextRepeatMode(int buttonState) {
-        Integer[] modeList = {PlayerEngineConstants.PLAYBACK_MODE_ALL, PlayerEngineConstants.PLAYBACK_MODE_ONE, PlayerEngineConstants.PLAYBACK_MODE_SHUFFLE,
-                PlayerEngineConstants.PLAYBACK_MODE_LIST, PlayerEngineConstants.PLAYBACK_MODE_REVERSE_LIST, PlayerEngineConstants.PLAYBACK_MODE_PAUSE, PlayerEngineConstants.PLAYBACK_MODE_CLOSE};
+        Integer[] modeList = {PlayerConstants.PLAYBACK_MODE_ALL, PlayerConstants.PLAYBACK_MODE_ONE, PlayerConstants.PLAYBACK_MODE_SHUFFLE,
+                PlayerConstants.PLAYBACK_MODE_LIST, PlayerConstants.PLAYBACK_MODE_REVERSE_LIST, PlayerConstants.PLAYBACK_MODE_PAUSE, PlayerConstants.PLAYBACK_MODE_CLOSE};
         int nextMode = Helpers.getNextValue(buttonState, modeList);
         return nextMode;
     }

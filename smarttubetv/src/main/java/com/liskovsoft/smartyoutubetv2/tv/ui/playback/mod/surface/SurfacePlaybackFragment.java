@@ -33,7 +33,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
         mVideoSurfaceWrapper = (PlayerTweaksData.instance(getContext()).isTextureViewEnabled() ||
-                PlayerData.instance(getContext()).getVideoRotation() != 0) ?
+                PlayerData.instance(getContext()).getRotationAngle() != 0) ?
                 new TextureViewWrapper(getContext(), root) : new SurfaceViewWrapper(getContext(), root);
         mVideoSurfaceRoot = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.surface_root);
         mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
@@ -70,12 +70,17 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         super.onDestroyView();
     }
 
+    /** Returns the {@link ResizeMode}. */
+    protected @ResizeMode int getResize() {
+        return mVideoSurfaceRoot.getResizeMode();
+    }
+
     /**
      * Sets the {@link ResizeMode}.
      *
      * @param resizeMode The {@link ResizeMode}.
      */
-    protected void setResizeMode(@ResizeMode int resizeMode) {
+    protected void setResize(@ResizeMode int resizeMode) {
         mVideoSurfaceRoot.setResizeMode(resizeMode);
     }
 
@@ -83,12 +88,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         mVideoSurfaceRoot.setZoom(percents);
     }
 
-    /** Returns the {@link ResizeMode}. */
-    protected @ResizeMode int getResizeMode() {
-        return mVideoSurfaceRoot.getResizeMode();
-    }
-
-    protected void setAspectRatio(float aspectRatio) {
+    protected void setAspect(float aspectRatio) {
         mAspectRatio = aspectRatio;
         mVideoSurfaceRoot.setAspectRatio(calculateAspectRatio());
     }

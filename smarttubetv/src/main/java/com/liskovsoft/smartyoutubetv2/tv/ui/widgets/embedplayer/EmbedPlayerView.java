@@ -387,27 +387,27 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     @Override
-    public void setVideoZoomMode(int mode) {
+    public void setResizeMode(int mode) {
 
     }
 
     @Override
-    public void setVideoZoom(int percents) {
+    public void setZoomPercents(int percents) {
 
     }
 
     @Override
-    public int getVideoZoomMode() {
+    public int getResizeMode() {
         return 0;
     }
 
     @Override
-    public void setVideoAspectRatio(float mode) {
+    public void setAspectRatio(float ratio) {
 
     }
 
     @Override
-    public void setVideoRotation(int angle) {
+    public void setRotationAngle(int angle) {
 
     }
 

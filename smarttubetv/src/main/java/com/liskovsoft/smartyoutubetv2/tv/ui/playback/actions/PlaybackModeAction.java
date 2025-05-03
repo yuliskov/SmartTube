@@ -6,21 +6,21 @@ import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.PlaybackControlsRow.MultiAction;
 
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngineConstants;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
  * An action for displaying two repeat states: none and all.
  */
 public class PlaybackModeAction extends MultiAction {
-    private static final int INDEX_NONE = PlayerEngineConstants.PLAYBACK_MODE_CLOSE;
-    private static final int INDEX_ONE = PlayerEngineConstants.PLAYBACK_MODE_ONE;
-    private static final int INDEX_ALL = PlayerEngineConstants.PLAYBACK_MODE_ALL;
-    private static final int INDEX_PAUSE = PlayerEngineConstants.PLAYBACK_MODE_PAUSE;
-    private static final int INDEX_LIST = PlayerEngineConstants.PLAYBACK_MODE_LIST;
-    private static final int INDEX_SHUFFLE = PlayerEngineConstants.PLAYBACK_MODE_SHUFFLE;
-    private static final int INDEX_REVERSE_LIST = PlayerEngineConstants.PLAYBACK_MODE_REVERSE_LIST;
-    private static final int INDEX_LOOP_LIST = PlayerEngineConstants.PLAYBACK_MODE_LOOP_LIST;
+    private static final int INDEX_NONE = PlayerConstants.PLAYBACK_MODE_CLOSE;
+    private static final int INDEX_ONE = PlayerConstants.PLAYBACK_MODE_ONE;
+    private static final int INDEX_ALL = PlayerConstants.PLAYBACK_MODE_ALL;
+    private static final int INDEX_PAUSE = PlayerConstants.PLAYBACK_MODE_PAUSE;
+    private static final int INDEX_LIST = PlayerConstants.PLAYBACK_MODE_LIST;
+    private static final int INDEX_SHUFFLE = PlayerConstants.PLAYBACK_MODE_SHUFFLE;
+    private static final int INDEX_REVERSE_LIST = PlayerConstants.PLAYBACK_MODE_REVERSE_LIST;
+    private static final int INDEX_LOOP_LIST = PlayerConstants.PLAYBACK_MODE_LOOP_LIST;
     private final Context mContext;
 
     /**

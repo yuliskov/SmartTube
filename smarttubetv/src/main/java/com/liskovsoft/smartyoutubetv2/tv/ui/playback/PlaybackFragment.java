@@ -1064,20 +1064,15 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setSpeed(float speed) {
-        mExoPlayerController.setSpeed(speed);
-        // NOTE: Real speed isn't changed immediately, so use supplied speed data
-        setSpeedButtonState(speed != 1.0f);
-    }
-
-    @Override
     public float getSpeed() {
         return mExoPlayerController.getSpeed();
     }
 
     @Override
-    public void setPitch(float pitch) {
-        mExoPlayerController.setPitch(pitch);
+    public void setSpeed(float speed) {
+        mExoPlayerController.setSpeed(speed);
+        // NOTE: Real speed isn't changed immediately, so use supplied speed data
+        setSpeedButtonState(speed != 1.0f);
     }
 
     @Override
@@ -1086,8 +1081,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setVolume(float volume) {
-        mExoPlayerController.setVolume(volume);
+    public void setPitch(float pitch) {
+        mExoPlayerController.setPitch(pitch);
     }
 
     @Override
@@ -1096,27 +1091,32 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setVideoZoomMode(int mode) {
-        setResizeMode(mode);
+    public void setVolume(float volume) {
+        mExoPlayerController.setVolume(volume);
     }
 
     @Override
-    public int getVideoZoomMode() {
-        return getResizeMode();
+    public int getResizeMode() {
+        return getResize();
     }
 
     @Override
-    public void setVideoZoom(int percents) {
+    public void setResizeMode(int mode) {
+        setResize(mode);
+    }
+
+    @Override
+    public void setZoomPercents(int percents) {
         setZoom(percents);
     }
 
     @Override
-    public void setVideoAspectRatio(float ratio) {
-        setAspectRatio(ratio);
+    public void setAspectRatio(float ratio) {
+        setAspect(ratio);
     }
 
     @Override
-    public void setVideoRotation(int angle) {
+    public void setRotationAngle(int angle) {
         setRotation(angle);
     }
 

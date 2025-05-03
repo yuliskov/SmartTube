@@ -413,7 +413,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     break;
             }
 
-            mThumbsBar.setThumbsRotation(mPlayerData.getVideoRotation());
+            mThumbsBar.setThumbsRotation(mPlayerData.getRotationAngle());
 
             return true;
         }

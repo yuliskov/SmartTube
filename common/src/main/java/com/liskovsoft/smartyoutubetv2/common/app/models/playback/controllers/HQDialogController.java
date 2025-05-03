@@ -175,8 +175,8 @@ public class HQDialogController extends BasePlayerController {
     private void addVideoZoomCategory() {
         addCategoryInt(AppDialogUtil.createVideoZoomCategory(
                 getContext(), () -> {
-                    getPlayer().setVideoZoomMode(getPlayerData().getVideoZoomMode());
-                    getPlayer().setVideoZoom(getPlayerData().getVideoZoom());
+                    getPlayer().setResizeMode(getPlayerData().getResizeMode());
+                    getPlayer().setZoomPercents(getPlayerData().getZoomPercents());
 
                     // Make result easily be spotted by the user
                     getPlayer().showOverlay(false);
