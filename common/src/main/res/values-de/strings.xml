@@ -601,7 +601,7 @@
     <string name="content_block_exclude_channel">Diesen Kanal von SponsorBlock ausschließen</string>
     <string name="content_block_stop_excluding_channel">Diesen Kanal nicht mehr von SponsorBlock ausschließen</string>
     <string name="player_chapter_notification">Schnelles Springen durch die Kapitel per Popup-Benachrichtigung</string>
-    <string name="subtitle_remember">Aktivierte Untertitel für jeden Kanal merken</string>
+    <string name="subtitle_remember">Untertitel nur für den aktuellen Kanal aktivieren</string>
     <string name="amazon_frame_drop_fix">Frame-Drop-Fix #2</string>
     <string name="amazon_frame_drop_fix_desc">Gedacht für Amazon Stick-Geräte. Kann auch auf anderen Geräten funktionieren.</string>
     <string name="default_stack_desc">Eingebaute Netzwerk-Engine. Diese Engine könnte in bestimmten Situationen eine bessere Stabilität haben.</string>
@@ -697,4 +697,7 @@
     <string name="player_audio_focus">Audio-Fokus (Pause, wenn andere Player erkannt werden)</string>
     <string name="paid_content_notification">Benachrichtigung über bezahlte Inhalte</string>
     <string name="you_liked">Mag ich</string>
+    <string name="premium_users_only">Nur für Premium-Nutzer. Fix für unvollständige Videoformat-Liste</string>
+    <string name="playback_buffering_fix">Wiedergabe-Puffer-Fix</string>
+    <string name="oculus_quest_fix">Oculus-Quest-Fix</string>
 </resources>
