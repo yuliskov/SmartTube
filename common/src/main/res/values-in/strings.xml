@@ -581,7 +581,7 @@
     <string name="content_block_exclude_channel">Kecualikan channel ini dari SponsorBlock</string>
     <string name="content_block_stop_excluding_channel">Berhenti mengecualikan channel ini dari SponsorBlock</string>
     <string name="player_chapter_notification">Maju cepat melalui chapters menggunakan notifikasi popup</string>
-    <string name="subtitle_remember">Ingat subtitle yang diaktifkan untuk setiap channel</string>    
+    <string name="subtitle_remember">Mengaktifkan subtitle hanya pada channel saat ini</string>    
     <string name="amazon_frame_drop_fix">Perbaikan Frame drop #2</string>
     <string name="amazon_frame_drop_fix_desc">Diperuntukkan untuk perangkat Amazon Stick. Dapat berfungsi pada perangkat lain juga.</string>
     <string name="default_stack_desc">Mesin jaringan bawaan. Mesin ini mungkin memiliki stabilitas yang lebih baik dalam situasi tertentu.</string>
