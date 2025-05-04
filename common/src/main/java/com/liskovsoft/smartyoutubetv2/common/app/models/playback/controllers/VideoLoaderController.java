@@ -123,7 +123,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     }
 
     private void onLongBuffering(boolean isRecurrent) {
-        if (mLastVideo == null) {
+        if (getPlayer() == null || mLastVideo == null) {
             return;
         }
 
@@ -133,7 +133,8 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             getMainController().onPlayEnd();
         } else if (isRecurrent) {
             MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
-            enableFasterDataSource();
+            // Faster source is different among devices. Try them one by one.
+            switchNextEngine();
             restartEngine();
         } else {
             YouTubeServiceManager.instance().applyAntiBotFix(); // bot check error?
@@ -826,14 +827,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
     }
 
-    private int getNextEngine() {
-        int currentEngine = getPlayerTweaksData().getPlayerDataSource();
-        Integer[] engineList = Utils.skipCronet() ?
-                new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP } :
-                new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET, PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP };
-        return Helpers.getNextValue(currentEngine, engineList);
-    }
-
     private void updateBufferingCount() {
         long currentTimeMs = System.currentTimeMillis();
         int bufferingCount = 0;
@@ -854,7 +847,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     }
 
     private boolean isBufferingRecurrent() {
-        return mBufferingCount != null && mBufferingCount.first > 2;
+        return mBufferingCount != null && mBufferingCount.first > 1;
     }
 
     private void forceSectionPlaylistIfNeeded(Video previous, Video next) {
@@ -869,10 +862,25 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
     }
 
+    private void switchNextEngine() {
+        getPlayerTweaksData().setPlayerDataSource(getNextEngine());
+    }
+
+    private int getNextEngine() {
+        int currentEngine = getPlayerTweaksData().getPlayerDataSource();
+        Integer[] engineList = Utils.skipCronet() ?
+                new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP } :
+                new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET, PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP };
+        return Helpers.getNextValue(currentEngine, engineList);
+    }
+
     private static int getFasterDataSource() {
         return Utils.skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET;
     }
 
+    /**
+     * Bad idea. Faster source is different among devices
+     */
     private void enableFasterDataSource() {
         if (isFasterDataSourceEnabled()) {
             return;
@@ -881,6 +889,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         getPlayerTweaksData().setPlayerDataSource(getFasterDataSource());
     }
 
+    /**
+     * Bad idea. Faster source is different among devices
+     */
     private boolean isFasterDataSourceEnabled() {
         if (getGeneralData().isProxyEnabled()) {
             // Disable auto switch for proxies.
