@@ -52,7 +52,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private static final String SELECTED_HEADER_INDEX = "SelectedHeaderIndex";
     private static final String SELECTED_VIDEO = "SelectedVideo";
     private static final String IS_PLAYER_IN_FOREGROUND = "IsPlayerInForeground";
-    private static final String TIMESTAMP = "Timestamp";
     private ArrayObjectAdapter mSectionRowAdapter;
     private BrowsePresenter mBrowsePresenter;
     private Map<Integer, BrowseSection> mSections;
@@ -61,10 +60,9 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private ProgressBarManager mProgressBarManager;
     private NavigateTitleView mTitleView;
     private boolean mIsFragmentCreated;
-    private int mRestoredHeaderIndex = -1;
-    private Video mRestoredVideo;
-    private boolean mRestoredInForeground;
-    private long mRestoredTimestamp;
+    private int mSelectedHeaderIndex = -1;
+    private Video mSelectedVideo;
+    private boolean mIsPlayerInForeground;
     private boolean mFocusOnContent;
 
     @Override
@@ -72,10 +70,9 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         super.onCreate(null);
 
         if (savedInstanceState != null) {
-            mRestoredHeaderIndex = savedInstanceState.getInt(SELECTED_HEADER_INDEX, -1);
-            mRestoredVideo = Video.fromString(savedInstanceState.getString(SELECTED_VIDEO));
-            mRestoredInForeground = savedInstanceState.getBoolean(IS_PLAYER_IN_FOREGROUND, false);
-            mRestoredTimestamp = savedInstanceState.getLong(TIMESTAMP, -1);
+            mSelectedHeaderIndex = savedInstanceState.getInt(SELECTED_HEADER_INDEX, -1);
+            mSelectedVideo = Video.fromString(savedInstanceState.getString(SELECTED_VIDEO));
+            mIsPlayerInForeground = savedInstanceState.getBoolean(IS_PLAYER_IN_FOREGROUND, false);
         }
         mIsFragmentCreated = true;
 
@@ -101,7 +98,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         if (mBrowsePresenter.getCurrentVideo() != null) {
             outState.putString(SELECTED_VIDEO, mBrowsePresenter.getCurrentVideo().toString());
             outState.putBoolean(IS_PLAYER_IN_FOREGROUND, ViewManager.instance(getContext()).isPlayerInForeground());
-            outState.putLong(TIMESTAMP, System.currentTimeMillis());
         }
     }
 
@@ -125,18 +121,20 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         mBrowsePresenter.onViewInitialized();
 
-        if (mRestoredHeaderIndex != -1) {
+        if (mSelectedHeaderIndex != -1) {
             // Restore state after crash
-            selectSection(mRestoredHeaderIndex, true);
-            mRestoredHeaderIndex = -1;
+            selectSection(mSelectedHeaderIndex, true);
+            mSelectedHeaderIndex = -1;
 
             // Restore state after crash
-            selectSectionItem(mRestoredVideo);
-            if (PlaybackPresenter.instance(getContext()).getPlayer() == null && mRestoredInForeground) {
-                State lastState = VideoStateService.instance(getContext()).getLastState();
-                PlaybackPresenter.instance(getContext()).openVideo(lastState != null && lastState.timestamp > mRestoredTimestamp ? lastState.video : mRestoredVideo);
+            selectSectionItem(mSelectedVideo);
+            if (PlaybackPresenter.instance(getContext()).getPlayer() == null && mIsPlayerInForeground && mSelectedVideo != null) {
+                VideoStateService stateService = VideoStateService.instance(getContext());
+                boolean isLastStateActual = stateService.getByVideoId(mSelectedVideo.videoId) != null;
+                State lastState = stateService.getLastState();
+                PlaybackPresenter.instance(getContext()).openVideo(lastState != null && isLastStateActual ? lastState.video : mSelectedVideo);
             }
-            mRestoredVideo = null;
+            mSelectedVideo = null;
         }
     }
 
