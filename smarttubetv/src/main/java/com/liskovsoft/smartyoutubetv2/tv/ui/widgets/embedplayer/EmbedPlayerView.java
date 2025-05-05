@@ -3,22 +3,40 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.embedplayer;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.SeekParameters;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * https://chatgpt.com/c/6806b729-1ab0-8010-94f0-56f6b71cdbfb
  */
 public class EmbedPlayerView extends PlayerView implements PlaybackView {
+    private static final String TAG = EmbedPlayerView.class.getSimpleName();
+    private SimpleExoPlayer mPlayer;
+    private ExoPlayerInitializer mPlayerInitializer;
+    private PlayerController mExoPlayerController;
+    private PlaybackPresenter mPlaybackPresenter;
+
     public EmbedPlayerView(Context context) {
         super(context);
     }
@@ -233,97 +251,106 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     @Override
     public void openDash(InputStream dashManifest) {
-
+        mExoPlayerController.openDash(dashManifest);
     }
 
     @Override
     public void openDashUrl(String dashManifestUrl) {
-
+        mExoPlayerController.openDashUrl(dashManifestUrl);
     }
 
     @Override
     public void openHlsUrl(String hlsPlaylistUrl) {
-
+        mExoPlayerController.openHlsUrl(hlsPlaylistUrl);
     }
 
     @Override
     public void openUrlList(List<String> urlList) {
-
+        mExoPlayerController.openUrlList(urlList);
     }
 
     @Override
     public void openMerged(InputStream dashManifest, String hlsPlaylistUrl) {
-
+        mExoPlayerController.openMerged(dashManifest, hlsPlaylistUrl);
     }
 
     @Override
     public long getPositionMs() {
-        return 0;
+        return mExoPlayerController.getPositionMs();
     }
 
     @Override
     public void setPositionMs(long positionMs) {
-
+        mExoPlayerController.setPositionMs(positionMs);
     }
 
     @Override
     public long getDurationMs() {
-        return 0;
+        long durationMs = mExoPlayerController.getDurationMs();
+
+        long liveDurationMs = getVideo() != null ? getVideo().getLiveDurationMs() : 0;
+
+        if (durationMs > Video.MAX_LIVE_DURATION_MS && liveDurationMs != 0) {
+            durationMs = liveDurationMs;
+        }
+
+        return durationMs;
     }
 
     @Override
     public void setPlayWhenReady(boolean play) {
-
+        mExoPlayerController.setPlayWhenReady(play);
     }
 
     @Override
     public boolean getPlayWhenReady() {
-        return false;
+        return mExoPlayerController.getPlayWhenReady();
     }
 
     @Override
     public boolean isPlaying() {
-        return false;
+        return mExoPlayerController.isPlaying();
     }
 
     @Override
     public boolean isLoading() {
-        return false;
+        return mExoPlayerController.isLoading();
     }
 
     @Override
     public List<FormatItem> getVideoFormats() {
-        return Collections.emptyList();
+        return mExoPlayerController.getVideoFormats();
     }
 
     @Override
     public List<FormatItem> getAudioFormats() {
-        return Collections.emptyList();
+        return mExoPlayerController.getAudioFormats();
     }
 
     @Override
     public List<FormatItem> getSubtitleFormats() {
-        return Collections.emptyList();
+        return mExoPlayerController.getSubtitleFormats();
     }
 
     @Override
     public void setFormat(FormatItem option) {
-
+        // Android 4.4 fix for format selection dialog (player destroyed when dialog is focused)
+        mExoPlayerController.selectFormat(option);
     }
 
     @Override
     public FormatItem getVideoFormat() {
-        return null;
+        return mExoPlayerController.getVideoFormat();
     }
 
     @Override
     public FormatItem getAudioFormat() {
-        return null;
+        return mExoPlayerController.getAudioFormat();
     }
 
     @Override
     public boolean isEngineInitialized() {
-        return false;
+        return mPlayer != null;
     }
 
     @Override
@@ -398,7 +425,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     @Override
     public int getResizeMode() {
-        return 0;
+        return super.getResizeMode();
     }
 
     @Override
@@ -414,5 +441,56 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     @Override
     public void setVideoFlipEnabled(boolean enabled) {
 
+    }
+
+    private void createPlayer() {
+        // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
+        DefaultTrackSelector trackSelector = new RestoreTrackSelector(new AdaptiveTrackSelection.Factory());
+        mExoPlayerController.setTrackSelector(trackSelector);
+
+        DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getContext());
+        mPlayer = mPlayerInitializer.createPlayer(getContext(), renderersFactory, trackSelector);
+
+        // Fix seeking on TextureView (some devices only)
+        if (PlayerTweaksData.instance(getContext()).isTextureViewEnabled()) {
+            // Also, live stream (dash) seeking fix
+            mPlayer.setSeekParameters(SeekParameters.CLOSEST_SYNC);
+        }
+
+        mExoPlayerController.setPlayer(mPlayer);
+
+        if (PlayerTweaksData.instance(getContext()).isAudioFocusEnabled()) {
+            ExoPlayerInitializer.enableAudioFocus(mPlayer, true);
+        }
+
+        setPlayer(mPlayer);
+    }
+
+    private void releasePlayer() {
+        if (mPlayer != null) {
+            Log.d(TAG, "releasePlayer: Start releasing player engine...");
+            mPlaybackPresenter.onEngineReleased();
+            destroyPlayerObjects();
+        }
+    }
+
+    private void destroyPlayerObjects() {
+        // Fix access calls when player isn't initialized
+        mExoPlayerController.release();
+        mPlayer = null;
+        setPlayer(null);
+        mPlaybackPresenter.setView(null);
+    }
+
+    private void initPlayer() {
+        if (mPlayer != null) {
+            return;
+        }
+
+        mPlayerInitializer = new ExoPlayerInitializer(getContext());
+        mPlaybackPresenter = PlaybackPresenter.instance(getContext());
+        mPlaybackPresenter.setView(this);
+        mExoPlayerController = new ExoPlayerController(getContext(), mPlaybackPresenter);
+        createPlayer();
     }
 }
