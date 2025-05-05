@@ -695,4 +695,8 @@
   <string name="my_videos">Mes vidéos</string>
   <string name="player_audio_focus">Focus audio (pause si d\'autres lecteurs sont détectés)</string>
   <string name="paid_content_notification">Notification de contenu payant</string>
+  <string name="you_liked">vous avez aimé</string>
+  <string name="playback_buffering_fix">Correction de la mise en mémoire tampon</string>
+  <string name="premium_users_only">Réservé aux utilisateurs Premium. Correction de la liste incomplète des formats vidéo.</string>
+  <string name="oculus_quest_fix">Correction pour Oculus Quest</string>
 </resources>
