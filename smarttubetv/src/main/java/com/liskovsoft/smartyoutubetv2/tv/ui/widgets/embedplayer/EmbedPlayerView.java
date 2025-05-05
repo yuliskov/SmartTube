@@ -443,6 +443,11 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     }
 
+    public void openVideo(Video video) {
+        initPlayer();
+        mPlaybackPresenter.onNewVideo(video);
+    }
+
     private void createPlayer() {
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
         DefaultTrackSelector trackSelector = new RestoreTrackSelector(new AdaptiveTrackSelection.Factory());
