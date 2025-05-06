@@ -140,6 +140,7 @@
     <string name="open_channel_uploads">Apri caricamenti dei canali</string>
     <string name="app_exit_shortcut">Esci dall\'app</string>
     <string name="player_exit_shortcut">Esci dal lettore</string>
+    <string name="search_exit_shortcut">Esci dalla ricerca</string>
     <string name="app_exit_none">Non uscire</string>
     <string name="app_double_back_exit">Due volte tasto indietro</string>
     <string name="app_single_back_exit">Una volta tasto indietro</string>
@@ -536,6 +537,7 @@
     <string name="loading">Caricamento in corso…</string>
     <string name="hide_streams">Nascondi le trasmissioni dalle iscrizioni</string>
     <string name="video_rotate">Ruota</string>
+    <string name="video_flip">Capovolgi (specchio)</string>
     <string name="trending_searches">Ricerca per tendenze</string>
     <string name="video_duration_any">Qualsiasi</string>
     <string name="video_duration">Durata</string>
@@ -599,7 +601,7 @@
     <string name="content_block_exclude_channel">Escludi questo canale da SponsorBlock</string>
     <string name="content_block_stop_excluding_channel">Non escludere più questo canale da SponsorBlock</string>
     <string name="player_chapter_notification">Avanza velocemente tra i capitoli usando la notifica popup</string>
-    <string name="subtitle_remember">Ricorda i sottotitoli abilitati per ciascun canale</string>
+    <string name="subtitle_remember">Abilita i sottotitoli solo sul canale attuale</string>
     <string name="amazon_frame_drop_fix">Correggi salto fotogrammi #2</string>
     <string name="amazon_frame_drop_fix_desc">Destinato ai dispositivi Amazon Stick. Può funzionare anche su altri dispositivi.</string>
     <string name="default_stack_desc">Motore di rete integrato. Questo motore può avere una migliore stabilità in determinate situazioni.</string>
@@ -676,7 +678,7 @@
     <string name="calm_msg">Stiamo lavorando per risolvere il problema. Controlla regolarmente gli aggiornamenti</string>
     <string name="without_picture">Senza immagine</string>
     <string name="video_disabled">Video disabilitato</string>
-    <string name="applying_fix">Non chiudere il lettore. Applicazione della correzione...</string>
+    <string name="applying_fix">Non chiudere il lettore. Applicazione della correzione…</string>
     <string name="hide_mixes">Nascondi i mix</string>
     <string name="player_global_focus_desc">Questa funzione determina quale pulsante del lettore riceverà la messa a fuoco durante la navigazione tra le righe dei pulsanti del lettore</string>
     <string name="disable_network_error_fixing">Disabilita la correzione automatica degli errori di rete</string>
@@ -694,4 +696,8 @@
     <string name="my_videos">I miei video</string>
     <string name="player_audio_focus">Messa a fuoco audio (pausa se vengono rilevati altri lettori)</string>
     <string name="paid_content_notification">Notifica di contenuti a pagamento</string>
+    <string name="you_liked">piaciuto</string>
+    <string name="premium_users_only">Solo utenti Premium. Correzione per l\'elenco incompleto dei formati video</string>
+    <string name="playback_buffering_fix">Correzione del buffering di riproduzione</string>
+    <string name="oculus_quest_fix">Correzione per Oculus Quest</string>
 </resources>
