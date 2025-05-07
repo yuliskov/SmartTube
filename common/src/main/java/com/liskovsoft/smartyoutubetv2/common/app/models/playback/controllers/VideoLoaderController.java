@@ -42,7 +42,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
     private static final long BUFFERING_THRESHOLD_MS = 5_000;
     private static final long BUFFERING_WINDOW_MS = 60_000;
-    private static final long BUFFERING_RECURRENCE_COUNT = (long) ((BUFFERING_WINDOW_MS * 0.6) / BUFFERING_THRESHOLD_MS);
+    private static final long BUFFERING_RECURRENCE_COUNT = (long) (BUFFERING_WINDOW_MS * 0.5 / BUFFERING_THRESHOLD_MS);
     private final Playlist mPlaylist;
     private final UniqueRandom mRandom;
     private Video mLastVideo;
@@ -162,7 +162,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     @Override
     public void onVideoLoaded(Video video) {
         mLastErrorType = -1;
-        Utils.removeCallbacks(mOnLongBuffering);
         getPlayer().setButtonState(R.id.action_repeat, video.finishOnEnded ? PlayerConstants.PLAYBACK_MODE_CLOSE : getPlayerData().getPlaybackMode());
     }
 
@@ -241,7 +240,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
 
         Utils.removeCallbacks(mRestartEngine);
-        Utils.removeCallbacks(mOnLongBuffering);
 
         return false;
     }
@@ -827,6 +825,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     private void updateBufferingCountIfNeeded() {
         updateBufferingCount();
         if (isBufferingRecurrent()) {
+            mBufferingCount = null;
             onLongBuffering();
         } else {
             // Continue counting buffering occurrences...
