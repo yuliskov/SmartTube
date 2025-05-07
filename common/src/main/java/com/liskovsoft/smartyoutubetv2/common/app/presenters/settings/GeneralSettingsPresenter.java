@@ -286,7 +286,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 options.add(
                         UiOptionItem.from(
                                 item.getTitle(),
-                                optionItem -> mSidebarService.setBootSectionId(item.hashCode()),
+                                optionItem -> mSidebarService.setBootSectionId(item.getId()),
                                 item.hashCode() == mSidebarService.getBootSectionId()
                         )
                 );
