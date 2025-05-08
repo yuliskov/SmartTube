@@ -318,7 +318,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                                }
 
                                if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument") || // temporal fix
-                                       Helpers.equalsAny(className, "PoTokenException")) {
+                                       Helpers.equalsAny(className, "PoTokenException", "BadWebViewException")) {
                                    YouTubeServiceManager.instance().applyNoPlaybackFix();
                                    reloadVideo();
                                } else if (Helpers.containsAny(message, "is not defined")) {
