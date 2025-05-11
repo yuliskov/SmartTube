@@ -735,7 +735,7 @@ public class GeneralData implements ProfileChangeListener {
         mScreensaverDimmingPercents = Helpers.parseInt(split, 44, 80);
         mIsRemapNextToSpeedEnabled = Helpers.parseBoolean(split, 45, false);
         mIsRemapPlayToOKEnabled = Helpers.parseBoolean(split, 46, false);
-        mHistoryState = Helpers.parseInt(split, 47, HISTORY_ENABLED);
+        mHistoryState = Helpers.parseInt(split, 47, HISTORY_AUTO);
         mRememberSubscriptionsPosition = Helpers.parseBoolean(split, 48, false);
         // mSelectedSubscriptionsItem was here
         mIsRemapNumbersToSpeedEnabled = Helpers.parseBoolean(split, 50, false);
