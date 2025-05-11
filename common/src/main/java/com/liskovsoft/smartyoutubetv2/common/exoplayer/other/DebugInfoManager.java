@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.other;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build.VERSION;
@@ -35,6 +36,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.app.models.AppInfo;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
@@ -397,7 +399,9 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         AppInfo appInfo = Helpers.firstNonNull(MediaServiceData.instance().getFailedAppInfo(), MediaServiceData.instance().getAppInfo());
         String playerUrl = appInfo != null ? appInfo.getPlayerUrl() : null;
         if (playerUrl != null) {
-            appendRow("Video info version", UrlQueryStringFactory.parse(Uri.parse(playerUrl)).get("player"));
+            String playerVersion = UrlQueryStringFactory.parse(Uri.parse(playerUrl)).get("player");
+            boolean isFailed = MediaServiceData.instance().getFailedAppInfo() != null;
+            appendRow("Video info version", isFailed ? Utils.color(playerVersion, Color.RED) : playerVersion);
         }
     }
 
@@ -406,7 +410,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendValueColumn(createTextView(val));
     }
 
-    private void appendRow(String name, String val) {
+    private void appendRow(String name, CharSequence val) {
         appendNameColumn(createTextView(name));
         appendValueColumn(createTextView(val));
     }
@@ -425,7 +429,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         column2.addView(content);
     }
 
-    private TextView createTextView(String name) {
+    private TextView createTextView(CharSequence name) {
         TextView textView = new TextView(mContext);
         textView.setText(name);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
