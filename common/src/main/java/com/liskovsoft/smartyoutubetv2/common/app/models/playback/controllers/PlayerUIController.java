@@ -967,7 +967,7 @@ public class PlayerUIController extends BasePlayerController {
             applySoundOff(getPlayerData().getPlayerVolume() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
             getPlayer().setVolume(getPlayerData().getPlayerVolume());
         });
-        OptionCategory pitchEffectCategory = AppDialogUtil.createPitchEffectCategory(getContext(), getPlayer(), getPlayerData());
+        OptionCategory pitchEffectCategory = AppDialogUtil.createPitchEffectCategory(getContext());
         settingsPresenter.appendCategory(audioVolumeCategory);
         settingsPresenter.appendCategory(pitchEffectCategory);
         settingsPresenter.showDialog(getContext().getString(R.string.player_volume));

@@ -116,7 +116,7 @@ public class HQDialogController extends BasePlayerController {
     }
 
     private void addPitchEffectCategory() {
-        addCategoryInt(AppDialogUtil.createPitchEffectCategory(getContext(), getPlayer(), getPlayerData()));
+        addCategoryInt(AppDialogUtil.createPitchEffectCategory(getContext()));
     }
 
     private void addAudioLanguage() {

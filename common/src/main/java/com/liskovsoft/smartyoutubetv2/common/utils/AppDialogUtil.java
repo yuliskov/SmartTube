@@ -28,6 +28,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroupServiceWrapper;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -443,13 +444,33 @@ public class AppDialogUtil {
         return OptionCategory.from(AUDIO_VOLUME_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
-    public static OptionCategory createPitchEffectCategory(Context context, PlayerManager playerManager, PlayerData playerData) {
+    public static OptionCategory createPitchEffectCategory(Context context) {
         String title = context.getString(R.string.pitch_effect);
 
         List<OptionItem> options = new ArrayList<>();
 
-        for (int pitchRaw : Helpers.range(1, 20 * 4, 1)) {
-            float pitch = pitchRaw / (10f * 4);
+        //for (int pitchRaw : Helpers.range(1, 20 * 4, 1)) {
+        //    float pitch = pitchRaw / (10f * 4);
+        //    options.add(UiOptionItem.from(Helpers.toString(pitch),
+        //            optionItem -> {
+        //                playerManager.setPitch(pitch);
+        //                playerData.setPitch(pitch);
+        //            },
+        //            Helpers.floatEquals(pitch, playerManager.getPitch())));
+        //}
+
+        addPitches(context, options, Helpers.range(0.025f, 0.975f, 0.025f));
+        addPitches(context, options, new float[]{ 0.985f, 0.990f, 0.995f }); // Custom pitches
+        addPitches(context, options, Helpers.range(1f, 2f, 0.025f));
+
+        return OptionCategory.from(PITCH_EFFECT_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
+    }
+
+    private static void addPitches(Context context, List<OptionItem> options, float[] pitchList) {
+        PlayerManager playerManager = PlaybackPresenter.instance(context).getPlayer();
+        PlayerData playerData = PlayerData.instance(context);
+
+        for (float pitch : pitchList) {
             options.add(UiOptionItem.from(Helpers.toString(pitch),
                     optionItem -> {
                         playerManager.setPitch(pitch);
@@ -457,8 +478,6 @@ public class AppDialogUtil {
                     },
                     Helpers.floatEquals(pitch, playerManager.getPitch())));
         }
-
-        return OptionCategory.from(PITCH_EFFECT_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
     public static OptionCategory createSubtitleStylesCategory(Context context) {
