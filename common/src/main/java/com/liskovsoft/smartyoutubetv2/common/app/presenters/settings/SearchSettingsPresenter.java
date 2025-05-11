@@ -7,6 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 
 import java.util.ArrayList;
@@ -14,10 +15,12 @@ import java.util.List;
 
 public class SearchSettingsPresenter extends BasePresenter<Void> {
     private final SearchData mSearchData;
+    private final GeneralData mGeneralData;
 
     public SearchSettingsPresenter(Context context) {
         super(context);
         mSearchData = SearchData.instance(context);
+        mGeneralData = GeneralData.instance(context);
     }
 
     public static SearchSettingsPresenter instance(Context context) {
@@ -58,6 +61,10 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
         //options.add(UiOptionItem.from(getContext().getString(R.string.disable_popular_searches),
         //        option -> mSearchData.disablePopularSearches(option.isSelected()),
         //        mSearchData.isPopularSearchesDisabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.search_exit_shortcut) + ": " + getContext().getString(R.string.app_double_back_exit),
+                option -> mGeneralData.setSearchExitShortcut(option.isSelected() ? GeneralData.EXIT_DOUBLE_BACK : GeneralData.EXIT_SINGLE_BACK),
+                mGeneralData.getSearchExitShortcut() == GeneralData.EXIT_DOUBLE_BACK));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_search_history),
                 option -> mSearchData.disableSearchHistory(option.isSelected()),

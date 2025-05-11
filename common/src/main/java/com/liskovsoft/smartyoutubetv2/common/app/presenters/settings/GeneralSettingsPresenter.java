@@ -68,7 +68,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendContextMenuItemsCategory(settingsPresenter);
         //appendContextMenuSortingCategory(settingsPresenter);
         //appendTopButtonsCategory(settingsPresenter);
-        appendHideUnwantedContent(settingsPresenter);
+        appendHideVideos(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         //appendBackgroundPlaybackActivationCategory(settingsPresenter);
@@ -111,7 +111,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.side_panel_sections), options);
     }
 
-    private void appendHideUnwantedContent(AppDialogPresenter settingsPresenter) {
+    private void appendHideVideos(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
         MediaServiceData data = MediaServiceData.instance();
 
