@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:tools="http://schemas.android.com/tools"
-       xmlns:android="http://schemas.android.com/apk/res/android">
+       xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- Changes to original image style: style="?attr/imageCardViewImageStyle" -->
     <!-- Change 1: width and height set to match_parent to fix image black borders -->
     <!-- Change 2: layout_viewType attr is moved out to parent container -->
@@ -19,6 +20,12 @@
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         tools:ignore="ContentDescription"/>
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.embedplayer.EmbedPlayerView
+        android:visibility="gone"
+        android:id="@+id/preview_player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:use_controller="false"/>
     <LinearLayout
                     android:id="@+id/clip_info"
                     android:layout_width="match_parent"

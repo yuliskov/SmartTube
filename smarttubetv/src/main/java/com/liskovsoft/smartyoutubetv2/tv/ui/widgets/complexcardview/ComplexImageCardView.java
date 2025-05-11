@@ -112,6 +112,10 @@ public class ComplexImageCardView extends ImageCardView {
         mComplexImageView.setPreviewUrl(previewUrl);
     }
 
+    public void setPreviewVideoId(String videoId) {
+        mComplexImageView.setPreviewVideoId(videoId);
+    }
+
     public void setTitleLinesNum(int lines) {
         TextView titleView = findViewById(R.id.title_text);
 

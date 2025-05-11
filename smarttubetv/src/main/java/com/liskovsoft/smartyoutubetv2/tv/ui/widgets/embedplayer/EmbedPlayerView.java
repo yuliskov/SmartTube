@@ -226,7 +226,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     @Override
     public void finish() {
-
+        releasePlayer();
     }
 
     @Override
@@ -443,6 +443,10 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     }
 
+    public void openVideo(String videoId) {
+        openVideo(Video.from(videoId));
+    }
+
     public void openVideo(Video video) {
         initPlayer();
         mPlaybackPresenter.onNewVideo(video);
@@ -491,11 +495,12 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
         if (mPlayer != null) {
             return;
         }
-
+        
         mPlayerInitializer = new ExoPlayerInitializer(getContext());
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.setView(this);
         mExoPlayerController = new ExoPlayerController(getContext(), mPlaybackPresenter);
+        mPlaybackPresenter.onViewInitialized();
         createPlayer();
     }
 }
