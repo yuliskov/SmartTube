@@ -43,4 +43,5 @@ public interface PlayerController {
     void setVolume(float volume);
     float getVolume();
     void resetPlayerState();
+    void setOnVideoLoaded(Runnable onVideoLoaded);
 }

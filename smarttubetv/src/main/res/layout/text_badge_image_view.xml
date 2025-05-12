@@ -12,20 +12,10 @@
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         tools:ignore="ContentDescription"/>
-    <ImageView
-        android:visibility="gone"
-        android:id="@+id/preview_image"
+    <FrameLayout
+        android:id="@+id/preview_container"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
-        tools:ignore="ContentDescription"/>
-    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.embedplayer.EmbedPlayerView
-        android:visibility="gone"
-        android:id="@+id/preview_player"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:use_controller="false"/>
+        android:layout_height="wrap_content" />
     <LinearLayout
                     android:id="@+id/clip_info"
                     android:layout_width="match_parent"

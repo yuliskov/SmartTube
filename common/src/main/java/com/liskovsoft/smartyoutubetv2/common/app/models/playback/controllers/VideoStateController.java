@@ -119,6 +119,10 @@ public class VideoStateController extends BasePlayerController {
 
     @Override
     public void onEngineReleased() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         // Save previous state
         if (getPlayer().containsMedia()) {
             setPlayEnabled(getPlayer().getPlayWhenReady());

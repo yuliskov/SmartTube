@@ -4,14 +4,10 @@
         android:id="@+id/main_image"
         tools:ignore="ContentDescription"
         style="?attr/imageCardViewImageStyle"/>
-    <ImageView
-        android:visibility="gone"
-        android:id="@+id/preview_image"
+    <FrameLayout
+        android:id="@+id/preview_container"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
-        tools:ignore="ContentDescription"/>
+        android:layout_height="wrap_content" />
     <LinearLayout
                     android:id="@+id/clip_info"
                     android:layout_width="match_parent"

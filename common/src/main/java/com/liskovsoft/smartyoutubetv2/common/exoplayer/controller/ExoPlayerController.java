@@ -23,7 +23,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.VolumeBooster;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
@@ -53,6 +52,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private PlayerView mPlayerView;
     private VolumeBooster mVolumeBooster;
     private boolean mIsEnded;
+    private Runnable mOnVideoLoaded;
 
     public ExoPlayerController(Context context, PlayerEventListener eventListener) {
         PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
@@ -301,13 +301,14 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     private void notifyOnVideoLoad() {
-        if (mVideo == null) {
-            return;
-        }
-
         if (mOnSourceChanged) {
             mOnSourceChanged = false;
+
             mEventListener.onVideoLoaded(mVideo);
+
+            if (mOnVideoLoaded != null) {
+                mOnVideoLoaded.run();
+            }
 
             // Produce thread sync problems
             // Attempt to read from field 'java.util.TreeMap$Node java.util.TreeMap$Node.left' on a null object reference
@@ -438,6 +439,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         if (containsMedia()) {
             mPlayer.stop(true);
         }
+    }
+
+    @Override
+    public void setOnVideoLoaded(Runnable onVideoLoaded) {
+        mOnVideoLoaded = onVideoLoaded;
     }
 
     private void setQualityInfo(String qualityInfoStr) {

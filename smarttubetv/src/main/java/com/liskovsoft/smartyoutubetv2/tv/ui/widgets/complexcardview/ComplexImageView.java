@@ -4,13 +4,15 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.embedplayer.EmbedPlayerView;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
@@ -19,11 +21,15 @@ public class ComplexImageView extends RelativeLayout {
     private ImageView mMainImage;
     private ImageView mPreviewImage;
     private EmbedPlayerView mPreviewPlayer;
+    private FrameLayout mPreviewContainer;
     private ProgressBar mProgressBar;
     private TextView mBadgeText;
     private String mPreviewUrl;
     private String mPreviewVideoId;
     private ViewGroup mProgressContainer;
+    private int mPreviewWidth;
+    private int mPreviewHeight;
+    private Runnable mCreateAndStartPlayer;
 
     public ComplexImageView(Context context) {
         super(context);
@@ -43,11 +49,10 @@ public class ComplexImageView extends RelativeLayout {
     private void init() {
         inflate(getContext(), R.layout.text_badge_image_view, this);
         mMainImage = findViewById(R.id.main_image);
-        mPreviewImage = findViewById(R.id.preview_image);
-        mPreviewPlayer = findViewById(R.id.preview_player);
         mBadgeText = findViewById(R.id.extra_text_badge);
         mProgressBar = findViewById(R.id.clip_progress);
         mProgressContainer = findViewById(R.id.clip_info);
+        mPreviewContainer = findViewById(R.id.preview_container);
     }
 
     /**
@@ -108,49 +113,52 @@ public class ComplexImageView extends RelativeLayout {
         mPreviewVideoId = videoId;
     }
 
-    //public void startPlayback() {
-    //    if (mPreviewUrl == null) {
-    //        return;
-    //    }
-    //
-    //    mPreviewImage.setVisibility(View.VISIBLE);
-    //
-    //    Glide.with(getContext().getApplicationContext()) // FIX: "You cannot start a load for a destroyed activity"
-    //            .load(mPreviewUrl)
-    //            .apply(ViewUtil.glideOptions())
-    //            .into(mPreviewImage);
-    //}
-    //
-    //public void stopPlayback() {
-    //    if (mPreviewUrl == null) {
-    //        return;
-    //    }
-    //
-    //    mPreviewImage.setVisibility(View.GONE);
-    //    mPreviewImage.setImageDrawable(null);
-    //}
-
     public void startPlayback() {
         if (mPreviewUrl != null) {
-            mPreviewImage.setVisibility(View.VISIBLE);
+            if (mPreviewImage == null) {
+                mPreviewImage = new ImageView(getContext());
+                mPreviewImage.setScaleType(ScaleType.CENTER_CROP);
+                mPreviewImage.setAdjustViewBounds(true);
+                mPreviewContainer.addView(mPreviewImage, new FrameLayout.LayoutParams(mPreviewWidth, mPreviewHeight));
+            }
 
             Glide.with(getContext().getApplicationContext()) // FIX: "You cannot start a load for a destroyed activity"
                     .load(mPreviewUrl)
                     .apply(ViewUtil.glideOptions())
                     .into(mPreviewImage);
         } else if (mPreviewVideoId != null) {
-            mPreviewPlayer.setVisibility(View.VISIBLE);
-            mPreviewPlayer.openVideo(mPreviewVideoId);
+            if (mCreateAndStartPlayer == null) {
+                mCreateAndStartPlayer = this::createAndStartPlayer;
+            }
+
+            Utils.postDelayed(mCreateAndStartPlayer, 3_000);
         }
+    }
+
+    private void createAndStartPlayer() {
+        if (mPreviewPlayer == null) {
+            mPreviewPlayer = new EmbedPlayerView(getContext());
+            mPreviewPlayer.setUseController(false);
+            mPreviewPlayer.setOnLoad(() -> mPreviewContainer.addView(mPreviewPlayer, new FrameLayout.LayoutParams(mPreviewWidth, mPreviewHeight)));
+        }
+        
+        mPreviewPlayer.openVideo(mPreviewVideoId);
     }
 
     public void stopPlayback() {
         if (mPreviewUrl != null) {
-            mPreviewImage.setVisibility(View.GONE);
+            mPreviewContainer.removeView(mPreviewImage);
             mPreviewImage.setImageDrawable(null);
+            Glide.with(getContext()).clear(mPreviewImage);
+            mPreviewImage = null;
         } else if (mPreviewVideoId != null) {
-            mPreviewPlayer.setVisibility(View.GONE);
-            mPreviewPlayer.finish(); // TODO: not implemented
+            Utils.removeCallbacks(mCreateAndStartPlayer);
+
+            if (mPreviewPlayer != null) {
+                mPreviewContainer.removeView(mPreviewPlayer);
+                mPreviewPlayer.finish();
+                mPreviewPlayer = null;
+            }
         }
     }
 
@@ -178,9 +186,11 @@ public class ComplexImageView extends RelativeLayout {
     }
 
     private void setPreviewDimensions(int width, int height) {
-        ViewGroup.LayoutParams lp = mPreviewImage.getLayoutParams();
-        lp.width = width;
-        lp.height = height;
-        mPreviewImage.setLayoutParams(lp);
+        mPreviewWidth = width;
+        mPreviewHeight = height;
+        //ViewGroup.LayoutParams lp = mPreviewImage.getLayoutParams();
+        //lp.width = width;
+        //lp.height = height;
+        //mPreviewImage.setLayoutParams(lp);
     }
 }

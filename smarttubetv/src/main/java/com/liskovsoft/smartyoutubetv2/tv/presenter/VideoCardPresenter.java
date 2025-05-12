@@ -133,7 +133,7 @@ public class VideoCardPresenter extends LongClickPresenter {
 
         if (mIsAnimatedPreviewsEnabled) {
             cardView.setPreviewUrl(video.previewUrl);
-            //cardView.setPreviewVideoId(video.videoId);
+            cardView.setPreviewVideoId(video.videoId);
         }
 
         cardView.setMainImageDimensions(mWidth, mHeight);
@@ -170,6 +170,9 @@ public class VideoCardPresenter extends LongClickPresenter {
         // Remove references to images so that the garbage collector can free up memory.
         cardView.setBadgeImage(null);
         cardView.setMainImage(null);
+
+        // Cleanup Glide resources. https://chatgpt.com/share/682120c5-e428-8010-b848-371b2dec0cd5
+        Glide.with(cardView.getContext()).clear(cardView.getMainImageView());
     }
 
     private void updateDimensions(Context context) {

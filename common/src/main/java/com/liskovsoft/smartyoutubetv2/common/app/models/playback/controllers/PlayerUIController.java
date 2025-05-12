@@ -114,6 +114,10 @@ public class PlayerUIController extends BasePlayerController {
         disableUiAutoHideTimeout();
         disableSuggestionsResetTimeout();
 
+        if (getPlayer() == null) {
+            return false;
+        }
+
         boolean isHandled = handleBackKey(keyCode) || handleMenuKey(keyCode) ||
                 handleConfirmKey(keyCode) || handleStopKey(keyCode) || handleNumKeys(keyCode) ||
                 handlePlayPauseKey(keyCode) || handleLeftRightSkip(keyCode);
@@ -600,10 +604,6 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private boolean handleMenuKey(int keyCode) {
-        if (getPlayer() == null) {
-            return false;
-        }
-
         boolean controlsShown = getPlayer().isOverlayShown();
         boolean suggestionsShown = getPlayer().isSuggestionsShown();
 
@@ -619,10 +619,6 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private boolean handleConfirmKey(int keyCode) {
-        if (getPlayer() == null) {
-            return false;
-        }
-
         boolean controlsShown = getPlayer().isOverlayShown();
 
         if (KeyHelpers.isConfirmKey(keyCode) && !controlsShown) {

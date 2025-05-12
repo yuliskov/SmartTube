@@ -36,6 +36,8 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     private ExoPlayerInitializer mPlayerInitializer;
     private PlayerController mExoPlayerController;
     private PlaybackPresenter mPlaybackPresenter;
+    private Video mVideo;
+    private Runnable mOnLoad;
 
     public EmbedPlayerView(Context context) {
         super(context);
@@ -216,12 +218,16 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     @Override
     public void setVideo(Video item) {
+        mVideo = item;
 
+        if (mExoPlayerController != null) {
+            mExoPlayerController.setVideo(mVideo);
+        }
     }
 
     @Override
     public Video getVideo() {
-        return null;
+        return mVideo;
     }
 
     @Override
@@ -448,17 +454,28 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     public void openVideo(Video video) {
-        initPlayer();
+        if (mPlaybackPresenter == null) {
+            mPlaybackPresenter = PlaybackPresenter.instance(getContext());
+        }
+
+        // Fullscreen playback is running. Skipping
+        if (mPlaybackPresenter.getView() != null) {
+            return;
+        }
+
+        mVideo = video;
         mPlaybackPresenter.onNewVideo(video);
+        initPlayer();
     }
 
-    private void createPlayer() {
+    private void createPlayerObjects() {
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
         DefaultTrackSelector trackSelector = new RestoreTrackSelector(new AdaptiveTrackSelection.Factory());
         mExoPlayerController.setTrackSelector(trackSelector);
 
         DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getContext());
         mPlayer = mPlayerInitializer.createPlayer(getContext(), renderersFactory, trackSelector);
+        mPlayer.setPlayWhenReady(true);
 
         // Fix seeking on TextureView (some devices only)
         if (PlayerTweaksData.instance(getContext()).isTextureViewEnabled()) {
@@ -467,6 +484,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
         }
 
         mExoPlayerController.setPlayer(mPlayer);
+        mExoPlayerController.setVideo(mVideo);
 
         if (PlayerTweaksData.instance(getContext()).isAudioFocusEnabled()) {
             ExoPlayerInitializer.enableAudioFocus(mPlayer, true);
@@ -476,8 +494,9 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     private void releasePlayer() {
-        if (mPlayer != null) {
+        if (isEngineInitialized()) {
             Log.d(TAG, "releasePlayer: Start releasing player engine...");
+            mOnLoad = null;
             mPlaybackPresenter.onEngineReleased();
             destroyPlayerObjects();
         }
@@ -488,19 +507,31 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
         mExoPlayerController.release();
         mPlayer = null;
         setPlayer(null);
-        mPlaybackPresenter.setView(null);
+        //mPlaybackPresenter.setView(null);
     }
 
     private void initPlayer() {
-        if (mPlayer != null) {
+        if (isEngineInitialized()) {
             return;
         }
         
         mPlayerInitializer = new ExoPlayerInitializer(getContext());
-        mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.setView(this);
         mExoPlayerController = new ExoPlayerController(getContext(), mPlaybackPresenter);
-        mPlaybackPresenter.onViewInitialized();
-        createPlayer();
+        mExoPlayerController.setOnVideoLoaded(this::onVideoLoaded);
+        mPlaybackPresenter.onViewInitialized(); // init all controllers
+        createPlayerObjects();
+        mPlaybackPresenter.onEngineInitialized(); // start playback
+    }
+
+    private void onVideoLoaded() {
+        if (mOnLoad != null) {
+            mOnLoad.run();
+            mOnLoad = null;
+        }
+    }
+
+    public void setOnLoad(Runnable onLoad) {
+        mOnLoad = onLoad;
     }
 }
