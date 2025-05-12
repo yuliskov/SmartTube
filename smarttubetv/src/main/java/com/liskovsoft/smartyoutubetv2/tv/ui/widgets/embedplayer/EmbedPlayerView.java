@@ -232,7 +232,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     @Override
     public void finish() {
-        releasePlayer();
+        destroyPlayerObjects();
     }
 
     @Override
@@ -466,9 +466,14 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
         mVideo = video;
         mPlaybackPresenter.onNewVideo(video);
         initPlayer();
+        createPlayerObjects();
     }
 
     private void createPlayerObjects() {
+        if (isEngineInitialized()) {
+            return;
+        }
+
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
         DefaultTrackSelector trackSelector = new RestoreTrackSelector(new AdaptiveTrackSelection.Factory());
         mExoPlayerController.setTrackSelector(trackSelector);
@@ -491,27 +496,24 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
         }
 
         setPlayer(mPlayer);
-    }
 
-    private void releasePlayer() {
-        if (isEngineInitialized()) {
-            Log.d(TAG, "releasePlayer: Start releasing player engine...");
-            mOnLoad = null;
-            mPlaybackPresenter.onEngineReleased();
-            destroyPlayerObjects();
-        }
+        mPlaybackPresenter.onEngineInitialized(); // start playback
     }
 
     private void destroyPlayerObjects() {
-        // Fix access calls when player isn't initialized
-        mExoPlayerController.release();
-        mPlayer = null;
-        setPlayer(null);
-        //mPlaybackPresenter.setView(null);
+        if (isEngineInitialized()) {
+            mOnLoad = null;
+            mPlaybackPresenter.onEngineReleased();
+            // Fix access calls when player isn't initialized
+            mExoPlayerController.release();
+            mPlayer = null;
+            setPlayer(null);
+            //mPlaybackPresenter.setView(null);
+        }
     }
 
     private void initPlayer() {
-        if (isEngineInitialized()) {
+        if (mExoPlayerController != null) {
             return;
         }
         
@@ -520,8 +522,6 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
         mExoPlayerController = new ExoPlayerController(getContext(), mPlaybackPresenter);
         mExoPlayerController.setOnVideoLoaded(this::onVideoLoaded);
         mPlaybackPresenter.onViewInitialized(); // init all controllers
-        createPlayerObjects();
-        mPlaybackPresenter.onEngineInitialized(); // start playback
     }
 
     private void onVideoLoaded() {

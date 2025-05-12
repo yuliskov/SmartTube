@@ -5,6 +5,7 @@
         tools:ignore="ContentDescription"
         style="?attr/imageCardViewImageStyle"/>
     <FrameLayout
+        android:visibility="gone"
         android:id="@+id/preview_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

@@ -120,6 +120,7 @@ public class ComplexImageView extends RelativeLayout {
                 mPreviewImage.setScaleType(ScaleType.CENTER_CROP);
                 mPreviewImage.setAdjustViewBounds(true);
                 mPreviewContainer.addView(mPreviewImage, new FrameLayout.LayoutParams(mPreviewWidth, mPreviewHeight));
+                mPreviewContainer.setVisibility(View.VISIBLE);
             }
 
             Glide.with(getContext().getApplicationContext()) // FIX: "You cannot start a load for a destroyed activity"
@@ -139,7 +140,10 @@ public class ComplexImageView extends RelativeLayout {
         if (mPreviewPlayer == null) {
             mPreviewPlayer = new EmbedPlayerView(getContext());
             mPreviewPlayer.setUseController(false);
-            mPreviewPlayer.setOnLoad(() -> mPreviewContainer.addView(mPreviewPlayer, new FrameLayout.LayoutParams(mPreviewWidth, mPreviewHeight)));
+            mPreviewPlayer.setOnLoad(() -> {
+                mPreviewContainer.addView(mPreviewPlayer, new FrameLayout.LayoutParams(mPreviewWidth, mPreviewHeight));
+                mPreviewContainer.setVisibility(View.VISIBLE);
+            });
         }
         
         mPreviewPlayer.openVideo(mPreviewVideoId);
@@ -148,6 +152,7 @@ public class ComplexImageView extends RelativeLayout {
     public void stopPlayback() {
         if (mPreviewUrl != null) {
             mPreviewContainer.removeView(mPreviewImage);
+            mPreviewContainer.setVisibility(View.GONE);
             mPreviewImage.setImageDrawable(null);
             Glide.with(getContext()).clear(mPreviewImage);
             mPreviewImage = null;
@@ -156,6 +161,7 @@ public class ComplexImageView extends RelativeLayout {
 
             if (mPreviewPlayer != null) {
                 mPreviewContainer.removeView(mPreviewPlayer);
+                mPreviewContainer.setVisibility(View.GONE);
                 mPreviewPlayer.finish();
                 mPreviewPlayer = null;
             }
