@@ -133,7 +133,7 @@ public class VideoCardPresenter extends LongClickPresenter {
 
         if (mIsAnimatedPreviewsEnabled) {
             cardView.setPreviewUrl(video.previewUrl);
-            cardView.setPreviewVideoId(video.videoId);
+            //cardView.setPreviewVideoId(video.videoId);
         }
 
         cardView.setMainImageDimensions(mWidth, mHeight);
