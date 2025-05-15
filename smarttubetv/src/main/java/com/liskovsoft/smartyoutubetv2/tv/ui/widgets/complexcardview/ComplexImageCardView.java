@@ -4,9 +4,12 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import androidx.leanback.widget.ImageCardView;
+
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
@@ -108,12 +111,8 @@ public class ComplexImageCardView extends ImageCardView {
         }
     }
 
-    public void setPreviewUrl(String previewUrl) {
-        mComplexImageView.setPreviewUrl(previewUrl);
-    }
-
-    public void setPreviewVideoId(String videoId) {
-        mComplexImageView.setPreviewVideoId(videoId);
+    public void setPreview(Video video) {
+        mComplexImageView.setPreview(video);
     }
 
     public void setTitleLinesNum(int lines) {

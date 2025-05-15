@@ -176,14 +176,7 @@ public class VideoStateController extends BasePlayerController {
         //restoreFormats();
 
         // In this state video length is not undefined.
-        restorePosition();
-        restorePendingPosition();
-        //restoreSpeed();
-        // Player thinks that subs not enabled if I enable it too early (e.g. on source change event).
-        //restoreSubtitleFormat();
-
-        restoreVolume();
-        restorePitch();
+        restoreState();
     }
 
     @Override
@@ -392,13 +385,30 @@ public class VideoStateController extends BasePlayerController {
     }
 
     public void saveState() {
+        if (getVideo() != null && getVideo().embedPlayer) {
+            return;
+        }
+
         savePosition();
         updateHistory();
-        //persistState(); // persist the state if the device reboots accidentally
         syncWithPlaylists();
     }
 
+    private void restoreState() {
+        restorePosition();
+        restorePendingPosition();
+        // Player thinks that subs not enabled if I enable it too early (e.g. on source change event).
+        //restoreSubtitleFormat();
+
+        restoreVolume();
+        restorePitch();
+    }
+
     private void persistState() {
+        if (getVideo() != null && getVideo().embedPlayer) {
+            return;
+        }
+
         getStateService().persistState();
     }
 

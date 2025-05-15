@@ -132,8 +132,7 @@ public class VideoCardPresenter extends LongClickPresenter {
                 ContextCompat.getColor(context, R.color.dark_red) : ContextCompat.getColor(context, R.color.black));
 
         if (mIsAnimatedPreviewsEnabled) {
-            cardView.setPreviewUrl(video.previewUrl);
-            //cardView.setPreviewVideoId(video.videoId);
+            cardView.setPreview(video);
         }
 
         cardView.setMainImageDimensions(mWidth, mHeight);
@@ -172,7 +171,7 @@ public class VideoCardPresenter extends LongClickPresenter {
         cardView.setMainImage(null);
 
         // Cleanup Glide resources. https://chatgpt.com/share/682120c5-e428-8010-b848-371b2dec0cd5
-        Glide.with(cardView.getContext()).clear(cardView.getMainImageView());
+        Glide.with(cardView.getContext().getApplicationContext()).clear(cardView.getMainImageView());
     }
 
     private void updateDimensions(Context context) {

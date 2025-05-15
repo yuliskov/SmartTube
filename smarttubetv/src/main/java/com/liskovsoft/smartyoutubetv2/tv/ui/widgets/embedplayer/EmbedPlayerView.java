@@ -3,13 +3,15 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.embedplayer;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
@@ -23,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.io.InputStream;
 import java.util.List;
@@ -32,23 +35,38 @@ import java.util.List;
  */
 public class EmbedPlayerView extends PlayerView implements PlaybackView {
     private static final String TAG = EmbedPlayerView.class.getSimpleName();
+    public static final int QUALITY_LOW = 0;
+    public static final int QUALITY_NORMAL = 1;
     private SimpleExoPlayer mPlayer;
     private ExoPlayerInitializer mPlayerInitializer;
     private PlayerController mExoPlayerController;
     private PlaybackPresenter mPlaybackPresenter;
     private Video mVideo;
-    private Runnable mOnLoad;
+    private boolean mMute;
+    private final Runnable mShowView = this::showView;
+    private int mQuality;
 
     public EmbedPlayerView(Context context) {
         super(context);
+        hideView();
     }
 
     public EmbedPlayerView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        hideView();
     }
 
     public EmbedPlayerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        hideView();
+    }
+
+    private void hideView() {
+        setAlpha(0);
+    }
+
+    private void showView() {
+        setAlpha(1);
     }
 
     @Override
@@ -340,8 +358,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     @Override
     public void setFormat(FormatItem option) {
-        // Android 4.4 fix for format selection dialog (player destroyed when dialog is focused)
-        mExoPlayerController.selectFormat(option);
+        // NOP. Use internal selection
     }
 
     @Override
@@ -391,12 +408,18 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     @Override
     public void setSpeed(float speed) {
-
+        if (mExoPlayerController != null) {
+            mExoPlayerController.setSpeed(speed);
+        }
     }
 
     @Override
     public float getSpeed() {
-        return 0;
+        if (mExoPlayerController == null) {
+            return 1f;
+        }
+
+        return mExoPlayerController.getSpeed();
     }
 
     @Override
@@ -411,17 +434,18 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     @Override
     public void setVolume(float volume) {
-
+        if (!mMute && mExoPlayerController != null) {
+            mExoPlayerController.setVolume(volume);
+        }
     }
 
     @Override
     public float getVolume() {
-        return 0;
-    }
+        if (mExoPlayerController == null) {
+            return 1f;
+        }
 
-    @Override
-    public void setResizeMode(int mode) {
-
+        return mExoPlayerController.getVolume();
     }
 
     @Override
@@ -449,24 +473,29 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     }
 
+    public void setQuality(int quality) {
+        mQuality = quality;
+    }
+
     public void openVideo(String videoId) {
         openVideo(Video.from(videoId));
     }
 
-    public void openVideo(Video video) {
+    public void openVideo(@NonNull Video video) {
+        video.embedPlayer = true;
+
         if (mPlaybackPresenter == null) {
             mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         }
 
         // Fullscreen playback is running. Skipping
-        if (mPlaybackPresenter.getView() != null) {
-            return;
+        PlaybackView view = mPlaybackPresenter.getView();
+        if (view == null || view instanceof EmbedPlayerView) {
+            mVideo = video;
+            mPlaybackPresenter.onNewVideo(video);
+            initPlayer();
+            createPlayerObjects();
         }
-
-        mVideo = video;
-        mPlaybackPresenter.onNewVideo(video);
-        initPlayer();
-        createPlayerObjects();
     }
 
     private void createPlayerObjects() {
@@ -481,6 +510,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
         DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getContext());
         mPlayer = mPlayerInitializer.createPlayer(getContext(), renderersFactory, trackSelector);
         mPlayer.setPlayWhenReady(true);
+        //mPlayer.setRepeatMode(Player.REPEAT_MODE_ONE);
 
         // Fix seeking on TextureView (some devices only)
         if (PlayerTweaksData.instance(getContext()).isTextureViewEnabled()) {
@@ -490,6 +520,12 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
         mExoPlayerController.setPlayer(mPlayer);
         mExoPlayerController.setVideo(mVideo);
+        mExoPlayerController.selectFormat(mQuality == QUALITY_LOW ? FormatItem.VIDEO_SUB_SD_AVC_30 : FormatItem.VIDEO_SD_AVC_30);
+        // Don't use subs! Not efficient. High cpu load. Cause input lags.
+        mExoPlayerController.selectFormat(FormatItem.SUBTITLE_NONE);
+        if (mMute) {
+            mExoPlayerController.setVolume(0);
+        }
 
         if (PlayerTweaksData.instance(getContext()).isAudioFocusEnabled()) {
             ExoPlayerInitializer.enableAudioFocus(mPlayer, true);
@@ -502,13 +538,17 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     private void destroyPlayerObjects() {
         if (isEngineInitialized()) {
-            mOnLoad = null;
-            mPlaybackPresenter.onEngineReleased();
+            Utils.removeCallbacks(mShowView);
+            // Don't replace main player!
+            if (mPlaybackPresenter.getView() == this) {
+                mPlaybackPresenter.onEngineReleased();
+                mPlaybackPresenter.setView(null);
+            }
+            mExoPlayerController.setOnVideoLoaded(null);
             // Fix access calls when player isn't initialized
             mExoPlayerController.release();
             mPlayer = null;
             setPlayer(null);
-            //mPlaybackPresenter.setView(null);
         }
     }
 
@@ -522,16 +562,20 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
         mExoPlayerController = new ExoPlayerController(getContext(), mPlaybackPresenter);
         mExoPlayerController.setOnVideoLoaded(this::onVideoLoaded);
         mPlaybackPresenter.onViewInitialized(); // init all controllers
+
+        setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_ZOOM); // Fix unfilled borders
     }
 
     private void onVideoLoaded() {
-        if (mOnLoad != null) {
-            mOnLoad.run();
-            mOnLoad = null;
-        }
+        // Fix the screen becomes black for a moment
+        Utils.postDelayed(mShowView, 1_000);
     }
 
-    public void setOnLoad(Runnable onLoad) {
-        mOnLoad = onLoad;
+    public void setMute(boolean mute) {
+        mMute = mute;
+
+        if (mExoPlayerController != null) {
+            mExoPlayerController.setVolume(0);
+        }
     }
 }

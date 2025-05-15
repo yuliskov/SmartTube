@@ -99,6 +99,7 @@ public final class Video {
     private long durationMs = -1;
     private WeakReference<VideoGroup> group; // Memory leak fix. Used to get next page when scrolling.
     public List<NotificationState> notificationStates;
+    public boolean embedPlayer;
 
     public Video() {
        // NOP
@@ -786,6 +787,7 @@ public final class Video {
         video.isLive = isLive;
         video.isUpcoming = isUpcoming;
         video.nextMediaItem = nextMediaItem;
+        video.durationMs = durationMs;
 
         if (getGroup() != null) {
             video.setGroup(getGroup().copy()); // Needed for proper multi row fragments sync (row id == group id)

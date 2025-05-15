@@ -229,6 +229,10 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     public void loadSuggestions(Video video) {
+        if (video.embedPlayer) {
+            return;
+        }
+
         clearSuggestionsIfNeeded(video);
         loadMetadata(video, metadata -> updateSuggestions(metadata, video));
     }

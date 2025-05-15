@@ -12,10 +12,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.embedplayer.EmbedPlayerView;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
+
+import java.lang.ref.WeakReference;
 
 public class ComplexImageView extends RelativeLayout {
     private ImageView mMainImage;
@@ -24,12 +27,11 @@ public class ComplexImageView extends RelativeLayout {
     private FrameLayout mPreviewContainer;
     private ProgressBar mProgressBar;
     private TextView mBadgeText;
-    private String mPreviewUrl;
-    private String mPreviewVideoId;
     private ViewGroup mProgressContainer;
     private int mPreviewWidth;
     private int mPreviewHeight;
     private Runnable mCreateAndStartPlayer;
+    private WeakReference<Video> mVideo;
 
     public ComplexImageView(Context context) {
         super(context);
@@ -64,6 +66,15 @@ public class ComplexImageView extends RelativeLayout {
         super.setVisibility(visibility);
         if (mMainImage != null) {
             mMainImage.setVisibility(visibility);
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        super.onWindowFocusChanged(hasWindowFocus);
+
+        if (!hasWindowFocus) {
+            stopPlayback();
         }
     }
 
@@ -105,16 +116,18 @@ public class ComplexImageView extends RelativeLayout {
         }
     }
 
-    public void setPreviewUrl(String videoUrl) {
-        mPreviewUrl = videoUrl;
-    }
-
-    public void setPreviewVideoId(String videoId) {
-        mPreviewVideoId = videoId;
+    public void setPreview(Video video) {
+        if (video != null) {
+            mVideo = new WeakReference<>(video);
+        }
     }
 
     public void startPlayback() {
-        if (mPreviewUrl != null) {
+        if (getVideo() == null) {
+            return;
+        }
+
+        if (getVideo().previewUrl != null) {
             if (mPreviewImage == null) {
                 mPreviewImage = new ImageView(getContext());
                 mPreviewImage.setScaleType(ScaleType.CENTER_CROP);
@@ -124,39 +137,47 @@ public class ComplexImageView extends RelativeLayout {
             }
 
             Glide.with(getContext().getApplicationContext()) // FIX: "You cannot start a load for a destroyed activity"
-                    .load(mPreviewUrl)
+                    .load(getVideo().previewUrl)
                     .apply(ViewUtil.glideOptions())
                     .into(mPreviewImage);
-        } else if (mPreviewVideoId != null) {
+        } else if (getVideo().videoId != null) {
             if (mCreateAndStartPlayer == null) {
                 mCreateAndStartPlayer = this::createAndStartPlayer;
             }
 
-            Utils.postDelayed(mCreateAndStartPlayer, 3_000);
+            Utils.postDelayed(mCreateAndStartPlayer, 2_000);
         }
     }
 
     private void createAndStartPlayer() {
+        if (getVideo() == null) {
+            return;
+        }
+
         if (mPreviewPlayer == null) {
             mPreviewPlayer = new EmbedPlayerView(getContext());
+            mPreviewPlayer.setQuality(Math.min(mPreviewWidth, mPreviewHeight) < 300 ? EmbedPlayerView.QUALITY_LOW : EmbedPlayerView.QUALITY_NORMAL);
             mPreviewPlayer.setUseController(false);
-            mPreviewPlayer.setOnLoad(() -> {
-                mPreviewContainer.addView(mPreviewPlayer, new FrameLayout.LayoutParams(mPreviewWidth, mPreviewHeight));
-                mPreviewContainer.setVisibility(View.VISIBLE);
-            });
+            //mPreviewPlayer.setMute(true);
+            mPreviewContainer.addView(mPreviewPlayer, new FrameLayout.LayoutParams(mPreviewWidth, mPreviewHeight));
+            mPreviewContainer.setVisibility(View.VISIBLE);
         }
-        
-        mPreviewPlayer.openVideo(mPreviewVideoId);
+
+        mPreviewPlayer.openVideo(getVideo().copy());
     }
 
     public void stopPlayback() {
-        if (mPreviewUrl != null) {
+        if (getVideo() == null) {
+            return;
+        }
+
+        if (getVideo().previewUrl != null) {
             mPreviewContainer.removeView(mPreviewImage);
             mPreviewContainer.setVisibility(View.GONE);
             mPreviewImage.setImageDrawable(null);
-            Glide.with(getContext()).clear(mPreviewImage);
+            Glide.with(getContext().getApplicationContext()).clear(mPreviewImage);
             mPreviewImage = null;
-        } else if (mPreviewVideoId != null) {
+        } else if (getVideo().videoId != null) {
             Utils.removeCallbacks(mCreateAndStartPlayer);
 
             if (mPreviewPlayer != null) {
@@ -198,5 +219,9 @@ public class ComplexImageView extends RelativeLayout {
         //lp.width = width;
         //lp.height = height;
         //mPreviewImage.setLayoutParams(lp);
+    }
+
+    private Video getVideo() {
+        return mVideo != null ? mVideo.get() : null;
     }
 }

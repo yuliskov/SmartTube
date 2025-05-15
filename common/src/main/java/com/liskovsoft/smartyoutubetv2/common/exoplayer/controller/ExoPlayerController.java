@@ -485,13 +485,15 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     private void releasePlayer() {
+        if (mPlayer == null) {
+            return;
+        }
+
         try {
-            if (mPlayer != null) {
-                mPlayer.removeListener(this);
-                mPlayer.stop(true);
-                mPlayer.release();
-                mPlayer = null;
-            }
+            mPlayer.removeListener(this);
+            mPlayer.stop(true); // Cause input lags due to high cpu load?
+            mPlayer.release();
+            mPlayer = null;
         } catch (ArrayIndexOutOfBoundsException e) { // thrown on stop()
             e.printStackTrace();
         }
