@@ -17,7 +17,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
@@ -561,6 +563,10 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
             hideView();
             if (mVideo != null) {
                 mVideo.embedPlayer = false;
+                BasePresenter<?> presenter = ViewManager.instance(getContext()).getCurrentPresenter();
+                if (presenter != null) {
+                    presenter.syncItem(mVideo);
+                }
             }
         }
     }

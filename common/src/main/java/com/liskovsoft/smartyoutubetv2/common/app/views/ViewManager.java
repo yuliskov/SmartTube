@@ -16,9 +16,12 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -467,5 +470,21 @@ public class ViewManager {
         if (!isPlayerInForeground()) {
             startView(PlaybackView.class);
         }
+    }
+
+    public BasePresenter<?> getCurrentPresenter() {
+        Class<?> topView = getTopView();
+
+        if (topView == BrowseView.class) {
+            return BrowsePresenter.instance(mContext);
+        } else if (topView == SearchView.class) {
+            return SearchPresenter.instance(mContext);
+        } else if (topView == ChannelView.class) {
+            return ChannelPresenter.instance(mContext);
+        } else if (topView == ChannelUploadsView.class) {
+            return ChannelUploadsPresenter.instance(mContext);
+        }
+
+        return null;
     }
 }
