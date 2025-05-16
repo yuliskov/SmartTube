@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import androidx.leanback.widget.ImageCardView;
@@ -113,6 +112,10 @@ public class ComplexImageCardView extends ImageCardView {
 
     public void setPreview(Video video) {
         mComplexImageView.setPreview(video);
+    }
+
+    public void setMute(boolean muted) {
+        mComplexImageView.setMute(muted);
     }
 
     public void setTitleLinesNum(int lines) {

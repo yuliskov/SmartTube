@@ -33,6 +33,7 @@ public class ComplexImageView extends RelativeLayout {
     private Runnable mCreateAndStartPlayer;
     private WeakReference<Video> mVideo;
     private boolean mPreferSimplePreview;
+    private boolean mMute;
 
     public ComplexImageView(Context context) {
         super(context);
@@ -123,6 +124,10 @@ public class ComplexImageView extends RelativeLayout {
         }
     }
 
+    public void setMute(boolean mute) {
+        mMute = mute;
+    }
+
     public void startPlayback() {
         if (getVideo() == null) {
             return;
@@ -159,7 +164,7 @@ public class ComplexImageView extends RelativeLayout {
             mPreviewPlayer = new EmbedPlayerView(getContext());
             mPreviewPlayer.setQuality(Math.min(mPreviewWidth, mPreviewHeight) < 300 ? EmbedPlayerView.QUALITY_LOW : EmbedPlayerView.QUALITY_NORMAL);
             mPreviewPlayer.setUseController(false);
-            //mPreviewPlayer.setMute(true);
+            mPreviewPlayer.setMute(mMute);
             mPreviewContainer.addView(mPreviewPlayer, new FrameLayout.LayoutParams(mPreviewWidth, mPreviewHeight));
             mPreviewContainer.setVisibility(View.VISIBLE);
         }

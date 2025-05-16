@@ -38,7 +38,7 @@ public class VideoCardPresenter extends LongClickPresenter {
     private int mDefaultTextColor = -1;
     private int mSelectedBackgroundColor = -1;
     private int mSelectedTextColor = -1;
-    private boolean mIsAnimatedPreviewsEnabled;
+    private int mCardPreviewType;
     private int mThumbQuality;
     private int mWidth;
     private int mHeight;
@@ -56,7 +56,7 @@ public class VideoCardPresenter extends LongClickPresenter {
         mSelectedTextColor =
                 ContextCompat.getColor(context, R.color.card_selected_text_grey);
 
-        mIsAnimatedPreviewsEnabled = isCardAnimatedPreviewsEnabled(context);
+        mCardPreviewType = getCardPreviewType(context);
         mThumbQuality = getThumbQuality(context);
 
         boolean isCardMultilineTitleEnabled = isCardMultilineTitleEnabled(context);
@@ -131,8 +131,9 @@ public class VideoCardPresenter extends LongClickPresenter {
         cardView.setBadgeColor(video.hasNewContent || video.isLive || video.isUpcoming ?
                 ContextCompat.getColor(context, R.color.dark_red) : ContextCompat.getColor(context, R.color.black));
 
-        if (mIsAnimatedPreviewsEnabled) {
+        if (mCardPreviewType != MainUIData.CARD_PREVIEW_DISABLED) {
             cardView.setPreview(video);
+            cardView.setMute(mCardPreviewType == MainUIData.CARD_PREVIEW_MUTED);
         }
 
         cardView.setMainImageDimensions(mWidth, mHeight);
@@ -189,8 +190,8 @@ public class VideoCardPresenter extends LongClickPresenter {
         return MainUIData.instance(context).isCardTextAutoScrollEnabled();
     }
 
-    protected boolean isCardAnimatedPreviewsEnabled(Context context) {
-        return MainUIData.instance(context).isCardAnimatedPreviewsEnabled();
+    protected int getCardPreviewType(Context context) {
+        return MainUIData.instance(context).getCardPreviewType();
     }
 
     protected boolean isCardMultilineTitleEnabled(Context context) {

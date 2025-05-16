@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
+import android.os.Build.VERSION;
+
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuManager;
@@ -17,9 +19,9 @@ import java.util.List;
 
 public class MainUIData extends DataChangeBase implements ProfileChangeListener {
     private static final String MAIN_UI_DATA = "main_ui_data2";
-    public static final int ANIMATED_PREVIEW_DISABLED = 0;
-    public static final int ANIMATED_PREVIEW_MUTED = 1;
-    public static final int ANIMATED_PREVIEW_FULL = 2;
+    public static final int CARD_PREVIEW_DISABLED = 0;
+    public static final int CARD_PREVIEW_MUTED = 1;
+    public static final int CARD_PREVIEW_FULL = 2;
     public static final int CHANNEL_SORTING_NEW_CONTENT = 0;
     public static final int CHANNEL_SORTING_NAME = 1;
     public static final int CHANNEL_SORTING_DEFAULT = 2;
@@ -84,7 +86,6 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     private static MainUIData sInstance;
     private final Context mContext;
     private final AppPrefs mPrefs;
-    private boolean mIsCardAnimatedPreviewsEnabled;
     private boolean mIsCardMultilineTitleEnabled;
     private boolean mIsCardMultilineSubtitleEnabled;
     private boolean mIsCardTextAutoScrollEnabled;
@@ -105,7 +106,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     private boolean mIsChannelsFilterEnabled;
     private boolean mIsChannelSearchBarEnabled;
     private boolean mIsPinnedChannelRowsEnabled;
-    private int mAnimatedPreviewType;
+    private int mCardPreviewType;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -121,15 +122,6 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         }
 
         return sInstance;
-    }
-
-    public void enableCardAnimatedPreviews(boolean enable) {
-        mIsCardAnimatedPreviewsEnabled = enable;
-        persistState();
-    }
-
-    public boolean isCardAnimatedPreviewsEnabled() {
-        return mIsCardAnimatedPreviewsEnabled;
     }
 
     public void enableCardMultilineTitle(boolean enable) {
@@ -337,12 +329,12 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return (mTopButtons & button) == button;
     }
 
-    public int getAnimatedPreviewType() {
-        return mAnimatedPreviewType;
+    public int getCardPreviewType() {
+        return mCardPreviewType;
     }
 
-    public void setAnimatedPreviewType(int type) {
-        mAnimatedPreviewType = type;
+    public void setCardPreviewType(int type) {
+        mCardPreviewType = type;
         persistState();
     }
 
@@ -396,7 +388,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
 
         String[] split = Helpers.splitData(data);
 
-        mIsCardAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
+        //mIsCardAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
         mVideoGridScale = Helpers.parseFloat(split, 1, 1.0f); // 4 cards in a row
         mUIScale = Helpers.parseFloat(split, 2, 1.0f);
         mColorSchemeIndex = Helpers.parseInt(split, 3, 1);
@@ -417,7 +409,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         mIsChannelsFilterEnabled = Helpers.parseBoolean(split, 18, true);
         mIsChannelSearchBarEnabled = Helpers.parseBoolean(split, 19, true);
         mIsPinnedChannelRowsEnabled = Helpers.parseBoolean(split, 20, true);
-        mAnimatedPreviewType = Helpers.parseInt(split, 21, ANIMATED_PREVIEW_FULL);
+        mCardPreviewType = Helpers.parseInt(split, 21, VERSION.SDK_INT > 19 ? CARD_PREVIEW_FULL : CARD_PREVIEW_DISABLED);
 
         for (Long menuItem : MENU_ITEM_DEFAULT_ORDER) {
             if (!mMenuItemsOrdered.contains(menuItem)) {
@@ -435,12 +427,12 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     }
     
     private void persistState() {
-        mPrefs.setProfileData(MAIN_UI_DATA, Helpers.mergeData(mIsCardAnimatedPreviewsEnabled,
+        mPrefs.setProfileData(MAIN_UI_DATA, Helpers.mergeData(null,
                 mVideoGridScale, mUIScale, mColorSchemeIndex, mIsCardMultilineTitleEnabled,
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
                 mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,
                 null, mThumbQuality, mIsCardMultilineSubtitleEnabled, Helpers.mergeList(mMenuItemsOrdered),
-                mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled, mIsPinnedChannelRowsEnabled, mAnimatedPreviewType));
+                mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled, mIsPinnedChannelRowsEnabled, mCardPreviewType));
 
         onDataChange();
     }
