@@ -163,7 +163,7 @@ public class ComplexImageView extends RelativeLayout {
             mPreviewContainer.setVisibility(View.VISIBLE);
         }
 
-        mPreviewPlayer.openVideo(getVideo().copy());
+        mPreviewPlayer.openVideo(getVideo());
     }
 
     public void stopPlayback() {

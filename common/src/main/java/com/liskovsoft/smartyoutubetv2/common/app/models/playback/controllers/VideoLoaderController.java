@@ -654,6 +654,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             return;
         }
 
+        if (video.embedPlayer) {
+            playbackMode = PlayerConstants.PLAYBACK_MODE_CLOSE;
+        }
+
         switch (playbackMode) {
             case PlayerConstants.PLAYBACK_MODE_REVERSE_LIST:
                 if (video.hasPlaylist() || video.belongsToChannelUploads() || video.belongsToChannel()) {

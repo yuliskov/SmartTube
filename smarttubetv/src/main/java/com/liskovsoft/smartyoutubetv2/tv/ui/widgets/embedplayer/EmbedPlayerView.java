@@ -255,7 +255,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     @Override
     public void finishReally() {
-
+        finish();
     }
 
     @Override
@@ -403,7 +403,11 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     @Override
     public boolean containsMedia() {
-        return false;
+        if (mExoPlayerController == null) {
+            return false;
+        }
+
+        return mExoPlayerController.containsMedia();
     }
 
     @Override
@@ -424,12 +428,18 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     @Override
     public void setPitch(float pitch) {
-
+        if (mExoPlayerController != null) {
+            mExoPlayerController.setPitch(pitch);
+        }
     }
 
     @Override
     public float getPitch() {
-        return 0;
+        if (mExoPlayerController == null) {
+            return 1f;
+        }
+
+        return mExoPlayerController.getPitch();
     }
 
     @Override
@@ -549,6 +559,10 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
             mExoPlayerController.release();
             mPlayer = null;
             setPlayer(null);
+            hideView();
+            if (mVideo != null) {
+                mVideo.embedPlayer = false;
+            }
         }
     }
 
