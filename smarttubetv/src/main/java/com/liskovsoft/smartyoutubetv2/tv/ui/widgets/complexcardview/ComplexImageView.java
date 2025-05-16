@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -165,6 +166,7 @@ public class ComplexImageView extends RelativeLayout {
             mPreviewPlayer.setQuality(Math.min(mPreviewWidth, mPreviewHeight) < 300 ? EmbedPlayerView.QUALITY_LOW : EmbedPlayerView.QUALITY_NORMAL);
             mPreviewPlayer.setUseController(false);
             mPreviewPlayer.setMute(mMute);
+            mPreviewPlayer.setBackgroundColor(Color.BLACK);
             mPreviewContainer.addView(mPreviewPlayer, new FrameLayout.LayoutParams(mPreviewWidth, mPreviewHeight));
             mPreviewContainer.setVisibility(View.VISIBLE);
         }
