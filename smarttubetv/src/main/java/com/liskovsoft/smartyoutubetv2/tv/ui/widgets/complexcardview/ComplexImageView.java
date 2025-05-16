@@ -32,6 +32,7 @@ public class ComplexImageView extends RelativeLayout {
     private int mPreviewHeight;
     private Runnable mCreateAndStartPlayer;
     private WeakReference<Video> mVideo;
+    private boolean mPreferSimplePreview;
 
     public ComplexImageView(Context context) {
         super(context);
@@ -127,7 +128,7 @@ public class ComplexImageView extends RelativeLayout {
             return;
         }
 
-        if (getVideo().previewUrl != null) {
+        if (getVideo().previewUrl != null && mPreferSimplePreview) {
             if (mPreviewImage == null) {
                 mPreviewImage = new ImageView(getContext());
                 mPreviewImage.setScaleType(ScaleType.CENTER_CROP);
@@ -171,12 +172,14 @@ public class ComplexImageView extends RelativeLayout {
             return;
         }
 
-        if (getVideo().previewUrl != null) {
-            mPreviewContainer.removeView(mPreviewImage);
-            mPreviewContainer.setVisibility(View.GONE);
-            mPreviewImage.setImageDrawable(null);
-            Glide.with(getContext().getApplicationContext()).clear(mPreviewImage);
-            mPreviewImage = null;
+        if (getVideo().previewUrl != null && mPreferSimplePreview) {
+            if (mPreviewImage != null) {
+                mPreviewContainer.removeView(mPreviewImage);
+                mPreviewContainer.setVisibility(View.GONE);
+                mPreviewImage.setImageDrawable(null);
+                Glide.with(getContext().getApplicationContext()).clear(mPreviewImage);
+                mPreviewImage = null;
+            }
         } else if (getVideo().videoId != null) {
             Utils.removeCallbacks(mCreateAndStartPlayer);
 

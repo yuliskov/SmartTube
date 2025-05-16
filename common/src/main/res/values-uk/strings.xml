@@ -688,4 +688,7 @@
     <string name="player_audio_focus">Аудіо фокус (пауза, якщо виявлено інші плеєри)</string>
     <string name="paid_content_notification">Повідомлення про платний вміст</string>
     <string name="you_liked">вам сподобалося</string>
+    <string name="card_preview_muted">Відео без звуку</string>
+    <string name="card_preview_full">Відео зі звуком</string>
+    <string name="card_preview">Попередній перегляд картки</string>
 </resources>

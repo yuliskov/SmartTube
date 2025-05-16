@@ -699,4 +699,7 @@
     <string name="player_audio_focus">Ses odaklama (diğer video oynatıcılar algılanırsa duraklatma)</string>
     <string name="paid_content_notification">Ücretli içerik bildirimleri</string>
     <string name="you_liked">sen beğendin</string>
+    <string name="card_preview_muted">Sessiz video</string>
+    <string name="card_preview_full">Sesli video</string>
+    <string name="card_preview">Kart önizlemesi</string>
 </resources>

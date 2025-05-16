@@ -41,6 +41,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 
         appendTopButtonsCategory(settingsPresenter);
         appendColorScheme(settingsPresenter);
+        appendCardPreviews(settingsPresenter);
         appendCardStyle(settingsPresenter);
         appendThumbSource(settingsPresenter);
         //appendCardTitleLines(settingsPresenter);
@@ -105,11 +106,23 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         return styleOptions;
     }
 
-    private void appendCardStyle(AppDialogPresenter settingsPresenter) {
+    private void appendCardPreviews(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        OptionItem animatedPreviewsOption = UiOptionItem.from(getContext().getString(R.string.card_animated_previews),
-                option -> mMainUIData.enableCardAnimatedPreviews(option.isSelected()), mMainUIData.isCardAnimatedPreviewsEnabled());
+        for (int[] pair : new int[][] {
+                {R.string.option_disabled, MainUIData.ANIMATED_PREVIEW_DISABLED},
+                {R.string.card_preview_muted, MainUIData.ANIMATED_PREVIEW_MUTED},
+                {R.string.card_preview_full, MainUIData.ANIMATED_PREVIEW_FULL}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
+                mMainUIData.setAnimatedPreviewType(pair[1]);
+            }, mMainUIData.getAnimatedPreviewType() == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.card_preview), options);
+    }
+
+    private void appendCardStyle(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
 
         OptionItem multilineTitle = UiOptionItem.from(getContext().getString(R.string.card_multiline_title),
                 option -> mMainUIData.enableCardMultilineTitle(option.isSelected()), mMainUIData.isCardMultilineTitleEnabled());
@@ -120,7 +133,6 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         OptionItem autoScrolledTitle = UiOptionItem.from(getContext().getString(R.string.card_auto_scrolled_title),
                 option -> mMainUIData.enableCardTextAutoScroll(option.isSelected()), mMainUIData.isCardTextAutoScrollEnabled());
         
-        options.add(animatedPreviewsOption);
         options.add(multilineTitle);
         options.add(multilineSubtitle);
         if (Build.VERSION.SDK_INT > 19) {

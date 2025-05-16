@@ -17,6 +17,9 @@ import java.util.List;
 
 public class MainUIData extends DataChangeBase implements ProfileChangeListener {
     private static final String MAIN_UI_DATA = "main_ui_data2";
+    public static final int ANIMATED_PREVIEW_DISABLED = 0;
+    public static final int ANIMATED_PREVIEW_MUTED = 1;
+    public static final int ANIMATED_PREVIEW_FULL = 2;
     public static final int CHANNEL_SORTING_NEW_CONTENT = 0;
     public static final int CHANNEL_SORTING_NAME = 1;
     public static final int CHANNEL_SORTING_DEFAULT = 2;
@@ -102,6 +105,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     private boolean mIsChannelsFilterEnabled;
     private boolean mIsChannelSearchBarEnabled;
     private boolean mIsPinnedChannelRowsEnabled;
+    private int mAnimatedPreviewType;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -333,6 +337,15 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return (mTopButtons & button) == button;
     }
 
+    public int getAnimatedPreviewType() {
+        return mAnimatedPreviewType;
+    }
+
+    public void setAnimatedPreviewType(int type) {
+        mAnimatedPreviewType = type;
+        persistState();
+    }
+
     private void initColorSchemes() {
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_teal,
@@ -404,6 +417,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         mIsChannelsFilterEnabled = Helpers.parseBoolean(split, 18, true);
         mIsChannelSearchBarEnabled = Helpers.parseBoolean(split, 19, true);
         mIsPinnedChannelRowsEnabled = Helpers.parseBoolean(split, 20, true);
+        mAnimatedPreviewType = Helpers.parseInt(split, 21, ANIMATED_PREVIEW_FULL);
 
         for (Long menuItem : MENU_ITEM_DEFAULT_ORDER) {
             if (!mMenuItemsOrdered.contains(menuItem)) {
@@ -426,7 +440,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
                 mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,
                 null, mThumbQuality, mIsCardMultilineSubtitleEnabled, Helpers.mergeList(mMenuItemsOrdered),
-                mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled, mIsPinnedChannelRowsEnabled));
+                mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled, mIsPinnedChannelRowsEnabled, mAnimatedPreviewType));
 
         onDataChange();
     }

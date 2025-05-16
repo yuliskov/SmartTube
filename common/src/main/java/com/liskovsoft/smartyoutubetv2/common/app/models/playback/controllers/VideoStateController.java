@@ -386,7 +386,7 @@ public class VideoStateController extends BasePlayerController {
 
     public void saveState() {
         // Skip mini player, but don't save for the previews (mute enabled)
-        if (isEmbedMuted()) {
+        if (isMutedEmbed() || isBeginEmbed()) {
             return;
         }
 
@@ -407,7 +407,7 @@ public class VideoStateController extends BasePlayerController {
 
     private void persistState() {
         // Skip mini player, but don't save for the previews (mute enabled)
-        if (isEmbedMuted()) {
+        if (isMutedEmbed() || isBeginEmbed()) {
             return;
         }
 
@@ -655,7 +655,15 @@ public class VideoStateController extends BasePlayerController {
         }
     }
 
-    private boolean isEmbedMuted() {
-        return getVideo() != null && getPlayer() != null && getVideo().embedPlayer && Helpers.floatEquals(getPlayer().getVolume(), 0);
+    private boolean isMutedEmbed() {
+        return isEmbed() && getPlayer() != null && Helpers.floatEquals(getPlayer().getVolume(), 0);
+    }
+
+    private boolean isBeginEmbed() {
+        return isEmbed() && getPlayer() != null && getPlayer().getPositionMs() <= BEGIN_THRESHOLD_MS;
+    }
+
+    private boolean isEmbed() {
+        return getVideo() != null && getVideo().embedPlayer;
     }
 }
