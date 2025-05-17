@@ -700,4 +700,7 @@
     <string name="premium_users_only">Nur für Premium-Nutzer. Fix für unvollständige Videoformat-Liste</string>
     <string name="playback_buffering_fix">Wiedergabe-Puffer-Fix</string>
     <string name="oculus_quest_fix">Oculus-Quest-Fix</string>
+    <string name="card_preview_muted">Video ohne Ton</string>
+    <string name="card_preview_full">Video mit Ton</string>
+    <string name="card_preview">Karten-Vorschau</string>
 </resources>
