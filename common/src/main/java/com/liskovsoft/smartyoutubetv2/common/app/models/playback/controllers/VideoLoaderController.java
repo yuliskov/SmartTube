@@ -215,6 +215,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     @Override
     public void onPlayEnd() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         applyPlaybackMode(getPlaybackMode());
     }
 

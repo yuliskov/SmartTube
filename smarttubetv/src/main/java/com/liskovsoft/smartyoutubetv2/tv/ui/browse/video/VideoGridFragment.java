@@ -43,11 +43,7 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
     private Video mSelectedItem;
     private float mVideoGridScale;
     private final Runnable mRestoreTask = this::restorePosition;
-    private final Runnable mClearGrid = () -> {
-        if (mGridAdapter != null) {
-            mGridAdapter.clear();
-        }
-    };
+    private Runnable mUpdateGrid;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -147,6 +143,16 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
             return;
         }
 
+        Utils.removeCallbacks(mUpdateGrid);
+        mUpdateGrid = null;
+
+        // Attempt to fix: IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
+        if (getBrowseGrid() != null && getBrowseGrid().isComputingLayout()) {
+            mUpdateGrid = () -> update(group);
+            Utils.postDelayed(mUpdateGrid, 100);
+            return;
+        }
+
         int action = group.getAction();
 
         if (action == VideoGroup.ACTION_REPLACE) {
@@ -210,14 +216,7 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
             // Fix: Invalid item position -1(-1). Item count:84 androidx.leanback.widget.VerticalGridView
             freeze(true);
 
-            Utils.removeCallbacks(mClearGrid);
-
-            // Attempt to fix: IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
-            if (getBrowseGrid() != null && getBrowseGrid().isComputingLayout()) {
-                Utils.postDelayed(mClearGrid, 100);
-            } else {
-                mGridAdapter.clear();
-            }
+            mGridAdapter.clear();
         }
     }
 
