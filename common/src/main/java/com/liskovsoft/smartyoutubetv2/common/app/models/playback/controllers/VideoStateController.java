@@ -539,7 +539,7 @@ public class VideoStateController extends BasePlayerController {
     private void restoreVolume() {
         float newVolume = getPlayerData().getPlayerVolume();
 
-        if (getPlayerTweaksData().isPlayerAutoVolumeEnabled()) {
+        if (getPlayerTweaksData().isPlayerAutoVolumeEnabled() || isEmbed()) {
             newVolume *= getVideo().volume;
         }
 

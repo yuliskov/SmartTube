@@ -457,7 +457,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     }
 
     private void runFormatErrorAction(Throwable error) {
-        if (mLastVideo != null && mLastVideo.embedPlayer) {
+        if (isEmbed()) {
             if (getPlayer() != null) {
                 getPlayer().finish();
             }
@@ -487,7 +487,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     }
     
     private void runEngineErrorAction(int type, int rendererIndex, Throwable error) {
-        if (mLastVideo != null && mLastVideo.embedPlayer) {
+        if (isEmbed()) {
             if (getPlayer() != null) {
                 getPlayer().finish();
             }
@@ -942,5 +942,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             playbackMode = PlayerConstants.PLAYBACK_MODE_ONE;
         }
         return playbackMode;
+    }
+
+    private boolean isEmbed() {
+        return mLastVideo != null && mLastVideo.embedPlayer;
     }
 }
