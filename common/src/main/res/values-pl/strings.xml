@@ -694,4 +694,11 @@
   <string name="my_videos">Moje wideo</string>
   <string name="player_audio_focus">Automatyzacja audio (pauza w przypadku wykrycia innych odtwarzaczy)</string>
   <string name="paid_content_notification">Powiadomienia o płatnych treściach</string>
+  <string name="you_liked">polubionych</string>
+  <string name="premium_users_only">Tylko dla użytkowników Premium. Poprawka niekompletnej listy formatów wideo</string>
+  <string name="playback_buffering_fix">Poprawka bufora odtwarzania</string>
+  <string name="oculus_quest_fix">Poprawka dla Oculus Quest</string>
+  <string name="card_preview_muted">Wideo bez dźwięku</string>
+  <string name="card_preview_full">Wideo z dźwiękiem</string>
+  <string name="card_preview">Podgląd karty</string>
 </resources>
