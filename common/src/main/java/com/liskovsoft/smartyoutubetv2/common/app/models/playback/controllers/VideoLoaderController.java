@@ -512,7 +512,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         String resultMsg = fullErrorMsg;
 
         if (Helpers.startsWithAny(message, "Unable to connect to")) {
-            // No internet connection
+            // No internet connection or WRONG DATE on the device
             restartEngine = false;
             resultMsg = shortErrorMsg;
         } else if (error instanceof OutOfMemoryError) {
