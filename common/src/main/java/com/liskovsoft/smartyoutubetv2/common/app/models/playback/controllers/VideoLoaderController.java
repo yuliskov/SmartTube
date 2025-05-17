@@ -156,7 +156,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
 
         mLastErrorType = type;
-        runErrorAction(type, rendererIndex, error);
+        runEngineErrorAction(type, rendererIndex, error);
     }
 
     @Override
@@ -310,24 +310,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                 .subscribe(this::processFormatInfo,
                            error -> {
                                getPlayer().showProgressBar(false);
-                               String message = error.getMessage();
-                               String className = error.getClass().getSimpleName();
-                               Log.e(TAG, "loadFormatInfo error: %s", message);
-                               if (!Helpers.containsAny(message, "fromNullable result is null")) {
-                                   MessageHelpers.showLongMessage(getContext(), "%s: %s", className, message);
-                               }
-
-                               if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument") || // temporal fix
-                                       Helpers.equalsAny(className, "PoTokenException", "BadWebViewException")) {
-                                   YouTubeServiceManager.instance().applyNoPlaybackFix();
-                                   reloadVideo();
-                               } else if (Helpers.containsAny(message, "is not defined")) {
-                                   YouTubeServiceManager.instance().invalidateCache();
-                                   reloadVideo();
-                               } else {
-                                   Log.e(TAG, "Probably no internet connection");
-                                   scheduleReloadVideoTimer(1_000);
-                               }
+                               runFormatErrorAction(error);
                            });
     }
 
@@ -473,13 +456,45 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         Utils.removeCallbacks(mReloadVideo, mLoadNext, mRestartEngine, mMetadataSync, mOnLongBuffering, mRebootApp);
     }
 
-    @SuppressLint("StringFormatMatches")
-    private void runErrorAction(int type, int rendererIndex, Throwable error) {
+    private void runFormatErrorAction(Throwable error) {
         if (mLastVideo != null && mLastVideo.embedPlayer) {
+            if (getPlayer() != null) {
+                getPlayer().finish();
+            }
             return;
         }
 
-        boolean restart = applyGenericErrorAction(type, rendererIndex, error);
+        String message = error.getMessage();
+        String className = error.getClass().getSimpleName();
+        String fullMsg = String.format("loadFormatInfo error: %s: %s", className, message);
+        Log.e(TAG, fullMsg);
+
+        if (!Helpers.containsAny(message, "fromNullable result is null")) {
+            MessageHelpers.showLongMessage(getContext(), fullMsg);
+        }
+
+        if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument") || // temporal fix
+                Helpers.equalsAny(className, "PoTokenException", "BadWebViewException")) {
+            YouTubeServiceManager.instance().applyNoPlaybackFix();
+            reloadVideo();
+        } else if (Helpers.containsAny(message, "is not defined")) {
+            YouTubeServiceManager.instance().invalidateCache();
+            reloadVideo();
+        } else {
+            Log.e(TAG, "Probably no internet connection");
+            scheduleReloadVideoTimer(1_000);
+        }
+    }
+    
+    private void runEngineErrorAction(int type, int rendererIndex, Throwable error) {
+        if (mLastVideo != null && mLastVideo.embedPlayer) {
+            if (getPlayer() != null) {
+                getPlayer().finish();
+            }
+            return;
+        }
+
+        boolean restart = applyEngineErrorAction(type, rendererIndex, error);
 
         if (restart) {
             restartEngine();
@@ -488,7 +503,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
     }
 
-    private boolean applyGenericErrorAction(int type, int rendererIndex, Throwable error) {
+    private boolean applyEngineErrorAction(int type, int rendererIndex, Throwable error) {
         boolean restartEngine = true;
         String message = error != null ? error.getMessage() : null;
         String errorTitle = getErrorTitle(type, rendererIndex);
