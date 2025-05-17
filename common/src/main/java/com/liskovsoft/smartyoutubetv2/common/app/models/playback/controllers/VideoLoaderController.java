@@ -475,6 +475,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     @SuppressLint("StringFormatMatches")
     private void runErrorAction(int type, int rendererIndex, Throwable error) {
+        if (mLastVideo != null && mLastVideo.embedPlayer) {
+            return;
+        }
+
         boolean restart = applyGenericErrorAction(type, rendererIndex, error);
 
         if (restart) {
