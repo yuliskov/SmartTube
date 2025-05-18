@@ -601,7 +601,7 @@
     <string name="content_block_exclude_channel">Vyloučit tento kanál ze SponsorBlocku</string>
     <string name="content_block_stop_excluding_channel">Přestat vylučovat tento kanál ze SponsorBlocku</string>
     <string name="player_chapter_notification">Rychlý posun mezi kapitolami pomocí vyskakovacího upozornění</string>
-    <string name="subtitle_remember">Pamatovat si povolené titulky pro každý kanál</string>
+    <string name="subtitle_remember">Povolit titulky pouze na aktuálním kanálu</string>
     <string name="amazon_frame_drop_fix">Oprava poklesu snímků #2</string>
     <string name="amazon_frame_drop_fix_desc">Určeno pro zařízení Amazon Stick. Může fungovat i na jiných zařízeních.</string>
     <string name="default_stack_desc">Vestavěný síťový vyhledávač. Tento vyhledávač může mít v určitých situacích lepší stabilitu.</string>
@@ -636,7 +636,7 @@
     <string name="play_next">Přehrát další</string>
     <string name="hide_watched_from_subscriptions">Skrýt zhlédnutá videa v Odběrech</string>
     <string name="hide_watched_from_notifications">Skrýt zhlédnutá videa v Oznámení</string>
-    <string name="hide_unwanted_content">Skrýt nežádoucí obsah</string>
+    <string name="hide_unwanted_content">Skrýt videa</string>
     <string name="hide_watched_from_home">Skrýt zhlédnutá videa ze sekce Domů</string>
     <string name="hide_watched_from_watch_later">Skrýt zhlédnutá videa ze seznamu Přehrát později</string>
     <string name="remote_control_permission">Dálkové ovládání na pozadí vyžaduje oprávnění pro překrytí přes okna</string>
@@ -697,4 +697,10 @@
     <string name="player_audio_focus">Audio fokus (pozastavit, pokud jsou detekovány jiné přehrávače)</string>
     <string name="paid_content_notification">Upozornění placeného obsahu</string>
     <string name="you_liked">to se ti líbí</string>
+    <string name="premium_users_only">Pouze pro uživatele s Premium. Oprava nekompletního seznamu formátů videa</string>
+    <string name="playback_buffering_fix">Oprava načítajícího se přehrávání</string>
+    <string name="oculus_quest_fix">Oprava pro Oculus Quest</string>
+    <string name="card_preview_muted">Video beze zvuku</string>
+    <string name="card_preview_full">Video se zvukem</string>
+    <string name="card_preview">Náhled kary</string>
 </resources>
