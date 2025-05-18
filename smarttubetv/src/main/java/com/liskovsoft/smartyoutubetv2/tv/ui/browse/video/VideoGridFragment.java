@@ -43,7 +43,6 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
     private Video mSelectedItem;
     private float mVideoGridScale;
     private final Runnable mRestoreTask = this::restorePosition;
-    private Runnable mUpdateGrid;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -140,16 +139,6 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
     public void update(VideoGroup group) {
         if (mGridAdapter == null) {
             mPendingUpdates.add(group);
-            return;
-        }
-
-        Utils.removeCallbacks(mUpdateGrid);
-        mUpdateGrid = null;
-
-        // Attempt to fix: IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
-        if (getBrowseGrid() != null && getBrowseGrid().isComputingLayout()) {
-            mUpdateGrid = () -> update(group);
-            Utils.postDelayed(mUpdateGrid, 100);
             return;
         }
 

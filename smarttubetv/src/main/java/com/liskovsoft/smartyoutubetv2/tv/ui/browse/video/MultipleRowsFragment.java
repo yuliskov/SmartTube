@@ -49,7 +49,6 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private ShortsCardPresenter mShortsPresenter;
     private int mSelectedRowIndex = -1;
     private ChannelHeaderCallback mChannelHeaderCallback;
-    private Runnable mUpdateRows;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -180,16 +179,6 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     public void update(VideoGroup group) {
         if (mVideoGroupAdapters == null) {
             mPendingUpdates.add(group);
-            return;
-        }
-
-        Utils.removeCallbacks(mUpdateRows);
-        mUpdateRows = null;
-
-        // Attempt to fix: IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
-        if (getVerticalGridView() != null && getVerticalGridView().isComputingLayout()) {
-            mUpdateRows = () -> update(group);
-            Utils.postDelayed(mUpdateRows, 100);
             return;
         }
 

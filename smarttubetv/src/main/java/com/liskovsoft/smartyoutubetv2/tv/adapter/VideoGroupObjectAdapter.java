@@ -8,6 +8,7 @@ import androidx.leanback.widget.PresenterSelector;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -166,12 +167,16 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
 
         return -1;
     }
+    
+    public void clear() {
+        Utils.postDelayed(this::clearInt, 100);
+    }
 
     /**
      * Clear takes some time. Do not call it immediately before the add or you'll get an exception!
      * IndexOutOfBoundsException: Invalid item position... GridLayoutManager.getViewForPosition
      */
-    public void clear() {
+    private void clearInt() {
         int itemCount = mVideoItems.size();
         mVideoItems.clear();
         mVideoGroups.clear();
@@ -205,6 +210,14 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     }
 
     public void sync(VideoGroup group) {
+        Utils.postDelayed(() -> syncInt(group), 100);
+    }
+
+    /**
+     * Sync takes some time. Do not call it immediately before the add or you'll get an exception!
+     * IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
+     */
+    private void syncInt(VideoGroup group) {
         for (Video video : group.getVideos()) {
             // Search for multiple occurrences (e.g. History section)
             for (int i = 0; i < mVideoItems.size(); i++) {
