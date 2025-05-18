@@ -36,6 +36,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class ExoPlayerController implements Player.EventListener, PlayerController {
@@ -46,7 +47,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private final TrackInfoFormatter2 mTrackFormatter;
     private final TrackErrorFixer mTrackErrorFixer;
     private boolean mOnSourceChanged;
-    private Video mVideo;
+    private WeakReference<Video> mVideo;
     private final PlayerEventListener mEventListener;
     private SimpleExoPlayer mPlayer;
     private PlayerView mPlayerView;
@@ -116,7 +117,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mTrackSelectorManager.setMergedSource(mediaSource instanceof MergingMediaSource);
         mTrackSelectorManager.invalidate();
         mOnSourceChanged = true;
-        mEventListener.onSourceChanged(mVideo);
+        mEventListener.onSourceChanged(getVideo());
         mPlayer.prepare(mediaSource);
     }
 
@@ -192,8 +193,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mMediaSourceFactory.release();
         releasePlayer();
         mPlayerView = null;
-        mVideo = null;
-        // Don't destroy it (needed inside bridge)!
+        // Don't destroy it (needed inside the bridge)!
         //mEventListener = null;
     }
 
@@ -227,12 +227,12 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     @Override
     public void setVideo(Video video) {
-        mVideo = video;
+        mVideo = new WeakReference<>(video);
     }
 
     @Override
     public Video getVideo() {
-        return mVideo;
+        return mVideo != null ? mVideo.get() : null;
     }
 
     @Override
@@ -304,7 +304,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         if (mOnSourceChanged) {
             mOnSourceChanged = false;
 
-            mEventListener.onVideoLoaded(mVideo);
+            mEventListener.onVideoLoaded(getVideo());
 
             if (mOnVideoLoaded != null) {
                 mOnVideoLoaded.run();

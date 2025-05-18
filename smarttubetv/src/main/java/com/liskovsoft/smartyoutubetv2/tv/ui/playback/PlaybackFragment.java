@@ -387,6 +387,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         createPlayerObjects();
 
+        mPlaybackPresenter.setView(this); // replaced by the embed player?
         mPlaybackPresenter.onEngineInitialized();
     }
 

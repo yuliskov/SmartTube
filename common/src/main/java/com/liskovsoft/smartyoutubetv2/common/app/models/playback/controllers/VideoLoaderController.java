@@ -109,7 +109,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
 
         if (getPlayer() != null && getPlayer().isEngineInitialized()) { // player is initialized
-            if (isVideoChanged) {
+            if (isVideoChanged || !getPlayer().containsMedia()) {
                 loadVideo(item); // force play immediately
             } else {
                 loadSuggestions(item); // update suggestions only
@@ -141,7 +141,12 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     @Override
     public void onEngineInitialized() {
-        loadVideo(mLastVideo);
+        if (getPlayer() == null) {
+            return;
+        }
+
+        Video video = getPlayer().getVideo();
+        loadVideo(video != null ? video : mLastVideo);
         getPlayer().setButtonState(R.id.action_repeat, getPlayerData().getPlaybackMode());
         mSleepTimerStartMs = System.currentTimeMillis();
     }
@@ -328,15 +333,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         mLastVideo.sync(formatInfo);
 
         // Fix stretched video for a couple milliseconds (before the onVideoSizeChanged gets called)
-        if (formatInfo.containsDashFormats()) {
-            MediaFormat format = formatInfo.getDashFormats().get(0);
-            int width = format.getWidth();
-            int height = format.getHeight();
-            boolean isShorts = width < height;
-            if (width > 0 && height > 0 && (getPlayerData().getAspectRatio() == PlayerData.ASPECT_RATIO_DEFAULT || isShorts)) {
-                getPlayer().setAspectRatio((float) width / height);
-            }
-        }
+        applyAspectRatio(formatInfo);
 
         if (formatInfo.containsMedia()) {
             getStateService().setHistoryBroken(formatInfo.isHistoryBroken());
@@ -347,17 +344,20 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
 
         if (formatInfo.isUnplayable()) {
+            if (isEmbed()) {
+                getPlayer().finish();
+                return;
+            }
+
             getPlayer().setTitle(formatInfo.getPlayabilityStatus());
             getPlayer().showProgressBar(false);
             mSuggestionsController.loadSuggestions(mLastVideo);
             bgImageUrl = mLastVideo.getBackgroundUrl();
 
-            if (formatInfo.isHistoryBroken()) {
-                // Sign in error (bot check error?)
+            if (formatInfo.isHistoryBroken()) { // bot check error or the video is hidden
                 YouTubeServiceManager.instance().applyNoPlaybackFix();
-                //YouTubeServiceManager.instance().applyAntiBotFix();
                 scheduleRebootAppTimer(5_000);
-            } else {
+            } else { // 18+ video
                 scheduleNextVideoTimer(5_000);
             }
         } else if (formatInfo.containsDashVideoFormats() && acceptDashVideoFormats(formatInfo)) {
@@ -491,10 +491,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     }
     
     private void runEngineErrorAction(int type, int rendererIndex, Throwable error) {
-        if (isEmbed()) {
-            if (getPlayer() != null) {
-                getPlayer().finish();
-            }
+        // Hide begin errors in embed mode (e.g. wrong date/time: unable to connect to...)
+        if (isEmbed() && getPlayer() != null && getPlayer().getPositionMs() == 0) {
+            getPlayer().finish();
             return;
         }
 
@@ -946,6 +945,22 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             playbackMode = PlayerConstants.PLAYBACK_MODE_ONE;
         }
         return playbackMode;
+    }
+
+    /**
+     * Fix stretched video for a couple milliseconds (before the onVideoSizeChanged gets called)
+     */
+    private void applyAspectRatio(MediaItemFormatInfo formatInfo) {
+        // Fix stretched video for a couple milliseconds (before the onVideoSizeChanged gets called)
+        if (formatInfo.containsDashFormats()) {
+            MediaFormat format = formatInfo.getDashFormats().get(0);
+            int width = format.getWidth();
+            int height = format.getHeight();
+            boolean isShorts = width < height;
+            if (width > 0 && height > 0 && (getPlayerData().getAspectRatio() == PlayerData.ASPECT_RATIO_DEFAULT || isShorts)) {
+                getPlayer().setAspectRatio((float) width / height);
+            }
+        }
     }
 
     private boolean isEmbed() {

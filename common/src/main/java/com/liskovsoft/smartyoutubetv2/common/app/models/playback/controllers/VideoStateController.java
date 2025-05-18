@@ -27,14 +27,15 @@ public class VideoStateController extends BasePlayerController {
     private static final long LIVE_BUFFER_MS = OFFICIAL_LIVE_BUFFER_MS;
     private static final long SHORT_LIVE_BUFFER_MS = 0; // Note, on buffer lower than the 60sec you'll notice segment skip
     private static final long BEGIN_THRESHOLD_MS = 10_000;
+    private static final long EMBED_THRESHOLD_MS = 30_000;
     private static final int HISTORY_UPDATE_INTERVAL_MINUTES = 5; // Sync history every five minutes
     private boolean mIsPlayEnabled;
     private Video mVideo = new Video();
     private boolean mIsPlayBlocked;
     private int mTickleLeft;
     private boolean mIncognito;
-    //private final Runnable mUpdateHistory = this::updateHistory;
     private final Runnable mUpdateHistory = () -> { saveState(); persistState(); };
+    private long mNewVideoTimeMs;
 
     /**
      * Fired after user clicked on video in browse activity<br/>
@@ -44,14 +45,22 @@ public class VideoStateController extends BasePlayerController {
     public void onNewVideo(Video item) {
         // Ensure that we aren't running on presenter init stage
         if (getPlayer() != null) {
-            if (!item.equals(getVideo()) || isEmbed()) { // video might be opened twice (when remote connection enabled). Fix for that.
+            if (!item.equals(getVideo())) { // a video might be opened twice (when remote connection enabled). Fix for that.
                 // Reset auto-save history timer
                 mTickleLeft = 0;
                 // Save state of the previous video.
                 // In case video opened from phone and other stuff.
                 removeFromHistoryIfNeeded();
                 saveState();
+            } else if (isEmbed()) { // switching from embed to normal player
+                // Save state of the previous video.
+                // In case video opened from phone and other stuff.
+                saveState();
             }
+        }
+
+        if (!item.equals(getVideo())) {
+            mNewVideoTimeMs = System.currentTimeMillis();
         }
 
         setPlayEnabled(true); // video just added
@@ -539,7 +548,7 @@ public class VideoStateController extends BasePlayerController {
     private void restoreVolume() {
         float newVolume = getPlayerData().getPlayerVolume();
 
-        if (getPlayerTweaksData().isPlayerAutoVolumeEnabled() || isEmbed()) {
+        if (getPlayerTweaksData().isPlayerAutoVolumeEnabled()) {
             newVolume *= getVideo().volume;
         }
 
@@ -660,7 +669,7 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private boolean isBeginEmbed() {
-        return isEmbed() && getPlayer() != null && getPlayer().getPositionMs() <= BEGIN_THRESHOLD_MS;
+        return isEmbed() && System.currentTimeMillis() - mNewVideoTimeMs <= EMBED_THRESHOLD_MS;
     }
 
     private boolean isEmbed() {

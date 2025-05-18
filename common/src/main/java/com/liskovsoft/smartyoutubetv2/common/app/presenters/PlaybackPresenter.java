@@ -175,6 +175,10 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         return getView() != null && getView().isEngineBlocked();
     }
 
+    public boolean isEngineInitialized() {
+        return getView() != null && getView().isEngineInitialized();
+    }
+
     //public int getBackgroundMode() {
     //    return getView() != null ? getView().getBackgroundMode() : -1;
     //}

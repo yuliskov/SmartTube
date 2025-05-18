@@ -502,7 +502,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
         // Fullscreen playback is running. Skipping
         PlaybackView view = mPlaybackPresenter.getView();
-        if (view == null || view instanceof EmbedPlayerView) {
+        if (view == null || view instanceof EmbedPlayerView || !PlaybackPresenter.instance(getContext()).isEngineInitialized()) {
             mVideo = video;
             mPlaybackPresenter.onNewVideo(video);
             initPlayer();
