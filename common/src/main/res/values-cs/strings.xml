@@ -698,7 +698,7 @@
     <string name="paid_content_notification">Upozornění placeného obsahu</string>
     <string name="you_liked">to se ti líbí</string>
     <string name="premium_users_only">Pouze pro uživatele s Premium. Oprava nekompletního seznamu formátů videa</string>
-    <string name="playback_buffering_fix">Oprava pro načítajícího se přehrávání</string>
+    <string name="playback_buffering_fix">Oprava načítajícího se přehrávání</string>
     <string name="oculus_quest_fix">Oprava pro Oculus Quest</string>
     <string name="card_preview_muted">Video beze zvuku</string>
     <string name="card_preview_full">Video se zvukem</string>
