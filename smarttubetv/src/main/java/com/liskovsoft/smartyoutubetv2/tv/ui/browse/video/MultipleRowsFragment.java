@@ -19,6 +19,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelHeaderPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelHeaderPresenter.ChannelHeaderCallback;
@@ -48,6 +49,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private ShortsCardPresenter mShortsPresenter;
     private int mSelectedRowIndex = -1;
     private ChannelHeaderCallback mChannelHeaderCallback;
+    private Runnable mUpdateRows;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -147,6 +149,24 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         }
     }
 
+    private int findPositionById(int id) {
+        if (mRowsAdapter != null) {
+            VideoGroupObjectAdapter needed = mVideoGroupAdapters.get(id);
+            for (int i = 0; i < mRowsAdapter.size(); i++) {
+                Object row = mRowsAdapter.get(i);
+
+                if (row instanceof ListRow) {
+                    VideoGroupObjectAdapter adapter = (VideoGroupObjectAdapter) ((ListRow) row).getAdapter();
+                    if (adapter == needed) {
+                        return i;
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
     @Override
     public boolean isEmpty() {
         if (mRowsAdapter == null) {
@@ -160,6 +180,16 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     public void update(VideoGroup group) {
         if (mVideoGroupAdapters == null) {
             mPendingUpdates.add(group);
+            return;
+        }
+
+        Utils.removeCallbacks(mUpdateRows);
+        mUpdateRows = null;
+
+        // Attempt to fix: IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
+        if (getVerticalGridView() != null && getVerticalGridView().isComputingLayout()) {
+            mUpdateRows = () -> update(group);
+            Utils.postDelayed(mUpdateRows, 100);
             return;
         }
 

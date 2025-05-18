@@ -801,6 +801,10 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void prepareScreenOff() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
 
         manager.setBlocked(false);
