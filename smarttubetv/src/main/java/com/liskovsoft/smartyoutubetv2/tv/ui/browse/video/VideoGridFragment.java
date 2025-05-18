@@ -8,6 +8,8 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.VerticalGridPresenter;
+
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
@@ -136,6 +138,14 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
 
     @Override
     public void update(VideoGroup group) {
+        int action = group.getAction();
+
+        // Smooth remove animation
+        if (action == VideoGroup.ACTION_REMOVE || action == VideoGroup.ACTION_REMOVE_AUTHOR) {
+            updateInt(group);
+            return;
+        }
+
         freeze(true);
 
         updateInt(group);
