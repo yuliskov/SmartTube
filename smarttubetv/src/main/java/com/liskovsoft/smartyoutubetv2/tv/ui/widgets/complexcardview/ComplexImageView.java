@@ -22,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 import java.lang.ref.WeakReference;
 
 public class ComplexImageView extends RelativeLayout {
+    private static final long PLAYER_START_DELAY_MS = 2_000;
     private ImageView mMainImage;
     private ImageView mPreviewImage;
     private EmbedPlayerView mPreviewPlayer;
@@ -152,7 +153,7 @@ public class ComplexImageView extends RelativeLayout {
                 mCreateAndStartPlayer = this::createAndStartPlayer;
             }
 
-            Utils.postDelayed(mCreateAndStartPlayer, 2_000);
+            Utils.postDelayed(mCreateAndStartPlayer, PLAYER_START_DELAY_MS);
         }
     }
 
