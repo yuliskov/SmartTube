@@ -168,17 +168,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         return -1;
     }
 
-    @Override
-    public boolean isEmpty() {
-        if (mRowsAdapter == null) {
-            return mPendingUpdates.isEmpty();
-        }
-
-        return mRowsAdapter.size() == 0;
-    }
-
-    @Override
-    public void update(VideoGroup group) {
+    private boolean isComputingLayout(VideoGroup group) {
         int action = group.getAction();
 
         // Attempt to fix: IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
@@ -190,12 +180,28 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
                     Object nestedRecyclerView = Helpers.getField(viewHolder, "mNestedRecyclerView");
                     if (nestedRecyclerView instanceof WeakReference) {
                         Object recyclerView = ((WeakReference<?>) nestedRecyclerView).get();
-                        if (recyclerView instanceof RecyclerView && ((RecyclerView) recyclerView).isComputingLayout()) {
-                            return;
-                        }
+                        return recyclerView instanceof RecyclerView && ((RecyclerView) recyclerView).isComputingLayout();
                     }
                 }
             }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        if (mRowsAdapter == null) {
+            return mPendingUpdates.isEmpty();
+        }
+
+        return mRowsAdapter.size() == 0;
+    }
+
+    @Override
+    public void update(VideoGroup group) {
+        if (isComputingLayout(group)) {
+            return;
         }
 
         freeze(true);
