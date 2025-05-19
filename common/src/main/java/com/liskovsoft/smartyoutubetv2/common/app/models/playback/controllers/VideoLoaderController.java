@@ -241,6 +241,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     @Override
     public boolean onKeyDown(int keyCode) {
+        if (getPlayer() == null) {
+            return false;
+        }
+
         mSleepTimerStartMs = System.currentTimeMillis();
 
         // Remove error msg if needed

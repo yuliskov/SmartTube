@@ -140,6 +140,11 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
     public void update(VideoGroup group) {
         int action = group.getAction();
 
+        // Attempt to fix: IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
+        if (action == VideoGroup.ACTION_SYNC && getBrowseGrid() != null && getBrowseGrid().isComputingLayout()) {
+            return;
+        }
+
         // Smooth remove animation
         if (action == VideoGroup.ACTION_REMOVE || action == VideoGroup.ACTION_REMOVE_AUTHOR) {
             updateInt(group);
