@@ -99,7 +99,6 @@ public final class Video {
     private long durationMs = -1;
     private WeakReference<VideoGroup> group; // Memory leak fix. Used to get next page when scrolling.
     public List<NotificationState> notificationStates;
-    public boolean embedPlayer;
 
     public Video() {
        // NOP

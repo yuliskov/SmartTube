@@ -12,4 +12,5 @@ public interface PlayerManager extends PlayerEngine, PlayerUI {
     void showBackground(String url);
     void showBackgroundColor(int colorResId);
     void resetPlayerState();
+    boolean isEmbed();
 }

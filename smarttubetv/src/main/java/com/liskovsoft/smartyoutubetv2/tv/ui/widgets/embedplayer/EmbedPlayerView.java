@@ -276,6 +276,11 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     @Override
+    public boolean isEmbed() {
+        return true;
+    }
+
+    @Override
     public void openDash(InputStream dashManifest) {
         mExoPlayerController.openDash(dashManifest);
     }
@@ -494,8 +499,6 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     public void openVideo(@NonNull Video video) {
-        video.embedPlayer = true;
-
         if (mPlaybackPresenter == null) {
             mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         }
@@ -562,7 +565,6 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
             setPlayer(null);
             hideView();
             if (mVideo != null) {
-                mVideo.embedPlayer = false;
                 BasePresenter<?> presenter = ViewManager.instance(getContext()).getCurrentPresenter();
                 if (presenter != null) {
                     presenter.syncItem(mVideo);

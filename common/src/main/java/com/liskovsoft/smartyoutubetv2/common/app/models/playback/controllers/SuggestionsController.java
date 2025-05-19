@@ -229,7 +229,7 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     public void loadSuggestions(Video video) {
-        if (video.embedPlayer) {
+        if (isEmbedPlayer()) {
             return;
         }
 

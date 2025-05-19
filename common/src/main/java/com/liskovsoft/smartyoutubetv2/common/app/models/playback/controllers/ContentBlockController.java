@@ -383,7 +383,7 @@ public class ContentBlockController extends BasePlayerController {
         boolean stayQuiet = skipDurationMs < 10_000 && PlayerTweaksData.instance(getContext()).isTextureViewEnabled();
 
         if (!stayQuiet) {
-            if (type == ContentBlockData.ACTION_SKIP_ONLY || getPlayer().isInPIPMode() || Utils.isScreenOff(getContext()) || getPlayer().getVideo().embedPlayer) {
+            if (type == ContentBlockData.ACTION_SKIP_ONLY || getPlayer().isInPIPMode() || Utils.isScreenOff(getContext()) || isEmbedPlayer()) {
                 simpleSkip(skipPosMs);
             } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
                 messageSkip(skipPosMs, skipMessage);

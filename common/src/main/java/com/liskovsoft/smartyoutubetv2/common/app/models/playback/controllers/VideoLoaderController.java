@@ -348,7 +348,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
 
         if (formatInfo.isUnplayable()) {
-            if (isEmbed()) {
+            if (isEmbedPlayer()) {
                 getPlayer().finish();
                 return;
             }
@@ -465,7 +465,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     }
 
     private void runFormatErrorAction(Throwable error) {
-        if (isEmbed()) {
+        if (isEmbedPlayer()) {
             if (getPlayer() != null) {
                 getPlayer().finish();
             }
@@ -496,7 +496,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     
     private void runEngineErrorAction(int type, int rendererIndex, Throwable error) {
         // Hide begin errors in embed mode (e.g. wrong date/time: unable to connect to...)
-        if (isEmbed() && getPlayer() != null && getPlayer().getPositionMs() == 0) {
+        if (isEmbedPlayer() && getPlayer() != null && getPlayer().getPositionMs() == 0) {
             getPlayer().finish();
             return;
         }
@@ -680,7 +680,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             return;
         }
 
-        if (video.embedPlayer) {
+        if (isEmbedPlayer()) {
             playbackMode = PlayerConstants.PLAYBACK_MODE_CLOSE;
         }
 
@@ -965,9 +965,5 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                 getPlayer().setAspectRatio((float) width / height);
             }
         }
-    }
-
-    private boolean isEmbed() {
-        return mLastVideo != null && mLastVideo.embedPlayer;
     }
 }

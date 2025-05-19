@@ -363,14 +363,10 @@ public class AutoFrameRateController extends BasePlayerController implements Aut
         }
 
         // NOTE: Avoid detecting shorts by Video.isShorts. Because this is working only in certain places (e.g. Shorts section).
-        return isEmbed() || getPlayer().getDurationMs() <= SHORTS_DURATION_MIN_MS || isSkipShortsPrefs();
+        return isEmbedPlayer() || getPlayer().getDurationMs() <= SHORTS_DURATION_MIN_MS || isSkipShortsPrefs();
     }
 
     private boolean isSkipShortsPrefs() {
         return getPlayerData().isSkipShortsEnabled() && (getPlayer().getVideo().isShorts || getPlayer().getDurationMs() <= SHORTS_DURATION_MAX_MS);
-    }
-
-    private boolean isEmbed() {
-        return getPlayer().getVideo().embedPlayer;
     }
 }

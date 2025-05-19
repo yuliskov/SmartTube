@@ -1589,6 +1589,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         setSeekPreviewTitle(null);
     }
 
+    @Override
+    public boolean isEmbed() {
+        return false;
+    }
+
     /**
      * PIP mode fix
      */
