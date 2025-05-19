@@ -636,7 +636,7 @@
     <string name="play_next">Riproduci successivo</string>
     <string name="hide_watched_from_subscriptions">Nascondi i video già visti dalle Iscrizioni</string>
     <string name="hide_watched_from_notifications">Nascondi i video già visti dalle Notifiche</string>
-    <string name="hide_unwanted_content">Nascondi i contenuti indesiderati</string>
+    <string name="hide_unwanted_content">Nascondi i video</string>
     <string name="hide_watched_from_home">Nascondi i video già visti dalla Home</string>
     <string name="hide_watched_from_watch_later">Nascondi i video già visti dalla playlist Guarda più tardi</string>
     <string name="remote_control_permission">Il controllo remoto in background richiede l\'autorizzazione alla sovrapposizione</string>
@@ -700,4 +700,7 @@
     <string name="premium_users_only">Solo utenti Premium. Correzione per l\'elenco incompleto dei formati video</string>
     <string name="playback_buffering_fix">Correzione del buffering di riproduzione</string>
     <string name="oculus_quest_fix">Correzione per Oculus Quest</string>
+    <string name="card_preview_muted">Video senza audio</string>
+    <string name="card_preview_full">Video con audio</string>
+    <string name="card_preview">Anteprima delle cartoline</string>
 </resources>
