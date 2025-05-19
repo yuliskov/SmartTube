@@ -256,7 +256,13 @@ public final class VideoFrameReleaseTimeHelper {
     @Override
     public void onDisplayChanged(int displayId) {
       if (displayId == Display.DEFAULT_DISPLAY) {
-        updateDefaultDisplayRefreshRateParams();
+        // MOD: swallow an exception
+        try {
+          updateDefaultDisplayRefreshRateParams();
+        } catch (IllegalStateException e) {
+          // IllegalStateException: Unable to locate mode -1
+          e.printStackTrace();
+        }
       }
     }
 

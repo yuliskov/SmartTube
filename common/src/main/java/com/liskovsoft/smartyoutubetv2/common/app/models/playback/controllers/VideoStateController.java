@@ -510,6 +510,10 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void restoreSpeedAndPositionIfNeeded() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         Video item = getVideo();
 
         boolean liveEnd = isLiveEnd();

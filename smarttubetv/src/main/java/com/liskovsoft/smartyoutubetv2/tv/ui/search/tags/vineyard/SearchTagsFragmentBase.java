@@ -347,7 +347,8 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                 // speech recognition, and then you can simply call:
                 try {
                     SpeechUtil.redirectUserToGoogleAppOnPlayStore(getContext());
-                } catch (ActivityNotFoundException e) {
+                } catch (ActivityNotFoundException | NullPointerException e) {
+                    // NullPointerException: android.os.Parcel.readException (Parcel.java:1478)
                     e.printStackTrace();
                 }
             }

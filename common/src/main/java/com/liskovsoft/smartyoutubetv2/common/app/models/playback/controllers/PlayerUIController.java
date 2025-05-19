@@ -60,6 +60,10 @@ public class PlayerUIController extends BasePlayerController {
     private long mOverlayHideTimeMs;
     private final Runnable mSuggestionsResetHandler = () -> getPlayer().resetSuggestedPosition();
     private final Runnable mUiAutoHideHandler = () -> {
+        if (getPlayer() == null) {
+            return;
+        }
+
         // Playing the video and dialog overlay isn't shown
         if (getPlayer().isPlaying() && !getAppDialogPresenter().isDialogShown()) {
             if (getPlayer().isControlsShown()) { // don't hide when suggestions is shown
