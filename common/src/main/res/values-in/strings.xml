@@ -680,4 +680,7 @@
     <string name="premium_users_only">Hanya untuk pengguna premium. Perbaikan untuk daftar format video yang tidak lengkap</string>
     <string name="playback_buffering_fix">Perbaikan buffering pemutaran</string>
     <string name="oculus_quest_fix">Perbaikan Oculus Quest</string>
+    <string name="card_preview_muted">Vidio tanpa suara</string>
+    <string name="card_preview_full">Vidio dengan suara</string>
+    <string name="card_preview">Pratinjau kartu</string>
 </resources>
