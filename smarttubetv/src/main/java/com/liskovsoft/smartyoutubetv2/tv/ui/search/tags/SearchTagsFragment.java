@@ -365,7 +365,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
                 Object row = getResultsAdapter().get(i);
 
                 if (row instanceof ListRow) {
-                    VideoGroupObjectAdapter adapter = (VideoGroupObjectAdapter) ((ListRow) row).getAdapter();
+                    // Could be one of those: TagAdapter, VideoGroupObjectAdapter
+                    ObjectAdapter adapter = ((ListRow) row).getAdapter();
                     if (adapter == needed) {
                         return i;
                     }
